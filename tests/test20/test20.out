@@ -36,9 +36,10 @@ PhysicsList::SetCuts:CutLength : 1 um
               eBrem,            annihil,       LowEnCompton,    LowEnConversion
      LowEnPhotoElec,      LowEnRayleigh
 /particle/list
-              alpha,             alpha+,        anti_proton,                 e+
-                 e-,              gamma,           geantino,             helium
-           hydrogen,             proton,
+              Ps-1s,              Ps-2s,              alpha,             alpha+
+        anti_proton,                 e+,                 e-,              gamma
+           geantino,             helium,           hydrogen,             proton
+
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -62,7 +63,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -84,8 +85,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=34.31s Real=34.33s Sys=0.01s
-Time elapsed in 1 events ---- User=34.31s Real=34.33s Sys=0.01s
+  User=33.01s Real=33.06s Sys=0.01s
+Time elapsed in 1 events ---- User=33.01s Real=33.07s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -104,8 +105,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=300.77s Real=300.92s Sys=0.04s
-Time elapsed in 9 events ---- User=300.77s Real=300.92s Sys=0.04s
+  User=244.24s Real=244.37s Sys=0.02s
+Time elapsed in 9 events ---- User=244.24s Real=244.37s Sys=0.02s
 #
 /gun/particle proton
 #------------------
@@ -125,423 +126,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-The data set has 5 components
-
---- Component 0 ---
-Point: 100000 - Data value: 38.3124
-Point: 108902 - Data value: 35.8786
-Point: 118597 - Data value: 33.588
-Point: 129155 - Data value: 31.4315
-Point: 140653 - Data value: 29.4055
-Point: 153174 - Data value: 27.5009
-Point: 166810 - Data value: 25.712
-Point: 181660 - Data value: 24.0329
-Point: 197832 - Data value: 22.4568
-Point: 215443 - Data value: 20.979
-Point: 234623 - Data value: 19.5929
-Point: 255510 - Data value: 18.2939
-Point: 278256 - Data value: 17.0772
-Point: 303027 - Data value: 15.9377
-Point: 330003 - Data value: 14.8708
-Point: 359381 - Data value: 13.8723
-Point: 391375 - Data value: 12.9385
-Point: 426216 - Data value: 12.0651
-Point: 464159 - Data value: 11.2456
-Point: 505480 - Data value: 10.4824
-Point: 550479 - Data value: 9.74719
-Point: 599484 - Data value: 9.07403
-Point: 652852 - Data value: 8.4509
-Point: 710971 - Data value: 7.86901
-Point: 774264 - Data value: 7.32537
-Point: 843191 - Data value: 6.81839
-Point: 918254 - Data value: 6.34558
-Point: 1e+06 - Data value: 5.90462
-Point: 1.08902e+06 - Data value: 5.49346
-Point: 1.18597e+06 - Data value: 5.11016
-Point: 1.29155e+06 - Data value: 4.75298
-Point: 1.40653e+06 - Data value: 4.42016
-Point: 1.53174e+06 - Data value: 4.11012
-Point: 1.6681e+06 - Data value: 3.82139
-Point: 1.8166e+06 - Data value: 3.55247
-Point: 1.97832e+06 - Data value: 3.30211
-Point: 2.15443e+06 - Data value: 3.06907
-Point: 2.34623e+06 - Data value: 2.85145
-Point: 2.5551e+06 - Data value: 2.64969
-Point: 2.78256e+06 - Data value: 2.45545
-Point: 3.03027e+06 - Data value: 2.2788
-Point: 3.30003e+06 - Data value: 2.11608
-Point: 3.59381e+06 - Data value: 1.96462
-Point: 3.91375e+06 - Data value: 1.82393
-Point: 4.26216e+06 - Data value: 1.69309
-Point: 4.64159e+06 - Data value: 1.57152
-Point: 5.0548e+06 - Data value: 1.45852
-Point: 5.50479e+06 - Data value: 1.35354
-Point: 5.99484e+06 - Data value: 1.256
-Point: 6.52852e+06 - Data value: 1.1654
-Point: 7.10971e+06 - Data value: 1.08126
-Point: 7.74264e+06 - Data value: 1.00312
-Point: 8.43191e+06 - Data value: 0.930564
-Point: 9.18254e+06 - Data value: 0.863205
-Point: 1e+07 - Data value: 0.800674
-Point: 1.08902e+07 - Data value: 0.742381
-Point: 1.18597e+07 - Data value: 0.688506
-Point: 1.29155e+07 - Data value: 0.636722
-Point: 1.40653e+07 - Data value: 0.589782
-Point: 1.53174e+07 - Data value: 0.54666
-Point: 1.6681e+07 - Data value: 0.506657
-Point: 1.8166e+07 - Data value: 0.469506
-Point: 1.97832e+07 - Data value: 0.435071
-Point: 2.15443e+07 - Data value: 0.403147
-Point: 2.34623e+07 - Data value: 0.373541
-Point: 2.5551e+07 - Data value: 0.346086
-Point: 2.78256e+07 - Data value: 0.320636
-Point: 3.03027e+07 - Data value: 0.297043
-Point: 3.30003e+07 - Data value: 0.275172
-Point: 3.59381e+07 - Data value: 0.254901
-Point: 3.91375e+07 - Data value: 0.236114
-Point: 4.26216e+07 - Data value: 0.218704
-Point: 4.64159e+07 - Data value: 0.202572
-Point: 5.0548e+07 - Data value: 0.187558
-Point: 5.50479e+07 - Data value: 0.173708
-Point: 5.99484e+07 - Data value: 0.160397
-Point: 6.52852e+07 - Data value: 0.148366
-Point: 7.10971e+07 - Data value: 0.137337
-Point: 7.74264e+07 - Data value: 0.127123
-Point: 8.43191e+07 - Data value: 0.117652
-Point: 9.18254e+07 - Data value: 0.108887
---- Component 1 ---
-Point: 100000 - Data value: 76.6937
-Point: 108902 - Data value: 71.5737
-Point: 118597 - Data value: 66.7748
-Point: 129155 - Data value: 62.2767
-Point: 140653 - Data value: 58.0676
-Point: 153174 - Data value: 54.1316
-Point: 166810 - Data value: 50.4204
-Point: 181660 - Data value: 46.9747
-Point: 197832 - Data value: 43.7597
-Point: 215443 - Data value: 40.6897
-Point: 234623 - Data value: 37.8769
-Point: 255510 - Data value: 35.2523
-Point: 278256 - Data value: 32.7986
-Point: 303027 - Data value: 30.5225
-Point: 330003 - Data value: 28.3943
-Point: 359381 - Data value: 26.4102
-Point: 391375 - Data value: 24.5645
-Point: 426216 - Data value: 22.8434
-Point: 464159 - Data value: 21.2383
-Point: 505480 - Data value: 19.7407
-Point: 550479 - Data value: 18.3444
-Point: 599484 - Data value: 17.0479
-Point: 652852 - Data value: 15.846
-Point: 710971 - Data value: 14.725
-Point: 774264 - Data value: 13.6738
-Point: 843191 - Data value: 12.7009
-Point: 918254 - Data value: 11.7967
-Point: 1e+06 - Data value: 10.9349
-Point: 1.08902e+06 - Data value: 10.1441
-Point: 1.18597e+06 - Data value: 9.41603
-Point: 1.29155e+06 - Data value: 8.73904
-Point: 1.40653e+06 - Data value: 8.11054
-Point: 1.53174e+06 - Data value: 7.5249
-Point: 1.6681e+06 - Data value: 6.98061
-Point: 1.8166e+06 - Data value: 6.47614
-Point: 1.97832e+06 - Data value: 6.00525
-Point: 2.15443e+06 - Data value: 5.57347
-Point: 2.34623e+06 - Data value: 5.17127
-Point: 2.5551e+06 - Data value: 4.79704
-Point: 2.78256e+06 - Data value: 4.44935
-Point: 3.03027e+06 - Data value: 4.12647
-Point: 3.30003e+06 - Data value: 3.8265
-Point: 3.59381e+06 - Data value: 3.54848
-Point: 3.91375e+06 - Data value: 3.28827
-Point: 4.26216e+06 - Data value: 3.04865
-Point: 4.64159e+06 - Data value: 2.82061
-Point: 5.0548e+06 - Data value: 2.61425
-Point: 5.50479e+06 - Data value: 2.41949
-Point: 5.99484e+06 - Data value: 2.24119
-Point: 6.52852e+06 - Data value: 2.07661
-Point: 7.10971e+06 - Data value: 1.9242
-Point: 7.74264e+06 - Data value: 1.78271
-Point: 8.43191e+06 - Data value: 1.65149
-Point: 9.18254e+06 - Data value: 1.52981
-Point: 1e+07 - Data value: 1.41699
-Point: 1.08902e+07 - Data value: 1.31243
-Point: 1.18597e+07 - Data value: 1.21555
-Point: 1.29155e+07 - Data value: 1.12577
-Point: 1.40653e+07 - Data value: 1.04256
-Point: 1.53174e+07 - Data value: 0.965444
-Point: 1.6681e+07 - Data value: 0.894039
-Point: 1.8166e+07 - Data value: 0.827253
-Point: 1.97832e+07 - Data value: 0.766014
-Point: 2.15443e+07 - Data value: 0.70773
-Point: 2.34623e+07 - Data value: 0.6551
-Point: 2.5551e+07 - Data value: 0.605709
-Point: 2.78256e+07 - Data value: 0.56043
-Point: 3.03027e+07 - Data value: 0.518606
-Point: 3.30003e+07 - Data value: 0.479892
-Point: 3.59381e+07 - Data value: 0.44405
-Point: 3.91375e+07 - Data value: 0.410862
-Point: 4.26216e+07 - Data value: 0.380133
-Point: 4.64159e+07 - Data value: 0.351724
-Point: 5.0548e+07 - Data value: 0.325414
-Point: 5.50479e+07 - Data value: 0.301055
-Point: 5.99484e+07 - Data value: 0.278529
-Point: 6.52852e+07 - Data value: 0.257676
-Point: 7.10971e+07 - Data value: 0.238382
-Point: 7.74264e+07 - Data value: 0.220531
-Point: 8.43191e+07 - Data value: 0.203855
-Point: 9.18254e+07 - Data value: 0.188569
---- Component 2 ---
-Point: 100000 - Data value: 53.493
-Point: 108902 - Data value: 49.9001
-Point: 118597 - Data value: 46.5382
-Point: 129155 - Data value: 43.3565
-Point: 140653 - Data value: 40.4347
-Point: 153174 - Data value: 37.6728
-Point: 166810 - Data value: 35.0534
-Point: 181660 - Data value: 32.6156
-Point: 197832 - Data value: 30.3869
-Point: 215443 - Data value: 28.291
-Point: 234623 - Data value: 26.284
-Point: 255510 - Data value: 24.4818
-Point: 278256 - Data value: 22.7975
-Point: 303027 - Data value: 21.1833
-Point: 330003 - Data value: 19.6607
-Point: 359381 - Data value: 18.3227
-Point: 391375 - Data value: 17.0336
-Point: 426216 - Data value: 15.8364
-Point: 464159 - Data value: 14.7142
-Point: 505480 - Data value: 13.662
-Point: 550479 - Data value: 12.7042
-Point: 599484 - Data value: 11.7994
-Point: 652852 - Data value: 10.9629
-Point: 710971 - Data value: 10.1888
-Point: 774264 - Data value: 9.45889
-Point: 843191 - Data value: 8.77918
-Point: 918254 - Data value: 8.15055
-Point: 1e+06 - Data value: 7.55641
-Point: 1.08902e+06 - Data value: 7.01184
-Point: 1.18597e+06 - Data value: 6.50963
-Point: 1.29155e+06 - Data value: 6.03802
-Point: 1.40653e+06 - Data value: 5.60036
-Point: 1.53174e+06 - Data value: 5.19398
-Point: 1.6681e+06 - Data value: 4.81935
-Point: 1.8166e+06 - Data value: 4.46623
-Point: 1.97832e+06 - Data value: 4.14533
-Point: 2.15443e+06 - Data value: 3.84646
-Point: 2.34623e+06 - Data value: 3.56756
-Point: 2.5551e+06 - Data value: 3.30884
-Point: 2.78256e+06 - Data value: 3.06907
-Point: 3.03027e+06 - Data value: 2.84624
-Point: 3.30003e+06 - Data value: 2.639
-Point: 3.59381e+06 - Data value: 2.44637
-Point: 3.91375e+06 - Data value: 2.26718
-Point: 4.26216e+06 - Data value: 2.101
-Point: 4.64159e+06 - Data value: 1.94763
-Point: 5.0548e+06 - Data value: 1.80478
-Point: 5.50479e+06 - Data value: 1.67207
-Point: 5.99484e+06 - Data value: 1.54512
-Point: 6.52852e+06 - Data value: 1.43144
-Point: 7.10971e+06 - Data value: 1.32596
-Point: 7.74264e+06 - Data value: 1.22807
-Point: 8.43191e+06 - Data value: 1.13739
-Point: 9.18254e+06 - Data value: 1.05342
-Point: 1e+07 - Data value: 0.975564
-Point: 1.08902e+07 - Data value: 0.903493
-Point: 1.18597e+07 - Data value: 0.836845
-Point: 1.29155e+07 - Data value: 0.774919
-Point: 1.40653e+07 - Data value: 0.717482
-Point: 1.53174e+07 - Data value: 0.664295
-Point: 1.6681e+07 - Data value: 0.615043
-Point: 1.8166e+07 - Data value: 0.569408
-Point: 1.97832e+07 - Data value: 0.527063
-Point: 2.15443e+07 - Data value: 0.487702
-Point: 2.34623e+07 - Data value: 0.451745
-Point: 2.5551e+07 - Data value: 0.418106
-Point: 2.78256e+07 - Data value: 0.386407
-Point: 3.03027e+07 - Data value: 0.356699
-Point: 3.30003e+07 - Data value: 0.330038
-Point: 3.59381e+07 - Data value: 0.30539
-Point: 3.91375e+07 - Data value: 0.282544
-Point: 4.26216e+07 - Data value: 0.261383
-Point: 4.64159e+07 - Data value: 0.241776
-Point: 5.0548e+07 - Data value: 0.223699
-Point: 5.50479e+07 - Data value: 0.206938
-Point: 5.99484e+07 - Data value: 0.191416
-Point: 6.52852e+07 - Data value: 0.177033
-Point: 7.10971e+07 - Data value: 0.163778
-Point: 7.74264e+07 - Data value: 0.151494
-Point: 8.43191e+07 - Data value: 0.140127
-Point: 9.18254e+07 - Data value: 0.129608
---- Component 3 ---
-Point: 100000 - Data value: 31.9542
-Point: 108902 - Data value: 30.4805
-Point: 118597 - Data value: 29.0657
-Point: 129155 - Data value: 27.6277
-Point: 140653 - Data value: 26.3093
-Point: 153174 - Data value: 24.9652
-Point: 166810 - Data value: 23.6118
-Point: 181660 - Data value: 22.397
-Point: 197832 - Data value: 21.2702
-Point: 215443 - Data value: 20.1448
-Point: 234623 - Data value: 19.02
-Point: 255510 - Data value: 18.0877
-Point: 278256 - Data value: 17.1293
-Point: 303027 - Data value: 16.1567
-Point: 330003 - Data value: 15.2598
-Point: 359381 - Data value: 14.4106
-Point: 391375 - Data value: 13.6334
-Point: 426216 - Data value: 12.845
-Point: 464159 - Data value: 12.0588
-Point: 505480 - Data value: 11.4045
-Point: 550479 - Data value: 10.7488
-Point: 599484 - Data value: 10.0615
-Point: 652852 - Data value: 9.45592
-Point: 710971 - Data value: 8.89291
-Point: 774264 - Data value: 8.34013
-Point: 843191 - Data value: 7.84203
-Point: 918254 - Data value: 7.36156
-Point: 1e+06 - Data value: 6.90574
-Point: 1.08902e+06 - Data value: 6.48535
-Point: 1.18597e+06 - Data value: 6.06571
-Point: 1.29155e+06 - Data value: 5.68921
-Point: 1.40653e+06 - Data value: 5.32723
-Point: 1.53174e+06 - Data value: 4.98918
-Point: 1.6681e+06 - Data value: 4.66796
-Point: 1.8166e+06 - Data value: 4.35727
-Point: 1.97832e+06 - Data value: 4.08472
-Point: 2.15443e+06 - Data value: 3.82205
-Point: 2.34623e+06 - Data value: 3.57567
-Point: 2.5551e+06 - Data value: 3.34276
-Point: 2.78256e+06 - Data value: 3.12508
-Point: 3.03027e+06 - Data value: 2.91828
-Point: 3.30003e+06 - Data value: 2.7263
-Point: 3.59381e+06 - Data value: 2.54421
-Point: 3.91375e+06 - Data value: 2.37459
-Point: 4.26216e+06 - Data value: 2.21561
-Point: 4.64159e+06 - Data value: 2.06776
-Point: 5.0548e+06 - Data value: 1.93
-Point: 5.50479e+06 - Data value: 1.79835
-Point: 5.99484e+06 - Data value: 1.67308
-Point: 6.52852e+06 - Data value: 1.55922
-Point: 7.10971e+06 - Data value: 1.45268
-Point: 7.74264e+06 - Data value: 1.35346
-Point: 8.43191e+06 - Data value: 1.26102
-Point: 9.18254e+06 - Data value: 1.17433
-Point: 1e+07 - Data value: 1.09399
-Point: 1.08902e+07 - Data value: 1.01868
-Point: 1.18597e+07 - Data value: 0.9483
-Point: 1.29155e+07 - Data value: 0.882516
-Point: 1.40653e+07 - Data value: 0.820993
-Point: 1.53174e+07 - Data value: 0.763067
-Point: 1.6681e+07 - Data value: 0.710078
-Point: 1.8166e+07 - Data value: 0.660576
-Point: 1.97832e+07 - Data value: 0.614701
-Point: 2.15443e+07 - Data value: 0.571777
-Point: 2.34623e+07 - Data value: 0.531783
-Point: 2.5551e+07 - Data value: 0.493377
-Point: 2.78256e+07 - Data value: 0.458555
-Point: 3.03027e+07 - Data value: 0.425221
-Point: 3.30003e+07 - Data value: 0.395061
-Point: 3.59381e+07 - Data value: 0.366969
-Point: 3.91375e+07 - Data value: 0.340884
-Point: 4.26216e+07 - Data value: 0.316575
-Point: 4.64159e+07 - Data value: 0.293963
-Point: 5.0548e+07 - Data value: 0.272897
-Point: 5.50479e+07 - Data value: 0.253318
-Point: 5.99484e+07 - Data value: 0.235026
-Point: 6.52852e+07 - Data value: 0.218231
-Point: 7.10971e+07 - Data value: 0.202629
-Point: 7.74264e+07 - Data value: 0.188083
-Point: 8.43191e+07 - Data value: 0.174549
-Point: 9.18254e+07 - Data value: 0.16199
---- Component 4 ---
-Point: 100000 - Data value: 37.0738
-Point: 108902 - Data value: 35.3901
-Point: 118597 - Data value: 33.7808
-Point: 129155 - Data value: 32.1407
-Point: 140653 - Data value: 30.6132
-Point: 153174 - Data value: 29.1024
-Point: 166810 - Data value: 27.6751
-Point: 181660 - Data value: 26.2533
-Point: 197832 - Data value: 25.0028
-Point: 215443 - Data value: 23.7453
-Point: 234623 - Data value: 22.4922
-Point: 255510 - Data value: 21.3565
-Point: 278256 - Data value: 20.3228
-Point: 303027 - Data value: 19.2759
-Point: 330003 - Data value: 18.236
-Point: 359381 - Data value: 17.2494
-Point: 391375 - Data value: 16.3314
-Point: 426216 - Data value: 15.4024
-Point: 464159 - Data value: 14.5615
-Point: 505480 - Data value: 13.7731
-Point: 550479 - Data value: 12.9897
-Point: 599484 - Data value: 12.1813
-Point: 652852 - Data value: 11.4853
-Point: 710971 - Data value: 10.8305
-Point: 774264 - Data value: 10.1982
-Point: 843191 - Data value: 9.51621
-Point: 918254 - Data value: 8.95349
-Point: 1e+06 - Data value: 8.42257
-Point: 1.08902e+06 - Data value: 7.90773
-Point: 1.18597e+06 - Data value: 7.41899
-Point: 1.29155e+06 - Data value: 6.9676
-Point: 1.40653e+06 - Data value: 6.5314
-Point: 1.53174e+06 - Data value: 6.11118
-Point: 1.6681e+06 - Data value: 5.7371
-Point: 1.8166e+06 - Data value: 5.37889
-Point: 1.97832e+06 - Data value: 5.03959
-Point: 2.15443e+06 - Data value: 4.71894
-Point: 2.34623e+06 - Data value: 4.41961
-Point: 2.5551e+06 - Data value: 4.13315
-Point: 2.78256e+06 - Data value: 3.86424
-Point: 3.03027e+06 - Data value: 3.6121
-Point: 3.30003e+06 - Data value: 3.37947
-Point: 3.59381e+06 - Data value: 3.15975
-Point: 3.91375e+06 - Data value: 2.95355
-Point: 4.26216e+06 - Data value: 2.75987
-Point: 4.64159e+06 - Data value: 2.57944
-Point: 5.0548e+06 - Data value: 2.40896
-Point: 5.50479e+06 - Data value: 2.24944
-Point: 5.99484e+06 - Data value: 2.09869
-Point: 6.52852e+06 - Data value: 1.9563
-Point: 7.10971e+06 - Data value: 1.81931
-Point: 7.74264e+06 - Data value: 1.69483
-Point: 8.43191e+06 - Data value: 1.58124
-Point: 9.18254e+06 - Data value: 1.47411
-Point: 1e+07 - Data value: 1.3737
-Point: 1.08902e+07 - Data value: 1.27997
-Point: 1.18597e+07 - Data value: 1.19227
-Point: 1.29155e+07 - Data value: 1.11053
-Point: 1.40653e+07 - Data value: 1.03425
-Point: 1.53174e+07 - Data value: 0.962782
-Point: 1.6681e+07 - Data value: 0.896615
-Point: 1.8166e+07 - Data value: 0.834944
-Point: 1.97832e+07 - Data value: 0.777129
-Point: 2.15443e+07 - Data value: 0.723154
-Point: 2.34623e+07 - Data value: 0.672817
-Point: 2.5551e+07 - Data value: 0.625929
-Point: 2.78256e+07 - Data value: 0.582287
-Point: 3.03027e+07 - Data value: 0.541597
-Point: 3.30003e+07 - Data value: 0.501319
-Point: 3.59381e+07 - Data value: 0.465889
-Point: 3.91375e+07 - Data value: 0.432965
-Point: 4.26216e+07 - Data value: 0.402231
-Point: 4.64159e+07 - Data value: 0.373694
-Point: 5.0548e+07 - Data value: 0.347118
-Point: 5.50479e+07 - Data value: 0.322324
-Point: 5.99484e+07 - Data value: 0.299331
-Point: 6.52852e+07 - Data value: 0.278116
-Point: 7.10971e+07 - Data value: 0.258303
-Point: 7.74264e+07 - Data value: 0.239861
-Point: 8.43191e+07 - Data value: 0.222703
-Point: 9.18254e+07 - Data value: 0.206763
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=6.83s Real=6.85s Sys=0s
-Time elapsed in 1 events ---- User=6.83s Real=6.85s Sys=0s
+  User=4.04s Real=4.06s Sys=0s
+Time elapsed in 1 events ---- User=4.04s Real=4.06s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -560,8 +149,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.94s Real=3.93s Sys=0s
-Time elapsed in 1 events ---- User=3.94s Real=3.93s Sys=0s
+  User=3.82s Real=3.82s Sys=0s
+Time elapsed in 1 events ---- User=3.82s Real=3.82s Sys=0s
 #
 /gun/particle alpha
 #------------------
@@ -584,8 +173,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=24.16s Real=24.17s Sys=0.01s
-Time elapsed in 1 events ---- User=24.16s Real=24.17s Sys=0.01s
+  User=22.45s Real=22.47s Sys=0.01s
+Time elapsed in 1 events ---- User=22.45s Real=22.47s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -604,15 +193,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.63s Real=23.65s Sys=0s
-Time elapsed in 1 events ---- User=23.63s Real=23.65s Sys=0s
+  User=23.32s Real=23.52s Sys=0s
+Time elapsed in 1 events ---- User=23.32s Real=23.52s Sys=0s
 #
 G4 kernel has come to Quit state.
-DNAProcess for alpha in Water : 5179 calls
-DNAProcess for alpha+ in Water : 55 calls
-DNAProcess for e- in Water : 68047 calls
-DNAProcess for helium in Water : 2 calls
-DNAProcess for proton in Water : 1029 calls
+DNAProcess for alpha in Water : 5025 calls
+DNAProcess for alpha+ in Water : 104 calls
+DNAProcess for e- in Water : 65395 calls
+DNAProcess for proton in Water : 1023 calls
 Transportation for alpha in Water : 2 calls
-Transportation for e- in Water : 2 calls
+Transportation for e- in Water : 13 calls
 Transportation for proton in Water : 2 calls

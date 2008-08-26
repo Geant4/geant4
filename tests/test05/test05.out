@@ -936,7 +936,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

@@ -7,6 +7,10 @@
 *************************************************************
 
 SimpleBox is now made of Pb
+
+<<< Geant4 Physics List engine packaging library: PACK 5.4
+<<< Geant4 Physics List simulation engine: LHEP 4.2
+
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
@@ -36,7 +40,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -48,7 +52,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -61,12 +65,17 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -76,14 +85,19 @@ hIoni:   tables are built for  proton
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+
+      Stopping Power data for 16 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -109,6 +123,11 @@ hIoni:   tables are built for  kaon-
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -125,11 +144,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -156,6 +170,11 @@ hIoni:   tables are built for  pi+
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -163,57 +182,62 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                      Hadronic Processes for <anti_neutron>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <anti_proton>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 30000
+
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:             HadronicModel: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
                      Hadronic Processes for <kaon+>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
    KaonPlusInelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                   G4HEKaonPlusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
                      Hadronic Processes for <kaon->
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                  G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
                      Hadronic Processes for <lambda>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
      LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <neutron>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
     NeutronInelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
-                                   G4HENeutronInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+                                   G4HENeutronInelastic: Emin(GeV)=    25  Emax(GeV)= 10000
+       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 
                      Hadronic Processes for <pi+>
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
    PionPlusInelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
-                                  G4HEPionPlusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+                                  G4HEPionPlusInelastic: Emin(GeV)=    25  Emax(GeV)= 10000
 
                      Hadronic Processes for <pi->
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   PionMinusInelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
-                                 G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+                                 G4HEPionMinusInelastic: Emin(GeV)=    25  Emax(GeV)= 10000
 
                      Hadronic Processes for <proton>
-       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 3
-                                 G4ElasticHadrNucleusHE: Emin(GeV)=   2.8  Emax(GeV)= 100000
+            hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
      ProtonInelastic  Models:       G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 55
-                                    G4HEProtonInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+                                    G4HEProtonInelastic: Emin(GeV)=    25  Emax(GeV)= 10000
 ============================================================================================
 #
 # pi+ at 100 GeV in Pb
@@ -288,7 +312,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -300,7 +324,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -313,12 +337,17 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -328,14 +357,19 @@ hIoni:   tables are built for  proton
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+
+      Stopping Power data for 16 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -361,6 +395,11 @@ hIoni:   tables are built for  kaon-
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -377,11 +416,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -408,6 +442,11 @@ hIoni:   tables are built for  pi+
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -415,11 +454,6 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 #
 # pi+ at 100 GeV in Al
 #
@@ -493,7 +527,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -505,7 +539,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -518,12 +552,17 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -533,14 +572,19 @@ hIoni:   tables are built for  proton
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
-
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
+
+      Stopping Power data for 16 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -566,6 +610,11 @@ hIoni:   tables are built for  kaon-
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -582,11 +631,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
       Theoretical model 
-
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -613,6 +657,11 @@ hIoni:   tables are built for  pi+
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
@@ -620,11 +669,6 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
       Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 #
 # pi+ at 100 GeV in Air
 #

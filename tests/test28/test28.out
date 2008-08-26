@@ -57,7 +57,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -69,7 +69,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -82,7 +82,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -92,7 +92,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -104,7 +104,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -133,7 +133,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -180,7 +180,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -266,7 +266,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.5s Real=1.6s Sys=0.01s
+  User=1.6s Real=1.8s Sys=0.02s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -292,7 +292,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -304,7 +304,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
       Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -317,7 +317,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
       Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -327,7 +327,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -339,7 +339,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -368,7 +368,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -415,7 +415,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -482,7 +482,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -494,7 +494,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -507,7 +507,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -517,7 +517,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -529,7 +529,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -558,7 +558,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -605,7 +605,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -651,7 +651,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=0.54s Sys=0s
+  User=0.61s Real=0.62s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -698,7 +698,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.1s Sys=0s
+  User=0.07s Real=0.06s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -744,7 +744,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -790,7 +790,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 # .....end deuteron.............
 #
@@ -838,7 +838,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.34s Sys=0s
+  User=0.87s Real=1s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -930,7 +930,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.9s Real=2.9s Sys=0s
+  User=0.22s Real=0.23s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -951,19 +951,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
- Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
 
 ====================================================================
 
@@ -1068,7 +1068,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # .....end alpha............
 #
@@ -1117,7 +1117,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=30s Real=31s Sys=0.05s
+  User=1.5e+02s Real=1.5e+02s Sys=0.05s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1164,7 +1164,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=0.59s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1211,7 +1211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=32.35s Real=32.4s Sys=0s
+  User=28.74s Real=28.75s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1238,7 +1238,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -1250,7 +1250,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -1263,7 +1263,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -1273,7 +1273,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -1285,7 +1285,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -1314,7 +1314,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -1361,7 +1361,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -1412,7 +1412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=20.31s Real=20.32s Sys=0.01s
+  User=16.05s Real=16.05s Sys=0.01s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1465,7 +1465,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.46s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1569,7 +1569,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=10s Real=10s Sys=0.01s
+  User=17s Real=17s Sys=0s
 #
 # .....end C(12,6)++............
 #
@@ -1599,7 +1599,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -1611,7 +1611,7 @@ eIoni:   tables are built for  e-
 eBrem:   tables are built for  e-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
       Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
@@ -1624,7 +1624,7 @@ eIoni:   tables are built for  e+
 eBrem:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
       Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
@@ -1634,7 +1634,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -1646,7 +1646,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -1675,7 +1675,7 @@ hIoni:   tables are built for  kaon-
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -1722,7 +1722,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
       LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
@@ -1785,7 +1785,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
