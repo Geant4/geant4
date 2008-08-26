@@ -154,7 +154,9 @@ examples/extended
     clGeometry, cltog4       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
   gdml                       Witold.Pokorski@cern.ch         Witold Pokorski
   geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-  hadronic/Hadr01            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  hadronic:
+    Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+    Hadr01                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   medical:
     DICOM                    Pedro.Arce@ciemat.es            Pedro Arce
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
