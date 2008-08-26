@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.3 2008-08-19 15:27:39 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.4 2008-08-26 15:40:38 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,13 +91,10 @@ public:
 				 G4double maxEnergy);
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*);
+                                const G4Material*,G4double);
 
   inline void SetEnergyThreshold(G4double val);
   inline G4double EnergyThreshold() const;
-
-  inline void SetHydrogenEnergyThreshold(G4double val);
-  inline G4double HydrogenEnergyThreshold() const;
 
 protected:
 
@@ -120,8 +117,13 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
+  // * fast inline functions *
   inline void SetCurrentElement(const G4double);
-  void SetupForElement(const G4int);
+
+  inline G4double Phi1(G4double,G4double);
+  inline G4double Phi1M2(G4double,G4double);
+  inline G4double Psi1(G4double,G4double);
+  inline G4double Psi1M2(G4double,G4double);
 
   // hide assignment operator
   G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right);
@@ -134,7 +136,10 @@ protected:
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
 
-  static G4double xgi[8], wgi[8];
+  static const G4double xgi[8], wgi[8];
+  static const G4double Fel_light[5];
+  static const G4double Finel_light[5];
+
 
   G4double minThreshold;
 
@@ -166,8 +171,10 @@ private:
   G4double LPMconstant;
   G4double bremFactor;
   G4double highEnergyTh;
-  G4double hydrogenEnergyTh;
+  G4double energyThresholdLPM;
   G4double facFel, facFinel;
+  G4double preS1,logTwo;
+  G4bool use_completescreening;
 
   G4bool   isInitialised;
 
@@ -179,6 +186,7 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
+    // remove this check if everything is well tested 
     if (currentZ!=GetCurrentElement()->GetZ()) {
       G4cout<<" ERROR in  G4eBremsstrahlungRelModel::SetCurrentElement "<<Z<<" vs. "<<GetCurrentElement()->GetZ()<<G4endl;
     }
@@ -186,7 +194,17 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(iz);
-    SetupForElement(iz);
+
+    if (iz <= 4) {
+      Fel = Fel_light[iz];  
+      Finel = Finel_light[iz] ; 
+    }
+    else {
+      Fel = facFel - lnZ/3. ;
+      Finel = facFinel - 2.*lnZ/3. ;
+    }
+
+    fCoulomb=GetCurrentElement()->GetfCoulomb();
   }
 }
 
@@ -218,20 +236,33 @@ G4double G4eBremsstrahlungRelModel::EnergyThreshold() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-void G4eBremsstrahlungRelModel::SetHydrogenEnergyThreshold(G4double val) 
+
+inline G4double G4eBremsstrahlungRelModel::Phi1(G4double gg, G4double Z)
 {
-  hydrogenEnergyTh = val;
+  //       Thomas-Fermi FF from Tsai, eq.(3.38) for Z>=5
+  return 20.863 - 2.*log(1. + sqr(0.55846*gg) )
+    - 4.*( 1. - 0.6*exp(-0.9*gg) - 0.4*exp(-1.5*gg) );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungRelModel::HydrogenEnergyThreshold() const 
+inline G4double G4eBremsstrahlungRelModel::Phi1M2(G4double gg, G4double Z)
 {
-  return hydrogenEnergyTh;
+  //       Thomas-Fermi FF from Tsai, eq. (3.39) for Z>=5
+  // return Phi1(gg,Z) - 
+  return 2./(3.*(1. + 6.5*gg +6.*sqr(gg)) );
 }
 
+inline G4double G4eBremsstrahlungRelModel::Psi1(G4double eps, G4double Z)
+{
+  //       Thomas-Fermi FF from Tsai, eq.(3.40) for Z>=5 
+  return 28.340 - 2.*log(1. + sqr(3.621*eps) )
+    - 4.*( 1. - 0.7*exp(-8*eps) - 0.3*exp(-29.*eps) );
+}
+
+inline G4double G4eBremsstrahlungRelModel::Psi1M2(G4double eps, G4double Z)
+{
+  //       Thomas-Fermi FF from Tsai, eq. (3.41) for Z>=5
+  return  2./(3.*(1. + 40.*eps +400.*sqr(eps)) );
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
