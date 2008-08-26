@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStopping.cc,v 1.7 2008-08-25 16:04:19 vnivanch Exp $
+// $Id: G4SimpleMaterialStopping.cc,v 1.8 2008-08-26 18:15:41 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -152,7 +152,7 @@ G4int i, j=0;
 dedx.reserve(16*25);
 
 //..List of ions
-//G4double factor = MeV*cm2/milligram;
+//G4double factor0 = MeV*cm2/milligram;
 G4double factor = 1000.*MeV/cm;
 G4double dens[25]={8.988E-05, 1.785E-04, 1.848, 1.9, .00125, .001429, 8.99E-04, 2.699, 2.329, .0017837, 4.508, 7.873, 8.907, 8.933, 5.323, .003743, 1.22, 1.5, 7.285, .005895, 19.254, 21.45, 19.291, 11.343, 19.05};
 G4int Z_Ion[16] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStopping.cc,v 1.7 2008-08-25 16:04:19 vnivanch Exp $
+// $Id: G4MaterialStopping.cc,v 1.8 2008-08-26 18:15:41 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -55,23 +55,25 @@ G4MaterialStopping::G4MaterialStopping(G4EmCorrections* corr, G4bool splineFlag)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MaterialStopping::~G4MaterialStopping()
-{}
+{
+  G4cout << "G4MaterialStopping::~G4MaterialStopping " << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
 G4MaterialStopping::GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy)
 {
-  G4cout << "Hello, idxMaterial= " << idxMaterial << G4endl;
+  //G4cout << "Hello, idxMaterial= " << idxMaterial << G4endl;
   G4double res = 0.0;
   if(ionZ < 3 || ionZ > 18 || idxMaterial < 0 || idxMaterial > 30) return res; 
   G4bool b;
   G4int idx = idxMaterial*16 + ionZ - 3;
-  G4cout << "Index of DEDX " << idx << G4endl;
-  G4cout << "Number  DEDX " << dedx.size() << G4endl;
-  G4cout << "Pointer DEDX " << dedx[idx] << G4endl;
+  //G4cout << "Index of DEDX " << idx << G4endl;
+  //G4cout << "Number  DEDX " << dedx.size() << G4endl;
+  //G4cout << "Pointer DEDX " << dedx[idx] << G4endl;
   G4double scaledEnergy = kinEnergy/A[ionZ - 3];
-  G4cout << "Scaled Energy is " << scaledEnergy << G4endl;
+  //G4cout << "Scaled Energy is " << scaledEnergy << G4endl;
   G4double emin = 0.025*MeV;
   if(scaledEnergy < emin) {
     res = (dedx[idx])->GetValue(emin, b)*sqrt(scaledEnergy/emin);
@@ -157,7 +159,7 @@ G4int i, j=0;
 dedx.reserve(16*31);
 
 //..List of ions
-// G4double factor = MeV*cm2/milligram;
+// G4double factor0 = MeV*cm2/milligram;
 G4double factor = 1000*MeV/cm;
 G4double dens[31]={1.127,.92,1.2048E-03,3.97,1.85,1.85,1.76,3.18,1.8421E-03,2.23,1.42,2.635,2.44,6.6715E-04,1.04,1.14,3.815,1.032,1.2,.94,1.4,1.19,1.06,2.20,1.8794E-03,2.32,3.667,1.0641E-03,1.8263E-03,1.0,7.5618E-04};
 G4int Z_Ion[16] = {3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
@@ -212,6 +214,8 @@ AddData(E,A_17,dens[j]*factor);
 G4double A_18[31]={7.196,7.978,9.43,10.77,12.04,13.24,14.37,15.44,16.47,20.95,24.14,26.26,27.67,29.29,30.09,30.46,30.59,30.57,30.45,30.27,28.91,27.36,25.87,24.48,22.07,20.06,18.38,16.94,15.72,14.65,13.72};
 AddData(E,A_18,dens[j]*factor);
 j++;
+
+ G4cout << "Initialisation done j= " << j << G4endl;
 
 G4double AA_3[31]={2.852,3.097,3.49,3.778,3.983,4.125,4.221,4.283,4.321,4.313,4.182,4.022,3.859,3.553,3.284,3.05,2.845,2.665,2.507,2.366,1.846,1.516,1.289,1.123,0.898,0.7521,0.6496,0.5735,0.5147,0.4677,0.4292};
 AddData(E,AA_3,dens[j]*factor);
@@ -927,6 +931,8 @@ G4double U_18[31]={6.564,7.283,8.624,9.878,11.06,12.19,13.26,14.28,15.25,19.47,2
 AddData(E,U_18,dens[j]*factor);
 j++;
 
+ G4cout << "Initialisation done j= " << j << G4endl;
+
 G4double V_3[31]={2.541,2.772,3.148,3.426,3.623,3.759,3.849,3.907,3.942,3.94,3.827,3.688,3.546,3.276,3.037,2.827,2.642,2.479,2.335,2.206,1.728,1.422,1.21,1.055,0.8447,0.7079,0.6118,0.5404,0.4851,0.441,0.4049};
 AddData(E,V_3,dens[j]*factor);
 G4double V_4[31]={3.127,3.434,3.963,4.392,4.729,4.984,5.174,5.313,5.413,5.594,5.553,5.441,5.304,5.014,4.733,4.473,4.236,4.019,3.822,3.642,2.941,2.463,2.119,1.86,1.498,1.259,1.088,0.9614,0.8628,0.784,0.7195};
@@ -960,6 +966,8 @@ AddData(E,V_17,dens[j]*factor);
 G4double V_18[31]={6.642,7.369,8.724,9.986,11.17,12.3,13.36,14.38,15.35,19.64,22.74,24.8,26.18,27.8,28.61,29,29.17,29.18,29.09,28.94,27.73,26.29,24.89,23.58,21.29,19.37,17.75,16.37,15.19,14.16,13.27};
 AddData(E,V_18,dens[j]*factor);
 j++;
+
+ G4cout << "Initialisation done j= " << j << G4endl;
 
 G4double W_3[31]={1.603,1.75,1.999,2.196,2.352,2.474,2.568,2.64,2.694,2.799,2.774,2.705,2.623,2.454,2.295,2.151,2.023,1.908,1.804,1.711,1.358,1.127,0.965,0.8452,0.6807,0.573,0.4969,0.4401,0.396,0.3606,0.3316};
 AddData(E,W_3,dens[j]*factor);
@@ -995,6 +1003,8 @@ G4double W_18[31]={4.048,4.504,5.369,6.194,6.991,7.764,8.512,9.236,9.936,13.07,1
 AddData(E,W_18,dens[j]*factor);
 j++;
 
+ G4cout << "Initialisation done j= " << j << G4endl;
+
 G4double X_3[31]={3.332,3.612,4.056,4.373,4.592,4.739,4.835,4.893,4.924,4.88,4.713,4.519,4.326,3.97,3.659,3.39,3.157,2.952,2.773,2.613,2.031,1.663,1.411,1.228,0.9798,0.8194,0.7071,0.6238,0.5594,0.508,0.466};
 AddData(E,X_3,dens[j]*factor);
 G4double X_4[31]={4.135,4.515,5.152,5.649,6.03,6.313,6.519,6.667,6.771,6.928,6.834,6.663,6.468,6.07,5.698,5.36,5.055,4.781,4.533,4.309,3.45,2.875,2.465,2.159,1.735,1.455,1.256,1.109,0.9941,0.9026,0.8279};
@@ -1028,6 +1038,8 @@ AddData(E,X_17,dens[j]*factor);
 G4double X_18[31]={8.813,9.748,11.47,13.07,14.56,15.96,17.28,18.53,19.71,24.73,28.21,30.48,31.98,33.65,34.43,34.74,34.8,34.7,34.49,34.23,32.47,30.59,28.82,27.21,24.43,22.15,20.26,18.65,17.29,16.1,15.07};
 AddData(E,X_18,dens[j]*factor);
 
+ G4cout << "Initialisation done j= " << j << G4endl;
+
 if(corr) {
   G4int n = 0;
   for(j=0; j<31; j++) {
@@ -1037,4 +1049,7 @@ if(corr) {
     }
   }
 }
+
+ G4cout << "Initialisation end " << G4endl;
+
 }

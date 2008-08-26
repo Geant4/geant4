@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006-10-20 14:34:31 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2008-08-26 18:15:28 antoni Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -11,9 +11,8 @@ ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
 
-G4EXEC_BUILD = true
+G4EXEC_BUILD := true
 
 include $(G4INSTALL)/config/architecture.gmk
-
 
 include $(G4INSTALL)/config/binmake.gmk
