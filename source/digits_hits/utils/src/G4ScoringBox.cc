@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.51 2008-03-25 02:18:38 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.52 2008-08-26 01:08:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -122,7 +122,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     else
     {
       new G4PVDivision(layerName[0], layerLogical[0], boxLogical, kXAxis,
-		    fNSegment[0], fSize[0]/fNSegment[0]*2.);
+		    fNSegment[0], 0.);
     }
   } else if(fNSegment[0] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
@@ -158,7 +158,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     else
     {
       new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kYAxis,
-		    fNSegment[1], fSize[1]/fNSegment[1]*2.);
+		    fNSegment[1], 0.);
     }
   } else if(fNSegment[1] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
@@ -221,7 +221,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
       else
       {
         new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
-		      fNSegment[2], 2.*fSize[2]/fNSegment[2]);
+		      fNSegment[2], 0.);
       }
     }
   else if(fNSegment[2] == 1) {
