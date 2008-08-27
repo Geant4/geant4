@@ -14,7 +14,7 @@
 #
 /testhadr/CutsAll          1 mm
 #/testhadr/Physics          QBBC
-/testhadr/Physics          emstandard_opt2
+/testhadr/Physics          emstandard_opt3
 #
 /run/initialize
 #

@@ -168,6 +168,6 @@ int main(int argc, char** argv)
   delete [] x_exp;
   delete [] y_exp;
 
-  string fout = fnm[idx] + "_water.gif";
+  string fout = "afig" + fnm[idx] + "_water.gif";
   c1->Print(fout.c_str());
 }
