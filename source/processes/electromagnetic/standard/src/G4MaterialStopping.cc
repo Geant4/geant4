@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStopping.cc,v 1.9 2008-08-26 18:20:14 antoni Exp $
+// $Id: G4MaterialStopping.cc,v 1.10 2008-08-27 10:00:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -62,16 +62,11 @@ G4MaterialStopping::~G4MaterialStopping()
 G4double 
 G4MaterialStopping::GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy)
 {
-  //G4cout << "Hello, idxMaterial= " << idxMaterial << G4endl;
   G4double res = 0.0;
   if(ionZ < 3 || ionZ > 18 || idxMaterial < 0 || idxMaterial > 30) return res; 
   G4bool b;
   G4int idx = idxMaterial*16 + ionZ - 3;
-  //G4cout << "Index of DEDX " << idx << G4endl;
-  //G4cout << "Number  DEDX " << dedx.size() << G4endl;
-  //G4cout << "Pointer DEDX " << dedx[idx] << G4endl;
   G4double scaledEnergy = kinEnergy/A[ionZ - 3];
-  //G4cout << "Scaled Energy is " << scaledEnergy << G4endl;
   G4double emin = 0.025*MeV;
   if(scaledEnergy < emin) {
     res = (dedx[idx])->GetValue(emin, b)*sqrt(scaledEnergy/emin);

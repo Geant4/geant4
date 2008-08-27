@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStopping.cc,v 1.5 2008-08-27 08:52:06 antoni Exp $
+// $Id: G4IronStopping.cc,v 1.6 2008-08-27 10:00:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //
 // Description: Data on stopping power
 //
-// Author:      Ivanchenko 10.08.2008
+// Author:    A.Ivanchenko 10.08.2008
 //
 // Modifications:
 //
@@ -149,7 +149,6 @@ dedx.reserve(1*16);
 
 //..List of ions
 G4double factor = 1000.*MeV/cm;
-G4LPhysicsFreeVector* pv;  
 G4double dens[16]={8.988E-05, 1.785E-04, 1.848, 1.9, .00125, .001429, 8.99E-04, 2.699, 2.329, .0017837, 4.508, 7.873, 8.907, 8.933, 5.323, .003743};
 G4String NameMaterial[16]={"G4_H", "G4_He", "G4_Be", "G4_C", "G4_N", "G4_O", "G4_Ne", "G4_Al", "G4_Si", "G4_Ar", "G4_Ti", "G4_Fe", "G4_Ni", "G4_Cu", "G4_Ge", "G4_Kr"};
   
@@ -157,7 +156,6 @@ for(i=0;i<16;i++){
 MatName[i]=NameMaterial[i];
 Density[i]=dens[i]*gram/cm3;
 }
-
 
   //..Reduced energies
 G4double E[53] = {.025,.03,.04,.05,.06,.07,0.08,0.09,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,150,200,250,300,400,500,600,700,800,900,1000};
@@ -211,12 +209,9 @@ G4double Ge_Fe[53] ={2.136E+00, 2.387E+00, 2.854E+00, 3.284E+00, 3.678E+00, 4.04
 G4double Kr_Fe[53] ={2.888E+00, 3.222E+00, 3.838E+00, 4.386E+00, 4.875E+00, 5.326E+00, 5.754E+00, 6.164E+00, 6.563E+00, 8.427E+00, 9.958E+00, 1.119E+01, 1.221E+01, 1.383E+01, 1.508E+01, 1.608E+01, 1.689E+01, 1.753E+01, 1.802E+01, 1.840E+01, 1.922E+01, 1.926E+01, 1.903E+01, 1.870E+01, 1.792E+01, 1.712E+01, 1.635E+01, 1.563E+01, 1.496E+01, 1.433E+01, 1.375E+01, 1.139E+01, 9.689E+00, 8.425E+00, 7.454E+00, 6.071E+00, 5.143E+00, 4.482E+00, 3.990E+00, 3.610E+00, 3.309E+00, 3.064E+00, 2.309E+00, 1.921E+00, 1.685E+00, 1.526E+00, 1.327E+00, 1.209E+00, 1.133E+00, 1.081E+00, 1.044E+00, 1.016E+00, 9.949E-01};
  AddData(E,Kr_Fe,dens[j]*factor);j++;
 
-
 if(corr) {
-  G4int n = 0;
   for(j=0; j<16; j++) {
-      corr->AddStoppingData(26, 56, NameMaterial[j], dedx[n]);
-      n++;
+    corr->AddStoppingData(26, 56, NameMaterial[j], dedx[j]);
   }
 }
 }
