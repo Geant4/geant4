@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.4 2008-08-26 15:40:38 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.5 2008-08-27 09:57:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -237,28 +237,28 @@ G4double G4eBremsstrahlungRelModel::EnergyThreshold() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-inline G4double G4eBremsstrahlungRelModel::Phi1(G4double gg, G4double Z)
+inline G4double G4eBremsstrahlungRelModel::Phi1(G4double gg, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq.(3.38) for Z>=5
   return 20.863 - 2.*log(1. + sqr(0.55846*gg) )
     - 4.*( 1. - 0.6*exp(-0.9*gg) - 0.4*exp(-1.5*gg) );
 }
 
-inline G4double G4eBremsstrahlungRelModel::Phi1M2(G4double gg, G4double Z)
+inline G4double G4eBremsstrahlungRelModel::Phi1M2(G4double gg, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq. (3.39) for Z>=5
   // return Phi1(gg,Z) - 
   return 2./(3.*(1. + 6.5*gg +6.*sqr(gg)) );
 }
 
-inline G4double G4eBremsstrahlungRelModel::Psi1(G4double eps, G4double Z)
+inline G4double G4eBremsstrahlungRelModel::Psi1(G4double eps, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq.(3.40) for Z>=5 
   return 28.340 - 2.*log(1. + sqr(3.621*eps) )
     - 4.*( 1. - 0.7*exp(-8*eps) - 0.3*exp(-29.*eps) );
 }
 
-inline G4double G4eBremsstrahlungRelModel::Psi1M2(G4double eps, G4double Z)
+inline G4double G4eBremsstrahlungRelModel::Psi1M2(G4double eps, G4double)
 {
   //       Thomas-Fermi FF from Tsai, eq. (3.41) for Z>=5
   return  2./(3.*(1. + 40.*eps +400.*sqr(eps)) );
