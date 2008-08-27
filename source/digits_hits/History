@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2007-12-11 13:26:13 gcosmo Exp $
+$Id: History,v 1.33 2008-08-27 18:35:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 27, 2008, M.Asai (digits_hits-V09-01-00)
+- Fixing a bug in utils/src/G4ScoringBox.cc for the use of G4PVDivision.
+- Fixing a bug in utils/src/G4VScoreWriter.cc for indexing scheme in GetIndex() method.
 
 Dec 11, 2007, G.Cosmo (digits_hits-V09-00-05)
 - Added "graphics_reps" to GLOBLIBS list to allow for building DLLs on
