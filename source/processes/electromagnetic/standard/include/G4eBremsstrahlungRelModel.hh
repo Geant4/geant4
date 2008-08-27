@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.5 2008-08-27 09:57:51 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.6 2008-08-27 15:13:12 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -149,7 +149,7 @@ protected:
   G4double totalEnergy;
   G4double currentZ;
   G4double z13, z23, lnZ;
-  G4double Fel, Finel, fCoulomb;
+  G4double Fel, Finel, fCoulomb, fMax; 
   G4double densityFactor;
   G4double densityCorr;
 
@@ -186,10 +186,7 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    // remove this check if everything is well tested 
-    if (currentZ!=GetCurrentElement()->GetZ()) {
-      G4cout<<" ERROR in  G4eBremsstrahlungRelModel::SetCurrentElement "<<Z<<" vs. "<<GetCurrentElement()->GetZ()<<G4endl;
-    }
+
     G4int iz = G4int(Z);
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
@@ -205,6 +202,7 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
     }
 
     fCoulomb=GetCurrentElement()->GetfCoulomb();
+    fMax   =  Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
   }
 }
 

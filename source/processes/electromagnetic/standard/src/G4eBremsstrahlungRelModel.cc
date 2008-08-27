@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.7 2008-08-26 15:40:38 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.8 2008-08-27 15:13:12 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    use_completescreening(false),isInitialised(false)
+    use_completescreening(true),isInitialised(false)
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
@@ -213,7 +213,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
     G4VEmModel::SetCurrentElement((*theElementVector)[i]);
     SetCurrentElement((*theElementVector)[i]->GetZ());
 
-    dedx += theAtomicNumDensityVector[i]*currentZ*currentZ*ComputeBremLoss(cut)*Fel;
+    dedx += theAtomicNumDensityVector[i]*currentZ*currentZ*ComputeBremLoss(cut);
   }
   dedx *= bremFactor;
 
@@ -280,7 +280,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
   // allow partial integration
   if(tmax < kinEnergy) cross -= ComputeXSectionPerAtom(tmax);
   
-  cross *= Z*Z*bremFactor*Fel;
+  cross *= Z*Z*bremFactor;
 
   return cross;
 }
@@ -424,7 +424,7 @@ G4double G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEne
   G4double secondTerm = (1.-y)/12.*(1.+1./currentZ);
 
   G4double cross = mainLPM+secondTerm;
-  return cross/Fel;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -461,7 +461,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
     secondTerm = (1.-y)/8.*(phi1m2+psi1m2/currentZ);
   }
   G4double cross = main+secondTerm;
-  return cross/Fel;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -490,7 +490,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   densityCorr = densityFactor*totalEnergy*totalEnergy;
   G4ThreeVector direction = dp->GetMomentumDirection();
 
-  G4double fmax= 1.0;
+  //  G4double fmax= fMax;
   G4bool highe = true;
   if(totalEnergy < energyThresholdLPM) highe = false;
  
@@ -505,15 +505,15 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
     if(highe) f = ComputeRelDXSectionPerAtom(gammaEnergy);
     else      f = ComputeDXSectionPerAtom(gammaEnergy);
 
-    if ( f > fmax ) {
+    if ( f > fMax ) {
       G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
-	     << f << " > " << fmax
+	     << f << " > " << fMax
 	     << " Egamma(MeV)= " << gammaEnergy
 	     << " E(mEV)= " << kineticEnergy
 	     << G4endl;
     }
 
-  } while (f < fmax*G4UniformRand());
+  } while (f < fMax*G4UniformRand());
 
   //
   //  angles of the emitted gamma. ( Z - axis along the parent particle)
