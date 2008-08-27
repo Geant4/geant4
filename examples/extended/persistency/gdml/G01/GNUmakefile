@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2008-08-27 11:04:02 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # --------------------------------------------------------------
@@ -8,7 +8,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../../..
 endif
 
 .PHONY: all
