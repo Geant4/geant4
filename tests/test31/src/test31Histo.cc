@@ -425,7 +425,7 @@ void test31Histo::TableControl()
       G4double dedx0 = cal.ComputeTotalDEDX(e1,part,mat,e1);
       G4double dedx  = cal.ComputeElectronicDEDX(e1,part,mat,e1);
       G4double dedx1 = cal.GetDEDX(e1,part,mat);
-      G4double dedx2 = wst.GetElectronicDEDX(6, e);
+      G4double dedx2 = wst.GetElectronicDEDX(6, e1);
       G4cout << std::setw(3) << ij << "." 
              << std::setw(10) << e/MeV 
 	     << std::setw(10) << e1/MeV
