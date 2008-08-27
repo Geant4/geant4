@@ -7,7 +7,7 @@ rm -f *.txt
 set    work = "$G4BIN/$G4SYSTEM/test44"
 set    dir  = "$G4INSTALL/tests/test44/"
 
-ln -f ${dir}/Exp_Data/*.txt ./
+ln -s ${dir}/Exp_Data/*.txt ./
 
 setenv PHYSLIST  QBBC
 set    phys = "opt0"
