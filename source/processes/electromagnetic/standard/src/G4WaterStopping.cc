@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.6 2008-08-27 10:00:03 vnivanch Exp $
+// $Id: G4WaterStopping.cc,v 1.7 2008-08-27 10:30:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -79,9 +79,9 @@ G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4WaterStopping::AddData(G4double* energy, G4double* stoppower, 
-				 G4double factor)
+			      G4double factor)
 {
-  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(31,energy[0],energy[30]);
+  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(53,energy[0],energy[30]);
   pv->SetSpline(spline);
   dedx.push_back(pv);
   for(G4int i=0;i<53;i++) {
