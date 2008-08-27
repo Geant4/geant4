@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStopping.hh,v 1.1 2008-08-08 18:56:43 antoni Exp $
+// $Id: G4IronStopping.hh,v 1.2 2008-08-27 08:52:19 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4IronStopping_h
@@ -78,6 +78,8 @@ public:
   G4PhysicsVector* GetPhysicsVector(const G4String& NameMaterial);
 
 private:
+
+  void AddData(G4double* energy, G4double* stoppower, G4double factor);
 
   void Initialise(G4EmCorrections*);
 
