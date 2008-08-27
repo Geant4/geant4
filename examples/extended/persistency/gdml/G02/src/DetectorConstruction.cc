@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2008-08-27 11:07:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -141,7 +141,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // OPTION: TO ADD MODULE AT DEPTH LEVEL ...
     //
-    // Can be a integer or a name of Physical Volume:
+    // Can be a integer or a pointer to the top Physical Volume:
     //
     // G4int depth=1;
     // parser.AddModule(depth);
