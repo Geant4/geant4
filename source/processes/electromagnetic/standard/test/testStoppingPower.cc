@@ -22,8 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+// 
+// 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,14 +51,14 @@ G4double A_Ion[16] = {6.941,9.0122,10.811,12.011,14.007,15.999,18.998,20.180,22.
 G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","G4_ALUMINUM_OXIDE","G4_BONE_COMPACT_ICRU","G4_BONE_CORTICAL_ICRP","G4_C-552","G4_CALCIUM_FLUORIDE","G4_CARBON_DIOXIDE","G4_Pyrex_Glass","G4_KAPTON","G4_LITHIUM_FLUORIDE","G4_LITHIUM_TETRABORATE","G4_METHANE","G4_MUSCLE_STRIATED_ICRU","G4_NYLON-6/6","G4_PHOTO_EMULSION","G4_PLASTIC_SC_VINYLTOLUENE","G4_POLYCARBONATE","G4_POLYETHYLENE","G4_MYLAR","G4_LUCITE","G4_POLYSTYRENE","G4_TEFLON","G4_PROPANE","G4_SILICON_DIOXIDE","G4_SODIUM_IODIDE","G4_TISSUE-METHANE","G4_TISSUE-PROPANE","G4_WATER","G4_WATER_VAPOR"};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
+
   G4MaterialStopping mS;
   G4double dedx = mS.GetDEDX(3,0,.025*MeV*6.941);
   G4String matN = mS.GetMaterialName(0);
   G4double dens = mS.GetDensity(0);
   G4cout << "DEDX for Z=3 in " << matN << " is "<< dedx*mm/MeV << " MeV/mm,    " 
   << dedx*gram/(1000*dens*MeV*cm2) << " MeV/g/cm2 " << G4endl;
-*/
+
   G4SimpleMaterialStopping mS1;
   G4double dedx1 = mS1.GetDEDX(4,1,.025*MeV*6.941);
   G4String matN1 = mS1.GetMaterialName(1);
