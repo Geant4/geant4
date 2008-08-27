@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2008-07-01 08:30:51 gcosmo Exp $
+$Id: History,v 1.21 2008-08-27 08:01:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 22nd, 2008  Tatiana Nikitina - exgdml-V09-01-03
+- Updated gdml files to be fully compliant with Schema.
+- Added solids.gdml including simple examples for all kind of solids.
 
 July 1st, 2008  Zoltan Torzsok - exgdml-V09-01-02
 - Removed no longer needed toy gdml files: matrix.gdml, modular.gdml,
