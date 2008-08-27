@@ -1,0 +1,40 @@
+###################################################
+# Visualization of detector geometry and events  
+###################################################
+
+# create empty scene
+/vis/scene/create
+
+# reading Geometry from STEP file
+/mydet/StepFile mbb
+/run/initialize
+
+# Create a scene handler for a specific graphics system
+/vis/open OGLIX
+#/vis/open VRML2FILE
+
+# draw scene
+/vis/viewer/zoom 5
+/vis/viewer/set/viewpointThetaPhi 45 45 deg
+#/vis/viewer/set/viewpointThetaPhi 90 -25 deg
+/vis/viewer/flush
+/vis/drawVolume
+
+#if you want to see trajectories and hits points
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 0.2
+
+# (if you prefer not refreshing each event, uncomment next line)
+ /vis/scene/endOfEventAction accumulate
+
+#hard coded position and direction for gun
+/gun/position 0 0 -0.1 mm
+/gun/direction  1 0.1 0.1
+
+#if you want make a run with particle
+#/tracking/verbose 1
+/run/beamOn 10
+#
+
