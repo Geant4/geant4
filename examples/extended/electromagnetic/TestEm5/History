@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2008-08-23 18:28:59 maire Exp $
+$Id: History,v 1.105 2008-08-28 15:28:04 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+28-08-08 mma (testem5-V09-01-07)
+- TrackingAction.cc : reset id=0 between blocks
+      
 23-08-08 mma (testem5-V09-01-06)
 - HistoManager.cc : add missing comma in title array.
-- TrackingAction.cc : use vertex position to help to define transmit, reflect 
+- TrackingAction.cc : use vertex position to help to define transmit 
 
 12-06-08 mma (testem5-V09-01-05)
 - Remove AIDA from GNUmakefile 

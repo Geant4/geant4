@@ -12,7 +12,7 @@ set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
 set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
 
 title '100 GeV muon in 1 m iron'
-h/file 1 9.1ref06.hbook
+h/file 1 9.1ref07.hbook
 
 opt stat
 

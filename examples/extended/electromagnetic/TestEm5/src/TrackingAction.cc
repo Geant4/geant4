@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.17 2008-08-23 18:28:59 maire Exp $
+// $Id: TrackingAction.cc,v 1.18 2008-08-28 15:28:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   G4double charge        = aTrack->GetDefinition()->GetPDGCharge();
 
   G4bool transmit = ((position.x() >= xendAbs) && (vertex.x() < xendAbs));
-  G4bool reflect  = ((position.x() <= xstartAbs) && (vertex.x() > xstartAbs));
+  G4bool reflect  =  (position.x() <= xstartAbs);
   G4bool notabsor = (transmit || reflect);
 
   //transmitted + reflected particles counter
@@ -82,17 +82,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //
   //histograms
   //
-  G4int id = 0;
   G4bool charged  = (charge != 0.);
   G4bool neutral = !charged;
 
   //energy spectrum at exit
   //
+  G4int id = 0;  
        if (transmit && charged) id = 10;
   else if (transmit && neutral) id = 20;
   else if (reflect  && charged) id = 30;
   else if (reflect  && neutral) id = 40;
-  
+
+  if (id>0)   
   histoManager->FillHisto(id, aTrack->GetKineticEnergy());
     
   //energy leakage
@@ -108,13 +109,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   //space angle distribution at exit : dN/dOmega
   //
+  G4ThreeVector direction = aTrack->GetMomentumDirection();    
+  id = 0;   
        if (transmit && charged) id = 12;
   else if (transmit && neutral) id = 22;
   else if (reflect  && charged) id = 32;
   else if (reflect  && neutral) id = 42;
 
-  G4ThreeVector direction = aTrack->GetMomentumDirection();  
-  if (histoManager->HistoExist(id)) {
+  if (id>0) {
     G4double theta  = std::acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
     G4double unit   = histoManager->GetHistoUnit(id);    
@@ -124,12 +126,13 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   
   //energy fluence at exit : dE(MeV)/dOmega
   //
+  id = 0;  
        if (transmit && charged) id = 11;
   else if (transmit && neutral) id = 21;
   else if (reflect  && charged) id = 31;
   else if (reflect  && neutral) id = 41;
 
-  if (histoManager->HistoExist(id)) {
+  if (id>0) {
     G4double theta  = std::acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
     G4double unit   = histoManager->GetHistoUnit(id);    
@@ -140,6 +143,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   
   //projected angles distribution at exit
   //
+  id = 0;   
        if (transmit && charged) id = 13;
   else if (transmit && neutral) id = 23;
   else if (reflect  && charged) id = 33;
@@ -157,6 +161,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   //projected position and radius at exit
   //
+  id = 0;   
   if (transmit && charged) id = 14;
   
   if (id>0) {
