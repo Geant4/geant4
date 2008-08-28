@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.8 2008-08-04 08:49:09 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.9 2008-08-28 14:14:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -438,14 +438,14 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double dirx = sint*cos(phi);
   G4double diry = sint*sin(phi);
-  /*
-  G4cout << "G4WentzelVIModel: step(mm)= " << tPathLength/mm
-	 << " sint= " << sint << " cost= " << cost<< G4endl;
-  */
+  
+  //G4cout << "G4WentzelVIModel: step(mm)= " << tPathLength/mm
+  //	 << " sint= " << sint << " cost= " << cost<< G4endl;
+  
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(dirx,diry,cost);
   G4ThreeVector temp(0.0,0.0,1.0);
-  G4ThreeVector pos(0.0,0.0,0.0);
+  G4ThreeVector pos(0.0,0.0,-zPathLength);
   G4ThreeVector dir(0.0,0.0,1.0);
   G4bool isscat = false;
 
@@ -465,7 +465,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
     // position and direction for secondary scattering
     dir.set(sint*cos(phi),sint*sin(phi),cost);
-    pos += 0.5*newDirection*zPathLength;
+    pos += 0.5*dir*zPathLength;
     x1 *= 2.0;
   }
 
