@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardLPM.cc,v 1.1 2008-05-29 17:55:38 vnivanch Exp $
+// $Id: PhysListEmStandardLPM.cc,v 1.2 2008-08-28 15:41:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4eMultipleScattering.hh"
+#include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
@@ -45,6 +45,7 @@
 #include "G4eplusAnnihilation.hh"
 
 #include "G4eBremsstrahlungHEModel.hh"
+#include "G4eBremsstrahlungRelModel.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -87,26 +88,32 @@ void PhysListEmStandardLPM::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4MultipleScattering* msc = new G4MultipleScattering;
+      msc->SetStepLimitType(fMinimal);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHEModel();
-      lpm->SetLowEnergyLimit(100.*eV);
+      G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
+      lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
       brem->AddEmModel(0,lpm);
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      //      pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
       pmanager->AddProcess(brem,   -1, 3, 3);
       
     } else if (particleName == "e+") {
       //positron
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4MultipleScattering* msc = new G4MultipleScattering;
+      msc->SetStepLimitType(fMinimal);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHEModel();
-      lpm->SetLowEnergyLimit(100.*eV);
+      G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
+      lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
       brem->AddEmModel(0,lpm);
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      //pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3, 3);
       pmanager->AddProcess(brem,   -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
       

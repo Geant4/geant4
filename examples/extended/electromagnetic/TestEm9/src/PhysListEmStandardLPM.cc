@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardLPM.cc,v 1.2 2008-08-22 14:11:53 vnivanch Exp $
+// $Id: PhysListEmStandardLPM.cc,v 1.3 2008-08-28 15:38:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +45,7 @@
 #include "G4eplusAnnihilation.hh"
 
 #include "G4eBremsstrahlungHEModel.hh"
+#include "G4eBremsstrahlungRelModel.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -94,8 +95,8 @@ void PhysListEmStandardLPM::ConstructProcess()
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHEModel();
-      lpm->SetLowEnergyLimit(100.*eV);
+      G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
+      lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
       brem->AddEmModel(0,lpm);
       pmanager->AddProcess(brem,   -1, 3, 3);
@@ -109,8 +110,8 @@ void PhysListEmStandardLPM::ConstructProcess()
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4VEmModel* lpm = new G4eBremsstrahlungHEModel();
-      lpm->SetLowEnergyLimit(100.*eV);
+      G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
+      lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
       brem->AddEmModel(0,lpm);
       pmanager->AddProcess(brem,   -1, 3, 3);
