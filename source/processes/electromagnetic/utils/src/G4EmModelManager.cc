@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.43 2008-07-31 13:01:26 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.44 2008-08-28 16:23:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,9 +145,7 @@ G4EmModelManager::~G4EmModelManager()
 void G4EmModelManager::Clear()
 {
   if(1 < verboseLevel) {
-    G4cout << "G4EmModelManager::Clear()";
-    if(particle) G4cout << " for " << particle->GetParticleName();
-    G4cout << G4endl;
+    G4cout << "G4EmModelManager::Clear()" << G4endl;
   }
 
   theCuts.clear();
