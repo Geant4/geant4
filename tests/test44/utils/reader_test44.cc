@@ -45,8 +45,6 @@ int main(int argc, char** argv)
 
   string legend[3] = {"QBBC opt0", "QBBC opt2", "QBBC opt3"};
 
-  gROOT->Reset();
-
   const int nbin = 3000;
   double x[nbin], y[nbin];
 
@@ -59,6 +57,8 @@ int main(int argc, char** argv)
   double maxJ, maxX, maxY, norm;
   char buffer[256];
 
+  //gROOT->Reset(); 
+  gROOT->SetStyle("Plain");
   TCanvas *c1 = new TCanvas("c1", "c1",6,6,800,600);
   gStyle->SetOptStat(0);
   c1->SetFillColor(0);
@@ -85,7 +85,8 @@ int main(int argc, char** argv)
   }
 
   double x_max = x_exp[nn-1]*1.01;
-  string hist_title = tp[idx] + " " + te[idx] + " " + teu[idx] + " " + "in Water, Geant4  " + refer;
+  string hist_title = tp[idx] + " " + te[idx] + " " + 
+    teu[idx] + " " + "in Water, Geant4  " + refer;
 
   cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << endl;
 
@@ -131,7 +132,7 @@ int main(int argc, char** argv)
     }
     cout << "File with MC <" << finName[j] << "> is opened" << endl;
    
-    hh[j] = new TH1D(hhh[j].c_str(),"",nbin,0,300);
+    hh[j] = new TH1D(hhh[j].c_str(),"",nbin,0.,300.);
     hh[j]->SetLineStyle(1);
     hh[j]->SetLineWidth(2);
     hh[j]->SetLineColor(j+2);
@@ -141,14 +142,24 @@ int main(int argc, char** argv)
 
     for (int k = 0; k < nbin; k++) {
       in >> x[k] >> y[k];
-      if (!in.good()) break;
+      if (!in.good()) {
+        cout << "Stop reading results at k= " << k << endl;
+	break;
+      }
+      //      cout << "x= " << x[k] << " y= " << y[k] << endl; 
       hh[j]->SetBinContent(k+1, y[k]);
+      hh[j]->SetBinError(k+1, y[k]/100.);
     }
 
     in >> maxJ >> maxX >> maxY;
-    cout << "maxJ= " << maxJ << " maxX= " << maxX << " maxY= " << maxY << endl;
+    cout << "Histo filled N= " << nbin << " maxJ= " << maxJ 
+	 << " maxX= " << maxX << " maxY= " << maxY << endl;
     norm = maxY;
     hh[j]->Scale(1./norm);
+
+    //cout << " Bin 10 y= " <<  hh[j]->GetBinContent(10) << endl;
+    //cout << " Bin 1 y= " <<  hh[j]->GetBinContent(1) << endl;
+
     hh[j]->Draw("HISTO SAME");
   
     entry=leg->AddEntry(hh[j], legend[j].c_str(), "l");
@@ -159,15 +170,11 @@ int main(int argc, char** argv)
     in.close();
   }
   leg->Draw();
-
-  c1->Update();
-
-  //  c1->Modified();
-  //  c1->cd();
+  //  c1->Update();
 
   delete [] x_exp;
   delete [] y_exp;
 
-  string fout = "afig" + fnm[idx] + "_water.gif";
+  string fout = "A_" + fnm[idx] + "_water.gif";
   c1->Print(fout.c_str());
 }

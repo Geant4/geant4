@@ -12,13 +12,14 @@
 /testhadr/NumberDivZ       40
 /testhadr/PrintModulo      10
 #
-/testhadr/CutsAll          1 mm
+#/testhadr/CutsAll          1 mm
 #/testhadr/Physics          QBBC
-/testhadr/Physics          emstandard_opt3
+#/testhadr/Physics          emstandard_opt2
 #
 /run/initialize
+/process/eLoss/subsec true
 #
 /gun/particle proton
 /gun/energy 100. MeV
-/run/beamOn 100
+/run/beamOn 1
 #
