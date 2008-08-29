@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.37 2008-02-29 12:23:14 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.38 2008-08-29 02:50:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -346,7 +346,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       G4Tokenizer next(newVal);
       G4String meshName = next();
       G4String psName = next();
-      G4bool   onFlag = StoB(next());
+      //G4bool   onFlag = StoB(next());
       G4String scaleOption = next();
 //      fSMan->DrawChart(meshName,psName,onFlag,scaleOption);
 

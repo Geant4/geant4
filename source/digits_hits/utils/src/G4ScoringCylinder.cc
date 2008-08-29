@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.5 2008-03-25 02:22:08 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.6 2008-08-29 02:50:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,8 +93,12 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4String tubsName = fWorldName;
 
   if(verboseLevel > 9) G4cout << fSize[0] << ", " << fSize[1] << G4endl;
-  G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", 0., fSize[0], fSize[1],
-				    0., twopi*rad);
+  G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", // name
+				    0.,           // R min
+				    fSize[0],     // R max
+				    fSize[1],     // dZ
+				    0.,           // starting phi
+				    twopi*rad);   // segment phi
   G4LogicalVolume *  tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
   new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    tubsLogical, tubsName+"0", worldLogical, false, 0);
@@ -110,19 +114,20 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 			     0.,
 			     fSize[0]/fNSegment[0],
 			     fSize[1],
-			     0., twopi);
+			     0., twopi*rad);
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
   if(fNSegment[0] > 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along r direction" << G4endl;
     G4double r = fSize[0]/fNSegment[0];
-    if(G4ScoringManager::GetReplicaLevel()>0) {
+    //if(G4ScoringManager::GetReplicaLevel()>0) {
+    if(false) { // always use G4PVDivision
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
       new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kRho,
 		      fNSegment[0], r, 0.);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
       new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kRho,
-		       fNSegment[0], r);
+		       fNSegment[0], 0.);
     }
   } else if(fNSegment[0] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
@@ -148,12 +153,13 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 			     0.,
 			     fSize[0],///fNSegment[0],
 			     fSize[1]/fNSegment[1],
-			     0., twopi);
+			     0., twopi*rad);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   if(fNSegment[1] > 1)  {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
     G4double width = fSize[1]/fNSegment[1]*2.;
-    if(G4ScoringManager::GetReplicaLevel()>1) {
+    //if(G4ScoringManager::GetReplicaLevel()>1) {
+    if(false) { // always use G4PVDivision
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
       new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
 		      fNSegment[1], width);
@@ -186,7 +192,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 				       0.,
 				       fSize[0],//fNSegment[0],
 				       fSize[1]/fNSegment[1],
-				       0., twopi/fNSegment[2]);
+				       0., twopi*rad/fNSegment[2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) {
 
@@ -210,7 +216,8 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
 
     G4double angle = twopi*rad/fNSegment[2];
-    if(G4ScoringManager::GetReplicaLevel()>2) {
+    //if(G4ScoringManager::GetReplicaLevel()>2) {
+    if(false) { // always use G4PVDivision
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
       new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kPhi,
 			fNSegment[2], angle, 0.);
@@ -315,34 +322,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
 
     G4Scale3D scale;
     if(axflg/100==1) {
-      /*
       // rz plane
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,xymax); }
-      G4ThreeVector zhalf(0., 0., fSize[2]/fNSegment[2]*0.98);
-      G4Box xyplate("xy", fSize[0]/fNSegment[0], fSize[1]/fNSegment[1], fSize[2]/fNSegment[2]*0.01);
-      for(int x = 0; x < fNSegment[0]; x++) {
-	for(int y = 0; y < fNSegment[1]; y++) {
-	  G4ThreeVector pos(GetReplicaPosition(x, y, 0) - zhalf);
-	  G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2]-1) + zhalf);
-	  G4Transform3D trans, trans2;
-	  if(fRotationMatrix) {
-	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos);
-	    trans = G4Translate3D(fCenterPosition)*trans;
-	    trans2 = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(pos2);
-	    trans2 = G4Translate3D(fCenterPosition)*trans2;
-	  } else {
-	    trans = G4Translate3D(pos)*G4Translate3D(fCenterPosition);
-	    trans2 = G4Translate3D(pos2)*G4Translate3D(fCenterPosition);
-	  }
-	  G4double c[4];
-	  colorMap->GetMapColor(xycell[x][y], c);
-	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	  pVisManager->Draw(xyplate, att, trans);
-	  pVisManager->Draw(xyplate, att, trans2);
-
-	}
-      }
-      */
     }
     axflg = axflg%100;
     if(axflg/10==1) {
@@ -471,17 +451,17 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
     for(; itr != map->end(); itr++) {
       GetRZPhi(itr->first, q);
 
-      if(idxProj == 0 && q[2] == idxColumn) { // rz plane
-	rzcell[q[0]][q[1]] += *(itr->second); 
-	if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
-      }
-      if(idxProj == 1 && q[0] == idxColumn) { // rz plane
+      if(idxProj == 0 && q[0] == idxColumn) { // zphi plane
 	zphicell[q[1]][q[2]] += *(itr->second);
 	if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
       }
-      if(idxProj == 2 && q[1] == idxColumn) { // rz plane
+      if(idxProj == 1 && q[1] == idxColumn) { // rphi plane
 	rphicell[q[0]][q[2]] += *(itr->second);
 	if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
+      }
+      if(idxProj == 2 && q[2] == idxColumn) { // rz plane
+	rzcell[q[0]][q[1]] += *(itr->second); 
+	if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
       }
     }  
 
@@ -491,41 +471,8 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
 
 
     G4Scale3D scale;
-    // r-z plane
+    // r-phi plane
     if(idxProj == 0) {
-      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rzmax); }
-
-      G4double rsize = fSize[0]/fNSegment[0];
-      G4double zhalf = fSize[1]/fNSegment[1];
-      G4double angle = twopi/fNSegment[2]*idxColumn;
-      G4double dphi = twopi/fNSegment[2];
-      for(int z = 0; z < fNSegment[1]; z++) {
-	for(int r = 0; r < fNSegment[0]; r++) {
-
-	    G4double rs[2] = {rsize*r, rsize*(r+1)};
-	    G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf,
-			    angle, dphi);
-
-	    G4ThreeVector zpos(0., 0.,
-			       -fSize[1]+fSize[1]/fNSegment[1]*(2.*z+1));
-	    G4Transform3D trans;
-	    if(fRotationMatrix) {
-	      trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	      trans = G4Translate3D(fCenterPosition)*trans;
-	    } else {
-	      trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	    }
-	    G4double c[4];
-	    colorMap->GetMapColor(rzcell[r][z], c);
-	    att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	    pVisManager->Draw(cylinder, att, trans);
-	  }
-	}
-
-
-    } else
-    // z-phi plane
-    if(idxProj == 1) {
       if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,zphimax); }
 
       G4double zhalf = fSize[1]/fNSegment[1];
@@ -534,8 +481,8 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
       for(int phi = 0; phi < fNSegment[2]; phi++) {
 	for(int z = 0; z < fNSegment[1]; z++) {
 
-	  G4double angle = twopi/fNSegment[2]*phi;
-	  G4double dphi = twopi/fNSegment[2];
+	  G4double angle = twopi/fNSegment[2]*phi*radian;
+	  G4double dphi = twopi/fNSegment[2]*radian;
 	  G4Tubs cylinder("z-phi", rsize[0], rsize[1], zhalf,
 			  angle, dphi*0.99999);
 
@@ -553,34 +500,65 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
 	  pVisManager->Draw(cylinder, att, trans);
 	}
       }
-    } else {
-    // r-phi plane
-      if(idxProj == 2) {
-	if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rphimax); }
 
-	G4double rsize = fSize[0]/fNSegment[0];
-	for(int phi = 0; phi < fNSegment[2]; phi++) {
-	  for(int r = 0; r < fNSegment[0]; r++) {
+      // r-phi plane
+    } else if(idxProj == 1) {
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rphimax); }
 
-	    G4double rs[2] = {rsize*r, rsize*(r+1)};
-	    G4double angle = twopi/fNSegment[2]*phi;
-	    G4double dphi = twopi/fNSegment[2];
-	    G4Tubs cylinder("z-phi", rs[0], rs[1], 0.001,
-			    angle, dphi*0.99999);
-	    G4ThreeVector zpos(0., 0.,
-			       -fSize[1]+fSize[1]/fNSegment[1]*(2.*idxColumn+1.));
-	    G4Transform3D trans;
-	    if(fRotationMatrix) {
-	      trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
-	      trans = G4Translate3D(fCenterPosition)*trans;
-	    } else {
-	      trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
-	    }
-	    G4double c[4];
-	    colorMap->GetMapColor(rphicell[r][phi], c);
-	    att.SetColour(c[0], c[1], c[2]);//, c[3]);
-	    pVisManager->Draw(cylinder, att, trans);
+      G4double rsize = fSize[0]/fNSegment[0];
+      for(int phi = 0; phi < fNSegment[2]; phi++) {
+	for(int r = 0; r < fNSegment[0]; r++) {
+
+	  G4double rs[2] = {rsize*r, rsize*(r+1)};
+	  G4double angle = twopi/fNSegment[2]*phi*radian;
+	  G4double dz = fSize[1]/fNSegment[1];
+	  G4double dphi = twopi/fNSegment[2]*radian;
+	  G4Tubs cylinder("r-phi", rs[0], rs[1], dz,
+			  angle, dphi*0.99999);
+	  G4ThreeVector zpos(0., 0.,
+			     -fSize[1]+fSize[1]/fNSegment[1]*(idxColumn*2+1));
+	  G4Transform3D trans;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	  } else {
+	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
 	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(rphicell[r][phi], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(cylinder, att, trans);
+	}
+      }
+
+      // r-z plane
+    } else if(idxProj == 2) {
+      if(colorMap->IfFloatMinMax()) { colorMap->SetMinMax(0.,rzmax); }
+
+      G4double rsize = fSize[0]/fNSegment[0];
+      G4double zhalf = fSize[1]/fNSegment[1];
+      G4double angle = twopi/fNSegment[2]*idxColumn*radian;
+      G4double dphi = twopi/fNSegment[2]*radian;
+      for(int z = 0; z < fNSegment[1]; z++) {
+	for(int r = 0; r < fNSegment[0]; r++) {
+
+	  G4double rs[2] = {rsize*r, rsize*(r+1)};
+	  G4Tubs cylinder("z-phi", rs[0], rs[1], zhalf,
+			  angle, dphi);
+
+	  G4ThreeVector zpos(0., 0.,
+			     -fSize[1]+fSize[1]/fNSegment[1]*(2.*z+1));
+	  G4Transform3D trans;
+	  if(fRotationMatrix) {
+	    trans = G4Rotate3D(*fRotationMatrix).inverse()*G4Translate3D(zpos);
+	    trans = G4Translate3D(fCenterPosition)*trans;
+	  } else {
+	    trans = G4Translate3D(zpos)*G4Translate3D(fCenterPosition);
+	  }
+	  G4double c[4];
+	  colorMap->GetMapColor(rzcell[r][z], c);
+	  att.SetColour(c[0], c[1], c[2]);//, c[3]);
+	  pVisManager->Draw(cylinder, att, trans);
 	}
       }
     }

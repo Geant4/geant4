@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.53 2008-08-27 20:28:32 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.54 2008-08-29 02:50:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -315,7 +315,6 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     att.SetForceSolid(true);
     att.SetForceAuxEdgeVisible(true);
 
-
     G4Scale3D scale;
     if(axflg/100==1) {
       // xy plane
@@ -404,7 +403,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       }
     }
   }
-  //colorMap->DrawColorChart();
+  colorMap->DrawColorChart();
 }
 
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
@@ -552,7 +551,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     }
   }
 
-  //colorMap->DrawColorChart();
+  colorMap->DrawColorChart();
 }
 
 
