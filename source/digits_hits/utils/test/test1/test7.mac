@@ -8,7 +8,7 @@
 /score/create/cylinderMesh cylinderMesh_1
 #
 /score/mesh/cylinderSize 100. 100. cm
-/score/mesh/translate/xyz 1. 0. 0. cm
+/score/mesh/translate/xyz 0. 0. 0. cm
 #                Nr Nz Nphi
 /score/mesh/nBin 30 30 30
 
