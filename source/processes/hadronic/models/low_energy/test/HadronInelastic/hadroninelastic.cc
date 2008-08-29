@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//   File:    hadroninelastic.cc - updated process-level test of LEP models
+//   Author:  D.H. Wright (SLAC)
+//   Date:    29 Aug 2008
 //
+
 #include "G4RunManager.hh"
 #include "DummyDetectorConstruction.hh"
 #include "DummyPhysicsList.hh"
@@ -39,23 +43,53 @@
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 
+// Processes
 #include "G4ProtonInelasticProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
+#include "G4LambdaInelasticProcess.hh"
+#include "G4SigmaPlusInelasticProcess.hh"
+#include "G4SigmaMinusInelasticProcess.hh"
+#include "G4XiZeroInelasticProcess.hh"
+#include "G4XiMinusInelasticProcess.hh"
+#include "G4OmegaMinusInelasticProcess.hh"
+#include "G4AntiProtonInelasticProcess.hh"
+#include "G4AntiNeutronInelasticProcess.hh"
+#include "G4AntiLambdaInelasticProcess.hh"
+#include "G4AntiSigmaPlusInelasticProcess.hh"
+#include "G4AntiSigmaMinusInelasticProcess.hh"
+#include "G4AntiXiZeroInelasticProcess.hh"
+#include "G4AntiXiMinusInelasticProcess.hh"
+#include "G4AntiOmegaMinusInelasticProcess.hh"
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
-#include "G4LambdaInelasticProcess.hh"
-#include "G4AntiProtonInelasticProcess.hh"
+#include "G4KaonZeroLInelasticProcess.hh"
+#include "G4KaonZeroSInelasticProcess.hh"
 
+// Models
 #include "G4LEProtonInelastic.hh"
 #include "G4LENeutronInelastic.hh"
+#include "G4LELambdaInelastic.hh"
+#include "G4LESigmaPlusInelastic.hh"
+#include "G4LESigmaMinusInelastic.hh"
+#include "G4LEXiZeroInelastic.hh"
+#include "G4LEXiMinusInelastic.hh"
+#include "G4LEOmegaMinusInelastic.hh"
+#include "G4LEAntiProtonInelastic.hh"
+#include "G4LEAntiNeutronInelastic.hh"
+#include "G4LEAntiLambdaInelastic.hh"
+#include "G4LEAntiSigmaPlusInelastic.hh"
+#include "G4LEAntiSigmaMinusInelastic.hh"
+#include "G4LEAntiXiZeroInelastic.hh"
+#include "G4LEAntiXiMinusInelastic.hh"
+#include "G4LEAntiOmegaMinusInelastic.hh"
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEKaonPlusInelastic.hh"
 #include "G4LEKaonMinusInelastic.hh"
-#include "G4LELambdaInelastic.hh"
-#include "G4LEAntiProtonInelastic.hh"
+#include "G4LEKaonZeroLInelastic.hh"
+#include "G4LEKaonZeroSInelastic.hh"
 
 
 int main(int argc,char** argv)
@@ -126,6 +160,76 @@ int main(int argc,char** argv)
   inelasticProcess->RegisterMe(new G4LENeutronInelastic() );
   processes.push_back(inelasticProcess);
 
+  particles.push_back(G4Lambda::Lambda() );
+  inelasticProcess = new G4LambdaInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LELambdaInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4SigmaPlus::SigmaPlus() );
+  inelasticProcess = new G4SigmaPlusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LESigmaPlusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4SigmaMinus::SigmaMinus() );
+  inelasticProcess = new G4SigmaMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LESigmaMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4XiZero::XiZero() );
+  inelasticProcess = new G4XiZeroInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEXiZeroInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4XiMinus::XiMinus() );
+  inelasticProcess = new G4XiMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEXiMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4OmegaMinus::OmegaMinus() );
+  inelasticProcess = new G4OmegaMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEOmegaMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiProton::AntiProton() );
+  inelasticProcess = new G4AntiProtonInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiProtonInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiNeutron::AntiNeutron() );
+  inelasticProcess = new G4AntiNeutronInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiNeutronInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiLambda::AntiLambda() );
+  inelasticProcess = new G4AntiLambdaInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiLambdaInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiSigmaPlus::AntiSigmaPlus() );
+  inelasticProcess = new G4AntiSigmaPlusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiSigmaPlusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiSigmaMinus::AntiSigmaMinus() );
+  inelasticProcess = new G4AntiSigmaMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiSigmaMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiXiZero::AntiXiZero() );
+  inelasticProcess = new G4AntiXiZeroInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiXiZeroInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiXiMinus::AntiXiMinus() );
+  inelasticProcess = new G4AntiXiMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiXiMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
+  particles.push_back(G4AntiOmegaMinus::AntiOmegaMinus() );
+  inelasticProcess = new G4AntiOmegaMinusInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEAntiOmegaMinusInelastic() );
+  processes.push_back(inelasticProcess);
+
   particles.push_back(G4PionPlus::PionPlus() );
   inelasticProcess = new G4PionPlusInelasticProcess();
   inelasticProcess->RegisterMe(new G4LEPionPlusInelastic() );
@@ -146,14 +250,14 @@ int main(int argc,char** argv)
   inelasticProcess->RegisterMe(new G4LEKaonMinusInelastic() );
   processes.push_back(inelasticProcess);
 
-  particles.push_back(G4Lambda::Lambda() );
-  inelasticProcess = new G4LambdaInelasticProcess();
-  inelasticProcess->RegisterMe(new G4LELambdaInelastic() );
+  particles.push_back(G4KaonZeroLong::KaonZeroLong() );
+  inelasticProcess = new G4KaonZeroLInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEKaonZeroLInelastic() );
   processes.push_back(inelasticProcess);
 
-  particles.push_back(G4AntiProton::AntiProton() );
-  inelasticProcess = new G4AntiProtonInelasticProcess();
-  inelasticProcess->RegisterMe(new G4LEAntiProtonInelastic() );
+  particles.push_back(G4KaonZeroShort::KaonZeroShort() );
+  inelasticProcess = new G4KaonZeroSInelasticProcess();
+  inelasticProcess->RegisterMe(new G4LEKaonZeroSInelastic() );
   processes.push_back(inelasticProcess);
 
   G4ThreeVector aMomentum = G4ThreeVector(0.,0.,projectileMomentum*GeV);
