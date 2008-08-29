@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.54 2008-07-16 09:45:49 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.55 2008-08-29 17:28:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -417,6 +417,7 @@ void G4VEmProcess::PrintInfoDefinition()
            << " in " << nLambdaBins << " bins, spline: " 
 	   << (G4LossTableManager::Instance())->SplineFlag()
            << G4endl;
+    modelManager->DumpModelList(verboseLevel);
   }
 
   if(verboseLevel > 1) {
