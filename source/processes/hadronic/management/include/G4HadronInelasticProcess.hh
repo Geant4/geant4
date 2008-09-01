@@ -42,40 +42,25 @@
 #define G4HadronInelasticProcess_h 1
 
 #include "G4HadronicProcess.hh"
-//#include "G4LPhysicsFreeVector.hh"
-#include "G4HadronCrossSections.hh" 
-#include "G4CrossSectionDataStore.hh"
-#include "G4HadronInelasticDataSet.hh"
-#include "G4ParticleChange.hh"
- 
 
- class G4HadronInelasticProcess : public G4HadronicProcess
- {
- public:
+class G4ParticleDefinition;
+
+class G4HadronInelasticProcess : public G4HadronicProcess
+{
+public:
     
-    G4HadronInelasticProcess(
-     const G4String &processName,
-     G4ParticleDefinition *aParticle );
+  G4HadronInelasticProcess(const G4String &processName,
+			   G4ParticleDefinition *aParticle );
     
-    virtual ~G4HadronInelasticProcess();
+  virtual ~G4HadronInelasticProcess();
         
-    void BuildThePhysicsTable();
-    
-    G4bool IsApplicable(const G4ParticleDefinition& aP);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
-    G4VParticleChange *PostStepDoIt(const G4Track &aTrack, const G4Step &aStep);
+private:
 
-  private:    
+  G4ParticleDefinition* theParticle;
 
-    virtual G4double GetMicroscopicCrossSection( const G4DynamicParticle *aParticle, 
-                                                 const G4Element *anElement, 
-						 G4double aTemp );
-   
- protected:
-
-    G4ParticleDefinition *theParticle;
-    G4ParticleChange theParticleChange;
- };
+};
  
 #endif
  
