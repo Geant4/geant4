@@ -40,6 +40,7 @@
 #include "G4Material.hh"
 #include "G4VCrossSectionDataSet.hh"
 
+class G4Nucleus;
 
 class G4CrossSectionDataStore
 {
@@ -66,6 +67,9 @@ public:
 
    std::pair<G4double/*Z*/, G4double/*A*/> 
    SelectRandomIsotope(const G4DynamicParticle*, const G4Material*);
+
+   G4Element* SampleZandA(const G4DynamicParticle*, const G4Material*,
+			  G4Nucleus& target);
 
    void AddDataSet(G4VCrossSectionDataSet*);
 
