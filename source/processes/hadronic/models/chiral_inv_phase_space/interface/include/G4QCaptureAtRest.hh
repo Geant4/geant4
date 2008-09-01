@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.3 2007-02-09 09:33:28 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.4 2008-09-01 17:30:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -117,9 +117,11 @@ public:
   G4QCaptureAtRest(const G4String& processName ="CHIPSNuclearAbsorptionAtRest");
 
   // Destructor
-  ~G4QCaptureAtRest();
+  virtual ~G4QCaptureAtRest();
 
-  G4bool IsApplicable(const G4ParticleDefinition& particle);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& particle);
+
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
   G4VParticleChange* AtRestDoIt(const G4Track& aTrack, const G4Step& aStep); 
 

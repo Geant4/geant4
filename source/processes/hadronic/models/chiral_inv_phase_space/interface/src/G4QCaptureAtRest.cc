@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.14 2008-07-09 19:45:49 dennis Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.15 2008-09-01 17:30:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -40,6 +40,7 @@
 //#define tdebug
 
 #include "G4QCaptureAtRest.hh"
+#include "G4HadronicProcessStore.hh"
 
 G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   : G4VRestProcess(processName, fHadronic), Time(0.), EnergyDeposition(0.)
@@ -54,6 +55,7 @@ G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 G4bool   G4QCaptureAtRest::manualFlag=false; // If false then standard parameters are used
@@ -131,6 +133,11 @@ G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle)
   G4cout<<"***G4QCaptureAtRest::IsApplicable: PDG="<<particle.GetPDGEncoding()<<G4endl;
 #endif
   return false;
+}
+
+void G4QCaptureAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
 }
 
 G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4Step& step)
