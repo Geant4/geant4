@@ -23,54 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// $Id: G4ElectroNuclearReaction.hh,v 1.24 2008-09-01 17:30:42 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// GEANT4 physics class: G4ElectroNuclearReaction -- header file
-// Created: J.P. Wellisch, 12/11/2001
-// The last update: J.P. Wellisch, 06-June-02
-//
-#ifndef G4ElectroNuclearReaction_h
-#define G4ElectroNuclearReaction_h 1
 
-#include "globals.hh"
-#include "G4HadronicInteraction.hh"
-#include "G4ChiralInvariantPhaseSpace.hh"
-#include "G4ElectroNuclearCrossSection.hh"
-#include "G4PhotoNuclearCrossSection.hh"
-#include "G4GammaParticipants.hh"
-#include "G4QGSModel.hh"
-#include "G4QGSMFragmentation.hh"
+//
+// Created:
+// 01.09.2008 V.Ivanchenko 
+//
 
-class G4TheoFSGenerator;
-class G4GeneratorPrecompoundInterface;
-class G4ExcitedStringDecay;
+#include "G4GammaNuclearReaction.hh"
+#include "G4Gamma.hh"
+#include "G4Nucleus.hh"
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
 
-class G4ElectroNuclearReaction : public G4HadronicInteraction
+G4GammaNuclearReaction::G4GammaNuclearReaction(): 
+  G4HadronicInteraction("CHIPS")
+{}
+
+G4GammaNuclearReaction::~G4GammaNuclearReaction()
+{}
+
+G4HadFinalState * G4GammaNuclearReaction::ApplyYourself(
+	   const G4HadProjectile& aTrack, 
+	   G4Nucleus& aTargetNucleus)
 {
-public: 
+  if(aTrack.GetDefinition() != G4Gamma::GammaDefinition())
+  {
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "Called G4GammaNuclearReaction for particle other than gamma");
+  }
+  return theModel.ApplyYourself(aTrack, aTargetNucleus);
+}
 
-  G4ElectroNuclearReaction();
-
-  virtual ~G4ElectroNuclearReaction();
-    
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-					 G4Nucleus& aTargetNucleus);
-
-private:
-
-  G4ChiralInvariantPhaseSpace theLEModel;
-  G4TheoFSGenerator * theHEModel;
-  G4GeneratorPrecompoundInterface * theCascade;
-  G4QGSModel< G4GammaParticipants > theStringModel;
-  G4QGSMFragmentation theFragmentation;
-  G4ExcitedStringDecay * theStringDecay;
-  G4ElectroNuclearCrossSection theElectronData;
-  G4PhotoNuclearCrossSection thePhotonData;
-  G4HadFinalState theResult;
-};
-
-#endif

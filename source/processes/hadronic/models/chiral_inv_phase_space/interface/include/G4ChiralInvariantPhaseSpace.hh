@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #ifndef G4ChiralInvariantPhaseSpace_h
-#define G4ChiralInvariantPhaseSpace_h
+#define G4ChiralInvariantPhaseSpace_h 1
 
 //
 // Modified:
