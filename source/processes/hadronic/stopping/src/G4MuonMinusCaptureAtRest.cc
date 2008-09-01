@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.49 2008-07-09 19:32:09 dennis Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.50 2008-09-01 17:12:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -52,6 +52,7 @@
 #include "G4GHEKinematicsVector.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4ExcitationHandler.hh"
+#include "G4HadronicProcessStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -66,6 +67,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   pEMCascade = new G4MuMinusCaptureCascade();
   theN       = new G4Fancy3DNucleus();
   theHandler = new G4ExcitationHandler();
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,6 +86,13 @@ G4MuonMinusCaptureAtRest::~G4MuonMinusCaptureAtRest()
 G4bool G4MuonMinusCaptureAtRest::IsApplicable(const G4ParticleDefinition& p)
 {
   return ( &p == G4MuonMinus::MuonMinus() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuonMinusCaptureAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
