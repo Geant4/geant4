@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.5 2008-08-04 13:52:30 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.6 2008-09-01 17:22:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -501,7 +501,13 @@ void G4HadronicProcessStore::Dump(G4int level)
       for(itp=ep_map.lower_bound(part); itp!=ep_map.upper_bound(part); ++itp) {
 	if(itp->first == part) {
 	  G4VProcess* proc = (itp->second);
-	  G4cout << std::setw(20) << proc->GetProcessName() << G4endl;
+	  if(wasPrinted[i] == 0) {
+	    wasPrinted[i] = 1;
+	    G4cout<<G4endl;
+	    G4cout << "                     Hadronic Processes for <" 
+		   <<part->GetParticleName() << ">" << G4endl; 
+	  }
+	  G4cout << "          " << proc->GetProcessName() << G4endl;
 	}
       }
     }
