@@ -42,6 +42,7 @@
 // 14-APR-98 FWJ: variant G4HadronElastic process for
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
+// 01-SEP-2008 V.Ivanchenko: use methods from the base class
 //
 
 // Class Description
@@ -55,15 +56,7 @@
  
 #include "globals.hh"
 #include "G4HadronicProcess.hh"
-#include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4LightMedia.hh"
-#include "G4Step.hh"
-#include "G4TrackStatus.hh"
-
 
 class G4HadronElasticProcess : public G4HadronicProcess
 {
@@ -71,27 +64,9 @@ public:
 
    G4HadronElasticProcess(const G4String& processName = "HadronElastic");
 
-   ~G4HadronElasticProcess();
+   virtual ~G4HadronElasticProcess();
  
-   inline
-
-   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
-   {
-      SetDispatch(this);
-      return G4HadronicProcess::GeneralPostStepDoIt(aTrack, aStep);
-   }
-
-   G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-
-   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-
-   void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
-
-private:
-
-   G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-                                       const G4Element* anElement,
-				       G4double aTemp);
+   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
 };
 #endif

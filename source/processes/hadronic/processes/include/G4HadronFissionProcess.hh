@@ -34,6 +34,7 @@
 // 19-MAY-98 FWJ: variant G4HadronFission process for
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
+// 01-SEP-2008 V.Ivanchenko: use methods from the base class
 //
 
 
@@ -46,47 +47,18 @@
 #define G4HadronFissionProcess_h 1
  
 #include "globals.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4Electron.hh"
-#include "G4Gamma.hh"
-#include "G4Step.hh"
-#include "G4TrackStatus.hh"
 #include "G4HadronicProcess.hh"
-#include "G4CrossSectionDataStore.hh"
-#include "G4HadronFissionDataSet.hh"
-
 
 class G4HadronFissionProcess : public G4HadronicProcess
 {
 public:
 
-   G4HadronFissionProcess(const G4String& processName ="HadronFission");
+  G4HadronFissionProcess(const G4String& processName ="nFission");
 
-   ~G4HadronFissionProcess();
+  virtual ~G4HadronFissionProcess();
  
-   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
-   {
-      SetDispatch(this);
-      return G4HadronicProcess::GeneralPostStepDoIt(aTrack, aStep);
-   }
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-   G4bool IsApplicable(const G4ParticleDefinition& )
-   {
-      return true;
-   }
-
-   void BuildThePhysicsTable(G4ParticleDefinition& aParticleType);
-
-   void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
-
-private:
-
-   G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-                                       const G4Element* anElement, 
-				       G4double aTemp);
 };
+
 #endif

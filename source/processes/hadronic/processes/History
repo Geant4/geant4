@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.3 2008-07-09 19:10:56 dennis Exp $
+$Id: History,v 1.4 2008-09-01 17:40:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+1 Sep 2008 Vladimir Ivanchenko (hadr-proc-V09-01-01)
+----------------------------------------------------
+- G4HadronElasticProcess, G4HadronCaptureProcess, 
+  G4HadronFissionProcess - used PostStepDoIt, DumpPhysicsTable from
+                           the base class G4HadronicProcess 
 
 8 Jul 2008 Dennis Wright (hadr-proc-V09-01-00)
 ----------------------------------------------
