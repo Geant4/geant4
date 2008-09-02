@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.50 2008-09-01 17:12:40 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.51 2008-09-02 09:53:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -93,6 +93,7 @@ G4bool G4MuonMinusCaptureAtRest::IsApplicable(const G4ParticleDefinition& p)
 void G4MuonMinusCaptureAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
 {
   G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
