@@ -155,16 +155,18 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
   if(1 < nElements) {
     G4double* xsec = new G4double [nElements];
     const G4double* theAtomsPerVolumeVector = aMaterial->GetVecNbOfAtomsPerVolume();
+    G4double cross = 0.0;
     for(i=0; i<nElements; i++) {
-      anElement = (*theElementVector)[i];
+      anElement= (*theElementVector)[i];
       inCharge = whichDataSetInCharge(particle, anElement);
-      xsec[i]  = theAtomsPerVolumeVector[i]*
+      cross   += theAtomsPerVolumeVector[i]*
 	inCharge->GetCrossSection(particle, anElement, aTemp);
+      xsec[i]  = cross;
     }
-    G4double random = xsec[nElements-1]*G4UniformRand();
+    cross *= G4UniformRand();
 
     for(i=0; i<nElements; i++) {
-      if( random <=  xsec[i] ) {
+      if( cross <=  xsec[i] ) {
 	anElement = (*theElementVector)[i];
 	break;
       }
@@ -190,6 +192,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 
       G4double* xsec  = new G4double [nIsoPerElement];
       G4double iso_xs = 0.0;
+      G4double cross  = 0.0;
 
       G4double* abundVector = anElement->GetRelativeAbundanceVector();
       G4bool elementXS = false;
@@ -201,11 +204,12 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 	  elementXS = true;
 	}
 
-	xsec[i] += abundVector[i]*iso_xs;
+	cross  += abundVector[i]*iso_xs;
+	xsec[i] = cross;
       }
-      G4double random = xsec[nIsoPerElement - 1]*G4UniformRand();
+      cross *= G4UniformRand();
       for (i = 0; i<nIsoPerElement; i++) {
-	if(random <= xsec[i]) {
+	if(cross <= xsec[i]) {
 	  AA = G4double((*isoVector)[i]->GetN());
 	  break;
 	}
@@ -225,7 +229,9 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 
       G4double* xsec  = new G4double [nIso];
       G4double iso_xs = 0.0;
-      G4bool elementXS = false;
+      G4double cross  = 0.0;
+      G4bool elementXS= false;
+
       for (i = 0; i<nIso; i++) {
         AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index+i));
 	if (inCharge->IsZAApplicable(particle, ZZ, AA )) {
@@ -234,11 +240,12 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 	  iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
 	  elementXS = true;
 	}
-	xsec[i] += theDefaultIsotopes.GetAbundance(index+i)*iso_xs;
+	cross  += theDefaultIsotopes.GetAbundance(index+i)*iso_xs;
+	xsec[i] = cross;
       }
-      G4double random = xsec[nIsoPerElement - 1]*G4UniformRand();
+      cross *= G4UniformRand();
       for (i = 0; i<nIso; i++) {
-	if(random <= xsec[i]) {
+	if(cross <= xsec[i]) {
 	  AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index+i));
 	  break;
 	}
