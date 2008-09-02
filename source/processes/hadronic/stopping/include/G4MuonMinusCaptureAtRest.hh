@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.21 2008-09-01 17:12:40 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.22 2008-09-02 10:39:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4MuonMinusCaptureAtRest physics process
@@ -72,6 +72,8 @@ public:
   virtual ~G4MuonMinusCaptureAtRest();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition&);
+
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 

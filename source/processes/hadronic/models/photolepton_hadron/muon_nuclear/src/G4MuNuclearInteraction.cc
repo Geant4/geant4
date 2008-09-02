@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.9 2008-09-02 10:10:14 vnivanch Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.10 2008-09-02 10:37:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -93,11 +93,16 @@ void G4MuNuclearInteraction::SetPhysicsTableBining(G4double lowE,
   LowestKineticEnergy = lowE; HighestKineticEnergy = highE ; TotBin = nBins ;
 }
 
-void G4MuNuclearInteraction::BuildPhysicsTable(
+void G4MuNuclearInteraction::PreparePhysicsTable(
                                     const G4ParticleDefinition& aParticleType)
 {
   G4HadronicProcessStore::Instance()
     ->RegisterParticleForExtraProcess(this, &aParticleType);
+}
+
+void G4MuNuclearInteraction::BuildPhysicsTable(
+                                    const G4ParticleDefinition& aParticleType)
+{
   G4HadronicProcessStore::Instance()->PrintInfo(&aParticleType);
 
   G4double LowEdgeEnergy , Value;

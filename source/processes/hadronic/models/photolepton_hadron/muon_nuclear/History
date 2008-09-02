@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2008-09-02 08:03:04 vnivanch Exp $
+$Id: History,v 1.5 2008-09-02 10:37:20 vnivanch Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -18,7 +18,8 @@ code and to keep track of all tags.
  2 Sep 2008 V.Ivantchenko (hadr-munuclear-V09-01-00)
 -----------------------------------------------------------------------
 - G4MuNuclearInteraction added SubType and registration in the 
-                         G4HadronicProcessStore; cleanup for readability 
+                         G4HadronicProcessStore; added PreparePhysicsTable
+                         method and cleanup for readability 
 
  4 Nov 2006 Dennis Wright for V. Ivantchenko (hadr-munuclear-V08-01-00)
 -----------------------------------------------------------------------

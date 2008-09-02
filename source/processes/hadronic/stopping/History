@@ -17,7 +17,8 @@ code and to keep track of all tags.
 01-Sep-2008 Vladimir Ivantchenko (hadr-stopping-V09-01-03)
 ----------------------------------------------------------
 G4MuonMinusCaptureAtRest - added registration in the 
-       G4HadronicprocessStore
+       G4HadronicprocessStore and PrintInfo by adding
+       PreparePhysicsTable and BuildPhysicsTable methods
 GNUmakefile - add includes
 
 08-Jul-2008 Dennis Wright (hadr-stopping-V09-01-02)
