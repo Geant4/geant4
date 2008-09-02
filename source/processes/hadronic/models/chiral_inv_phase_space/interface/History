@@ -14,10 +14,11 @@ code and to keep track of all tags.
 
  1-Sep-2008 Vladimir Ivanchenko        (hadr-chips-inter-V09-01-07)
 -------------------------------------------------------------------
-GNUmakefile - added path to include files
 G4QCaptureAtRest - added registration in G4HadronicProcessStore
-G4ElectroNuclearReaction and G4GammaNuclearReaction - moved
-    implementations from header to source files and added names
+G4GammaNuclearReaction - moved implementations from header to source 
+                         and added name "CHIPS"
+G4ElectroNuclearReaction - moved instantiation of HE model to 
+                         constructor from run time and added name "CHIPS"
 
  8-Jul-2008 Dennis Wright              (hadr-chips-inter-V09-01-06)
 -------------------------------------------------------------------
