@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.8 2008-09-02 08:03:04 vnivanch Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.9 2008-09-02 10:10:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -98,6 +98,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
 {
   G4HadronicProcessStore::Instance()
     ->RegisterParticleForExtraProcess(this, &aParticleType);
+  G4HadronicProcessStore::Instance()->PrintInfo(&aParticleType);
+
   G4double LowEdgeEnergy , Value;
   G4PhysicsLogVector* ptrVector;
    
