@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.15 2008-09-01 17:30:01 vnivanch Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.16 2008-09-02 10:18:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -138,6 +138,7 @@ G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle)
 void G4QCaptureAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
 {
   G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
 G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4Step& step)
