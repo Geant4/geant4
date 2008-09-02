@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.4 2008-09-01 17:30:01 vnivanch Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.5 2008-09-02 10:31:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -120,6 +120,8 @@ public:
   virtual ~G4QCaptureAtRest();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& particle);
+
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 

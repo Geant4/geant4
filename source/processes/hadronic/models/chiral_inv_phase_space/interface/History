@@ -15,6 +15,8 @@ code and to keep track of all tags.
  1-Sep-2008 Vladimir Ivanchenko        (hadr-chips-inter-V09-01-07)
 -------------------------------------------------------------------
 G4QCaptureAtRest - added registration in G4HadronicProcessStore
+                   and PrintInfo by adding PreparePhysicsTable and 
+	           BuildPhysicsTable
 G4GammaNuclearReaction - moved implementations from header to source 
                          and added name "CHIPS"
 G4ElectroNuclearReaction - moved instantiation of HE model to 
