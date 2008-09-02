@@ -57,6 +57,17 @@ geometry/solids/CSG                              geom-csg-V09-01-04
   greater than 90*deg, and use of tangent giving negative value.
   Completes series of corrections introduced previously.
 
+geometry/solids/specific                         geom-specific-V09-01-14
+------------------------
+- G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report
+  #1015. Fixed precision problem when solving quadratic equation; apply
+  comparison with kCarTolerance and not with zero; fixed logic problem in
+  algoritm for points on surface and direction inside, relative to directions
+  along Z, (0,0,Vz).
+- G4ExtrudedSolid: fix in polygon decomposition; systematically use
+  half kCarTolerance instead of kCarTolerance; added solid name in the
+  error messages coming from fatal exceptions.
+
 geometry/volumes                                 geomvol-V09-01-02
 ----------------
 - Synchronised files with CVS head.
