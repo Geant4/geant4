@@ -24,14 +24,8 @@
 // ********************************************************************
 //
 //
-<<<<<<< GammaRayTelMuonPhysics.cc
-// $Id: GammaRayTelMuonPhysics.cc,v 1.6 2008-06-11 20:21:56 cirrone Exp $
+// $Id: GammaRayTelMuonPhysics.cc,v 1.7 2008-09-02 14:24:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: GammaRayTelMuonPhysics.cc,v 1.6 2008-06-11 20:21:56 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.5
-//
 // 
 
 #include "GammaRayTelMuonPhysics.hh"
