@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.54 2008-08-21 18:53:32 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.55 2008-09-02 08:54:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -446,7 +446,7 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
   currentElement = (*theElementVector)[n];
   if (n > 0) {
     G4double x = G4UniformRand()*
-                 CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
+                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<n; i++) {
       if (x <= xsec[i]) {
 	currentElement = (*theElementVector)[i];
@@ -462,16 +462,18 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
   G4int N = G4int(elm->GetN() + 0.5);
-  G4int ni   = elm->GetNumberOfIsotopes();
+  G4int ni = elm->GetNumberOfIsotopes();
   if(ni > 0) {
-    G4double* ab = currentElement->GetRelativeAbundanceVector();
-    G4double x = G4UniformRand();
     G4int idx = 0;
-    for(; idx<ni; idx++) {
-      x -= ab[idx];
-      if (x <= 0.0) break;
+    if(ni > 1) {
+      G4double* ab = currentElement->GetRelativeAbundanceVector();
+      G4double x = G4UniformRand();
+      for(; idx<ni; idx++) {
+	x -= ab[idx];
+	if (x <= 0.0) break;
+      }
+      if(idx >= ni) idx = ni - 1;
     }
-    if(idx >= ni) idx = ni - 1;
     N = elm->GetIsotope(idx)->GetN();
   }
   return N;
