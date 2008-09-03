@@ -25,22 +25,23 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(**) Fixes included in release 9.1.p03
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-01-07
 ------
-- architecture.gmk: removed obsoled DOM library from GDMLIBS; fixes
+- architecture.gmk: removed obsoled DOM library from GDMLIBS; fixes         (**)
   run-time problems on Windows.
 
-geometry/divisions                               geomdiv-V09-01-01
+geometry/divisions                               geomdiv-V09-01-01          (**)
 ------------------
 - G4PVDivision: corrected initialisation for 'fnReplicas' and 'fwidth' data
   members in CheckAndSetParameters(), to make use of precomputed values
   retrieved from parameterisations; simplified method signature.
 - Corrected error message in G4VDivisionParameterisation::CheckNDivAndWidth().
 
-geometry/management                              geommng-V09-01-06
+geometry/management                              geommng-V09-01-06          (**)
 -------------------
 - G4LogicalVolume, G4LogicalVolumeStore: modified logic for the deletion
   of the root-region volumes, adding locking mechanism and automatically
@@ -51,7 +52,7 @@ geometry/management                              geommng-V09-01-06
   to correct handling individual removal of root-region volumes and restore
   proper setup state.
 
-geometry/solids/CSG                              geom-csg-V09-01-04
+geometry/solids/CSG                              geom-csg-V09-01-04         (**)
 -------------------
 - G4Sphere: fixed bug in DistanceToOut(p, v, ...) for normal 'fSTheta'
   greater than 90*deg, and use of tangent giving negative value.
@@ -59,12 +60,12 @@ geometry/solids/CSG                              geom-csg-V09-01-04
 
 geometry/solids/specific                         geom-specific-V09-01-14
 ------------------------
-- G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report
+- G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem report  (**)
   #1015. Fixed precision problem when solving quadratic equation; apply
   comparison with kCarTolerance and not with zero; fixed logic problem in
   algoritm for points on surface and direction inside, relative to directions
   along Z, (0,0,Vz).
-- G4ExtrudedSolid: fix in polygon decomposition; systematically use
+- G4ExtrudedSolid: fix in polygon decomposition; systematically use         (**)
   half kCarTolerance instead of kCarTolerance; added solid name in the
   error messages coming from fatal exceptions.
 
@@ -74,11 +75,12 @@ geometry/volumes                                 geomvol-V09-01-02
 
 global                                           global-V09-01-12
 ------
-- Corrected G4SwapPtr() global function to consider references as arguments.
+- Corrected G4SwapPtr() global function to consider references as           (**)
+  arguments.
 
 interfaces                                       interfaces-V09-01-02
 ----------
-- Replaced few usage of exit() with G4Exception in G4UIGainServer,
+- Replaced few usage of exit() with G4Exception in G4UIGainServer,          (**)
   G4UIterminal and G4UItcsh implementations.
 
 materials                                        materials-V09-01-15
@@ -267,11 +269,11 @@ processes/hadronic
     OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons
           is used.
   o Integraded fixes in G4EvaporationProbabilities; OPT=2 is set.
-- models/high_energy (hadr-hep-V09-01-04)
+- models/high_energy (hadr-hep-V09-01-04)                                   (**)
   o G4HEInelastic: fixed bug for momentum sampling in HighEnergyCascading() and
     MediumEnergyCascading(), which caused oscillatory behavior in spectrum.
     Replaced legacy calls to exit() with G4Exception in Factorial().
-- models/lll_fission (hadr-lllfis-V09-01-00)
+- models/lll_fission (hadr-lllfis-V09-01-00)                                (**)
   o Replaced legacy calls to exit() with G4Exception in G4fissionerr.
 - models/neutron_hp (hadr-hpn-V09-01-17)
   o Fixed minor bug in G4NeutronHPLabAngularEnergy.
@@ -300,7 +302,7 @@ processes/hadronic
     G4KaonMinusAbsorptionAtRest, G4MuonMinusCaptureAtRest,
     G4NeutronCaptureAtRest, G4PiMinusAbsorptionAtRest, and
     G4PionMinusAbsorptionAtRest.
-- util (hadr-util-V09-01-01)
+- util (hadr-util-V09-01-01)                                                (**)
   o G4ReactionDynamics: fixed bug for momentum sampling in GenerateXandPt(),
     which caused oscillatory behavior in spectrum.
     Replaced legacy calls to exit() with G4Exception.
@@ -315,7 +317,7 @@ processes/optical                                op-V09-01-06
 
 run                                              run-V09-01-02
 ---
-- G4RunManagerKernel: avoid deletion of default root-region which is now
+- G4RunManagerKernel: avoid deletion of default root-region which is now    (**)
   taken care by the geometry stores. It resolves the ambiguity of explicitely
   avoiding the de-registration and deletion of the default root-region by
   the stores and eliminates the limitation of forcing the world logical-volume
@@ -324,7 +326,7 @@ run                                              run-V09-01-02
 examples                                         examples-V09-01-07
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V09-01-04)
+- advanced/air_shower (air_shower-V09-01-04)                                (**)
   o Adjusted range of optical properties tables in UltraDetectorConstruction;
     use accessors to access private data members.
   o Added check of optical photon energy in UltraPrimaryGeneratorAction.
@@ -342,7 +344,7 @@ examples                                         examples-V09-01-07
 - extended/hadronic/Hadr00 (exhadr00-V09-01-01)
   o New example demonstrating how to use G4PhysListFactory to build physics
     lists and G4HadronicProcessStore to access cross sections.
-- extended/medical/DICOM (DICOM-V09-01-01)
+- extended/medical/DICOM (DICOM-V09-01-01)                                  (**)
   o Bug fix in DicomNestedPhantomParameterisation in calculating the volume
     copy-number, which used to cause wrong material assignment.
   o Set default cut to 1 mm (with previous 1.E-3 mm too much time was spent

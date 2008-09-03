@@ -15,19 +15,20 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (*)  Fixes included in release 9.1.p02
+(**) Fixes included in release 9.1.p03
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-01-04
 ------
-- liblist.c: removed C++ style comments.
+- liblist.c: removed C++ style comments.                                   (**)
 
 event                                            event-V09-01-00
 -----
-- Fixed problem of out of bounds array access in G4SPSEneDistribution.
+- Fixed problem of out of bounds array access in G4SPSEneDistribution.     (**)
   Added accessors to G4SPSAngDistribution, addressing problem report #1013.
 
-geometry/management                              geommng-V09-01-04
+geometry/management                              geommng-V09-01-04         (**)
 -------------------
 - G4Region: changed condition inside ScanVolumeTree() to check for the
   existence of a valid material-scanner pointer to apply the material scan
@@ -40,7 +41,7 @@ geometry/solids/specific                         geom-specific-V09-01-12
 ------------------------
 - Enhanced GetPointOnSurface() for generic G4Polycone and G4Polyhedra
   constructs; the method uses new triangulation algorithm for G4PolyPhiFace.
-- G4ExtrudedSolid: added missing 'std' namespace to standard mathematical
+- G4ExtrudedSolid: added missing 'std' namespace to standard mathematical  (**)
   function calls.
 
 global                                           global-V09-01-07
@@ -122,7 +123,7 @@ processes/hadronic
   o G4PhotonEvaporation: atomic relaxation model is no longer applied following
     internal electron conversion. Instead the vacant shell index is passed to
     radioactive decay model, where the ARM is applied.
-- models/high_energy (hadr-hep-V09-01-01)
+- models/high_energy (hadr-hep-V09-01-01)                                  (**)
   o G4HEInelastic::TuningOfHighEnergyCascade(): removed abnormally high pt
     secondaries due to incident strange particles by prohibiting the assignment
     of leading particle to anything that goes backward in the CM frame.
@@ -130,7 +131,7 @@ processes/hadronic
   o Removed unnecessary dependencies in G4NeutronHPChannel and
     G4NeutronHPElementData.
 - models/parton_string/diffraction (hadr-string-diff-V09-01-02)
-  o Fixed compilation warnings for unused variables in G4FTFModel.
+  o Fixed compilation warnings for unused variables in G4FTFModel.         (**)
 - models/qmd (hadr-qmd-V09-01-01)
   o Fixed and changed sampling method of impact parameter in G4QMDReaction.
 - models/radioactive_decay (radioactive_decay-V09-01-00)
@@ -141,13 +142,13 @@ processes/hadronic
 - models/rpg (hadr-rpg-V09-01-02)
   o Fixed remaining compilation warnings for gcc-4.3.0.
 
-run                                              run-V09-01-01
+run                                              run-V09-01-01             (**)
 ---
 - Invoke G4Particle::DeleteAllParticles() in the destructor of
   G4VUserPhysicsList to clear leaks induced by particles created in
   the user application.
 
-tracking                                         run-V09-01-01
+tracking                                         run-V09-01-01             (**)
 --------
 - G4SteppingManager: 'fTouchableHandle' was not properly updated.
   Addressing problem report #1009.

@@ -22,6 +22,7 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(**) Fixes included in release 9.1.p03
 
 Summarised, the list of changes is the following:
 
@@ -36,11 +37,11 @@ environments                                     envs-V09-01-02
 ------------
 - Updated configure scripts and fixed some minor bugs.
 
-g3tog4                                           g3tog4-V09-01-00
+g3tog4                                           g3tog4-V09-01-00           (**)
 ------
 - GNUmakefile: clean Fortran objects in 'lib' target before building libraries.
 
-geometry/solids/CSG                              geom-csg-V09-01-03
+geometry/solids/CSG                              geom-csg-V09-01-03         (**)
 -------------------
 - G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
   very small tangent direction; now returning kInfinity and no longer zero.
@@ -160,7 +161,7 @@ processes/hadronic
     'fPostponeToNextEvent'.
 - models/de_excitation (hadr-deex-V09-01-09)
   o Fixed minor memory leak in G4ExcitationHandler.
-- models/high_energy (hadr-hep-V09-01-01)
+- models/high_energy (hadr-hep-V09-01-01)                                   (**)
   o Removed error message "total mass > total energy" in NBodyPhaseSpace()
     in G4HEInelastic; replaced with message only when verbosity greater than 1.
 - models/management (hadr-modman-V09-01-03)
@@ -207,7 +208,7 @@ processes/hadronic
 
 processes/management                             procman-V09-01-03
 --------------------
-- Fixed un-necessary double deletion/creation of vector in
+- Fixed un-necessary double deletion/creation of vector in                  (**)
   G4ProcessVector::operator=().
 
 processes/optical                                op-V09-01-02
@@ -224,16 +225,16 @@ examples                                         examples-V09-01-06
 - Updated reference outputs.
 - Removed AIDA setup from GNUmakefiles, now embedded in central scripts.
 - Retired obsolete advanced example "raredecay_calorimetry".
-- advanced/air_shower (air_shower-V09-01-02)
+- advanced/air_shower (air_shower-V09-01-02)                                (**)
   o Fixed compilation error in the analysis manager.
   o Corrected definition of the refraction index of the Quartz in
     DetectorConstruction class.
-- advanced/brachytheraphy (brachytheraphy-V09-01-01)
+- advanced/brachytheraphy (brachytheraphy-V09-01-01)                        (**)
   o Fixed compilation error in the analysis manager. Fixed bad type assignment.
   o Activated generation of histogram files for output.
-- advanced/gammaray_telescope (gammaraytel-V09-01-00)
+- advanced/gammaray_telescope (gammaraytel-V09-01-00)                       (**)
   o Fixed compilation errors due to missing inclusion of headers.
-- advanced/lAr_calorimeter (lAr_calorimeter-V09-01-00)
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-01-00)                      (**)
   o Fixed compilation error in the analysis manager.
 - advanced/microbeam (microbeam-V09-01-01)
   o Added units in MicrobeamPhantomconfiguration and MicrobeamSteppingAction.
@@ -242,13 +243,13 @@ examples                                         examples-V09-01-06
     particle in liquid water using only G4DNA processes.
 - advanced/nanobeam (nanobeam-V09-01-11)
   o Fixed mechanism for default macro reading.
-- advanced/Rich (Rich-V09-01-00)
+- advanced/Rich (Rich-V09-01-00)                                            (**)
   o Adjusted initialisation of G4Cerenkov process now being a discrete process.
   o Fixed compilation error and cleared compilation warnings.
-- advanced/Tiara (Tiara-V09-01-00)
+- advanced/Tiara (Tiara-V09-01-00)                                          (**)
   o Fixed compilation error in TiaraCellScorerStore.
 - extended/exoticphysics/monopole (monopole-V09-01-00)
-  o Fixed compilation warnings.
+  o Fixed compilation warnings.                                             (**)
 - extended/gdml (exgdml-V09-01-02)
   o Removed no longer needed toy gdml files: matrix.gdml, modular.gdml,
     diamond.gdml. Updated files: axes.gdml, entity.gdml, scale.gdml.
