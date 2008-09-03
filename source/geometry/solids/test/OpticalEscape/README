@@ -1,0 +1,56 @@
+$Id: README,v 1.1 2008-09-03 13:34:03 gcosmo Exp $
+-------------------------------------------------------------------
+
+In this directory you can find the test for Geant4 Solids with Optical Photons.
+The test was created from a user application in order to test the replay
+of the Solids.
+
+=============
+How it works :
+=============
+ - The Solid is situated in the center of the World Volume.
+   It can be choosen via macro command. 
+ - The primary particle (e- of 20 veV) is shooting from Randomly Position on
+   the Shpere around the Solid to the center of the World Volume.
+ - This primary particle 'enters' in the Solid and create Optical Photons.
+   The boundary between Solid and World is declared as Boundary with Reflection.
+   If a optical Photon is going outside Solid, it is a Error.
+   This error is detected, warning or error message is printed.
+   This message also containts the information that can be useful for debugging:
+   -Position p and Direction v of the Point  (Global Coordinates), were Error
+    is detected.
+   -Inside(p):
+    If p is Inside, the DistanceToOut(p,v,norm) is given
+    If p is Outside,the DistanceToIn(p,-v) is given
+    If p is On the Surface, both values are given.
+
+=====================
+How to run this test :
+=====================       
+
+ To build the application, first setup your Geant4 environmental variables,
+ do not forget to setup the visualisation part.
+
+ and then do :                  make
+ 
+ and to run it :                AXPETDemonstrator run1.mac
+                          
+
+==================================
+ Via command line user can choose :
+==================================
+
+ the solis :   /mydet/SelectDetector nameOfSolid   
+ the rotation: /mydet/RotateX angleInDegree
+               /mydet/RotateY angleInDegree
+               /mydet/RotateZ angleInDegree
+ In case of Error(Optical Photon escaping Solid)
+ warning or Abortion of the Run can be chosen.
+ It can be useful for large statistics. 
+ Coomand for Abort Run : /mydet/AbortRun 1
+
+============                
+The examples are given in vis.mac(shooting 30 e- in all solids) 
+============              run1.mac(shooting 3000 e- in shoosen solid, Ellipsoid)
+                          run2.mac(shooting 3000 e- in shoosen solid,
+                                   Shell=Subtraction of Spheres)   
