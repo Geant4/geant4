@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+//080901 Avoiding troubles which caused by G4PhysicsVecotor of length 0 by T. Koi
+//
 #include "G4NeutronHPIsoData.hh"
 #include "G4NeutronHPDataUsed.hh"
 
@@ -44,8 +46,10 @@
     if(Z==1 && (aFile.GetZ()!=Z || std::abs(aFile.GetA()-A)>0.0001) )
     {
       if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
-      theChannel.close();
-      return false;
+      //080901 TKDB No more necessary below protection, cross sections set to 0 in G4NeutronHPNames
+      //And below two lines causes trouble with G4PhysicsVector
+      //theChannel.close();
+      //return false;
     }
     if(!theChannel) {theChannel.close(); return false;}
     // accommodating deficiencie of some compilers
