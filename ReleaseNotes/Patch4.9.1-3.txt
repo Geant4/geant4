@@ -144,6 +144,12 @@ List of fixes included in this public patch since the public release 9.1.p02:
       o Fixed problems in compilation.
     + advanced/lAr_calorimeter:
       o Fixed compilation warning in AnalysisManager.
+    + advanced/Rich:
+      o Fixed compilation errors and removed warnings.
+    + advanced/Tiara:
+      o Fixed compilation errors.
+    + extended/exoticphysics/monopole:
+      o Fixed compilation warnings.
     + extended/medical/DICOM:
       o Bug fix in DicomNestedPhantomParameterisation in calculating the cell
         copy-number; now fixing the material assignments.
