@@ -328,7 +328,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   } else {   // non-strange particle branch
 
-    const G4double large_cut = 4.0;
+    //  DHW 3 Sept 08  const G4double large_cut = 4.0;
     std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
@@ -372,7 +372,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
       }; 
     };
 
-    if(ekin > large_cut && mul == 1) mul = 2;
+    // DHW 3 Sept 08    if(ekin > large_cut && mul == 1) mul = 2;
 
   }  // strange, non-strange
 
