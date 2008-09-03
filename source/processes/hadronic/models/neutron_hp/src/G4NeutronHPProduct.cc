@@ -33,6 +33,7 @@
 //        modified by T. Koi.
 // 080721 Using ClearHistories() methodl for limiting the sum of secondary energies
 //        modified by T. Koi.
+// 080901 bug fix of too many secnodaries production in nd reactinos by T. Koi
 //
 #include "G4NeutronHPProduct.hh" 
 #include "G4Poisson.hh"
@@ -43,6 +44,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   if(theDist == 0) { return 0; }
   G4ReactionProductVector * result = new G4ReactionProductVector;
   G4double mean = theYield.GetY(anEnergy);
+G4cout << "mean " << mean << G4endl;
   G4int multi;
   multi = G4int(mean+0.0001);
   //if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
@@ -76,11 +78,14 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     delete  tmp;
   }
+/*
+//080901 TK Comment out, too many secondaries are produced in deuteron reactions
   if(theTarget->GetMass()<2*GeV) // @@@ take care of residuals in all cases
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     tmp->SetDefinition(G4Proton::Proton());
     if(tmp != 0) { result->push_back(tmp); }
   }
+*/
   return result;
 }
