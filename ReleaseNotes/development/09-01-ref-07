@@ -254,7 +254,7 @@ processes/hadronic
     sub-type 16 (quasi-elastic) for G4QCoherentChargeExchange; sub-type 10
     (unknown) for G4QAtomicElectronScattering, G4QDiscProcessMixer.
 - models/coherent_elastic (hadr-cohe-V09-01-05)
-  o G4HadronElastic: added protection inside LElastic model against rare
+  o G4HadronElastic: added protection inside LElastic model against rare    (**)
     unphysical values of sampled 't'.
   o Set process sub-type to 11 for G4UHadronElasticProcess and 16 for
     G4ChargeExchangeProcess.

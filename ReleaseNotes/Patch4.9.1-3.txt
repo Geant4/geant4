@@ -81,8 +81,17 @@ List of fixes included in this public patch since the public release 9.1.p02:
     ----------
     + Replaced calls to exit() with G4Exception wherever applicable.
 
+  o Materials:
+    ---------
+    + G4Element: extended printout of errors and warnings; added more safe
+      check of consistency between Z and A in construction.
+    + G4Material: improved errors printout.
+
   o Hadronic Processes:
     ------------------
+    + models/coherent_elastic:
+      o G4HadronElastic: added protection inside LElastic algorithm against
+        cases of t>tmax (outside kinematically allowed 4-momentum transfer).
     + models/lll_fission:
       o Replaced usage of exit() with G4Exception in G4fissionerr.
     + models/high_energy:

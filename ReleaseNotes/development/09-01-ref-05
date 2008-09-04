@@ -50,7 +50,7 @@ global                                           global-V09-01-07
 
 materials                                        materials-V09-01-05
 ---------
-- G4Element: added more safe check of consistence between Z and A in the
+- G4Element: added more safe check of consistence between Z and A in the   (**)
   constructor. Improved printout of errors and warnings.
 
 persistency/gdml                                 gdml-V09-01-04
