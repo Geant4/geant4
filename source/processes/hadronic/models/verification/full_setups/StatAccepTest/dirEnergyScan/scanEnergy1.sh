@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------
-# Last update: 25-Jul-2008
+# Last update: 04-Sep-2008
 #
 # This simple shell script run a energy scan, in the beam energy range
-# 1 - 30 GeV, for 1 Physics List, 1 beam particle, and 1 type of
-# simplified calorimeter.
+# 1 - 30 GeV, and beyond, for 1 Physics List, 1 beam particle, 
+# and 1 type of simplified calorimeter.
 #
 # See "***LOOKHERE***" below for the available choices.
 #
@@ -11,7 +11,9 @@
 # the latter runs 4 simplified calorimeters (cms, atlas, pbwo4, tile),
 # whereas  scanEnergy1.sh  runs only 1 simplified calorimeter.
 # Notice that  scanEnergy1.sh  can run  atlasTILE.g4 , whereas
-# scanEnergy.sh  cannot.
+# scanEnergy.sh  cannot. 
+# Furthermore, it can run also beam energies above 30 GeV.
+#
 #------------------------------------------------------------------------
 #
 #*****************************LOOKHERE***
@@ -216,6 +218,45 @@ echo " === 30 GeV === "
 cd dir30GeV
 mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-30GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
 cd ..
+#
+#
+date
+echo " === 50 GeV === "
+cd dir50GeV
+mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-50GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+cd ..
+#
+date
+echo " === 100 GeV === "
+cd dir100GeV
+mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-100GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+cd ..
+#
+###date
+###echo " === 180 GeV === "
+###cd dir180GeV
+###mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-180GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+###cd ..
+#
+date
+echo " === 200 GeV === "
+cd dir200GeV
+mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-200GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+cd ..
+#
+###date
+###echo " === 300 GeV === "
+###cd dir300GeV
+###mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-300GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+###cd ..
+#
+###date
+###echo " === 350 GeV === "
+###cd dir350GeV
+###mainStatAccepTest-$PHYSICS_LIST $CALO.g4 > output.log-$sCALO-$PARTICLE-350GeV-$G4_RELEASE-$PHYSICS_LIST 2>&1
+###cd ..
+#
+date
 #
 echo " "
 echo " === END === "
