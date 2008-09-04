@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorConstruction.hh,v 1.7 2007-08-24 13:04:04 gcosmo Exp $
+// $Id: Tst11DetectorConstruction.hh,v 1.8 2008-09-04 22:31:30 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 080901 Add defineTKMaterials() 
 //
 
 #ifndef Tst11DetectorConstruction_h
@@ -54,6 +56,7 @@ class Tst11DetectorConstruction : public G4VUserDetectorConstruction
 
   private:
      void defineNISTMaterials();
+     void defineTKMaterials();
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;

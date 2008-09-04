@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // 070522 Add Nist Materals T. Koi
+// 080901 Add TK Materals T. Koi
 //
 
 #include "Tst11DetectorConstruction.hh"
@@ -49,6 +50,7 @@ Tst11DetectorConstruction::Tst11DetectorConstruction()
   detectorMessenger = new Tst11DetectorMessenger(this);
   materialChoice = "Pb";
   defineNISTMaterials();
+  defineTKMaterials();
 }
 
 Tst11DetectorConstruction::~Tst11DetectorConstruction()
@@ -259,6 +261,36 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    //nistMan->FindOrBuildMaterial( "G4_Cm" );
    //nistMan->FindOrBuildMaterial( "G4_Bk" );
    //nistMan->FindOrBuildMaterial( "G4_Cf" ); // No data HP even with Am
+
+}
+
+void Tst11DetectorConstruction::defineTKMaterials()
+{
+
+   G4NistManager* nistMan = G4NistManager::Instance();
+
+   G4String symbol;             //a=mass of a mole;
+   G4double a, z, density;      //z=mean number of protons;
+   G4int iz, n;                 //iz=number of protons  in an isotope;
+   G4int ncomponents, natoms;
+   G4double abundance, fractionmass;
+
+   G4Isotope* isoH1 = new G4Isotope("H1", iz=1, n=1, a=1.0078250321*g/mole);
+   G4Element* elH1  = new G4Element("Hydrogen1",symbol="H1" , ncomponents=1);
+   elH1->AddIsotope(isoH1, abundance=100.*perCent);
+   G4Material* Hydrogen1 = new G4Material("Hydrogen1" , density= 1.0*g/cm3 , ncomponents = 1 , kStateSolid , 0.*kelvin , 1*atmosphere );
+   Hydrogen1->AddElement( elH1 , fractionmass = 1 );
+
+   // Create Element for Thermal Scattering
+   G4Element* elTSHW= new G4Element( "TS_H_of_Water" , "H_WATER" , 1.0 , 1.0079*g/mole );
+   G4Element* elTSH= new G4Element( "TS_H_of_Polyethylene" , "H_POLYETHYLENE" , 1.0 , 1.0079*g/mole );
+   // Create Materials from the elements
+   G4Material* matH2O_TS = new G4Material( "Water_TS" , density = 1.0*g/cm3 , ncomponents= 2 );
+   matH2O_TS -> AddElement(elTSHW,natoms=2);
+   matH2O_TS -> AddElement(nistMan->FindOrBuildElement( "O" ), natoms = 1);
+   G4Material* matCH2_TS = new G4Material( "Polyethylene_TS" , density = 0.94*g/cm3 , ncomponents= 2 );
+   matCH2_TS -> AddElement(elTSH,natoms=2);
+   matCH2_TS -> AddElement(nistMan->FindOrBuildElement( "C" ), natoms= 1);
 
 }
 

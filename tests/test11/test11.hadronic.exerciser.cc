@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.19 2007-06-01 00:29:10 tkoi Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.20 2008-09-04 22:31:30 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 080901 Add Thermal materials and hydogen from 1H isotope in test.
 //
 
 #include "globals.hh"
@@ -234,6 +236,10 @@ int main (int argc, char** argv) {
    //TK_materialNameList.push_back ( "G4_Bk" );
    //TK_materialNameList.push_back ( "G4_Cf" ); // No data HP even with Am
 
+//080901
+   TK_materialNameList.push_back ( "Hydrogen1" );
+   TK_materialNameList.push_back ( "Water_TS" );
+   TK_materialNameList.push_back ( "Polyethylene_TS" );
 /*
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
