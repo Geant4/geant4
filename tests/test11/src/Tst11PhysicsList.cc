@@ -24,8 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11PhysicsList.cc,v 1.9 2006-06-29 21:39:04 gunter Exp $
+// $Id: Tst11PhysicsList.cc,v 1.10 2008-09-04 22:32:13 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 080901 Add dump neutron crossSections
+//        Add Thermal Scattering by T. Koi
 //
 #include "globals.hh"
 #include "Tst11PhysicsList.hh"
@@ -268,6 +271,8 @@ void Tst11PhysicsList::ConstructEM()
 #include "G4NeutronHPElasticData.hh"
 #include "G4CrossSectionDataStore.hh"
 
+#include "G4NeutronHPThermalScattering.hh"
+#include "G4NeutronHPThermalScatteringData.hh"
 //
 // ConstructHad()
 //
@@ -370,9 +375,16 @@ void Tst11PhysicsList::ConstructHad()
          G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
          theElasticProcess1->RegisterMe(theElasticModel1);
          theElasticModel1->SetMinEnergy(19*MeV);
+         theElasticNeutron->SetMinEnergy(4*eV);
          theElasticProcess1->RegisterMe(theElasticNeutron);
          G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
          theElasticProcess1->AddDataSet(theNeutronData);
+
+//080901 TK add Thermal Scattering 
+         G4NeutronHPThermalScattering * theThermal = new G4NeutronHPThermalScattering;
+         theElasticProcess1->RegisterMe(theThermal);
+         G4NeutronHPThermalScatteringData * theThermalData = new G4NeutronHPThermalScatteringData;
+         theElasticProcess1->AddDataSet(theThermalData);
          pmanager->AddDiscreteProcess(theElasticProcess1);
          
           // inelastic scattering
@@ -410,6 +422,54 @@ void Tst11PhysicsList::ConstructHad()
          G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
          theCaptureProcess->AddDataSet(theNeutronData3);
          pmanager->AddDiscreteProcess(theCaptureProcess);
+
+
+//080901 TK add 
+
+         G4cout << "NeutronHP Elastic Cross Sections " << G4endl;
+         theNeutronData->DumpPhysicsTable( *G4Neutron::Neutron() );
+         G4cout << "NeutronHP Inelastic Cross Sections " << G4endl;
+         theNeutronData1->DumpPhysicsTable( *G4Neutron::Neutron() );
+         G4cout << "NeutronHP Capture Cross Sections " << G4endl;
+         theNeutronData2->DumpPhysicsTable( *G4Neutron::Neutron() );
+         G4cout << "NeutronHP Fission Cross Sections " << G4endl;
+         theNeutronData3->DumpPhysicsTable( *G4Neutron::Neutron() );
+
+
+         G4cout << "Cross Section Dump Through Process::GetMicroscopicCrossSection " << G4endl;
+         G4int ne  = G4Element::GetNumberOfElements();
+         for ( G4int iele = 0 ; iele < ne ; iele ++ )
+         { 
+            const G4Element* ele = (*(G4Element::GetElementTable()))[ iele ];
+            G4cout << ele->GetName() << G4endl;
+            G4cout << "Energy[eV]  Elastic[mb] Inelastic[mb] Capture[mb] Fission[mb] " << G4endl;
+
+            for ( G4int ie = 1 ; ie < 150 ; ie++ )
+            {
+               G4double e = 1.0e-5*eV*std::pow( 10.0 , 1.0*ie/10 );  
+               G4DynamicParticle* dp = new G4DynamicParticle( G4Neutron::Neutron(), G4ThreeVector(1,0,0), e);
+               G4cout << e/eV   
+                      << " " << ((G4HadronicProcess*)theElasticProcess1)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theInelasticProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theCaptureProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theFissionProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << G4endl;
+            } 
+/*
+            // 1 - 20 MeV
+            for ( G4int ie = 1 ; ie < 20 ; ie++ )
+            {
+               G4DynamicParticle* dp = new G4DynamicParticle( G4Neutron::Neutron(), G4ThreeVector(1,0,0), ie*MeV);
+               G4cout << ie*MeV/eV   
+                      << " " << ((G4HadronicProcess*)theElasticProcess1)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theInelasticProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theCaptureProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << " " << ((G4HadronicProcess*)theFissionProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
+                      << G4endl;
+            }
+*/
+         }
+
       }  
       else if (particleName == "anti_neutron") {
          pmanager->AddDiscreteProcess(theElasticProcess);
