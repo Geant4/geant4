@@ -29,6 +29,7 @@
 //
 // 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) ) 
 //          is added by T. KOI
+// 080904 Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering by T. Koi
 //
 #include "G4NeutronHPElasticFS.hh"
 #include "G4ReactionProduct.hh"
@@ -303,8 +304,35 @@
       G4double tP = theTarget.GetTotalMomentum();
       G4double tM = theTarget.GetMass();
       theTarget.SetTotalEnergy(std::sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
+
+/*
+For debug purpose. 
+Same transformation G4ReactionProduct.Lorentz() by 4vectors
+{
+G4LorentzVector n4p = G4LorentzVector ( theNeutron.GetMomentum() , theNeutron.GetKineticEnergy() + theNeutron.GetMass() );    
+G4cout << "before " << ( n4p.e() - n4p.m() ) / eV<< G4endl;
+G4LorentzVector cm4p = G4LorentzVector ( theCMS.GetMomentum() , theCMS.GetKineticEnergy() + theCMS.GetMass() );    
+n4p.boost( cm4p.boostVector() );
+G4cout << cm4p/eV << G4endl;
+G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
+}
+*/
+
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
+//080904 Add Protection for very low energy (1e-6eV) scattering 
+      if ( theNeutron.GetKineticEnergy() < 0 )
+      {
+         theNeutron.SetMomentum( G4ThreeVector(0) ); 
+         theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
+      }
+
       theTarget.Lorentz(theTarget, -1.*theCMS);
+//080904 Add Protection for very low energy (1e-6eV) scattering 
+      if ( theTarget.GetKineticEnergy() < 0 )
+      {
+         theTarget.SetMomentum( G4ThreeVector(0) ); 
+         theTarget.SetTotalEnergy ( theTarget.GetMass() );
+      }
     }
     else
     {
