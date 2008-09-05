@@ -44,7 +44,6 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   if(theDist == 0) { return 0; }
   G4ReactionProductVector * result = new G4ReactionProductVector;
   G4double mean = theYield.GetY(anEnergy);
-G4cout << "mean " << mean << G4endl;
   G4int multi;
   multi = G4int(mean+0.0001);
   //if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
