@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.13 2006-06-29 19:04:17 gunter Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.14 2008-09-05 18:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,69 +40,62 @@
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
+//    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //
 // --------------------------------------------------------------
 
 #include "G4PhysicsLogVector.hh"
 
 G4PhysicsLogVector::G4PhysicsLogVector()
-  : dBin(0.), baseBin(0.)
+  : G4PhysicsVector(false), dBin(0.), baseBin(0.)
 { 
   type = T_G4PhysicsLogVector;
 }
 
 G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
-  : dBin(0.), baseBin(0.)
+  : G4PhysicsVector(false), dBin(0.), baseBin(0.)
 {
   type = T_G4PhysicsLogVector;
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1); 
+  dataVector.resize(theNbin+1);
+  binVector.resize(theNbin+1); 
 
   numberOfBin = theNbin;
 
-  edgeMin = 0.;
-  edgeMax = 0.;
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
- 
-  for (size_t i=0; i<=numberOfBin; i++)
-  {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
+  if(numberOfBin > 0) {
+    edgeMin = 1;
+    edgeMax = numberOfBin;
+    for (size_t i=0; i<=numberOfBin; i++) {
+      binVector[i] = i + 1;
+      dataVector[i]= 0.0;
+    }
   }
 }  
 
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
-  : dBin(std::log10(theEmax/theEmin)/theNbin),
+  : G4PhysicsVector(false), dBin(std::log10(theEmax/theEmin)/theNbin),
     baseBin(std::log10(theEmin)/dBin)
 {
   type = T_G4PhysicsLogVector;
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1); 
+  dataVector.resize(theNbin+1);
+  binVector.resize(theNbin+1); 
 
   numberOfBin = theNbin;
 
-  for (size_t i=0; i<numberOfBin+1; i++)
-  {
-    binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
-    dataVector.push_back(0.0);
+  if(numberOfBin > 0) {
+    for (size_t i=0; i<numberOfBin+1; i++) {
+      binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
+      dataVector.push_back(0.0);
+    }
+    edgeMin = binVector[0];
+    edgeMax = binVector[numberOfBin-1];
   }
-
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfBin-1];
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
 }  
 
 G4PhysicsLogVector::~G4PhysicsLogVector(){}

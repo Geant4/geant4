@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.9 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.10 2008-09-05 18:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 // A subdivision method is used to find the energy|momentum bin.
 //
 // F.W. Jones, TRIUMF, 04-JUN-96
+// 05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 // --------------------------------------------------------------------------
 
 inline
@@ -47,8 +48,16 @@ void G4LPhysicsFreeVector::PutValues(size_t binNumber,
   // G4PhysicsVector has PutValue() but it is inconvenient.
   // Want to simultaneously fill the bin and data vectors.
 {
-   binVector[binNumber] = binValue;
-   dataVector[binNumber] = dataValue;
+  if(binNumber <= numberOfBin) { 
+    binVector[binNumber] = binValue;
+    dataVector[binNumber]= dataValue;
+    if(0 == binNumber) edgeMin = binValue;
+    if( numberOfBin - 1 <= binNumber) {
+      edgeMax = binValue;
+      binVector[binNumber + 1] = binValue;
+      dataVector[binNumber+ 1] = dataValue;
+    }
+  }
 }
 
 inline

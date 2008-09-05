@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.14 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.15 2008-09-05 18:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
 // 27-MAR-97 FWJ: first version for Alpha release
+// 05-SEP-2008, V.Ivanchenko : added protections for zero-length vector
 // --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
@@ -47,11 +48,7 @@
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
    : G4PhysicsVector(false), verboseLevel(0)
 {
-   type = T_G4LPhysicsFreeVector;
-
-   edgeMin = 0.0;
-   edgeMax = 0.0;
-   numberOfBin = 0;
+  type = T_G4LPhysicsFreeVector;
 }
 
 // --------------------------------------------------------------------
@@ -59,23 +56,21 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
                                            G4double binmin,
                                            G4double binmax)
-   : G4PhysicsVector(false), verboseLevel(0)
+  : G4PhysicsVector(false), verboseLevel(0)
 {
-   type = T_G4LPhysicsFreeVector;
-
-   edgeMin = binmin;
-   edgeMax = binmax;
-   numberOfBin = nbin;
-   lastEnergy = 0.;
-   lastValue = 0.;
-   lastBin = 0;
-   binVector.reserve(nbin+1);
-   dataVector.reserve(nbin+1);
-   for (size_t i=0; i<=numberOfBin; i++)
-   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-   }
+  type = T_G4LPhysicsFreeVector;
+   
+  numberOfBin = nbin;
+  binVector.resize(nbin+1);
+  dataVector.resize(nbin+1);
+  if(nbin > 0) {
+    edgeMin = binmin;
+    edgeMax = binmax;
+    for (size_t i=0; i<=numberOfBin; i++) {
+      binVector[i] = binmin;
+      dataVector[i]= 0.0;
+    }
+  }
 }  
 
 // --------------------------------------------------------------------

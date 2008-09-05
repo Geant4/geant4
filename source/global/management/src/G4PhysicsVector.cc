@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.21 2008-04-21 06:27:02 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.22 2008-09-05 18:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //    18 Jan. 2001, H.Kurashige : removed ptrNextTable
 //    09 Mar. 2001, H.Kurashige : added G4PhysicsVector type 
+//    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
@@ -50,10 +51,12 @@
 
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
-   edgeMin(0.), edgeMax(0.), numberOfBin(0),
+   edgeMin(DBL_MAX), edgeMax(0.), numberOfBin(0),
    lastEnergy(0.), lastValue(0.), lastBin(0), 
    secDerivative(0), useSpline(spline)
 {
+  binVector.push_back(edgeMin);
+  dataVector.push_back(0.0);
 }
 
 // --------------------------------------------------------------
@@ -220,9 +223,15 @@ void G4PhysicsVector::FillSecondDerivatives()
 {  
   secDerivative = new G4double [numberOfBin];
 
-  G4double* u = new G4double [numberOfBin];
-
   secDerivative[0] = 0.0 ;
+
+  // cannot compute derivatives for less than 3 points
+  if(3 > numberOfBin) {
+    secDerivative[numberOfBin-1] = 0.0 ;
+    return;
+  }
+
+  G4double* u = new G4double [numberOfBin];
   u[0] = 0.0 ;
    
   // Decomposition loop for tridiagonal algorithm. secDerivative[i]

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.13 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4PhysicsVector.icc,v 1.14 2008-09-05 18:04:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,8 @@
 //    This class serves as the base class for a vector having various 
 //    energy scale, for example like 'log', 'linear', 'free', etc.
 //
+// Modified:
+// 05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //---------------------------------------------------------------
 
 inline
@@ -124,14 +126,14 @@ inline
 
   if( theEnergy == lastEnergy ) {
 
-  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin]) {
-     lastEnergy = theEnergy;
-     Interpolation();
-
   } else if( theEnergy <= edgeMin ) {
      lastBin = 0;
      lastEnergy = theEnergy;
      lastValue  = dataVector[0];
+
+  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin]) {
+     lastEnergy = theEnergy;
+     Interpolation();
 
   } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin-1]) {
      lastBin--;
@@ -140,7 +142,7 @@ inline
 
   } else if( theEnergy >= edgeMax ){
      lastBin = numberOfBin-1;
-     lastEnergy = theEnergy;
+     lastEnergy = edgeMax;
      lastValue  = dataVector[lastBin];
 
   } else {
@@ -165,12 +167,14 @@ inline
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
-  dataVector[binNumber] = theValue;
+  if(binNumber < numberOfBin) {
+    dataVector[binNumber] = theValue;
 
-  // Fill the bin which is hidden to user with theValue. This is to 
-  // handle correctly when Energy=theEmax in getValue.
+    // Fill the bin which is hidden to user with theValue. This is to 
+    // handle correctly when Energy=theEmax in getValue.
 
-  if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
+    if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
+  }
 }
 
 //---------------------------------------------------------------
