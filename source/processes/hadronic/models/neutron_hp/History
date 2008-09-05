@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-20)
+---------------------------------------------
+- Delete output for debugging
+	G4NeutronHPProduct.cc
+
 4 September 2008 Tatsumi Koi (hadr-hpn-V09-01-19)
 ---------------------------------------------
 - Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering 
