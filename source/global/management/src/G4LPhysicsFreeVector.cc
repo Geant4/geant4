@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.15 2008-09-05 18:04:45 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.16 2008-09-06 19:15:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 // --------------------------------------------------------------------
 
 G4LPhysicsFreeVector::G4LPhysicsFreeVector()
-   : G4PhysicsVector(false), verboseLevel(0)
+   : G4PhysicsVector(), verboseLevel(0)
 {
   type = T_G4LPhysicsFreeVector;
 }
@@ -56,7 +56,7 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector()
 G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
                                            G4double binmin,
                                            G4double binmax)
-  : G4PhysicsVector(false), verboseLevel(0)
+  : G4PhysicsVector(), verboseLevel(0)
 {
   type = T_G4LPhysicsFreeVector;
    

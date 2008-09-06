@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.14 2008-09-05 18:04:45 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.15 2008-09-06 19:15:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,13 +47,13 @@
 #include "G4PhysicsLogVector.hh"
 
 G4PhysicsLogVector::G4PhysicsLogVector()
-  : G4PhysicsVector(false), dBin(0.), baseBin(0.)
+  : G4PhysicsVector(), dBin(0.), baseBin(0.)
 { 
   type = T_G4PhysicsLogVector;
 }
 
 G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
-  : G4PhysicsVector(false), dBin(0.), baseBin(0.)
+  : G4PhysicsVector(), dBin(0.), baseBin(0.)
 {
   type = T_G4PhysicsLogVector;
 
@@ -76,7 +76,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
-  : G4PhysicsVector(false), dBin(std::log10(theEmax/theEmin)/theNbin),
+  : G4PhysicsVector(), dBin(std::log10(theEmax/theEmin)/theNbin),
     baseBin(std::log10(theEmin)/dBin)
 {
   type = T_G4PhysicsLogVector;
@@ -89,9 +89,9 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
   numberOfBin = theNbin;
 
   if(numberOfBin > 0) {
-    for (size_t i=0; i<numberOfBin+1; i++) {
-      binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
-      dataVector.push_back(0.0);
+    for (size_t i=0; i<=numberOfBin; i++) {
+      binVector[i] = std::pow(10., std::log10(theEmin)+i*dBin);
+      dataVector[i]= 0.0;
     }
     edgeMin = binVector[0];
     edgeMax = binVector[numberOfBin-1];
