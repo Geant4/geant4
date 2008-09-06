@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.10 2008-09-05 18:04:45 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.11 2008-09-06 19:52:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,11 +52,7 @@ void G4LPhysicsFreeVector::PutValues(size_t binNumber,
     binVector[binNumber] = binValue;
     dataVector[binNumber]= dataValue;
     if(0 == binNumber) edgeMin = binValue;
-    if( numberOfBin - 1 <= binNumber) {
-      edgeMax = binValue;
-      binVector[binNumber + 1] = binValue;
-      dataVector[binNumber+ 1] = dataValue;
-    }
+    else if( numberOfBin - 1 == binNumber) edgeMax = binValue;
   }
 }
 

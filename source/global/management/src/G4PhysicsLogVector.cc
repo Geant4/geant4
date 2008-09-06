@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.15 2008-09-06 19:15:37 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.16 2008-09-06 19:52:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,12 +59,12 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
-  dataVector.resize(theNbin+1);
-  binVector.resize(theNbin+1); 
 
   numberOfBin = theNbin;
 
   if(numberOfBin > 0) {
+    dataVector.resize(theNbin+1);
+    binVector.resize(theNbin+1); 
     edgeMin = 1;
     edgeMax = numberOfBin;
     for (size_t i=0; i<=numberOfBin; i++) {
