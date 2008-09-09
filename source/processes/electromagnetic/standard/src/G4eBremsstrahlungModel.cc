@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.39 2007-05-23 08:47:35 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.40 2008-09-09 08:56:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,8 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
     particle(0),
     isElectron(true),
     probsup(1.0),
-    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
+    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
+    //MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
     theLPMflag(true),
     isInitialised(false)
