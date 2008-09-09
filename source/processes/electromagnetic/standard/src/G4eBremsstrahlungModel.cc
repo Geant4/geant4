@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.40 2008-09-09 08:56:20 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.41 2008-09-09 09:05:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 21-03-06  Fix problem of initialisation in case when cuts are not defined (VI)
 // 27-03-06  Fix calculation of fl parameter at low energy (energy loss) (VI)
 // 15-02-07  correct LPMconstant by a factor 2, thanks to G. Depaola (mma)
+// 09-09-08  MigdalConstant increased in (2pi)^2 times (A.Schaelicke) 
 //
 // Class Description:
 //
