@@ -1,4 +1,4 @@
-$Id: History,v 1.408 2008-09-09 09:05:39 vnivanch Exp $
+$Id: History,v 1.409 2008-09-09 09:30:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,9 +19,10 @@ committal in the CVS repository !
 
 09 Septembetr 08: V.Ivant (emstand-V09-01-31)
 G4WaterStopping, G4IronStopping, G4MaterialStopping, 
-G4SimpleMaterialStopping moved to material category
+G4SimpleMaterialStopping - use mass number instead of atomic mass
+                           (A.Lechner proposal)
 G4eBremsstrahlungModel - Migdal constant set to the vavue of 
-                         G4eBremsstrahlungRelModel
+                         G4eBremsstrahlungRelModel (A.Schaelicke)
 
 28 August 08: V.Ivant (emstand-V09-01-30)
 G4WaterStopping, G4IronStopping - add method AddData to speeed up
