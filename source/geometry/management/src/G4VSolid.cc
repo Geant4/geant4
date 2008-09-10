@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.37 2008-02-20 15:24:26 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.38 2008-09-10 13:18:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -70,7 +70,7 @@ G4VSolid::G4VSolid(const G4String& name)
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Protected copy constructor
+// Copy constructor
 //
 
 G4VSolid::G4VSolid(const G4VSolid& rhs)

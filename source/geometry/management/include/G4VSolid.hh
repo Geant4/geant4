@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.28 2008-02-20 15:24:25 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.29 2008-09-10 13:18:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,6 +229,10 @@ class G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4VSolid(const G4VSolid& rhs);
+    G4VSolid& operator=(const G4VSolid& rhs); 
+      // Copy constructor and assignment operator.
+
   protected:  // with description
 
     void CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
@@ -292,12 +296,6 @@ class G4VSolid
       // Calculate surface area only based on Inside() method.
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
-
-  protected:  // without description
-
-    G4VSolid(const G4VSolid& rhs);
-    G4VSolid& operator=(const G4VSolid& rhs); 
-      // Protected copy constructor and assignment operator.
 
   protected:
 
