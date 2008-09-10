@@ -46,7 +46,9 @@ List of fixes included in this public patch since the public release 9.1.p02:
         scan instead of using the flag for nested structures.
       o G4GeometryManager: do not apply optimisation on the current volume if
         it has been defined as a regular structure.
-      o Addresses problem report #990.
+        Addresses problem report #990.
+      o G4VSolid: promote copy-constructor and assignment operator to public
+        to cope with specific use-case in ATLAS (see problem report #1023).
     + solids/CSG:
       o G4Sphere: fixed bug in DistanceToOut(p, v, ...) for normal 'fSTheta'
         greater than 90*deg, and use of tangent giving negative value.
