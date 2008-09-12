@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2008-04-24 12:40:50 gcosmo Exp $
+$Id: History,v 1.131 2008-09-12 16:12:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July, 15th, 2008   J.Apostolakis - field-V09-01-02
+--------------------------------
+- Revised signature of G4ChordFinder::FinderNextChord(), making 'FieldTrack'
+  argument passed a reference.
+
+May, 28th, 2008   T.Nikitina
+----------------------------
+- G4ChordFinder: added new method ApproxCurvePointS() using Brent second order
+  location mechanism.
 
 April 24th, 2008   T.Nikitina - field-V09-01-01
 -----------------------------
