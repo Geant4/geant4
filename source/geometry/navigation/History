@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2008-04-29 15:33:05 gcosmo Exp $
+$Id: History,v 1.120 2008-09-12 16:28:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 5th, 2008 - T.Nikitina
+--------------------------
+- Added Brent method for LocateIntersectionPoint() in G4PropagatorInField.
+  The Brent method is now used as default and can be switched off through
+  call to the proper accessor function SetBrentMethod().
+- Requires related update to G4ChordFinder in geometry/magneticfield module
+  included in tag "field-V09-01-02".
 
 April 29th, 2008 - M.Asai (geomnav-V09-01-04)
 -------------------------
