@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.18 2008-04-13 18:06:36 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.19 2008-09-12 16:35:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,8 @@
 // 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
 // 23-10-06 Reduce lowestKinEnergy to 0.25 keV (V.Ivanchenko)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 //
 
 // Class Description:
@@ -61,6 +63,8 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4LossTableManager.hh"
+#include "G4EmCorrections.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,10 +73,12 @@ using namespace std;
 G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
                                  const G4String& nam)
   : G4VEmModel(nam),
+    corr(0),
     particle(0),
     fParticleChange(0),
     iMolecula(0),
-    isIon(false)
+    isIon(false),
+    isInitialised(false)
 {
   if(p) SetParticle(p);
   highKinEnergy    = 2.0*MeV;
@@ -104,18 +110,48 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
                                  const G4DataVector&)
 {
   if(p != particle) SetParticle(p);
-  G4String pname = particle->GetParticleName();
-  if(particle->GetParticleType() == "nucleus" &&
-     pname != "deuteron" && pname != "triton") isIon = true;
 
-  if(!fParticleChange) {
-    if(pParticleChange) {
-      fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-	(pParticleChange);
-    } else {
-      fParticleChange = new G4ParticleChangeForLoss();
+  if(!isInitialised) {
+    isInitialised = true;
+
+    G4String pname = particle->GetParticleName();
+    if(particle->GetParticleType() == "nucleus" &&
+       pname != "deuteron" && pname != "triton") isIon = true;
+
+    corr = G4LossTableManager::Instance()->EmCorrections();
+
+    if(!fParticleChange) {
+      if(pParticleChange) {
+	fParticleChange = 
+	  reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+      } else {
+	fParticleChange = new G4ParticleChangeForLoss();
+      }
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
+					       const G4Material* mat,
+					       G4double kineticEnergy)
+{
+  if(isIon) {
+    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
+    chargeSquare = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+    GetModelOfFluctuations()->SetParticleAndCharge(p, chargeSquare);
+  }
+  return chargeSquare;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
+					    const G4Material* mat,
+					    G4double kineticEnergy)
+{
+  return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,10 +162,9 @@ G4double G4BraggIonModel::ComputeCrossSectionPerElectron(
                                                  G4double cutEnergy,
                                                  G4double maxKinEnergy)
 {
-
   G4double cross     = 0.0;
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < tmax) {
 
     G4double energy  = kineticEnergy + mass;
@@ -211,6 +246,39 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
   //       << " q2 = " << chargeSquare <<  G4endl;
 
   return dedx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+					   const G4DynamicParticle* dp,
+					   G4double& eloss,
+					   G4double&,
+					   G4double length)
+{
+  if(nuclearStopping) {
+
+    G4double preKinEnergy = dp->GetKineticEnergy();
+    G4double e = preKinEnergy - eloss*0.5;
+    if(e < 0.0) e = preKinEnergy*0.5;
+    G4double nloss = length*corr->NuclearDEDX(dp->GetDefinition(),
+					      couple->GetMaterial(),
+					      e,false);
+
+    // too big energy loss
+    if(eloss + nloss > preKinEnergy) {
+      nloss *= (preKinEnergy/(eloss + nloss));
+      eloss = preKinEnergy;
+    } else {
+      eloss += nloss;
+    }
+    /*
+    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    	   << " de= " << eloss << " NIEL= " << nloss 
+	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
+    */
+    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

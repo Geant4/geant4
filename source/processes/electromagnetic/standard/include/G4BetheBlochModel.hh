@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.14 2008-05-20 16:55:43 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.15 2008-09-12 16:35:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,9 +44,11 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 12-11-03 Fix for GenericIons (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
-// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
 // 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 
 //
 // Class Description:
@@ -105,6 +107,20 @@ public:
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
+
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
+					const G4Material* mat,
+					G4double kineticEnergy);
+
+  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
+				     const G4Material* mat,
+				     G4double kineticEnergy);
+
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.20 2008-05-20 16:55:24 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.21 2008-09-12 16:35:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,10 +44,12 @@
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
-// 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 11-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 12-02-06 move G4LossTableManager::Instance()->EmCorrections() 
 //          in constructor (mma)
+// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -151,11 +153,34 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BetheBlochModel::ComputeCrossSectionPerElectron(
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double cutEnergy,
-                                                 G4double maxKinEnergy)	
+G4double G4BetheBlochModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
+						 const G4Material* mat,
+						 G4double kineticEnergy)
+{
+  if(isIon) {
+    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
+    chargeSquare = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+    GetModelOfFluctuations()->SetParticleAndCharge(p, chargeSquare);
+  }
+  return chargeSquare;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BetheBlochModel::GetParticleCharge(const G4ParticleDefinition* p,
+					      const G4Material* mat,
+					      G4double kineticEnergy)
+{
+  return corr->GetParticleCharge(p,mat,kineticEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
+						  G4double kineticEnergy,
+						  G4double cutEnergy,
+						  G4double maxKinEnergy)	
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
@@ -273,6 +298,43 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
     dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
   }
   return dedx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+					     const G4DynamicParticle* dp,
+					     G4double& eloss,
+					     G4double&,
+					     G4double length)
+{
+  G4double preKinEnergy = dp->GetKineticEnergy();
+  const G4ParticleDefinition* p = dp->GetDefinition();
+  if(isIon) {
+    mass = p->GetPDGMass();
+    eloss += length*corr->IonHighOrderCorrections(p,couple,preKinEnergy);
+  }
+  if(nuclearStopping && preKinEnergy*proton_mass_c2/mass < chargeSquare*100.*MeV) {
+
+    G4double e = preKinEnergy - eloss*0.5;
+    if(e < 0.0) e = preKinEnergy*0.5;
+    G4double nloss = length*corr->NuclearDEDX(p,couple->GetMaterial(),e,false);
+
+    // too big energy loss
+    if(eloss + nloss > preKinEnergy) {
+      nloss *= (preKinEnergy/(eloss + nloss));
+      eloss = preKinEnergy;
+    } else {
+      eloss += nloss;
+    }
+    /*
+    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    	   << " de= " << eloss << " NIEL= " << nloss 
+	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
+    */
+    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
