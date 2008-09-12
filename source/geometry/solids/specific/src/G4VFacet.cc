@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.cc,v 1.6 2007-08-23 14:45:03 gcosmo Exp $
+// $Id: G4VFacet.cc,v 1.7 2008-09-12 07:16:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,8 +95,8 @@ G4bool G4VFacet::operator== (const G4VFacet &right) const
     do
     {
       coincident = (GetVertex(i)-right.GetVertex(j)).mag2() < tolerance;
-    } while (!coincident && j++ < nVertices);
-  } while (coincident && i++ < nVertices);
+    } while (!coincident && ++j < nVertices);
+  } while (coincident && ++i < nVertices);
   
   return coincident;
 }
@@ -116,21 +116,21 @@ void G4VFacet::ApplyTranslation(const G4ThreeVector v)
 //
 std::ostream &G4VFacet::StreamInfo(std::ostream &os) const
 {
-  os <<G4endl;
-  os <<"***********************************************************************"
-     <<G4endl;
-  os <<"FACET TYPE       = " <<geometryType <<G4endl;
-  os <<"ABSOLUTE VECTORS = " <<G4endl;
-  os <<"P0               = " <<P0 <<G4endl;
+  os << G4endl;
+  os << "*********************************************************************"
+     << G4endl;
+  os << "FACET TYPE       = " << geometryType << G4endl;
+  os << "ABSOLUTE VECTORS = " << G4endl;
+  os << "P0               = " << P0 << G4endl;
   for (G4ThreeVectorList::const_iterator it=P.begin(); it!=P.end(); it++)
-    os <<"P[" <<it-P.begin()+1 <<"]      = " <<*it <<G4endl;
-    
-  os <<"RELATIVE VECTORS = " <<G4endl;
+    { os << "P[" << it-P.begin()+1 << "]      = " << *it << G4endl; }
+
+  os << "RELATIVE VECTORS = " << G4endl;
   for (G4ThreeVectorList::const_iterator it=E.begin(); it!=E.end(); it++)
-    os <<"E[" <<it-E.begin()+1 <<"]      = " <<*it <<G4endl;
-  
-  os <<"***********************************************************************"
-     <<G4endl;
+    { os << "E[" << it-E.begin()+1 << "]      = " << *it << G4endl; }
+
+  os << "*********************************************************************"
+     << G4endl;
   
   return os;
 }
