@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.38 2008-03-06 18:34:19 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.39 2008-09-12 16:24:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,7 +108,7 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 void G4PhotoElectricEffect::PrintInfo()
 {
   G4cout
-    << " Total cross sections from Sandia parametrisation. "
+    << "      Total cross sections from Sandia parametrisation. "
     << "\n      Sampling according " << Model()->GetName() << " model"  
     << G4endl;
 }

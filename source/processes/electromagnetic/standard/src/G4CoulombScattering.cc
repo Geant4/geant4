@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.17 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.18 2008-09-12 16:24:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,14 +133,13 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4CoulombScattering::PrintInfo()
 {
-  G4cout << " Scattering of " << aParticle->GetParticleName()
-	 << " with   " << PolarAngleLimit()/degree
+  G4cout << "      " << PolarAngleLimit()/degree
 	 << " < Theta(degree) < 180" 
-	 << "; Eth(MeV)= ";
+	 << ", Eth(MeV)= ";
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 
-  if(q2Max < DBL_MAX) G4cout << "; q2Max(MeV^2)= " << q2Max;
+  if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
   G4cout << G4endl;
 }
 

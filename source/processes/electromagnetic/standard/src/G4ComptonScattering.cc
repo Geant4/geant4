@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.28 2008-03-06 18:34:19 vnivanch Exp $
+// $Id: G4ComptonScattering.cc,v 1.29 2008-09-12 16:24:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,7 +106,7 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 void G4ComptonScattering::PrintInfo()
 {
   G4cout
-    << " Total cross sections has a good parametrisation"
+    << "      Total cross sections has a good parametrisation"
     << " from 10 KeV to (100/Z) GeV" 
     << "\n      Sampling according " << Model()->GetName() << " model"
     << G4endl;

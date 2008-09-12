@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.28 2008-03-06 18:34:19 vnivanch Exp $
+// $Id: G4GammaConversion.cc,v 1.29 2008-09-12 16:24:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,7 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 void G4GammaConversion::PrintInfo()
 {
   G4cout
-    << " Total cross sections has a good parametrisation" 
+    << "      Total cross sections has a good parametrisation" 
     << " from 1.5 MeV to 100 GeV for all Z;"
     << "\n      sampling secondary e+e- according "
     << Model()->GetName() << " model"
