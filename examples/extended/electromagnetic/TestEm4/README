@@ -1,4 +1,4 @@
-$Id: README,v 1.20 2008-05-06 11:18:17 maire Exp $
+$Id: README,v 1.21 2008-09-12 18:46:14 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -75,7 +75,8 @@ $Id: README,v 1.20 2008-05-06 11:18:17 maire Exp $
 	gmake histclean
 	gmake
 
-  It is possible to choose the format of the histogram file (hbook, root, XML):
+  It is possible to choose the format of the histogram file :
+  hbook, root (default), XML
   comment/uncomment 1 line in the constructor of RunAction. 
 
   To use histograms, at least one of the AIDA implementations should be 
