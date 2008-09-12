@@ -72,6 +72,8 @@ List of fixes included in this public patch since the public release 9.1.p02:
         apply comparison with kCarTolerance and not with zero; fixed logic
         problem in algorithm for points on surface and direction inside,
         relative to directions along Z, (0,0,Vz).
+      o G4VFacet: corrected increment of indeces in operator==().
+        Addressing problem report #1024.
 
   o Global:
     ------
