@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.82 2008-09-12 16:13:49 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.83 2008-09-12 16:19:01 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -933,8 +933,7 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
 {
   massRatio     = massratio;
   chargeSqRatio = charge2ratio;
-  chargeSquare  = charge2ratio*eplus*eplus;
-  if(chargeSqRatio > 0.0) reduceFactor  = 1.0/(chargeSqRatio*massRatio);
+  reduceFactor  = 1.0/(chargeSqRatio*massRatio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
