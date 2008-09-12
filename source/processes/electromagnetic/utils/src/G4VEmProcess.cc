@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.55 2008-08-29 17:28:27 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.56 2008-09-12 16:13:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -397,35 +397,25 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 void G4VEmProcess::PrintInfoDefinition()
 {
   if(verboseLevel > 0) {
-    G4cout << G4endl << GetProcessName() << ": " ;
-    PrintInfo();
-    if(integral) {
-      G4cout << "      Integral mode is used  "<< G4endl;
+    G4cout << G4endl << GetProcessName() << ":   tables are built for  "
+           << particle->GetParticleName();
+    if(integral) G4cout << ", integral mode is used ";
+    G4cout << G4endl;
+    if(buildLambdaTable) {
+      G4cout << "      Lambda tables from "
+	     << G4BestUnit(minKinEnergy,"Energy") 
+	     << " to "
+	     << G4BestUnit(maxKinEnergy,"Energy")
+	     << " in " << nLambdaBins << " bins, spline: " 
+	     << (G4LossTableManager::Instance())->SplineFlag()
+	     << G4endl;
     }
-  }
-
-  if (!buildLambdaTable)  return;
-  
-  if(verboseLevel > 0) {
-    G4cout << "      tables are built for  "
-           << particle->GetParticleName()
-           << G4endl
-           << "      Lambda tables from "
-           << G4BestUnit(minKinEnergy,"Energy") 
-           << " to "
-           << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nLambdaBins << " bins, spline: " 
-	   << (G4LossTableManager::Instance())->SplineFlag()
-           << G4endl;
+    PrintInfo();
     modelManager->DumpModelList(verboseLevel);
   }
 
-  if(verboseLevel > 1) {
-    G4cout << "Tables are built for " << particle->GetParticleName()
-           << G4endl;
-  }
-  if(verboseLevel > 2) {
-    G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
+  if(verboseLevel > 2 && buildLambdaTable) {
+    G4cout << "      LambdaTable address= " << theLambdaTable << G4endl;
     if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
   }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.81 2008-07-31 13:01:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.82 2008-09-12 16:13:49 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -147,14 +147,9 @@ protected:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
 				    const G4Material*, G4double cut);
 
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double& eloss,
-				    G4double& niel,
-				    G4double length);
-
   //------------------------------------------------------------------------
-  // Generic methods common to all ContinuousDiscrete processes 
+  // Virtual methods common to all EM ContinuousDiscrete processes
+  // Further inheritance is not assumed 
   //------------------------------------------------------------------------
 
 public:
@@ -164,6 +159,16 @@ public:
   void PreparePhysicsTable(const G4ParticleDefinition&);
 
   void BuildPhysicsTable(const G4ParticleDefinition&);
+
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+						 G4double  previousStepSize,
+						 G4double  currentMinimumStep,
+						 G4double& currentSafety,
+						 G4GPILSelection* selection);
+
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+						G4double   previousStepSize,
+						G4ForceCondition* condition);
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
@@ -211,27 +216,9 @@ public:
 			     const G4DynamicParticle* dp,
 			     G4double length);
 
-
-  virtual G4double AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,
-                             G4double  previousStepSize,
-                             G4double  currentMinimumStep,
-                             G4double& currentSafety,
-                             G4GPILSelection* selection
-                            );
-
-  virtual G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
-
   //------------------------------------------------------------------------
   // Specific methods to build and access Physics Tables
   //------------------------------------------------------------------------
-
-  G4double CrossSectionPerVolume(G4double kineticEnergy,
-				 const G4MaterialCutsCouple* couple);
 
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
 
@@ -356,18 +343,12 @@ public:
   virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
 
   //------------------------------------------------------------------------
-  // Run time method for simulation of ionisation
+  // Public interface to helper functions 
   //------------------------------------------------------------------------
 
-  inline G4double SampleRange();
+  inline 
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
-  inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
-
-
-  // Set scaling parameters
-  inline void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
-
-  // Helper functions
   inline G4double MeanFreePath(const G4Track& track);
 
   inline G4double ContinuousStepLimit(const G4Track& track,
@@ -375,12 +356,24 @@ public:
 				      G4double currentMinimumStep,
 				      G4double& currentSafety);
 
+  //------------------------------------------------------------------------
+  // Run time method for simulation of ionisation
+  //------------------------------------------------------------------------
+
+  // sample range at the end of a step
+  inline G4double SampleRange();
+
+  // Set scaling parameters for ions is needed to G4EmCalculator
+  inline void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
+
+  // Access to cross section table
+  G4double CrossSectionPerVolume(G4double kineticEnergy,
+				 const G4MaterialCutsCouple* couple);
+
 protected:
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
 				       G4double cut);
-
-  inline virtual void InitialiseMassCharge(const G4Track&);
 
   inline G4ParticleChangeForLoss* GetParticleChange();
 
@@ -388,7 +381,7 @@ protected:
 
   inline void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  inline G4VEmModel* SelectModel(G4double kinEnergy);
+  inline void SelectModel(G4double kinEnergy);
 
   inline size_t CurrentMaterialCutsCoupleIndex() const;
 
@@ -396,7 +389,10 @@ protected:
 
 private:
 
-  // Clear tables
+  //------------------------------------------------------------------------
+  // Management of tables
+  //------------------------------------------------------------------------
+
   void Clear();
 
   G4bool StoreTable(const G4ParticleDefinition* p, 
@@ -410,11 +406,10 @@ private:
 		       const G4String& tname, 
 		       G4bool mandatory);
 
-  inline void InitialiseStep(const G4Track&);
-
+  // define material and indexes
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
-  // Returnd values for scaled energy and base particles mass
+  // Returnd values for scaled energy using mass of the base particle
   //
   inline G4double GetDEDXForScaledEnergy(G4double scaledKinEnergy);
   inline G4double GetSubDEDXForScaledEnergy(G4double scaledKinEnergy);
@@ -439,6 +434,7 @@ private:
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
+  const G4ParticleDefinition* theGenericIon;
 
   G4PhysicsVector*            vstrag;
 
@@ -493,14 +489,15 @@ private:
   G4bool   rndmStepFlag;
   G4bool   tablesAreBuilt;
   G4bool   integral;
+  G4bool   isIon;
   G4bool   isIonisation;
   G4bool   useSubCutoff;
-
-  // ======== Cashed values - may be state dependent ================
 
 protected:
 
   G4ParticleChangeForLoss          fParticleChange;
+
+  // ======== Cashed values - may be state dependent ================
 
 private:
 
@@ -509,7 +506,7 @@ private:
 
   const G4ParticleDefinition* particle;
 
-  // cash
+  G4VEmModel*                 currentModel;
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
@@ -518,7 +515,6 @@ private:
 
   G4double massRatio;
   G4double reduceFactor;
-  G4double chargeSquare;
   G4double chargeSqRatio;
 
   G4double preStepLambda;
@@ -544,22 +540,6 @@ inline void G4VEnergyLossProcess::DefineMaterial(
     mfpKinEnergy = DBL_MAX;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::InitialiseStep(const G4Track& track)
-{
-  InitialiseMassCharge(track);
-  preStepKinEnergy = track.GetKineticEnergy();
-  preStepScaledEnergy = preStepKinEnergy*massRatio;
-  DefineMaterial(track.GetMaterialCutsCouple());
-  if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::InitialiseMassCharge(const G4Track&)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -817,9 +797,9 @@ inline G4double G4VEnergyLossProcess::MinPrimaryEnergy(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
+inline void G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 {
-  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -857,14 +837,6 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() con
 {
   return secondaryParticle;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::CorrectionsAlongStep(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-			     G4double&, G4double&, G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -956,15 +928,15 @@ inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio, 
-						       G4double charge2ratio)
+inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
+                                                       G4double charge2ratio)
 {
   massRatio     = massratio;
   chargeSqRatio = charge2ratio;
   chargeSquare  = charge2ratio*eplus*eplus;
   if(chargeSqRatio > 0.0) reduceFactor  = 1.0/(chargeSqRatio*massRatio);
 }
-  
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 inline G4double G4VEnergyLossProcess::GetCurrentRange() const
