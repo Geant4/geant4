@@ -1,4 +1,4 @@
-$Id: README,v 1.24 2008-08-26 16:35:29 maire Exp $
+$Id: README,v 1.25 2008-09-12 16:32:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -95,7 +95,7 @@ $Id: README,v 1.24 2008-08-26 16:35:29 maire Exp $
   	
  8 - HISTOGRAMS
  
-  Testem1 produces several histo which are saved as testem1.hbook by default.
+  Testem1 produces several histo which are saved as testem1.root by default.
   Content of these histo:  
       1 : track length of primary particle
       2 : number of steps primary particle
@@ -110,7 +110,7 @@ $Id: README,v 1.24 2008-08-26 16:35:29 maire Exp $
    /testem/histo/setFileName  name  (default testem1)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (hbook by default)
+   with the command /testem/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id

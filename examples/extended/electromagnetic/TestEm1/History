@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2008-08-26 16:35:29 maire Exp $
+$Id: History,v 1.88 2008-09-12 16:32:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+12-09-08 mma (testem1-V09-01-05)
+- HistoManager: change default histos format
+- add plotHisto.C and plotHisto.kumac
      
 12-06-08 mma (testem1-V09-01-04)
 - Rename Install.aida to InstallAida.txt
