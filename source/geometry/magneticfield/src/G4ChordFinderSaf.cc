@@ -115,7 +115,7 @@ CalculatePointInside(G4ThreeVector safetyOrigin,
 }
 
 G4double
-G4ChordFinderSaf::FindNextChord( const  G4FieldTrack  yStart,
+G4ChordFinderSaf::FindNextChord( const  G4FieldTrack&  yStart,
                                      G4double     stepMax,
                                      G4FieldTrack&   yEnd, // Endpoint
                                      G4double&   dyErrPos, // Error of endpoint

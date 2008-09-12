@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChordFinderSaf.hh,v 1.3 2006-06-29 18:21:52 gunter Exp $
+// $Id: G4ChordFinderSaf.hh,v 1.4 2008-09-12 16:12:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ public:
 
   ~G4ChordFinderSaf(); 
 
-  G4double FindNextChord( const  G4FieldTrack  yStart,
+  G4double FindNextChord( const  G4FieldTrack&  yStart,
 			  G4double     stepMax,
 			  G4FieldTrack&   yEnd,  // Endpoint
 			  G4double&   dyErrPos,  // Error of endpoint
