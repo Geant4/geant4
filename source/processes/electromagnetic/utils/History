@@ -1,4 +1,4 @@
-$Id: History,v 1.348 2008-09-12 16:13:49 vnivanch Exp $
+$Id: History,v 1.349 2008-09-12 16:15:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 September 08: V.Ivant (emutils-V09-01-27)
+G4VEmProcess - improved verbose output
 G4VEnergyLossProcess - added pointer to current G4VEmModel;
                        removed method CorrectionsAlongStep, instead 
-	               corresponding method of a model are used
+	               corresponding method of a model are used;
+                       improved verbose output
 G4VEmFluctuationModel - added method SetParticleAndCharge
 G4VEmModel - minor optimisations of SelectRandomAtom and SelectIsotope;
              added methods GetParticleCharge, GetChargeSquareRatio, 
