@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.56 2008-09-12 14:52:02 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.57 2008-09-12 14:54:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,8 @@
 // 29-10-07 Added SampleScattering (V.Ivanchenko)
 // 15-07-08 Reorder class members and improve comments (VI)
 // 21-07-08 Added vector of G4ElementSelector and methods to use it (VI)
+// 12-09-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
+//          CorrectionsAlongStep, ActivateNuclearStopping (VI)
 //
 // Class Description:
 //
