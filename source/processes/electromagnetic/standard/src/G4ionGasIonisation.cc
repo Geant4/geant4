@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.13 2008-06-02 18:11:34 vnivanch Exp $
+// $Id: G4ionGasIonisation.cc,v 1.14 2008-09-12 16:26:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,13 +55,8 @@
 using namespace std;
 
 G4ionGasIonisation::G4ionGasIonisation(const G4String& name)
-  : G4ionIonisation(name),
-    currParticle(0),
-    baseParticle(0),
-    initialised(false)
+  : G4ionIonisation(name)
 {
-  atomXS = CLHEP::pi*CLHEP::Bohr_radius*CLHEP::Bohr_radius;
-  verboseLevel = 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,116 +64,7 @@ G4ionGasIonisation::G4ionGasIonisation(const G4String& name)
 G4ionGasIonisation::~G4ionGasIonisation()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionGasIonisation::InitialiseEnergyLossProcess(
-		      const G4ParticleDefinition* part,
-		      const G4ParticleDefinition* bpart)
-{
-  G4ionIonisation::InitialiseEnergyLossProcess(part, bpart);
-  currTh = BetheBlochEnergyThreshold();
-  if(initialised) return;
-
-  currParticle = part;
-
-  if(part == bpart || part == G4GenericIon::GenericIon()) baseParticle = 0;
-  else if(bpart == 0) baseParticle = G4GenericIon::GenericIon();
-  else                baseParticle = bpart;
-
-  if(baseParticle) basePartMass = baseParticle->GetPDGMass();
-  else             basePartMass = currParticle->GetPDGMass();
-  
-  initialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionGasIonisation::PrintInfo()
-{
-  G4ionIonisation::PrintInfo();
-  G4cout << "      Version of ion process with simulation discrete ion/media change exchange."
-	 << G4endl;	 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionGasIonisation::InitialiseMassCharge(const G4Track& track)
-{
-  // First step of an ion
-  if(track.GetCurrentStepNumber() == 1) {
-    currParticle = track.GetDefinition();
-    ionZ = G4int(currParticle->GetPDGCharge()/eplus + 0.5);
-    currentIonZ = G4int(track.GetDynamicParticle()->GetCharge()/eplus + 0.5);
-    currMassRatio = basePartMass/currParticle->GetPDGMass();
-  }
-  // any step 
-  G4double q = eplus*currentIonZ;
-  currCharge2= currentIonZ*currentIonZ;
-  SetDynamicMassCharge(currMassRatio, q*q);
-  preStepKinEnergy = track.GetKineticEnergy();
-  ionFluctuations->SetParticleAndCharge(currParticle, currCharge2);
-  //G4cout << "Q^2= " <<  currCharge2 << " q= " << q << " ratio= " 
-  //	 << currMassRatio << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* dp,
-					      G4double& eloss,
-					      G4double&,
-                                              G4double s)
-{
-  const G4ParticleDefinition* part = dp->GetDefinition();
-  const G4Material* mat = couple->GetMaterial();
-  //G4cout<<"G4ionGasIonisation: eloss= "<<eloss
-  //	<<" epre(MeV)= "<<preStepKinEnergy<<G4endl;
-
-  // use nuclear stopping 
-  if(NuclearStoppingFlag() && 
-     preStepKinEnergy*currMassRatio < 50.*currTh*currCharge2) {
-
-    G4double nloss = 
-      s*corr->NuclearDEDX(part,mat,preStepKinEnergy-0.5*eloss,false);
-    if(eloss + nloss > preStepKinEnergy) {
-      nloss *= (preStepKinEnergy/(eloss + nloss));
-      eloss = preStepKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    //    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
-    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-  }
-  //  G4cout<<"eloss= "<<eloss<<" niel= " <<niel<<" s= "<<s<<G4endl;
-
-  // add corrections
-  if(eloss < preStepKinEnergy) {
-
-    // use Bethe-Bloch with corrections
-    if(preStepKinEnergy*currMassRatio > currTh) {
-      eloss += s*corr->IonHighOrderCorrections(part,couple,preStepKinEnergy);
-      /*
-    } else {
-      // Correction for data points if(stopDataActive)
-      eloss *= corr->EffectiveChargeCorrection(part,mat,e)	
-	/effCharge->EffectiveChargeSquareRatio(part,mat,e);
-      */
-    }
-
-    // Compute mean effective charge on the step
-    G4double e = preStepKinEnergy - eloss;
-
-    // effective number of collisions
-    G4double x = mat->GetElectronDensity()*s*atomXS;
-    // equilibrium charge
-    G4double q = effCharge->EffectiveCharge(part,mat,e)/eplus;
-  
-    // sample charge change during the step
-    fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
-  }
-}
-
+/*
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4ionGasIonisation::SampleChargeAfterStep(G4double qeff, G4double xeff)
@@ -199,5 +85,5 @@ G4double G4ionGasIonisation::SampleChargeAfterStep(G4double qeff, G4double xeff)
 			      << G4endl;
   return q;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

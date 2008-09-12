@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.hh,v 1.3 2008-02-04 17:52:45 vnivanch Exp $
+// $Id: G4ionGasIonisation.hh,v 1.4 2008-09-12 16:26:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,8 +54,6 @@
 
 #include "G4ionIonisation.hh"
 
-class G4Material;
-
 class G4ionGasIonisation : public G4ionIonisation
 {
 public:
@@ -64,50 +62,11 @@ public:
 
   virtual ~G4ionGasIonisation();
 
-  virtual void PrintInfo();
-
-protected:
-
-  // Initialise process before run
-  virtual void InitialiseEnergyLossProcess(
-				   const G4ParticleDefinition*,
-                                   const G4ParticleDefinition*);
-
-  // Initialise dynamic charge before step
-  virtual void InitialiseMassCharge(const G4Track&);
-
-  // Apply correction after step and modify dynamic charge
-  virtual void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-                           const G4DynamicParticle*,
-                                 G4double& eloss,
-                                 G4double& niel,
-                                 G4double length);
-
 private:
-
-  // Sample change of charge of the projectile ion
-  G4double SampleChargeAfterStep(G4double qeff, G4double xeff);
 
   // hide assignment operator
   G4ionGasIonisation & operator=(const G4ionGasIonisation &right);
   G4ionGasIonisation(const G4ionGasIonisation&);
-
-  const G4ParticleDefinition* currParticle;
-  const G4ParticleDefinition* baseParticle;
-
-  G4double                    basePartMass;
-  G4double                    currMassRatio;
-  G4double                    atomXS;
-  G4double                    preStepKinEnergy;
-  G4double                    currCharge2;
-  G4double                    currTh;
-
-  G4int                       currentIonZ;
-  G4int                       ionZ;
-
-  G4bool                      initialised;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
