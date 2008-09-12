@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.55 2008-09-02 08:54:24 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.56 2008-09-12 14:52:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,6 +155,23 @@ public:
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 				const G4MaterialCutsCouple*);
 
+  // Compute effective ion charge square
+  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,
+					const G4Material*,
+					G4double kineticEnergy);
+
+  // Compute ion charge 
+  virtual G4double GetParticleCharge(const G4ParticleDefinition*,
+				     const G4Material*,
+				     G4double kineticEnergy);
+
+  // add correction to energy loss and ompute non-ionizing energy loss
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double& eloss,
+				    G4double& niel,
+				    G4double length);
+
 protected:
 
   // kinematically allowed max kinetic energy of a secondary
@@ -242,6 +259,8 @@ public:
 
   inline void SetPolarAngleLimit(G4double);
 
+  inline void ActivateNuclearStopping(G4bool);
+
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
   inline const G4String& GetName() const;
@@ -277,6 +296,7 @@ private:
 protected:
 
   G4VParticleChange*  pParticleChange;
+  G4bool              nuclearStopping;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -331,6 +351,13 @@ inline void G4VEmModel::SetPolarAngleLimit(G4double val)
   polarAngleLimit = val;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::ActivateNuclearStopping(G4bool val)
+{
+  nuclearStopping = val;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
@@ -372,11 +399,33 @@ inline G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4VEmModel::ComputeDEDXPerVolume(
-                                        const G4Material*,
-					const G4ParticleDefinition*,
-					G4double,
-					G4double)
+inline G4double G4VEmModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
+						 const G4Material*, G4double)
+{
+  G4double q = p->GetPDGCharge()/CLHEP::eplus;
+  return q*q;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::GetParticleCharge(const G4ParticleDefinition* p,
+					      const G4Material*, G4double)
+{
+  return p->GetPDGCharge();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
+					     const G4DynamicParticle*,
+					     G4double&,G4double&,G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::ComputeDEDXPerVolume(const G4Material*,
+						 const G4ParticleDefinition*,
+						 G4double,G4double)
 {
   return 0.0;
 }
