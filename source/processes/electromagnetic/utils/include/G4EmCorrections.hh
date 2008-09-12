@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.23 2008-08-03 18:30:36 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.24 2008-09-12 14:44:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 28.04.2006 General cleanup, add finite size corrections (V.Ivanchenko)
 // 13.05.2006 Add corrections for ion stopping (V.Ivanhcenko)
 // 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
+// 12.09.2008 Added inlined interfaces to effective charge (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -139,16 +140,27 @@ public:
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
 		       G4PhysicsVector* dVector);
 
+  void InitialiseForNewRun();
+
+  // effective charge correction using stopping power data
   G4double EffectiveChargeCorrection(const G4ParticleDefinition*,
 				     const G4Material*,
-				     G4double);
+				     G4double kineticEnergy);
 
-  G4ionEffectiveCharge* GetIonEffectiveCharge(G4VEmModel* m1 = 0,
-					      G4VEmModel* m2 = 0);
+  // effective charge of an ion
+  inline G4double GetParticleCharge(const G4ParticleDefinition*,
+				    const G4Material*,
+				    G4double kineticEnergy);
 
-  G4int GetNumberOfStoppingVectors();
+  inline
+  G4double EffectiveChargeSquareRatio(const G4ParticleDefinition*,
+				      const G4Material*,
+				      G4double kineticEnergy);
 
-  void InitialiseForNewRun();
+  // ionisation models for ions
+  inline void SetIonisationModels(G4VEmModel* m1 = 0, G4VEmModel* m2 = 0);
+
+  inline G4int GetNumberOfStoppingVectors();
 
 private:
 
@@ -296,6 +308,34 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv,
 	  0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+
 	       z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
          / ((x2-x1)*(y2-y1));
+}
+
+inline 
+void G4EmCorrections::SetIonisationModels(G4VEmModel* m1, G4VEmModel* m2)
+{
+  if(m1) ionLEModel = m1;
+  if(m2) ionHEModel = m2;
+}
+
+inline G4int G4EmCorrections::GetNumberOfStoppingVectors()
+{
+  return nIons;
+}
+
+inline G4double 
+G4EmCorrections::GetParticleCharge(const G4ParticleDefinition* p,
+				   const G4Material* mat,
+				   G4double kineticEnergy)
+{
+  return effCharge.EffectiveCharge(p,mat,kineticEnergy);
+}
+
+inline G4double 
+G4EmCorrections::EffectiveChargeSquareRatio(const G4ParticleDefinition* p,
+					    const G4Material* mat,
+					    G4double kineticEnergy)
+{
+  return effCharge.EffectiveChargeSquareRatio(p,mat,kineticEnergy);
 }
 
 inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
