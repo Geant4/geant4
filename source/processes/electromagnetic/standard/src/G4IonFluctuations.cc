@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.21 2008-08-11 17:01:27 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.22 2008-09-12 17:11:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,17 +67,18 @@
 using namespace std;
 
 G4IonFluctuations::G4IonFluctuations(const G4String& nam)
- :G4VEmFluctuationModel(nam),
-  particle(0),
-  particleMass(proton_mass_c2),
-  charge(1.0),
-  chargeSquare(1.0),
-  effChargeSquare(1.0),
-  minNumberInteractionsBohr(10.0),
-  theBohrBeta2(50.0*keV/proton_mass_c2),
-  minFraction(0.2),
-  xmin(0.2),
-  minLoss(0.001*eV)
+  : G4VEmFluctuationModel(nam),
+    particle(0),
+    particleMass(proton_mass_c2),
+    charge(1.0),
+    chargeSquare(1.0),
+    effChargeSquare(1.0),
+    //    minNumberInteractionsBohr(10.0),
+    minNumberInteractionsBohr(0.0),
+    theBohrBeta2(50.0*keV/proton_mass_c2),
+    minFraction(0.2),
+    xmin(0.2),
+    minLoss(0.001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -100,9 +101,9 @@ void G4IonFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 
 G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
                                                const G4DynamicParticle* dp,
-                                                     G4double& tmax,
-                                                     G4double& length,
-                                                     G4double& meanLoss)
+					       G4double& tmax,
+					       G4double& length,
+					       G4double& meanLoss)
 {
   //  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
@@ -129,12 +130,15 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     }
     //       G4cout << "siga= " << siga << G4endl;
     siga = sqrt(siga);
-
     G4double lossmax = meanLoss+meanLoss;
-    do {
-      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (0.0 > loss || loss > lossmax);
 
+    if(siga > 5.0*meanLoss) {
+      loss = lossmax*G4UniformRand();
+    } else {
+      do {
+	loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (0.0 > loss || loss > lossmax);
+    }
   // Poisson fluctuations
   } else {
 
@@ -148,11 +152,10 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::Dispersion(
-                          const G4Material* material,
-                          const G4DynamicParticle* dp,
- 				G4double& tmax,
-			        G4double& length)
+G4double G4IonFluctuations::Dispersion(const G4Material* material,
+				       const G4DynamicParticle* dp,
+				       G4double& tmax,
+				       G4double& length)
 {
   kineticEnergy  = dp->GetKineticEnergy();
 

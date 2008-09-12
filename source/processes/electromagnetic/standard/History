@@ -1,4 +1,4 @@
-$Id: History,v 1.409 2008-09-09 09:30:58 vnivanch Exp $
+$Id: History,v 1.410 2008-09-12 17:11:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Septembetr 08: V.Ivant (emstand-V09-01-32)
+Improved verbose output for processes
+G4IonFluctuations - do not use Poisson sampling
+G4BetheBlochModel, G4BraggModel, G4BraggIonModel - added methods
+   GetParticleCharge, GetChargeSquareRatio, CorrectionsAlongStep
+   needed for ions
+G4ionIonisation, G4hIonisation - remove InitialiseMassCharge and
+                                 CorrectionsAlongStep methods;
+                                 limits of kinetic energy for models 
+                                 taken from the base class
 
 09 Septembetr 08: V.Ivant (emstand-V09-01-31)
 G4WaterStopping, G4IronStopping, G4MaterialStopping, 

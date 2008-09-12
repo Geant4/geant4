@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.6 2008-08-12 13:42:43 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.7 2008-09-12 17:11:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,16 +65,18 @@ public:
 
   virtual ~G4IonFluctuations();
 
+  // Sample fluctuations
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,
-                                    G4double&,
-                                    G4double&,
-                                    G4double&);
+			      G4double& tmax,
+			      G4double& length,
+			      G4double& meanLoss);
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  // Compute dispertion 
+  G4double Dispersion(const G4Material*,
+		      const G4DynamicParticle*,
+		      G4double& tmax,
+		      G4double& length);
 
   // Initialisation prerun
   void InitialiseMe(const G4ParticleDefinition*);
