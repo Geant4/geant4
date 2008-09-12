@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.54 2008-06-01 19:32:02 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.55 2008-09-12 17:02:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
 // 22-07-06 Remove obsolete method (V.Ivantchenko)
 // 07-11-07 Moved CorrectionsAlongStep to cc (V.Ivantchenko)
+// 12-09-08 Removed InitialiseMassCharge and CorrectionsAlongStep (VI)
 //
 // Class Description:
 //
@@ -71,14 +72,9 @@
 #define G4ionIonisation_h 1
 
 #include "G4VEnergyLossProcess.hh"
-#include "G4ionEffectiveCharge.hh"
-#include "G4VEmModel.hh"
-#include "G4EmCorrections.hh"
-#include "G4IonFluctuations.hh"
 
 class G4Material;
-class G4PhysicsVector;
-class G4BraggIonModel;
+class G4EmCorrections;
 
 class G4ionIonisation : public G4VEnergyLossProcess
 {
@@ -105,14 +101,6 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double& eloss,
-				    G4double& niel,
-                                    G4double length);
-
-  inline void InitialiseMassCharge(const G4Track&);
-
   inline G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 				   const G4Material*, G4double cut);
 
@@ -120,30 +108,17 @@ protected:
 
   inline G4bool NuclearStoppingFlag();
 
-  // protected pointers 
-  G4ionEffectiveCharge*       effCharge;
-  G4EmCorrections*            corr;
-  G4IonFluctuations*          ionFluctuations; 
-
 private:
 
   // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
 
-  // cash
-  const G4Material*           curMaterial;
-  const G4ParticleDefinition* curParticle;
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
+  G4EmCorrections*            corr;
 
-  G4double                    preKinEnergy;
+  const G4ParticleDefinition* theParticle;
 
   G4double                    eth;
-  G4double                    baseMass;
-  G4double                    massRatio;
-  G4double                    massFactor;
-  G4double                    charge2;
 
   G4bool                      isInitialised;
   G4bool                      stopDataActive;
@@ -167,22 +142,6 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
   G4double x = 0.5*cut/electron_mass_c2;
   G4double g = std::sqrt(1. + x);
   return proton_mass_c2*(g - 1.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4ionIonisation::InitialiseMassCharge(const G4Track& track)
-{
-  curMaterial  = track.GetMaterial();
-  curParticle  = track.GetDefinition();
-  preKinEnergy = track.GetKineticEnergy();
-  massRatio    = baseMass/curParticle->GetPDGMass();
-  charge2 = 
-    effCharge->EffectiveChargeSquareRatio(curParticle,curMaterial,preKinEnergy)
-    *corr->EffectiveChargeCorrection(curParticle,curMaterial,preKinEnergy);
-
-  SetDynamicMassCharge(massRatio, charge2);
-  ionFluctuations->SetParticleAndCharge(curParticle, charge2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

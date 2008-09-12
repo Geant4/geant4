@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.76 2008-06-11 08:51:01 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.77 2008-09-12 17:02:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@
 // 26-05-06 scale negative particles from pi- and pbar,
 //          positive from pi+ and p (VI)
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
+// 12-09-08 Removed CorrectionsAlongStep (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -97,7 +98,6 @@
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -107,7 +107,8 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    isInitialised(false)
+    isInitialised(false),
+    nuclearStopping(true)
 {
   SetStepFunction(0.2, 1.0*mm);
   SetIntegral(true);
@@ -115,8 +116,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetProcessSubType(2);
   mass = 0.0;
   ratio = 0.0;
-  corr = G4LossTableManager::Instance()->EmCorrections();  
-  nuclearStopping = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -130,100 +129,74 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 		    const G4ParticleDefinition* part,
 		    const G4ParticleDefinition* bpart)
 {
-  if(isInitialised) return;
+  if(!isInitialised) {
 
-  theParticle = part;
+    theParticle = part;
 
-  G4String pname = part->GetParticleName();
+    G4String pname = part->GetParticleName();
 
-  // standard base particles
-  if(part == bpart || pname == "proton" ||
-     pname == "anti_proton" || 
-     pname == "pi+" || pname == "pi-" || 
-     pname == "kaon+" || pname == "kaon-") 
-    { 
-      theBaseParticle = 0;
-    }
-  // select base particle 
-  else if(bpart == 0) {
-
-    if(part->GetPDGSpin() == 0.0)
-      if(part->GetPDGCharge() > 0.0 ) {
-	theBaseParticle = G4KaonPlus::KaonPlus();
-      } else {
-	theBaseParticle = G4KaonMinus::KaonMinus();
+    // standard base particles
+    if(part == bpart || pname == "proton" ||
+       pname == "anti_proton" || 
+       pname == "pi+" || pname == "pi-" || 
+       pname == "kaon+" || pname == "kaon-") 
+      { 
+	theBaseParticle = 0;
       }
-    else if(part->GetPDGCharge() > 0.0) {
-      theBaseParticle = G4Proton::Proton();
-    } else {
-      theBaseParticle = G4AntiProton::AntiProton();
+    // select base particle 
+    else if(bpart == 0) {
+
+      if(part->GetPDGSpin() == 0.0)
+	if(part->GetPDGCharge() > 0.0 ) {
+	  theBaseParticle = G4KaonPlus::KaonPlus();
+	} else {
+	  theBaseParticle = G4KaonMinus::KaonMinus();
+	}
+      else if(part->GetPDGCharge() > 0.0) {
+	theBaseParticle = G4Proton::Proton();
+      } else {
+	theBaseParticle = G4AntiProton::AntiProton();
+      }
+      // base particle defined by interface
+    } else { 
+      theBaseParticle = bpart;
     }
-    // base particle defined by interface
-  } else { 
-    theBaseParticle = bpart;
+    SetBaseParticle(theBaseParticle);
+    SetSecondaryParticle(G4Electron::Electron());
+
+    mass  = theParticle->GetPDGMass();
+    ratio = electron_mass_c2/mass;
+    massratio = 1.0;
+    if(theBaseParticle) massratio = theBaseParticle->GetPDGMass()/mass; 
+
+    if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    eth = 2.0*MeV*mass/proton_mass_c2;
+
+    EmModel(1)->SetHighEnergyLimit(eth);
+
+    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+    AddEmModel(1, EmModel(1), new G4IonFluctuations());
+
+    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+    EmModel(2)->SetLowEnergyLimit(eth);
+    EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(2, EmModel(2), FluctModel());  
+
+    isInitialised = true;
   }
-  SetBaseParticle(theBaseParticle);
-  SetSecondaryParticle(G4Electron::Electron());
-
-  mass  = theParticle->GetPDGMass();
-  ratio = electron_mass_c2/mass;
-  massratio = 1.0;
-  if(theBaseParticle) massratio = theBaseParticle->GetPDGMass()/mass; 
-
-  if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
-  EmModel(1)->SetLowEnergyLimit(100*eV);
-  eth = 2.0*MeV*mass/proton_mass_c2;
-  ethnuc = eth*50.0;
-  EmModel(1)->SetHighEnergyLimit(eth);
-
-  if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
-  AddEmModel(1, EmModel(1), new G4IonFluctuations());
-  //  AddEmModel(1, EmModel(1), FluctModel());
-
-  if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
-  EmModel(2)->SetLowEnergyLimit(eth);
-  EmModel(2)->SetHighEnergyLimit(100*TeV);
-  AddEmModel(2, EmModel(2), FluctModel());  
-
-  isInitialised = true;
+  EmModel(1)->ActivateNuclearStopping(nuclearStopping);
+  EmModel(2)->ActivateNuclearStopping(nuclearStopping);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisation::PrintInfo()
 {
-  if(EmModel(1) && EmModel(2))
-    G4cout << "      Scaling relation is used from proton dE/dx and range."
-	   << "\n      Delta cross sections and sampling from " 
-	   << EmModel(2)->GetName() << " model for scaled energy > "
-	   << eth/MeV << " MeV"
-	   << "\n      Parametrisation from "
-	   << EmModel(1)->GetName() << " for protons below."
-	   << " NuclearStopping= " << nuclearStopping
+  if(EmModel(1) && EmModel(2)) {
+    G4cout << "      Scaling relation is used from proton dE/dx and range, "
+	   << "nuclearStopping= " << nuclearStopping
 	   << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-					 const G4DynamicParticle* dp,
-					 G4double& eloss,
-					 G4double& niel,
-					 G4double s)
-{
-  G4double ekin = dp->GetKineticEnergy();
-  if(nuclearStopping && ekin < ethnuc) {
-    G4double e = ekin - eloss*0.5;
-    if(e <= 0.0) e = 0.5*ekin;
-    G4double nloss = s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),e);
-    if(eloss + nloss > ekin) {
-      nloss *= (ekin/(eloss + nloss));
-      eloss = ekin - nloss;
-    }
-    niel += nloss;
-    //    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
-    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
 }
 

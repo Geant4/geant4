@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.39 2008-02-04 17:52:45 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.40 2008-09-12 17:02:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
+// 12-09-08 Removed CorrectionsAlongStep (VI)
 //
 // Class Description:
 //
@@ -79,8 +80,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
-#include "G4VEmModel.hh"
-#include "G4EmCorrections.hh"
 
 class G4Material;
 
@@ -105,13 +104,6 @@ public:
 
 protected:
 
-  void CorrectionsAlongStep(
-                           const G4MaterialCutsCouple*,
-	             	   const G4DynamicParticle*,
-			         G4double& eloss,
-			         G4double& niel,
-                                 G4double length);
-
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
@@ -126,13 +118,11 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
-  G4EmCorrections*            corr;
 
   G4bool                      isInitialised;
   G4bool                      nuclearStopping;
 
   G4double                    eth;
-  G4double                    ethnuc;
   G4double                    massratio;
 
 };

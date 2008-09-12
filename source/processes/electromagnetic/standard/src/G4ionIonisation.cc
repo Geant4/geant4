@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.60 2008-06-09 10:10:14 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.61 2008-09-12 17:02:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 // 16-05-07 Add data for light ion stopping only for GenericIon (V.Ivantchenko)
 // 07-11-07 Fill non-ionizing energy loss (V.Ivantchenko)
+// 12-09-08 Removed InitialiseMassCharge and CorrectionsAlongStep (VI)
 //
 //
 // -------------------------------------------------------------------
@@ -64,6 +65,7 @@
 #include "G4ionIonisation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
@@ -71,6 +73,8 @@
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4WaterStopping.hh"
+#include "G4EmCorrections.hh"
+#include "G4IonFluctuations.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,8 +82,8 @@ using namespace std;
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
+    corr(0),
     theParticle(0),
-    theBaseParticle(0),
     isInitialised(false),
     stopDataActive(true),
     nuclearStopping(true)
@@ -103,28 +107,26 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 		      const G4ParticleDefinition* part,
 		      const G4ParticleDefinition* bpart)
 {
+  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+
   if(!isInitialised) {
 
     theParticle = part;
 
-    if(part == bpart || part == G4GenericIon::GenericIon()) theBaseParticle = 0;
-    else if(bpart == 0) theBaseParticle = G4GenericIon::GenericIon();
-    else                theBaseParticle = bpart;
+    // define base particle
+    const G4ParticleDefinition* theBaseParticle = 0;
+    if(bpart == 0 && part != ion) theBaseParticle = ion;
+    else theBaseParticle = bpart;
 
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    if(theBaseParticle) baseMass = theBaseParticle->GetPDGMass();
-    else                baseMass = theParticle->GetPDGMass();
-
-    G4VEmModel* bragg;
-    if(part == G4GenericIon::GenericIon()) bragg = new G4BraggModel();
-    else  bragg = new G4BraggIonModel();
+    G4VEmModel* bragg = new G4BraggIonModel();
+    eth = 2.0*MeV;  
 
     if (!EmModel(1)) SetEmModel(bragg, 1);
     else {delete bragg;}
-    EmModel(1)->SetLowEnergyLimit(100*eV);
-    eth = 2.0*MeV;  
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(eth);
 
     ionFluctuations = new G4IonFluctuations();
@@ -134,41 +136,32 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
     if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
     EmModel(2)->SetLowEnergyLimit(eth);
-    EmModel(2)->SetHighEnergyLimit(100*TeV);
+    EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());    
 
     // Add ion stoping tables for Generic Ion
-    if(part == G4GenericIon::GenericIon()) {
+    if(part == ion) {
       G4WaterStopping  ws(corr);
-      effCharge = corr->GetIonEffectiveCharge(EmModel(1),EmModel(2));
-    } else {
-      effCharge = corr->GetIonEffectiveCharge(0);
+      corr->SetIonisationModels(EmModel(1),EmModel(2));
     }
-
     isInitialised = true;
   }
   // reinitialisation of corrections for the new run
-  if(part == G4GenericIon::GenericIon()) corr->InitialiseForNewRun();
+  EmModel(1)->ActivateNuclearStopping(nuclearStopping);
+  EmModel(2)->ActivateNuclearStopping(nuclearStopping);
+  if(part == ion) corr->InitialiseForNewRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ionIonisation::PrintInfo()
 {
-  if(EmModel(1) && EmModel(2))
-    G4cout << "      Scaling relation is used from proton dE/dx and range."
-	   << "\n      Delta cross sections and sampling from " 
-	   << EmModel(2)->GetName() << " model for scaled energy > "
-	   << eth/MeV << " MeV"
-	   << "\n      Parametrisation from "
-	   << EmModel(1)->GetName() << " for protons below."
-	   << " NuclearStopping= " << nuclearStopping
-	   << G4endl;	 
-  if (stopDataActive)
-    G4cout << "\n      Stopping Power data for " 
+  if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
+    G4cout << "      Stopping Power data for " 
            << corr->GetNumberOfStoppingVectors()
 	   << " ion/material pairs are used."
            << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -178,63 +171,6 @@ void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
 				      G4PhysicsVector* dVector)
 {
   corr->AddStoppingData(Z, A, mname, dVector);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-					   const G4DynamicParticle* dp,
-					   G4double& eloss,
-					   G4double&,
-                                           G4double s)
-{
-  const G4ParticleDefinition* part = dp->GetDefinition();
-  const G4Material* mat = couple->GetMaterial();
-  
-  // Compute nuclear stopping
-  if(nuclearStopping && preKinEnergy*massRatio < 50.*eth*charge2) {
-
-    G4double nloss = 
-      s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5,false);
-
-    // too big energy loss
-    if(eloss + nloss > preKinEnergy) {
-      nloss *= (preKinEnergy/(eloss + nloss));
-      eloss = preKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    /*
-    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    	   << " de= " << eloss << " NIEL= " << nloss 
-	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
-    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-  }
-
-  if(preKinEnergy > eloss) {
-
-    //G4double e = preKinEnergy - eloss*0.5;
-    
-    //G4double eloss0 = eloss;   
-    //G4cout << "e= " << e << " ratio= " << massRatio 
-    //	   << " eth= " << eth<< " eloss0= " << eloss << " s= " << s << G4endl;
-
-    // High order corrections to Bethe-Bloch
-    if(preKinEnergy*massRatio > eth) {
-      eloss += s*corr->IonHighOrderCorrections(part,couple,preKinEnergy);
-      //G4cout<<"Above th: eloss= "<<eloss<<" f= "<<eloss/eloss0<<G4endl;
-
-      // correction for modification of effective charge during the step
-    } else {      
-      //eloss *= (effCharge->EffectiveChargeSquareRatio(part,mat,e)/charge2);
-      // propose charge after the step
-      fParticleChange.SetProposedCharge(eplus*sqrt(charge2));
-      //G4cout<<"Corrected for mean energy: eloss= "<<eloss<<" f= "<<eloss/eloss0
-      //    << " q2= " << charge2 << " charge2new= " 
-      //    <<effCharge->EffectiveChargeSquareRatio(part,mat,e) <<G4endl;
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
