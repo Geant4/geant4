@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.47 2008-08-22 10:50:22 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.48 2008-09-12 14:44:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -579,7 +579,7 @@ G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
 					 G4double e)
 {
   SetupKinematics(p, mat, e);
-  G4double mterm = pi*fine_structure_const*beta*charge;
+  G4double mterm = CLHEP::pi*fine_structure_const*beta*charge;
   return mterm;
 }
 
@@ -658,22 +658,6 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionEffectiveCharge* G4EmCorrections::GetIonEffectiveCharge(G4VEmModel* m1, 
-							     G4VEmModel* m2)
-{
-  if(m1) ionLEModel = m1;
-  if(m2) ionHEModel = m2;
-  return &effCharge;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4int G4EmCorrections::GetNumberOfStoppingVectors()
-{
-  return nIons;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* p,
 						    const G4Material* mat,
 						    G4double ekin)
@@ -692,10 +676,9 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     curMaterial = mat;
     curVector   = 0;
     currentZ = p->GetAtomicNumber();
-    G4double A = nist->GetAtomicMassAmu(currentZ);
     if(verbose > 1) {
       G4cout << "G4EmCorrections::EffectiveChargeCorrection: Zion= " 
-	     << currentZ << " Aion= " << A << G4endl;
+	     << currentZ << " Aion= " << p->GetPDGMass()/amu_c2 << G4endl;
     }
     massFactor = proton_mass_c2/p->GetPDGMass();
     idx = -1;
@@ -770,7 +753,8 @@ void G4EmCorrections::BuildCorrectionVector()
   //G4cout << "BuildCorrectionVector: idx= " << idx << " Z= " << Z 
   //	 << " curZ= " << currentZ << G4endl;
 
-  G4double A = nist->GetAtomicMassAmu(Z);
+  // G4double A = nist->GetAtomicMassAmu(Z);
+  G4double A = G4double(ion->GetBaryonNumber());
   G4PhysicsVector* v = stopData[idx];
     
   const G4ParticleDefinition* p = G4GenericIon::GenericIon();
