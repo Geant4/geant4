@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.15 2008-04-07 12:06:32 maire Exp $
+// $Id: HistoManager.cc,v 1.16 2008-09-13 13:08:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,8 @@ HistoManager::HistoManager()
 #endif
  
   fileName[0] = "testem3";
-  fileType    = "hbook";  
-  fileOption  = "--noErrors uncompress";  
+  fileType    = "root";  
+  fileOption  = "--noErrors export=root uncompress";  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 
     histo[k] = 0;

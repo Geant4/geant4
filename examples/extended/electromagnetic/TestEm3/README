@@ -1,4 +1,4 @@
-$Id: README,v 1.30 2008-05-05 20:37:12 maire Exp $
+$Id: README,v 1.31 2008-09-13 13:08:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -147,9 +147,10 @@ $Id: README,v 1.30 2008-05-05 20:37:12 maire Exp $
   histo 21 : energy flow (MeV/event)
   histo 22 : lateral energy leak (MeV/event)  
 
- One can control the name of the histograms file with the command:
- /testem/histo/setFileName  name  (default testem3.hbook)
- 
+ One can control the name of the histograms file with the commands:
+ /testem/histo/setFileName  name  (default testem3)
+ /testem/histo/setFileType  type  (choice: hbook, root(default), XML)
+  
   NB. Numbering scheme for histograms:
   layer     : from 1 to NbOfLayers (inclued)
   absorbers : from 1 to NbOfAbsor (inclued)
