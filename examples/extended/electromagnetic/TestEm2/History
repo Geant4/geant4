@@ -1,5 +1,5 @@
-$Id: History,v 1.78 2008-06-11 22:09:18 maire Exp $
--------------------------------------------------------------------
+$Id: History,v 1.79 2008-09-13 12:16:18 maire Exp $
+----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,7 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+13-09-08 mma (testem2-V09-01-05)
+- RunAction : change default histograms format 
 
 12-06-08 mma (testem2-V09-01-04)
 - Remove AIDA from GNUmakefile 

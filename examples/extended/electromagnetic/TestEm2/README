@@ -1,4 +1,4 @@
-$Id: README,v 1.24 2008-05-05 17:08:31 maire Exp $
+$Id: README,v 1.25 2008-09-13 12:16:18 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,8 +38,7 @@ $Id: README,v 1.24 2008-05-05 17:08:31 maire Exp $
 
     Modular PhysicsList are used. The following modules can be activated:
     1. "standard"    - (alternative) standard EM physics
-    2. "g4v52"       - (alternative) standard EM physics version G4 5.2
-    3. "high_energy" - add high energy processes
+    2. "high_energy" - add high energy processes
 
     To activate a specific module the UI command can be used:
     "/testem/phys/addPhysics  title"
@@ -126,7 +125,7 @@ $Id: README,v 1.24 2008-05-05 17:08:31 maire Exp $
    "/testem/histo/setFileType type"
 
  The following types are available: "hbook", "root", "XML"
- By default the name is "testem2" and the type "hbook".
+ By default the name is "testem2" and the type "root".
  
  Before compilation of the example it is optimal to clean up old files:
   	gmake histclean
