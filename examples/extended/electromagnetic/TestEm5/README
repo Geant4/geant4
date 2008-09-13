@@ -1,4 +1,4 @@
-$Id: README,v 1.23 2008-08-23 18:28:59 maire Exp $
+$Id: README,v 1.24 2008-09-13 17:05:40 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -42,7 +42,8 @@ $Id: README,v 1.23 2008-08-23 18:28:59 maire Exp $
  - "emstandard"        G4EmStandardPhysics builder
  - "emstandard_opt1"   G4EmStandardPhysics_option1 builder
  - "emstandard_opt2"   G4EmStandardPhysics_option2 builder
- - "emstandard_opt3"   G4EmStandardPhysics_option3 builder 
+ - "emstandard_opt3"   G4EmStandardPhysics_option3 builder
+  
  See geant4/source/physics_lists/History for details 
          	
  3- AN EVENT : THE PRIMARY GENERATOR
@@ -120,10 +121,11 @@ $Id: README,v 1.23 2008-08-23 18:28:59 maire Exp $
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
 
- The histograms can be viewed using PAW. See below the note on ANAPHE+AIDA.
+ The histograms can be viewed using ROOT or PAW. See below the note on AIDA.
  
- One can control the name of the histograms file with the command:
- /testem/histo/setFileName  name  (default testem5.hbook) 
+ One can control the name and format of the histograms file with the command:
+ /testem/histo/setFileName  name  (default testem5)
+ /testem/histo/setFileType  type  (choice: hbook, root(default), XML)  
    
  It is also possible to print selected histograms on an ascii file:
  /testem/histo/printHisto id
