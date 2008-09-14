@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.21 2008-06-09 11:19:15 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.22 2008-09-14 17:06:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,7 +53,6 @@
 
 #include "G4ionEffectiveCharge.hh"
 #include "G4UnitsTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
@@ -62,6 +61,7 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
+  chargeFactor     = 1.0;
   energyHighLimit  = 20.0*MeV;
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
@@ -97,6 +97,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   G4double Zi     = charge/eplus;
 
   chargeCorrection = 1.0;
+  chargeFactor     = 1.0;
   effCharge = charge;
 
   // The aproximation of ion effective charge from:
@@ -113,6 +114,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Helium ion case
   if( Zi < 2.5 ) {
 
+    chargeFactor = 0.5;
     static G4double c[6] = {0.2865,  0.1266, -0.001429,
 			    0.02402,-0.01135, 0.001475} ;
 
