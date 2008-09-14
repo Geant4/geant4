@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardLPM.cc,v 1.2 2008-08-28 15:41:56 vnivanch Exp $
+// $Id: PhysListEmStandardLPM.cc,v 1.3 2008-09-14 17:14:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,6 +95,7 @@ void PhysListEmStandardLPM::ConstructProcess()
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      // brem->SetVerboseLevel(2);
       G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
       lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
@@ -110,6 +111,7 @@ void PhysListEmStandardLPM::ConstructProcess()
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      //      brem->SetVerboseLevel(2);
       G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
       lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
@@ -139,6 +141,9 @@ void PhysListEmStandardLPM::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetApplyCuts(true);
+  opt.SetLPMFlag(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
