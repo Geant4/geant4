@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.18 2008-03-18 09:51:23 maire Exp $
+# $Id: TestEm7.in,v 1.19 2008-09-14 17:14:18 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -39,14 +39,23 @@
 /run/beamOn 1000
 #
 /testem/det/setMat G4_Cu
+/testem/det/tallyMat G4_Cu
 /testem/det/update
 /gun/particle kaon+
 /gun/energy 100 MeV
 /run/beamOn 1000
 #
 /testem/det/setMat TechVacuum
+/testem/det/tallyMat TechVacuum
 /testem/det/update
 /gun/particle alpha
 /gun/energy 0.265 keV
+/run/beamOn 100
+#
+/testem/det/setMat G4_WATER
+/testem/det/tallyMat G4_WATER
+/testem/det/update
+/gun/particle alpha
+/gun/energy 100 MeV
 /run/beamOn 100
 #
