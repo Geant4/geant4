@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.62 2008-09-12 17:12:48 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.63 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,26 +112,27 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   if(!isInitialised) {
 
     theParticle = part;
+    G4String pname = part->GetParticleName();
 
     // define base particle
     const G4ParticleDefinition* theBaseParticle = 0;
-    if(bpart == 0 && part != ion) theBaseParticle = ion;
+
+    if(pname == "alpha" || part == ion) theBaseParticle = 0;
+    else if(pname == "He3") theBaseParticle = G4Alpha::Alpha();
+    else if(bpart == 0 && part != ion) theBaseParticle = ion;
     else theBaseParticle = bpart;
 
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    G4VEmModel* bragg = new G4BraggIonModel();
-    eth = 2.0*MeV;  
-
-    if (!EmModel(1)) SetEmModel(bragg, 1);
-    else {delete bragg;}
+    if (!EmModel(1)) SetEmModel(new G4BraggIonModel(), 1);
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+
+    // model limit defined for protons
+    eth = (EmModel(1)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
     EmModel(1)->SetHighEnergyLimit(eth);
 
-    G4IonFluctuations* ionFluctuations = new G4IonFluctuations();
-
-    if (!FluctModel()) SetFluctModel(ionFluctuations);
+    if (!FluctModel()) SetFluctModel(new G4IonFluctuations());
     AddEmModel(1, EmModel(1), FluctModel());
 
     if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  

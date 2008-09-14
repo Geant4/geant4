@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.55 2008-09-12 17:02:34 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.56 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,11 +118,11 @@ private:
 
   const G4ParticleDefinition* theParticle;
 
-  G4double                    eth;
+  G4double   eth;
 
-  G4bool                      isInitialised;
-  G4bool                      stopDataActive;
-  G4bool                      nuclearStopping;
+  G4bool     isInitialised;
+  G4bool     stopDataActive;
+  G4bool     nuclearStopping;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -137,11 +137,10 @@ inline G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MinPrimaryEnergy(
-          const G4ParticleDefinition*, const G4Material*, G4double cut)
+          const G4ParticleDefinition* p, const G4Material*, G4double cut)
 {
-  G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = std::sqrt(1. + x);
-  return proton_mass_c2*(g - 1.0);
+  return 
+    p->GetPDGMass()*(std::sqrt(1. + 0.5*cut/CLHEP::electron_mass_c2) - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

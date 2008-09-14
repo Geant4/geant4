@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.21 2008-09-12 16:35:09 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.22 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,18 +73,19 @@ using namespace std;
 G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, 
                                      const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  tlimit(DBL_MAX),
-  twoln10(2.0*log(10.0)),
-  bg2lim(0.0169),
-  taulim(8.4146e-3),
-  isIon(false)
+    particle(0),
+    tlimit(DBL_MAX),
+    twoln10(2.0*log(10.0)),
+    bg2lim(0.0169),
+    taulim(8.4146e-3),
+    isIon(false)
 {
   fParticleChange = 0;
   if(p) SetParticle(p);
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
+  SetLowEnergyLimit(2.0*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

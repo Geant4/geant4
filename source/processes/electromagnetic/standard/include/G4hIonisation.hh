@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.40 2008-09-12 17:02:34 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.41 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,18 +113,12 @@ private:
   G4hIonisation & operator=(const G4hIonisation &right);
   G4hIonisation(const G4hIonisation&);
 
+  G4bool     isInitialised;
+  G4bool     nuclearStopping;
+
   G4double   mass;
   G4double   ratio;
-
-  const G4ParticleDefinition* theParticle;
-  const G4ParticleDefinition* theBaseParticle;
-
-  G4bool                      isInitialised;
-  G4bool                      nuclearStopping;
-
-  G4double                    eth;
-  G4double                    massratio;
-
+  G4double   eth;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -143,8 +137,7 @@ inline G4double G4hIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 						G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double y = electron_mass_c2/mass;
-  G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
+  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(g - 1.0);
 }
 

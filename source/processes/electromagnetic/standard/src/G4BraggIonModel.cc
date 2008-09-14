@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.19 2008-09-12 16:35:09 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.20 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,8 +81,8 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
     isInitialised(false)
 {
   if(p) SetParticle(p);
-  highKinEnergy    = 2.0*MeV;
-  lowKinEnergy     = 0.0*MeV;
+  SetHighEnergyLimit(2.0*MeV);
+
   HeMass           = 3.727417*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
   lowestKinEnergy  = 1.0*keV/rateMassHe2p;

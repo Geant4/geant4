@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.77 2008-09-12 17:02:34 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.78 2008-09-14 17:11:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,8 +105,6 @@ using namespace std;
 
 G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
     isInitialised(false),
     nuclearStopping(true)
 {
@@ -131,8 +129,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
 
-    theParticle = part;
-
+    const G4ParticleDefinition* theBaseParticle = 0;
     G4String pname = part->GetParticleName();
 
     // standard base particles
@@ -164,19 +161,18 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    mass  = theParticle->GetPDGMass();
+    mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;
-    massratio = 1.0;
-    if(theBaseParticle) massratio = theBaseParticle->GetPDGMass()/mass; 
 
     if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    eth = 2.0*MeV*mass/proton_mass_c2;
 
+    // model limit defined for protons
+    eth = (EmModel(1)->HighEnergyLimit())*mass/proton_mass_c2;
     EmModel(1)->SetHighEnergyLimit(eth);
+    AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
     if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
-    AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
     if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
     EmModel(2)->SetLowEnergyLimit(eth);
@@ -194,8 +190,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 void G4hIonisation::PrintInfo()
 {
   if(EmModel(1) && EmModel(2)) {
-    G4cout << "      Scaling relation is used from proton dE/dx and range, "
-	   << "nuclearStopping= " << nuclearStopping
+    G4cout << "      NuclearStopping= " << nuclearStopping
 	   << G4endl;
   }
 }
