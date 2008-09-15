@@ -33,6 +33,8 @@
 #include "Tst12SteppingAction.hh"
 #include "Tst12StackingAction.hh"
 
+#include "FTFP.hh"
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4RunManager.hh"
@@ -50,7 +52,8 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst12DetectorConstruction);
-  runManager->SetUserInitialization(new Tst12PhysicsList);
+  //  runManager->SetUserInitialization(new Tst12PhysicsList);
+  runManager->SetUserInitialization(new FTFP);
 
   // UserAction classes
   runManager->SetUserAction(new Tst12RunAction);

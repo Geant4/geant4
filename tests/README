@@ -1,4 +1,4 @@
-$Id: README,v 1.22 2008-06-17 09:40:37 gcosmo Exp $
+$Id: README,v 1.23 2008-09-15 08:19:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,10 +22,8 @@ exhaustive and complete.
  
 test01 ## Geometry - CSG solids and navigator:
        ## including Boolean, assemblies, reflection and calorimeter benchmark.
-test02 ## Standard e.m. processes. Low energy and high energy
-       ## hadronic processes and stopping, including coherent
-       ## elastic scattering.  (Derived originally from ExN04)
-       ## (Action? Split into (a) em, (b) had with higher em cuts)
+test02 ## LHEP Physics Lists
+       ## test02.in (em test) is obsolete; hadron test is the main
 test05 ## Geometry - Tessellated solids and General Particle Source.
        ## (Action? Eventually add CAD input setup.)
 test07 ## Statistical evaluation prototype.  (Derived originally from ExN03)
@@ -51,22 +49,22 @@ test25 ## Classical cascade hadronic model.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
 test29 ## Electroweak interface (G4QCaptureAtRest).
-test30 ## Hadronic generators: one energy of incident beam for concrete target.
-test31 ## General acceptance test for EM physics.
+test30 ## Hadronic generators test versus thin target data E<3 GeV (not for stt).
+test31 ## Test of stopping powers and energy loss for EM physics (not for stt) .
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
-test35 ## Internal test exercising HARP physics
+test35 ## Hadronic Generator test versus HARP data 3 GeV < E < 13 GeV (not for stt).
 test36 ## EM XTR processes
-test37 ## Sandia data, electron beam in semi-infinite media
+test37 ## Sandia data, electron beam in semi-infinite media (not for stt).
 test38 ## Cross-section scaling test of gamma and electron nuclear reactions
        ## using CHIPS decay for final state production.
 test39 ## CHIPS elastic & lA scattering at process level
 test40 ## Benchmark test for e.m. shower development from single primary
-test41 ## MUSCAT experiment for multiple-scattering validation
-test44 ## Bragg peak distribution validation (based on example Hadr01)
+test41 ## MUSCAT experiment for multiple-scattering validation (not for stt).
+test44 ## Bragg peak distribution validation (not for stt).
 test45 ## Validation of thick target data for low-energy proton and ion beams
-       ## stopped in different targets.
+       ## stopped in different targets (not for stt).
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
        ## 2) gamma attenuation coefficient;
