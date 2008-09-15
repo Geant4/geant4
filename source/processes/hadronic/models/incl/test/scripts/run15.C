@@ -167,7 +167,7 @@ void nCrossSection(){
   TFile* fref = new TFile("tmp/run15.root");
   TFile* ffref = new TFile("tmp/run15ref.root");
 
-  Char_t* titre="d(1.2 GeV) + 208Pb (INCL4+ABLA)";
+  Char_t* titre="d(1.6 GeV) + 208Pb (INCL4+ABLA)";
 	
   Char_t* psFileName="n_cross_section_run15.ps";
 
@@ -353,7 +353,7 @@ void nCrossSection(){
 
   // Prepare the cuts and normalisation factors
   emin=0.;
-  emax=1300.;
+  emax=1800.;
   logE=0; // log E scale True=1, False=0
 
   // Plot theoretical cross sections:
@@ -401,7 +401,7 @@ void nCrossSection(){
   c3_1->Draw();
   c3_1->cd();
   emin=0.;
-  emax=1200.;
+  emax=1800.;
   Int_t nbx=100;
  
   TH1F* hista=new TH1F("hista","",nbx,emin,emax);

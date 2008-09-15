@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.13 2008-06-25 17:20:03 kaitanie Exp $
+$Id: History,v 1.14 2008-09-15 08:16:45 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,16 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+12 September 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-02)
+------------------------------------
+- Bug fixes in INCL cascade:
+  o Fixed target nucleus initialization for targets with A >= 0.19 and
+  A <= 28.
+  o Fixed target nucleus radius calculation for targets 6 <= A < 19.
+  o Fixed conditional statements to avoid uninitialized variables.
+  o Several array index handling (off-by-one) bugs fixed.
+  o Several possible double/integer datatype problems fixed.
 
 25 June 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-01)
 ------------------------------

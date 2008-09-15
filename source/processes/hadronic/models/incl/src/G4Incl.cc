@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.18 2008-06-25 17:20:04 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.19 2008-09-15 08:16:45 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1181,14 +1181,14 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
     ws->rmaxws = ws->r0 + (ws->xfoisa)*(ws->adif);
   }
   else if(iamat >= 19) {
-    ws->r0 = light_nuc->r[iamat];
-    ws->adif = light_nuc->a[iamat];
+    ws->r0 = light_nuc->r[iamat-1];
+    ws->adif = light_nuc->a[iamat-1];
     ws->rmaxws = ws->r0 + (ws->xfoisa)*(ws->adif);
   }
   else if(iamat >= 6) {
-    ws->r0 = light_nuc->r[iamat];
-    ws->adif = light_nuc->a[iamat];
-    ws->rmaxws = 5.5 + 0.3*(iamat-6.)/12.;
+    ws->r0 = light_nuc->r[iamat-1];
+    ws->adif = light_nuc->a[iamat-1];
+    ws->rmaxws = 5.5 + 0.3*(double(iamat)-6.)/12.;
   }
   else if(iamat >= 2) {
     if(iamat == 2) {
@@ -2289,8 +2289,8 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   G4double beproj = 0.;
-  bl3->ia2 = G4int(calincl->f[0]); // f(1)->f[0] and so on..., calincl added
-  G4int iz2 = G4int(calincl->f[1]);
+  bl3->ia2 = G4int(std::floor(calincl->f[0] + 0.1)); // f(1)->f[0] and so on..., calincl added
+  G4int iz2 = G4int(std::floor(calincl->f[1] + 0.1));
   G4double r02 = 1.12;
   kindstruct->kindf7 = int(std::floor(calincl->f[6] + 0.1));
 
@@ -2340,20 +2340,20 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   bl3->r2 = r02*std::pow(G4double(a2),0.33333333);
 
   // parametres moyens de densite de la cible (fermi 2 parametres)
-  if (bl3->ia2 > 28) { //then
+  if (bl3->ia2 >= 28) { //then
     ws->r0 = (2.745e-4*bl3->ia2+1.063)*std::pow(G4double(bl3->ia2),0.33333333);
     ws->adif = 1.63e-4*bl3->ia2 + 0.510;
     ws->rmaxws = ws->r0 + ws->xfoisa*(ws->adif);
   }
-  else if(bl3->ia2 >= 0.19) { //then
-    ws->r0 = light_nuc->r[bl3->ia2];
-    ws->adif = light_nuc->a[bl3->ia2];
+  else if(bl3->ia2 >= 19) { //then
+    ws->r0 = light_nuc->r[bl3->ia2-1];
+    ws->adif = light_nuc->a[bl3->ia2-1];
     ws->rmaxws = ws->r0 + ws->xfoisa*(ws->adif);
   }
   else if(bl3->ia2>=6) { //then
-    ws->r0 = 1.581*(light_nuc->a[bl3->ia2]) * (2.0 + 5.0 * (light_nuc->r[bl3->ia2])/(2.0 + 3.0*(light_nuc->r[bl3->ia2])));
-    ws->adif = light_nuc->a[bl3->ia2];
-    ws->rmaxws = 5.5 + 0.3*(bl3->ia2 - 6.0)/12.0;
+    ws->r0 = 1.581*(light_nuc->a[bl3->ia2-1]) * (2.0 + 5.0 * (light_nuc->r[bl3->ia2-1]))/(2.0 + 3.0*(light_nuc->r[bl3->ia2-1]));
+    ws->adif = light_nuc->a[bl3->ia2-1];
+    ws->rmaxws = 5.5 + 0.3*(double(bl3->ia2) - 6.0)/12.0;
   }
   else if(bl3->ia2 >= 2) { // then
     if(bl3->ia2 == 2) { //then
@@ -2491,7 +2491,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       }
       else {
 	// deutons
-	tlabu = tlab/bl3->ia1;
+	tlabu = tlab/double(bl3->ia1);
 	if (tlabu <= 400) {
 	  coeffb0 = -0.0035*tlabu + 6.86;
 	  expob0 = -0.00005*tlabu + 0.32;
@@ -2810,9 +2810,9 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       bl9->hel[i] = 0.0;
       efer = efer + bl1->eps[i] - fmp;
     }
-    x1_target = x1_target/bl3->ia2;
-    x2_target = x2_target/bl3->ia2;
-    x3_target = x3_target/bl3->ia2;
+    x1_target = x1_target/double(bl3->ia2);
+    x2_target = x2_target/double(bl3->ia2);
+    x3_target = x3_target/double(bl3->ia2);
   }
 
   efrun = efrun + efer;
@@ -2944,10 +2944,10 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       energie_in = tlab + fmpinc;
       if((energie_in) <= (bl3->ia1*fmp)) {
 	for(G4int i = 1; i <= bl3->ia1; i++) {
-	  bl1->eps[i] = energie_in/bl3->ia1;
+	  bl1->eps[i] = energie_in/double(bl3->ia1);
 	  bl1->p1[i] = 0.0;
 	  bl1->p2[i] = 0.0;
-	  bl1->p3[i] = pinc/bl3->ia1;
+	  bl1->p3[i] = pinc/double(bl3->ia1);
 	}
 	goto pnu1871;
       }
@@ -3583,9 +3583,11 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   // Replaced goto structure:
   // if (k3 == 1) go to 260
   // if (k4 == 0) go to 260
-  mg=bl1->ind1[bl9->l1]+bl1->ind1[bl9->l2];
-  if((k3 != 1) && (k4 != 0) && (mg == 1)) {
+  if(k3 != 1 && k4 != 0) {
+    mg=bl1->ind1[bl9->l1]+bl1->ind1[bl9->l2];
     isos=bl1->ind2[bl9->l1]+bl1->ind2[bl9->l2];
+  }
+  if((k3 != 1) && (k4 != 0) && (mg == 1)) {
     // if (mg != 1) go to 260
     ldel = bl9->l2;
     if(mg-bl1->ind1[bl9->l1] == 0) {
@@ -3886,7 +3888,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       }
     }
 
-    if(egs < (efer-(bl3->ia2-nbalttf)*tf)) {
+    if(egs < (efer- double(bl3->ia2-nbalttf)*tf)) {
       if(varavat->kveux == 1) {
 	varavat->bloc_cdpp[iavat] = 1;
       }
@@ -4031,7 +4033,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       mrdd = mrdd + 1;
       led = 1;
     }
-    if((ich1+ich2-1) == 0) {
+    if((ich1+ich2-1) > 0) {
       mcdd = mcdd + 1;
       led = 1;
     }
@@ -4060,7 +4062,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
     t[45] = std::sqrt(t[42]*t[42] + t[43]*t[43] + t[44]*t[44]); //t(N)->t[N-1]
     t[42] = t[42]/t[45]; //t(N)->t[N-1]
     t[43] = t[43]/t[45]; //t(N)->t[N-1]
-    t[45] = t[45]/t[46];
+    t[44] = t[44]/t[45];
     cif = (t[33]*t[36] + t[34]*t[37] + t[35]*t[38])/t[39]/t[40]; //t(N)->t[N-1]
    
     // trouble with forward scattering 22/3/95
@@ -4378,7 +4380,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       }
     }
   }
-  if(egs >= (efer-(bl3->ia2-nbalttf)*tf)) {
+  if(egs >= (efer - double(bl3->ia2-nbalttf)*tf)) {
     goto pnu850;
   }
 
@@ -6944,7 +6946,7 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
     return;
   }
 
-  bl3->ia2 = int(calincl->f[0]); // f(1) -> f[0]
+  bl3->ia2 = int(std::floor(calincl->f[0] + 0.1)); // f(1) -> f[0]
   sep = 6.8309;
 
   if(bl3->ia2 <= 4) {

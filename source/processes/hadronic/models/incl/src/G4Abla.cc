@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.18 2008-06-25 17:20:04 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.19 2008-09-15 08:16:45 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1509,7 +1509,7 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
     volant->zpcv[volant->iv] = 0.;
     volant->pcv[volant->iv] = pc;
 
-    if(volant->getTotalMass() > 209) {
+    if(volant->getTotalMass() > 209 && verboseLevel > 0) {
       volant->dump();
       G4cout <<"DEBUGA Total = " << volant->getTotalMass() << G4endl;
     }
