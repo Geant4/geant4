@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.11 2006-06-29 19:02:25 gunter Exp $
+// $Id: G4PhysicsLogVector.hh,v 1.12 2008-09-16 10:17:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,11 @@ class G4PhysicsLogVector : public G4PhysicsVector
 
     G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
       // To retrieve persistent data from file stream.
-
+  
+    G4PhysicsLogVector(const G4PhysicsLogVector&);
+    G4PhysicsLogVector& operator=(const G4PhysicsLogVector&);
+      // Copy constructor and assignment operator.
+      
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
