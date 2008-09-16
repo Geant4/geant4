@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.23 2008-09-16 10:16:32 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.24 2008-09-16 14:55:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,10 +54,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
    edgeMin(0.), edgeMax(0.), numberOfBin(0),
    lastEnergy(0.), lastValue(0.), lastBin(0), 
    secDerivative(0), useSpline(spline)
-{
-  binVector.push_back(0.0);
-  dataVector.push_back(0.0);
-}
+{}
 
 // --------------------------------------------------------------
 

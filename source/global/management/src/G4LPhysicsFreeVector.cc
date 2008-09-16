@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.18 2008-09-16 10:18:03 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.19 2008-09-16 14:55:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,15 +61,13 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
   type = T_G4LPhysicsFreeVector;
    
   numberOfBin = nbin;
-  if(nbin > 0) {
-    binVector.reserve(nbin+1);
-    dataVector.reserve(nbin+1);
-    edgeMin = binmin;
-    edgeMax = binmax;
-    for (size_t i=0; i<=numberOfBin; i++) {
-      binVector.push_back(0.0);
-      dataVector.push_back(0.0);
-    }
+  binVector.reserve(nbin+1);
+  dataVector.reserve(nbin+1);
+  edgeMin = binmin;
+  edgeMax = binmax;
+  for (size_t i=0; i<=numberOfBin; i++) {
+    binVector.push_back(0.0);
+    dataVector.push_back(0.0);
   }
 }  
 
