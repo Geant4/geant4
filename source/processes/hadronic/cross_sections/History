@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-1 Septamber 2008 Vladimir Ivantchenko (hadr-cross-V09-01-03)
+16 September 2008 Dennis Wright (hadr-cross-V09-01-04)
+------------------------------------------------------
+- G4PiNuclearCrossSection.cc: comment out G4ping and its instances
+  following result of Pete Elmer who showed G4ping is very slow
+
+01 September 2008 Vladimir Ivantchenko (hadr-cross-V09-01-03)
 ------------------------------------------------------------
 - G4CrossSectionDataStore - added method SampleZandA, which
     return G4Element and fill G4Nucleaus
