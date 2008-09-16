@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.6 2008-09-16 13:01:35 gcosmo Exp $
+// $Id: G4UrbanMscModel90.cc,v 1.7 2008-09-16 14:20:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,11 +112,11 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   SetParticle(p);
 
-  if (pParticleChange)
+  if (pParticleChange) {
    fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  else
+  } else {
    fParticleChange = new G4ParticleChangeForMSC();
-
+  }
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
@@ -269,17 +269,13 @@ G4double G4UrbanMscModel90::ComputeCrossSectionPerAtom(
 
   G4double eKineticEnergy = KineticEnergy;
 
-  static G4String electronName("e-");
-  static G4String positronName("e+");
-
-  if((particle->GetParticleName() != electronName) &&
-     (particle->GetParticleName() != positronName) )
+  if(mass > electron_mass_c2)
   {
-     G4double TAU = KineticEnergy/mass ;
-     G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
-     G4double w = c-2. ;
-     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
-     eKineticEnergy = electron_mass_c2*tau ;
+    G4double TAU = KineticEnergy/mass ;
+    G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+    G4double w = c-2. ;
+    G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+    eKineticEnergy = electron_mass_c2*tau ;
   }
 
   G4double ChargeSquare = charge*charge;

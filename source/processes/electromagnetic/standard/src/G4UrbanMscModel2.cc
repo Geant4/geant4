@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.8 2008-08-23 14:06:32 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.9 2008-09-16 14:20:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -301,14 +301,13 @@ G4double G4UrbanMscModel2::ComputeCrossSectionPerAtom(
 
   G4double eKineticEnergy = KineticEnergy;
 
-  if((particle->GetParticleName() != "e-") &&
-     (particle->GetParticleName() != "e+") )
+  if(mass > electron_mass_c2)
   {
-     G4double TAU = KineticEnergy/mass ;
-     G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
-     G4double w = c-2. ;
-     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
-     eKineticEnergy = electron_mass_c2*tau ;
+    G4double TAU = KineticEnergy/mass ;
+    G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+    G4double w = c-2. ;
+    G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+    eKineticEnergy = electron_mass_c2*tau ;
   }
 
   G4double ChargeSquare = charge*charge;
