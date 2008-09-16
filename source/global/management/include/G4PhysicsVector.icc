@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.14 2008-09-05 18:04:45 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.15 2008-09-16 10:15:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,14 +126,14 @@ inline
 
   if( theEnergy == lastEnergy ) {
 
-  } else if( theEnergy <= edgeMin ) {
-     lastBin = 0;
-     lastEnergy = theEnergy;
-     lastValue  = dataVector[0];
-
   } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin]) {
      lastEnergy = theEnergy;
      Interpolation();
+
+  } else if( theEnergy <= edgeMin ) {
+     lastBin = 0;
+     lastEnergy = edgeMin;
+     lastValue  = dataVector[0];
 
   } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin-1]) {
      lastBin--;
