@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.18 2008-09-16 14:55:18 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.19 2008-09-16 18:57:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,18 +59,14 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
+  dataVector.reserve(theNbin+1);
+  binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
 
-  if(numberOfBin > 0) {
-    dataVector.reserve(theNbin+1);
-    binVector.reserve(theNbin+1); 
-    edgeMin = 1;
-    edgeMax = numberOfBin;
-    for (size_t i=0; i<=numberOfBin; i++) {
-      binVector.push_back(0.0);
-      dataVector.push_back(0.0);
-    }
+  for (size_t i=0; i<=numberOfBin; i++) {
+    binVector.push_back(0.0);
+    dataVector.push_back(0.0);
   }
 }  
 
@@ -83,11 +79,11 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 
   // Add extra one bin (hidden to user) to handle correctly when 
   // Energy=theEmax in getValue. 
+  dataVector.reserve(theNbin+1);
+  binVector.reserve(theNbin+1); 
 
   numberOfBin = theNbin;
 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1); 
   for (size_t i=0; i<=numberOfBin; i++) {
     binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
     dataVector.push_back(0.0);
