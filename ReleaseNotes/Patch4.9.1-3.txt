@@ -115,6 +115,10 @@ List of fixes included in this public patch since the public release 9.1.p02:
         and replaced with message only when verbosity is > 1.
     + models/parton_string/diffraction:
       o Fixed compilation warnings for unused variables in G4FTFModel.
+    + models/pre_equilibrium:
+      o Fixed cases of floating point overflow when using pre-compound in
+        combination with binary-cascade; reviewed algorithm in method
+        G4PreCompoundEmission::rho().
     + util:
       o G4ReactionDynamics::GenerateXandPt(): fixed bug in momentum bin
         responsible for causing oscillatory behavior in spectrum.
