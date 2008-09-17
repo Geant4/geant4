@@ -22,7 +22,7 @@
 // $Id: HadrontherapyBeamLine.cc;
 // Last modified: G.A.P.Cirrone, May 2008;
 //
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+// See more at: http://geant4infn.wikispaces.com/
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
