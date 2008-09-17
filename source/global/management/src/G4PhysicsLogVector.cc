@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.19 2008-09-16 18:57:08 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.20 2008-09-17 14:00:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,9 +64,10 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
   numberOfBin = theNbin;
 
-  for (size_t i=0; i<=numberOfBin; i++) {
-    binVector.push_back(0.0);
-    dataVector.push_back(0.0);
+  for (size_t i=0; i<=numberOfBin; i++)
+  {
+     binVector.push_back(0.0);
+     dataVector.push_back(0.0);
   }
 }  
 
@@ -84,7 +85,8 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 
   numberOfBin = theNbin;
 
-  for (size_t i=0; i<=numberOfBin; i++) {
+  for (size_t i=0; i<numberOfBin+1; i++)
+  {
     binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
     dataVector.push_back(0.0);
   }
