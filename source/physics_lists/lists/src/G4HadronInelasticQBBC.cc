@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.9 2008-08-05 10:25:00 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.10 2008-09-17 18:19:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -77,8 +77,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
     chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
-  if(verbose > -1) G4cout << "### HadronInelasticQBBC" << G4endl;
-  //  store = G4HadronProcessStore::Instance();
+  if(verbose > 1) G4cout << "### HadronInelasticQBBC" << G4endl;
   theHPXSecI = 0;
   theHPXSecC = 0;
   theHPXSecF = 0;
@@ -87,8 +86,10 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   theQuasiElastic   = 0;
   theQGStringDecay  = 0;
   theQGStringModel  = 0;
-  theFTFStringDecay = 0;
-  theFTFStringModel = 0;
+  theFTFBStringDecay = 0;
+  theFTFBStringModel = 0;
+  theFTFCStringDecay = 0;
+  theFTFCStringModel = 0;
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
@@ -98,8 +99,10 @@ G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
   delete theQuasiElastic;
   delete theQGStringDecay;
   delete theQGStringModel;
-  delete theFTFStringDecay;
-  delete theFTFStringModel;
+  delete theFTFBStringDecay;
+  delete theFTFCStringDecay;
+  delete theFTFBStringModel;
+  delete theFTFCStringModel;
   delete theHPXSecI;
   delete theHPXSecC;
   delete theHPXSecF;
@@ -123,7 +126,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
     G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
 
   G4double minEstring  = 4.0*GeV;
-  G4double maxEcascade = 6.0*GeV;
+  G4double maxEcascade = 5.0*GeV;
   //  G4double minFtf      = 7.5*GeV;
 
   //Binary
@@ -142,31 +145,41 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theCHIPS->SetMaxEnergy(maxEcascade);
 
   //QGS
-  theCascade = new G4BinaryCascade;
+  theCascade = new G4BinaryCascade();
   theCHIPSCascade = new G4QStringChipsParticleLevelInterface;
-  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator();
+  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator("QGSC");
   theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
   theQGStringDecay  = new G4ExcitedStringDecay(new G4QGSMFragmentation());
   theQGStringModel->SetFragmentationModel(theQGStringDecay);
   theQGSModel->SetTransport(theCHIPSCascade);
 
-  theQuasiElastic = new G4QuasiElasticChannel;
+  theQuasiElastic = new G4QuasiElasticChannel();
   theQGSModel->SetQuasiElasticChannel(theQuasiElastic);
   theQGSModel->SetHighEnergyGenerator(theQGStringModel);
   theQGSModel->SetMinEnergy(minEstring);
   theQGSModel->SetMaxEnergy(100*TeV);
 
-  //FTF
-  G4TheoFSGenerator* theFTFModel = new G4TheoFSGenerator();
-  theFTFStringModel = new G4FTFModel();
-  theFTFStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
-  theFTFStringModel->SetFragmentationModel(theFTFStringDecay);
-  //theFTFModel->SetTransport(theCHIPSCascade);
-  theFTFModel->SetTransport(theCascade);
-  theFTFModel->SetHighEnergyGenerator(theFTFStringModel);
-  theFTFModel->SetMinEnergy(minEstring);
-  theFTFModel->SetMaxEnergy(100*TeV);
-  //theFTFModel->SetQuasiElasticChannel(theQuasiElastic);
+  //FTFB
+  G4TheoFSGenerator* theFTFBModel = new G4TheoFSGenerator("FTFB");
+  theFTFBStringModel = new G4FTFModel();
+  theFTFBStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
+  theFTFBStringModel->SetFragmentationModel(theFTFBStringDecay);
+
+  theFTFBModel->SetTransport(theCascade);
+  theFTFBModel->SetHighEnergyGenerator(theFTFBStringModel);
+  theFTFBModel->SetMinEnergy(minEstring);
+  theFTFBModel->SetMaxEnergy(100*TeV);
+
+  //FTFC
+  G4TheoFSGenerator* theFTFCModel = new G4TheoFSGenerator("FTFC");
+  theFTFCStringModel = new G4FTFModel();
+  theFTFCStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
+  theFTFCStringModel->SetFragmentationModel(theFTFCStringDecay);
+
+  theFTFCModel->SetTransport(theCHIPSCascade);
+  theFTFCModel->SetHighEnergyGenerator(theFTFCStringModel);
+  theFTFCModel->SetMinEnergy(minEstring);
+  theFTFCModel->SetMaxEnergy(100*TeV);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
@@ -204,7 +217,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       if(pname == "proton") {
 	hp->AddDataSet(&theXSecP);
 
-        if(ftfFlag) hp->RegisterMe(theFTFModel);
+        if(ftfFlag) hp->RegisterMe(theFTFBModel);
 	else        hp->RegisterMe(theQGSModel);
  
 	if(bertFlag) hp->RegisterMe(theBERT);
@@ -215,7 +228,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(&theXSecN);
-        if(ftfFlag) hp->RegisterMe(theFTFModel);
+        if(ftfFlag) hp->RegisterMe(theFTFBModel);
 	else        hp->RegisterMe(theQGSModel);
 
 	G4HadronCaptureProcess* theNeutronCapture = 
@@ -259,7 +272,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       } else if(pname == "pi-" || pname == "pi+") {
 	hp->AddDataSet(&thePiCross);
-        if(ftfFlag) hp->RegisterMe(theFTFModel);
+        if(ftfFlag) hp->RegisterMe(theFTFBModel);
 	else        hp->RegisterMe(theQGSModel);
 
         hp->RegisterMe(theBERT);
@@ -273,7 +286,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "kaon+"     || 
 		pname == "kaon0S"    || 
 		pname == "kaon0L") {
-        hp->RegisterMe(theFTFModel);
+        hp->RegisterMe(theFTFCModel);
         hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
@@ -283,17 +296,17 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "xi-"       || 
 		pname == "xi0") {
 
-	hp->RegisterMe(theFTFModel);
+	hp->RegisterMe(theFTFCModel);
 	hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
-	hp->RegisterMe(theFTFModel);
+	hp->RegisterMe(theFTFCModel);
         hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else {
-	hp->RegisterMe(theFTFModel);
+	hp->RegisterMe(theFTFCModel);
         hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
       }

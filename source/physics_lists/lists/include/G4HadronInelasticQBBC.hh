@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.5 2008-08-05 10:25:00 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.6 2008-09-17 18:19:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -106,8 +106,10 @@ private:
   G4QStringChipsParticleLevelInterface * theCHIPSCascade;
   G4QGSModel< G4QGSParticipants > * theQGStringModel;
   G4ExcitedStringDecay* theQGStringDecay;
-  G4ExcitedStringDecay* theFTFStringDecay;
-  G4FTFModel*           theFTFStringModel;
+  G4ExcitedStringDecay* theFTFBStringDecay;
+  G4ExcitedStringDecay* theFTFCStringDecay;
+  G4FTFModel*           theFTFBStringModel;
+  G4FTFModel*           theFTFCStringModel;
 
   G4int    verbose;
   G4bool   ftfFlag;
