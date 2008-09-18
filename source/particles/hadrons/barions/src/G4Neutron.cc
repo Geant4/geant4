@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.22 2008-03-06 15:41:57 kurasige Exp $
+// $Id: G4Neutron.cc,v 1.23 2008-09-18 08:37:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,11 +72,11 @@ G4Neutron* G4Neutron::Definition()
   // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
     anInstance = new G4Ions(
-                 name, neutron_mass_c2, 7.432e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.480e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
-		false,    886.7*second,          NULL,
+		false,    885.7*second,          NULL,
 		false,       "nucleon",             0,
                   0.0 
               );

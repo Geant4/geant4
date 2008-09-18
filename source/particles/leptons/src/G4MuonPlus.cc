@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.13 2007-03-15 06:53:58 kurasige Exp $
+// $Id: G4MuonPlus.cc,v 1.14 2008-09-18 08:37:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4MuonPlus* G4MuonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   anInstance = new G4ParticleDefinition(
-                 name,   0.1056584*GeV, 2.99591e-16*MeV,   +1.*eplus, 
+                 name,   0.1056584*GeV, 3.01594e-16*MeV,   +1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -13,

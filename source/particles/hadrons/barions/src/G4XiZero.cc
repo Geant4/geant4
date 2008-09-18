@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.cc,v 1.18 2007-03-11 07:17:35 kurasige Exp $
+// $Id: G4XiZero.cc,v 1.19 2008-09-18 08:37:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4XiZero* G4XiZero::Definition()
   //             shortlived      subType    anti_encoding
 
     anInstance = new G4ParticleDefinition(
-                 name,     1.31483*GeV,  2.27e-12*MeV,         0.0,
+                 name,     1.31483*GeV,  2.28e-12*MeV,         0.0,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            +1,        3322,

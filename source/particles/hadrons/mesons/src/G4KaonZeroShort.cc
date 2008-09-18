@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroShort.cc,v 1.17 2006-06-29 19:19:54 gunter Exp $
+// $Id: G4KaonZeroShort.cc,v 1.18 2008-09-18 08:37:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,11 +70,11 @@ G4KaonZeroShort* G4KaonZeroShort::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.497672*GeV,  7.352e-12*MeV,         0.0,
+                 name,    0.497614*GeV,  7.397e-12*MeV,         0.0,
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         310,
-                false,      0.08953*ns,          NULL,
+                false,      0.08958*ns,          NULL,
                 false,          "kaon",           310);
 
  //create Decay Table

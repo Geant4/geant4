@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.14 2006-06-29 19:19:45 gunter Exp $
+// $Id: G4KaonMinus.cc,v 1.15 2008-09-18 08:37:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4KaonMinus* G4KaonMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.493677*GeV,   5.315e-14*MeV,    -1.*eplus,
+                 name,    0.493677*GeV,   5.352e-14*MeV,    -1.*eplus,
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,        -321,
