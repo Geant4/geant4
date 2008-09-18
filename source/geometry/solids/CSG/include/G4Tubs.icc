@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.7 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.8 2008-09-18 13:43:03 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -65,49 +65,48 @@ G4double G4Tubs::GetDeltaPhiAngle () const
   return fDPhi;
 }
 
+inline 
+void G4Tubs::Initialize()
+{
+  fCubicVolume= 0.;
+  fSurfaceArea= 0.;
+  fpPolyhedron = 0;
+}
+
 inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
   fRMin= newRMin;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
   fRMax= newRMax;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetZHalfLength (G4double newDz)
 {
   fDz= newDz;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetStartPhiAngle (G4double newSPhi)
 {
   fSPhi= newSPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
   fDPhi= newDPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
+  
 }
 
 //  Older names for access functions
