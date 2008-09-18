@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BarashenkovGGcofTest.cc,v 1.3 2008-09-12 13:16:13 grichine Exp $
+// $Id: BarashenkovGGcofTest.cc,v 1.4 2008-09-18 15:58:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,7 +116,8 @@ int main()
   G4cout << " 6 pion-" << G4endl;
   //  G4cin >> choice;
 
-  choice = 1;
+  choice = 3;
+
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -927,13 +928,14 @@ int main()
     // barashTotXsc = barPiIn.GetTotalXsc();
     // barashElXsc  = barPiIn.GetElasticXsc();
 
-     ggTotXsc = ggXsc.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+     ggTotXsc  = ggXsc.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
 
-     ggElaXsc = ggXsc.GetElasticGlauberGribovXsc();
+     ggIneXsc  = ggXsc.GetInelasticGlauberGribovXsc();
+
+     ggElaXsc  = ggXsc.GetElasticGlauberGribovXsc();
 
      // ggElaXsc = ggXsc.GetHadronNucleaonXscPDG(theDynamicParticle, theElement);
 
-     ggIneXsc  = ggXsc.GetInelasticGlauberGribovXsc();
 
      ratioTot = barashTotXsc/ggTotXsc;
      ratioIn  = barashInXsc/ggIneXsc;
@@ -951,14 +953,17 @@ int main()
     writef <<i<<"    ratioTot = " << ratioTot << " ; ratioIn = "
        << ratioIn << " ; ratioEl = "<< ratioEl << G4endl;
 
-    writeCorTot<<", "<<ratioTot;
-    writeCorIn<<", "<<ratioIn;
+    writeCorTot<<ratioTot<<", ";
+    writeCorIn<<ratioIn<<", ";
 
     // delete theElement;
     // delete theMaterial;
       
 
   }
+  writeCorTot<<G4endl;
+  writeCorIn<<G4endl;
+
   //  G4cout<<"iz = "<<iz<<";  N = "<<N<<"; sum = "<<iz+N<<G4endl;                         
   
   /*  

@@ -120,10 +120,12 @@ public:
   inline G4double GetParticleBarCorTot( const G4ParticleDefinition* theParticle, G4double Z );
   inline G4double GetParticleBarCorIn( const G4ParticleDefinition* theParticle, G4double Z );
 
+  inline void SetEnergyLowerLimit(G4double E ){fLowerLimit=E;};
+
 private:
 
   const G4double fUpperLimit;
-  const G4double fLowerLimit; 
+  G4double fLowerLimit; 
   const G4double fRadiusConst;
 
   static const G4double fNeutronBarCorrectionTot[93];
