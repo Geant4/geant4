@@ -13,6 +13,11 @@ List of fixes included in this public patch since the public release 9.1.p02:
     + liblist.c: removed C++ style comments; resolving compilation problems
       on legacy SUN-CC compiler.
 
+  o Digits_Hits:
+    -----------
+    + Fixed a bug in G4ScoringBox for the use of G4PVDivision
+      and G4VScoreWriter for indexing scheme in GetIndex() method.
+
   o Event:
     -----
     + Provided accessors to G4SPSAngDistribution.
