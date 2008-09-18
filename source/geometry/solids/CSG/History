@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2008-07-07 10:43:04 gcosmo Exp $
+$Id: History,v 1.106 2008-09-18 16:14:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 18, 2008  T.Nikitina                 geom-csg-V09-01-05
+- G4Tubs: implemented first speed improvements and corrections from joint
+  code review of G4Tubs class. Cached computation for half-tolerance and
+  other cached values.
 
 Jul 07, 2008  V.Grichine                 geom-csg-V09-01-04
 - G4Sphere: fixed bug in DistanceToOut(p, v, ...) for normal 'fSTheta'
