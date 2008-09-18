@@ -1,4 +1,4 @@
-$Id: README,v 1.16 2008-05-06 11:41:26 maire Exp $
+$Id: README,v 1.17 2008-09-18 16:42:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -135,7 +135,7 @@ $Id: README,v 1.16 2008-05-06 11:41:26 maire Exp $
 	gmake histclean
 	gmake
 	
-  By default the histograms are saved as testem6.hbook
+  By default the histograms are saved as testem6.root
   It is possible to choose the format of the histogram file (hbook, root, XML):
   comment/uncomment 1 line in the constructor of RunAction. 
 
