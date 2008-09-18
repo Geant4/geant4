@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.8 2008-09-18 13:43:03 tnikitin Exp $
+// $Id: G4Tubs.icc,v 1.9 2008-09-18 16:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -106,7 +106,6 @@ void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 {
   fDPhi= newDPhi;
   Initialize();
-  
 }
 
 //  Older names for access functions

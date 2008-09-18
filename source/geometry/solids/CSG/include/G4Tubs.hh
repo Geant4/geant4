@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.18 2008-09-18 13:40:27 tnikitin Exp $
+// $Id: G4Tubs.hh,v 1.19 2008-09-18 16:13:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 //
 //   A tube or tube segment with curved sides parallel to
 //   the z-axis. The tube has a specified half-length along
-//   the z axis, about which it is centered, and a given
+//   the z-axis, about which it is centered, and a given
 //   minimum and maximum radius. A minimum radius of 0
 //   corresponds to filled tube /cylinder. The tube segment is
 //   specified by starting and delta angles for phi, with 0
@@ -104,10 +104,10 @@ class G4Tubs : public G4CSGSolid
     inline void SetZHalfLength   (G4double newDz);
     inline void SetStartPhiAngle (G4double newSPhi);
     inline void SetDeltaPhiAngle (G4double newDPhi);
-    inline void Initialize();
     
     // Methods for solid
 
+    inline void Initialize();
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
@@ -146,12 +146,12 @@ class G4Tubs : public G4CSGSolid
   public:  // without description
 
     G4Tubs(__void__&);
-     //
-     // Fake default constructor for usage restricted to direct object
-     // persistency for clients requiring preallocation of memory for
-     // persistifiable objects.
+      //
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
-     //  Older names for access functions
+    //  Older names for access functions
 
     inline G4double GetRMin() const;
     inline G4double GetRMax() const;
@@ -170,11 +170,11 @@ class G4Tubs : public G4CSGSolid
     G4double fRMin,fRMax,fDz,fSPhi,fDPhi;
     G4bool fPhiFullTube;
    
-     // Used by distanceToOut
+      // Used by distanceToOut
 
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
 
-     // used by normal
+      // Used by normal
 
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
