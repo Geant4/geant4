@@ -14,11 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-August 2008 A.Howard   hadr-pre-V09-01-09
+---------------------------------------------------
+Including Gunter's fix (see 11-August below) on top of ref-07 
+(hadr-pre-V09-00-04), i.e. without JMQ's developments.
+
 11-August 2008 G.Folger      
 -----------------------------------------------
 Rewrite algorithm in G4PreCompoundEmission::rho() to avoid frequent 
 floating point overflow when using Precompund in combination 
 with Binary Cascade. 
+
 
 24 July 2008 J. M. Quesada   hadr-pre-V09-01-08
 ---------------------------------------------------
