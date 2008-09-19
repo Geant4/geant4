@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.19 2007-12-15 12:29:16 kurasige Exp $
+// $Id: G4Decay.hh,v 1.20 2008-09-19 03:19:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,8 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForDecay.hh"
+#include "G4DecayProcessType.hh"
+
 class G4VExtDecayer;
 
 class G4Decay : public G4VRestDiscreteProcess 

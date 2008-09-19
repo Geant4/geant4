@@ -47,7 +47,12 @@
 
 #include "G4Transform3D.hh"
 
-G4DecayWithSpin::G4DecayWithSpin(const G4String& processName):G4Decay(processName){}
+G4DecayWithSpin::G4DecayWithSpin(const G4String& processName):G4Decay(processName)
+{
+  // set Process Sub Type   
+  SetProcessSubType(static_cast<int>(DECAY_WithSpin));
+
+}
 
 G4DecayWithSpin::~G4DecayWithSpin(){}
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProcessType.hh,v 1.1 2007-12-15 12:29:16 kurasige Exp $
+// $Id: G4DecayProcessType.hh,v 1.2 2008-09-19 03:19:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,8 +43,10 @@
 
 enum G4DecayProcessType
 {
-  DECAY,
-  DECAY_External,
-  DECAY_Unknown
+  DECAY = 201 ,
+  DECAY_WithSpin ,
+  DECAY_PionMakeSpin ,
+  DECAY_Unknown = 211,
+  DECAY_External = 231
 };
 #endif

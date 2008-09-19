@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.29 2008-04-16 07:55:27 kurasige Exp $
+// $Id: G4Decay.cc,v 1.30 2008-09-19 03:19:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
 #include "G4VExtDecayer.hh"
-#include "G4DecayProcessType.hh"
 
 // constructor
 G4Decay::G4Decay(const G4String& processName)
