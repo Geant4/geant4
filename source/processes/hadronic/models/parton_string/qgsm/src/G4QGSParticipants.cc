@@ -261,7 +261,8 @@ void G4QGSParticipants::PerformSoftCollisions()
 {
   std::vector<G4InteractionContent*>::iterator i;
   G4LorentzVector str4Mom;
-  for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
+  i = theInteractions.begin();
+  while ( i != theInteractions.end() )   
   {
     G4InteractionContent* anIniteraction = *i;
     G4PartonPair * aPair = NULL;
@@ -303,9 +304,10 @@ void G4QGSParticipants::PerformSoftCollisions()
         thePartonPairs.push_back(aPair);
       }  
       delete *i;
-      i=theInteractions.erase(i);
-      i--;
-    }
+      i=theInteractions.erase(i);    // i now points to the next interaction
+    } else {    
+      i++;
+    }  
   }
 #ifdef debug_G4QGSPart_PSoftColl
   G4cout << " string 4 mom " << str4Mom << G4endl;
