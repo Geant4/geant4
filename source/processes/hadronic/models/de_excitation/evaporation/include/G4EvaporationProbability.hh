@@ -23,18 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// JMQ & MAC 07/12/2007: New inverse cross sections
-// $Id: G4EvaporationProbability.hh,v 1.9 2008-05-24 16:34:33 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Oct 1998) 
+// by V. Lara (Oct 1998)
 //
-//J.M. Quesada (Dec 2007-Apr 2008). Rebuilt class. Mayor changes: new inverse cross sections and 
-//numerical integration .
-
-
 #ifndef G4EvaporationProbability_h
 #define G4EvaporationProbability_h 1
 
@@ -88,17 +81,25 @@ private:
   
 public:
 
-  G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
+ G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, const G4double K);
 
-//JMQ: new methods (04/12/07)
+ G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
 
-  G4double ProbabilityDistributionFunction(const G4double K, const G4Fragment & aFragment);
+private:
 
-  G4double CalculateProbability(const G4double MaximalKineticEnergy,const G4Fragment & fragment );
+  G4double CalculateProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy );
 
-  G4double IntegrateEmissionProbability(const G4double & Low, const G4double & Up, const G4Fragment & aFragment);
+  G4double IntegrateEmissionProbability(const G4Fragment & aFragment, const G4double & Low, const G4double & Up );
 
- G4double CrossSection(const G4double K, const  G4Fragment & fragment );
+protected:
+
+ virtual G4double CrossSection( const  G4Fragment & fragment, const G4double K )= 0;  
+
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment)=0 ;
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment)=0 ;
+
+private:
 
   // Data Members
 
@@ -111,8 +112,10 @@ public:
   // number and S_f is fragment spin
   G4double Gamma;
 
-  //The Coulomb Barrier
+//The Coulomb Barrier
          G4VCoulombBarrier * theCoulombBarrierptr;
+
+
 };
 
 

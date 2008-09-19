@@ -23,17 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
-//
-// $Id: G4EvaporationChannel.hh,v 1.7 2008-05-24 16:34:33 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-//JMQ & MAC 7/12/07 : new MonteCarlo sampling  of the kinetic energy
-//J. M.Quesada (Apr. 208). Rebuit class. Mayor changes. Unused items have been removed (unused constructors..). New methods.
+
 
 #ifndef G4EvaporationChannel_h
 #define G4EvaporationChannel_h 1
@@ -41,6 +36,12 @@
 #include "G4VEvaporationChannel.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4EvaporationProbability.hh"
+#include "G4NeutronEvaporationProbability.hh"
+#include "G4ProtonEvaporationProbability.hh"
+#include "G4DeuteronEvaporationProbability.hh"
+#include "G4TritonEvaporationProbability.hh"
+#include "G4He3EvaporationProbability.hh"
+#include "G4AlphaEvaporationProbability.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
@@ -90,7 +91,9 @@ public:
   void Initialize(const G4Fragment & fragment);
 
   G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
-  
+
+  // void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity);
+ 
 public:
 
 
@@ -100,8 +103,6 @@ public:
   
   inline G4double GetMaximalKineticEnergy(void) const 
   { return MaximalKineticEnergy; }
-  
-  // ----------------------
   
 private: 
   
@@ -124,15 +125,19 @@ private:
   // This data member define the channel. 
   // They are intializated at object creation (constructor) time.
 
-  // Atomic Number
-  G4int A;
+  // Atomic Number of ejectile
+  G4int theA;
 
-  // Charge
-  G4int Z;
+  // Charge of ejectile
+  G4int theZ;
 
 
   // For evaporation probability calcualation
   G4VEmissionProbability * theEvaporationProbabilityPtr;
+
+  // For Level Density calculation
+ // G4bool MyOwnLevelDensity;
+  G4VLevelDensityParameter * theLevelDensityPtr;
 
 
   // For Coulomb Barrier calculation
@@ -146,11 +151,11 @@ private:
   // They are calculated through the Initialize method which takes as parameters 
   // the atomic number, charge and excitation energy of nucleus.
 
-  // Residual Atomic Number
-  G4int AResidual;
+  // Residual Mass Number
+  G4int ResidualA;
 
   // Residual Charge
-  G4int ZResidual;
+  G4int ResidualZ;
 	
   // Emission Probability
   G4double EmissionProbability;
@@ -158,6 +163,8 @@ private:
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;
+
+
 };
 
 

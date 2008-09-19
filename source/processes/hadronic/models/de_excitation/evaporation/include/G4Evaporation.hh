@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.4 2007-02-14 13:37:49 ahoward Exp $
+// $Id: G4Evaporation.hh,v 1.5 2008-09-19 13:32:54 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -68,8 +68,6 @@ public:
 
   void SetDefaultChannel();
   void SetGEMChannel();
-  
-private:
 
 #ifdef debug
   void CheckConservation(const G4Fragment & theInitialState,

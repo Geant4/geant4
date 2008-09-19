@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonCoulombBarrier.cc,v 1.4 2006-06-29 20:28:37 gunter Exp $
+// $Id: G4TritonCoulombBarrier.cc,v 1.5 2008-09-19 13:32:54 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

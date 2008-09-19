@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronEvaporationProbability.hh,v 1.12 2008-05-24 16:34:33 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Nov 1999) 
+// by V. Lara (Oct 1998)
 //
-//J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, ExcitEnergies, ExcitSpins)
-
 
 #ifndef G4NeutronEvaporationProbability_h
 #define G4NeutronEvaporationProbability_h 1
@@ -43,12 +39,12 @@
 class G4NeutronEvaporationProbability : public G4EvaporationProbability
 {
 public:
-  // Only available constructor
+ 
   G4NeutronEvaporationProbability();
 		
   ~G4NeutronEvaporationProbability() {}
 private:  
-  // Copy constructor
+  
   G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right);
 
   const G4NeutronEvaporationProbability & operator=(const G4NeutronEvaporationProbability &right);
@@ -57,7 +53,31 @@ private:
 
 private:
 
- G4NeutronCoulombBarrier theCoulombBarrier;  
+  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
+
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
+
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment);
+ 
+  
+//data members
+
+      G4NeutronCoulombBarrier theCoulombBarrier; 
+
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
+
+
 };
 
 

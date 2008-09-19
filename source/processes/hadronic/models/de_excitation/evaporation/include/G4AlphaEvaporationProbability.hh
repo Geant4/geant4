@@ -23,16 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AlphaEvaporationProbability.hh,v 1.11 2008-05-24 16:34:33 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Nov 1999) 
+// by V. Lara (Oct 1998)
 //
-// J. M. Quesada (Apr. 2008) unused items have been removed (AlphaParam, BetaParam, CCoefficient, ExcitEnegies, ExcitSpins)
-
-
 #ifndef G4AlphaEvaporationProbability_h
 #define G4AlphaEvaporationProbability_h 1
 
@@ -55,11 +50,37 @@ private:
   G4bool operator==(const G4AlphaEvaporationProbability &right) const;
   G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
 
+
 private:
 
-  G4AlphaCoulombBarrier theCoulombBarrier;	
+  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
+
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
+
+  
+ virtual G4double CalcAlphaParam(const G4Fragment & fragment) ;
+ 
+ virtual G4double CalcBetaParam(const G4Fragment & fragment)  ;
+ 
+  G4double CCoeficient(const G4double aZ) ;
+  
+//data members
+    
+      G4AlphaCoulombBarrier theCoulombBarrier;
+
+      G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
 
 
 };
 
+
 #endif
+
