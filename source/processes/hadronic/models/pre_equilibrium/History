@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-August 2008 G.Folger      
+-----------------------------------------------
+Rewrite algorithm in G4PreCompoundEmission::rho() to avoid frequent 
+floating point overflow when using Precompund in combination 
+with Binary Cascade. 
+
 24 July 2008 J. M. Quesada   hadr-pre-V09-01-08
 ---------------------------------------------------
 Minor fixes and Coulomb barrier just for Wellisch's proton cross section 
