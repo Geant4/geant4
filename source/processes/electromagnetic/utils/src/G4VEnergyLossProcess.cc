@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.138 2008-09-12 16:13:49 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.139 2008-09-20 19:39:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -210,8 +210,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   (G4LossTableManager::Instance())->Register(this);
   fluctModel = 0;
 
-  scoffRegions.clear();
-  scProcesses.clear();
   scTracks.reserve(5);
   secParticles.reserve(5);
 
@@ -286,10 +284,10 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 
 void G4VEnergyLossProcess::Clear()
 {
-  if(1 < verboseLevel) 
+  if(1 < verboseLevel) { 
     G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() 
-    << G4endl;
-
+	   << G4endl;
+  }
   delete [] theDEDXAtMaxEnergy;
   delete [] theRangeAtMaxEnergy;
   delete [] theEnergyOfCrossSectionMax;
@@ -302,8 +300,9 @@ void G4VEnergyLossProcess::Clear()
   theCrossSectionMax = 0;
   tablesAreBuilt = false;
 
-  scTracks.clear();
+  //scTracks.clear();
   scProcesses.clear();
+  nProcesses = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -311,45 +310,52 @@ void G4VEnergyLossProcess::Clear()
 void 
 G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  // Are particle defined?
-  if( !particle ) {
-    particle = &part;
-    if(part.GetParticleType() == "nucleus") {
-      isIon = true; 
-      if(part.GetParticleSubType() == "generic") {
-	theGenericIon = G4GenericIon::GenericIon();
-	particle = theGenericIon;
-      }
-    }
-  }
-
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
            << GetProcessName()
            << " for " << part.GetParticleName()
-           << " local: " << particle->GetParticleName()
            << G4endl;
   }
-
-  G4LossTableManager* lManager = G4LossTableManager::Instance();
-
-  if(&part != particle) {
-    if(part.GetParticleType() == "nucleus") {
-      lManager->RegisterIon(&part, this);
-      isIon = true;
-    } else {
-      lManager->RegisterExtraParticle(&part, this);
-    }
-    return;
-  }
-
-  Clear();
 
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
   fRange        = DBL_MAX;
   preStepKinEnergy = 0.0;
+  chargeSqRatio = 1.0;
+  massRatio = 1.0;
+  reduceFactor = 1.0;
+
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+
+  // Are particle defined?
+  if( !particle ) {
+    particle = &part;
+    if(part.GetParticleType() == "nucleus") {
+      if(!theGenericIon) theGenericIon = G4GenericIon::GenericIon();
+      if(particle == theGenericIon) { isIon = true; }
+      else if(part.GetPDGCharge() > eplus) {
+	isIon = true; 
+
+	// generic ions created on-fly
+	if(part.GetPDGCharge() > 2.5*eplus) {
+	  particle = theGenericIon;
+	}
+      }
+    }
+  }
+
+  if( particle != &part) {
+    if(part.GetParticleType() == "nucleus") {
+      isIon = true;
+      lManager->RegisterIon(&part, this);
+    } else { 
+      lManager->RegisterExtraParticle(&part, this);
+    }
+    return;
+  }
+
+  Clear();
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
@@ -381,9 +387,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass   = particle->GetPDGMass();
-  chargeSqRatio = 1.0;
-  massRatio = 1.0;
-  reduceFactor = 1.0;
 
   if (baseParticle) {
     massRatio = (baseParticle->GetPDGMass())/initialMass;
@@ -396,9 +399,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 				     minSubRange, verboseLevel);
 
   // Sub Cutoff Regime
-  scProcesses.clear();
-  nProcesses = 0;
-  
   if (nSCoffRegions>0) {
     theSubCuts = modelManager->SubCutoff();
 
@@ -424,6 +424,8 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if (1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Initialise() is done "
+           << " for local " << particle->GetParticleName()
+	   << " isIon= " << isIon
            << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
            << " reduceFactor= " << reduceFactor << G4endl;
@@ -688,8 +690,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
   G4double x = DBL_MAX;
 
-  // initialisation of material, mass, chanrge, model at the beginning of the step
-  //  InitialiseMassCharge(track);
+  // initialisation of material, mass, charge, model at the beginning of the step
   DefineMaterial(track.GetMaterialCutsCouple());
 
   const G4ParticleDefinition* currPart = track.GetDefinition();
@@ -705,12 +706,10 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
       currentModel->GetChargeSquareRatio(currPart,currentMaterial,preStepKinEnergy);
     reduceFactor  = 1.0/(chargeSqRatio*massRatio);
   }
-  //  G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
+  //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
   if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
   if(theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
-
-  //  InitialiseStep(track);
 
   // compute mean free path
   if(preStepScaledEnergy < mfpKinEnergy) {
@@ -723,7 +722,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if(preStepLambda > DBL_MIN) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
-      //G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength Reset" << G4endl;
+      //G4cout<<"G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength Reset"<<G4endl;
       ResetNumberOfInteractionLengthLeft();
     } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
