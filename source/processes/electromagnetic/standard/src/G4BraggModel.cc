@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.18 2008-09-14 17:11:48 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.19 2008-09-20 19:38:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,12 +135,9 @@ G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
-  if(isIon) {
-    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-    chargeSquare = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
-    GetModelOfFluctuations()->SetParticleAndCharge(p, chargeSquare);
-  }
-  return chargeSquare;
+  G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
+  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
+  return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

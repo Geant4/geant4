@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.22 2008-09-14 17:11:48 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.23 2008-09-20 19:38:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -158,12 +158,9 @@ G4double G4BetheBlochModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 						 const G4Material* mat,
 						 G4double kineticEnergy)
 {
-  if(isIon) {
-    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-    chargeSquare = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
-    GetModelOfFluctuations()->SetParticleAndCharge(p, chargeSquare);
-  }
-  return chargeSquare;
+  G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
+  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
+  return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -313,6 +310,8 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   const G4ParticleDefinition* p = dp->GetDefinition();
   if(isIon) {
     mass = p->GetPDGMass();
+    G4double q = p->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
     eloss += length*corr->IonHighOrderCorrections(p,couple,preKinEnergy);
   }
   if(nuclearStopping && preKinEnergy*proton_mass_c2/mass < chargeSquare*100.*MeV) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.63 2008-09-14 17:11:48 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.64 2008-09-20 19:38:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,7 @@
 #include "G4ionIonisation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4Alpha.hh"
+//#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
@@ -112,15 +112,14 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   if(!isInitialised) {
 
     theParticle = part;
-    G4String pname = part->GetParticleName();
+    //G4String pname = part->GetParticleName();
 
     // define base particle
     const G4ParticleDefinition* theBaseParticle = 0;
 
-    if(pname == "alpha" || part == ion) theBaseParticle = 0;
-    else if(pname == "He3") theBaseParticle = G4Alpha::Alpha();
-    else if(bpart == 0 && part != ion) theBaseParticle = ion;
-    else theBaseParticle = bpart;
+    if(part == ion)     theBaseParticle = 0;
+    else if(bpart == 0) theBaseParticle = ion;
+    else                theBaseParticle = bpart;
 
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
