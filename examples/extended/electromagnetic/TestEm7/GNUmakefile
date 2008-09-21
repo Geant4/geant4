@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2008-06-11 22:23:38 maire Exp $
+# $Id: GNUmakefile,v 1.11 2008-09-21 16:03:10 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -25,4 +25,4 @@ visclean:
 	rm -f .DAWN_*
 
 histclean:
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/RunAction.o
+	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/Histo.o
