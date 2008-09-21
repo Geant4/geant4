@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.15 2008-09-21 16:03:10 vnivanch Exp $
+# $Id: alpha.mac,v 1.1 2008-09-21 16:03:10 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -17,8 +17,8 @@
 #
 /run/initialize
 #
-/gun/particle proton
-/gun/energy 100 MeV
+/gun/particle alpha
+/gun/energy 400 MeV
 #
 # step limit
 /testem/phys/setCuts 0.5 mm
@@ -26,10 +26,10 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName proton
+/testem/histo/fileName alpha
 /testem/histo/fileType root
-/testem/histo/setHisto 1 100 70 80
-/testem/histo/setHisto 2 100 70 80
+/testem/histo/setHisto 1 100 75 85
+/testem/histo/setHisto 2 100 75 85
 #
 /run/beamOn 1000
 #

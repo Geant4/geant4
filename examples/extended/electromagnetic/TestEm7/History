@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2008-09-21 16:03:10 vnivanch Exp $
+$Id: History,v 1.79 2008-09-21 16:04:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,7 @@ track of all tags.
 
 21-09-08 V.Ivant (testem7-V09-01-11)
 - added macro for alpha incident
+- extended TestEm7.in - added run with alpha 
 - fixed GNUmakefile
 
 22-08-08 V.Ivant (testem7-V09-01-10)
