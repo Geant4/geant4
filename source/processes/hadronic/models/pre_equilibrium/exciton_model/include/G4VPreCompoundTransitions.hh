@@ -24,6 +24,10 @@
 // ********************************************************************
 //
 //J. M. Quesada (May 08). New virtual classes have been added 
+// JMQ (06 September 2008) Also external choices have been added for:
+//                      - "never go back"  hipothesis (useNGB=true) 
+//                      - CEM transition probabilities (useCEMtr=true)  
+
 #ifndef G4VPreCompoundTransitions_hh
 #define G4VPreCompoundTransitions_hh 1
 
@@ -42,6 +46,15 @@ public:
   virtual G4double GetTransitionProb1()=0;
   virtual G4double GetTransitionProb2()=0;
   virtual G4double GetTransitionProb3()=0;
+
+  // for never go back hypothesis (if useNGB=true, default=false)
+  inline void UseNGB(G4bool use){useNGB=use;}
+  //for use of CEM transition probabilities (if useCEMtr=true, defaut false)
+  inline void UseCEMtr(G4bool use){useCEMtr=use;}
+
+protected:
+  G4bool useNGB;
+  G4bool useCEMtr;
 };
 
 #endif

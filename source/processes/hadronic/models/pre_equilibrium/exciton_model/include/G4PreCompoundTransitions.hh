@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.hh,v 1.5 2008-05-08 10:45:21 quesada Exp $
+// $Id: G4PreCompoundTransitions.hh,v 1.6 2008-09-22 10:18:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 // J. M. Quesada . New methods for accessing to individual transition probabilities (landa+, landa-, landa0) from
 // G4PreCompoundModel.cc  
+
 
 #ifndef G4PreCompoundTransitions_h
 #define G4PreCompoundTransitions_h 1
@@ -57,7 +58,7 @@ public:
 
   // Calculates transition probabilities with Delta N = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
 
-  G4PreCompoundTransitions() : TransitionProb1(0.0), TransitionProb2(0.0), TransitionProb3(0.0) {}
+  G4PreCompoundTransitions() : TransitionProb1(0.0), TransitionProb2(0.0), TransitionProb3(0.0){}
 
   virtual ~G4PreCompoundTransitions() {}
 
@@ -84,24 +85,24 @@ private:
   G4double TransitionProb3;
 
 
-//J. M.Quesada (May. 08)
- public:
-// inline G4double GetTransitionProb1() const
- G4double GetTransitionProb1() 
-{
- return TransitionProb1;
-}
-// inline G4double GetTransitionProb2() const
-G4double GetTransitionProb2() 
-{
- return TransitionProb2;
-}
-// inline G4double GetTransitionProb3() const
-G4double GetTransitionProb3() 
-{
- return TransitionProb3;
-}
-//
+  //J. M.Quesada (May. 08)
+public:
+  // inline G4double GetTransitionProb1() const
+  G4double GetTransitionProb1() 
+  {
+    return TransitionProb1;
+  }
+  // inline G4double GetTransitionProb2() const
+  G4double GetTransitionProb2() 
+  {
+    return TransitionProb2;
+  }
+  // inline G4double GetTransitionProb3() const
+  G4double GetTransitionProb3() 
+  {
+    return TransitionProb3;
+  }
+
 };
 
 #endif

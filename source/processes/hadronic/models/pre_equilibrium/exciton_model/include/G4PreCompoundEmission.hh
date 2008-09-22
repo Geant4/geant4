@@ -23,11 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh,v 1.5 2008-08-11 16:48:44 gunter Exp $
+// $Id: G4PreCompoundEmission.hh,v 1.6 2008-09-22 10:18:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 
 #ifndef G4PreCompoundEmission_h
 #define G4PreCompoundEmission_h 1
@@ -76,9 +81,16 @@ private:
 
   G4double rho(const G4double p, const G4double h, const G4double g, 
 	       const G4double E, const G4double Ef) const;
-	       
+
   G4double factorial(G4double a) const;
-  
+
+  //for inverse cross section choice
+public:
+  inline void SetOPTxs(G4int);
+  //for superimposed CoulomBarrier for inverse cross sections
+  inline void UseSICB(G4bool);
+
+
   //==============
   // Data Members
   //==============

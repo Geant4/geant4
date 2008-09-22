@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.6 2008-05-08 10:34:54 quesada Exp $
+// $Id: G4VPreCompoundFragment.icc,v 1.7 2008-09-22 10:18:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
-//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  (NOW implicitely included through cross sections)
-// because of inheritance (just in case..) by HETC classes. They are not activated by default.
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option 
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 
 inline G4double G4VPreCompoundFragment::GetA() const 
 { 
@@ -138,3 +140,16 @@ inline void G4VPreCompoundFragment::IncrementStage()
   theStage++;
 }
 
+//for inverse cross section choice
+inline void G4VPreCompoundFragment::SetOPTxs(G4int opt)
+{
+  OPTxs=opt;
+  return;
+}
+
+//for superimposed Coulomb Barrier for inverse cross sections
+inline void G4VPreCompoundFragment::UseSICB(G4bool use)
+{
+  useSICB=use;
+  return;
+}

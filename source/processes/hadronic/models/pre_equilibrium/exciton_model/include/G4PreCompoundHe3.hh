@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundHe3.hh,v 1.9 2008-07-23 18:25:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // by V. Lara
 //
-//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed Coulomb barrier , GetAlpha and GetBeta methods
+//J. M. Quesada (July 08) 
 
 #ifndef G4PreCompoundHe3_h
 #define G4PreCompoundHe3_h 1
@@ -38,6 +34,7 @@
 #include "G4ReactionProduct.hh"
 #include "G4He3.hh"
 #include "G4He3CoulombBarrier.hh"
+#include "G4PreCompoundParameters.hh"
 
 class G4PreCompoundHe3 : public G4PreCompoundIon
 {
@@ -65,52 +62,44 @@ public:
   { return G4PreCompoundIon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4He3::He3Definition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }   
-    
-private:
-
-//JMQ (Sep. 07) combinatorial factor Rj
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2);
-    if(NumberCharged >=2 && (NumberParticles-NumberCharged) >= 1) rj = 3.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged))/static_cast<G4double>(denominator);  //re-recorrected JMQ 03/10/07
-
-    return rj;
-  }
-
-
-  virtual G4double FactorialFactor(const G4double N, const G4double P)
-  {
-    return 
-      (N-3.0)*(P-2.0)*(
-		       (((N-2.0)*(P-1.0))/2.0) *(
-						 (((N-1.0)*P)/3.0) 
-						 )
-		       );
-  }
-
-  virtual G4double CoalescenceFactor(const G4double A)
-  {
-    return 243.0/(A*A);
-  }    
-
-private:
-
-  G4He3CoulombBarrier theHe3CoulombBarrier;
-
-};
-
-#endif
+  G4ReactionProduct * GetReactionProduct() const;
  
 
+private:
+
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
+
+  virtual G4double CrossSection(const  G4double K) ; 
+
+  virtual G4double FactorialFactor(const G4double N, const G4double P);
+
+  virtual G4double CoalescenceFactor(const G4double A);
+
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt12(const G4double K);
+  G4double GetOpt34(const G4double K);
+
+  G4double GetAlpha();
+  
+  G4double GetBeta();
+
+//data members
+
+      G4He3CoulombBarrier theHe3CoulombBarrier;
+        G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
+};
+#endif
+
+
+
+
+
+ 

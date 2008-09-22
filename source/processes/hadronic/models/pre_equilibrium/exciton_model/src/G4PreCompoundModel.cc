@@ -24,14 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.15 2008-07-24 13:52:42 quesada Exp $
+// $Id: G4PreCompoundModel.cc,v 1.16 2008-09-22 10:18:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 //
 //J. M. Quesada (Apr.08). Several changes. Soft cut-off switched off. 
-//(May. 08) Protection against non-fisical preeq. transitional regime has 
+//(May. 08). Protection against non-physical preeq. transitional regime has 
 // been set
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option
+// JMQ (06 September 2008) Also external choices have been added for:
+//                      - superimposed Coulomb barrier (useSICB=true) 
+//                      - "never go back"  hipothesis (useNGB=true) 
+//                      - soft cutoff from preeq. to equlibrium (useSCO=true)
+//                      - CEM transition probabilities (useCEMtr=true)  
+
 
 #include "G4PreCompoundModel.hh"
 #include "G4PreCompoundEmission.hh"
@@ -179,7 +188,22 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   G4PreCompoundEmission aEmission;
   if (useHETCEmission) aEmission.SetHETCModel();
   aEmission.SetUp(theInitialState);
-
+  
+  //for cross section options
+  
+  if (OPTxs!= 0 && OPTxs!=1 && OPTxs !=2 && OPTxs !=3 && OPTxs !=4  ) {
+    std::ostringstream errOs;
+    errOs << "BAD CROSS SECTION OPTION in G4PreCompoundModel.cc !!"  <<G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());}
+  else aEmission.SetOPTxs(OPTxs); 
+  
+  //for the choice of superimposed Coulomb Barrier for inverse cross sections
+  
+   aEmission.UseSICB(useSICB);
+ 
+  
+  //----------
+  
   G4VPreCompoundTransitions * aTransition = 0;
   if (useGNASHTransition) 
     {
@@ -188,91 +212,95 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   else 
     {
       aTransition = new G4PreCompoundTransitions;
+      // for the choice of "never go back" hypothesis and CEM transition probabilities  
+      if (useNGB) aTransition->UseNGB(useNGB);
+      if (useCEMtr) aTransition->UseCEMtr(useCEMtr);
     }
-
-
+  
   // Main loop. It is performed until equilibrium deexcitation.
-//G4int fragment=0;
-
+  //G4int fragment=0;
+  
   for (;;) {
-
-//fragment++;
-//G4cout<<"-------------------------------------------------------------------"<<G4endl;
-//G4cout<<"Fragment number .. "<<fragment<<G4endl;
-
+    
+    //fragment++;
+    //G4cout<<"-------------------------------------------------------------------"<<G4endl;
+    //G4cout<<"Fragment number .. "<<fragment<<G4endl;
+    
     // Initialize fragment according with the nucleus parameters
     aEmission.Initialize(aFragment);
-
- 
+    
+    
     
     G4double g = (6.0/pi2)*aFragment.GetA()*
       G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-
-
-
-
+    
+    
+    
+    
     G4int EquilibriumExcitonNumber = static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())+ 0.5);
 //   
 //    G4cout<<"Neq="<<EquilibriumExcitonNumber<<G4endl;
 //
 // J. M. Quesada (Jan. 08)  equilibrium hole number could be used as preeq.- evap. delimiter (IAEA report)
 //    G4int EquilibriumHoleNumber = static_cast<G4int>(0.2*std::sqrt(g*aFragment.GetExcitationEnergy())+ 0.5);
-
+    
 // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
-
-//        G4cout<<"----------------------------------------"<<G4endl;
-//        G4double NP=aFragment.GetNumberOfParticles();
-//        G4double NH=aFragment.GetNumberOfHoles();
-//        G4double NE=aFragment.GetNumberOfExcitons();
-//        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
-//       G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
+    
+    //        G4cout<<"----------------------------------------"<<G4endl;
+    //        G4double NP=aFragment.GetNumberOfParticles();
+    //        G4double NH=aFragment.GetNumberOfHoles();
+    //        G4double NE=aFragment.GetNumberOfExcitons();
+    //        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
+    //        G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
         
-
-//G4int transition=0;
+    
+    //G4int transition=0;
     do 
       {
-//transition++;
-//G4cout<<"transition number .."<<transition<<G4endl;
-//G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
+        //transition++;
+        //G4cout<<"transition number .."<<transition<<G4endl;
+        //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
         G4bool go_ahead = false;
-// soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
-//       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
-     G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
-
-//J. M. Quesada (Apr. 08): soft-cutoff switched off
+        // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
+        //       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
+        G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
+        
+        
         if (test < EquilibriumExcitonNumber) go_ahead=true;
-
-//if (test < EquilibriumExcitonNumber)
-//        if (test < EquilibriumHoleNumber)
-//          {
-//            test /= static_cast<G4double>(EquilibriumExcitonNumber); 
-//           test /= static_cast<G4double>(EquilibriumHoleNumber);
-//            test -= 1.0;
-//            test = test*test;
-//            test /= 0.32;
-//            test = 1.0 - std::exp(-test);
-//            go_ahead = (G4UniformRand() < test);
-//
-//          }
-
-//JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! (O values would be returned otherwise)
+        //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
+        if (useSCO) {
+          if (test < EquilibriumExcitonNumber)
+            //  if (test < EquilibriumHoleNumber)
+            {
+              test /= static_cast<G4double>(EquilibriumExcitonNumber); 
+              //     test /= static_cast<G4double>(EquilibriumHoleNumber);
+              test -= 1.0;
+              test = test*test;
+              test /= 0.32;
+              test = 1.0 - std::exp(-test);
+              go_ahead = (G4UniformRand() < test);
+              
+            }
+        } 
+        
+        //JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! (O values would be returned otherwise)
         G4double TotalTransitionProbability = aTransition->CalculateProbability(aFragment);
         G4double P1=aTransition->GetTransitionProb1();
         G4double P2=aTransition->GetTransitionProb2();
         G4double P3=aTransition->GetTransitionProb3();
-//       G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
-
-
-//J.M. Quesada (May. 08). Physical criterium (landas)  PREVAILS over approximation (critical exciton number)
+        //       G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
+        
+        
+        //J.M. Quesada (May. 08). Physical criterium (lamdas)  PREVAILS over approximation (critical exciton number)
         if(P1<=(P2+P3)) go_ahead=false;
-      
+        
         if (go_ahead &&  aFragment.GetA() > 4)
 	  {				
 	    G4double TotalEmissionProbability = aEmission.GetTotalProbability(aFragment);
-//
-//  G4cout<<"TotalEmissionProbability="<<TotalEmissionProbability<<G4endl;
-//
+            //
+            //  G4cout<<"TotalEmissionProbability="<<TotalEmissionProbability<<G4endl;
+            //
 	    // Check if number of excitons is greater than 0
 	    // else perform equilibrium emission
 	    if (aFragment.GetNumberOfExcitons() <= 0) 
@@ -287,14 +315,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	      }
 	    
 	    //	    G4PreCompoundTransitions aTransition(aFragment);
-	
-//J.M.Quesada (May 08) this has already been done in order to decide what to do (preeq-eq) 
+            
+            //J.M.Quesada (May 08) this has already been done in order to decide what to do (preeq-eq) 
 	    // Sum of transition probabilities
-//	    G4double TotalTransitionProbability = aTransition->CalculateProbability(aFragment);
-	
+            //	    G4double TotalTransitionProbability = aTransition->CalculateProbability(aFragment);
+            
 	    // Sum of all probabilities
 	    G4double TotalProbability = TotalEmissionProbability + TotalTransitionProbability;
-	
+            
 	    // Select subprocess
 	    if (G4UniformRand() > TotalEmissionProbability/TotalProbability) 
 	      {
@@ -331,6 +359,7 @@ void G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment
 						    G4ReactionProductVector * Result) const 
 {
   G4ReactionProductVector * theEquilibriumResult;
+
   theEquilibriumResult = GetExcitationHandler()->BreakItUp(aFragment);
   
   Result->insert(Result->end(),theEquilibriumResult->begin(), theEquilibriumResult->end());
@@ -396,5 +425,6 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
 }
 
 #endif
+
 
 

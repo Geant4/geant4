@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//J. M. Quesada (August 2008).  
+//Based  on previous work by V. Lara
 //
-// $Id: G4VPreCompoundFragment.hh,v 1.7 2008-07-24 13:53:32 quesada Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// by V. Lara
-//
-//J. M. Quesada (May. 2008) . Coulomb barrier has been kept  
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option 
+// JMQ (06 September 2008) Also external choice has been added for:
+//                      - superimposed Coulomb barrier (if useSICB=true) 
 
 
 #ifndef G4VPreCompoundFragment_h
@@ -62,11 +62,6 @@ public:
   G4VPreCompoundFragment(const G4double anA, const G4double aZ,
 			 G4VCoulombBarrier * aCoulombBarrier,
 			 const G4String &  aName);
-
-
-//JMQ (May 08): new  constructor to be used by new G4PrecompoundFragment class (without coulomb barrier)
-// G4VPreCompoundFragment(const G4double anA, const G4double aZ, const G4String &  aName);
-
 
   
   virtual ~G4VPreCompoundFragment();
@@ -143,6 +138,12 @@ public:
 
   inline void IncrementStage();
 
+  //for inverse cross section choice
+  inline void SetOPTxs(G4int);
+  //for superimposed Coulomb Barrier for inverse cross sections
+  inline void UseSICB(G4bool);
+
+
 
   // =============
   // Data members
@@ -177,8 +178,11 @@ private:
 
   G4int theStage; 
 
-  //JMQ new boolean variable for control 
-  G4bool G4Prec;   
+protected:
+//for inverse cross section choice
+  G4int OPTxs;
+//for superimposed Coulomb Barrier for inverse cross sections
+  G4bool useSICB;
 };
 
 #include "G4VPreCompoundFragment.icc"

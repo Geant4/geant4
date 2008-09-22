@@ -24,13 +24,7 @@
 // ********************************************************************
 //
 //
-
-// $Id: G4PreCompoundProton.hh,v 1.11 2008-07-24 13:53:32 quesada Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// by V. Lara
-//
-//J. M. Quesada (Dic. 07) Added combinatorial factor Rj. Removed  GetAlpha and GetBeta methods
+//J. M. Quesada (July 08) 
 
 #ifndef G4PreCompoundProton_h
 #define G4PreCompoundProton_h 1
@@ -68,39 +62,39 @@ public:
   { return G4PreCompoundNucleon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Proton::ProtonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
-#endif
-    return theReactionProduct;
-  }
+  G4ReactionProduct * GetReactionProduct() const;
+ 
   
 private:
 
 //JMQ (Sep. 07) combinatorial factor Rj
-  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    if(NumberParticles > 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
-    return rj;
-  }
+  virtual G4double GetRj(const G4int NumberParticles, const G4int NumberCharged);
 
+  virtual G4double CrossSection(const  G4double K) ; 
+
+
+  G4double GetOpt0(const G4double K);
+  G4double GetOpt1(const G4double K);
+  G4double GetOpt2(const G4double K);
+  G4double GetOpt3(const G4double K);
+
+  G4double GetAlpha();
   
-  virtual G4bool IsItPossible(const G4Fragment& aFragment)
-  {
-    return (aFragment.GetNumberOfCharged() >= 1);
-  }
-private:
+  G4double GetBeta();
 
-  G4ProtonCoulombBarrier theProtonCoulombBarrier;
+//data members
 
-  
+      G4ProtonCoulombBarrier theProtonCoulombBarrier;
+       G4double ResidualA;
+      G4double ResidualZ; 
+      G4double theA;
+      G4double theZ;
+      G4double ResidualAthrd;
+      G4double FragmentA;
+      G4double FragmentAthrd;
+
+
+ 
 };
-
 #endif
  

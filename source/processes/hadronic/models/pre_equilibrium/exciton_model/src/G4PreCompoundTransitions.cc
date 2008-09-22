@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.17 2008-07-24 13:52:42 quesada Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// by V. Lara
-//
-//J. M. Quesada (Feb. 08). New transition probabilities. Several bugs fixed.
-
+//J. M. Quesada (Feb. 08). Base on previous work by V. Lara.
+// New transition probabilities. Several bugs fixed.
+// JMQ (06 September 2008) Also external choices have been added for:
+//                      - "never go back"  hipothesis (useNGB=true) 
+//                      -  CEM transition probabilities (useCEMtr=true)
 #include "G4PreCompoundTransitions.hh"
 #include "G4HadronicException.hh"
 
@@ -56,6 +54,8 @@ G4bool G4PreCompoundTransitions::operator!=(const G4PreCompoundTransitions &) co
 G4double G4PreCompoundTransitions::
 CalculateProbability(const G4Fragment & aFragment)
 {
+  //G4cout<<"In G4PreCompoundTransitions.cc  useNGB="<<useNGB<<G4endl;
+  //G4cout<<"In G4PreCompoundTransitions.cc  useCEMtr="<<useCEMtr<<G4endl;
 
   // Fermi energy
   const G4double FermiEnergy = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
@@ -76,142 +76,144 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double A = aFragment.GetA();
   G4double Z = static_cast<G4double>(aFragment.GetZ());
   G4double U = aFragment.GetExcitationEnergy();
-
-
-//J. M. Quesada (Feb. 08) new physics
-// OPT=1 Transitions are calculated according to Gudima's paper (original in G4PreCompound from VL) 
-// OPT=2 Transitions are calculated according to Gupta's formulae
-//
-// default OPT=2
-        G4int OPT=2;
-
-
-     if (OPT==1){
-
-
-  // Relative Energy (T_{rel})
-  G4double RelativeEnergy = (8.0/5.0)*FermiEnergy + U/N;
   
-  // Sample kind of nucleon-projectile 
-  G4bool ChargedNucleon(false);
-  G4double chtest = 0.5;
-  if (P > 0) chtest = aFragment.GetNumberOfCharged()/P;
-  if (G4UniformRand() < chtest) ChargedNucleon = true;
-
-  // Relative Velocity: 
-  // <V_{rel}>^2
-  G4double RelativeVelocitySqr(0.0);
-  if (ChargedNucleon) RelativeVelocitySqr = 2.0*RelativeEnergy/proton_mass_c2;
-  else RelativeVelocitySqr = 2.0*RelativeEnergy/neutron_mass_c2;
-
-  // <V_{rel}>
-  G4double RelativeVelocity = std::sqrt(RelativeVelocitySqr);
-
-  // Proton-Proton Cross Section
-  G4double ppXSection = (10.63/RelativeVelocitySqr - 29.92/RelativeVelocity + 42.9)*millibarn;
-  // Proton-Neutron Cross Section
-  G4double npXSection = (34.10/RelativeVelocitySqr - 82.20/RelativeVelocity + 82.2)*millibarn;
   
-  // Averaged Cross Section: \sigma(V_{rel})
-  //  G4double AveragedXSection = (ppXSection+npXSection)/2.0;
-  G4double AveragedXSection(0.0);
-  if (ChargedNucleon)
-    {
-//JMQ: small bug fixed
-//      AveragedXSection = ((Z-1.0) * ppXSection + (A-Z-1.0) * npXSection) / (A-1.0);
-     AveragedXSection = ((Z-1.0) * ppXSection + (A-Z) * npXSection) / (A-1.0);
-    }
-  else 
-    {
-      AveragedXSection = ((A-Z-1.0) * ppXSection + Z * npXSection) / (A-1.0);
-    }
-
-  // Fermi relative energy ratio
-  G4double FermiRelRatio = FermiEnergy/RelativeEnergy;
-
-  // This factor is introduced to take into account the Pauli principle
-  G4double PauliFactor = 1.0 - (7.0/5.0)*FermiRelRatio;
-  if (FermiRelRatio > 0.5) PauliFactor += (2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
-
-  // Interaction volume 
-  G4double Vint = (4.0/3.0)*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
-
-  // Transition probability for \Delta n = +2
-
-  TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
-  if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
-
-  G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  // GE = g*E where E is Excitation Energy
-  G4double GE = (6.0/pi2)*a*A*U;
-
-  G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
-
-  G4bool NeverGoBack(false);
-
-
-  //JMQ/AH  bug fixed: if (U-Fph < 0.0) NeverGoBack = true;
-  if (GE-Fph < 0.0) NeverGoBack = true;
-
-  // F(p+1,h+1)
-  G4double Fph1 = Fph + N/2.0;
+  //J. M. Quesada (Feb. 08) new physics
+  // OPT=1 Transitions are calculated according to Gudima's paper (original in G4PreCompound from VL) 
+  // OPT=2 Transitions are calculated according to Gupta's formulae
+  //
   
-  G4double ProbFactor = std::pow((GE-Fph)/(GE-Fph1),N+1.0);
+  
+  
+  if (useCEMtr){
 
-
-  if (NeverGoBack)
-    {
+    
+    // Relative Energy (T_{rel})
+    G4double RelativeEnergy = (8.0/5.0)*FermiEnergy + U/N;
+    
+    // Sample kind of nucleon-projectile 
+    G4bool ChargedNucleon(false);
+    G4double chtest = 0.5;
+    if (P > 0) chtest = aFragment.GetNumberOfCharged()/P;
+    if (G4UniformRand() < chtest) ChargedNucleon = true;
+    
+    // Relative Velocity: 
+    // <V_{rel}>^2
+    G4double RelativeVelocitySqr(0.0);
+    if (ChargedNucleon) RelativeVelocitySqr = 2.0*RelativeEnergy/proton_mass_c2;
+    else RelativeVelocitySqr = 2.0*RelativeEnergy/neutron_mass_c2;
+    
+    // <V_{rel}>
+    G4double RelativeVelocity = std::sqrt(RelativeVelocitySqr);
+    
+    // Proton-Proton Cross Section
+    G4double ppXSection = (10.63/RelativeVelocitySqr - 29.92/RelativeVelocity + 42.9)*millibarn;
+    // Proton-Neutron Cross Section
+    G4double npXSection = (34.10/RelativeVelocitySqr - 82.20/RelativeVelocity + 82.2)*millibarn;
+    
+    // Averaged Cross Section: \sigma(V_{rel})
+    //  G4double AveragedXSection = (ppXSection+npXSection)/2.0;
+    G4double AveragedXSection(0.0);
+    if (ChargedNucleon)
+      {
+        //JMQ: small bug fixed
+        //      AveragedXSection = ((Z-1.0) * ppXSection + (A-Z-1.0) * npXSection) / (A-1.0);
+        AveragedXSection = ((Z-1.0) * ppXSection + (A-Z) * npXSection) / (A-1.0);
+      }
+    else 
+      {
+        AveragedXSection = ((A-Z-1.0) * ppXSection + Z * npXSection) / (A-1.0);
+      }
+    
+    // Fermi relative energy ratio
+    G4double FermiRelRatio = FermiEnergy/RelativeEnergy;
+    
+    // This factor is introduced to take into account the Pauli principle
+    G4double PauliFactor = 1.0 - (7.0/5.0)*FermiRelRatio;
+    if (FermiRelRatio > 0.5) PauliFactor += (2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
+    
+    // Interaction volume 
+    //  G4double Vint = (4.0/3.0)*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
+    G4double xx=2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity);
+    G4double Vint = (4.0/3.0)*pi*xx*xx*xx;
+    
+    // Transition probability for \Delta n = +2
+    
+    TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
+    if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
+    
+    G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+    // GE = g*E where E is Excitation Energy
+    G4double GE = (6.0/pi2)*a*A*U;
+    
+    G4double Fph = ((P*P+H*H+P-H)/4.0 - H/2.0);
+    
+    //G4bool NeverGoBack(false);
+    G4bool NeverGoBack;
+    if(useNGB)  NeverGoBack=true;
+    else NeverGoBack=false;
+    
+    
+    //JMQ/AH  bug fixed: if (U-Fph < 0.0) NeverGoBack = true;
+    if (GE-Fph < 0.0) NeverGoBack = true;
+    
+    // F(p+1,h+1)
+    G4double Fph1 = Fph + N/2.0;
+    
+    G4double ProbFactor = std::pow((GE-Fph)/(GE-Fph1),N+1.0);
+    
+    
+    if (NeverGoBack)
+      {
       TransitionProb2 = 0.0;
       TransitionProb3 = 0.0;
-    }
-  else 
-    {
-      // Transition probability for \Delta n = -2 (at F(p,h) = 0)
-      TransitionProb2 = TransitionProb1 * ProbFactor * (P*H*(N+1.0)*(N-2.0))/((GE-Fph)*(GE-Fph));
-      if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
-      
-      // Transition probability for \Delta n = 0 (at F(p,h) = 0)
-      TransitionProb3 = TransitionProb1* ((N+1.0)/N) * ProbFactor  * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
-      if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
-    }
-
-//  G4cout<<"U = "<<U<<G4endl;
-//  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
-//  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
-  return TransitionProb1 + TransitionProb2 + TransitionProb3;}
-
-else if (OPT==2) {
-
-  G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-  // GE = g*E where E is Excitation Energy
-  G4double GE = (6.0/pi2)*a*A*U;
-
-G4double Kmfp=2.;
-
-       TransitionProb1=1./Kmfp*3./8.*1./c_light*std::pow(10.,-9.)*(1.4 *std::pow(10.,21.)*U-2./(N+1)*6.*std::pow(10.,18.)* std::pow(U,2.));
-     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0;
-
+      }
+    else 
+      {
+        // Transition probability for \Delta n = -2 (at F(p,h) = 0)
+        TransitionProb2 = TransitionProb1 * ProbFactor * (P*H*(N+1.0)*(N-2.0))/((GE-Fph)*(GE-Fph));
+        if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
+        
+        // Transition probability for \Delta n = 0 (at F(p,h) = 0)
+        TransitionProb3 = TransitionProb1* ((N+1.0)/N) * ProbFactor  * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
+        if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
+      }
+    
+    //  G4cout<<"U = "<<U<<G4endl;
+    //  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
+    //  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
+    return TransitionProb1 + TransitionProb2 + TransitionProb3;}
   
-      if (N<=1) TransitionProb2=0. ;
-     else  TransitionProb2=1./Kmfp*3./8.*1./c_light*std::pow(10.,-9.)*(N-1.)*(N-2.)*P*H/
-std::pow(GE,2.)*(1.4*std::pow(10.,21.)*U - 2./(N-1)*6.*std::pow(10.,18.)*std::pow(U,2.));
-
-      if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
-
+  else  {
+    //JMQ: Transition probabilities from Gupta's work
+    
+    G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+    // GE = g*E where E is Excitation Energy
+    G4double GE = (6.0/pi2)*a*A*U;
+    
+    G4double Kmfp=2.;
+     
+    
+    TransitionProb1=1./Kmfp*3./8.*1./c_light*1.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U);
+    if (TransitionProb1 < 0.0) TransitionProb1 = 0.0;
+    
+    if (useNGB){
+      TransitionProb2=0.;
       TransitionProb3=0.;
-
-//  G4cout<<"U = "<<U<<G4endl;
-//  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
-//  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
-  return TransitionProb1 + TransitionProb2 + TransitionProb3;
     }
+    else{        
+      if (N<=1) TransitionProb2=0. ;    
+      else  TransitionProb2=1./Kmfp*3./8.*1./c_light*1.0e-9*(N-1.)*(N-2.)*P*H/(GE*GE)*(1.4e+21*U - 2./(N-1)*6.0e+18*U*U);      
+      if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
+      TransitionProb3=0.;
+    }
+    
+      //  G4cout<<"U = "<<U<<G4endl;
+    //  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
+    //  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
+    return TransitionProb1 + TransitionProb2 + TransitionProb3;
+  }
 
-else {
-std::ostringstream errOs;
-      errOs << "BAD TRANSITION PROBABILITIES  OPTION !!"  <<G4endl;
-     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-return 0.;
-}
 
 }
 
@@ -242,7 +244,7 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
   result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
   result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
 
- // With weight Z/A, number of charged particles is INcreased on +1
+ // With weight Z/A, number of charged particles is increased with +1
   if ( ( deltaN > 0 ) &&
       (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
 		  std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))

@@ -14,7 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19-August 2008 A.Howard   hadr-pre-V09-01-09
+22-September 2008 A.Howard   hadr-pre-V09-01-10
+---------------------------------------------------
+JMQ's latest developments - which are an extension of hadr-pre-V09-01-08 with
+cross-section options (equivalent to the de-excitation modifications) and other
+options (SICB, Never Go Back,...).  In addition Gunter's fix to the factorials
+is included from hadr-pre-V09-01-09.
+Added new files: G4PreCompoundAlpha.cc G4PreCompoundDeuteron.cc
+G4PreCompoundHe3.cc G4PreCompoundNeutron.cc G4PreCompoundProton.cc
+G4PreCompoundTriton.cc (Classes previously existed.  Now they have more 
+involved cross-section calculations).
+
+19-September 2008 A.Howard   hadr-pre-V09-01-09
 ---------------------------------------------------
 Including Gunter's fix (see 11-August below) on top of ref-07 
 (hadr-pre-V09-00-04), i.e. without JMQ's developments.

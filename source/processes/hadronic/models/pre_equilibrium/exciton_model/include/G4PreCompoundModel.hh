@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.5 2008-05-08 10:28:50 quesada Exp $
+// $Id: G4PreCompoundModel.hh,v 1.6 2008-09-22 10:18:36 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -35,6 +35,14 @@
 // Can be used as a stand-allone model, but also in conjunction with an intra-nuclear
 // transport, or any of the string-parton models.
 // Class Description - End
+//
+// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
+// cross section option.(default OPTxs=3)
+// JMQ (06 September 2008) Also external choices have been added for:
+//                - superimposed Coulomb barrier (if useSICB=true, default false) 
+//                - "never go back"  hipothesis (if useNGB=true, default false) 
+//                - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
+//                - CEM transition probabilities (if useCEMtr=true, default false)  
 
 #ifndef G4PreCompoundModel_h
 #define G4PreCompoundModel_h 1
@@ -49,6 +57,7 @@
 #include "G4Fragment.hh"
 #include "Randomize.hh"
 
+//#include "G4PreCompoundEmission.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4ReactionProductVector.hh"
@@ -61,10 +70,11 @@
 
 class G4PreCompoundModel : public G4VPreCompoundModel
 {
+ 
 public:
-    
   G4PreCompoundModel(G4ExcitationHandler * const value) : 
-    G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false) {}
+    G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
+    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(false) {}
 
   ~G4PreCompoundModel() {}
 
@@ -94,6 +104,13 @@ public:
   inline void UseGNASHTransition() { useGNASHTransition = true; }
   inline void UseDefaultTransition() { useGNASHTransition = false; }
 
+ //for cross section selection
+  inline void SetOPTxs(G4int opt) { OPTxs = opt; }
+//for the rest of external choices
+  inline void UseSICB() { useSICB = true; }
+  inline void UseNGB()  { useNGB = true; }
+  inline void UseSCO()  { useSCO = true; }
+  inline void UseCEMtr() { useCEMtr = true; }
 private:  
 
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
@@ -111,8 +128,20 @@ private:
   // Data Members 
   //==============
 
+
+
   G4bool           useHETCEmission;
   G4bool           useGNASHTransition;
+
+//for cross section options
+  G4int OPTxs;
+//for the rest of external choices
+  G4bool useSICB;
+  G4bool useNGB;
+  G4bool useSCO;
+  G4bool useCEMtr;
+
+
     G4HadFinalState theResult;
 
 #ifdef PRECOMPOUND_TEST
