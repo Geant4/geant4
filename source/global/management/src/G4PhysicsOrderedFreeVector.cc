@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.10 2006-06-29 19:04:20 gunter Exp $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -60,14 +60,12 @@
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
                                                        G4double *Values,
                                                        size_t VectorLength)
+  : G4PhysicsVector()
 {
         type = T_G4PhysicsOrderedFreeVector;
 
-        lastBin = INT_MAX;
-
-        lastEnergy = -DBL_MAX;
-        lastValue = DBL_MAX;
-
+        dataVector.reserve(VectorLength+1);
+        binVector.reserve(VectorLength+1); 
         numberOfBin = VectorLength;
 
         for (size_t i = 0 ; i < VectorLength ; i++)
@@ -77,19 +75,14 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
         }
         edgeMin = binVector.front();
         edgeMax = binVector.back();
+	binVector.push_back ( binVector[numberOfBin-1] + 1.0 );
+	dataVector.push_back( dataVector[numberOfBin-1] );
 }
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
+  : G4PhysicsVector()
 {
         type = T_G4PhysicsOrderedFreeVector;
-
-        lastBin = INT_MAX;
-        lastEnergy = -DBL_MAX;
-        lastValue = DBL_MAX;
-
-        edgeMin = 0.0;
-        edgeMax = 0.0;
-        numberOfBin = 0;
 }
 
         ////////////////
@@ -160,4 +153,22 @@ G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue,
 
   return binVector[theLocBin] +
          ( binVector[theLocBin+1]-binVector[theLocBin] ) * intplFactor;
+}
+
+G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(
+    const G4PhysicsOrderedFreeVector& right)
+  : G4PhysicsVector(right)
+{}
+
+G4PhysicsOrderedFreeVector& 
+G4PhysicsOrderedFreeVector::operator=(const G4PhysicsOrderedFreeVector& right)
+{
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  return *this;
 }

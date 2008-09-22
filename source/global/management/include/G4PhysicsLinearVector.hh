@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.10 2006-06-29 19:02:21 gunter Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,6 +71,10 @@ class G4PhysicsLinearVector : public G4PhysicsVector
 
     ~G4PhysicsLinearVector();
       // Destructor
+
+    G4PhysicsLinearVector(const G4PhysicsLinearVector&);
+    G4PhysicsLinearVector& operator=(const G4PhysicsLinearVector&);
+      // Copy constructor and assignment operator.
 
     G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
 

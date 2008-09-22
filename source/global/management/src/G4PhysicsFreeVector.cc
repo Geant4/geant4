@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.10 2006-06-29 19:04:10 gunter Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,16 +46,14 @@
 #include "G4PhysicsFreeVector.hh"
 
 
-G4PhysicsFreeVector::G4PhysicsFreeVector()
+G4PhysicsFreeVector::G4PhysicsFreeVector() 
+  : G4PhysicsVector()
 {
-  edgeMin = 0.0;
-  edgeMax = 0.0;
-  numberOfBin = 0;
   type = T_G4PhysicsFreeVector;
 }
 
-
 G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsFreeVector;
   numberOfBin = theNbin;
@@ -70,15 +68,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
   }
-
-  edgeMin = 0.;
-  edgeMax = 0.;
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
 }  
-
 
 G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector, 
                                          const G4DataVector& theDataVector)
@@ -110,15 +100,9 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
 
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfBin-1];
-
-  lastBin = INT_MAX;
-  lastEnergy = -DBL_MAX;
-  lastValue = DBL_MAX;
 }  
 
-
 G4PhysicsFreeVector::~G4PhysicsFreeVector(){}
-
 
 void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue, 
                                     G4double theDataValue )
@@ -147,3 +131,21 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue,
      edgeMin = binVector[0];
   }
 }
+
+G4PhysicsFreeVector::G4PhysicsFreeVector(const G4PhysicsFreeVector& right)
+  : G4PhysicsVector(right)
+{}
+
+G4PhysicsFreeVector& 
+G4PhysicsFreeVector::operator=(const G4PhysicsFreeVector& right)
+{
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  return *this;
+}
+
