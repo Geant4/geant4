@@ -23,81 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4INUCL_PARTICLE_HH
-#define G4INUCL_PARTICLE_HH
+// $Id: G4CascadeMomentum.hh,v 1.1 2008-09-22 10:06:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// Class G4CascadeMomentum
+//
+// Class description:
+//
+// A simple wrapper class meant to replace the widespread use of
+// std::vector<double> in the cascade mode code, which causes
+// problems for performance due to excess memory allocations.
 
-#ifndef GLOB
-#include "globals.hh"
+// Author: Peter Elmer, Princeton University                  7-Aug-2008
+// --------------------------------------------------------------------
+#ifndef G4CASCADE_MOMENTUM_HH
+#define G4CASCADE_MOMENTUM_HH
+
+#include <cassert>
+
+#include "G4Types.hh"
+
+class G4CascadeMomentum
+{
+  public:
+
+    G4CascadeMomentum() {for (int i=0; i<4; ++i) data_[i]=0.0;}
+
+    G4double& operator[](int i)
+    {
+      assert(i>=0 && i<4);
+      return data_[i];
+    }
+    const G4double& operator[](int i) const
+    {
+      assert(i>=0 && i<4);
+      return data_[i];
+    }
+
+  private:
+
+    G4double data_[4];
+};
 #endif
 
-#include <iostream>
-#include <vector>
-#include "G4CascadeMomentum.hh"
-
-// Notice: no cc-file for G4InuclParticle
-
-class G4InuclParticle {
-
-public:
-  G4InuclParticle() {
-    setModel(0); // default model
-  };
-
-  virtual ~G4InuclParticle() { };
- 
-  G4InuclParticle(const G4CascadeMomentum& mom) {
-    setMomentum(mom);
-    setModel(0);
-  };
-
-  void setMomentum(const G4CascadeMomentum& mom) {
-    momentum = mom;
-  };
-
-
-  const G4CascadeMomentum& getMomentum() const { 
-    return momentum; 
-  };
-
-  G4double getMomModule() const { 
-    return std::sqrt(momentum[1] * momentum[1] +
-		     momentum[2] * momentum[2] + 
-		     momentum[3] * momentum[3]); 
-  };
-   
-  virtual void printParticle() const {
-    G4cout << " px " << momentum[1] << " py " << momentum[2] <<
-      " pz " << momentum[3] <<
-      " pmod " << std::sqrt(momentum[1] * momentum[1] + 
-			    momentum[2] * momentum[2] +
-			    momentum[3] * momentum[3])
-	   << " E " << momentum[0] 
-           << " creator model " << modelId << G4endl;
-  };
-
-  void setModel(G4int model) {
-    modelId = model;
-  };
-
-  G4int getModel() {
-    return modelId;
-  };
-
-protected: 
-  G4CascadeMomentum momentum;
-
-private:
-  G4int modelId; // used to indicate model that created instance of G4InuclParticle
-
-  // 0 default
-  // 1 bullet
-  // 2 target
-  // 3 G4ElementaryParticleCollider
-  // 4 G4IntraNucleiCascader
-  // 5 G4NonEquilibriumEvaporator
-  // 6 G4EquilibriumEvaporator
-  // 7 G4Fissioner
-  // 8 G4BigBanger
-};        
-
-#endif // G4INUCL_PARTICLE_HH 

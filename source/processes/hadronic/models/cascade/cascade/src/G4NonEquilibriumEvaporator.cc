@@ -66,8 +66,8 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     //  initialization
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    std::vector<G4double> PEX = nuclei_target->getMomentum();
-    std::vector<G4double> pin = PEX;
+    G4CascadeMomentum PEX = nuclei_target->getMomentum();
+    G4CascadeMomentum pin = PEX;
     G4double EEXS = nuclei_target->getExitationEnergy();
     pin[0] += 0.001 * EEXS;
     G4InuclNuclei dummy_nuc;
@@ -95,7 +95,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     G4double AR = A - QP;
     G4double ZR = Z - QPP;  
     G4int NEX = G4int(QEX + 0.5);
-    std::vector<G4double> ppout(4, 0.0);
+    G4CascadeMomentum ppout;
     G4bool try_again = NEX > 0 ? true : false;
   
     while (try_again) {
@@ -292,14 +292,14 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  EPART *= 0.001; // to the GeV
 			  // generate particle momentum
 			  G4double pmod = std::sqrt(EPART * (2.0 * mass + EPART));
-			  std::vector<G4double> mom(4);
+			  G4CascadeMomentum mom;
 			  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 			  G4double FI = randomPHI();
 			  G4double P1 = pmod * COS_SIN.second;
 			  mom[1] = P1 * std::cos(FI);
 			  mom[2] = P1 * std::sin(FI);
 			  mom[3] = pmod * COS_SIN.first;
-			  std::vector<G4double> mom_at_rest(4);
+			  G4CascadeMomentum mom_at_rest;
 
 			  for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
 
@@ -325,14 +325,14 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  mom[0] = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
 					mom[3] * mom[3] + mass * mass);
 
-			  std::vector<G4double> part_mom = 
+			  G4CascadeMomentum part_mom = 
 		            toTheExitonSystemRestFrame.backToTheLab(mom);
 
 			  part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
 					     part_mom[2] * part_mom[2] + part_mom[3] * part_mom[3] +
 					     mass * mass);
 
-			  std::vector<G4double> ex_mom = 
+			  G4CascadeMomentum ex_mom = 
 			    toTheExitonSystemRestFrame.backToTheLab(mom_at_rest);
 
 			  ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + ex_mom[2] * ex_mom[2]
@@ -422,7 +422,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     // the exitation energy has to be re-set properly for the energy
     // conservation
 
-    std::vector<G4double> pnuc(4);
+    G4CascadeMomentum pnuc;
 
     for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
     G4InuclNuclei nuclei(pnuc, A, Z);

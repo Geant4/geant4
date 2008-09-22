@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.6 2007-05-25 04:16:21 miheikki Exp $
+// $Id: G4InuclEvaporation.cc,v 1.7 2008-09-22 10:06:32 gcosmo Exp $
 //
 #include <numeric>
 #include "G4IonTable.hh"
@@ -122,7 +122,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   G4InuclNuclei* nucleus = new G4InuclNuclei(A, Z);
   nucleus->setExitationEnergy(exitationE/1000);
-  std::vector<G4double> tmom(4, 0.0);
+  G4CascadeMomentum tmom;
   nucleus->setMomentum(tmom);
   nucleus->setEnergy();
 
@@ -156,7 +156,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 	//       	ipart->printParticle();
       }
 
-      std::vector<G4double> mom = ipart->getMomentum();
+      const G4CascadeMomentum& mom = ipart->getMomentum();
       eTot   += std::sqrt(mom[0]*1000 * mom[0]*1000);
 
       ekin = ipart->getKineticEnergy()*1000;
@@ -200,7 +200,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
       ekin = ifrag->getKineticEnergy()*1000;
       emas = ifrag->getMass()*1000;
-      std::vector<G4double> mom = ifrag->getMomentum();
+      const G4CascadeMomentum& mom = ifrag->getMomentum();
       eTot  += std::sqrt(mom[0]*1000 * mom[0]*1000);
 
       G4ThreeVector aMom(mom[1]*1000, mom[2]*1000, mom[3]*1000);

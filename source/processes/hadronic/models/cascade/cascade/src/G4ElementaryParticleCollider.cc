@@ -85,8 +85,8 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 				      G4InuclElementaryParticle* particle2,
 				      G4CollisionOutput& output) {
 
-  std::vector<G4double> totscm(4, 0.0); //::: fix
-  std::vector<G4double> totlab(4, 0.0);
+  G4CascadeMomentum totscm; //::: fix
+  G4CascadeMomentum totlab;
 
   // generate nucleon or pion collission with NUCLEON 
   // or pion with quasideutron
@@ -119,7 +119,7 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
       if(!particles.empty()) { // convert back to Lab
 	particleIterator ipart;
 	for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
-	  std::vector<G4double> mom = 
+	  G4CascadeMomentum mom = 
 	    convertToSCM.backToTheLab(ipart->getMomentum());
 	  ipart->setMomentum(mom); 
 	};
@@ -145,7 +145,7 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 	  if(!particles.empty()) { // convert back to Lab
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      std::vector<G4double> mom = 
+	      G4CascadeMomentum mom = 
 		convertToSCM.backToTheLab(ipart->getMomentum());
 	      ipart->setMomentum(mom); 
 	    };
@@ -474,7 +474,7 @@ generateSCMfinalState(G4double ekin,
         };
       }
 
-      std::vector<G4double> mom;
+      G4CascadeMomentum mom;
 
       if (kw == 2) { // need to rescale momentum
 	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
@@ -506,7 +506,7 @@ generateSCMfinalState(G4double ekin,
 	G4cout << " after rotation px " << mom[1] << " py " << mom[2] <<
 	  " pz " << mom[3] << G4endl;
       }
-      std::vector<G4double> mom1(4);
+      G4CascadeMomentum mom1;
 
       for (G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
 
@@ -548,7 +548,7 @@ generateSCMfinalState(G4double ekin,
 	if (G4int(modules.size()) == multiplicity) {
 
 	  if (multiplicity == 3) { 
-	    std::vector<G4double> mom3 = 
+	    G4CascadeMomentum mom3 = 
 	      particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
 
 	    mom3 = toSCM->rotate(mom3);
@@ -565,11 +565,11 @@ generateSCMfinalState(G4double ekin,
 		G4cout << " ok for mult " << multiplicity << G4endl;
 	      }
 
-	      std::vector<G4double> mom1 = generateWithFixedTheta(ct, modules[0]);
+	      G4CascadeMomentum mom1 = generateWithFixedTheta(ct, modules[0]);
 
 	      mom1 = toSCM->rotate(mom3, mom1);
 
-	      std::vector<G4double> mom2(4);
+	      G4CascadeMomentum mom2;
 
 	      for(G4int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
 
@@ -584,8 +584,8 @@ generateSCMfinalState(G4double ekin,
 	  } else { // multiplicity > 3
 
 	    // generate first mult - 2 momentums
-	    std::vector<std::vector<G4double> > scm_momentums;
-	    std::vector<G4double> tot_mom(4);
+	    std::vector<G4CascadeMomentum> scm_momentums;
+	    G4CascadeMomentum tot_mom;
 
 	    for (G4int i = 0; i < multiplicity - 2; i++) {
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
@@ -628,7 +628,7 @@ generateSCMfinalState(G4double ekin,
 	      G4double pt = modules[i]*st;
 	      G4double phi = randomPHI();
 
-	      std::vector<G4double> mom(4);
+	      G4CascadeMomentum mom;
 
 	      mom[1] = pt * std::cos(phi);
 	      mom[2] = pt * std::sin(phi);
@@ -659,14 +659,14 @@ generateSCMfinalState(G4double ekin,
 
 	      tot_mom = toSCM->rotate(tot_mom);  
 
-	      std::vector<G4double> mom = 
+	      G4CascadeMomentum mom = 
 		generateWithFixedTheta(ct, modules[multiplicity - 2]);
 
 	      mom = toSCM->rotate(tot_mom, mom);
 	      scm_momentums.push_back(mom);
 
 	      // and the last one
-	      std::vector<G4double> mom1(4);
+	      G4CascadeMomentum mom1;
 
 	      for (i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
 
@@ -1361,7 +1361,7 @@ G4double G4ElementaryParticleCollider::getMomModuleFor2toMany(
   return std::fabs(PRA);
 }
 
-std::vector<G4double> G4ElementaryParticleCollider::
+G4CascadeMomentum G4ElementaryParticleCollider::
 particleSCMmomentumFor2to3(
 			   G4int is, 
 			   G4int knd, 
@@ -1425,7 +1425,7 @@ particleSCMmomentumFor2to3(
   G4double pt = pmod * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
 
-  std::vector<G4double> mom(4);
+  G4CascadeMomentum mom;
 
   mom[1] = pt * std::cos(phi);
   mom[2] = pt * std::sin(phi);
@@ -1706,7 +1706,7 @@ adjustIntervalForElastic(
   return std::pair<G4double, G4double>(a, b);
 }  
 
-std::vector<G4double> G4ElementaryParticleCollider::
+G4CascadeMomentum G4ElementaryParticleCollider::
 particleSCMmomentumFor2to2(
 			   G4int is, 
 			   G4int kw, 
@@ -1830,7 +1830,7 @@ particleSCMmomentumFor2to2(
 
   G4double pt = pscm * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
-  std::vector<G4double> mom(4);
+  G4CascadeMomentum mom;
 
   mom[1] = pt * std::cos(phi);
   mom[2] = pt * std::sin(phi);
@@ -2008,7 +2008,7 @@ generateSCMpionAbsorption(G4double etot_scm,
   G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 
   G4double pmod = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-  std::vector<G4double> mom(4);
+  G4CascadeMomentum mom;
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
@@ -2017,7 +2017,7 @@ generateSCMpionAbsorption(G4double etot_scm,
   mom[2] = pt * std::sin(FI);
   mom[3] = pmod * COS_SIN.first;
 
-  std::vector<G4double> mom1 = mom;
+  G4CascadeMomentum mom1 = mom;
 
   for(G4int i = 1; i < 4; i++) mom1[i] *= -1.0;
   particles.push_back(G4InuclElementaryParticle(mom , particle_kinds[0]));

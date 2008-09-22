@@ -93,7 +93,7 @@ private:
 		      G4int is) const;
 
 
-  std::vector<G4double> particleSCMmomentumFor2to2(G4int is, 
+  G4CascadeMomentum particleSCMmomentumFor2to2(G4int is, 
 			             G4int kw, 
 				     G4double ekin,
 				     G4double pscm) const; 
@@ -119,7 +119,7 @@ private:
 
   G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
 	
-  std::vector<G4double> particleSCMmomentumFor2to3(G4int is, 
+  G4CascadeMomentum particleSCMmomentumFor2to3(G4int is, 
 					      G4int knd, 
 					      G4double ekin, 
 					      G4double pmod) const; 

@@ -64,7 +64,7 @@ public:
       nucleiFragments.push_back(nuclea[i]);
   };
 
- std::vector<G4InuclElementaryParticle> getOutgoingParticles() const {
+  const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
     return outgoingParticles;
   };
 
@@ -72,20 +72,20 @@ public:
     return nucleiFragments.size(); 
   };
  
-  std::vector<G4InuclNuclei> getNucleiFragments() const {
+  const std::vector<G4InuclNuclei>& getNucleiFragments() const {
     return nucleiFragments;
   };
 
-  std::vector<G4double> getTotalOutputMomentum() const {
-    std::vector<G4double> tot_mom(4, 0.0);
+  G4CascadeMomentum getTotalOutputMomentum() const {
+    G4CascadeMomentum tot_mom;
     double eex_r = 0.0;
     G4int i(0);
     for(i = 0; i < G4int(outgoingParticles.size()); i++) {
-      std::vector<G4double> mom = outgoingParticles[i].getMomentum();
+      const G4CascadeMomentum& mom = outgoingParticles[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
     };
     for(i = 0; i < G4int(nucleiFragments.size()); i++) {
-      std::vector<G4double> mom = nucleiFragments[i].getMomentum();
+      const G4CascadeMomentum& mom = nucleiFragments[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
       eex_r += 0.001 * nucleiFragments[i].getExitationEnergy();
     };

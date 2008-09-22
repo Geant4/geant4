@@ -31,6 +31,7 @@
 #endif
 
 #include <vector>
+#include "G4CascadeMomentum.hh"
 
 class G4LorentzConvertor {
 
@@ -38,9 +39,9 @@ public:
 
   G4LorentzConvertor();
 
-  G4LorentzConvertor(const std::vector<G4double>& bmom, 
+  G4LorentzConvertor(const G4CascadeMomentum& bmom, 
 		     G4double bmass, 
-		     const std::vector<G4double>& tmom, 
+		     const G4CascadeMomentum& tmom, 
 		     G4double tmass) {
 
     setBullet(bmom, bmass);
@@ -48,7 +49,7 @@ public:
     degenerated = false;  
   }; 
 
-  void setBullet(const std::vector<G4double>& bmom, 
+  void setBullet(const G4CascadeMomentum& bmom, 
 		 G4double bmass) {
 
     bullet_mom = bmom;
@@ -56,7 +57,7 @@ public:
     //  G4cout << " bullet: e " << bmom[0] << " mass " << bmass << G4endl;
   };
 
-  void setTarget(const std::vector<G4double>& tmom, 
+  void setTarget(const G4CascadeMomentum& tmom, 
 		 G4double tmass) {
 
     target_mom = tmom;
@@ -68,7 +69,7 @@ public:
  
   void toTheTargetRestFrame(); 
 
-  std::vector<G4double> backToTheLab(const std::vector<G4double>& mom) const; 
+  G4CascadeMomentum backToTheLab(const G4CascadeMomentum& mom) const; 
 
   G4double getKinEnergyInTheTRS() const {
 
@@ -95,10 +96,10 @@ public:
     return plab; 
   };
  
-  std::vector<G4double> rotate(const std::vector<G4double> mom) const; 
+  G4CascadeMomentum rotate(const G4CascadeMomentum& mom) const; 
 
-  std::vector<G4double> rotate(const std::vector<G4double> mom1,
-			    const std::vector<G4double> mom) const; 
+  G4CascadeMomentum rotate(const G4CascadeMomentum& mom1,
+			    const G4CascadeMomentum& mom) const; 
 
   G4bool reflectionNeeded() const; 
 
@@ -108,15 +109,15 @@ public:
 
 private: 
 G4int verboseLevel;
-  std::vector<G4double> bullet_mom;
+  G4CascadeMomentum bullet_mom;
   G4double bullet_mass;
 
-  std::vector<G4double> target_mom;
+  G4CascadeMomentum target_mom;
   G4double target_mass;
 
   std::vector<G4double> velocity;
 
-  std::vector<G4double> scm_momentum;
+  G4CascadeMomentum scm_momentum;
 
   G4double ecm_tot;
 

@@ -70,7 +70,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
 
-  std::vector<G4double> momentum_in = bullet->getMomentum();
+  G4CascadeMomentum momentum_in = bullet->getMomentum();
 
   momentum_in[0] += tnuclei->getMass();
 
@@ -218,11 +218,11 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	     << " output_particles  " << output_particles.size() <<  G4endl;
     }
 
-    std::vector<G4double> momentum_out(4, 0.0);
+    G4CascadeMomentum momentum_out;
     particleIterator ipart;
 
     for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
-      std::vector<G4double> mom = ipart->getMomentum();
+      const G4CascadeMomentum& mom = ipart->getMomentum();
 
       for (G4int j = 0; j < 4; j++) momentum_out[j] += mom[j];
 
@@ -299,7 +299,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   // special branch to avoid the cascad generation but to get the input for evaporation etc
 
-  std::vector<G4double> momentum_out(4, 0.0);
+  G4CascadeMomentum momentum_out;
   G4InuclNuclei outgoing_nuclei(169, 69);
 
   outgoing_nuclei.setMomentum(momentum_out);

@@ -120,12 +120,12 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
-	std::vector<G4double> bmom(4, 0.0);
+	G4CascadeMomentum bmom;
 
 	bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
 	G4InuclNuclei ntarget(at, zt);
-	std::vector<G4double> tmom(4, 0.0);
+	G4CascadeMomentum tmom;
 
 	ntarget.setMomentum(tmom);
 	ntarget.setEnergy();
@@ -189,7 +189,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  if (!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      std::vector<G4double> mom = ipart->getMomentum();
+	      G4CascadeMomentum mom = ipart->getMomentum();
 
 	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
@@ -206,7 +206,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	    nucleiIterator inuc;
 
 	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      std::vector<G4double> mom = inuc->getMomentum(); 
+	      G4CascadeMomentum mom = inuc->getMomentum(); 
 
 	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);

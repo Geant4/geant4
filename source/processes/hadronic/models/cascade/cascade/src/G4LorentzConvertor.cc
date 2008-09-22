@@ -63,8 +63,6 @@ void G4LorentzConvertor::toTheCenterOfMass() {
 
   G4double pb = 0.0;
 
-  scm_momentum.resize(4);
-
   G4double xx = pv * (gamma - 1.0) / v2 - target_mom[0] * gamma;
 
   for(i = 1; i < 4; i++) {
@@ -101,13 +99,13 @@ void G4LorentzConvertor::toTheCenterOfMass() {
   gapp = ga * pscm;
 }
 
-std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom) const {
+G4CascadeMomentum G4LorentzConvertor::rotate(const G4CascadeMomentum& mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(std::vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(G4CascadeMomentum)" << G4endl;
   }
 
-  std::vector<G4double> mom_rot(4);
+  G4CascadeMomentum mom_rot;
 
   if (verboseLevel > 3) {
     G4cout << " ga " << ga << " gbpp " << gbpp << " gapp " << gapp << G4endl;  
@@ -138,16 +136,16 @@ std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom
   return mom_rot;
 }
 
-std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom1, 
-					    const std::vector<G4double> mom) const {
+G4CascadeMomentum G4LorentzConvertor::rotate(const G4CascadeMomentum& mom1, 
+					    const G4CascadeMomentum& mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(std::vector<G4double>,std::vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(G4CascadeMomentum,G4CascadeMomentum)" << G4endl;
   }
 
   const G4double small = 1.0e-10;
 
-  std::vector<G4double> mom_rot(4);
+  G4CascadeMomentum mom_rot;
 
   G4double pp = 0.0;
 
@@ -212,8 +210,6 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
 
   G4double pb = 0.0;
 
-  scm_momentum.resize(4);
-
   G4double xx = 0.0;
 
   if(v2 > small) xx = pv * (gamma - 1.0) / v2 - bullet_mom[0] * gamma;
@@ -241,7 +237,7 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   gapp = ga * pscm;   
 }
 
-std::vector<G4double> G4LorentzConvertor::backToTheLab(const std::vector<G4double>& mom) const {
+G4CascadeMomentum G4LorentzConvertor::backToTheLab(const G4CascadeMomentum& mom) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
@@ -255,7 +251,7 @@ std::vector<G4double> G4LorentzConvertor::backToTheLab(const std::vector<G4doubl
     G4cout << " v2 " << v2 << G4endl;   
   }
 
-  std::vector<G4double> mom1(4);
+  G4CascadeMomentum mom1;
 
   if(v2 < small) {
     mom1 = mom;
