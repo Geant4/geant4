@@ -52,7 +52,7 @@ Histo::Histo()
 {
   verbose    = 0;
   histName   = "testem9";
-  histType   = "hbook";
+  histType   = "root";
   nHisto     = 0;
   defaultAct = 1;
   tupleName  = "tuple9";
@@ -92,8 +92,9 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   G4String nam = histName + "." + histType;
-
-  tree = tf->create(nam,histType,false,true,"uncompress");
+  G4String options  = "--noErrors export=root uncompress";
+    
+  tree = tf->create(nam,histType,false,true,options);
   delete tf;
   if(tree) {
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
