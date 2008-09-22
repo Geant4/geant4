@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.16 2008-09-17 14:00:09 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.17 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,6 @@
 //    This class serves as the base class for a vector having various 
 //    energy scale, for example like 'log', 'linear', 'free', etc.
 //
-// Modified:
-// 05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //---------------------------------------------------------------
 
 inline

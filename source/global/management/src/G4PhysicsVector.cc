@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.24 2008-09-16 14:55:18 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.25 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,14 +60,14 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  delete [] secDerivative;
+  DeleteData();
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  *this=right;
+  CopyData(right);
 }
 
 // --------------------------------------------------------------
@@ -77,18 +77,9 @@ G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
   if (&right==this)  { return *this; }
   if (type != right.type)  { return *this; }
 
-  type = right.type;
-  edgeMin = right.edgeMin;
-  edgeMax = right.edgeMax;
-  numberOfBin = right.numberOfBin;
-  lastEnergy = right.lastEnergy;
-  lastValue = right.lastValue;
-  lastBin = right.lastBin;
-  dataVector = right.dataVector;
-  binVector = right.binVector;
-  secDerivative = right.secDerivative;
-  useSpline = right.useSpline;
-  comment = right.comment;
+  DeleteData();
+  CopyData(right);
+
   return *this;
 }
 
@@ -104,6 +95,43 @@ G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
   return (this != &right);
+}
+
+// --------------------------------------------------------------
+
+void G4PhysicsVector::DeleteData()
+{
+  delete [] secDerivative;
+  secDerivative = 0;
+}
+
+// --------------------------------------------------------------
+
+void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
+{
+  type = vec.type;
+  edgeMin = vec.edgeMin;
+  edgeMax = vec.edgeMax;
+  numberOfBin = vec.numberOfBin;
+  lastEnergy = vec.lastEnergy;
+  lastValue = vec.lastValue;
+  lastBin = vec.lastBin;
+  dataVector = vec.dataVector;
+  binVector = vec.binVector;
+  useSpline = vec.useSpline;
+  comment = vec.comment;
+  if (vec.secDerivative)
+  {
+    secDerivative = new G4double [numberOfBin];
+    for (size_t i=0; i<numberOfBin; i++)
+    {
+       secDerivative[i] = vec.secDerivative[i];
+    }
+  }
+  else
+  {
+    secDerivative = 0;
+  }
 }
 
 // --------------------------------------------------------------

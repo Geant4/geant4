@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.21 2008-09-17 14:00:09 vnivanch Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.22 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,6 @@
 //
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
-// 27-MAR-97 FWJ: first version for Alpha release
-// 05-SEP-2008, V.Ivanchenko : added protections for zero-length vector
 // --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
@@ -76,6 +74,30 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
 
 G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 {
+}
+
+// --------------------------------------------------------------------
+
+G4LPhysicsFreeVector::G4LPhysicsFreeVector(const G4LPhysicsFreeVector& right)
+  : G4PhysicsVector(right)
+{
+  verboseLevel = right.verboseLevel;
+}
+
+// --------------------------------------------------------------------
+
+G4LPhysicsFreeVector& 
+G4LPhysicsFreeVector::operator=(const G4LPhysicsFreeVector& right)
+{
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  verboseLevel = right.verboseLevel;
+  return *this;
 }
 
 // --------------------------------------------------------------------

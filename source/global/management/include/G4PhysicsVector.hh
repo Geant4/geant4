@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.17 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.18 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,6 +142,12 @@ class G4PhysicsVector
 
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
+
+    void DeleteData();
+    void CopyData(const G4PhysicsVector& vec);
+         // Internal methods for allowing copy of objects
+
+  protected:
 
     typedef std::vector<G4double> G4PVDataVector;
 

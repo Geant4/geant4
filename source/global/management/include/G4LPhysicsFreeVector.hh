@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.10 2008-04-07 14:18:57 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.hh,v 1.11 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,10 @@ public: // with description
    G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
 
    ~G4LPhysicsFreeVector();
+
+   G4LPhysicsFreeVector(const G4LPhysicsFreeVector&);
+   G4LPhysicsFreeVector& operator=(const G4LPhysicsFreeVector&);
+     // Copy constructor and assignment operator.
 
    void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
      // G4PhysicsVector has PutValue() but it is inconvenient.

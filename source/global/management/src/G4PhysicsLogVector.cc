@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.20 2008-09-17 14:00:09 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.21 2008-09-22 08:26:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
 //    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
+//    9  Mar. 2001, H.Kurashige : added PhysicsVector type and Retrieve
 //    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
 //
 // --------------------------------------------------------------
@@ -94,7 +94,9 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
   edgeMax = binVector[numberOfBin-1];
 }  
 
-G4PhysicsLogVector::~G4PhysicsLogVector(){}
+G4PhysicsLogVector::~G4PhysicsLogVector()
+{
+}
 
 G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
@@ -108,9 +110,8 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   return success;
 }
 
-
 G4PhysicsLogVector::G4PhysicsLogVector(const G4PhysicsLogVector& right)
-  :G4PhysicsVector(right)
+  : G4PhysicsVector(right)
 {
   dBin = right.dBin;
   baseBin = right.baseBin;
@@ -119,10 +120,14 @@ G4PhysicsLogVector::G4PhysicsLogVector(const G4PhysicsLogVector& right)
 G4PhysicsLogVector& 
 G4PhysicsLogVector::operator=(const G4PhysicsLogVector& right)
 {
-  //  if(this != right) {
-    dBin    = right.dBin;
-    baseBin = right.baseBin;
-    // }
+  // Check assignment to self
+  //
+  if(this == &right) { return *this; }
+
+  DeleteData();
+  CopyData(right);
+
+  dBin    = right.dBin;
+  baseBin = right.baseBin;
   return *this;
 }
-
