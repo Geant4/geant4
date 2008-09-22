@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.23 2008-05-03 19:12:38 maire Exp $
+// $Id: ExN02PhysicsList.cc,v 1.24 2008-09-22 16:41:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,6 +133,7 @@ void ExN02PhysicsList::ConstructProcess()
   AddTransportation();
   ConstructEM();
   ConstructGeneral();
+  AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,9 +154,6 @@ void ExN02PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-
-#include "G4StepLimiter.hh"
-#include "G4UserSpecialCuts.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -200,9 +198,6 @@ void ExN02PhysicsList::ConstructEM()
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      //step limit
-      pmanager->AddProcess(new G4StepLimiter,         -1,-1, 3);         
-      ///pmanager->AddProcess(new G4UserSpecialCuts,   -1,-1,4);  
     }
   }
 }
@@ -210,6 +205,7 @@ void ExN02PhysicsList::ConstructEM()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
+
 void ExN02PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
@@ -224,6 +220,30 @@ void ExN02PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+  }
+}
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4StepLimiter.hh"
+#include "G4UserSpecialCuts.hh"
+
+void ExN02PhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  G4StepLimiter* stepLimiter = new G4StepLimiter();
+  ////G4UserSpecialCuts* userCuts = new G4UserSpecialCuts();
+  
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+
+      if (particle->GetPDGCharge() != 0.0)
+        {
+	  pmanager ->AddDiscreteProcess(stepLimiter);
+	  ////pmanager ->AddDiscreteProcess(userCuts);
+        }
   }
 }
 

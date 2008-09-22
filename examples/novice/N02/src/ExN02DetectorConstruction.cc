@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.20 2007-10-17 08:50:35 gcosmo Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.21 2008-09-22 16:41:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -300,6 +300,13 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
   fpMagField->SetFieldValue(fieldValue);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN02DetectorConstruction::SetMaxStep(G4double maxStep)
+{
+  if ((stepLimit)&&(maxStep>0.)) stepLimit->SetMaxAllowedStep(maxStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
