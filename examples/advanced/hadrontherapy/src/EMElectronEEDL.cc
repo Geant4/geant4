@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyElectronEEDL.cc; May 2005
+// $Id: HadrontherapyElectronEEDL.cc; Last by G.A.P.Cirrone September  2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------

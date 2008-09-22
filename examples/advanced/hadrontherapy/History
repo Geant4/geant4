@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 $Id: History, 2004/02/27  G.A.P. Cirrone, 
 	                  cirrone@lns.infn.it
-			  http://geant4infn.wikispaces.com/HadrontherapyExample
+			  http://geant4infn.wikispaces.com/
 -------------------------------------------------------------------------------
 
 
@@ -10,6 +10,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
      ====================================================
 
                       Category History file
+
+22.09.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-07
+           - Corrected the G4eBremsstrahlung() process in the file 
+             EMElectronStandard.cc;
+           - Updated the head of the History file;
 
 17.09.2008 A.Lechner; Tag: hadrontherapy-V09-01-06
            - Corrections in the Low Energy Electromagnetic physic lists.
