@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.12 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -153,22 +153,4 @@ G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue,
 
   return binVector[theLocBin] +
          ( binVector[theLocBin+1]-binVector[theLocBin] ) * intplFactor;
-}
-
-G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(
-    const G4PhysicsOrderedFreeVector& right)
-  : G4PhysicsVector(right)
-{}
-
-G4PhysicsOrderedFreeVector& 
-G4PhysicsOrderedFreeVector::operator=(const G4PhysicsOrderedFreeVector& right)
-{
-  // Check assignment to self
-  //
-  if(this == &right) { return *this; }
-
-  DeleteData();
-  CopyData(right);
-
-  return *this;
 }

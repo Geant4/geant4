@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.13 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsLinearVector.cc,v 1.14 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,16 +33,7 @@
 //
 //  G4PhysicsLinearVector.cc
 //
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    15 Feb. 1996, K.Amako : Implemented the 1st version
-//    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced.
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
-//    22 Sep. 2008, V.Ivanchenko : added copy constructor and assignment  
-//                                 operator using algorithm of G.Cosmo 
+//  15 Feb 1996 - K.Amako : 1st version
 //
 //--------------------------------------------------------------------
 

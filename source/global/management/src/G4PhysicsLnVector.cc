@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc,v 1.16 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsLnVector.cc,v 1.17 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,12 +33,7 @@
 //
 //  G4PhysicsLnVector.cc
 //
-//  History:
-//    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    9  Mar. 2001, H.Kurashige : add PhysicsVector type and Retrieve
-//    22 Sep. 2008, V.Ivanchenko : added copy constructor and assignment  
-//                                 operator using algorithm of G.Cosmo 
+//  27 Apr 1999 - M.G.Pia: Created from G4PhysicsLogVector
 //
 // --------------------------------------------------------------
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.12 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,9 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
   edgeMax = binVector[numberOfBin-1];
 }  
 
-G4PhysicsFreeVector::~G4PhysicsFreeVector(){}
+G4PhysicsFreeVector::~G4PhysicsFreeVector()
+{
+}
 
 void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue, 
                                     G4double theDataValue )
@@ -131,21 +133,3 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue,
      edgeMin = binVector[0];
   }
 }
-
-G4PhysicsFreeVector::G4PhysicsFreeVector(const G4PhysicsFreeVector& right)
-  : G4PhysicsVector(right)
-{}
-
-G4PhysicsFreeVector& 
-G4PhysicsFreeVector::operator=(const G4PhysicsFreeVector& right)
-{
-  // Check assignment to self
-  //
-  if(this == &right) { return *this; }
-
-  DeleteData();
-  CopyData(right);
-
-  return *this;
-}
-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.12 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,10 +77,6 @@ class G4PhysicsFreeVector : public G4PhysicsVector
   
     ~G4PhysicsFreeVector();
          // Destructor
-
-    G4PhysicsFreeVector(const G4PhysicsFreeVector&);
-    G4PhysicsFreeVector& operator=(const G4PhysicsFreeVector&);
-         // Copy constructor and assignment operator.
 
     void PutValue( size_t binNumber, G4double binValue, 
                                      G4double dataValue );   

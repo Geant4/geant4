@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.10 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.11 2008-09-22 14:49:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -80,10 +80,6 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
 				   size_t VectorLength);
 
 	~G4PhysicsOrderedFreeVector();
-
-        G4PhysicsOrderedFreeVector(const G4PhysicsOrderedFreeVector&);
-        G4PhysicsOrderedFreeVector& operator=(const G4PhysicsOrderedFreeVector&);
-        // Copy constructor and assignment operator.
 
         ////////////
         // Methods
