@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2008-01-23 16:06:14 grichine Exp $
+// $Id: PhysicsList.cc,v 1.4 2008-09-22 08:55:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@
 
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
-#include "G4HadronProcessStore.hh"
+#include "G4HadronicProcessStore.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -153,7 +153,7 @@ void PhysicsList::ConstructProcess()
     hadronPhys[i]->ConstructProcess();
   }
 
-  if(dump) G4HadronProcessStore::Instance()->Dump(1);
+  if(dump) G4HadronicProcessStore::Instance()->Dump(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
