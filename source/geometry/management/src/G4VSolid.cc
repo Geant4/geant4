@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.38 2008-09-10 13:18:42 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.39 2008-09-23 13:07:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -180,6 +180,7 @@ void G4VSolid::ClipCrossSection(       G4ThreeVectorList* pVertices,
 {
 
   G4ThreeVectorList polygon;
+  polygon.reserve(4);
   polygon.push_back((*pVertices)[pSectionIndex]);
   polygon.push_back((*pVertices)[pSectionIndex+1]);
   polygon.push_back((*pVertices)[pSectionIndex+2]);
@@ -209,6 +210,7 @@ void G4VSolid::ClipBetweenSections(      G4ThreeVectorList* pVertices,
                                          G4double& pMin, G4double& pMax) const
 {
   G4ThreeVectorList polygon;
+  polygon.reserve(4);
   polygon.push_back((*pVertices)[pSectionIndex]);
   polygon.push_back((*pVertices)[pSectionIndex+4]);
   polygon.push_back((*pVertices)[pSectionIndex+5]);
