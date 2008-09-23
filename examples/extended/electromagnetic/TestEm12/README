@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2008-05-07 12:30:02 maire Exp $
+$Id: README,v 1.9 2008-09-23 20:48:12 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -126,7 +126,7 @@ $Id: README,v 1.8 2008-05-07 12:30:02 maire Exp $
    /testem/histo/setFileName  name  (default testem12)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (hbook by default)
+   with the command /testem/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
