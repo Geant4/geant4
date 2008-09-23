@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.10 2007-12-10 16:30:35 gunter Exp $
+// $Id: G4TriangularFacet.cc,v 1.11 2008-09-23 09:06:08 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -709,9 +709,11 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double lambda0 = CLHEP::RandFlat::shoot(0.,1.);
-  G4double lambda1 = CLHEP::RandFlat::shoot(0.,lambda0);
-
+  G4double alpha = CLHEP::RandFlat::shoot(0.,1.);
+  G4double beta = CLHEP::RandFlat::shoot(0.,1);
+  G4double lambda1=alpha*beta;
+  G4double lambda0=alpha-lambda1;
+  
   return (P0 + lambda0*E[0] + lambda1*E[1]);
 }
 
