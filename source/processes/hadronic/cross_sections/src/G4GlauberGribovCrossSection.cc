@@ -302,7 +302,7 @@ G4GlauberGribovCrossSection::IsZAApplicable(const G4DynamicParticle* aDP,
          theParticle == theKMinus    || 
          theParticle == theSMinus)      )    ||  
 
-       ( kineticEnergy  >= 0.1*fLowerLimit &&
+       ( kineticEnergy  >= fLowerLimit &&
          Z > 1.5 &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theNeutron   ||   
