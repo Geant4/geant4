@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.10 2008-08-22 14:11:53 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.11 2008-09-24 10:38:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef HistoManager_h
@@ -109,7 +109,7 @@ public: // Without description
   G4double  GetMaxEnergy() const {return maxEnergy;};
   void SetThresholdEnergy(G4double val) {thKinE = val;};
   void SetThresholdZ(G4double val) {thPosZ = val;};
-  void AddStep() {n_step++;};
+  void AddStep() {n_step += 1.0;};
 
   // Acceptance parameters
   void SetEdepAndRMS(G4int, G4ThreeVector);
@@ -132,15 +132,16 @@ private:
   G4double thPosZ;
 
   G4double trackLength;
+  G4double n_step;
+  G4double n_step_target;
   G4bool trackAbs;        // Track is in absorber
   G4int n_evt;
   G4int n_elec;
   G4int n_posit;
   G4int n_gam;
-  G4int n_step;
   G4int n_gamph;
   G4int n_gam_tar;
-  G4int n_step_target;
+  G4int n_lowe;
   G4int nBinsE, nBinsEA, nBinsED;
   G4bool nTuple;
 

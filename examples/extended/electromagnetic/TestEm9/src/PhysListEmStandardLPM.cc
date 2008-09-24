@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardLPM.cc,v 1.5 2008-08-29 10:22:27 vnivanch Exp $
+// $Id: PhysListEmStandardLPM.cc,v 1.6 2008-09-24 10:38:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 #include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -90,12 +91,12 @@ void PhysListEmStandardLPM::ConstructProcess()
       //electron
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      brem->SetVerboseLevel(2);
+      // brem->SetVerboseLevel(2);
       G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
       lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
@@ -106,12 +107,12 @@ void PhysListEmStandardLPM::ConstructProcess()
       //positron
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      brem->SetVerboseLevel(2);
+      //      brem->SetVerboseLevel(2);
       G4VEmModel* lpm = new G4eBremsstrahlungRelModel();
       lpm->SetLowEnergyLimit(GeV);
       lpm->SetHighEnergyLimit(100.*TeV);
@@ -144,6 +145,7 @@ void PhysListEmStandardLPM::ConstructProcess()
   G4EmProcessOptions opt;
   opt.SetApplyCuts(true);
   opt.SetLPMFlag(false);
+  //  opt.SetSplineFlag(true);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

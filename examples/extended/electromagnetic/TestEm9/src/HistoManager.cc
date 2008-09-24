@@ -149,6 +149,7 @@ void HistoManager::BeginOfRun()
   n_posit= 0;
   n_gam  = 0;
   n_step = 0;
+  n_lowe = 0;
 
   for(G4int i=0; i<6; i++) {
     stat[i] = 0;
@@ -201,7 +202,7 @@ void HistoManager::EndOfRun()
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
-  G4double xs = x*(G4double)n_step;
+  G4double xs = x*n_step;
 
   G4double f = 100.*std::sqrt(beamEnergy/GeV);
 
@@ -249,6 +250,7 @@ void HistoManager::EndOfRun()
   }
   G4cout << std::setprecision(4) << "Beam Energy                  " << beamEnergy/GeV 
 	 << " GeV" << G4endl;
+  if(n_lowe > 0)          G4cout << "Number of events E/E0<0.8    " << n_lowe << G4endl; 
   G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
@@ -306,6 +308,11 @@ void HistoManager::EndOfEvent()
     E[i] /= beamEnergy;
     e25 += E[i];
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
+  }
+
+  if(e25 < 0.8) {
+    n_lowe++;
+    G4cout << "### in the event# " << n_evt << "  E25= " << e25 << G4endl;
   }
 
   // compute ratios

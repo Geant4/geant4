@@ -1,4 +1,4 @@
-# $Id: cms50gev.mac,v 1.2 2008-09-24 10:38:46 vnivanch Exp $
+# $Id: cms50gevLPM.mac,v 1.1 2008-09-24 10:39:53 vnivanch Exp $
 #
 # Macro file for TestEm9 
 #
@@ -12,13 +12,13 @@
 /testem/det/EcalLength 230 mm
 /testem/det/EcalWidth   22 mm
 #
-/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2
-#/testem/phys/addPhysics  standardLPM
+/testem/phys/addPhysics  standardLPM
 #
 /process/eLoss/verbose  1
-/testem/phys/setCuts 1.0 mm
+/testem/phys/setCuts 1 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
 #
@@ -34,7 +34,7 @@
 #/random/resetEngineFrom first.rndm
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName cms50gev
+/testem/histo/fileName cms50gevLPM
 /testem/histo/fileType root
 /testem/histo/setHisto 0  250 0.60 0.85 
 /testem/histo/setHisto 1  200 0.80 1.00 
