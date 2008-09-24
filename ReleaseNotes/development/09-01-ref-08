@@ -1,0 +1,192 @@
+
+                       geant4-09-01-ref-08
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o 
+
+---------- Reference-tag 'Release Notes' -----------
+
+(**) Fixes included in release 9.1.p03
+
+Summarised, the list of changes is the following:
+
+digits_hits                                      digits_hits-V09-01-00      (**)
+-----------
+- Fixed a bug in G4ScoringBox for the use of G4PVDivision
+  and G4VScoreWriter for indexing scheme in GetIndex() method.
+
+event                                            event-V09-01-01            (**)
+-----
+- Removed some redundant semicolons in G4SPSAngDistribution header...
+
+geometry/magnetifield                            field-V09-01-02
+---------------------
+- Revised signature of G4ChordFinder::FinderNextChord(), making 'FieldTrack'
+  argument passed a reference.
+
+geometry/management                              geommng-V09-01-08
+-------------------
+- G4VSolid: promote copy-constructor and assignment operator to public      (**)
+  to cope with specific use-case in ATLAS (see problem report #1023).
+- G4VSolid: explicitely reserve memory for polygon vectors in clipping
+  algorithm to help reducing memory footprint.
+
+geometry/navigation                              geomnav-V09-01-05          (**)
+-------------------
+- G4PropagatorInField: correction to LocateIntersectionPoint() algorithm
+  to ensure that endpoints are not further apart in space than on the curve
+  due to different errors in the integration.
+
+geometry/solids/CSG                              geom-csg-V09-01-05
+-------------------
+- G4Tubs: implemented first speed improvements and corrections from joint
+  code review of G4Tubs class. Cached computation for half-tolerance and
+  other cached values.
+
+geometry/solids/specific                         geom-specific-V09-01-16
+------------------------
+- Corrected algorithm in G4TriangularFacet::GetPointOnFace() according to
+  suggestion advanced in problem report #1025. Fixes a problem of false
+  overlaps detection related to G4ExtrudedSolid and G4TessellatedSolid.
+- G4VFacet: corrected increment of indeces in operator==(), following       (**)
+  problem report #1024.
+
+global                                           global-V09-01-13
+------
+- Corrected initialisation of vectors to conform to definition in
+  G4PhysicsVector, and added protections against empty vectors.
+- Corrected definition of copy-constructor and operator=() in G4PhysicsVector
+  and added corresponding definitions in derived classes, where needed.
+
+particles                                        particles-V09-01-06
+---------
+- Updated mass and width according to PDG-2008.
+- Avoid direct comparison of strings in method G4IonTable::IsIon().
+
+physics_lists                                    phys-lists-V09-01-11
+-------------
+- G4NeutronTrackingCut: added methods for directly defining time and
+  energy limits.
+- G4HadronInelasticQBBC, QBBC: using FTF (as default) with Binary Cascade
+  and improved printout.
+
+processes/decay                                  decay-V09-01-03
+---------------
+- Fixed problem of memory overwrite in G4DecayWithSpin.
+
+processes/electromagnetic/standard               emstand-V09-01-34
+----------------------------------
+- Added new classes with stopping data G4MaterialStopping,
+  G4SimpleMaterialStopping and G4IronStopping.
+- Improved verbose output for processes.
+- G4ionIonisation: use the same low-energy model for He ions and GenericIons,
+  like in 9.2-beta.
+- G4WentzelVIModel: fixed bug in lateral displacement.
+- G4UrbanMscModel2: fixed NaN in sampling of cosine theta for 50 GeV e-.
+- G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90: fixed cases of string
+  comparison when compute transport cross-sections, compare masses instead.
+- G4eBremsstrahlungModel: corrected Migdal constant to be set to the value as
+  in G4eBremsstrahlungRelModel.
+- G4eBremsstrahlungRelModel: define threshold energy for LPM effect; fixed LPM
+  calculation; define Thomas-fermi FF (ala Tsai); some speed improvements.
+- G4IonFluctuations: do not use Poisson sampling.
+- G4BetheBlochModel, G4BraggModel, G4BraggIonModel: added methods
+  GetParticleCharge(), GetChargeSquareRatio(), CorrectionsAlongStep()
+  needed for ions; defining low and high energy limits inside the model.
+- G4ionIonisation, G4hIonisation: removed InitialiseMassCharge() and
+  CorrectionsAlongStep() methods; limits of kinetic energy for models now
+  taken from the base class and from models; separated treatment of He ions.
+- G4WaterStopping: use mass number instead of atomic mass.
+
+processes/electromagnetic/utils                  emutils-V09-01-28
+-------------------------------
+- G4VEnergyLossProcess: added pointer to current G4VEmModel; removed method
+  CorrectionsAlongStep(), using instead corresponding method of the model;
+  improved verbose output.
+- G4VEmModel:
+  o Minor optimisations of SelectRandomAtom() and SelectIsotope().
+  o Added methods GetParticleCharge(), GetChargeSquareRatio(),
+    CorrectionsAlongStep() and ActivateNuclearStopping() needed for simulation
+    of ion transport.
+  o Use STL vector for cross sections instead of array.
+- G4EmCorrections: added interfaces to effective charge.
+- G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess: use new
+  DumpModelList() method from G4EmModelManager in the verbosity output.
+- G4VEmFluctuationModel: added method SetParticleAndCharge().
+- G4EmModelManager: fixed crash in destructor when verbosity > 1;
+  fixed selection of models per energy; updated printout with DumpModelList()
+  method.
+- G4EmElementSelector: update usage of methods SetupMaterial() and
+  ComputeCrossSectionPerAtom().
+- G4EmCorrections: dEdx data for ions are initialised at the start of a run
+  for materials used in geometry; updated search for ion/material pairs.
+- G4EmCalculator: improved printout.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-01-04)
+  o G4CrossSectionDataStore: added method SampleZandA(), returning a G4Element
+    and filling G4Nucleus.
+  o G4PiNuclearCrossSection: commented out debug calls to G4ping.
+- management (hadr-man-V09-01-06)
+  o G4HadronicProcess: some cleanup; use method SampleZandA() to select an
+    isotope and avoid use debug local NanCheck(); avoid checking environment
+    variables at run-time; directly fill G4HadronicWhiteBoard; implemented
+    PostStepDoIt() and DumpPhysicsTable() methods.
+  o G4HadronInelasticProcess: use methods from the base class.
+  o G4HadronicProcessStore: improved printout.
+- models/cascade (hadr-casc-V09-01-05)
+  o G4ElementaryParticleCollider: in method GenerateMultiplicity(), removed
+    large_cut which increases multiplicity from 3 to 4 abruptly at 4 GeV
+    and above. This caused a sharp drop-off in the single pion spectra from
+    pH reactions. The effect in heavier nuclei is small.
+  o Introduced simple wrapper class G4CascadeMomentum meant to replace usage
+    of std::vector<double> in the cascade code, to reduce memory allocations.
+    Modified cascade code accordingly.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-07)
+  o G4QCaptureAtRest: added registration in G4HadronicProcessStore
+    and PrintInfo() by adding PreparePhysicsTable() and BuildPhysicsTable().
+  o G4GammaNuclearReaction: moved implementations from header to source
+    and added ID name "CHIPS".
+  o G4ElectroNuclearReaction: moved instantiation of HE model to constructor
+    from run time and added ID name "CHIPS".
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-01-00)
+  o G4MuNuclearInteraction: added SubType and registration in the
+    G4HadronicProcessStore; added PreparePhysicsTable() method; some code
+    cleanup.
+- models/neutron_hp (hadr-hpn-V09-01-20)
+  o Added protection for negative energy results in very low energy
+    (1E-6 eV) scattering in G4NeutronHPElasticFS.
+  o Fixed problem in G4NeutronHPProduct resulting in too many secondaries
+    production in nd rections.
+  o Added protection in G4NeutronHPName for selecting data in hydrogen and
+    alpha.
+  o Fixed case of definition of G4PhysicsVecotor of length zero in
+    G4NeutronHPIsoData.
+- models/parton_string/qgsm (hadr-qgsm-V09-01-01)
+  o Fixed logic in G4QGSParticipants algorithm: avoid usage of iterator
+    decrementing in loops. Addresses problem report #1018.
+- processes (hadr-proc-V09-01-01)
+  o  G4HadronElasticProcess, G4HadronCaptureProcess, and
+     G4HadronFissionProcess: use PostStepDoIt() and DumpPhysicsTable() from
+     the base class G4HadronicProcess.
+- stopping (hadr-stopping-V09-01-03)
+  o G4MuonMinusCaptureAtRest: added registration in G4HadronicprocessStore
+    and PrintInfo() by adding PreparePhysicsTable() and BuildPhysicsTable()
+    methods.
+
+processes/scoring                                procscore-V09-01-01
+-----------------
+- Correction in copying non-ionizing energy deposit in G4Step.
+
+examples                                         examples-V09-01-08
+--------
+- Updated reference outputs.
+
+tests                                            tests-V09-01-08
+-----
+- Updated reference outputs and tools.
+- test11 (test11-V09-01-00)
+  o 
