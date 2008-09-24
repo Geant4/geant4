@@ -49,20 +49,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4UInelasticCrossSection::G4UInelasticCrossSection(const G4ParticleDefinition* p) 
+G4UInelasticCrossSection::G4UInelasticCrossSection(const G4ParticleDefinition*) 
 {
+  verboseLevel = 0;
   hasGlauber = false;
-  thEnergy   = 100.*GeV;
+  thEnergy   = 90.*GeV;
   fGlauber   = new G4GlauberGribovCrossSection();
   fGheisha   = G4HadronCrossSections::Instance();
   fNucleon   = 0;
   fUPi       = 0;
-  if(p == G4Proton::Proton() || p == G4Neutron::Neutron())
-    fNucleon = new G4NucleonNuclearCrossSection();
-  else if(p == G4PionPlus::PionPlus() || p == G4PionMinus::PionMinus())
-    fUPi = new G4UPiNuclearCrossSection();
-  verboseLevel = 0;
-  Initialise(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,7 +111,7 @@ G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle*
 {
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
-  G4int iz = G4int(Z + 0.5);
+  G4int iz = G4int(Z);
   if(iz > 92) iz = 92;
 
     // proton and neutron
@@ -159,8 +154,14 @@ G4double G4UInelasticCrossSection::GetIsoZACrossSection(const G4DynamicParticle*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UInelasticCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
+void G4UInelasticCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
+  if(&p == G4Proton::Proton() || &p == G4Neutron::Neutron()) {
+    fNucleon = new G4NucleonNuclearCrossSection();
+  } else if(&p == G4PionPlus::PionPlus() || &p == G4PionMinus::PionMinus()) {
+    fUPi = new G4UPiNuclearCrossSection();
+  }
+  Initialise(&p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

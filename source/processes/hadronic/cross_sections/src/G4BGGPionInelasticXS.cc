@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc,v 1.1 2007-03-13 15:19:30 vnivanch Exp $
+// $Id: G4BGGPionInelasticXS.cc,v 1.2 2008-09-24 16:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,25 +51,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p) 
+G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition*) 
 {
   verboseLevel = 0;
-  thEnergy     = 100.*GeV;
-  if(p == G4PionPlus::PionPlus() || p == G4PionMinus::PionMinus()) {
-    fPion = new G4UPiNuclearCrossSection();
-    fGlauber = new G4GlauberGribovCrossSection();
-    particle = p;
-    Initialise();
-  } else {
-    fPion = 0;
-    fGlauber = 0;
-    particle = 0;
-    if(p) G4cout << "### G4BGGPionInelasticXS WARNING: is not applicable to " 
-		 << p->GetParticleName()
-		 << G4endl;
-    else  G4cout << "### G4BGGPionInelasticXS WARNING: particle is not defined " 
-		 << G4endl;
-  }
+  thEnergy     = 90.*GeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,7 +74,7 @@ G4double G4BGGPionInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* dp,
 {
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
-  G4int iz = G4int(Z + 0.5);
+  G4int iz = G4int(Z);
   if(iz > 92) iz = 92;
 
   if(ekin > thEnergy) {
@@ -111,8 +96,21 @@ G4double G4BGGPionInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* dp,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition&)
+void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
+  if(&p == G4PionPlus::PionPlus() || &p == G4PionMinus::PionMinus()) {
+    fPion = new G4UPiNuclearCrossSection();
+    fGlauber = new G4GlauberGribovCrossSection();
+    particle = &p;
+    Initialise();
+  } else {
+    fPion = 0;
+    fGlauber = 0;
+    particle = 0;
+    G4cout << "### G4BGGPionInelasticXS WARNING: is not applicable to " 
+	   << p.GetParticleName()
+	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,9 +129,8 @@ void G4BGGPionInelasticXS::Initialise()
   G4DynamicParticle dp(part, mom, thEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
-  G4double A = nist->GetAtomicMassAmu(2);
 
-  G4double csup, csdn;
+  G4double A, csup, csdn;
 
   if(verboseLevel > 0) G4cout << "### G4BGGPionInelasticXS::Initialise for "
 			      << particle->GetParticleName() << G4endl;
