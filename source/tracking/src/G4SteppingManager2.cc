@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.30 2008-09-24 08:45:58 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.31 2008-09-24 09:03:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -188,13 +188,6 @@ void G4SteppingManager::GetProcessNumber()
        (*fSelectedPostStepDoItVector)[np] = InActivated;
        break;
      }
-
-     if (fCondition==ExclusivelyForced) { 
- 	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
- 	     (*fSelectedPostStepDoItVector)[nrest] = InActivated; 
- 	 } 
-	 return;  // Take note the 'return' at here !!! 
-     } 
        
      if(physIntLength < PhysicalStep ){
          PhysicalStep = physIntLength;
@@ -204,10 +197,17 @@ void G4SteppingManager::GetProcessNumber()
 	     ->SetProcessDefinedStep(fCurrentProcess);
      }
 
+     if (fCondition==ExclusivelyForced) { 
+ 	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
+ 	     (*fSelectedPostStepDoItVector)[nrest] = InActivated; 
+ 	 } 
+	 return;  // Take note the 'return' at here !!! 
+     } 
 
    }
 
    if(fPostStepDoItProcTriggered<MAXofPostStepLoops)
+     if((*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] == InActivated)
      (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = NotForced;
 
 
