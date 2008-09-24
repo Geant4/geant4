@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2008-05-06 12:52:48 tsasaki Exp $
+$Id: History,v 1.123 2008-09-24 08:45:58 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 Sep 2008  T.Sasaki (tracking-V09-01-01)
+- G4SteppingManager2.cc: Bug fix for PhysicalStep
 
 06 May 2008  T.Sasaki (tracking-V09-01-00)
 - G4SteppingManager.cc: fTouchableHandle was not properly updated 
