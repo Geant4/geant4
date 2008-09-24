@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.48 2008-09-12 14:44:13 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.49 2008-09-24 17:39:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -196,26 +196,30 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 //   valid for kineticEnergy < 0.5 MeV
 //   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
 
-  G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
-  if(Z >= 100)   Z = 99;
-  else if(Z < 1) Z = 1;
+  G4double sum = 0.0;
 
-  // fill vector
-  if(thcorr[Z].size() == 0) {
-    thcorr[Z].resize(ncouples);
-    G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+  if(ionHEModel) {
+    G4int Z = G4int(p->GetPDGCharge()/eplus + 0.5);
+    if(Z >= 100)   Z = 99;
+    else if(Z < 1) Z = 1;
 
-    for(size_t i=0; i<ncouples; i++) {
-      (thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p, currmat[i], ethscaled);
-      //G4cout << i << ". ethscaled= " << ethscaled 
-      //<< " corr= " << (thcorr[Z])[i]/ethscaled << G4endl;
+    // fill vector
+    if(thcorr[Z].size() == 0) {
+      thcorr[Z].resize(ncouples);
+      G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+
+      for(size_t i=0; i<ncouples; i++) {
+	(thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p, currmat[i], ethscaled);
+	//G4cout << i << ". ethscaled= " << ethscaled 
+	//<< " corr= " << (thcorr[Z])[i]/ethscaled << G4endl;
+      } 
     } 
-  } 
-  G4double rest = (thcorr[Z])[couple->GetIndex()];
+    G4double rest = (thcorr[Z])[couple->GetIndex()];
 
-  G4double sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
+    sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
-  if(verbose > 1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
+    if(verbose > 1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
+  }
   return sum;
 }
 
