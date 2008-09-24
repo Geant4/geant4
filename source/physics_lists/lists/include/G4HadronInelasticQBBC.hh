@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.6 2008-09-17 18:19:33 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.7 2008-09-24 18:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ private:
 
   G4PreCompoundModel* thePreEquilib;
   G4QuasiElasticChannel*    theQuasiElastic;
-  //  G4GeneratorPrecompoundInterface* theCascade;
+  G4GeneratorPrecompoundInterface* preCompound;
   G4BinaryCascade* theCascade;
   G4QStringChipsParticleLevelInterface * theCHIPSCascade;
   G4QGSModel< G4QGSParticipants > * theQGStringModel;

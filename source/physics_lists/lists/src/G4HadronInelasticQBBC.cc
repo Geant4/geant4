@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.10 2008-09-17 18:19:33 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.11 2008-09-24 18:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4StringChipsInterface.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSMFragmentation.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -82,6 +83,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   theHPXSecC = 0;
   theHPXSecF = 0;
   theCascade = 0;
+  preCompound = 0;
   theCHIPSCascade   = 0;
   theQuasiElastic   = 0;
   theQGStringDecay  = 0;
@@ -95,6 +97,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
   delete theCascade;
+  delete preCompound;
   delete theCHIPSCascade;
   delete theQuasiElastic;
   delete theQGStringDecay;
@@ -125,8 +128,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(verbose > 1) 
     G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
 
-  G4double minEstring  = 4.0*GeV;
-  G4double maxEcascade = 5.0*GeV;
+  G4double minEstring  = 9.1*GeV;
+  G4double maxEcascade = 9.5*GeV;
   //  G4double minFtf      = 7.5*GeV;
 
   //Binary
@@ -146,12 +149,14 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
   //QGS
   theCascade = new G4BinaryCascade();
+  preCompound = new G4GeneratorPrecompoundInterface();
+
   theCHIPSCascade = new G4QStringChipsParticleLevelInterface;
-  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator("QGSC");
+  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator("QGSP");
   theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
   theQGStringDecay  = new G4ExcitedStringDecay(new G4QGSMFragmentation());
   theQGStringModel->SetFragmentationModel(theQGStringDecay);
-  theQGSModel->SetTransport(theCHIPSCascade);
+  theQGSModel->SetTransport(preCompound);
 
   theQuasiElastic = new G4QuasiElasticChannel();
   theQGSModel->SetQuasiElasticChannel(theQuasiElastic);
@@ -170,13 +175,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theFTFBModel->SetMinEnergy(minEstring);
   theFTFBModel->SetMaxEnergy(100*TeV);
 
-  //FTFC
-  G4TheoFSGenerator* theFTFCModel = new G4TheoFSGenerator("FTFC");
+  //FTFP
+  G4TheoFSGenerator* theFTFCModel = new G4TheoFSGenerator("FTFP");
   theFTFCStringModel = new G4FTFModel();
   theFTFCStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
   theFTFCStringModel->SetFragmentationModel(theFTFCStringDecay);
 
-  theFTFCModel->SetTransport(theCHIPSCascade);
+  theFTFCModel->SetTransport(preCompound);
   theFTFCModel->SetHighEnergyGenerator(theFTFCStringModel);
   theFTFCModel->SetMinEnergy(minEstring);
   theFTFCModel->SetMaxEnergy(100*TeV);
