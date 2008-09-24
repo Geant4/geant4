@@ -4,7 +4,11 @@
 
 Some of the development/fixes included since the last development tag are:
 
- o 
+ o Updated mass and width of particles according to PDG-2008.
+ o Added methods in G4NeutronTrackingCut for directly defining time and
+   energy limits.
+ o Added new EM classes with stopping data G4MaterialStopping,
+   G4SimpleMaterialStopping and G4IronStopping.
 
 ---------- Reference-tag 'Release Notes' -----------
 
