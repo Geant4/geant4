@@ -184,9 +184,42 @@ processes/scoring                                procscore-V09-01-01
 examples                                         examples-V09-01-08
 --------
 - Updated reference outputs.
+- advanced/hadrontherapy (hadrontherapy-V09-01-06)
+  o Corrections in the Low Energy Electromagnetic physic lists.
+- extended/electromagnetic/TestEm1 (testem1-V09-01-05)
+- extended/electromagnetic/TestEm2 (testem2-V09-01-05)
+- extended/electromagnetic/TestEm3 (testem3-V09-01-07)
+- extended/electromagnetic/TestEm4 (testem4-V09-01-03)
+- extended/electromagnetic/TestEm5 (testem5-V09-01-08)
+- extended/electromagnetic/TestEm6 (testem6-V09-01-02)
+- extended/electromagnetic/TestEm7 (testem7-V09-01-12)
+  o Changed default histograms format.
+- extended/electromagnetic/TestEm9 (testem9-V09-01-07)
+  o Added control on number of events with Edep < 80%.
+  o Use 'double' for number of steps instead of 'int'.
+  o Changed default histograms format.
+- extended/electromagnetic/TestEm11 (testem11-V09-01-04)
+- extended/electromagnetic/TestEm12 (testem12-V09-01-05)
+  o Changed default histograms format.
+- extended/hadronic/Hadr01 (exhadr01-V09-01-03)
+  o Improved physics-lists output.
+- persistency (persistencyEx-V09-01-00)
+  o Added examples set for GDML plugin module: new example showing how to
+    use GDML module for reading and writing; also showing how to import
+    STEP Tools files.
+  o Imported old GDML example placed inside extended/gdml.
+- novice/N02 (exampleN02-V09-01-02)
+  o PhysicsList: added method AddStepMax() for G4StepLimiter.
+  o DetectorConstruction: added method SetMaxStep().
+  o DetectorMessenger: added command /N02/det/stepMax.
 
 tests                                            tests-V09-01-08
 -----
 - Updated reference outputs and tools.
 - test11 (test11-V09-01-00)
-  o 
+  o Added thermal materals in test.
+  o Added thermal scatterings and dump neutron cross sections.
+- tests/test31 (test31-V09-01-03)
+  o Updated PhysLists: cut and step limit definition.
+- tests/test44 (test44-V09-01-02)
+  o Fixed bug in run.csh script
