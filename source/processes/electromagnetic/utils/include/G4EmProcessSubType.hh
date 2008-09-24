@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.1 2008-09-23 18:32:59 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.2 2008-09-24 15:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -49,7 +49,7 @@ enum G4EmProcessSubType
   fSubTypeNotDefined = -1, 
 
   fCoulombScattering = 1, 
-  fIonization = 2, 
+  fIonisation = 2, 
   fBremsstrahlung = 3, 
   fPairProdByCharged = 4,
   fAnnihilation = 5, 
