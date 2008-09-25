@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.31 2008-09-24 09:03:52 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.32 2008-09-25 03:14:55 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -206,10 +206,13 @@ void G4SteppingManager::GetProcessNumber()
 
    }
 
-   if(fPostStepDoItProcTriggered<MAXofPostStepLoops)
-     if((*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] == InActivated)
-     (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = NotForced;
-
+   if (fPostStepDoItProcTriggered<MAXofPostStepLoops) {
+       if ((*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] == 
+	   InActivated) {
+	   (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = 
+	       NotForced;
+       }
+   }
 
 // GPIL for AlongStep
    proposedSafety = DBL_MAX;

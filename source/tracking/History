@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2008-09-24 08:45:58 tsasaki Exp $
+$Id: History,v 1.124 2008-09-25 03:14:55 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25 Sep 2008  T.Sasaki (tracking-V09-01-02)
+- G4SteppingManager2.cc: Bug fix for the previous tag
 
 24 Sep 2008  T.Sasaki (tracking-V09-01-01)
 - G4SteppingManager2.cc: Bug fix for PhysicalStep
