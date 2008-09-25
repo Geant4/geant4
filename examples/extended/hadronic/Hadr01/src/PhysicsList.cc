@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.27 2008-09-17 18:15:31 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.28 2008-09-25 16:22:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -215,8 +215,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QBBC") {
 
     SetBuilderList0();
+    //    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+    //						    false,false,false,false,true));
     hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
-						    false,false,false,false,true));
+						    false,true,false,false,false));
 
   } else if (name == "QBBC_DEL") {
 
