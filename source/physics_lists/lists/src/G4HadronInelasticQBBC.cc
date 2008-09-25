@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.12 2008-09-25 07:28:36 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.13 2008-09-25 09:20:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name,
   : G4VPhysicsConstructor(name), verbose(ver), ftfFlag(ftf), bertFlag(bert), 
     chipsFlag(chips), hpFlag(hp), glFlag(glauber), wasActivated(false)
 {
-  if(verbose > 1) G4cout << "### HadronInelasticQBBC" << G4endl;
+  if(verbose > 1) G4cout << "### HadronInelasticQBBC bertFlag= " <<  bertFlag <<G4endl;
   theHPXSecI = 0;
   theHPXSecC = 0;
   theHPXSecF = 0;
@@ -126,7 +126,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
   wasActivated = true;
 
   if(verbose > 1) 
-    G4cout << "### HadronInelasticQBBC Construct Process" << G4endl;
+    G4cout << "### HadronInelasticQBBC Construct Process"
+           << " ftfFlag= " << ftfFlag << "  bertFlag= " << bertFlag
+	   << G4endl;
 
   G4double minEstring  = 9.1*GeV;
   G4double maxEcascade = 9.5*GeV;
