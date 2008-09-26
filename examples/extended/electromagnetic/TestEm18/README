@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2008-05-07 14:33:11 maire Exp $
+$Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -65,7 +65,7 @@ $Id: README,v 1.3 2008-05-07 14:33:11 maire Exp $
     One can control the name and the type of the histograms file with 
     the commands:
     /testem/histo/setFileName  name  (default testem18)
-    /testem/histo/setFileType  name  (default hbook)
+    /testem/histo/setFileType  name  (default root)
    
     It is also possible to print selected histograms on an ascii file:
     /testem/histo/printHisto id
