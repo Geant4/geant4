@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.2 2008-08-07 14:38:15 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.3 2008-09-26 16:23:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,14 +171,31 @@ public:
   G4double  GetGamma()   {return fGamma;}; 
   G4double  GetEnergy()  {return fEnergy;};                
   G4double  GetVarAngle(){return fVarAngle;};
+
+
+  // Test methods for msc radiation models 
+
   G4double CalculateParticleBeta( const G4ParticleDefinition* particle, 
                                  	G4double momentum    );
   G4double CalculateZommerfeld( G4double beta, G4double Z1, G4double Z2 );
-  G4double  CalculateAm( G4double momentum, G4double n, G4double Z);
-  G4double  CalculateTransportXsc(  const G4ParticleDefinition* aParticle, 
+  G4double CalculateAm( G4double momentum, G4double n, G4double Z);
+  G4double CalculateTransportXsc(  const G4ParticleDefinition* aParticle, 
                                           G4double momentum, G4double Z);
-  G4double  CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
+  G4double CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
                
+  void // G4double 
+  CalculateReciprocalRadLength(); 
+
+  void // G4complex 
+  CalculateCorrectionTMGY(G4double energy);
+
+  G4complex CalculateMigdalS(G4double energy);
+
+  G4complex CalculateCorrectionMsc(G4double energy);
+
+  G4double CalculateMscMigdalDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
+
+
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
   void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
@@ -239,10 +256,15 @@ protected:
   G4double fAlphaPlate;
   G4double fAlphaGas;
 
+  // test fields for msc radiation
 
   G4double fBeta;
   G4double fZommerfeld;
   G4double fAm;
+  G4double fRadLength;
+  G4complex fCorTMGY;
+
+
 
   G4SandiaTable* fPlatePhotoAbsCof;
  
@@ -255,7 +277,7 @@ protected:
 
 };
 
-// inline methods
+// inline test methods
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -431,5 +453,96 @@ inline  G4double G4MscRadiation::CalculateMscDiffdNdx(  G4DynamicParticle* dPart
 
   return mscDiffXsc;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// methods for Migdal averaging in absorbing medium
+
+inline void  // G4double 
+G4MscRadiation::CalculateReciprocalRadLength()
+{
+  G4double onePerL = 4.*fine_structure_const*classic_electr_radius*classic_electr_radius;
+  G4double Z       = fPlateMaterial->GetZ();
+  onePerL         *= Z*Z*fPlateMaterial->GetTotNbOfAtomsPerVolume();
+  onePerL         *= std::log(183.*std::pow(Z,-1./3.));
+
+  fRadLength = 1/onePerL;
+  // return onePerL;
+}
+
+
+inline  void // G4complex 
+G4MscRadiation::CalculateCorrectionTMGY(G4double energy)
+{
+  G4double re = 1. +(fGamma*fGamma)*fSigma1/(energy*energy);
+  G4double im = -hbarc*fGamma*fGamma/(energy*fRadLength);
+  fCorTMGY = G4complex(re,im);
+}
+
+inline  G4complex G4MscRadiation::CalculateMigdalS(G4double energy)
+{
+  // G4complex tmgy = CalculateCorrectionTMGY(energy);
+  G4complex tmgy = fCorTMGY/(8.*fGamma*fGamma); 
+  G4double hq = pi*hbarc/(2.*fine_structure_const*fGamma*fGamma*fRadLength);
+  G4double ratio = hq/energy;
+  return tmgy*std::sqrt(ratio);
+}
+
+inline  G4complex G4MscRadiation::CalculateCorrectionMsc(G4double energy)
+{
+  G4complex order = 6.*CalculateMigdalS(energy);
+  return 1. - std::exp(-order);
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
+// return Msc Migdal averaged in absorbing medium differential xsc
+
+
+inline  G4double G4MscRadiation::CalculateMscMigdalDiffdNdx(  G4DynamicParticle* dParticle, 
+                                                              G4double energy)
+{
+
+  // const G4ParticleDefinition* aParticle = dParticle->GetDefinition(); 
+  // G4double momentum = dParticle->GetTotalMomentum();
+
+  G4double Tkin = dParticle->GetKineticEnergy();
+  if(Tkin <= energy || Tkin <= 0. || energy <= 0.) return 0.;
+
+  G4double y = energy/Tkin;
+  if(verboseLevel) 
+  {
+    G4cout<<"y = "<<y<<G4endl;
+  }
+
+  G4double pMass = dParticle->GetMass();
+  fGamma = 1. + Tkin/pMass;
+
+  G4double mscDiffXsc = 1/(energy*fRadLength);
+
+  mscDiffXsc *= y*y + 4.*(1.- y)/3.;
+
+  CalculateCorrectionTMGY(energy);
+
+  G4complex cMsc = CalculateCorrectionMsc(energy); 
+
+  G4double corMedium = real(cMsc/fCorTMGY);
+
+  mscDiffXsc *= corMedium;
+
+  if( mscDiffXsc < 0. )  mscDiffXsc = 0.;
+
+  return mscDiffXsc;
+}
+
+
+
+
+
+
+
+
+
 
 #endif

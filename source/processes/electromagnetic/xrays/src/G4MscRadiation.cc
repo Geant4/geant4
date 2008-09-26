@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.cc,v 1.2 2008-08-07 14:38:15 grichine Exp $
+// $Id: G4MscRadiation.cc,v 1.3 2008-09-26 16:23:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -248,6 +248,8 @@ G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
   fSigma2 = 0.; //fPlasmaCof*gasMat->GetElectronDensity();
 
   // Compute cofs for preparation of linear photo absorption
+
+   CalculateReciprocalRadLength(); 
 
   ComputePlatePhotoAbsCof();
 
