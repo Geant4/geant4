@@ -160,7 +160,7 @@ G4CascadeMomentum G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
   G4CascadeMomentum momr;
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
-  G4CascadeMomentum mom1;
+  //  not used:  G4CascadeMomentum mom1;
   momr[1] = pt * std::cos(phi);
   momr[2] = pt * std::sin(phi);
   momr[3] = p * ct;

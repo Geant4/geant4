@@ -85,8 +85,8 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 				      G4InuclElementaryParticle* particle2,
 				      G4CollisionOutput& output) {
 
-  G4CascadeMomentum totscm; //::: fix
-  G4CascadeMomentum totlab;
+  // not used:   G4CascadeMomentum totscm; //::: fix
+  // not used:   G4CascadeMomentum totlab;
 
   // generate nucleon or pion collission with NUCLEON 
   // or pion with quasideutron

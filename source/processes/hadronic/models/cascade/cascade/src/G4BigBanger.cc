@@ -84,10 +84,10 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 	particles[i].printParticle();
     }
     if(!particles.empty()) { // convert back to Lab
-      if (verboseLevel > 2) {
-	G4CascadeMomentum totscm;
-	G4CascadeMomentum totlab;
-      }
+      //      if (verboseLevel > 2) {
+      // not used    G4CascadeMomentum totscm;
+      // not used    G4CascadeMomentum totlab;
+      //      }
       particleIterator ipart;
 
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
