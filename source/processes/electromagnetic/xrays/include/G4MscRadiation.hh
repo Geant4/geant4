@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.3 2008-09-26 16:23:00 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.4 2008-09-27 15:30:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,6 +185,8 @@ public:
                
   void // G4double 
   CalculateReciprocalRadLength(); 
+
+  G4double GetRadLength(){return fRadLength;};
 
   void // G4complex 
   CalculateCorrectionTMGY(G4double energy);
@@ -449,11 +451,12 @@ inline  G4double G4MscRadiation::CalculateMscDiffdNdx(  G4DynamicParticle* dPart
   mscDiffXsc *= y*y + 4.*(1.- y)/3.;
   
 
-  if( mscDiffXsc < 0. )  mscDiffXsc = 0.;
+  if( mscDiffXsc < 0.  || y >= 1. )  mscDiffXsc = 0.;
 
   return mscDiffXsc;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 //
 // methods for Migdal averaging in absorbing medium
@@ -484,7 +487,7 @@ inline  G4complex G4MscRadiation::CalculateMigdalS(G4double energy)
   // G4complex tmgy = CalculateCorrectionTMGY(energy);
   G4complex tmgy = fCorTMGY/(8.*fGamma*fGamma); 
   G4double hq = pi*hbarc/(2.*fine_structure_const*fGamma*fGamma*fRadLength);
-  G4double ratio = hq/energy;
+  G4double ratio = energy/hq;
   return tmgy*std::sqrt(ratio);
 }
 
@@ -531,7 +534,7 @@ inline  G4double G4MscRadiation::CalculateMscMigdalDiffdNdx(  G4DynamicParticle*
 
   mscDiffXsc *= corMedium;
 
-  if( mscDiffXsc < 0. )  mscDiffXsc = 0.;
+  if( mscDiffXsc < 0. || y >= 1.)  mscDiffXsc = 0.;
 
   return mscDiffXsc;
 }

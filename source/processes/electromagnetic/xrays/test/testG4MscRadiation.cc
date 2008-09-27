@@ -58,16 +58,58 @@
 #include "G4MscRadiation.hh"
 
 
-
-
 using namespace std;
+
+
+G4double SimpleMF(G4double x)
+{
+  G4double order = 6.*x;
+  return 1. - std::exp(-order);
+}
+
+
+
+G4double MediumMF(G4double x)
+{
+  G4double order = 6.*x;
+  order *= 1. + (3. - pi)*x;
+
+  return 1. - std::exp(-order);
+}
+
+
+
+G4double ComplexMF(G4double x)
+{
+  G4double order = 6.*x;
+  order *= 1. + (3. - pi)*x;
+  order -= x*x*x/(0.623+0.796*x+0.657*x*x);
+
+  return 1. - std::exp(-order);
+}
+
+
+
+
 
 int main()
 {
 
   G4int i, j, k, iMax;
   G4double x;
+  G4double expXrad=0., g4Xrad;
 
+  std::ofstream writef("angle.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
+
+  iMax=0;
+  // writef<<iMax<<G4endl;
+  for( i = 1; i <= iMax; i++ )
+  {
+    x = 0.01*i;
+    G4cout<<x<<"\t"<<SimpleMF(x)<<"\t"<<MediumMF(x)<<"\t"<<ComplexMF(x)<<G4endl;
+    // writef<<x<<"\t"<<SimpleMF(x)<<"\t"<<MediumMF(x)<<"\t"<<ComplexMF(x)<<G4endl;
+  }
 
   G4Element*     theElement;
   G4Material*    theMaterial;
@@ -92,7 +134,7 @@ int main()
   G4cout << "92 uranium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 77;
+  choice = 6;
 
 
   switch (choice)
@@ -101,30 +143,36 @@ int main()
 
       theElement  = man->FindOrBuildElement("H");
       theMaterial = man->FindOrBuildMaterial("G4_H");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 2:
 
       theElement  = man->FindOrBuildElement("He");
       theMaterial = man->FindOrBuildMaterial("G4_He");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 4:
 
       theElement  = man->FindOrBuildElement("Be");
       theMaterial = man->FindOrBuildMaterial("G4_Be");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 6:
 
       theElement  = man->FindOrBuildElement("C");
       theMaterial = man->FindOrBuildMaterial("G4_C");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 19.6*cm;
       break;
 
     case 7:
 
       theElement  = man->FindOrBuildElement("N");
       theMaterial = man->FindOrBuildMaterial("G4_N");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
 
@@ -132,18 +180,22 @@ int main()
 
       theElement  = man->FindOrBuildElement("O");
       theMaterial = man->FindOrBuildMaterial("G4_O");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 13:
 
       theElement  = man->FindOrBuildElement("Al");
       theMaterial = man->FindOrBuildMaterial("G4_Al");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 8.9*cm;
       break;
 
     case 14:
 
       theElement  = man->FindOrBuildElement("Si");
       theMaterial = man->FindOrBuildMaterial("G4_Si");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 18:
@@ -156,18 +208,22 @@ int main()
 
       theElement  = man->FindOrBuildElement("Fe");
       theMaterial = man->FindOrBuildMaterial("G4_Fe");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 1.76*cm;
       break;
 
     case 29:
 
       theElement  = man->FindOrBuildElement("Cu");
       theMaterial = man->FindOrBuildMaterial("G4_Cu");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 48:
 
       theElement  = man->FindOrBuildElement("Cd");
       theMaterial = man->FindOrBuildMaterial("G4_Cd");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
 
@@ -175,24 +231,31 @@ int main()
 
       theElement  = man->FindOrBuildElement("W");
       theMaterial = man->FindOrBuildMaterial("G4_W");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 0.35*cm;
       break;
 
     case 77:
 
       theElement  = man->FindOrBuildElement("Ir");
       theMaterial = man->FindOrBuildMaterial("G4_Ir");
+      g4Xrad = theMaterial->GetRadlen();
       break;
 
     case 82:
 
       theElement  = man->FindOrBuildElement("Pb");
       theMaterial = man->FindOrBuildMaterial("G4_Pb");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 0.56*cm;
       break;
 
     case 92:
 
       theElement  = man->FindOrBuildElement("U");
       theMaterial = man->FindOrBuildMaterial("G4_U");
+      g4Xrad = theMaterial->GetRadlen();
+      expXrad = 0.35*cm;
       break;
   }
 
@@ -245,10 +308,7 @@ int main()
 
   }
 
-  G4double energyMscXR, kinEnergy = 149.0*GeV;
-
-
-  iMax = 5;
+  G4double energyMscXR, kinEnergy = 25.0*GeV;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -262,33 +322,54 @@ int main()
   G4int Z   = G4int(theElement->GetZ());
   G4int A    = G4int(theElement->GetN()+0.5);
 
-  G4double step = 0.128*mm;
+  G4double step = 4.10*mm;
 
 
 
   G4double m2 = man->GetAtomicMassAmu(Z)*GeV;
   // G4double m2 = man->GetAtomicMass( Z, A);
-  G4cout <<" target mass, m2 = "<<m2/GeV<<" GeV"<<G4endl;
+  G4cout <<" target mass, m2 = "<<m2/GeV<<" GeV"<<G4endl<<G4endl;
+  G4cout <<"step = "<<step<<" mm; g4Xrad = "<<g4Xrad<<" mm; expXrad = "<<expXrad<<"  mm"<<G4endl<<G4endl;
 
 
   G4MscRadiation* mscRad = new G4MscRadiation(theMaterial, step);
 
-  mscRad->SetVerboseLevel(1);
+  mscRad->SetVerboseLevel(0);
 
-  G4double numberMscXR; 
+  G4double numberMscXR, numberMGYXR, absorption, lincofXR, radLength, ; 
+
+  iMax = 50;
+
+  writef<<iMax<<G4endl;
 
   for( i = 0; i < iMax; i++ )
   {
-    energyMscXR = (1. +i*5.)*GeV;
+    energyMscXR = std::exp(i*0.2)*0.1*MeV;
+    lincofXR = mscRad->GetPlateLinearPhotoAbs(energyMscXR);
+    absorption = (1. - std::exp(-lincofXR*step))/lincofXR;
+
     numberMscXR = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
-    numberMscXR *= step*energyMscXR;
-    G4cout <<"energyMscXR  = "<<energyMscXR/GeV<<" GeV; numberMscXR =  "
-           <<numberMscXR<<" "<<G4endl<<G4endl;
+    numberMGYXR = mscRad->CalculateMscMigdalDiffdNdx(theDynamicParticle,energyMscXR);
+
+    radLength = mscRad->GetRadLength();
+
+    numberMscXR *= energyMscXR;
+    numberMGYXR *= energyMscXR;
+
+    // numberMscXR *= expXrad;
+    // numberMscXR *= expXrad;
+
+    numberMscXR *= absorption;
+    numberMGYXR *= absorption;
+
+    G4cout <<"effStep = "<<absorption<<" mm; energyMscXR  = "<<energyMscXR/MeV<<" MeV; numberMscXR =  "
+           <<numberMscXR<<" "<<"; numberMGYXR =  "
+           <<numberMGYXR<<" "<<G4endl;
+    writef <<energyMscXR/MeV<<"\t"
+           <<numberMscXR<<"\t"
+           <<numberMGYXR<<G4endl;
   }
 
-
-  std::ofstream writef("angle.dat", std::ios::out ) ;
-  writef.setf( std::ios::scientific, std::ios::floatfield );
   
 
   return 1;
