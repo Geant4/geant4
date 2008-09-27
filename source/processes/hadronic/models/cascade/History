@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 Sep 2008 Dennis Wright (hadr-casc-V09-01-06)
+-----------------------------------------------
+- Fixed 4.3 compiler warnings for G4InuclElementaryParticle.hh by providing
+  initializers for particle type and mass
+- Remove unused variables totscm, totlab in G4BigBanger.cc, 
+  G4ElementaryParticleCollider.cc, and unused mom1 from G4InuclSpecialFunctions.cc
+
 22 Sep 2008 Gabriele Cosmo (hadr-casc-V09-01-05)
 ------------------------------------------------
 - Introduced simple wrapper class G4CascadeMomentum meant to replace usage
