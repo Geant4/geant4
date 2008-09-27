@@ -50,7 +50,8 @@ class G4InuclElementaryParticle : public G4InuclParticle {
 public:
 
   G4InuclElementaryParticle() { 
-
+    particleType = 0;     // DHW: added to keep 4.3 compiler happy
+    particleMass = 0.;    //            "              "
     valid_particle = false;
   };
 
