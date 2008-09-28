@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2008-05-07 15:03:48 maire Exp $
+$Id: README,v 1.15 2008-09-28 16:04:01 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -153,7 +153,7 @@ $Id: README,v 1.14 2008-05-07 15:03:48 maire Exp $
    /testem/histo/setFileName  name  (default fanoCavity)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (hbook by default)
+   with the command /testem/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
