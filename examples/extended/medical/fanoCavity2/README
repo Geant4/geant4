@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2008-05-07 15:11:39 maire Exp $
+$Id: README,v 1.10 2008-09-28 16:15:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -124,10 +124,10 @@ $Id: README,v 1.9 2008-05-07 15:11:39 maire Exp $
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /testem/histo/setFileName  name  (default fanoCavity)
+   /testem/histo/setFileName  name  (default fanocavity2)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /testem/histo/setFileType (hbook by default)
+   with the command /testem/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
    /testem/histo/printHisto id
