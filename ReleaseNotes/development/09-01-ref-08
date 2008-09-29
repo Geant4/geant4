@@ -195,12 +195,6 @@ processes/scoring                                procscore-V09-01-01
 -----------------
 - Correction in copying non-ionizing energy deposit in G4Step.
 
-tracking                                         tracking-V09-01-02
---------
-- Bug fix in the computation of the physical-step inside method
-  G4SteppingManager::DefinePhysicalStepLength() for correct handling
-  in Cherenkov process.
-
 examples                                         examples-V09-01-08
 --------
 - Updated reference outputs.
