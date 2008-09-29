@@ -160,6 +160,8 @@ processes/hadronic
     and added ID name "CHIPS".
   o G4ElectroNuclearReaction: moved instantiation of HE model to constructor
     from run time and added ID name "CHIPS".
+- models/de_excitation (hadr-deex-V09-01-13)
+  o Upgrades to evaporation and handler.
 - models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-01-00)
   o G4MuNuclearInteraction: added SubType and registration in the
     G4HadronicProcessStore; added PreparePhysicsTable() method; some code
@@ -176,6 +178,10 @@ processes/hadronic
 - models/parton_string/qgsm (hadr-qgsm-V09-01-01)
   o Fixed logic in G4QGSParticipants algorithm: avoid usage of iterator
     decrementing in loops. Addresses problem report #1018.
+- models/pre_equilibrium (hadr-pre-V09-01-09)
+  o Fixed cases of floating point overflow when using pre-compound in       (**)
+    combination with binary-cascade; reviewed algorithm in method
+    G4PreCompoundEmission::rho().
 - processes (hadr-proc-V09-01-01)
   o  G4HadronElasticProcess, G4HadronCaptureProcess, and
      G4HadronFissionProcess: use PostStepDoIt() and DumpPhysicsTable() from
