@@ -69,12 +69,14 @@ particles                                        particles-V09-01-06
 - Updated mass and width according to PDG-2008.
 - Avoid direct comparison of strings in method G4IonTable::IsIon().
 
-physics_lists                                    phys-lists-V09-01-11
+physics_lists                                    phys-lists-V09-01-12
 -------------
 - G4NeutronTrackingCut: added methods for directly defining time and
   energy limits.
 - G4HadronInelasticQBBC, QBBC: using FTF (as default) with Binary Cascade
   and improved printout.
+- Added temporary variant to QBBC, equivalent to QGSP_BERT without LHEP
+  for protons, neutrons and pions.
 
 processes/decay                                  decay-V09-01-03
 ---------------
@@ -104,7 +106,7 @@ processes/electromagnetic/standard               emstand-V09-01-34
   taken from the base class and from models; separated treatment of He ions.
 - G4WaterStopping: use mass number instead of atomic mass.
 
-processes/electromagnetic/utils                  emutils-V09-01-28
+processes/electromagnetic/utils                  emutils-V09-01-29
 -------------------------------
 - G4VEnergyLossProcess: added pointer to current G4VEmModel; removed method
   CorrectionsAlongStep(), using instead corresponding method of the model;
@@ -115,7 +117,9 @@ processes/electromagnetic/utils                  emutils-V09-01-28
     CorrectionsAlongStep() and ActivateNuclearStopping() needed for simulation
     of ion transport.
   o Use STL vector for cross sections instead of array.
-- G4EmCorrections: added interfaces to effective charge.
+- G4EmCorrections:
+  o Added interfaces to effective charge.
+  o Do not compute ion corrections if G4hIonisation process is used for ions.
 - G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess: use new
   DumpModelList() method from G4EmModelManager in the verbosity output.
 - G4VEmFluctuationModel: added method SetParticleAndCharge().
@@ -141,7 +145,7 @@ processes/hadronic
     PostStepDoIt() and DumpPhysicsTable() methods.
   o G4HadronInelasticProcess: use methods from the base class.
   o G4HadronicProcessStore: improved printout.
-- models/cascade (hadr-casc-V09-01-05)
+- models/cascade (hadr-casc-V09-01-06)
   o G4ElementaryParticleCollider: in method GenerateMultiplicity(), removed
     large_cut which increases multiplicity from 3 to 4 abruptly at 4 GeV
     and above. This caused a sharp drop-off in the single pion spectra from
@@ -185,6 +189,12 @@ processes/scoring                                procscore-V09-01-01
 -----------------
 - Correction in copying non-ionizing energy deposit in G4Step.
 
+tracking                                         tracking-V09-01-02
+--------
+- Bug fix in the computation of the physical-step inside method
+  G4SteppingManager::DefinePhysicalStepLength() for correct handling
+  in Cherenkov process.
+
 examples                                         examples-V09-01-08
 --------
 - Updated reference outputs.
@@ -204,9 +214,17 @@ examples                                         examples-V09-01-08
   o Changed default histograms format.
 - extended/electromagnetic/TestEm11 (testem11-V09-01-04)
 - extended/electromagnetic/TestEm12 (testem12-V09-01-05)
+- extended/electromagnetic/TestEm14 (testem14-V09-01-03)
+- extended/electromagnetic/TestEm15 (testem15-V09-01-04)
+- extended/electromagnetic/TestEm16 (testem16-V09-01-02)
+- extended/electromagnetic/TestEm17 (testem17-V09-01-04)
+- extended/electromagnetic/TestEm18 (testem18-V09-01-04)
   o Changed default histograms format.
 - extended/hadronic/Hadr01 (exhadr01-V09-01-03)
   o Improved physics-lists output.
+- extended/medical/fanoCavity (fano-V09-01-03)
+- extended/medical/fanoCavity2 (fano2-V09-01-03)
+  o Changed default histograms format.
 - persistency (persistencyEx-V09-01-00)
   o Added examples set for GDML plugin module: new example showing how to
     use GDML module for reading and writing; also showing how to import
