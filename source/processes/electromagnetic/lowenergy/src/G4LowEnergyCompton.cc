@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.45 2008-04-24 14:13:25 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.46 2008-09-30 06:49:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -265,7 +265,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.ProposeMomentumDirection(photonDirection1);
  
   G4double photonEnergy1 = photonE;
-  G4cout << "--> PHOTONENERGY1 = " << photonE/keV << G4endl;
+  //G4cout << "--> PHOTONENERGY1 = " << photonE/keV << G4endl;
 
   if (photonEnergy1 > 0.)
     {
