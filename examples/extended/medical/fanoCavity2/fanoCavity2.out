@@ -52,18 +52,19 @@ PhysicsList::SetCuts:CutLength : 10 km
 #
 /run/beamOn 40000
 
-phot:  Total cross sections from Sandia parametrisation. 
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
+compt:   tables are built for  gamma
       Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
+conv:   tables are built for  gamma
       Lambda tables from 1.022 MeV to 10 GeV in 800 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
@@ -73,17 +74,17 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
       Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 10 GeV in 800 bins
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
       Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       Delta cross sections and sampling from myMollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
       CSDA range table up to 10 GeV in 800 bins
 
 msc:  Model variant of multiple scattering for proton
@@ -94,10 +95,11 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
       Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 GeV
       CSDA range table up to 10 GeV in 800 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
@@ -150,37 +152,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8720 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52454 Ne-_cav= 2724 doseCavity/Ebeam= 0.98664  (100*(ratio-1) = -1.33552 %)
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52454 Ne-_cav= 2732 doseCavity/Ebeam= 0.98985  (100*(ratio-1) = -1.01501 %)
 
---->evntNb= 20000 Nwall= 19994 Ncav= 7 Ic/Iw= 1.83645 Ne-_cav= 5570 doseCavity/Ebeam= 1.00589  (100*(ratio-1) = 0.58928 %)
+--->evntNb= 20000 Nwall= 19994 Ncav= 7 Ic/Iw= 1.83645 Ne-_cav= 5564 doseCavity/Ebeam= 1.00453  (100*(ratio-1) = 0.45307 %)
 
---->evntNb= 30000 Nwall= 29993 Ncav= 8 Ic/Iw= 1.39911 Ne-_cav= 8223 doseCavity/Ebeam= 1.04784  (100*(ratio-1) = 4.78370 %)
+--->evntNb= 30000 Nwall= 29993 Ncav= 8 Ic/Iw= 1.39911 Ne-_cav= 8211 doseCavity/Ebeam= 1.05393  (100*(ratio-1) = 5.39311 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=16s Real=16s Sys=0s
+  User=16s Real=16s Sys=0.01s
 
- Process calls frequency --->  msc= 531803  eIoni= 618804  Transportation= 21972
+ Process calls frequency --->  msc= 531614  eIoni= 618912  Transportation= 21952
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 10985	 Energy = 6.979 GeV
-      Exit  --> nbParticles = 10986	 Energy = 6.983 GeV
+      Enter --> nbParticles = 10975	 Energy = 6.975 GeV
+      Exit  --> nbParticles = 10976	 Energy = 6.978 GeV
 
- beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.57410	 energyFluence = 38.12113 MeV*cm2/mg
+ beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.57410	 energyFluence = 38.12110 MeV*cm2/mg
 
- Total edep in cavity = 8.32655 MeV +- 6.48829 %
- Total dose in cavity = 41.63274 MeV*cm2/mg +- 6.48829 %
+ Total edep in cavity = 8.32970 MeV +- 6.49457 %
+ Total dose in cavity = 41.64850 MeV*cm2/mg +- 6.49457 %
 
- DoseCavity/EnergyFluence = 1.09212 +- 0.07086
+ DoseCavity/EnergyFluence = 1.09253 +- 0.07096
 
- Total charged trackLength in cavity = 34.8185 m     (mean value = 3.1696 mm )
+ Total charged trackLength in cavity = 34.6910 m     (mean value = 3.1609 mm )
 
- StepSize of ch. tracks in wall   = 158.0621 um  +- 182.2140 um 	 (nbSteps/track = 27.7623)
- StepSize of ch. tracks in cavity = 557.8008 um  +- 1.0255 mm 	 (nbSteps/track = 5.6824)
+ StepSize of ch. tracks in wall   = 158.0911 um  +- 182.1648 um 	 (nbSteps/track = 27.7616)
+ StepSize of ch. tracks in cavity = 556.4278 um  +- 1.0194 mm 	 (nbSteps/track = 5.6807)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1530490902, 289490935
+ Current couple of seeds = 320586833, 1457186214
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -42,18 +42,18 @@ Registered filter factories:
 
 ***** Table : Nb of materials = 16 *****
 
- Material:   Vacuum     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Nucl.Int.Length: 113804113.435 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727680.290 pc   Nucl.Int.Length: 113804204.102 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  70.893 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    LPAir     density:  0.000 mg/cm3  RadL: 56273252.573 km   Nucl.Int.Length: 135377106.646 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:    LPAir     density:  0.000 kg/m3   RadL: 56273281.030 km   Nucl.Int.Length: 135377214.500 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  71.50 %  ElmAbundance  75.57 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  25.00 %  ElmAbundance  23.14 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   3.50 %  ElmAbundance   1.30 %
@@ -61,7 +61,7 @@ Registered filter factories:
  Material:       Pl     density: 21.400 g/cm3   RadL:   3.058 mm   Nucl.Int.Length:   9.486 cm   Imean: 787.800 eV 
    --->  Element: Pl ( )   Z = 78.0   N = 195.1   A = 195.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Butane     density:  0.026 mg/cm3  RadL:  17.729 km   Nucl.Int.Length:  25.686 km   Imean:  53.612 eV   temperature: 293.16 K  pressure:   0.01 atm
+ Material:   Butane     density:  0.026 kg/m3   RadL:  17.729 km   Nucl.Int.Length:  25.686 km   Imean:  53.612 eV   temperature: 293.16 K  pressure:   0.01 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  82.63 %  ElmAbundance  28.57 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  17.37 %  ElmAbundance  71.43 %
 
@@ -243,9 +243,9 @@ LowEnBrem:  Total cross sections from EEDL database.
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -253,9 +253,9 @@ eBrem:   tables are built for  e+
       Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -407,21 +407,21 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   is non-zero.
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.50464016
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.099180855
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.50463879108429
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.099181093275547
 
 -> Event # 3 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.46884209
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.11931427
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.46884414553642
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.11931455135345
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.53181338
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.071219295
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.53181147575378
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.071220487356186
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -437,8 +437,8 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.34575373
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.082672782
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.34575149416924
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.082673735916615
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 -> Total number of particles detected by the gas detector : 4

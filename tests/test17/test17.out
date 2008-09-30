@@ -41,12 +41,12 @@ Material available: Graphite
    --->  Element: liquidXenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 321.900 eV 
    --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm   Imean: 790.000 eV 
+ Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.541 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
@@ -56,14 +56,14 @@ Material available: Graphite
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:  Methane CH_4   density:  0.667 mg/cm3  RadL: 696.375 m    Nucl.Int.Length: 907.942 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Methane CH_4   density:  0.667 kg/m3   RadL: 696.375 m    Nucl.Int.Length: 907.942 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  25.19 %  ElmAbundance  80.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction:  74.81 %  ElmAbundance  20.00 %
 
- Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.377 cm   Imean:  78.000 eV 
+ Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.378 cm   Imean:  78.000 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -96,18 +96,19 @@ Set cuts for all particles!
 #
 /run/beamOn 1000
 
-phot:  Total cross sections from Sandia parametrisation. 
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
+compt:   tables are built for  gamma
       Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
+conv:   tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -117,9 +118,9 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -130,9 +131,9 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -140,9 +141,9 @@ eBrem:   tables are built for  e+
       Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -294,9 +295,13 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -311,9 +316,13 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -353,17 +362,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.36s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18367 +- 0.00529313  microns 
+    Track Length in absorber = 9.18367 +- 0.00529312  microns 
     CSDA  Range  in absorber = 9.0481 +- 0.00575201  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.124669 +- 0.00529313 microns 
+    Track Length (G4 - ICRU49) = 0.124669 +- 0.00529312 microns 
     CSDA  Range  (G4 - ICRU49) = 0.1791 +- 0.00575201 microns 
 
 Average Number electrons per event = 0
@@ -396,11 +405,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-<<<<<<< test17.out
-  User=0.35s Real=0.35s Sys=0s
-=======
-  User=0.34s Real=0.34s Sys=0s
->>>>>>> 1.136
+  User=0.34s Real=0.35s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -441,12 +446,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.75s Real=0.75s Sys=0s
+  User=0.72s Real=0.72s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56911 +- 0.00118061  microns 
-    CSDA  Range  in absorber = 6.92522 +- 0.0118302  microns 
+    Track Length in absorber = 8.56856 +- 0.00123205  microns 
+    CSDA  Range  in absorber = 6.95627 +- 0.0116435  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -483,25 +488,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-<<<<<<< test17.out
-  User=1.17s Real=1.17s Sys=0s
-=======
-  User=1.13s Real=1.12s Sys=0s
->>>>>>> 1.136
+  User=1.13s Real=1.13s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19915 +- 0.0160238  microns 
-    CSDA  Range  in absorber = 9.06967 +- 0.0158716  microns 
+    Track Length in absorber = 9.15982 +- 0.0168903  microns 
+    CSDA  Range  in absorber = 9.03445 +- 0.0170803  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.140151 +- 0.0160238 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.200667 +- 0.0158716 microns 
+    Track Length (G4 - ICRU49) = 0.100824 +- 0.0168903 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.165448 +- 0.0170803 microns 
 
-Average Number electrons per event = 22.24
-Average Number photons per event   = 22.24
+Average Number electrons per event = 22.69
+Average Number photons per event   = 22.69
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -531,24 +532,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-<<<<<<< test17.out
-  User=2.59s Real=2.59s Sys=0s
-=======
-  User=2.44s Real=2.45s Sys=0s
->>>>>>> 1.136
+  User=2.28s Real=2.29s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.14363 +- 0.0136817  microns 
-    CSDA  Range  in absorber = 9.01636 +- 0.0134521  microns 
+    Track Length in absorber = 9.18795 +- 0.0147258  microns 
+    CSDA  Range  in absorber = 9.05483 +- 0.0143044  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.0846258 +- 0.0136817 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.14736 +- 0.0134521 microns 
+    Track Length (G4 - ICRU49) = 0.128951 +- 0.0147258 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.185834 +- 0.0143044 microns 
 
-Average Number electrons per event = 523.11
-Average Number photons per event   = 2.95
+Average Number electrons per event = 522.32
+Average Number photons per event   = 2.98
 
 G4 kernel has come to Quit state.

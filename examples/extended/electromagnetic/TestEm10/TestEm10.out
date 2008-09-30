@@ -31,7 +31,7 @@ total radiator thickness = 5.94 cm
 plate material = Mylar
 gas material = Air
 plate plasma energy = 24.5068 eV
-gas plasma energy = 0.731967 eV
+gas plasma energy = 0.731966 eV
 Regular transparent X-ray TR  radiator EM process is called
 Em10PhysicsList::SetCuts:CutLength for e-, e+ and gamma is: 1 mm 
 Radiator gamma cut    = 1 mm
@@ -43,18 +43,19 @@ Detector electron cut = 1 mm
 Detector positron cut = 1 mm
 Detector cuts are set
 
-phot:  Total cross sections from Sandia parametrisation. 
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
+compt:   tables are built for  gamma
       Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
+conv:   tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -64,9 +65,9 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -135,9 +136,9 @@ SynRad:  Incoherent Synchrotron Radiation
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -145,9 +146,9 @@ eBrem:   tables are built for  e+
       Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
 
 Lorentz Factor	XTR photon number
 
@@ -212,26 +213,29 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
 hIoni:   tables are built for  kaon+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
 hIoni:   tables are built for  kaon-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -241,9 +245,13 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -258,9 +266,13 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -275,10 +287,11 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -288,10 +301,11 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 
 ========= Table of registered couples ==============================
 
@@ -330,26 +344,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.55s Real=1.55s Sys=0s
+  User=1.58s Real=1.57s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=43.4815 +- 0.48049  mm  
+    mean charged track length   in absorber=43.9954 +- 0.571309  mm  
 
-            mean energy deposit in absorber=0.0522961 +- 0.000878734  MeV 
+            mean energy deposit in absorber=0.0530131 +- 0.000988611  MeV 
 
- mean number of steps in absorber (charged) =9.081 +- 0.261871      
- mean number of steps in absorber (neutral) =2.766 +- 0.0524523      
+ mean number of steps in absorber (charged) =8.752 +- 0.259597      
+ mean number of steps in absorber (neutral) =2.794 +- 0.0526456      
 
-   mean number of charged secondaries = 3.603 +- 0.0769376
+   mean number of charged secondaries = 3.566 +- 0.0836041
 
-   mean number of neutral secondaries = 0.057 +- 0.00759941
+   mean number of neutral secondaries = 0.033 +- 0.00564898
 
-   mean number of e-s =3.603  and e+s =0
+   mean number of e-s =3.565  and e+s =0.001
 
-(number) transmission coeff=0.505  reflection coeff=0.019
+(number) transmission coeff=0.516  reflection coeff=0.018
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=56
+#entries=1000    #underflows=0    #overflows=60
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -359,70 +373,70 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           3       0.003
-    9   13.8462           5       0.005
-   10   15.3846           5       0.005
-   11   16.9231          15       0.015
-   12   18.4615          18       0.018
-   13        20          26       0.026
-   14   21.5385          11       0.011
-   15   23.0769          22       0.022
-   16   24.6154          31       0.031
-   17   26.1538          16       0.016
-   18   27.6923          24       0.024
-   19   29.2308          21       0.021
-   20   30.7692          30        0.03
-   21   32.3077          28       0.028
-   22   33.8462          21       0.021
-   23   35.3846          35       0.035
-   24   36.9231          29       0.029
-   25   38.4615          27       0.027
-   26        40          40        0.04
-   27   41.5385          26       0.026
-   28   43.0769          32       0.032
-   29   44.6154          33       0.033
-   30   46.1538          26       0.026
-   31   47.6923          25       0.025
-   32   49.2308          25       0.025
-   33   50.7692          21       0.021
-   34   52.3077          21       0.021
-   35   53.8462          22       0.022
+    8   12.3077           1       0.001
+    9   13.8462           7       0.007
+   10   15.3846           8       0.008
+   11   16.9231          13       0.013
+   12   18.4615          11       0.011
+   13        20          17       0.017
+   14   21.5385          23       0.023
+   15   23.0769          23       0.023
+   16   24.6154          17       0.017
+   17   26.1538          30        0.03
+   18   27.6923          29       0.029
+   19   29.2308          24       0.024
+   20   30.7692          26       0.026
+   21   32.3077          40        0.04
+   22   33.8462          28       0.028
+   23   35.3846          26       0.026
+   24   36.9231          32       0.032
+   25   38.4615          25       0.025
+   26        40          22       0.022
+   27   41.5385          29       0.029
+   28   43.0769          35       0.035
+   29   44.6154          29       0.029
+   30   46.1538          33       0.033
+   31   47.6923          26       0.026
+   32   49.2308          19       0.019
+   33   50.7692          26       0.026
+   34   52.3077          20        0.02
+   35   53.8462          21       0.021
    36   55.3846          27       0.027
-   37   56.9231          15       0.015
-   38   58.4615          23       0.023
-   39        60          21       0.021
-   40   61.5385          18       0.018
-   41   63.0769          19       0.019
-   42   64.6154          14       0.014
-   43   66.1538          15       0.015
-   44   67.6923           8       0.008
-   45   69.2308          16       0.016
-   46   70.7692           9       0.009
-   47   72.3077          15       0.015
-   48   73.8462           7       0.007
-   49   75.3846           9       0.009
-   50   76.9231           5       0.005
+   37   56.9231          19       0.019
+   38   58.4615          22       0.022
+   39        60          23       0.023
+   40   61.5385          16       0.016
+   41   63.0769          14       0.014
+   42   64.6154          17       0.017
+   43   66.1538          14       0.014
+   44   67.6923           6       0.006
+   45   69.2308          11       0.011
+   46   70.7692          13       0.013
+   47   72.3077           9       0.009
+   48   73.8462           8       0.008
+   49   75.3846          11       0.011
+   50   76.9231           7       0.007
    51   78.4615           7       0.007
    52        80           8       0.008
-   53   81.5385           7       0.007
-   54   83.0769          10        0.01
-   55   84.6154           9       0.009
+   53   81.5385           6       0.006
+   54   83.0769           9       0.009
+   55   84.6154          10        0.01
    56   86.1538           8       0.008
-   57   87.6923           8       0.008
-   58   89.2308           5       0.005
+   57   87.6923           2       0.002
+   58   89.2308           6       0.006
    59   90.7692           4       0.004
    60   92.3077           6       0.006
-   61   93.8462           4       0.004
-   62   95.3846           2       0.002
-   63   96.9231           2       0.002
-   64   98.4615           5       0.005
+   61   93.8462           8       0.008
+   62   95.3846           3       0.003
+   63   96.9231           3       0.003
+   64   98.4615           3       0.003
 
- Emp =            0.04   width=           0.04  MeV 
+ Emp =       0.0323077   width=      0.0384615  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1800185535, 1854740775
+ Current couple of seeds = 121050666, 1578212807
 ----------------------------------------
 
 ========= Table of registered couples ==============================

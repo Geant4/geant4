@@ -13,7 +13,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -56,9 +56,9 @@ PhysicsList::SetCuts:CutLength : 1 um
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -66,9 +66,9 @@ eBrem:   tables are built for  e+
       Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
 
 ========= Table of registered couples ==============================
 
@@ -85,8 +85,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=33.01s Real=33.06s Sys=0.01s
-Time elapsed in 1 events ---- User=33.01s Real=33.07s Sys=0.01s
+  User=33.29s Real=33.37s Sys=0.03s
+Time elapsed in 1 events ---- User=33.29s Real=33.37s Sys=0.03s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -105,8 +105,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=244.24s Real=244.37s Sys=0.02s
-Time elapsed in 9 events ---- User=244.24s Real=244.37s Sys=0.02s
+  User=245.51s Real=245.74s Sys=0.05s
+Time elapsed in 9 events ---- User=245.51s Real=245.74s Sys=0.05s
 #
 /gun/particle proton
 #------------------
@@ -129,8 +129,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.04s Real=4.06s Sys=0s
-Time elapsed in 1 events ---- User=4.04s Real=4.06s Sys=0s
+  User=3.94s Real=3.95s Sys=0s
+Time elapsed in 1 events ---- User=3.94s Real=3.95s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -149,8 +149,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.82s Real=3.82s Sys=0s
-Time elapsed in 1 events ---- User=3.82s Real=3.82s Sys=0s
+  User=3.9s Real=3.91s Sys=0s
+Time elapsed in 1 events ---- User=3.9s Real=3.91s Sys=0s
 #
 /gun/particle alpha
 #------------------
@@ -173,8 +173,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=22.45s Real=22.47s Sys=0.01s
-Time elapsed in 1 events ---- User=22.45s Real=22.47s Sys=0.01s
+  User=22.47s Real=22.58s Sys=0.01s
+Time elapsed in 1 events ---- User=22.47s Real=22.58s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -193,8 +193,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.32s Real=23.52s Sys=0s
-Time elapsed in 1 events ---- User=23.32s Real=23.52s Sys=0s
+  User=23.35s Real=23.44s Sys=0.02s
+Time elapsed in 1 events ---- User=23.35s Real=23.44s Sys=0.02s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 5025 calls

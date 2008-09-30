@@ -47,8 +47,8 @@ DoIt Vector:
 The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    Transportation
@@ -56,8 +56,8 @@ DoIt Vector:
    Transportation
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
   The final AlongStep Vectors: 
 GPIL Vector: 
@@ -69,8 +69,8 @@ DoIt Vector:
 The final PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    ImportanceProcess
@@ -80,23 +80,24 @@ DoIt Vector:
    ImportanceProcess
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
 ================================================
  configure preconf 
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
+conv:   tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
+compt:   tables are built for  gamma
       Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
 
-phot:  Total cross sections from Sandia parametrisation. 
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
 msc:  Model variant of multiple scattering for e-
@@ -107,9 +108,9 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -120,9 +121,9 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -130,9 +131,9 @@ eBrem:   tables are built for  e+
       Total cross sections and sampling from eBrem model (based on the EEDL data library) 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -142,10 +143,11 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 3
@@ -154,26 +156,29 @@ msc:  Model variant of multiple scattering for GenericIon
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
 hIoni:   tables are built for  kaon+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
 hIoni:   tables are built for  kaon-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -183,9 +188,13 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -200,9 +209,13 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
 muBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
@@ -217,10 +230,11 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
@@ -230,10 +244,11 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -266,8 +281,8 @@ hIoni:   tables are built for  pi-
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
            inelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
                                         TheoFSGenerator: Emin(GeV)=    19  Emax(GeV)= 100000
-       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
-       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 
                      Hadronic Processes for <pi+>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -299,26 +314,26 @@ hIoni:   tables are built for  pi-
  Number of event processed : 100
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |             7 |           107 |             0 |             0 |     8.0931271 |     8.1239305 |             1 |     1064.9342 |     1064.9342 |     27.265876 |     8651.4515 |      220.6662 |
-       cell_01 |           115 |           131 |           145 |           145 |     7.7805139 |     8.9843413 |             1 |     13234.513 |     13234.513 |      365.8679 |     118903.38 |     2846.6403 |
-       cell_02 |            89 |           203 |           273 |         136.5 |     5.5041706 |      7.758421 |           0.5 |     20368.585 |     10184.293 |     359.97654 |      79014.03 |     1981.3723 |
-       cell_03 |           107 |           246 |           323 |         80.75 |     4.7674497 |      7.834985 |          0.25 |     25280.813 |     6320.2032 |     262.24721 |     49518.698 |     1250.2504 |
-       cell_04 |           128 |           303 |           419 |        52.375 |     3.3428712 |     7.4053288 |         0.125 |     29996.082 |     3749.5103 |     214.53653 |     27766.357 |     717.16798 |
-       cell_05 |           125 |           281 |           421 |       26.3125 |     2.1078593 |     6.8572277 |        0.0625 |      30770.61 |     1923.1631 |     165.21334 |     13187.568 |     348.24647 |
-       cell_06 |           139 |           318 |           485 |      15.15625 |     3.0916197 |     6.7474324 |       0.03125 |     35012.646 |     1094.1452 |     63.842019 |     7382.6707 |     197.37524 |
-       cell_07 |           160 |           379 |           576 |             9 |    0.25283729 |     6.5166487 |      0.015625 |     42379.099 |     662.17341 |     464.35139 |     4315.1515 |     117.40535 |
-       cell_08 |           170 |           384 |           581 |     4.5390625 |     3.3016016 |     6.2212012 |     0.0078125 |     41684.921 |     325.66345 |     16.970308 |     2026.0178 |     56.029195 |
-       cell_09 |           196 |           456 |           760 |       2.96875 |     2.9770754 |     5.9384016 |    0.00390625 |     47347.979 |     184.95304 |     10.417671 |     1098.3254 |     31.014191 |
-       cell_10 |           221 |           478 |           815 |     1.5917969 |   0.051324103 |     5.5136754 |   0.001953125 |     53532.933 |     104.55651 |     325.49064 |     576.49066 |     16.705515 |
-       cell_11 |           234 |           508 |          1031 |     1.0068359 |     2.5786219 |     4.9139673 |  0.0009765625 |      61461.65 |     60.021142 |     3.4854535 |     294.94193 |     8.9876667 |
-       cell_12 |           251 |           546 |          1019 |    0.49755859 |     2.6892515 |     4.9264271 | 0.00048828125 |     59156.153 |      28.88484 |     1.6218988 |     142.29906 |     4.3616937 |
-       cell_13 |           278 |           599 |          1125 |     0.2746582 |    0.32457707 |      4.761736 | 0.00024414062 |     67293.983 |     16.429195 |     7.4955005 |      78.23149 |     2.4328676 |
-       cell_14 |           312 |           683 |          1407 |    0.17175293 |    0.14736985 |     4.2934085 | 0.00012207031 |     78808.913 |     9.6202286 |     9.0825711 |     41.303571 |     1.3384971 |
-       cell_15 |           353 |           759 |          1533 |   0.093566895 |     2.3720642 |     4.2862878 | 6.1035156e-05 |     89583.016 |     5.4677134 |    0.32221611 |     23.436193 |    0.76431729 |
-       cell_16 |           424 |           917 |          1959 |   0.059783936 |     2.3366214 |     4.0727666 | 3.0517578e-05 |     107851.44 |     3.2913647 |    0.19177261 |      13.40496 |    0.44809999 |
-       cell_17 |           466 |          1001 |          2105 |   0.032119751 |      2.153183 |      3.871061 | 1.5258789e-05 |      118274.9 |     1.8047317 |    0.11085728 |     6.9862265 |      0.238696 |
-       cell_18 |           456 |          1089 |          2399 |   0.018302917 |     0.2854689 |     3.7563799 | 7.6293945e-06 |     126076.76 |    0.96188933 |     0.4381993 |     3.6132218 |    0.12509227 |
-       cell_19 |           484 |           484 |             0 |             0 |     1.9081442 |     3.8720535 | 7.6293945e-06 |     71101.274 |    0.54245967 |   0.037522229 |     2.1004328 |   0.071597825 |
+       cell_00 |            10 |           110 |             0 |             0 |     4.6829579 |     7.5029287 |             1 |     1475.3463 |     1475.3463 |     60.511084 |     11069.418 |     283.37086 |
+       cell_01 |           109 |           133 |           131 |           131 |     7.0313501 |     9.0712581 |             1 |      11123.52 |      11123.52 |     340.19132 |     100904.32 |     2392.0043 |
+       cell_02 |            80 |           181 |           210 |           105 |     6.6115436 |     8.5095188 |           0.5 |     17043.639 |     8521.8196 |     266.85628 |     72516.584 |     1764.3319 |
+       cell_03 |           108 |           245 |           334 |          83.5 |     4.1590615 |      7.617544 |          0.25 |     27285.888 |      6821.472 |      315.5314 |     51962.863 |     1312.3145 |
+       cell_04 |           142 |           329 |           409 |        51.125 |     6.6052294 |     7.8606515 |         0.125 |     32911.153 |     4113.8941 |     123.93362 |     32337.888 |     818.60996 |
+       cell_05 |           152 |           354 |           431 |       26.9375 |     6.6256827 |     7.6931266 |        0.0625 |     36128.244 |     2258.0153 |     67.054989 |     17371.197 |     444.28508 |
+       cell_06 |           174 |           392 |           539 |      16.84375 |     5.4284117 |     7.0218621 |       0.03125 |     42081.147 |     1315.0358 |     45.003413 |     9234.0004 |     244.29706 |
+       cell_07 |           188 |           434 |           655 |     10.234375 |     4.9386695 |     6.6387729 |      0.015625 |     49816.975 |     778.39023 |     28.407167 |      5167.556 |     140.29361 |
+       cell_08 |           221 |           522 |           858 |      6.703125 |     4.1339105 |     6.3101044 |     0.0078125 |     56758.879 |     443.42874 |      18.64599 |     2798.0817 |     77.080855 |
+       cell_09 |           266 |           596 |           966 |     3.7734375 |     4.4505809 |     6.0455229 |    0.00390625 |     70014.102 |     273.49259 |     10.492956 |     1653.4057 |     46.699748 |
+       cell_10 |           291 |           650 |          1060 |     2.0703125 |     4.4323149 |     5.7487735 |   0.001953125 |     73198.242 |     142.96532 |     5.3680849 |     821.87522 |     23.793043 |
+       cell_11 |           313 |           679 |          1140 |     1.1132812 |     3.4635246 |     5.5666411 |  0.0009765625 |     77459.407 |     75.643952 |     3.5569805 |     421.08273 |     12.319689 |
+       cell_12 |           351 |           755 |          1218 |    0.59472656 |     3.7520997 |     5.3022474 | 0.00048828125 |     84261.643 |      41.14338 |     1.7461911 |     218.15238 |      6.551883 |
+       cell_13 |           381 |           843 |          1382 |    0.33740234 |    0.28232907 |     5.2374054 | 0.00024414062 |     92798.661 |     22.655923 |     12.660074 |     118.65825 |     3.5743068 |
+       cell_14 |           415 |           916 |          1650 |    0.20141602 |    0.21893115 |     4.7147372 | 0.00012207031 |      103178.6 |     12.595044 |     8.5630455 |     59.382323 |     1.8747174 |
+       cell_15 |           496 |          1095 |          2060 |    0.12573242 |   0.042342938 |     4.4877056 | 6.1035156e-05 |     125977.72 |     7.6890696 |     26.308622 |     34.506281 |     1.1139844 |
+       cell_16 |           561 |          1234 |          2371 |   0.072357178 |     3.0301458 |     4.3755865 | 3.0517578e-05 |     143120.74 |     4.3676985 |    0.20723505 |     19.111242 |    0.62795242 |
+       cell_17 |           609 |          1355 |          2679 |   0.040878296 |    0.15465858 |     4.3062087 | 1.5258789e-05 |     158243.51 |     2.4146043 |     2.2246551 |      10.39779 |    0.34406199 |
+       cell_18 |           587 |          1402 |          2745 |   0.020942688 |   0.098873635 |     4.3111069 | 7.6293945e-06 |     155899.96 |     1.1894223 |     1.7069779 |     5.1277267 |    0.16877511 |
+       cell_19 |           623 |           623 |             0 |             0 |     2.7007341 |     4.2156007 | 7.6293945e-06 |      93470.48 |    0.71312317 |   0.036911307 |     3.0062426 |   0.099687627 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!
@@ -332,8 +347,8 @@ DoIt Vector:
   The initial PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    ImportanceProcess
@@ -343,8 +358,8 @@ DoIt Vector:
    ImportanceProcess
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
   The final AlongStep Vectors: 
 GPIL Vector: 
@@ -354,8 +369,8 @@ DoIt Vector:
   The final PostStep Vectors: 
 GPIL Vector: 
    Decay
-   HadronCapture
-   HadronFission
+   nCapture
+   nFission
    inelastic
    HadronElastic
    Transportation
@@ -363,7 +378,7 @@ DoIt Vector:
    Transportation
    HadronElastic
    inelastic
-   HadronFission
-   HadronCapture
+   nFission
+   nCapture
    Decay
 ================================================

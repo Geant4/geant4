@@ -21,7 +21,7 @@
    --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
    --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    G4_He     density:  0.166 mg/cm3  RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_He     density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
    --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
    --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -177,22 +177,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=14.46s Real=14.46s Sys=0s
+  User=14.11s Real=14.19s Sys=0.02s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.06
-Average number of gamma                      20.89
-Average number of e+                         0.7408
+Average number of e-                         12.17
+Average number of gamma                      20.95
+Average number of e+                         0.7623
 Average number of neutrons                   0
-Average number of steps in absorber          32.66
-Average number of e- steps in target         18.71
-Average number of g  produced in the target  20.06
-Average number of e- produced in the target  7.075
-Average number of g produced in the phantom  0.5253
-Average number of e- produced in the phantom 2.815
-Total gamma fluence in front of phantom      8.801 MeV 
+Average number of steps in absorber          32.67
+Average number of e- steps in target         18.73
+Average number of g  produced in the target  20.1
+Average number of e- produced in the target  7.158
+Average number of g produced in the phantom  0.542
+Average number of e- produced in the phantom 2.83
+Total gamma fluence in front of phantom      8.864 MeV 
 ========================================================
 
 

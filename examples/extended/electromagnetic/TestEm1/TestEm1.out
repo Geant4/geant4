@@ -9,7 +9,7 @@
 
 ***** Table : Nb of materials = 14 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -24,7 +24,7 @@
    --->  Element: Hydrogen (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction:  27.27 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.73 %  ElmAbundance  66.67 %
 
- Material:   D2_gas     density:  0.036 mg/cm3  RadL:  13.184 km   Nucl.Int.Length:  12.278 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   D2_gas     density:  0.036 kg/m3   RadL:  13.184 km   Nucl.Int.Length:  12.278 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: D2_gas ( )   Z =  2.0   N =   2.0   A =   2.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm   Imean: 187.200 eV 
@@ -45,7 +45,7 @@
    --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
 
  Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Tungsten     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm   Imean: 725.200 eV 
    --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -83,26 +83,25 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setHisto 3 200 0 20 mm 
 ----> SetHisto 3: step size of primary particle (mm);  200 bins from 0 mm to 20 mm
 #
-/testem/histo/setFileType hbook
-###/testem/histo/setFileType root
-###/testem/histo/setFileType XML
+/testem/histo/setFileType root
 #
 /testem/phys/setCuts 1 mm
 /testem/histo/setFileName run0
 /run/beamOn 2000
 
-phot:  Total cross sections from Sandia parametrisation. 
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
       Sampling according PhotoElectric model
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
+compt:   tables are built for  gamma
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
+conv:   tables are built for  gamma
       Lambda tables from 1.022 MeV to 100 TeV in 110 bins, spline: 1
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
@@ -112,9 +111,9 @@ msc:  Model variant of multiple scattering for e-
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -128,9 +127,9 @@ eBrem:   tables are built for  e-
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       Delta cross sections and sampling from MollerBhabha model
       Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -141,9 +140,9 @@ eBrem:   tables are built for  e+
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
       Subcutoff sampling in 1 regions
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
+annihil:   tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      Sampling according eplus2gg model
 
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
@@ -153,10 +152,11 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -167,42 +167,44 @@ msc:  Model variant of multiple scattering for GenericIon
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       Stopping Power data for 16 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
 hIoni:   tables are built for  kaon+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
 hIoni:   tables are built for  kaon-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -214,9 +216,13 @@ msc:  Model variant of multiple scattering for mu+
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -235,9 +241,13 @@ muPairProd:   tables are built for  mu+
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -256,10 +266,11 @@ muPairProd:   tables are built for  mu-
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -271,10 +282,11 @@ msc:  Model variant of multiple scattering for pi-
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
       Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 70 bins
       Subcutoff sampling in 1 regions
 
@@ -312,7 +324,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=13.96s Real=19.01s Sys=0.62s
+  User=13.87s Real=21.94s Sys=0.59s
 
  ======================== run summary ======================
 
@@ -320,29 +332,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.728 MeV
+ total energy deposit: 99.784 MeV
 
- nb tracks/event   neutral:     27.923   charged:     148.21
- nb  steps/event   neutral:     141.13   charged:     481.09
+ nb tracks/event   neutral:     27.747   charged:     149.45
+ nb  steps/event   neutral:     141.13   charged:     484.32
 
  nb of process calls per event: 
-            msc       eBrem       eIoni        phot       comptTransportation        conv     annihil
-         152.14      25.398      302.14      25.521      113.21       1.007         1.4         1.4
+            msc       eBrem       eIoni        phot       compt        conv     annihilTransportation
+         153.33      25.151      304.39      25.319      113.38       1.436       1.436      1.0075
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.118 cm    rms = 3.7661 cm 
- proj Range = 9.5393 cm    rms = 3.4614 cm 
- proj/true  = 0.858
- transverse dispersion at end = 1.7855 cm 
-      mass true Range from simulation = 30.019 g/cm2 
+ true Range = 10.954 cm    rms = 3.8471 cm 
+ proj Range = 9.3983 cm    rms = 3.5394 cm 
+ proj/true  = 0.85795
+ transverse dispersion at end = 1.78 cm 
+      mass true Range from simulation = 29.577 g/cm2 
        from PhysicsTable (csda range) = 31.82 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 49535161, 501400978
+ Current couple of seeds = 391950399, 1606719681
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -372,7 +384,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 49535161, 501400978
+ Current couple of seeds = 391950399, 1606719681
 ----------------------------------------
 Start Run processing.
 
@@ -380,7 +392,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=25.53s Real=30.74s Sys=0.6s
+  User=25.41s Real=30.94s Sys=0.63s
 
  ======================== run summary ======================
 
@@ -388,29 +400,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.739 MeV
+ total energy deposit: 99.802 MeV
 
- nb tracks/event   neutral:     36.489   charged:     290.51
- nb  steps/event   neutral:     146.05   charged:     905.73
+ nb tracks/event   neutral:     34.992   charged:     296.47
+ nb  steps/event   neutral:     144.72   charged:     917.42
 
  nb of process calls per event: 
-            msc       eIoni       eBrem        conv     annihil       compt        photTransportation
-         287.28      582.43      34.663      1.3445      1.3445      109.56      34.151      1.0055
+          eBrem       eIoni         msc       compt        phot        conv     annihilTransportation
+          33.09      589.49      293.42      109.73      32.612       1.404       1.404      0.9875
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.315 cm    rms = 3.8133 cm 
- proj Range = 9.7324 cm    rms = 3.5107 cm 
- proj/true  = 0.8601
- transverse dispersion at end = 1.8474 cm 
-      mass true Range from simulation = 30.552 g/cm2 
+ true Range = 11.209 cm    rms = 3.8208 cm 
+ proj Range = 9.6277 cm    rms = 3.5662 cm 
+ proj/true  = 0.85894
+ transverse dispersion at end = 1.8316 cm 
+      mass true Range from simulation = 30.264 g/cm2 
        from PhysicsTable (csda range) = 31.82 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 918623357, 866720484
+ Current couple of seeds = 1273560782, 609846469
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
