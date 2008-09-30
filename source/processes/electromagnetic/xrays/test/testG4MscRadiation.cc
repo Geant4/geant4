@@ -37,6 +37,7 @@
 #include "Randomize.hh"
 #include "G4UnitsTable.hh"
 #include <iomanip>
+#include <complex>
 
 
 #include "G4Element.hh"
@@ -68,6 +69,19 @@ G4double SimpleMF(G4double x)
 }
 
 
+G4double SimpleMPsi(G4double x)
+{
+  G4double order = 4.*x;
+  return 1. - std::exp(-order);
+}
+
+
+G4double SimpleMG(G4double x)
+{  
+  return 3.*SimpleMPsi(x) - 2.*SimpleMF(x);
+}
+
+
 
 G4double MediumMF(G4double x)
 {
@@ -77,6 +91,18 @@ G4double MediumMF(G4double x)
   return 1. - std::exp(-order);
 }
 
+
+G4double MediumMPsi(G4double x)
+{
+  G4double order = 4.*x + 8.*x*x;
+  return 1. - std::exp(-order);
+}
+
+
+G4double MediumMG(G4double x)
+{  
+  return 3.*MediumMPsi(x) - 2.*MediumMF(x);
+}
 
 
 G4double ComplexMF(G4double x)
@@ -89,6 +115,18 @@ G4double ComplexMF(G4double x)
 }
 
 
+G4double ComplexMPsi(G4double x)
+{
+  G4double order = 4.*x + 8.*x*x/(1.+ 3.96*x + 4.97*x*x - 0.05*x*x*x + 7.5*x*x*x*x);
+  return 1. - std::exp(-order);
+}
+
+
+
+G4double ComplexMG(G4double x)
+{  
+  return 3.*ComplexMPsi(x) - 2.*ComplexMF(x);
+}
 
 
 
@@ -102,13 +140,20 @@ int main()
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  iMax=0;
+  // iMax = 200;
+  iMax = 0;
   // writef<<iMax<<G4endl;
   for( i = 1; i <= iMax; i++ )
   {
     x = 0.01*i;
-    G4cout<<x<<"\t"<<SimpleMF(x)<<"\t"<<MediumMF(x)<<"\t"<<ComplexMF(x)<<G4endl;
+    // G4cout<<x<<"\t"<<SimpleMF(x)<<"\t"<<MediumMF(x)<<"\t"<<ComplexMF(x)<<G4endl;
     // writef<<x<<"\t"<<SimpleMF(x)<<"\t"<<MediumMF(x)<<"\t"<<ComplexMF(x)<<G4endl;
+  
+    // G4cout<<x<<"\t"<<SimpleMPsi(x)<<"\t"<<MediumMPsi(x)<<"\t"<<ComplexMPsi(x)<<G4endl;
+    // writef<<x<<"\t"<<SimpleMPsi(x)<<"\t"<<MediumMPsi(x)<<"\t"<<ComplexMPsi(x)<<G4endl;
+
+    // G4cout<<x<<"\t"<<SimpleMG(x)<<"\t"<<MediumMG(x)<<"\t"<<ComplexMG(x)<<G4endl;
+    // writef<<x<<"\t"<<SimpleMG(x)<<"\t"<<MediumMG(x)<<"\t"<<ComplexMG(x)<<G4endl;
   }
 
   G4Element*     theElement;
@@ -324,19 +369,25 @@ int main()
 
   G4double step = 4.10*mm;
 
-
+  step = expXrad;
 
   G4double m2 = man->GetAtomicMassAmu(Z)*GeV;
   // G4double m2 = man->GetAtomicMass( Z, A);
   G4cout <<" target mass, m2 = "<<m2/GeV<<" GeV"<<G4endl<<G4endl;
-  G4cout <<"step = "<<step<<" mm; g4Xrad = "<<g4Xrad<<" mm; expXrad = "<<expXrad<<"  mm"<<G4endl<<G4endl;
+  G4cout <<"step = "<<step<<" mm; g4Xrad = "<<g4Xrad<<" mm; expXrad = "
+         <<expXrad<<"  mm"<<G4endl<<G4endl;
 
 
-  G4MscRadiation* mscRad = new G4MscRadiation(theMaterial, step);
+  // G4MscRadiation* mscRad = new G4MscRadiation(theMaterial, step);
+  G4MscRadiation* mscRad = new G4MscRadiation(theMaterial, step, theDynamicParticle);
 
   mscRad->SetVerboseLevel(0);
 
-  G4double numberMscXR, numberMGYXR, absorption, lincofXR, radLength, ; 
+  G4double numberMscXR, numberMGYXR, numberE146XR, absorption, lincofXR, radLength; 
+
+  G4double sRe, sIm, mcRe, mcIm, tmRe, tmIm, tmc;
+
+  G4complex ms, mc, tm;
 
   iMax = 50;
 
@@ -345,29 +396,44 @@ int main()
   for( i = 0; i < iMax; i++ )
   {
     energyMscXR = std::exp(i*0.2)*0.1*MeV;
+    /*
     lincofXR = mscRad->GetPlateLinearPhotoAbs(energyMscXR);
     absorption = (1. - std::exp(-lincofXR*step))/lincofXR;
 
-    numberMscXR = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
-    numberMGYXR = mscRad->CalculateMscMigdalDiffdNdx(theDynamicParticle,energyMscXR);
+    numberMscXR  = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
+    numberMGYXR  = mscRad->CalculateMscMigdalDiffdNdx(theDynamicParticle,energyMscXR);
+    numberE146XR = mscRad->CalculateMscE146DiffdNdx(theDynamicParticle,energyMscXR);
 
     radLength = mscRad->GetRadLength();
 
-    numberMscXR *= energyMscXR;
-    numberMGYXR *= energyMscXR;
+    numberMscXR  *= energyMscXR; // *expXrad;
+    numberMGYXR  *= energyMscXR; // *expXrad;
+    numberE146XR *= energyMscXR; // *expXrad;
 
     // numberMscXR *= expXrad;
     // numberMscXR *= expXrad;
 
-    numberMscXR *= absorption;
-    numberMGYXR *= absorption;
+    numberMscXR  *= absorption;
+    numberMGYXR  *= absorption;
+    numberE146XR *= absorption;
 
-    G4cout <<"effStep = "<<absorption<<" mm; energyMscXR  = "<<energyMscXR/MeV<<" MeV; numberMscXR =  "
-           <<numberMscXR<<" "<<"; numberMGYXR =  "
-           <<numberMGYXR<<" "<<G4endl;
-    writef <<energyMscXR/MeV<<"\t"
-           <<numberMscXR<<"\t"
-           <<numberMGYXR<<G4endl;
+    G4cout <<"effStep = "<<absorption<<" mm; eXR  = "
+           <<energyMscXR/MeV<<" MeV; MscXR =  "
+           <<numberMscXR<<" "<<"; MGYXR =  "
+           <<numberMGYXR<<" "<<"; E146XR =  "
+           <<numberE146XR<<" "<<G4endl;
+    writef <<energyMscXR/MeV<<"\t"<<numberMscXR<<"\t"<<numberMGYXR<<"\t"<<numberE146XR<<G4endl;
+    */
+
+    mscRad->CalculateCorrectionTMGY(energyMscXR);
+    tm = mscRad->GetCorrectionTMGY();
+    ms = mscRad->CalculateMigdalS(energyMscXR);
+    mc = mscRad->CalculateCorrectionMsc(energyMscXR);
+    tmc = real(mc/tm);
+    G4cout <<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<imag(tm)
+           <<"\t"<<real(ms)<<"\t"<<imag(ms)
+           <<"\t"<<real(mc)<<"\t"<<imag(mc)<<G4endl; 
+    writef<<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<real(mc)<<"\t"<<tmc<<G4endl;
   }
 
   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.cc,v 1.3 2008-09-26 16:23:00 grichine Exp $
+// $Id: G4MscRadiation.cc,v 1.4 2008-09-30 14:39:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -250,6 +250,114 @@ G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
   // Compute cofs for preparation of linear photo absorption
 
    CalculateReciprocalRadLength(); 
+
+  ComputePlatePhotoAbsCof();
+
+  pParticleChange = &fParticleChange;
+
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Test constructor with dynamic particle
+
+G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
+                                G4DynamicParticle* dParticle, 
+				const G4String& processName,
+				G4ProcessType type) :
+  G4VDiscreteProcess(processName, type),
+  fPlateMaterial(foilMat),
+  fGammaCutInKineticEnergy(0),
+  fGammaTkinCut(0),
+  fAngleDistrTable(0),
+  fEnergyDistrTable(0),
+  fPlatePhotoAbsCof(0),
+  fGasPhotoAbsCof(0),
+  fAngleForEnergyTable(0)
+{
+  verboseLevel = 0;
+
+  // Initialization of local constants
+  fTheMinEnergyTR = 1.0*keV;
+  fTheMaxEnergyTR = 100.0*keV;
+  fTheMaxAngle    = 1.0e-3;
+  fTheMinAngle    = 5.0e-6;
+  fBinTR          = 50;
+
+  fMinProtonTkin  = 100.0*GeV;
+  fMaxProtonTkin  = 100.0*TeV;
+  fTotBin         = 50;
+
+  // Proton energy vector initialization
+
+  fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+					       fMaxProtonTkin,
+					       fTotBin  );
+
+  fXTREnergyVector = new G4PhysicsLogVector(fTheMinEnergyTR,
+					    fTheMaxEnergyTR,
+					    fBinTR  );
+
+  fPlasmaCof = 4.0*pi*fine_structure_const*hbarc*hbarc*hbarc/electron_mass_c2;
+
+  fCofTR     = fine_structure_const/pi;
+
+
+  fPlateNumber = 1;
+  if(verboseLevel > 0)
+    G4cout<<"### G4MscRadiation: the number of TR radiator plates = "
+	  <<fPlateNumber<<G4endl;
+  if(fPlateNumber == 0)
+  {
+    G4Exception("G4MscRadiation: No plates in X-ray TR radiator");
+  }
+  // default is XTR dEdx, not flux after radiator
+
+  fExitFlux      = false;
+  fAngleRadDistr = false;
+  fCompton       = true;
+
+  fLambda = DBL_MAX;
+  // Mean thicknesses of plates and gas gaps
+
+  fPlateThick = a;
+  fGasThick   = 1;
+  fTotalDist  = fPlateNumber*fPlateThick;
+  if(verboseLevel > 0)
+    G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl;
+
+  // index of plate material
+  fMatIndex1 = foilMat->GetIndex();
+  if(verboseLevel > 0)
+  {
+    G4cout<<"plate material = "<<foilMat->GetName()<<G4endl;
+  }
+  
+  fMatIndex2 = 0; // gasMat->GetIndex();
+
+  // plasma energy squared for plate material
+
+  fSigma1 = fPlasmaCof*foilMat->GetElectronDensity();
+
+  if(verboseLevel > 0)
+    G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl;
+
+  // plasma energy squared for gas material
+
+  fSigma2 = 0.; //fPlasmaCof*gasMat->GetElectronDensity();
+
+  // Compute cofs for preparation of linear photo absorption
+
+  G4double Tkin = dParticle->GetKineticEnergy();
+  G4double pMass = dParticle->GetMass();
+  fGamma = 1. + Tkin/pMass;
+
+
+
+   CalculateReciprocalRadLength(); 
+
+
+
 
   ComputePlatePhotoAbsCof();
 

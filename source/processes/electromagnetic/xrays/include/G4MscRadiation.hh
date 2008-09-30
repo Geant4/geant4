@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.4 2008-09-27 15:30:04 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.5 2008-09-30 14:39:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,11 @@ public:
                     G4ProcessType type = fElectromagnetic);
 
   // test constructor
+
+  G4MscRadiation (  G4Material*,G4double,G4DynamicParticle*,
+                    const G4String & processName = "MscRadiation",
+                    G4ProcessType type = fElectromagnetic);
+
 
   G4MscRadiation (  G4Material*,G4double,
                     const G4String & processName = "MscRadiation",
@@ -184,18 +189,24 @@ public:
   G4double CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
                
   void // G4double 
+
   CalculateReciprocalRadLength(); 
 
   G4double GetRadLength(){return fRadLength;};
 
   void // G4complex 
+
   CalculateCorrectionTMGY(G4double energy);
+
+  G4complex GetCorrectionTMGY(){return fCorTMGY;};
 
   G4complex CalculateMigdalS(G4double energy);
 
   G4complex CalculateCorrectionMsc(G4double energy);
 
   G4double CalculateMscMigdalDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
+
+  G4double CalculateMscE146DiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
 
 
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
@@ -477,8 +488,14 @@ G4MscRadiation::CalculateReciprocalRadLength()
 inline  void // G4complex 
 G4MscRadiation::CalculateCorrectionTMGY(G4double energy)
 {
+  G4double lambda;
+
   G4double re = 1. +(fGamma*fGamma)*fSigma1/(energy*energy);
-  G4double im = -hbarc*fGamma*fGamma/(energy*fRadLength);
+
+  if(energy > 1.*MeV) lambda = fRadLength;
+  else lambda = 1./GetPlateLinearPhotoAbs(energy);
+
+  G4double im = -hbarc*fGamma*fGamma/(energy*lambda);
   fCorTMGY = G4complex(re,im);
 }
 
@@ -525,6 +542,58 @@ inline  G4double G4MscRadiation::CalculateMscMigdalDiffdNdx(  G4DynamicParticle*
   G4double mscDiffXsc = 1/(energy*fRadLength);
 
   mscDiffXsc *= y*y + 4.*(1.- y)/3.;
+
+  CalculateCorrectionTMGY(energy);
+
+  G4complex cMsc = CalculateCorrectionMsc(energy); 
+
+  G4double corMedium = real(cMsc/fCorTMGY);
+
+  mscDiffXsc *= corMedium;
+
+  if( mscDiffXsc < 0. || y >= 1.)  mscDiffXsc = 0.;
+
+  return mscDiffXsc;
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
+// return Msc E146 Anthony(9) averaged in absorbing medium differential xsc
+
+
+inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* dParticle, 
+                                                              G4double energy)
+{
+
+  // const G4ParticleDefinition* aParticle = dParticle->GetDefinition(); 
+  // G4double momentum = dParticle->GetTotalMomentum();
+
+  G4double Tkin = dParticle->GetKineticEnergy();
+  if(Tkin <= energy || Tkin <= 0. || energy <= 0.) return 0.;
+
+  G4double y = energy/Tkin;
+  if(verboseLevel) 
+  {
+    G4cout<<"y = "<<y<<G4endl;
+  }
+  G4double Z = fPlateMaterial->GetZ();
+  G4double pMass = dParticle->GetMass();
+  fGamma = 1. + Tkin/pMass;
+
+  G4double mscDiffXsc = Z*Z*std::log(184.*std::pow(Z,-1./3.));
+
+  mscDiffXsc += Z*std::log(1194.*std::pow(Z,-2./3.));
+
+  mscDiffXsc *= y*y + 2.*( 1. + (1.-y)*(1.-y) );
+
+  mscDiffXsc += (1.-y)*(Z*Z+Z)/3.;
+
+  mscDiffXsc *= 4.*fine_structure_const*classic_electr_radius*classic_electr_radius;
+
+  mscDiffXsc *= fPlateMaterial->GetTotNbOfAtomsPerVolume()/(energy*3.); 
+
+
 
   CalculateCorrectionTMGY(energy);
 
