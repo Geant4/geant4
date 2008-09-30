@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: benchmarks.cc,v 1.21 2007-05-24 23:26:03 miheikki Exp $
+// $Id: benchmarks.cc,v 1.22 2008-09-30 22:06:00 miheikki Exp $
 //#define CHECK_MOMC
 
 #include <vector>
@@ -73,6 +73,15 @@
 #include "G4ElasticCascadeInterface.hh"
 #include "G4InuclEvaporation.hh"
 
+#include "G4CascadeKminusNChannel.hh"	   
+#include "G4CascadeKminusPChannel.hh"
+#include "G4CascadeKplusNChannel.hh"	   
+#include "G4CascadeKplusPChannel.hh"
+#include "G4CascadeKzeroBarNChannel.hh"	   
+#include "G4CascadeKzeroBarPChannel.hh"
+#include "G4CascadeKzeroNChannel.hh"	   
+#include "G4CascadeKzeroPChannel.hh"
+
 
 void test(std::string, int);
 G4int tEvaporation(G4int A, G4int Z, G4double E);
@@ -93,7 +102,7 @@ int main(int argc, char **argv ) {
   if (argc < 2)
     {
       printf("usage: benchmarks <test ID> <parameters>\n");
-      return(1);
+      //      return(1);
     }
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
@@ -119,7 +128,7 @@ int main(int argc, char **argv ) {
     G4cout << "           Z " << Z           << G4endl;
   }
 
-    test("Cascade interface", tCascadeInterface());
+  //    test("Cascade interface", tCascadeInterface());
 
     // test("Evaporation", tEvaporation(27,13, 100));
   //test("Coulomb",               tCoulomb());
@@ -138,6 +147,7 @@ int main(int argc, char **argv ) {
     test("Analyzer",              tAnalyzer());  
 
   */
+    test("Analyzer",              tAnalyzer());  
   return 0;       
 }
 
@@ -286,9 +296,9 @@ G4int tCoulomb()  {
 #endif
       analyser->analyse(cascadeParticles);
     };
-    //  analyser->printResults();
+      analyser->printResults();
     //  analyser->printResultsSimple();
-    analyser->printResultsNtuple();
+    //analyser->printResultsNtuple();
   }
 
   return 1;
@@ -592,12 +602,12 @@ int tAnalyzer() {
   // General test program for hetc and inucl
 
   const G4int to_report = 1;
-  G4int nrain = 1; // number of interactions to be generated
-  G4double eMin  = 0.5; // minimun energy for bullet
-  G4double eMax  = 4.0;   // maximum energy for bullet
+  G4int nrain = 1000; // number of interactions to be generated
+  G4double eMin  = 1.0; // minimun energy for bullet
+  G4double eMax  = 2.0;   // maximum energy for bullet
   G4int    eBins = 1;   // bullet energy bins
   G4double eStep = (eMax-eMin)/eBins;
-  for(G4int e = 0; e < 10; e++) { // Scan with different energy
+  for(G4int e = 0; e < eBins; e++) { // Scan with different energy
  
     // Auxiliarly stuff for ugly analysis
     G4Analyser* analyser = new G4Analyser();
@@ -693,9 +703,9 @@ int tAnalyzer() {
 #endif
       analyser->analyse(cascadeParticles);
     };
-    //  analyser->printResults();
+      analyser->printResults();
     //  analyser->printResultsSimple();
-    analyser->printResultsNtuple();
+    //    analyser->printResultsNtuple();
   }
 
   return 1;       

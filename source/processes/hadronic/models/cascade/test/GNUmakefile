@@ -1,7 +1,7 @@
-# $Id: GNUmakefile,v 1.59 2007-11-14 23:00:21 miheikki Exp $
+# $Id: GNUmakefile,v 1.60 2008-09-30 22:05:59 miheikki Exp $
 #G4TARGET := cascade
-G4TARGET := interface
-#G4TARGET := benchmarks
+#G4TARGlET := interface
+G4TARGET := benchmarks
 #G4TARGET := evaporation
 #G4EXLIB := true
 
@@ -12,6 +12,8 @@ endif
 include $(G4INSTALL)/config/binmake.gmk
 # enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
+unit:
+	(cd unit; gmake;) //AH:::
 
 t1:   #// 197Au79 tested for 30-3000 OK (likewise 54Be26 9Be4 ans 238U92)
 	rm -f c.out; date;

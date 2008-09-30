@@ -5,7 +5,8 @@ OBJS=                              \
 	test/fake1.o               \
 	test/fake2.o               \
 	test/utility.o             \
-	test/template.o
+	test/template.o		\
+	../unit.o
 RUNNER=unitTest
 
 REMOVE=rm -f

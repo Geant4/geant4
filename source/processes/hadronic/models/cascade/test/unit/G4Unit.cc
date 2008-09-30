@@ -247,6 +247,7 @@ int runTest(const std::string& errorFormat)
 
 } // namespace
 
+
 int main(int argc, char* argv[])
 {
     using namespace BERT;
@@ -266,3 +267,4 @@ int main(int argc, char* argv[])
 
     return runTest(getFormat(argv[1]));
 }
+
