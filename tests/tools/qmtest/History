@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2008-04-23 16:35:49 gunter Exp $
+$Id: History,v 1.2 2008-09-30 13:48:33 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,8 @@ $Id: History,v 1.1 2008-04-23 16:35:49 gunter Exp $
      ----------------------------------------------------------
 
 
+23-Jul-08 G.Folger		     (testtools-QMtest-V09-01-03)
+- add remaining tests, start on examples with extended/electromagnetic
 
 23-Apr-08 G.Folger                   (testtools-QMtest-V09-01-02)
   - Correct typo for test12-build
