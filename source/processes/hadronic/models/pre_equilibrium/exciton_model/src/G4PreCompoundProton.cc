@@ -219,10 +219,10 @@ G4double G4PreCompoundProton::GetOpt2(const  G4double K)
 // *********** OPT=3 : Kalbach's cross sections (from PRECO code)*************
 G4double G4PreCompoundProton::GetOpt3(const  G4double K)
 {
-//     ** p from  becchetti and greenlees (but modified with sub-barrier
-//     ** correction function and xp2 changed from -449)
-// JMQ (june 2008) : refinement of proton cross section for light systems
-//
+  //     ** p from  becchetti and greenlees (but modified with sub-barrier
+  //     ** correction function and xp2 changed from -449)
+  // JMQ (june 2008) : refinement of proton cross section for light systems
+  //
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   p0 = 15.72;
@@ -235,27 +235,27 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   nu0 = 273.1;
   nu1 = -182.4;
   nu2 = -1.872;
-
+  
   // parameters for  proton cross section refinement 
   G4double afit,bfit,a2,b2;
   afit=-0.0785656;
   bfit=5.10789;
   a2= -0.00089076;
   b2= 0.0231597;  
-
+  
   G4double ec,ecsq,xnulam,etest(0.),ra(0.),a,w,c,signor(1.),signor2,sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
-
+  
   
   G4double	flow = 1.e-18;
   G4double       spill= 1.e+18; 
-
- 
-
+  
+  
+  
   if (ResidualA <= 60.)  signor = 0.92;
   else if (ResidualA < 100.) signor = 0.8 + ResidualA*0.002;
-
-
+  
+  
   ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
@@ -263,14 +263,14 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   a = std::pow(ResidualA,mu1);
   mu = mu0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);
- 
+  
   c =std::min(3.15,ec*0.5);
   w = 0.7 * c / 3.15; 
-
+  
   xnulam = nu / landa;
   if (xnulam > spill) xnulam=0.;
   if (xnulam >= flow) etest =std::sqrt(xnulam) + 7.;
-
+  
   a = -2.*p*ec + landa - nu/ecsq;
   b = p*ecsq + mu + 2.*nu/ec;
   ecut = 0.;
@@ -283,7 +283,7 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
     if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
-
+    
     signor2 = (ec-elab-c) / w;
     signor2 = 1. + std::exp(signor2);
     sig = sig / signor2;
@@ -300,17 +300,22 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
     if ( ResidualZ<=26 && elab <=(afit*ResidualZ+bfit)*ec) 
       sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec));   
     //
- 
-   geom = 0.;
-
-    if (xnulam < flow || elab < etest) return sig;
+    
+    geom = 0.;
+    
+    if (xnulam < flow || elab < etest) 
+      {
+        if (sig <0.0) {sig=0.0;}
+        return sig;
+      }
     geom = std::sqrt(theA*K);
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
     sig = std::max(geom,sig);
+    
+  }   //end for E>Ec
 
-                     }   //end for E>Ec
- return sig;}
+  return sig;}
 
 
 
