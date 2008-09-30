@@ -3,11 +3,11 @@
     <argument name="target_group"><text>.*</text></argument>   
     <argument name="timeout"><integer>-1</integer></argument>
     <argument name="stdout"><text/></argument>
-    <argument name="prerequisites"><set><tuple><text>exam-ext-electromagnetic-TestEm5-build</text><enumeral>PASS</enumeral></tuple></set></argument>
+    <argument name="prerequisites"><set><tuple><text>exam-ext-electromagnetic-testem5-build</text><enumeral>PASS</enumeral></tuple></set></argument>
     <argument name="stdin"><text/></argument>
     <argument name="exit_code"><integer>0</integer></argument>
     <argument name="environment"><set/></argument>
-    <argument name="command"><text>$G4BIN/$G4SYSTEM/TestEm5 &lt; $G4INSTALL/examples/extended/electromagnetic/TestEm5/TestEm5.in</text></argument>
+    <argument name="command"><text>$G4BIN/$G4SYSTEM/TestEm5 $G4INSTALL/examples/extended/electromagnetic/TestEm5/TestEm5.in</text></argument>
     <argument name="stderr"><text/></argument>
     <argument name="resources"><set/></argument>
 </extension>
