@@ -14,12 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 September 2008 A.Howard (hadr-deex-V09-01-14)
+---------------------------------------------------
+Correct tag of the head + trivial fix from JMQ to prevent negative
+cross-sections for incident protons on targets with A < Carbon.
+
+
 19 September 2008 A.Howard (hadr-deex-V09-01-13)
 ---------------------------------------------------
 First inclusion of JMQ's recent changes to evaporation and handler.
 Directories touched: evaporation (everywhere), handler (MAC's changes + JMQ
 interface changes), management (G4VEvaporationChannel.hh (interface)), util
-(G4VEmissionProbability.hh (interface))
+(G4VEmissionProbability.hh (interface)) - MIS-TAGGED - this is closer to ref07
+***********PLEASE IGNORE**********
 
 
 25 July 2008 V.Ivanchenko (hadr-deex-V09-01-12)

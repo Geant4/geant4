@@ -301,7 +301,11 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
 //
     geom = 0.;
 
-    if (xnulam < flow || elab < etest) return sig;
+    if (xnulam < flow || elab < etest)
+     {
+        if (sig <0.0) {sig=0.0;}
+        return sig;
+      }
     geom = std::sqrt(theA*K);
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
