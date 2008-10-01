@@ -7,7 +7,7 @@
     <argument name="stdin"><text/></argument>
     <argument name="exit_code"><integer>0</integer></argument>
     <argument name="environment"><set/></argument>
-    <argument name="command"><text>$G4BIN/$G4SYSTEM/Microbeam</text></argument>
+    <argument name="command"><text>cd $G4INSTALL/examples/advanced/microbeam;$G4BIN/$G4SYSTEM/Microbeam</text></argument>
     <argument name="stderr"><text/></argument>
     <argument name="resources"><set/></argument>
 </extension>

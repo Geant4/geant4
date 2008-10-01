@@ -7,7 +7,7 @@
     <argument name="stdin"><text/></argument>
     <argument name="exit_code"><integer>0</integer></argument>
     <argument name="environment"><set/></argument>
-    <argument name="command"><text>$G4BIN/$G4SYSTEM/fanoCavity $G4INSTALL/examples/extended/medical/fanoCavity/fanoCavity.in</text></argument>
+    <argument name="command"><text>cd $G4INSTALL/examples/extended/medical/fanoCavity;$G4BIN/$G4SYSTEM/fanoCavity fanoCavity.in</text></argument>
     <argument name="stderr"><text/></argument>
     <argument name="resources"><set/></argument>
 </extension>

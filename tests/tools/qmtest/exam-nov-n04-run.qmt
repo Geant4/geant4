@@ -7,7 +7,7 @@
     <argument name="stdin"><text/></argument>
     <argument name="exit_code"><integer>0</integer></argument>
     <argument name="environment"><set/></argument>
-    <argument name="command"><text>$G4BIN/$G4SYSTEM/exampleN04 $G4INSTALL/examples/novice/N04/exampleN04.in</text></argument>
+    <argument name="command"><text>cd $G4INSTALL/examples/novice/N04;$G4BIN/$G4SYSTEM/exampleN04 exampleN04.in</text></argument>
     <argument name="stderr"><text/></argument>
     <argument name="resources"><set/></argument>
 </extension>

@@ -7,7 +7,7 @@
     <argument name="stdin"><text/></argument>
     <argument name="exit_code"><integer>0</integer></argument>
     <argument name="environment"><set/></argument>
-    <argument name="command"><text>$G4BIN/$G4SYSTEM/clGeometry $G4INSTALL/examples/extended/g3tog4/clGeometry/clGeometry.in</text></argument>
+    <argument name="command"><text>cd $G4INSTALL/examples/extended/g3tog4/clGeometry;$G4BIN/$G4SYSTEM/clGeometry clGeometry.in</text></argument>
     <argument name="stderr"><text/></argument>
     <argument name="resources"><set/></argument>
 </extension>
