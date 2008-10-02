@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2008-09-25 03:14:55 tsasaki Exp $
+$Id: History,v 1.125 2008-10-02 01:08:23 tsasaki Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02 Oct 2008  T.Sasaki (tracking-V09-01-03)
+- G4SteppingManager2.cc: PhyscalStep etc was not updated when 
+  any flaga for ForceCondition is set. (since begining of Geant4)
+
 25 Sep 2008  T.Sasaki (tracking-V09-01-02)
 - G4SteppingManager2.cc: Bug fix for the previous tag
 

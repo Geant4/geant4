@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.32 2008-09-25 03:14:55 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.33 2008-10-02 01:08:23 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -169,33 +169,27 @@ void G4SteppingManager::GetProcessNumber()
 #endif
 
      switch (fCondition) {
-     case ExclusivelyForced:
-       (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
-       fStepStatus = fExclusivelyForcedProc;
-	   fStep->GetPostStepPoint()
-				 ->SetProcessDefinedStep(fCurrentProcess);
-       break;
-     case Conditionally:
-       (*fSelectedPostStepDoItVector)[np] = Conditionally;
-       break;
-     case Forced:
-       (*fSelectedPostStepDoItVector)[np] = Forced;
-       break;
-     case StronglyForced:
-       (*fSelectedPostStepDoItVector)[np] = StronglyForced;
-       break;
-     default:
-       (*fSelectedPostStepDoItVector)[np] = InActivated;
-       break;
+	 case ExclusivelyForced:
+	     (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
+	     fStepStatus = fExclusivelyForcedProc;
+	     fStep->GetPostStepPoint()
+		 ->SetProcessDefinedStep(fCurrentProcess);
+	     break;
+	 case Conditionally:
+	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	     break;
+	 case Forced:
+	     (*fSelectedPostStepDoItVector)[np] = Forced;
+	     break;
+	 case StronglyForced:
+	     (*fSelectedPostStepDoItVector)[np] = StronglyForced;
+	     break;
+	 default:
+	     (*fSelectedPostStepDoItVector)[np] = InActivated;
+	     break;
      }
        
-     if(physIntLength < PhysicalStep ){
-         PhysicalStep = physIntLength;
-	 fStepStatus = fPostStepDoItProc;
-	 fPostStepDoItProcTriggered = G4int(np);
-         fStep->GetPostStepPoint()
-	     ->SetProcessDefinedStep(fCurrentProcess);
-     }
+
 
      if (fCondition==ExclusivelyForced) { 
  	 for(size_t nrest=np+1; nrest < MAXofPostStepLoops; nrest++){ 
@@ -203,6 +197,16 @@ void G4SteppingManager::GetProcessNumber()
  	 } 
 	 return;  // Take note the 'return' at here !!! 
      } 
+     else{
+	 if(physIntLength < PhysicalStep ){
+	     PhysicalStep = physIntLength;
+	     fStepStatus = fPostStepDoItProc;
+	     fPostStepDoItProcTriggered = G4int(np);
+	     fStep->GetPostStepPoint()
+		 ->SetProcessDefinedStep(fCurrentProcess);
+	 }
+     }
+     
 
    }
 
