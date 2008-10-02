@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2008-09-01 17:40:51 vnivanch Exp $
+$Id: History,v 1.5 2008-10-02 20:40:16 dennis Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+2 Oct 2008 Dennis Wright (hadr-proc-V09-01-02)
+----------------------------------------------
+- G4HadronCaptureProcess.cc - change subtype from 13 to fCapture
+- G4HadronFissionProcess.cc - change subtype from 14 to fFission
+- G4HadronElasticProcess.cc - change subtype from 11 to fHadronElastic
 
 1 Sep 2008 Vladimir Ivanchenko (hadr-proc-V09-01-01)
 ----------------------------------------------------
