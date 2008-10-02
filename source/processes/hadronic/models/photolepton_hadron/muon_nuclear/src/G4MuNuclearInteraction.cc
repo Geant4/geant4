@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.10 2008-09-02 10:37:20 vnivanch Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.11 2008-10-02 21:04:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -67,7 +67,7 @@ G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
     theMuonPlus ( G4MuonPlus::MuonPlus() ),
     thePionZero (G4PionZero::PionZero() )
 {  
-  SetProcessSubType(12);
+  SetProcessSubType(fHadronInelastic);
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
  
