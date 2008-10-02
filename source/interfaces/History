@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2008-07-22 04:14:31 kmura Exp $
+$Id: History,v 1.99 2008-10-02 08:50:39 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2 October, Laurent Garnier
+ - Add availability to have a external Qapp
 
 22 July, 2008 K.Murakami (interfaces-V09-01-02)
  - tagged

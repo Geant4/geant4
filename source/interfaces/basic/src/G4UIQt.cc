@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.17 2008-05-05 13:24:00 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.18 2008-10-02 08:50:39 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 
-//define GEANT4_QT_DEBUG
+//#define GEANT4_QT_DEBUG
 
 #ifdef G4UI_BUILD_QT_SESSION
 
@@ -112,6 +112,33 @@ G4UIQt::G4UIQt (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
+  // Check if already define in external app QMainWindow
+  bool found = false;
+#if QT_VERSION < 0x040000
+  // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+  // but if I comment them, it doesn't work...
+  QWidgetList  *list = QApplication::allWidgets();
+  QWidgetListIt it( *list );         // iterate over the widgets
+  QWidget * widget;
+  while ( (widget=it.current()) != 0 ) {  // for each widget...
+    ++it;
+    if ((found== false) && (widget->inherits("QMainWindow"))) {
+      found = true;
+    }
+  }
+  delete list;                      // delete the list, not the widgets
+#else
+  foreach (QWidget *widget, QApplication::allWidgets()) {
+    if ((found== false) && (widget->inherits("QMainWindow"))) {
+      found = true;
+    }
+  }
+#endif
+
+  if (found) {
+    G4cout        << "G4UIQt : Found an external App with a QMainWindow already defined. Aborted" << G4endl;
+    return ;
+  }
   fMainWindow = new QMainWindow();
 
 #ifdef GEANT4_QT_DEBUG
