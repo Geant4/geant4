@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.27 2008-07-09 19:46:58 dennis Exp $
+// $Id: G4QCollision.cc,v 1.28 2008-10-02 21:10:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -54,7 +54,7 @@ G4QCollision::G4QCollision(const G4String& processName):
   G4cout<<"G4QCollision::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-  SetProcessSubType(12);
+  SetProcessSubType(fHadronInelastic);
   //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPSWorld (234 part.max)
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters

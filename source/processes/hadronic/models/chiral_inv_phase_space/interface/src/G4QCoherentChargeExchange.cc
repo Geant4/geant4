@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.6 2008-07-09 19:46:43 dennis Exp $
+// $Id: G4QCoherentChargeExchange.cc,v 1.7 2008-10-02 21:10:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
@@ -57,7 +57,7 @@ G4QCoherentChargeExchange::G4QCoherentChargeExchange(const G4String& processName
   G4cout<<"G4QCohChargeEx::Constructor is called processName="<<processName<<G4endl;
 #endif
   if (verboseLevel>0) G4cout << GetProcessName() << " process is created "<< G4endl;
-  SetProcessSubType(16);
+  SetProcessSubType(fChargeExchange);
   //G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part. max)
 }
 

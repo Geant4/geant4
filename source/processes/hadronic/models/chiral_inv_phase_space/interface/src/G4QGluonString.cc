@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGluonString.cc,v 1.2 2008-07-09 19:47:49 dennis Exp $
+// $Id: G4QGluonString.cc,v 1.3 2008-10-02 21:10:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QGluonString class -----------------
@@ -53,7 +53,7 @@ G4QGluonString::G4QGluonString(const G4String& processName):
   G4cout<<"G4QGluonString::Constructor is called"<<G4endl;
 #endif
   if (verboseLevel>0) G4cout<<GetProcessName()<<" process is created by CHIPS"<<G4endl;
-  SetProcessSubType(12);
+  SetProcessSubType(fHadronInelastic);
   G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World with 234 particles
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters

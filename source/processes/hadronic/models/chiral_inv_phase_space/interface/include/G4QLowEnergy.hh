@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.3 2007-11-15 09:36:43 mkossov Exp $
+// $Id: G4QLowEnergy.hh,v 1.4 2008-10-02 21:10:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy header ----------------
@@ -54,6 +54,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
 #include "G4QNucleus.hh"
