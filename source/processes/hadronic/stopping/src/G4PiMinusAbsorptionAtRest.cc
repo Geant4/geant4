@@ -63,9 +63,7 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
                                                      G4ProcessType aType) :
   G4VRestProcess (processName, aType)
 {
-  SetProcessSubType(15);
-  //  _stopAbsorption = 0;
-  //  _stopDeexcitation = 0;
+  SetProcessSubType(fHadronAtRest);
 
   _indexDeexcitation = 0;
 

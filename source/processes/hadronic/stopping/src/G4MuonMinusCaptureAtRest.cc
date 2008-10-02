@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.52 2008-09-02 10:39:52 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.53 2008-10-02 20:57:52 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -61,7 +61,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   G4VRestProcess (processName, aType), nCascade(0), targetZ(0), targetA(0), 
   isInitialised(false)
 {
-  SetProcessSubType(15);
+  SetProcessSubType(fHadronAtRest);
   Cascade    = new G4GHEKinematicsVector [17];
   pSelector  = new G4StopElementSelector();
   pEMCascade = new G4MuMinusCaptureCascade();

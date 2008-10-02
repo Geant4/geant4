@@ -47,6 +47,7 @@
 #include "G4PiMinusStopAbsorption.hh"
 #include "G4StopDeexcitation.hh"
 #include "G4StopDeexcitationAlgorithm.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4DynamicParticle;
 

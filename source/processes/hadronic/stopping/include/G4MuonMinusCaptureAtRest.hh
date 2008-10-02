@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.22 2008-09-02 10:39:52 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.23 2008-10-02 20:57:52 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  G4MuonMinusCaptureAtRest physics process
@@ -56,6 +56,7 @@
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4MuonMinus.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4Fancy3DNucleus;
 class G4ExcitationHandler;
