@@ -12,6 +12,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 2-Oct-2008 Dennis Wright (hadr-chips-inter-V09-01-08)
+------------------------------------------------------
+- change process type integer from 15 to fHadronAtRest for 
+  G4PionMinusNuclearAtRestChips, G4ProtonAntiProtonAtRestChips, 
+  G4QCaptureAtRest
+
+- change process type integer from 16 to enum fChargeExchange for 
+  G4QCoherentChargeExchange
+
+- change process type integer from 12 to enum fHadronInelastic for 
+  G4QCollision, G4QDiffraction, G4QGluonString, G4QLowEnergy
+
+- change process type integer from 11 to fHadronElastic for 
+  G4QElastic, G4QIonIonElastic
+
+- remove process type from G4QAtomicElectronScattering, 
+  G4QDiscProcessMixer.cc
+
  1-Sep-2008 Vladimir Ivanchenko        (hadr-chips-inter-V09-01-07)
 -------------------------------------------------------------------
 G4QCaptureAtRest - added registration in G4HadronicProcessStore
