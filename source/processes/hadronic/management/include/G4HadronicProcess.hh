@@ -49,7 +49,7 @@
 #include "G4VLeadingParticleBiasing.hh"
 //#include "G4Delete.hh"
 #include "G4CrossSectionDataStore.hh"
-//#include "G4HadronicException.hh"
+#include "G4HadronicProcessType.hh"
 
 class G4Track;
 class G4Step;
