@@ -46,7 +46,7 @@ G4HadronInelasticProcess::G4HadronInelasticProcess(const G4String& processName,
                                                    G4ParticleDefinition* aParticle):
   G4HadronicProcess(processName)
 {
-  SetProcessSubType(12);
+  SetProcessSubType(fHadronInelastic);
   AddDataSet(new G4HadronInelasticDataSet());
   theParticle = aParticle;
 }
