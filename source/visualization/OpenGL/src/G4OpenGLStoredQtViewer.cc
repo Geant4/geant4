@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.15 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.16 2008-10-02 08:56:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,13 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 #endif
   nbPaint =0;
   hasToRepaint =false;
+
+  // if no scene...
+  if (fSceneHandler.GetScene() == 0) {
+    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+	   << G4endl;
+    return;
+  }
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
@@ -75,7 +82,7 @@ G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
 
 void G4OpenGLStoredQtViewer::Initialise() {
 #ifdef GEANT4_QT_DEBUG
-  printf("GLWidget::Initialise \n");
+  printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
   readyToPaint = false;
   CreateGLQtContext ();

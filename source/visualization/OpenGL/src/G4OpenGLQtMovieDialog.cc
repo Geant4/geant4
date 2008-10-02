@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.cc,v 1.6 2008-03-14 09:22:31 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.cc,v 1.7 2008-10-02 08:56:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,7 +181,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   QWidget *saveFileHBox = new QWidget(saveFileGroupBox);
   QHBoxLayout *saveFileHBoxLayout = new QHBoxLayout(saveFileHBox);
 
-  fSaveFileName = new QLineEdit("",saveFileHBox);
+  fSaveFileName = new QLineEdit("G4Movie.mpeg",saveFileHBox);
 
   QPushButton *saveButton = new QPushButton(tr("..."),saveFileHBox);
   saveButton->setMaximumWidth (30);
@@ -269,23 +269,28 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   QHBoxLayout *buttonBoxLayout = new QHBoxLayout(buttonBox);
 
-  QPushButton *buttonCancel = new QPushButton( tr( "&Cancel" ),buttonBox );
-  buttonCancel->setAutoDefault( TRUE );
-  buttonBoxLayout->addWidget(buttonCancel);
-
   QPushButton *buttonReset = new QPushButton( tr( "&Reset" ),buttonBox );
   buttonReset->setAutoDefault( TRUE );
   buttonBoxLayout->addWidget(buttonReset);
 
-  fButtonApply = new QPushButton( tr( "&Apply" ),buttonBox );
-  fButtonApply->setAutoDefault( TRUE );
-  enabledApplyButton();
-  buttonBoxLayout->addWidget(fButtonApply);
+  fButtonStartPause = new QPushButton( tr( "  &Start " ),buttonBox );
+  fButtonStartPause->setEnabled(true);
+  fButtonStartPause->setAutoDefault( TRUE );
+  buttonBoxLayout->addWidget(fButtonStartPause);
 
-  fButtonEncode = new QPushButton( tr( "&Encode" ),buttonBox );
-  fButtonEncode->setEnabled(fParentViewer->isReadyToEncode()); 
-  fButtonEncode->setAutoDefault( TRUE );
-  buttonBoxLayout->addWidget(fButtonEncode);
+  fButtonStopFinishClose = new QPushButton( tr( "&Stop" ),buttonBox );
+  fButtonStopFinishClose->setEnabled(false);
+  fButtonStopFinishClose->setAutoDefault( TRUE );
+  buttonBoxLayout->addWidget(fButtonStopFinishClose);
+
+  fButtonSave = new QPushButton( tr( "&Save" ),buttonBox );
+  fButtonSave->setEnabled(false);
+  fButtonSave->setAutoDefault( TRUE );
+  buttonBoxLayout->addWidget(fButtonSave);
+
+  QPushButton *buttonCancel = new QPushButton( tr( "&Cancel" ),buttonBox );
+  buttonCancel->setAutoDefault( TRUE );
+  buttonBoxLayout->addWidget(buttonCancel);
 
 #if QT_VERSION >= 0x040000
   buttonBox->setLayout(buttonBoxLayout);
@@ -299,10 +304,11 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 #endif
 
   // signals and slots connections
-  connect( fButtonApply, SIGNAL( clicked() ), this, SLOT( checkAllParameters() ) );
+  connect( fButtonStartPause, SIGNAL( clicked() ), fParentViewer, SLOT(    startPauseVideo() ) );
   connect( buttonReset, SIGNAL( clicked() ), this, SLOT( resetRecording() ) );
   connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
-  connect( fButtonEncode, SIGNAL( clicked() ), this, SLOT( encode() ) );
+  connect( fButtonStopFinishClose, SIGNAL( clicked() ), this, SLOT( stopFinishClose() ) );
+  connect( fButtonSave, SIGNAL( clicked() ), this, SLOT( save() ) );
 
   // fill
   setRecordingStatus("");
@@ -310,21 +316,20 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fTempFolderPath->setText(fParentViewer->getTempFolderPath());
 
   // connect line edit signals
-  connect (fEncoderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
-  connect (fTempFolderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
-  connect (fSaveFileName,SIGNAL(textChanged ( const QString&)),this,SLOT(enabledApplyButton()));
+  connect (fEncoderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(checkEncoderSwParameters()));
+  connect (fTempFolderPath,SIGNAL(textChanged ( const QString&)),this,SLOT(checkTempFolderParameters()));
+  connect (fSaveFileName,SIGNAL(textChanged ( const QString&)),this,SLOT(checkSaveFileNameParameters()));
 
 #if QT_VERSION >= 0x040000
-  connect (fEncoderPath,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
-  connect (fTempFolderPath,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
-  connect (fSaveFileName,SIGNAL(editingFinished ()),this,SLOT(checkAllParameters()));
+  connect (fEncoderPath,SIGNAL(editingFinished ()),this,SLOT(checkEncoderSwParameters()));
+  connect (fTempFolderPath,SIGNAL(editingFinished ()),this,SLOT(checkTempFolderParameters()));
+  connect (fSaveFileName,SIGNAL(editingFinished ()),this,SLOT(checkSaveFileNameParameters()));
 #else
-  connect (fEncoderPath,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
-  connect (fTempFolderPath,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
-  connect (fSaveFileName,SIGNAL(lostFocus ()),this,SLOT(checkAllParameters()));
+  connect (fEncoderPath,SIGNAL(lostFocus ()),this,SLOT(checkEncoderSwParameters()));
+  connect (fTempFolderPath,SIGNAL(lostFocus ()),this,SLOT(checkTempFolderParameters()));
+  connect (fSaveFileName,SIGNAL(lostFocus ()),this,SLOT(checkSaveFileNameParameters()));
 #endif
 
-  checkAllParameters();
 }
 
 
@@ -352,7 +357,7 @@ void G4OpenGLQtMovieDialog::selectEncoderPathAction()
     return;
   }
   fEncoderPath->setText(nomFich);
-  checkAllParameters();
+  checkEncoderSwParameters();
  }
 
 
@@ -373,7 +378,7 @@ void G4OpenGLQtMovieDialog::selectTempPathAction()
     return;
   }
   fTempFolderPath->setText(nomFich);
-  checkAllParameters();
+  checkTempFolderParameters();
  }
 
 
@@ -395,44 +400,30 @@ void G4OpenGLQtMovieDialog::selectSaveFileNameAction()
     return;
   }
   fSaveFileName->setText(nomFich);
-  checkAllParameters();
+  checkSaveFileNameParameters();
  }
 
 
-void G4OpenGLQtMovieDialog::encode() {
-  fParentViewer->encodeVideo();
+void G4OpenGLQtMovieDialog::stopFinishClose() {
+  fParentViewer->stopVideo();
 }
 
-/** Check all parameters
-*/
-void G4OpenGLQtMovieDialog::checkAllParameters() {
-
-  // set state of encode button
-  // if frames had been generated and parameters are valid : enabled encode button
-  bool status = checkEncoderParameters(fEncoderPath->text()) 
-              & checkTempFolderParameters(fTempFolderPath->text())
-              & checkSaveFileNameParameters(fSaveFileName->text());
-  if (status) {
-    if (fParentViewer->isStopped()) {
-      if (fParentViewer->generateMpegEncoderParameters()) {
-        fButtonEncode->setEnabled(fParentViewer->isReadyToEncode() );
-      }
-    }
+void G4OpenGLQtMovieDialog::save() {
+  if (((fParentViewer->isPaused()) || fParentViewer->isRecording() || fParentViewer->isStopped())) {
+    fParentViewer->saveVideo();
   }
-  fButtonApply->setEnabled(false);
 }
-
 
 	/**
  * If one of parameter is incorrect, put it in red and don't valid it
  * If valid, save it
  */
-bool G4OpenGLQtMovieDialog::checkEncoderParameters(QString param) {
+bool G4OpenGLQtMovieDialog::checkEncoderSwParameters() {
 
   bool status = true;
   QPalette palette( fEncoderPath->palette() );
 
-  QString temp = fParentViewer->setEncoderPath(param);
+  QString temp = fParentViewer->setEncoderPath(fEncoderPath->text());
   setRecordingInfos("");
   fEncoderStatus->setText(temp);
   if (temp != "") {
@@ -462,12 +453,12 @@ bool G4OpenGLQtMovieDialog::checkEncoderParameters(QString param) {
  * If one of parameter is incorrect, put it in red and don't valid it
  * If valid, save it
  */
-bool G4OpenGLQtMovieDialog::checkTempFolderParameters(QString param) {
+bool G4OpenGLQtMovieDialog::checkTempFolderParameters() {
 
   bool status = true;
   QPalette palette( fTempFolderPath->palette() );
 
-  QString temp = fParentViewer->setTempFolderPath(param);
+  QString temp = fParentViewer->setTempFolderPath(fTempFolderPath->text());
   fTempFolderStatus->setText(temp);
   if (temp != "") {
 #if QT_VERSION > 0x040000
@@ -493,12 +484,12 @@ bool G4OpenGLQtMovieDialog::checkTempFolderParameters(QString param) {
  * If one of parameter is incorrect, put it in red and don't valid it
  * If valid, save it
  */
-bool G4OpenGLQtMovieDialog::checkSaveFileNameParameters(QString param) {
+bool G4OpenGLQtMovieDialog::checkSaveFileNameParameters() {
 
   bool status = true;
   QPalette palette( fSaveFileName->palette() );
 
-  QString temp = fParentViewer->setSaveFileName(param);
+  QString temp = fParentViewer->setSaveFileName(fSaveFileName->text());
   fSaveFileStatus->setText(temp);
   if (temp != "") { 
 #if QT_VERSION > 0x040000
@@ -526,8 +517,69 @@ void G4OpenGLQtMovieDialog::resetRecording() {
 
 
 void G4OpenGLQtMovieDialog::setRecordingStatus(QString txt) {
-  fButtonEncode->setEnabled(fParentViewer->isReadyToEncode());
   fRecordingStatus->setText(txt);
+  if (fParentViewer->isWaiting()) {
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(true);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isPaused()) {
+
+    fButtonStartPause->setText("  &Continue ");
+    fButtonStartPause->setEnabled(true);
+    fButtonStopFinishClose->setEnabled(true);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isRecording()) {
+
+    fButtonStartPause->setText("  &Pause ");
+    fButtonStartPause->setEnabled(true);
+    fButtonStopFinishClose->setEnabled(true);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isBadOutput()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(true);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isBadTmp()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(false);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isBadEncoder()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(true);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isSuccess()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(false);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isFailed()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(false);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(false);
+
+  } else if (fParentViewer->isStopped()) {
+
+    fButtonStartPause->setText("  &Start ");
+    fButtonStartPause->setEnabled(false);
+    fButtonStopFinishClose->setEnabled(false);
+    fButtonSave->setEnabled(true);
+  }
 }
 
 
@@ -537,7 +589,7 @@ void G4OpenGLQtMovieDialog::setRecordingInfos(QString txt) {
 
 
 void G4OpenGLQtMovieDialog::enabledApplyButton() {
-  fButtonApply->setEnabled(true);
+  fButtonStartPause->setEnabled(true);
 }
 
 #endif

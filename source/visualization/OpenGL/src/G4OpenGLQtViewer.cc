@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.24 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.25 2008-10-02 08:56:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -316,7 +316,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 {
 
   // launch Qt if not
-  G4Qt* interactorManager = G4Qt::getInstance ();
+  G4Qt::getInstance ();
 
   fLastPos3 = QPoint(-1,-1);    
   fLastPos2 = QPoint(-1,-1);    
@@ -688,9 +688,9 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
 #if QT_VERSION < 0x040000
 #if QT_VERSION < 0x030200
-  QAction *movieParameters =  new QAction("&Movie parameters...","&Make movie ...",CTRL+Key_M,mActions,0,true);
+  QAction *movieParameters =  new QAction("&Make Movie...","&Make movie ...",CTRL+Key_M,mActions,0,true);
 #else
-  QAction *movieParameters =  new QAction("&Movie parameters...",CTRL+Key_M,mActions);
+  QAction *movieParameters =  new QAction("&Make Movie...",CTRL+Key_M,mActions);
 #endif
   movieParameters->addTo(mActions);
   QObject ::connect(movieParameters, 
@@ -1485,6 +1485,9 @@ void G4OpenGLQtViewer::showMovieParametersDialog() {
   if (!fMovieParametersDialog) {
     fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,GLWindow);
     displayRecordingStatus();
+    fMovieParametersDialog->checkEncoderSwParameters();
+    fMovieParametersDialog->checkSaveFileNameParameters();
+    fMovieParametersDialog->checkTempFolderParameters();
     if (getEncoderPath() == "") {
       setRecordingInfos("mpeg_encode is needed to encode in video format. It is available here: http://bmrc.berkeley.edu/frame/research/mpeg/");
     }
@@ -1706,9 +1709,9 @@ void G4OpenGLQtViewer::rescaleImage(
 #ifdef GEANT4_QT_DEBUG
   printf("should rescale \n");
 #endif
-  GLfloat* feedback_buffer;
-  GLint returned;
-  FILE* file;
+  //  GLfloat* feedback_buffer;
+  //  GLint returned;
+  //  FILE* file;
   
 //   feedback_buffer = new GLfloat[size];
 //   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
@@ -2123,11 +2126,33 @@ void G4OpenGLQtViewer::stopVideo() {
 
   if (fRecordFrameNumber >0) {
     // check parameters if they were modified (Re APPLY them...)
-    // It will enable/disable encode button
-    fMovieParametersDialog->checkAllParameters();
+    if (!(fMovieParametersDialog->checkEncoderSwParameters())) {
+      setRecordingStatus(BAD_ENCODER);
+    }  else if (!(fMovieParametersDialog->checkSaveFileNameParameters())) {
+      setRecordingStatus(BAD_OUTPUT);
+    }
   } else {
     resetRecording();
     setRecordingInfos("No frame to encode.");
+  }
+}
+
+/** Stop the video. Check all parameters and enable encoder button if all is ok.
+*/
+void G4OpenGLQtViewer::saveVideo() {
+
+  // if encoder parameter is wrong, display parameters dialog and return
+  if (!fMovieParametersDialog) {
+    showMovieParametersDialog();
+  }
+
+  fMovieParametersDialog->checkEncoderSwParameters();
+  fMovieParametersDialog->checkSaveFileNameParameters();
+  
+  if (fRecordingStep == STOP) {
+    setRecordingStatus(SAVE);
+    generateMpegEncoderParameters();
+    encodeVideo();
   }
 }
 
@@ -2137,9 +2162,10 @@ void G4OpenGLQtViewer::stopVideo() {
 void G4OpenGLQtViewer::startPauseVideo() {
    
   // first time, if temp parameter is wrong, display parameters dialog and return
-  if ( fRecordingStep == WAIT) {
+
+  if (( fRecordingStep == WAIT)) {
     if ( fRecordFrameNumber == 0) {
-      if (getTempFolderPath() == "") {
+      if (getTempFolderPath() == "") { // BAD_OUTPUT
         showMovieParametersDialog();
         setRecordingInfos("You should specified the temp folder in order to make movie");
         return;
@@ -2158,7 +2184,7 @@ void G4OpenGLQtViewer::startPauseVideo() {
       }
     }
   }
-  if (fRecordingStep == WAIT) {
+  if ((fRecordingStep == WAIT)) {
     setRecordingStatus(START); 
   } else if (fRecordingStep == START) {
     setRecordingStatus(PAUSE);
@@ -2169,7 +2195,6 @@ void G4OpenGLQtViewer::startPauseVideo() {
   }
 }
 
-
 void G4OpenGLQtViewer::setRecordingStatus(RECORDING_STEP step) {
 
   fRecordingStep = step;
@@ -2179,36 +2204,40 @@ void G4OpenGLQtViewer::setRecordingStatus(RECORDING_STEP step) {
 
 void G4OpenGLQtViewer::displayRecordingStatus() {
   
-  QString txt = "";
+  QString txtStatus = "";
   if (fRecordingStep == WAIT) {
-    txt  = "Waiting to start...";
+    txtStatus  = "Waiting to start...";
     fRecordFrameNumber = 0; // reset the frame number
   } else if (fRecordingStep == START) {
-    txt  = "Start Recording...";
+    txtStatus  = "Start Recording...";
   } else if (fRecordingStep == PAUSE) {
-    txt  = "Pause Recording...";
+    txtStatus  = "Pause Recording...";
   } else if (fRecordingStep == CONTINUE) {
-    txt  = "Continue Recording...";
+    txtStatus  = "Continue Recording...";
   } else if (fRecordingStep == STOP) {
-    txt  = "Stop Recording...";
+    txtStatus  = "Stop Recording...";
   } else if (fRecordingStep == READY_TO_ENCODE) {
-    txt  = "Ready to Encode...";
+    txtStatus  = "Ready to Encode...";
   } else if (fRecordingStep == ENCODING) {
-    txt  = "Encoding...";
+    txtStatus  = "Encoding...";
   } else if (fRecordingStep == FAILED) {
-    txt  = "Failed to encode...";
+    txtStatus  = "Failed to encode...";
+  } else if ((fRecordingStep == BAD_ENCODER)
+         || (fRecordingStep == BAD_OUTPUT)
+             || (fRecordingStep == BAD_TMP)) {
+    txtStatus  = "Correct above errors first";
   } else if (fRecordingStep == SUCCESS) {
-    txt  = "File encoded successfully";
+    txtStatus  = "File encoded successfully";
   } else {
   }
 
   if (fMovieParametersDialog) {
-    fMovieParametersDialog->setRecordingStatus(txt);
+    fMovieParametersDialog->setRecordingStatus(txtStatus);
   } else {
 #if QT_VERSION < 0x040000
-    G4cout << txt.ascii() << G4endl;
+    G4cout << txtStatus.ascii() << G4endl;
 #else
-    G4cout << txt.toStdString().c_str() << G4endl;
+    G4cout << txtStatus.toStdString().c_str() << G4endl;
 #endif
   }
   setRecordingInfos("");
@@ -2282,6 +2311,10 @@ QString G4OpenGLQtViewer::setEncoderPath(QString path) {
     return "This is not a file";
   }
   fEncoderPath = path;
+
+  if ((fRecordingStep == BAD_ENCODER)) {
+    setRecordingStatus(STOP);
+  } 
   return "";
 }
 
@@ -2293,11 +2326,83 @@ bool G4OpenGLQtViewer::isRecording(){
   return false;
 }
 
+bool G4OpenGLQtViewer::isPaused(){
+  if (fRecordingStep == PAUSE) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isEncoding(){
+  if (fRecordingStep == ENCODING) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isWaiting(){
+  if (fRecordingStep == WAIT) {
+    return true;
+  }
+  return false;
+}
+
 bool G4OpenGLQtViewer::isStopped(){
   if (fRecordingStep == STOP) {
     return true;
   }
   return false;
+}
+
+bool G4OpenGLQtViewer::isFailed(){
+  if (fRecordingStep == FAILED) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isSuccess(){
+  if (fRecordingStep == SUCCESS) {
+    return true;
+  }
+  return false;
+}
+
+bool G4OpenGLQtViewer::isBadEncoder(){
+  if (fRecordingStep == BAD_ENCODER) {
+    return true;
+  }
+  return false;
+}
+bool G4OpenGLQtViewer::isBadTmp(){
+  if (fRecordingStep == BAD_TMP) {
+    return true;
+  }
+  return false;
+}
+bool G4OpenGLQtViewer::isBadOutput(){
+  if (fRecordingStep == BAD_OUTPUT) {
+    return true;
+  }
+  return false;
+}
+
+void G4OpenGLQtViewer::setBadEncoder(){
+  fRecordingStep = BAD_ENCODER;
+  displayRecordingStatus();
+}
+void G4OpenGLQtViewer::setBadTmp(){
+  fRecordingStep = BAD_TMP;
+  displayRecordingStatus();
+}
+void G4OpenGLQtViewer::setBadOutput(){
+  fRecordingStep = BAD_OUTPUT;
+  displayRecordingStatus();
+}
+
+void G4OpenGLQtViewer::setWaiting(){
+  fRecordingStep = WAIT;
+  displayRecordingStatus();
 }
 
 
@@ -2337,6 +2442,9 @@ QString G4OpenGLQtViewer::setTempFolderPath(QString path) {
     return path +" is write protected";
   }
   
+  if ((fRecordingStep == BAD_TMP)) {
+    setRecordingStatus(WAIT); 
+  }
   fTempFolderPath = path;
   return "";
 }
@@ -2372,6 +2480,9 @@ QString G4OpenGLQtViewer::setSaveFileName(QString path) {
     return path +" is read protected";
   }
   
+  if ((fRecordingStep == BAD_OUTPUT)) {
+    setRecordingStatus(STOP); 
+  }
   fSaveFileName = path;
   return "";
 }
@@ -2388,7 +2499,6 @@ QString G4OpenGLQtViewer::getSaveFileName() {
 */
 QString G4OpenGLQtViewer::createTempFolder() {
   fMovieTempFolderPath = "";
-
   //check
   QString tmp = setTempFolderPath(fTempFolderPath);
   if (tmp != "") {
@@ -2658,6 +2768,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fclose (fp);
 
   setRecordingInfos("Parameter file "+fParameterFileName+" generated in "+fMovieTempFolderPath);
+  printf("Parameter file %s  generated in %s\n",fParameterFileName.toStdString().c_str(),fMovieTempFolderPath.toStdString().c_str());
   setRecordingStatus(READY_TO_ENCODE);
   return true;
 }
@@ -2723,7 +2834,7 @@ void G4OpenGLQtViewer::processEncodeFinished()
   } else {
     setRecordingStatus(FAILED);
   }
-  setRecordingInfos(txt+removeTempFolder());
+  //  setRecordingInfos(txt+removeTempFolder());
 }
 
 

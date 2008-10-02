@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh,v 1.1 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.hh,v 1.2 2008-10-02 08:56:45 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -73,21 +73,22 @@ private :
   QLabel *fSaveFileStatus;
   QLabel *fRecordingStatus;
   QLabel *fRecordingInfos;
-  QPushButton *fButtonEncode;
-  QPushButton *fButtonApply;
-
-  bool checkEncoderParameters(QString);
-  bool checkTempFolderParameters(QString);
-  bool checkSaveFileNameParameters(QString);
+  QPushButton *fButtonStopFinishClose;
+  QPushButton *fButtonSave;
+  QPushButton *fButtonStartPause;
 
 public slots :
   void checkAllParameters();
+  void stopFinishClose();
+  void save();
+  bool checkEncoderSwParameters();
+  bool checkSaveFileNameParameters();
+  bool checkTempFolderParameters();
 
 private slots :
   void selectEncoderPathAction();
   void selectTempPathAction();
   void selectSaveFileNameAction();
-  void encode();
   void resetRecording();
   void enabledApplyButton();
 };

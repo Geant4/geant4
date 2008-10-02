@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.10 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.11 2008-10-02 08:56:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,9 +82,23 @@ public:
   QString getSaveFileName();
   bool isRecording();
   bool isStopped();
+  bool isPaused();
+  bool isEncoding();
+  bool isWaiting();
+  bool isFailed();
+  void setWaiting();
+  bool isBadEncoder();
+  bool isBadOutput();
+  bool isBadTmp();
+  bool isSuccess();
+  void setBadTmp();
+  void setBadOutput();
+  void setBadEncoder();
   bool isReadyToEncode();
   void resetRecording();
   void encodeVideo();
+  void stopVideo();
+  void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
 
@@ -128,7 +142,7 @@ protected:
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
-  enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS}; 
+  enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
 
   void createPopupMenu();
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
@@ -140,8 +154,6 @@ private:
   void initMovieParameters();
   QString createTempFolder();
   QString removeTempFolder();
-  void startPauseVideo();
-  void stopVideo();
   void setRecordingStatus(RECORDING_STEP);
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
@@ -201,6 +213,9 @@ signals:
  void moveX(int);
  void moveY(int);
  void moveZ(int);
+
+public slots :
+  void startPauseVideo();
 
 private slots :
   void actionMouseRotate();

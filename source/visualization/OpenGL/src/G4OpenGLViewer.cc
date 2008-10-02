@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.39 2008-07-28 15:36:45 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.40 2008-10-02 08:56:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,7 +149,12 @@ void G4OpenGLViewer::ClearView () {
 }
 
 void G4OpenGLViewer::SetView () {
-  
+
+  if (!fSceneHandler.GetScene()) {
+    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+	   << G4endl;
+    return;
+  }
   // Calculates view representation based on extent of object being
   // viewed and (initial) viewpoint.  (Note: it can change later due
   // to user interaction via visualization system's GUI.)
