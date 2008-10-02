@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.5 2008-09-02 10:37:20 vnivanch Exp $
+// $Id: G4MuNuclearInteraction.hh,v 1.6 2008-10-02 21:04:35 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -54,6 +54,7 @@
 #include "G4ElementTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParametrizedHadronicVertex.hh"
+#include "G4HadronicProcessType.hh"
  
 class G4MuNuclearInteraction : public G4VDiscreteProcess
  
