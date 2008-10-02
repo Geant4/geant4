@@ -48,7 +48,7 @@
 G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) : 
   G4HadronicProcess(processName)
 {
-  SetProcessSubType(14);
+  SetProcessSubType(fFission);
   AddDataSet(new G4HadronFissionDataSet());
 }
 

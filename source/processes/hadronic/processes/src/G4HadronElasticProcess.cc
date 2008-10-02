@@ -54,7 +54,7 @@
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) : 
   G4HadronicProcess(processName)
 {
-  SetProcessSubType(11);
+  SetProcessSubType(fHadronElastic);
   AddDataSet(new G4HadronElasticDataSet());
 }
 
