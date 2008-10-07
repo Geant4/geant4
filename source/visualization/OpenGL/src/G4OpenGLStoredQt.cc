@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.5 2008-10-02 08:56:46 lgarnier Exp $
+// $Id: G4OpenGLStoredQt.cc,v 1.6 2008-10-07 05:28:49 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
