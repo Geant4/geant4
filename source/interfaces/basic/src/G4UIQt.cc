@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.18 2008-10-02 08:50:39 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.19 2008-10-07 00:46:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -431,7 +431,8 @@ G4int G4UIQt::ReceiveG4cout (
   fTextArea->append(QString((char*)aString.data()).trimmed());
   fTextArea->verticalScrollBar()->setSliderPosition(fTextArea->verticalScrollBar()->maximum());
 #endif
-  interactorManager->FlushAndWaitExecution();
+  fTextArea->repaint();
+  //  interactorManager->FlushAndWaitExecution();
   return 0;
 }
 
@@ -462,7 +463,8 @@ G4int G4UIQt::ReceiveG4cerr (
   fTextArea->setTextColor(previousColor);
   fTextArea->verticalScrollBar()->setSliderPosition(fTextArea->verticalScrollBar()->maximum());
 #endif
-  interactorManager->FlushAndWaitExecution();
+  fTextArea->repaint();
+  //  interactorManager->FlushAndWaitExecution();
   return 0;
 }
 
