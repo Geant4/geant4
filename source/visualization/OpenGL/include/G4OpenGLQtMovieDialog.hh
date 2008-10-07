@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh,v 1.3 2008-10-07 01:03:04 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.hh,v 1.4 2008-10-07 05:36:11 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -78,7 +78,6 @@ private :
   QPushButton *fButtonStartPause;
 
 public slots :
-  void checkAllParameters();
   void stopFinishClose();
   void save();
   bool checkEncoderSwParameters();
