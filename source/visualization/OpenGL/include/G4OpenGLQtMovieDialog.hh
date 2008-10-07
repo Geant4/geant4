@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh,v 1.2 2008-10-02 08:56:45 lgarnier Exp $
+// $Id: G4OpenGLQtMovieDialog.hh,v 1.3 2008-10-07 01:03:04 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
