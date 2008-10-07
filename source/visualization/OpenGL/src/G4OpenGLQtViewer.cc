@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.25 2008-10-02 08:56:46 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.26 2008-10-07 03:39:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1530,7 +1530,7 @@ void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
   fLastPos2 = fLastPos1;
   fLastPos3 = fLastPos2;
   fLastEventTime->start();
-  if (fMouseAction == STYLE2){  // pick
+  if (fMouseAction == STYLE3){  // pick
     Pick(p.x(),p.y());
   }
 }

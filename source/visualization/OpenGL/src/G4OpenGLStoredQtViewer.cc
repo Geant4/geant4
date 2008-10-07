@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.16 2008-10-02 08:56:46 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.17 2008-10-07 03:39:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,15 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLQtViewer (sceneHandler),
   G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
 {
+  // if no scene...
+  if (fSceneHandler.GetScene() == 0) {
+    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+	   << G4endl;
+    return;
+  }
+
+  //set true to picking
+  fVP.SetPicking(true);
 #if QT_VERSION < 0x040000
   setFocusPolicy(QWidget::StrongFocus); // enable keybord events
 #else
@@ -58,12 +67,6 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   nbPaint =0;
   hasToRepaint =false;
 
-  // if no scene...
-  if (fSceneHandler.GetScene() == 0) {
-    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
-	   << G4endl;
-    return;
-  }
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
