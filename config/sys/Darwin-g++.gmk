@@ -2,7 +2,6 @@
 # ------ MacOS-X ------
 #                                 MacOS 10.3 gcc-3.3
 #                                 MacOS 10.4 gcc-4.0
-#                                 MacOS 10.5 gcc-4.0
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -71,17 +70,43 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef QTHOME
     QTHOME     := /sw
   endif
+
+  QT_VERSION   := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo QT4 || echo QT3)
+
   ifndef QTFLAGS
-    QTFLAGS    := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+    ifeq ($(QT_VERSION),QT4)
+      QTFLAFG   := "-I ${QTHOME}/QtCore.framework/Headers "
+      QTFLAFG   += "-I ${QTHOME}/QtGui.framework/Headers "
+      QTFLAFG   += "-I ${QTHOME}/QtOpenGL.framework/Headers "
+      QTFLAFG   += "-I ${QTHOME}/QtSql.framework/Headers "
+      QTFLAFG   += "-I ${QTHOME}/QtXml.framework/Headers "
+    else
+      QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+    endif
   endif
   ifndef QTMOC
-    QTMOC      := $(QTHOME)/bin/moc
+    ifeq ($(QT_VERSION),QT4)
+      QTMOC      := /usr/bin/moc
+    else
+      QTMOC      := $(QTHOME)/bin/moc
+    endif
   endif
   ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt -lqui
-    QT4LIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
-    QT4LIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
-    GLQTLIBS   := $(shell test -f $(QTHOME)/Qt3Support.framework/Qt3Support && echo $(QT4LIBS) || echo $(QT3LIBS))
+    ifeq ($(QT_VERSION),QT3)
+      QTLIBS    := -L$(QTHOME)/lib -lqt -lqui
+    else
+      QTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
+      QTLIBS    += -framework QtSql -framework QtXml
+    endif
+  endif
+
+  ifndef GLQTLIBS
+    ifeq ($(QT_VERSION),QT3)
+      GLQTLIBS    := -L$(QTHOME)/lib -lqt -lqui
+    else
+      GLQTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
+    endif
   endif
 
   define build-granular-shared-lib

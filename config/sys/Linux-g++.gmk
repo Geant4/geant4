@@ -60,19 +60,31 @@ ifeq ($(G4SYSTEM),Linux-g++)
     XMLIBS    := -lXm -lXpm
   endif
   ifndef QTHOME
-    QTHOME     := /usr/local/Qt
+    QTHOME     := /usr
   endif
   ifndef QTFLAGS
-    QTFLAGS    := -I$(QTHOME)/include/Qt
-    QTFLAGS    += -I$(QTHOME)/include
+    QTFLAGS    := -I$(QTHOME)/include/qt4/Qt
+    QTFLAGS    += -I$(QTHOME)/include/qt4
   endif
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
+
+  QT_VERSION   := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo QT4 || echo QT3)
+
+  ifndef GLQTLIBS
+    ifeq ($(QT_VERSION),QT3)
+      GLQTLIBS    := -L$(QTHOME)/lib -lqt-mt
+    else
+      GLQTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
+    endif
+  endif
   ifndef QTLIBS
-    QT3LIBS    := -L$(QTHOME)/lib -lqt-mt
-    QT4LIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
-    QTLIBS     := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo $(QT4LIBS) || echo $(QT3LIBS))
+    ifeq ($(QT_VERSION),QT3)
+      QTLIBS    := -L$(QTHOME)/lib -lqt-mt
+    else
+      QTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtSql -lQtXml
+    endif
   endif
   ifndef XAWFLAGS
     XAWFLAGS   := -I/usr/X11R6/include

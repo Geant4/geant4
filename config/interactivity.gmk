@@ -32,7 +32,7 @@ ifdef LOAD_QT
   INTYLIBS += $(QTLIBS)
 endif
 ifdef LOAD_GLQT
-  INTYLIBS += $(QTLIBS)
+  INTYLIBS += $(GLQTLIBS)
 endif
 
 ########################### OpenGL ###############################
