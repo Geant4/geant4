@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.12 2008-03-10 17:03:16 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.13 2008-10-09 08:24:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -57,8 +57,8 @@ class QDialog;
 
 // Class description :
 //
-//  G4UIQt : class to handle a Motif interactive session.
-// G4UIQt is the Motif version of G4UIterminal.
+//  G4UIQt : class to handle a Qt interactive session.
+// G4UIQt is the Qt version of G4UIterminal.
 //
 //  A command box is at disposal for entering/recalling Geant4 commands.
 //  A menubar could be customized through the AddMenu, AddButton methods.
