@@ -62,15 +62,20 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef QTHOME
     QTHOME     := /usr
   endif
+  QT_VERSION   := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo QT4 || echo QT3)
+
   ifndef QTFLAGS
-    QTFLAGS    := -I$(QTHOME)/include/qt4/Qt
-    QTFLAGS    += -I$(QTHOME)/include/qt4
+    ifeq ($(QT_VERSION),QT4)
+      QTFLAGS    := -I$(QTHOME)/include/qt4/Qt
+      QTFLAGS    += -I$(QTHOME)/include/qt4
+    else
+      QTFLAGS    := -I$(QTHOME)/include/qt
+    endif
   endif
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
 
-  QT_VERSION   := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo QT4 || echo QT3)
 
   ifndef GLQTLIBS
     ifeq ($(QT_VERSION),QT3)

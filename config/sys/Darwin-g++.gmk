@@ -62,7 +62,10 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    ifeq ($(G4SYSTEM),Darwin-g++)
 # It may be required to uncomment the following lines for building on MacOSX 10.5 "Leopard"
+      OGLLIBS   += $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo " -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+    endif
 #    OGLLIBS   += -dylib_file \
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:\
 #                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
@@ -75,11 +78,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 
   ifndef QTFLAGS
     ifeq ($(QT_VERSION),QT4)
-      QTFLAFG   := "-I ${QTHOME}/QtCore.framework/Headers "
-      QTFLAFG   += "-I ${QTHOME}/QtGui.framework/Headers "
-      QTFLAFG   += "-I ${QTHOME}/QtOpenGL.framework/Headers "
-      QTFLAFG   += "-I ${QTHOME}/QtSql.framework/Headers "
-      QTFLAFG   += "-I ${QTHOME}/QtXml.framework/Headers "
+      QTFLAGS   := -I ${QTHOME}/QtCore.framework/Headers 
+      QTFLAGS   += -I ${QTHOME}/QtGui.framework/Headers 
+      QTFLAGS   += -I ${QTHOME}/QtOpenGL.framework/Headers 
+      QTFLAGS   += -I ${QTHOME}/QtSql.framework/Headers 
+      QTFLAGS   += -I ${QTHOME}/QtXml.framework/Headers 
     else
       QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
