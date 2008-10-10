@@ -81,14 +81,14 @@ ifeq ($(G4SYSTEM),Linux-g++)
     ifeq ($(QT_VERSION),QT3)
       GLQTLIBS    := -L$(QTHOME)/lib -lqt-mt
     else
-      GLQTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtOpenGL -lQtSql -lQtXml
+      GLQTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtOpenGL
     endif
   endif
   ifndef QTLIBS
     ifeq ($(QT_VERSION),QT3)
       QTLIBS    := -L$(QTHOME)/lib -lqt-mt
     else
-      QTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtSql -lQtXml
+      QTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui
     endif
   endif
   ifndef XAWFLAGS

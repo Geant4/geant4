@@ -62,13 +62,12 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-    ifeq ($(G4SYSTEM),Darwin-g++)
-# It may be required to uncomment the following lines for building on MacOSX 10.5 "Leopard"
-      OGLLIBS   += $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo " -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+    ifdef LOAD_X11
+      ifeq ($(G4SYSTEM),Darwin-g++)
+          # It may be required to uncomment the following lines for building on MacOSX 10.5 "Leopard"
+        OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo " -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+      endif
     endif
-#    OGLLIBS   += -dylib_file \
-#                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:\
-#                 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
   endif
   ifndef QTHOME
     QTHOME     := /sw
@@ -81,8 +80,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   := -I ${QTHOME}/QtCore.framework/Headers 
       QTFLAGS   += -I ${QTHOME}/QtGui.framework/Headers 
       QTFLAGS   += -I ${QTHOME}/QtOpenGL.framework/Headers 
-      QTFLAGS   += -I ${QTHOME}/QtSql.framework/Headers 
-      QTFLAGS   += -I ${QTHOME}/QtXml.framework/Headers 
     else
       QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
@@ -99,7 +96,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTLIBS    := -L$(QTHOME)/lib -lqt -lqui
     else
       QTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
-      QTLIBS    += -framework QtSql -framework QtXml
     endif
   endif
 
@@ -108,7 +104,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       GLQTLIBS    := -L$(QTHOME)/lib -lqt -lqui
     else
       GLQTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
-      GLQTLIBS    += -framework QtOpenGL -framework QtSql -framework QtXml
+      GLQTLIBS    += -framework QtOpenGL
     endif
   endif
 

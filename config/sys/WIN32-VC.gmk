@@ -50,14 +50,14 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     ifeq ($(QT_VERSION),QT3)
       QTLIBS   := -L$(QTHOME)/lib -lqt-mt
     else
-      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtSql4.lib QtXml4.lib
+      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
     endif
   endif
   ifndef QTGLLIBS
     ifeq ($(QT_VERSION),QT3)
       QTLIBS   := -L$(QTHOME)/lib -lqt-mt
     else
-      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib QtSql4.lib QtXml4.lib
+      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
     endif
   endif
 
