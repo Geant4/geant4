@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.6 2008-08-04 08:48:33 vnivanch Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.7 2008-10-12 07:21:03 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,7 +165,7 @@ private:
   G4double rangeinit;
   G4double currentRadLength;
 
-  G4double Zeff,z43,y;
+  G4double Zeff,y,lnz;
   G4double theta0max,rellossmax;
   G4double third;
 

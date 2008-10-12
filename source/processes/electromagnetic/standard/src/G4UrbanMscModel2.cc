@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.9 2008-09-16 14:20:54 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.10 2008-10-12 07:21:03 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,10 @@
 //
 // 05-08-08  bugfix in ComputeTruePathLengthLimit (L.Urban)
 //
+// 09-10-08  theta0 and tail have been retuned using some e-,mu,proton
+//           scattering data
+//           + single scattering without path length correction for
+//           small steps (t < tlimitmin, for UseDistanceToBoundary only)
 
 // Class Description:
 //
@@ -118,8 +122,8 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   geomlimit     = geombig;
   presafety     = 0.*mm;
   Zeff          = 1.;
-  z43           = 1.;
   y             = 0.;
+  lnz           = 0.;
   theta0max     = pi/6.;
   rellossmax    = 0.50;
   third         = 1./3.;
@@ -303,11 +307,11 @@ G4double G4UrbanMscModel2::ComputeCrossSectionPerAtom(
 
   if(mass > electron_mass_c2)
   {
-    G4double TAU = KineticEnergy/mass ;
-    G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
-    G4double w = c-2. ;
-    G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
-    eKineticEnergy = electron_mass_c2*tau ;
+     G4double TAU = KineticEnergy/mass ;
+     G4double c = mass*TAU*(TAU+2.)/(electron_mass_c2*(TAU+1.)) ;
+     G4double w = c-2. ;
+     G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
+     eKineticEnergy = electron_mass_c2*tau ;
   }
 
   G4double ChargeSquare = charge*charge;
@@ -495,9 +499,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 
         }
 
-
       //step limit 
-    //tlimit = facrange*currentRange ;
       tlimit = facrange*rangeinit;              
       if(tlimit < facsafety*presafety)
         tlimit = facsafety*presafety; 
@@ -537,6 +539,10 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       if(tlimit < stepmin) tlimit = stepmin;
 
       if(tPathLength > tlimit) tPathLength = tlimit  ; 
+
+      // no path length correction and use single scattering for small steps
+      if(tPathLength < tlimitmin) insideskin = true;
+
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
@@ -746,9 +752,12 @@ G4double G4UrbanMscModel2::ComputeTheta0(G4double trueStepLength,
   y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
   y = log(y);
-  z43 = exp(4.*log(Zeff)/3.);
+  lnz = log(Zeff);
   // correction factor from e-/proton scattering data
-  theta0 *= (1.020-0.13/z43)+(0.050-0.020/z43)*y;
+  G4double corr = (0.885+lnz*(0.104-0.0170*lnz))+
+                  (0.028+lnz*(0.012-0.00125*lnz))*y; 
+  if(y < -6.5) corr -= 0.011*(6.5+y);
+  theta0 *= corr ;                                               
 
   return theta0;
 }
@@ -833,7 +842,6 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
 	    G4double postsafety = safetyHelper->ComputeSafety(newPosition);
 
 	    // displacement to boundary
-	    // if(postsafety < tlimitminfix) {
             if(postsafety <= 0.0) {
 	      safetyHelper->Locate(newPosition, newDirection);
 
@@ -939,9 +947,11 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       if(xmean1 <= 0.999*xmeanth)
         return SimpleScattering(xmeanth,x2meanth);
 
-      // from e-/proton scattering data                                     
-      G4double c = (1.82+0.18/z43);
-      if(y > -15.) c += (0.0025+0.0020/z43)*(y+15.)*(y+15.) ; 
+      // from MUSCAT H,Be,Fe data 
+      G4double c = 2.134-lnz*(0.1045-0.00602*lnz) ;
+      if(y > -13.5)
+        c += (0.001126-lnz*(0.0001089+0.0000247*lnz))*
+             exp(3.*log(y+13.5));
 
       if(abs(c-3.) < 0.001)  c = 3.001;      
       if(abs(c-2.) < 0.001)  c = 2.001;      
@@ -951,8 +961,8 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       //from continuity of derivatives
       b = 1.+(c-xsi)/a;
 
-      b1  = b+1.;
-      bx  = c/a;
+      b1 = b+1.;
+      bx = c/a;
       eb1 = exp(c1*log(b1));
       ebx = exp(c1*log(bx));
 
