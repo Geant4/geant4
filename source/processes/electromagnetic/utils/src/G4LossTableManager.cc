@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.92 2008-07-22 15:55:15 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.93 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -171,7 +171,7 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
   flagLPM = true;
-  splineFlag = false;
+  splineFlag = true;
   bremsTh = DBL_MAX;
   verbose = 1;
   tableBuilder->SetSplineFlag(splineFlag);
@@ -568,7 +568,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   dedx = em->IonisationTable();
   if (1 < n_dedx) {
-    em->SetDEDXTable(dedx, fIonisation);
+    em->SetDEDXTable(dedx, fIsIonisation);
     dedx = 0;
     dedx  = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
     tableBuilder->BuildDEDXTable(dedx, t_list);
@@ -619,7 +619,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if (0 < nSubRegions) {
     G4PhysicsTable* dedxSub = em->IonisationTableForSubsec();
     if (1 < listSub.size()) {
-      em->SetDEDXTable(dedxSub, fSubIonisation);
+      em->SetDEDXTable(dedxSub, fIsSubIonisation);
       dedxSub = 0;
       dedxSub = G4PhysicsTableHelper::PreparePhysicsTable(dedxSub);
       tableBuilder->BuildDEDXTable(dedxSub, listSub);

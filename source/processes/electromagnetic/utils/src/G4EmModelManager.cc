@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.45 2008-08-29 17:28:27 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.46 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -801,7 +801,7 @@ void G4EmModelManager::DumpModelList(G4int verb)
     if(verb > 1 || nRegions > 1) {
     }
     G4int n = r->NumberOfModels();  
-    if(verb > 1 || n > 1) {
+    if(verb > 1 || n > 0) {
       G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; j++) {

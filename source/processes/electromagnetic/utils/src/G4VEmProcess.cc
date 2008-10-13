@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.56 2008-09-12 16:13:49 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.57 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,8 +87,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
-  nLambdaBins(90),
-  lambdaFactor(0.8),
   integral(false),
   applyCuts(false),
   startFromNull(true),
@@ -98,9 +96,19 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   currentCouple(0)
 {
   SetVerboseLevel(1);
+
+  // Size of tables assuming spline
   minKinEnergy = 0.1*keV;
-  maxKinEnergy = 100.0*GeV;
+  maxKinEnergy = 100.0*TeV;
+  nLambdaBins  = 60;
+
+  // default lambda factor
+  lambdaFactor  = 0.8;
+
+  // default limit on polar angle
   polarAngleLimit = 0.0;
+
+  // particle types
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();
@@ -373,7 +381,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	  if (e < (*theCutsElectron)[currentMaterialIndex]) good = false;
 
 	} else if (p == thePositron) {
-	  if (e < (*theCutsPositron)[currentMaterialIndex]) {
+	  if (electron_mass_c2 < (*theCutsGamma)[currentMaterialIndex] &&
+	      e < (*theCutsPositron)[currentMaterialIndex]) {
 	    good = false;
 	    e += 2.0*electron_mass_c2;
 	  }

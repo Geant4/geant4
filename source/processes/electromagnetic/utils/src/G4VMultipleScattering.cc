@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.56 2008-08-29 17:28:27 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.57 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,15 +95,19 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   skin(3.0),
   facrange(0.02),
   facgeom(2.5),
-  nBins(120),
   latDisplasment(true),
   currentParticle(0),
   currentCouple(0)
 {
+  SetVerboseLevel(1);
+
+  // Size of tables assuming spline
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
+  nBins        = 60;
+
+  // default limit on polar angle
   polarAngleLimit = 0.0;
-  SetVerboseLevel(1);
 
   pParticleChange = &fParticleChange;
 

@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.2 2008-09-24 15:43:32 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.3 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -69,5 +69,7 @@ enum G4EmProcessSubType
   fOpAbsorption = 31,
   fOpBoundary = 32,
   fOpRayleigh = 33,
-  fOpWLS = 34,  
-}
+  fOpWLS = 34
+};
+
+#endif

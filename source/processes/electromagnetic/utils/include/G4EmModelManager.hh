@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.24 2008-08-29 17:28:27 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.25 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,6 +73,7 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4EmTableType.hh"
+#include "G4EmProcessSubType.hh"
 #include "G4Region.hh"
 
 class G4RegionModels

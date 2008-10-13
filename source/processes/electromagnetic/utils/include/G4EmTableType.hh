@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmTableType.hh,v 1.3 2007-01-15 17:27:40 vnivanch Exp $
+// $Id: G4EmTableType.hh,v 1.4 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -50,8 +50,8 @@ enum G4EmTableType
   fTotal = 0,
   fRestricted,
   fSubRestricted,
-  fIonisation,
-  fSubIonisation
+  fIsIonisation,
+  fIsSubIonisation
 };
 #endif
 

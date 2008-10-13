@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.139 2008-09-20 19:39:21 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.140 2008-10-13 14:56:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -167,11 +167,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
   baseParticle(0),
-  nBins(120),
-  nBinsCSDA(70),
-  linLossLimit(0.05),
   minSubRange(0.1),
-  lambdaFactor(0.8),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   tablesAreBuilt(false),
@@ -186,15 +182,26 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 {
   SetVerboseLevel(1);
 
-  // Size of tables
+  // low energy limit
   lowestKinEnergy  = 1.*eV;
+
+  // Size of tables assuming spline
   minKinEnergy     = 0.1*keV;
   maxKinEnergy     = 100.0*TeV;
+  nBins            = 60;
   maxKinEnergyCSDA = 1.0*GeV;
+  nBinsCSDA        = 35;
+
+  // default linear loss limit for spline
+  linLossLimit  = 0.01;
 
   // default dRoverRange and finalRange
   SetStepFunction(0.2, 1.0*mm);
 
+  // default lambda factor
+  lambdaFactor  = 0.8;
+
+  // particle types
   theElectron   = G4Electron::Electron();
   thePositron   = G4Positron::Positron();
   theGenericIon = 0;
@@ -1230,10 +1237,10 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
     theDEDXTable = p;
   } else if(fSubRestricted == tType) {    
     theDEDXSubTable = p;
-  } else if(fIonisation == tType && theIonisationTable != p) {    
+  } else if(fIsIonisation == tType && theIonisationTable != p) {    
     if(theIonisationTable) theIonisationTable->clearAndDestroy();
     theIonisationTable = p;
-  } else if(fSubIonisation == tType && theIonisationSubTable != p) {    
+  } else if(fIsSubIonisation == tType && theIonisationSubTable != p) {    
     if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy();
     theIonisationSubTable = p;
   }
