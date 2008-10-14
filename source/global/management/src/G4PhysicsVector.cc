@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.25 2008-09-22 08:26:33 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.26 2008-10-14 11:21:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -248,45 +248,24 @@ void G4PhysicsVector::FillSecondDerivatives()
 {  
   secDerivative = new G4double [numberOfBin];
 
-  secDerivative[0] = 0.0 ;
+  G4int n = numberOfBin-1;
 
   // cannot compute derivatives for less than 3 points
   if(3 > numberOfBin) {
-    secDerivative[numberOfBin-1] = 0.0 ;
+    secDerivative[0] = 0.0;
+    secDerivative[n] = 0.0;
     return;
   }
 
-  G4double* u = new G4double [numberOfBin];
-  u[0] = 0.0 ;
-   
-  // Decomposition loop for tridiagonal algorithm. secDerivative[i]
-  // and u[i] are used for temporary storage of the decomposed factors.
-   
-  for(size_t i=1; i<numberOfBin-1; i++)
+  for(G4int i=1; i<n; i++)
   {
-    G4double sig = (binVector[i]-binVector[i-1])
-                 / (binVector[i+1]-binVector[i-1]) ;
-    G4double p = sig*secDerivative[i-1] + 2.0 ;
-    secDerivative[i] = (sig - 1.0)/p ;
-    u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i])
-         - (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]) ;
-    u[i] =(6.0*u[i]/(binVector[i+1]-binVector[i-1]) - sig*u[i-1])/p ;
+    secDerivative[i] = 
+      3.0*((dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
+	   (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]))
+      /(binVector[i+1]-binVector[i-1]);
   }
-
-  G4double qn = 0.0 ;
-  G4double un = 0.0 ;
-
-  secDerivative[numberOfBin-1] = (un - qn*u[numberOfBin-2])
-                               / (qn*secDerivative[numberOfBin-2] + 1.0) ;
-   
-  // The back-substitution loop for the triagonal algorithm of solving
-  // a linear system of equations.
-   
-  for(G4int k=numberOfBin-2; k>=0; k--)
-  {
-    secDerivative[k] = secDerivative[k]*secDerivative[k+1] + u[k];
-  }
-  delete [] u;
+  secDerivative[n] = secDerivative[n-1];
+  secDerivative[0] = secDerivative[1];
 }
    
 // --------------------------------------------------------------
