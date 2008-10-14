@@ -1,4 +1,4 @@
-$Id: History,v 1.352 2008-09-24 17:39:40 vnivanch Exp $
+$Id: History,v 1.353 2008-10-14 13:43:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 October 08: V.Ivant (emutils-V09-01-30)
+G4EmCorrections - define the range of correction vector 25 keV - 2.5 MeV,
+                  as it is in ICRU'73 table, use 20 bins
+G4LossTableManager - set spline option "true" by default
+G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering set default
+                  table size 0.1 keV - 100 TeV in 60 bins
+G4EmModelManager - included G4EmProcessSubType.hh header
+G4EmTableType.hh - changed enumeration names fIonisation -> fIsIonisation,
+                   fSubIonisation -> fIsSubIonisation to avoid clash with
+                   sub-type enumeration name 
 
 21 September 08: V.Ivant (emutils-V09-01-29)
 G4EmCorrections - do not compute ion corrections if for ions 
