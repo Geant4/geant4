@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh,v 1.5 2008-01-30 10:54:13 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.hh,v 1.6 2008-10-15 10:16:17 lgarnier Exp $
 // GEANT4 tag $Name: 
 //
 // 
@@ -35,6 +35,7 @@
 #define G4OPENGLQTEXPORTDIALOG_HH
 
 #include <qdialog.h>
+#include <qobject.h>
 
 class QButtonGroup;
 class QPushButton;
