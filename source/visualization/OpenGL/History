@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2008-10-02 08:56:45 lgarnier Exp $
+$Id: History,v 1.118 2008-10-15 10:33:27 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+12th October Laurent Garnier
+ - G4OpenGLQtExportDialog : improvments for Qt3"
+ - G4OpenGLQtViewer,G4OpenGLImmediateQtViewer,G4OpenGLStoreQtViewer : Add the name on OpenGlQt viewers
+ - G4OpenGLStoredQtViewer,G4OpenGLImmediateQt, G4OpenGLStoredQt : Change OGLSQT and OGLIQT by OGLSQt and OGLIQt
 
 2 October Laurent Garnier
  - Fix a crash when there was no scene.
