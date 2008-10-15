@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.7 2008-10-12 07:21:03 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.8 2008-10-15 08:45:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,7 +133,7 @@ private:
 
 
   G4double mass;
-  G4double charge;
+  G4double charge,ChargeSquare;
 
   G4double taubig;
   G4double tausmall;
@@ -166,6 +166,7 @@ private:
   G4double currentRadLength;
 
   G4double Zeff,y,lnz;
+  G4double scr1,scr2;
   G4double theta0max,rellossmax;
   G4double third;
 
@@ -174,7 +175,6 @@ private:
   G4bool   isInitialized;
   G4bool   inside;
   G4bool   insideskin;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,6 +204,7 @@ void G4UrbanMscModel2::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
+    ChargeSquare = charge*charge;
   }
 }
 

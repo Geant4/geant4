@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.10 2008-10-12 07:21:03 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.11 2008-10-15 08:45:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,9 +68,12 @@
 // 05-08-08  bugfix in ComputeTruePathLengthLimit (L.Urban)
 //
 // 09-10-08  theta0 and tail have been retuned using some e-,mu,proton
-//           scattering data
+//           scattering data (L.Urban)
 //           + single scattering without path length correction for
 //           small steps (t < tlimitmin, for UseDistanceToBoundary only)
+//
+// 15-10-08  Moliere-Bethe screening in the single scattering part(L.Urban)          
+//
 
 // Class Description:
 //
@@ -95,6 +98,7 @@
 #include "G4SafetyHelper.hh"
 
 #include "G4Poisson.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,6 +128,9 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   Zeff          = 1.;
   y             = 0.;
   lnz           = 0.;
+  scr1          = fine_structure_const*fine_structure_const*
+                  electron_mass_c2*electron_mass_c2/(0.885*0.885);
+  scr2          = 3.76*fine_structure_const*fine_structure_const;
   theta0max     = pi/6.;
   rellossmax    = 0.50;
   third         = 1./3.;
@@ -313,8 +320,6 @@ G4double G4UrbanMscModel2::ComputeCrossSectionPerAtom(
      G4double tau = 0.5*(w+sqrt(w*w+4.*c)) ;
      eKineticEnergy = electron_mass_c2*tau ;
   }
-
-  G4double ChargeSquare = charge*charge;
 
   G4double eTotalEnergy = eKineticEnergy + electron_mass_c2 ;
   G4double beta2 = eKineticEnergy*(eTotalEnergy+electron_mass_c2)
@@ -875,12 +880,15 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
     G4int n = G4Poisson(mean);
     if(n > 0)
     {
-      G4double tm = KineticEnergy/electron_mass_c2;
-      // ascr - screening parameter
-      G4double ascr = exp(log(Zeff)/3.)/(137.*sqrt(tm*(tm+2.)));
-      G4double ascr1 = 1.+0.5*ascr*ascr;
+      //screening (Moliere-Bethe)
+      G4double mom2 = KineticEnergy*(2.*mass+KineticEnergy);
+      G4double beta2 = mom2/((KineticEnergy+mass)*(KineticEnergy+mass));
+      G4double ascr = scr1*exp(2.*log(Zeff)/3.)/mom2;
+      ascr *= 1.13+scr2*Zeff*Zeff*ChargeSquare/beta2;
+      G4double ascr1 = 1.+2.*ascr;
       G4double bp1=ascr1+1.;
       G4double bm1=ascr1-1.;
+
       // single scattering from screened Rutherford x-section
       G4double ct,st,phi;
       G4double sx=0.,sy=0.,sz=0.;
