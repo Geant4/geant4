@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2008-09-24 18:10:51 vnivanch Exp $
+$Id: History,v 1.68 2008-10-15 18:24:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-10-2008, V.Ivanchenko phys-lists-V09-01-13
+In all EM builders: added hadron bemsstrahlung and e+e- pair production
+  and e-msc for e+-; 
+G4EmStandardPhysics_option2 - enable "ApplyCuts", disable "SubCutoff" 
+G4EmStandardPhysics_option3 - added G4LowEnergyRayleigh, set 120 bins
+  for tables (60 is the default), StepFunction per particle type
 
 24-09-2008, V.Ivanchenko phys-lists-V09-01-12
 - QBBC temporary variant which is equivalent QGSP_BERT without LHEP

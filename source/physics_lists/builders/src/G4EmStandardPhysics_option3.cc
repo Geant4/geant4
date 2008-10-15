@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.10 2008-08-04 09:11:54 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.11 2008-10-15 18:24:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -49,6 +49,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4LowEnergyRayleigh.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -61,6 +62,8 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -144,27 +147,32 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
     if (particleName == "gamma") {
 
+      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
 
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
-      pmanager->AddProcess(eIoni,                     -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      G4eIonisation* epIoni = new G4eIonisation();
-      epIoni->SetStepFunction(0.2, 100*um);            
-      epIoni->SetLinearLossLimit(1.e-3);
-      pmanager->AddProcess(epIoni,                    -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetLinearLossLimit(1.e-3);
+      eIoni->SetStepFunction(0.2, 100*um);      
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
 
     } else if (particleName == "mu+" ||
@@ -184,9 +192,19 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 20*um);
-      ionIoni->SetLinearLossLimit(1.e-2);
+      ionIoni->SetStepFunction(0.1, 50*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+
+    } else if (particleName == "pi+" ||
+               particleName == "pi-" ||
+               particleName == "proton" ) {
+
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4hIonisation* hIoni = new G4hIonisation();
+      hIoni->SetStepFunction(0.2, 100*um);
+      pmanager->AddProcess(hIoni,                     -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -202,13 +220,10 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-               particleName == "kaon+" ||
+	       particleName == "kaon+" ||
                particleName == "kaon-" ||
-               particleName == "lambda_c+" ||
+	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
-               particleName == "pi+" ||
-               particleName == "pi-" ||
-               particleName == "proton" ||
                particleName == "sigma+" ||
                particleName == "sigma-" ||
                particleName == "tau+" ||
@@ -217,11 +232,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
-      hIoni->SetLinearLossLimit(1.e-2);
-      pmanager->AddProcess(hIoni,                     -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
     
@@ -232,16 +244,16 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   
   // Multiple Coulomb scattering
   //
-  opt.SetMscStepLimitation(fUseDistanceToBoundary);
-  opt.SetMscRangeFactor(0.02);
+  //opt.SetMscStepLimitation(fUseDistanceToBoundary);
+  //opt.SetMscRangeFactor(0.02);
     
   // Physics tables
   //
   opt.SetMinEnergy(100*eV);
-  opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(220);
-  opt.SetLambdaBinning(220);
-  opt.SetSplineFlag(true);
+  opt.SetMaxEnergy(100*TeV);
+  opt.SetDEDXBinning(120);
+  opt.SetLambdaBinning(120);
+  //opt.SetSplineFlag(true);
     
   // Ionization
   //

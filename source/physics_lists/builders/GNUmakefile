@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2008-05-30 11:01:37 vnivanch Exp $
+# $Id: GNUmakefile,v 1.5 2008-10-15 18:24:11 vnivanch Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/builders library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -38,6 +38,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/electromagnetic/xrays/include \
+            -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \
