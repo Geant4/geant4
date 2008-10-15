@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.13 2007-09-14 07:04:09 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.14 2008-10-15 02:41:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,14 @@
 
 #include "G4NucleiProperties.hh"
 
+G4bool   G4NucleiProperties::isIntialized = false;
 
+G4double G4NucleiProperties::mass_proton = -1.;
+G4double G4NucleiProperties::mass_neutron = -1.;
+G4double G4NucleiProperties::mass_deuteron = -1.;
+G4double G4NucleiProperties::mass_triton = -1.;
+G4double G4NucleiProperties::mass_alpha = -1.;
+G4double G4NucleiProperties::mass_He3 = -1.;
 
 G4double  G4NucleiProperties::AtomicMass(G4double A, G4double Z)
 {
@@ -75,6 +82,23 @@ G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
 
 G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
+  if (!isIntialized) {
+    isIntialized = true;
+    G4ParticleDefinition * nucleus = 0;
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+    if (nucleus!=0) mass_proton = nucleus->GetPDGMass();
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+    if (nucleus!=0) mass_neutron = nucleus->GetPDGMass();
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+    if (nucleus!=0) mass_deuteron = nucleus->GetPDGMass();
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
+    if (nucleus!=0) mass_triton = nucleus->GetPDGMass();
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
+    if (nucleus!=0) mass_alpha = nucleus->GetPDGMass();
+    nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+    if (nucleus!=0) mass_He3 = nucleus->GetPDGMass();
+  }
+
   if (A < 1 || Z < 0 || Z > A) {
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
@@ -84,27 +108,26 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 #endif    
     return 0.0;
   } else {
-    G4ParticleDefinition * nucleus = 0;
+    G4double mass= -1.;
     if ( (Z<=2) ) {
       if ( (Z==1)&&(A==1) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+	mass = mass_proton;
       } else if ( (Z==0)&&(A==1) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+	mass = mass_neutron;
       } else if ( (Z==1)&&(A==2) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+	mass = mass_deuteron;
       } else if ( (Z==1)&&(A==3) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
+	mass = mass_triton;
       } else if ( (Z==2)&&(A==4) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
+	mass = mass_alpha;
       } else if ( (Z==2)&&(A==3) ) {
-	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+	mass = mass_He3;
       }
     }
-    if (nucleus!=0) {
-      return nucleus->GetPDGMass();
-    }else {
-      return GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);
+    if (mass < 0.) {
+      mass = GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);      
     }
+    return mass;
   }
 }
 

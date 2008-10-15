@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.14 2006-06-29 19:23:54 gunter Exp $
+// $Id: G4NucleiProperties.hh,v 1.15 2008-10-15 02:41:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,27 +65,38 @@ public:
 
 public:  // With Description
 
-	// Calculate Mass Excess of nucleus A,Z
-	static G4double GetMassExcess(const G4int A, const G4int Z);
-
-	static G4double GetAtomicMass(const G4double A, const G4double Z);
+  // Give mass of nucleus A,Z
+  static G4double GetNuclearMass(const G4double A, const G4double Z);
+  
+public:
+  // Calculate Mass Excess of nucleus A,Z
+  static G4double GetMassExcess(const G4int A, const G4int Z);
+  
+  // Give mass of Atom A,Z
+  static G4double GetAtomicMass(const G4double A, const G4double Z);
+  
+  static G4double GetBindingEnergy(const G4int A, const G4int Z);
 	
-	static G4double GetBindingEnergy(const G4int A, const G4int Z);
-	
-	static G4double GetNuclearMass(const G4double A, const G4double Z);
-
 private:
 
-	// Calculate Mass Excess according to Cameron's liquid drop formula
-//	static G4double CameronMassExcess(const G4int A, const G4int Z);
+  // Calculate Mass Excess according to Cameron's liquid drop formula
+  //	static G4double CameronMassExcess(const G4int A, const G4int Z);
+  
+  static G4double  AtomicMass(G4double A, G4double Z);
+  
+  static G4double BindingEnergy(G4double A, G4double Z);
+  
+  static G4double MassExcess(G4double A, G4double Z);
 
-	static G4double  AtomicMass(G4double A, G4double Z);
-	
-	static G4double BindingEnergy(G4double A, G4double Z);
-
-	static G4double MassExcess(G4double A, G4double Z);
-	
-	
+private:
+  static G4bool   isIntialized;
+  static G4double mass_proton;
+  static G4double mass_neutron;
+  static G4double mass_deuteron;
+  static G4double mass_triton;
+  static G4double mass_alpha;
+  static G4double mass_He3;
+ 	
 };
 
 
