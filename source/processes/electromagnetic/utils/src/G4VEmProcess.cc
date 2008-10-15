@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.57 2008-10-13 14:56:56 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.58 2008-10-15 14:33:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -408,7 +408,8 @@ void G4VEmProcess::PrintInfoDefinition()
   if(verboseLevel > 0) {
     G4cout << G4endl << GetProcessName() << ":   tables are built for  "
            << particle->GetParticleName();
-    if(integral) G4cout << ", integral mode is used ";
+    if(integral) G4cout << ", integral: 1 ";
+    if(applyCuts) G4cout << ", applyCuts: 1 ";
     G4cout << G4endl;
     if(buildLambdaTable) {
       G4cout << "      Lambda tables from "

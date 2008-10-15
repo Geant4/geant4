@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.140 2008-10-13 14:56:56 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.141 2008-10-15 14:33:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1168,7 +1168,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
              << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
              << " in " << nBinsCSDA << " bins" << G4endl;
     }
-    if(nSCoffRegions>0) {
+    if(nSCoffRegions>0 && isIonisation) {
       G4cout << "      Subcutoff sampling in " << nSCoffRegions 
 	     << " regions" << G4endl;
     }
