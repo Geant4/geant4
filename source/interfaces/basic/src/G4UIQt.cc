@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.19 2008-10-07 00:46:19 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.20 2008-10-15 09:09:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -69,6 +69,7 @@
 #include <qheader.h>
 #include <qlistview.h>
 #include <qpopupmenu.h>
+#include <qwidgetlist.h>
 #endif
 
 
@@ -100,14 +101,11 @@ static G4bool exitPause = true;
 </pre>
 */
 G4UIQt::G4UIQt (
- int argc
+ int* argc
 ,char** argv
 )
   :fHelpDialog(NULL)
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::Initialise %d %s\n",argc,argv[0]);
-#endif
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);

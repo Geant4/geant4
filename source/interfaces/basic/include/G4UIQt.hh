@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.13 2008-10-09 08:24:34 allison Exp $
+// $Id: G4UIQt.hh,v 1.14 2008-10-15 09:09:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -79,7 +79,7 @@ class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSessio
   Q_OBJECT
 
 public: // With description
-  G4UIQt(int,char**);
+  G4UIQt(int*,char**);
   // (argv, argc) or (0, NULL) had to be given.
   G4UIsession* SessionStart();
   // To enter interactive X loop ; waiting/executing command,...

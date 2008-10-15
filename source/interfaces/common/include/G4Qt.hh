@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.2 2007-11-08 17:00:09 lgarnier Exp $
+// $Id: G4Qt.hh,v 1.3 2008-10-15 09:09:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify Qt event treatment between 
@@ -50,13 +50,13 @@
 class G4Qt : public G4VInteractorManager {
 public:
   static G4Qt* getInstance();
-  static G4Qt* getInstance(int,char**,char*);
+  static G4Qt* getInstance(int*,char**,char*);
   G4bool Inited();
   void* GetEvent();
   void FlushAndWaitExecution();
   virtual ~G4Qt();                     
 private:
-  G4Qt (int,char**,char*);                     
+  G4Qt (int*,char**,char*);                     
   static G4Qt* instance; // Pointer to single instance.
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.8 2008-10-02 08:50:39 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.9 2008-10-15 09:09:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -41,20 +41,9 @@
 #include <qapplication.h>
 
 
-#define NewString(str)  \
- ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : NULL)
-
-//static void XWidgetIconify                 (Widget);
-//static void XWidgetUniconify               (Widget);
-//static void XDisplaySetWindowToNormalState (Display*,Window);
-
 G4Qt* G4Qt::instance    = NULL;
 
 static G4bool QtInited  = FALSE;
-//static int    argn      = 0;
-//static char** args      = NULL;
-// static QtAppContext appContext = NULL;
-//static QApplication app = NULL;
 
 /***************************************************************************/
 G4Qt* G4Qt::getInstance (
@@ -66,7 +55,7 @@ G4Qt* G4Qt::getInstance (
 }
 /***************************************************************************/
 G4Qt* G4Qt::getInstance (
- int    a_argn
+ int*    a_argn
 ,char** a_args
 ,char*  a_class
 ) 
@@ -80,7 +69,7 @@ G4Qt* G4Qt::getInstance (
 }
 /***************************************************************************/
 G4Qt::G4Qt (
- int    a_argn
+ int*    a_argn
 ,char** a_args
 ,char*  a_class
 )
@@ -98,7 +87,7 @@ G4Qt::G4Qt (
       //#else
       SetMainInteractor (qApp);
       //#endif
-      SetArguments      (a_argn,a_args);
+      SetArguments      (*a_argn,a_args);
 #ifdef GEANT4_QT_DEBUG
       printf("G4Qt::G4Qt alredy inited in external \n");
 #endif
@@ -109,11 +98,11 @@ G4Qt::G4Qt (
       printf("G4Qt::G4Qt inited Qt\n");
 #endif
 #if QT_VERSION < 0x040000
-      qApp = new QApplication (a_argn, a_args);
+      qApp = new QApplication (*a_argn, a_args);
       //    QApplication qApp(a_argn, a_args);
       //    if(&qApp == NULL) {
 #else
-      new QApplication (a_argn, a_args);
+      new QApplication (*a_argn, a_args);
 #endif
       if(!qApp) {
         
@@ -125,7 +114,7 @@ G4Qt::G4Qt (
         //#else
         SetMainInteractor (qApp);
         //#endif
-        SetArguments      (a_argn,a_args);
+        SetArguments      (*a_argn,a_args);
 #ifdef GEANT4_QT_DEBUG
         printf("G4Qt::G4Qt inited Qt END\n");
 #endif
