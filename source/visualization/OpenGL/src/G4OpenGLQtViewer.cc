@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.27 2008-10-15 10:24:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.28 2008-10-15 12:41:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1885,6 +1885,7 @@ bool G4OpenGLQtViewer::generateEPS (
     bool alpha = aImage.hasAlphaBuffer();
 #else
     bool alpha = aImage.hasAlphaChannel();
+#endif
     for(int y=height-1; y >=0 ; y--) {
       QRgb * s = (QRgb*)(aImage.scanLine(y));
       for(int x=0; x <width; x++) {
@@ -1904,7 +1905,6 @@ bool G4OpenGLQtViewer::generateEPS (
       }
       fprintf (fp, "\n");
     } 
-#endif
 
   }
 
