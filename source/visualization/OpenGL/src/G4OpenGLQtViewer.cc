@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.26 2008-10-07 03:39:47 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.27 2008-10-15 10:24:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,6 +166,7 @@ void G4OpenGLQtViewer::CreateGLQtContext (
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
  QGLWidget* glWidget
+ ,QString name
 ) 
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -234,10 +235,10 @@ void G4OpenGLQtViewer::CreateMainWindow (
   mainLayout->addWidget(fWindow);
 
 #if QT_VERSION < 0x040000
-  GLWindow->setCaption( tr( "QGl Viewer" ));
+  GLWindow->setCaption(name );
 #else
   GLWindow->setLayout(mainLayout);
-  GLWindow->setWindowTitle(tr("QGl Viewer"));
+  GLWindow->setWindowTitle( name);
 #endif
   GLWindow->resize(300, 300);
   GLWindow->move(900,300);
@@ -2768,7 +2769,6 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fclose (fp);
 
   setRecordingInfos("Parameter file "+fParameterFileName+" generated in "+fMovieTempFolderPath);
-  printf("Parameter file %s  generated in %s\n",fParameterFileName.toStdString().c_str(),fMovieTempFolderPath.toStdString().c_str());
   setRecordingStatus(READY_TO_ENCODE);
   return true;
 }

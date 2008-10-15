@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.11 2008-10-02 08:56:46 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.12 2008-10-15 10:24:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ public:
 
 protected:
   void CreateGLQtContext ();
-  virtual void CreateMainWindow (QGLWidget*);
+  virtual void CreateMainWindow (QGLWidget*,QString);
   void manageContextMenuEvent(QContextMenuEvent *e);
 #if QT_VERSION < 0x040000
   void G4MousePressEvent(QPoint);

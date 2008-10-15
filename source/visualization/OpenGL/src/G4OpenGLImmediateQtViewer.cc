@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.4 2008-01-15 11:05:08 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.5 2008-10-15 10:24:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@ void G4OpenGLImmediateQtViewer::Initialise() {
    printf("G4OpenGLImmediateQtViewer::Initialise () 2\n");
 #endif
 
-  CreateMainWindow (this);
+   CreateMainWindow (this,QString(fName));
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLImmediateQtViewer::Initialise () 3\n");
 #endif
