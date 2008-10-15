@@ -1,4 +1,4 @@
-$Id: History,v 1.413 2008-09-21 16:08:45 vnivanch Exp $
+$Id: History,v 1.414 2008-10-15 15:43:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 Septembetr 08: V.Ivant (emstand-V09-01-35)
+G4eBremsstrahlung - set relativistic model above 1 GeV by default
+G4eBremsstrahlungModel, G4eBremsstrahlungRelModel removed private member
+   highEnergyTh and use access method to this threshold in the base class
 
 21 Septembetr 08: V.Ivant (emstand-V09-01-34)
 G4BetheBlochModel, G4BraggModel, G4BraggIonModel - simplified new methods

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.41 2008-09-09 09:05:39 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.42 2008-10-15 15:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,17 +86,13 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
     isElectron(true),
     probsup(1.0),
     MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
-    //MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
-    theLPMflag(true),
+    theLPMflag(false),
     isInitialised(false)
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
   minThreshold = 1.0*keV;
-  highKinEnergy= 100.*TeV;
-  lowKinEnergy = 1.0*keV;
-  highEnergyTh = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -165,11 +161,11 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   }
   if(isInitialised) return;
 
-  if(pParticleChange)
+  if(pParticleChange) {
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else
+  } else {
     fParticleChange = new G4ParticleChangeForLoss();
-
+  }
   isInitialised = true;
 }
 
@@ -880,7 +876,7 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double finalE = kineticEnergy - gammaEnergy;
 
   // stop tracking and create new secondary instead of primary
-  if(gammaEnergy > highEnergyTh) {
+  if(gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
     G4DynamicParticle* el = 

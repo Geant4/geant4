@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.8 2008-08-27 15:13:12 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.9 2008-10-15 15:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,8 +93,9 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
+
   minThreshold = 1.0*keV;
-  highEnergyTh = DBL_MAX;
+  SetLowEnergyLimit(GeV);  
 
   nist = G4NistManager::Instance();  
   InitialiseConstants();
@@ -164,10 +165,6 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 					   const G4DataVector& cuts)
 {
-  // *** update flags from losstablemanager *** 
-  G4LossTableManager* man = G4LossTableManager::Instance(); 
-  SetEnergyThreshold(man->BremsstrahlungTh());
-
   if(p) SetParticle(p);
 
   highKinEnergy = HighEnergyLimit();
@@ -547,7 +544,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   G4double finalE = kineticEnergy - gammaEnergy;
 
   // stop tracking and create new secondary instead of primary
-  if(gammaEnergy > highEnergyTh) {
+  if(gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
     G4DynamicParticle* el = 

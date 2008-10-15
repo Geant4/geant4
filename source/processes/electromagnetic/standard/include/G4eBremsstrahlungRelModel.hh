@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.6 2008-08-27 15:13:12 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.7 2008-10-15 15:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,9 +93,6 @@ public:
   virtual void SetupForMaterial(const G4ParticleDefinition*,
                                 const G4Material*,G4double);
 
-  inline void SetEnergyThreshold(G4double val);
-  inline G4double EnergyThreshold() const;
-
 protected:
 
   inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -140,7 +137,6 @@ protected:
   static const G4double Fel_light[5];
   static const G4double Finel_light[5];
 
-
   G4double minThreshold;
 
   // cash
@@ -170,7 +166,6 @@ private:
   G4double MigdalConstant;
   G4double LPMconstant;
   G4double bremFactor;
-  G4double highEnergyTh;
   G4double energyThresholdLPM;
   G4double facFel, facFinel;
   G4double preS1,logTwo;
@@ -214,22 +209,6 @@ G4double G4eBremsstrahlungRelModel::MaxSecondaryEnergy(
     				       G4double kineticEnergy)
 {
   return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4eBremsstrahlungRelModel::SetEnergyThreshold(G4double val) 
-{
-  highEnergyTh = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungRelModel::EnergyThreshold() const 
-{
-  return highEnergyTh;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
