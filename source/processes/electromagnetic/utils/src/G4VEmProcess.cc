@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.58 2008-10-15 14:33:16 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.59 2008-10-15 17:54:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -406,11 +406,11 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 void G4VEmProcess::PrintInfoDefinition()
 {
   if(verboseLevel > 0) {
-    G4cout << G4endl << GetProcessName() << ":   tables are built for  "
+    G4cout << G4endl << GetProcessName() << ":   for  "
            << particle->GetParticleName();
     if(integral) G4cout << ", integral: 1 ";
     if(applyCuts) G4cout << ", applyCuts: 1 ";
-    G4cout << G4endl;
+    G4cout << "    SubType= " << GetProcessSubType() << G4endl;
     if(buildLambdaTable) {
       G4cout << "      Lambda tables from "
 	     << G4BestUnit(minKinEnergy,"Energy") 

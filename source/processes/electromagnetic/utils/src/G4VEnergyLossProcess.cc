@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.141 2008-10-15 14:33:16 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.142 2008-10-15 17:54:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -222,7 +222,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   // Data for stragling of ranges from ICRU'37 report
   const G4int nrbins = 7;
-  vstrag = new G4PhysicsLogVector(keV, GeV, nrbins);
+  vstrag = new G4PhysicsLogVector(keV, GeV, nrbins-1);
+  vstrag->SetSpline(true);
   G4double s[nrbins] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
   for(G4int i=0; i<nrbins; i++) {vstrag->PutValue(i, s[i]);}
 }
@@ -1141,8 +1142,9 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 void G4VEnergyLossProcess::PrintInfoDefinition()
 {
   if(0 < verboseLevel) {
-    G4cout << G4endl << GetProcessName() << ":   tables are built for  "
+    G4cout << G4endl << GetProcessName() << ":   for  "
            << particle->GetParticleName()
+	   << "    SubType= " << GetProcessSubType() 
            << G4endl
            << "      dE/dx and range tables from "
  	   << G4BestUnit(minKinEnergy,"Energy")

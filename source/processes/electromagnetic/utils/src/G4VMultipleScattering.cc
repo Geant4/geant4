@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.57 2008-10-13 14:56:56 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.58 2008-10-15 17:54:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,6 +109,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   // default limit on polar angle
   polarAngleLimit = 0.0;
 
+  SetProcessSubType(fCoulombScattering);
   pParticleChange = &fParticleChange;
 
   modelManager = new G4EmModelManager();
@@ -228,8 +229,7 @@ void G4VMultipleScattering::PrintInfoDefinition()
 {
   if (0 < verboseLevel) {
     G4cout << G4endl << GetProcessName() 
-	   << ":  Model variant of multiple scattering "
-	   << "for " << firstParticle->GetParticleName()
+	   << ":   for " << firstParticle->GetParticleName()
 	   << G4endl;
     if (theLambdaTable) {
       G4cout << "      Lambda tables from "
@@ -240,8 +240,6 @@ void G4VMultipleScattering::PrintInfoDefinition()
 	     << (G4LossTableManager::Instance())->SplineFlag()
 	     << G4endl;
     }
-    G4cout << "      LateralDisplacementFlag=  " << latDisplasment
-	   << "   Skin= " << skin << G4endl; 
     PrintInfo();
     modelManager->DumpModelList(verboseLevel);
     if (2 < verboseLevel) {
