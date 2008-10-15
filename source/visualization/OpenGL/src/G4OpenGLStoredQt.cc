@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.6 2008-10-07 05:28:49 lgarnier Exp $
+// $Id: G4OpenGLStoredQt.cc,v 1.7 2008-10-15 10:26:25 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 
 G4OpenGLStoredQt::G4OpenGLStoredQt ():
   G4VGraphicsSystem ("OpenGLStoredQt",
-		     "OGLSQT",
+		     "OGLSQt",
 		     G4VisFeaturesOfOpenGLSQt (),
 		     G4VGraphicsSystem::threeD)
 {

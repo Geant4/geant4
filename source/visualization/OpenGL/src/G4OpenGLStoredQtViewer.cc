@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.17 2008-10-07 03:39:47 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.18 2008-10-15 10:29:39 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,11 +51,11 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
 {
   // if no scene...
-  if (fSceneHandler.GetScene() == 0) {
-    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
-	   << G4endl;
-    return;
-  }
+//   if (fSceneHandler.GetScene() == 0) {
+//     G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+// 	   << G4endl;
+//     return;
+//   }
 
   //set true to picking
   fVP.SetPicking(true);
@@ -92,7 +92,7 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::Initialise () 2\n");
 #endif
-  CreateMainWindow (this);
+  CreateMainWindow (this,QString(fName));
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::Initialise () 3\n");
 #endif
@@ -120,7 +120,11 @@ void G4OpenGLStoredQtViewer::initializeGL () {
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
 
-  hasToRepaint =true;
+  if (fSceneHandler.GetScene() == 0) {
+    hasToRepaint =false;
+  } else {
+    hasToRepaint =true;
+  }
 
 #ifdef GEANT4_QT_DEBUG
   printf("G4OpenGLStoredQtViewer::InitialiseGL  -------------------------------------------------------------------------------------\n");

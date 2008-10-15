@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.2 2007-11-15 18:24:28 lgarnier Exp $
+// $Id: G4OpenGLImmediateQt.cc,v 1.3 2008-10-15 10:26:25 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
   G4VGraphicsSystem ("OpenGLImmediateQt",
-		     "OGLIQT",
+		     "OGLIQt",
 		     G4VisFeaturesOfOpenGLIQt (),
 		     G4VGraphicsSystem::threeD)
 {
