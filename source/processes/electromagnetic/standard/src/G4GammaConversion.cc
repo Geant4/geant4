@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc,v 1.29 2008-09-12 16:24:10 vnivanch Exp $
+// $Id: G4GammaConversion.cc,v 1.30 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,10 +78,8 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
-  SetMaxKinEnergy(100.0*GeV);
-  SetProcessSubType(5);
+  SetProcessSubType(fGammaConversion);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,12 +95,11 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = max(MinKinEnergy(), 2.0*electron_mass_c2);
+    G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
-    G4double emax = MaxKinEnergy();
-    if(!Model()) SetModel(new G4BetheHeitlerModel);
+    if(!Model()) SetModel(new G4BetheHeitlerModel());
     Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(emax);
+    Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
   } 
 }
@@ -110,13 +107,6 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4GammaConversion::PrintInfo()
-{
-  G4cout
-    << "      Total cross sections has a good parametrisation" 
-    << " from 1.5 MeV to 100 GeV for all Z;"
-    << "\n      sampling secondary e+e- according "
-    << Model()->GetName() << " model"
-    << G4endl;
-}         
+{}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

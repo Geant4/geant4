@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.18 2008-09-12 16:24:10 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.19 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,17 +64,14 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
   SetIntegral(true);
-  SetMinKinEnergy(keV);
-  SetMaxKinEnergy(PeV);
   thEnergy = PeV;
   thEnergyElec = PeV;
   if(name == "CoulombScat") {
     thEnergy = 10.*MeV;
     thEnergyElec = 10.*GeV;
   }
-  SetLambdaBinning(120);
   SetSecondaryParticle(G4Electron::Electron());
-  SetProcessSubType(1);
+  SetProcessSubType(fCoulombScattering);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

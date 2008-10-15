@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering52.cc,v 1.6 2008-03-06 18:34:19 vnivanch Exp $
+// $Id: G4ComptonScattering52.cc,v 1.7 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,9 @@ G4ComptonScattering52::G4ComptonScattering52(const G4String& processName,
     NumbBinTable(80),
     fminimalEnergy(1*eV)
 {
-  SetProcessSubType(6);
+  SetProcessSubType(13);
+  G4cout << "!!! G4ComptonScattering52 is the obsolete process class and will be removed soon !!!"
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

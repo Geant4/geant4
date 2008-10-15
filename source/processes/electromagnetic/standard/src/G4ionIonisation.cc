@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.64 2008-09-20 19:38:50 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.65 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
-  SetProcessSubType(2);
+  SetProcessSubType(fIonisation);
   //  SetVerboseLevel(1);
   corr = G4LossTableManager::Instance()->EmCorrections();
 }
@@ -159,7 +159,7 @@ void G4ionIonisation::PrintInfo()
   if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
     G4cout << "      Stopping Power data for " 
            << corr->GetNumberOfStoppingVectors()
-	   << " ion/material pairs are used."
+	   << " ion/material pairs, nuclearStopping: " << nuclearStopping
            << G4endl;
   }
 }

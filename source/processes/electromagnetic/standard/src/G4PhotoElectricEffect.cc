@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.39 2008-09-12 16:24:10 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.40 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(7);
+  SetProcessSubType(fPhotoElectricEffect);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +96,7 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(false);
     SetSecondaryParticle(G4Electron::Electron());
-    if(!Model()) SetModel(new G4PEEffectModel);
+    if(!Model()) SetModel(new G4PEEffectModel());
     Model()->SetLowEnergyLimit(MinKinEnergy());
     Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
@@ -107,10 +107,8 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4PhotoElectricEffect::PrintInfo()
 {
-  G4cout
-    << "      Total cross sections from Sandia parametrisation. "
-    << "\n      Sampling according " << Model()->GetName() << " model"  
-    << G4endl;
+  G4cout << "      Total cross sections from Sandia parametrisation. "
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

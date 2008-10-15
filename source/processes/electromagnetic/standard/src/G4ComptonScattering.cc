@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.29 2008-09-12 16:24:10 vnivanch Exp $
+// $Id: G4ComptonScattering.cc,v 1.30 2008-10-15 17:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,10 +73,7 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetLambdaBinning(90);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*GeV);
-  SetProcessSubType(6);
+  SetProcessSubType(fComptonScattering);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,11 +89,9 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = MinKinEnergy();
-    G4double emax = MaxKinEnergy();
     if(!Model()) SetModel(new G4KleinNishinaCompton);
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(emax);
+    Model()->SetLowEnergyLimit(MinKinEnergy());
+    Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
   } 
 }
@@ -104,12 +99,6 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4ComptonScattering::PrintInfo()
-{
-  G4cout
-    << "      Total cross sections has a good parametrisation"
-    << " from 10 KeV to (100/Z) GeV" 
-    << "\n      Sampling according " << Model()->GetName() << " model"
-    << G4endl;
-}         
+{}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
