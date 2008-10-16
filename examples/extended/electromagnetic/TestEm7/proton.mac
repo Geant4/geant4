@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.15 2008-09-21 16:03:10 vnivanch Exp $
+# $Id: proton.mac,v 1.16 2008-10-16 11:42:18 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -12,8 +12,8 @@
 /testem/det/setSizeYZ 10 cm
 /testem/det/tallyMat G4_WATER
 #
-/testem/phys/addPhysics  emstandard
-#/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  emstandard_opt3
 #
 /run/initialize
 #
@@ -21,15 +21,16 @@
 /gun/energy 100 MeV
 #
 # step limit
-/testem/phys/setCuts 0.5 mm
+#/testem/phys/setCuts 0.5 mm
+/testem/phys/setCuts 1 mm
 #/testem/stepMax 0.5 mm
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName proton
+/testem/histo/fileName p100opt3cut1
 /testem/histo/fileType root
 /testem/histo/setHisto 1 100 70 80
 /testem/histo/setHisto 2 100 70 80
 #
-/run/beamOn 1000
+/run/beamOn 10000
 #
