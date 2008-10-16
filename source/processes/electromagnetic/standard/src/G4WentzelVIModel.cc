@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.9 2008-08-28 14:14:19 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.10 2008-10-16 14:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -666,6 +666,97 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
   //<< " txsec(1/mm)= " << xtsec <<G4endl; 
   return xs;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/*
+G4double G4MuMscModel::ComputeXSectionPerVolume()
+{
+  const G4ElementVector* theElementVector = 
+    currentMaterial->GetElementVector();
+  const G4double* theAtomNumDensityVector = 
+    currentMaterial->GetVecNbOfAtomsPerVolume();
+  size_t nelm = currentMaterial->GetNumberOfElements();
+
+  xsece1 = 0.0;
+  xsece2 = 0.0;
+  xsecn2 = 0.0;
+  zcorr  = 0.0;
+
+  G4double fac = coeff*chargeSquare*invbeta2/mom2;
+
+  for (size_t i=0; i<nelm; i++) {
+    const G4Element* elm = (*theElementVector)[i];
+    G4double Z = elm->GetZ();
+    SetupTarget(Z, tkin);
+    G4double den = fac*theAtomNumDensityVector[i]*Z;
+
+    G4double x  = 1.0 - cosThetaMin;
+    G4double x1 = x + screenZ;
+    G4double x2 = 1.0/(x1*x1);
+    G4double x3 = 1.0 + x*formfactA;
+    
+    //G4cout << "x= " << x << " den= " << den << " cosE= " << cosTetMaxElec << G4endl;
+    //G4cout << "cosThtaMin= " << cosThetaMin << G4endl;
+    //G4cout << "cosTetMaxNuc= " << cosTetMaxNuc << " q2Limit= " << q2Limit << G4endl;
+    
+    // scattering off electrons
+    if(cosTetMaxElec < cosThetaMin) {
+
+      // flat part
+      G4double s = den*x2*x;
+      xsece1 += s;
+      zcorr  += 0.5*x*s;
+
+      // Reserford part
+      G4double z1 = 1.0 - cosTetMaxElec + screenZ;
+      G4double z2 = (cosThetaMin - cosTetMaxElec)/x1; 
+      if(z2 < 0.2) s = z2*(x - 0.5*z2*(x - screenZ))/x1;
+      else         s = log(1.0 + z2)  - screenZ*z2/z1;
+      xsece2  += den*z2/z1;
+      zcorr   += den*s;
+    }
+    den *= Z;
+
+    //G4cout << "Z= " << Z<< " cosL= " << cosTetMaxNuc << " cosMin= " << cosThetaMin << G4endl;
+    // scattering off nucleaus
+    if(cosTetMaxNuc < cosThetaMin) {
+
+      // flat part
+      G4double s = den*x2*x/(x3*x3);
+      xsece1 += s;
+      zcorr  += 0.5*x*s;
+
+      // Reserford part
+      s  = screenZ*formfactA;
+      G4double w  = 1.0 + 2.0*s;
+      G4double z1 = 1.0 - cosTetMaxNuc + screenZ;
+      G4double d  = (1.0 - s)/formfactA;
+      G4double x4 = x1 + d;
+      G4double z4 = z1 + d;
+      G4double t1 = 1.0/(x1*z1);
+      G4double t4 = 1.0/(x4*z4);
+      G4double w1 = cosThetaMin - cosTetMaxNuc;
+      G4double w2 = log(z1*x4/(x1*z4));
+
+      den *= w;     
+      xsecn2  += den*(w1*(t1 + t4) - 2.0*w2/d);
+      zcorr   += den*(w*w2 - w1*(screenZ*t1 + t4/formfactA));
+    }
+    xsece[i] = xsece2;
+    xsecn[i] = xsecn2;
+    //    G4cout << i << "  xsece2= " << xsece2 << "  xsecn2= " << xsecn2 << G4endl;
+  }
+  G4double xsec = xsece1 + xsece2 + xsecn2;
+ 
+    //G4cout << "xsece1= " << xsece1 << "  xsece2= " << xsece2 
+    //<< "  xsecn2= " << xsecn2 
+	// << " zsec= " << zcorr*0.5*tPathLength << G4endl;
+  zcorr *= 0.5*tPathLength;
+
+  return xsec;
+}
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
