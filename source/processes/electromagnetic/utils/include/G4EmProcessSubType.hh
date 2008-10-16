@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.3 2008-10-13 14:56:56 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.4 2008-10-16 14:31:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -60,6 +60,7 @@ enum G4EmProcessSubType
   fPhotoElectricEffect = 12,
   fComptonScattering = 13,
   fGammaConversion = 14,
+  fGammaConversionToMuMu = 15,
  
   fCerenkov = 21,
   fScintillation = 22,
