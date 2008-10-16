@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.7 2008-03-06 18:44:58 vnivanch Exp $
+// $Id: G4hhIonisation.cc,v 1.8 2008-10-16 14:29:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,14 +63,9 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
-  minKinEnergy = 0.1*keV;
-  maxKinEnergy = 100.*TeV;
-  SetDEDXBinning(120);
-  SetMinKinEnergy(minKinEnergy);
-  SetMaxKinEnergy(maxKinEnergy);
   SetStepFunction(0.1, 0.1*mm);
   SetVerboseLevel(1);
-  SetProcessSubType(2);
+  SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -101,6 +96,8 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 
   G4int nm = 1;
 
+  minKinEnergy = MinKinEnergy();
+
   if(eth > minKinEnergy) {
     G4VEmModel* em = new G4BraggNoDeltaModel();
     em->SetLowEnergyLimit(minKinEnergy);
@@ -109,16 +106,16 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     nm++;
   }
 
-  if(eth < maxKinEnergy) {
+  if(eth < MaxKinEnergy()) {
     G4VEmModel* em1 = new G4BetheBlochNoDeltaModel();
     em1->SetLowEnergyLimit(std::max(eth,minKinEnergy));
-    em1->SetHighEnergyLimit(maxKinEnergy);
+    em1->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(nm, em1, flucModel);
   }
 
-  if(verboseLevel>0)
+  if(verboseLevel>1) {
     G4cout << "G4hhIonisation is initialised: Nmodels= " << nm << G4endl;
-
+  }
   isInitialised = true;
 }
 
@@ -127,11 +124,7 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
 void G4hhIonisation::PrintInfo()
 {
   G4cout << "      Delta-ray will not be produced; "
-         << "Bether-Bloch model for E > " << std::max(eth,minKinEnergy)
 	 << G4endl;
-  if(eth > minKinEnergy) G4cout
-	 << "      ICRU49 parametrisation scaled from protons below.";
-  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

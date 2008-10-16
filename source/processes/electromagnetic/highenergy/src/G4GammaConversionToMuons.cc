@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.6 2008-07-08 15:07:32 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.7 2008-10-16 14:29:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -51,7 +51,7 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
-  SetProcessSubType(5);
+  SetProcessSubType(15);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -394,9 +394,10 @@ G4Element* G4GammaConversionToMuons::SelectRandomAtom(
 
 void G4GammaConversionToMuons::PrintInfoDefinition()
 {
-  G4String comments ="gamma->mu+mu- Bethe Heitler process.\n";
+  G4String comments ="gamma->mu+mu- Bethe Heitler process, SubType= ";
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "        good cross section parametrization from "
+	 << GetProcessSubType() << G4endl;
+  G4cout << "        good cross section parametrization from "
          << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << HighestEnergyLimit/GeV << " GeV for all Z." << G4endl;
 }

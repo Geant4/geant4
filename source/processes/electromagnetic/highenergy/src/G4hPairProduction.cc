@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProduction.cc,v 1.2 2008-03-06 18:44:58 vnivanch Exp $
+// $Id: G4hPairProduction.cc,v 1.3 2008-10-16 14:29:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ G4hPairProduction::G4hPairProduction(const G4String& name)
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
-  SetProcessSubType(8);
+  SetProcessSubType(fPairProdByCharged);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,10 +95,7 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hPairProduction::PrintInfo()
-{
-  G4cout << "      Theoretical model "
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

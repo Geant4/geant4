@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2008-07-22 16:17:07 vnivanch Exp $
+$Id: History,v 1.30 2008-10-16 14:29:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 October 08: V.Ivanchenko (emhighenergy-V09-01-06)
+- Updated processes enumeration and printout
 
 21 July 08:  V.Ivanchenko (emhighenergy-V09-01-05)
 - G4hBremsstrahlungModel, G4hPairProductionModel - do not use A in
