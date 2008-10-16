@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.5 2008-09-30 14:39:07 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.6 2008-10-16 15:07:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -202,6 +202,14 @@ public:
 
   G4complex CalculateMigdalS(G4double energy);
 
+  G4complex CalculateMigdalXi(G4complex s);
+
+  G4complex CalculateMigdalPhi(G4complex s);
+
+  G4complex CalculateMigdalPsi(G4complex s);
+
+
+
   G4complex CalculateCorrectionMsc(G4double energy);
 
   G4double CalculateMscMigdalDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
@@ -272,6 +280,8 @@ protected:
   // test fields for msc radiation
 
   G4double fBeta;
+  G4double fZ;
+  G4double fY;
   G4double fZommerfeld;
   G4double fAm;
   G4double fRadLength;
@@ -485,6 +495,10 @@ G4MscRadiation::CalculateReciprocalRadLength()
 }
 
 
+///////////////////////////////////////////////////////////////////////////
+//
+// Polarisation correction in absorbing medium
+
 inline  void // G4complex 
 G4MscRadiation::CalculateCorrectionTMGY(G4double energy)
 {
@@ -499,19 +513,72 @@ G4MscRadiation::CalculateCorrectionTMGY(G4double energy)
   fCorTMGY = G4complex(re,im);
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// return s-variable of Migdal. Modify!
+
 inline  G4complex G4MscRadiation::CalculateMigdalS(G4double energy)
 {
   // G4complex tmgy = CalculateCorrectionTMGY(energy);
   G4complex tmgy = fCorTMGY/(8.*fGamma*fGamma); 
   G4double hq = pi*hbarc/(2.*fine_structure_const*fGamma*fGamma*fRadLength);
-  G4double ratio = energy/hq;
+
+  hq *= 1. - fY;  // high energy correction
+
+  G4double ratio = energy/hq;  
+
   return tmgy*std::sqrt(ratio);
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// return Migdal function xi(s)
+
+inline  G4complex G4MscRadiation::CalculateMigdalXi(G4complex s)
+{
+  G4double s1 = std::pow(fZ,2./3.)/(184.*184.);
+
+  if ( real(s) < s1)       return G4complex(2.,0.);  
+  else if ( real(s) >= 1.) return G4complex(1.,0.); 
+  else                     return 1. + std::log(s)/std::log(s1); 
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// return Migdal function phi(s)
+
+inline  G4complex G4MscRadiation::CalculateMigdalPhi(G4complex x)
+{
+  G4complex order = 6.*x;
+  // order *= 1. + (3. - pi)*x;
+  // order -= x*x*x/(0.623+0.796*x+0.658*x*x); 
+
+  return 1. - std::exp(-order);
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// return Migdal function psi(s)
+
+inline  G4complex G4MscRadiation::CalculateMigdalPsi(G4complex x)
+{
+  G4complex order = 4.*x;
+  // order +=  8.*x*x/(1.+ 3.96*x + 4.97*x*x - 0.05*x*x*x + 7.5*x*x*x*x); 
+  return 1. - std::exp(-order);
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Return G-correction of Migdal msc suppression
+
 inline  G4complex G4MscRadiation::CalculateCorrectionMsc(G4double energy)
 {
-  G4complex order = 6.*CalculateMigdalS(energy);
-  return 1. - std::exp(-order);
+  G4complex order = CalculateMigdalS(energy);
+
+  return 3.*( 1. - std::exp(-4.*order) ) - 2.*( 1. - std::exp(-6.*order) );
 }
 
 
@@ -573,35 +640,74 @@ inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* d
   if(Tkin <= energy || Tkin <= 0. || energy <= 0.) return 0.;
 
   G4double y = energy/Tkin;
+
+  fY = y; 
+
   if(verboseLevel) 
   {
     G4cout<<"y = "<<y<<G4endl;
   }
-  G4double Z = fPlateMaterial->GetZ();
+  fZ = fPlateMaterial->GetZ();
   G4double pMass = dParticle->GetMass();
   fGamma = 1. + Tkin/pMass;
 
-  G4double mscDiffXsc = Z*Z*std::log(184.*std::pow(Z,-1./3.));
+  CalculateCorrectionTMGY(energy);
 
-  mscDiffXsc += Z*std::log(1194.*std::pow(Z,-2./3.));
+  G4double mscDiffXsc = fZ*fZ*std::log(184.*std::pow(fZ,-1./3.));
 
-  mscDiffXsc *= y*y + 2.*( 1. + (1.-y)*(1.-y) );
+  mscDiffXsc += fZ*std::log(1194.*std::pow(fZ,-2./3.));
 
-  mscDiffXsc += (1.-y)*(Z*Z+Z)/3.;
+  // medium corrections
+
+  G4complex s = CalculateMigdalS(energy);
+
+  G4complex xi  = CalculateMigdalXi(s);  
+  if(verboseLevel) 
+  {
+    G4cout<<"xi = "<< xi  <<G4endl;
+  }
+  G4complex phi = CalculateMigdalPhi(s);  
+  if(verboseLevel) 
+  {
+    G4cout<<"phi = "<< phi  <<G4endl;
+  }
+  G4complex psi = CalculateMigdalPsi(s);
+  if(verboseLevel) 
+  {
+    G4cout<<"psi = "<< psi  <<G4endl;
+  }
+
+  G4complex G = 3.*psi - 2.*phi;
+
+  // phi /= fCorTMGY;
+
+  xi /= fCorTMGY;
+
+    // G4complex cMsc = CalculateCorrectionMsc(energy); 
+  
+
+  mscDiffXsc *= real( xi*( y*y*G + 2.*( 1. + (1.-y)*(1.-y) )*phi ) );
+
+  if(verboseLevel) 
+  {
+    G4cout<<"mscDiffXsc = "<< mscDiffXsc  <<G4endl;
+  }
+
+  mscDiffXsc += (1.-y)*(fZ*fZ + fZ)/3.;
 
   mscDiffXsc *= 4.*fine_structure_const*classic_electr_radius*classic_electr_radius;
 
   mscDiffXsc *= fPlateMaterial->GetTotNbOfAtomsPerVolume()/(energy*3.); 
 
+  if(verboseLevel) 
+  {
+    G4cout<<"mscDiffXsc = "<< mscDiffXsc  <<G4endl;
+  }
 
 
-  CalculateCorrectionTMGY(energy);
+  // G4double corMedium = real(cMsc/fCorTMGY);
 
-  G4complex cMsc = CalculateCorrectionMsc(energy); 
-
-  G4double corMedium = real(cMsc/fCorTMGY);
-
-  mscDiffXsc *= corMedium;
+  // mscDiffXsc *= corMedium;
 
   if( mscDiffXsc < 0. || y >= 1.)  mscDiffXsc = 0.;
 
