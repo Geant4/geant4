@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.13 2007-07-28 13:44:25 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.14 2008-10-16 13:37:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -66,6 +66,7 @@
 #include "G4MuPairProductionModel.hh"
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4ProductionCuts.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -272,6 +273,7 @@ G4PhysicsTable* G4EnergyLossForExtrapolator::PrepareTable()
   for(G4int i=0; i<nmat; i++) {  
 
     G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins);
+    v->SetSpline(G4LossTableManager::Instance()->SplineFlag());
     table->push_back(v);
   }
   return table;

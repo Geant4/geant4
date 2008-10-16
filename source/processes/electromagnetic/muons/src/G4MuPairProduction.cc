@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.50 2008-03-06 18:38:59 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.51 2008-10-16 13:37:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,7 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
-  SetProcessSubType(8);
+  SetProcessSubType(fPairProdByCharged);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,9 +112,9 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 
     G4MuPairProductionModel* em = new G4MuPairProductionModel();
     em->SetLowestKineticEnergy(lowestKinEnergy);
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
+    G4VEmFluctuationModel* fm = 0;
+    em->SetLowEnergyLimit(MinKinEnergy());
+    em->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, em, fm);
   }
 }
@@ -122,10 +122,7 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuPairProduction::PrintInfo()
-{
-  G4cout << "      Theoretical model "
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

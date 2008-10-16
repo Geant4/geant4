@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.11 2008-07-31 13:11:57 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.12 2008-10-16 13:37:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuMultipleScattering.hh"
-#include "G4MuMscModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -98,13 +97,15 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildLambdaTable(false);
   }
 
-  // initialisation of parameters
-  //mscModel = new G4MuMscModel();
+  // initialisation of the model
+
   mscModel = new G4WentzelVIModel();
   mscModel->SetStepLimitType(StepLimitType());
   mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
   mscModel->SetRangeFactor(RangeFactor());
   mscModel->SetPolarAngleLimit(PolarAngleLimit());
+  mscModel->SetLowEnergyLimit(MinKinEnergy());
+  mscModel->SetHighEnergyLimit(MaxKinEnergy());
 
   AddEmModel(1,mscModel);
   isInitialized = true;
@@ -114,10 +115,10 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MuMultipleScattering::PrintInfo()
 {
-  G4cout << "      Model <" << mscModel->GetName() << ">, RangeFactor= "
-	 << RangeFactor()
-	 << ", Step limit type " << StepLimitType()
-	 << G4endl;
+  G4cout << "      RangeFactor= " << RangeFactor()
+         << ", step limit type: " << StepLimitType()
+         << ", lateralDisplacement: " << LateralDisplasmentFlag()
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

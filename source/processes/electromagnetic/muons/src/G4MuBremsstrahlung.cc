@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.40 2008-03-06 18:38:59 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.41 2008-10-16 13:37:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,7 +82,7 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
-  SetProcessSubType(3);
+  SetProcessSubType(fBremsstrahlung);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -107,9 +107,9 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
     G4MuBremsstrahlungModel* em = new G4MuBremsstrahlungModel();
     em->SetLowestKineticEnergy(lowestKinEnergy);
 
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
+    G4VEmFluctuationModel* fm = 0;
+    em->SetLowEnergyLimit(MinKinEnergy());
+    em->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, em, fm);
   }
 }
@@ -117,10 +117,7 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuBremsstrahlung::PrintInfo()
-{
-  G4cout << "      Theoretical model "
-         << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
