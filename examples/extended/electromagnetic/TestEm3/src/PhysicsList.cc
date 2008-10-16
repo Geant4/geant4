@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.25 2008-09-13 13:13:39 maire Exp $
+// $Id: PhysicsList.cc,v 1.26 2008-10-16 11:19:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,6 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardIG.hh"
-#include "PhysListEmStandardLPM.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
@@ -244,18 +242,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
-    
-  } else if (name == "standardIG") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardIG(name);
-    
-  } else if (name == "standardLPM") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardLPM(name);
     
   } else if (name == "livermore") {
 
