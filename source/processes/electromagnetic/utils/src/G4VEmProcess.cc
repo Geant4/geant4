@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.59 2008-10-15 17:54:07 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.60 2008-10-17 14:46:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,7 +100,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   // Size of tables assuming spline
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
-  nLambdaBins  = 60;
+  nLambdaBins  = 84;
 
   // default lambda factor
   lambdaFactor  = 0.8;

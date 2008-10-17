@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc,v 1.1 2008-07-09 09:47:33 vnivanch Exp $
+// $Id: G4ElectronIonPair.cc,v 1.2 2008-10-17 14:46:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,72 +105,40 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4ThreeVector>* 
-G4ElectronIonPair::SampleIonisationPoints(const G4Step* step) 
+G4ElectronIonPair::SampleIonsAlongStep(const G4ThreeVector& prePos,
+				       const G4ThreeVector& postPos,
+				       G4double meanion)
 {
-  std::vector<G4ThreeVector>* v = 0;
-  G4ThreeVector postPos = step->GetPostStepPoint()->GetPosition();  
+  std::vector<G4ThreeVector>* v = new std::vector<G4ThreeVector>;
 
-  // number of ionisation along step
-  G4double nion = MeanNumberOfIonsAlongStep(step);
+  G4double sig = 0.2*std::sqrt(meanion);
+  G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
 
   // sample ionisation along step
-  if(nion > 0.0) {
+  if(nion > 0) {
 
-    G4ThreeVector prePos = step->GetPreStepPoint()->GetPosition();  
     G4ThreeVector deltaPos = postPos - prePos;  
-    G4double length = deltaPos.mag();
-    G4double meanLength = length/nion;
-    G4double s = 0.0;
-    do {
-      s += G4UniformRand()*meanLength;
-      if(s <= length) {
-        if(!v) v = new std::vector<G4ThreeVector>;
-        v->push_back( prePos + deltaPos*s/length );
-      }
-    } while(s < length);
-
-    if(v && verbose > 1 ) { 
+    for(G4int i=0; i<nion; i++) {
+      v->push_back( prePos + deltaPos*G4UniformRand() );
+    }
+    if(verbose > 1 ) { 
       G4cout << "### G4ElectronIonPair::SampleIonisationPoints: "
 	     << v->size() << "  ion pairs are added" << G4endl;
     }
   }
+  return v;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4ElectronIonPair::ResidualeChargePostStep(const G4ParticleDefinition*,
+						 const G4TrackVector*,
+						 G4int subType)
+{
   G4int nholes = 0;
 
-  const G4VProcess* proc = 
-    step->GetPostStepPoint()->GetProcessDefinedStep();
-
-  if(proc) {
-    G4ProcessType type = proc->GetProcessType();
-    if(type == fElectromagnetic || type == fHadronic) {
-      
-      const G4ParticleDefinition* part = step->GetTrack()->GetDefinition();
-      G4double Q = part->GetPDGCharge();
-
-      G4TrackStatus stat = step->GetTrack()->GetTrackStatus();
-      if(stat == fAlive) Q = 0.0;
-
-      G4TrackVector* sec = step->GetSecondary();
-      G4int nsec = sec->size();
-      if(nsec > 0) {
-	for(G4int i=0; i<nsec; i++) {
-	  Q -= (*sec)[i]->GetDefinition()->GetPDGCharge();
-	}
-      }
-      nholes = G4int(std::abs(Q/eplus) + 0.1);
-    }
-  }
-
-  if(nholes > 0) {
-   
-    if(!v) v = new std::vector<G4ThreeVector>;
-    for(G4int i=0; i<nholes; i++) {v->push_back(postPos);}
-    if(verbose > 1 ) { 
-      G4cout << "### G4ElectronIonPair::SampleIonisationPoints: "
-	     << nholes << " holes are added" << G4endl;
-    }
-  }
-  return v;
+  if(2 == subType || 12 == subType || 13 == subType) nholes = 1;
+  return nholes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
