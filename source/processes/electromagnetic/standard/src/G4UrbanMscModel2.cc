@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.11 2008-10-15 08:45:10 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.12 2008-10-17 12:03:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,6 +74,9 @@
 //
 // 15-10-08  Moliere-Bethe screening in the single scattering part(L.Urban)          
 //
+// 17-10-08  stepping similar to that in model (9.1) for UseSafety case
+//           for e+/e- in order to speed up the code for calorimeters
+//
 
 // Class Description:
 //
@@ -108,6 +111,9 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   : G4VMscModel(nam),
     isInitialized(false)
 {
+  masslimite    = 0.6*MeV;
+  lambdalimit   = 1.*mm;
+  fr            = 0.02;
   facsafety     = 0.3;
   taubig        = 8.0;
   tausmall      = 1.e-16;
@@ -568,6 +574,15 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       if((stepStatus == fGeomBoundary) || (stepNumber == 1))
       {
         rangeinit = currentRange;
+        fr = facrange;
+        // 9.1 like stepping for e+/e- only (not for muons,hadrons)
+        if(mass < masslimite) 
+        {
+          if(lambda0 > currentRange)
+            rangeinit = lambda0;
+          if(lambda0 > lambdalimit)
+            fr *= 0.75+0.25*lambda0/lambdalimit;
+        }
 
         //lower limit for tlimit
         G4double rat = currentKinEnergy/MeV ;
@@ -576,7 +591,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
         if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
       }
       //step limit
-      tlimit = facrange*rangeinit;               
+      tlimit = fr*rangeinit;               
+
       if(tlimit < facsafety*presafety)
         tlimit = facsafety*presafety;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.8 2008-10-15 08:45:10 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.9 2008-10-17 12:03:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,6 +134,7 @@ private:
 
   G4double mass;
   G4double charge,ChargeSquare;
+  G4double masslimite,lambdalimit,fr;
 
   G4double taubig;
   G4double tausmall;
