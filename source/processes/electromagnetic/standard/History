@@ -1,4 +1,4 @@
-$Id: History,v 1.415 2008-10-15 17:58:05 vnivanch Exp $
+$Id: History,v 1.416 2008-10-17 14:03:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Septembetr 08: V.Ivant (emstand-V09-01-36)
+G4UrbanMscModel2 - use logic of 9.1 version for step limitation
+                   option "UseSafety" to fix CPU penalty in sampling
+                   calorimeters (L.Urban)
+G4UrbanMscModel2, G4UrbanMscModel, G4UrbanMscModel90 added protection
+                   against sampling scattering angle with zero transport 
+                   cross section   
 
 15 Septembetr 08: V.Ivant (emstand-V09-01-35)
 For all process classes set sub-types according to the enumeration
