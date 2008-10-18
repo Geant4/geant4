@@ -51,13 +51,16 @@
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
-G4CascadeInterface::G4CascadeInterface()
-  :verboseLevel(0)  {
-
+G4CascadeInterface::G4CascadeInterface(const G4String& nam)
+  :G4VIntraNuclearTransportModel(nam), verboseLevel(0)  
+{
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
   }
 }
+
+G4CascadeInterface::~G4CascadeInterface()
+{}
    
 G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* , 
 						       G4V3DNucleus* ) {
