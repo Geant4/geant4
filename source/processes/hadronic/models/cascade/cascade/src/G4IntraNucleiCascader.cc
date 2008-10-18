@@ -33,6 +33,7 @@
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
 #include "G4CascadParticle.hh"
+#include "Randomize.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -67,8 +68,11 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 #ifdef RUN
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
   G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
-  G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
+  G4InuclElementaryParticle* bparticle = 
+                          dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
+  G4double coulombBarrier = 0.00126*tnuclei->getZ()/
+                                      (1.+std::pow(tnuclei->getA(),0.333));
 
   G4CascadeMomentum momentum_in = bullet->getMomentum();
 
@@ -185,15 +189,33 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	    theExitonConfiguration.incrementQP(new_cascad_particles[0].getParticle().type());
 	  };  
 
-	} else { // goes out
+        } else { // particle about to leave nucleus - check for Coulomb barrier
 
 	  if (verboseLevel > 3) {
 	    G4cout << " Goes out " << G4endl;
 	    new_cascad_particles[0].print();
 	  }
-
-	  output_particles.push_back(new_cascad_particles[0].getParticle());
-	}; 
+          G4InuclElementaryParticle currentParticle = new_cascad_particles[0].getParticle();
+          G4double KE = currentParticle.getKineticEnergy();
+          G4double mass = currentParticle.getMass();
+          G4double Q = currentParticle.getCharge();
+          if (KE < Q*coulombBarrier) {
+     	    // Calculate barrier penetration
+            G4double CBP = 0.0; 
+	    // if (KE > 0.0001) CBP = std::exp(-0.00126*tnuclei->getZ()*0.25*
+	    //   (1./KE - 1./coulombBarrier));
+            if (KE > 0.0001) CBP = std::exp(-0.0181*0.5*tnuclei->getZ()*
+                                            (1./KE - 1./coulombBarrier)*
+                                         std::sqrt(mass*(coulombBarrier-KE)) );
+            if (G4UniformRand() < CBP) {
+	      output_particles.push_back(currentParticle);
+            } else {
+              theExitonConfiguration.incrementQP(currentParticle.type());
+            }
+          } else {
+	    output_particles.push_back(currentParticle);
+          }
+        } 
 
       } else { // interaction 
 
@@ -211,7 +233,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       };
     };
 
-    // cascad is finished -> check, whether it's o'k
+    // Cascade is finished. Check if it's OK.
 
     if (verboseLevel > 3) {
       G4cout << " Cascade finished  " << G4endl
