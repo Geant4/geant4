@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.79 2008-10-15 17:53:44 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.80 2008-10-20 08:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,9 +108,9 @@ G4hIonisation::G4hIonisation(const G4String& name)
     isInitialised(false),
     nuclearStopping(true)
 {
-  SetStepFunction(0.2, 1.0*mm);
-  SetIntegral(true);
-  SetVerboseLevel(1);
+  //  SetStepFunction(0.2, 1.0*mm);
+  //SetIntegral(true);
+  //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
