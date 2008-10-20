@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2008-10-15 18:24:11 vnivanch Exp $
+$Id: History,v 1.69 2008-10-20 11:28:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-10-2008, V.Ivanchenko phys-lists-V09-01-14
+In all EM builders - set inactive for AlongStep for bremsstrahlung and pair
+                     production porcesses for minor CPU improvenment
 
 15-10-2008, V.Ivanchenko phys-lists-V09-01-13
 In all EM builders: added hadron bemsstrahlung and e+e- pair production

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.11 2008-10-15 18:24:11 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.12 2008-10-20 11:28:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -161,7 +161,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
 
     } else if (particleName == "e+") {
 
@@ -172,8 +172,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
@@ -183,8 +183,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       muIoni->SetStepFunction(0.2, 100*um);          
       muIoni->SetLinearLossLimit(1.e-3);
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
@@ -203,8 +203,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 100*um);
       pmanager->AddProcess(hIoni,                     -1, 2, 2);
-      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
-      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
