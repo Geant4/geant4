@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.34 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.35 2008-10-20 13:27:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -171,6 +171,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   splCmd->SetDefaultValue(false);
   splCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  aplCmd = new G4UIcmdWithABool("/process/em/applyCuts",this);
+  aplCmd->SetGuidance("The flag to Apply Cuts for gamma processes");
+  aplCmd->SetParameterName("apl",true);
+  aplCmd->SetDefaultValue(false);
+  aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -261,6 +267,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete rangeCmd;
   delete lpmCmd;
   delete splCmd;
+  delete aplCmd;
   delete latCmd;
   delete verCmd;
   delete ver1Cmd;
@@ -356,6 +363,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == splCmd) {
     opt->SetSplineFlag(splCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+
+  if (command == aplCmd) {
+    opt->SetApplyCuts(aplCmd->GetNewBoolValue(newValue));
   }
 
   if (command == latCmd) {
