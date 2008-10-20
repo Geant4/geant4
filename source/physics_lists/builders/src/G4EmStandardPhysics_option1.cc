@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.8 2008-10-15 18:24:11 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.9 2008-10-20 11:17:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -164,7 +164,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
 
     } else if (particleName == "e+") {
 
@@ -174,7 +174,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(eioni,                   -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1, 4);
 
     } else if (particleName == "mu+" ||
@@ -182,8 +182,8 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
@@ -233,6 +233,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetApplyCuts(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
