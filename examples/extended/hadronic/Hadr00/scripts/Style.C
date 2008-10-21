@@ -15,7 +15,7 @@ TString axtit[3] = {"log10(E/MeV)", "Cross section (bn)","log10(p/GeV)"};
 
 TString hed[nxs] = {"Elastic","Elastic","Inelastic","Inelastic","Capture","Fission"};
 TString fil0[nxs]= {"elp","el","inlp","inl","cap","fis"};
-Double_t x1[nxs] = {-3,-1,-3,0,-1,-1}; 
+Double_t x1[nxs] = {-3,-1,-3,-1,-1,-1}; 
 Double_t x2[nxs] = {5,6,5,6,6,6}; 
 Double_t y1[nxs] = {0.001,0.001,0.001,0.001,0.1,0.1}; 
 Double_t y2[nxs] = {20,10,20,5,10,10}; 
