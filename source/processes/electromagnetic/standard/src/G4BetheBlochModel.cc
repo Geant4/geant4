@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.23 2008-09-20 19:38:50 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.24 2008-10-22 16:00:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,8 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
     twoln10(2.0*log(10.0)),
     bg2lim(0.0169),
     taulim(8.4146e-3),
-    isIon(false)
+    isIon(false),
+    isInitialised(false)
 {
   fParticleChange = 0;
   if(p) SetParticle(p);
@@ -108,12 +109,18 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 {
   if (!particle) SetParticle(p);
 
-  if(!fParticleChange) {
-    if (pParticleChange) {
-      fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-	(pParticleChange);
-    } else { 
-      fParticleChange = new G4ParticleChangeForLoss();
+  corrFactor = chargeSquare;
+
+  if(!isInitialised) {
+    isInitialised = true;
+
+    if(!fParticleChange) {
+      if (pParticleChange) {
+	fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+	  (pParticleChange);
+      } else { 
+	fParticleChange = new G4ParticleChangeForLoss();
+      }
     }
   }
 }
@@ -158,9 +165,10 @@ G4double G4BetheBlochModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 						 const G4Material* mat,
 						 G4double kineticEnergy)
 {
+  // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+  corrFactor = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+  return corrFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,6 +177,7 @@ G4double G4BetheBlochModel::GetParticleCharge(const G4ParticleDefinition* p,
 					      const G4Material* mat,
 					      G4double kineticEnergy)
 {
+  // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
@@ -306,19 +315,22 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					     G4double&,
 					     G4double length)
 {
-  G4double preKinEnergy = dp->GetKineticEnergy();
   const G4ParticleDefinition* p = dp->GetDefinition();
+  const G4Material* mat = couple->GetMaterial();
+  G4double preKinEnergy = dp->GetKineticEnergy();
+  G4double e = preKinEnergy - eloss*0.5;
+  if(e < 0.0) e = preKinEnergy*0.5;
+
   if(isIon) {
-    mass = p->GetPDGMass();
-    G4double q = p->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    eloss += length*corr->IonHighOrderCorrections(p,couple,preKinEnergy);
+    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
+    GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
+    eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
+    eloss += length*corr->IonHighOrderCorrections(p,couple,e);
   }
+
   if(nuclearStopping && preKinEnergy*proton_mass_c2/mass < chargeSquare*100.*MeV) {
 
-    G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
-    G4double nloss = length*corr->NuclearDEDX(p,couple->GetMaterial(),e,false);
+    G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
 
     // too big energy loss
     if(eloss + nloss > preKinEnergy) {
@@ -348,7 +360,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
-  G4double maxKinEnergy = min(maxEnergy,tmax);
+  G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) return;
 
   G4double totEnergy     = kineticEnergy + mass;

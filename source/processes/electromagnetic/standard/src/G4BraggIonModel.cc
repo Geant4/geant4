@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.21 2008-09-20 19:38:50 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.22 2008-10-22 16:00:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,6 +111,8 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p != particle) SetParticle(p);
 
+  corrFactor = chargeSquare;
+
   if(!isInitialised) {
     isInitialised = true;
 
@@ -137,9 +139,10 @@ G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					       const G4Material* mat,
 					       G4double kineticEnergy)
 {
+  // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+  corrFactor  = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy); 
+  return corrFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,6 +151,7 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
+  // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
@@ -253,14 +257,20 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					   G4double&,
 					   G4double length)
 {
+  // this method is called only for ions
+  const G4ParticleDefinition* p = dp->GetDefinition();
+  const G4Material* mat = couple->GetMaterial();
+  G4double preKinEnergy = dp->GetKineticEnergy();
+  G4double e = preKinEnergy - eloss*0.5;
+  if(e < 0.0) e = preKinEnergy*0.5;
+
+  G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
+  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
+  eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
+
   if(nuclearStopping) {
 
-    G4double preKinEnergy = dp->GetKineticEnergy();
-    G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
-    G4double nloss = length*corr->NuclearDEDX(dp->GetDefinition(),
-					      couple->GetMaterial(),
-					      e,false);
+    G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
 
     // too big energy loss
     if(eloss + nloss > preKinEnergy) {
@@ -287,7 +297,7 @@ void G4BraggIonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 					G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
-  G4double xmax = min(tmax, maxEnergy);
+  G4double xmax = std::min(tmax, maxEnergy);
   if(xmin >= xmax) return;
 
   G4double kineticEnergy = dp->GetKineticEnergy();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.10 2008-09-14 17:11:48 vnivanch Exp $
+// $Id: G4BraggIonModel.hh,v 1.11 2008-10-22 16:00:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -168,6 +168,7 @@ private:
   G4double lowestKinEnergy;
   G4double HeMass;
   G4double massFactor;
+  G4double corrFactor;
   G4double rateMassHe2p;
   G4double theZieglerFactor;
 
