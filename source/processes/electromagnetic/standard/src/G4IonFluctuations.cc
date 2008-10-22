@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.22 2008-09-12 17:11:25 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.23 2008-10-22 16:04:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,9 +73,9 @@ G4IonFluctuations::G4IonFluctuations(const G4String& nam)
     charge(1.0),
     chargeSquare(1.0),
     effChargeSquare(1.0),
-    //    minNumberInteractionsBohr(10.0),
+    parameter(10.0*CLHEP::MeV/CLHEP::proton_mass_c2),
     minNumberInteractionsBohr(0.0),
-    theBohrBeta2(50.0*keV/proton_mass_c2),
+    theBohrBeta2(50.0*keV/CLHEP::proton_mass_c2),
     minFraction(0.2),
     xmin(0.2),
     minLoss(0.001*eV)
@@ -95,6 +95,7 @@ void G4IonFluctuations::InitialiseMe(const G4ParticleDefinition* part)
   charge         = part->GetPDGCharge()/eplus;
   chargeSquare   = charge*charge;
   effChargeSquare= chargeSquare;
+  uniFluct.InitialiseMe(part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -107,6 +108,14 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 {
   //  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
+
+  //G4cout << "G4IonFluctuations::SampleFluctuations E(MeV)= " << dp->GetKineticEnergy()
+  //	 << "  Elim(MeV)= " << parameter*charge*particleMass << G4endl; 
+
+  // Vavilov fluctuations
+  if(dp->GetKineticEnergy() > parameter*charge*particleMass) {
+    return uniFluct.SampleFluctuations(material,dp,tmax,length,meanLoss);
+  }
 
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
@@ -157,11 +166,12 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
 				       G4double& tmax,
 				       G4double& length)
 {
-  kineticEnergy  = dp->GetKineticEnergy();
-
-  G4double electronDensity = material->GetElectronDensity();
+  kineticEnergy = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
   beta2 = kineticEnergy*(kineticEnergy + 2.*particleMass)/(etot*etot);
+
+  G4double electronDensity = material->GetElectronDensity();
+
   /*
   G4cout << "e= " <<  kineticEnergy << " m= " << particleMass
   	 << " tmax= " << tmax << " l= " << length 

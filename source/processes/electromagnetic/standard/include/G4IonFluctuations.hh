@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.7 2008-09-12 17:11:25 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.8 2008-10-22 16:04:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4UniversalFluctuation.hh"
 
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
@@ -93,6 +94,7 @@ private:
   G4IonFluctuations & operator=(const  G4IonFluctuations &right);
   G4IonFluctuations(const  G4IonFluctuations&);
 
+  G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
 
   G4double particleMass;
@@ -101,6 +103,7 @@ private:
   G4double effChargeSquare;
 
   // data members to speed up the fluctuation calculation
+  G4double parameter;
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minFraction;
@@ -124,6 +127,7 @@ void G4IonFluctuations::SetParticleAndCharge(const G4ParticleDefinition* part,
     chargeSquare   = charge*charge;
   }
   effChargeSquare  = q2;
+  uniFluct.SetParticleAndCharge(part, q2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
