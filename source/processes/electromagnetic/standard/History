@@ -1,4 +1,4 @@
-$Id: History,v 1.419 2008-10-22 16:27:17 vnivanch Exp $
+$Id: History,v 1.420 2008-10-22 18:40:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,8 @@ G4IonFluctuations - added G4UniversalFluctuation model, which are used for
 G4BetheBlochModel, G4BraggIonModel - take into account effective change 
     change over the step
 G4hIonisation - switch off nuclear stopping for pi and K mesons   
+G4eCoulombScatteringModel and G4WentzelVIModel - added protection against
+    precision loss in computation of cross section at high energy
 
 20 Septembetr 08: V.Ivant (emstand-V09-01-37)
 G4UrbanMscModel2 - return back ref-08 version
