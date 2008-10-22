@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.11 2008-07-09 19:35:46 dennis Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.12 2008-10-22 08:16:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,7 @@
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName), first(true)
 {
-  SetProcessSubType(16);
+  SetProcessSubType(fChargeExchange);
   thEnergy = 19.*MeV;
   verboseLevel= 1;
   qCManager = 0;
