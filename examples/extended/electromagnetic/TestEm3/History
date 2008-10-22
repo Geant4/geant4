@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2008-10-16 11:19:54 vnivanch Exp $
+$Id: History,v 1.119 2008-10-22 16:15:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22-10-08 mma (testem3-V09-01-09)
+- update PhysListEmStandard and README
 
 16-10-08 V.Ivant (testem3-V09-01-08)
 - Removed temporary builders PhysListEmStandardLPM and 
