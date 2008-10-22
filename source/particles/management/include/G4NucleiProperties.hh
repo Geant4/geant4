@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.15 2008-10-15 02:41:37 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.16 2008-10-22 12:35:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,6 @@ class G4NucleiProperties
  //   G4NucleiProperties is an utility class to provide mass formula of nuclei
  //   (i.e. it has static member function only)
 
-
 public: 
 
   // Destructor
@@ -68,7 +67,8 @@ public:  // With Description
   // Give mass of nucleus A,Z
   static G4double GetNuclearMass(const G4double A, const G4double Z);
   
-public:
+private:
+  // hide these methods to enforce using GetNuclearMass
   // Calculate Mass Excess of nucleus A,Z
   static G4double GetMassExcess(const G4int A, const G4int Z);
   
@@ -78,15 +78,17 @@ public:
   static G4double GetBindingEnergy(const G4int A, const G4int Z);
 	
 private:
-
-  // Calculate Mass Excess according to Cameron's liquid drop formula
-  //	static G4double CameronMassExcess(const G4int A, const G4int Z);
   
   static G4double  AtomicMass(G4double A, G4double Z);
   
   static G4double BindingEnergy(G4double A, G4double Z);
   
   static G4double MassExcess(G4double A, G4double Z);
+
+private: 
+  // table of orbit electrons mass - binding energy 
+  enum  {MaxZ = 120};
+  static G4double electronMass[MaxZ];
 
 private:
   static G4bool   isIntialized;
