@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.29 2008-06-13 01:05:05 gum Exp $
+// $Id: G4Scintillation.cc,v 1.30 2008-10-22 01:19:11 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -63,6 +63,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4EmProcessSubType.hh"
+
 #include "G4Scintillation.hh"
 
 using namespace std;
@@ -87,6 +89,8 @@ G4Scintillation::G4Scintillation(const G4String& processName,
                                        G4ProcessType type)
                   : G4VRestDiscreteProcess(processName, type)
 {
+        SetProcessSubType(fScintillation);
+
 	fTrackSecondariesFirst = false;
 
         YieldFactor = 1.0;
@@ -375,7 +379,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4Track* aSecondaryTrack = 
 		new G4Track(aScintillationPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
+                aSecondaryTrack->SetTouchableHandle(
+                                 aStep.GetPreStepPoint()->GetTouchableHandle());
+                // aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
