@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21st Oct 2008 Peter Gumplinger (op-V09-01-07)
+              add SetProcessSubType for G4OpAbsorption, G4OpBoundaryProcess,
+              G4OpRayleigh and G4OpWLS
+
 18th Aug 2008 Peter Gumplinger (op-V09-01-06)
               use signatures G4SwapPtr(T*& and G4SwapObj(T*
               in G4OpBoundaryProcess - to work with global-V09-01-12
