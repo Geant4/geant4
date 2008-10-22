@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.24 2008-06-05 23:46:14 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.25 2008-10-22 01:17:55 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -64,6 +64,12 @@
 
 #include "G4ios.hh"
 #include "G4Poisson.hh"
+#include "G4EmProcessSubType.hh"
+
+#include "G4LossTableManager.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ParticleDefinition.hh"
+
 #include "G4Cerenkov.hh"
 
 using namespace std;
@@ -85,16 +91,19 @@ using namespace std;
         /////////////////
 
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
-           : G4VDiscreteProcess(processName, type)
+           : G4VProcess(processName, type)
 {
         G4cout << "G4Cerenkov::G4Cerenkov constructor" << G4endl;
-        G4cout << "NOTE: this is now a G4VDiscreteProcess!" << G4endl;
+        G4cout << "NOTE: this is now a G4VProcess!" << G4endl;
         G4cout << "Required change in UserPhysicsList: " << G4endl;
         G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
         G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
         G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
 
+        SetProcessSubType(fCerenkov);
+
 	fTrackSecondariesFirst = false;
+        fMaxBetaChange = 0.;
 	fMaxPhotons = 0;
 
         thePhysicsTable = NULL;
@@ -140,7 +149,6 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 // they are added to the particle change. 
 
 {
-
 	//////////////////////////////////////////////////////
 	// Should we ensure that the material is dispersive?
 	//////////////////////////////////////////////////////
@@ -159,13 +167,11 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
                                aMaterial->GetMaterialPropertiesTable();
-        if (!aMaterialPropertiesTable)
-           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+        if (!aMaterialPropertiesTable) return pParticleChange;
 
 	const G4MaterialPropertyVector* Rindex = 
                 aMaterialPropertiesTable->GetProperty("RINDEX"); 
-        if (!Rindex) 
-	   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+        if (!Rindex) return pParticleChange;
 
         // particle charge
         const G4double charge = aParticle->GetDefinition()->GetPDGCharge();
@@ -183,7 +189,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 aParticleChange.SetNumberOfSecondaries(0);
  
-                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+                return pParticleChange;
 
         }
 
@@ -200,7 +206,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		aParticleChange.SetNumberOfSecondaries(0);
 		
-                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+                return pParticleChange;
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -224,6 +230,14 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double maxCos = BetaInverse / nMax; 
 	G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
+
+        const G4double beta1 = pPreStepPoint ->GetBeta();
+        const G4double beta2 = pPostStepPoint->GetBeta();
+
+        G4double MeanNumberOfPhotons1 =
+                     GetAverageNumberOfPhotons(charge,beta1,aMaterial,Rindex);
+        G4double MeanNumberOfPhotons2 =
+                     GetAverageNumberOfPhotons(charge,beta2,aMaterial,Rindex);
 
 	for (G4int i = 0; i < NumPhotons; i++) {
 
@@ -302,9 +316,18 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 // Generate new G4Track object:
 
-		rand = G4UniformRand();
+                G4double delta, NumberOfPhotons, N;
 
-                G4double delta = rand * aStep.GetStepLength();
+                do {
+                   rand = G4UniformRand();
+                   delta = rand * aStep.GetStepLength();
+                   NumberOfPhotons = MeanNumberOfPhotons1 - delta *
+                                (MeanNumberOfPhotons1-MeanNumberOfPhotons2)/
+                                              aStep.GetStepLength();
+                   N = G4UniformRand() *
+                       std::max(MeanNumberOfPhotons1,MeanNumberOfPhotons2);
+                } while (N > NumberOfPhotons);
+
 		G4double deltaTime = delta /
                        ((pPreStepPoint->GetVelocity()+
                          pPostStepPoint->GetVelocity())/2.);
@@ -317,7 +340,8 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		G4Track* aSecondaryTrack = 
 		new G4Track(aCerenkovPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
+                aSecondaryTrack->SetTouchableHandle(
+                                 aStep.GetPreStepPoint()->GetTouchableHandle());
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
@@ -329,7 +353,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
-	return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+        return pParticleChange;
 }
 
 // BuildThePhysicsTable for the Cerenkov process
@@ -440,44 +464,112 @@ void G4Cerenkov::BuildThePhysicsTable()
 // ---------------
 //
 
-G4double G4Cerenkov::GetMeanFreePath(const G4Track& aTrack,
+G4double G4Cerenkov::GetMeanFreePath(const G4Track&,
+                                           G4double,
+                                           G4ForceCondition*)
+{
+        return 1.;
+}
+
+G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
+                                           const G4Track& aTrack,
                                            G4double,
                                            G4ForceCondition* condition)
 {
-        *condition = StronglyForced;
-
-	// If user has defined an average maximum number of photons to
-	// be generated in a Step, then return the Step length for that 
-	// number of photons. 
- 
-	if (fMaxPhotons <= 0) return DBL_MAX;
+        *condition = NotForced;
+        G4double StepLimit = DBL_MAX;
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
+        const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
 
-        G4MaterialPropertiesTable* aMaterialPropertiesTable =
-                               aMaterial->GetMaterialPropertiesTable();
-        if (!aMaterialPropertiesTable) return DBL_MAX;
-
-        const G4MaterialPropertyVector* Rindex =
-                aMaterialPropertiesTable->GetProperty("RINDEX");
-        if (!Rindex) return DBL_MAX;
-
-        // particle charge
-        const G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+        const G4double kineticEnergy = aParticle->GetKineticEnergy();
+        const G4ParticleDefinition* particleType = aParticle->GetDefinition();
+        const G4double mass = particleType->GetPDGMass();
 
         // particle beta
         const G4double beta = aParticle->GetTotalMomentum() /
                               aParticle->GetTotalEnergy();
+        // particle gamma
+        const G4double gamma = 1./std::sqrt(1.-beta*beta);
 
-	G4double MeanNumberOfPhotons = 
-                 GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
+        G4MaterialPropertiesTable* aMaterialPropertiesTable =
+                            aMaterial->GetMaterialPropertiesTable();
 
-        if(MeanNumberOfPhotons <= 0.0) return DBL_MAX;
+        const G4MaterialPropertyVector* Rindex = NULL;
 
-	G4double StepLimit = fMaxPhotons / MeanNumberOfPhotons;
+        if (aMaterialPropertiesTable)
+                     Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 
-	return StepLimit;
+        G4double nMax;
+        if (Rindex) {
+           nMax = Rindex->GetMaxProperty();
+        } else {
+           return StepLimit;
+        }
+
+        G4double BetaMin = 1./nMax;
+        G4double GammaMin = 1./std::sqrt(1.-BetaMin*BetaMin);
+
+        if (gamma < GammaMin ) return StepLimit;
+
+        G4double kinEmin = mass*(GammaMin-1.);
+
+        G4double RangeMin = G4LossTableManager::Instance()->
+                                                   GetRange(particleType,
+                                                            kinEmin,
+                                                            couple);
+        G4double Range    = G4LossTableManager::Instance()->
+                                                   GetRange(particleType,
+                                                            kineticEnergy,
+                                                            couple);
+
+        G4double Step = Range - RangeMin;
+        if (Step < 1.*um ) return StepLimit;
+
+        if (Step > 0. && Step < StepLimit) StepLimit = Step; 
+
+        // If user has defined an average maximum number of photons to
+        // be generated in a Step, then calculate the Step length for
+        // that number of photons. 
+ 
+        if (fMaxPhotons > 0) {
+
+           // particle charge
+           const G4double charge = aParticle->
+                                   GetDefinition()->GetPDGCharge();
+
+	   G4double MeanNumberOfPhotons = 
+                    GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
+
+           G4double Step = 0.;
+           if (MeanNumberOfPhotons > 0.0) Step = fMaxPhotons /
+                                                 MeanNumberOfPhotons;
+
+           if (Step > 0. && Step < StepLimit) StepLimit = Step;
+        }
+
+        // If user has defined an maximum allowed change in beta per step
+        if (fMaxBetaChange > 0.) {
+
+           G4double dedx = G4LossTableManager::Instance()->
+                                                   GetDEDX(particleType,
+                                                           kineticEnergy,
+                                                           couple);
+
+           G4double deltaGamma = gamma - 
+                                 1./std::sqrt(1.-beta*beta*
+                                                 (1.-fMaxBetaChange)*
+                                                 (1.-fMaxBetaChange));
+
+           G4double Step = mass * deltaGamma / dedx;
+
+           if (Step > 0. && Step < StepLimit) StepLimit = Step;
+
+        }
+
+        *condition = StronglyForced;
+        return StepLimit;
 }
 
 // GetAverageNumberOfPhotons
