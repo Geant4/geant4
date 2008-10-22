@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.58 2008-08-13 16:39:16 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.59 2008-10-22 18:39:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,8 +116,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   cosThetaMin = cos(PolarAngleLimit());
   currentCuts = &cuts;
   //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
-  // << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
-  // << "  cos(TetMax)= " << cosThetaMax <<G4endl;
+  //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+  //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   if(!isInitialised) {
     isInitialised = true;
 
@@ -126,8 +126,6 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
     else
       fParticleChange = new G4ParticleChangeForGamma();
-  } else {
-    return;
   }
   if(mass < GeV && particle->GetParticleType() != "nucleus") {
     InitialiseElementSelectors(p,cuts);
@@ -211,19 +209,26 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
     nucXSection  = elecXSection;
   }
 
-  //G4cout << "XS tkin(MeV)= " << tkin<<"costmax= " << costm 
-  //<< " costmin= " << cosTetMinNuc << G4endl;
+  //G4cout << "XS tkin(MeV)= " << tkin<<" xs= " <<nucXSection 
+  //	 << " costmax= " << cosTetMaxNuc2 
+  //	 << " costmin= " << cosTetMinNuc << "  Z= " << targetZ <<G4endl;
   if(cosTetMaxNuc2 < cosTetMinNuc) {
     G4double s  = screenZ*formfactA;
     G4double z1 = 1.0 - cosTetMaxNuc2 + screenZ;
     G4double d  = (1.0 - s)/formfactA;
-    G4double x2 = x1 + d;
-    G4double z2 = z1 + d;
-    //G4cout <<"x1= "<<x1<<" x2= " <<x2<<" z1= " <<z1<<" z2= "<<z2
-    //<<" s= " << " d= " <<d<<G4endl;
-    nucXSection += fac*targetZ*(1.0 + 2.0*s)*
-      ((cosTetMinNuc - cosTetMaxNuc2)*(1.0/(x1*z1) + 1.0/(x2*z2)) -
-       2.0*log(z1*x2/(z2*x1))/d);
+    //G4cout <<"x1= "<<x1<<" z1= " <<z1<<" s= "<<s << " d= " <<d <<G4endl;
+    if(d < 0.2*x1) {
+      G4double x2 = x1*x1;
+      G4double z2 = z1*z1;
+      x = (1.0/(x1*x2) - 1.0/(z1*z2) - d*1.5*(1.0/(x2*x2) - 1.0/(z2*z2)))/
+	(3.0*formfactA*formfactA);
+    } else {
+      G4double x2 = x1 + d;
+      G4double z2 = z1 + d;
+      x = (1.0 + 2.0*s)*((cosTetMinNuc - cosTetMaxNuc2)*(1.0/(x1*z1) + 1.0/(x2*z2)) -
+			 2.0*log(z1*x2/(z2*x1))/d);
+    }
+    nucXSection += fac*targetZ*x;
   }
 
   //G4cout<<" cross(bn)= "<<nucXSection/barn<<" xsElec(bn)= "<<elecXSection/barn
@@ -248,10 +253,11 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
-  // << kinEnergy <<G4endl;
+  //	 << kinEnergy << "  " << particle->GetParticleName() << G4endl;
  
   // Choose nucleus
   currentElement = SelectRandomAtom(couple,particle,ekin,cutEnergy,ekin);
+
   SetupTarget(currentElement->GetZ(),ekin);
   
   G4double cost = SampleCosineTheta();
@@ -261,7 +267,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double sint = sqrt(z1*(1.0 + cost));
   
   //G4cout<<"## Sampled sint= " << sint << "  Z= " << targetZ 
-  //<< "  screenZ= " << screenZ << " cn= " << formfactA << G4endl;
+  //	<< "  screenZ= " << screenZ << " cn= " << formfactA << G4endl;
   
   G4double phi  = twopi * G4UniformRand();
 

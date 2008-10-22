@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.10 2008-10-16 14:12:32 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.11 2008-10-22 18:39:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -646,12 +646,20 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
       G4double s  = screenZ*formfactA;
       G4double z1 = 1.0 - cosnm + screenZ;
       G4double d  = (1.0 - s)/formfactA;
-      G4double x2 = x1 + d;
-      G4double z2 = z1 + d;
 
-      nsec = f*targetZ*(1.0 + 2.0*s)*
-	((cosThetaMin - cosnm)*(1.0/(x1*z1) + 1.0/(x2*z2)) - 
-	 2.0*log(z1*x2/(x1*z2))/d);
+      // check numerical limit
+      if(d < numlimit*x1) {
+	G4double x2 = x1*x1;
+	G4double z2 = z1*z1;
+	nsec = (1.0/(x1*x2) - 1.0/(z1*z2) - d*1.5*(1.0/(x2*x2) - 1.0/(z2*z2)))/
+	  (3.0*formfactA*formfactA);
+      } else {
+	G4double x2 = x1 + d;
+	G4double z2 = z1 + d;
+	nsec = (1.0 + 2.0*s)*((cosThetaMin - cosnm)*(1.0/(x1*z1) + 1.0/(x2*z2)) -
+			   2.0*log(z1*x2/(z2*x1))/d);
+      }
+      nsec *= fac*targetZ;
     }
     nsec += esec;
     if(nsec > 0.0) esec /= nsec;
