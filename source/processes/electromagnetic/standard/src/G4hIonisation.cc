@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.80 2008-10-20 08:56:41 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.81 2008-10-22 16:02:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -163,6 +163,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
     mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;
+
+    if(mass < 900.*MeV) nuclearStopping = false;
 
     if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
