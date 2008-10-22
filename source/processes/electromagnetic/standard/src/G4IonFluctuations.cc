@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.23 2008-10-22 16:04:33 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.24 2008-10-22 16:25:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,7 +178,7 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
   	 << " q^2= " << effChargeSquare << " beta2=" << beta2<< G4endl;
   */
   G4double siga = (1. - beta2*0.5)*tmax*length*electronDensity*
-    twopi_mc2_rcl2*effChargeSquare/beta2;
+    twopi_mc2_rcl2*chargeSquare/beta2;
 
   // Low velocity - additional ion charge fluctuations according to
   // Q.Yang et al., NIM B61(1991)149-155.
@@ -215,10 +215,11 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   // Reduced energy in MeV/AMU
   G4double energy = kineticEnergy *amu_c2/(particleMass*MeV) ;
 
-  G4double s1 = 1.0;
-  if( beta2 > 3.0*theBohrBeta2*Z ) {
-    s1 = RelativisticFactor(material, Z);
-  } else {
+  // simple approximation for higher beta2
+  G4double s1 = RelativisticFactor(material, Z);
+
+  // tabulation for lower beta2
+  if( beta2 < 3.0*theBohrBeta2*Z ) {
 
     static G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
@@ -335,10 +336,11 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
     G4double ss = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
       + a[iz][2]*pow(energy,a[iz][3]);
   
-    // protection for the validity range
+    // protection for the validity range for low beta
     G4double slim = 0.001;
-    if(ss < 1.0 && ss > slim) s1 = 1.0/ss;
-    else if(ss <= slim)       s1 = 1./slim;
+    if(ss < slim) s1 = 1.0/slim;
+    // for high value of beta
+    else if(s1*ss < 1.0) s1 = 1.0/ss;
   }
 
   G4int i = 0 ;
@@ -393,7 +395,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   G4cout << "s1= " << s1 << " s2= " << s2 << " q^2= " << effChargeSquare 
 	 << " e= " << energy << G4endl;
   */
-  return s1 + s2*chargeSquare/effChargeSquare;
+  return s1*effChargeSquare/chargeSquare + s2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
