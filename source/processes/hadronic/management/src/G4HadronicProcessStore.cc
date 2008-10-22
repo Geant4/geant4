@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.6 2008-09-01 17:22:12 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.7 2008-10-22 07:58:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,7 +117,7 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindProcess(aParticle, 11);
+  G4HadronicProcess* hp = FindProcess(aParticle, fHadronElastic);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) cross = hp->GetMicroscopicCrossSection(&localDP,
@@ -162,7 +162,7 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindProcess(aParticle, 12);
+  G4HadronicProcess* hp = FindProcess(aParticle, fHadronInelastic);
   localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
@@ -208,7 +208,7 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindProcess(aParticle, 13);
+  G4HadronicProcess* hp = FindProcess(aParticle, fCapture);
   localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
@@ -254,7 +254,7 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindProcess(aParticle, 14);
+  G4HadronicProcess* hp = FindProcess(aParticle, fFission);
   localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
@@ -300,7 +300,7 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerAtom(
     G4double kineticEnergy,
     const G4Element *anElement)
 {
-  G4HadronicProcess* hp = FindProcess(aParticle, 16);
+  G4HadronicProcess* hp = FindProcess(aParticle, fChargeExchange);
   localDP.SetDefinition(const_cast<G4ParticleDefinition*>(aParticle));
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
@@ -580,7 +580,7 @@ G4int G4HadronicProcessStore::GetVerbose()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcess* G4HadronicProcessStore::FindProcess(
-		   const G4ParticleDefinition* part, G4int subType)
+   const G4ParticleDefinition* part, G4HadronicProcessType subType)
 {
   bool isNew = false;
   G4HadronicProcess* hp = 0;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.2 2008-08-04 13:47:54 vnivanch Exp $
+// $Id: G4HadronicProcessStore.hh,v 1.3 2008-10-22 07:58:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,7 @@
 #include "G4HadronicProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4HadronicProcessType.hh"
 #include <map>
 #include <vector>
 
@@ -172,7 +173,8 @@ public:
 
   G4int GetVerbose();
 
-  G4HadronicProcess* FindProcess(const G4ParticleDefinition*, G4int subType);
+  G4HadronicProcess* FindProcess(const G4ParticleDefinition*, 
+				 G4HadronicProcessType subType);
 
 private:
 
