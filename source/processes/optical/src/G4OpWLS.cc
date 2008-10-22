@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.11 2008-07-19 00:35:34 gum Exp $
+// $Id: G4OpWLS.cc,v 1.12 2008-10-22 00:28:55 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -45,6 +45,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+
 #include "G4OpWLS.hh"
 #include "G4WLSTimeGeneratorProfileDelta.hh"
 #include "G4WLSTimeGeneratorProfileExponential.hh"
@@ -60,6 +61,8 @@
 G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   : G4VDiscreteProcess(processName, type)
 {
+  SetProcessSubType(34);
+
   theIntegralTable = 0;
  
   if (verboseLevel>0) {
