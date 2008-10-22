@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.19 2008-09-20 19:38:50 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.20 2008-10-22 16:01:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,6 +135,7 @@ G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
+  // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
   GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
   return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
@@ -146,6 +147,7 @@ G4double G4BraggModel::GetParticleCharge(const G4ParticleDefinition* p,
 					 const G4Material* mat,
 					 G4double kineticEnergy)
 {
+  // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
