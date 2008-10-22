@@ -143,6 +143,10 @@ protected:
   inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
   { theEnergyRangeManager = value; }
 
+  // obsolete method will be removed
+  inline void SetDispatch( G4HadronicProcess *value )
+  { dispatch=value; }
+
   // access to the chosen generator
   inline G4HadronicInteraction *GetHadronicInteraction()
   { return theInteraction; }
