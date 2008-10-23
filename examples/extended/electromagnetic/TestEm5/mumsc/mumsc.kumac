@@ -12,19 +12,19 @@ set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
 set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
 
 title '100 GeV muon in 1 m iron'
-h/file 1 9.1ref07.hbook
+h/file 1 9.1ref08.hbook
 
 opt stat
 
 set dmod 1 ; set hcol 4 ; set plci 4
 h/pl //lun1/14
-key 3 2500  1 '9.1-ref-03' ! l
+key 3 2500  1 '9.1-ref-08' ! l
 atitle x(mm)  nb
 
 opt logy
 set dmod 1 ; set hcol 4 ; set plci 4
 h/pl //lun1/15
-key 6 400  1 '9.1-ref-06' ! l
+key 6 400  1 '9.1-ref-08' ! l
 atitle radius(mm)  nb
 
 exec Redraw-Axis
