@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.16 2008-10-22 12:35:46 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.17 2008-10-23 13:34:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,17 +66,22 @@ public:  // With Description
 
   // Give mass of nucleus A,Z
   static G4double GetNuclearMass(const G4double A, const G4double Z);
-  
-private:
-  // hide these methods to enforce using GetNuclearMass
+
+  // return 'true' if the nucleus in the stable table 
+  // (i.e.in G4NucleiPropertiesTable)
+  static bool IsInStableTable(const G4double A, const G4double Z);
+
+  // Give binding energy 
+  static G4double GetBindingEnergy(const G4int A, const G4int Z);
+
   // Calculate Mass Excess of nucleus A,Z
   static G4double GetMassExcess(const G4int A, const G4int Z);
-  
+
+private:
+  // hidie methods to enforce using GetNuclearMass
   // Give mass of Atom A,Z
   static G4double GetAtomicMass(const G4double A, const G4double Z);
   
-  static G4double GetBindingEnergy(const G4int A, const G4int Z);
-	
 private:
   
   static G4double  AtomicMass(G4double A, G4double Z);

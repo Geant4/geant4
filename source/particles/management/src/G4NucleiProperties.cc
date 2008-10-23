@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.15 2008-10-22 12:35:46 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.16 2008-10-23 13:34:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,6 +141,23 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
   }
 }
 
+G4bool G4NucleiProperties::IsInStableTable(const G4double A, const G4double Z)
+{
+  if (Z < 0 || Z > A) {
+#ifdef G4VERBOSE
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0) {
+      G4cout << "G4NucleiProperties::IsInStableTable: Wrong values for A = " 
+	     << A << " and Z = " << Z << G4endl;	
+    }
+#endif 
+    return false;
+
+  } else {
+    G4int iA = G4int(A);
+    G4int iZ = G4int(Z);
+    return G4NucleiPropertiesTable::IsInTable(iZ,iA);
+  }
+}
 
 G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
 {

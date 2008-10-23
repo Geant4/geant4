@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableA.cc,v 1.10 2006-06-29 19:25:42 gunter Exp $
+// $Id: G4NucleiPropertiesTableA.cc,v 1.11 2008-10-23 13:34:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,8 +105,6 @@ G4double G4NucleiPropertiesTable::GetNuclearMass(G4int Z, G4int A)
     return 0.0;
   }
 }
-
-
 
 
 G4double G4NucleiPropertiesTable::GetMassExcess(G4int Z, G4int A) 
