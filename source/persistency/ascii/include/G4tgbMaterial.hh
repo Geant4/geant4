@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterial.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterial.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,32 +63,32 @@ class G4tgbMaterial
 
     virtual G4Material* BuildG4Material() = 0;
 
-    const G4String GetName() const
+    const G4String& GetName() const
     {
       return theTgrMate->GetName();
     }
 
-    const G4double GetDensity() const
+    G4double GetDensity() const
     {
       return theTgrMate->GetDensity();
     }
 
-    const G4int GetNumberOfMaterials() const
+    G4int GetNumberOfMaterials() const
     {
       return theTgrMate->GetNumberOfComponents();
     }
 
-    const G4double GetA() const
+    G4double GetA() const
     {
       return theTgrMate->GetA();
     }
 
-    const G4double GetZ() const
+    G4double GetZ() const
     {
       return theTgrMate->GetZ();
     }
 
-    const G4String GetType() const
+    const G4String& GetType() const
     {
       return theTgrMate->GetType();
     }  

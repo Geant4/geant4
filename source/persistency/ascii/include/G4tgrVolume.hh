@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolume.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,7 +92,7 @@ class G4tgrVolume
     const G4String& GetMaterialName() const {return theMaterialName;}
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
-    const G4bool GetVisibility() const {return theVisibility;}
+    G4bool GetVisibility() const {return theVisibility;}
     const G4double* GetColour() const {return theRGBColour;}
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;

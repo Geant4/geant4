@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrFileIn.cc,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -164,9 +164,8 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
     if ( ii == NMAXLIN-1 )
     {
       ErrorInLine();
-      G4String ErrMessage = "Line longer than " + NMAXLIN
-              + G4String(" characters.\n")
-              + G4String("Please split it putting a '\\' at the end of line!");
+      G4String ErrMessage = "Too long line. Please split it "
+                          + G4String("putting a '\\' at the end!");
       G4Exception("G4tgrFileIn::GetWordsInLine()", "InvalidInput",
                   FatalException, ErrMessage);
     }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrFileIn.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,7 @@ class G4tgrFileIn
 
     // Access data members
 
-    const G4int Nline() { return theLineNo[theCurrentFile]; }
+    G4int Nline() { return theLineNo[theCurrentFile]; }
   
     const G4String& GetName() { return theName; }
   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementFromIsotopes.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrElementFromIsotopes.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,9 +58,9 @@ class G4tgrElementFromIsotopes : public G4tgrElement
       // Construct the G4tgrElementFromIsotopes (fill its data members)
       // interpreting the data in the list of words 'wl' 
 
-    const G4int GetNumberOfIsotopes() const       { return theNoIsotopes;    }
+    G4int GetNumberOfIsotopes() const             { return theNoIsotopes;    }
     const G4String& GetComponent( G4int n ) const { return theComponents[n]; }
-    const G4double  GetAbundance( G4int n ) const { return theAbundances[n]; }
+    G4double  GetAbundance( G4int n ) const       { return theAbundances[n]; }
 
   private:
 

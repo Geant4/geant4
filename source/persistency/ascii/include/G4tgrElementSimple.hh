@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementSimple.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrElementSimple.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,8 +58,8 @@ class G4tgrElementSimple : public G4tgrElement
       // Construct the G4tgrElementSimple (fill its data members)
       // interpreting the data in the list of words 'wl' 
 
-    const G4double GetZ() const { return theZ; }
-    const G4double GetA() const { return theA; }
+    G4double GetZ() const { return theZ; }
+    G4double GetA() const { return theA; }
 
   private:
 

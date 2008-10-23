@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbVolume.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,7 +106,7 @@ class G4tgbVolume
     G4VSolid* BuildSolidForDivision( G4VSolid* parentSolid );
 
     const G4String& GetName() const { return theTgrVolume->GetName(); }
-    const G4bool GetVisibility() const { return theTgrVolume->GetVisibility(); }
+    G4bool GetVisibility() const { return theTgrVolume->GetVisibility(); }
     const G4double* GetColour() const { return theTgrVolume->GetColour(); }
 
   private:
