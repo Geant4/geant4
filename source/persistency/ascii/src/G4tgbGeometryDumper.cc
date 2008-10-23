@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.3 2008-10-23 16:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -383,7 +383,7 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
   G4BooleanSolid * bso = dynamic_cast < G4BooleanSolid * > (so);
   G4VSolid* solid0 = bso->GetConstituentSolid( 0 );
   G4VSolid* solid1 = bso->GetConstituentSolid( 1 );
-  G4DisplacedSolid* solid1Disp;
+  G4DisplacedSolid* solid1Disp = 0;
   G4bool displaced = dynamic_cast<G4DisplacedSolid*>(solid1);
   if( displaced )
   {
