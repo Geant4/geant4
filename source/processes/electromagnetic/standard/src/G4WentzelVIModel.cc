@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.12 2008-10-23 09:56:45 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.13 2008-10-23 09:58:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -209,7 +209,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
       y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 - 1.5*x1);
       //			      + 3.0*x1*x1 + 2.666666*x3*x1);
       // high energy limit
-    } else if(1.0 < (1.0 + numlimit)*x1) {
+    } else if(1.0 < x1) {
       x4 = x1*(1.0 + x3);
       y  = x3*(1.0 + 0.5*x3 - (2.0 - x1)*(1.0 + x3 + x3*x3/3.0)/x4)/(x4*x4);
       // middle energy 
