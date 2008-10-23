@@ -3,7 +3,6 @@
 // * License and Disclaimer                                           *
 // *                                                                  *
 // * The  eeant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
@@ -23,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.13 2008-10-17 14:03:57 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.14 2008-10-23 09:24:38 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +76,8 @@
 // 17-10-08  stepping similar to that in model (9.1) for UseSafety case
 //           for e+/e- in order to speed up the code for calorimeters
 //
+// 23-10-08  bugfix in the screeningparameter of the single scattering part,
+//           some technical change in order to speed up the code (UpdateCache)
 
 // Class Description:
 //
@@ -131,12 +132,24 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  Zeff          = 1.;
+                          
   y             = 0.;
-  lnz           = 0.;
-  scr1          = fine_structure_const*fine_structure_const*
-                  electron_mass_c2*electron_mass_c2/(0.885*0.885);
-  scr2          = 3.76*fine_structure_const*fine_structure_const;
+
+  Zold          = 0.;
+  Zeff          = 1.;
+  Z2            = 1.;                
+  Z23           = 1.;                    
+  lnZ           = 0.;
+  coeffth1      = 0.;
+  coeffth2      = 0.;
+  coeffc1       = 0.;
+  coeffc2       = 0.;
+  scr1ini       = fine_structure_const*fine_structure_const*
+                  electron_mass_c2*electron_mass_c2/(0.885*0.885*4.*pi);
+  scr2ini       = 3.76*fine_structure_const*fine_structure_const;
+  scr1          = 0.;
+  scr2          = 0.;
+
   theta0max     = pi/6.;
   rellossmax    = 0.50;
   third         = 1./3.;
@@ -144,6 +157,7 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -551,9 +565,6 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 
       if(tPathLength > tlimit) tPathLength = tlimit  ; 
 
-      // no path length correction and use single scattering for small steps
-      if(tPathLength < tlimitmin) insideskin = true;
-
     }
     // for 'normal' simulation with or without magnetic field 
     //  there no small step/single scattering at boundaries
@@ -773,10 +784,8 @@ G4double G4UrbanMscModel2::ComputeTheta0(G4double trueStepLength,
   y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
   y = log(y);
-  lnz = log(Zeff);
   // correction factor from e-/proton scattering data
-  G4double corr = (0.885+lnz*(0.104-0.0170*lnz))+
-                  (0.028+lnz*(0.012-0.00125*lnz))*y; 
+  G4double corr = coeffth1+coeffth2*y;                
   if(y < -6.5) corr -= 0.011*(6.5+y);
   theta0 *= corr ;                                               
 
@@ -789,8 +798,9 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
 					G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
+
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0) ) return;
+     (tPathLength/tausmall < lambda0)) return;
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
@@ -889,6 +899,9 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;
 
+  if(Zold != Zeff)  
+    UpdateCache();
+
   if(insideskin)
   {
     //no scattering, single or plural scattering
@@ -900,8 +913,8 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       //screening (Moliere-Bethe)
       G4double mom2 = KineticEnergy*(2.*mass+KineticEnergy);
       G4double beta2 = mom2/((KineticEnergy+mass)*(KineticEnergy+mass));
-      G4double ascr = scr1*exp(2.*log(Zeff)/3.)/mom2;
-      ascr *= 1.13+scr2*Zeff*Zeff*ChargeSquare/beta2;
+      G4double ascr = scr1/mom2;
+      ascr *= 1.13+scr2/beta2;
       G4double ascr1 = 1.+2.*ascr;
       G4double bp1=ascr1+1.;
       G4double bm1=ascr1-1.;
@@ -973,10 +986,9 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
         return SimpleScattering(xmeanth,x2meanth);
 
       // from MUSCAT H,Be,Fe data 
-      G4double c = 2.134-lnz*(0.1045-0.00602*lnz) ;
-      if(y > -13.5)
-        c += (0.001126-lnz*(0.0001089+0.0000247*lnz))*
-             exp(3.*log(y+13.5));
+      G4double c = coeffc1;                         
+      if(y > -13.5) 
+        c += coeffc2*exp(3.*log(y+13.5));
 
       if(abs(c-3.) < 0.001)  c = 3.001;      
       if(abs(c-2.) < 0.001)  c = 2.001;      

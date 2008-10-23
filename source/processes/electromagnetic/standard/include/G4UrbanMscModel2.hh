@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.9 2008-10-17 12:03:42 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.10 2008-10-23 09:24:38 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,6 +119,8 @@ private:
 
   inline void SetParticle(const G4ParticleDefinition*);
 
+  inline void UpdateCache();
+
   //  hide assignment operator
   G4UrbanMscModel2 & operator=(const  G4UrbanMscModel2 &right);
   G4UrbanMscModel2(const  G4UrbanMscModel2&);
@@ -166,12 +168,17 @@ private:
   G4double rangeinit;
   G4double currentRadLength;
 
-  G4double Zeff,y,lnz;
-  G4double scr1,scr2;
   G4double theta0max,rellossmax;
   G4double third;
 
   G4int    currentMaterialIndex;
+
+  G4double y;
+  G4double Zold;
+  G4double Zeff,Z2,Z23,lnZ;
+  G4double coeffth1,coeffth2;
+  G4double coeffc1,coeffc2;
+  G4double scr1ini,scr2ini,scr1,scr2;
 
   G4bool   isInitialized;
   G4bool   inside;
@@ -210,6 +217,22 @@ void G4UrbanMscModel2::SetParticle(const G4ParticleDefinition* p)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel2::UpdateCache()                                   
+{
+    lnZ = log(Zeff);
+    coeffth1 = 0.885+lnZ*(0.104-0.0170*lnZ);
+    coeffth2 = 0.028+lnZ*(0.012-0.00125*lnZ);
+    coeffc1  = 2.134-lnZ*(0.1045-0.00602*lnZ);
+    coeffc2  = 0.001126-lnZ*(0.0001089+0.0000247*lnZ);
+    Z2 = Zeff*Zeff;
+    Z23 = exp(2.*lnZ/3.);
+    scr1     = scr1ini*Z23;
+    scr2     = scr2ini*Z2*ChargeSquare;
+  //  lastMaterial = couple->GetMaterial();
+    Zold = Zeff;
+}
 
 #endif
 
