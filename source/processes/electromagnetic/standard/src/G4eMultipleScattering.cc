@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc,v 1.6 2008-10-15 17:53:44 vnivanch Exp $
+// $Id: G4eMultipleScattering.cc,v 1.7 2008-10-23 17:55:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -57,6 +57,7 @@ G4eMultipleScattering::G4eMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
+  SetRangeFactor(0.04);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
