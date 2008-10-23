@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgrFileIn.cc,v 1.3 2008-10-23 16:04:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -213,7 +213,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
         }
       }
       tt++;
-    } while(*tt != '\0' & stemp.length()!=0);
+    } while((*tt != '\0') && (stemp.length()!=0));
 
     G4String stempt (ltemp);
     if(stempt.length() == 0)  { NoWords = 0; }
