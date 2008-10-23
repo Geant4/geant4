@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.cc,v 1.84 2008-10-17 14:03:57 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.85 2008-10-23 17:55:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -860,8 +860,8 @@ void G4UrbanMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(cth > 1.)  cth =  1.;
-  if(cth < -1.) cth = -1.;
+  if(abs(cth) > 1.) return;
+
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);

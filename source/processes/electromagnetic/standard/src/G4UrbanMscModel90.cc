@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.8 2008-10-17 14:03:57 vnivanch Exp $
+// $Id: G4UrbanMscModel90.cc,v 1.9 2008-10-23 17:55:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -401,11 +401,11 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
 
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
-
-  //  G4cout << "G4UrbanMscModel90::ComputeTruePathLengthLimit tPathLength= " 
-  //	 <<tPathLength<<" safety= " << presafety
-  //     << " range= " <<currentRange<<G4endl;
-
+  /*
+  G4cout << "G4UrbanMscModel90::ComputeTruePathLengthLimit tPathLength= " 
+  	 <<tPathLength<<" safety= " << presafety
+       << " range= " <<currentRange<<G4endl;
+  */
   // far from geometry boundary
   if(currentRange < presafety)
     {
@@ -569,7 +569,6 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
     }
   //  G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
-
   return tPathLength ;
 }
 
@@ -747,8 +746,7 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(cth > 1.)  cth =  1.;
-  if(cth < -1.) cth = -1.;
+  if(std::abs(cth) > 1.) return;
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();

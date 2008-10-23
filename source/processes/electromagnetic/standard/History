@@ -1,4 +1,4 @@
-$Id: History,v 1.421 2008-10-23 09:56:45 vnivanch Exp $
+$Id: History,v 1.422 2008-10-23 17:55:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ committal in the CVS repository !
 23 Septembetr 08: V.Ivant (emstand-V09-01-39)
 G4eCoulombScatteringModel and G4WentzelVIModel - added protection against
     precision loss in computation of cross section at high energy
+G4UrbanMscModel2 - fixed screening parameter of the single scattering part
+G4eMultipleScattering - set default RangeFactor = 0.04
 
 22 Septembetr 08: V.Ivant (emstand-V09-01-38)
 G4IonFluctuations - added G4UniversalFluctuation model, which are used for 

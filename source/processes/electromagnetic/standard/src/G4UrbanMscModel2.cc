@@ -3,6 +3,7 @@
 // * License and Disclaimer                                           *
 // *                                                                  *
 // * The  eeant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
@@ -22,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.14 2008-10-23 09:24:38 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.15 2008-10-23 17:55:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -463,9 +464,9 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
 
-  //  G4cout << "G4UrbanMscModel2::ComputeTruePathLengthLimit tPathLength= " 
-  //	 <<tPathLength<<" safety= " << presafety
-  //     << " range= " <<currentRange<<G4endl;
+  //    G4cout << "G4UrbanMscModel2::ComputeTruePathLengthLimit tPathLength= " 
+  //	   <<tPathLength<<" safety= " << presafety
+  //	   << " range= " <<currentRange<<G4endl;
 
   // far from geometry boundary
   if(currentRange < presafety)
@@ -625,9 +626,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 	  if(tPathLength > tlimit) tPathLength = tlimit;
 	}
     }
-  //  G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
+  // G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
-
   return tPathLength ;
 }
 
@@ -648,8 +648,11 @@ void G4UrbanMscModel2::GeomLimit(const G4Track&  track)
                   track.GetMomentumDirection(),
                   cstep,
                   presafety);
-    //    G4cout << "!!!G4UrbanMscModel2::GeomLimit presafety= " << presafety
-    //	   << " limit= " << geomlimit << G4endl;
+    /*
+    G4cout << "!!!G4UrbanMscModel2::GeomLimit presafety= " << presafety
+	   << " r= " << currentRange
+    	   << " limit= " << geomlimit << G4endl;
+    */
   }  
 }
 
@@ -803,9 +806,10 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
      (tPathLength/tausmall < lambda0)) return;
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
+
   // protection against 'bad' cth values
-  if(cth > 1.)  cth =  1.;
-  if(cth < -1.) cth = -1.;
+  if(std::abs(cth) > 1.) return;
+
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);
@@ -819,13 +823,13 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
   if (latDisplasment && safety > tlimitminfix) {
 
     G4double r = SampleDisplacement();
-/*
+    /*
     G4cout << "G4UrbanMscModel2::SampleSecondaries: e(MeV)= " << kineticEnergy
 	   << " sinTheta= " << sth << " r(mm)= " << r
            << " trueStep(mm)= " << tPathLength
            << " geomStep(mm)= " << zPathLength
            << G4endl;
-*/
+    */
     if(r > 0.)
       {
         G4double latcorr = LatCorrelation();
@@ -878,7 +882,7 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
 	      safetyHelper->Locate(newPosition, newDirection);
 
 	    // not on the boundary
-            } else { 
+            } else {
 	      safetyHelper->ReLocateWithinVolume(newPosition);
 	    }
 	  }
