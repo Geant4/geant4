@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialMixture.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrMaterialMixture.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,7 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
   
   //---------- Fill private data 
   theName = G4tgrUtils::GetString( wl[1] );
-  theDensity = fabs(G4tgrUtils::GetDouble( wl[2], g/cm3 ) );
+  theDensity = std::fabs(G4tgrUtils::GetDouble( wl[2], g/cm3 ) );
   theNoComponents = G4tgrUtils::GetInt( wl[3] );
 
   G4tgrUtils::CheckWLsize( wl, 4+theNoComponents*2, WLSIZE_GE,

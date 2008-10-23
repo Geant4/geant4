@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbVolume.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -662,7 +662,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
         G4double check = (rotmat->colX().cross(rotmat->colY()))*rotmat->colZ();
         G4double tol = 1.0e-3;
         //---- Check that matrix is ortogonal
-        if (1-abs(check)>tol)
+        if (1-std::abs(check)>tol)
         {
           G4cerr << " Matrix : " << rmName << " " << rotmat->colX()
                  << " " << rotmat->colY() << " " << rotmat->colZ() << G4endl

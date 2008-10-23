@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbRotationMatrix.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,12 +107,12 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom6( std::vector<G4double>& values )
   G4double phiZ = values[5];
 
   // build the 3 axis from the values
-  CLHEP::Hep3Vector colx(sin(thetaX)*cos(phiX),
-                         sin(thetaX)*sin(phiX),cos(thetaX));
-  CLHEP::Hep3Vector coly(sin(thetaY)*cos(phiY),
-                         sin(thetaY)*sin(phiY),cos(thetaY));
-  CLHEP::Hep3Vector colz(sin(thetaZ)*cos(phiZ),
-                         sin(thetaZ)*sin(phiZ),cos(thetaZ));
+  CLHEP::Hep3Vector colx(std::sin(thetaX)*std::cos(phiX),
+                         std::sin(thetaX)*std::sin(phiX),std::cos(thetaX));
+  CLHEP::Hep3Vector coly(std::sin(thetaY)*std::cos(phiY),
+                         std::sin(thetaY)*std::sin(phiY),std::cos(thetaY));
+  CLHEP::Hep3Vector colz(std::sin(thetaZ)*std::cos(phiZ),
+                         std::sin(thetaZ)*std::sin(phiZ),std::cos(thetaZ));
 
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the

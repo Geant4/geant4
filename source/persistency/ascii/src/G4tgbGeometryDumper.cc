@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -621,11 +621,11 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
                << trp->GetYHalfLength1() << " "
                << trp->GetXHalfLength1() << " "
                << trp->GetXHalfLength2() << " "    
-               << atan(trp->GetTanAlpha1())/deg << " " 
+               << std::atan(trp->GetTanAlpha1())/deg << " " 
                << trp->GetYHalfLength2()    << " "
                << trp->GetXHalfLength3()    << " "
                << trp->GetXHalfLength4()    << " "    
-               << atan(trp->GetTanAlpha2())/deg << " "
+               << std::atan(trp->GetTanAlpha2())/deg << " "
                << G4endl;
   } else if (solidType == "TRD") {
     G4Trd * tr = dynamic_cast < G4Trd * > (so);
@@ -867,11 +867,11 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     params.push_back( trp->GetYHalfLength1() );
     params.push_back( trp->GetXHalfLength1() );
     params.push_back( trp->GetXHalfLength2() );    
-    params.push_back( atan(trp->GetTanAlpha1())/deg ); 
+    params.push_back( std::atan(trp->GetTanAlpha1())/deg ); 
     params.push_back( trp->GetYHalfLength2()    );
     params.push_back( trp->GetXHalfLength3()    );
     params.push_back( trp->GetXHalfLength4()    );    
-    params.push_back( atan(trp->GetTanAlpha2())/deg );
+    params.push_back( std::atan(trp->GetTanAlpha2())/deg );
   } else if (solidType == "TRD") {
     const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
     params.push_back( tr->GetZHalfLength());
@@ -1028,7 +1028,7 @@ G4double G4tgbGeometryDumper::approxTo0( G4double val )
   G4double precision = G4GeometryTolerance::GetInstance()
                        ->GetSurfaceTolerance();
 
-  if( fabs(val) < precision )  { val = 0; }
+  if( std::fabs(val) < precision )  { val = 0; }
   return val;
 }
 
