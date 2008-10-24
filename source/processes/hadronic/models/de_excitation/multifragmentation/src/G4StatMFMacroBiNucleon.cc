@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
+// $Id: G4StatMFMacroBiNucleon.cc,v 1.7 2008-10-24 22:56:42 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -68,7 +68,7 @@ G4double G4StatMFMacroBiNucleon::CalcMeanMultiplicity(const G4double FreeVol, co
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
     
-    const G4double BindingE = G4NucleiPropertiesTable::GetBindingEnergy(1,theA); //old value was 2.796*MeV
+    const G4double BindingE = G4NucleiProperties::GetBindingEnergy(theA,1); //old value was 2.796*MeV
     G4double exponent = (BindingE + theA*(mu+nu*theZARatio) - 
 			 Coulomb*theZARatio*theZARatio*std::pow(G4double(theA),5./3.))/T;
 
@@ -88,7 +88,7 @@ G4double G4StatMFMacroBiNucleon::CalcEnergy(const G4double T)
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/std::pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 									
-    _Energy  = -G4NucleiPropertiesTable::GetBindingEnergy(1,theA) + 
+    _Energy  = -G4NucleiProperties::GetBindingEnergy(theA,1) + 
 	Coulomb * theZARatio * theZARatio * std::pow(G4double(theA),5./3.) +
 	(3./2.) * T;
 							
