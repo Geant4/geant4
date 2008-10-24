@@ -14,7 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-- added name to G4CascadeInterface ("Bertini Cascade")
+24 Oct 2008 Dennis Wright (hadr-casc-V09-01-08)
+-----------------------------------------------
+- replace GetAtomicMass() with GetNuclearMass() in cascade/G4InuclEvaporation
+  and evaporation/G4BertiniEvaporation
+- V. Ivantchenko added name to G4CascadeInterface ("Bertini Cascade")
 
 17 Oct 2008 Dennis Wright (hadr-casc-V09-01-07)
 -----------------------------------------------
