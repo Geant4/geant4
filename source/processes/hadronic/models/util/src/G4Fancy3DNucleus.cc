@@ -36,7 +36,7 @@
 #include "G4Fancy3DNucleus.hh"
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include <algorithm>
@@ -164,8 +164,9 @@ void G4Fancy3DNucleus::SortNucleonsInZ()
 
 G4double G4Fancy3DNucleus::BindingEnergy()
 {
-	return G4NucleiPropertiesTable::GetBindingEnergy(myZ,myA);
+  return G4NucleiProperties::GetBindingEnergy(myA,myZ);
 }
+
 
 G4double G4Fancy3DNucleus::GetNuclearRadius()
 {
