@@ -36,13 +36,10 @@
 #define G4PhotoNuclearCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-/////////#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-//#include "G4QPDGCode.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 
 class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
@@ -81,7 +78,6 @@ public:
 
 private:
   G4int    GetFunctions(G4double a, G4double* y, G4double* z);
-  //G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
   G4double EquLinearFit(G4double X, G4int N,const G4double X0,const G4double XD, const G4double* Y);
   G4double ThresholdEnergy(G4int Z, G4int N);
 
@@ -99,7 +95,6 @@ private:
   static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
   static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
 
-  //G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif
