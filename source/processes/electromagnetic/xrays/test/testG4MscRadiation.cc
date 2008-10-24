@@ -109,7 +109,7 @@ G4double ComplexMF(G4double x)
 {
   G4double order = 6.*x;
   order *= 1. + (3. - pi)*x;
-  order -= x*x*x/(0.623+0.796*x+0.657*x*x);
+  order -= x*x*x/(0.623+0.796*x+0.658*x*x);
 
   return 1. - std::exp(-order);
 }
@@ -353,7 +353,13 @@ int main()
 
   }
 
-  G4double energyMscXR, kinEnergy = 25.0*GeV;
+  G4double energyMscXR, kinEnergy;
+
+
+  // kinEnergy = 8*GeV;   // 25.0*GeV;
+
+  kinEnergy = 25.0*GeV;
+
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -385,9 +391,11 @@ int main()
 
   G4double numberMscXR, numberMGYXR, numberE146XR, absorption, lincofXR, radLength; 
 
-  G4double sRe, sIm, mcRe, mcIm, tmRe, tmIm, tmc;
+  G4double sRe, sIm, mcRe, mcIm, tmRe, tmIm, tmc, sf;
 
   G4complex ms, mc, tm;
+
+  G4double s, phi, xi, G, psi;
 
   iMax = 50;
 
@@ -396,10 +404,11 @@ int main()
   for( i = 0; i < iMax; i++ )
   {
     energyMscXR = std::exp(i*0.2)*0.1*MeV;
-    /*
     lincofXR = mscRad->GetPlateLinearPhotoAbs(energyMscXR);
     absorption = (1. - std::exp(-lincofXR*step))/lincofXR;
-
+ 
+    /*
+   
     numberMscXR  = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
     numberMGYXR  = mscRad->CalculateMscMigdalDiffdNdx(theDynamicParticle,energyMscXR);
     numberE146XR = mscRad->CalculateMscE146DiffdNdx(theDynamicParticle,energyMscXR);
@@ -423,6 +432,8 @@ int main()
            <<numberMGYXR<<" "<<"; E146XR =  "
            <<numberE146XR<<" "<<G4endl;
     writef <<energyMscXR/MeV<<"\t"<<numberMscXR<<"\t"<<numberMGYXR<<"\t"<<numberE146XR<<G4endl;
+
+    
     */
 
     mscRad->CalculateCorrectionTMGY(energyMscXR);
@@ -430,13 +441,36 @@ int main()
     ms = mscRad->CalculateMigdalS(energyMscXR);
     mc = mscRad->CalculateCorrectionMsc(energyMscXR);
     tmc = real(mc/tm);
+    
+
+    // sf = mscRad->SupressionFunction(kinEnergy, energyMscXR);
+
+     mscRad->CalcLPMFunctions(kinEnergy, energyMscXR);
+
+     s = mscRad->GetMigdalS();     
+     phi = mscRad->GetMigdalPhi();     
+     xi = mscRad->GetMigdalXi();     
+     psi = mscRad->GetMigdalPsi();     
+     G = mscRad->GetMigdalG();     
+     /*    
     G4cout <<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<imag(tm)
            <<"\t"<<real(ms)<<"\t"<<imag(ms)
-           <<"\t"<<real(mc)<<"\t"<<imag(mc)<<G4endl; 
-    writef<<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<real(mc)<<"\t"<<tmc<<G4endl;
+           <<"\t"<<real(mc)<<"\t"<<imag(mc)<<"\t"<<sf<<G4endl; 
+    writef<<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<real(mc)<<"\t"<<tmc<<"\t"<<sf<<G4endl;
+     */
+   
+
+    // G4cout <<energyMscXR/MeV<<"\t"<<sf<<G4endl;
+    // G4cout <<energyMscXR/MeV<<"\t"<<s<<G4endl;
+    // writef <<energyMscXR/MeV<<"\t"<<s<<G4endl;
+    // writef <<energyMscXR/MeV<<"\t"<<real(mc)<<G4endl;
+    // writef <<energyMscXR/MeV<<"\t"<<s<<G4endl;
+
+    G4cout <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<G4endl;
+    writef <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<G4endl;
+ 
   }
 
-  
 
   return 1;
 } // end of main
