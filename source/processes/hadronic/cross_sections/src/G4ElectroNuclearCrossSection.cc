@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.28 2008-01-17 10:07:11 vnivanch Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.29 2008-10-24 19:15:17 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -249,17 +249,17 @@ G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;
-  if(G4NucleiPropertiesTable::IsInTable(Z,A)) mT=G4NucleiProperties::GetNuclearMass(A,Z);
+  if(G4NucleiProperties::IsInStableTable(A,Z)) mT = G4NucleiProperties::GetNuclearMass(A,Z);
   // If it is not in the Table of Stable Nuclei, then the Threshold=inf
   else return infEn;              
   // ---------
   G4double mP= infEn;
   //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
-  if(Z&&G4NucleiPropertiesTable::IsInTable(Z-1,A-1)) mP=G4NucleiProperties::GetNuclearMass(A-1,Z-1);
+  if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1)) mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
   else return infEn;
   G4double mN= infEn;
   //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
-  if(N&&G4NucleiPropertiesTable::IsInTable(Z,A-1)) mN=G4NucleiProperties::GetNuclearMass(A-1,Z);
+  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z)) mN = G4NucleiProperties::GetNuclearMass(A-1,Z);
   else return infEn;
   G4double dP= mP+mProt-mT;
   G4double dN= mN+mNeut-mT;

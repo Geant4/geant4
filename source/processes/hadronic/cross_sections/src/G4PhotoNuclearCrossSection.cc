@@ -283,7 +283,7 @@ G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   // CHIPS - Direct GEANT
   //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
   G4double mT= 0.;
-  if(G4NucleiPropertiesTable::IsInTable(Z,A)) 
+  if(G4NucleiProperties::IsInStableTable(A,Z)) 
     mT=G4NucleiProperties::GetNuclearMass(A,Z);
   else
   {
@@ -296,7 +296,7 @@ G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   G4double mP= infEn;
   //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
 
-  if(Z && G4NucleiPropertiesTable::IsInTable(Z-1,A-1))
+  if(Z && G4NucleiProperties::IsInStableTable(A-1,Z-1))
   {
     mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
   }
@@ -309,7 +309,7 @@ G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   */
   G4double mN= infEn;
   //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
-  if(N&&G4NucleiPropertiesTable::IsInTable(Z,A-1)) 
+  if(N&&G4NucleiProperties::IsInStableTable(A-1,Z)) 
     mN=G4NucleiProperties::GetNuclearMass(A-1,Z);
   /*
   else
