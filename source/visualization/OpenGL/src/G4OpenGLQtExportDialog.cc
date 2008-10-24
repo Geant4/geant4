@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.cc,v 1.7 2008-03-10 16:57:04 lgarnier Exp $
+// $Id: G4OpenGLQtExportDialog.cc,v 1.8 2008-10-24 13:49:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//#define GEANT4_QT_DEBUG
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+%#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQtExportDialog.hh"
 

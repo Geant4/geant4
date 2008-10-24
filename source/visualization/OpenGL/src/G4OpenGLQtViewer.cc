@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.28 2008-10-15 12:41:21 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.29 2008-10-24 13:49:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,6 @@
 // 27/06/2003 : G.Barrand : implementation (at last !).
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
-//#define GEANT4_QT_DEBUG
 
 #include "G4OpenGLQtViewer.hh"
 
@@ -87,17 +85,7 @@ void G4OpenGLQtViewer::SetView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::SetView ++++++++++++++++++++\n");
-#endif
-  //   if(!fHDC) return;
-  //   if(!fHGLRC) return;
-  //   ::wglMakeCurrent(fHDC,fHGLRC);
-  //  fWindow->makeCurrent();
   G4OpenGLViewer::SetView ();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::SetView --------------------\n");
-#endif
 }
 
 /**
@@ -125,9 +113,6 @@ void G4OpenGLQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::ShowView  +++++++++++++++++++++\n");
-#endif
   if (!GLWindow) {
     G4cerr << "Visualization window not defined, please choose one before\n" << G4endl;
   } else {
@@ -136,17 +121,8 @@ void G4OpenGLQtViewer::ShowView (
 #else
     GLWindow->activateWindow();
 #endif
-#ifdef GEANT4_QT_DEBUG
-    printf("G4OpenGLQtViewer::ShowView -----------------------\n");
-#endif
   }
   glFlush ();
-  //   // Empty the Windows message queue :
-  //   MSG event;
-  //   while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
-  //     ::TranslateMessage(&event);
-  //     ::DispatchMessage (&event);
-  //   }
 }
 
 
@@ -157,7 +133,7 @@ void G4OpenGLQtViewer::CreateGLQtContext (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateGLQtContext \n");
 #endif
 }
@@ -173,7 +149,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
 #endif
 
@@ -218,13 +194,13 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #endif
 
     if (found==false) {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
       GLWindow = new QDialog();
     }
   } else {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     GLWindow = new QDialog();
@@ -262,7 +238,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     WinSize_y = fVP.GetWindowSizeHintY ();
 
   if(!fWindow) return;
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
 #endif
 
@@ -275,9 +251,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
 /**  Close the dialog and set the pointer to NULL
  */
 // void G4OpenGLQtViewer::dialogClosed() {
-// #ifdef GEANT4_QT_DEBUG
-//   printf("G4OpenGLQtViewer::dialogClosed END\n");
-// #endif
 //   //  GLWindow = NULL;
 // }
 #endif
@@ -327,7 +300,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 
   fLastEventTime = new QTime();
 
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
@@ -342,10 +315,6 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
   G4cout <<removeTempFolder().ascii() <<G4endl;
 #else
   G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
-#endif
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::~G4OpenGLQtViewer \n");
 #endif
 }
 
@@ -576,16 +545,10 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   } else {
     mDrawing->clear();
   }
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer:: fDrawingWireframe 1\n");
-#endif
   QObject ::connect(fDrawingWireframe, 
                     SIGNAL(activated()),
                     this, 
                     SLOT(actionDrawingWireframe()));
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer:: fDrawingWireframe 2\n");
-#endif
   QObject ::connect(fDrawingLineRemoval, 
                     SIGNAL(activated()),
                     this, 
@@ -947,9 +910,6 @@ void G4OpenGLQtViewer::actionMouseMove() {
    Slot activate when mouseAction->zoom menu is set 
  */
 void G4OpenGLQtViewer::actionMousePick() {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionMousePick \n");
-#endif
   emit toggleMouseAction(STYLE3);
 }
 
@@ -1467,18 +1427,11 @@ void G4OpenGLQtViewer::actionSaveImage() {
     return;
   }
   
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionSaveImage() \n");
-#endif
 }
 
 
 void G4OpenGLQtViewer::actionMovieParameters() {
-
   showMovieParametersDialog();
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::actionMovieParameters() \n");
-#endif
 }
 
 
@@ -1540,15 +1493,9 @@ void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
 */
 void G4OpenGLQtViewer::G4MouseReleaseEvent()
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::mouseRealease() %d,%d  %d,%d  %d,%d\n",fLastPos1.x(),fLastPos1.y(),fLastPos2.x(),fLastPos2.y(),fLastPos3.x(),fLastPos3.y());
-#endif
   fSpinningDelay = fLastEventTime->elapsed();
   QPoint delta = (fLastPos3-fLastPos1);
   if ((delta.x() == 0) && (delta.y() == 0)) {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::mouseRealease() EXIT 1 \n");
-#endif
     return;
   }
   if (fSpinningDelay < fLaunchSpinDelay ) {
@@ -1566,11 +1513,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
         }
         lastMoveTime.start();
         cycles = 1 ;
-        //      }
       ((QApplication*)G4Qt::getInstance ())->processEvents();
-#ifdef GEANT4_QT_DEBUG
-        printf("G4OpenGLQtViewer::mouseRealease() cycle :%d \n",lastMoveTime.elapsed());
-#endif
       cycles ++ ;
     }
   }
@@ -1707,9 +1650,6 @@ void G4OpenGLQtViewer::rescaleImage(
  int aWidth
 ,int aHeight
 ){
-#ifdef GEANT4_QT_DEBUG
-  printf("should rescale \n");
-#endif
   //  GLfloat* feedback_buffer;
   //  GLint returned;
   //  FILE* file;
@@ -1790,9 +1730,6 @@ bool G4OpenGLQtViewer::generateEPS (
 )
 {
   // FIXME
-#ifdef GEANT4_QT_DEBUG
-  printf("saving EPS\n");
-#endif
 
   FILE* fp;
 
@@ -1993,10 +1930,6 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
 {
   fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(event->delta())/1200)); 
   updateQWidget();
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLQtViewer::wheel event  +++++++++++++++++++++ %f %d\n",fVP.GetZoomFactor(),event->delta());
-#endif
 }
 
 

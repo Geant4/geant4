@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.40 2008-10-02 08:56:46 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.41 2008-10-24 13:49:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,6 @@
 // OpenGL view - opens window, hard copy, etc.
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
-
-//#define GEANT4_QT_DEBUG
 
 #include "G4ios.hh"
 #include "G4OpenGLViewer.hh"
@@ -941,15 +939,6 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   const G4Point3D cameraPosition =
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
 
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLViewer:: %f %f %f Tp: %f %f %f Vpd:%f %f %f - Up:%f %f %f Cp:%f %f %f\n",
-         dx,dy,deltaRotation,targetPoint[0],targetPoint[1],targetPoint[2],
-         vp.x(),vp.y(),vp.z(),
-         up.x(),up.y(),up.z(),
-         cameraPosition[0],cameraPosition[1],cameraPosition[2]);
-#endif
-
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();
     if (new_vp.z()*vp.z() <0) {
@@ -958,11 +947,7 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   } else {
     new_up = up;
     if (new_vp.z()*vp.z() <0) {
-#ifdef GEANT4_QT_DEBUG
-      //            printf("G4OpenGLViewer:: ***********************************************************\n");
-#endif
       new_up.set(new_up.x(),-new_up.y(),new_up.z());
-      //      new_vp.set(-new_vp.x(),new_vp.y(),new_vp.z());
     }
   }
   fVP.SetUpVector(new_up);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.5 2008-10-15 10:24:04 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.6 2008-10-24 13:49:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,44 +52,26 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 }
 
 G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::~GLWidget \n");
-#endif
      makeCurrent();
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::~GLWidget END\n");
-#endif
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
-#ifdef GEANT4_QT_DEBUG
-   printf("GLWidget::Initialise \n");
-#endif
-#ifdef GEANT4_QT_DEBUG
-   printf("readyToPaint = false \n");
+#ifdef G4DEBUG
+   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
    readyToPaint = false;
    CreateGLQtContext ();
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLImmediateQtViewer::Initialise () 2\n");
-#endif
 
    CreateMainWindow (this,QString(fName));
-#ifdef GEANT4_QT_DEBUG
-  printf("G4OpenGLImmediateQtViewer::Initialise () 3\n");
-#endif
 
   CreateFontLists ();  // FIXME Does nothing!
   
-#ifdef GEANT4_QT_DEBUG
-  printf("readyToPaint = true \n");
-#endif
   readyToPaint = true;
   
   // First Draw
   SetView();
-#ifdef GEANT4_QT_DEBUG
-  printf("    ClearView\n");
+#ifdef G4DEBUG
+  printf("G4OpenGLImmediateQtViewer::Initialise    ClearView\n");
 #endif
   ClearView (); //ok, put the background correct
   ShowView();
@@ -100,8 +82,8 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
    InitializeGLView ();
 
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLImmediateQtViewer::InitialiseGL () 1\n");
+#ifdef G4DEBUG
+   printf("G4OpenGLImmediateQtViewer::InitialiseGL ()\n");
 #endif
 
    // If a double buffer context has been forced upon us, ignore the
@@ -109,7 +91,7 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
    glDrawBuffer (GL_FRONT); // FIXME : Ne marche pas avec cette ligne, mais affiche le run correctement...
    // clear the buffers and window.
    ClearView ();
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
    //   printf("G4OpenGLImmediateQtViewer::InitialiseGL () 2\n");
 #endif
    FinishView ();
@@ -119,15 +101,15 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
    glDepthFunc (GL_LEQUAL);
    glDepthMask (GL_TRUE);
 
-#ifdef GEANT4_QT_DEBUG
-   printf("G4OpenGLImmediateQtViewer::InitialiseGL  -------------------------------------------------------------------------------------\n");
+#ifdef G4DEBUG
+   printf("G4OpenGLImmediateQtViewer::InitialiseGL END\n");
 #endif
 }
 
 
 void G4OpenGLImmediateQtViewer::DrawView () {
 
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::DrawView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
 #endif
    // If a double buffer context has been forced upon us, ignore the
@@ -142,9 +124,6 @@ void G4OpenGLImmediateQtViewer::DrawView () {
 
    if(style!=G4ViewParameters::hlr &&
       haloing_enabled) {
-#ifdef GEANT4_QT_DEBUG
-     printf("G4OpenGLImmediateQtViewer::DrawView DANS LE IF\n");
-#endif
 
      HaloingFirstPass ();
      NeedKernelVisit ();
@@ -158,7 +137,7 @@ void G4OpenGLImmediateQtViewer::DrawView () {
    NeedKernelVisit ();  // Always need to visit G4 kernel.
    ProcessView ();
    FinishView ();
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::DrawView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
 #endif
   readyToPaint = false;
@@ -171,12 +150,12 @@ void G4OpenGLImmediateQtViewer::FinishView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::FinishView VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
 #endif
 
    glFlush ();
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::FinishView ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
 #endif
 
@@ -191,7 +170,7 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 ,int height)
 {  
   setupViewport(width,height);
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::resizeGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
 #endif
 }
@@ -208,7 +187,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
      return;
    }
    nbPaint++;
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
    printf("\n\nG4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV %d ready %d\n",nbPaint,readyToPaint);
 #endif
    WinSize_x = (G4int) width();
@@ -217,10 +196,10 @@ void G4OpenGLImmediateQtViewer::paintGL()
    setupViewport(width(),height());
 
    SetView();
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
 //   //  printf("before ClearView\n");
 #endif
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
    printf("    ClearView\n");
 #endif
    
@@ -229,7 +208,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
    readyToPaint = true; // could be set to false by DrawView
 
 
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
    printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %d ready %d\n\n\n",nbPaint,readyToPaint);
 #endif
  }
