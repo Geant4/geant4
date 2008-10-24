@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.20 2008-10-15 09:09:47 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.21 2008-10-24 13:23:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
-
-//#define GEANT4_QT_DEBUG
 
 #ifdef G4UI_BUILD_QT_SESSION
 
@@ -139,7 +137,7 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::Initialise after main window creation\n");
 #endif
 #if QT_VERSION < 0x040000
@@ -200,13 +198,6 @@ G4UIQt::G4UIQt (
   fCommandArea->setFocus(Qt::TabFocusReason);
 #endif
   fTextArea->setReadOnly(true);
-
-
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::   2\n");
-#endif
-
-
 
   layoutTop->addWidget(fTextArea);
   layoutTop->addWidget(clearButton);
@@ -305,9 +296,6 @@ G4UIsession* G4UIQt::SessionStart (
   exitSession = false;
 
 
-#ifdef GEANT4_QT_DEBUG
-  printf("disable secondary loop\n");
-#endif
   interactorManager->DisableSecondaryLoop (); // TO KEEP
   if ((QApplication*)interactorManager->GetMainInteractor())
     ((QApplication*)interactorManager->GetMainInteractor())->exec();
@@ -322,9 +310,6 @@ G4UIsession* G4UIQt::SessionStart (
   //   } // TO KEEP
 
   interactorManager->EnableSecondaryLoop ();
-#ifdef GEANT4_QT_DEBUG
-  printf("enable secondary loop\n");
-#endif
   return this;
 }
 
@@ -368,9 +353,6 @@ void G4UIQt::PauseSessionStart (
 {
   if (!aState) return;
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::PauseSessionStart\n");
-#endif
   if(aState=="G4_pause> ") {  // TO KEEP
     SecondaryLoop ("Pause, type continue to exit this state"); // TO KEEP
   } // TO KEEP
@@ -393,9 +375,6 @@ void G4UIQt::SecondaryLoop (
 {
   if (!aPrompt) return;
 
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::SecondaryLoop\n");
-#endif
   G4Qt* interactorManager = G4Qt::getInstance (); // TO KEEP ?
   Prompt(aPrompt); // TO KEEP
   exitPause = false; // TO KEEP
@@ -1004,7 +983,7 @@ G4bool G4UIQt::GetHelpChoice(
  G4int& aInt
 )
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
 #endif
   return true;
@@ -1016,7 +995,7 @@ G4bool G4UIQt::GetHelpChoice(
 void G4UIQt::ExitHelp(
 )
 {
-#ifdef GEANT4_QT_DEBUG
+#ifdef G4DEBUG
   printf("G4UIQt::ExitHelp SHOULD NEVER GO HERE");
 #endif
 }
@@ -1613,8 +1592,6 @@ QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
         doubleKeyAdd ++;
       }
       commandResultMap.insert(tmp*multFactor+doubleKeyAdd,QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()));
-#endif
-#ifdef GEANT4_QT_DEBUG
 #endif
     }
     

@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2008-10-15 09:09:47 lgarnier Exp $
+$Id: History,v 1.102 2008-10-24 13:23:22 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 October, Laurent Garnier
+ - Change GEANT4_QT_DEBUG flag by QTDEBUG
+ - Suppress unuseful DEBUG messages
 
 15 October, Laurent Garnier
  - Fix a problem on some linux with QApplication. But this is NOT the good way to do it...
