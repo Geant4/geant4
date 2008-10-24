@@ -25,12 +25,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpProcessSubType.hh,v 1.1 2008-10-24 16:57:03 vnivanch Exp $
+// $Id: G4OpProcessSubType.hh,v 1.2 2008-10-24 18:18:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
-// G4EmProcessSubType.hh
+// G4OpProcessSubType.hh
 //
 // Class Description:
 //   This is an enumerator to define sub-type of optical processes
