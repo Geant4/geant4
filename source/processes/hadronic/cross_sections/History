@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 October 2008 Dennis Wright (hadr-cross-V09-01-06)
+----------------------------------------------------
+- replace G4NucleiPropertiesTable::IsInTable with 
+  G4NucleiProperties::IsInStableTable for G4PhotoNuclearCrossSection
+  and G4ElectroNuclearCrossSection
+
 24 September 2008 Vladimir Ivantchenko (hadr-cross-V09-01-05)
 ------------------------------------------------------------
 - G4GlauberGribovCrossSection provides a smooth transition from 
