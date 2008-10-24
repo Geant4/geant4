@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th Oct 2008 Peter Gumplinger (op-V09-01-08)
+              use local G4OpProcessSubType.hh
+
 21st Oct 2008 Peter Gumplinger (op-V09-01-07)
               add SetProcessSubType for G4OpAbsorption, G4OpBoundaryProcess,
               G4OpRayleigh and G4OpWLS

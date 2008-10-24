@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.16 2008-10-22 00:28:07 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.17 2008-10-24 19:51:12 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4OpProcessSubType.hh"
 
 #include "G4OpRayleigh.hh"
 
@@ -78,7 +79,7 @@
 G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
 {
-        SetProcessSubType(33);
+        SetProcessSubType(fOpRayleigh);
 
         thePhysicsTable = 0;
 

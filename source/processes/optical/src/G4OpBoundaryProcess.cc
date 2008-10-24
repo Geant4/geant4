@@ -66,6 +66,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4OpProcessSubType.hh"
 
 #include "G4OpBoundaryProcess.hh"
 #include "G4GeometryTolerance.hh"
@@ -94,7 +95,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
            G4cout << GetProcessName() << " is created " << G4endl;
         }
 
-        SetProcessSubType(32);
+        SetProcessSubType(fOpBoundary);
 
 	theStatus = Undefined;
 	theModel = glisur;

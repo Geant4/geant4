@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc,v 1.8 2008-10-22 00:25:58 gum Exp $
+// $Id: G4OpAbsorption.cc,v 1.9 2008-10-24 19:52:28 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4OpProcessSubType.hh"
 
 #include "G4OpAbsorption.hh"
 
@@ -77,7 +78,7 @@ G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
            G4cout << GetProcessName() << " is created " << G4endl;
         }
 
-        SetProcessSubType(31);
+        SetProcessSubType(fOpAbsorption);
 }
 
 // G4OpAbsorption::G4OpAbsorption(const G4OpAbsorpton &right)
