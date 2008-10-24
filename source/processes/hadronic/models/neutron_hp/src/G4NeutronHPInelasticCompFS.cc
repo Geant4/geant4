@@ -34,10 +34,11 @@
 // 080717 bug fix of calculation of residual momentum by T. Koi
 // 080801 protect negative avalable energy by T. Koi
 //        introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
@@ -211,7 +212,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+    targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
                    G4Neutron::Neutron()->GetPDGMass();
 //    if(theEnergyAngData[i]!=0)
 //        targetMass = theEnergyAngData[i]->GetTargetMass();
@@ -228,7 +229,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4double residualMass=0;
     G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
     G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(residualZ+eps), static_cast<G4int>(residualA+eps)) ) /
+    residualMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualZ+eps), static_cast<G4int>(residualA+eps)) ) /
                      G4Neutron::Neutron()->GetPDGMass();
 
 // prepare energy in target rest frame

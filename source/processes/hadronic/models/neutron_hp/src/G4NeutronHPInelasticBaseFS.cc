@@ -29,10 +29,11 @@
 //
 // 080801 Give a warning message for irregular mass value in data file by T. Koi
 //        Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPInelasticBaseFS.hh"
 #include "G4Nucleus.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
@@ -59,8 +60,8 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
-       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
-       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
    theGammas.Init(theGammaData);
    //   delete aName;
 }
@@ -176,7 +177,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 // prepare target
   G4double targetMass;
   G4double eps = 0.0001;
-  targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+  targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
                G4Neutron::Neutron()->GetPDGMass();
   if(theEnergyAngData!=0)
      { targetMass = theEnergyAngData->GetTargetMass(); }
@@ -263,7 +264,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
       }
     }
     G4ReactionProduct * aHadron;
-    G4double localMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps)));
+    G4double localMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps)));
     G4ThreeVector bufferedDirection(0,0,0);
     for(i0=0; i0<nDef; i0++)
     {
@@ -299,7 +300,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
 	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
-	    G4double concreteMass = G4NucleiPropertiesTable::GetNuclearMass(z1, a1);
+	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(z1, a1);
 	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
 	    G4double emin = availableEnergy+m1+m2 - std::sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
@@ -365,10 +366,10 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
     G4double eBindProducts = 0;
     G4double eBindN = 0;
     G4double eBindP = 0;
-    G4double eBindD = G4NucleiPropertiesTable::GetBindingEnergy(1,2);
-    G4double eBindT = G4NucleiPropertiesTable::GetBindingEnergy(1,3);
-    G4double eBindHe3 = G4NucleiPropertiesTable::GetBindingEnergy(2,3);
-    G4double eBindA = G4NucleiPropertiesTable::GetBindingEnergy(2,4);
+    G4double eBindD = G4NucleiProperties::GetBindingEnergy(1,2);
+    G4double eBindT = G4NucleiProperties::GetBindingEnergy(1,3);
+    G4double eBindHe3 = G4NucleiProperties::GetBindingEnergy(2,3);
+    G4double eBindA = G4NucleiProperties::GetBindingEnergy(2,4);
     for(i=0; i<tmpHadrons->size(); i++)
     {
       if(tmpHadrons->operator[](i)->GetDefinition() == G4Neutron::Neutron())

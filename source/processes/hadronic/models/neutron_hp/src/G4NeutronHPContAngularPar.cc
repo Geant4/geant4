@@ -34,6 +34,7 @@
 // 080612 Fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #1
 // 080714 Limiting the sum of energy of secondary particles by T. Koi
 // 080801 Fix div0 error wiht G4FPE and memory leak by T. Koi
+// 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 
 #include "G4NeutronHPContAngularPar.hh"
@@ -48,7 +49,7 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4NeutronHPVector.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4NeutronHPKallbachMannSyst.hh"
 #include "G4ParticleTable.hh"
  
@@ -376,7 +377,7 @@
       G4int residualZ = targetZ-Z;
       G4double residualMass =  residualZ*G4Proton::Proton()->GetPDGMass();
                residualMass +=(residualA-residualZ)*G4Neutron::Neutron()->GetPDGMass();
-               residualMass -= G4NucleiPropertiesTable::GetBindingEnergy(residualZ, residualA);
+               residualMass -= G4NucleiProperties::GetBindingEnergy(residualZ, residualA);
       G4NeutronHPKallbachMannSyst theKallbach(compoundFraction,
                                               incidentEnergy, incidentMass,
                                               productEnergy, productMass,
