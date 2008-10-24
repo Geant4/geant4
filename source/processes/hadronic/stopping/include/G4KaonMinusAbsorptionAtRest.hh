@@ -46,7 +46,7 @@
 #include "G4Nucleus.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DynamicParticleVector.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4HadronicProcessType.hh"
 
 

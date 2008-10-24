@@ -37,7 +37,6 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4ParticleTypes.hh"
 #include "G4Nucleus.hh"
@@ -93,7 +92,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 	}
     }
 
-  G4double binding = G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ) ,static_cast<G4int>(_nucleusA)) / _nucleusA;
+  G4double binding = G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(_nucleusA) ,static_cast<G4int>(_nucleusZ)) / _nucleusA;
   G4double mass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(newA),static_cast<G4int>(newZ));
 
 
@@ -184,13 +183,14 @@ G4double G4PiMinusStopAbsorption::Energy()
       if ((*_absorptionProducts)[i]->GetDefinition() == G4Proton::Proton()) nP++;
     }
 
-  G4double productBinding = (G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ),static_cast<G4int>(_nucleusA)) / _nucleusA) * nAbsorptionProducts;
+  G4double productBinding = (G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(_nucleusA),static_cast<G4int>(_nucleusZ)) / _nucleusA) * nAbsorptionProducts;
   G4double mass = G4NucleiProperties::GetNuclearMass(_nucleusA - (nP + nN),_nucleusZ - nP);
   G4double pNucleus = pProducts.mag();
   G4double eNucleus = std::sqrt(pNucleus*pNucleus + mass*mass);
   G4double tNucleus = eNucleus - mass;
-  G4double temp = G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ - nP),static_cast<G4int>(_nucleusA - (nP + nN))) - 
-    G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(_nucleusZ),static_cast<G4int>(_nucleusA));
+  G4double temp = 
+    G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(_nucleusA - (nP + nN)),static_cast<G4int>(_nucleusZ - nP)) - 
+    G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(_nucleusA),static_cast<G4int>(_nucleusZ));
   energy = productEnergy + productBinding + tNucleus;
   
   if (_level > 0)
