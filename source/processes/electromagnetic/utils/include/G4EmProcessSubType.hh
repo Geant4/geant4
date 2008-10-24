@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.4 2008-10-16 14:31:04 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.5 2008-10-24 16:54:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -65,12 +65,7 @@ enum G4EmProcessSubType
   fCerenkov = 21,
   fScintillation = 22,
   fSynchrotronRadiation = 23,
-  fTransitionRadiation = 24,
-  
-  fOpAbsorption = 31,
-  fOpBoundary = 32,
-  fOpRayleigh = 33,
-  fOpWLS = 34
+  fTransitionRadiation = 24,  
 };
 
 #endif
