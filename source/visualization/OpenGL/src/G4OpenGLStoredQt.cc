@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQt.cc,v 1.8 2008-10-24 13:49:19 lgarnier Exp $
+// $Id: G4OpenGLStoredQt.cc,v 1.9 2008-10-24 14:21:34 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,10 +56,10 @@ G4VSceneHandler* G4OpenGLStoredQt::CreateSceneHandler
 }
 
 G4VViewer* G4OpenGLStoredQt::CreateViewer
+(G4VSceneHandler& scene, const G4String& name) {
 #ifdef G4DEBUG
   printf("G4OpenGLStoredQt::CreateViewer \n");
 #endif
-(G4VSceneHandler& scene, const G4String& name) {
   G4VViewer* pView =
     new G4OpenGLStoredQtViewer
     ((G4OpenGLStoredSceneHandler&) scene, name);
