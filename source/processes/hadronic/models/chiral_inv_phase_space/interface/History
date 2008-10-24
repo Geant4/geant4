@@ -12,6 +12,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Oct-2008 Dennis Wright (hadr-chips-inter-V09-01-09)
+------------------------------------------------------
+- replace G4NucleiPropertiesTable::IsInTable with 
+  G4NucleiProperties::IsInStableTable in G4QElectronNuclearCrossSection,
+  G4QMuonNuclearCrossSection, G4QPhotonNuclearCrossSection, 
+  G4QTauNuclearCrossSection
+
  2-Oct-2008 Dennis Wright (hadr-chips-inter-V09-01-08)
 ------------------------------------------------------
 - change process type integer from 15 to fHadronAtRest for 
