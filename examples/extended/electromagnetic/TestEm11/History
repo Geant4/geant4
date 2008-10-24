@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2008-09-22 15:11:34 maire Exp $
+$Id: History,v 1.25 2008-10-24 16:12:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+24-10-08 mma (testem11-V09-01-05)
+- update PhysListEmStandard and README
      
 22-09-08 mma (testem11-V09-01-04)
 - HistoManager : root format by default
