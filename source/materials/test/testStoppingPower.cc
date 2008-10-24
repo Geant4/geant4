@@ -34,9 +34,9 @@
 // TESTTARGET should be gived, please look GNUmakefile
 
 
-#include "G4MaterialStopping.hh"
-#include "G4SimpleMaterialStopping.hh"
-#include "G4IronStopping.hh"
+#include "G4MaterialStoppingICRU73.hh"
+#include "G4SimpleMaterialStoppingICRU73.hh"
+#include "G4IronStoppingICRU73.hh"
 
 int main(){  
 
@@ -52,14 +52,14 @@ G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  G4MaterialStopping mS;
+  G4MaterialStoppingICRU73 mS;
   G4double dedx = mS.GetDEDX(3,0,.025*MeV*6.941);
   G4String matN = mS.GetMaterialName(0);
   G4double dens = mS.GetDensity(0);
   G4cout << "DEDX for Z=3 in " << matN << " is "<< dedx*mm/MeV << " MeV/mm,    " 
   << dedx*gram/(1000*dens*MeV*cm2) << " MeV/g/cm2 " << G4endl;
 
-  G4SimpleMaterialStopping mS1;
+  G4SimpleMaterialStoppingICRU73 mS1;
   G4double dedx1 = mS1.GetDEDX(4,1,.025*MeV*6.941);
   G4String matN1 = mS1.GetMaterialName(1);
   G4double dens1 = mS1.GetDensity(1);
@@ -67,7 +67,7 @@ G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","
 	 << dedx1*gram/(1000*dens1*MeV*cm2) << " MeV/g/cm2 " << G4endl;
    
      
-  G4IronStopping mS2;
+  G4IronStoppingICRU73 mS2;
   G4double dedx2 = mS2.GetDEDX(4,.025*MeV*55.847);
   G4String matN2 = mS2.GetMaterialName(4);
   G4double dens2 = mS2.GetDensity(4);

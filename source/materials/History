@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2008-10-20 09:06:49 vnivanch Exp $
+$Id: History,v 1.129 2008-10-24 16:49:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-08 V.Ivanchenko (materials-V09-01-17)
+G4IronStoppingICRU73, G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73
+ - renamed ICRU'73 data classes; Get methods are inlined
 
 20-10-08 V.Ivanchenko (materials-V09-01-16)
 G4IronStopping, G4MaterialStopping, G4SimpleMaterialStopping - added 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStopping.cc,v 1.1 2008-10-20 09:06:49 vnivanch Exp $
+// $Id: G4MaterialStoppingICRU73.cc,v 1.1 2008-10-24 16:49:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -40,12 +40,12 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4MaterialStopping.hh"
+#include "G4MaterialStoppingICRU73.hh"
 #include "G4LPhysicsFreeVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MaterialStopping::G4MaterialStopping(G4bool splineFlag) 
+G4MaterialStoppingICRU73::G4MaterialStoppingICRU73(G4bool splineFlag) 
 {
   spline = splineFlag;
   Initialise();
@@ -53,13 +53,13 @@ G4MaterialStopping::G4MaterialStopping(G4bool splineFlag)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MaterialStopping::~G4MaterialStopping()
+G4MaterialStoppingICRU73::~G4MaterialStoppingICRU73()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MaterialStopping::GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy)
+G4double G4MaterialStoppingICRU73::GetDEDX(G4int ionZ, G4int idxMaterial, 
+					   G4double kinEnergy)
 {
   G4double res = 0.0;
   if(ionZ < 3 || ionZ > 18 || idxMaterial < 0 || idxMaterial > 30) return res; 
@@ -77,63 +77,8 @@ G4MaterialStopping::GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MaterialStopping::GetDEDX(G4int ionZ, const G4String& NameMaterial, 
-			    G4double kinEnergy)
-{
-  return GetDEDX(ionZ, GetMaterialIndex(NameMaterial), kinEnergy);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int
-G4MaterialStopping::GetMaterialIndex(const G4String& NameMaterial)
-{
-  for (G4int idx=0; idx<31; idx++){
-    if(MatName[idx] == NameMaterial) return idx;
-  }
-  return -1;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double 
-G4MaterialStopping::GetDensity(G4int idxMaterial)
-{
-  if( idxMaterial < 0 || idxMaterial > 30) return 0.0;
-  return Density[idxMaterial];
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4String G4MaterialStopping::GetMaterialName(G4int idxMaterial)
-{
-  G4String s = "";
-  if( idxMaterial < 0 || idxMaterial > 30) return s;
-  return MatName[idxMaterial];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4PhysicsVector* 
-G4MaterialStopping::GetPhysicsVector(G4int ionZ, G4int idxMaterial)
-{
-  if(ionZ < 3 || ionZ > 18 || idxMaterial < 0 || idxMaterial > 30) return 0; 
-  G4int idx = idxMaterial*16 + ionZ - 3;
-  return dedx[idx];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4PhysicsVector* 
-G4MaterialStopping::GetPhysicsVector(G4int ionZ, const G4String& NameMaterial)
-{
-  return GetPhysicsVector(ionZ, GetMaterialIndex(NameMaterial));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MaterialStopping::AddData(G4double* energy, G4double* stoppower, 
-				 G4double factor)
+void G4MaterialStoppingICRU73::AddData(G4double* energy, G4double* stoppower, 
+				       G4double factor)
 {
   G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(31,energy[0],energy[30]);
   pv->SetSpline(spline);
@@ -145,7 +90,7 @@ void G4MaterialStopping::AddData(G4double* energy, G4double* stoppower,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MaterialStopping::Initialise()
+void G4MaterialStoppingICRU73::Initialise()
 {
 G4int i, j=0;
 dedx.reserve(16*31);

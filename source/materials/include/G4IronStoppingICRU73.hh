@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStopping.hh,v 1.1 2008-10-20 09:06:49 vnivanch Exp $
+// $Id: G4IronStoppingICRU73.hh,v 1.1 2008-10-24 16:49:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef G4IronStopping_h
-#define G4IronStopping_h 1
+#ifndef G4IronStoppingICRU73_h
+#define G4IronStoppingICRU73_h 1
 
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4IronStopping
+// ClassName:   G4IronStoppingICRU73
 //
 // Description: Data on stopping powers for light ions in compounds
 //
@@ -53,27 +53,27 @@
 #include "G4LPhysicsFreeVector.hh"
 #include <vector>
 
-class G4IronStopping
+class G4IronStoppingICRU73
 {
 public:
 
-  G4IronStopping(G4bool splineFlag = true);
+  G4IronStoppingICRU73(G4bool splineFlag = true);
 
-  ~G4IronStopping();
+  ~G4IronStoppingICRU73();
 
   G4double GetDEDX(G4int idxMaterial, G4double kinEnergy);
 
-  G4double GetDEDX(const G4String& NameMaterial, G4double kinEnergy);
+  inline G4double GetDEDX(const G4String& NameMaterial, G4double kinEnergy);
 
-  G4int GetMaterialIndex(const G4String& NameMaterial);
+  inline G4int GetMaterialIndex(const G4String& NameMaterial);
 
-  G4double GetDensity(G4int idx);
+  inline G4double GetDensity(G4int idx);
 
-  G4String GetMaterialName(G4int idx);
+  inline G4String GetMaterialName(G4int idx);
 
-  G4PhysicsVector* GetPhysicsVector(G4int idx);
+  inline G4PhysicsVector* GetPhysicsVector(G4int idx);
 
-  G4PhysicsVector* GetPhysicsVector(const G4String& NameMaterial);
+  inline G4PhysicsVector* GetPhysicsVector(const G4String& NameMaterial);
 
 private:
 
@@ -82,8 +82,8 @@ private:
   void Initialise();
 
   // hide assignment operator
-  G4IronStopping & operator=(const  G4IronStopping &right);
-  G4IronStopping(const  G4IronStopping&);
+  G4IronStoppingICRU73 & operator=(const  G4IronStoppingICRU73 &right);
+  G4IronStoppingICRU73(const  G4IronStoppingICRU73&);
 
   G4bool spline;
   G4String MatName[16];
@@ -91,6 +91,58 @@ private:
 
   std::vector<G4LPhysicsFreeVector*>  dedx;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4IronStoppingICRU73::GetDEDX(const G4String& NameMaterial, 
+					      G4double kinEnergy)
+{
+  return GetDEDX(GetMaterialIndex(NameMaterial), kinEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int
+G4IronStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
+{
+  for (G4int idxMaterial=0; idxMaterial<16; idxMaterial++){
+    if(MatName[idxMaterial] == NameMaterial) return idxMaterial;
+  }
+  return -1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4IronStoppingICRU73::GetDensity(G4int idxMaterial)
+{
+  if( idxMaterial < 0 || idxMaterial > 15) return 0.0;
+  return Density[idxMaterial];
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4String G4IronStoppingICRU73::GetMaterialName(G4int idxMaterial)
+{
+  G4String s = "";
+  if( idxMaterial< 0 || idxMaterial> 15) return s;
+  return MatName[idxMaterial];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4PhysicsVector* G4IronStoppingICRU73::GetPhysicsVector(G4int idxMaterial)
+{
+  if(idxMaterial< 0 || idxMaterial> 15) return 0; 
+  return dedx[idxMaterial];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4PhysicsVector* 
+G4IronStoppingICRU73::GetPhysicsVector(const G4String& NameMaterial)
+{
+  return GetPhysicsVector(GetMaterialIndex(NameMaterial));
+}
 
 #endif
  
