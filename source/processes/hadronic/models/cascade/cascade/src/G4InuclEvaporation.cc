@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.7 2008-09-22 10:06:32 gcosmo Exp $
+// $Id: G4InuclEvaporation.cc,v 1.8 2008-10-24 20:49:07 dennis Exp $
 //
 #include <numeric>
 #include "G4IonTable.hh"
@@ -98,7 +98,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   G4double A = theNucleus.GetA();
   G4double Z = theNucleus.GetZ();
-  G4double mTar  = G4NucleiProperties::GetAtomicMass(A, Z); // Mass of the target nucleus
+  G4double mTar  = G4NucleiProperties::GetNuclearMass(A, Z); // Mass of the target nucleus
   G4LorentzVector tmp =theNucleus.GetMomentum();
 
   G4ThreeVector momentum = tmp.vect();
@@ -106,7 +106,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4double exitationE = theNucleus.GetExcitationEnergy();
 
   // Move to CMS frame, save initial velocity of the nucleus to boostToLab vector.
-  //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetAtomicMass( A, Z ) ) * momentum ); 
+  //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetNuclearMass( A, Z ) ) * momentum ); 
   G4InuclNuclei* tempNuc = new G4InuclNuclei(A, Z);
   G4double mass=tempNuc->getMass()*1000;
   G4ThreeVector boostToLab( ( 1/mass) * momentum ); 

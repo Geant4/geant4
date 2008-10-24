@@ -102,7 +102,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   nucleusMomentumVector = nucleus.GetMomentum();
 
   // Move to CMS frame, save initial velocity of the nucleus to boostToLab vector.
-  G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetAtomicMass( nucleusA, nucleusZ ) ) 
+  G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetNuclearMass( nucleusA, nucleusZ ) ) 
 			    * nucleusMomentumVector ); // xx mass ok?
 
   if ( verboseLevel >= 10 )
@@ -181,7 +181,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	  const G4int zRes = nucleusZ - pSelectedChannel->getParticleZ(); 
 	  const G4int aRes  = nucleusA - pSelectedChannel->getParticleA(); 
 	  // const G4double eBind = G4NucleiProperties::GetBindingEnergy( aRes, zRes );  // Binding energy of the nucleus.
-	  mRes  = G4NucleiProperties::GetAtomicMass( aRes, zRes ); // Mass of the target nucleus
+	  mRes  = G4NucleiProperties::GetNuclearMass( aRes, zRes ); // Mass of the target nucleus
 	  //      In HETC88:
 	  //   	  eBind = Z * (-0.78244) + A * 8.36755 - cameron ( A , Z );
 	  //  	  mRes =  zRes * 938.79304 + ( aRes - zRes ) * 939.57548 - eBind; 
