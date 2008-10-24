@@ -13,6 +13,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Oct-2008 Tatsumi Koi (hadr-qmd-V09-01-05)
+- Migrate to particles-V09-01-09 by T. Koi
+	src/G4QMDGroundStateNucleus.cc  
+	src/G4QMDNucleus.cc  
+
+
 12-Jun-2008 Tatsumi Koi (hadr-qmd-V09-01-04)
 - Delete unnecessary dependency and unused functions
   Change criterion of reaction by T. Koi
