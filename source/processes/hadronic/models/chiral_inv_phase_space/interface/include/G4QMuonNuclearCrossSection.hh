@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.hh,v 1.5 2006-12-01 10:57:46 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.hh,v 1.6 2008-10-24 19:23:25 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,6 @@
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4MuonPlus.hh"

@@ -40,7 +40,6 @@
 #include "G4Element.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4Electron.hh"
