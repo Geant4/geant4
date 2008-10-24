@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01RunAction.cc,v 1.3 2006-06-29 19:32:10 gunter Exp $
+// $Id: Tst01RunAction.cc,v 1.4 2008-10-24 15:24:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,12 +42,12 @@ Tst01RunAction::~Tst01RunAction()
 {
 }
 
-void Tst01RunAction::BeginOfRunAction(const G4Run* aRun)
+void Tst01RunAction::BeginOfRunAction(const G4Run* )
 {
   ftimer.Start();
 }
 
-void Tst01RunAction::EndOfRunAction(const G4Run* aRun)
+void Tst01RunAction::EndOfRunAction(const G4Run* )
 {
    ftimer.Stop();
    G4cout << ftimer <<G4endl;

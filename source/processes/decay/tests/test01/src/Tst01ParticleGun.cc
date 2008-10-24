@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01ParticleGun.cc,v 1.5 2007-05-07 10:12:29 kurasige Exp $
+// $Id: Tst01ParticleGun.cc,v 1.6 2008-10-24 15:24:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,6 +67,7 @@ Tst01ParticleGun::~Tst01ParticleGun()
 }
     
 Tst01ParticleGun::Tst01ParticleGun(const Tst01ParticleGun &right)
+  : G4ParticleGun()
 {
   *this = right;
 }
