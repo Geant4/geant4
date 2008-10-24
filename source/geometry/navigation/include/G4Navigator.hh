@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.26 2007-10-18 14:18:36 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.27 2008-10-24 14:00:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -180,7 +180,8 @@ class G4Navigator
     // by the geometry was taken in its entirety.
 
   virtual G4double ComputeSafety(const G4ThreeVector &globalpoint,
-                                 const G4double pProposedMaxLength = DBL_MAX);
+                                 const G4double pProposedMaxLength = DBL_MAX,
+                                 const G4bool keepState = false);
     // Calculate the isotropic distance to the nearest boundary from the
     // specified point in the global coordinate system. 
     // The globalpoint utilised must be within the current volume.

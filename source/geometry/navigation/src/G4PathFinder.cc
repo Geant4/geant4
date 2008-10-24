@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.59 2008-04-29 15:32:54 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.60 2008-10-24 14:00:03 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -756,11 +756,11 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
    G4double minSafety= kInfinity; 
   
    std::vector<G4Navigator*>::iterator pNavigatorIter;
-   pNavigatorIter= fpTransportManager-> GetActiveNavigatorsIterator();
+   pNavigatorIter= fpTransportManager->GetActiveNavigatorsIterator();
 
    for( register G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
-      G4double safety = (*pNavigatorIter)->ComputeSafety( position );
+      G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
       if( safety < minSafety ) { minSafety = safety; } 
       fNewSafetyComputed[num]= safety;
    } 
