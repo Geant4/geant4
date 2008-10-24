@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.14 2008-09-15 08:16:45 kaitanie Exp $
+$Id: History,v 1.15 2008-10-24 21:08:35 dennis Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,10 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+24 October 2008 - Dennis Wright (hadr-incl-V09-01-03)
+-----------------------------------------------------
+- use GetNuclearMass() instead of GetAtomicMass() in G4AblaEvaporation.cc
 
 12 September 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-02)
 ------------------------------------
