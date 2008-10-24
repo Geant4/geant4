@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.5 2008-10-24 16:54:17 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.6 2008-10-24 16:56:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 // Class Description:
 //   This is an enumerator to define sub-type of electro-magnetic
-//    and optical processes
+//   processes
 //
 // Creation date: 23.09.2008
 // Modifications:
@@ -46,8 +46,6 @@
 
 enum G4EmProcessSubType 
 { 
-  fSubTypeNotDefined = -1, 
-
   fCoulombScattering = 1, 
   fIonisation = 2, 
   fBremsstrahlung = 3, 
