@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2008-04-04 13:10:09 maire Exp $
+// $Id: PhysicsList.cc,v 1.3 2008-10-26 18:53:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -164,30 +164,37 @@ void PhysicsList::ConstructEM()
   
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  
-  //multiple scattering
+  // Main options and setting parameters are shown here.
+  // Several of them have default values.
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetSkin(3.);
+  G4EmProcessOptions emOptions;
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);    
-  emOptions.SetMaxEnergy(10*GeV);  
-  emOptions.SetDEDXBinning(800);  
-  emOptions.SetLambdaBinning(800);
-  
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(10*GeV);
+  emOptions.SetDEDXBinning(80);
+  emOptions.SetLambdaBinning(80);
+  emOptions.SetSplineFlag(true);	//default
+      
+  //multiple coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+  emOptions.SetMscRangeFactor(0.02);	//default
+  emOptions.SetMscGeomFactor (2.5);	//default       
+  emOptions.SetSkin(3.);		//default
+      
   //energy loss
-  //  
-  emOptions.SetStepFunction(0.2, 10*um);
-  emOptions.SetLinearLossLimit(1.e-6);
+  //
+  emOptions.SetStepFunction(0.2, 10*um);   
+  emOptions.SetLinearLossLimit(1.e-3);
+   
           
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(800);    
+  emOptions.SetDEDXBinningForCSDARange(80);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
