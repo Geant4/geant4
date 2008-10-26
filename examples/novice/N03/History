@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2008-05-07 09:56:53 allison Exp $
+$Id: History,v 1.121 2008-10-26 13:59:57 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-10-08 mma (exampleN03-V09-01-03)
+- Update PhysicsList for proton and ions
      
 07-05-08 J.Allison (exampleN03-V09-01-02)
 - Protected "/control/execute vis.mac" with G4VIS_USE flag.
