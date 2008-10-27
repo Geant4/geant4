@@ -1,4 +1,4 @@
-$Id: History,v 1.422 2008-10-23 17:55:47 vnivanch Exp $
+$Id: History,v 1.423 2008-10-27 10:25:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Septembetr 08: V.Ivant (emstand-V09-01-40)
+G4UrbanMscModel2 - extra protection for "UseDistanceToBoundary" option
+G4WentzelVIModel - fixed cross section factor for single scattering
 
 23 Septembetr 08: V.Ivant (emstand-V09-01-39)
 G4eCoulombScatteringModel and G4WentzelVIModel - added protection against
