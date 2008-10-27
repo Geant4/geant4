@@ -92,7 +92,7 @@ G4int G4QMDNucleus::GetAtomicNumber()
 G4double G4QMDNucleus::GetNuclearMass()
 {
 
-   G4double mass = G4NucleiProperties::GetNuclearMass( GetAtomicNumber() , GetMassNumber() );
+   G4double mass = G4NucleiProperties::GetNuclearMass( GetMassNumber() , GetAtomicNumber() );
    
    if ( mass == 0.0 )
    {

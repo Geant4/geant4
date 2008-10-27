@@ -120,7 +120,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
    //std::cout << "G4QMDGroundStateNucleus::packNucleons" << std::endl;
 
-   ebini = - ( G4NucleiProperties::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() ) ) / GetMassNumber();
+   ebini = - G4NucleiProperties::GetBindingEnergy( GetMassNumber() , GetAtomicNumber() ) / GetMassNumber();
 
    G4double ebin00 = ebini * 0.001;
 
