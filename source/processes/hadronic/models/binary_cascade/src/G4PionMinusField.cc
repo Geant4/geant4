@@ -36,7 +36,7 @@
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
 #include "G4PionMinusField.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4PionMinus.hh"
@@ -82,7 +82,7 @@ G4double G4PionMinusField::GetField(const G4ThreeVector & aPosition)
   G4double A = theNucleus->GetMassNumber();
   G4double Z = theNucleus->GetCharge();
   G4double pionMinusMass = G4PionMinus::PionMinus()->GetPDGMass();
-  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(G4lrint(Z), G4lrint(A));
+  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = pionMinusMass*nucleusMass/(pionMinusMass+nucleusMass);
 

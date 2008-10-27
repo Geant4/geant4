@@ -37,7 +37,7 @@
 // -------------------------------------------------------------------
 
 #include "G4KM_OpticalEqRhs.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4HadTmpUtil.hh"
 
@@ -55,7 +55,7 @@ void G4KM_OpticalEqRhs::SetFactor(G4double mass, G4double opticalParameter)
 {
   G4double A = theNucleus->GetMassNumber();
   G4double Z = theNucleus->GetCharge();
-  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(G4lrint(Z), G4lrint(A));
+  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = mass*nucleusMass/(mass+nucleusMass);
 
