@@ -63,8 +63,7 @@ public:
     G4Nucleus aNuc;
     G4double eps = 0.0001;
     G4double eleMass; 
-    eleMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
-  	       ) / G4Neutron::Neutron()->GetPDGMass();
+    eleMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theA+eps) , static_cast<G4int>(theZ+eps) ) ) / G4Neutron::Neutron()->GetPDGMass();
   
     G4ReactionProduct aThermalNuc = aNuc.GetBiasedThermalNucleus(eleMass, neuVelo, aT);
     

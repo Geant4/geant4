@@ -212,7 +212,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+    targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
                    G4Neutron::Neutron()->GetPDGMass();
 //    if(theEnergyAngData[i]!=0)
 //        targetMass = theEnergyAngData[i]->GetTargetMass();
@@ -229,7 +229,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     G4double residualMass=0;
     G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
     G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualZ+eps), static_cast<G4int>(residualA+eps)) ) /
+    residualMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualA+eps), static_cast<G4int>(residualZ+eps)) ) /
                      G4Neutron::Neutron()->GetPDGMass();
 
 // prepare energy in target rest frame

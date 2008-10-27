@@ -60,8 +60,8 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
-       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
-       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(AR+eps),static_cast<G4int>(ZR+eps)) -
+       G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps));
    theGammas.Init(theGammaData);
    //   delete aName;
 }
@@ -264,7 +264,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
       }
     }
     G4ReactionProduct * aHadron;
-    G4double localMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps)));
+    G4double localMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps)));
     G4ThreeVector bufferedDirection(0,0,0);
     for(i0=0; i0<nDef; i0++)
     {
@@ -300,7 +300,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
 	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
-	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(z1, a1);
+	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(a1, z1);
 	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
 	    G4double emin = availableEnergy+m1+m2 - std::sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
@@ -366,10 +366,10 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
     G4double eBindProducts = 0;
     G4double eBindN = 0;
     G4double eBindP = 0;
-    G4double eBindD = G4NucleiProperties::GetBindingEnergy(1,2);
-    G4double eBindT = G4NucleiProperties::GetBindingEnergy(1,3);
-    G4double eBindHe3 = G4NucleiProperties::GetBindingEnergy(2,3);
-    G4double eBindA = G4NucleiProperties::GetBindingEnergy(2,4);
+    G4double eBindD = G4NucleiProperties::GetBindingEnergy(2,1);
+    G4double eBindT = G4NucleiProperties::GetBindingEnergy(3,1);
+    G4double eBindHe3 = G4NucleiProperties::GetBindingEnergy(3,2);
+    G4double eBindA = G4NucleiProperties::GetBindingEnergy(4,2);
     for(i=0; i<tmpHadrons->size(); i++)
     {
       if(tmpHadrons->operator[](i)->GetDefinition() == G4Neutron::Neutron())

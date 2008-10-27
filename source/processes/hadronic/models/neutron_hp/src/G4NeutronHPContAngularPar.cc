@@ -377,7 +377,7 @@
       G4int residualZ = targetZ-Z;
       G4double residualMass =  residualZ*G4Proton::Proton()->GetPDGMass();
                residualMass +=(residualA-residualZ)*G4Neutron::Neutron()->GetPDGMass();
-               residualMass -= G4NucleiProperties::GetBindingEnergy(residualZ, residualA);
+               residualMass -= G4NucleiProperties::GetBindingEnergy( residualA , residualZ );
       G4NeutronHPKallbachMannSyst theKallbach(compoundFraction,
                                               incidentEnergy, incidentMass,
                                               productEnergy, productMass,
