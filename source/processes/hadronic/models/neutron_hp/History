@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-22)
+  Z,A to A,Z for functions of NucleiProperties 
+	G4NeutronHPThermalBoost.hh
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPCaptureFS.cc
+        G4NeutronHPContAngularPar.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPInelasticBaseFS.cc
+        G4NeutronHPInelasticCompFS.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
 24 October 2008 Tatsumi Koi (hadr-hpn-V09-01-21)
 - Migarate to "particles-V09-01-09"
 	G4NeutronHPThermalBoost.hh
