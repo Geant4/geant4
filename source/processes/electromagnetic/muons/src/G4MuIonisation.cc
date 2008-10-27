@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.56 2008-10-16 13:37:04 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.57 2008-10-27 10:55:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,9 +98,9 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 1*mm);
-  SetIntegral(true);
-  SetVerboseLevel(1);
+  //  SetStepFunction(0.2, 1*mm);
+  //SetIntegral(true);
+  //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
 }
 
