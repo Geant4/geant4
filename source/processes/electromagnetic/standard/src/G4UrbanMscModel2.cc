@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.15 2008-10-23 17:55:47 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.16 2008-10-27 07:49:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,6 +79,9 @@
 //
 // 23-10-08  bugfix in the screeningparameter of the single scattering part,
 //           some technical change in order to speed up the code (UpdateCache)
+//
+// 27-10-08  bugfix in ComputeTruePathLengthLimit (affects UseDistanceToBoundary
+//           stepping type only) (L.Urban)          
 
 // Class Description:
 //
@@ -539,7 +542,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       //     << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
 
       // shortcut
-      if((tPathLength < tlimit) && (tPathLength < presafety))
+      if((tPathLength < tlimit) && (tPathLength < presafety) &&
+         (smallstep >= skin) && (tPathLength < geomlimit-0.999*skindepth))
 	return tPathLength;   
 
       // step reduction near to boundary
