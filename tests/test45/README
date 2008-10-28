@@ -8,6 +8,7 @@
                      Author A.Ivantchenko
              
 The test is based on test44. The purpose of this test is to validate 
-thick target data for low-energy proton and ion beams stopped in 
-different tragets.
+data for low-energy proton and ion beams stopped in different THICK targets.
+
+$G4MY/test45 test45.in
 
