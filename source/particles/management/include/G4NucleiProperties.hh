@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.17 2008-10-23 13:34:59 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.18 2008-10-28 07:12:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,9 +73,11 @@ public:  // With Description
 
   // Give binding energy 
   static G4double GetBindingEnergy(const G4int A, const G4int Z);
+  static G4double GetBindingEnergy(const G4double A, const G4double Z);
 
   // Calculate Mass Excess of nucleus A,Z
   static G4double GetMassExcess(const G4int A, const G4int Z);
+  static G4double GetMassExcess(const G4double A, const G4double Z);
 
 private:
   // hidie methods to enforce using GetNuclearMass

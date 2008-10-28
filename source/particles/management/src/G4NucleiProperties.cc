@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.16 2008-10-23 13:34:59 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.17 2008-10-28 07:12:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,6 +159,13 @@ G4bool G4NucleiProperties::IsInStableTable(const G4double A, const G4double Z)
   }
 }
 
+G4double G4NucleiProperties::GetMassExcess(const G4double A, const G4double Z)
+{
+  G4int iA = G4int(A);
+  G4int iZ = G4int(Z);
+  return GetMassExcess(iA,iZ);
+}
+
 G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
 {
   if (A < 1 || Z < 0 || Z > A) {
@@ -209,6 +216,13 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
       return AtomicMass(A,Z);
     }
   }
+}
+
+G4double G4NucleiProperties::GetBindingEnergy(const G4double A, const G4double Z)
+{
+  G4int iA = G4int(A);
+  G4int iZ = G4int(Z);
+  return GetBindingEnergy(iA,iZ);
 }
 
 G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
