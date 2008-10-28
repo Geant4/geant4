@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.19 2008-07-15 14:02:06 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.20 2008-10-28 15:15:11 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,12 +72,13 @@ class G4ChordFinder
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
      
-      G4FieldTrack ApproxCurvePointS(const  G4FieldTrack&  curveAPointVelocity,
+      G4FieldTrack ApproxCurvePointS( const  G4FieldTrack&  curveAPointVelocity,
                                       const  G4FieldTrack&  curveBPointVelocity,
+				      const  G4FieldTrack&  ApproxCurveV,
                                       const  G4ThreeVector& currentEPoint,
                                       const  G4ThreeVector& currentFPoint,
                                       const  G4ThreeVector& PointG,
-                                             G4bool first,G4double      epsStep);
+                                             G4bool first,  G4double      epsStep);
  
       G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
                                      const  G4FieldTrack&  curveBPointVelocity,

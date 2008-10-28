@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.49 2008-07-15 14:02:06 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.50 2008-10-28 15:15:26 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -441,8 +441,9 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 //  While advancing towards S utilise eps_step 
 //  as a measure of the relative accuracy of each Step.
 G4FieldTrack
-G4ChordFinder::ApproxCurvePointS( const G4FieldTrack& CurveA_PointVelocity, 
-                                  const G4FieldTrack& CurveB_PointVelocity, 
+G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity, 
+                                  const G4FieldTrack&  CurveB_PointVelocity, 
+                                  const G4FieldTrack&  ApproxCurveV,
                                   const G4ThreeVector& CurrentE_Point,
                                   const G4ThreeVector& CurrentF_Point,
                                   const G4ThreeVector& PointG,
@@ -482,14 +483,19 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack& CurveA_PointVelocity,
    else{
          
       G4double test_step  =InvParabolic(xa,ya,xb,yb,xc,yc);
-      G4double curve=std::abs(EndPoint.GetCurveLength()-CurveB_PointVelocity.GetCurveLength());
-      G4double dist= (EndPoint.GetPosition()-Point_B).mag();
+      G4double curve;
+      if(first){
+        curve=std::abs(EndPoint.GetCurveLength()-ApproxCurveV.GetCurveLength());
+      }else{
+        curve=std::abs(EndPoint.GetCurveLength()-CurveB_PointVelocity.GetCurveLength());
+       }
+      
       if(test_step<=0) { test_step=0.1*xb;}
       if(test_step>=xb){ test_step=0.5*xb;}
-       
+      if(test_step>=curve){test_step=0.5*curve;} 
 
-      if(curve*(1.+eps_step)<dist){
-	test_step=0.5*dist;
+      if(curve*(1.+eps_step)<xb){//Simular to ReEstimate Step from G4VIntersectionLocator
+	 test_step=0.5*curve;
        }
 
        G4bool goodAdvance;
@@ -497,9 +503,10 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack& CurveA_PointVelocity,
              fIntgrDriver->AccurateAdvance(EndPoint,test_step, eps_step);
             //            ***************
       
-       #ifdef G4DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
+       // Printing Brent and Linear Approximation
         G4cout<<"G4ChordFinder:: test-step ShF="<<test_step<<"  EndPoint="<<EndPoint<<G4endl;
-      //    Test Track
+       //  Test Track
        G4FieldTrack TestTrack( CurveA_PointVelocity);
        TestTrack = ApproxCurvePointV( CurveA_PointVelocity, 
                                                   CurveB_PointVelocity, 
@@ -508,7 +515,8 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack& CurveA_PointVelocity,
        G4cout.precision(14);
        G4cout<<"G4ChordFinder:: BrentApprox="<<EndPoint<<G4endl;
        G4cout<<"G4ChordFinder::LinearApprox="<<TestTrack<<G4endl; 
-       #endif
+#endif
+
   }
 return EndPoint;
 }  
@@ -523,11 +531,7 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   //    if r=|AE|/|AB|, and s=true path lenght (AB)
   //    return the point that is r*s along the curve!
   /////////////////////////////
-  //
-  //2st implementation : Inverse Parabolic Extrapolation by D.C.Williams
-  //
-  //    Uses InvParabolic (xa,ya,xb,yb,xc,yc)
-
+ 
   G4FieldTrack    Current_PointVelocity = CurveA_PointVelocity; 
 
   G4ThreeVector  CurveA_Point= CurveA_PointVelocity.GetPosition();
@@ -565,7 +569,7 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
     // Take default corrective action: 
     //    -->  adjust the maximum curve length. 
     //  NOTE: this case only happens for relatively straight paths.
-    curve_length = ABdist; 
+    // curve_length = ABdist; 
   }
 
   G4double  new_st_length; 
@@ -614,8 +618,7 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   // of the integration Step, this could be re-used ...
    G4cout.precision(14);
       
-   //     G4cout<<"G4ChordFinder::LinearApprox="<<Current_PointVelocity<<G4endl; 
-  return Current_PointVelocity;
+ return Current_PointVelocity;
 }
 
 void
