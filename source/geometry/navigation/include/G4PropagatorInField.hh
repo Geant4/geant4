@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PropagatorInField.hh,v 1.14 2008-05-28 09:11:59 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
 //
@@ -53,6 +50,8 @@
 
 #include "G4FieldTrack.hh"
 #include "G4FieldManager.hh"
+#include "G4VIntersectionLocator.hh"
+
 class G4ChordFinder; 
 
 class G4Navigator;
@@ -65,7 +64,8 @@ class G4PropagatorInField
  public:  // with description
 
    G4PropagatorInField( G4Navigator    *theNavigator, 
-                        G4FieldManager *detectorFieldMgr );
+                        G4FieldManager *detectorFieldMgr,
+                        G4VIntersectionLocator *vLocator=0 );
   ~G4PropagatorInField();
 
    G4double ComputeStep( G4FieldTrack      &pFieldTrack,
@@ -179,36 +179,25 @@ class G4PropagatorInField
   inline G4bool GetUseSafetyForOptimization();
       // Toggle & view parameter for using safety to discard 
       //   unneccesary calls to navigator (thus 'optimising' performance)
-
- protected:  // with description
-
-   G4bool LocateIntersectionPoint( 
-        const  G4FieldTrack&       curveStartPointTangent,  //  A
-        const  G4FieldTrack&       curveEndPointTangent,    //  B
-        const  G4ThreeVector&      trialPoint,              //  E
-               G4FieldTrack&       intersectPointTangent,   // Output
-               G4bool&             recalculatedEndPoint);   // Out: 
-
-     // If such an intersection exists, this function 
-     // calculate the intersection point of the true path of the particle 
-     // with the surface of the current volume (or of one of its daughters). 
-     // (Should use lateral displacement as measure of convergence). 
-
-   G4bool IntersectChord( G4ThreeVector  StartPointA, 
-                          G4ThreeVector  EndPointB,
-                          G4double      &NewSafety,
-                          G4double      &LinearStepLength,
-                          G4ThreeVector &IntersectionPoint);
+  inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
+                                G4ThreeVector  EndPointB,
+                                G4double      &NewSafety,
+                                G4double      &LinearStepLength,
+                                G4ThreeVector &IntersectionPoint);
      // Intersect the chord from StartPointA to EndPointB
      // and return whether an intersection occurred
+     // NOTE : SAFETY IS CHANGED
 
-   G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
-                                    const G4FieldTrack &EstimtdEndStateB,
-                                          G4double      linearDistSq,
-                                          G4double      curveDist);
-     // Return new estimate for state after curveDist 
-     // starting from CurrentStateA,  to replace EstimtdEndStateB,
-     // (and report displacement -- if field is compiled verbose.)
+   public:  // without description
+
+   inline G4VIntersectionLocator*  GetIntersectionLocator();
+   inline void                     SetIntersectionLocator( 
+                                   G4VIntersectionLocator *pIntersectionLocator ); 
+   
+ 
+ protected:  // with description
+
+  
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
                                    G4double      decreaseFactor,
@@ -227,7 +216,7 @@ class G4PropagatorInField
      // The  Field Manager of the current volume (may be the one above.)
 
    G4Navigator   *fNavigator;
-
+  
    //  STATE information
    //  -----------------
 
@@ -269,19 +258,10 @@ class G4PropagatorInField
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
 
-  G4int maxNumberOfStepsForIntersection;
-  G4int maxNumberOfCallsToReIntegration;
-  G4int maxNumberOfCallsToReIntegration_depth;
-    //  Counters for Statistics about Location and ReIntegrations
-private:
+  G4VIntersectionLocator *fIntersectionLocator;
+  G4bool fAllocatedLocator;
+    // Used to Intersection Locator
 
-   static const G4int max_depth=4;
-   G4FieldTrack* ptrInterMedFT[max_depth+1];
-     // Used to store intermediate values of tracks in case of
-     // too slow progress
-private:
-   G4bool fUseBrentLocator;
-   
 private:
 
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;

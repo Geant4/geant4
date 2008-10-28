@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.11 2008-05-28 09:12:05 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------------------
@@ -267,13 +265,31 @@ G4Navigator* G4PropagatorInField::GetNavigatorForPropagating()
   return fNavigator;
 } 
 
-inline
-void G4PropagatorInField::SetBrentMethod(G4bool newLocator)
+inline 
+void G4PropagatorInField::
+SetIntersectionLocator( G4VIntersectionLocator *pIntersectionLocator )
 {
-  fUseBrentLocator=newLocator;
+  if(pIntersectionLocator)  { fIntersectionLocator= pIntersectionLocator; }
 }
+
 inline
-G4bool G4PropagatorInField::GetBrentMethod()
+G4VIntersectionLocator* G4PropagatorInField::GetIntersectionLocator()
 {
-  return fUseBrentLocator;
+  return fIntersectionLocator;
+} 
+
+inline G4bool
+G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
+                                     G4ThreeVector  EndPointB,
+                                     G4double      &NewSafety,
+                                     G4double      &LinearStepLength,
+                                     G4ThreeVector &IntersectionPoint
+                                   )
+{
+  // Calculate the direction and length of the chord AB
+  return fIntersectionLocator->IntersectChord(StartPointA,EndPointB,NewSafety,
+       fPreviousSafety,fPreviousSftOrigin,LinearStepLength,IntersectionPoint);
+ 
 }
+
+
