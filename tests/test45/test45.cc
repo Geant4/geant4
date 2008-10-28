@@ -24,18 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: test44.cc,v 1.9 2008/03/11 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
-//      GEANT4 test44
+//      GEANT4 test45
 //
 //  Application demonstrating Geant4 hadronic physics:
-//  beam interaction with a target
+//  beam interaction with a thick target
 //
-//  Authors: 
+//  Authors: Ivanchenko
 //
-//  Modified: 
+//  Modified: Sept 2008
 //
 // -------------------------------------------------------------
 //
