@@ -1,0 +1,14 @@
+$Id: README,v 1.1 2008-10-28 23:10:56 tkoi Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test61
+                            ------
+
+Testing the G4QMD
+in a simple setup.
+Target materials include H, H2O,  Si, U
+

@@ -1,0 +1,1217 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-01-ref-08    (4-July-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+SimpleBox is now made of U
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+userDetector->Construct() start.
+SLog is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+Thank you for using G4BinaryCascade. 
+physicsList->setCut() start.
+Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
+/gun/direction 1 0 0
+#/tracking/verbose 1
+#
+# C(12,6)++ at 1 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
+============================================================================================
+/gun/energy 12.0 GeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 4
+
+conv:   tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+
+compt:   tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:   tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 4
+  User=69s Real=69s Sys=0s
+#
+# C(12,6)++ at 1 GeV/nucleon on H
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 12.0 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 16
+
+conv:   tables are built for  gamma
+      Lambda tables from 1 MeV to 1e+02 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+
+compt:   tables are built for  gamma
+      Lambda tables from 1e+02 eV  to 1e+02 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:   tables are built for  e+
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   1e+02 TeV
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   1e+02 TeV
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.1 MeV
+          BetheBloch :     Emin=        1.1 MeV        Emax=   1e+02 TeV
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.1 MeV
+          BetheBloch :     Emin=        1.1 MeV        Emax=   1e+02 TeV
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2e+02 keV
+          BetheBloch :     Emin=      2e+02 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   1e+02 TeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2e+02 keV
+          BetheBloch :     Emin=      2e+02 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   1e+02 TeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   3e+02 keV
+          BetheBloch :     Emin=      3e+02 keV        Emax=   1e+02 TeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins
+      Lambda tables from threshold to 1e+02 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   3e+02 keV
+          BetheBloch :     Emin=      3e+02 keV        Emax=   1e+02 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : H 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 16
+  User=0.04s Real=0.04s Sys=0s
+#
+# C(12,6)++ at 1 GeV/nucleon on Silicon
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 12.0 GeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 16
+
+conv:   tables are built for  gamma
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+
+compt:   tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:   tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 16
+  User=12.04s Real=12.09s Sys=0.02s
+#
+# C(12,6)++ at 1 GeV/nucleon on Water
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 12.0 GeV
+/mydet/SelectMaterial H2O
+SimpleBox is now made of H2O
+/run/beamOn 16
+
+conv:   tables are built for  gamma
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+
+compt:   tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:   tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Water 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 16
+  User=8.42s Real=8.42s Sys=0s
+#
+#
+# C(12,6)++ at 200 MeV in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 2400 MeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 4
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 4
+  User=0s Real=0s Sys=0s
+#
+# C(12,6)++ at 200 MeV/nucleon on H
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 2400 MeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 16
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : H 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 16
+  User=0.03s Real=0.03s Sys=0s
+#
+# C(12,6)++ at 200 MeV/nucleon on Silicon
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 2400 MeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 16
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 16
+  User=1.02s Real=1.02s Sys=0s
+#
+# .....end C(12,6)++............
+#
+# beyond what we really can do.... we think.
+# Fe(56,26) charge 26 at 1 GeV/n in Lead
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 56.0 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 4
+
+conv:   tables are built for  gamma
+      Lambda tables from 1.0219981 MeV to 100 GeV in 100 bins, spline: 0
+      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+
+compt:   tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+
+phot:   tables are built for  gamma
+      Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+
+annihil:   tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      Sampling according eplus2gg model
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for GenericIon
+      LateralDisplacementFlag=  0   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+hIoni:   tables are built for  kaon-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.0523107 MeV
+          BetheBloch :     Emin=  1.0523107 MeV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      Theoretical model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+      LateralDisplacementFlag=  1   Skin= 3
+      Model <UrbanMscUni>, RangeFactor= 0.02, Step limit type 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.50425 keV
+          BetheBloch :     Emin=  297.50425 keV        Emax=   100 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Lead 
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : H
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 990 eV     e- 708.90956 keV    e+ 683.20614 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 1.0114457 GeV    e+ 962.84668 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 834.15882 keV    e- 317.96904 MeV    e+ 302.69093 MeV
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.8802232e+295 J      e- 2.8802232e+295 J      e+ 2.8802232e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 4
+  User=80.8s Real=80.89s Sys=0.03s
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
