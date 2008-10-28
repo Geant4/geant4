@@ -177,7 +177,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 // prepare target
   G4double targetMass;
   G4double eps = 0.0001;
-  targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
+  targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
                G4Neutron::Neutron()->GetPDGMass();
   if(theEnergyAngData!=0)
      { targetMass = theEnergyAngData->GetTargetMass(); }
