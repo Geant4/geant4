@@ -13,6 +13,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-23)
+  Z,A to A,Z for functions of NucleiProperties 
+	recommit and re tag hadr-hpn-V09-01-22 
 
 27 October 2008 Tatsumi Koi (hadr-hpn-V09-01-22)
   Z,A to A,Z for functions of NucleiProperties 
