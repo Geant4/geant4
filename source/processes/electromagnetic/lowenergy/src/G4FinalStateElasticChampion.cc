@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.2 2008-08-20 15:06:46 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.3 2008-10-29 11:31:44 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -233,20 +233,31 @@ G4double G4FinalStateElasticChampion::QuadInterpolator(G4double e11, G4double e1
 G4double G4FinalStateElasticChampion::RandomizeCosTheta(G4double k) 
 {
 
- G4double oneOverMax = 1./DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,0.); 
-  
- G4double cosTheta;
- G4double fCosTheta;
-
- do 
- { 
-   cosTheta = 2. * G4UniformRand() - 1.;
-
-   // Calculate here fcosTheta = dSigma/dOmega
-   fCosTheta = DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,std::acos(cosTheta)/deg);
-   fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
+ G4double cosTheta = -1;
+ G4double cumul = 0;
+ G4double value = 0;
+ 
+ // Number of integration steps in the 0-180 deg range
+ G4int iMax=180;
+ 
+ G4double random = G4UniformRand();
+ 
+ // Cumulate differential cross section
+ for (G4int i=0; i<iMax; i++) 
+ {
+   cumul = cumul + DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,G4double(i)*180./(iMax-1));
  }
- while (fCosTheta < G4UniformRand());
+ 
+ // Select theta angle
+ for (G4int i=0; i<iMax; i++) 
+ {
+   value = value + DifferentialCrossSection(G4Electron::ElectronDefinition(),k/eV,G4double(i)*180./(iMax-1)) / cumul;
+   if (random < value) 
+   {
+     cosTheta=std::cos( deg*G4double(i)*180./(iMax-1) ); 
+     break;
+   } 
+ } 
 
  return cosTheta;
 }
