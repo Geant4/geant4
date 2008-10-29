@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2008-09-12 16:12:39 gcosmo Exp $
+$Id: History,v 1.132 2008-10-29 14:18:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October, 28th, 2008   T.Nikitina - field-V09-01-03
+--------------------------------
+- Added 'ApproxCurveV' to method G4ChordFinder::ApproxCurvePointS() in 
+  order to better calculate the curve length.
+- Some code cleanup.
+
+September, 18th, 2008   T.Nikitina
+----------------------------------
+- Added new stepper class G4ConstRK4, performing integration of one step
+  with error calculation in constant magnetic field; implementation derived
+  from G4ClassicalRK4.
 
 July, 15th, 2008   J.Apostolakis - field-V09-01-02
 --------------------------------
