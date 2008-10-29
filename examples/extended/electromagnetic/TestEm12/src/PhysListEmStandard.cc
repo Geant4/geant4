@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.4 2008-10-26 18:19:11 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.5 2008-10-29 19:03:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +103,7 @@ void PhysListEmStandard::ConstructProcess()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);       
@@ -112,7 +112,7 @@ void PhysListEmStandard::ConstructProcess()
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton  
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
@@ -139,30 +139,30 @@ void PhysListEmStandard::ConstructProcess()
   // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
-  
+
   //physics tables
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(60);		//default  
-  emOptions.SetLambdaBinning(60);	//default
+  emOptions.SetDEDXBinning(120);
+  emOptions.SetLambdaBinning(120);
   emOptions.SetSplineFlag(true);	//default
-      
+   
   //multiple coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetMscRangeFactor(0.02);	//default
+  emOptions.SetMscRangeFactor(0.04);	//default
   emOptions.SetMscGeomFactor (2.5);	//default       
   emOptions.SetSkin(3.);		//default
-      
+   
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 100*um);   
-  emOptions.SetLinearLossLimit(1.e-3);
-   
+  emOptions.SetLinearLossLimit(1.e-2);	//default
+
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default  
+  emOptions.SetSubCutoff(false);	//default
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

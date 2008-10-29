@@ -13,13 +13,13 @@ set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
 
 title 'e- 1 MeV in water : Dose Point Kernel'
 *
-h/file 1 1mev.hbook
+h/file 1 1mevnopt.hbook
 *
 opt grid
 *
 set dmod 1 ; set hcol 4 ; set plci 4
 h/pl //lun1/8
-key 0.2 0.65  1 'G4-9.1-ref-00' ! l
+key 0.2 0.65  1 'G4-9.1-ref-08++' ! l
 atitle 'r/r0'  'DPK'
 
 * *** data
