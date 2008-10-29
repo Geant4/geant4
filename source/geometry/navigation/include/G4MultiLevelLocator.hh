@@ -23,64 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class description:
+//
+// $Id: G4MultiLevelLocator.hh,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// Class G4MultiLevelLocator 
+//
+// class description:
 // 
-// Calculation of Intersection Point with a boundary 
-// when PropagationInField is used.
-// Derived from method LocateIntersectionPoint(...) from G4PropagatorInField
-// It is based on Linear Method for Finding Intersection Point with
-// a 'depth' algorithm in case of slow progress.(Intersection is not found
-// after 10 trials)
-//
-//
+// Implementing the calculation of the intersection point with a boundary when
+// PropagationInField is used. Derived from method LocateIntersectionPoint()
+// from G4PropagatorInField, it is based on a linear method for finding the
+// intersection point by means of a 'depth' algorithm in case of slow progress
+// (intersection is not found after 100 trials).
+
 // History:
 // -------
-// 27.10.08  Tatiana Nikitina  derived from LocateIntersectionPoint(...) from 
-//                             G4PropagatorInField class
-//
+// 27.10.08 - Tatiana Nikitina: Derived from LocateIntersectionPoint() from 
+//                              G4PropagatorInField class
+// ---------------------------------------------------------------------------
+
 #ifndef G4MULTILEVELLOCATOR_HH
 #define G4MULTILEVELLOCATOR_HH
 
 #include "G4VIntersectionLocator.hh"
 
-class G4MultiLevelLocator:public G4VIntersectionLocator
- {
+class G4MultiLevelLocator : public G4VIntersectionLocator
+{
    public:  // with description 
  
      G4MultiLevelLocator(G4Navigator *theNavigator);
         // Constructor
      ~G4MultiLevelLocator();
-        // Default destructor.
+        // Default destructor
      
      G4bool EstimateIntersectionPoint( 
-         const  G4FieldTrack&       curveStartPointTangent,  //  A
-         const  G4FieldTrack&       curveEndPointTangent,    //  B
-         const  G4ThreeVector&      trialPoint,              //  E
+         const  G4FieldTrack&       curveStartPointTangent,  // A
+         const  G4FieldTrack&       curveEndPointTangent,    // B
+         const  G4ThreeVector&      trialPoint,              // E
                 G4FieldTrack&       intersectPointTangent,   // Output
-	        G4bool&             recalculatedEndPoint,    // Out
-                G4double&           fPreviousSafety=0,//In/Out
-                G4ThreeVector&      fPreviousSftOrigin=0);//In/Out
+                G4bool&             recalculatedEndPoint,    // Out
+                G4double&           fPreviousSafety,         // In/Out
+                G4ThreeVector&      fPreviousSftOrigin);     // In/Out
+      // If such an intersection exists, this function calculates the
+      // intersection point of the true path of the particle with the surface
+      // of the current volume (or of one of its daughters). 
+      // Should use lateral displacement as measure of convergence
 
-                                                        
-      // If such an intersection exists, this function 
-      // calculate the intersection point of the true path of the particle 
-      // with the surface of the current volume (or of one of its daughters). 
-      // (Should use lateral displacement as measure of convergence). 
+   private:
 
-    private:
+     static const G4int max_depth=4;
 
-   static const G4int max_depth=4;
-   // static const G4int max_depth=7;
-   G4FieldTrack* ptrInterMedFT[max_depth+1];
-     // Used to store intermediate values of tracks in case of
-     // too slow progress
+     G4FieldTrack* ptrInterMedFT[max_depth+1];
+       // Used to store intermediate tracks values in case of too slow progress
 
-   G4int maxNumberOfStepsForIntersection;
-   G4int maxNumberOfCallsToReIntegration;
-   G4int maxNumberOfCallsToReIntegration_depth;
-    //  Counters for Statistics about Location and ReIntegrations
-  
-
- };
+     G4int maxNumberOfStepsForIntersection;
+     G4int maxNumberOfCallsToReIntegration;
+     G4int maxNumberOfCallsToReIntegration_depth;
+       //  Counters for Statistics about Location and ReIntegrations
+};
 
 #endif

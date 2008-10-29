@@ -23,42 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class description:
-// 
-// Calculation of Intersection Point with a boundary 
-// when PropagationInField is used.
-// Gives possibility to choose the method of Intersection :
-// G4SimpleLocator, G4MultiLevelLocator, G4BrentLocator
+// $Id: G4VIntersectionLocator.cc,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Class G4VIntersectionLocator implementation
 //
-// History:
-// -------
-// 27.10.08 John Apostolakis, Tatiana Nikitina  design and implementation 
-//
+// 27.10.08 - John Apostolakis, Tatiana Nikitina.
+// ---------------------------------------------------------------------------
  
-#include "G4VIntersectionLocator.hh"
-#include "globals.hh"
-#include "G4GeometryTolerance.hh"
-#include "G4Types.hh"
-#include "G4ios.hh"
 #include <iomanip>
 
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4VIntersectionLocator.hh"
+#include "G4GeometryTolerance.hh"
 
-G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator){
-
+///////////////////////////////////////////////////////////////////////////
+//
+// Constructor
+//
+G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator)
+{
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fiNavigator = theNavigator;
   fVerboseLevel = 0;
 }      
 
-G4VIntersectionLocator::~G4VIntersectionLocator(){
-;
+///////////////////////////////////////////////////////////////////////////
+//
+// Destructor.
+//
+G4VIntersectionLocator::~G4VIntersectionLocator()
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////
 //
 // Dumps status of propagator.
-
+//
 void
 G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
                                      const G4FieldTrack&        CurrentFT, 
@@ -74,8 +76,7 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
       
-  if( ((stepNo == 0) && (verboseLevel <3))
-      || (verboseLevel >= 3) )
+  if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
     static G4int noPrecision= 4;
     G4cout.precision(noPrecision);
@@ -101,39 +102,50 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
   
     G4cout << G4endl;
   }
-  if((stepNo == 0) && (verboseLevel <=3)){
-     // Recurse to print the start values
-     //
-     printStatus( StartFT, StartFT, -1.0, safety, -1);
-   }
-   if( verboseLevel <= 3 )
-   {
-     if( stepNo >= 0)
+  if((stepNo == 0) && (verboseLevel <=3))
+  {
+    // Recurse to print the start values
+    //
+    printStatus( StartFT, StartFT, -1.0, safety, -1);
+  }
+  if( verboseLevel <= 3 )
+  {
+    if( stepNo >= 0)
+    {
        G4cout << std::setw( 4) << stepNo << " ";
-     else
+    }
+    else
+    {
        G4cout << std::setw( 5) << "Start" ;
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
-     G4cout.precision(8);
-     G4cout << std::setw(10) << CurrentPosition.x() << " "
-            << std::setw(10) << CurrentPosition.y() << " "
-            << std::setw(10) << CurrentPosition.z() << " ";
-     G4cout.precision(4);
-     G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
-            << std::setw( 7) << CurrentUnitVelocity.y() << " "
-            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+    }
+    G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentFT.GetCurveLength() << " "; 
+    G4cout.precision(8);
+    G4cout << std::setw(10) << CurrentPosition.x() << " "
+           << std::setw(10) << CurrentPosition.y() << " "
+           << std::setw(10) << CurrentPosition.z() << " ";
+    G4cout.precision(4);
+    G4cout << std::setw( 7) << CurrentUnitVelocity.x() << " "
+           << std::setw( 7) << CurrentUnitVelocity.y() << " "
+           << std::setw( 7) << CurrentUnitVelocity.z() << " ";
      //  G4cout << G4endl; 
      //     G4cout << " >>> " ; 
      G4cout.precision(3); 
-     G4cout << std::setw( 7) << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag() << " "; 
-     //   << std::setw( 7) << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
+     G4cout << std::setw( 7)
+            << CurrentFT.GetMomentum().mag()- StartFT.GetMomentum().mag()
+            << " "; 
+     //   << std::setw( 7)
+     //   << CurrentUnitVelocity.z() - InitialUnitVelocity.z() << " ";
      G4cout << std::setw( 9) << step_len << " "; 
      G4cout << std::setw(12) << safety << " ";
-     if( requestStep != -1.0 ) 
+     if( requestStep != -1.0 )
+     {
        G4cout << std::setw( 9) << requestStep << " ";
+     }
      else
+     {
        G4cout << std::setw( 9) << "Init/NotKnown" << " "; 
-
+     }
      G4cout << G4endl;
    }
    else // if( verboseLevel > 3 )
@@ -150,17 +162,16 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
    }
 }
 
-
-// --------------------- oooo000000000000oooo ----------------------------
-
+///////////////////////////////////////////////////////////////////////////
+//
+// ReEstimateEndPoint.
+//
 G4FieldTrack G4VIntersectionLocator::
 ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
                     const G4FieldTrack &EstimatedEndStateB,
                           G4double      linearDistSq,
-                          G4double      curveDist
-                  )
-{
-  
+                          G4double      curveDist )
+{  
   G4FieldTrack newEndPoint( CurrentStateA );
   G4MagInt_Driver* integrDriver= GetChordFinderFor()->GetIntegrationDriver(); 
 
@@ -180,8 +191,8 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
                      -newEndPoint.GetPosition()).mag();
      }
      goodAdvance= 
-       integrDriver->AccurateAdvance(newEndPoint, advanceLength, GetEpsilonStepFor());
-     //              ***************
+       integrDriver->AccurateAdvance(newEndPoint, advanceLength,
+                                     GetEpsilonStepFor());
   }
   while( !goodAdvance && (++itrial < no_trials) );
 
@@ -195,7 +206,7 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   }
 
   //  All the work is done
-  //   below are some diagnostics only -- before the return!
+  //  below are some diagnostics only -- before the return!
   // 
   static const G4String MethodName("G4VIntersectionLocator::ReEstimateEndpoint");
 

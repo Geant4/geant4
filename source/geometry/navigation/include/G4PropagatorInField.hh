@@ -24,16 +24,20 @@
 // ********************************************************************
 //
 // 
-// class G4PropagatorInField 
+// $Id: G4PropagatorInField.hh,v 1.16 2008-10-29 14:31:55 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class description:
+//
+// Class G4PropagatorInField 
+//
+// class description:
 // 
 // This class performs the navigation/propagation of a particle/track 
 // in a magnetic field. The field is in general non-uniform.
 // For the calculation of the path, it relies on the class G4ChordFinder.
 //
-// Key Method:
-//              ComputeStep(..)
+// Key Method: ComputeStep(..)
+
 // History:
 // -------
 // 25.10.96 John Apostolakis,  design and implementation 
@@ -115,89 +119,75 @@ class G4PropagatorInField
 
    inline G4FieldTrack GetEndState() const;
 
-   // The following methods are now obsolescent but *for now* will work 
-   //   They are being replaced by same-name methods in G4FieldManager,
-   //   allowing the specialisation in different volumes. 
-   //   Their new behaviour is to change the values for the global field manager. 
-   inline G4double  GetMinimumEpsilonStep() const;
-   inline void      SetMinimumEpsilonStep( G4double newEpsMin );
-     // Minimum for Relative accuracy of any Step 
-
+   inline G4double  GetMinimumEpsilonStep() const;  // Min for relative accuracy 
+   inline void      SetMinimumEpsilonStep( G4double newEpsMin ); //  of any step
    inline G4double  GetMaximumEpsilonStep() const;
    inline void      SetMaximumEpsilonStep( G4double newEpsMax );
-
    inline void      SetLargestAcceptableStep( G4double newBigDist );
    inline G4double  GetLargestAcceptableStep();
+     // The 6 above methods are now obsolescent but *for now* will work 
+     // They are being replaced by same-name methods in G4FieldManager,
+     // allowing the specialisation in different volumes. 
+     // Their new behaviour is to change the values for the global field
+     // manager
+
+   inline void      SetBrentMethod(G4bool newLocator);
+   inline G4bool    GetBrentMethod();
+     // Use alternative Locator (based on Brent Method, second order
+     // Intersection)
+
+   void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
+     // Set the filter that examines & stores 'intermediate' 
+     //  curved trajectory points.  Currently only position is stored.
+
+   std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
+     // Access the points which have passed by the filter.
+     // Responsibility for deleting the points lies with the client.
+     // This method MUST BE called exactly ONCE per step. 
+
+   void ClearPropagatorState();
+     // Clear all the State of this class and its current associates
+     //   --> the current field manager & chord finder will also be called
+
+   inline void SetDetectorFieldManager( G4FieldManager* newGlobalFieldManager );
+     // Update this (dangerous) state -- for the time being
   
-     // Use alternative Locator(based on Brent Method,second order Intersection)
-  inline void      SetBrentMethod(G4bool newLocator);
-  inline G4bool    GetBrentMethod();
+   inline void   SetUseSafetyForOptimization( G4bool );
+   inline G4bool GetUseSafetyForOptimization();
+     // Toggle & view parameter for using safety to discard 
+     //   unneccesary calls to navigator (thus 'optimising' performance)
+   inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
+                                 G4ThreeVector  EndPointB,
+                                 G4double      &NewSafety,
+                                 G4double      &LinearStepLength,
+                                 G4ThreeVector &IntersectionPoint);
+     // Intersect the chord from StartPointA to EndPointB
+     // and return whether an intersection occurred
+     // NOTE : SAFETY IS CHANGED
 
- public:  // with description
+   inline G4VIntersectionLocator* GetIntersectionLocator();
+   inline void SetIntersectionLocator(G4VIntersectionLocator *pLocator );
+ 
+ public:  // without description
 
-   // The following methods are obsolete and will not work --
-   //   as they have been replaced by the same methods in G4FieldManager
-   //   since Geant4 4.0
    inline G4double  GetDeltaIntersection() const;
    inline G4double  GetDeltaOneStep() const;
    inline void    SetAccuraciesWithDeltaOneStep( G4double deltaOneStep );  
    inline void    SetDeltaIntersection( G4double deltaIntersection );
    inline void    SetDeltaOneStep( G4double deltaOneStep );  
-
- public:  // without description
+     // The above 5 methods are obsolete and will not work, as they have been
+     // replaced by the same methods in G4FieldManager since Geant4 4.0 ...
 
    inline G4FieldManager*  GetCurrentFieldManager();
    inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
    inline G4Navigator*     GetNavigatorForPropagating(); 
-
- public:  // no description
 
    inline void SetThresholdNoZeroStep( G4int noAct,
                                        G4int noHarsh,
                                        G4int noAbandon );
    inline G4int GetThresholdNoZeroSteps( G4int i ); 
 
- public:  // with description
-  // 
-  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
-  // Set the filter that examines & stores 'intermediate' 
-  //  curved trajectory points.  Currently only position is stored.
-
-  std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
-  // Access the points which have passed by the filter.
-  // Responsibility for deleting the points lies with the client.
-  // This method MUST BE called exactly ONCE per step. 
-
-  void ClearPropagatorState();
-  // Clear all the State of this class and its current associates
-  //   --> the current field manager & chord finder will also be called
-
-  inline void SetDetectorFieldManager( G4FieldManager* newGlobalFieldManager );
-      // Update this (dangerous) state -- for the time being
-  
-  inline void   SetUseSafetyForOptimization( G4bool );
-  inline G4bool GetUseSafetyForOptimization();
-      // Toggle & view parameter for using safety to discard 
-      //   unneccesary calls to navigator (thus 'optimising' performance)
-  inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
-                                G4ThreeVector  EndPointB,
-                                G4double      &NewSafety,
-                                G4double      &LinearStepLength,
-                                G4ThreeVector &IntersectionPoint);
-     // Intersect the chord from StartPointA to EndPointB
-     // and return whether an intersection occurred
-     // NOTE : SAFETY IS CHANGED
-
-   public:  // without description
-
-   inline G4VIntersectionLocator*  GetIntersectionLocator();
-   inline void                     SetIntersectionLocator( 
-                                   G4VIntersectionLocator *pIntersectionLocator ); 
-   
- 
  protected:  // with description
-
-  
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
                                    G4double      decreaseFactor,
@@ -205,9 +195,9 @@ class G4PropagatorInField
                              const G4FieldTrack& aFieldTrack);
  private:
 
-  // ----------------------------------------------------------------------
-  //  DATA Members
-  // ----------------------------------------------------------------------
+   // ----------------------------------------------------------------------
+   //  DATA Members
+   // ----------------------------------------------------------------------
 
    G4FieldManager *fDetectorFieldMgr; 
      // The  Field Manager of the whole Detector.  (default)
@@ -258,18 +248,18 @@ class G4PropagatorInField
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
 
-  G4VIntersectionLocator *fIntersectionLocator;
-  G4bool fAllocatedLocator;
-    // Used to Intersection Locator
+   G4VIntersectionLocator *fIntersectionLocator;
+   G4bool fAllocatedLocator;
+     // Used to Intersection Locator
 
-private:
+ private:
 
-  G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
-    // The filter encapsulates the algorithm which selects which
-    // intermediate points should be stored in a trajectory. 
-    // When it is NULL, no intermediate points will be stored.
-    // Else PIF::ComputeStep must submit (all) intermediate
-    // points it calculates, to this filter.  (jacek 04/11/2002)
+   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
+     // The filter encapsulates the algorithm which selects which
+     // intermediate points should be stored in a trajectory. 
+     // When it is NULL, no intermediate points will be stored.
+     // Else PIF::ComputeStep must submit (all) intermediate
+     // points it calculates, to this filter.  (jacek 04/11/2002)
 };
 
 // ********************************************************************
