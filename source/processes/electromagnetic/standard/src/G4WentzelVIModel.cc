@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.14 2008-10-24 16:13:18 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.15 2008-10-29 14:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -246,9 +246,11 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 {
   G4double tlimit = currentMinimalStep;
   const G4DynamicParticle* dp = track.GetDynamicParticle();
+  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
+  G4StepStatus stepStatus = sp->GetStepStatus();
 
   // initialisation for 1st step  
-  if(track.GetCurrentStepNumber() == 1) {
+  if(stepStatus == fUndefined) {
     inside = false;
     SetupParticle(dp->GetDefinition());
     theLambdaTable = theTable;
@@ -269,8 +271,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   if(inside) return tlimit;   
 
   // pre step
-  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
-  G4StepStatus stepStatus = sp->GetStepStatus();
   G4double presafety = sp->GetSafety();
 
   // compute presafety again if presafety <= 0 and no boundary

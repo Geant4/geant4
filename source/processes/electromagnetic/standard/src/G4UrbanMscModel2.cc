@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.cc,v 1.16 2008-10-27 07:49:24 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.17 2008-10-29 14:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -441,10 +441,12 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 			     G4double currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
-  G4int stepNumber = track.GetCurrentStepNumber();
+  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
+  G4StepStatus stepStatus = sp->GetStepStatus();
+
   const G4DynamicParticle* dp = track.GetDynamicParticle();
 
-  if(stepNumber == 1) {
+  if(stepStatus == fUndefined) {
     inside = false;
     insideskin = false;
     tlimit = geombig;
@@ -464,7 +466,6 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
   
   if(tPathLength > currentRange) tPathLength = currentRange;
 
-  G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   presafety = sp->GetSafety();
 
   //    G4cout << "G4UrbanMscModel2::ComputeTruePathLengthLimit tPathLength= " 
@@ -477,8 +478,6 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       inside = true;
       return tPathLength;  
     }
-
-  G4StepStatus stepStatus = sp->GetStepStatus();
 
   // standard  version
   //
@@ -497,10 +496,10 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
 	{
           rangeinit = currentRange;
-	  if(stepNumber == 1) smallstep = 1.e10;
+	  if(stepStatus == fUndefined) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
 	  // constraint from the geometry 
@@ -587,7 +586,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
           return tPathLength;  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepNumber == 1))
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
       {
         rangeinit = currentRange;
         fr = facrange;

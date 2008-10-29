@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.hh,v 1.3 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4UrbanMscModel90.hh,v 1.4 2008-10-29 14:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,7 +69,7 @@ class G4UrbanMscModel90 : public G4VMscModel
 
 public:
 
-  G4UrbanMscModel90(const G4String& nam = "UrbanMscUni");
+  G4UrbanMscModel90(const G4String& nam = "UrbanMscUni90");
 
   virtual ~G4UrbanMscModel90();
 

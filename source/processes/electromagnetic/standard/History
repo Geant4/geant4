@@ -1,4 +1,4 @@
-$Id: History,v 1.423 2008-10-27 10:25:15 vnivanch Exp $
+$Id: History,v 1.424 2008-10-29 14:15:30 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,29 +17,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27 Septembetr 08: V.Ivant (emstand-V09-01-40)
+29 October 08: V.Ivant (emstand-V09-01-41)
+G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90, G4WentzelVIModel 
+  use StepStatus from preStepPoint to identify first step for a given track
+  instaed of step number in order to address ATLAS problem of small step
+  limits happen with suspended tracks
+
+27 October 08: V.Ivant (emstand-V09-01-40)
 G4UrbanMscModel2 - extra protection for "UseDistanceToBoundary" option
 G4WentzelVIModel - fixed cross section factor for single scattering
 
-23 Septembetr 08: V.Ivant (emstand-V09-01-39)
+23 October 08: V.Ivant (emstand-V09-01-39)
 G4eCoulombScatteringModel and G4WentzelVIModel - added protection against
     precision loss in computation of cross section at high energy
 G4UrbanMscModel2 - fixed screening parameter of the single scattering part
 G4eMultipleScattering - set default RangeFactor = 0.04
 
-22 Septembetr 08: V.Ivant (emstand-V09-01-38)
+22 October 08: V.Ivant (emstand-V09-01-38)
 G4IonFluctuations - added G4UniversalFluctuation model, which are used for 
     high energy; added comments and cleanup
 G4BetheBlochModel, G4BraggIonModel - take into account effective change 
     change over the step
 G4hIonisation - switch off nuclear stopping for pi and K mesons   
 
-20 Septembetr 08: V.Ivant (emstand-V09-01-37)
+20 October 08: V.Ivant (emstand-V09-01-37)
 G4UrbanMscModel2 - return back ref-08 version
 G4IronStopping, G4MaterialStopping, G4SimpleMaterialStopping moved to materials
 G4eBremsstrahlungHEModel - temporary model is removed    
 
-17 Septembetr 08: V.Ivant (emstand-V09-01-36)
+17 October 08: V.Ivant (emstand-V09-01-36)
 G4UrbanMscModel2 - use logic of 9.1 version for step limitation
                    option "UseSafety" to fix CPU penalty in sampling
                    calorimeters (L.Urban)
@@ -47,7 +53,7 @@ G4UrbanMscModel2, G4UrbanMscModel, G4UrbanMscModel90 added protection
                    against sampling scattering angle with zero transport 
                    cross section   
 
-15 Septembetr 08: V.Ivant (emstand-V09-01-35)
+15 October 08: V.Ivant (emstand-V09-01-35)
 For all process classes set sub-types according to the enumeration
 of G4EmProcessSubType.hh, improved cout 
 G4UrbanMscModel2 - use screning function from G4eCoulombScatteringModel
@@ -55,17 +61,17 @@ G4eBremsstrahlung - set relativistic model above 1 GeV by default
 G4eBremsstrahlungModel, G4eBremsstrahlungRelModel removed private member
    highEnergyTh and use access method to this threshold in the base class
 
-21 Septembetr 08: V.Ivant (emstand-V09-01-34)
+21 September 08: V.Ivant (emstand-V09-01-34)
 G4BetheBlochModel, G4BraggModel, G4BraggIonModel - simplified new methods
 G4ionIonisation - use the same low-energy model for He ions and GenericIons
                   (like it was in 9.2beta)
 
-16 Septembetr 08: V.Ivant (emstand-V09-01-33)
+16 September 08: V.Ivant (emstand-V09-01-33)
 G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90 - do not use
    string comparison when compute transport cross section, instead
    compare masses (G.Cosmo)
 
-12 Septembetr 08: V.Ivant (emstand-V09-01-32)
+12 September 08: V.Ivant (emstand-V09-01-32)
 Improved verbose output for processes
 G4IonFluctuations - do not use Poisson sampling
 G4BetheBlochModel, G4BraggModel, G4BraggIonModel - added methods
@@ -77,7 +83,7 @@ G4ionIonisation, G4hIonisation - remove InitialiseMassCharge and
                                  taken from the base class and from
                                  models; separate trietment He ions 
 
-09 Septembetr 08: V.Ivant (emstand-V09-01-31)
+09 September 08: V.Ivant (emstand-V09-01-31)
 G4WaterStopping, G4IronStopping, G4MaterialStopping, 
 G4SimpleMaterialStopping - use mass number instead of atomic mass
                            (A.Lechner proposal)
