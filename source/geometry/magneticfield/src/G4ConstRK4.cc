@@ -23,22 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4ConstRK4
 //
-// Class description :
-// 
-// G4ConstRK4 perform the Integration of One Step with Error Calculation
-// in Constant Magnetic Field.
-// The Integration method is the same as ClassicalRK4.
-// The Field Value is assumed Constant For the Step.
-// This Field Evaluation is called only once per step.
-// The G4ConstRK4 can be used only for Magnetic Fields.
-//  
+// $Id: G4ConstRK4.cc,v 1.2 2008-10-29 14:17:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// - 18.09.2008 - J.Apostolakis, T.Nikitina - Created
 // -------------------------------------------------------------------
 
 #include "G4ConstRK4.hh"
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
+
 //////////////////////////////////////////////////////////////////
 //
 // Constructor sets the number of variables (default = 8)
@@ -46,22 +42,24 @@
 G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables)
 {
-  if(numberOfVariables !=8 ){
-     G4Exception("G4ConstRK4 is only for Number of Variables=8",
-                "Abort", FatalException,  
-                "Use other Stepper");
-  }else{
-   fEq=EqRhs;
-   yMiddle= new G4double[8];
-   dydxMid= new G4double[8];
-   yInitial= new G4double[8];
-   yOneStep= new G4double[8];
+  if(numberOfVariables !=8 )
+  {
+    G4Exception("G4ConstRK4::G4ConstRK4()", "InvalidSetup", FatalException,
+                "Valid only for number of variables=8. Use another Stepper!");
+  }
+  else
+  {
+    fEq=EqRhs;
+    yMiddle= new G4double[8];
+    dydxMid= new G4double[8];
+    yInitial= new G4double[8];
+    yOneStep= new G4double[8];
 
-   dydxm = new G4double[8];
-   dydxt = new G4double[8]; 
-   yt    = new G4double[8]; 
+    dydxm = new G4double[8];
+    dydxt = new G4double[8]; 
+    yt    = new G4double[8]; 
     Field[0]=0.;Field[1]=0.;Field[2]=0.;
- }
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -70,13 +68,13 @@ G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numberOfVariables)
 
 G4ConstRK4::~G4ConstRK4()
 {
-   delete[] yMiddle;
-   delete[] dydxMid;
-   delete[] yInitial;
-   delete[] yOneStep;
-   delete[] dydxm;
-   delete[] dydxt;
-   delete[] yt;
+   delete [] yMiddle;
+   delete [] dydxMid;
+   delete [] yInitial;
+   delete [] yOneStep;
+   delete [] dydxm;
+   delete [] dydxt;
+   delete [] yt;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -84,16 +82,15 @@ G4ConstRK4::~G4ConstRK4()
 // Given values for the variables y[0,..,n-1] and their derivatives
 // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
 // method to advance the solution over an interval h and return the
-// incremented variables as yout[0,...,n-1], which not be a distinct
+// incremented variables as yout[0,...,n-1], which is not a distinct
 // array from y. The user supplies the routine RightHandSide(x,y,dydx),
 // which returns derivatives dydx at x. The source is routine rk4 from
 // NRC p. 712-713 .
 
-void
-G4ConstRK4::DumbStepper( const G4double  yIn[],
-                             const G4double  dydx[],
-                                   G4double  h,
-                                   G4double  yOut[])
+void G4ConstRK4::DumbStepper( const G4double  yIn[],
+                              const G4double  dydx[],
+                                    G4double  h,
+                                    G4double  yOut[])
 {
    G4double  hh = h*0.5 , h6 = h/6.0  ;
    
@@ -106,7 +103,7 @@ G4ConstRK4::DumbStepper( const G4double  yIn[],
    yt[0] = yIn[0] + hh*dydx[0] ;
    RightHandSideConst(yt,dydxt) ;        
 
-  // 2nd Step K2=h*dydxt
+   // 2nd Step K2=h*dydxt
    yt[5] = yIn[5] + hh*dydxt[5] ;
    yt[4] = yIn[4] + hh*dydxt[4] ;
    yt[3] = yIn[3] + hh*dydxt[3] ;
@@ -115,8 +112,8 @@ G4ConstRK4::DumbStepper( const G4double  yIn[],
    yt[0] = yIn[0] + hh*dydxt[0] ;
    RightHandSideConst(yt,dydxm) ;     
 
-  // 3rd Step K3=h*dydxm
-  // now dydxm=(K2+K3)/h
+   // 3rd Step K3=h*dydxm
+   // now dydxm=(K2+K3)/h
    yt[5] = yIn[5] + h*dydxm[5] ;
    dydxm[5] += dydxt[5] ;  
    yt[4] = yIn[4] + h*dydxm[4] ;
@@ -131,7 +128,7 @@ G4ConstRK4::DumbStepper( const G4double  yIn[],
    dydxm[0] += dydxt[0] ;  
    RightHandSideConst(yt,dydxt) ;   
 
-  // 4th Step K4=h*dydxt
+   // 4th Step K4=h*dydxt
    yOut[5] = yIn[5]+h6*(dydx[5]+dydxt[5]+2.0*dydxm[5]);
    yOut[4] = yIn[4]+h6*(dydx[4]+dydxt[4]+2.0*dydxm[4]);
    yOut[3] = yIn[3]+h6*(dydx[3]+dydxt[3]+2.0*dydxm[3]);
@@ -141,78 +138,90 @@ G4ConstRK4::DumbStepper( const G4double  yIn[],
    
 }  // end of DumbStepper ....................................................
 
+////////////////////////////////////////////////////////////////
+//
+// Stepper
+
 void
 G4ConstRK4::Stepper( const G4double yInput[],
-		            const G4double dydx[],
-		                  G4double hstep,
-		                  G4double yOutput[],
-		                  G4double yError []      )
-{  
+                     const G4double dydx[],
+                           G4double hstep,
+                           G4double yOutput[],
+                           G4double yError [] )
+{
    const G4int nvar = 8 ;
    const G4int maxvar= 8;
 
    G4int i;
-   // correction for Richardson Extrapolation.
+
+   // Correction for Richardson extrapolation
+   //
    G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
-   //  Saving yInput because yInput and yOutput can be aliases for same array
+   // Saving yInput because yInput and yOutput can be aliases for same array
 
-   for(i=0;i<nvar;i++) yInitial[i]=yInput[i];
-    yInitial[7]= yInput[7];    // Copy the time in case ... even if not really needed
-    yMiddle[7] = yInput[7];  // Copy the time from initial value 
-    yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
-    yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
-   for(i=nvar;i<maxvar;i++) yOutput[i]=yInput[i];
-    yError[7] = 0.0;         
+   for (i=0;i<nvar;i++) { yInitial[i]=yInput[i]; }
+
+   yInitial[7]= yInput[7];  // Copy the time in case...even if not really needed
+   yMiddle[7] = yInput[7];  // Copy the time from initial value 
+   yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
+   yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
+   for (i=nvar;i<maxvar;i++) { yOutput[i]=yInput[i]; }
+   yError[7] = 0.0;         
 
    G4double halfStep = hstep * 0.5; 
 
    // Do two half steps
+   //
    GetConstField(yInitial,Field);
    DumbStepper  (yInitial,  dydx,   halfStep, yMiddle);
    RightHandSideConst(yMiddle, dydxMid);    
    DumbStepper  (yMiddle, dydxMid, halfStep, yOutput); 
 
    // Store midpoint, chord calculation
+   //
    fMidPoint = G4ThreeVector( yMiddle[0],  yMiddle[1],  yMiddle[2]); 
 
    // Do a full Step
+   //
    DumbStepper(yInitial, dydx, hstep, yOneStep);
-   for(i=0;i<nvar;i++) {
+   for(i=0;i<nvar;i++)
+   {
       yError [i] = yOutput[i] - yOneStep[i] ;
-      yOutput[i] += yError[i]*correction ;  // Provides accuracy increased
-                                            // by 1 order via the 
-                                            // Richardson Extrapolation  
+      yOutput[i] += yError[i]*correction ;
+        // Provides accuracy increased by 1 order via the 
+        // Richardson extrapolation  
    }
 
    fInitialPoint = G4ThreeVector( yInitial[0], yInitial[1], yInitial[2]); 
    fFinalPoint   = G4ThreeVector( yOutput[0],  yOutput[1],  yOutput[2]); 
 
-   return ;
+   return;
 }
 
-G4double
-G4ConstRK4::DistChord() const 
+////////////////////////////////////////////////////////////////
+//
+// Estimate the maximum distance from the curve to the chord
+//
+// We estimate this using the distance of the midpoint to chord.
+// The method below is good only for angle deviations < 2 pi;
+// this restriction should not be a problem for the Runge Kutta methods, 
+// which generally cannot integrate accurately for large angle deviations
+
+G4double G4ConstRK4::DistChord() const 
 {
-  // Estimate the maximum distance from the curve to the chord
-  //
-  //  We estimate this using the distance of the midpoint to 
-  //  chord (the line between 
-  // 
-  //  Method below is good only for angle deviations < 2 pi, 
-  //   This restriction should not a problem for the Runge cutta methods, 
-  //   which generally cannot integrate accurately for large angle deviations.
   G4double distLine, distChord; 
 
-  if (fInitialPoint != fFinalPoint) {
+  if (fInitialPoint != fFinalPoint)
+  {
      distLine= G4LineSection::Distline( fMidPoint, fInitialPoint, fFinalPoint );
-     // This is a class method that gives distance of Mid 
-     //  from the Chord between the Initial and Final points.
-
+       // This is a class method that gives distance of Mid 
+       // from the Chord between the Initial and Final points
      distChord = distLine;
-  }else{
+  }
+  else
+  {
      distChord = (fMidPoint-fInitialPoint).mag();
   }
   return distChord;
 }
-
