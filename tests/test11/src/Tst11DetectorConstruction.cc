@@ -269,8 +269,8 @@ void Tst11DetectorConstruction::defineTKMaterials()
 
    G4NistManager* nistMan = G4NistManager::Instance();
 
-   G4String symbol;             //a=mass of a mole;
-   G4double a, z, density;      //z=mean number of protons;
+   G4String symbol;            
+   G4double a, density;         //a=mass of a mole;
    G4int iz, n;                 //iz=number of protons  in an isotope;
    G4int ncomponents, natoms;
    G4double abundance, fractionmass;
