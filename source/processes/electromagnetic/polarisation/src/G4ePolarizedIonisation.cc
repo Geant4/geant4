@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.6 2008-03-20 11:58:57 schaelic Exp $
+// $Id: G4ePolarizedIonisation.cc,v 1.7 2008-10-30 22:34:23 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -81,7 +81,7 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
   //  PrintInfoDefinition();
-  SetProcessSubType(2);
+  SetProcessSubType(fIonisation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

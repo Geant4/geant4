@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc,v 1.4 2008-03-20 11:58:57 schaelic Exp $
+// $Id: G4PolarizedGammaConversion.cc,v 1.5 2008-10-30 22:34:23 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,7 @@ G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processNa
   SetLambdaBinning(100);
   SetMinKinEnergy(2.0*electron_mass_c2);
   SetMaxKinEnergy(100.0*GeV);
-  SetProcessSubType(5);
+  SetProcessSubType(fGammaConversion);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

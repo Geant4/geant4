@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPhotoElectricEffect.cc,v 1.2 2008-03-20 11:58:57 schaelic Exp $
+// $Id: G4PolarizedPhotoElectricEffect.cc,v 1.3 2008-10-30 22:34:23 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,7 +46,7 @@ G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(const G4String& p
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(7);
+  SetProcessSubType(fPhotoElectricEffect);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
