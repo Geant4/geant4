@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStoppingICRU73.cc,v 1.1 2008-10-24 16:49:17 vnivanch Exp $
+// $Id: G4MaterialStoppingICRU73.cc,v 1.2 2008-10-30 21:52:00 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -48,6 +48,8 @@
 G4MaterialStoppingICRU73::G4MaterialStoppingICRU73(G4bool splineFlag) 
 {
   spline = splineFlag;
+  lowerEnergyBoundary = 0.025 * MeV;
+  upperEnergyBoundary = 10.00 * MeV;
   Initialise();
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStoppingICRU73.hh,v 1.1 2008-10-24 16:49:17 vnivanch Exp $
+// $Id: G4IronStoppingICRU73.hh,v 1.2 2008-10-30 21:51:35 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4IronStoppingICRU73_h
@@ -67,6 +67,12 @@ public:
 
   inline G4int GetMaterialIndex(const G4String& NameMaterial);
 
+  // Function returns an unique index (>=0) for each ion-material couple (the 
+  // return value is -1 if the couple is not found):
+  inline G4int GetIonMaterialCoupleIndex(
+                        G4int atomicNumber,            // Atomic number of ion 
+                        const G4String& materialName); // Material name
+
   inline G4double GetDensity(G4int idx);
 
   inline G4String GetMaterialName(G4int idx);
@@ -74,6 +80,10 @@ public:
   inline G4PhysicsVector* GetPhysicsVector(G4int idx);
 
   inline G4PhysicsVector* GetPhysicsVector(const G4String& NameMaterial);
+
+  inline G4double GetLowerEnergyBoundary();
+
+  inline G4double GetUpperEnergyBoundary();
 
 private:
 
@@ -88,6 +98,10 @@ private:
   G4bool spline;
   G4String MatName[16];
   G4double Density[16];
+
+  // Lower and upper energy boundaries for dE/dx vectors:
+  G4double lowerEnergyBoundary;
+  G4double upperEnergyBoundary;
 
   std::vector<G4LPhysicsFreeVector*>  dedx;
 };
@@ -109,6 +123,17 @@ G4IronStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
     if(MatName[idxMaterial] == NameMaterial) return idxMaterial;
   }
   return -1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int
+G4IronStoppingICRU73::GetIonMaterialCoupleIndex(G4int atomicNumber,
+                                                const G4String& materialName) {
+
+  if(atomicNumber != 26) return -1;
+
+  return GetMaterialIndex(materialName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,6 +168,23 @@ G4IronStoppingICRU73::GetPhysicsVector(const G4String& NameMaterial)
 {
   return GetPhysicsVector(GetMaterialIndex(NameMaterial));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double
+G4IronStoppingICRU73::GetLowerEnergyBoundary() {
+
+  return lowerEnergyBoundary;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double
+G4IronStoppingICRU73::GetUpperEnergyBoundary() {
+
+  return upperEnergyBoundary;
+}
+
 
 #endif
  
