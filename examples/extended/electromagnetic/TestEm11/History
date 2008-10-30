@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2008-10-24 16:12:26 maire Exp $
+$Id: History,v 1.26 2008-10-30 19:00:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+30-10-08 mma (testem11-V09-01-06)
+- update PhysListEmStandard : options and hMultipleScattering for muon
      
 24-10-08 mma (testem11-V09-01-05)
 - update PhysListEmStandard and README
