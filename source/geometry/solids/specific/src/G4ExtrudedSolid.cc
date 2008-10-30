@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.17 2008-08-12 08:54:57 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.18 2008-10-30 11:47:45 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -561,7 +561,7 @@ G4bool G4ExtrudedSolid::MakeFacets()
     if ( ! good ) { return false; }
 
     good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
-                                              GetVertex(fNz-1, 1), GetVertex(1, 0),
+                                              GetVertex(fNz-1, 1), GetVertex(fNz-1, 0),
                                               ABSOLUTE) );
     if ( ! good ) { return false; }
 
