@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlace.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@ G4tgrPlace::~G4tgrPlace()
 // -------------------------------------------------------------------------
 const G4String& G4tgrPlace::GetRotMatName() const
 {
-  return theType;  // Dummy...
+  return "";  // Dummy...
 }
 
 

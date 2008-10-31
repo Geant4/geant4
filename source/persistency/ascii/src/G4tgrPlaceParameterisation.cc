@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceParameterisation.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,8 +69,11 @@ G4tgrPlaceParameterisation( const std::vector<G4String>& wl )
   //---------- set the type
   theParamType = G4tgrUtils::GetString( wl[4] );
 
+  //---------- set the rotation matrix name
+  theRotMatName = G4tgrUtils::GetString(wl[5]);
+ 
   //---------- set the extra data 
-  for( size_t ii = 5; ii < wl.size(); ii++)
+  for( size_t ii = 6; ii < wl.size(); ii++)
   {
     theExtraData.push_back( G4tgrUtils::GetDouble(wl[ii]) );
   }

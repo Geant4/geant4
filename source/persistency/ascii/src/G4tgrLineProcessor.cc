@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrLineProcessor.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -241,15 +241,32 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":VIS" )
   {
-    G4tgrVolume* vol = volmgr->FindVolume( G4tgrUtils::GetString( wl[1] ), 1 );
-    vol->AddVisibility( wl );
+    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    for( size_t ii = 0; ii < vols.size(); ii++ )
+    {
+      vols[ii]->AddVisibility( wl );
+    }
 
     //--------------------------------- colour
   }
   else if( wl0 == ":COLOUR"|| wl0 == ":COLOR" )
   {
-    G4tgrVolume* vol = volmgr->FindVolume( G4tgrUtils::GetString( wl[1] ), 1 );
-    vol->AddRGBColour( wl );
+    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    for( size_t ii = 0; ii < vols.size(); ii++ )
+    {
+      vols[ii]->AddRGBColour( wl );
+    }
+
+    //--------------------------------- check overlaps
+  }
+  else if( wl0 == ":CHECK_OVERLAPS" )
+  {
+    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    for( size_t ii = 0; ii < vols.size(); ii++ )
+    {
+      vols[ii]->AddCheckOverlaps( wl );
+    }
+	   
     
     //--------------------------------- ERROR
   }

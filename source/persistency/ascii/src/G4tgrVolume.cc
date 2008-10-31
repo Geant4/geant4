@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolume.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,8 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
     theMaterialName = G4tgrUtils::GetString( wl[wl.size()-1] );
     
     //---------- create only vector<double> of theSolidParams
-    theSolid = FindOrCreateSolid( wl );
+    theSolid = G4tgrVolumeMgr::GetInstance()->CreateSolid( wl, 1 );
+
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
@@ -99,29 +100,19 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
   theVisibility = 1;
   theRGBColour = new G4double[4];
   for(size_t ii=0; ii<4; ii++)  { theRGBColour[ii] = -1.; }
+  theCheckOverlaps = 0;
 }
 
 
 //-------------------------------------------------------------------------
 G4tgrVolume* G4tgrVolume::GetVolume( G4int ii ) const
 {
-  G4String ErrMessage = "Should only be called for composite solids... " + ii;
+  G4String ErrMessage = "Should only be called for composite solids... " + G4tgrUtils::ftoa(ii);
   G4Exception("G4tgrVolume::GetVolume()", "InvalidCall",
               FatalException, ErrMessage);
   return 0;
 }
 
-
-//-------------------------------------------------------------------------
-G4tgrSolid* G4tgrVolume::FindOrCreateSolid( const std::vector<G4String>& wl )
-{
-  G4tgrSolid* solid = G4tgrVolumeMgr::GetInstance()->FindSolid( wl[2] );
-  if( !solid )
-  {
-    solid = G4tgrVolumeMgr::GetInstance()->CreateSolid( wl, 1 );
-  }
-  return solid;
-}
 
 
 //-------------------------------------------------------------
@@ -173,6 +164,11 @@ G4tgrVolume::AddPlaceReplica( const std::vector<G4String>& wl )
   G4tgrUtils::CheckWLsize( wl, 6, WLSIZE_GE, " G4tgrVolume::AddPlaceReplica");
   G4tgrUtils::CheckWLsize( wl, 7, WLSIZE_LE, " G4tgrVolume::AddPlaceReplica");
 
+  if( wl.size() == 7 && G4tgrUtils::GetDouble(wl[6]) != 0. && wl[3] != "PHI" )
+    {
+    G4Exception("G4tgrVolume::AddPlaceReplica","Offset set for replica not along PHI, it will not be used",JustWarning,G4String("Volume "+wl[1]+" in volume "+wl[2]).c_str());
+    }
+  
   //---------- set G4tgrPlace 
   G4tgrPlaceDivRep* pl = new G4tgrPlaceDivRep( wl );
   pl->SetType("PlaceReplica");
@@ -225,7 +221,7 @@ void G4tgrVolume::AddVisibility( const std::vector<G4String>& wl )
   //---------- Check for exact number of words read 
   G4tgrUtils::CheckWLsize( wl, 3, WLSIZE_EQ, " G4tgrVolume::AddVisibility");
 
-  //---------- set G4tgrPlace 
+  //---------- Set visibility
   theVisibility = G4tgrUtils::GetBool( wl[2] );
 }
 
@@ -236,12 +232,25 @@ void G4tgrVolume::AddRGBColour( const std::vector<G4String>& wl )
   //---------- Check for exact number of words read 
   G4tgrUtils::CheckWLsize( wl, 5, WLSIZE_GE, " G4tgrVolume::AddRGBColour");
   
-  //  theRGBColour = new double[3];
+  //---------- Set RGB colour
   theRGBColour[0] = G4tgrUtils::GetDouble( wl[2] );
   theRGBColour[1] = G4tgrUtils::GetDouble( wl[3] );
   theRGBColour[2] = G4tgrUtils::GetDouble( wl[4] );
+  ///--------- Set transparency
   if( wl.size() == 6 )
   {
     theRGBColour[3] = G4tgrUtils::GetDouble( wl[5] );
   }
+}
+
+
+//-------------------------------------------------------------
+void G4tgrVolume::AddCheckOverlaps( const std::vector<G4String>& wl )
+{
+  //---------- Check for exact number of words read 
+  G4tgrUtils::CheckWLsize( wl, 3, WLSIZE_GE, " G4tgrVolume::AddCheckOverlaps");
+  
+  ///--------- Set check overlaps 
+  theCheckOverlaps = G4tgrUtils::GetBool( wl[2] );
+
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamSquare.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbPlaceParamSquare.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,11 +47,11 @@ G4tgbPlaceParamSquare::~G4tgbPlaceParamSquare()
 
 
 // -------------------------------------------------------------------------
-G4tgbPlaceParamSquare::G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam )
+G4tgbPlaceParamSquare::G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam ) : G4tgbPlaceParameterisation(tgrParam)
 {
   //---- Get translation and rotation 
   if( tgrParam->GetParamType() == "SQUARE" ) {
-    CheckNExtraData( tgrParam, 9, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
+    CheckNExtraData( tgrParam, 12, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
     theDirection1 = G4ThreeVector( tgrParam->GetExtraData()[6], tgrParam->GetExtraData()[7], tgrParam->GetExtraData()[8] );
     theDirection2 = G4ThreeVector( tgrParam->GetExtraData()[9], tgrParam->GetExtraData()[10], tgrParam->GetExtraData()[11] );
     theAxis = kZAxis;
@@ -94,8 +94,7 @@ G4tgbPlaceParamSquare::G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrPar
 
   theNCopies = theNCopies1 * theNCopies2;
   theTranslation = theOffset1*theDirection1 + theOffset2*theDirection2;
-
-    
+  
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
     G4cout << "G4tgbPlaceParamSquare: no copies " << theNCopies << " = " << theNCopies1 << " X " << theNCopies2 << G4endl
@@ -145,4 +144,5 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   //----- Set traslation and rotation
   physVol->SetTranslation(origin);
   physVol->SetCopyNo( copyNo );
+  physVol->SetRotation( theRotationMatrix );
 }

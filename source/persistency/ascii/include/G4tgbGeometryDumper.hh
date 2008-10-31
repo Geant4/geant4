@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.hh,v 1.2 2008-10-31 18:31:48 arce Exp $
+// $Id: G4tgbGeometryDumper.hh,v 1.3 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

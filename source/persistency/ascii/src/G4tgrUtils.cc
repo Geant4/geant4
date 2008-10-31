@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrUtils.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -494,7 +494,7 @@ void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
     G4String chartmp = ftoa( nWcheck );
     outStr += chartmp + G4String(" words");
     DumpVS( wl, outStr.c_str() );
-    G4String ErrMessage = " NUMBER OF WORDS: " +  wlsize;
+    G4String ErrMessage = " NUMBER OF WORDS: " + ftoa(wlsize);
     G4Exception("G4tgrUtils::CheckWLsize()", "ParseError",
                 FatalException, ErrMessage);
   }
@@ -672,3 +672,78 @@ G4RotationMatrix G4tgrUtils::GetRotationFromDirection( G4ThreeVector dir )
 
   return rotation;
 }  
+
+
+G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1, const G4String& word2 )
+{
+  G4bool bEqual = TRUE;
+  std::vector< std::pair<G4int,G4int> > stringPairs; //start of substring, number of characters
+
+  //--- Get string limits between asterisks in word1
+  size_t cStart = 0;
+  //  G4int cEnd = word1.length();
+  for( ;; ){
+    size_t cAster = word1.find("*",cStart);
+    if( cAster != std::string::npos ) {
+      if( cAster == cStart ) {
+	if( cAster != 0 ){
+	  G4Exception("AreWordsEquivalent","A word has two asterisks together, please correct it",FatalException,("Offending word is: " + word1).c_str() );
+	} else {
+	  // word1 == *
+	  if(word1.size() == 1 ) return TRUE;
+	}
+      }     
+      if( cAster!= cStart ) stringPairs.push_back( std::pair<G4int,G4int>(cStart, cAster-cStart) );
+      //      G4cout << " AreWordsEquivalent stringPair " << cStart << " to " << cAster << " " <<  G4endl;
+      cStart = cAster+1;
+    } else {
+      if( cStart == 0 ){
+	//--- If there is no asterisk check if they are the same
+	return word1 == word2;
+      }
+      
+      break;
+    }
+  }
+  
+  //---- Add characters after last asterisk as string pair 
+  if( cStart <= word1.length() ) {
+    if( word1.length() != cStart ) stringPairs.push_back( std::pair<G4int,G4int>(cStart, word1.length()-cStart) );
+    //    G4cout << " AreWordsEquivalent stringPair " << word1.length() << " " << cStart << " " <<  G4endl;
+  }
+
+  //--- If there are not asterisk, simple comparison
+  if( stringPairs.size() == 0 ) {
+    if( word1 == word2 ) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+  
+  //--- Find substrings in word2, in same order as in word1
+  cStart = 0;
+  for( size_t ii = 0; ii < stringPairs.size(); ii++ ){
+    std::pair<G4int,G4int> spair = stringPairs[ii];
+    size_t sFound = word2.find(word1.substr(spair.first, spair.second),cStart);
+    //    G4cout << " AreWordsEquivalent word  Found:  " << word1.substr(spair.first, spair.second) << " at pos " << sFound << " in " << word2 << G4endl;
+    if( sFound  == std::string::npos ) {
+      bEqual = FALSE;
+      break;
+    } else {
+      //---- If there is no asterisk before first character, the fisrt string pair found has to start at the first character
+      //      G4cout << " AreWordsEquivalent chk end " <<  spair.first << " " << spair.second  << " " << spair.first+spair.second << " " << word1.length() << " " << sFound+spair.second << " " << word2.length()<< G4endl;
+      if( spair.first == 0 && sFound != 0 ) {
+	bEqual = FALSE;
+	break;
+	//---- If there is no asterisk after last character, the last string pair found has to end at the last character
+      } else if( spair.first+spair.second-1 == word1.length() && sFound+spair.second-1 != word2.length() ) {
+	bEqual = FALSE;
+	break;
+      }
+      cStart += spair.second;
+    } 
+  }
+
+  return bEqual;
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.3 2008-10-23 16:20:01 gcosmo Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.4 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,12 +45,23 @@
 #include "G4Tubs.hh"
 #include "G4Cons.hh"
 #include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Orb.hh"
 #include "G4Trd.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Hype.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
-#include "G4Orb.hh"
-#include "G4Sphere.hh"
+#include "G4EllipticalTube.hh"
 #include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4Hype.hh"
+#include "G4Tet.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
 #include "G4PVPlacement.hh"
 #include "G4BooleanSolid.hh"
 #include "G4ReflectionFactory.hh"
@@ -276,18 +287,24 @@ void G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
 
   size_t numElements           = mat->GetNumberOfElements();
   G4double density             = mat->GetDensity()/g*cm3;
-  const G4ElementVector* elems = mat->GetElementVector();
-  const G4double* fractions    = mat->GetFractionVector();
+
   
   // start tag
   if (numElements == 1)
-  {
+    {
     (*theFile) << ":MATE " << AddQuotes(mat->GetName()) << " "
                << mat->GetZ() << " " << mat->GetA()/(g/mole) << " "
                << density << G4endl;
   }
   else
   {
+    const G4ElementVector* elems = mat->GetElementVector();
+    const G4double* fractions    = mat->GetFractionVector();
+    for (size_t ii = 0; ii < numElements; ii++)
+    {
+      DumpElement( (*elems)[ii] );
+    }
+
     (*theFile) << ":MIXT "<< AddQuotes(mat->GetName()) << " "
                << density << " " << numElements << G4endl;
     // close start element tag and get ready to do composit "parts"
@@ -297,10 +314,6 @@ void G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
                  << fractions[ii] << G4endl;
     }
 
-    for (size_t ii = 0; ii < numElements; ii++)
-    {
-      DumpElement( (*elems)[ii] );
-    }
   }
 
   theMaterials[mat->GetName()] = mat;
@@ -313,13 +326,6 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
 {
   if( CheckIfElementExists( ele->GetName(),ele ) )  { return; }
 
-  if( ele->GetNumberOfIsotopes() != 0 )
-  {
-    G4Exception("G4tgbGeometryDumper::DumpElement()",
-                "NotImplemented", FatalException,
-                "Elements from isotopes not supported yet, sorry...");
-  }
-
   //----- Material mixtures store the components as elements
   //      (even if the input are materials), but without symbol
   G4String symbol = ele->GetSymbol();
@@ -327,11 +333,45 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
   {
     symbol = ele->GetName();
   }
-  (*theFile) << ":ELEM " << AddQuotes(ele->GetName()) << " "
-             << AddQuotes(symbol) << " " << ele->GetZ() << " "
-             << ele->GetA()/(g/mole) << " " << G4endl;
-  
+
+  if( ele->GetNumberOfIsotopes() == 0 )
+  {
+    (*theFile) << ":ELEM " << AddQuotes(ele->GetName()) << " "
+	       << AddQuotes(symbol) << " " << ele->GetZ() << " "
+	       << ele->GetA()/(g/mole) << " " << G4endl;
+  } else {
+    
+    const G4IsotopeVector* isots = ele->GetIsotopeVector();
+    for (size_t ii = 0; ii <  ele->GetNumberOfIsotopes(); ii++)
+    {
+      DumpIsotope( (*isots)[ii] );
+    }
+
+    (*theFile) << ":ELEM_FROM_ISOT " << AddQuotes(ele->GetName()) << " "
+	       << AddQuotes(symbol) << " " << ele->GetNumberOfIsotopes() << G4endl;
+    const G4double* fractions    = ele->GetRelativeAbundanceVector();
+    for (size_t ii = 0; ii < ele->GetNumberOfIsotopes(); ii++)
+    {
+      (*theFile) << "   " << AddQuotes(GetIsotopeName((*isots)[ii])) << " "
+                 << fractions[ii] << G4endl;
+    }
+
+    
+  }
+
   theElements[ele->GetName()] = ele;
+}
+
+
+//------------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpIsotope( G4Isotope* isot)
+{
+  G4String isotName = GetIsotopeName(isot);
+  (*theFile) << ":ISOT " << AddQuotes(isotName) << " "
+	     << isot->GetZ() << " " << isot->GetN() << " "
+	     << isot->GetA()/(g/mole) << " " << G4endl;
+
+  theIsotopes[isotName] = isot;
 }
 
 
@@ -426,6 +466,14 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
 //------------------------------------------------------------------------
 void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so) 
 {
+  std::vector<G4double> params = GetSolidParams( so );
+  for( size_t ii = 0 ; ii < params.size(); ii++ ){  
+    (*theFile) << params[ii] << " " ;
+  }
+  (*theFile) << G4endl;
+  
+  return;
+
   G4String solidType = so->GetEntityType();
   solidType = GetTGSolidType( solidType );
 
@@ -452,6 +500,34 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
                << cn->GetZHalfLength() << " "
                << cn->GetStartPhiAngle()/deg  << " "
                << cn->GetDeltaPhiAngle()/deg  << G4endl;
+
+  } else if (solidType == "TRAP") {
+    G4Trap * trp = dynamic_cast < G4Trap * > (so);
+    G4ThreeVector symAxis(trp->GetSymAxis());
+    G4double theta, phi;
+    theta = symAxis.theta()/deg;
+    phi = symAxis.phi()/deg;
+    (*theFile) << trp->GetZHalfLength()  << " "
+               << theta << " " 
+               << phi<< " "
+               << trp->GetYHalfLength1() << " "
+               << trp->GetXHalfLength1() << " "
+               << trp->GetXHalfLength2() << " "    
+               << std::atan(trp->GetTanAlpha1())/deg << " " 
+               << trp->GetYHalfLength2()    << " "
+               << trp->GetXHalfLength3()    << " "
+               << trp->GetXHalfLength4()    << " "    
+               << std::atan(trp->GetTanAlpha2())/deg << " "
+               << G4endl;
+
+  } else if (solidType == "TRD") {
+    G4Trd * tr = dynamic_cast < G4Trd * > (so);
+    (*theFile) << tr->GetZHalfLength()<< " "
+               << tr->GetYHalfLength1() << " "
+               << tr->GetYHalfLength2() << " " 
+               << tr->GetXHalfLength1() << " "
+               << tr->GetXHalfLength2() << G4endl;
+
   } else if (solidType == "POLYCONE") {
     //--- Dump RZ corners, as original parameters will not be present
     //    if it was build from RZ corners
@@ -608,46 +684,7 @@ void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so)
       (*theFile) << ph->GetCorner(ii).r << " "
                  << ph->GetCorner(ii).z << G4endl;
     }
-
-  } else if (solidType == "TRAP") {
-    G4Trap * trp = dynamic_cast < G4Trap * > (so);
-    G4ThreeVector symAxis(trp->GetSymAxis());
-    G4double theta, phi;
-    theta = symAxis.theta()/deg;
-    phi = symAxis.phi()/deg;
-    (*theFile) << trp->GetZHalfLength()  << " "
-               << theta << " " 
-               << phi<< " "
-               << trp->GetYHalfLength1() << " "
-               << trp->GetXHalfLength1() << " "
-               << trp->GetXHalfLength2() << " "    
-               << std::atan(trp->GetTanAlpha1())/deg << " " 
-               << trp->GetYHalfLength2()    << " "
-               << trp->GetXHalfLength3()    << " "
-               << trp->GetXHalfLength4()    << " "    
-               << std::atan(trp->GetTanAlpha2())/deg << " "
-               << G4endl;
-  } else if (solidType == "TRD") {
-    G4Trd * tr = dynamic_cast < G4Trd * > (so);
-    (*theFile) << tr->GetZHalfLength()<< " "
-               << tr->GetYHalfLength1() << " "
-               << tr->GetYHalfLength2() << " " 
-               << tr->GetXHalfLength1() << " "
-               << tr->GetXHalfLength2() << G4endl;
-    
-  } else if (solidType == "ORB") {
-    G4Orb * orb = dynamic_cast < G4Orb * > (so);
-    (*theFile) << orb->GetRadius()  << G4endl;
-
-  } else if (solidType == "SPHERE") {
-    G4Sphere * sphe = dynamic_cast < G4Sphere * > (so);
-    (*theFile) << sphe->GetInsideRadius() << G4endl;
-    (*theFile) << sphe->GetOuterRadius() << G4endl;
-    (*theFile) << sphe->GetStartPhiAngle() << G4endl;
-    (*theFile) << sphe->GetDeltaPhiAngle() << G4endl;
-    (*theFile) << sphe->GetStartThetaAngle() << G4endl;
-    (*theFile) << sphe->GetDeltaThetaAngle() << G4endl;
-
+  
   } else if (solidType == "ELLIPSOID" ){
     G4Ellipsoid* dso = dynamic_cast < G4Ellipsoid * > (so);
     (*theFile) << dso->GetSemiAxisMax(0)  << " "
@@ -687,6 +724,47 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     params.push_back( tu->GetStartPhiAngle()/deg );
     params.push_back( tu->GetDeltaPhiAngle()/deg );
     
+  } else if (solidType == "TRAP") {
+    const G4Trap * trp = dynamic_cast < const G4Trap * > (so);
+    G4ThreeVector symAxis(trp->GetSymAxis());
+    G4double theta, phi;
+    theta = symAxis.theta()/deg;
+    phi = symAxis.phi()/deg;
+    params.push_back( trp->GetZHalfLength() );
+    params.push_back( theta ); 
+    params.push_back( phi);
+    params.push_back( trp->GetYHalfLength1() );
+    params.push_back( trp->GetXHalfLength1() );
+    params.push_back( trp->GetXHalfLength2() );    
+    params.push_back( std::atan(trp->GetTanAlpha1())/deg ); 
+    params.push_back( trp->GetYHalfLength2()    );
+    params.push_back( trp->GetXHalfLength3()    );
+    params.push_back( trp->GetXHalfLength4()    );    
+    params.push_back( std::atan(trp->GetTanAlpha2())/deg );
+
+  } else if (solidType == "TRD") {
+    const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
+    params.push_back( tr->GetZHalfLength());
+    params.push_back( tr->GetYHalfLength1() );
+    params.push_back( tr->GetYHalfLength2() ); 
+    params.push_back( tr->GetXHalfLength1() );
+    params.push_back( tr->GetXHalfLength2() );
+    
+  } else if (solidType == "PARA") {
+    const G4Para * para = dynamic_cast < const G4Para * > (so);
+    double phi;
+    if(para->GetSymAxis().z()!=1.0)
+      phi = atan(para->GetSymAxis().y()/para->GetSymAxis().x());
+    else
+      phi = 0;
+    
+    params.push_back( para->GetXHalfLength());
+    params.push_back(  para->GetYHalfLength());
+    params.push_back( para->GetZHalfLength());
+    params.push_back( atan(para->GetTanAlpha())/deg);
+    params.push_back( acos(para->GetSymAxis().z())/deg);
+    params.push_back( phi/deg);
+    
   } else if (solidType == "CONS") {
     const G4Cons * cn = dynamic_cast < const G4Cons * > (so);
     params.push_back( cn->GetInnerRadiusMinusZ() ); 
@@ -696,6 +774,28 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     params.push_back( cn->GetZHalfLength() );
     params.push_back( cn->GetStartPhiAngle()/deg  );
     params.push_back( cn->GetDeltaPhiAngle()/deg  );
+
+  } else if (solidType == "SPHERE") {
+    const G4Sphere * sphere = dynamic_cast < const G4Sphere * > (so);
+    params.push_back( sphere->GetInsideRadius());
+    params.push_back( sphere->GetOuterRadius());
+    params.push_back( sphere->GetStartPhiAngle()/deg);
+    params.push_back( sphere->GetDeltaPhiAngle()/deg);
+    params.push_back( sphere->GetStartThetaAngle()/deg);
+    params.push_back( sphere->GetDeltaThetaAngle()/deg);
+
+  } else if (solidType == "ORB") {
+    const G4Orb * orb = dynamic_cast < const G4Orb * > (so);
+    params.push_back( orb->GetRadius());
+    
+  } else if (solidType == "TORUS") {
+    const G4Torus * torus = dynamic_cast < const G4Torus * > (so);
+    params.push_back( torus->GetRmin());
+    params.push_back( torus->GetRmax());
+    params.push_back( torus->GetRtor());
+    params.push_back( torus->GetSPhi()/deg);
+    params.push_back( torus->GetDPhi()/deg);
+  
   } else if (solidType == "POLYCONE") {
     //--- Dump RZ corners, as original parameters will not be present
     //    if it was build from RZ corners
@@ -855,43 +955,11 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
        params.push_back( ph->GetCorner(ii).z );
     }
 
-  } else if (solidType == "TRAP") {
-    const G4Trap * trp = dynamic_cast < const G4Trap * > (so);
-    G4ThreeVector symAxis(trp->GetSymAxis());
-    G4double theta, phi;
-    theta = symAxis.theta()/deg;
-    phi = symAxis.phi()/deg;
-    params.push_back( trp->GetZHalfLength() );
-    params.push_back( theta ); 
-    params.push_back( phi);
-    params.push_back( trp->GetYHalfLength1() );
-    params.push_back( trp->GetXHalfLength1() );
-    params.push_back( trp->GetXHalfLength2() );    
-    params.push_back( std::atan(trp->GetTanAlpha1())/deg ); 
-    params.push_back( trp->GetYHalfLength2()    );
-    params.push_back( trp->GetXHalfLength3()    );
-    params.push_back( trp->GetXHalfLength4()    );    
-    params.push_back( std::atan(trp->GetTanAlpha2())/deg );
-  } else if (solidType == "TRD") {
-    const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
-    params.push_back( tr->GetZHalfLength());
-    params.push_back( tr->GetYHalfLength1() );
-    params.push_back( tr->GetYHalfLength2() ); 
-    params.push_back( tr->GetXHalfLength1() );
-    params.push_back( tr->GetXHalfLength2() );
-    
-  } else if (solidType == "ORB") {
-    const G4Orb * orb = dynamic_cast < const G4Orb * > (so);
-    params.push_back( orb->GetRadius()  );
-     
-  } else if (solidType == "SPHERE") {
-    const G4Sphere * sphe = dynamic_cast < const G4Sphere * > (so);
-    params.push_back( sphe->GetInsideRadius() );
-    params.push_back( sphe->GetOuterRadius() );
-    params.push_back( sphe->GetStartPhiAngle() );
-    params.push_back( sphe->GetDeltaPhiAngle() );
-    params.push_back( sphe->GetStartThetaAngle() );
-    params.push_back( sphe->GetDeltaThetaAngle() );
+  } else if (solidType == "ELLIPTICAL_TUBE") {
+    const G4EllipticalTube * eltu = dynamic_cast < const G4EllipticalTube * > (so);
+    params.push_back( eltu->GetDx());
+    params.push_back( eltu->GetDy());
+    params.push_back( eltu->GetDz());
 
   } else if (solidType == "ELLIPSOID" ){
     const G4Ellipsoid* dso = dynamic_cast < const G4Ellipsoid * > (so);
@@ -900,6 +968,58 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
      params.push_back( dso->GetSemiAxisMax(2)  );
      params.push_back( dso->GetZBottomCut()   );
      params.push_back( dso->GetZTopCut() );
+
+     //  } else if (solidType == "ELLIPTICAL_CONE") {
+     //    const G4EllipticalCone * elco = dynamic_cast < const G4EllipticalCone * > (so);
+
+  } else if (solidType == "HYPE") {
+    const G4Hype* hype = dynamic_cast < const G4Hype * > (so);
+    params.push_back( hype->GetInnerRadius());
+    params.push_back( hype->GetOuterRadius());
+    params.push_back( hype->GetInnerStereo()/deg);
+    params.push_back( hype->GetOuterStereo()/deg);
+    params.push_back( 2*hype->GetZHalfLength());
+
+//  } else if( solidType == "TET" ) {
+
+  } else if( solidType == "TWISTED_BOX" ) {
+    const G4TwistedBox* tbox = dynamic_cast < const G4TwistedBox * > (so);
+    params.push_back( tbox->GetPhiTwist()/deg );
+    params.push_back( tbox->GetXHalfLength() );
+    params.push_back( tbox->GetYHalfLength() );
+    params.push_back( tbox->GetZHalfLength() );
+
+  } else if( solidType == "TWISTED_TRAP" ) {
+    const G4TwistedTrap * ttrap = dynamic_cast < const G4TwistedTrap * > (so);
+    params.push_back( ttrap->GetPhiTwist()/deg );
+    params.push_back( ttrap->GetZHalfLength() );
+    params.push_back( ttrap->GetPolarAngleTheta()/deg ); 
+    params.push_back( ttrap->GetAzimuthalAnglePhi()/deg );
+    params.push_back( ttrap->GetY1HalfLength() );
+    params.push_back( ttrap->GetX1HalfLength() );
+    params.push_back( ttrap->GetX2HalfLength() );    
+    params.push_back( ttrap->GetY2HalfLength()    );
+    params.push_back( ttrap->GetX3HalfLength()    );
+    params.push_back( ttrap->GetX4HalfLength()    );    
+    params.push_back( ttrap->GetTiltAngleAlpha()/deg );
+    
+  } else if( solidType == "TWISTED_TRD" ) {
+    const G4TwistedTrd * ttrd = dynamic_cast < const G4TwistedTrd * > (so);
+    params.push_back( ttrd->GetX1HalfLength());
+    params.push_back( ttrd->GetX2HalfLength() );
+    params.push_back( ttrd->GetY1HalfLength() ); 
+    params.push_back( ttrd->GetY2HalfLength() );
+    params.push_back( ttrd->GetZHalfLength() );
+    params.push_back( ttrd->GetPhiTwist()/deg );
+ 
+  } else if( solidType == "TWISTED_TUBS" ) {
+    const G4TwistedTubs * ttub = dynamic_cast < const G4TwistedTubs * > (so);
+    params.push_back( ttub->GetInnerRadius()   );
+    params.push_back( ttub->GetOuterRadius()   );
+    params.push_back( ttub->GetZHalfLength()   );
+    params.push_back( ttub->GetDPhi()/deg );
+    params.push_back( ttub->GetPhiTwist()/deg );
+
   }
   else
   {
@@ -1081,33 +1201,6 @@ G4String G4tgbGeometryDumper::SubstituteRefl( G4String name )
 
 
 //------------------------------------------------------------------------
-G4bool G4tgbGeometryDumper::CheckIfElementExists( const G4String& name,
-                                                        G4Element* pt )
-{
-  if( theElements.find( name ) != theElements.end() )
-  {
-    if( pt != (*(theElements.find(name))).second )
-    {
-      G4cerr << "G4tgbGeometryDumper::CheckIfElementExists() - "
-             << "Element found but not same as before: " << name << G4endl;
-      if( !Same2G4Elements(pt, (*(theElements.find(name))).second))
-      {
-        G4String ErrMessage = "Element found but with different A or Z \n"
-                            + G4String("as as before: ") + name;
-        G4Exception("G4tgbGeometryDumper::CheckIfElementExists()",
-                    "InvalidSetup", FatalException, ErrMessage);
-      }
-    }
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
-}
-
-
-//------------------------------------------------------------------------
 G4bool G4tgbGeometryDumper::CheckIfMaterialExists( const G4String& name,
                                                          G4Material* pt )
 {
@@ -1131,6 +1224,79 @@ G4bool G4tgbGeometryDumper::CheckIfMaterialExists( const G4String& name,
     return 0;
   } 
 }
+
+
+//------------------------------------------------------------------------
+G4bool G4tgbGeometryDumper::CheckIfElementExists( const G4String& name,
+                                                        G4Element* pt )
+{
+  if( theElements.find( name ) != theElements.end() )
+  {
+    if( pt != (*(theElements.find(name))).second )
+    {
+      G4cerr << "G4tgbGeometryDumper::CheckIfElementExists() - "
+             << "Element found but not same as before: " << name << G4endl;
+      if( !Same2G4Elements(pt, (*(theElements.find(name))).second))
+      {
+        G4String ErrMessage = "Element found but with different A or Z \n"
+                            + G4String("as before: ") + name;
+        G4Exception("G4tgbGeometryDumper::CheckIfElementExists()",
+                    "InvalidSetup", FatalException, ErrMessage);
+      }
+    }
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
+
+//------------------------------------------------------------------------
+G4String G4tgbGeometryDumper::GetIsotopeName( G4Isotope* isot )
+{
+  G4String isotName = isot->GetName();
+
+  std::map<G4String,G4Isotope*>::const_iterator ite = theIsotopes.find( isotName );
+  if( ite != theIsotopes.end() )
+  {
+    G4Isotope* isotold = (*ite).second;
+    if( isot != isotold )
+    {
+      if( !Same2G4Isotopes(isot, isotold))
+	// G4Nist does names isotopes of same element with same name
+	if( isot->GetZ() == isotold->GetZ() ) 
+	{
+	  G4int ii = 2;
+	  for(;;ii++) {
+	    G4String newIsotName = isotName + "_" + itoa(ii);
+	    std::map<G4String,G4Isotope*>::const_iterator ite2 = theIsotopes.find( newIsotName );
+	    if( ite2 == theIsotopes.end() ) {
+	      isotName = newIsotName;
+	      break;
+	    } else {
+	      if( Same2G4Isotopes( isot, (*ite2).second ) ) 
+	      {
+		isotName = newIsotName;
+		break;
+	      }
+	    }
+	  }
+	} else {
+	  G4String ErrMessage = "Isotope found but with different A or Z \n"
+	    + G4String("as before: ") + isot->GetName();
+	  G4Exception("G4tgbGeometryDumper::CheckIfIsotopeExists()",
+		      "InvalidSetup", FatalException, ErrMessage);
+	}
+
+    }
+      
+  }
+
+  return isotName;
+}
+
 
 
 //------------------------------------------------------------------------
@@ -1259,20 +1425,6 @@ G4tgbGeometryDumper::LookForExistingRotation( const G4RotationMatrix* rotm )
 
 
 //------------------------------------------------------------------------
-G4bool G4tgbGeometryDumper::Same2G4Elements( G4Element* ele1, G4Element* ele2 )
-{
-  if( ele1->GetZ() != ele2->GetZ() || ele1->GetA() != ele2->GetA() )
-  {
-    return 0;
-  }
-  else
-  {
-    return 1;
-  }
-}
-
-
-//------------------------------------------------------------------------
 G4bool G4tgbGeometryDumper::Same2G4Materials( G4Material* mat1,
                                               G4Material* mat2 )
 {
@@ -1294,3 +1446,33 @@ G4bool G4tgbGeometryDumper::Same2G4Materials( G4Material* mat1,
 
   return bSame;
 }
+
+//------------------------------------------------------------------------
+G4bool G4tgbGeometryDumper::Same2G4Elements( G4Element* ele1, G4Element* ele2 )
+{
+  if( ele1->GetZ() != ele2->GetZ() || ele1->GetA() != ele2->GetA() )
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+
+
+//------------------------------------------------------------------------
+G4bool G4tgbGeometryDumper::Same2G4Isotopes( G4Isotope* isot1, G4Isotope* isot2 )
+{
+  if( isot1->GetZ() != isot2->GetZ() || isot1->GetN() != isot2->GetN() || isot1->GetA() != isot2->GetA() )
+  {
+    G4cout << " ISOTOPE1 " << *isot1 << " ISOTOPE2 " << *isot2 << G4endl; 
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+
+

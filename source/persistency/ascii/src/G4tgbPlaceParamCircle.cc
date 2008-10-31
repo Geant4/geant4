@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamCircle.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbPlaceParamCircle.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@ G4tgbPlaceParamCircle::~G4tgbPlaceParamCircle()
 // -------------------------------------------------------------------------
 G4tgbPlaceParamCircle::
 G4tgbPlaceParamCircle( G4tgrPlaceParameterisation* tgrParam )
+  : G4tgbPlaceParameterisation(tgrParam)
 {
   //---- Get translation and rotation 
   if( tgrParam->GetParamType() == "CIRCLE" )
@@ -140,6 +141,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   *pvRm = rm;
   physVol->SetRotation(pvRm);
   physVol->SetCopyNo( copyNo );
+  physVol->SetRotation( theRotationMatrix );
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 5 )

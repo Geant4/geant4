@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialMixture.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
+// $Id: G4tgrMaterialMixture.cc,v 1.3 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
          G4cout << " G4tgrMaterialMixture::G4tgrMaterialMixture() -"
-                << " adding component: " << wl[ii*2+4] << G4endl;
+                << " adding component: " << wl[ii*2+4] << " Fraction= " << G4tgrUtils::GetDouble(wl[ii*2+1+4]) << G4endl;
     }
 #endif
     theComponents.push_back(  G4tgrUtils::GetString( wl[ii*2+4] ) );

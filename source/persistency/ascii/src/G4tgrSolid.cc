@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrSolid.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrSolid.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,7 +107,7 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
   angleParams["TRAP"] = apar;
   apar.clear(); apar.insert(2); apar.insert(3); apar.insert(4); apar.insert(5);
   angleParams["SPHERE"] = apar;
-  apar.clear(); apar.insert(2); apar.insert(3); apar.insert(4); apar.insert(5);
+  apar.clear(); apar.insert(3); apar.insert(4);
   angleParams["TORUS"] = apar;
   apar.clear(); apar.insert(0); apar.insert(1);
   angleParams["POLYCONE"] = apar;

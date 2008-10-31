@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeMgr.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -194,9 +194,8 @@ G4tgrSolid* G4tgrVolumeMgr::FindSolid( const G4String& volname, G4bool exists )
   {
     if( exists )
     {
-      for( svite = theG4tgrSolidMap.begin();
-           svite != theG4tgrSolidMap.end(); svite++ )
-      {
+      for( svite = theG4tgrSolidMap.begin(); svite != theG4tgrSolidMap.end(); svite++ ) 
+	{
         G4cerr << " VOL:" << (*svite).first << G4endl;
       }
       G4String ErrMessage = "Solid not found... " + volname;
@@ -248,38 +247,85 @@ G4tgrVolumeMgr::FindVolume( const G4String& volname, G4bool exists )
   return vol;
 }
 
+//-------------------------------------------------------------
+std::vector<G4tgrVolume*>
+G4tgrVolumeMgr::FindVolumes( const G4String& volname, G4bool exists ) 
+{
+  std::vector<G4tgrVolume*> vols;
+  
+  G4mapsvol::iterator svite;
+  for( svite = theG4tgrVolumeMap.begin(); svite != theG4tgrVolumeMap.end(); svite++ )
+  {
+    if( G4tgrUtils::AreWordsEquivalent( volname, (*svite).second->GetName()) ) {
+      vols.push_back(const_cast<G4tgrVolume*>((*svite).second) );
+    }
+  }
+
+  if( vols.size() == 0 ) 
+  {
+    if( exists )
+    {
+      for( svite = theG4tgrVolumeMap.begin();
+           svite != theG4tgrVolumeMap.end(); svite++ )
+      {
+        G4cerr << " VOL:" << (*svite).first << G4endl;
+      }
+      G4String ErrMessage = "Volume not found... " + volname;
+      G4Exception("G4tgrVolumeMgr::FindVolumes()", "InvalidSetup",
+                  FatalException, ErrMessage);
+    }
+    else
+    {
+      G4String WarMessage = "Volume does not exists... " + volname;
+      G4Exception("G4tgrVolumeMgr::FindVolumes()", "SearchFailed",
+                  JustWarning, WarMessage);
+    }
+  }
+
+  return vols;
+}
+
 
 //-------------------------------------------------------------
 const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume()
 {
-  //----------- Start from any G4tgrVolume, because if you go upwards
-  //            you will always end at the top  
-  const G4tgrVolume* vol = (*(theG4tgrVolumeMap.begin())).second;
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-  {
-    G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
-           << vol->GetName() << " no place = "
-           <<  vol->GetPlacements().size() << G4endl;
-  }
-#endif
+  //----------- Start from any G4tgrVolume and go upwards until you get to the top. Check that indeed all volumes drive to the same top volume 
 
-  while( vol->GetPlacements().size() != 0 )
-  {
-    //---------- get parent of first placement (there could be a pathological
-    //           case and you will never get to the top...
-    vol = FindVolume( (* (vol->GetPlacements()).begin() )->GetParentName(), 1 );
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  const G4tgrVolume* topVol = 0;
+  G4mapsvol::const_iterator itetv;
+  for( itetv = theG4tgrVolumeMap.begin(); itetv != theG4tgrVolumeMap.end(); itetv++ )
     {
-      G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
-             << vol->GetName()<< " N place = "
-             <<  vol->GetPlacements().size() << G4endl;
-    }
+      const G4tgrVolume* vol = (*itetv).second;
+#ifdef G4VERBOSE
+      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	{
+	  G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
+		 << vol->GetName() << " no place = "
+		 <<  vol->GetPlacements().size() << G4endl;
+	}
 #endif
-  }
-
-  return vol;
+      
+      while( vol->GetPlacements().size() != 0 )
+	{
+	  vol = FindVolume( (* (vol->GetPlacements()).begin() )->GetParentName(), 1 );
+#ifdef G4VERBOSE
+	  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+	    {
+	      G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
+		     << vol->GetName()<< " N place = "
+		     <<  vol->GetPlacements().size() << G4endl;
+	    }
+#endif
+	}
+      if( topVol != 0 && topVol != vol  && topVol->GetType() != "VOLDivision" && vol->GetType() != "VOLDivision" ) 
+	{
+	  G4Exception("G4tgrVolumeMgr::GetTopVolume","Two world volumes found, second will be taken",JustWarning,(G4String("Both these volumes are at the top of a hierarchy of volumes : ")+ topVol->GetName() + " & " + vol->GetName() ).c_str());
+	}
+      
+      topVol = vol;
+    }
+      
+  return topVol;
 }
 
 

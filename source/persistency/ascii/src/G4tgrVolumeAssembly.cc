@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeAssembly.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeAssembly.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,13 +60,14 @@ G4tgrVolumeAssembly::G4tgrVolumeAssembly( const std::vector<G4String>& wl )
 {
   theType = "VOLAssembly";
 
-  G4tgrUtils::CheckWLsize( wl, 5, WLSIZE_GE,
-                           "G4tgrVolumeAssembly::G4tgrVolumeAssembly" );
-
   //---------- set name 
   theName = G4tgrUtils::GetString( wl[1] ); 
 
   G4int nVol = G4tgrUtils::GetInt( wl[2] ); 
+
+  G4tgrUtils::CheckWLsize( wl, 3+nVol*5, WLSIZE_GE,
+                           "G4tgrVolumeAssembly::G4tgrVolumeAssembly" );
+
 
   for(G4int ii=0; ii<nVol*5; ii+=5)
   {

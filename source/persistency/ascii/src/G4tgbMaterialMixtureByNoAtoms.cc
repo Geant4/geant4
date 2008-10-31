@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,6 +81,8 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
   G4Material* compMate;
   compAreElements = 0;
   compAreMaterials = 0;
+  G4double totalWeight = 0.; //use for number of atoms -> weight conversion
+  std::vector<G4Material*> compMateList; 
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
   {
@@ -136,10 +138,13 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
         G4Exception("G4tgbMaterialMixtureByNoAtoms::buildG4Material()",
                     "NotImplemented", FatalException, ErrMessage);
 */
-        // If it is a material add it by No Atoms
+        // If it is a material transform No Atoms to Weight
+	//        if( fr > 1.0 ) { fr = 1.; }
         G4double fr = GetFraction(ii);
-        if( fr > 1.0 ) { fr = 1.; }
-        mate->AddMaterial( compMate, GetFraction( ii ) );
+	fr *= compMate->GetDensity();
+	totalWeight += fr;
+	//Do it after normalization  mate->AddMaterial( compMate, GetFraction( ii ) );
+	compMateList.push_back(compMate); 
       }
       else
       {
@@ -152,6 +157,15 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
     } 
   }
 
+  //renormalize after the conversion number of atoms -> weight
+  if( compAreMaterials ) {
+    for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++) {
+      G4double fr = GetFraction(ii);
+      fr *= compMateList[ii]->GetDensity()/totalWeight; 
+      mate->AddMaterial( compMateList[ii], fr ); 
+    }
+  }
+      
   return mate;
 
 }

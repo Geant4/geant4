@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.2 2008-10-23 16:11:57 gcosmo Exp $
+// $Id: G4tgbVolume.cc,v 1.3 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -257,7 +257,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     {
       G4String ErrMessage1 = "Solid type " + stype;
       G4String ErrMessage2 = " should have 11 or 4 parameters,\n";
-      G4String ErrMessage3 = "and it has " + solParam.size();
+      G4String ErrMessage3 = "and it has " + G4tgrUtils::ftoa(solParam.size());
       G4String ErrMessage = ErrMessage1 + ErrMessage2 + ErrMessage3 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -316,10 +316,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4int(3+nplanes*3) + " (Z,Rmin,Rmax)\n";
-      G4String Err3 = "or " + G4int(3+nplanes*2);
+      G4String Err2 = G4tgrUtils::ftoa(3+nplanes*3) + " (Z,Rmin,Rmax)\n";
+      G4String Err3 = "or " + G4tgrUtils::ftoa(3+nplanes*2);
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " +  solParam.size();
+      G4String Err5 = "and it has " +  G4tgrUtils::ftoa(solParam.size());
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -372,10 +372,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4int(4+nplanes*3) + " (Z,Rmin,Rmax)\n";
-      G4String Err3 = "or " + G4int(4+nplanes*2);
+      G4String Err2 = G4tgrUtils::ftoa(4+nplanes*3) + " (Z,Rmin,Rmax)\n";
+      G4String Err3 = "or " + G4tgrUtils::ftoa(4+nplanes*2);
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " + solParam.size();
+      G4String Err5 = "and it has " + G4tgrUtils::ftoa(solParam.size());
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -417,7 +417,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
                                &((*Z_c)[0]));
     }
 
-  } else if( stype == "ELLIPTICAL_TUBE" ) {
+  } else if( stype == "ELLIPTICALTUBE" ) {
     CheckNoSolidParams( stype, 3, solParam.size() );
     solid = new G4EllipticalTube( sname, solParam[0], solParam[1], solParam[2]);
 
@@ -426,7 +426,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     solid = new G4Ellipsoid( sname, solParam[0], solParam[1], solParam[2],
                              solParam[3], solParam[4] );
 
-  } else if( stype == "ELLIPTICAL_CONE" ) {
+  } else if( stype == "ELLIPTICALCONE" ) {
     CheckNoSolidParams( stype, 4, solParam.size() );
     solid = new G4EllipticalCone( sname, solParam[0], solParam[1],
                                   solParam[2], solParam[3] );
@@ -444,23 +444,23 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4ThreeVector p4(solParam[9], solParam[10], solParam[11]);
     solid = new G4Tet( sname, anchor, p2, p3, p4 );
 
-  } else if( stype == "TWISTED_BOX" ) {
+  } else if( stype == "TWISTEDBOX" ) {
     CheckNoSolidParams( stype, 4, solParam.size() );
     solid = new G4TwistedBox( sname, solParam[0], solParam[1],
                               solParam[2], solParam[3]);
 
-  } else if( stype == "TWISTED_TRAP" ) {
+  } else if( stype == "TWISTEDTRAP" ) {
     CheckNoSolidParams( stype, 11, solParam.size() );
     solid = new G4TwistedTrap( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5], solParam[6],
                         solParam[7], solParam[8], solParam[9], solParam[10] );
 
-  } else if( stype == "TWISTED_TRD" ) {
+  } else if( stype == "TWISTEDTRD" ) {
     CheckNoSolidParams( stype, 6, solParam.size() );
     solid = new G4TwistedTrd( sname, solParam[0], solParam[1], solParam[2],
                               solParam[3], solParam[4], solParam[5]);
 
-  } else if( stype == "TWISTED_TUBS" ) {
+  } else if( stype == "TWISTEDTUBS" ) {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
     if( phiTotal - twopi  < 1.e-9 ) phiTotal = twopi;
@@ -477,7 +477,6 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 
     if( stype == "Boolean_UNION" ){
       solid = new G4UnionSolid( sname, sol1, sol2, relRotMat, relPlace );
-      G4cout << " UNION " << relPlace << G4endl;
     } else if( stype == "Boolean_SUBS" ){
       solid = new G4SubtractionSolid( sname, sol1, sol2, relRotMat, relPlace );
     } else if( stype == "Boolean_INTERS" ){
@@ -519,8 +518,8 @@ void G4tgbVolume::CheckNoSolidParams( const G4String& solidType,
   if( NoParamExpected != NoParam )
   {
     G4String Err1 = "Solid type " + solidType + " should have ";
-    G4String Err2 = NoParamExpected + " parameters,\n";
-    G4String Err3 = "and it has " + NoParam;
+    G4String Err2 = G4tgrUtils::ftoa(NoParamExpected) + " parameters,\n";
+    G4String Err3 = "and it has " + G4tgrUtils::ftoa(NoParam);
     G4String ErrMessage = Err1 + Err2 + Err3 + " !";
     G4Exception("G4tgbVolume::CheckNoSolidParams()", "InvalidSetup",
                 FatalException, ErrMessage);
@@ -623,7 +622,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #endif
     physvol = new G4PVPlacement(0, G4ThreeVector(),
                                 const_cast<G4LogicalVolume*>(currentLV),
-                                GetName(), 0, false, 0);
+                                GetName(), 0, false, 0, theTgrVolume->GetCheckOverlaps());
   }
   else
   { 
@@ -697,7 +696,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                                        const_cast<G4LogicalVolume*>(currentLV),
                                        GetName(),
                                        const_cast<G4LogicalVolume*>(parentLV),
-                                       false, copyNo);
+                                       false, copyNo, theTgrVolume->GetCheckOverlaps());
         }
 #ifdef G4VERBOSE
         if( G4tgrMessenger::GetVerboseLevel() >= 2 )
@@ -713,7 +712,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       }
       else if( place->GetType() == "PlaceParam" )
       {
-        G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
+	G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
 
         //----- See what parameterisation type
 #ifdef G4VERBOSE
@@ -771,28 +770,28 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                                         EAxis(param->GetAxis()),
                                         param->GetNCopies(), param);
       }
-      
-      //--------------- If it is  G4tgrVolumeReplica
-    }
-    else if( theTgrVolume->GetType() == "PlaceReplica" )
-    {
-      G4tgrVolumeDivision* volr = (G4tgrVolumeDivision*)theTgrVolume;
-      G4tgrPlaceDivRep* dpr = volr->GetPlaceDivision() ;
-#ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      else if( place->GetType() == "PlaceReplica" )
       {
-        G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-               << "   replica" << " " << GetName()
-               << " in " <<  parentLV->GetName() 
-               << " " << dpr->GetNDiv() << " " << dpr->GetWidth()
-               << " " << dpr->GetOffset() << G4endl;
-      }
+	//--------------- If it is  PlaceReplica
+	//	G4tgrVolumeDivision* volr = (G4tgrVolumeDivision*)theTgrVolume;
+	G4tgrPlaceDivRep* dpr = (G4tgrPlaceDivRep*)place;
+	//	G4tgrPlaceDivRep* dpr = volr->GetPlaceDivision() ;
+#ifdef G4VERBOSE
+	if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+	  {
+	    G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
+		   << "   replica" << " " << currentLV->GetName()
+		   << " in " <<  parentLV->GetName() 
+		   << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
+		   << " offset " << dpr->GetOffset() << G4endl;
+	  }
 #endif
-      physvol = new G4PVReplica(GetName(),
-                                const_cast<G4LogicalVolume*>(currentLV),
-                                const_cast<G4LogicalVolume*>(parentLV),
-                                EAxis(dpr->GetAxis()), dpr->GetNDiv(),
-                                dpr->GetWidth(), dpr->GetOffset());
+	physvol = new G4PVReplica(GetName(),
+				  const_cast<G4LogicalVolume*>(currentLV),
+				  const_cast<G4LogicalVolume*>(parentLV),
+				  EAxis(dpr->GetAxis()), dpr->GetNDiv(),
+				  dpr->GetWidth(), dpr->GetOffset());
+      }
     }
     else if( theTgrVolume->GetType() == "VOLDivision" )
     {

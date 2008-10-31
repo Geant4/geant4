@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamLinear.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbPlaceParamLinear.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,8 @@ G4tgbPlaceParamLinear::~G4tgbPlaceParamLinear()
 
 // -------------------------------------------------------------------------
 G4tgbPlaceParamLinear::
-G4tgbPlaceParamLinear( G4tgrPlaceParameterisation* tgrParam )
+G4tgbPlaceParamLinear( G4tgrPlaceParameterisation* tgrParam ) 
+  : G4tgbPlaceParameterisation(tgrParam)
 {
   //---- Get translation and rotation 
   if( tgrParam->GetParamType() == "LINEAR" )
@@ -122,4 +123,5 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   //----- Set traslation and rotation
   physVol->SetTranslation(origin);
   physVol->SetCopyNo( copyNo );
+  physVol->SetRotation( theRotationMatrix );
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrFileReader.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -146,7 +146,7 @@ G4bool G4tgrFileReader::ReadFiles()
         {
           if( ! theLineProcessor->ProcessLine( wl ) )
           {
-            fin.DumpException( "Tag not found." );
+            fin.DumpException( "Tag not found: " + wl[0]);
           }
         }
         wl = wlnew;
@@ -157,7 +157,7 @@ G4bool G4tgrFileReader::ReadFiles()
     {
       if( ! theLineProcessor->ProcessLine( wl ) )
       {
-        fin.DumpException( "Tag not found." );
+        fin.DumpException( "Tag not found: " + wl[0]);
       }
     }
   }  
