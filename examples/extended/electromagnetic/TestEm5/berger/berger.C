@@ -43,7 +43,7 @@
 
    // Print the histograms legend
    TLegend *legend = new TLegend(0.6,0.6,0.8,0.8);
-   legend->AddEntry(h1d,"G4-9.1-ref-03 ","l");
+   legend->AddEntry(h1d,"G4-9.1-ref-08++","l");
    legend->AddEntry(h1f,"Berger data","L");
    legend->Draw();
 

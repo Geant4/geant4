@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histogram fill by Geant4 TestEm5 simulation
-   TFile f("./9.1ref03.root");
+   TFile f("./tramu.root");
    TH1D* h1d = (TH1D*) f.Get("10");
    h1d->SetTitle("1 TeV muon in 3 m iron : kinetic energy at exit (GeV)");
    h1d->GetXaxis()->SetTitle("Ekine (GeV)");
@@ -40,7 +40,7 @@
 
    // Print the histograms legend
    TLegend* legend = new TLegend(0.2,0.55,0.45,0.70);
-   legend->AddEntry(h1d,"G4-9.1-ref-03 ","l");
+   legend->AddEntry(h1d,"G4-9.1-ref-08++","l");
    legend->AddEntry(h1f,"Mars14 simul ","L");
    legend->Draw();
 
