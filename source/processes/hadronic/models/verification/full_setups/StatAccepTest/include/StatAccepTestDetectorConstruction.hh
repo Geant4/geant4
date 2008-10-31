@@ -72,6 +72,7 @@ private:
   G4Material* LiquidArgon;
   G4Material* Silicon;
   G4Material* Quartz;
+  G4Material* Brass;
   G4Material* theAbsorberMaterial;
   G4Material* theActiveMaterial;
   

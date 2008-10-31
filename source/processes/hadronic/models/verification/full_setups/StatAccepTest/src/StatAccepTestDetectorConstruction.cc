@@ -37,7 +37,8 @@
 
 StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :  
   Vacuum( 0 ), Iron( 0 ), Copper( 0 ), Tungsten( 0 ), Lead( 0 ), Uranium( 0 ), 
-  PbWO4( 0 ), Polystyrene( 0 ), LiquidArgon( 0 ), Silicon( 0 ), Quartz( 0 ),
+  PbWO4( 0 ), Polystyrene( 0 ), LiquidArgon( 0 ), Silicon( 0 ), 
+  Quartz( 0 ), Brass( 0 ),
   theAbsorberMaterial( 0 ), theActiveMaterial( 0 ),
   experimentalHall_log( 0 ), experimentalHall_phys( 0 ),
   logicCalo( 0 ), physiCalo( 0 ),
@@ -146,7 +147,10 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   //G4Element* elFe = new G4Element( name="Iron", symbol="Fe", z=26., a );
 
   a = 63.54*g/mole;
-  //G4Element* elCu = new G4Element( name="Copper", symbol="Cu", z=29., a );
+  G4Element* elCu = new G4Element( name="Copper", symbol="Cu", z=29., a );
+
+  a = 65.41*g/mole; 
+  G4Element* elZn = new G4Element( name="Zinc", symbol="Zn", z=30., a );
 
   a = 183.85*g/mole;
   G4Element* elW = new G4Element( name="Tungstenm", symbol="W", z=74., a );
@@ -238,6 +242,10 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   Quartz->AddElement( elSi, 1 );
   Quartz->AddElement( elO , 2 );
 
+  Brass = new G4Material( name="Brass", density=8.6*g/cm3, nel=2 );
+  Brass->AddElement( elCu, 0.7 );
+  Brass->AddElement( elZn, 0.3 );  
+
   //G4cout << " END  StatAccepTestDetectorConstruction::DefineMaterials()" 
   //       << G4endl; //***DEBUG***
 
@@ -270,6 +278,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
     } else if ( theAbsorberMaterial == Copper ) {
       lambda = 15.056*cm;
       X0     = 1.4353*cm; 
+    } else if ( theAbsorberMaterial == Brass ) {  
+      lambda = 15.056*cm;   // Lack of PDG data: I am assuming the same as Copper. 
+      X0     = 1.4353*cm;   
     } else if ( theAbsorberMaterial == Tungsten ) {
       lambda = 9.5855*cm;
       X0     = 0.35*cm; 
@@ -612,6 +623,8 @@ void StatAccepTestDetectorConstruction::SetAbsorberMaterial( const G4String name
   } else if ( name == "Cu" ||
  	      name == "Copper" || name == "copper" ) { 
     theAbsorberMaterial = Copper;
+  } else if ( name == "Brass" || name == "brass" ) { 
+    theAbsorberMaterial = Brass;
   } else if ( name == "Pb" ||
  	      name == "Lead" || name == "lead" ) { 
     theAbsorberMaterial = Lead;
