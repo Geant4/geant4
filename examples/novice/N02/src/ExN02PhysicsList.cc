@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.25 2008-10-26 14:12:56 maire Exp $
+// $Id: ExN02PhysicsList.cc,v 1.26 2008-10-31 08:35:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -191,7 +191,7 @@ void ExN02PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);       
@@ -200,7 +200,7 @@ void ExN02PhysicsList::ConstructEM()
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton  
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
