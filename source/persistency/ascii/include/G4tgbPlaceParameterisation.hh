@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbPlaceParameterisation.hh,v 1.2 2008-10-31 18:31:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 #include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
 #include "G4tgrUtils.hh"
 
 class G4VPhysicalVolume;
@@ -54,7 +55,7 @@ class G4tgbPlaceParameterisation : public G4VPVParameterisation
 { 
   public:  // with description
 
-    G4tgbPlaceParameterisation();
+    G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam);
     virtual ~G4tgbPlaceParameterisation();
     virtual void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
 
@@ -70,6 +71,8 @@ class G4tgbPlaceParameterisation : public G4VPVParameterisation
     G4int theNCopies;
     EAxis theAxis;
     G4ThreeVector theTranslation;
+    G4RotationMatrix* theRotationMatrix;
+
 };
 
 #endif

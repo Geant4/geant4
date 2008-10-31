@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgrVolume.hh,v 1.3 2008-10-31 18:31:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,9 +66,6 @@ class G4tgrVolume
     G4tgrVolume( const std::vector<G4String>& wl );
     virtual ~G4tgrVolume();
 
-    G4tgrSolid* FindOrCreateSolid( const std::vector<G4String>& wl );
-      // Find a solid and if it does no exist, create it
-
     virtual G4tgrPlace* AddPlace( const std::vector<G4String>& wl );
       // Add a position with the data read from a ':place' tag
 
@@ -84,6 +81,9 @@ class G4tgrVolume
     void AddRGBColour( const std::vector<G4String>& wl );
       // Add colour
 
+    void AddCheckOverlaps( const std::vector<G4String>& wl );
+      // Add check overlaps flag
+
     // Accessors
 
     const G4String& GetName() const {return theName;}
@@ -94,6 +94,7 @@ class G4tgrVolume
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
     G4bool GetVisibility() const {return theVisibility;}
     const G4double* GetColour() const {return theRGBColour;}
+    G4bool GetCheckOverlaps() const {return theCheckOverlaps;}
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;
 
@@ -112,6 +113,7 @@ class G4tgrVolume
 
     G4bool theVisibility;
     G4double* theRGBColour;
+    G4bool theCheckOverlaps;
 };
 
 #endif

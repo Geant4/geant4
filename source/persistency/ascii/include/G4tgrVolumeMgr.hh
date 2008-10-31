@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeMgr.hh,v 1.2 2008-10-31 18:31:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,6 +77,12 @@ class G4tgrVolumeMgr
     G4tgrVolume* FindVolume( const G4String& volname, G4bool exists = false );
       // Find a G4tgrVolume with name 'volname'. If it is not found:
       // if exists is true, exit; if exists is false, return 0
+
+    std::vector<G4tgrVolume*> FindVolumes( const G4String& volname, G4bool exists ); 
+      // Find all G4tgrVolume's with name 'volname'. '*' can be used in the 
+      // name to mean 'any character' or 'any substring'. If it is not found:
+      // if exists is true, exit; if exists is false, return 0
+
 
     const G4tgrVolume* GetTopVolume();  
       // Find the top of the volume tree

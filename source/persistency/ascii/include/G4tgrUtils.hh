@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrUtils.hh,v 1.2 2008-10-31 18:31:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,6 +99,10 @@ class G4tgrUtils
       // Convert a bool to an integer, checking that it is really a bool
 
     static G4RotationMatrix GetRotationFromDirection( G4ThreeVector dir );
+
+
+    static G4bool AreWordsEquivalent( const G4String& word1, const G4String& word2 );
+    // Looks if word1 and word2 are equivalent, considering that word1 may have '*', meaning 'any character'
 
   private:
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceParameterisation.hh,v 1.2 2008-10-31 18:31:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,12 +70,17 @@ class G4tgrPlaceParameterisation : public G4tgrPlace
     const G4String& GetParamType() const { return theParamType; }
      // GetType returns placement type
     std::vector<G4double> GetExtraData() const { return theExtraData; }
+    const G4String& GetRotMatName() const { return theRotMatName; }
 
   private:
 
     G4String theParamType;
     std::vector<G4double> theExtraData;
       // Extra data not common to all parameterisations
+
+    G4String theRotMatName;
+    // The rotation matrix (by name, as the rotations
+    // matrices are not yet created)
 };
 
 #endif
