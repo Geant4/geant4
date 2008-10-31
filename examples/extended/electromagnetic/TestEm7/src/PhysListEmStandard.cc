@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.15 2008-10-24 15:36:24 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.16 2008-10-31 16:36:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,16 +102,16 @@ void PhysListEmStandard::ConstructProcess()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);       
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);       
               
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton  
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
@@ -127,8 +127,8 @@ void PhysListEmStandard::ConstructProcess()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
 
@@ -143,21 +143,21 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(60);		//default  
-  emOptions.SetLambdaBinning(60);	//default
+  emOptions.SetDEDXBinning(120);	//default=60  
+  emOptions.SetLambdaBinning(120);	//default=60
   emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetMscRangeFactor(0.02);	//default
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscRangeFactor(0.04);	//default
   emOptions.SetMscGeomFactor (2.5);	//default       
   emOptions.SetSkin(3.);		//default
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 50*um);   
-  emOptions.SetLinearLossLimit(1.e-3);
+  emOptions.SetStepFunction(0.2, 50*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-2);		//default
    
   //ionization
   //
