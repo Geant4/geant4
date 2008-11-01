@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.12 2008-10-26 18:55:37 maire Exp $
+// $Id: PhysicsList.cc,v 1.13 2008-11-01 11:11:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -178,21 +178,21 @@ void PhysicsList::ConstructEM()
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(10*GeV);
-  emOptions.SetDEDXBinning(80);
-  emOptions.SetLambdaBinning(80);
+  emOptions.SetDEDXBinning(80);		//default    
+  emOptions.SetLambdaBinning(80);	//default    
   emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
-  emOptions.SetMscRangeFactor(0.02);	//default
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscRangeFactor(0.02);	//default=0.04
   emOptions.SetMscGeomFactor (2.5);	//default       
   emOptions.SetSkin(3.);		//default
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 10*um);   
-  emOptions.SetLinearLossLimit(1.e-3);
+  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-2);		//default
    
           
   //build CSDA range
