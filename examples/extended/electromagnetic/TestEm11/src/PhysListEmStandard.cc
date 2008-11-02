@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.7 2008-10-30 19:00:35 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.8 2008-11-02 09:46:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,21 +145,21 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(120);
-  emOptions.SetLambdaBinning(120);
+  emOptions.SetDEDXBinning(120);	//default=84  
+  emOptions.SetLambdaBinning(120);	//default=84  
   emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   //default=fUseSafety
   emOptions.SetMscRangeFactor(0.04);	//default
   emOptions.SetMscGeomFactor (2.5);	//default       
   emOptions.SetSkin(3.);		//default
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 100*um);   
-  emOptions.SetLinearLossLimit(1.e-2);	//default
+  emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-3);		//default=1.e-2
    
   //ionization
   //

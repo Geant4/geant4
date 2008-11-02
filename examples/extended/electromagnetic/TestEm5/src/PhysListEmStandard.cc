@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.21 2008-10-31 11:36:46 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.22 2008-11-02 09:53:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,8 +144,8 @@ void PhysListEmStandard::ConstructProcess()
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(120);	//default=60
-  emOptions.SetLambdaBinning(120);	//default=60
+  emOptions.SetDEDXBinning(120);	//default=84
+  emOptions.SetLambdaBinning(120);	//default=84
   emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
@@ -158,7 +158,7 @@ void PhysListEmStandard::ConstructProcess()
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
+  emOptions.SetLinearLossLimit(1.e-3);		//default=1.e-2
    
   //ionization
   //
