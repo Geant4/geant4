@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2008-10-24 16:49:17 vnivanch Exp $
+$Id: History,v 1.130 2008-11-02 12:22:19 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-11-08 V.Ivanchenko (materials-V09-01-18)
+G4IronStoppingICRU73, G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73
+ - fixed inline methods
 
 24-10-08 V.Ivanchenko (materials-V09-01-17)
 G4IronStoppingICRU73, G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73

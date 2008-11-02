@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.2 2008-10-30 21:51:35 alechner Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.3 2008-11-02 12:22:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
@@ -124,25 +124,31 @@ G4SimpleMaterialStoppingICRU73::GetDEDX(G4int ionZ, const G4String& NameMaterial
 inline G4int
 G4SimpleMaterialStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
 {
-  for (G4int idx=0; idx<25; idx++){
-    if(MatName[idx] == NameMaterial) return idx;
+  G4int idx = -1;
+  for (G4int i=0; i<25; i++){
+    if(MatName[i] == NameMaterial) {
+      idx = i;
+      break;
+    }
   }
-  return -1;
+  return idx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4int
 G4SimpleMaterialStoppingICRU73::GetIonMaterialCoupleIndex(
-                       G4int atomicNumber,             // Atomic number of ion
-                       const G4String& materialName) { // Material name
+                       G4int atomicNumber,             
+                       const G4String& materialName) 
+{ 
+  G4int idx = -1;
+  if(atomicNumber >= 3 && atomicNumber <= 18) {
 
-  if(atomicNumber < 3 || atomicNumber > 18) return -1;
+    G4int materialIndex = GetMaterialIndex(materialName);
+    if(materialIndex >= 0) idx = materialIndex * 16 + atomicNumber - 3;
+  }
 
-  G4int materialIndex = GetMaterialIndex(materialName);
-  if(materialIndex < 0) return -1;
-
-  return materialIndex * 16 + atomicNumber - 3;
+  return idx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,17 +156,19 @@ G4SimpleMaterialStoppingICRU73::GetIonMaterialCoupleIndex(
 inline G4double 
 G4SimpleMaterialStoppingICRU73::GetDensity(G4int idxMaterial)
 {
-  if( idxMaterial < 0 || idxMaterial > 24) return .0;
-  return Density[idxMaterial];
+  G4double d = 0.0;
+  if( idxMaterial >= 0 && idxMaterial <= 24) d = Density[idxMaterial];
+  return d;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
 G4String G4SimpleMaterialStoppingICRU73::GetMaterialName(G4int idxMaterial)
 {
   G4String s = "";
-  if( idxMaterial < 0 || idxMaterial > 24) return s;
-  return MatName[idxMaterial];
+  if( idxMaterial >= 0 && idxMaterial <= 24) s = MatName[idxMaterial];
+  return s;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,9 +176,11 @@ G4String G4SimpleMaterialStoppingICRU73::GetMaterialName(G4int idxMaterial)
 inline G4PhysicsVector* 
 G4SimpleMaterialStoppingICRU73::GetPhysicsVector(G4int ionZ, G4int idxMaterial)
 {
-  if(ionZ < 3 || ionZ > 18 || idxMaterial < 0 || idxMaterial > 24) return 0; 
-  G4int idx = idxMaterial*16 + ionZ - 3;
-  return dedx[idx];
+  G4PhysicsVector* v = 0;
+  if(ionZ >= 3 && ionZ <= 18 && idxMaterial >= 0 && idxMaterial <= 24) {  
+    v = dedx[idxMaterial*16 + ionZ - 3];
+  }
+  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

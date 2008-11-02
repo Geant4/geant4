@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IronStoppingICRU73.hh,v 1.2 2008-10-30 21:51:35 alechner Exp $
+// $Id: G4IronStoppingICRU73.hh,v 1.3 2008-11-02 12:22:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4IronStoppingICRU73_h
@@ -119,37 +119,43 @@ inline G4double G4IronStoppingICRU73::GetDEDX(const G4String& NameMaterial,
 inline G4int
 G4IronStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
 {
+  G4int idx = -1;
   for (G4int idxMaterial=0; idxMaterial<16; idxMaterial++){
-    if(MatName[idxMaterial] == NameMaterial) return idxMaterial;
+    if(MatName[idxMaterial] == NameMaterial) {
+      idx = idxMaterial;
+      break;
+    }
   }
-  return -1;
+  return idx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4int
 G4IronStoppingICRU73::GetIonMaterialCoupleIndex(G4int atomicNumber,
-                                                const G4String& materialName) {
-
-  if(atomicNumber != 26) return -1;
-
-  return GetMaterialIndex(materialName);
+                                                const G4String& materialName) 
+{
+  G4int idx = -1;
+  if(atomicNumber == 26) idx = GetMaterialIndex(materialName);
+  return idx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4IronStoppingICRU73::GetDensity(G4int idxMaterial)
 {
-  if( idxMaterial < 0 || idxMaterial > 15) return 0.0;
-  return Density[idxMaterial];
+  G4double d = 0.0;
+  if( idxMaterial >= 0 && idxMaterial <= 15) d = Density[idxMaterial];
+  return d;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4String G4IronStoppingICRU73::GetMaterialName(G4int idxMaterial)
 {
   G4String s = "";
-  if( idxMaterial< 0 || idxMaterial> 15) return s;
-  return MatName[idxMaterial];
+  if( idxMaterial >= 0 && idxMaterial <= 15) s = MatName[idxMaterial];
+  return s;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,8 +163,9 @@ inline G4String G4IronStoppingICRU73::GetMaterialName(G4int idxMaterial)
 inline 
 G4PhysicsVector* G4IronStoppingICRU73::GetPhysicsVector(G4int idxMaterial)
 {
-  if(idxMaterial< 0 || idxMaterial> 15) return 0; 
-  return dedx[idxMaterial];
+  G4PhysicsVector* v = 0;
+  if(idxMaterial >= 0 && idxMaterial <= 15) v = dedx[idxMaterial];
+  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
