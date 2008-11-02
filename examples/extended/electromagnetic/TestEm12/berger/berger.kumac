@@ -13,7 +13,7 @@ set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
 
 title 'e- 1 MeV in water : Dose Point Kernel'
 *
-h/file 1 1mevnopt.hbook
+h/file 1 1mev.spline.001.hbook
 *
 opt grid
 *
