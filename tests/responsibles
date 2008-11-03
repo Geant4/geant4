@@ -145,6 +145,7 @@ examples/extended
     exgps                    flei@space.qinetiq.com          Fan Lei
     HepMCEx01,02             Koichi.Murakami@kek.jp          Koichi Murakami
     MCTruth                  Witold.Pokorski@cern.ch         Witold Pokorski
+    pythia                   Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
   exoticphysics:
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   field:
@@ -171,6 +172,7 @@ examples/extended
     gdml                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
     P01                      Witold.Pokorski@cern.ch         Witold Pokorski
     P02                      Witold.Pokorski@cern.ch         Witold Pokorski
+    P03                      Pedro.Arce@ciemat.es            Pedro Arce
   polarisation/Pol01         Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   radioactivedecay/exrdm     flei@space.qinetiq.com          Fan Lei
   runAndEvent:
