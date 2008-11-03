@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: pythya6_decayer.cc,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// $Id: pythia6_decayer.cc,v 1.1 2008-11-03 14:47:54 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
