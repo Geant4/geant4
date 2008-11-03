@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbVolume.cc,v 1.4 2008-11-03 17:04:41 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,6 +49,7 @@
 #include "G4tgrVolumeAssembly.hh"
 #include "G4tgrVolumeMgr.hh"
 #include "G4tgrPlace.hh"
+#include "G4tgrPlaceSimple.hh"
 #include "G4tgrPlaceDivRep.hh"
 #include "G4tgrPlaceParameterisation.hh"
 #include "G4tgrUtils.hh"
@@ -653,7 +654,8 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       if( place->GetType() == "PlaceSimple" )
       {
         //----- Get rotation matrix
-        G4String rmName = place->GetRotMatName();
+        G4tgrPlaceSimple* placeSimple = (G4tgrPlaceSimple*)place; 
+	G4String rmName = placeSimple->GetRotMatName();
 
         G4RotationMatrix* rotmat = G4tgbRotationMatrixMgr::GetInstance()
                                  ->FindOrBuildG4RotMatrix( rmName );
@@ -875,7 +877,8 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 
       // Rotation and Translation of the assembly inside the world
 
-      G4String rmName = place->GetRotMatName();
+      G4tgrPlaceSimple* placeSimple = (G4tgrPlaceSimple*)place; 
+      G4String rmName = placeSimple->GetRotMatName();
       G4RotationMatrix* rotmat = G4tgbRotationMatrixMgr::GetInstance()
                                ->FindOrBuildG4RotMatrix( rmName );
       G4ThreeVector transl = place->GetPlacement();

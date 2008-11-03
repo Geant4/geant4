@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlace.hh,v 1.2 2008-11-03 17:04:41 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,7 +64,6 @@ class G4tgrPlace
 
     void SetType( const G4String& typ ){ theType = typ; }
 
-    virtual const G4String& GetRotMatName() const;
     virtual G4ThreeVector GetPlacement() const;
 
   protected:

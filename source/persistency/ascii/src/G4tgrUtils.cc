@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrUtils.cc,v 1.3 2008-11-03 17:04:41 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -737,7 +737,8 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1, const G4String& wo
 	bEqual = FALSE;
 	break;
 	//---- If there is no asterisk after last character, the last string pair found has to end at the last character
-      } else if( spair.first+spair.second-1 == word1.length() && sFound+spair.second-1 != word2.length() ) {
+      } else if( spair.first+spair.second-1 == G4int(word1.length()) 
+		 && G4int(sFound)+spair.second-1 != G4int(word2.length()) ) {
 	bEqual = FALSE;
 	break;
       }
