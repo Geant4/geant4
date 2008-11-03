@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCDetectorBuilder.hh,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGRCDetectorBuilder.hh,v 1.2 2008-11-03 16:26:56 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce
@@ -48,8 +48,7 @@ class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
    ~ExTGRCDetectorBuilder();
 
     const G4tgrVolume* ReadDetector();
-    G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop,
-                                                G4bool bBuildRegionCuts = 1 );
+    virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop);
   private:
 
     ExTGRCLineProcessor* tlproc;

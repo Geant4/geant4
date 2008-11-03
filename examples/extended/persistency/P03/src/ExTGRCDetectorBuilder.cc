@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCDetectorBuilder.cc,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGRCDetectorBuilder.cc,v 1.2 2008-11-03 16:26:56 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce
@@ -67,19 +67,16 @@ const G4tgrVolume* ExTGRCDetectorBuilder::ReadDetector()
 
 //---------------------------------------------------------------------
 G4VPhysicalVolume* ExTGRCDetectorBuilder::
-ConstructDetector( const G4tgrVolume* tgrVoltop, G4bool bBuildRegionCuts )
+ConstructDetector( const G4tgrVolume* tgrVoltop)
 {
   G4VPhysicalVolume* topPV =
     G4tgbDetectorBuilder::ConstructDetector( tgrVoltop );
 
-  if( bBuildRegionCuts )
-  {
-    //--- Create regions
-    ExTGRCRegionCutsMgr::GetInstance()->BuildRegions();
-    
-    //--- Set cuts to regions
+  //--- Create regions
+  ExTGRCRegionCutsMgr::GetInstance()->BuildRegions();
+  
+  //--- Set cuts to regions
     ExTGRCRegionCutsMgr::GetInstance()->BuildProductionCuts();
-  }
 
   return topPV;
 }

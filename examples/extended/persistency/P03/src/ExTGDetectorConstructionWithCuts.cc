@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstructionWithCuts.cc,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGDetectorConstructionWithCuts.cc,v 1.2 2008-11-03 16:26:56 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ G4VPhysicalVolume* ExTGDetectorConstructionWithCuts::Construct()
   volmgr->SetDetectorBuilder( gtb );
 
   const G4tgrVolume* tgrVoltop = gtb->ReadDetector();
-  G4VPhysicalVolume* physiWorld = gtb->ConstructDetector(tgrVoltop,1);
+  G4VPhysicalVolume* physiWorld = gtb->ConstructDetector(tgrVoltop);
 
   //  G4VPhysicalVolume* physiWorld = volmgr->ReadAndConstructDetector();
 
