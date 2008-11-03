@@ -1,0 +1,33 @@
+// Define rotation matrix
+:ROTM RM0 0. 0. 0.
+:ROTM RM1 45. 0. 0.
+:ROTM RM2 90. 0. 45.
+
+// Define volumes and place them
+:VOLU world BOX 2000. 2000. 2000. G4_AIR
+
+:VOLU subworld1 BOX 500. 500. 500. G4_AIR
+:PLACE subworld1 1 world RM0 0. 1000. 0. 
+:VOLU subworld2 BOX 500. 500. 500. G4_AIR
+:PLACE subworld2 1 world RM0 0. -1000. 0. 
+:VOLU subworld3 BOX 500. 500. 500. G4_AIR
+:PLACE subworld3 1 world RM0 0. 0. 1000.  
+:VOLU subworld4 BOX 500. 500. 500. G4_AIR
+:PLACE subworld4 1 world RM0 0. 0. -1000.  
+
+:VOLU "my tube" TUBE 0. 30. 60. G4_AIR
+:PLACE_PARAM "my tube" 1 subworld1 LINEAR_X RM0 6 100. -300. 
+:PLACE_PARAM "my tube" 2 subworld2 LINEAR_Y RM1 5 150. -300. 
+:PLACE_PARAM "my tube" 3 subworld3 LINEAR_Z RM0 4 200. -500. 
+:PLACE_PARAM "my tube" 4 subworld4 LINEAR RM2 3 250. 0. 1. 1. 0.
+
+:VOLU small_box BOX 10. 10. 10. G4_AIR
+:PLACE small_box 1 "my tube" RM0 0. 0. 0. 
+:PLACE small_box 2 "my tube" RM0 10. 0. 0. 
+:COLOUR small_box 1. 0. 0.
+
+:VIS world OFF
+:VIS subworld1 OFF
+:VIS subworld2 OFF
+:VIS subworld3 OFF
+:VIS subworld4 OFF

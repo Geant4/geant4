@@ -1,0 +1,32 @@
+// Define a parameter for later use
+:P POSZ 5.
+
+// Define materials
+:ELEM Hydrogen H 1. 1.
+:ELEM Oxygen O 8 16.
+:ELEM Nitrogen N 7 14.
+:MIXT Air 1.214E-03 2
+      Nitrogen   0.75
+      Oxygen     0.25
+
+// Define rotation matrix
+:ROTM R00 90. 0. 90. 90. 0. 0.  // unit matrix
+
+// Define volumes and place them
+:VOLU world BOX 30. 30. 50. Air
+
+:VOLU "my tube" TUBS 0. 10. 20. 0. 360. G4_WATER
+:PLACE "my tube" 1 world R00 0. 0. $POSZ
+
+:VOLU sphere ORB 5.  G4_AIR
+:PLACE sphere 1 "my tube" R00 0. 1. 10.
+
+:VOLU chamber ELLIPTICALTUBE 3. 5. 10. G4_WATER
+:PLACE chamber 1 world R00 0. 0. 40.
+
+:REGION tubeReg "my tube"
+:REGION chamberReg chamber
+
+:CUTS tubeReg 10. 1. 
+:CUTS chamberReg 0.1 0.1 0.1
+ 
