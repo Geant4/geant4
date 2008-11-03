@@ -29,6 +29,9 @@ materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+"/ascii                      Pedro.Arce@ciemat.es            Pedro Arce
+"/gdml                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+"/mctruth                    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
