@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.cc,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// $Id: G4Pythia6Decayer.cc,v 1.2 2008-11-03 14:48:53 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // According to TPythia6Decayer class in Root:
@@ -40,7 +40,7 @@
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Track.hh>
+#include "G4Track.hh"
 
 #include <CLHEP/Vector/LorentzVector.h>
 
