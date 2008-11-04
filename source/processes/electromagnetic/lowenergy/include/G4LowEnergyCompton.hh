@@ -23,89 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.hh,v 1.22 2008-03-17 13:45:25 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.23 2008-11-04 09:57:49 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: A. Forti
-//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 02 Mar 1999   A. Forti   1st implementation
-//  1 Aug 2001   MGP        Major revision according to a design iteration
-//
-// -------------------------------------------------------------------
 
-// Class description:
-// Low Energy Electromagnetic Physics, Compton Scattering
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// -------------------------------------------------------------------
+#ifndef G4LowEnergyCompton_h
+#define G4LowEnergyCompton_h 1
 
-#ifndef G4LOWENERGYCOMPTON_HH
-#define G4LOWENERGYCOMPTON_HH 1
+#include "G4VEmProcess.hh"
+#include "G4Gamma.hh"
+#include "G4LivermoreCompton.hh"
 
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Track;
-class G4Step;
-class G4ParticleDefinition;
-class G4VParticleChange;
-class G4VEMDataSet;
-class G4VCrossSectionHandler;
-class G4VRangeTest;
+class G4LowEnergyCompton : public G4VEmProcess
 
-class G4LowEnergyCompton : public G4VDiscreteProcess {
+{
+public: 
 
-public:
+  G4LowEnergyCompton(const G4String& processName ="LECompton",
+		      G4ProcessType type = fElectromagnetic);
+
+  virtual ~G4LowEnergyCompton();
+
+  G4bool IsApplicable(const G4ParticleDefinition&);
   
-  G4LowEnergyCompton(const G4String& processName ="LowEnCompton");
-  
-  ~G4LowEnergyCompton();
-
-  G4bool IsApplicable(const G4ParticleDefinition& definition);
-  
-  void BuildPhysicsTable(const G4ParticleDefinition& definition);
- 
-  G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
- 
-  // For testing purpose only
-  G4double DumpMeanFreePath(const G4Track& track, 
-			    G4double previousStepSize, 
-			    G4ForceCondition* condition) 
-  { return GetMeanFreePath(track, previousStepSize, condition); }
+  virtual void PrintInfo();
 
 protected:
 
-  G4double GetMeanFreePath(const G4Track& track, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-private: 
-
-  // Hide copy constructor and assignment operator as private 
-  G4LowEnergyCompton& operator=(const G4LowEnergyCompton& right);
-  G4LowEnergyCompton(const G4LowEnergyCompton& );
-
-  G4double lowEnergyLimit;  // low energy limit  applied to the process
-  G4double highEnergyLimit; // high energy limit applied to the process
-
-  G4VEMDataSet* meanFreePathTable;
-  G4VEMDataSet* scatterFunctionData;
-
-  G4VCrossSectionHandler* crossSectionHandler;
-
-  G4VRangeTest* rangeTest;
-
-  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
-  const G4double intrinsicHighEnergyLimit;
-
-  G4ShellData shellData;
-  G4DopplerProfile profileData;
+private:
+     
+  G4bool       isInitialised;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline 
+G4bool G4LowEnergyCompton::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  
+#endif
+ 
