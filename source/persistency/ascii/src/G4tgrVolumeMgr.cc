@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrVolumeMgr.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -297,7 +297,7 @@ const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume()
     {
       const G4tgrVolume* vol = (*itetv).second;
 #ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+      if( G4tgrMessenger::GetVerboseLevel() >= 3 )
 	{
 	  G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
 		 << vol->GetName() << " no place = "
@@ -309,7 +309,7 @@ const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume()
 	{
 	  vol = FindVolume( (* (vol->GetPlacements()).begin() )->GetParentName(), 1 );
 #ifdef G4VERBOSE
-	  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+	  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
 	    {
 	      G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
 		     << vol->GetName()<< " N place = "

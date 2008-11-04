@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceSimple.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceSimple.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,8 @@
 
 #include "G4tgrPlaceSimple.hh"
 #include "G4tgrUtils.hh"
-#include "G4tgrRotationMatrixFactory.hh"
+#include "G4tgrVolume.hh"
+#include "G4tgrMessenger.hh"
 
 // -------------------------------------------------------------------------
 G4tgrPlaceSimple::G4tgrPlaceSimple()
@@ -74,4 +75,19 @@ G4tgrPlaceSimple::G4tgrPlaceSimple( const std::vector<G4String>& wl )
   //---------- set the rotation matrix name
   theRotMatName = G4tgrUtils::GetString(wl[4+wl7]);
 
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
+
+}
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrPlaceSimple& obj)
+{
+  os << "G4tgrPlaceSimple=  in " << obj.theParentName << " Position= " << obj.thePlace << " RotMatName= " << obj.theRotMatName << G4endl;
+     
+  return os;
 }

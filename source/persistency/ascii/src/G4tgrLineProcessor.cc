@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrLineProcessor.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,9 +68,9 @@ G4tgrLineProcessor::~G4tgrLineProcessor()
 G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4tgrUtils::DumpVS(wl, "!!!! processing line");
+    G4tgrUtils::DumpVS(wl, "@@@ Processing input line");
   }
 #endif  
 
@@ -128,12 +128,6 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( (wl0 == ":MIXT") || (wl0 == ":MIXT_BY_WEIGHT") )
   {
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-    {
-      G4tgrUtils::DumpVS( wl, " material mixture by weight read " );
-    }
-#endif
     G4tgrMaterialMixture* mate = G4tgrMaterialFactory::GetInstance()
                           ->AddMaterialMixture( wl, "MaterialMixtureByWeight" );
     volmgr->RegisterMe( mate );
@@ -142,12 +136,6 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":MIXT_BY_NATOMS" )
   {
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-    {
-      G4tgrUtils::DumpVS( wl, " material mixture by number of atoms read " );
-    }
-#endif
     G4tgrMaterialMixture* mate = G4tgrMaterialFactory::GetInstance()
                           ->AddMaterialMixture(wl, "MaterialMixtureByNoAtoms");
     volmgr->RegisterMe( mate );
@@ -156,12 +144,6 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":MIXT_BY_VOLUME" )
   {
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-    {
-      G4tgrUtils::DumpVS( wl, " material mixture by volume read " );
-    }
-#endif
     G4tgrMaterialMixture* mate = G4tgrMaterialFactory::GetInstance()
                           ->AddMaterialMixture( wl, "MaterialMixtureByVolume" );
     volmgr->RegisterMe( mate );

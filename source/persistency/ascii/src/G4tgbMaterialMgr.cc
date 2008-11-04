@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMgr.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterialMgr.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -461,7 +461,7 @@ G4tgbMaterial* G4tgbMaterialMgr::FindG4tgbMaterial(const G4String & name,
   {
     mate = (*cite).second;
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
       G4cout << " G4tgbMaterialMgr::FindG4tgbMaterial() -"
              << " G4tgbMaterial found: " << ( (*cite).second )->GetName()

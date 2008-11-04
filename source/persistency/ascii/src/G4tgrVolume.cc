@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrVolume.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,11 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
   //---------- set name 
   theName = G4tgrUtils::GetString( wl[1] ); 
 
+  theVisibility = 1;
+  theRGBColour = new G4double[4];
+  for(size_t ii=0; ii<4; ii++)  { theRGBColour[ii] = -1.; }
+  theCheckOverlaps = 0;
+
   if( wl.size() != 4 )
   {
     //:VOLU tag to build a volume creating solid and material
@@ -75,32 +80,29 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
     theSolid = G4tgrVolumeMgr::GetInstance()->CreateSolid( wl, 1 );
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  {
-    G4cout << "G4tgrVolume::G4tgrVolume() - From new solid: "
-           << *theSolid << G4endl;
-  }
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+      {
+	G4cout << "Created from new solid: " 
+	       << *this << G4endl;
+      }
 #endif
   }
   else
-  {
-    //:VOLU tag to build a volume assigning material to solid
-    //---------- set material name
-    theMaterialName = G4tgrUtils::GetString( wl[3] );
-    theSolid = G4tgrVolumeMgr::GetInstance()->FindSolid( wl[2], true );
-
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
-      G4cout << " G4tgrVolume::G4tgrVolume() - From existing solid: "
-             << *theSolid << G4endl;
-    }
+      //:VOLU tag to build a volume assigning material to solid
+      //---------- set material name
+      theMaterialName = G4tgrUtils::GetString( wl[3] );
+      theSolid = G4tgrVolumeMgr::GetInstance()->FindSolid( wl[2], true );
+      
+#ifdef G4VERBOSE
+      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	{
+	  G4cout << "Created from existing solid: " 
+		 << *this << G4endl;
+	}
 #endif
-  }
-  theVisibility = 1;
-  theRGBColour = new G4double[4];
-  for(size_t ii=0; ii<4; ii++)  { theRGBColour[ii] = -1.; }
-  theCheckOverlaps = 0;
+    }
+
 }
 
 
@@ -143,7 +145,7 @@ G4tgrPlace* G4tgrVolume::AddPlace( const std::vector<G4String>& wl )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << "   New placement: " << thePlacements.size()
+    G4cout << " G4tgrVolume:  New placement: " << thePlacements.size()
            << " added for Volume " << theName
            << " inside " << pl->GetParentName()
            << " type " << pl->GetType() << G4endl;
@@ -178,7 +180,7 @@ G4tgrVolume::AddPlaceReplica( const std::vector<G4String>& wl )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << "   New placement: " << thePlacements.size()
+    G4cout << " G4tgrVolume:  New placement replica: " << thePlacements.size()
            << " added for Volume " << theName
            << " inside " << pl->GetParentName() << G4endl;
   }
@@ -203,7 +205,7 @@ G4tgrVolume::AddPlaceParam( const std::vector<G4String>& wl )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << "   New placement Param: " << thePlacements.size()
+    G4cout << " G4tgrVolume:  New placement Param: " << thePlacements.size()
            << " added for Volume " << theName
            << " inside " << pl->GetParentName() << G4endl;
   }
@@ -253,4 +255,13 @@ void G4tgrVolume::AddCheckOverlaps( const std::vector<G4String>& wl )
   ///--------- Set check overlaps 
   theCheckOverlaps = G4tgrUtils::GetBool( wl[2] );
 
+}
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrVolume& obj)
+{
+  os << "G4tgrVolume= " << obj.theName << " Type= " << obj.theType << " Material= " << obj.theMaterialName << " Visibility " << obj.theVisibility 
+     << " Colour " << (obj.theRGBColour)[0] << " " << (obj.theRGBColour)[1] << " " << (obj.theRGBColour)[2] << (obj.theRGBColour)[3] << " " << " CheckOverlaps " << obj.theCheckOverlaps << " N placements " << obj.thePlacements.size() << G4endl;
+      
+  return os;
 }

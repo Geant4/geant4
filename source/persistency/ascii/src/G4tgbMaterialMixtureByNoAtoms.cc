@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,14 +68,7 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
                                      theTgrMate->GetDensity(),
                                      theTgrMate->GetNumberOfComponents(),
                                      kStateUndefined, STP_Temperature );
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  {
-    G4cout << " G4tgbMaterialMixtureByNoAtoms::BuildG4Material() -"
-           << " Constructing new G4Material: " << theTgrMate->GetName()
-           << " " << theTgrMate->GetDensity() << G4endl;
-  }
-#endif
+
   //--- add components
   G4Element* compElem;
   G4Material* compMate;
@@ -165,7 +158,14 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
       mate->AddMaterial( compMateList[ii], fr ); 
     }
   }
-      
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+    G4cout << " Constructing new G4Material by number of atoms: " << *mate << G4endl; 
+  }
+#endif      
+
   return mate;
 
 }

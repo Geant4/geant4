@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.hh,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrPlaceParameterisation.hh,v 1.4 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,6 +71,8 @@ class G4tgrPlaceParameterisation : public G4tgrPlace
      // GetType returns placement type
     std::vector<G4double> GetExtraData() const { return theExtraData; }
     const G4String& GetRotMatName() const { return theRotMatName; }
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrPlaceParameterisation& obj);
 
   private:
 

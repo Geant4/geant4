@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamSquare.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbPlaceParamSquare.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,7 +115,7 @@ void G4tgbPlaceParamSquare::
 ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 4 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():" << G4endl;
     G4cout << "   no copies " << theNCopies << G4endl
@@ -134,7 +134,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   origin += theTranslation;
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 4 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgbPlaceParamSquare::ComputeTransformation() - "
            << copyNo << " = " << copyNo1 << ", X " << copyNo2 << G4endl

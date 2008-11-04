@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.4 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrVolume.hh,v 1.5 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,6 +97,8 @@ class G4tgrVolume
     G4bool GetCheckOverlaps() const {return theCheckOverlaps;}
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrVolume& obj);
 
   protected:   
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbRotationMatrix.cc,v 1.4 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,6 +91,13 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom3( std::vector<G4double>& values )
   rotMat->rotateY( values[1] );
   rotMat->rotateZ( values[2] );
 
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+    G4cout << " Constructing new G4RotationMatrix from 3 numbers " <<  GetName() << " : " << *rotMat << G4endl;
+  }
+#endif
+
   return rotMat;
 }
 
@@ -124,12 +131,9 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom6( std::vector<G4double>& values )
   G4RotationMatrix* rotMat = new G4RotationMatrix(rottemp);
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  { 
-     G4cout << " G4tgbRotationMatrix::BuildG4RotMatrix(): " << G4endl
-            << "   colx " << colx << " = " << rotMat->colX() << G4endl
-            << "   coly " << coly << " = " << rotMat->colY() << G4endl
-            << "   colz " << colz << " = " << rotMat->colZ() << G4endl;
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+    G4cout << " Constructing new G4RotationMatrix from 6 numbers " <<  GetName() << " : " << *rotMat << G4endl;
   }
 #endif
 
@@ -145,14 +149,6 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<G4double>& values )
   CLHEP::Hep3Vector coly(values[3],values[4],values[5]);
   CLHEP::Hep3Vector colz(values[6],values[7],values[8]);
 
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  {
-    G4cout << " G4tgbRotationMatrix::BuildG4RotMatrixFrom9():" << G4endl
-           << "   colx " << colx << ", y " << coly << ", z " << colz << G4endl;
-  }
-#endif
-
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the
   // constructor which does not check its input arguments!   
@@ -163,12 +159,9 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<G4double>& values )
   G4RotationMatrix* rotMat = new G4RotationMatrix(rottemp);
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-     G4cout << " G4tgbRotationMatrix::buildG4RotMatrixFrom9():" << G4endl
-            << "   colx " << colx << " = " << rotMat->colX() << G4endl
-            << "   coly " << coly << " = " << rotMat->colY() << G4endl
-            << "   colz " << colz << " = " << rotMat->colZ() << G4endl;
+    G4cout << " Constructing new G4RotationMatrix from 9 numbers " <<  GetName() << " : " << *rotMat << G4endl;
   }
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementFromIsotopes.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgrElementFromIsotopes.hh,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,11 +62,14 @@ class G4tgrElementFromIsotopes : public G4tgrElement
     const G4String& GetComponent( G4int n ) const { return theComponents[n]; }
     G4double  GetAbundance( G4int n ) const       { return theAbundances[n]; }
 
+    friend std::ostream& operator<<(std::ostream&, const G4tgrElementFromIsotopes& );
+
   private:
 
     G4int theNoIsotopes;
     std::vector<G4String> theComponents;
     std::vector<G4double> theAbundances;
+
 };
 
 #endif

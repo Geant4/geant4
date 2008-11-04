@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialFactory.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrMaterialFactory.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -151,7 +151,7 @@ G4tgrMaterialFactory::AddMaterialSimple( const std::vector<G4String>& wl )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << " adding material simple " << wl[1] << G4endl;
+    G4cout << " G4tgrMaterialFactory::AddMaterialSimple" << wl[1] << G4endl;
   }
 #endif
 
@@ -178,7 +178,7 @@ G4tgrMaterialFactory::AddMaterialMixture( const std::vector<G4String>& wl,
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << " adding material mixture " << wl[1] << G4endl;
+    G4cout << " G4tgrMaterialFactory::AddMaterialMixture " << wl[1] << G4endl;
   }
 #endif
 
@@ -202,7 +202,7 @@ G4tgrMaterialFactory::AddMaterialMixture( const std::vector<G4String>& wl,
 G4tgrIsotope* G4tgrMaterialFactory::FindIsotope(const G4String & name) const 
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
      G4cout << " G4tgrMaterialFactory::FindIsotope() - " << name << G4endl;
   }
@@ -217,7 +217,7 @@ G4tgrIsotope* G4tgrMaterialFactory::FindIsotope(const G4String & name) const
   else
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       G4cout << " G4tgrIsotope found: "
              << ( (*cite).second )->GetName() << G4endl;
@@ -232,7 +232,7 @@ G4tgrIsotope* G4tgrMaterialFactory::FindIsotope(const G4String & name) const
 G4tgrElement* G4tgrMaterialFactory::FindElement(const G4String & name) const 
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrMaterialFactory::FindElement() - " << name << G4endl;
   }
@@ -246,7 +246,7 @@ G4tgrElement* G4tgrMaterialFactory::FindElement(const G4String & name) const
   else
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       DumpElementList();
       G4cout << " G4tgrElement found: "
@@ -262,7 +262,7 @@ G4tgrElement* G4tgrMaterialFactory::FindElement(const G4String & name) const
 G4tgrMaterial* G4tgrMaterialFactory::FindMaterial(const G4String & name) const 
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrMaterialFactory::FindMaterial() - " << name << G4endl;
   }
@@ -332,7 +332,7 @@ ErrorAlreadyExists(const G4String& object,
   else
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4tgrUtils::DumpVS( wl, (G4String("!! WARNING: ") + msg).c_str() ); 
     }

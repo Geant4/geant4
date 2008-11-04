@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrFileReader.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,13 +82,6 @@ G4tgrFileReader* G4tgrFileReader::GetInstance()
 G4bool G4tgrFileReader::ReadFiles() 
 {
 
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-  {
-    G4cout << " G4tgrFileReader::ReadFiles() " << G4endl;
-  }
-#endif
-
   std::vector< G4String > wl,wlnew;
     
 #ifdef G4VERBOSE
@@ -110,7 +103,7 @@ G4bool G4tgrFileReader::ReadFiles()
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
-      G4cout << "   Data File is " << theTextFiles[ii] << G4endl;
+      G4cout << "   Reading data file " << theTextFiles[ii] << G4endl;
     }
 #endif
     
@@ -126,7 +119,7 @@ G4bool G4tgrFileReader::ReadFiles()
       {
         wl.insert( wl.end(), wlnew.begin(), wlnew.end() );
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 3 )
+        if( G4tgrMessenger::GetVerboseLevel() >= 4 )
         {
           G4tgrUtils::DumpVS(wl, "!!!! adding line");
         }
@@ -137,7 +130,7 @@ G4bool G4tgrFileReader::ReadFiles()
       {
         //----- Process previous tag
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+        if( G4tgrMessenger::GetVerboseLevel() >= 4 )
         {
           G4tgrUtils::DumpVS(wl, "!!!! line read");
         }

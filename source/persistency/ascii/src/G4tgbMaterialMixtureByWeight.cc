@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,15 +108,13 @@ G4Material* G4tgbMaterialMixtureByWeight::BuildG4Material()
       }
     } 
   }
+
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " G4tgbMaterialMixtureByWeight::BuildG4Material() -"
-           << " Built new G4MaterialMixtureByWeight:"
-           << " " << theTgrMate->GetName()
-           << " " << *mate << G4endl;
+    G4cout << " Constructing new G4Material by weight: " << *mate << G4endl; 
   }
-#endif
+#endif      
 
   return mate;
 }

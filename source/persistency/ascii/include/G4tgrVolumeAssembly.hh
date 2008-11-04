@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeAssembly.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeAssembly.hh,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,7 @@ class G4tgrVolumeAssembly : public G4tgrVolume
     G4int GetNoComponents() const
       { return theComponentNames.size(); }
 
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrVolumeAssembly& obj);
   protected:   
 
     std::vector<G4String> theComponentNames;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,6 +100,13 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
                   "InvalidSetup", FatalException, ErrMessage);
     }
   } 
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+    G4cout << " Constructing new G4Material by volume: " << *mate << G4endl; 
+  }
+#endif      
 
   return mate;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementSimple.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgrElementSimple.hh,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,8 @@ class G4tgrElementSimple : public G4tgrElement
 
     G4double GetZ() const { return theZ; }
     G4double GetA() const { return theA; }
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrElementSimple& obj);
 
   private:
 

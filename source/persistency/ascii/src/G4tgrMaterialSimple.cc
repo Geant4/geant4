@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialSimple.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrMaterialSimple.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 
 #include "G4tgrMaterialSimple.hh"
 #include "G4tgrUtils.hh"
+#include "G4tgrMessenger.hh"
 
 //-------------------------------------------------------------
 G4tgrMaterialSimple::G4tgrMaterialSimple()
@@ -67,6 +68,12 @@ G4tgrMaterialSimple::G4tgrMaterialSimple(const G4String& matType,
   theA = G4tgrUtils::GetDouble( wl[3], g/mole);
   theDensity = G4tgrUtils::GetDouble( wl[4], g/cm3);
   theNoComponents = 0;
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
 }
 
 
@@ -95,7 +102,7 @@ G4double G4tgrMaterialSimple::GetFraction(G4int ii)
 //-------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrMaterialSimple& mate) 
 {
-  os << "MATERIAL SIMPLE: " << mate.theName 
+  os << "G4tgrMaterialSimple= " << mate.theName 
      << " Z " << mate.theZ << " A " << mate.theA 
      << "density= " << mate.theDensity*g/cm3
      << " g/cm3. Number of Components: " << mate.theNoComponents << G4endl;

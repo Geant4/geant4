@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbIsotope.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbIsotope.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,18 +63,17 @@ G4Isotope* G4tgbIsotope::BuildG4Isotope()
   if( theG4Isot == 0 )
   { 
     //----- construct new G4Isotope 
+
+    isot = new G4Isotope(theTgrIsot->GetName(), theTgrIsot->GetZ(),
+                         theTgrIsot->GetN(), theTgrIsot->GetA() );
+
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
-      G4cout << " G4tgbIsotope::BuildG4Isotope() - Isotope: " <<  " "
-             << theTgrIsot->GetName() << " "
-             << theTgrIsot->GetZ() << " "
-             << theTgrIsot->GetN() << " "
-             << theTgrIsot->GetA() << G4endl;
+      G4cout << "  Constructing new G4Isotope " 
+             << *isot << G4endl;
     }
 #endif
-    isot = new G4Isotope(theTgrIsot->GetName(), theTgrIsot->GetZ(),
-                         theTgrIsot->GetN(), theTgrIsot->GetA() );
     theG4Isot = isot;
   }
   else

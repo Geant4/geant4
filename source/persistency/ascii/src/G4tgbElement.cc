@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbElement.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbElement.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,18 +60,15 @@ G4Element* G4tgbElement::BuildG4ElementSimple()
     //----- construct new G4Element 
     G4tgrElementSimple* tgrElem = static_cast<G4tgrElementSimple*>(theTgrElem);
 
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-    {
-      G4cout << " Constructing new G4Element: "
-             << tgrElem->GetName() << " "
-             << tgrElem->GetSymbol() << " "
-             << tgrElem->GetZ() << " "
-             << tgrElem->GetA() << G4endl;
-    }
-#endif
     elem = new G4Element(tgrElem->GetName(), tgrElem->GetSymbol(),
                          tgrElem->GetZ(), tgrElem->GetA() );
+#ifdef G4VERBOSE
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    {
+      G4cout << " Constructing new G4Element: " 
+             << *elem << G4endl;
+    }
+#endif
     theG4Elem = elem;
   }
   else
@@ -94,17 +91,17 @@ G4Element* G4tgbElement::BuildG4ElementFromIsotopes()
     //----- construct new G4Element 
     G4tgrElementFromIsotopes* tgrElem
       = static_cast<G4tgrElementFromIsotopes*>(theTgrElem);
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-    {
-      G4cout << " Constructing  new G4Element: "
-             << tgrElem->GetName() << " "
-             << tgrElem->GetSymbol() << " "
-             << tgrElem->GetNumberOfIsotopes() << G4endl;
-    }
-#endif
+
     elem = new G4Element(tgrElem->GetName(), tgrElem->GetSymbol(),
                          tgrElem->GetNumberOfIsotopes() );
+
+#ifdef G4VERBOSE
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    {
+      G4cout << " Constructing  new G4Element from isotopes: "
+             << *elem << G4endl;
+    }
+#endif
 
     //----- add isotopes
     G4Isotope* compIsot;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeDivision.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,7 +90,7 @@ G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl )
   //------ register parent - child 
   G4tgrVolumeMgr::GetInstance()->RegisterParentChild( parentName, thePlaceDiv );
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrVolumeDivision::G4tgrVolumeDivision() -"
            << " Replica register parent - child " << G4endl;
@@ -142,4 +142,20 @@ G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl )
   theVisibility = 1;
   theRGBColour = new G4double[3];
   for(size_t ii=0; ii<3; ii++)  { theRGBColour[ii] = -1.; }
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
+}
+
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrVolumeDivision& obj)
+{
+  os << "G4tgrVolumeDivision= " << obj.theName << " Placement= " << *(obj.thePlaceDiv) << G4endl;
+
+  return os;
 }

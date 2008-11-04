@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrParameterMgr.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrParameterMgr.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -168,7 +168,7 @@ G4String G4tgrParameterMgr::FindParameter( const G4String& name, G4bool exists )
     exists = 1;
     par = ((*sdite).second);
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrParameterMgr::FindParameter() -"
            << " parameter found " << name << " = " << par << G4endl; 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.4 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrFileIn.cc,v 1.5 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -195,7 +195,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
         {
           NoWords++;
 #ifdef G4VERBOSE
-          if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+          if( G4tgrMessenger::GetVerboseLevel() >= 3 )
           {
             G4cout << "G4tgrFileIn::GetWordsInLine() - NoWords"
                    << NoWords << ltemp << G4endl;
@@ -206,7 +206,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
         {
           NoWords++; 
 #ifdef G4VERBOSE
-          if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+          if( G4tgrMessenger::GetVerboseLevel() >= 3 )
           {
             G4cout << "G4tgrFileIn::GetWordsInLine() - NoWords"
                    << NoWords << ltemp << G4endl;
@@ -228,7 +228,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
       if ( stemp.length() == 0 )  { break; }
       G4int comment = stemp.find(G4String("//") );
 #ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      if( G4tgrMessenger::GetVerboseLevel() >= 3 )
       {
         G4cout << "!!!COMMENT" << comment << stemp.c_str() << G4endl;
       }
@@ -348,7 +348,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
     }
 
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       G4cout << " G4tgrFileIn::GetWordsInLine() - Include found !" << G4endl;
     }
@@ -377,7 +377,7 @@ G4bool G4tgrFileIn::EndOfFile()
   if( isok )
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       G4cout << " G4tgrFileIn::EndOfFile() - EOF: "
              << theCurrentFile << G4endl;
@@ -392,7 +392,7 @@ G4bool G4tgrFileIn::EndOfFile()
 
   // Only real closing if all files are closed
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrFileIn::EndOfFile() - EOF: "
            << isok << " " << theCurrentFile << G4endl;
@@ -413,7 +413,7 @@ G4bool G4tgrFileIn::EndOfFile()
 void G4tgrFileIn::Close()
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << "G4tgrFileIn::Close() - "
            << theCurrentFile << ", size " << theFiles.size() << G4endl;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrIsotope.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrIsotope.hh,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,6 +62,8 @@ class G4tgrIsotope
     G4int    GetZ() const { return theZ; }
     G4int    GetN() const { return theN; }
     G4double GetA() const { return theA; }
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrIsotope& obj);
   
  private:
 

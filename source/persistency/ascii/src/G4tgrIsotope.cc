@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrIsotope.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrIsotope.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,15 @@ G4tgrIsotope::G4tgrIsotope( const std::vector<G4String>& wl )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " G4tgrIsotope::G4tgrIsotope() - Created " << theName << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
+}
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrIsotope& obj)
+{
+  os << "G4tgrIsotope= " << obj.theName << " Z = " << obj.theZ << " N= " << obj.theN << " A= " << obj.theA << G4endl;
+
+  return os;
 }

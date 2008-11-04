@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamCircle.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbPlaceParamCircle.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -144,7 +144,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   physVol->SetRotation( theRotationMatrix );
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 5 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgbPlaceParamCircle::ComputeTransformation():" << G4endl
            << "   no copies - " << theNCopies  << G4endl

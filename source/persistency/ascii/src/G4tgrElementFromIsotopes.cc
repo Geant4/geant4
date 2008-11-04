@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementFromIsotopes.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrElementFromIsotopes.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,10 +70,25 @@ G4tgrElementFromIsotopes( const std::vector<G4String>& wl )
   }
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " G4tgrElementFromIsotopes::G4tgrElementFromIsotopes() -"
-           << " Created " << theName << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
+}
+
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrElementFromIsotopes& obj)
+{
+  os << "G4tgrElementFromIsotopes= " << obj.theName << " N isotopes " << obj.theNoIsotopes
+     << " COMPONENTS " << G4endl;
+  for(size_t ii = 0; ii < obj.theComponents.size(); ii++ )
+    { 
+      os << obj.theComponents[ii] << " : " << obj.theAbundances[ii];
+    }
+
+  os << G4endl;
+
+  return os;
 }

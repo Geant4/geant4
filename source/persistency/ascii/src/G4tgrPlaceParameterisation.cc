@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrPlaceParameterisation.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,8 @@
 
 #include "G4tgrPlaceParameterisation.hh"
 #include "G4tgrUtils.hh"
-#include "G4tgrRotationMatrixFactory.hh"
+#include "G4tgrVolume.hh"
+#include "G4tgrMessenger.hh"
 
 //-------------------------------------------------------------
 G4tgrPlaceParameterisation::G4tgrPlaceParameterisation()
@@ -77,4 +78,26 @@ G4tgrPlaceParameterisation( const std::vector<G4String>& wl )
   {
     theExtraData.push_back( G4tgrUtils::GetDouble(wl[ii]) );
   }
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
 }
+
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrPlaceParameterisation& obj)
+{
+  os << "G4tgrPlaceParameterisation= in " << obj.theParentName << " ParamTyep = " << obj.theParamType << " RotMatName= " << obj.theRotMatName << " EXTRA DATA= " ;
+  for( size_t ii = 0; ii << obj.theExtraData.size(); ii++ )
+    {
+      os << obj.theExtraData[ii] << " ";
+  }
+  os << G4endl;
+
+  return os;
+}
+

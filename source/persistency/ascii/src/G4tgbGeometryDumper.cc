@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.4 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.5 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,7 +138,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
 {
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
     G4cout << " G4tgbGeometryDumper::DumpPhysVol() - Volume: "
            << pv->GetName() << G4endl;
@@ -178,7 +178,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
     G4RotationMatrix* rotMat = pv->GetRotation();
     if( !rotMat ) rotMat = new G4RotationMatrix();
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " G4tgbGeometryDumper::DumpPhysVol() - PV RotationMatrix: "
              << rotMat << G4endl;
@@ -189,7 +189,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
     if( reffact->IsReflected( lv ) )
     {
 #ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
       {
         G4cout << " G4tgbGeometryDumper::DumpPhysVol() - Reflected volume: "
                << pv->GetName() << G4endl;
@@ -210,7 +210,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
       pvName += "_refl";
     }
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " G4tgbGeometryDumper::DumpPhysVol() -"
              << " Calling DumpRotationMatrix :" << rotMat << G4endl;
@@ -253,7 +253,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
 void G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv )
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
     G4cout << " G4tgbGeometryDumper::DumpLogVol() - Log vol: "
            << lv->GetName() << lv->GetSolid()->GetName() << G4endl;
@@ -379,7 +379,7 @@ void G4tgbGeometryDumper::DumpIsotope( G4Isotope* isot)
 void G4tgbGeometryDumper::DumpSolid( G4VSolid* solid )
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
     G4cout << " G4tgbGeometryDumper::DumpSolid() - Solid: "
            << solid->GetName() << G4endl;
@@ -1093,7 +1093,7 @@ G4tgbGeometryDumper::GetPVChildren( G4LogicalVolume* lv )
     {
       children.push_back( *ite );
 #ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
       {
         G4cout << " G4tgbGeometryDumper::GetPVChildren() - adding children: "
                << (*ite)->GetName() << " of " << lv->GetName() <<  G4endl;
@@ -1379,7 +1379,7 @@ G4bool G4tgbGeometryDumper::CheckIfPhysVolExists( const G4String& name,
                                                         G4VPhysicalVolume* pt )
 {
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
     G4cout << " G4tgbGeometryDumper::CheckIfPhysVolExists() - "
            << name << G4endl;

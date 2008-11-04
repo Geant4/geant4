@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.cc,v 1.3 2008-11-03 17:04:41 arce Exp $
+// $Id: G4tgrUtils.cc,v 1.4 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -182,7 +182,7 @@ G4String G4tgrUtils::GetString( const G4String& str )
   if( cstr[0] == '$' )
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       G4cout << " G4tgrUtils::GetString() - Substitute parameter: "
              << G4tgrParameterMgr::GetInstance()

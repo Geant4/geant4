@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrVolumeDivision.hh,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,8 @@ class G4tgrVolumeDivision : public G4tgrVolume
       // Set the list of supported axis for each solid types
 
     G4tgrPlaceDivRep* GetPlaceDivision() { return thePlaceDiv; }
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrVolumeDivision& obj);
 
   private:
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeAssembly.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrVolumeAssembly.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,14 @@ G4tgrVolumeAssembly::G4tgrVolumeAssembly( const std::vector<G4String>& wl )
   for (size_t ii=0; ii<4; ii++)  { theRGBColour[ii] = -1.; }
 
   theSolid = 0;
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
+
 }
 
 
@@ -117,4 +125,20 @@ G4tgrPlace* G4tgrVolumeAssembly::AddPlace( const std::vector<G4String>& wl )
   G4tgrVolumeMgr::GetInstance()->RegisterParentChild( pl->GetParentName(), pl );
 
   return pl;
+}
+
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrVolumeAssembly& obj)
+{
+  os << "G4tgrVolumeAssembly= " << obj.theName;
+
+  for( size_t ii = 0; ii < obj.theComponentNames.size(); ii++ )
+    {
+      os << obj.theComponentNames[ii] << " RotMatName= " << obj.theComponentRMs[ii] << " Position= " << obj.theComponentPos[ii].x() << " "  << obj.theComponentPos[ii].y() << " " << obj.theComponentPos[ii].z();
+    }
+
+  os << G4endl;
+
+  return os;
 }

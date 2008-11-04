@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceSimple.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceSimple.hh,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,6 +62,8 @@ class G4tgrPlaceSimple : public G4tgrPlace
 
     const G4String& GetRotMatName() const { return theRotMatName; }
     G4ThreeVector GetPlacement() const { return thePlace; }
+
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrPlaceSimple& obj);
 
   protected:
 

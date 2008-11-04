@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceDivRep.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceDivRep.hh,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,6 +79,8 @@ class G4tgrPlaceDivRep : public G4tgrPlace
     void SetAxis( EAxis axis ) { theAxis = axis; }
     void SetOffset( G4double offset ) { theOffset = offset; }
     void SetDivType( G4DivType typ ) { theDivType = typ; }
+    
+    friend std::ostream& operator<<(std::ostream& os, const G4tgrPlaceDivRep& obj);
 
   private:
 

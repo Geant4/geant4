@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrSolid.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrSolid.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,6 +67,15 @@ G4tgrSolid::G4tgrSolid( const std::vector<G4String>& wl)
   FillSolidParams( wl );
 
   G4tgrVolumeMgr::GetInstance()->RegisterMe( this );
+
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
+
 }
 
 
@@ -162,7 +171,7 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrSolid& sol)
 {
-  os << "SOLID " << sol.theName << " of type " << sol.theType << " PARAMS: ";
+  os << "G4tgrSolid= " << sol.theName << " of type " << sol.theType << " PARAMS: ";
   if( sol.theSolidParams.size() != 0 )
   {
     std::vector<G4double> solpar = *(sol.theSolidParams[0]); 

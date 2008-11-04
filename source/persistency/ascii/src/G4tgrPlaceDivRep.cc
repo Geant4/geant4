@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceDivRep.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgrPlaceDivRep.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,10 +36,8 @@
 
 #include "G4tgrPlaceDivRep.hh"
 #include "G4tgrUtils.hh"
-#include "G4tgrRotationMatrixFactory.hh"
-
-#include "CLHEP/Units/SystemOfUnits.h"
-
+#include "G4tgrMessenger.hh"
+#include "G4tgrVolume.hh"
 
 //-------------------------------------------------------------
 G4tgrPlaceDivRep::G4tgrPlaceDivRep()
@@ -76,6 +74,14 @@ G4tgrPlaceDivRep::G4tgrPlaceDivRep( const std::vector<G4String>& wl )
   {
     theOffset = 0.;
   }
+
+#ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  {
+     G4cout << " Created " << *this << G4endl;
+  }
+#endif
+
 }
 
 
@@ -101,4 +107,12 @@ EAxis G4tgrPlaceDivRep::BuildAxis( const G4String& axisName )
                 "InvalidAxis", FatalException, ErrMessage);
   }
   return kXAxis; // to avoid warning errors  
+}
+
+// -------------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrPlaceDivRep& obj)
+{
+  os << "G4tgrPlaceDivRep= in " << obj.theParentName << " NDiv= " << obj.theNDiv << " Width= " << obj.theWidth << " Axis= " << obj.theAxis << " Offset= " << obj.theOffset << " DivType= " << obj.theDivType << G4endl;
+
+  return os;
 }
