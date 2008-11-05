@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.19 2008-09-18 16:13:54 gcosmo Exp $
+// $Id: G4Tubs.hh,v 1.20 2008-11-05 13:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,6 @@ class G4Tubs : public G4CSGSolid
     
     // Methods for solid
 
-    inline void Initialize();
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
@@ -179,6 +178,10 @@ class G4Tubs : public G4CSGSolid
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
   private:
+
+    inline void Initialize();
+      //
+      // Reset relevant values to zero
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       //

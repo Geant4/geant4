@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.6 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Cons.icc,v 1.7 2008-11-05 13:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -34,6 +34,14 @@
 //
 // Implementation of inline methods of G4Cons
 // --------------------------------------------------------------------
+
+inline
+void G4Cons::Initialise()
+{
+  fCubicVolume= 0.;
+  fSurfaceArea= 0.;
+  fpPolyhedron = 0;
+}
 
 inline
 G4double G4Cons::GetInnerRadiusMinusZ() const
@@ -81,62 +89,63 @@ inline
 void G4Cons::SetInnerRadiusMinusZ( G4double Rmin1 )
 {
   fRmin1= Rmin1 ;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 inline
 void G4Cons::SetOuterRadiusMinusZ( G4double Rmax1 )
 {
   fRmax1= Rmax1 ;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 inline
 void G4Cons::SetInnerRadiusPlusZ ( G4double Rmin2 )
 {
   fRmin2= Rmin2 ;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 inline
 void G4Cons::SetOuterRadiusPlusZ ( G4double Rmax2 )
 {
   fRmax2= Rmax2 ;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 inline
 void G4Cons::SetZHalfLength ( G4double newDz )
 {
   fDz= newDz ;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 inline
 void G4Cons::SetStartPhiAngle ( G4double newSPhi )
 {
   fSPhi= newSPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 void G4Cons::SetDeltaPhiAngle ( G4double newDPhi )
 {
+  if ( newDPhi >= twopi-kAngTolerance*0.5 )
+  {
+    fPhiFullCone = true;
+  }
+  else if ( newDPhi > 0 )
+  {
+    fPhiFullCone = false;
+  }
+  else
+  {
+     G4cerr << "ERROR - G4Cons()::SetDeltaPhiAngle() : " << GetName() << G4endl
+            << "        Negative delta-Phi ! - " << newDPhi << G4endl;
+     G4Exception("G4Cons::SetDeltaPhiAngle()", "InvalidSetup",
+                  FatalException, "Invalid dphi.");
+  }
   fDPhi=  newDPhi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialise();
 }
 
 // Old access methods ...
@@ -219,7 +228,7 @@ G4double G4Cons::GetSurfaceArea()
                          + mmax * std::sqrt(dmax*dmax+4*fDz*fDz)
                          + 0.5*(fRmax1*fRmax1-fRmin1*fRmin1
                                +fRmax2*fRmax2-fRmin2*fRmin2 ));
-    if(fDPhi < twopi )
+    if(!fPhiFullCone)
     {
       fSurfaceArea = fSurfaceArea+4*fDz*(mmax-mmin);
     }

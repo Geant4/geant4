@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.18 2007-05-18 07:38:00 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.19 2008-11-05 13:55:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -177,6 +177,9 @@ class G4Cons : public G4CSGSolid
 
   private:
 
+        inline void Initialise();
+          // Reset relevant values to zero
+
         G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
           // Algorithm for SurfaceNormal() following the original
           // specification for points not on the surface
@@ -189,6 +192,7 @@ class G4Cons : public G4CSGSolid
                  fRmax1,fRmax2,
                  fDz,
                  fSPhi,fDPhi;
+        G4bool   fPhiFullCone;
 };
 
 #include "G4Cons.icc"
