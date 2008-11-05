@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.21 2007-05-18 10:24:32 gcosmo Exp $
+// $Id: testG4Tubs.cc,v 1.22 2008-11-05 13:56:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -372,6 +372,9 @@ G4bool testG4Tubs()
     assert(ApproxEqual(Dist,50));
     Dist=t1.DistanceToIn(pbigx,vxy);
     assert(ApproxEqual(Dist,kInfinity));
+
+    Dist=t1a.DistanceToIn(pbigz,vmz);
+    assert(ApproxEqual(Dist,50));
 
     Dist=t2.DistanceToIn(G4ThreeVector(45.5,0,0),vx);
     //  G4cout<<"Dist=t2.DistanceToIn((45.5,0,0),vx) = "<<Dist<<G4endl;
