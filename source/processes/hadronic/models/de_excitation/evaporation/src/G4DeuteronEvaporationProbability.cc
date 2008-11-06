@@ -31,7 +31,9 @@
 // Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
 // cross section option
 
+
 #include "G4DeuteronEvaporationProbability.hh"
+
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)
@@ -40,8 +42,6 @@ G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability(const G4Deute
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4DeuteronEvaporationProbability::copy_constructor meant to not be accessable");
 }
-
-
 
 
 const G4DeuteronEvaporationProbability & G4DeuteronEvaporationProbability::
@@ -57,16 +57,23 @@ G4bool G4DeuteronEvaporationProbability::operator==(const G4DeuteronEvaporationP
     return false;
 }
 
+
 G4bool G4DeuteronEvaporationProbability::operator!=(const G4DeuteronEvaporationProbability &) const
 {
     return true;
 }
 
-  G4double G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
-  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
-	
-  G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
-  { return 0.0; }
+
+G4double G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+{
+    return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));
+}
+
+
+G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
+{
+    return 0.0;
+}
 
 
 G4double G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability::CCoeficient(const G4double aZ) 
@@ -90,6 +97,7 @@ G4double G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability::CCo
     return C/2.0;
 	
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -121,6 +129,8 @@ G4double G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability::CCo
          return 0.;
        }
 }
+
+
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
@@ -165,8 +175,6 @@ G4double G4DeuteronEvaporationProbability::GetOpt12(const  G4double K)
  return xs;
 
 }
-
-
 
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
@@ -235,4 +243,3 @@ G4double G4DeuteronEvaporationProbability::GetOpt34(const  G4double K)
 }
 
 //   ************************** end of cross sections ******************************* 
-
