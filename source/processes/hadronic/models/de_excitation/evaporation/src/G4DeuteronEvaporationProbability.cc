@@ -76,7 +76,7 @@ G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment & )
 }
 
 
-G4double G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability::CCoeficient(const G4double aZ) 
+G4double G4DeuteronEvaporationProbability::CCoeficient(const G4double aZ) 
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
