@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.5 2008-08-20 14:51:48 sincerti Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.6 2008-11-06 19:12:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateElasticBrennerZaider.hh"
@@ -114,7 +114,7 @@ G4double G4FinalStateElasticBrennerZaider::RandomizeCosTheta(G4double k)
   // ------------ (K) ~ --------------------------------- + ---------------------------------
   //   d Omega           (1 + 2 gamma(K) - cos(theta))^2     (1 + 2 delta(K) + cos(theta))^2
   //
-  // Maximum is < 1/(4 gamma(K)^2) + beta(K)/(4 delta(K)^2)
+  // Maximum is < 1/(4 gamma(K)^2) + beta(K)/((2+2delta(K))^2)
   //
   // Phys. Med. Biol. 29 N.4 (1983) 443-447
   
@@ -143,7 +143,7 @@ G4double G4FinalStateElasticBrennerZaider::RandomizeCosTheta(G4double k)
       }
   }
 
-  G4double oneOverMax = 1. / (1./(4.*gamma*gamma) + beta/(4.*delta*delta));
+  G4double oneOverMax = 1. / (1./(4.*gamma*gamma) + beta/( (2.+2.*delta)*(2.+2.*delta) ));
   
   G4double cosTheta = 0.;
   G4double leftDenominator = 0.;
