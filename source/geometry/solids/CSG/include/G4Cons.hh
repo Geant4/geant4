@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.20 2008-11-06 10:55:40 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.21 2008-11-06 11:04:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,8 @@
 //
 //  fSPhi  starting angle of the segment in radians
 //  fDPhi  delta angle of the segment in radians
+//
+//  fPhiFullCone   Boolean variable used for indicate the Phi Section
 //
 //   Note:
 //      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,

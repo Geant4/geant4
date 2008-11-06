@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.58 2008-11-06 10:55:40 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.59 2008-11-06 11:04:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -700,7 +700,6 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 //          inner radius intersection
 //
 // NOTE:
-// - Precalculations for phi trigonometry are Done `just in time'
 // - `if valid' implies tolerant checking of intersection points
 // - z, phi intersection from Tubs
 
@@ -1313,7 +1312,7 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 
 ///////////////////////////////////////////////////////////////
 //
-// Calculate distance to surface of shape from `inside', allowing for tolerance
+// Calculate distance to surface of shape from 'inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
 
 G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
@@ -1449,7 +1448,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     if ( d >= 0 )
     {
       // Check if on outer cone & heading outwards
-      // NOTE: Should use rho-rout>-kRadtolerance*0.5
+      // NOTE: Should use rho-rout>-kRadTolerance*0.5
         
       if (nt3 > -halfRadTolerance && nt2 >= 0 )
       {

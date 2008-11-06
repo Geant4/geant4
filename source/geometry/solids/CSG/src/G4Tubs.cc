@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.72 2008-11-06 10:55:40 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.73 2008-11-06 11:04:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -802,8 +802,7 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 //          inner radius intersection
 //
 // NOTE:
-// - Precalculations for phi trigonometry are Done `just in time'
-// - `if valid' implies tolerant checking of intersection points
+// - 'if valid' implies tolerant checking of intersection points
 
 G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
                                const G4ThreeVector& v  ) const
