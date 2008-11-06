@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.19 2008-09-15 08:16:45 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.20 2008-11-06 10:11:27 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1172,7 +1172,7 @@ void G4Incl::initMaterial(G4int izmat, G4int iamat, G4int imat)
     G4cout <<"Nuclear density for nucleus (z, a): " << izmat << " " << iamat << " " << imat << G4endl;
   }
   
-  const G4double fmp = 938.2796;
+  const G4double fmp = 938.2796; // From INCL data
 
   // parametres moyens de densite de la cible (fermi 2 parametres)
   if (iamat >= 28) {
@@ -1709,7 +1709,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4double eout = 0.0;
   G4double eps_c[BL1SIZE]; 
   for(G4int init_i = 0; init_i < BL1SIZE; init_i++) {
-    eps_c[BL1SIZE] = 0.0;
+    eps_c[init_i] = 0.0;
   }
   G4double epsv = 0.0;
   G4double erecg = 0.0;
