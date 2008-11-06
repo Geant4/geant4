@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.20 2008-11-05 13:55:25 gcosmo Exp $
+// $Id: G4Tubs.hh,v 1.21 2008-11-06 10:55:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,7 +166,7 @@ class G4Tubs : public G4CSGSolid
       // Creates the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
-    G4double fRMin,fRMax,fDz,fSPhi,fDPhi;
+    G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
     G4bool fPhiFullTube;
    
       // Used by distanceToOut
@@ -183,6 +183,10 @@ class G4Tubs : public G4CSGSolid
       //
       // Reset relevant values to zero
 
+    inline void InitializeTrigonometry();
+      //
+      // Recompute relevant trigonometric values and cache them
+
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       //
       // Algorithm for SurfaceNormal() following the original
@@ -193,6 +197,11 @@ class G4Tubs : public G4CSGSolid
     G4double kRadTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
+
+    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+             sinSPhi, cosSPhi, sinEPhi, cosEPhi;
+      //
+      // Cached trigonometric values
 };
 
 #include "G4Tubs.icc"

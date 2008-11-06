@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.7 2008-11-05 13:55:25 gcosmo Exp $
+// $Id: G4Cons.icc,v 1.8 2008-11-06 10:55:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -41,6 +41,23 @@ void G4Cons::Initialise()
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
   fpPolyhedron = 0;
+}
+
+inline 
+void G4Cons::InitializeTrigonometry()
+{
+  G4double hDPhi = 0.5*fDPhi;                       // half delta phi
+  G4double cPhi  = fSPhi + hDPhi; 
+  G4double ePhi  = fSPhi + fDPhi;
+
+  sinCPhi    = std::sin(cPhi);
+  cosCPhi    = std::cos(cPhi);
+  cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
+  cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
+  sinSPhi = std::sin(fSPhi);
+  cosSPhi = std::cos(fSPhi);
+  sinEPhi = std::sin(ePhi);
+  cosEPhi = std::cos(ePhi);
 }
 
 inline
@@ -125,6 +142,7 @@ void G4Cons::SetStartPhiAngle ( G4double newSPhi )
 {
   fSPhi= newSPhi;
   Initialise();
+  InitializeTrigonometry();
 }
 
 void G4Cons::SetDeltaPhiAngle ( G4double newDPhi )
@@ -146,6 +164,7 @@ void G4Cons::SetDeltaPhiAngle ( G4double newDPhi )
   }
   fDPhi=  newDPhi;
   Initialise();
+  InitializeTrigonometry();
 }
 
 // Old access methods ...
