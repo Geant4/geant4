@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.59 2008-11-06 11:04:00 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.60 2008-11-06 15:26:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -141,9 +141,6 @@ G4Cons::G4Cons( const G4String& pName,
       G4Exception("G4Cons::G4Cons()", "InvalidSetup",
                   FatalException, "Invalid dphi.");
     }
-    // Possible pre-calculation of cos() and sin() for Phi Angles, here!
-    // In case of parameterisation these value should be resetted in
-    // method SetDeltaPhiAngle().
 
     // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
 
