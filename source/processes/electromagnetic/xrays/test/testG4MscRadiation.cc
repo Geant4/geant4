@@ -179,7 +179,7 @@ int main()
   G4cout << "92 uranium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 6;
+  choice = 13;
 
 
   switch (choice)
@@ -395,7 +395,7 @@ int main()
 
   G4complex ms, mc, tm;
 
-  G4double s, phi, xi, G, psi;
+  G4double s, phi, xi, G, psi, tmef;
 
   iMax = 50;
 
@@ -407,11 +407,11 @@ int main()
     lincofXR = mscRad->GetPlateLinearPhotoAbs(energyMscXR);
     absorption = (1. - std::exp(-lincofXR*step))/lincofXR;
  
-    /*
+    /*    
    
     numberMscXR  = mscRad->CalculateMscDiffdNdx(theDynamicParticle,energyMscXR);
     numberMGYXR  = mscRad->CalculateMscMigdalDiffdNdx(theDynamicParticle,energyMscXR);
-    numberE146XR = mscRad->CalculateMscE146DiffdNdx(theDynamicParticle,energyMscXR);
+    numberE146XR = mscRad->CalculateMscE146DiffdNdx(energyMscXR);
 
     radLength = mscRad->GetRadLength();
 
@@ -434,7 +434,7 @@ int main()
     writef <<energyMscXR/MeV<<"\t"<<numberMscXR<<"\t"<<numberMGYXR<<"\t"<<numberE146XR<<G4endl;
 
     
-    */
+    
 
     mscRad->CalculateCorrectionTMGY(energyMscXR);
     tm = mscRad->GetCorrectionTMGY();
@@ -451,13 +451,14 @@ int main()
      phi = mscRad->GetMigdalPhi();     
      xi = mscRad->GetMigdalXi();     
      psi = mscRad->GetMigdalPsi();     
-     G = mscRad->GetMigdalG();     
-     /*    
+     G = mscRad->GetMigdalG(); 
+     tmef = mscRad->GetTMEffect();    
+         
     G4cout <<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<imag(tm)
            <<"\t"<<real(ms)<<"\t"<<imag(ms)
            <<"\t"<<real(mc)<<"\t"<<imag(mc)<<"\t"<<sf<<G4endl; 
     writef<<energyMscXR/MeV<<"\t"<<real(tm)<<"\t"<<real(mc)<<"\t"<<tmc<<"\t"<<sf<<G4endl;
-     */
+    
    
 
     // G4cout <<energyMscXR/MeV<<"\t"<<sf<<G4endl;
@@ -466,10 +467,44 @@ int main()
     // writef <<energyMscXR/MeV<<"\t"<<real(mc)<<G4endl;
     // writef <<energyMscXR/MeV<<"\t"<<s<<G4endl;
 
-    G4cout <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<G4endl;
-    writef <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<G4endl;
- 
+
+    G4cout <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<"\t"<<tmef<<G4endl;
+    writef <<energyMscXR/MeV<<"\t"<<phi<<"\t"<<xi<<"\t"<<psi<<"\t"<<G<<"\t"<<tmef<<G4endl;
+
+*/ 
+
+
+
   }
+
+
+  G4double eTkin, lambda;
+  iMax = 50;
+  
+  // writef<<iMax<<G4endl;
+
+  for( i = 0; i < iMax; i++ )
+  {
+
+    eTkin = std::exp(i*0.5)*0.001*MeV;
+
+    G4DynamicParticle*  aDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+                                              G4ParticleMomentum(0.,0.,1.),
+                                              eTkin);
+
+    G4MscRadiation* aMscRad = new G4MscRadiation(theMaterial, step, aDynamicParticle);
+
+    lambda = aMscRad->CalculateMscE146Lambda();
+
+    G4cout <<eTkin/GeV<<"\t"<<lambda<<G4endl;
+    writef <<eTkin/GeV<<"\t"<<lambda<<G4endl;
+
+
+    delete aMscRad;
+    delete aDynamicParticle;
+  }
+
+
 
 
   return 1;

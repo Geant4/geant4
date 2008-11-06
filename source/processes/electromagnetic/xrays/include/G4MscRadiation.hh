@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.hh,v 1.7 2008-10-24 16:12:21 grichine Exp $
+// $Id: G4MscRadiation.hh,v 1.8 2008-11-06 13:24:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -214,10 +214,11 @@ public:
 
   G4double CalculateMscMigdalDiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
 
-  G4double CalculateMscE146DiffdNdx(  G4DynamicParticle* dParticle, G4double energy);
+  G4double CalculateMscE146DiffdNdx(G4double gammaEnergy);
+  G4double CalculateMscE146Lambda();
 
-  G4double SupressionFunction(G4double kineticEnergy, G4double gammaEnergy);
-  void CalcLPMFunctions(G4double kineticEnergy, G4double gammaEnergy);
+  G4double SupressionFunction(G4double gammaEnergy);
+  void CalcLPMFunctions(G4double gammaEnergy);
 
 
   G4double GetMigdalS()  { return fMigdalS; };
@@ -225,6 +226,7 @@ public:
   G4double GetMigdalPsi(){ return fMigdalPsi; };
   G4double GetMigdalPhi(){ return fMigdalPhi; };
   G4double GetMigdalG()  { return fMigdalG; };
+  G4double GetTMEffect()  { return fTMeffect; };
 
 
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
@@ -267,6 +269,8 @@ protected:
   G4double fEnergy;                    // energy and
   G4double fVarAngle;                  // angle squared
   G4double fLambda;
+  G4double fTkin;
+  G4double fPartMass;
 
   G4double fPlasmaCof;                // physical consts for plasma energy
   G4double fCofTR;  
@@ -302,7 +306,7 @@ protected:
   G4double fMigdalPsi;
   G4double fMigdalPhi;
   G4double fMigdalG;
-
+  G4double fTMeffect;
 
 
   G4SandiaTable* fPlatePhotoAbsCof;
@@ -411,7 +415,8 @@ inline  G4double G4MscRadiation::CalculateTransportXsc( const G4ParticleDefiniti
 // return Msc differential xsc
 
 
-inline  G4double G4MscRadiation::CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, G4double energy)
+inline  G4double G4MscRadiation::CalculateMscDiffdNdx(  G4DynamicParticle* dParticle, 
+                                                        G4double energy)
 {
 
   const G4ParticleDefinition* aParticle = dParticle->GetDefinition(); 
@@ -658,7 +663,7 @@ inline  G4double G4MscRadiation::CalculateMscMigdalDiffdNdx(  G4DynamicParticle*
 
   CalculateCorrectionTMGY(energy);
 
-  // G4double sf = SupressionFunction(Tkin, energy);
+  // G4double sf = SupressionFunction(energy);
 
   G4complex cMsc = CalculateCorrectionMsc(energy); 
 
@@ -679,17 +684,15 @@ inline  G4double G4MscRadiation::CalculateMscMigdalDiffdNdx(  G4DynamicParticle*
 // return Msc E146 Anthony(9) averaged in absorbing medium differential xsc
 
 
-inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* dParticle, 
-                                                              G4double energy)
+inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(G4double energy)
 {
 
   // const G4ParticleDefinition* aParticle = dParticle->GetDefinition(); 
   // G4double momentum = dParticle->GetTotalMomentum();
 
-  G4double Tkin = dParticle->GetKineticEnergy();
-  if(Tkin <= energy || Tkin <= 0. || energy <= 0.) return 0.;
+  if(fTkin <= energy || fTkin <= 0. || energy <= 0.) return 0.;
 
-  G4double y = energy/(Tkin+electron_mass_c2);
+  G4double y = energy/(fTkin+fPartMass);
 
   fY = y; 
 
@@ -697,9 +700,6 @@ inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* d
   {
     G4cout<<"y = "<<y<<G4endl;
   }
-  fZ = fPlateMaterial->GetZ();
-  G4double pMass = dParticle->GetMass();
-  fGamma = 1. + Tkin/pMass;
 
   // TM medium correction
 
@@ -740,10 +740,10 @@ inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* d
 
     // G4complex cMsc = CalculateCorrectionMsc(energy); 
   
-  // G4double sf = SupressionFunction(Tkin, energy);
+  // G4double sf = SupressionFunction(energy);
   // sf /= real(fCorTMGY);
 
-  CalcLPMFunctions(Tkin, energy);
+  CalcLPMFunctions(energy);
   mscDiffXsc *= ( y*y*fMigdalG + 2.*( 1. + (1.-y)*(1.-y) )*fMigdalPhi )*fMigdalXi;
   mscDiffXsc /= real(fCorTMGY);
 
@@ -778,19 +778,48 @@ inline  G4double G4MscRadiation::CalculateMscE146DiffdNdx(  G4DynamicParticle* d
   return mscDiffXsc;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// 
+
+
+
+inline  G4double G4MscRadiation::CalculateMscE146Lambda()
+{
+  G4double kMin, kMax, nMean, lambda;
+
+  G4Integrator<G4MscRadiation,G4double(G4MscRadiation::*)(G4double)> integral;
+
+  kMin = 10*eV;
+  kMax = fTkin;
+
+  nMean = integral.Legendre96(this,&G4MscRadiation::CalculateMscE146DiffdNdx,
+	                      kMin, kMax );
+   
+  if (nMean <= DBL_MIN) lambda = DBL_MAX;
+  else             lambda = 1./nMean;
+
+  return lambda;
+}
+
+
+
+
 ////////////////////////////////////////////////////////////////////////
 //
 // From G4eBrHEModel. For testing and tuning
 
-inline G4double G4MscRadiation::SupressionFunction(G4double kineticEnergy, G4double gammaEnergy)
+inline G4double G4MscRadiation::SupressionFunction(G4double gammaEnergy)
 {
   G4bool mscLPMflag = true;
+
   G4double mscMigdalConstant = classic_electr_radius*electron_Compton_length*
                                electron_Compton_length*4.*pi;
+
   G4double mscLPMconstant = fine_structure_const*electron_mass_c2*electron_mass_c2/
                             (4.*pi*hbarc);
 
-  G4double Eele = kineticEnergy + electron_mass_c2;
+  G4double Eele = fTkin + electron_mass_c2;
 
   G4double k = gammaEnergy;
 
@@ -803,7 +832,7 @@ inline G4double G4MscRadiation::SupressionFunction(G4double kineticEnergy, G4dou
 
   G4double supr = 1.0;
 
-  if (mscLPMflag) 
+  if ( mscLPMflag ) 
   {
     G4double y = k/Eele;
     G4double y2 = y*y;
@@ -975,7 +1004,7 @@ inline G4double G4MscRadiation::SupressionFunction(G4double kineticEnergy, G4dou
 //
 // From G4eBrRelModel for testing and tuning
 
-inline void  G4MscRadiation::CalcLPMFunctions(G4double kineticEnergy, G4double k)
+inline void  G4MscRadiation::CalcLPMFunctions(G4double k)
 {
   // PROFILE_HERE;
   // *** calculate lpm variable s & sprime ***
@@ -983,10 +1012,11 @@ inline void  G4MscRadiation::CalcLPMFunctions(G4double kineticEnergy, G4double k
 
   G4double mscMigdalConstant = classic_electr_radius*electron_Compton_length*
                                electron_Compton_length*4.*pi;
+
   G4double mscLPMconstant = fine_structure_const*electron_mass_c2*electron_mass_c2/
                             (4.*pi*hbarc);
 
-  G4double totalEnergy = kineticEnergy + electron_mass_c2;
+  G4double totalEnergy = fTkin + electron_mass_c2;
   G4double y = k/totalEnergy;
   G4double lpmEnergy = mscLPMconstant*(fPlateMaterial->GetRadlen());
 
@@ -1029,10 +1059,16 @@ inline void  G4MscRadiation::CalcLPMFunctions(G4double kineticEnergy, G4double k
   // using Ter-Mikaelian eq. (20.9)
 
   G4double k2 = k*k;
-  s = s * (1 + (densityCorr/k2) );
+
+  fTMeffect = 1./(1. + densityCorr/k2 );
+
+  s /= fTMeffect;
+
   fMigdalS = s;
+
   // recalculate Xi using modified s above
   // Klein eq. (75)
+
   fMigdalXi = 1.;
   if (s<=s1) fMigdalXi = 2.;
   else if ( (s1<s) && (s<=1) ) fMigdalXi = 1. + log(s)/logS1;
@@ -1067,6 +1103,7 @@ inline void  G4MscRadiation::CalcLPMFunctions(G4double kineticEnergy, G4double k
       G4double fMigdalPsi = 1-exp(-4*s-8*s2/(1+3.936*s+4.97*s2-0.05*s3+7.50*s4));
       fMigdalG = 3*fMigdalPsi-2*fMigdalPhi;
     }
+    
     else 
     {
       // using alternative parametrisiation
@@ -1075,20 +1112,21 @@ inline void  G4MscRadiation::CalcLPMFunctions(G4double kineticEnergy, G4double k
         + s3*0.67282686077812381 + s4*-0.1207722909879257;
       fMigdalG = tanh(pre);
     }
+    
   }
   else 
   {
     // low suppression limit valid s>2.
 
     fMigdalPhi = 1. - 0.0119048/s4;
-    fMigdalG = 1. - 0.0230655/s4;
+    fMigdalG   = 1. - 0.0230655/s4;
   }
 
 
   // make sure suppression is smaller than 1 
   // caused by Migdal approximation in xi    
 
-  if ( fMigdalXi*fMigdalPhi > 1. || s > 0.57)  fMigdalXi=1./fMigdalPhi;
+  if ( fMigdalXi*fMigdalPhi > 1. || s > 0.57)  fMigdalXi = 1./fMigdalPhi;
 }
 
 

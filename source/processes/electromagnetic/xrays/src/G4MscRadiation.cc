@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MscRadiation.cc,v 1.4 2008-09-30 14:39:07 grichine Exp $
+// $Id: G4MscRadiation.cc,v 1.5 2008-11-06 13:24:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -346,11 +346,11 @@ G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
 
   fSigma2 = 0.; //fPlasmaCof*gasMat->GetElectronDensity();
 
-  // Compute cofs for preparation of linear photo absorption
 
-  G4double Tkin = dParticle->GetKineticEnergy();
-  G4double pMass = dParticle->GetMass();
-  fGamma = 1. + Tkin/pMass;
+  fTkin = dParticle->GetKineticEnergy();
+  fPartMass = dParticle->GetMass();
+  fGamma = 1. + fTkin/fPartMass;
+  fZ = fPlateMaterial->GetZ();
 
 
 
@@ -358,6 +358,7 @@ G4MscRadiation::G4MscRadiation( G4Material* foilMat, G4double a,
 
 
 
+  // Compute cofs for preparation of linear photo absorption
 
   ComputePlatePhotoAbsCof();
 
