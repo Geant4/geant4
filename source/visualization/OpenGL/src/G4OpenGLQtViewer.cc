@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.29 2008-10-24 13:49:19 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.30 2008-11-06 13:43:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,39 +104,8 @@ void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/**
-   Implementation of virtual method of G4VViewer
-*/
-void G4OpenGLQtViewer::ShowView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  if (!GLWindow) {
-    G4cerr << "Visualization window not defined, please choose one before\n" << G4endl;
-  } else {
-#if QT_VERSION < 0x040000
-    GLWindow->setActiveWindow();
-#else
-    GLWindow->activateWindow();
-#endif
-  }
-  glFlush ();
-}
 
 
-
-//////////////////////////////////////////////////////////////////////////////
-void G4OpenGLQtViewer::CreateGLQtContext (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-#ifdef G4DEBUG
-  printf("G4OpenGLQtViewer::CreateGLQtContext \n");
-#endif
-}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -216,7 +185,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   GLWindow->setLayout(mainLayout);
   GLWindow->setWindowTitle( name);
 #endif
-  GLWindow->resize(300, 300);
+  GLWindow->resize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
   GLWindow->move(900,300);
   GLWindow->show();
   
@@ -822,7 +791,22 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
 }
 
-void G4OpenGLQtViewer::manageContextMenuEvent(QContextMenuEvent *e)
+
+void G4OpenGLQtViewer::G4resizeGL(
+ int aWidth
+,int aHeight)
+{  
+  setupViewport(aWidth,aHeight);
+  
+  if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
+    hasToRepaint =true;
+  }
+  WinSize_x = (G4int) aWidth;
+  WinSize_y = (G4int) aHeight;
+}
+
+
+void G4OpenGLQtViewer::G4manageContextMenuEvent(QContextMenuEvent *e)
 {
   if (!GLWindow) {
     G4cerr << "Visualization window not defined, please choose one before" << G4endl;
@@ -1017,6 +1001,18 @@ void G4OpenGLQtViewer::showShortcuts() {
     G4cout << " Press RETURN to Stop video recording " << G4endl;
   } else  if (fMouseAction == STYLE3) { //pick
     G4cout << "Click and pick " << G4endl;
+  } else {
+    G4cout << "Move camera point of view with mouse" << G4endl;
+    G4cout << "Press left/right arrows to move volume left/right" << G4endl;
+    G4cout << "Press up/down arrows to move volume up/down" << G4endl;
+    G4cout << "Press ALT+up/down arrows to move volume toward/forward" << G4endl;
+    G4cout << "Press SHIFT+left/right arrows to rotate volume left/right" << G4endl;
+    G4cout << "Press SHIFT+up/down arrows to rotate volume up/down" << G4endl;
+    G4cout << "Press +/- to zoom into volume" << G4endl;
+    G4cout << "Press ALT+/- to slow/speed auto rotation/move" << G4endl;
+    G4cout << "In video mode : " << G4endl;
+    G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
+    G4cout << " Press RETURN to Stop video recording " << G4endl;
   }
 
 }
@@ -1468,24 +1464,40 @@ void Graph::exportToSVG(const QString& fname)
 
 
 
+void G4OpenGLQtViewer::FinishView()
+{
+   glFlush ();
+   fWindow->swapBuffers ();
+}
 
 /**
    Save the current mouse press point
    @param p mouse click point
 */
-#if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
-#else
-void G4OpenGLQtViewer::G4MousePressEvent(QPoint p)
-#endif
+void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *event)
 {
-  fAutoMove = false; // stop automove
-  fLastPos1 = p;
-  fLastPos2 = fLastPos1;
-  fLastPos3 = fLastPos2;
-  fLastEventTime->start();
-  if (fMouseAction == STYLE3){  // pick
-    Pick(p.x(),p.y());
+#if QT_VERSION < 0x040000
+  if ((event->button() & Qt::LeftButton)
+      && !((event->state() & Qt::ShiftButton)
+           || (event->state() & Qt::ControlButton)
+           || (event->state() & Qt::AltButton)
+           || (event->state() & Qt::MetaButton))) {
+#else
+  if ((event->buttons() & Qt::LeftButton)
+      && !((event->modifiers() & Qt::ShiftModifier)
+           || (event->modifiers() & Qt::ControlModifier)
+           || (event->modifiers() & Qt::AltModifier)
+           || (event->modifiers() & Qt::MetaModifier))) {
+#endif
+    fWindow->setMouseTracking(true);
+    fAutoMove = false; // stop automove
+    fLastPos1 = event->pos();
+    fLastPos2 = fLastPos1;
+    fLastPos3 = fLastPos2;
+    fLastEventTime->start();
+    if (fMouseAction == STYLE3){  // pick
+      Pick(event->pos().x(),event->pos().y());
+    }
   }
 }
 
@@ -1517,6 +1529,14 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
       cycles ++ ;
     }
   }
+  fWindow->setMouseTracking(false);
+
+}
+
+
+void G4OpenGLQtViewer::G4MouseDoubleClickEvent()
+{
+  fWindow->setMouseTracking(true);
 }
 
 
@@ -1527,12 +1547,14 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
    @param mAutoMove true: apply this move till another evnt came, false :one time move
 */
 
-#if QT_VERSION < 0x040000
-void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mButtons)
-#else
-  void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::MouseButtons mButtons)
-#endif
+void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
 {
+  
+#if QT_VERSION < 0x040000
+  Qt::ButtonState mButtons = event->state();
+#else
+  Qt::MouseButtons mButtons = event->buttons();
+#endif
 
   if (fAutoMove) {
     return;
@@ -1540,7 +1562,7 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(int pos_x, int pos_y,Qt::ButtonState mBu
 
   fLastPos3 = fLastPos2;
   fLastPos2 = fLastPos1;
-  fLastPos1 = QPoint(pos_x, pos_y);
+  fLastPos1 = QPoint(event->x(), event->y());
 
   int deltaX = fLastPos2.x()-fLastPos1.x();
   int deltaY = fLastPos2.y()-fLastPos1.y();

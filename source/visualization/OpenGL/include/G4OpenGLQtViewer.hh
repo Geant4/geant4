@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.12 2008-10-15 10:24:04 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.13 2008-11-06 13:43:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,6 @@ public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
   void SetView ();
-  void ShowView ();
   virtual void updateQWidget()=0;
   void setupViewport(int, int);
   QString setEncoderPath(QString path);
@@ -105,24 +104,18 @@ public:
 protected:
   void CreateGLQtContext ();
   virtual void CreateMainWindow (QGLWidget*,QString);
-  void manageContextMenuEvent(QContextMenuEvent *e);
-#if QT_VERSION < 0x040000
-  void G4MousePressEvent(QPoint);
-#else
-  void G4MousePressEvent(QPoint);
-#endif
+  void G4resizeGL(int, int);
+  void G4manageContextMenuEvent(QContextMenuEvent *e);
+  void G4MousePressEvent(QMouseEvent *event);
   void G4MouseReleaseEvent();
-  void G4MouseDoubleClickEvent(QPoint p);
-#if QT_VERSION < 0x040000
-  void G4MouseMoveEvent(int, int, Qt::ButtonState);
-#else
-  void G4MouseMoveEvent(int, int, Qt::MouseButtons);
-#endif
+  void G4MouseDoubleClickEvent();
+  void G4MouseMoveEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
   void G4keyPressEvent (QKeyEvent * event); 
   void rotateQtScene(float, float);
   void rotateQtCamera(float, float);
   void moveScene(float, float, float,bool);
+  void FinishView();
 
 
 protected:
@@ -139,6 +132,12 @@ protected:
   float fDeltaRotationAngleX;
   float fDeltaRotationAngleY;
   float fDeltaRotationAngleZ;
+
+  bool hasToRepaint;
+  bool readyToPaint;
+  bool zoomAction;
+  QPoint beginZoom;
+  QPoint endZoom;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 

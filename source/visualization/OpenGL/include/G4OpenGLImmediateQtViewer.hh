@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.3 2007-11-09 15:03:21 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.4 2008-11-06 13:43:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,10 +60,19 @@ public:
   void resizeGL(int width,int height);
   void paintGL();
   void updateQWidget();
+  void ShowView ();
 
-private : 
-  int readyToPaint;
-  int nbPaint;
+protected:
+  void wheelEvent(QWheelEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
+  void contextMenuEvent(QContextMenuEvent *e);
+  void keyPressEvent (QKeyEvent * event); 
+private:
+  void ComputeView ();
+
 };
 
 #endif

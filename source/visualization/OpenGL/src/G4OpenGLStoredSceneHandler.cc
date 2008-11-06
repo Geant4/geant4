@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.38 2008-04-28 16:19:39 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.39 2008-11-06 13:43:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,7 +103,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
-    if (!fDisplayListId) {  // Could pre-allocate?
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
       G4cout <<
 	"********************* WARNING! ********************"
 	"\nUnable to allocate any more display lists in OpenGL."
@@ -171,8 +171,21 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
     glPopMatrix();
   }
 
+  //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
+  if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+    G4cout <<
+      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+      "  display List for fTopPODL - try OpenGL Immediated mode."
+           << G4endl;
+  }
   if (fMemoryForDisplayLists) {
     glEndList();
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+      G4cout <<
+        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+        "  display List for fTopPODL - try OpenGL Immediated mode."
+             << G4endl;
+    }
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
@@ -282,7 +295,7 @@ void G4OpenGLStoredSceneHandler::BeginModeling () {
 void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
-  if (!fTopPODL) {
+  if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
     G4cout <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
       "  display List for fTopPODL - try OpenGL Immediated mode."
@@ -300,6 +313,12 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       }
     }
     glEndList ();
+    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
+      G4cout <<
+        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+        "  display List for fTopPODL - try OpenGL Immediated mode."
+             << G4endl;
+    }
   }
 
   G4VSceneHandler::EndModeling ();

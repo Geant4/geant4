@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.6 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.7 2008-11-06 13:43:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,10 +58,10 @@ public:
   void Initialise ();
   void initializeGL ();
   void DrawView ();
-  void FinishView ();
   void resizeGL(int width,int height);
   void paintGL();
   void updateQWidget();
+  void ShowView ();
 
 protected:
   void wheelEvent(QWheelEvent *event);
@@ -71,14 +71,9 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
   void keyPressEvent (QKeyEvent * event); 
+private:
+  void ComputeView ();
 
-private : 
-  bool hasToRepaint;
-  bool readyToPaint;
-  bool zoomAction;
-  int nbPaint;
-  QPoint beginZoom;
-  QPoint endZoom;
   //  QImage glBufferImage;
 };
 
