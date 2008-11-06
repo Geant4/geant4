@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2008 Gabriele Cosmo (hadr-deex-V09-01-17)
+-----------------------------------------------------
+- Fix in evaporation/G4DeuteronEvaporationProbability.cc for compilation
+  error on Windows-VC++; fixed typo in class scope specification for a
+  couple of methods...
+
 05 November 2008 Dennis Wright (hadr-deex-V09-01-16)
 ----------------------------------------------------
 - multifragmentation/G4StatMFChannel.cc: fix gcc 4.3 compiler warnings 
