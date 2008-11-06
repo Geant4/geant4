@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.8 2008-07-25 11:20:47 vnivanch Exp $
+// $Id: G4StatMFChannel.cc,v 1.9 2008-11-06 08:14:42 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -91,7 +91,7 @@ G4bool G4StatMFChannel::CheckFragments(void)
       {
 	G4int A = static_cast<G4int>((*i)->GetA());
 	G4int Z = static_cast<G4int>((*i)->GetZ());
-       	if (A > 1 && (Z > A || Z <= 0) || (A==1 && Z > A) || A <= 0) return false;
+       	if ( (A > 1 && (Z > A || Z <= 0)) || (A==1 && Z > A) || A <= 0 ) return false;
     }
     
     return true;
@@ -223,7 +223,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 		    G4ThreeVector FragToFragVector = (*i)->GetPosition() - (*j)->GetPosition();
 		    G4double Rmin = R0*(std::pow((*i)->GetA(),1./3.) +
 					std::pow((*j)->GetA(),1./3));
-		    if (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) break;
+		    if ( (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) ) break;
 		  }
 		counter++;
 	      } while (ThereAreOverlaps && counter < 1000);
