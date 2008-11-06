@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.10 2008-10-24 13:23:22 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.11 2008-11-06 10:06:33 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -55,7 +55,7 @@ G4Qt* G4Qt::getInstance (
 }
 /***************************************************************************/
 G4Qt* G4Qt::getInstance (
- int*    a_argn
+ int    a_argn
 ,char** a_args
 ,char*  a_class
 ) 
@@ -69,52 +69,71 @@ G4Qt* G4Qt::getInstance (
 }
 /***************************************************************************/
 G4Qt::G4Qt (
- int*    a_argn
+ int    a_argn
 ,char** a_args
 ,char*  a_class
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+  argn = 0;
+  args = NULL;
+
 #ifdef G4DEBUG
   printf("G4Qt::G4Qt try to inited Qt\n");
 #endif
   // Check if Qt already init in another external app
   if(qApp) {
-      QtInited  = TRUE;
-      //#if QT_VERSION < 0x040000
-      //      SetMainInteractor (&qApp);
-      //#else
-      SetMainInteractor (qApp);
-      //#endif
-      SetArguments      (*a_argn,a_args);
+    QtInited  = TRUE;
+    //#if QT_VERSION < 0x040000
+    //      SetMainInteractor (&qApp);
+    //#else
+    SetMainInteractor (qApp);
+    //#endif
+    SetArguments      (a_argn,a_args);
+    
 #ifdef G4DEBUG
-      printf("G4Qt::G4Qt alredy inited in external \n");
+    printf("G4Qt::G4Qt alredy inited in external \n");
 #endif
   } else {
-
+    
     if(QtInited==FALSE) {  //Qt should be Inited once !
-#ifdef G4DEBUG
-      printf("G4Qt::G4Qt inited Qt\n");
-#endif
+      // Then two cases :
+      // - It is the first time we create G4UI  (argc!=0)
+      //   -> Inited and register
+      // - It is the first time we create G4VIS  (argc == 0)
+      //   -> Inited and NOT register
+      
+      if (a_argn != 0) {
+        argn = a_argn;
+        args = a_args;
+
+      } else { //argc = 0
+
+        // FIXME : That's not the good arguments, but I don't know how to get args from other Interactor.
+        // Ex: How to get them from G4Xt ?
+        argn = 1;
+        args = (char **)malloc( 1 * sizeof(char *) );
+        args[0] = (char *)malloc(10 * sizeof(char));
+        strncpy(args[0], "my_app \0", 9);
+      }
+
+      int *p_argn = (int*)malloc(sizeof(int));
+      *p_argn = argn;
 #if QT_VERSION < 0x040000
-      qApp = new QApplication (*a_argn, a_args);
-      //    QApplication qApp(a_argn, a_args);
-      //    if(&qApp == NULL) {
+      qApp = new QApplication (argn, args);
 #else
-      new QApplication (*a_argn, a_args);
+      new QApplication (argn, args);
 #endif
       if(!qApp) {
         
         G4cout        << "G4Qt : Unable to init Qt." << G4endl;
       } else {
         QtInited  = TRUE;
-        //#if QT_VERSION < 0x040000
-        //      SetMainInteractor (&qApp);
-        //#else
-        SetMainInteractor (qApp);
-        //#endif
-        SetArguments      (*a_argn,a_args);
+        if (a_argn != 0) {
+          SetMainInteractor (qApp);
+        }
+        SetArguments      (a_argn,a_args);
 #ifdef G4DEBUG
         printf("G4Qt::G4Qt inited Qt END\n");
 #endif

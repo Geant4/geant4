@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.21 2008-10-24 13:23:22 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.22 2008-11-06 10:06:33 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -99,7 +99,7 @@ static G4bool exitPause = true;
 </pre>
 */
 G4UIQt::G4UIQt (
- int* argc
+ int argc
 ,char** argv
 )
   :fHelpDialog(NULL)
