@@ -320,8 +320,10 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           else
           { 
              //080901 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
-             if ( reac.find("Inelastic") != reac.size() && ( ( Z == 1 && A == 1 ) || ( Z == 2 && A == 4 ) )
-             || ( reac.find("Capture") != reac.size() && ( Z == 2 && A == 4 ) ) )
+             if ( (reac.find("Inelastic") != reac.size() && 
+                   ((Z == 1 && A == 1) || (Z == 2 && A == 4) ) ) 
+                 ||   
+                  (reac.find("Capture") != reac.size() && (Z == 2 && A == 4) ) )
              {
                 G4String new_name = base+"/"+rest+"0_0_Zero";
                 result.SetName( new_name );
