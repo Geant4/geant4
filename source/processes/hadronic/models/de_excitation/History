@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2008 Dennis Wright (hadr-deex-V09-01-16)
+----------------------------------------------------
+- multifragmentation/G4StatMFChannel.cc: fix gcc 4.3 compiler warnings 
+  at lines 94 and 226.  (place parentheses around && in ||)
+
 24 October 2008 Dennis Wright (hadr-deex-V09-01-15)
 ---------------------------------------------------
 - replace G4NucleiPropertiesTable::GetBindingEnergy with 
