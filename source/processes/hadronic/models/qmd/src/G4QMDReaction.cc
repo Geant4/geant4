@@ -27,6 +27,9 @@
 // 080602 Fix memory leaks by T. Koi 
 // 080612 Delete unnecessary dependency and unused functions
 //        Change criterion of reaction by T. Koi
+// 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
+//            UseFrag (chage criterion of a inelastic reaction)
+//        Fix bug in nucleon projectiles  by T. Koi    
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
@@ -38,17 +41,16 @@ G4QMDReaction::G4QMDReaction()
 : system ( NULL )
 , deltaT ( 1 ) // in fsec
 , maxTime ( 100 ) // will have maxTime-th time step
+, gem ( true )
+, frag ( false )
 {
-
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
-   evaporation = new G4Evaporation;
-   evaporation->SetGEMChannel();
    excitationHandler = new G4ExcitationHandler;
+   evaporation = new G4Evaporation;
    excitationHandler->SetEvaporation( evaporation );
-//   preco = new G4PreCompoundModel( excitationHandler );
-
+   setEvaporationCh();
 }
 
 
@@ -155,7 +157,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4LorentzVector proj4pLAB = projectile.Get4Momentum()/GeV;
 
       G4QMDGroundStateNucleus* proj(NULL); 
-      if ( projectile.GetDefinition()->GetParticleType() == "nucleus" )
+      if ( projectile.GetDefinition()->GetParticleType() == "nucleus" 
+        || projectile.GetDefinition()->GetParticleName() == "proton"
+        || projectile.GetDefinition()->GetParticleName() == "neutron" )
       {
 
          proj_Z = proj_pd->GetAtomicNumber();
@@ -374,6 +378,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
          //if ( elasticLike_energy == true && withCollision == true ) elastic = true;   // ielst = 1 
 //       InelasticLike without Collision 
          //if ( elasticLike_energy == false ) elastic = false;                          // ielst = 2                
+         if ( frag == true )
+            if ( elasticLike_energy == false ) elastic = false;
 //       InelasticLike with Collision 
          if ( elasticLike_energy == false && withCollision == true ) elastic = false; // ielst = 3
 
@@ -679,3 +685,16 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
    coulomb_collision_pz_targ = pzta;
 
 }
+
+
+
+void G4QMDReaction::setEvaporationCh()
+{
+
+   if ( gem == true ) 
+      evaporation->SetGEMChannel();
+   else
+      evaporation->SetDefaultChannel();
+
+}
+

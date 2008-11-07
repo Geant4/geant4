@@ -33,6 +33,10 @@
 // 
 //      Creation date: 02 April 2007
 // -----------------------------------------------------------------------------
+//
+// 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
+//            UseFrag (chage criterion of a inelastic reaction)
+//
 
 #ifndef G4QMDReaction_hh
 #define G4QMDReaction_hh
@@ -62,7 +66,12 @@ class G4QMDReaction : public G4HadronicInteraction
 
       G4HadFinalState *ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus & targetNucleus );
 
+      void UnUseGEM(){ gem = false; setEvaporationCh(); };
+      void UseFRAG(){ frag = true; };
+
    private:
+
+      void setEvaporationCh();
 
       G4QMDMeanField* meanField;
 
@@ -77,6 +86,7 @@ class G4QMDReaction : public G4HadronicInteraction
 
       G4Evaporation* evaporation;
       G4ExcitationHandler* excitationHandler;
+
 //      G4VPreCompoundModel* preco; 
 
 
@@ -98,6 +108,9 @@ class G4QMDReaction : public G4HadronicInteraction
 
       G4IonsShenCrossSection shenXS;
       G4IonsShenCrossSection genspaXS;
+
+      G4bool gem;
+      G4bool frag;
 
 };
 
