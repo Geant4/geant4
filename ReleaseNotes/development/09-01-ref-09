@@ -1,0 +1,302 @@
+
+                       geant4-09-01-ref-09
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o New Brent locator se as default in propagation in field, giving better
+   accuracy and faster convergence.
+ o Adopting 'safe' ComputeSafety() from G4Navigator featuring unchanged
+   navigator state.
+ o Code review implementation for speed improvements in G4Cons and G4Tubs
+   shapes.
+ o First implementation of new persistency module for reading detector
+   descriptions in text (ASCII) mode.
+ o New classes for material stopping powers in the range 25 keV/n - 10 MeV/n.
+ o Implemented review of usage of nuclear masses and nucleai binding energies
+   from centralized G4NucleiProperties class in all affected physics processes.
+ o For all affected physics processes, set sub-types according to new
+   enumeration classification.
+ o New low-energy photon models (Penelope and Livermore) compatible with
+   standard EM design.
+ o Fixes and improvements to EM multiple-scattering models.
+ o New extended example showing implementation of an external decayer
+   based on Pythia6.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-09
+------
+- Added "persistency/ascii" and "particles/adjoint" sub-modules in binmake.gmk.
+
+geometry/magnetifield                            field-V09-01-03
+---------------------
+- Added 'ApproxCurveV' to method G4ChordFinder::ApproxCurvePointS() in
+  order to better calculate the curve length.
+- Added new stepper class G4ConstRK4, performing integration of one step
+  with error calculation in constant magnetic field; implementation derived
+  from G4ClassicalRK4.
+- Some code cleanup.
+
+geometry/navigation                              geomnav-V09-01-07
+-------------------
+- G4Navigator: introduced optional Boolean argument to ComputeSafety() to
+  allow for computation of safety without modifying the state of the navigator.
+  Modified accordingly involved classes, for calls to ComputeSafety().
+- Moved method LocateIntersectionPoint() in G4PropagatorInField to a separate
+  class G4VIntersectionLocator, now allowing to use different location
+  algorithms: Brent, MultiLevel, Simple.
+- New classes: G4VIntersectionLocator, G4SimpleLocator, G4BrentLocator and
+  G4MultiLevelLocator. Made Brent locator the default.
+
+geometry/solids/CSG                              geom-csg-V09-01-06
+-------------------
+- G4Cons: implemented first speed improvements and corrections from joint
+  code review of G4Cons class. Cached computation for half-tolerance and
+  use of Boolean flag for identifying if full-cone or section.
+- G4Tubs: more refinements to previous review; corrected implementation
+  of constructor to conform to implementation as in G4Cons. Fixed issue in
+  SetDeltaPhi() method after changes introduced in the previous tag.
+
+geometry/solids/specific                         geom-specific-V09-01-17
+------------------------
+- G4ExtrudedSolid: fixed bug in the decomposition of polygonal sides for
+  quadrangular facets in MakeFacets(). Addresses problem report #1029.
+
+global                                           global-V09-01-14
+------
+- G4PhysicsVector: changed algorithm for computation of second derivatives, to
+  guarantee continuity with first derivative; fixed second derivative at edges
+  of the vector to be the same as in neighboring nodes.
+
+materials                                        materials-V09-01-18
+---------
+- Added new classes G4IronStoppingICRU73, G4MaterialStoppingICRU73
+  and G4SimpleMaterialStoppingICRU73 for ICRU'73 data on stopping powers
+  in the range: 25 keV/n - 10 MeV/n.
+
+particles                                        particles-V09-01-11
+---------
+- Hidden all methods of getting mass of nucleus except for
+  G4NucleiProperties::GetNuclearMass(), which should be now used.
+  Cashed pointers/masses of light nuclei in G4NucleiProperties.
+- Added a table of sum of masses of orbital electrons and their binding energy
+  in G4NucleiProperties. Added methods of taking A and Z arguments as double.
+- Added G4NucleiProperties::IsInStableTable() as replace of
+  G4NucleiPropertiesTable::IsInTable().
+- Promoted to public methods GetBindingEnergy() and GetMassExcess() in
+  G4NucleiProperties class.
+- New sub-module 'adjoint' for adjoint-particles to be used in reverse MC
+  simulations.
+- Fix for using raw number of electron mass in calculation of magnetic
+  moment for e+/-.
+
+persistency                                      persistency-V09-01-00
+-----------
+- First implementation of a new "ascii" reader module for text detector
+  persistency.
+
+physics_lists                                    phys-lists-V09-01-14
+-------------
+- Set 'inactive' for AlongStep for Bremsstrahlung and pair production
+  processes in all EM builders, bringing minor CPU improvement.
+- Added hadron Bremsstrahlung, e+e- pair production and e-multiple scattering
+  for electrons and positrons in all EM builders:
+  G4EmStandardPhysics_option2: enabling "ApplyCuts", disabling "SubCutoff";
+  G4EmStandardPhysics_option3: added G4LowEnergyRayleigh, set 120 bins
+  for tables (60 is the default), and StepFunction per particle type.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-01-06
+------------------------------------
+- Updated processes enumeration and printouts.
+
+processes/electromagnetic/lowenergy              emlowen-V09-01-31
+-----------------------------------
+- Added new photon models (Penelope and Livermore) compatible with standard
+  EM design.
+- Improved generation of scattering angle in G4FinalStateElasticChampion.
+- Removed printout in G4LowEnergyCompton. Addressing problem report #1026.
+- Corrected bug in computation of differential cross-section maximum in
+  G4FinalStateElasticBrennerZaider.
+
+processes/electromagnetic/muons                  emmuons-V09-01-14
+-------------------------------
+- Added Spline option and promoted to public method ComputeTrueStep()
+  in G4EnergyLossForExtrapolator; made some code cleanup.
+- Changed 'SubType' and improved printout in G4MuIonisation,
+  G4MuBremsstrahlung, G4MuPairProduction and G4MuMultipleScattering.
+- Code cleanup in G4MuMscModel.
+
+processes/electromagnetic/polarisation           empolar-V09-01-01
+--------------------------------------
+- For all process classes set sub-types according to the enumeration.
+
+processes/electromagnetic/standard               emstand-V09-01-41
+----------------------------------
+- For all process classes set sub-types according to the enumeration
+  of G4EmProcessSubType. Improved printout.
+- G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90, G4WentzelVIModel:
+  using 'StepStatus' from preStepPoint to identify first step for a given
+  track instead of the step number. Fixing a problem observed in ATLAS
+  of small step limits with suspended tracks when using Cherenkov process.
+- G4UrbanMscModel2:
+  o Use screening function from G4eCoulombScatteringModel and fixed
+    screening parameter of the single scattering part.
+  o Added extra protection for 'UseDistanceToBoundary' option.
+- G4UrbanMscModel2, G4UrbanMscModel, G4UrbanMscModel90: added protection
+  against sampling scattering angle with zero transport cross section.
+- G4eCoulombScatteringModel and G4WentzelVIModel: added protection against
+  precision loss in computation of cross section at high energy.
+- G4WentzelVIModel: fixed cross section factor for single scattering.
+- G4eMultipleScattering: set default RangeFactor to 0.04.
+- G4IonFluctuations: added G4UniversalFluctuation model, which is used for
+  high energy. Added comments and code cleanup.
+- G4BetheBlochModel, G4BraggIonModel: take into account effective change
+  change over the step.
+- G4hIonisation: switched off nuclear stopping for pi and K mesons.
+- G4eBremsstrahlung: set relativistic model above 1 GeV by default
+- G4eBremsstrahlungModel, G4eBremsstrahlungRelModel: removed private member
+  and use access method from base class.
+
+processes/electromagnetic/utils                  emutils-V09-01-34
+-------------------------------
+- Added G4EmProcessSubType struct, defining sub-types for all EM processes
+  and changed enumeration names in G4EmTableType to avoid clashes.
+- G4EmCorrections: define the range of correction vector 25 keV - 2.5 MeV,
+  as it is in ICRU'73 table; use 20 bins.
+- G4LossTableManager: set spline option to TRUE, flagLPM to FALSE by default.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: set default
+  table size 0.1 keV - 100 TeV in 60 bins; set number of bins for tables to
+  7 per decade.
+- G4EnergyLossMessenger: added UI command "/process/em/applyCuts".
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: improved printout.
+- G4VEmModel: added new accessors for acessing secondary threshold.
+
+processes/electromagnetic/xrays                  xrays-V09-01-04
+-------------------------------
+- Added SetProcessSubType() method to G4Cerenkov and G4Scintillation.
+- Modified G4Cerenkov to allow for MaxBetaChangePerStep, sets PostStepGetPIL
+  to where the particle would drop below the Cerenkov threshold in the current
+  material. The Cerenkov photon origins are now sampled according to the linear
+  decrease in the MeanNumberOfPhotons over the step.
+  G4Cerenkov now inherits from G4VProcess.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-01-06)
+  o G4GlauberGribovCrossSection provides a smooth transition from Barashenkov
+    cross-sections at 90 GeV; set threshold to 90 GeV where this cross-section
+    is used.
+  o Replaced usage of G4NucleiPropertiesTable::IsInTable() with
+    G4NucleiProperties::IsInStableTable() for G4PhotoNuclearCrossSection
+    and G4ElectroNuclearCrossSection.
+- management (hadr-man-V09-01-08)
+  o Introduced new hadronic process subtype enum G4HadronicProcessType;
+    added to G4HadronicProcess to identify process sub-types, and used in
+    G4HadronicProcessStore.
+  o Changed process sub-type to 'fHadronInelastic' for G4HadronInelasticProcess.
+  o G4HadronicProcess: temporarly restored back obsolete method SetDispatch().
+- models/binary_cascade (had-binary-V09-01-00)
+  o Replaced usage of G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with
+    G4NucleiProperties::GetBindingEnergy(A,Z) in all affected classes.
+- models/cascade (hadr-casc-V09-01-08)
+  o Added Coulomb barrier plus barrier penetration in G4IntraNucleiCascader.
+  o Replaced GetAtomicMass() with GetNuclearMass() in G4InuclEvaporation
+    and G4BertiniEvaporation
+  o Added name "Bertini Cascade" to G4CascadeInterface.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-01-09)
+  o Changed process type ID to 'fHadronAtRest' for G4QCaptureAtRest,
+    G4PionMinusNuclearAtRestChips and G4ProtonAntiProtonAtRestChips.
+  o Replaced usage of G4NucleiPropertiesTable::IsInTable() with
+    G4NucleiProperties::IsInStableTable() in G4QElectronNuclearCrossSection,
+    G4QMuonNuclearCrossSection, G4QPhotonNuclearCrossSection, and
+    G4QTauNuclearCrossSection.
+- models/coherent_elastic (hadr-cohe-V09-01-06)
+  o Set process sub-types according to enumerator for G4UHadronElasticProcess
+    and use '16' for G4ChargeExchangeProcess.
+- models/de_excitation (hadr-deex-V09-01-17)
+  o Replaced usage of G4NucleiPropertiesTable::GetBindingEnergy() with
+    G4NucleiProperties::GetBindingEnergy() in G4StatMFMacroTriNucleon,
+    G4StatMFMacroBiNucleon and G4StatMFMacroTetraNucleon
+  o Trivial fix to prevent negative cross-sections for incident protons on
+    targets with A < Carbon.
+  o Fixed compilation warnings on G4StatMFChannel.
+- models/incl (hadr-incl-V09-01-05)
+  o Two fission models are provided. By default GSI SimFis3 fission is used.
+    Optional SimFis18 is provided.
+  o Fixed serious data reading bug affecting the reading of some data files.
+  o Initialized variables to zero and improved coding style.
+  o Moved the stored event number to the class definition.
+  o Fixed definition of few variables; fixed an index off-by-one bug in G4Abla.
+  o Fixed target nucleus initialization for targets with A>=0.19 and A<=28.
+  o Fixed target nucleus radius calculation for targets 6 <= A < 19.
+  o Fixed conditional statements to avoid uninitialized variables.
+  o Several array index handling (off-by-one) bugs fixed.
+  o Several possible double/integer datatype problems fixed.
+  o Partial fix to the Alpha evaporation energies and fix to neutron energies.
+  o Moved remnant direction calculation block and added safeguards.
+  o Switched the transformation matrix indices in ABLA.
+  o Use GetNuclearMass() instead of GetAtomicMass() in G4AblaEvaporation.
+  o Cleaned up comments.
+- models/neutron_hp (hadr-hpn-V09-01-22)
+  o Migration to use G4NucleiProperties::GetBindingEnergy(A,Z).
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-01-01)
+  o G4MuNuclearInteraction: included process type enum and changed sub-type
+    to 'fHadronInelastic'.
+- models/qmd (hadr-qmd-V09-01-06)
+  o Migration to use G4NucleiProperties::GetBindingEnergy(A,Z) for
+    G4QMDGroundStateNucleus and G4QMDNucleus.
+- models/util (hadr-mod-util-V09-01-07)
+  o Migration to use G4NucleiProperties::GetBindingEnergy(A,Z) for
+    G4Fancy3DNucleus.
+- processes (hadr-proc-V09-01-02)
+  o Changed sub-types for G4HadronCaptureProcess (to 'fCapture'),
+    G4HadronFissionProcess (to 'fFission') and to G4HadronElasticProcess
+    (to 'fHadronElastic').
+- stopping (hadr-stopping-V09-01-05)
+  o Replaced process sub-type IDs with corresponding enum IDs.
+  o Migration to use G4NucleiProperties::GetBindingEnergy(A,Z) for
+    G4KaonMinusAbsorptionAtRest and G4PiMinusStopAbsorption.
+  o Replaced usage of G4NucleiPropertiesTable::GetAtomicMass() with
+    G4NucleiProperties::GetNuclearMass() in G4StopTheoDeexcitation.
+
+processes/optical                                op-V09-01-08
+-----------------
+- Replaced process sub-type IDs with corresponding enum IDs.
+  Added local G4OpProcessSubType enum.
+
+track                                            track-V09-01-02
+-----
+- G4Track: changed to 'const' pointers 'fpCreatorProcess' and 'fpLCAtVertex'.
+- G4StepPoint: changed to 'const' pointer 'fpProcessDefinedStep' data member.
+
+tracking                                         tracking-V09-01-03
+--------
+- G4SteppingManager2: corrected conditions for default ('InActivated')
+  and 'NotForced' processes.
+
+examples                                         examples-V09-01-09
+--------
+- Updated reference outputs.
+- advanced/microbeam (microbeam-V09-01-03)
+  o  Corrected typos in zero field region in MicrobeamEMField.
+- extended/electromagnetic (electromagnetic-V09-01-01)
+  o Updated EM standard physics-lists and EM options.
+  o Use G4hMultipleScattering for muons and protons.
+- extended/eventgenerator/pythia (pythiaex-V09-01-00)
+  o New example 'decayer6' of external decayer implementation based on Pythia6.
+- extended/medical/fanoCavity (fano-V09-01-05)
+- extended/medical/fanoCavity2 (fano2-V09-01-05)
+  o Updated EM standard physics-lists and EM options.
+- novice/N02 (exampleN02-V09-01-04)
+- novice/N03 (exampleN03-V09-01-04)
+  o Updated EM standard physics-lists.
+  o Use G4hMultipleScattering for muons and protons.
+
+tests                                            tests-V09-01-09
+-----
+- Updated reference outputs and tools.
