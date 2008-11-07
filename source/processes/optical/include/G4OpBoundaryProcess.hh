@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.17 2008-06-05 22:20:50 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.18 2008-11-07 17:59:37 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,7 @@
 #include "geomdefs.hh"
 #include "Randomize.hh"
 
+#include "G4RandomTools.hh"
 #include "G4RandomDirection.hh"
 
 #include "G4Step.hh"
@@ -166,10 +167,6 @@ private:
 
 	G4bool G4BooleanRand(const G4double prob) const;
 
-	G4ThreeVector G4LambertianRand(const G4ThreeVector& normal);
-
-	G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal) const;
-
 	G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
 				     const G4ThreeVector&  Normal) const;
 
@@ -228,48 +225,6 @@ G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
   /* Returns a random boolean variable with the specified probability */
 
   return (G4UniformRand() < prob);
-}
-
-inline
-G4ThreeVector G4OpBoundaryProcess::
-	      G4LambertianRand(const G4ThreeVector& normal)
-{
-  /* Returns a random lambertian unit vector. */
-
-  G4ThreeVector vect;
-  G4double ndotv;
-
-  do {
-
-    vect = G4RandomDirection();
-
-    ndotv = normal * vect;
-
-    if (ndotv < 0.0) {
-      vect = -vect;
-      ndotv = -ndotv;
-    }
-
-  } while (!G4BooleanRand(ndotv));
-  return vect;
-}
-
-inline
-G4ThreeVector G4OpBoundaryProcess::
-	      G4PlaneVectorRand(const G4ThreeVector& normal) const
-
-  /* This function chooses a random vector within a plane given
-     by the unit normal */
-{
-  G4ThreeVector vec1 = normal.orthogonal();
-
-  G4ThreeVector vec2 = vec1.cross(normal);
-
-  G4double phi = twopi*G4UniformRand();
-  G4double cosphi = std::cos(phi);
-  G4double sinphi = std::sin(phi);
-
-  return cosphi * vec1 + sinphi * vec2;
 }
 
 inline

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07th Nov 2008 Peter Gumplinger (op-V09-01-09)
+              use new global/HEPRandom's G4RandomTools.hh
+
 24th Oct 2008 Peter Gumplinger (op-V09-01-08)
               use local G4OpProcessSubType.hh
 
