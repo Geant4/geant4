@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomTools.hh,v 1.1 2008-11-07 11:14:38 gcosmo Exp $
+// $Id: G4RandomTools.hh,v 1.2 2008-11-07 17:54:21 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ inline G4ThreeVector G4LambertianRand(const G4ThreeVector& normal)
 // ---------------------------------------------------------------------------
 // Chooses a random vector within a plane given by the unit normal
 //
-inline G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal) const
+inline G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal)
 {
   G4ThreeVector vec1 = normal.orthogonal();
   G4ThreeVector vec2 = vec1.cross(normal);
