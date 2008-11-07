@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.hh,v 1.1 2007-08-30 23:34:01 gum Exp $
+// $Id: G4EqEMFieldWithSpin.hh,v 1.2 2008-11-07 17:06:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,6 +63,10 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 
+    inline void SetAnomaly(G4double a) { anomaly = a; }
+    inline G4double GetAnomaly() const { return anomaly; }
+      // set/get magnetic anomaly
+
   private:
 
     G4double        fElectroMagCof ;
@@ -77,4 +81,4 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
 };
 
-#endif
+#endif /* G4EQEMFIELDWITHSPIN */
