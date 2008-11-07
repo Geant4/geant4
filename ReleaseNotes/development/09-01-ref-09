@@ -284,7 +284,14 @@ examples                                         examples-V09-01-09
 - Updated reference outputs.
 - advanced/microbeam (microbeam-V09-01-03)
   o  Corrected typos in zero field region in MicrobeamEMField.
-- extended/electromagnetic (electromagnetic-V09-01-01)
+- extended/electromagnetic/TestEm1 (testem1-V09-01-07)
+- extended/electromagnetic/TestEm2 (testem2-V09-01-07)
+- extended/electromagnetic/TestEm3 (testem3-V09-01-10)
+- extended/electromagnetic/TestEm5 (testem5-V09-01-11)
+- extended/electromagnetic/TestEm7 (testem7-V09-01-15)
+- extended/electromagnetic/TestEm9 (testem9-V09-01-08)
+- extended/electromagnetic/TestEm11 (testem11-V09-01-06)
+- extended/electromagnetic/TestEm12 (testem12-V09-01-07)
   o Updated EM standard physics-lists and EM options.
   o Use G4hMultipleScattering for muons and protons.
 - extended/eventgenerator/pythia (pythiaex-V09-01-00)
@@ -300,3 +307,5 @@ examples                                         examples-V09-01-09
 tests                                            tests-V09-01-09
 -----
 - Updated reference outputs and tools.
+- test11 (test11-V09-01-01)
+  o Delete initialization of unused variable in Tst11DetectorConstruction.
