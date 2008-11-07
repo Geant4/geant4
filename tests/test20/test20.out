@@ -53,22 +53,24 @@ PhysicsList::SetCuts:CutLength : 1 um
 /tracking/verbose 0
 /run/beamOn 1
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
 
-annihil:   tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      Sampling according eplus2gg model
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
 ========= Table of registered couples ==============================
 
@@ -85,8 +87,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=33.29s Real=33.37s Sys=0.03s
-Time elapsed in 1 events ---- User=33.29s Real=33.37s Sys=0.03s
+  User=33.56s Real=33.62s Sys=0.04s
+Time elapsed in 1 events ---- User=33.56s Real=33.62s Sys=0.04s
 /tracking/verbose 0
 /run/beamOn 9
 
@@ -105,8 +107,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 9
-  User=245.51s Real=245.74s Sys=0.05s
-Time elapsed in 9 events ---- User=245.51s Real=245.74s Sys=0.05s
+  User=294.54s Real=294.74s Sys=0.05s
+Time elapsed in 9 events ---- User=294.54s Real=294.74s Sys=0.05s
 #
 /gun/particle proton
 #------------------
@@ -129,8 +131,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.94s Real=3.95s Sys=0s
-Time elapsed in 1 events ---- User=3.94s Real=3.95s Sys=0s
+  User=5.38s Real=5.39s Sys=0.01s
+Time elapsed in 1 events ---- User=5.38s Real=5.39s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -149,8 +151,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.9s Real=3.91s Sys=0s
-Time elapsed in 1 events ---- User=3.9s Real=3.91s Sys=0s
+  User=4.47s Real=4.47s Sys=0s
+Time elapsed in 1 events ---- User=4.47s Real=4.47s Sys=0s
 #
 /gun/particle alpha
 #------------------
@@ -173,8 +175,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=22.47s Real=22.58s Sys=0.01s
-Time elapsed in 1 events ---- User=22.47s Real=22.58s Sys=0.01s
+  User=25.72s Real=25.74s Sys=0.01s
+Time elapsed in 1 events ---- User=25.72s Real=25.74s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1
 
@@ -193,14 +195,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=23.35s Real=23.44s Sys=0.02s
-Time elapsed in 1 events ---- User=23.35s Real=23.44s Sys=0.02s
+  User=25.17s Real=25.18s Sys=0s
+Time elapsed in 1 events ---- User=25.17s Real=25.18s Sys=0s
 #
 G4 kernel has come to Quit state.
-DNAProcess for alpha in Water : 5025 calls
-DNAProcess for alpha+ in Water : 104 calls
-DNAProcess for e- in Water : 65395 calls
-DNAProcess for proton in Water : 1023 calls
+DNAProcess for alpha in Water : 5060 calls
+DNAProcess for alpha+ in Water : 108 calls
+DNAProcess for e- in Water : 68407 calls
+DNAProcess for helium in Water : 19 calls
+DNAProcess for proton in Water : 960 calls
 Transportation for alpha in Water : 2 calls
-Transportation for e- in Water : 13 calls
+Transportation for e- in Water : 12 calls
 Transportation for proton in Water : 2 calls

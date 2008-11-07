@@ -80,11 +80,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   cross section per atom   : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
 
  
-  cross section per volume : 	     0.075796 cm^-1	     0.490629 cm^-1	            0 cm^-1	     0.566425 cm^-1
-  cross section per mass   : 	    0.0142393 cm2/g	    0.0921716 cm2/g	            0 cm2/g	     0.106411 cm2/g
+  cross section per volume : 	     0.075796 cm^-1	     0.489011 cm^-1	            0 cm^-1	     0.564807 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0918675 cm2/g	            0 cm2/g	     0.106107 cm2/g
  
-  mean free path           : 	      13.1933 cm 	       2.0382 cm 	 5.82593e+288 pc 	      1.76546 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	      10.8493 g/cm2 	 2.88022e+285 kg/cm2	      9.39753 g/cm2 
+  mean free path           : 	      13.1933 cm 	      2.04494 cm 	 5.82593e+288 pc 	      1.77052 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	      10.8852 g/cm2 	 2.88022e+285 kg/cm2	      9.42446 g/cm2 
 
 -------------------------------------------------------------
 
@@ -94,22 +94,22 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.10224 keV	 e-  85.4196 keV
 
- Max_energy _transferable : 10 MeV (4.90376 cm )
+ Max_energy _transferable : 10 MeV (4.90536 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  cross section per volume : 	     0.991136 cm^-1	     0.346354 cm^-1	      1.33749 cm^-1
-  cross section per mass   : 	     0.991136 cm2/g	     0.346354 cm2/g	      1.33749 cm2/g
+  cross section per volume : 	     0.991191 cm^-1	     0.347901 cm^-1	      1.33909 cm^-1
+  cross section per mass   : 	     0.991191 cm2/g	     0.347901 cm2/g	      1.33909 cm2/g
  
-  mean free path           : 	      1.00894 cm 	      2.88722 cm 	      7.47669 mm 
-        (g/cm2)            : 	      1.00894 g/cm2 	      2.88722 g/cm2 	      747.669 mg/cm2
+  mean free path           : 	      1.00889 cm 	      2.87438 cm 	      7.46775 mm 
+        (g/cm2)            : 	      1.00889 g/cm2 	      2.87438 g/cm2 	      746.775 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61567 MeV/cm	       12.468 eV/cm 	      1.61568 MeV/cm
-      (MeV/g/cm2)          : 	      1.61567 MeV*cm2/g	       12.468  eV*cm2/g	      1.61568 MeV*cm2/g
+  restricted dE/dx         : 	      1.61567 MeV/cm	      12.3265 eV/cm 	      1.61568 MeV/cm
+      (MeV/g/cm2)          : 	      1.61567 MeV*cm2/g	      12.3265  eV*cm2/g	      1.61568 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05554 cm  ( 6.05554 g/cm2 )
-  range from full dE/dx    : 	 4.90376 cm  ( 4.90376 g/cm2 )
+  range from restrict dE/dx: 	 6.06051 cm  ( 6.06051 g/cm2 )
+  range from full dE/dx    : 	 4.90536 cm  ( 4.90536 g/cm2 )
  
   transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  

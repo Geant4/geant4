@@ -68,18 +68,18 @@ PhysicsList::SetCuts:CutLength : 1 mm
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   9.1  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.5
 
                      Hadronic Processes for <kaon->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   9.1  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.5
           CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <lambda>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   9.1  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.5
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
@@ -94,12 +94,12 @@ PhysicsList::SetCuts:CutLength : 1 mm
                      Hadronic Processes for <pi+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.1  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.5
 
                      Hadronic Processes for <pi->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.1  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.5
           CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <proton>
@@ -141,33 +141,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.97s Real=0.97s Sys=0s
+  User=0.79s Real=0.82s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         63.65   RMS(MeV) 41.6
-Average number of steps              290.1
-Average number of gamma              2.84
-Average number of e-                 4.95
-Average number of e+                 0.05
-Average number of neutrons           0.73
-Average number of protons            0.81
+Average energy deposit (MeV)         61.01   RMS(MeV) 52.82
+Average number of steps              249
+Average number of gamma              2.38
+Average number of e-                 4.62
+Average number of e+                 0.03
+Average number of neutrons           0.68
+Average number of protons            0.75
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.5
-Average number of pi0                0.15
-Average number of kaons              0
-Average number of muons              0
-Average number of deuterons+tritons  0.07
-Average number of He3+alpha          0.16
-Average number of ions               0.57
-Average number of forward neutrons   0.09
-Average number of reflected neutrons 0
-Average number of leaked neutrons    0.59
-Average number of proton leak        0.49
-Average number of pion leak          0.45
+Average number of pi+ & pi-          0.26
+Average number of pi0                0.14
+Average number of kaons              0.02
+Average number of muons              0.01
+Average number of deuterons+tritons  0.08
+Average number of He3+alpha          0.21
+Average number of ions               0.46
+Average number of forward neutrons   0.1
+Average number of reflected neutrons 0.01
+Average number of leaked neutrons    0.51
+Average number of proton leak        0.36
+Average number of pion leak          0.22
 ========================================================
 
 #

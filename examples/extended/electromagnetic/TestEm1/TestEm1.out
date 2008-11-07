@@ -89,206 +89,244 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileName run0
 /run/beamOn 2000
 
-phot:   tables are built for  gamma
-      Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
 
-compt:   tables are built for  gamma
-      Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
-      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-
-conv:   tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 TeV in 110 bins, spline: 1
-      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 2
-
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      CSDA range table up to 1 GeV in 70 bins
-      Subcutoff sampling in 1 regions
-
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-      Subcutoff sampling in 1 regions
-
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      CSDA range table up to 1 GeV in 70 bins
-      Subcutoff sampling in 1 regions
-
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Total cross sections and sampling from eBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
-      Subcutoff sampling in 1 regions
-
-annihil:   tables are built for  e+
+compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
-      Sampling according eplus2gg model
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+msc:   for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+      CSDA range table up to 1 GeV in 35 bins
+      Subcutoff sampling in 1 regions
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+      CSDA range table up to 1 GeV in 35 bins
+      Subcutoff sampling in 1 regions
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 3
-      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 0
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
 
-ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      Stopping Power data for 16 ion/material pairs are used.
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for GenericIon
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      NuclearStopping= 1
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      NuclearStopping= 1
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
+msc:   for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Theoretical model 
-      Subcutoff sampling in 1 regions
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
 
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Theoretical model 
-      Subcutoff sampling in 1 regions
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Theoretical model 
-      Subcutoff sampling in 1 regions
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
 
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      Theoretical model 
-      Subcutoff sampling in 1 regions
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      NuclearStopping= 1
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
 
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 110 bins, spline: 1
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 110 bins
-      Lambda tables from threshold to 100 TeV in 110 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-05
-      NuclearStopping= 1
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
-      CSDA range table up to 1 GeV in 70 bins
+      CSDA range table up to 1 GeV in 35 bins
       Subcutoff sampling in 1 regions
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Root logical volume(s) : Aluminium 
@@ -324,7 +362,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=13.87s Real=21.94s Sys=0.59s
+  User=14.33s Real=21.11s Sys=0.58s
 
  ======================== run summary ======================
 
@@ -332,29 +370,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.784 MeV
+ total energy deposit: 99.806 MeV
 
- nb tracks/event   neutral:     27.747   charged:     149.45
- nb  steps/event   neutral:     141.13   charged:     484.32
+ nb tracks/event   neutral:       27.7   charged:     150.01
+ nb  steps/event   neutral:     141.29   charged:     479.59
 
  nb of process calls per event: 
             msc       eBrem       eIoni        phot       compt        conv     annihilTransportation
-         153.33      25.151      304.39      25.319      113.38       1.436       1.436      1.0075
+         150.54      25.095      302.52      25.307      113.59       1.429       1.429      0.9715
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 10.954 cm    rms = 3.8471 cm 
- proj Range = 9.3983 cm    rms = 3.5394 cm 
- proj/true  = 0.85795
- transverse dispersion at end = 1.78 cm 
-      mass true Range from simulation = 29.577 g/cm2 
-       from PhysicsTable (csda range) = 31.82 g/cm2 
+ true Range = 11.177 cm    rms = 3.7856 cm 
+ proj Range = 9.6752 cm    rms = 3.5291 cm 
+ proj/true  = 0.86561
+ transverse dispersion at end = 1.7009 cm 
+      mass true Range from simulation = 30.179 g/cm2 
+       from PhysicsTable (csda range) = 31.819 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 391950399, 1606719681
+ Current couple of seeds = 1121991556, 601029902
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -384,7 +422,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 391950399, 1606719681
+ Current couple of seeds = 1121991556, 601029902
 ----------------------------------------
 Start Run processing.
 
@@ -392,7 +430,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=25.41s Real=30.94s Sys=0.63s
+  User=26.28s Real=34.1s Sys=0.64s
 
  ======================== run summary ======================
 
@@ -400,29 +438,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.802 MeV
+ total energy deposit: 99.818 MeV
 
- nb tracks/event   neutral:     34.992   charged:     296.47
- nb  steps/event   neutral:     144.72   charged:     917.42
+ nb tracks/event   neutral:     35.185   charged:     297.59
+ nb  steps/event   neutral:     145.92   charged:     916.01
 
  nb of process calls per event: 
-          eBrem       eIoni         msc       compt        phot        conv     annihilTransportation
-          33.09      589.49      293.42      109.73      32.612       1.404       1.404      0.9875
+          eIoni       eBrem         msc       comptTransportation        phot        conv     annihil
+         588.68      33.278      292.65      110.74       0.914       32.88      1.4015      1.4015
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.209 cm    rms = 3.8208 cm 
- proj Range = 9.6277 cm    rms = 3.5662 cm 
- proj/true  = 0.85894
- transverse dispersion at end = 1.8316 cm 
-      mass true Range from simulation = 30.264 g/cm2 
-       from PhysicsTable (csda range) = 31.82 g/cm2 
+ true Range = 11.305 cm    rms = 3.7608 cm 
+ proj Range = 9.8213 cm    rms = 3.4988 cm 
+ proj/true  = 0.86876
+ transverse dispersion at end = 1.7246 cm 
+      mass true Range from simulation = 30.523 g/cm2 
+       from PhysicsTable (csda range) = 31.819 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1273560782, 609846469
+ Current couple of seeds = 31858709, 1883051292
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

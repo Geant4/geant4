@@ -54,55 +54,57 @@ PhysicsList::SetCuts:CutLength : 10 km
 #
 /run/beamOn 4000
 
-compt:   tables are built for  gamma
-      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
-      Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according myKlein-Nishina model
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 GeV in 80 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     myKlein-Nishina :     Emin=          0 eV         Emax=   10 GeV
 
-phot:   tables are built for  gamma
-      Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   10 GeV
 
-conv:   tables are built for  gamma
-      Lambda tables from 1.022 MeV to 10 GeV in 800 bins, spline: 0
-      Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 10 GeV in 80 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Bethe-Heitler :     Emin=          0 eV         Emax=   10 GeV
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni2>, RangeFactor= 0.02, Step limit type 2
+msc:   for e-
+      Lambda tables from 100 eV  to 10 GeV in 80 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
 
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
-      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      Delta cross sections and sampling from myMollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      CSDA range table up to 10 GeV in 800 bins
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 GeV in 80 bins
+      Lambda tables from threshold to 10 GeV in 80 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.001
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      myMollerBhabha :     Emin=          0 eV         Emax=   10 GeV
+      CSDA range table up to 10 GeV in 80 bins
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
-      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
-      Delta cross sections and sampling from myMollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      CSDA range table up to 10 GeV in 800 bins
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 GeV in 80 bins
+      Lambda tables from threshold to 10 GeV in 80 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.001
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      myMollerBhabha :     Emin=          0 eV         Emax=   10 GeV
+      CSDA range table up to 10 GeV in 80 bins
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 10 GeV in 800 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Model <UrbanMscUni>, RangeFactor= 0.2, Step limit type 2
+msc:   for proton
+      Lambda tables from 100 eV  to 10 GeV in 80 bins, spline: 1
+      RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 10 GeV in 800 bins
-      Lambda tables from threshold to 10 GeV in 800 bins, spline: 0
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 1e-06
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 GeV in 80 bins
+      Lambda tables from threshold to 10 GeV in 80 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.001
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 GeV
-      CSDA range table up to 10 GeV in 800 bins
+      CSDA range table up to 10 GeV in 80 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
  Root logical volume(s) : Chamber 
@@ -141,15 +143,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70342   Tkin= 587.556 keV (0.000 %)   NbOfelec in cav= 4673   Dose/EnFluence= 28.750 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70378   Tkin= 587.625 keV (0.000 %)   NbOfelec in cav= 4659   Dose/EnFluence= 29.305 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140703   Tkin= 587.699 keV (0.024 %)   NbOfelec in cav= 9313   Dose/EnFluence= 27.834 cm2/g (-3.186 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140919   Tkin= 587.997 keV (0.063 %)   NbOfelec in cav= 9132   Dose/EnFluence= 28.542 cm2/g (-2.605 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211305   Tkin= 588.462 keV (0.130 %)   NbOfelec in cav= 13910   Dose/EnFluence= 28.100 cm2/g (0.957 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211610   Tkin= 587.932 keV (-0.011 %)   NbOfelec in cav= 13663   Dose/EnFluence= 28.886 cm2/g (1.204 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=55.93s Real=55.97s Sys=0.01s
+  User=54.2s Real=54.24s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -159,32 +161,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282136  Transportation= 74654  msc= 2091557  eIoni= 1763664
+ Process calls frequency --->  compt= 282802  Transportation= 74587  msc= 2112053  eIoni= 1773697
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 587.9826 keV +- 0.1030 %  (--> range in wall material = 2.2098 mm )
- Mass_energy_transfer coef: 29.8446 cm2/g
+ Mean energy of secondary e- = 587.7519 keV +- 0.1029 %  (--> range in wall material = 2.2117 mm )
+ Mass_energy_transfer coef: 29.8329 cm2/g
 
- StoppingPower in wall   = 1.9726 MeV*cm2/g
-               in cavity = 1.9726 MeV*cm2/g
+ StoppingPower in wall   = 1.9694 MeV*cm2/g
+               in cavity = 1.9694 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18217	 Energy = 9.2736 GeV
-      Exit  --> nbParticles = 18222	 Energy = 9.2716 GeV
+      Enter --> nbParticles = 18112	 Energy = 9.0486 GeV
+      Exit  --> nbParticles = 18127	 Energy = 9.0527 GeV
 
- Total edep in cavity = 12.3325 MeV +- 2.4564 %	 Total charged trackLength = 50.6357 m     (mean value = 2.7796 mm )
- Total dose in cavity = 19.6278 MeV/mg
- Dose/EnergyFluence   = 27.7482 cm2/g
+ Total edep in cavity = 12.8852 MeV +- 2.7915 %	 Total charged trackLength = 51.8299 m     (mean value = 2.8616 mm )
+ Total dose in cavity = 20.5075 MeV/mg
+ Dose/EnergyFluence   = 28.9918 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.92976 +- 0.02380
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.97181 +- 0.02813
 
- StepSize of ch. tracks in wall   = 123.6483 um  +- 121.6997 um 	 (nbSteps/track = 13.5293)
- StepSize of ch. tracks in cavity = 481.2132 um  +- 522.6618 um 	 (nbSteps/track = 5.7762)
+ StepSize of ch. tracks in wall   = 123.3200 um  +- 121.4897 um 	 (nbSteps/track = 13.6059)
+ StepSize of ch. tracks in cavity = 493.2235 um  +- 562.2640 um 	 (nbSteps/track = 5.8019)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 833404077, 1232414320
+ Current couple of seeds = 1049746824, 1281439532
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
