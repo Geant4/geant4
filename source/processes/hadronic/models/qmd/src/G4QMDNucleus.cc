@@ -217,7 +217,7 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
    //G4cout << "BindingEnergy in GeV " << bindingEnergy << G4endl;
    //G4cout << "G4BindingEnergy in GeV " << G4NucleiProperties::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV << G4endl;
 
-   excitationEnergy = bindingEnergy + G4NucleiProperties::GetBindingEnergy( GetAtomicNumber() , GetMassNumber() )/GeV;
+   excitationEnergy = bindingEnergy + G4NucleiProperties::GetBindingEnergy( GetMassNumber() , GetAtomicNumber() )/GeV;
    //G4cout << "excitationEnergy in GeV " << excitationEnergy << G4endl;
    if ( excitationEnergy < 0 ) excitationEnergy = 0.0; 
 
