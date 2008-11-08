@@ -20,6 +20,7 @@
 /testhadr/Physics          PHYSLIST
 #
 /run/initialize
+/process/em/verbose 1
 #
 /gun/particle ion
 /gun/ion  6 12 6

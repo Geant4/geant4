@@ -17,6 +17,9 @@
 /testhadr/Physics          PHYSLIST
 #
 /run/initialize
+/process/em/verbose 1
+#/process/eLoss/binsDEDX 120
+#/process/eLoss/StepFunction 0.1 0.05 mm
 #
 /gun/particle proton
 /gun/energy 110. MeV
