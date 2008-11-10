@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.2 2008-11-10 14:28:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,16 +39,19 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4TransportationManager.hh"
-#include "G4VisExecutive.hh"
 
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
 #include "G4GDMLParser.hh"
 
-int main(int argc,char **argv) {
-
+int main(int argc,char **argv)
+{
    G4cout << G4endl;
    G4cout << "Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>" << G4endl;
    G4cout << G4endl;
@@ -76,14 +79,16 @@ int main(int argc,char **argv) {
    }
 
    G4RunManager* runManager = new G4RunManager;
-   G4VisManager* visManager = new G4VisExecutive;
 
    runManager->SetUserInitialization(new DetectorConstruction(parser.GetWorldVolume()));
    runManager->SetUserInitialization(new PhysicsList);
    runManager->SetUserAction(new PrimaryGeneratorAction);
 
    runManager->Initialize();
+#ifdef G4VIS_USE
+   G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();
+#endif
 
    G4UImanager* UI = G4UImanager::GetUIpointer();
 
@@ -94,11 +99,16 @@ int main(int argc,char **argv) {
    session = new G4UIterminal();
 #endif
 
+#ifdef G4VIS_USE
    UI->ApplyCommand("/control/execute vis.mac"); 
+#endif
 
    session->SessionStart();
-   
+   delete session;
+
+#ifdef G4VIS_USE
    delete visManager;
+#endif
    delete runManager;
 
    return 0;
