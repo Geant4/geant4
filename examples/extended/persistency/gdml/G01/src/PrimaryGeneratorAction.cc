@@ -24,21 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "PrimaryGeneratorAction.hh"
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction() {
-
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+{
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="geantino"));
+  particleGun->SetParticleDefinition(
+               particleTable->FindParticle(particleName="geantino"));
   particleGun->SetParticleEnergy(1.0*GeV);
   particleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.1, 0.1));
 }
@@ -66,5 +71,3 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->SetParticleMomentumDirection(v);
   particleGun->GeneratePrimaryVertex(anEvent);
 }
-
-

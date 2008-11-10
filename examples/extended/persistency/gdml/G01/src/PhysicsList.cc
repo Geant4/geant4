@@ -24,34 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: PhysicsList.cc,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "PhysicsList.hh"
 
-PhysicsList::PhysicsList() {
+PhysicsList::PhysicsList()
+{
 }
 
-PhysicsList::~PhysicsList() {
+PhysicsList::~PhysicsList()
+{
 }
 
-void PhysicsList::ConstructParticle() {
-
+void PhysicsList::ConstructParticle()
+{
    G4Geantino::GeantinoDefinition();
 }
 
-void PhysicsList::ConstructProcess() {
-
+void PhysicsList::ConstructProcess()
+{
    AddTransportation();
 }
 
-void PhysicsList::SetCuts() {
-
+void PhysicsList::SetCuts()
+{
    G4int temp = GetVerboseLevel();
    SetVerboseLevel(0);                                                           
    SetCutsWithDefault();   
    SetVerboseLevel(temp);  
 }
-

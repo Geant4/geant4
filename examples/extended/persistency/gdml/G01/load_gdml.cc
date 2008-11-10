@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.3 2008-11-10 15:39:34 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.4 2008-11-10 15:40:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,7 +53,7 @@
 int main(int argc,char **argv)
 {
    G4cout << G4endl;
-   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory>
+   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory>"
           << " <output_gdml_file:optional>" << G4endl;
    G4cout << G4endl;
 
