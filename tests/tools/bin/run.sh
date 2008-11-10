@@ -11,7 +11,7 @@
 # executed from everywhere. (That a bit anbitious, anywhere is already
 #                            quite risky).
 #
-
+
 # Some checks :
 # set -x
 if [ -z "${G4INSTALL}" ] ; then
@@ -391,9 +391,9 @@ if [ $1 = "all" ] ; then
   $G4STTDIR/bin/run.sh test1002
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test1002 64
   
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1003 65
-  $G4STTDIR/bin/run.sh test1003
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1003 65
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test61 65
+  $G4STTDIR/bin/run.sh test61
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test61 65
   
   ${G4STTDIR}/bin/geant4-unix.pl --start-test test6001 66
   $G4STTDIR/bin/run.sh test6001
