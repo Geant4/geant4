@@ -95,7 +95,8 @@ SUBDIRS_AIDA += test50
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
 
-HADRONICSDIRS = test02 test11 test12 test13 test15 test16 test21 test22 test23 test24 test25 test27 test28
+HADRONICSDIRS = test02 test11 test12 test13 test15 test16 
+HADRONICSDIRS += test21 test22 test23 test24 test25 test27 test28 test61
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
