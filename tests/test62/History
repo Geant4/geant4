@@ -1,0 +1,33 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 62 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+7th November 2008  Pekka Kaitaniemi (test62-V09-01-00)
+- Use test24 as the basis of a new INCL/ABLA cascade/evaporation system test
+- Modifications:
+  o Use G4InclAblaCascadeInterface (INCL/ABLA for proton, neutron, pi+, pi-,
+  pi0 projectiles)
+  o Add Carbon, Lead and Thorium target material definitions
+  o Hydrogen target not used in the run macro (H target not supported by INCL)
+  o Set the test run energy to 1 GeV (INCL4.2 supports energies 200 MeV - 3
+  GeV)
+
+6th December 2005  Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+16th March 2004  Gabriele Cosmo
+- Fixed compilation warnings.
+- Replaced usage of NULL with 0.
+
+4th November 2002  Hans-Peter Wellisch
+- created the test
