@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,20 +34,23 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-class DetectorConstruction : public G4VUserDetectorConstruction {
-private:
-   G4VPhysicalVolume *World;
-public:
+class DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
  
-   DetectorConstruction(G4VPhysicalVolume *setWorld = 0) {
-   
+    DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
+    {   
       World = setWorld;
-   }   
+    }
 
-  G4VPhysicalVolume *Construct() {
-  
-     return World;
-  }
+    G4VPhysicalVolume *Construct()
+    {
+      return World;
+    }
+
+  private:
+
+    G4VPhysicalVolume *World;
 };
 
 #endif

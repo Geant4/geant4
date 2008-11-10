@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: PhysicsList.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,21 +36,17 @@
 #include "G4ParticleTypes.hh"
 #include "globals.hh"
 
-class PhysicsList: public G4VUserPhysicsList {
-public:
-   PhysicsList();
+class PhysicsList : public G4VUserPhysicsList
+{
+  public:
+    PhysicsList();
    ~PhysicsList();
-protected:
-   void ConstructParticle();
-   void ConstructProcess();
-   void SetCuts();
+
+  protected:
+
+    void ConstructParticle();
+    void ConstructProcess();
+    void SetCuts();
 };
 
 #endif
-
-
-
-
-
-
-

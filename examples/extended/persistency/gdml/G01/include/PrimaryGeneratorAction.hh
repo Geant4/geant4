@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2008-08-27 08:30:10 gcosmo Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,25 +34,23 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
-//class G4ParticleGun;
-//class G4Event;
+class G4Event;
+class G4ParticleGun;
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-public:
-   PrimaryGeneratorAction();
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+
+    PrimaryGeneratorAction();
    ~PrimaryGeneratorAction();
 
    void GeneratePrimaries(G4Event* anEvent);
-private:
+
+  private:
+
     G4ParticleGun* particleGun;
 };
 
 #endif
-
-

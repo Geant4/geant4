@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.2 2008-11-10 14:28:48 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.3 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,11 +53,12 @@
 int main(int argc,char **argv)
 {
    G4cout << G4endl;
-   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>" << G4endl;
+   G4cout << "Usage: load_gdml <intput_gdml_file:mandatory>
+          << " <output_gdml_file:optional>" << G4endl;
    G4cout << G4endl;
 
-   if (argc<2) {
-   
+   if (argc<2)
+   {
       G4cout << "Error! Mandatory input file is not specified!" << G4endl;
       G4cout << G4endl;
       return -1;
@@ -66,13 +67,13 @@ int main(int argc,char **argv)
    G4GDMLParser parser;
    parser.Read(argv[1]);
 
-   if (argc==3) {
-
+   if (argc==3)
+   {
       parser.Write(argv[2],parser.GetWorldVolume());
    }
    
-   if (argc>3) {
-
+   if (argc>3)
+   {
       G4cout << "Error! Too many arguments!" << G4endl;
       G4cout << G4endl;
       return -1;
@@ -80,17 +81,19 @@ int main(int argc,char **argv)
 
    G4RunManager* runManager = new G4RunManager;
 
-   runManager->SetUserInitialization(new DetectorConstruction(parser.GetWorldVolume()));
+   runManager->SetUserInitialization(new DetectorConstruction(
+                                     parser.GetWorldVolume()));
    runManager->SetUserInitialization(new PhysicsList);
    runManager->SetUserAction(new PrimaryGeneratorAction);
 
    runManager->Initialize();
+
+   G4UImanager* UI = G4UImanager::GetUIpointer();
+
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();
 #endif
-
-   G4UImanager* UI = G4UImanager::GetUIpointer();
 
    G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
@@ -98,17 +101,16 @@ int main(int argc,char **argv)
 #else
    session = new G4UIterminal();
 #endif
-
 #ifdef G4VIS_USE
    UI->ApplyCommand("/control/execute vis.mac"); 
 #endif
-
    session->SessionStart();
    delete session;
 
 #ifdef G4VIS_USE
    delete visManager;
 #endif
+
    delete runManager;
 
    return 0;
