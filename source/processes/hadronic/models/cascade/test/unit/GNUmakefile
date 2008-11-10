@@ -26,3 +26,4 @@ ${RUNNER}: ${OBJS}
 
 clean:
 	${REMOVE} ${RUNNER} ${OBJS} 
+ca:	clean
