@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointPositron.cc,v 1.1 2008-11-06 13:17:36 kurasige Exp $
+// $Id: G4AdjointPositron.cc,v 1.2 2008-11-10 07:07:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@ G4AdjointPositron* G4AdjointPositron::Definition()
 { 
   
   if (theInstance !=0) return theInstance;
-  const G4String name = "adj_e-";
+  const G4String name = "adj_e+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
