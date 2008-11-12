@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,21 +69,25 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
                                      theTgrMate->GetNumberOfComponents(),
                                      kStateUndefined, STP_Temperature );
 
-  //--- add components
+ #ifdef G4VERBOSE
+  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  {
+    G4cout << " G4tgbMaterialMixtureByNoAtoms::BuildG4Material() -"
+           << " Constructing new G4Material:"
+           << " " << theTgrMate->GetName()
+           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
+  }
+#endif
+
+ //--- add components
   G4Element* compElem;
-  G4Material* compMate;
-  compAreElements = 0;
-  compAreMaterials = 0;
-  G4double totalWeight = 0.; //use for number of atoms -> weight conversion
-  std::vector<G4Material*> compMateList; 
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
   {
     //look if this component is an element
-    G4tgbElement* hselem = mf->FindG4tgbElement( GetComponent(ii) );
-    if( hselem != 0 )
+    compElem = mf->FindOrBuildG4Element( GetComponent(ii), false );
+    if( compElem != 0 )
     {
-      compElem = mf->FindOrBuildG4Element( GetComponent(ii) );
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 2 )
       {
@@ -91,72 +95,19 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
                << " Adding component element ..." << G4endl;
       }
 #endif
-      if( compAreMaterials )
-      {
-        G4String ErrMessage = "Material with some component elements and "
-                            + G4String("some materials: ")
-                            + theTgrMate->GetName();
-        G4Exception("G4tgbMaterialMixtureByNoAtoms::BuildG4Material()",
-                    "InvalidSetup", FatalException, ErrMessage);
-      }
-      compAreElements = 1;
       //add it by number of atoms
+      G4cout << compElem->GetName() << " BY NATOMS ele " << ii << " " << G4int(GetFraction(ii)) << G4endl;
       mate->AddElement( compElem, G4int(GetFraction(ii)) );
       //if it is not an element look if it is a material
     }
     else
     { 
-      compMate = mf->FindOrBuildG4Material( GetComponent(ii) );
-#ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-      {
-        G4cout << " G4tgbMaterialMixtureByNoAtoms::BuildG4Material() -"
-               << " compMate: " << GetFraction(ii) << G4endl;
-      }
-#endif
-      if( compMate != 0 )
-      { 
-        if( compAreElements )
-        { 
-          G4String ErrMessage = "Material with some component materials and "
-                              + G4String("some elements: ")
-                              + theTgrMate->GetName();
-          G4Exception("G4tgbMaterialMixtureByNoAtoms::BuildG4Material()",
-                      "InvalidSetup", FatalException, ErrMessage);
-        }
-        compAreMaterials = 1;
-/*
-        G4String ErrMessage = "Adding materials by atoms is not supported: "
-                            + theTgrMate->GetName() + ", sorry ...";
-        G4Exception("G4tgbMaterialMixtureByNoAtoms::buildG4Material()",
-                    "NotImplemented", FatalException, ErrMessage);
-*/
-        // If it is a material transform No Atoms to Weight
-	//        if( fr > 1.0 ) { fr = 1.; }
-        G4double fr = GetFraction(ii);
-	fr *= compMate->GetDensity();
-	totalWeight += fr;
-	//Do it after normalization  mate->AddMaterial( compMate, GetFraction( ii ) );
-	compMateList.push_back(compMate); 
-      }
-      else
-      {
-        G4String ErrMessage = "Component " + GetComponent(ii)
-                            + " of material " +  theTgrMate->GetName()
-                            + "\n" + "is not an element nor a material !";
-        G4Exception("G4tgbMaterialMixtureByWeight::buildG4Material()",
-                    "InvalidSetup", FatalException, ErrMessage);
-      }
+      G4String ErrMessage = "Component " + GetComponent(ii)
+	+ " of material " +  theTgrMate->GetName()
+	+ "\n" + "is not an element !";
+      G4Exception("G4tgbMaterialMixtureByWeight::buildG4Material()",
+		  "InvalidSetup", FatalException, ErrMessage);
     } 
-  }
-
-  //renormalize after the conversion number of atoms -> weight
-  if( compAreMaterials ) {
-    for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++) {
-      G4double fr = GetFraction(ii);
-      fr *= compMateList[ii]->GetDensity()/totalWeight; 
-      mate->AddMaterial( compMateList[ii], fr ); 
-    }
   }
 
 #ifdef G4VERBOSE

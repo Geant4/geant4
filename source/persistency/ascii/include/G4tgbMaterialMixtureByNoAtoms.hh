@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterialMixtureByNoAtoms.hh,v 1.2 2008-11-12 08:41:19 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,10 +62,6 @@ class G4tgbMaterialMixtureByNoAtoms : public G4tgbMaterialMixture
 
     void TransformToFractionsByWeight();
 
-  private:
-
-    G4bool compAreElements;
-    G4bool compAreMaterials;
 };
 
 #endif

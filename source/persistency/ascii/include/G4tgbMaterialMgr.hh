@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMgr.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbMaterialMgr.hh,v 1.2 2008-11-12 08:41:19 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,25 +83,27 @@ class G4tgbMaterialMgr
     G4Isotope* FindOrBuildG4Isotope(const G4String & name);
       // Look for an G4Isotope that has to exists
       // (if not found create it from the corresponding G4tgbIsotope)
-    G4Isotope* FindG4Isotope(const G4String & name) const;
+    G4Isotope* FindBuiltG4Isotope(const G4String & name) const;
       // Look for an G4Isotope and if not found return 0
     G4tgbIsotope* FindG4tgbIsotope(const G4String& name,
                                          G4bool bMustExist = 0) const;
       // Look for an G4Isotope and if not found return 0
 
-    G4Element* FindOrBuildG4Element(const G4String & name);
-      // Look for an G4Element that has to exists
+    G4Element* FindOrBuildG4Element(const G4String & name,
+                                         G4bool bMustExist = 1);
+      // Look for an G4Element that has to exists by default
       // (if not found create it from the corresponding G4tgbElement)
-    G4Element* FindG4Element(const G4String & name) const;
+    G4Element* FindBuiltG4Element(const G4String & name) const;
       // Look for an G4Element and if not found return 0
     G4tgbElement* FindG4tgbElement(const G4String& name,
                                          G4bool bMustExist = 0) const;
       // Look for an G4Element and if not found return 0
 
-    G4Material* FindOrBuildG4Material(const G4String& name);
-     // Look for an G4Material that has to exists
+    G4Material* FindOrBuildG4Material(const G4String& name,
+                                         G4bool bMustExist = 1);
+     // Look for an G4Material that has to exists by default
      // (if not found create it from the corresponding G4tgbMaterial)
-    G4Material* FindG4Material(const G4String& name) const;
+    G4Material* FindBuiltG4Material(const G4String& name) const;
      // Look for an G4Material and if not found return 0
     G4tgbMaterial* FindG4tgbMaterial(const G4String& name,
                                            G4bool bMustExist = 0) const;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgrLineProcessor.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,6 +120,7 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":MATE" )
   {
+
     G4tgrMaterialSimple* mate = G4tgrMaterialFactory::GetInstance()
                               ->AddMaterialSimple( wl );
     volmgr->RegisterMe( mate );
@@ -148,8 +149,17 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
                           ->AddMaterialMixture( wl, "MaterialMixtureByVolume" );
     volmgr->RegisterMe( mate );
 
-    //------------------------------- solid
+  //------------------------------- material Mean Excitation Energy of Ionisation Potential
   }
+  else if( wl0 == ":MATE_MEE" )
+  {
+    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
+    if( mate == 0 ) {
+      G4Exception("G4tgrLineProcessor::ProcessLine","Material not found",FatalException,G4tgrUtils::GetString( wl[1] ) );
+    }
+    
+  }
+  //------------------------------- solid
   else if( wl0 == ":SOLID" )
   {                        // called from here or from G4tgrVolume::G4tgrVolume
     volmgr->CreateSolid( wl, 0 );

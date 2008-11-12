@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgbMaterialMixtureByWeight.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,7 @@ G4Material* G4tgbMaterialMixtureByWeight::BuildG4Material()
     G4cout << " G4tgbMaterialMixtureByWeight::BuildG4Material() -"
            << " Constructing new G4Material:"
            << " " << theTgrMate->GetName()
-           << " " << theTgrMate->GetDensity() << G4endl;
+           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
   }
 #endif
   
@@ -84,10 +84,9 @@ G4Material* G4tgbMaterialMixtureByWeight::BuildG4Material()
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
   {
     // Look if this component is an element
-    G4tgbElement* hselem = mf->FindG4tgbElement( GetComponent(ii) );
-    if( hselem != 0 )
+    compElem = mf->FindOrBuildG4Element( GetComponent(ii), false );
+    if( compElem != 0 )
     {
-      compElem = mf->FindOrBuildG4Element( GetComponent(ii) );
       mate->AddElement( compElem, GetFraction( ii ) );
     }
     else  // If it is not an element, it must be a material

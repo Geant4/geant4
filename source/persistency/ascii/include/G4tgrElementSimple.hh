@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementSimple.hh,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgrElementSimple.hh,v 1.4 2008-11-12 08:41:19 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

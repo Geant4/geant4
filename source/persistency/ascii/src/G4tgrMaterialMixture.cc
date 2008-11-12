@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialMixture.cc,v 1.4 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgrMaterialMixture.cc,v 1.5 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,7 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
 std::ostream& operator<<(std::ostream& os, const G4tgrMaterialMixture& mate) 
 {
   os << "G4tgrMaterialMixture=: " << mate.theName << G4endl
-     << "density= " << mate.theDensity << " g/cm3. Number of Components: "
+     << "density= " << mate.theDensity/g*cm3 << " g/cm3. Number of Components: "
      << mate.theNoComponents << G4endl;
   for (G4int ii=0; ii<mate.theNoComponents; ii++)
   {

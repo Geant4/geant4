@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialSimple.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgrMaterialSimple.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,7 +104,7 @@ std::ostream& operator<<(std::ostream& os, const G4tgrMaterialSimple& mate)
 {
   os << "G4tgrMaterialSimple= " << mate.theName 
      << " Z " << mate.theZ << " A " << mate.theA 
-     << "density= " << mate.theDensity*g/cm3
+     << "density= " << mate.theDensity/g*cm3
      << " g/cm3. Number of Components: " << mate.theNoComponents << G4endl;
   return os;
 }

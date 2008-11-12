@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbElement.cc,v 1.2 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgbElement.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,14 +95,6 @@ G4Element* G4tgbElement::BuildG4ElementFromIsotopes()
     elem = new G4Element(tgrElem->GetName(), tgrElem->GetSymbol(),
                          tgrElem->GetNumberOfIsotopes() );
 
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing  new G4Element from isotopes: "
-             << *elem << G4endl;
-    }
-#endif
-
     //----- add isotopes
     G4Isotope* compIsot;
     G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
@@ -130,6 +122,15 @@ G4Element* G4tgbElement::BuildG4ElementFromIsotopes()
   {
     elem = theG4Elem; 
   }
+
+
+#ifdef G4VERBOSE
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    {
+      G4cout << " Constructing  new G4Element from isotopes: "
+             << *elem << G4endl;
+    }
+#endif
 
   return elem;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterial.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgbMaterial.hh,v 1.3 2008-11-12 08:41:19 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,6 +92,10 @@ class G4tgbMaterial
     {
       return theTgrMate->GetType();
     }  
+
+
+  G4tgrMaterial* GetTgrMate() const {
+    return theTgrMate; }
 
   protected:
 

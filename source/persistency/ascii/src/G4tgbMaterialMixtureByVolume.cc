@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,8 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
   {
     G4cout << " G4tgbMaterialMixtureByVolume::buildG4Material() -"
            << " Constructing new G4Material:"
-           << " " << theTgrMate->GetName() << G4endl;
+           << " " << theTgrMate->GetName() 
+	   << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
   }
 #endif
  
@@ -115,8 +116,6 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
 // -------------------------------------------------------------------------
 void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight() 
 { 
-  theFractionsByWeight = new G4double( theTgrMate->GetNumberOfComponents() );
-
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
   G4Material* compMate;
   G4double totalfd = 0.;
@@ -126,8 +125,9 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
     if( compMate != 0 )
     {
       // If it is a material add it by weight fraction 
-      theFractionsByWeight[ii] = GetFraction(ii) * compMate->GetDensity();
+      theFractionsByWeight.push_back( GetFraction(ii) * compMate->GetDensity() );
       totalfd += theFractionsByWeight[ii];
+      G4cout << compMate->GetName() << " BY VOLUME " << ii << " " << GetFraction(ii) << " dens " <<  compMate->GetDensity()/g*cm3 << " --> " << theFractionsByWeight[ii] << G4endl;
     }
     else
     {
@@ -141,6 +141,7 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
   {
     theFractionsByWeight[ii] /= totalfd;
+ G4cout << compMate->GetName() << " BY VOLUME " << ii << " FINAL " << theFractionsByWeight[ii] << G4endl;
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
