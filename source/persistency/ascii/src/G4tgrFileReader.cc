@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.cc,v 1.3 2008-11-04 15:40:43 arce Exp $
+// $Id: G4tgrFileReader.cc,v 1.4 2008-11-12 08:44:07 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,8 +47,8 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrMaterialFactory.hh"
 #include "G4tgrRotationMatrixFactory.hh"
-#include "G4tgrMessenger.hh"
 #include "G4tgrLineProcessor.hh"
+#include "G4tgrMessenger.hh"
 
 
 G4tgrFileReader* G4tgrFileReader::theInstance = 0;
@@ -57,7 +57,6 @@ G4tgrFileReader* G4tgrFileReader::theInstance = 0;
 //---------------------------------------------------------------
 G4tgrFileReader::G4tgrFileReader()
 {
-  new G4tgrMessenger;
   theLineProcessor = new G4tgrLineProcessor;
 }
 

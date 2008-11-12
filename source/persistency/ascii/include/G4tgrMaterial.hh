@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgrMaterial.hh,v 1.3 2008-11-12 08:40:14 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,12 +64,19 @@ class G4tgrMaterial
     virtual const G4String& GetComponent(G4int i) const = 0;
     virtual G4double GetFraction(G4int i) = 0;
 
+    G4double GetIonisationMeanExcitationEnergy() const {
+      return theIonisationMeanExcitationEnergy; }
+
+    void SetIonisationMeanExcitationEnergy( G4double mee ) {
+      theIonisationMeanExcitationEnergy = mee; }
+
   protected:
 
     G4String  theName;
     G4double  theDensity;
     G4int theNoComponents;
     G4String  theMateType;
+    G4double theIonisationMeanExcitationEnergy;
 };
 
 #endif
