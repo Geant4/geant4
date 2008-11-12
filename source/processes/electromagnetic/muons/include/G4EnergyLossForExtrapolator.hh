@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.10 2008-10-27 10:55:07 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.11 2008-11-12 18:20:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -82,6 +82,9 @@ public:
   G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
 	        	    const G4Material*, const G4ParticleDefinition*);
 
+  G4double TrueStepLength(G4double kinEnergy, G4double step,
+			  const G4Material*, const G4ParticleDefinition* part);
+
   inline G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
 				  const G4Material*, const G4String& particleName);
 
@@ -130,6 +133,8 @@ private:
 
   void ComputeProtonDEDX(const G4ParticleDefinition* part, G4PhysicsTable* table); 
 
+  void ComputeTrasportXS(const G4ParticleDefinition* part, G4PhysicsTable* table);
+
   inline G4double ComputeValue(G4double x, const G4PhysicsTable* table);
 
   // hide assignment operator
@@ -160,6 +165,7 @@ private:
   G4PhysicsTable*          invRangePositron;
   G4PhysicsTable*          invRangeMuon;
   G4PhysicsTable*          invRangeProton;
+  G4PhysicsTable*          mscElectron;
 
   const G4Material* currentMaterial;
   G4int       index;
