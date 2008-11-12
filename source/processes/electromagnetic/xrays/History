@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2008-10-22 01:15:46 gum Exp $
+$Id: History,v 1.68 2008-11-12 15:41:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 October 08: V. Ivanchenko (xrays-V09-01-05)
+- exclude G4MscRadiation from the release
 
 21 October 08: P. Gumplinger (xrays-V09-01-04)
 - Add SetProcessSubType(G4EmProcessSubType) to G4Cerenkov.cc
