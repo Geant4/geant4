@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.8 2008-07-09 09:47:33 vnivanch Exp $
+// $Id: G4EmSaturation.cc,v 1.9 2008-11-12 15:37:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
     // atomic relaxations
     if(p == gamma) {
-      //evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
+      evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
 
       // energy loss
     } else {
