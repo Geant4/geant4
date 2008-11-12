@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.hh,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbGeometryDumper.hh,v 1.4 2008-11-12 08:40:33 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,6 +66,7 @@ class G4tgbGeometryDumper
     void DumpGeometry(const G4String& fname );
     G4VPhysicalVolume* GetTopPhysVol();
     void DumpPhysVol( G4VPhysicalVolume* pv );
+    void DumpPVPlacement( G4VPhysicalVolume* pv );
     void DumpLogVol( G4LogicalVolume* lv );
     void DumpMaterial( G4Material* mat );
     void DumpElement( G4Element* ele);
@@ -91,18 +92,16 @@ class G4tgbGeometryDumper
     G4String itoa(G4int current);
     G4String AddQuotes( const G4String& str );
 
-    G4bool CheckIfMaterialExists( const G4String& name, G4Material* );
-    G4bool CheckIfElementExists( const G4String& name, G4Element* );
     G4String GetIsotopeName( G4Isotope* );
+    template< class TYP>
+    G4String GetObjectName( TYP* obj, std::map<G4String,TYP*> objectsDumped );
     G4bool CheckIfLogVolExists( const G4String& name, G4LogicalVolume* pt );
-    G4bool CheckIfSolidExists( const G4String& name, G4VSolid* );
     G4bool CheckIfPhysVolExists( const G4String& name, G4VPhysicalVolume* );
     G4String LookForExistingRotation( const G4RotationMatrix* rotm );
     G4String SupressRefl( G4String name );
     G4String SubstituteRefl( G4String name );
-    G4bool Same2G4Materials( G4Material* mat1, G4Material* mat2 );
-    G4bool Same2G4Elements( G4Element* ele1, G4Element* ele2 );
     G4bool Same2G4Isotopes( G4Isotope* ele1, G4Isotope* ele2 );
+    G4String FindSolidName( G4VSolid* solid );
 
   private:
 
