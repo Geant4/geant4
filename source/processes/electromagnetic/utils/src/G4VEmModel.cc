@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.17 2008-10-14 15:53:56 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.18 2008-11-12 15:34:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,12 @@ G4VEmModel::G4VEmModel(const G4String& nam):
 G4VEmModel::~G4VEmModel()
 {
   G4LossTableManager::Instance()->DeRegister(this);
+  G4int n = elmSelectors.size();
+  if(n > 0) {
+    for(G4int i=0; i<n; i++) { 
+      delete elmSelectors[i]; 
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
