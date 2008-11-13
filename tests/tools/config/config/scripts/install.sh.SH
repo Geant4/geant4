@@ -279,6 +279,7 @@ if [ X$g4ui_build_qt_session = Xy ] ; then
 G4UI_BUILD_QT_SESSION=1
 export G4UI_BUILD_QT_SESSION
 echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
+fi
 
 #+
 if [ X$g4ui_use_qt = Xy ] ; then
