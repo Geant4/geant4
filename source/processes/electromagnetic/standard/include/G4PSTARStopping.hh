@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.hh,v 1.4 2006-06-29 19:50:48 gunter Exp $
+// $Id: G4PSTARStopping.hh,v 1.5 2008-11-13 12:04:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4PSTARStopping_h
@@ -84,7 +84,6 @@ private:
   G4String name[74];
   G4double currentE, res;
   G4double e[74][60], kinE[60]; 
-  G4int Znum[74];
 };
 
 inline G4double G4PSTARStopping::GetElectronicDEDX(const G4Material* mat, 
