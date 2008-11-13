@@ -383,13 +383,6 @@ setenv OIVHOME "$g4vis_oivhome"
 echo "On this machine the OIVHOME=\$OIVHOME"
 endif 
 
-#+
-if ( X$g4_qthome != X ) then
-setenv QTHOME "$g4_qthome"
-echo "On this machine the QTHOME=\$QTHOME"
-endif
-
-
 
 #+
 if ( X$g4vis_build_openglxm_driver != X )  then
@@ -426,6 +419,36 @@ if ( X$g4ui_build_xaw_session != X )  then
 setenv XAWLIBS "$g4ui_xawlibs"
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 endif 
+
+
+#
+# Qt Flags and Libs, messy, but needed for backward compatibility
+#+
+if ( "X$g4ui_build_qt_session" == "Xy" || "X$g4ui_use_qt" == "Xy" )  then
+setenv QTFLAGS "$g4_qt_cxxflags"
+setenv QTLIBS "$g4_qt_libs"
+setenv QTMOC "$g4_qt_moc"
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the QTLIBS=\$QTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+endif
+
+if ( "X$g4vis_build_openglqt_driver" == "Xy" || "X$g4vis_build_openglqt_driver" == "Xy" )  then
+if ( "X\$QTFLAGS" == "X" )  then
+setenv QTFLAGS "$g4_qt_cxxflags $g4_qt_gl_cxxflags"
+else
+setenv QTFLAGS "\$QTFLAGS $g4_qt_gl_cxxflags"
+endif
+if ( "X\$QTMOC" == "X" )  then
+setenv QTMOC "$g4_qt_moc"
+endif
+setenv GLQTLIBS "$g4_qt_libs $g4_qt_gl_libs"
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the GLQTLIBS=\$GLQTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+endif
+
+
 
 
 
