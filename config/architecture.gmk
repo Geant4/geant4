@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.115 2008-07-11 15:40:14 gcosmo Exp $
+# $Id: architecture.gmk,v 1.116 2008-11-13 16:15:14 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -15,9 +15,9 @@
 #
 #          Linux-g++   Linux (Red Hat Enterprise/SCL4), gcc-3.4.6 (default)
 #
-#          SUN-CC      SunOS 5.8, CC 5.5
+#          Darwin-g++  MacOSX 10.5, gcc-4.0.1
 #
-#          WIN32-VC    Windows/XP and Microsoft Visual C++ 8.0
+#          WIN32-VC    Windows/XP and Microsoft Visual C++ 9.0
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
