@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.58 2008-10-14 15:53:56 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.59 2008-11-13 19:29:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -257,6 +257,8 @@ public:
 
   inline G4double SecondaryThreshold() const;
 
+  inline G4bool LPMFlag() const;
+
   inline void SetHighEnergyLimit(G4double);
 
   inline void SetLowEnergyLimit(G4double);
@@ -264,6 +266,8 @@ public:
   inline void SetPolarAngleLimit(G4double);
 
   inline void SetSecondaryThreshold(G4double);
+
+  inline void SetLPMFlag(G4bool val);
 
   inline void ActivateNuclearStopping(G4bool);
 
@@ -296,6 +300,7 @@ private:
   G4double        highLimit;
   G4double        polarAngleLimit;
   G4double        secondaryThreshold;
+  G4bool          theLPMflag;
 
   G4int           nSelectors;
   std::vector<G4EmElementSelector*> elmSelectors;
@@ -344,6 +349,13 @@ inline G4double G4VEmModel::SecondaryThreshold() const
   return secondaryThreshold;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmModel::LPMFlag() const 
+{
+  return theLPMflag;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VEmModel::SetHighEnergyLimit(G4double val)
@@ -370,6 +382,13 @@ inline void G4VEmModel::SetPolarAngleLimit(G4double val)
 inline void G4VEmModel::SetSecondaryThreshold(G4double val) 
 {
   secondaryThreshold = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::SetLPMFlag(G4bool val) 
+{
+  theLPMflag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

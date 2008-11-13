@@ -1,4 +1,4 @@
-$Id: History,v 1.362 2008-11-13 18:23:39 schaelic Exp $
+$Id: History,v 1.363 2008-11-13 19:29:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 13 Novemver 08: A.Schaelicke (emutils-V09-01-36)
 G4LossTableManager - changed default LPM effect to ON again
+G4VEmModel - (VI) add LPM flag and Get/Set methods
 
 12 November 08: V.Ivant (emutils-V09-01-35)
 G4VEmModel - fixed memory leak by destruction G4EmElementSelectors
