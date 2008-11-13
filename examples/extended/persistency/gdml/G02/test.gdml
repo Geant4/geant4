@@ -187,23 +187,23 @@
         <parameterised_position_size>
           <parameters number="1">
             <position name="Chamber0x15f20600_pos" unit="mm" x="0" y="0" z="-150"/>
-            <box_dimensions lunit="mm" x="48" y="48" z="20"/>
+            <box_dimensions x="48" y="48" z="20"/>
           </parameters>
           <parameters number="2">
             <position name="Chamber0x15f20601_pos" unit="mm" x="0" y="0" z="-70"/>
-            <box_dimensions lunit="mm" x="134.4" y="134.4" z="20"/>
+            <box_dimensions x="134.4" y="134.4" z="20"/>
           </parameters>
           <parameters number="3">
             <position name="Chamber0x15f20602_pos" unit="mm" x="0" y="0" z="10"/>
-            <box_dimensions lunit="mm" x="220.8" y="220.8" z="20"/>
+            <box_dimensions x="220.8" y="220.8" z="20"/>
           </parameters>
           <parameters number="4">
             <position name="Chamber0x15f20603_pos" unit="mm" x="0" y="0" z="90"/>
-            <box_dimensions lunit="mm" x="307.2" y="307.2" z="20"/>
+            <box_dimensions x="307.2" y="307.2" z="20"/>
           </parameters>
           <parameters number="5">
             <position name="Chamber0x15f20604_pos" unit="mm" x="0" y="0" z="170"/>
-            <box_dimensions lunit="mm" x="393.6" y="393.6" z="20"/>
+            <box_dimensions x="393.6" y="393.6" z="20"/>
           </parameters>
         </parameterised_position_size>
       </paramvol>
