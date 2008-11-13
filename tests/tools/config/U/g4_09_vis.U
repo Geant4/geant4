@@ -1,6 +1,6 @@
 ?RCS:
 ?MAKE:g4vis_build_dawn_driver g4vis_use_dawn g4vis_build_dawnfile_driver g4vis_use_dawnfile g4vis_build_openglx_driver g4vis_use_openglx g4vis_build_openglxm_driver g4vis_use_openglxm g4vis_xmhome g4vis_build_oix_driver g4vis_use_oix g4vis_build_raytracer_driver g4vis_use_raytracer g4vis_build_vrml_driver g4vis_use_vrml g4vis_build_vrmlfile_driver g4vis_use_vrmlfile g4vis_build_asciitree_driver g4vis_use_asciitree g4vis_build_openglwin32_driver g4vis_use_openglwin32 g4vis_build_oiwin32_driver g4vis_use_oiwin32 g4vis_oivhome g4vis_oglhome g4vis_build_raytracerx_driver g4vis_use_raytracerx g4vis_xmflags g4vis_xmlibs:\
-	g4ui_build_terminal_session Myread Getfile cat rm test
+	g4ui_build_terminal_session g4ui_build_qt_session Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
