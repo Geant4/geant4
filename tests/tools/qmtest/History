@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2008-09-30 14:28:48 vdiez Exp $
+$Id: History,v 1.4 2008-11-13 15:57:48 vdiez Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,12 @@ $Id: History,v 1.3 2008-09-30 14:28:48 vdiez Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-Nov-08 V.Diez                     (testtools-QMtest-V09-01-05)
+- removed tests which were not necessary
+- fixed wrong g3tog4-*-run.qmt tests
+- test25-run no prerequisite over build (temporary)
+- test39-build unsets G4LIB_BUILD_SHARED (temporary)
 
 30-Sep-08 V.Diez                     (testtools-QMtest-V09-01-04)
 - added new tests to the qmtest suite
