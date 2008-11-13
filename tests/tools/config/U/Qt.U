@@ -1,0 +1,387 @@
+?RCS:
+?X:
+?X: This unit produces a shell script "qt" which can be used to find
+?X: out how and where Qt is installed on the system. It will perform several
+?X: checks for the Qt headers, libraries and applications, setting variables
+?X: as needed. It leaves "qt" sitting around for other Configure units
+?X: to use, but arranges for its demise at the end of Configure.
+?X:
+?MAKE:Qt g4_qt_version g4_qt_cxxflags g4_qt_gl_cxxflags g4_qt_libs \
+g4_qt_gl_libs g4_qt_moc: startsh Loc cat
+?MAKE:	-pick add $@ %<
+?V:with_qt_dir:g4_qt_version g4_qt_cxxflags g4_qt_gl_cxxflags g4_qt_libs g4_qt_gl_libs g4_qt_moc g4_qt_is_configured g4_havegoodqt
+?F:./qt
+?T:with_qt_dir
+cat <<EOSC >qt
+$startsh
+#
+# Autoconf(ish) style check for Qt headers, libraries and moc application
+#
+
+#
+# These are variables that the final unit generated script may use
+#
+with_qt_dir="\$1"
+
+#
+# Only run if we haven't succesfully found Qt already
+#
+if test "x\$g4_qt_is_configured" = "x" ; then
+    #
+    # Flag specifying if we've configured Qt o.k.
+    #
+    g4_qt_is_configured="yes" # Optimism
+
+    # Flag to be set if any part of configuration fails
+    g4_havegoodqt="yes" # Optimism
+
+    # Qt4 flag
+    g4_is_qt4="no"
+
+    # Variables to be set
+    g4_qt_include_dir=''
+    g4_qt_lib_dir=''
+    g4_qt_moc=''
+
+    g4_qt_version=''
+    g4_qt_cxxflags=''
+    g4_qt_gl_cxxflags=''
+    g4_qt_libs=''
+    g4_qt_gl_libs=''
+
+    #
+    # User may supply a value for 'QTDIR' and in that case we ASSUME a
+    # Trolltech style installation or a Mac Framework
+    #
+    if test "x\$with_qt_dir" != "x" ; then
+        g4_qt_dir="\$with_qt_dir"
+        g4_qt_possible_qt_include_dirs="\$with_qt_dir/include/QtCore
+                                        \$with_qt_dir/include/Qt 
+                                        \`ls -dr \$with_qt_dir/include/qt*/QtCore 2>/dev/null\` 
+                                        \`ls -dr \$with_qt_dir/include/qt*/Qt 2>/dev/null\` 
+                                        \`ls -dr \$with_qt_dir/include/qt* 2>/dev/null\` 
+                                        \$with_qt_dir/include
+                                        \$with_qt_dir/QtCore.framework/Headers"
+
+        # Check for qglobal.h
+        g4_qglobal_loc=\`./loc qglobal.h no \$g4_qt_possible_qt_include_dirs\`
+
+        if test "x\$g4_qglobal_loc" = "xno" ; then
+            g4_havegoodqt=no
+            g4_qt_include_dir=no
+        fi
+        echo "checking for qglobal.h... \$g4_qglobal_loc"
+
+        if test "x\$g4_qglobal_loc" != "xno" ; then
+            g4_qt_include_dir="\`dirname \$g4_qglobal_loc\`"
+        fi
+
+    else
+        # We use standard search paths...
+        qt_direct_test_header="qglobal.h"
+
+        g4_qt_include_path_list="
+            \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
+            \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
+            /usr/include/QtCore
+            \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\` 
+            \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/*/QtCore 2>/dev/null\`
+            \`ls -dr /sw/include/QtCore 2>/dev/null\`
+            \`ls -dr /sw/qt*/include/QtCore 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include/QtCore 2>/dev/null\`
+            /usr/include
+            \`ls -dr /usr/include/qt* 2>/dev/null\`
+            \`ls -dr /opt/qt*/include 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/* 2>/dev/null\`
+            \`ls -dr /sw/include 2>/dev/null\`
+            \`ls -dr /sw/qt*/include 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include 2>/dev/null\`
+            /usr/include/Qt
+            \`ls -dr /usr/include/qt*/Qt 2>/dev/null\` 
+            \`ls -dr /opt/qt*/include/Qt 2>/dev/null\` 
+            \`ls -dr /usr/qt*/include/Qt 2>/dev/null\`
+            \`ls -dr /usr/qt/*/include/Qt 2>/dev/null\` 
+            \`ls -dr /usr/include/qt/*/Qt 2>/dev/null\`
+            \`ls -dr /sw/include/Qt 2>/dev/null\`
+            \`ls -dr /sw/qt*/include/Qt 2>/dev/null\`
+            \`ls -dr /sw/qt/*/include/Qt 2>/dev/null\`
+        "
+
+        # Find ALL installed versions of qglobal.h
+        for g4_qt_dir in \$g4_qt_include_path_list ; do
+            if test -r "\$g4_qt_dir/\$qt_direct_test_header" ; then
+                g4_qt_found_dirs="\$g4_qt_found_dirs \$g4_qt_dir"
+            fi
+        done
+
+        # Which one relates to the newest Qt?
+        g4_qt_prev_ver=0
+        for g4_qt_dir in \$g4_qt_found_dirs ; do
+            g4_qt_this_ver=\`grep -w '#define QT_VERSION' \$g4_qt_dir/\$qt_direct_test_header | sed s/'#define QT_VERSION'//\`
+
+            if expr \$g4_qt_this_ver '>' \$g4_qt_prev_ver > /dev/null ; then
+                g4_qt_include_dir=\$g4_qt_dir
+                g4_qt_prev_ver=\$g4_qt_this_ver
+            fi
+        done
+
+        if test "x\$g4_qt_include_dir" = "x" ; then
+            g4_qt_include_dir=no
+            g4_havegoodqt=no
+        fi
+
+        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
+    fi # END TEST with_qt_dir is set
+
+    #
+    # Result of above tests should have given us g4_qt_include_dir
+    # We can now use this to check other things, taking care to deal with the
+    # correct paths...
+    #
+
+    # Immediate and obvious Darwin check...
+    if test "x\`basename \$g4_qt_include_dir\`" = "xHeaders" ; then
+        #check for moc
+        if test -x "/usr/bin/moc" ; then
+            g4_qt_moc="/usr/bin/moc"
+            echo "checking for moc... \$g4_qt_moc"
+
+            g4_qt_dir=\`dirname \$g4_qt_include_dir\`
+            g4_qt_dir=\`dirname \$g4_qt_dir\`
+
+	    g4_qt_version="4"
+            g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
+            g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
+            g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
+            g4_qt_gl_libs="-framework QtOpenGL"
+        else
+            echo "checking for moc... no"
+            g4_havegoodqt=no
+        fi
+    else
+        # Probably have Unix-style installation, in which case estimated
+        # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
+        # one level below the 'include' directory in \$g4_qt_include_dir
+        if test "x\$with_qt_dir" = "x" ; then
+            # We need to strip g4_qt_include_dir, if it was found
+            g4_qt_dir=\$g4_qt_include_dir
+
+            # Only do this IF there's an 'include' in the path name!
+            if test "x\`echo \$g4_qt_dir | grep include\`" != "x" ; then
+                while test "x\`basename \$g4_qt_dir\`" != "xinclude" ;
+                do
+                    g4_qt_dir=\`dirname \$g4_qt_dir\`
+                done
+            fi
+
+            #Now should be one level above equivalent QTDIR
+            g4_qt_dir=\`dirname \$g4_qt_dir\`
+        fi
+
+        # At this point, we need get Qt version of detected qglobal.h because
+        # Qt3/4 libraries MAY be installed alongside each other...
+        qt_direct_test_header=qglobal.h
+        g4_qt_major_ver=\`grep QT_VERSION_STR \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null | sed 's/.* \"\([0-9]\)\..*\"/\1/'\`
+
+        #
+        # We might have an odd install where our found qglobal.h #includes
+        # the real qglobal...
+        #
+        if test "x\$g4_qt_major_ver" = "x" ; then
+            # check for a #include of qglobal...
+            possible_actual_qglobal=\`grep '#include.*qglobal' \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null\`
+
+            if test "x\$possible_actual_qglobal" != "x" ; then
+                #We did get something, and it's likely the include
+                #will give us a relative path (but an ASSUMPTION at present)
+                relative_path_to_qglobal=\`grep '#include.*qglobal' \$g4_qt_include_dir/\$qt_direct_test_header 2>/dev/null | sed 's/.*\"\(.*\)\"/\1/'\`
+
+                if test -r \$g4_qt_include_dir/\$relative_path_to_qglobal ; then
+                    g4_qt_major_ver=\`grep QT_VERSION_STR \$g4_qt_include_dir/\$relative_path_to_qglobal 2>/dev/null | sed 's/.* \"\([0-9]\)\..*\"/\1/'\`
+                else
+                    g4_qt_major_ver=no
+                    g4_havegoodqt=no
+                fi
+            else
+                g4_qt_major_ver=no
+                g4_havegoodqt=no
+            fi
+        fi #END TEST odd qglobal includes qglobal behaviour
+            
+        if test "x\$g4_qt_major_ver" = "x4" ; then
+            g4_is_qt4=yes
+        else
+            g4_is_qt4=no
+        fi
+        echo "checking Qt major version... \$g4_qt_major_ver"
+
+        #
+        # We also need to check for Qt4 installations with QtCore type
+        # directory structures. That being the case, make sure we have
+        # the extra headers..
+        #
+        if test "x\`basename \$g4_qt_include_dir\`" = "xQtCore" ; then
+            g4_qt_extra_headers=""
+            g4_qt_gl_headers=""
+            g4_qt_extra_packages="QtGui"
+            g4_qt_gl_packages="QtOpenGL"
+
+            for i in \$g4_qt_extra_packages ; do
+                if test -d "\`dirname \$g4_qt_include_dir\`/\$i" ; then
+                    echo "checking for \$i headers... yes"
+                    g4_qt_extra_headers="\$g4_qt_extra_headers \`dirname \$g4_qt_include_dir\`/\$i"
+                else
+                    echo "checking for \$i headers... no"
+                    g4_havegoodqt=no
+                fi
+            done
+
+            for i in \$g4_qt_gl_packages ; do
+                if test -d "\`dirname \$g4_qt_include_dir\`/\$i" ; then
+                    echo "checking for \$i headers... yes"
+                    g4_qt_gl_headers="\$g4_qt_gl_headers \`dirname \$g4_qt_include_dir\`/\$i"
+                else
+                    echo "checking for \$i headers... no"
+                    g4_havegoodqt=no
+                fi
+            done
+
+
+
+
+        fi #END TEST QtCore style install
+
+
+        #
+        # Now check for appropriate library...
+        #
+        if test -d "\$g4_qt_dir/lib64" ; then
+            g4_qt_lib_dir=\$g4_qt_dir/lib64
+        else
+            g4_qt_lib_dir=\$g4_qt_dir/lib
+        fi
+
+        if test "x\$g4_is_qt4" = "xyes" ; then
+            g4_qt_lib="\`ls \$g4_qt_lib_dir/libQtCore* 2> /dev/null | sed -n 1p |
+                    sed s@\$g4_qt_lib_dir/lib@@ | sed s@[.].*@@\`"
+
+            if test "x\$g4_qt_lib" = "x" ; then
+                # We might be on Windows...
+                g4_qt_lib="\`ls \$g4_qt_lib_dir/QtCore4.lib 2> /dev/null | sed -n 1p | sed s@\$g4_qt_lib_dir/@@\`"
+            fi
+
+            if test "x\$g4_qt_lib" != "x" ; then
+                echo "checking for QtCore library... \$g4_qt_lib"
+            else
+                echo "checking for QtCore library... no"
+                g4_havegoodqt=no
+            fi
+        else
+            g4_qt_lib="\`ls \$g4_qt_lib_dir/libqt-mt.* \$g4_qt_lib_dir/libqt.* 2> /dev/null | sed -n 1p | sed s@\$g4_qt_lib_dir/lib@@ | sed s@[.].*@@\`"
+
+            if test "x\$g4_qt_lib" != "x" ; then
+                echo "checking for qt-mt or qt library... \$g4_qt_lib"
+
+                # On Darwin we also need libqui for Qt3
+                if test "x\$osname" = "xdarwin" ; then
+                    g4_qt_lib_qui="\`ls \$g4_qt_lib_dir/libqui.* 2> /dev/null | 
+                                    sed -n 1p | sed s@\$g4_qt_lib_dir/lib@@ | 
+                                    sed s@[.].*@@\`"
+                    if test "x\$g4_qt_lib_qui" != "x" ; then
+                        echo "checking for qui library... yes"
+                    else
+                        echo "checking for qui library... no"
+                        g4_havegoodqt=no
+                    fi
+                fi
+            else
+                echo "checking for qt-mt or qt library... no"
+                g4_havegoodqt=no
+            fi
+        fi #END TEST for Qt4/3 libraries
+
+        #
+        # Finally, we need to search for moc
+        #
+        g4_qt_bin_dir=\$g4_qt_dir/bin
+        g4_qtmoc=no
+        if test -x "\$g4_qt_bin_dir/moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc"
+        elif test -x "\$g4_qt_bin_dir/moc-qt4" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
+        elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
+        else
+            g4_havegoodqt=no
+        fi
+        echo "checking for moc... \$g4_qtmoc"
+
+        ## THIS IS POINT AT WHICH TO DO FALLBACK TESTS I.E DOES
+        ## COMPILATION OF SMALL TEST PROGRAM WORK - THEN HEADERS AND
+        ## LIBS ARE AUTOMATICALLY FOUND BY LINKER
+
+        #
+        ## Finally, set output variables, raw for now
+        #
+        if test "x\$g4_havegoodqt" = "xyes" ; then
+	    g4_qt_version=\$g4_qt_major_ver
+            
+            # Take care of Qt4 style header structure...
+            g4_qt_cxxflags="-I\$g4_qt_include_dir"
+            if test "x\$g4_is_qt4" = "xyes" ; then
+                for i in \$g4_qt_extra_headers ; do
+                    g4_qt_cxxflags="\$g4_qt_cxxflags -I\$i"
+                done
+                for i in \$g4_qt_gl_headers ; do
+                    g4_qt_gl_cxxflags="\$g4_qt_gl_cxxflags -I\$i"
+                done
+            fi
+
+            g4_qt_libs="-L\$g4_qt_lib_dir"
+            if test "x\$g4_qt_lib" = "xQtCore4.lib" ; then
+                #We have Windows...
+                g4_qt_libs="\$g4_qt_libs QtCore4.lib QtGui4.lib"
+                g4_qt_gl_libs="QtOpenGL4.lib"
+            else
+                g4_qt_libs="\$g4_qt_libs -l\$g4_qt_lib"
+                if test "x\$g4_is_qt4" = "xyes" ; then
+                    g4_qt_libs="\$g4_qt_libs -lQtGui"
+                    g4_qt_gl_libs="-lQtOpenGL"
+                fi
+            fi
+            if test "x\$g4_qt_lib_qui" != "x" ; then
+                g4_qt_libs="\$g4_qt_libs -lqui"
+            fi
+
+
+            g4_qt_moc=\$g4_qtmoc
+
+            g4_qt_is_configured=yes
+        else
+            g4_qt_is_configured=''
+        fi
+    fi #END TEST for Darwin Framework
+
+else
+    #Probably also want flags here to reset variables if requested
+    echo "configure: Qt already configured, no recheck neccessary"
+fi #END TEST "x\$g4_qt_is_configured" = "x" 
+
+
+echo ""
+echo "DEBUG#####"
+echo "g4_qt_cxxflags    = \$g4_qt_cxxflags"
+echo "g4_qt_gl_cxxflags = \$g4_qt_gl_cxxflags"
+echo "g4_qt_libs        = \$g4_qt_libs"
+echo "g4_qt_gl_libs     = \$g4_qt_gl_libs"
+echo "g4_qt_moc         = \$g4_qt_moc"
+echo "..."
+echo "g4_havegoodqt       = \$g4_havegoodqt"
+echo "g4_qt_is_configured = \$g4_qt_is_configured"
+echo "##########"
+EOSC
