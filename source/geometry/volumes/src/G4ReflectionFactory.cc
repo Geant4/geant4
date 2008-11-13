@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.8 2008-11-13 09:25:07 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.9 2008-11-13 09:33:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -862,7 +862,7 @@ void G4ReflectionFactory::SetVolumesNameExtension(const G4String& nameExtension)
           
 //_____________________________________________________________________________
 
-G4String G4ReflectionFactory::GetVolumesNameExtension() const
+const G4String& G4ReflectionFactory::GetVolumesNameExtension() const
 {
   return fNameExtension;
 }
