@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.17 2008-11-13 12:29:17 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.18 2008-11-13 14:14:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ G4double G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
 {
   if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
-  if(mat && part) {
+  if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
     G4double r  = ComputeRange(kinEnergy,part);
     if(r <= step) {
@@ -127,7 +127,7 @@ G4double G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
   if(!isInitialised) Initialisation();
   G4double kinEnergyFinal = kinEnergy;
 
-  if(mat && part) {
+  if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
     G4double r  = ComputeRange(kinEnergy,part);
 
@@ -150,14 +150,16 @@ G4double G4EnergyLossForExtrapolator::TrueStepLength(G4double kinEnergy,
 {
   G4double res = stepLength;
   if(!isInitialised) Initialisation();
-  if(part == electron || part == positron) {
-    G4double x = stepLength*ComputeValue(kinEnergy, mscElectron);
-    if(x < 0.2) res *= (1.0 + 0.5*x + x*x/3.0);
-    else if(x < 0.9999) res = -std::log(1.0 - x)*stepLength/x;
-    else res = ComputeRange(kinEnergy,part);
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    if(part == electron || part == positron) {
+      G4double x = stepLength*ComputeValue(kinEnergy, mscElectron);
+      if(x < 0.2) res *= (1.0 + 0.5*x + x*x/3.0);
+      else if(x < 0.9999) res = -std::log(1.0 - x)*stepLength/x;
+      else res = ComputeRange(kinEnergy,part);
     
-  } else {
-    res = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+    } else {
+      res = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+    }
   }
   return res;
 }

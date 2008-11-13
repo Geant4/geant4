@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.11 2008-11-12 18:20:22 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.12 2008-11-13 14:14:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -282,8 +282,8 @@ inline G4double G4EnergyLossForExtrapolator::ComputeValue(G4double x,
 							  const G4PhysicsTable* table)
 {
   G4double res = 0.0;
-  bool b;
-  res = ((*table)[index])->GetValue(x, b);
+  G4bool b;
+  if(table) res = ((*table)[index])->GetValue(x, b);
   return res;
 }
 
