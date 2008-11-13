@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.48 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.49 2008-11-13 16:48:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -123,18 +123,29 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    xercesc::XMLString::transcode("LS", tempStr, 99);
    xercesc::DOMImplementation* impl =
      xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
-   xercesc::DOMWriter* writer =
-     ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
-
    xercesc::XMLString::transcode("Range", tempStr, 99);
    impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
-
    xercesc::XMLString::transcode("gdml", tempStr, 99);
    doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* gdml = doc->getDocumentElement();
+XERCESC_INCLUDE_GUARD_DOMLSSERIALIZER_HPP
+#if (_XERCES_VERSION >= 3) // DOM L3 as per Xerces 3.0 API
+    
+    xercesc::DOMLSSerializer* writer =
+      ((xercesc::DOMImplementationLS*)impl)->createLSSerializer();
+
+    xercesc::DOMConfiguration *dc = writer->getDomConfig();
+    dc->setParameter(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true);
+
+#else
+
+   xercesc::DOMWriter* writer =
+     ((xercesc::DOMImplementationLS*)impl)->createDOMWriter();
 
    if (writer->canSetFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true))
        writer->setFeature(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true);
+
+#endif
 
    gdml->setAttributeNode(NewAttribute("xmlns:xsi",
                           "http://www.w3.org/2001/XMLSchema-instance"));
@@ -154,7 +165,14 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
 
    try
    {
-      writer->writeNode(myFormTarget,*doc);
+#if (_XERCES_VERSION >= 3) // DOM L3 as per Xerces 3.0 API
+      xercesc::DOMLSOutput *theOutput =
+        ((xercesc::DOMImplementationLS*)impl)->createLSOutput();
+      theOutput->setByteStream(myFormTarget);
+      writer->write(doc, theOutput);
+#else
+      writer->writeNode(myFormTarget, *doc);
+#endif
    }
    catch (const xercesc::XMLException& toCatch)
    {
@@ -201,7 +219,7 @@ void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol)
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "Invalid NULL pointer is specified for modularization!");
    }
-   if (dynamic_cast<const G4PVDivision* const>(physvol))
+   if (dynamic_cast<const G4PVDivision*>(physvol))
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "It is not possible to modularize by divisionvol!");

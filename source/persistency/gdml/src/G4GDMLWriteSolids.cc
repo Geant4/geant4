@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.57 2008-08-20 08:56:32 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.58 2008-11-13 16:48:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -732,73 +732,73 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    solidList.push_back(solidPtr);
 
    if (const G4BooleanSolid* const booleanPtr
-     = dynamic_cast<const G4BooleanSolid* const>(solidPtr))
+     = dynamic_cast<const G4BooleanSolid*>(solidPtr))
      { BooleanWrite(solidsElement,booleanPtr); } else
    if (const G4Box* const boxPtr
-     = dynamic_cast<const G4Box* const>(solidPtr))
+     = dynamic_cast<const G4Box*>(solidPtr))
      { BoxWrite(solidsElement,boxPtr); } else
    if (const G4Cons* const conePtr
-     = dynamic_cast<const G4Cons* const>(solidPtr))
+     = dynamic_cast<const G4Cons*>(solidPtr))
      { ConeWrite(solidsElement,conePtr); } else
    if (const G4Ellipsoid* const ellipsoidPtr
-     = dynamic_cast<const G4Ellipsoid* const>(solidPtr))
+     = dynamic_cast<const G4Ellipsoid*>(solidPtr))
      { EllipsoidWrite(solidsElement,ellipsoidPtr); } else
    if (const G4EllipticalTube* const eltubePtr
-     = dynamic_cast<const G4EllipticalTube* const>(solidPtr))
+     = dynamic_cast<const G4EllipticalTube*>(solidPtr))
      { EltubeWrite(solidsElement,eltubePtr); } else
    if (const G4ExtrudedSolid* const xtruPtr
-     = dynamic_cast<const G4ExtrudedSolid* const>(solidPtr))
+     = dynamic_cast<const G4ExtrudedSolid*>(solidPtr))
      { XtruWrite(solidsElement,xtruPtr); } else
    if (const G4Hype* const hypePtr
-     = dynamic_cast<const G4Hype* const>(solidPtr))
+     = dynamic_cast<const G4Hype*>(solidPtr))
      { HypeWrite(solidsElement,hypePtr); } else
    if (const G4Orb* const orbPtr
-     = dynamic_cast<const G4Orb* const>(solidPtr))
+     = dynamic_cast<const G4Orb*>(solidPtr))
      { OrbWrite(solidsElement,orbPtr); } else
    if (const G4Para* const paraPtr
-     = dynamic_cast<const G4Para* const>(solidPtr))
+     = dynamic_cast<const G4Para*>(solidPtr))
      { ParaWrite(solidsElement,paraPtr); } else
    if (const G4Paraboloid* const paraboloidPtr
-     = dynamic_cast<const G4Paraboloid* const>(solidPtr))
+     = dynamic_cast<const G4Paraboloid*>(solidPtr))
      { ParaboloidWrite(solidsElement,paraboloidPtr); } else
    if (const G4Polycone* const polyconePtr
-     = dynamic_cast<const G4Polycone* const>(solidPtr))
+     = dynamic_cast<const G4Polycone*>(solidPtr))
      { PolyconeWrite(solidsElement,polyconePtr); } else
    if (const G4Polyhedra* const polyhedraPtr
-     = dynamic_cast<const G4Polyhedra* const>(solidPtr))
+     = dynamic_cast<const G4Polyhedra*>(solidPtr))
      { PolyhedraWrite(solidsElement,polyhedraPtr); } else
    if (const G4Sphere* const spherePtr
-     = dynamic_cast<const G4Sphere* const>(solidPtr))
+     = dynamic_cast<const G4Sphere*>(solidPtr))
      { SphereWrite(solidsElement,spherePtr); } else
    if (const G4TessellatedSolid* const tessellatedPtr
-     = dynamic_cast<const G4TessellatedSolid* const>(solidPtr))
+     = dynamic_cast<const G4TessellatedSolid*>(solidPtr))
      { TessellatedWrite(solidsElement,tessellatedPtr); } else
    if (const G4Tet* const tetPtr
-     = dynamic_cast<const G4Tet* const>(solidPtr))
+     = dynamic_cast<const G4Tet*>(solidPtr))
      { TetWrite(solidsElement,tetPtr); } else
    if (const G4Torus* const torusPtr
-     = dynamic_cast<const G4Torus* const>(solidPtr))
+     = dynamic_cast<const G4Torus*>(solidPtr))
      { TorusWrite(solidsElement,torusPtr); } else
    if (const G4Trap* const trapPtr
-     = dynamic_cast<const G4Trap* const>(solidPtr))
+     = dynamic_cast<const G4Trap*>(solidPtr))
      { TrapWrite(solidsElement,trapPtr); } else
    if (const G4Trd* const trdPtr
-     = dynamic_cast<const G4Trd* const>(solidPtr))
+     = dynamic_cast<const G4Trd*>(solidPtr))
      { TrdWrite(solidsElement,trdPtr); } else
    if (const G4Tubs* const tubePtr
-     = dynamic_cast<const G4Tubs* const>(solidPtr))
+     = dynamic_cast<const G4Tubs*>(solidPtr))
      { TubeWrite(solidsElement,tubePtr); } else
    if (const G4TwistedBox* const twistedboxPtr
-     = dynamic_cast<const G4TwistedBox* const>(solidPtr))
+     = dynamic_cast<const G4TwistedBox*>(solidPtr))
      { TwistedboxWrite(solidsElement,twistedboxPtr); } else
    if (const G4TwistedTrap* const twistedtrapPtr
-     = dynamic_cast<const G4TwistedTrap* const>(solidPtr))
+     = dynamic_cast<const G4TwistedTrap*>(solidPtr))
      { TwistedtrapWrite(solidsElement,twistedtrapPtr); } else
    if (const G4TwistedTrd* const twistedtrdPtr
-     = dynamic_cast<const G4TwistedTrd* const>(solidPtr))
+     = dynamic_cast<const G4TwistedTrd*>(solidPtr))
      { TwistedtrdWrite(solidsElement,twistedtrdPtr); } else
    if (const G4TwistedTubs* const twistedtubsPtr
-     = dynamic_cast<const G4TwistedTubs* const>(solidPtr))
+     = dynamic_cast<const G4TwistedTubs*>(solidPtr))
      { TwistedtubsWrite(solidsElement,twistedtubsPtr); }
    else
    {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.73 2008-08-22 16:00:39 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.74 2008-11-13 16:48:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -270,7 +270,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
       }
 
       if (const G4PVDivision* const divisionvol
-         = dynamic_cast<const G4PVDivision* const>(physvol)) // Is it division?
+         = dynamic_cast<const G4PVDivision*>(physvol)) // Is it division?
       {
          if (!G4Transform3D::Identity.isNear(invR*daughterR,kRelativePrecision))
          {
