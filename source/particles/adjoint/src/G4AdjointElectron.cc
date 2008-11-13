@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointElectron.cc,v 1.1 2008-11-06 13:17:36 kurasige Exp $
+// $Id: G4AdjointElectron.cc,v 1.2 2008-11-13 08:23:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,7 @@ G4AdjointElectron* G4AdjointElectron::Definition()
               );
    // Bohr Magnetron
    G4double muB =  0.5*eplus*hbar_Planck/(electron_mass_c2/c_squared) ;
-   anInstance->SetPDGMagneticMoment( muB * 1.0011596521859 );
+   anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
 
   }
   theInstance = reinterpret_cast<G4AdjointElectron*>(anInstance);
