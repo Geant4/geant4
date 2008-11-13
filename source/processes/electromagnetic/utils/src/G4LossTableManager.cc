@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.94 2008-10-14 14:04:16 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.95 2008-11-13 18:23:39 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -170,7 +170,7 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyActive = false;
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
-  flagLPM = false;
+  flagLPM = true;
   splineFlag = true;
   bremsTh = DBL_MAX;
   verbose = 1;
