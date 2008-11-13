@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.49 2008-11-13 16:48:19 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.50 2008-11-13 17:00:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -128,9 +128,9 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    xercesc::XMLString::transcode("gdml", tempStr, 99);
    doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* gdml = doc->getDocumentElement();
-XERCESC_INCLUDE_GUARD_DOMLSSERIALIZER_HPP
-#if (_XERCES_VERSION >= 3) // DOM L3 as per Xerces 3.0 API
-    
+
+#if XERCES_VERSION_MAJOR >= 3
+                                             // DOM L3 as per Xerces 3.0 API
     xercesc::DOMLSSerializer* writer =
       ((xercesc::DOMImplementationLS*)impl)->createLSSerializer();
 
@@ -165,7 +165,8 @@ XERCESC_INCLUDE_GUARD_DOMLSSERIALIZER_HPP
 
    try
    {
-#if (_XERCES_VERSION >= 3) // DOM L3 as per Xerces 3.0 API
+#if XERCES_VERSION_MAJOR >= 3
+                                            // DOM L3 as per Xerces 3.0 API
       xercesc::DOMLSOutput *theOutput =
         ((xercesc::DOMImplementationLS*)impl)->createLSOutput();
       theOutput->setByteStream(myFormTarget);
