@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+$Id: README,v 1.2 2008-11-13 16:44:29 gcosmo Exp $
 -------------------------------------------------------------------
 
  Example of use GDML reader/writer in  Detector Construction
@@ -30,7 +30,7 @@ $Id: README,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
                % gmake
  
  - Execute the application:
-               % geotest macro.mac
+               % geotest [macro-file].mac
    Note: if you are using dynamic libraries, you should add and
          $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
          equivalent on your system).
@@ -39,11 +39,12 @@ $Id: README,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 
  You can run this application with the following macro file:
    
-    write_gdml.mac : This macro will write the Geometry in file "write.gdml"
+    write_gdml.mac : This macro will write the Geometry defined in file
+                     "test.gdml" and output to a new file wtest.gdml
                      To change this name you can use command :
                      /mydet/writeFile FileName.gdml
 
-    read_gdml.mac : This macro will read the Geometry from file "read.gdml"
+    read_gdml.mac : This macro will read the Geometry from file "test.gdml"
                      To change this name you can use command :
                      /mydet/readFile FileName.gdml
 

@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.2 2008-08-27 11:07:34 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2008-11-13 16:44:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -84,7 +84,7 @@ DetectorConstruction::DetectorConstruction()
 {
   expHall_x=5.*m;
   
-  fReadFile ="wtest.gdml";
+  fReadFile ="test.gdml";
   fWriteFile="wtest.gdml";
   fStepFile ="mbb";
   writingChoice=1;

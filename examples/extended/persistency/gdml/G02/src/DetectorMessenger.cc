@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2008-11-13 16:44:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorMessenger implementation
@@ -49,7 +49,7 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet )
   theReadCommand = new G4UIcmdWithAString("/mydet/readFile", this);
   theReadCommand ->SetGuidance("READ GDML file with given name");
   theReadCommand ->SetParameterName("FileRead", false);
-  theReadCommand ->SetDefaultValue("wtest.gdml");
+  theReadCommand ->SetDefaultValue("test.gdml");
   theReadCommand ->AvailableForStates(G4State_PreInit);
   
   theWriteCommand = new G4UIcmdWithAString("/mydet/writeFile", this);

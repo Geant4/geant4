@@ -6,7 +6,7 @@
 /vis/scene/create
 
 # reading Geometry from File
-/mydet/readFile wtest.gdml
+/mydet/readFile test.gdml
 /run/initialize
 
 # Create a scene handler for a specific graphics system
