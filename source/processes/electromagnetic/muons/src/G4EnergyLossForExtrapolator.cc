@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.16 2008-11-12 18:20:22 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.17 2008-11-13 12:29:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -519,6 +519,7 @@ void G4EnergyLossForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* 
 {
   G4DataVector v;
   G4WentzelVIModel* msc = new G4WentzelVIModel();
+  msc->SetPolarAngleLimit(CLHEP::pi);
   msc->Initialise(part, v);
 
   mass    = part->GetPDGMass();
