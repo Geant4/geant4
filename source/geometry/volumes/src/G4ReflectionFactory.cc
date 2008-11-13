@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.7 2008-11-13 09:23:40 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.8 2008-11-13 09:25:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ G4ReflectionFactory::G4ReflectionFactory()
 
 G4ReflectionFactory::~G4ReflectionFactory()
 {
-  delete fInstance
+  delete fInstance;
 }
 
 //
