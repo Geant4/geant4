@@ -54,7 +54,7 @@
    <composite n="2" ref="Hydrogen"/>
    <composite n="1" ref="Oxygen"/>
   </material>
-  <material name="Air test">
+  <material name="Air">
    <D value="1.290" unit="mg/cm3"/>
    <fraction n="0.7" ref="Nitrogen"/>
    <fraction n="0.3" ref="Oxygen"/>
@@ -230,7 +230,7 @@
   </volume>
 
   <volume name="World">
-   <materialref ref="Air test"/>
+   <materialref ref="Air"/>
    <solidref ref="WorldBox"/>
 
    <physvol>
