@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.10 2008-11-13 18:23:02 schaelic Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.11 2008-11-13 19:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,7 +87,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    use_completescreening(true),isInitialised(false),theLPMflag(true)
+    use_completescreening(true),isInitialised(false)
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
@@ -143,7 +143,7 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
   lpmEnergy = mat->GetRadlen()*fLPMconstant;
 
   // Threshold for LPM effect (i.e. below which LPM hidden by density effect) 
-  if (theLPMflag) 
+  if (LPMFlag()) 
     energyThresholdLPM=sqrt(densityFactor)*lpmEnergy;
   else
      energyThresholdLPM=1.e39;   // i.e. do not use LPM effect

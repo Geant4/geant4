@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.51 2008-11-13 18:23:02 schaelic Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.52 2008-11-13 19:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,8 +128,7 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
   G4double eth = man->BremsstrahlungTh(); 
   EmModel(1)->SetSecondaryThreshold(eth);
   EmModel(2)->SetSecondaryThreshold(eth);
-  G4cout<<"set LPMflag: "<<man->LPMFlag()<<G4endl;
-  dynamic_cast<G4eBremsstrahlungRelModel*>(EmModel(2))->SetLPMflag(man->LPMFlag());
+  EmModel(2)->SetLPMFlag(man->LPMFlag());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

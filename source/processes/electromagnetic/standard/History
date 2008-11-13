@@ -1,4 +1,4 @@
-$Id: History,v 1.427 2008-11-13 18:23:02 schaelic Exp $
+$Id: History,v 1.428 2008-11-13 19:28:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 13 November 08: A. Schaelicke (emstand-V09-01-43)
-G4eBremsstrahlung - activate LPM switch
-G4eBremsstrahlungRelModel - new Set methods for LPM effect
-                          - revised LPMconstant
+G4eBremsstrahlung - activate LPM switch for high energy model
+G4eBremsstrahlungRelModel - revised LPMconstant
+G4eBremsstrahlungModel, G4eBremsstrahlungRelModel - (VI) use LPM flag
+                                from the base class
 
 13 November 08: V.Ivant (emstand-V09-01-42)
 G4PSTARStopping - fixed SiO2 and TEFLON data

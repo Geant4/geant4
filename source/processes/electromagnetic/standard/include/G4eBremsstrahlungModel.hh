@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.24 2008-10-15 15:43:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.25 2008-11-13 19:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,9 +100,6 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  inline void SetLPMflag(G4bool val);
-  inline G4bool LPMflag() const;
-
 protected:
 
   inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -150,7 +147,6 @@ private:
   G4double probsup;
   G4double MigdalConstant;
   G4double LPMconstant;
-  G4bool   theLPMflag;
   G4bool   isInitialised;
 
   std::vector<G4DataVector*> partialSumSigma;
@@ -200,22 +196,6 @@ G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
     				       G4double kineticEnergy)
 {
   return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-void G4eBremsstrahlungModel::SetLPMflag(G4bool val) 
-{
-  theLPMflag = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4eBremsstrahlungModel::LPMflag() const 
-{
-  return theLPMflag;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

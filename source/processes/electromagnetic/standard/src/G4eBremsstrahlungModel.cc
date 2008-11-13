@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.42 2008-10-15 15:43:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.43 2008-11-13 19:28:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,7 +87,6 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
     probsup(1.0),
     MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
-    theLPMflag(false),
     isInitialised(false)
 {
   if(p) SetParticle(p);
@@ -831,7 +830,7 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     */
     gammaEnergy = x*kineticEnergy; 
 
-    if (theLPMflag) {
+    if (LPMFlag()) {
      // take into account the supression due to the LPM effect
       if (G4UniformRand() <= SupressionFunction(material,kineticEnergy,
                                                            gammaEnergy))
@@ -948,7 +947,7 @@ G4double G4eBremsstrahlungModel::SupressionFunction(const G4Material* material,
 
   G4double supr = 1.0;
 
-  if (theLPMflag) {
+  if (LPMFlag()) {
 
     G4double s2lpm = LPMEnergy*gammaEnergy/totEnergySquare;
 
