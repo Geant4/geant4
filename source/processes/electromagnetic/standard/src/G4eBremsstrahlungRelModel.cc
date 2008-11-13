@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.11 2008-11-13 19:28:58 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.12 2008-11-13 23:28:27 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
   nist = G4NistManager::Instance();  
   InitialiseConstants();
+
+  SetLPMFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
