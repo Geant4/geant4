@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.16 2008-10-29 14:31:55 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.17 2008-11-13 14:28:56 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,11 +130,6 @@ class G4PropagatorInField
      // allowing the specialisation in different volumes. 
      // Their new behaviour is to change the values for the global field
      // manager
-
-   inline void      SetBrentMethod(G4bool newLocator);
-   inline G4bool    GetBrentMethod();
-     // Use alternative Locator (based on Brent Method, second order
-     // Intersection)
 
    void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
      // Set the filter that examines & stores 'intermediate' 
