@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4ui_build_qt_session g4ui_use_qt g4_qthome: g4system g4lib_build_shared g4clhep_base_dir g4debug g4ui_none Myread Getfile Loc sed grep cat rm test 
+?MAKE:g4ui_build_qt_session g4ui_use_qt: g4system g4lib_build_shared g4clhep_base_dir g4debug g4ui_none Qt Myread Getfile Loc sed grep cat rm test 
 ?MAKE:	-pick add $@ %<
 ?S:g4ui_build_qt_session:
 ?S:	This variable determines whether the Qt UI will be built 
@@ -7,209 +7,97 @@
 ?S:g4ui_use_qt:
 ?S:	This variable determines whether the Qt UI will be used.
 ?S:.
-?S:g4_qthome:
-?S:	This variable holds the path to the Qt installation
-?S:.
 ?INIT:#INITIALIZE QT UI OPTIONS
 ?INIT:g4ui_build_qt_session='n'
 ?INIT:g4ui_use_qt='n'
-?INIT:g4_qthome=''
 ?INIT:#END QT UI OPTIONS
 
 #
 # BEGIN QT/QTUI PROBE
 #
 
-#
-# We only perform the query/probe for Linux-g++ and Darwin-g++ systems..
-#
-if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
-
-# Now, IF g4ui_none HAS NOT BEEN SET TO Y, proceed to the query/probe section
+# Checks applied for all systems ONLY IF g4ui_none HAS NOT BEEN SET TO y
 if test "x$g4ui_none" = "xn" ; then
+    # Query the user to see if build of Qt UI module is needed
+    g4message=`cat <<EOM
 
-   # Query the user to see if they want to build the Qt UI module
-
-   g4message=`cat << EOM
-
-   G4UI_BUILD_QT_SESSION
-   G4UI_USE_QT
+    G4UI_BUILD_QT_SESSION
+    G4UI_USE_QT
 
 Setting these variables will enable the building of the G4 Qt based 
 user interface module and the use of this module in your applications
 respectively.
-The Qt4 headers, libraries and binaries are required to enable the
-building of this module.
-### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
-### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
 Do you want to enable build and use of this module?
 EOM`
 
-   #
-   # read in the user response
-   #
-   dflt=$g4ui_build_qt_session
-   rp=$g4message
-   . ./myread
-   gans=$ans
+    # Read in the user response
+    dflt=$g4ui_build_qt_session
+    rp=$g4message
+    . ./myread
+    gans=$ans
 
-   #
-   # Check response
-   #
-   case $gans in
-	n*|N*)
-		g4ui_build_qt_session=n
-		g4ui_use_qt=n
-		;;
+    # Check response and take set variables as needed.
+    case $gans in
+        n*|N*)
+	    g4ui_build_qt_session=n
+            g4ui_use_qt=n
+	    ;;
 	y*|Y*)
-		g4ui_build_qt_session=y
-		g4ui_use_qt=y
-		;;
-   esac
+	    g4ui_build_qt_session=y
+            g4ui_use_qt=y
+            ;;
+    esac
 
+    ##########
 
-   #########################################
+    ##########
+    # Now, if user chose to build module, we need to check for a Qt
+    # installation
+    #
+    if test "x$g4ui_build_qt_session" = "xy" ; then
+	echo " "
+	# NB Have to supply arg to qt script, just blank in this case!
+	. ./qt ""
 
+	# If we didn't find Qt automatically, then ask user if they know
+	# where it's installed...
+	if test "x$g4_havegoodqt" = "xno" ; then
+	    promptend="no"
+	    user_qthome="the standard locations"
 
-   #####################################################################
-   # Now, if we want to build/use the Qt UI module, we need to probe for
-   # a Qt4 installation
-   #
-   if test "x$g4ui_build_qt_session" = "xy" ; then
+            while test "x$promptend" = "xno" ; do
+	        g4message=`cat << EOM
 
-      echo " "
-      g4_havegoodqt=no
-
-      g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
-
-      echo "checking for Qt4 installation... $g4_qthome"
-
-      #If we found an installation, proceed to other tests.
-      if test "x$g4_qthome" != "xno" ; then
-
-	 #Set Qt installation to good at this point
-	 g4_havegoodqt=yes
-      
-	#Check that this is Qt4...
-	g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-	echo "checking Qt version... $g4_qtver"
-
-	#Now strip qthome back so we can check for moc...
-	g4_qthome=`dirname $g4_qthome`
-	g4_qthome=`dirname $g4_qthome`
-	g4_qthome=`dirname $g4_qthome`
-
-	#If version is o.k, check for moc
-	if test "x$g4_qtver" = "x4" ; then
-	   #Check for moc
-	   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-	   echo "checking for moc... $g4_qthavemoc"
-
-	   if test "x$g4_qthavemoc" = "xno" ; then
-	      g4_havegoodqt=no
-	   fi
-	else
-	   g4_havegoodqt=no
-	fi #END CHECK Qt VERSION
-      fi #END CHECK QTHOME
-      #
-      # END QT AUTOPROBE
-      ####################################################################
-
-
-      ####################################################################
-      # Based on result of Qt autoprobe, we decide if user input is needed to
-      # locate Qt...
-      #
-      if test "x$g4_havegoodqt" = "xno" ; then
-	 promptend="no"
-	 qthomeloc="the standard locations"
-
-	 while test "x$promptend" = "xno" ; do
-	       g4message=`cat << EOM
-
-Autodetection failed to locate Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt4 install (i.e. if Qt4 is installed
-in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
-CANCEL the build of the Qt UI module.
+Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
+or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
 EOM`
-	       dflt="/usr"
-	       fn='d~(-)'
-	       rp=$g4message
-	       . ./getfile
+		dflt=""
+                fn='d~(-)'
+		rp=$g4message
+		. ./getfile
+		user_qthome=$ans
 
-	       #Check for user cancellation
-	       if test "x$ans" = "x-" ; then
-		  g4ui_build_qt_session=n
-		  g4ui_use_qt=n
-		  g4_qthome=""
-		  echo "build/use of Qt UI module cancelled..."
-		  promptend=yes
+		if test "x$user_qthome" = "x-" ; then
+		    # Cancel build...
+		    g4ui_build_qt_session=n
+		    g4ui_use_qt=n
+		    echo "configure: build/use of Qt UI module cancelled"
+		    promptend=yes
+		else
+		    # Check for installation in user directory
+		    echo " "
+		    . ./qt $user_qthome
 
-	       else
-		  #We want to probe for Qt in the user supplied directory
-		  echo " "
-		  qthomeloc=$ans
-		  g4_havegoodqt=no
-		  g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
-
-		  echo "checking for Qt4 installation... $g4_qthome"
-
-		  #If we found an installation, proceed to other tests.
-		  if test "x$g4_qthome" != "xno" ; then
-		     #Set Qt installation to good at this point
-		     g4_havegoodqt=yes		
-
-		     #Check that this is Qt4...
-		     g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-		     echo "checking Qt version... $g4_qtver"
-
-		     #Now strip qthome back so we can check for moc...
-		     g4_qthome=`dirname $g4_qthome`
-
-		     #At this point we could have include/Qt
-		     #or include
-		     if test `basename $g4_qthome` = "Qt" ; then
-			g4_qthome=`dirname $g4_qthome`
-			g4_qthome=`dirname $g4_qthome`
-		     else
-			g4_qthome=`dirname $g4_qthome`
-		     fi
-
-		     #If version is o.k, check for moc
-		     if test "x$g4_qtver" = "x4" ; then
-			#Check for moc
-			g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-			echo "checking for moc... $g4_qthavemoc"
-
-			if test "x$g4_qthavemoc" = "xno" ; then
-			   g4_havegoodqt=no
-			fi
-		     else
-		        g4_havegoodqt=no
-		     fi #END CHECK Qt VERSION
-		  fi #END CHECK QTHOME
-
-		  #If we have a good Qt, end prompt
-		  if test "x$g4_havegoodqt" = "xyes" ; then
-		     promptend=yes
-		  fi
-	       fi #END CHECK USER CANCELLATION
-         done #END USER PROMPT FOR QT DETECTION
-
-      fi #END USER DIRECTED QT DETECTION
-      #
-      #END QT USER INPUT PROBE
-      ####################################################################
-
-   fi #END CHECK OF G4UI_BUILD_QT_SESSION=Y
-   ###########################################
-
-fi #END TEST G4UI_NONE=N
-fi #END TEST G4SYSTEM = Linux-g++ OR Darwin-g++
-########################
+		    if test "x$g4_havegoodqt" = "xyes" ; then
+			promptend=yes
+		    fi
+		fi #END TEST user_qthome = -
+            done #END while promptend=no (for user input of Qt install)
+        fi #END TEST g4_havegoodqt = no (for user prompt)
+    fi #END TEST g4ui_build_qt_session (whether to build at all)
+fi #END TEST g4ui_none = n
