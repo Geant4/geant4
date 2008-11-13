@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2008-07-03 14:15:57 bmorgan Exp $
+$Id: History,v 1.10 2008-11-13 17:22:50 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th November 2008 Ben Morgan
+- Configure: regenerated after addition of new Qt unit and changes to UI and
+Vis units.
+- config/scripts/env.csh.SH: Updated setting of variables for Qt headers, 
+libraries and applications.
+- config/scripts/env.sh.SH: Updated setting of variables for Qt headers, 
+libraries and applications.
+- config/scripts/install.sh.SH: Updated setting of variables for Qt headers, 
+libraries and applications.
+- U/g4_09_vis.U: Added unit dependency on g4ui_build_qt_session to ensure that
+Qt UI check is done prior to vis checks.
+- U/g4_09_vis_qt.U: Modified autoprobe and user query sections to use new Qt.U
+unit file and script.
+- U/g4_08_ui_qt.U: Modified autoprobe and user query sections to use new Qt.U
+unit file and script.
+- U/Qt.U: New unit file to perform checks for Qt headers, libraries and binaries
+ using tests suggested by Laurent Garnier.
 
 3rd July 2008 Ben Morgan
 - Configure: Regenerated after changes to G4EMLOW version.
