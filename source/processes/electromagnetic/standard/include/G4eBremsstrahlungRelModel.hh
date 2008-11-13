@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.7 2008-10-15 15:43:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.8 2008-11-13 18:23:02 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,13 @@ public:
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
                                 const G4Material*,G4double);
+
+  inline void SetLPMflag(G4bool val);
+  inline G4bool LPMflag() const;
+
+  inline void SetLPMconstant(G4double val);
+  inline G4double LPMconstant() const;
+
 
 protected:
 
@@ -163,8 +170,8 @@ private:
   // consts
   G4double highKinEnergy;
   G4double lowKinEnergy;
-  G4double MigdalConstant;
-  G4double LPMconstant;
+  G4double fMigdalConstant;
+  G4double fLPMconstant;
   G4double bremFactor;
   G4double energyThresholdLPM;
   G4double facFel, facFinel;
@@ -172,7 +179,7 @@ private:
   G4bool use_completescreening;
 
   G4bool   isInitialised;
-
+  G4bool   theLPMflag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -241,5 +248,40 @@ inline G4double G4eBremsstrahlungRelModel::Psi1M2(G4double eps, G4double)
   return  2./(3.*(1. + 40.*eps +400.*sqr(eps)) );
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+inline 
+void G4eBremsstrahlungRelModel::SetLPMflag(G4bool val) 
+{
+  theLPMflag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4bool G4eBremsstrahlungRelModel::LPMflag() const 
+{
+  return theLPMflag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+inline 
+void G4eBremsstrahlungRelModel::SetLPMconstant(G4double val) 
+{
+  fLPMconstant = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4double G4eBremsstrahlungRelModel::LPMconstant() const 
+{
+  return fLPMconstant;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 #endif

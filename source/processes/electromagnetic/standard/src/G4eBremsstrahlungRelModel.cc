@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.9 2008-10-15 15:43:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.10 2008-11-13 18:23:02 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,9 @@
 // Creation date: 12.08.2008
 //
 // Modifications:
+//
+// 13.11.08    add SetLPMflag and SetLPMconstant methods
+// 13.11.08    change default LPMconstant value
 //
 // Main References:
 //  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421. 
@@ -63,11 +66,6 @@
 #include "G4LossTableManager.hh"
 
 
-//#include "../test/simpleProf.hh"
-//#include "../test/prof.hh"
-#define PROFILE_HERE {}
-#define PROFILE_LOCAL(dummy) {}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4double G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
@@ -86,10 +84,10 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     particle(0),
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
     isElectron(true),
-    MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
-    LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
+    fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
+    fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    use_completescreening(true),isInitialised(false)
+    use_completescreening(true),isInitialised(false),theLPMflag(true)
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
@@ -141,12 +139,14 @@ G4double G4eBremsstrahlungRelModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
 						 const G4Material* mat, G4double kineticEnergy)
 {
-  densityFactor = mat->GetElectronDensity()*MigdalConstant;
-  lpmEnergy = mat->GetRadlen()*LPMconstant;
+  densityFactor = mat->GetElectronDensity()*fMigdalConstant;
+  lpmEnergy = mat->GetRadlen()*fLPMconstant;
 
   // Threshold for LPM effect (i.e. below which LPM hidden by density effect) 
-  //  - perhaps make a bool
-  energyThresholdLPM=sqrt(densityFactor)*lpmEnergy;
+  if (theLPMflag) 
+    energyThresholdLPM=sqrt(densityFactor)*lpmEnergy;
+  else
+     energyThresholdLPM=1.e39;   // i.e. do not use LPM effect
 
   // calculate threshold for density effect
   kinEnergy   = kineticEnergy;
@@ -324,7 +324,6 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
 {
-  PROFILE_HERE;
   // *** calculate lpm variable s & sprime ***
   // Klein eqs. (78) & (79)
   G4double sprime = sqrt(0.125*k*lpmEnergy/(totalEnergy*(totalEnergy-k)));
@@ -404,7 +403,6 @@ G4double G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEne
 //   only valid for very high energies, but includes LPM suppression
 //    * complete screening
 {
-  PROFILE_HERE;
   if(gammaEnergy < 0.0) return 0.0;
 
   G4double y = gammaEnergy/totalEnergy;
@@ -432,7 +430,6 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
 //  * screening according to thomas-fermi-Model (only valid for Z>5)
 //  * no LPM effect
 {
-  PROFILE_HERE;
 
   if(gammaEnergy < 0.0) return 0.0;
 
@@ -446,7 +443,6 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
     secondTerm = (1.-y)/12.*(1.+1./currentZ);
   }
   else {
-    PROFILE_LOCAL("calc thomas-fermi ff");
     // ** intermediate screening using Thomas-Fermi FF from Tsai only valid for Z>=5** 
     G4double dd=100.*electron_mass_c2*y/(totalEnergy-gammaEnergy);
     G4double gg=dd*z13;

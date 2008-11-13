@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.50 2008-10-15 15:43:13 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.51 2008-11-13 18:23:02 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,8 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 22-05-06 Use gammaThreshold from manager (V.Ivantchenko)
 // 15-01-07 use SetEmModel() from G4VEnergyLossProcess (mma)
-//
+//          use RelEmModel above 1GeV (AS &  VI)  
+// 13-11-08 reenable LPM switch (A.Schaelicke)
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,9 +124,12 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
     AddEmModel(2, EmModel(2), fm);
     isInitialised = true;
   }
-  G4double eth = G4LossTableManager::Instance()->BremsstrahlungTh(); 
+  G4LossTableManager* man = G4LossTableManager::Instance(); 
+  G4double eth = man->BremsstrahlungTh(); 
   EmModel(1)->SetSecondaryThreshold(eth);
   EmModel(2)->SetSecondaryThreshold(eth);
+  G4cout<<"set LPMflag: "<<man->LPMFlag()<<G4endl;
+  dynamic_cast<G4eBremsstrahlungRelModel*>(EmModel(2))->SetLPMflag(man->LPMFlag());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
