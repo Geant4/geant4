@@ -498,7 +498,7 @@ fi
 
 
 
-gs and Libs, messy, but needed for backward compatibility
+# Qt Flags and Libs, messy, but needed for backward compatibility
 #+
 if [ "X$g4ui_build_qt_session" = "Xy" -o "X$g4ui_use_qt" = "Xy" ] ; then
 QTFLAGS="$g4_qt_cxxflags"
