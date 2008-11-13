@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2008-08-22 16:01:02 gcosmo Exp $
+$Id: History,v 1.90 2008-11-13 16:48:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 November 2008 Gabriele Cosmo (gdml-V09-01-15)
+- Added support for new serializer API as introduced in Xerces-3.0.0.
+- Cleared compilation warnings on Intel-icc compiler.
 
 22 August 2008 Tatiana Nikitina (gdml-V09-01-14)
 - G4GDMLReadStructure: added methods ReplicaRead(), AxisRead(), QuantityRead()
