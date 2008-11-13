@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4_qthome g4vis_build_dawn_driver Myread Getfile Loc cat test
+?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4vis_build_dawn_driver Qt Myread Getfile Loc cat test
 ?MAKE:	-pick add $@ %<
 ?S:g4vis_build_openglqt_driver:
 ?S:	This variable determines whether the Qt OpenGL driver will be built 
@@ -9,224 +9,96 @@
 ?S:.
 ?INIT:#INITIALIZE QT VIS DRIVER OPTIONS
 ?INIT:g4vis_build_openglqt_driver='n'
-?INIT:g4ui_use_openglqt='n'
+?INIT:g4vis_use_openglqt='n'
 ?INIT:#END QT VIS DRIVER OPTIONS
 
 #
 # BEGIN QTVIS/QT PROBE
 #
-
+# Because the vis driver only works with UI, only probe if g4ui_none is
+# NOT set AND also that g4vis_none is NOT set
 #
-# We only run on a Linux-g++ or Darwin-g++ system
-#
-if test "x$g4system" = "xLinux-g++" -o "x$g4system" = "xDarwin-g++" ; then
+if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
+    # Query the user to see if build of Qt UI module is needed
+    g4message=`cat <<EOM
 
-   # Only proceed further if g4vis_none is not set
-   if test "x$g4vis_none" = "xn" ; then
-      #Query the user on whether to activate the module
-      g4message=`cat << EOM
+    G4UI_BUILD_OPENGLQT_DRIVER
+    G4UI_USE_OPENGLQT
 
-    G4VIS_BUILD_OPENGLQT_DRIVER
-    G4VIS_USE_OPENGLQT
-
-Setting these variables will enable the building of the G4 OpenGL Qt based
+Setting these variables will enable the building of the G4 OpenGL Qt based 
 visualisation driver and the use of this driver in your applications
 respectively.
-The Qt4 headers, libraries and binaries are required to enable the
-building of this module.
-### WARNING! THIS FEATURE IS EXPERIMENTAL IN THIS RELEASE! ###
-### WARNING! THIS FEATURE WILL ONLY WORK WITH Qt4!         ###
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
 Do you want to enable build and use of this module?
 EOM`
 
-      #Read the user response
-      dflt=$g4vis_build_openglqt_driver
-      rp=$g4message
-      . ./myread
-      gans=$ans
+    # Read in the user response
+    dflt=$g4vis_build_openglqt_driver
+    rp=$g4message
+    . ./myread
+    gans=$ans
 
-      #
-      # Check response
-      #
-      case $gans in
-	   n*|N*)
-		g4vis_build_openglqt_driver=n
-                g4vis_use_openglqt=n
-                ;;
-	   y*|Y*)
-                g4vis_build_openglqt_driver=y
-                g4vis_use_openglqt=y
-                ;;
-      esac
+    # Check response and take set variables as needed.
+    case $gans in
+        n*|N*)
+	    g4vis_build_openglqt_driver=n
+            g4vis_use_openglqt=n
+	    ;;
+	y*|Y*)
+	    g4vis_build_openglqt_driver=y
+            g4vis_use_openglqt=y
+            ;;
+    esac
 
-      ###################
+    ##########
 
+    ##########
+    # Now, if user chose to build module, we need to check for a Qt
+    # installation
+    #
+    if test "x$g4vis_build_openglqt_driver" = "xy" ; then
+	echo " "
+	# NB Have to supply arg to qt script, just blank in this case!
+	. ./qt ""
 
+	# If we didn't find Qt automatically, then ask user if they know
+	# where it's installed...
+	if test "x$g4_havegoodqt" = "xno" ; then
+	    promptend="no"
+	    user_qthome="the standard locations"
 
-      ####################################################################
-      # Now, if we have selected to build the driver, we need to check for
-      # a Qt4 installation, which may have been done for use by the UI
-      # module...
-      #
-      if test "x$g4vis_build_openglqt_driver" = "xy" ; then
-	 	 
-	 #Now check whether g4_qthome has been set previously - if it hasn't
-	 #proceed to probe for Qt4... (assume it's unfiltered, i.e. not
-	 #set to '' by earlier probe if it was /usr or /usr/local
-	 if test "x$g4_qthome" != "x" ; then
-	    echo " "
-	    echo "configure: Qt4 preconfigured, no recheck neccessary"
-	 else
-	 #################################################################
-	    #We repeat the search used for the UI module
-	    
-	    echo " "
-	    g4_havegoodqt=no
+            while test "x$promptend" = "xno" ; do
+	        g4message=`cat << EOM
 
-	    g4_qthome=`./loc qglobal.h no /usr/include/Qt /usr/local/include/Qt /opt/local/include/Qt /sw/include/Qt`
-
-	    echo "checking for Qt4 installation... $g4_qthome"
-
-	    #If we found an installation, proceed to other tests.
-	    if test "x$g4_qthome" != "xno" ; then
-
-	       #Set Qt installation to good at this point
-	       g4_havegoodqt=yes
-      
-		#Check that this is Qt4...
-		g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-		echo "checking Qt version... $g4_qtver"
-
-		#Now strip qthome back so we can check for moc...
-		g4_qthome=`dirname $g4_qthome`
-		g4_qthome=`dirname $g4_qthome`
-		g4_qthome=`dirname $g4_qthome`
-
-		#If version is o.k, check for moc
-		if test "x$g4_qtver" = "x4" ; then
-		   #Check for moc
-		   g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-		   echo "checking for moc... $g4_qthavemoc"
-
-		   if test "x$g4_qthavemoc" = "xno" ; then
-		      g4_havegoodqt=no
-		   fi
-		else
-		   g4_havegoodqt=no
-		fi #END CHECK Qt VERSION
-	    fi #END CHECK QTHOME
-	    #
-	    # END QT AUTOPROBE	    
-
-
-	    # Based on result of Qt autoprobe, we decide if user input is
-	    # needed to locate Qt...
-            #
-	    if test "x$g4_havegoodqt" = "xno" ; then
-	       promptend="no"
-	       qthomeloc="the standard locations"
-
-	       while test "x$promptend" = "xno" ; do
-		     g4message=`cat << EOM
-
-Autodetection failed to locate Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt4 install (i.e. if Qt4 is installed
-in PATH/include/Qt, or PATH/include, enter PATH), or type '-' to
-CANCEL the build of the Qt UI module.
+Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
+or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
 EOM`
-		     dflt="/usr"
-		     fn='d~(-)'
-		     rp=$g4message
-		     . ./getfile
+		dflt=""
+                fn='d~(-)'
+		rp=$g4message
+		. ./getfile
+		user_qthome=$ans
 
-		     #Check for user cancellation
-		     if test "x$ans" = "x-" ; then
-			g4ui_build_qt_session=n
-			g4ui_use_qt=n
-			g4_qthome=""
-			echo "build/use of OpenGl Qt driver cancelled..."
+		if test "x$user_qthome" = "x-" ; then
+		    # Cancel build...
+		    g4vis_build_openglqt_driver=n
+		    g4vis_use_openglqt=n
+		    echo "configure: build/use of Qt OpenGl driver cancelled"
+		    promptend=yes
+		else
+		    # Check for installation in user directory
+		    echo " "
+		    . ./qt $user_qthome
+
+		    if test "x$g4_havegoodqt" = "xyes" ; then
 			promptend=yes
-
-		     else
-		        #We want to probe for Qt in the user supplied directory
-			echo " "
-			qthomeloc=$ans
-			g4_havegoodqt=no
-			g4_qthome=`./loc qglobal.h no $ans/include/Qt $ans/include`
-
-			echo "checking for Qt4 installation... $g4_qthome"
-
-			#If we found an installation, proceed to other tests.
-			if test "x$g4_qthome" != "xno" ; then
-			   #Set Qt installation to good at this point
-			   g4_havegoodqt=yes		
-
-			   #Check that this is Qt4...
-			   g4_qtver=`$grep QT_VERSION_STR $g4_qthome | $sed 's/.* \"\([0-9]\)\..*\"/\1/'`
-
-			   echo "checking Qt version... $g4_qtver"
-
-			   #Now strip qthome back so we can check for moc...
-			   g4_qthome=`dirname $g4_qthome`
-
-			   #At this point we could have include/Qt
-			   #or include
-			   if test `basename $g4_qthome` = "Qt" ; then
-			      g4_qthome=`dirname $g4_qthome`
-			      g4_qthome=`dirname $g4_qthome`
-			   else
-			      g4_qthome=`dirname $g4_qthome`
-			   fi
-
-			   #If version is o.k, check for moc
-			   if test "x$g4_qtver" = "x4" ; then
-			      #Check for moc
-			      g4_qthavemoc=`./loc moc no $g4_qthome/bin`
-
-			      echo "checking for moc... $g4_qthavemoc"
-
-			      if test "x$g4_qthavemoc" = "xno" ; then
-				 g4_havegoodqt=no
-			      fi
-			   else
-			      g4_havegoodqt=no
-			   fi #END CHECK Qt VERSION
-			fi #END CHECK QTHOME
-
-			#If we have a good Qt, end prompt
-			if test "x$g4_havegoodqt" = "xyes" ; then
-			   promptend=yes
-			fi
-		     fi #END CHECK USER CANCELLATION
-	       done #END USER PROMPT FOR QT DETECTION
-
-            fi #END USER DIRECTED QT DETECTION
-	    #
-	    #END QT USER INPUT PROBE
-	 #################################################################
-	 fi #END TEST G4_QTHOME IS SET
-
-
-      fi #END TEST G4VIS_BUILD_OPENGLQT_DRIVER = y
-
-      
-      #
-      # Put a filter in here on /usr and /usr/local as QTHOME in line
-      # with other paths - done here as this is the last place QT is
-      # checked for
-      #DEACTIVATED AT PRESENT BECAUSE OF USE OF MOC
-      #
-      #if test "x$g4_qthome" = "x/usr" -o "x$g4_qthome" = "x/usr/local" ; then
-	# g4_qthome=""
-      #fi
-	 
-
-   fi #END TEST G4VIS_NONE IS N
-
-fi #END TEST G4SYSTEM IS Linux-g++ OR Darwin-g++
-
-#
-# END OF QTVIS/QT PROBE
+		    fi
+		fi #END TEST user_qthome = -
+            done #END while promptend=no (for user input of Qt install)
+        fi #END TEST g4_havegoodqt = no (for user prompt)
+    fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+fi #END TEST g4ui_none = n AND g4vis_none=n
