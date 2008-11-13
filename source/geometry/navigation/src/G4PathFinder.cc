@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.60 2008-10-24 14:00:03 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.61 2008-11-13 12:59:26 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -580,18 +580,9 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
 
   if( (!fNewTrack) && ( longMoveEnd && longMoveSaf ) )
   {  
-     G4ThreeVector  LastSafetyLocation;
-       // Copy to keep last value - and restore
-
-     LastSafetyLocation= fSafetyLocation; 
-
      // Recompute ComputeSafety for end position
      //
      revisedSafety= ComputeSafety(lastEndPosition); 
-
-     // Reset the state of last call to ComputeSafety
-     //
-     ComputeSafety( LastSafetyLocation ); 
 
 #ifdef G4DEBUG_PATHFINDER
 
@@ -1182,7 +1173,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      G4double minSafety= kInfinity, safety; 
      for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
      {
-        safety= fpNavigator[numNav]->ComputeSafety( startPoint );
+        safety= fpNavigator[numNav]->ComputeSafety( startPoint, false );
         fPreSafetyValues[numNav]= safety; 
         fCurrentPreStepSafety[numNav]= safety; 
         minSafety = std::min( safety, minSafety ); 
