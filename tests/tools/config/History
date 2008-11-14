@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2008-11-14 14:25:18 bmorgan Exp $
+$Id: History,v 1.12 2008-11-14 15:14:11 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 14th November 2008 Ben Morgan
-- Configure: regenerated after edits to Qt.U
-- U/Qt.U: added prepend of directory below QtCore directory to cxxflags.
+- Configure: regenerated after edits to Qt.U, g4_08_ui_qt.U and g4_09_vis_qt.U
+- U/g4_09_vis_qt.U: modified sourcing of qt script to use qt_search_dir variable
+- U/g4_08_ui_qt.U: modified sourcing of qt script to use qt_search_dir variable
+- U/Qt.U: added prepend of directory below QtCore directory to cxxflags, and
+made with_qt_dir take a preexisting variable qt_search_dir as its argument.
 
 13th November 2008 Ben Morgan
 - Configure: regenerated after addition of new Qt unit and changes to UI and
