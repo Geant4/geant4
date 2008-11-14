@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.105 2008-11-14 11:40:30 bmorgan Exp $
+# $Id: Configure,v 1.106 2008-11-14 14:26:15 bmorgan Exp $
 #
-# Generated on Thu Nov 13 17:21:43 GMT 2008 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 14 14:21:59 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2469,9 +2469,6 @@ if test "x\$g4_qt_is_configured" = "x" ; then
                 fi
             done
 
-
-
-
         fi #END TEST QtCore style install
 
 
@@ -2550,7 +2547,11 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 	    g4_qt_version=\$g4_qt_major_ver
             
             # Take care of Qt4 style header structure...
-            g4_qt_cxxflags="-I\$g4_qt_include_dir"
+            if test "x\`basename \$g4_qt_include_dir\`" = "xQtCore"; then
+		g4_qt_cxxflags="-I\`dirname \$g4_qt_include_dir\` -I\$g4_qt_include_dir"
+	    else
+	    	g4_qt_cxxflags="-I\$g4_qt_include_dir"
+	    fi
             if test "x\$g4_is_qt4" = "xyes" ; then
                 for i in \$g4_qt_extra_headers ; do
                     g4_qt_cxxflags="\$g4_qt_cxxflags -I\$i"
