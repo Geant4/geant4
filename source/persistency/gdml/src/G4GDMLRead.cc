@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.36 2008-08-22 10:00:20 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.37 2008-11-14 15:47:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -33,6 +33,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLRead.hh"
+#include "G4Element.hh"
+#include "G4Material.hh"
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -71,7 +73,6 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
      nameOut = ModuleName + nameOut;
    }
    nameOut = eval.SolveBrackets(nameOut);
-   // StripName(nameOut);
 
    physvol->SetName(nameOut);
 }
@@ -85,16 +86,19 @@ G4String G4GDMLRead::Strip(const G4String& name) const
 void G4GDMLRead::StripName(G4String& name) const
 {
   name.remove(name.find("0x"));
+  if (ModuleName.length()!=0)  { name.remove(name.find(ModuleName)); }
 }
 
 void G4GDMLRead::StripNames() const
 {
-  // Strips off names of volumes and solids from possible
-  // reference pointers attached to their original identifiers.
+  // Strips off names of volumes, solids elements and materials from possible
+  // reference pointers or IDs attached to their original identifiers.
 
   G4PhysicalVolumeStore* pvols = G4PhysicalVolumeStore::GetInstance();
   G4LogicalVolumeStore* lvols = G4LogicalVolumeStore::GetInstance();
   G4SolidStore* solids = G4SolidStore::GetInstance();
+  const G4ElementTable* elements = G4Element::GetElementTable();
+  const G4MaterialTable* materials = G4Material::GetMaterialTable();
 
   G4cout << "Stripping off GDML names of solids and volumes ..." << G4endl;
 
@@ -129,6 +133,26 @@ void G4GDMLRead::StripNames() const
     sname = pvol->GetName();
     StripName(sname);
     pvol->SetName(sname);
+  }
+
+  // Materials...
+  //
+  for (i=0; i<materials->size(); i++)
+  {
+    G4Material* pmat = (*materials)[i];
+    sname = pmat->GetName();
+    StripName(sname);
+    pmat->SetName(sname);
+  }
+
+  // Elements...
+  //
+  for (i=0; i<elements->size(); i++)
+  {
+    G4Element* pelm = (*elements)[i];
+    sname = pelm->GetName();
+    StripName(sname);
+    pelm->SetName(sname);
   }
 }
 
