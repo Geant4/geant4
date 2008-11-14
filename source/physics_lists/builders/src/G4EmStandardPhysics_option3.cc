@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.12 2008-10-20 11:28:11 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.13 2008-11-14 18:43:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetLinearLossLimit(1.e-3);
+      //eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
@@ -169,7 +169,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetLinearLossLimit(1.e-3);
+      //eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
@@ -180,8 +180,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.2, 100*um);          
-      muIoni->SetLinearLossLimit(1.e-3);
+      muIoni->SetStepFunction(0.2, 50*um);          
+      //muIoni->SetLinearLossLimit(1.e-3);
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
@@ -192,7 +192,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 50*um);
+      ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
     } else if (particleName == "pi+" ||
@@ -201,7 +201,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 100*um);
+      hIoni->SetStepFunction(0.2, 50*um);
       pmanager->AddProcess(hIoni,                     -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
