@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.2 2008-04-24 12:33:08 tnikitin Exp $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.3 2008-11-14 13:37:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,15 +39,23 @@
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithSpin.hh"
+#include "G4ElectroMagneticField.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField ) { anomaly = 1.165923e-3; }
+  : G4EquationOfMotion( emField )
+{
+  anomaly = 1.165923e-3;
+}
+
+G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
+{
+} 
 
 void  
 G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
-		                            G4double MomentumXc,
+                                            G4double MomentumXc,
                                             G4double particleMass)
 {
    fElectroMagCof =  eplus*particleCharge*c_light ;
@@ -66,8 +74,8 @@ G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
 
 void
 G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
-			                const G4double Field[],
-				              G4double dydx[] ) const
+                                       const G4double Field[],
+                                             G4double dydx[] ) const
 {
 
    // Components of y:

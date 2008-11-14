@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.hh,v 1.2 2008-11-07 17:06:43 gum Exp $
+// $Id: G4EqEMFieldWithSpin.hh,v 1.3 2008-11-14 13:37:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,8 @@
 #define G4EQEMFIELDWITHSPIN_hh
 
 #include "G4EquationOfMotion.hh"
-#include "G4ElectroMagneticField.hh"
+
+class G4ElectroMagneticField;
 
 class G4EqEMFieldWithSpin : public G4EquationOfMotion
 {
@@ -51,7 +52,7 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
     G4EqEMFieldWithSpin(G4ElectroMagneticField *emField );
 
-    ~G4EqEMFieldWithSpin() {;} 
+    ~G4EqEMFieldWithSpin();
 
     void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
                                 G4double MomentumXc,
@@ -69,8 +70,8 @@ class G4EqEMFieldWithSpin : public G4EquationOfMotion
 
   private:
 
-    G4double        fElectroMagCof ;
-    G4double        fMassCof;
+    G4double fElectroMagCof ;
+    G4double fMassCof;
 
     G4double omegac;
     G4double anomaly;
