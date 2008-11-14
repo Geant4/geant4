@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2008-09-19 03:19:53 kurasige Exp $
+$Id: History,v 1.34 2008-11-14 15:55:47 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
--Sep. 19 2008   H.Kurashige (decay-V09-01-03)
+-Sep. 19 2008   H.Kurashige (decay-V09-01-04)
 - modify process sub type enumeration
 
 - Aug. 22,  08 P.Gumplinger (decay-V09-01-03)
