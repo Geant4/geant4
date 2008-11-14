@@ -1,0 +1,22 @@
+///////////////////////////////////////////////////////
+// File name:     G4eInverseIonisation
+//
+// Author:        Laurent Desorgher
+//
+// Creation date: 20.11.2006
+//
+///////////////////////////////////////////////////////
+#include "G4eInverseIonisation.hh"
+#include "G4VEmAdjointModel.hh"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+G4eInverseIonisation::G4eInverseIonisation(G4bool whichScatCase,G4String process_name,G4VEmAdjointModel* aEmAdjointModel):
+				G4VAdjointInverseScattering(process_name,whichScatCase)
+{theAdjointEMModel = aEmAdjointModel;
+ theAdjointEMModel->SetSecondPartOfSameType(true); 
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+G4eInverseIonisation::~G4eInverseIonisation(){
+}
