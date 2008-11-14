@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
+// $Id: G4VIntersectionLocator.hh,v 1.3 2008-11-14 14:38:45 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 
 // History:
 // -------
-// 27.10.07 - John Apostolakis, Tatiana Nikitina: Design and implementation 
+// 27.10.08 - John Apostolakis, Tatiana Nikitina: Design and implementation 
 // ---------------------------------------------------------------------------
 
 #ifndef G4VINTERSECTIONLOCATOR_HH
@@ -111,6 +111,9 @@ class G4VIntersectionLocator
     inline void SetSafetyParametersFor(G4bool UseSafety );
     inline void SetVerboseFor(G4int fVerbose);
 
+    inline void AddAdjustementOfFoundIntersection(G4bool UseCorrection);
+    inline G4bool GetAdjustementOfFoundIntersection();
+
   protected:  // with description
 
     G4FieldTrack ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
@@ -121,11 +124,27 @@ class G4VIntersectionLocator
       // CurrentStateA, to replace EstimtdEndStateB, and report displacement
       // (if field is compiled verbose)
 
+     
+    G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector CurrentE_Point, G4bool &validNormal);
+      // Return the SurfaceNormal of Intersecting Solid 
+G4bool AdjustmentOfFoundIntersection(const G4ThreeVector A, const G4ThreeVector  CurrentE_Point, 
+                              const G4ThreeVector  CurrentF_Point,
+				     const G4ThreeVector MomentumDir,
+			      const G4bool IntersectAF, 
+                              G4ThreeVector &IntersectionPoint,
+                              G4double      &NewSafety,
+                              G4double      &fPreviousSafety,    // In/Out
+				     G4ThreeVector &fPreviousSftOrigin );//In/Out
+     // Optional method for Adjustment of Located IntersectionPoint using SurfaceNormal
+    
+
+  
   protected:
 
     G4double kCarTolerance;
     G4int    fVerboseLevel;
       // For verbose purposes
+    G4bool   fUseNormalCorrection;
 
     G4double      fiEpsilonStep;
     G4double      fiDeltaIntersection;
@@ -133,6 +152,7 @@ class G4VIntersectionLocator
     G4ChordFinder *fiChordFinder;
     G4bool        fiUseSafety;
       // For passing the parameters from G4PropagatorInField
+    G4Navigator *fHelpingNavigator;
 };
 
 #include "G4VIntersectionLocator.icc"

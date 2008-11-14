@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.icc,v 1.1 2008-10-29 14:31:55 gcosmo Exp $
+// $Id: G4VIntersectionLocator.icc,v 1.2 2008-11-14 14:38:52 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,16 @@ inline G4ChordFinder* G4VIntersectionLocator::GetChordFinderFor()
 inline G4int G4VIntersectionLocator::GetVerboseFor()
 {
   return fVerboseLevel;
+}
+
+inline G4bool G4VIntersectionLocator::GetAdjustementOfFoundIntersection()
+{
+  return fUseNormalCorrection;
+}
+
+inline void G4VIntersectionLocator::AddAdjustementOfFoundIntersection(G4bool UseCorrection )
+{
+  fUseNormalCorrection=UseCorrection;
 }
 
 inline void G4VIntersectionLocator::SetEpsilonStepFor( G4double EpsilonStep )
