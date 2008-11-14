@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
+// $Id: G4MultiLevelLocator.cc,v 1.3 2008-11-14 14:42:47 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator implementation
@@ -109,7 +109,8 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   G4ThreeVector CurrentE_Point = TrialPoint;
   G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
   G4double    NewSafety= -0.0;
-  
+  G4bool last_AF_intersection = false;   
+
   // G4bool final_section= true;  // Shows whether current section is last
                                   // (i.e. B=full end)
   G4bool first_section = true;
@@ -240,6 +241,25 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         IntersectedOrRecalculatedFT = ApproxIntersecPointV;
         IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
        
+         
+        if(GetAdjustementOfFoundIntersection()){
+       // Try to Get Correction of IntersectionPoint using SurfaceNormal()
+       //  
+         G4ThreeVector IP;
+         G4ThreeVector MomentumDir=ApproxIntersecPointV.GetMomentumDirection();
+	 G4bool goodCorrection=
+          AdjustmentOfFoundIntersection(Point_A,CurrentE_Point,
+					CurrentF_Point,MomentumDir,
+                                        last_AF_intersection, IP,
+                                        NewSafety,fPreviousSafety,
+                                              fPreviousSftOrigin
+                                          );
+
+	 if(goodCorrection){
+          IntersectedOrRecalculatedFT = ApproxIntersecPointV;
+          IntersectedOrRecalculatedFT.SetPosition(IP);
+	 }
+       }
         // Note: in order to return a point on the boundary, 
         //       we must return E. But it is F on the curve.
         //       So we must "cheat": we are using the position at point E
@@ -263,6 +283,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                                                fPreviousSftOrigin,
                                                stepLengthAF,
                                                PointG );
+        last_AF_intersection = Intersects_AF;
         if( Intersects_AF )
         {
           // G is our new Candidate for the intersection point.
@@ -538,7 +559,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                                               fPreviousSftOrigin,stepLengthAB,
                                               PointGe);
         if(Intersects_AB)
-        {
+        { last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
           fin_section_depth[depth]=true;
         }
@@ -597,7 +618,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                                               fPreviousSftOrigin,stepLengthAB,
                                               PointGe);
         if(Intersects_AB)
-        {
+        { last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
         }
        
