@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Win32.cc,v 1.9 2006-06-29 19:10:26 gunter Exp $
+// $Id: G4Win32.cc,v 1.10 2008-11-14 16:21:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -88,7 +88,7 @@ G4Win32::G4Win32 (
     Win32Inited = TRUE;
   }
 
-  AddDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);
+  AddDispatcher((G4DispatchFunction)G4Win32::DispatchWin32Event);
   SetMainInteractor(topWindow);
 }
 /***************************************************************************/
@@ -133,7 +133,7 @@ void G4Win32::FlushAndWaitExecution (
   }
 }
 /***************************************************************************/
-G4bool G4Win32::dispatchWin32Event  (
+G4bool G4Win32::DispatchWin32Event  (
  void* a_event
 )
 /***************************************************************************/
