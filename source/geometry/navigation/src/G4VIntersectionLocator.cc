@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.3 2008-11-14 14:41:58 tnikitin Exp $
+// $Id: G4VIntersectionLocator.cc,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4VIntersectionLocator implementation
@@ -48,7 +48,7 @@ G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator)
   fiNavigator = theNavigator;
   fVerboseLevel = 0;
   fUseNormalCorrection = false;
-  fHelpingNavigator=new G4Navigator();
+  fHelpingNavigator = new G4Navigator();
 }      
 
 ///////////////////////////////////////////////////////////////////////////
@@ -287,88 +287,108 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 // Method for finding SurfaceNormal of Intersecting Solid 
 //
 G4ThreeVector G4VIntersectionLocator::
-              GetLocalSurfaceNormal(const G4ThreeVector CurrentE_Point,G4bool &validNormal)
+GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point, G4bool &validNormal)
 {
-       G4ThreeVector Normal(G4ThreeVector(0,0,0));
-       validNormal=false;
-       G4VPhysicalVolume *located;
-       fHelpingNavigator->SetWorldVolume(GetNavigatorFor()->GetWorldVolume());
-       located = fHelpingNavigator->LocateGlobalPointAndSetup( CurrentE_Point );
-       G4TouchableHistoryHandle aTouchable =
-       fHelpingNavigator->CreateTouchableHistoryHandle();
-       G4ThreeVector localPosition = aTouchable->GetHistory()->
-                   GetTopTransform().TransformPoint(CurrentE_Point);
+  G4ThreeVector Normal(G4ThreeVector(0,0,0));
+  G4VPhysicalVolume* located;
 
-       if( located != 0){ 
-         if(located->GetLogicalVolume()->GetSolid()->Inside(localPosition)==kSurface){
-            Normal=located->GetLogicalVolume()->
-        			 GetSolid()->SurfaceNormal(localPosition);
-            validNormal=true;
-         }
-       }
-      
- return Normal; 
+  validNormal = false;
+  fHelpingNavigator->SetWorldVolume(GetNavigatorFor()->GetWorldVolume());
+  located = fHelpingNavigator->LocateGlobalPointAndSetup( CurrentE_Point );
+  G4TouchableHistoryHandle aTouchable = fHelpingNavigator
+                                      ->CreateTouchableHistoryHandle();
+  G4ThreeVector localPosition = aTouchable->GetHistory()
+                ->GetTopTransform().TransformPoint(CurrentE_Point);
+
+  if( located != 0)
+  { 
+    if (located->GetLogicalVolume()
+        ->GetSolid()->Inside(localPosition)==kSurface)
+    {
+      Normal = located->GetLogicalVolume()
+                      ->GetSolid()->SurfaceNormal(localPosition);
+      validNormal = true;
+    }
+  }
+
+  return Normal;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 //
 // Adjustment of Found Intersection
 //
-G4bool
-G4VIntersectionLocator::AdjustmentOfFoundIntersection( const G4ThreeVector  CurrentA_Point,
-                                                       const G4ThreeVector  CurrentE_Point, 
-                                                       const G4ThreeVector  CurrentF_Point,
-                                                       const G4ThreeVector  MomentumDir,
-                                                       const G4bool         IntersectAF,
-						       G4ThreeVector        &IntersectionPoint,   // In/Out
-                                                       G4double             &NewSafety,           // In/Out 
-                                                       G4double             &fPreviousSafety,     // In/Out
-                                                       G4ThreeVector        &fPreviousSftOrigin)  // In/Out
+G4bool G4VIntersectionLocator::
+AdjustmentOfFoundIntersection( const G4ThreeVector &CurrentA_Point,
+                               const G4ThreeVector &CurrentE_Point, 
+                               const G4ThreeVector &CurrentF_Point,
+                               const G4ThreeVector &MomentumDir,
+                               const G4bool         IntersectAF,
+                                     G4ThreeVector &IntersectionPoint,  // I/O
+                                     G4double      &NewSafety,          // I/O 
+                                     G4double      &fPreviousSafety,    // I/O
+                                     G4ThreeVector &fPreviousSftOrigin )// I/O
 {     
-      G4double dist,lambda;
-      G4ThreeVector Normal, NewPoint, Point_G;
-      G4bool goodAdjust=false,Intersects_FP=false,validNormal=false;
-      // Get SurfaceNormal of Intersecting Solid
-      Normal=GetLocalSurfaceNormal(CurrentE_Point,validNormal);
-      if(!validNormal)return false;
-         
-      // Intersection between Line&Plane
-      G4double n_d_m=Normal.dot(MomentumDir);
-      if(std::abs(n_d_m)<kCarTolerance){
-        if(fVerboseLevel>1)G4cerr<<"AdjustementOfFoundIntersection: No intersection==parallels lines=="<<G4endl;
+  G4double dist,lambda;
+  G4ThreeVector Normal, NewPoint, Point_G;
+  G4bool goodAdjust=false, Intersects_FP=false, validNormal=false;
+
+  // Get SurfaceNormal of Intersecting Solid
+  //
+  Normal=GetLocalSurfaceNormal(CurrentE_Point,validNormal);
+  if(!validNormal) { return false; }
+
+  // Intersection between Line and Plane
+  //
+  G4double n_d_m = Normal.dot(MomentumDir);
+  if ( std::abs(n_d_m)<kCarTolerance )
+  {
+    if ( fVerboseLevel>1 )
+    {
+      G4cerr << "WARNING - "
+             << "G4VIntersectionLocator::AdjustementOfFoundIntersection()"
+             << G4endl
+             << "        No intersection. Parallels lines!" << G4endl;
         return false;
-      }
-      lambda=-Normal.dot(CurrentF_Point-CurrentE_Point)/n_d_m;
-      NewPoint=CurrentF_Point+lambda*MomentumDir;// New candidate for Intersection
-      dist=std::abs(lambda);//Distance from CurrentF to Calculated Intersection
-      if(dist<kCarTolerance*0.001)return false;         
-      // Calculation of New Intersection Point on the path 
-      // First part Intersects
-      if(IntersectAF){
-       	G4double stepLengthFP; 
-        G4ThreeVector Point_P=CurrentA_Point;
-        GetNavigatorFor()->LocateGlobalPointWithinVolume(Point_P);
-        Intersects_FP = IntersectChord(Point_P,NewPoint,
-	                                       NewSafety,fPreviousSafety,
-                                               fPreviousSftOrigin,
-                                               stepLengthFP,
-                                               Point_G );
+    }
+    lambda =- Normal.dot(CurrentF_Point-CurrentE_Point)/n_d_m;
 
-      }else{
-      //Second Part Intersects
-       G4double stepLengthFP; 
-       GetNavigatorFor()->LocateGlobalPointWithinVolume(CurrentF_Point );
-       Intersects_FP = IntersectChord( CurrentF_Point,NewPoint,
-                                               NewSafety,fPreviousSafety,
-                                               fPreviousSftOrigin,
-                                               stepLengthFP,
-                                               Point_G );
-        
-     }
-     if(Intersects_FP){
-	goodAdjust=true;
-	IntersectionPoint=Point_G;	              
-      }
+    // New candidate for Intersection
+    //
+    NewPoint = CurrentF_Point+lambda*MomentumDir;
 
-return goodAdjust;
+    // Distance from CurrentF to Calculated Intersection
+    //
+    dist = std::abs(lambda);
+
+    if ( dist<kCarTolerance*0.001 )  { return false; }
+
+    // Calculation of new intersection point on the path.
+    //
+    if ( IntersectAF )  //  First part intersects
+    {
+      G4double stepLengthFP; 
+      G4ThreeVector Point_P = CurrentA_Point;
+      GetNavigatorFor()->LocateGlobalPointWithinVolume(Point_P);
+      Intersects_FP = IntersectChord( Point_P, NewPoint, NewSafety,
+                                      fPreviousSafety, fPreviousSftOrigin,
+                                      stepLengthFP, Point_G );
+
+    }
+    else   // Second part intersects
+    {      
+      G4double stepLengthFP; 
+      GetNavigatorFor()->LocateGlobalPointWithinVolume(CurrentF_Point );
+      Intersects_FP = IntersectChord( CurrentF_Point, NewPoint, NewSafety,
+                                      fPreviousSafety, fPreviousSftOrigin,
+                                      stepLengthFP, Point_G );
+    }
+    if ( Intersects_FP )
+    {
+      goodAdjust = true;
+      IntersectionPoint = Point_G;              
+    }
+  }
+
+  return goodAdjust;
 }

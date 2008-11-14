@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.3 2008-11-14 14:38:45 tnikitin Exp $
+// $Id: G4VIntersectionLocator.hh,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -125,19 +125,21 @@ class G4VIntersectionLocator
       // (if field is compiled verbose)
 
      
-    G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector CurrentE_Point, G4bool &validNormal);
-      // Return the SurfaceNormal of Intersecting Solid 
-G4bool AdjustmentOfFoundIntersection(const G4ThreeVector A, const G4ThreeVector  CurrentE_Point, 
-                              const G4ThreeVector  CurrentF_Point,
-				     const G4ThreeVector MomentumDir,
-			      const G4bool IntersectAF, 
-                              G4ThreeVector &IntersectionPoint,
-                              G4double      &NewSafety,
-                              G4double      &fPreviousSafety,    // In/Out
-				     G4ThreeVector &fPreviousSftOrigin );//In/Out
-     // Optional method for Adjustment of Located IntersectionPoint using SurfaceNormal
-    
+    G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
+                                              G4bool &validNormal);
+      // Return the SurfaceNormal of Intersecting Solid
 
+    G4bool AdjustmentOfFoundIntersection(const G4ThreeVector &A,
+                                         const G4ThreeVector &CurrentE_Point, 
+                                         const G4ThreeVector &CurrentF_Point,
+                                         const G4ThreeVector &MomentumDir,
+                                         const G4bool         IntersectAF, 
+                                               G4ThreeVector &IntersectionPoint,
+                                               G4double      &NewSafety,
+                                               G4double      &fPrevSafety,
+                                               G4ThreeVector &fPrevSftOrigin );
+      // Optional method for adjustment of located intersection point
+      // using the surface-normal
   
   protected:
 
@@ -146,13 +148,15 @@ G4bool AdjustmentOfFoundIntersection(const G4ThreeVector A, const G4ThreeVector 
       // For verbose purposes
     G4bool   fUseNormalCorrection;
 
-    G4double      fiEpsilonStep;
-    G4double      fiDeltaIntersection;
+    G4double       fiEpsilonStep;
+    G4double       fiDeltaIntersection;
     G4Navigator   *fiNavigator;
     G4ChordFinder *fiChordFinder;
-    G4bool        fiUseSafety;
+    G4bool         fiUseSafety;
       // For passing the parameters from G4PropagatorInField
+
     G4Navigator *fHelpingNavigator;
+      // Helper for location
 };
 
 #include "G4VIntersectionLocator.icc"

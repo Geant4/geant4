@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.3 2008-11-14 14:42:30 tnikitin Exp $
+// $Id: G4BrentLocator.cc,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator implementation
@@ -130,10 +130,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
-  G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
-  G4double    NewSafety= -0.0;
-
-  G4bool last_AF_intersection = false; 
+  G4FieldTrack  ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
+  G4double      NewSafety = 0.0;
+  G4bool        last_AF_intersection = false; 
 
   // G4bool final_section= true;  // Shows whether current section is last
                                   // (i.e. B=full end)
@@ -267,25 +266,22 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         IntersectedOrRecalculatedFT = ApproxIntersecPointV;
         IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
         
-        if(GetAdjustementOfFoundIntersection()){
-       // Try to Get Correction of IntersectionPoint using SurfaceNormal()
-       //  
-         G4ThreeVector IP;
-         G4ThreeVector MomentumDir=ApproxIntersecPointV.GetMomentumDirection();
-	 G4bool goodCorrection=
-          AdjustmentOfFoundIntersection(Point_A,CurrentE_Point,
-					CurrentF_Point,MomentumDir,
-                                        last_AF_intersection, IP,
-                                        NewSafety,fPreviousSafety,
-                                              fPreviousSftOrigin
-                                          );
-
-	 if(goodCorrection){
-          IntersectedOrRecalculatedFT = ApproxIntersecPointV;
-          IntersectedOrRecalculatedFT.SetPosition(IP);
-	 }
-       }
-
+        if ( GetAdjustementOfFoundIntersection() )
+        {
+          // Try to Get Correction of IntersectionPoint using SurfaceNormal()
+          //  
+          G4ThreeVector IP;
+          G4ThreeVector MomentumDir=ApproxIntersecPointV.GetMomentumDirection();
+          G4bool goodCorrection = AdjustmentOfFoundIntersection( Point_A,
+                                    CurrentE_Point, CurrentF_Point, MomentumDir,
+                                    last_AF_intersection, IP, NewSafety,
+                                    fPreviousSafety, fPreviousSftOrigin );
+          if ( goodCorrection )
+          {
+            IntersectedOrRecalculatedFT = ApproxIntersecPointV;
+            IntersectedOrRecalculatedFT.SetPosition(IP);
+          }
+        }
        
         // Note: in order to return a point on the boundary, 
         //       we must return E. But it is F on the curve.
@@ -593,8 +589,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                               NewSafety, fPreviousSafety,
                                               fPreviousSftOrigin,stepLengthAB,
                                               PointGe);
-        if(Intersects_AB)
-        { last_AF_intersection = Intersects_AB;
+        if( Intersects_AB )
+        {
+          last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
           fin_section_depth[depth]=true;
         }
@@ -653,8 +650,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         G4bool Intersects_AB = IntersectChord(Point_A, SubE_point, NewSafety,
                                               fPreviousSafety,
                                                fPreviousSftOrigin,stepLengthAB, PointGe);
-        if(Intersects_AB)
-        { last_AF_intersection = Intersects_AB;
+        if( Intersects_AB )
+        {
+          last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
         }
        

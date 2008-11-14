@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleLocator.cc,v 1.3 2008-11-14 14:42:20 tnikitin Exp $
+// $Id: G4SimpleLocator.cc,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4SimpleLocator implementation
@@ -94,11 +94,9 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
-  G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
-  G4double    NewSafety= -0.0;
-
+  G4FieldTrack  ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
+  G4double      NewSafety = 0.0;
   G4bool last_AF_intersection = false;
-  
   G4bool final_section = true;  // Shows whether current section is last
                                 // (i.e. B=full end)
   recalculatedEndPoint = false; 
@@ -178,26 +176,24 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
        IntersectedOrRecalculatedFT = ApproxIntersecPointV;
        IntersectedOrRecalculatedFT.SetPosition( CurrentE_Point );
 
-       if(GetAdjustementOfFoundIntersection()){
-       // Try to Get Correction of IntersectionPoint using SurfaceNormal()
-       //  
+       if ( GetAdjustementOfFoundIntersection() )
+       {
+         // Try to Get Correction of IntersectionPoint using SurfaceNormal()
+         //  
          G4ThreeVector IP;
-         G4ThreeVector MomentumDir=ApproxIntersecPointV.GetMomentumDirection();
-	 G4bool goodCorrection=
-          AdjustmentOfFoundIntersection(Point_A,CurrentE_Point,
-					CurrentF_Point,MomentumDir,
-                                        last_AF_intersection, IP,
-                                        NewSafety,fPreviousSafety,
-                                              fPreviousSftOrigin
-                                          );
+         G4ThreeVector MomentumDir= ApproxIntersecPointV.GetMomentumDirection();
+         G4bool goodCorrection = AdjustmentOfFoundIntersection( Point_A,
+                                   CurrentE_Point, CurrentF_Point, MomentumDir,
+                                   last_AF_intersection, IP, NewSafety,
+                                   fPreviousSafety, fPreviousSftOrigin );
 
-	 if(goodCorrection){
-          IntersectedOrRecalculatedFT = ApproxIntersecPointV;
-          IntersectedOrRecalculatedFT.SetPosition(IP);
-	 }
+         if(goodCorrection)
+         {
+           IntersectedOrRecalculatedFT = ApproxIntersecPointV;
+           IntersectedOrRecalculatedFT.SetPosition(IP);
+         }
        }
- 
-       
+
        // Note: in order to return a point on the boundary, 
        //       we must return E. But it is F on the curve.
        //       So we must "cheat": we are using the position at point E
