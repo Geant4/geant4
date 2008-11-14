@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.25 2008-10-22 01:17:55 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.26 2008-11-14 20:16:51 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -509,6 +509,8 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
         }
 
         G4double BetaMin = 1./nMax;
+        if ( BetaMin >= 1. ) return StepLimit;
+
         G4double GammaMin = 1./std::sqrt(1.-BetaMin*BetaMin);
 
         if (gamma < GammaMin ) return StepLimit;
