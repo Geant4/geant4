@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.106 2008-11-14 14:26:15 bmorgan Exp $
+# $Id: Configure,v 1.107 2008-11-14 15:14:46 bmorgan Exp $
 #
-# Generated on Fri Nov 14 14:21:59 GMT 2008 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 14 15:14:32 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2239,7 +2239,7 @@ $startsh
 #
 # These are variables that the final unit generated script may use
 #
-with_qt_dir="\$1"
+with_qt_dir="\$qt_search_dir"
 
 #
 # Only run if we haven't succesfully found Qt already
@@ -4720,7 +4720,8 @@ EOM`
     if test "x$g4ui_build_qt_session" = "xy" ; then
 	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
-	. ./qt ""
+	qt_search_dir=""
+	. ./qt
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
@@ -4752,7 +4753,8 @@ EOM`
 		else
 		    # Check for installation in user directory
 		    echo " "
-		    . ./qt $user_qthome
+		    qt_search_dir=$user_qthome
+		    . ./qt
 
 		    if test "x$g4_havegoodqt" = "xyes" ; then
 			promptend=yes
@@ -6086,7 +6088,8 @@ EOM`
     if test "x$g4vis_build_openglqt_driver" = "xy" ; then
 	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
-	. ./qt ""
+	qt_search_dir=""
+	. ./qt
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
@@ -6118,7 +6121,8 @@ EOM`
 		else
 		    # Check for installation in user directory
 		    echo " "
-		    . ./qt $user_qthome
+		    qt_search_dir=$user_qthome
+		    . ./qt
 
 		    if test "x$g4_havegoodqt" = "xyes" ; then
 			promptend=yes
