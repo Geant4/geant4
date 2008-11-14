@@ -279,7 +279,7 @@ if [ X$g4ui_build_qt_session = Xy ] ; then
 G4UI_BUILD_QT_SESSION=1
 export G4UI_BUILD_QT_SESSION
 echo "On this machine the G4UI_BUILD_QT_SESSION=\$G4UI_BUILD_QT_SESSION"
-fi 
+fi
 
 #+
 if [ X$g4ui_use_qt = Xy ] ; then
@@ -353,7 +353,7 @@ if [ X$g4vis_build_openglqt_driver = Xy ] ; then
 G4VIS_BUILD_OPENGLQT_DRIVER=1
 export G4VIS_BUILD_OPENGLQT_DRIVER
 echo "On this machine the G4VIS_BUILD_OPENGLQT_DRIVER=\$G4VIS_BUILD_OPENGLQT_DRIVER"
-fi 
+fi
 
 
 #+
@@ -441,13 +441,6 @@ echo "On this machine the OIVHOME=\$OIVHOME"
 fi
 fi 
 
-#+
-if [ X$g4_qthome != X ] ; then
-QTHOME=$g4_qthome
-export QTHOME
-echo "On this machine the QTHOME=\$QTHOME"
-fi 
-
 
 #+
 if [ X$g4vis_build_openglxm_driver != X ] ; then
@@ -502,6 +495,44 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 fi
 fi 
+
+
+
+# Qt Flags and Libs, messy, but needed for backward compatibility
+#+
+if [ "X$g4ui_build_qt_session" = "Xy" -o "X$g4ui_use_qt" = "Xy" ] ; then
+QTFLAGS="$g4_qt_cxxflags"
+QTLIBS="$g4_qt_libs"
+QTMOC="$g4_qt_moc"
+export QTFLAGS
+export QTLIBS
+export QTMOC
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the QTLIBS=\$QTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+fi
+fi
+
+if [ "X$g4vis_build_openglqt_driver" = "Xy" -o "X$g4vis_build_openglqt_driver" = "Xy" ] ; then
+if [ "X\$QTFLAGS" = "X" ] ; then
+QTFLAGS="$g4_qt_cxxflags $g4_qt_gl_cxxflags"
+else
+QTFLAGS="\$QTFLAGS $g4_qt_gl_cxxflags"
+fi
+if [ "X\$QTMOC" = "X" ] ; then
+QTMOC="$g4_qt_moc"
+fi
+GLQTLIBS="$g4_qt_libs $g4_qt_gl_libs"
+export QTFLAGS
+export QTMOC
+export GLQTLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the GLQTLIBS=\$GLQTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+fi
+fi
 
 
 #

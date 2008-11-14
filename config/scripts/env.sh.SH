@@ -523,14 +523,6 @@ echo "On this machine the OIVHOME=\$OIVHOME"
 fi
 fi 
 
-#+
-if [ X$g4_qthome != X ] ; then
-QTHOME=$g4_qthome
-export QTHOME
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the QTHOME=\$QTHOME"
-fi 
-fi
 
 
 #+
@@ -586,6 +578,41 @@ if [ X\$g4non_display = X ] ; then
 echo "On this machine the XAWLIBS=\$XAWLIBS"
 fi
 fi 
+
+
+#
+# Qt Flags and Libs, messy, but needed for backward compatibility
+#+
+if [ "X$g4ui_build_qt_session" = "Xy" -o "X$g4ui_use_qt" = "Xy" ] ; then
+QTFLAGS="$g4_qt_cxxflags"
+QTLIBS="$g4_qt_libs"
+QTMOC="$g4_qt_moc"
+export QTFLAGS
+export QTLIBS
+export QTMOC
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the QTLIBS=\$QTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+fi
+
+if [ "X$g4vis_build_openglqt_driver" = "Xy" -o "X$g4vis_build_openglqt_driver" = "Xy" ] ; then
+if [ "X\$QTFLAGS" = "X" ] ; then
+QTFLAGS="$g4_qt_cxxflags $g4_qt_gl_cxxflags"
+else
+QTFLAGS="\$QTFLAGS $g4_qt_gl_cxxflags"
+fi
+if [ "X\$QTMOC" = "X" ] ; then
+QTMOC="$g4_qt_moc"
+fi
+GLQTLIBS="$g4_qt_libs $g4_qt_gl_libs"
+export QTFLAGS
+export QTMOC
+export GLQTLIBS
+echo "On this machine the QTFLAGS=\$QTFLAGS"
+echo "On this machine the GLQTLIBS=\$GLQTLIBS"
+echo "On this machine the QTMOC=\$QTMOC"
+fi
+
 
 
 #
