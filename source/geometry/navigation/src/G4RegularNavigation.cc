@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.7 2007-12-10 16:30:01 gunter Exp $
+// $Id: G4RegularNavigation.cc,v 1.8 2008-11-14 22:50:01 arce Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -40,6 +40,7 @@
 #include "G4NormalNavigation.hh"
 #include "G4Navigator.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4RegNavHelper.hh"
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
@@ -133,6 +134,8 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                                 G4int& blockedReplicaNo,
                                 G4VPhysicalVolume* pCurrentPhysical)
 {
+  G4RegNavHelper::ClearStepLengths();
+
   G4PhantomParameterisation *param =
     (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
 
@@ -148,7 +151,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 				   entering,
 				   pBlockedPhysical,
 				   blockedReplicaNo);
-  }
+ }
 
 
   G4double ourStep = 0.;
@@ -197,6 +200,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   for( ;; )
   {
     newStep = voxelBox->DistanceToOut( localPoint, localDirection );
+
     if( (bFirstStep) && (newStep < currentProposedStepLength) )
     {
       exiting  = true;
@@ -213,6 +217,14 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     { 
       return currentProposedStepLength;
     }
+    if(totalNewStep > currentProposedStepLength) 
+    { 
+      G4RegNavHelper::AddStepLength( copyNo, newStep-totalNewStep+currentProposedStepLength );
+      return currentProposedStepLength;
+    } else {
+      G4RegNavHelper::AddStepLength( copyNo, newStep );
+    }
+
 
     // Move container point until wall of voxel
     //
@@ -228,6 +240,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     copyNo = param->GetReplicaNo(containerPoint,localDirection);
     G4ThreeVector voxelTranslation = param->GetTranslation( copyNo );
 
+    //    G4cout << " copyNo " << copyNo << " = " << pCurrentPhysical->GetCopyNo() << G4endl;
     // Move local point until wall of voxel and then put it in the new voxel
     // local coordinates
     //
