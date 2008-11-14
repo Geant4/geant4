@@ -59,7 +59,8 @@ EOM`
     if test "x$g4ui_build_qt_session" = "xy" ; then
 	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
-	. ./qt ""
+	qt_search_dir=""
+	. ./qt
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
@@ -91,7 +92,8 @@ EOM`
 		else
 		    # Check for installation in user directory
 		    echo " "
-		    . ./qt $user_qthome
+		    qt_search_dir=$user_qthome
+		    . ./qt
 
 		    if test "x$g4_havegoodqt" = "xyes" ; then
 			promptend=yes

@@ -21,7 +21,7 @@ $startsh
 #
 # These are variables that the final unit generated script may use
 #
-with_qt_dir="\$1"
+with_qt_dir="\$qt_search_dir"
 
 #
 # Only run if we haven't succesfully found Qt already
