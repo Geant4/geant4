@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.52 2008-11-13 19:28:58 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.53 2008-11-14 11:17:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,6 +128,8 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
   G4double eth = man->BremsstrahlungTh(); 
   EmModel(1)->SetSecondaryThreshold(eth);
   EmModel(2)->SetSecondaryThreshold(eth);
+
+  // Only high energy model LMP flag is ON/OFF
   EmModel(2)->SetLPMFlag(man->LPMFlag());
 }
 
@@ -135,13 +137,11 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
 
 void G4eBremsstrahlung::PrintInfo()
 {
-  if(EmModel()) {
-    G4double eth = G4LossTableManager::Instance()->BremsstrahlungTh();
-
-    if(eth < DBL_MAX)
-      G4cout << "      HighEnergyThreshold(GeV)= " << eth/GeV 
-	     << G4endl;
-  }
+  G4LossTableManager* man = G4LossTableManager::Instance(); 
+  G4double eth = man->BremsstrahlungTh(); 
+  G4cout << "      LPM flag: " << man->LPMFlag();
+  if(eth < DBL_MAX) G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
