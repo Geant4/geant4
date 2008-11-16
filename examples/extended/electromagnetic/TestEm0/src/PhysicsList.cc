@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.6 2007-12-17 17:22:44 maire Exp $
+// $Id: PhysicsList.cc,v 1.7 2008-11-16 22:14:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,10 +179,24 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
+  // Main options and setting parameters are shown here.
+  // Several of them have default values.
+  //
   G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(100*TeV);	//default  
+  emOptions.SetDEDXBinning(12*20);	//default=12*7  
+  emOptions.SetLambdaBinning(12*20);	//default=12*7
+
+  emOptions.SetBuildCSDARange(true);     
   emOptions.SetMaxEnergyForCSDARange(100*TeV);
-  emOptions.SetDEDXBinningForCSDARange(120);
+  emOptions.SetDEDXBinningForCSDARange(12*20);
+  
+  emOptions.SetSplineFlag(true);	//default
+     
   emOptions.SetVerbose(0);  
 }
 
