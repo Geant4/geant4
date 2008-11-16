@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.14 2008-11-02 10:45:32 maire Exp $
+// $Id: PhysicsList.cc,v 1.15 2008-11-16 12:22:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -178,8 +178,8 @@ void PhysicsList::ConstructEM()
   //
   emOptions.SetMinEnergy(100*eV);	//default    
   emOptions.SetMaxEnergy(10*GeV);
-  emOptions.SetDEDXBinning(80);		//default=56    
-  emOptions.SetLambdaBinning(80);	//default=56    
+  emOptions.SetDEDXBinning(8*20);	//default=8*7    
+  emOptions.SetLambdaBinning(8*20);	//default=8*7    
   emOptions.SetSplineFlag(true);	//default
       
   //multiple coulomb scattering
@@ -192,14 +192,14 @@ void PhysicsList::ConstructEM()
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-3);		//default=1.e-2
+  emOptions.SetLinearLossLimit(1.e-2);		//default
    
           
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);		//default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(80);    
+  emOptions.SetDEDXBinningForCSDARange(8*20);	//default=8*7     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
