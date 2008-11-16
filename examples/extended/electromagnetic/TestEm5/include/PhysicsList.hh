@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.7 2008-11-16 18:51:42 maire Exp $
+// $Id: PhysicsList.hh,v 1.8 2008-11-16 19:13:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,6 @@ public:
   void ConstructProcess();    
   void AddDecay();
   void AddStepMax();       
-  
-  ////StepMax* GetStepMaxProcess() {return stepMaxProcess;};
     
   void SetCuts();
   void SetCutForGamma(G4double);
