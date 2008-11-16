@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.6 2007-03-20 18:50:53 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.7 2008-11-16 18:51:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
-class StepMax;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +54,7 @@ public:
   void AddDecay();
   void AddStepMax();       
   
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  ////StepMax* GetStepMaxProcess() {return stepMaxProcess;};
     
   void SetCuts();
   void SetCutForGamma(G4double);
@@ -69,8 +68,6 @@ private:
   G4String emName;
   G4VPhysicsConstructor*  emPhysicsList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    
-  StepMax* stepMaxProcess;
     
   G4double cutForGamma;
   G4double cutForElectron;

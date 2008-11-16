@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.25 2008-10-16 11:37:49 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.26 2008-11-16 18:51:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,8 +54,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4Decay.hh"
-#include "StepMax.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -93,8 +91,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   helIsRegisted  = false;
   bicIsRegisted  = false;
   biciIsRegisted = false;
-  
-  stepMaxProcess  = 0;
     
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
@@ -164,6 +160,8 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Decay.hh"
+
 void PhysicsList::AddDecay()
 {
   // Add Decay Process
@@ -189,10 +187,12 @@ void PhysicsList::AddDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "StepMax.hh"
+
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
+  StepMax* stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
