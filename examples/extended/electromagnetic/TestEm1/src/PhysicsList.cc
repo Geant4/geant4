@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.10 2006-10-19 17:24:13 maire Exp $
+// $Id: PhysicsList.cc,v 1.11 2008-11-16 21:56:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,7 +188,8 @@ void PhysicsList::ConstructProcess()
   //
   G4EmProcessOptions emOptions;
   emOptions.SetBuildCSDARange(true);
-  
+  emOptions.SetDEDXBinningForCSDARange(8*20);
+    
   // Decay Process
   //
   AddDecay();

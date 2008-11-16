@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.5 2006-10-26 10:18:59 maire Exp $
+// $Id: PhysicsList.cc,v 1.6 2008-11-16 21:51:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +185,8 @@ void PhysicsList::ConstructProcess()
   //
   G4EmProcessOptions emOptions;
   emOptions.SetBuildCSDARange(true);
-  
+  emOptions.SetDEDXBinningForCSDARange(8*20);
+    
   // decay process
   //
   AddDecay();
