@@ -111,7 +111,7 @@ G4VIntraNuclearTransportModel("Binary Cascade")
   SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(10.1*GeV);
-  PrintWelcomeMessage();
+  //PrintWelcomeMessage();
   thePrimaryEscape = true;
   thePrimaryType = 0;
 }
