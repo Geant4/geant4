@@ -32,7 +32,7 @@ G4QGSPNeutronBuilder::
 G4QGSPNeutronBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
 {
   theMin = 12*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("QGSP");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
   theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);

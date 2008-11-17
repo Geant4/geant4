@@ -32,7 +32,7 @@ G4FTFPNeutronBuilder::
 G4FTFPNeutronBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
-  theModel = new G4TheoFSGenerator;
+  theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
