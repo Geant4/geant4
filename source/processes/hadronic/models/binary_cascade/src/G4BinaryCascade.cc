@@ -85,7 +85,8 @@
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
 
-G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
+G4BinaryCascade::G4BinaryCascade() : 
+G4VIntraNuclearTransportModel("Binary Cascade")
 {
   // initialise the resonance sector
   G4ShortLivedConstructor ShortLived;
@@ -117,7 +118,7 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
 
 
 G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
-: G4VIntraNuclearTransportModel()
+: G4VIntraNuclearTransportModel("Binary Cascade")
 {
 }
 

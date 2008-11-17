@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17-Nov-2008 Vladimir Ivanchenko          had-binary-V09-01-01
+G4BinaryCascade, G4BinaryLightIonReaction - added name of the model
+
 27-Oct-2008 Dennis Wright                had-binary-V09-01-00
 - replace G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with 
   G4NucleiProperties::GetBindingEnergy(A,Z)  in 
