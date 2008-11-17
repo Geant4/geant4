@@ -62,35 +62,61 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef QTHOME
     QTHOME     := /usr
   endif
-  QT_VERSION   := $(shell test -f $(QTHOME)/lib/libQt3Support.so && echo QT4 || echo QT3)
 
-  ifndef QTFLAGS
-    ifeq ($(QT_VERSION),QT4)
-      QTFLAGS    := -I$(QTHOME)/include/qt4/Qt
-      QTFLAGS    += -I$(QTHOME)/include/qt4
-    else
-      QTFLAGS    := -I$(QTHOME)/include/qt
-    endif
-  endif
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
 
+  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
+
+  ifndef QTFLAGS
+    ifeq ($(QT_VERSION),4)
+      QTFLAGS   += -I$(QTHOME)/include/qt$(QT_VERSION)
+      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtCore 
+      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtGui 
+      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtOpenGL 
+    else
+      QTFLAGS    := -I$(QTHOME)/include/qt$(QT_VERSION)/Qt
+      QTFLAGS    += -I$(QTHOME)/include/qt$(QT_VERSION)
+    endif
+  endif
+
+
+  ifndef QTLIBPATH
+    QT_SEARCH_LIB1 := $(shell ls  $(QTHOME)/lib/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
+    QT_SEARCH_LIB2 := $(shell ls  $(QTHOME)/lib/libq*  2>/dev/null | wc -l )
+    ifneq ($(QT_SEARCH_LIB1),0)
+      QTLIBPATH   := /lib/qt$(QT_VERSION)
+    endif
+    ifneq ($(QT_SEARCH_LIB2),0)
+      QTLIBPATH   := /lib
+    endif
+  endif
+
+  ifndef QTLIBS
+    QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
+    ifeq ($(QT_VERSION),3)
+      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* | wc -l )
+      ifneq ($(QT3_MT),0)
+        QTLIBS  += -lqt-mt
+      else
+        QTLIBS  += -lqt
+      endif
+      QTLIBS   += -lqui
+    else
+      QTLIBS    += -lQtCore -lQtGui
+    endif
+  endif
 
   ifndef GLQTLIBS
-    ifeq ($(QT_VERSION),QT3)
-      GLQTLIBS    := -L$(QTHOME)/lib -lqt-mt
+    ifeq ($(QT_VERSION),3)
+        # already done in QTLIBS
+        #      GLQTLIBS    := $(QTLIBS)
     else
-      GLQTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui -lQtOpenGL
+      GLQTLIBS    := -L$(QTHOME)$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
     endif
   endif
-  ifndef QTLIBS
-    ifeq ($(QT_VERSION),QT3)
-      QTLIBS    := -L$(QTHOME)/lib -lqt-mt
-    else
-      QTLIBS    := -L$(QTHOME)/lib/qt4 -lQtCore -lQtGui
-    endif
-  endif
+
   ifndef XAWFLAGS
     XAWFLAGS   := -I/usr/X11R6/include
   endif

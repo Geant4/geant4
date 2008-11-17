@@ -1,4 +1,4 @@
-$Id: History,v 1.333 2008-11-14 19:58:19 gcosmo Exp $
+$Id: History,v 1.334 2008-11-17 14:49:00 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th November 2008  Laurent Garnier 
+- Darwin.gmk
+ - Try to better find if GL conflicts on Darwin : Should be Ok now. I check the version of the system
+
 14th November 2008  Gabriele Cosmo (config-V09-01-10)
 - Added "electromagnetic/adjoint" sub-module in binmake.gmk.
 
@@ -24,6 +28,22 @@ committal in the CVS repository !
 
 23rd October 2008  Gabriele Cosmo (config-V09-01-08)
 - Added "persistency/ascii" sub-module in binmake.gmk.
+
+15th October 2008  Laurent Garnier 
+- Darwin.gmk : 
+  - Try to improve Qt config for Darwin :
+  - No more QTHOME or QTLIBS flags to be set
+  - Qt3 multithread or not auto select libraries
+  - Suppress some unuseful link and compil options
+
+10th October 2008  Laurent Garnier 
+- Darwin.gmk : 
+ - Remove Xml and Sql library for Qt config
+ - Try to better find if GL conflicts on Darwin
+
+8th October 2008  Laurent Garnier 
+- interactivity.gmk : changing flags for OpenGL and QT
+- Darwin-g++.gmk,Linux-g++.gmk,WIN32-VC.gmk : Improvments in those files, and for GLQT libs
 
 11th July 2008  Gabriele Cosmo (config-V09-01-07)
 - architecture.gmk: removed obsoled DOM library from GDMLIBS.

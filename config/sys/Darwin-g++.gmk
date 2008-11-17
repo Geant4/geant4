@@ -2,10 +2,12 @@
 # ------ MacOS-X ------
 #                                 MacOS 10.3 gcc-3.3
 #                                 MacOS 10.4 gcc-4.0
+#                                 MacOS 10.5 gcc-4.0
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
 #                  Gabriele Cosmo - CERN
+#                  Laurent Garnier - LAL
 #
 ifeq ($(G4SYSTEM),Darwin-g++)
   CXX       := g++
@@ -61,21 +63,26 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-    ifeq ($(G4SYSTEM),Darwin-g++)
-          # It may be required to uncomment the following lines for building on MacOSX 10.5 "Leopard"
+    ifeq ($(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/'),9)
+      # the following lines are for building on MacOSX 10.5 "Leopard"
       OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo " -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      endif
+    else
+      OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    endif
   endif
   ifndef QTHOME
     QTHOME   := $(shell test -f /Library/Frameworks/Qt3Support.framework/Qt3Support && echo  "/Library/Frameworks" || echo "/sw")
   endif
 
-  ifeq ($(QTHOME),/Library/Frameworks)
-    QT_VERSION := $(shell grep "QT_VERSION_STR" $(QTHOME)/QtCore.framework/Headers/qglobal.h | sed 's/.* \"\([0-9]\)\..*\"/\1/')
-  else
-    QT_VERSION := $(shell grep "QT_VERSION_STR" $(QTHOME)/include/qt/qglobal.h | sed 's/.* \"\([0-9]\)\..*\"/\1/')
+  ifndef QTMOC
+   ifeq ($(QTHOME),/Library/Frameworks)
+     QTMOC      := /usr/bin/moc
+   else
+     QTMOC      := $(QTHOME)/bin/moc
+   endif
   endif
+
+  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
 
   ifndef QTFLAGS
     ifeq ($(QT_VERSION),4)
@@ -86,14 +93,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   := -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
   endif
-  ifndef QTMOC
-    ifeq ($(QT_VERSION),4)
-      QTMOC      := /usr/bin/moc
-    else
-      QTMOC      := $(QTHOME)/bin/moc
-    endif
-  endif
-
   ifndef QTLIBPATH
     ifeq ($(QT_VERSION),3)
       QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "/lib/qt3/lib" || echo "/lib" )
