@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.53 2008-08-21 12:17:09 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.54 2008-11-17 13:52:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,6 +98,7 @@ class G4GDMLParser
    inline G4LogicalVolume* GetVolume(const G4String& name);
    inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
    inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
+   inline void StripNamePointers() const;
 
    // Methods for Writer
    //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.24 2008-08-22 10:00:20 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.25 2008-11-17 13:52:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -102,6 +102,7 @@ class G4GDMLRead
    virtual G4LogicalVolume* GetVolume(const G4String&) const=0;
    virtual G4String GetSetup(const G4String&)=0;
    void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
+   void StripNames() const;
 
  protected:
 
@@ -115,13 +116,9 @@ class G4GDMLRead
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
    void LoopRead(const xercesc::DOMElement* const,
                  void(G4GDMLRead::*)(const xercesc::DOMElement* const));
- private:
-
-   void StripNames() const;
 
  private:
 
-   G4String ModuleName;
    G4int InLoop;
 
 };

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.5 2008-08-21 12:17:09 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.6 2008-11-17 13:52:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -142,6 +142,12 @@ G4GDMLAuxListType
 G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
   return reader.GetVolumeAuxiliaryInformation(logvol);
+}
+
+inline
+void G4GDMLParser::StripNamePointers() const
+{
+  reader.StripNames();
 }
 
 //

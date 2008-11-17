@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.37 2008-11-14 15:47:29 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.38 2008-11-17 13:52:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -54,7 +54,7 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
    if (InLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
    if (strip) { StripName(nameOut); }
 
-   return G4String (ModuleName + nameOut);
+   return nameOut;
 }
 
 void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
@@ -67,10 +67,6 @@ void G4GDMLRead::GeneratePhysvolName(const G4String& nameIn,
      std::stringstream stream;
      stream << physvol->GetLogicalVolume()->GetName() << "_PV";
      nameOut = stream.str();
-   }
-   else
-   {
-     nameOut = ModuleName + nameOut;
    }
    nameOut = eval.SolveBrackets(nameOut);
 
@@ -86,7 +82,6 @@ G4String G4GDMLRead::Strip(const G4String& name) const
 void G4GDMLRead::StripName(G4String& name) const
 {
   name.remove(name.find("0x"));
-  if (ModuleName.length()!=0)  { name.remove(name.find(ModuleName)); }
 }
 
 void G4GDMLRead::StripNames() const
@@ -248,15 +243,7 @@ void G4GDMLRead::Read(const G4String& fileName,
    }
 
    InLoop = 0;
-   ModuleName.clear();
    Validate = SetValidate;
-
-   if (IsModule)
-   {
-      ModuleName = fileName;
-      ModuleName.remove(ModuleName.length()-5,5); // remove ".gdml"
-      ModuleName += "_";
-   }
 
    xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!Validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
