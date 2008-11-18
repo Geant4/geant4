@@ -164,6 +164,13 @@ int main(int argc, char** argv)
   G4bool xsbgg = true;
   G4bool elastic = false;
 
+  //options for deexcitation
+  G4int  OPTxs=3;
+  G4bool useSICB=false;
+  G4bool useNGB=false;
+  G4bool useSCO=false;
+  G4bool useCEMtr=false;
+
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
   G4double bng2[20] = {0.0};
@@ -394,7 +401,26 @@ int main(int argc, char** argv)
         gtran = true;
       } else if(line == "#GEMEvaporation") {
         nevap = true;
+      } else if(line == "#XSoption") {
+        (*fin)>>OPTxs;
+        G4cout<<" Option for inverse cross sections : OPTxs="<<OPTxs<<G4endl;
       }
+      else if(line == "#UseSuperImposedCoulombBarrier") {
+        useSICB=true;
+        G4cout<<" Coulomb Barrier has been overimposed to ALL inverse cross sections"<<G4endl;
+      }
+      else if(line == "#UseNeverGoBack") {
+        useNGB=true;
+        G4cout<<" Never Go Back hypothesis has been assumed at preequilibrium"<<G4endl;
+      }
+      else if(line == "#UseSoftCutOff") {
+        useSCO=true;
+        G4cout<<" Soft Cut Off  hypothesis has been assumed at preequilibrium"<<G4endl;
+      }
+      else if(line == "#UseCEMTransitions") {
+        useCEMtr=true;
+        G4cout<<" Transition probabilities at preequilibrium based on CEM model"<<G4endl;
+      }      
     } while(end);
 
     if(!end) break;
@@ -420,10 +446,6 @@ int main(int argc, char** argv)
     }
     const G4Element* elm = material->GetElement(0); 
 
-    G4int A = (G4int)(elm->GetN()+0.5);
-    G4int Z = (G4int)(elm->GetZ()+0.5);
-    if(targetA > 0) A = targetA;
-
     // -------- Projectile
 
     G4ParticleDefinition* part(0);
@@ -439,20 +461,43 @@ int main(int argc, char** argv)
     }
     G4DynamicParticle dParticle(part,aDirection,energy);
 
-    // ------- Select model
+    // ------- Select deexcitation options
 
-    G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
-    G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
-    G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
-    if (gtran && thePreCompound) thePreCompound->UseGNASHTransition();
-    if (gemis && thePreCompound) thePreCompound->UseHETCEmission();
-    if (nevap) {
-      G4Evaporation* evp = new G4Evaporation();
-      evp->SetGEMChannel();
-      theDeExcitation->SetEvaporation(evp);
+    if(OPTxs !=3 || useSICB || useNGB || useSCO || useCEMtr) {
+
+      G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
+      G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
+      if (OPTxs< 0 || OPTxs >4  ){
+	G4cout << "### WArning: BAD CROSS SECTION OPTION for PreCompound model " << OPTxs 
+	       << " ignored" << G4endl;
+	OPTxs = 3;
+      }
+     
+      //thePreCompound->SetOPTxs(OPTxs);
+      theDeExcitation->SetOPTxs(OPTxs);
+       
+      if (useSICB) 
+	{
+	  //thePreCompound->UseSICB();
+	  theDeExcitation->UseSICB();
+	}
+      //if (useNGB) thePreCompound->UseNGB();
+      //if (useSCO) thePreCompound->UseSCO();
+      //if (useCEMtr) thePreCompound->UseCEMtr();
+      phys->SetPreCompound(thePreCompound); 
+      phys->SetDeExcitation(theDeExcitation); 
     }
-    G4double amass = phys->GetNucleusMass();
+
+    // ------- Select model
+    G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+
+    // ------- Define target A
+    G4int A = (G4int)(elm->GetN()+0.5);
+    G4int Z = (G4int)(elm->GetZ()+0.5);
+    if(targetA > 0) A = targetA;
     phys->SetA(A);
+
+    G4double amass = phys->GetNucleusMass();
 
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName()

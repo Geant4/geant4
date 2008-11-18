@@ -43,11 +43,13 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4QuasiElasticChannel.hh"
+#include "G4PreCompoundModel.hh"
 
-HsQGSBInterface::HsQGSBInterface() 
+HsQGSBInterface::HsQGSBInterface(G4PreCompoundModel* p) 
 {
   theModel = new G4TheoFSGenerator;
-  theCascade = new G4BinaryCascade;
+  theCascade = new G4BinaryCascade();
+  theCascade->SetDeExcitation(p);
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(&theStringModel);
   G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;

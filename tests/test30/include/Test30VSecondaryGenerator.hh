@@ -71,7 +71,7 @@ public:
 
   G4double GetMass() {return mass;};
 
-  void SetA(G4int A) {targetN = A;};
+  void SetA(G4int A);
 
 protected:
 

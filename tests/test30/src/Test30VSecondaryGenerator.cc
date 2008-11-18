@@ -57,6 +57,18 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
 	 << " Nmat= " <<  material->GetNumberOfMaterials() 
 	 << G4endl;
   generatorName = "";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Test30VSecondaryGenerator::SetA(G4int A) 
+{
+  targetN = A;
   const G4ElementVector* ev = material->GetElementVector();
   G4int Z = (G4int)(((*ev)[0])->GetZ() + 0.5);
   G4int N = (G4int)(((*ev)[0])->GetN() + 0.5);
@@ -65,15 +77,10 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
 	 << Z << "  " << (*ev)[0]->GetN()<< G4endl;
   targetNucleus.SetParameters((G4double)N, (G4double)Z);
   mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);
-  G4cout << "Mass from targetNucleus(MeV)= " << mass/MeV << G4endl;
-  mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
-  G4cout << "Mass from IonTable(MeV)=      " << mass/MeV << G4endl;
+  G4cout << "Mass from targetNucleus(GeV)= " << mass/GeV << G4endl;
+  G4double mass1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
+  G4cout << "Mass from IonTable(GeV)=      " << mass1/GeV << G4endl;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

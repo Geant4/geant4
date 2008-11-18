@@ -66,6 +66,10 @@ public:
 
   G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
 
+  void SetDeExcitation(G4ExcitationHandler* p) {theDeExcitation = p;};
+
+  void SetPreCompound(G4PreCompoundModel* p) {thePreCompound = p;};
+
   void SetA(G4int A) {if(theProcess) theProcess->SetA(A);};
 
 //    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};

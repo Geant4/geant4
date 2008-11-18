@@ -49,10 +49,12 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
+class G4PreCompoundModel;
+
 class HsQGSBInterface : public G4VIntraNuclearTransportModel
 {
 public:
-  HsQGSBInterface();
+  HsQGSBInterface(G4PreCompoundModel*);
 
   virtual ~HsQGSBInterface();
 
