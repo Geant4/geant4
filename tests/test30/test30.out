@@ -1,0 +1,133 @@
+========================================================
+======        Cascade Test (test30) Start       ========
+========================================================
+Next line //---------------------------------------
+Next line //
+Next line Macro
+Next line file
+Next line for
+Next line test30
+Next line //
+Next line examine
+Next line PostStepDoIt
+Next line //
+Next line for
+Next line hadronic
+Next line physics
+Next line //
+Next line Created:
+Next line 13.03.2002
+Next line V.Ivanchenko
+Next line //---------------------------------------
+Next line #verbose
+Next line #events
+Next line //--------Proton_processes
+Next line #particle
+Next line //--------
+Next line #material
+Next line #targetA
+Next line #energy(MeV)
+Next line #emax(MeV)
+Next line #nbinse
+Next line #nbinsd
+Next line #elim(MeV)
+Next line #nangle
+Next line #angles
+Next line #dangle
+Next line //--------
+Next line #generator
+Next line #paw
+Next line #run
+###### Start new run # 0   for 10 events  #####
+### NIST DataBase for Materials is used
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Zr
+G4NistMaterialBuilder: BuildMaterial #39
+New material nComponents= 1
+G4NistElementBuilder: Build Element <Zr>  Z= 4.000000e+01  A= 9.122363e+01  with natural isotope composition
+Material is selected: G4_Zr
+Test30Physics entry
+Process is created; gen= binary
+Deexcitation handler is readybinary
+New generator and material= G4_Zr Nelm= 1 Nmat= 1
+Secondary generator <binary> is initialized
+Nucleus with N= 94  Z= 40  9.131840e+01
+Mass from targetNucleus(GeV)= 8.745283e+01
+Mass from IonTable(GeV)=      8.745283e+01
+The particle:  proton
+The material:  G4_Zr Z= 40 A= 94  Amax= 95
+The step:      1.000000e-05 mm
+The position:  (0.000000e+00,0.000000e+00,0.000000e+00) mm
+The direction: (0.000000e+00,0.000000e+00,1.000000e+00)
+The time:      0.000000e+00 ns
+energy = 2.220000e+01 MeV
+emax   = 2.500000e+01 MeV
+pmax   = 2.053098e+02 MeV
+### Log10 scale from -2.000000e+00 to 2.000000e+00 in 80 bins
+### Histo books 57 histograms in <bic.root>
+[Histo::book] File created: bic.root
+Histograms are booked output file <bic> 
+### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
+Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
+##### 0-th event  #####
+Energy/Momentum balance= (1.356687e-09,-3.516950e-10,-2.623423e-09;-2.643584e-03)
+Energy/Momentum balance= (5.094165e-10,-3.567280e-10,8.566303e-10;-4.252584e-03)
+Energy/Momentum balance= (-2.826297e-09,7.034771e-09,-8.874132e-09;3.084520e-04)
+Energy/Momentum balance= (1.619204e-10,3.598105e-10,-1.172785e-09;-2.426981e-04)
+Energy/Momentum balance= (-1.355865e-09,-4.347562e-10,-3.626866e-09;3.725253e-03)
+Energy/Momentum balance= (1.142513e-09,-5.252180e-10,-3.295532e-09;1.406529e-03)
+Energy/Momentum balance= (1.165812e-11,-2.849313e-10,2.380959e-09;-1.100349e-03)
+Energy/Momentum balance= (-1.054367e-09,-5.753472e-10,3.301219e-09;-6.053930e-04)
+Energy/Momentum balance= (2.506373e-11,-1.074776e-10,1.292065e-09;4.993963e-04)
+Energy/Momentum balance= (-3.660134e-10,-9.614406e-10,-2.913559e-09;-3.025696e-03)
+  User=2.000000e-02s Real=2.000000e-02s Sys=0.000000e+00s
+###### Save histograms
+[Histo::save] ROOT: file writing <bic.root>
+[Histo::save] ROOT: files closing...
+###### End of run # 0     ######
+Next line #generator
+Next line #paw
+Next line #run
+###### Start new run # 1   for 10 events  #####
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Zr
+Material is selected: G4_Zr
+Test30Physics entry
+Process is created; gen= bertini
+Deexcitation handler is readybertini
+New generator and material= G4_Zr Nelm= 1 Nmat= 1
+Secondary generator <bertini> is initialized
+Nucleus with N= 94  Z= 40  9.131840e+01
+Mass from targetNucleus(GeV)= 8.745283e+01
+Mass from IonTable(GeV)=      8.745283e+01
+The particle:  proton
+The material:  G4_Zr Z= 40 A= 94  Amax= 95
+The step:      1.000000e-05 mm
+The position:  (0.000000e+00,0.000000e+00,0.000000e+00) mm
+The direction: (0.000000e+00,0.000000e+00,1.000000e+00)
+The time:      0.000000e+00 ns
+energy = 2.220000e+01 MeV
+emax   = 2.500000e+01 MeV
+pmax   = 2.053098e+02 MeV
+### Log10 scale from -2.000000e+00 to 2.000000e+00 in 80 bins
+### Histo books 57 histograms in <bert.root>
+[Histo::book] File created: bert.root
+Histograms are booked output file <bert> 
+### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
+Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
+##### 0-th event  #####
+Energy/Momentum balance= (-7.325543e-06,-1.075230e-04,-1.746335e-04;-1.463369e-01)
+Energy/Momentum balance= (3.054151e-04,3.678842e-06,-1.000873e-05;-2.163691e-01)
+Energy/Momentum balance= (-1.056118e-04,-2.425757e-05,-4.406644e-05;-9.560618e-02)
+Energy/Momentum balance= (-2.766299e-04,1.586161e-04,5.579118e-05;-2.270459e-01)
+Energy/Momentum balance= (1.227539e-04,-2.337010e-04,5.948458e-05;-7.651766e-02)
+Energy/Momentum balance= (1.174171e-04,1.542718e-04,-8.923229e-05;-2.248126e-01)
+Energy/Momentum balance= (-1.598432e-05,-4.209101e-04,1.465253e-05;5.025685e-02)
+Energy/Momentum balance= (1.532690e-04,-6.130308e-04,-7.050834e-05;-5.040259e-01)
+Energy/Momentum balance= (-2.444286e-05,-1.596243e-04,9.621564e-05;-2.457944e-01)
+Energy/Momentum balance= (-4.297281e-05,1.014020e-04,-1.046672e-04;-2.852680e-01)
+  User=1.000000e-02s Real=1.000000e-02s Sys=0.000000e+00s
+###### Save histograms
+[Histo::save] ROOT: file writing <bert.root>
+[Histo::save] ROOT: files closing...
+###### End of run # 1     ######
+Next line #exit
+###### End of test #####
