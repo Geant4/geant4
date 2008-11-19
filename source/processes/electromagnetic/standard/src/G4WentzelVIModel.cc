@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.15 2008-10-29 14:15:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.16 2008-11-19 11:47:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -277,11 +277,11 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   // i.e. when it is needed for optimization purposes
   if(stepStatus != fGeomBoundary && presafety < tlimitminfix) 
     presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
-
-  //  G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit tlimit= " 
-  //	 <<tlimit<<" safety= " << presafety
-  //	 << " range= " <<currentRange<<G4endl;
-
+  /*
+  G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit tlimit= " 
+ 	 <<tlimit<<" safety= " << presafety
+  	 << " range= " <<currentRange<<G4endl;
+  */
   // far from geometry boundary
   if(currentRange < presafety) {
     inside = true;  
@@ -386,10 +386,10 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   
   G4double x1 = 0.5*tPathLength/lambdaeff;
   G4double cut= (*currentCuts)[currentMaterialIndex];
-  /*
+  /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy<<" Eeff(MeV)= "<<ekin/MeV
 	 << " L0= " << lambda0 << " Leff= " << lambdaeff 
-	 << " x1= " << x1 << G4endl;
+	 << " x1= " << x1 << " safety= " << safety << G4endl;
   */
 
   G4double xsec = 0.0;
@@ -464,8 +464,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       z = -x1*log(G4UniformRand());
     } while (z > 1.0); 
     cost = 1.0 - 2.0*z;
-    if(cost < -1.0) cost = -1.0;
-    else if(cost > 1.0) cost = 1.0;
+    if(std::abs(cost) > 1.0) cost = 1.0;
+
     sint = sqrt((1.0 - cost)*(1.0 + cost));
     phi  = twopi*G4UniformRand();
 
@@ -542,47 +542,49 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   fParticleChange->ProposeMomentumDirection(newDirection);
 
   if (latDisplasment && safety > tlimitminfix) {
-    G4double rms = sqrt(2.0*x1);
-    G4double dx = zPathLength*(0.5*dirx + invsqrt12*G4RandGauss::shoot(0.0,rms));
-    G4double dy = zPathLength*(0.5*diry + invsqrt12*G4RandGauss::shoot(0.0,rms));
+    G4double rms = invsqrt12*sqrt(2.0*x1);
+    G4double dx = zPathLength*(0.5*dirx + rms*G4RandGauss::shoot(0.0,1.0));
+    G4double dy = zPathLength*(0.5*diry + rms*G4RandGauss::shoot(0.0,1.0));
     G4double dz;
     G4double d = (dx*dx + dy*dy)/(zPathLength*zPathLength);
-    if(d < numlimit)  dz = -zPathLength*d*(1.0 + 0.25*d);
-    else if(d >= 1.0) dz = -zPathLength;
-    else              dz = -zPathLength*(1.0 - sqrt(1.0 - d));
+    if(d < numlimit)  dz = -0.5*zPathLength*d*(1.0 + 0.25*d);
+    else if(d < 1.0)  dz = -zPathLength*(1.0 - sqrt(1.0 - d));
+    else {
+      dx = dy = dz = 0.0;
+    }
 
     temp.set(dx,dy,dz);
     if(isscat) temp.rotateUz(dir);
     pos += temp;
+   
     pos.rotateUz(oldDirection);
 
-    G4double r2 = pos.mag2();
-    G4double r  = sqrt(r2);
-    /*
+    G4double r = pos.mag();
+
+    /*    
     G4cout << " r(mm)= " << r << " safety= " << safety
            << " trueStep(mm)= " << tPathLength
            << " geomStep(mm)= " << zPathLength
            << G4endl;
     */
 
-    G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
-    G4double fac= 1.;
-    if(r > safety) {
-      //  ******* so safety is computed at boundary too ************
-      G4double newsafety = safetyHelper->ComputeSafety(Position);
-      if(r > newsafety) fac = newsafety/r ;
-    }  
+    if(r > tlimitminfix) {
+      G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
+      G4double fac= 1.;
+      if(r >= safety) {
+	//  ******* so safety is computed at boundary too ************
+	G4double newsafety = 
+	  safetyHelper->ComputeSafety(Position) - tlimitminfix;
+        if(newsafety <= 0.0) fac = 0.0;
+	else if(r > newsafety) fac = newsafety/r ;
+        //G4cout << "NewSafety= " << newsafety << " fac= " << fac 
+	// << " r= " << r << " sint= " << sint << " pos " << Position << G4endl;
+      }  
 
-    if(fac > 0.) {
-      // compute new endpoint of the Step
-      //      G4ThreeVector newPosition = Position + fac*displacement;
-      G4ThreeVector newPosition = Position + fac*pos;
+      if(fac > 0.) {
+	// compute new endpoint of the Step
+	G4ThreeVector newPosition = Position + fac*pos;
 
-      // definitely not on boundary
-      if(1. == fac) {
-	safetyHelper->ReLocateWithinVolume(newPosition);
-	    
-      } else {
 	// check safety after displacement
 	G4double postsafety = safetyHelper->ComputeSafety(newPosition);
 
@@ -593,10 +595,12 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	  // not on the boundary
 	} else { 
 	  safetyHelper->ReLocateWithinVolume(newPosition);
+	  // if(fac < 1.0) G4cout << "NewPosition " << newPosition << G4endl;
 	}
-      }
-      fParticleChange->ProposePosition(newPosition);
-    } 
+     
+	fParticleChange->ProposePosition(newPosition);
+      } 
+    }
   }
   //G4cout << "G4WentzelVIModel::SampleScattering end" << G4endl;
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.428 2008-11-13 19:28:58 vnivanch Exp $
+$Id: History,v 1.429 2008-11-19 11:47:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 November 08: V.Ivant (emstand-V09-01-44)
+G4WentzelVIModel - minor fix in lateral displacement
 
 13 November 08: A. Schaelicke (emstand-V09-01-43)
 G4eBremsstrahlung - activate LPM switch for high energy model
