@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.10 2008-07-29 15:55:44 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.11 2008-11-19 15:42:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,14 +86,14 @@ void PhysListEmStandardIG::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
             
@@ -102,8 +102,8 @@ void PhysListEmStandardIG::ConstructProcess()
       //muon  
       pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,   -1,-4, 4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
              
     } else if (particleName == "alpha" || particleName == "He3") {
@@ -130,11 +130,11 @@ void PhysListEmStandardIG::ConstructProcess()
   G4EmProcessOptions opt;
   //  opt.SetSubCutoff(true);
   opt.SetMinEnergy(0.1*keV);
-  opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(90);
-  opt.SetLambdaBinning(90);
-  opt.SetLinearLossLimit(1.e-2);
-  opt.SetSplineFlag(true);
+  opt.SetMaxEnergy(10.*GeV);
+  opt.SetDEDXBinning(56);
+  opt.SetLambdaBinning(56);
+  //  opt.SetLinearLossLimit(1.e-2);
+  // opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(0.2);
 }
 
