@@ -24,11 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.7 2008-07-25 11:20:47 vnivanch Exp $
+// $Id: G4StatMFMacroCanonical.cc,v 1.8 2008-11-19 14:33:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 // --------------------------------------------------------------------
+//
+// Modified:
+// 25.07.08 I.Pshenichnov (in collaboration with Alexander Botvina and Igor 
+//          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
+//          Moscow, pshenich@fias.uni-frankfurt.de) fixed infinite loop for 
+//          a fagment with Z=A; fixed memory leak
 
 #include "G4StatMFMacroCanonical.hh"
 

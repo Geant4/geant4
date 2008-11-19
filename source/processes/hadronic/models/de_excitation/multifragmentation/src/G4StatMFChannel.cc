@@ -24,11 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.9 2008-11-06 08:14:42 dennis Exp $
+// $Id: G4StatMFChannel.cc,v 1.10 2008-11-19 14:33:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 25.07.08 I.Pshenichnov (in collaboration with Alexander Botvina and Igor 
+//          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
+//          Moscow, pshenich@fias.uni-frankfurt.de) fixed semi-infinite loop 
+
 
 #include "G4StatMFChannel.hh"
 #include "G4HadronicException.hh"

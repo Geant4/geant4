@@ -14,6 +14,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2008 V.Ivanchenko (hadr-deex-V09-01-21)
+- added comments to modifications of MF model
+
 19 November 2008 Alexander Howard (hadr-deex-V09-01-20)
 -----------------------------------------------------
 - Switched OFF FermiBreakUp by default.
@@ -62,7 +65,11 @@ interface changes), management (G4VEvaporationChannel.hh (interface)), util
 
 25 July 2008 V.Ivanchenko (hadr-deex-V09-01-12)
 ---------------------------------------------------
-Multi-Fragmentation model have been fixed by I.Pshenichnov:
+Multi-Fragmentation model have been fixed by I.Pshenichnov in collaboration 
+with Alexander Botvina and Igor Mishustin (FIAS, Frankfurt, INR,
+Moscow and Kurchatov Institute, Moscow, pshenich@fias.uni-frankfurt.de)
+
+G4StatMFMacroTemperature - return original algorithm
 G4StatMFMacroMultiplicity - additional checks in solver of equation
                             for the chemical potential
 G4StatMFMacroCanonical - fixed infinite loop for a fagment with Z=A;
