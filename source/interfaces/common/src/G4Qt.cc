@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.11 2008-11-06 10:06:33 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.12 2008-11-19 16:11:52 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -121,9 +121,9 @@ G4Qt::G4Qt (
       int *p_argn = (int*)malloc(sizeof(int));
       *p_argn = argn;
 #if QT_VERSION < 0x040000
-      qApp = new QApplication (argn, args);
+      qApp = new QApplication (*p_argn, args);
 #else
-      new QApplication (argn, args);
+      new QApplication (*p_argn, args);
 #endif
       if(!qApp) {
         
