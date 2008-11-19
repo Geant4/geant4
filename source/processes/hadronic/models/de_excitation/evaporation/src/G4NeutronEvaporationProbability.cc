@@ -192,6 +192,10 @@ G4double G4NeutronEvaporationProbability::GetOpt34(const  G4double K)
   landa = landa0/ResidualAthrd + landa1;
   mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
   nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2;
+
+  // JMQ very low energy behaviour corrected (problem  for A (apprx.)>60)
+  if (nu < 0.)nu=-nu;
+
   ec = 0.5;
   ecsq = 0.25;
   p = p0;

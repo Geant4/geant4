@@ -221,9 +221,9 @@ G4double G4EvaporationChannel::CalcMaximalKineticEnergy(const G4double NucleusTo
   G4double Tmax = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - 		
                    ResidualMass*ResidualMass)/(2.0*NucleusTotalE) - EvaporatedMass;
   
-  //JMQ (13-09-08) bug fixed: in the original version the Tmax is caculated
+  //JMQ (13-09-08) bug fixed: in the original version the Tmax is calculated
   //at the Coulomb barrier
-  //IMPORTANT: meaning of Tmax differs from OPTxs=0 and OPTxs!=0
+  //IMPORTANT: meaning of Tmax differs in OPTxs=0 and OPTxs!=0
   //When OPTxs!=0 Tmax is the TRUE (assimptotic) maximal kinetic energy
   
   if(OPTxs==0) 
