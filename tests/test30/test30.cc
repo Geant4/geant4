@@ -157,7 +157,13 @@ int main(int argc, char** argv)
   G4double costmax   = -1.0;
   G4double xxl       = 100.;
   G4double kBound    = 0.2;
+
+  G4double rmsProton = 0.0;
+  G4double rmsNeutron= 0.0;
+  G4double rmsPion   = 0.0;
+
   G4Material* material = 0;
+
   G4bool nevap = false;
   G4bool gtran = false;
   G4bool gemis = false;
@@ -395,6 +401,12 @@ int main(int argc, char** argv)
       } else if(line == "#exit") {
         end = false;
         break;
+      } else if(line == "#rmsEp") {
+        (*fin) >> rmsProton;
+      } else if(line == "#rmsEn") {
+        (*fin) >> rmsNeutron;
+      } else if(line == "#rmsEpi") {
+        (*fin) >> rmsPion;
       } else if(line == "#HETCEmission") {
         gemis = true;
       } else if(line == "#GNASHTransition") {
@@ -407,19 +419,23 @@ int main(int argc, char** argv)
       }
       else if(line == "#UseSuperImposedCoulombBarrier") {
         useSICB=true;
-        G4cout<<" Coulomb Barrier has been overimposed to ALL inverse cross sections"<<G4endl;
+        G4cout<<" Coulomb Barrier has been overimposed to ALL inverse cross sections"
+	      <<G4endl;
       }
       else if(line == "#UseNeverGoBack") {
         useNGB=true;
-        G4cout<<" Never Go Back hypothesis has been assumed at preequilibrium"<<G4endl;
+        G4cout<<" Never Go Back hypothesis has been assumed at preequilibrium"
+	      <<G4endl;
       }
       else if(line == "#UseSoftCutOff") {
         useSCO=true;
-        G4cout<<" Soft Cut Off  hypothesis has been assumed at preequilibrium"<<G4endl;
+        G4cout<<" Soft Cut Off  hypothesis has been assumed at preequilibrium"
+	      <<G4endl;
       }
       else if(line == "#UseCEMTransitions") {
         useCEMtr=true;
-        G4cout<<" Transition probabilities at preequilibrium based on CEM model"<<G4endl;
+        G4cout<<" Transition probabilities at preequilibrium based on CEM model"
+	      <<G4endl;
       }      
     } while(end);
 
@@ -473,17 +489,17 @@ int main(int argc, char** argv)
 	OPTxs = 3;
       }
      
-      //thePreCompound->SetOPTxs(OPTxs);
+      thePreCompound->SetOPTxs(OPTxs);
       theDeExcitation->SetOPTxs(OPTxs);
        
       if (useSICB) 
 	{
-	  //thePreCompound->UseSICB();
+	  thePreCompound->UseSICB();
 	  theDeExcitation->UseSICB();
 	}
-      //if (useNGB) thePreCompound->UseNGB();
-      //if (useSCO) thePreCompound->UseSCO();
-      //if (useCEMtr) thePreCompound->UseCEMtr();
+      if (useNGB) thePreCompound->UseNGB();
+      if (useSCO) thePreCompound->UseSCO();
+      if (useCEMtr) thePreCompound->UseCEMtr();
       phys->SetPreCompound(thePreCompound); 
       phys->SetDeExcitation(theDeExcitation); 
     }
@@ -975,6 +991,7 @@ int main(int argc, char** argv)
 
           if(pd == proton) {
 
+            if(rmsProton > 0.0) e += e*rmsProton*G4RandGauss::shoot(0.0,1.0);
             histo.fill(1,1.0, 1.0);
 	    histo.fill(21,e/MeV, factor);
 	    histo.fill(24,cost, factora);
@@ -987,6 +1004,7 @@ int main(int argc, char** argv)
 
           } else if(pd == pin) {
 
+            if(rmsPion > 0.0) e += e*rmsPion*G4RandGauss::shoot(0.0,1.0);
 	    histo.fill(1,4.0, 1.0);
             histo.fill(20,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
@@ -998,6 +1016,7 @@ int main(int argc, char** argv)
 
           } else if(pd == pip) {
 
+            if(rmsPion > 0.0) e += e*rmsPion*G4RandGauss::shoot(0.0,1.0);
 	    histo.fill(1,3.0, 1.0);
             histo.fill(19,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
@@ -1014,6 +1033,7 @@ int main(int argc, char** argv)
 
 	  } else if(pd == neutron) {
 
+            if(rmsNeutron > 0.0) e += e*rmsNeutron*G4RandGauss::shoot(0.0,1.0);
 	    histo.fill(1,2.0, 1.0);
 	    histo.fill(22,e/MeV, factor);
             G4double ee = std::log10(e/MeV);
