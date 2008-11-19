@@ -57,7 +57,8 @@
 
 G4ExcitationHandler::G4ExcitationHandler():
   // Fermi BreakUp is on and MultiFrag is off by default
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
+  //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
+  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          
