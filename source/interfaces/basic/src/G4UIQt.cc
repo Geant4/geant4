@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.22 2008-11-06 10:06:33 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.23 2008-11-19 13:53:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -223,7 +223,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QPopupMenu *fileMenu = new QPopupMenu( fMainWindow);
-  fileMenu->insertItem( "&Quitter",  this, SLOT(ExitSession()), CTRL+Key_Q );
+  fileMenu->insertItem( "&Quit",  this, SLOT(ExitSession()), CTRL+Key_Q );
   fMainWindow->menuBar()->insertItem( QString("&File"), fileMenu );
 
   // Add a Help menu
@@ -236,7 +236,7 @@ G4UIQt::G4UIQt (
 
   // Add a quit subMenu
   QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
-  fileMenu->addAction("Quitter", this, SLOT(ExitSession()));
+  fileMenu->addAction("Quit", this, SLOT(ExitSession()));
 
   // Add a Help menu
   QMenu *helpMenu = fMainWindow->menuBar()->addMenu("Help");
