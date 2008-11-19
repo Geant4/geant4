@@ -17,7 +17,7 @@ code and to keep track of all tags.
 22 August 2008 -  V.Ivanchenko (hadr-cohe-V09-01-06)
 ----------------------------------------------------
   - set process sub-types according to enumerator for G4UHadronElasticProcess 
-    and 16 for G4ChargeExchangeProcess
+    and for G4ChargeExchangeProcess
 
 05 August 2008 -  V.Ivanchenko (hadr-cohe-V09-01-05)
 ----------------------------------------------------

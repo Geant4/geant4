@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.12 2008-10-22 08:16:40 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.13 2008-11-19 18:28:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,6 +129,7 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
       factors = new G4PhysicsLinearVector(0.0,3.6*GeV,n);
       for(size_t i=0; i<n; i++) {factors->PutValue(i,F[i]);}
     }
+    factors->SetSpline(true);
 
     if(verboseLevel>1)
       G4cout << "G4ChargeExchangeProcess for "
