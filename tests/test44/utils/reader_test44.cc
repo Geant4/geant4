@@ -49,7 +49,8 @@ int main(int argc, char** argv)
   double x[nbin], y[nbin];
 
   //  const int n_exp = 41;
-  int n_exp[nidx] = {41, 25, 79};
+  //  int n_exp[nidx] = {41, 25, 79};
+  int n_exp[nidx] = {39, 25, 76};
   int nn = n_exp[idx];
   double *x_exp = new double[nn];
   double *y_exp = new double[nn];
@@ -80,7 +81,7 @@ int main(int argc, char** argv)
 
   for (int i=0; i<nn; i++) {
     in >> x_exp[i] >> y_exp[i];
-    if (!in.good()) break;
+    //    if (!in.good() ||y_exp[i] == 0.0 ) break;
     x_exp[i] = 10.*x_exp[i];
   }
 
@@ -89,7 +90,7 @@ int main(int argc, char** argv)
     teu[idx] + " " + "in Water, Geant4  " + refer;
 
   cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << endl;
-
+  /*
   TH1  *h = new TH2F("h", hist_title.c_str(),100,0,x_max,11,0,1.1);
   h->SetLineStyle(2);
   h->GetYaxis()->SetLabelFont(132);
@@ -100,7 +101,7 @@ int main(int argc, char** argv)
   h->GetYaxis()->SetTitle("dE/dx, arb. units");
   h->GetYaxis()->SetTitleOffset(1.2);
   h->Draw();
-
+  */
   TGraph *gr = new TGraph(nn,x_exp,y_exp);
   gr->SetMarkerStyle(22);
   gr->SetMarkerSize(1.2);
