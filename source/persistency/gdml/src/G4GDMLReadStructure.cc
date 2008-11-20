@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.51 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.52 2008-11-20 15:37:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -225,7 +225,7 @@ FileRead(const xercesc::DOMElement* const fileElement)
       if (attName=="volname") { volname = attValue; }
    }
 
-   const bool IsModule = true;
+   const G4bool IsModule = true;
    G4GDMLReadStructure structure;
    structure.Read(name,Validate,IsModule);
 
