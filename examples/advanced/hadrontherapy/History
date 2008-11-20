@@ -10,6 +10,8 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
      ====================================================
 
                       Category History file
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-11
+	   - Fixed path of macro files
 
 20.11.2008: G.A.P.Cirrone; Tag: hadrontherapy-V09-01-10
            - Updated the History file
