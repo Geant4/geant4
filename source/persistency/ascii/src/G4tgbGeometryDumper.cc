@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.6 2008-11-12 08:44:14 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgbGeometryDumper
 
@@ -63,13 +60,15 @@
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
 #include "G4PVPlacement.hh"
+#include "G4PVParameterised.hh"
+#include "G4PVReplica.hh"
 #include "G4BooleanSolid.hh"
 #include "G4ReflectionFactory.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryTolerance.hh"
-
+#include "G4VPVParameterisation.hh"
 #include <iomanip>
 
 //------------------------------------------------------------------------
@@ -148,25 +147,41 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
   if( reffact->IsReflected( lv )
    && reffact->IsReflected( pv->GetMotherLogical() ) )  { return; }
 
+
   G4bool bVolExists = CheckIfLogVolExists( lv->GetName(), lv );
-  if( !bVolExists )
+      
+  //---- Construct this PV
+  if( pv->GetMotherLogical() != 0 )   // not WORLD volume
+  {
+    if( !pv->IsReplicated() ) 
+    { 
+      G4String lvName = lv->GetName();
+      if( !bVolExists )
+      {
+	lvName = DumpLogVol( lv );
+      }
+      DumpPVPlacement( pv, lvName );
+    } 
+    else if( pv->IsParameterised() ) 
+    {
+      G4PVParameterised* pvparam = (G4PVParameterised*)(pv);
+      DumpPVParameterised( pvparam );
+    } 
+    else 
+    {
+      G4String lvName = lv->GetName();
+      if( !bVolExists )
+      {
+	lvName = DumpLogVol( lv );
+      }
+      G4PVReplica* pvrepl = (G4PVReplica*)(pv);
+      DumpPVReplica( pvrepl, lvName );
+    }
+    
+  }
+  else 
   {
     DumpLogVol( lv );
-  }
-
-  //---- Construct this PV
-  if( pv->GetMotherLogical() != 0 )   // WORLD volume
-  {
-    if( pv->IsReplicated() || pv->IsParameterised() )
-    {
-      G4String ErrMessage = "Only G4PVPlacement is supported yet, sorry... "
-                          + pv->GetName();
-      G4Exception("G4tgbGeometryDumper::DumpPlacements()", "NotImplemented",
-                  FatalException, ErrMessage);
-    }
-
-    DumpPVPlacement( pv );
-    
   }
 
   if( !bVolExists )
@@ -182,66 +197,57 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
 }
 
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv )
+void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvName, G4int copyNo )
 {
   G4String pvName = pv->GetName();
   
   G4RotationMatrix* rotMat = pv->GetRotation();
   if( !rotMat ) rotMat = new G4RotationMatrix();
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " G4tgbGeometryDumper::DumpPhysVol() - PV RotationMatrix: "
-             << rotMat << G4endl;
-    }
-#endif
   
   //---- Check if it is reflected
   G4ReflectionFactory* reffact = G4ReflectionFactory::Instance();
   G4LogicalVolume* lv = pv->GetLogicalVolume();
   if( reffact->IsReflected( lv ) )
-    {
+  {
 #ifdef G4VERBOSE
-      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	{
-	  G4cout << " G4tgbGeometryDumper::DumpPhysVol() - Reflected volume: "
-		 << pv->GetName() << G4endl;
-	}
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+      {
+	G4cout << " G4tgbGeometryDumper::DumpPVPlacement() - Reflected volume: "
+	       << pv->GetName() << G4endl;
+      }
 #endif
-      CLHEP::Hep3Vector colx = rotMat->colX();
-      CLHEP::Hep3Vector coly = rotMat->colY();
-      CLHEP::Hep3Vector colz = rotMat->colZ();
-      // apply a Z reflection (reflection matrix is decomposed in new
-      // reflection-free rotation + z-reflection)
-      colz *= -1.;
-      CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),
-                               colx.y(),coly.y(),colz.y(),
-                               colx.z(),coly.z(),colz.z());
+    CLHEP::Hep3Vector colx = rotMat->colX();
+    CLHEP::Hep3Vector coly = rotMat->colY();
+    CLHEP::Hep3Vector colz = rotMat->colZ();
+    // apply a Z reflection (reflection matrix is decomposed in new
+    // reflection-free rotation + z-reflection)
+    colz *= -1.;
+    CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),
+			     colx.y(),coly.y(),colz.y(),
+			     colx.z(),coly.z(),colz.z());
       // matrix representation (inverted)
-      *rotMat = G4RotationMatrix(rottemp);
-      *rotMat = (*rotMat).inverse();
-      pvName += "_refl";
-    }
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " G4tgbGeometryDumper::DumpPhysVol() -"
-             << " Calling DumpRotationMatrix :" << rotMat << G4endl;
-    }
-#endif
+    *rotMat = G4RotationMatrix(rottemp);
+    *rotMat = (*rotMat).inverse();
+    pvName += "_refl";
+  }
   G4String rotName = DumpRotationMatrix( rotMat );
   G4ThreeVector pos = pv->GetTranslation();
-  
+
+  if( copyNo == -999 ) //for parameterisations copy number is provided 
+  {
+    copyNo = pv->GetCopyNo();
+  }
+
   G4String fullname = pvName
-    +"#"+itoa(pv->GetCopyNo())
+    +"#"+itoa(copyNo)
     +"/"+pv->GetMotherLogical()->GetName();
   
   if( !CheckIfPhysVolExists(fullname, pv ))
     {
       (*theFile)
 	<< ":PLACE "
-	<< SubstituteRefl(AddQuotes(pv->GetLogicalVolume()->GetName()))
-	<< " " << pv->GetCopyNo() << " "
+	<< SubstituteRefl(AddQuotes(lvName))
+	<< " " << copyNo << " "
 	<< SubstituteRefl(AddQuotes(pv->GetMotherLogical()->GetName()))
 	<< " " << AddQuotes(rotName) << " " 
            << pos.x() << " " << pos.y() << " " << pos.z() << G4endl;
@@ -250,37 +256,241 @@ void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv )
     }
 }
 
+
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv )
+void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
 {
+  G4String pvName = pv->GetName();
+  
+  EAxis axis;
+  G4int nReplicas;
+  G4double width;
+  G4double offset;
+  G4bool consuming;
+  pv->GetReplicationData(axis, nReplicas, width, offset, consuming);
 
-  G4VSolid* solid;
-  //--- take out the '_refl' in the name
-  G4String lvName = GetObjectName(lv,theLogVols);
- if( theLogVols.find( lvName ) != theLogVols.end() ) return; // alredy dumped
+  G4VPVParameterisation* param = pv->GetParameterisation();
 
-  solid = lv->GetSolid();
-  //---- Dump solid 
-  DumpSolid( solid );
+  G4LogicalVolume* lv = pv->GetLogicalVolume();
+  G4VSolid*  solid1st = param->ComputeSolid(0, pv);
+  G4Material* mate1st = param->ComputeMaterial(0, pv );
+  std::vector<G4double> params1st = GetSolidParams( solid1st );
+  std::vector<G4double> newParams;
+  G4VSolid* newSolid = solid1st;
+  G4String lvName;
+      
+  G4cout << " DUMPPARAM " << pv->GetName() << " nrep " << nReplicas << " width " << width << " offset " << offset << G4endl;
+  for( G4int ii = 0; ii < nReplicas; ii++ )
+  {
+    G4Material* newMate = param->ComputeMaterial(ii, pv );
+    if( solid1st->GetEntityType() == "G4Box") 
+    {
+      G4Box* box = (G4Box*)(solid1st);
+      param->ComputeDimensions(*box, ii, pv );
+      newParams = GetSolidParams( box );
+      newSolid = (G4VSolid*)box;
+    } 
+    else if( solid1st->GetEntityType() == "G4Tubs") 
+    {
+      G4Tubs* tubs = (G4Tubs*)(solid1st);
+      param->ComputeDimensions(*tubs, ii, pv );
+      newParams = GetSolidParams( tubs );
+      newSolid = (G4VSolid*)tubs;
+    }
+    else if( solid1st->GetEntityType() == "G4Trd") 
+    {
+      G4Trd* trd = (G4Trd*)(solid1st);
+      param->ComputeDimensions(*trd, ii, pv );
+      newParams = GetSolidParams( trd );
+      newSolid = (G4VSolid*)trd;
+    }
+    else if( solid1st->GetEntityType() == "G4Trap") 
+    {
+      G4Trap* trap = (G4Trap*)(solid1st);
+      param->ComputeDimensions(*trap, ii, pv );
+      newParams = GetSolidParams( trap );
+      newSolid = (G4VSolid*)trap;
+    }
+    else if( solid1st->GetEntityType() == "G4Cons") 
+    {
+      G4Cons* cons = (G4Cons*)(solid1st);
+      param->ComputeDimensions(*cons, ii, pv );
+      newParams = GetSolidParams( cons );
+      newSolid = (G4VSolid*)cons;
+    }
+    else if( solid1st->GetEntityType() == "G4Sphere") 
+    {
+      G4Sphere* sphere = (G4Sphere*)(solid1st);
+      param->ComputeDimensions(*sphere, ii, pv );
+      newParams = GetSolidParams( sphere );
+      newSolid = (G4VSolid*)sphere;
+    }
+    else if( solid1st->GetEntityType() == "G4Orb") 
+    {
+      G4Orb* orb = (G4Orb*)(solid1st);
+      param->ComputeDimensions(*orb, ii, pv );
+      newParams = GetSolidParams( orb );
+      newSolid = (G4VSolid*)orb;
+    }
+    else if( solid1st->GetEntityType() == "G4Torus") 
+    {
+      G4Torus* torus = (G4Torus*)(solid1st);
+      param->ComputeDimensions(*torus, ii, pv );
+      newParams = GetSolidParams( torus );
+      newSolid = (G4VSolid*)torus;
+    }
+    else if( solid1st->GetEntityType() == "G4Para") 
+    {
+      G4Para* para = (G4Para*)(solid1st);
+      param->ComputeDimensions(*para, ii, pv );
+      newParams = GetSolidParams( para );
+      newSolid = (G4VSolid*)para;
+    }
+    else if( solid1st->GetEntityType() == "G4Polycone") 
+    {
+      G4Polycone* polycone = (G4Polycone*)(solid1st);
+      param->ComputeDimensions(*polycone, ii, pv );
+      newParams = GetSolidParams( polycone );
+      newSolid = (G4VSolid*)polycone;
+    }
+    else if( solid1st->GetEntityType() == "G4Polyhedra") 
+    {
+      G4Polyhedra* polyhedra = (G4Polyhedra*)(solid1st);
+      param->ComputeDimensions(*polyhedra, ii, pv );
+      newParams = GetSolidParams( polyhedra );
+      newSolid = (G4VSolid*)polyhedra;
+    }
+    else if( solid1st->GetEntityType() == "G4Hype") 
+    {
+      G4Hype* hype = (G4Hype*)(solid1st);
+      param->ComputeDimensions(*hype, ii, pv );
+      newParams = GetSolidParams( hype );
+      newSolid = (G4VSolid*)hype;
+    }
+    if( ii == 0 || mate1st != newMate || params1st[0] != newParams[0] ) 
+    {
+      G4String extraName = "";
+      if( ii != 0 ) 
+      { 
+	extraName= "#"+itoa(ii)+"/"+pv->GetMotherLogical()->GetName();
+      }
+      lvName = DumpLogVol( lv, extraName, newSolid, newMate );
+    }
+    
+    param->ComputeTransformation(ii, pv);
+    DumpPVPlacement( pv, lvName, ii );
+  }
 
-  //---- Dump material
-  G4Material* mate = lv->GetMaterial();
-  DumpMaterial( mate );
+}
 
-  //---- Dump logical volume (solid + material)
-  (*theFile) << ":VOLU " << SubstituteRefl(AddQuotes(lvName)) << " "
-             << SupressRefl(AddQuotes(solid->GetName()))
-             << " " << AddQuotes(mate->GetName()) << G4endl;
+//------------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpPVReplica( G4PVReplica* pv, G4String lvName )
+{
+  EAxis axis;
+  G4int nReplicas;
+  G4double width;
+  G4double offset;
+  G4bool consuming;
+  pv->GetReplicationData(axis, nReplicas, width, offset, consuming);
+  G4String axisName;
+  switch (axis )
+  {
+  case kXAxis:
+    axisName = "X";
+    break;
+  case kYAxis:
+    axisName = "Y";
+    break;
+  case kZAxis:
+    axisName = "Z";
+    break;
+  case kRho:
+    axisName = "R";
+    break;
+  case kPhi:
+    axisName = "PHI";
+    break;
+  case kRadial3D:
+  case kUndefined: 
+          G4String ErrMessage =  "Unknown axis of replication for volume"
+	    +pv->GetName();
+	  G4Exception("G4tgbGeometryDumper::DumpPVReplica", 
+		      "Wrong axis ",
+		      FatalException, 
+		      ErrMessage);
+      break;
+  }
 
-  theLogVols[lvName] = lv;
+  G4String fullname = lvName
+    +"/"+pv->GetMotherLogical()->GetName();
+  
+  if( !CheckIfPhysVolExists(fullname, pv ))
+  {
+    (*theFile)
+      << ":REPL "
+      << SubstituteRefl(AddQuotes(lvName))
+      << " " << SubstituteRefl(AddQuotes(pv->GetMotherLogical()->GetName()))
+      << " " << axisName 
+      << " " << nReplicas;
+    if( axis != kPhi ) 
+    {
+    (*theFile)
+      << " " << width
+      << " " << offset << G4endl;    
+    } 
+    else
+    {
+    (*theFile)
+      << " " << width/deg << "*deg"
+      << " " << offset/deg << "*deg" << G4endl;    
+    }
+
+    thePhysVols[fullname] = pv;
+  }
+
 }
 
 
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
+G4String G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv, G4String extraName, G4VSolid* solid, G4Material* mate )
+{
+  G4String lvName;
+  //--- take out the '_refl' in the name
+  if( extraName == "" ) 
+  {
+    lvName = GetObjectName(lv,theLogVols);
+  } 
+  else 
+  {
+    lvName = lv->GetName()+extraName;
+  }
+
+  if( theLogVols.find( lvName ) != theLogVols.end() ) return lvName; // alredy dumped
+
+  if( !solid ) solid = lv->GetSolid(); 
+  //---- Dump solid 
+  G4String solidName = DumpSolid( solid, extraName );
+
+  //---- Dump material
+  if( !mate ) mate = lv->GetMaterial();
+  G4String mateName = DumpMaterial( mate );
+
+  //---- Dump logical volume (solid + material)
+  (*theFile) << ":VOLU " << SubstituteRefl(AddQuotes(lvName)) << " "
+             << SupressRefl(AddQuotes(solidName))
+             << " " << AddQuotes(mateName) << G4endl;
+
+  theLogVols[lvName] = lv;
+
+  return lvName;
+}
+
+
+//------------------------------------------------------------------------
+G4String G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
 {
   G4String mateName = GetObjectName(mat,theMaterials);
-  if( theMaterials.find( mateName ) != theMaterials.end() ) return; // alredy dumped
+  if( theMaterials.find( mateName ) != theMaterials.end() ) return mateName; // alredy dumped
 
   size_t numElements           = mat->GetNumberOfElements();
   G4double density             = mat->GetDensity()/g*cm3;
@@ -318,6 +528,7 @@ void G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
 
   theMaterials[mateName] = mat;
 
+  return mateName;
 }
 
 
@@ -381,10 +592,19 @@ void G4tgbGeometryDumper::DumpIsotope( G4Isotope* isot)
 
 
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpSolid( G4VSolid* solid )
+G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid, G4String extraName )
 {
-  G4String solidName = GetObjectName(solid,theSolids);
-  if( theSolids.find( solidName ) != theSolids.end() ) return; // alredy dumped
+  G4String solidName;
+  if( extraName == "" ) 
+  {
+    solidName = GetObjectName(solid,theSolids);
+  } 
+  else 
+  {
+    solidName = solid->GetName()+extraName;
+  }
+
+  if( theSolids.find( solidName ) != theSolids.end() ) return solidName; // alredy dumped
 
   G4String solidType = solid->GetEntityType();
   solidType = GetTGSolidType( solidType );
@@ -412,6 +632,8 @@ void G4tgbGeometryDumper::DumpSolid( G4VSolid* solid )
 
     theSolids[solidName] = solid;
   }
+
+  return solidName;
 }
 
 
@@ -519,12 +741,12 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 
   } else if (solidType == "TRD") {
     const G4Trd * tr = dynamic_cast < const G4Trd * > (so);
-    params.push_back( tr->GetZHalfLength());
-    params.push_back( tr->GetYHalfLength1() );
-    params.push_back( tr->GetYHalfLength2() ); 
     params.push_back( tr->GetXHalfLength1() );
     params.push_back( tr->GetXHalfLength2() );
-    
+    params.push_back( tr->GetYHalfLength1() );
+    params.push_back( tr->GetYHalfLength2() ); 
+    params.push_back( tr->GetZHalfLength());
+
   } else if (solidType == "PARA") {
     const G4Para * para = dynamic_cast < const G4Para * > (so);
     double phi;
@@ -730,7 +952,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
        params.push_back( ph->GetCorner(ii).z );
     }
 
-  } else if (solidType == "ELLIPTICAL_TUBE") {
+  } else if (solidType == "ELLIPTICALTUBE") {
     const G4EllipticalTube * eltu = dynamic_cast < const G4EllipticalTube * > (so);
     params.push_back( eltu->GetDx());
     params.push_back( eltu->GetDy());
@@ -757,14 +979,14 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 
 //  } else if( solidType == "TET" ) {
 
-  } else if( solidType == "TWISTED_BOX" ) {
+  } else if( solidType == "TWISTEDBOX" ) {
     const G4TwistedBox* tbox = dynamic_cast < const G4TwistedBox * > (so);
     params.push_back( tbox->GetPhiTwist()/deg );
     params.push_back( tbox->GetXHalfLength() );
     params.push_back( tbox->GetYHalfLength() );
     params.push_back( tbox->GetZHalfLength() );
 
-  } else if( solidType == "TWISTED_TRAP" ) {
+  } else if( solidType == "TWISTEDTRAP" ) {
     const G4TwistedTrap * ttrap = dynamic_cast < const G4TwistedTrap * > (so);
     params.push_back( ttrap->GetPhiTwist()/deg );
     params.push_back( ttrap->GetZHalfLength() );
@@ -778,7 +1000,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     params.push_back( ttrap->GetX4HalfLength()    );    
     params.push_back( ttrap->GetTiltAngleAlpha()/deg );
     
-  } else if( solidType == "TWISTED_TRD" ) {
+  } else if( solidType == "TWISTEDTRD" ) {
     const G4TwistedTrd * ttrd = dynamic_cast < const G4TwistedTrd * > (so);
     params.push_back( ttrd->GetX1HalfLength());
     params.push_back( ttrd->GetX2HalfLength() );
@@ -787,7 +1009,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     params.push_back( ttrd->GetZHalfLength() );
     params.push_back( ttrd->GetPhiTwist()/deg );
  
-  } else if( solidType == "TWISTED_TUBS" ) {
+  } else if( solidType == "TWISTEDTUBS" ) {
     const G4TwistedTubs * ttub = dynamic_cast < const G4TwistedTubs * > (so);
     params.push_back( ttub->GetInnerRadius()   );
     params.push_back( ttub->GetOuterRadius()   );
@@ -1024,19 +1246,19 @@ template< class TYP>
 G4String G4tgbGeometryDumper::GetObjectName( TYP* obj, std::map<G4String,TYP*> objectsDumped )
 {
   G4String objName = obj->GetName();
-  //first look if this is objope is already dumped, with original objope name or new one
+  //first look if this is objecy is already dumped, with original object name or new one
   typename std::map<G4String,TYP*>::const_iterator ite;
   for( ite = objectsDumped.begin(); ite != objectsDumped.end(); ite++ ){
     if( obj == (*ite).second ) return (*ite).first;
   }
 
-  // Now look if there is another objope dumped with same name, and if found add _N to the name
+  // Now look if there is another object dumped with same name, and if found add _N to the name
   ite = objectsDumped.find( objName );
-  //Objope found with same name
+  //Object found with same name
   if( ite != objectsDumped.end() )
   {
     TYP* objold = (*ite).second;
-    if( obj != objold ) // new objope it is not the really the same one as objope found
+    if( obj != objold ) // new object it is not the really the same one as object found
     {
       G4int ii = 2;
       for(;;ii++) {
