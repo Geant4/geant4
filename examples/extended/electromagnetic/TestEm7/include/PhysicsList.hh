@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.7 2008-08-22 18:30:27 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.8 2008-11-20 20:34:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #define PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
+#include "G4EmConfigurator.hh"
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
@@ -67,6 +68,9 @@ public:
   StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
 private:
+
+  G4EmConfigurator em_config; 
+
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;

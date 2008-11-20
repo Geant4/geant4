@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.18 2008-11-16 19:17:39 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.19 2008-11-20 20:34:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,37 +131,6 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
-
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
-  emOptions.SetSplineFlag(true);	//default
-      
-  //multiple coulomb scattering
-  //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
-  emOptions.SetMscRangeFactor(0.04);	//default
-  emOptions.SetMscGeomFactor (2.5);	//default       
-  emOptions.SetSkin(3.);		//default
-      
-  //energy loss
-  //
-  emOptions.SetStepFunction(0.2, 50*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
-   
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);	//default  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

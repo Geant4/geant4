@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.19 2008-09-14 17:14:18 vnivanch Exp $
+# $Id: TestEm7.in,v 1.20 2008-11-20 20:34:50 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -18,7 +18,7 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics   emstandard_opt3	# default em physics  
+/testem/phys/addPhysics   emstandard_opt3
 #
 /run/initialize
 #

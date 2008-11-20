@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.34 2008-10-24 15:36:24 maire Exp $
+// $Id: PhysicsList.cc,v 1.35 2008-11-20 20:34:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,9 @@
 #include "G4Decay.hh"
 
 #include "StepMax.hh"
+
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,6 +118,7 @@ void PhysicsList::ConstructProcess()
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
+  em_config.AddModels();
 
   // decay physics list
   //
@@ -140,7 +144,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "standard_local") {
 
     emName = name;
     delete emPhysicsList;
@@ -181,6 +185,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardNR(name);
+
+  } else if (name == "standardICRU73") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard(name);
+    em_config.SetExtraEmModel("GenericIon","ionIoni",
+			      new G4IonParametrisedLossModel(),
+			      "",0.0, 100.0*TeV,
+			      new G4IonFluctuations());
+    G4cout << "standardICRU73" << G4endl;
 
   } else if (name == "livermore") {
     emName = name;
