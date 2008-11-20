@@ -55,6 +55,9 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 #include "G4HadronCrossSections.hh"
+#include "G4HadronicProcess.hh"
+#include "G4UHadronElasticProcess.hh"
+#include "G4ChargeExchangeProcess.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
@@ -506,6 +509,7 @@ int main(int argc, char** argv)
 
     // ------- Select model
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    G4HadronicProcess* extraproc = 0;
 
     // ------- Define target A
     G4int A = (G4int)(elm->GetN()+0.5);
@@ -687,30 +691,34 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "BertiniElastic" ) {
+    if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
       cs = new G4HadronElasticDataSet();
-    } else if (nameGen == "elastic" || 
+    } else if (nameGen == "chargeex" ||
+	       nameGen == "elastic" || 
 	       nameGen == "HElastic" || 
 	       nameGen == "DElastic") {
-      if(Z == 1) cs = new G4HadronElasticDataSet();
-      else if(part == proton || part == neutron) {
-	if(xsbgg) cs = new G4BGGNucleonElasticXS(part);
-	else      cs = new G4HadronElasticDataSet();
+
+      if (nameGen == "chargeex") extraproc = new G4ChargeExchangeProcess();
+      else                       extraproc = new G4UHadronElasticProcess();
+
+      if(part == proton || part == neutron) {
+	if(xsbgg) extraproc->AddDataSet(new G4BGGNucleonElasticXS(part));
       } else if(part == pip || part == pin) {
-	if(xsbgg) cs = new G4BGGPionElasticXS(part);
-	else      cs = new G4HadronElasticDataSet();
-      } else {
-	cs = new G4HadronElasticDataSet();
+	if(xsbgg) extraproc->AddDataSet(new G4BGGPionElasticXS(part));
       }
+
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4ProtonInelasticCrossSection();
+
     } else if(part == neutron && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4NeutronInelasticCrossSection();
+
     } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGPionInelasticXS(part);
       else cs = new G4PiNuclearCrossSection();
+
     } else if( ionParticle ) {
       if ( Shen ) {
         cs = new G4IonsShenCrossSection();
@@ -723,9 +731,16 @@ int main(int argc, char** argv)
       cs = new G4HadronInelasticDataSet();
     }
 
-    if(cs) {
+    if(extraproc) {
+      extraproc->PreparePhysicsTable(*part);
+      extraproc->BuildPhysicsTable(*part);
+      cross_sec = extraproc->GetMicroscopicCrossSection(&dParticle,
+							elm, 0.0);
+
+    } else if(cs) {
       cs->BuildPhysicsTable(*part);
       cross_sec = cs->GetCrossSection(&dParticle, elm);
+
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
         GetInelasticCrossSection(&dParticle, elm);
