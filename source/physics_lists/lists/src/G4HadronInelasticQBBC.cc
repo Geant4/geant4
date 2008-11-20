@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.13 2008-09-25 09:20:40 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.14 2008-11-20 12:39:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -130,9 +130,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
            << " ftfFlag= " << ftfFlag << "  bertFlag= " << bertFlag
 	   << G4endl;
 
-  G4double minEstring  = 9.1*GeV;
-  G4double maxEcascade = 9.5*GeV;
-  //  G4double minFtf      = 7.5*GeV;
+  G4double minEstring  = 9.5*GeV;
+  G4double maxEcascade = 7.5*GeV;
+  G4double minFTF      = 4.5*GeV;
+  G4double maxFTF      = 25.*GeV;
 
   //Binary
   G4HadronicInteraction* theBIC = new G4BinaryCascade();
@@ -174,7 +175,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
   theFTFBModel->SetTransport(theCascade);
   theFTFBModel->SetHighEnergyGenerator(theFTFBStringModel);
-  theFTFBModel->SetMinEnergy(minEstring);
+  theFTFBModel->SetMinEnergy(minFTF);
   theFTFBModel->SetMaxEnergy(100*TeV);
 
   //FTFP
@@ -185,8 +186,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
   theFTFCModel->SetTransport(preCompound);
   theFTFCModel->SetHighEnergyGenerator(theFTFCStringModel);
-  theFTFCModel->SetMinEnergy(minEstring);
-  theFTFCModel->SetMaxEnergy(100*TeV);
+  theFTFCModel->SetMinEnergy(minFTF);
+  theFTFCModel->SetMaxEnergy(maxFTF);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
@@ -224,8 +225,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
       if(pname == "proton") {
 	hp->AddDataSet(&theXSecP);
 
-        if(ftfFlag) hp->RegisterMe(theFTFCModel);
-	else        hp->RegisterMe(theQGSModel);
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
  
 	if(bertFlag) hp->RegisterMe(theBERT);
 	else         hp->RegisterMe(theBIC);
@@ -235,8 +238,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(&theXSecN);
-        if(ftfFlag) hp->RegisterMe(theFTFCModel);
-	else        hp->RegisterMe(theQGSModel);
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
 
 	G4HadronCaptureProcess* theNeutronCapture = 
 	  new G4HadronCaptureProcess("nCapture");
@@ -279,8 +284,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       } else if(pname == "pi-" || pname == "pi+") {
 	hp->AddDataSet(&thePiCross);
-        if(ftfFlag) hp->RegisterMe(theFTFCModel);
-	else        hp->RegisterMe(theQGSModel);
+	hp->RegisterMe(theQGSModel);
+        hp->RegisterMe(theFTFCModel);
+        //if(ftfFlag) hp->RegisterMe(theFTFCModel);
+	//else        hp->RegisterMe(theQGSModel);
 
         hp->RegisterMe(theBERT);
         //if(bertFlag) hp->RegisterMe(theBERT);

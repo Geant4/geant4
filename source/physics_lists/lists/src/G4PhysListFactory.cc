@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.3 2008-10-21 15:57:18 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.4 2008-11-20 12:39:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -114,6 +114,8 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "LHEP_PRECO_HP") {p = new LHEP_PRECO_HP();}
   else if(name == "QBBC") {p = new QBBC();}
   else if(name == "QBBCG") {p = new QBBC(1, "QBBCG");}
+  else if(name == "QBBCF") {p = new QBBC(1, "QBBCF");}
+  else if(name == "QBBC_HP") {p = new QBBC(1, "QBBC_HP");}
   else if(name == "QGSC") {p = new QGSC();}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
   else if(name == "QGSC_EFLOW") {p = new QGSC_EFLOW();}
