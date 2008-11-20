@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.12 2008-11-19 18:28:36 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.13 2008-11-20 12:35:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -243,7 +243,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   }
 
   G4ThreeVector p1 = lv1.vect();
-  G4double e1 = 0.5*etot*(1.0 + (m21*m21 - m11*m11)/(etot*etot));
+  G4double e1 = 0.5*etot*(1.0 - (m21*m21 - m11*m11)/(etot*etot));
   //  G4double e2 = etot - e1;
   G4double ptot = std::sqrt(e1*e1 - m11*m11);
 
@@ -262,8 +262,8 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   if(std::abs(cost) > 1.0) cost = 1.0;
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  if (verboseLevel > 1)
-    G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
+  //if (verboseLevel > 1)
+  //  G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   v1 *= ptot;
@@ -274,10 +274,14 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   nlv1.boost(bst);
 
   theParticleChange.SetStatusChange(stopAndKill);
+  theParticleChange.SetEnergyChange(0.0);
   G4DynamicParticle * aSec = new G4DynamicParticle(theSecondary, nlv1);
   theParticleChange.AddSecondary(aSec);
 
   G4double erec =  nlv0.e() - m21;
+
+  //G4cout << "erec= " <<erec << " Esec= " << aSec->GetKineticEnergy() << G4endl;  
+
   if(theHyperon) {
     theParticleChange.SetLocalEnergyDeposit(erec);
     aSec = new G4DynamicParticle();
@@ -287,6 +291,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     aSec = new G4DynamicParticle(theRecoil, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
+    if(erec < 0.0) erec = 0.0;
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
   return &theParticleChange;
