@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.hh,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgrUtils.hh,v 1.4 2008-11-20 16:44:29 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,6 @@ class G4tgrUtils
     static void DumpVS( const std::vector<G4String>& wl , const char* msg,
                               std::ostream& outs) ;
       // Dumps a vector of G4Strings with a message to outs
-    static G4String ftoa( const G4double dou );
     static void CheckWLsize( const std::vector<G4String>& wl,
                                    unsigned int nWCheck, WLSIZEtype st,
                              const G4String& methodName );
