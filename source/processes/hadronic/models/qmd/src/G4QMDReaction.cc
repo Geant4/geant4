@@ -275,7 +275,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       //G4cout << " do Paropagate " << i << " th time step. " << G4endl;
       meanField->DoPropagation( deltaT );
       //system->ShowParticipants();
-      collision->CalKinematicsOfBinaryCollisions();
+      collision->CalKinematicsOfBinaryCollisions( deltaT );
 
       if ( i / 10 * 10 == i ) 
       {
