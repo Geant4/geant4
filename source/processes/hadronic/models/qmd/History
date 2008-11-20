@@ -13,6 +13,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20-November-2008 Tatsumi Koi (hadr-qmd-V09-01-08)
+- Add Update 
+	include/G4QMDMeanField.hh
+	src/G4QMDMeanField.cc
+- Add "hit" flag and related methods
+	include/G4QMDParticipant.hh  
+- Add Erase and Insert Participant methods
+	include/G4QMDSystem.hh  
+	src/G4QMDSystem.cc
+- Add deltaT in signature of CalKinematicsOfBinaryCollisions
+  Add several required updating of Mean Filed 
+  Modify handling of absorption case 
+	include/G4QMDCollision.hh  
+	src/G4QMDCollision.cc  
+- Add deltaT in signature of CalKinematicsOfBinaryCollisions
+	src/G4QMDReaction.cc  
+
 07-November-2008 Tatsumi Koi (hadr-qmd-V09-01-07)
 - Add UnUseGEM and UseFRAG 
   Fix bug in neucleon projectile
