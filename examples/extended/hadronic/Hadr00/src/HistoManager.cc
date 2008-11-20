@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2008-08-07 15:28:13 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.4 2008-11-20 11:59:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -123,6 +123,7 @@ void HistoManager::BeginOfRun()
     histo->setHisto1D(3,nBinsE,e1,e2);
     histo->setHisto1D(4,nBinsE,e1,e2);
     histo->setHisto1D(5,nBinsE,e1,e2);
+    histo->setHisto1D(6,nBinsE,e1,e2);
 
   } else {
     histo->add1D("h1","Elastic cross section (barn) as a functions of log10(p/GeV)",
@@ -136,6 +137,8 @@ void HistoManager::BeginOfRun()
     histo->add1D("h5","Capture cross section (barn) as a functions of log10(E/MeV)",
 		 nBinsE,e1,e2);
     histo->add1D("h6","Fission cross section (barn) as a functions of log10(E/MeV)",
+		 nBinsE,e1,e2);
+    histo->add1D("h7","Charge exchange cross section (barn) as a functions of log10(E/MeV)",
 		 nBinsE,e1,e2);
   }
 
@@ -165,7 +168,7 @@ void HistoManager::EndOfRun()
 	   << G4endl;
     G4cout << "    N     E(MeV)    Elastic(barn)   Inelastic(barn)";
     if(particle == neutron) G4cout << "  Capture(barn)     Fission(barn)";
-    G4cout << G4endl;     
+    G4cout << "    ChargeExchange(barn)" << G4endl;     
     G4cout << "-------------------------------------------------------------" 
 	   << G4endl;
   }
@@ -210,6 +213,9 @@ void HistoManager::EndOfRun()
       if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
       histo->fill(5, x, xs/barn);    
     }
+    xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm);
+    if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+    histo->fill(6, x, xs/barn);    
     if(verbose>0) G4cout << G4endl;
   }
 
