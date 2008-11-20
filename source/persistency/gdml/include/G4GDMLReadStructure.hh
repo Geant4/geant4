@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.21 2008-08-22 15:00:22 tnikitin Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.22 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,7 +77,11 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
 
- private:
+   virtual void VolumeRead(const xercesc::DOMElement* const);
+   virtual void Volume_contentRead(const xercesc::DOMElement* const);
+   virtual void StructureRead(const xercesc::DOMElement* const);
+
+ protected:
 
    G4GDMLAuxPairType AuxiliaryRead(const xercesc::DOMElement* const);
    void BordersurfaceRead(const xercesc::DOMElement* const);
@@ -90,11 +94,8 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    EAxis AxisRead(const xercesc::DOMElement* const axisElement);
    G4double QuantityRead(const xercesc::DOMElement* const readElement);
    void SkinsurfaceRead(const xercesc::DOMElement* const);
-   void VolumeRead(const xercesc::DOMElement* const);
-   void Volume_contentRead(const xercesc::DOMElement* const);
-   void StructureRead(const xercesc::DOMElement* const);
 
- private:
+ protected:
 
    G4GDMLAuxMapType auxMap;
    G4LogicalVolume *pMotherLogical;

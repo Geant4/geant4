@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.38 2008-11-17 13:52:19 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.39 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -229,6 +229,13 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
    InLoop--;
 }
 
+void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
+{
+   G4String error_msg = "No handle to user-code for parsing extensions!";
+   G4Exception("G4GDMLRead::ExtensionRead()",
+               "NotImplemented", JustWarning, error_msg);
+}
+
 void G4GDMLRead::Read(const G4String& fileName,
                             G4bool SetValidate,
                             G4bool IsModule)
@@ -292,7 +299,8 @@ void G4GDMLRead::Read(const G4String& fileName,
       if (tag=="materials") { MaterialsRead(child); } else
       if (tag=="solids")    { SolidsRead(child);    } else
       if (tag=="setup")     { SetupRead(child);     } else
-      if (tag=="structure") { StructureRead(child); }
+      if (tag=="structure") { StructureRead(child); } else
+      if (tag=="extension") { ExtensionRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in gdml: " + tag;

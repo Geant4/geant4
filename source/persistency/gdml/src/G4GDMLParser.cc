@@ -24,57 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.9 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLParser.cc,v 1.13 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4GDMLReadMaterials
+// class G4GDMLParser Implementation
 //
-// Class description:
-//
-// GDML class for loading isotopes, elements and materials according to
-// specifications in Geant4.
-
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
-#ifndef _G4GDMLREADMATERIALS_INCLUDED_
-#define _G4GDMLREADMATERIALS_INCLUDED_
+#include "G4GDMLParser.hh"
 
-#include "G4Element.hh"
-#include "G4Isotope.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
-
-#include "G4GDMLReadDefine.hh"
-
-class G4GDMLReadMaterials : public G4GDMLReadDefine 
+G4GDMLParser::G4GDMLParser()
+  : ucode(false)
 {
+  reader = new G4GDMLReadStructure;
+  writer = new G4GDMLWriteStructure;
+  xercesc::XMLPlatformUtils::Initialize();
+}
 
- public:
+G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* ext)
+  : ucode(true)
+{
+  reader = ext;
+  writer = new G4GDMLWriteStructure;
+  xercesc::XMLPlatformUtils::Initialize();
+}
 
-   G4Element* GetElement(const G4String&, G4bool verbose=true) const;
-   G4Isotope* GetIsotope(const G4String&, G4bool verbose=true) const;
-   G4Material* GetMaterial(const G4String&, G4bool verbose=true) const;
-
-   virtual void MaterialsRead(const xercesc::DOMElement* const);
-
- protected:
-
-   G4double AtomRead(const xercesc::DOMElement* const);
-   G4int CompositeRead(const xercesc::DOMElement* const,G4String&);
-   G4double DRead(const xercesc::DOMElement* const);
-   G4double PRead(const xercesc::DOMElement* const);
-   G4double TRead(const xercesc::DOMElement* const);
-   void ElementRead(const xercesc::DOMElement* const);
-   G4double FractionRead(const xercesc::DOMElement* const,G4String&);
-   void IsotopeRead(const xercesc::DOMElement* const);
-   void MaterialRead(const xercesc::DOMElement* const);
-   void MixtureRead(const xercesc::DOMElement* const,G4Element*);
-   void MixtureRead(const xercesc::DOMElement* const,G4Material*);
-   void PropertyRead(const xercesc::DOMElement* const,G4Material*);
-
-};
-
-#endif
+G4GDMLParser::~G4GDMLParser()
+{
+  xercesc::XMLPlatformUtils::Terminate();
+  delete writer;
+  if (!ucode) { delete reader; }
+}

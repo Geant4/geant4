@@ -91,6 +91,8 @@ class G4GDMLReadDefine : public G4GDMLRead
    void VariableRead(const xercesc::DOMElement* const); 
    void QuantityRead(const xercesc::DOMElement* const); 
 
+ protected:
+
    std::map<G4String,G4double> quantityMap;
    std::map<G4String,G4ThreeVector> positionMap;
    std::map<G4String,G4ThreeVector> rotationMap;

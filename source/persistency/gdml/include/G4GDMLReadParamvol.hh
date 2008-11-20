@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadParamvol.hh,v 1.5 2008-07-29 13:27:30 tnikitin Exp $
+// $Id: G4GDMLReadParamvol.hh,v 1.6 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,14 @@
 class G4GDMLReadParamvol : public G4GDMLReadSetup
 {
 
+ public:
+
+   virtual void ParamvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+
+   virtual void Paramvol_contentRead(const xercesc::DOMElement* const);
+
+ protected:
+
    void Box_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
    void Trd_dimensionsRead(const xercesc::DOMElement* const,
@@ -74,14 +82,10 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
                                  G4GDMLParameterisation::PARAMETER&);
 
    void ParameterisedRead(const xercesc::DOMElement* const);
+
    void ParametersRead(const xercesc::DOMElement* const);
-   void Paramvol_contentRead(const xercesc::DOMElement* const);
 
  protected:
-
-   void ParamvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
-
- private:
 
    G4GDMLParameterisation* parameterisation;
 };

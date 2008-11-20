@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.50 2008-08-22 16:00:39 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.51 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -608,9 +608,8 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
       }
       else
       {
-        G4String error_msg = "Unknown tag in volume: " + tag;
-        G4Exception("G4GDMLReadStructure::Volume_contentRead()",
-                    "ReadError", FatalException, error_msg);
+        G4cout << "Treating unknown GDML tag in volume '" << tag
+               << "' as GDML extension..." << G4endl;
       }
    }
 }
