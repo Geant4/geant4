@@ -124,10 +124,10 @@
   
   <tet name="testtet" vertex1="v4" vertex2="v3" vertex3="v1" vertex4="v2" />
  
-  <twistedbox name ="ttwistedbox" PhiTwist="1" x="30" y="30" z="30" aunit="rad" lunit="mm"/> 
-  <twistedtrd name ="ttwistedtrd" PhiTwist="1" x1="9" x2="8" y1="6" y2="5" z="10" aunit="rad" lunit="mm"/> 
-  <twistedtrap name ="ttwistedtrap" PhiTwist="1" z="10" Theta="1" Phi="2" y1="15" y2="15" x1="10" x2="10" x3="10" x4="10" Alph="1" aunit="rad" lunit="mm"/> 
-  <twistedtubs name ="ttwistedtubs" endinnerrad="10" endouterrad="15" zlen="40" phi="90." twistedangle="1" aunit="degree" lunit="mm"/> 
+  <twistedbox name="ttwistedbox" PhiTwist="1" x="30" y="30" z="30" aunit="rad" lunit="mm"/> 
+  <twistedtrd name="ttwistedtrd" PhiTwist="1" x1="9" x2="8" y1="6" y2="5" z="10" aunit="rad" lunit="mm"/> 
+  <twistedtrap name="ttwistedtrap" PhiTwist="1" z="10" Theta="1" Phi="2" y1="15" y2="15" x1="10" x2="10" x3="10" x4="10" Alph="1" aunit="rad" lunit="mm"/> 
+  <twistedtubs name="ttwistedtubs" endinnerrad="10" endouterrad="15" zlen="40" phi="90." twistedangle="1" aunit="degree" lunit="mm"/> 
  </solids>
 
  <structure>  
