@@ -131,15 +131,4 @@ void EMMuonStandard::ConstructProcess()
   processManager -> SetProcessOrdering(muonMinusIonisationProcess,         idxPostStep,2);
   processManager -> SetProcessOrdering(muonMinusBremsstrahlungProcess,     idxPostStep,3);
   processManager -> SetProcessOrdering(muonMinusPairProductionProcess,     idxPostStep,4);
-
-  // Options activated to improve accuracy; 
-  // Usefull for a medical application
-  G4EmProcessOptions opt;
-  opt.SetStepFunction(0.2, 10*um);
-  opt.SetMinEnergy(0.1*keV);
-  opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
-  opt.SetLinearLossLimit(1.e-6);
- 
 }

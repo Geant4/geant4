@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EMPhotonStandard.cc; February 2008
+// $Id: EMPhotonStandard.cc; September 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -49,7 +49,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4StepLimiter.hh"
-#include "G4EmProcessOptions.hh"
+
 
 
 EMPhotonStandard::EMPhotonStandard(const G4String& name): 
@@ -84,16 +84,4 @@ void EMPhotonStandard::ConstructProcess()
   processManager -> AddDiscreteProcess(photonPhotoElectricProcess);
   processManager -> AddDiscreteProcess(photonComptonProcess);
   processManager -> AddDiscreteProcess(photonGammaConvProcess);
-  
-  // Options activated to improve accuracy; 
-  // Usefull for a medical application
-  G4EmProcessOptions opt;
-  opt.SetStepFunction(0.2, 10*um);
-  opt.SetMinEnergy(0.1*keV);
-  opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
-  opt.SetLinearLossLimit(1.e-6);
-
-
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonBertini.cc; May 2005
+// $Id: HadrontherapyProtonBertini.cc; November 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------

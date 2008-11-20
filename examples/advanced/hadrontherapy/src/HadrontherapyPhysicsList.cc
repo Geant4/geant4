@@ -86,6 +86,7 @@
 #include "HEHadronIonQElastic.hh"
 #include "HEHadronIonUElastic.hh"
 #include "HRMuonMinusCapture.hh"
+#include "G4EmProcessOptions.hh"
 
 
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
@@ -138,6 +139,17 @@ void HadrontherapyPhysicsList::AddPackage(const G4String& name)
 
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
+  // Options activated to improve accuracy and activated for the Standard EM models
+  // Usefull for a medical application
+  G4EmProcessOptions opt;
+  opt.SetStepFunction(0.2, 10*um);
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
+
+
   G4cout << "Adding PhysicsList component " << name << G4endl;
   // ****************
   // *** A. DECAY ***

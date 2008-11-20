@@ -11,6 +11,22 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+20.11.2008: G.A.P.Cirrone; Tag: hadrontherapy-V09-01-10
+           - Updated the History file
+           - Corrected cross sections definitions for ions
+           - Revised the definition and use of the electromagnetic options
+             for the use with the Standard models
+             
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-09
+           - Updated readme and improved the comments. 
+
+20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-08
+	   - Add new approach for the choice of the physic models.
+             Now packaged physic lists can be used alternatively 
+             to the the physic models implemented in the class files
+             EM, HE and HI. 
+           - Improved the electromagnetic models for the generic ions
+
 22.09.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-07
            - Corrected the G4eBremsstrahlung() process in the file 
              EMElectronStandard.cc;
