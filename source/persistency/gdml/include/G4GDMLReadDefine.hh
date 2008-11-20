@@ -75,13 +75,13 @@ class G4GDMLReadDefine : public G4GDMLRead
    G4ThreeVector GetScale(const G4String&);
    G4GDMLMatrix GetMatrix(const G4String&);
 
+   virtual void DefineRead(const xercesc::DOMElement* const);
+
  protected:
 
    G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
    void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String RefRead(const xercesc::DOMElement* const);
-
- private:
 
    void ConstantRead(const xercesc::DOMElement* const); 
    void MatrixRead(const xercesc::DOMElement* const);
@@ -90,9 +90,6 @@ class G4GDMLReadDefine : public G4GDMLRead
    void ScaleRead(const xercesc::DOMElement* const);
    void VariableRead(const xercesc::DOMElement* const); 
    void QuantityRead(const xercesc::DOMElement* const); 
-   void DefineRead(const xercesc::DOMElement* const);
-
- private:
 
    std::map<G4String,G4double> quantityMap;
    std::map<G4String,G4ThreeVector> positionMap;

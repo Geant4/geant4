@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.25 2008-11-17 13:52:19 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.26 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -90,7 +90,7 @@ class G4GDMLErrorHandler : public xercesc::ErrorHandler
 class G4GDMLRead
 {
 
- public:
+ public:  // with description
 
    virtual void DefineRead(const xercesc::DOMElement* const)=0;
    virtual void MaterialsRead(const xercesc::DOMElement* const)=0;
@@ -99,10 +99,29 @@ class G4GDMLRead
    virtual void Paramvol_contentRead(const xercesc::DOMElement* const)=0;
    virtual void Volume_contentRead(const xercesc::DOMElement* const)=0;
    virtual void StructureRead(const xercesc::DOMElement* const)=0;
+     //
+     // Pure virtual methods implemented in concrete reader plugin's classes
+
+   virtual void ExtensionRead(const xercesc::DOMElement* const);
+     //
+     // To be implemented in the client code for handling extensions
+     // to the GDML schema, identified with the tag "extension".
+     // The implementation should be placed inside a user-class
+     // inheriting from G4GDMLReadStructure and being registered
+     // as argument to G4GDMLParser.
+
    virtual G4LogicalVolume* GetVolume(const G4String&) const=0;
    virtual G4String GetSetup(const G4String&)=0;
+     //
+     // More pure virtual methods implemented in the reader plugin.
+
    void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
+     //
+     // Main method for reading GDML files.
+
    void StripNames() const;
+     //
+     // Strip off pointers from entity IDs.
 
  protected:
 

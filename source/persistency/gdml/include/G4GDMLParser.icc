@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.6 2008-11-17 13:52:19 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.7 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,13 +35,13 @@
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool Validate)
 {   
-  reader.Read(filename,Validate,false);
+  reader->Read(filename,Validate,false);
 }
 
 inline 
 void G4GDMLParser::ReadModule(const G4String& filename, G4bool Validate)
 {   
-  reader.Read(filename,Validate,true);
+  reader->Read(filename,Validate,true);
 }
 
 inline
@@ -67,7 +67,7 @@ void G4GDMLParser::Write(const G4String& filename,
   {
     lvol = pvol->GetLogicalVolume();
   }
-  writer.Write(filename,lvol,SchemaLocation,depth,refs);
+  writer->Write(filename,lvol,SchemaLocation,depth,refs);
 }
 
 inline 
@@ -86,68 +86,68 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
 inline 
 G4double G4GDMLParser::GetConstant(const G4String& name)
 {
-  return reader.GetConstant(name);
+  return reader->GetConstant(name);
 }
 
 inline 
 G4double G4GDMLParser::GetVariable(const G4String& name)
 {
-  return reader.GetVariable(name);
+  return reader->GetVariable(name);
 }
 
 inline 
 G4double G4GDMLParser::GetQuantity(const G4String& name)
 {
-  return reader.GetQuantity(name);
+  return reader->GetQuantity(name);
 }
 
 inline 
 G4ThreeVector G4GDMLParser::GetPosition(const G4String& name)
 {
-  return reader.GetPosition(name);
+  return reader->GetPosition(name);
 }
 
 inline 
 G4ThreeVector G4GDMLParser::GetRotation(const G4String& name)
 {
-  return reader.GetRotation(name);
+  return reader->GetRotation(name);
 }
 
 inline 
 G4ThreeVector G4GDMLParser::GetScale(const G4String& name)
 {
-  return reader.GetScale(name);
+  return reader->GetScale(name);
 }
 
 inline 
 G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name)
 {
-  return reader.GetMatrix(name);
+  return reader->GetMatrix(name);
 }
 
 inline 
 G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name)
 {
-  return reader.GetVolume(name);
+  return reader->GetVolume(name);
 }
 
 inline 
 G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
 {
-  return reader.GetWorldVolume(setupName);
+  return reader->GetWorldVolume(setupName);
 }
 
 inline 
 G4GDMLAuxListType
 G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
-  return reader.GetVolumeAuxiliaryInformation(logvol);
+  return reader->GetVolumeAuxiliaryInformation(logvol);
 }
 
 inline
 void G4GDMLParser::StripNamePointers() const
 {
-  reader.StripNames();
+  reader->StripNames();
 }
 
 //
@@ -157,17 +157,17 @@ void G4GDMLParser::StripNamePointers() const
 inline 
 void G4GDMLParser::AddModule(const G4VPhysicalVolume* const physvol)
 {
-  writer.AddModule(physvol);
+  writer->AddModule(physvol);
 }
 
 inline 
 void G4GDMLParser::AddModule(const G4int depth)
 {
-  writer.AddModule(depth);
+  writer->AddModule(depth);
 }
 
 inline 
 void G4GDMLParser::SetAddPointerToName(G4bool set)
 {
-  writer.SetAddPointerToName(set);
+  writer->SetAddPointerToName(set);
 }

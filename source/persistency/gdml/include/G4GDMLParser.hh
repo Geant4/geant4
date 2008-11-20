@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.54 2008-11-17 13:52:19 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.55 2008-11-20 15:33:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,10 +51,11 @@ class G4GDMLParser
 {
   public:  // with description
 
-   G4GDMLParser() { xercesc::XMLPlatformUtils::Initialize(); }
-   ~G4GDMLParser() { xercesc::XMLPlatformUtils::Terminate(); }
+   G4GDMLParser();
+   G4GDMLParser(G4GDMLReadStructure*);
+  ~G4GDMLParser();
      //
-     // Parser constructor & destructor
+     // Parser constructors & destructor
 
    inline void Read(const G4String& filename, G4bool Validate=true);
      //
@@ -108,8 +109,9 @@ class G4GDMLParser
 
   private:
 
-   G4GDMLReadStructure reader;
-   G4GDMLWriteStructure writer;
+   G4GDMLReadStructure* reader;
+   G4GDMLWriteStructure* writer;
+   G4bool ucode;
 
 };
 
