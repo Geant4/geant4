@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ColorReader.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// $Id: ColorReader.cc,v 1.2 2008-11-20 16:29:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -96,7 +96,7 @@ void ColorReader::ColorRead(const xercesc::DOMElement* const colorElement)
 {
    G4String name;
    G4VisAttributes* color = 0;
-   G4double r, g, b, a;
+   G4double r=0., g=0., b=0., a=0.;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = colorElement->getAttributes();
