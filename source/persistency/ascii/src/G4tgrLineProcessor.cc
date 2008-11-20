@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgrLineProcessor
 
@@ -157,7 +154,8 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
     if( mate == 0 ) {
       G4Exception("G4tgrLineProcessor::ProcessLine","Material not found",FatalException,G4tgrUtils::GetString( wl[1] ) );
     }
-    
+    mate->SetIonisationMeanExcitationEnergy( G4tgrUtils::GetDouble( wl[2] ) );
+
   }
   //------------------------------- solid
   else if( wl0 == ":SOLID" )
