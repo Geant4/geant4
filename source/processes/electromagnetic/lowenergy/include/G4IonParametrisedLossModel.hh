@@ -75,7 +75,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 
  public:
    G4IonParametrisedLossModel(const G4ParticleDefinition* particle = 0,
-                              const G4String& name = "IonParametrised");
+                              const G4String& name = "ParamICRU73");
 
    virtual ~G4IonParametrisedLossModel();
 
