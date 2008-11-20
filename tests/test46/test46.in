@@ -1,0 +1,25 @@
+#================================================
+#     Macro file for test46
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+###############################
+/testCalorim/GapWidth  0.01 mm
+/testCalorim/crystalWidth  22.0 mm
+/testCalorim/crystalLength 230.0 mm
+/testCalorim/hcalWidth 200. mm
+/testCalorim/nbins 50
+/testCalorim/maxE 10. GeV
+/testCalorim/factEcal 1.03  
+/testCalorim/factHcal 5.0
+#######
+/run/initialize
+/gun/particle mu+
+/gun/energy 1. GeV
+/run/beamOn 100
+
+
+
+
+

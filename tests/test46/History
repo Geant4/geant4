@@ -1,0 +1,26 @@
+$Id: History,v 1.1 2008-11-20 08:55:42 antoni Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    hadr01 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+25-08-08 V.Ivant (test45-V09-01-02)
+- updated scripts
+
+11-06-08 V.Ivant (test45-V09-01-01)
+- fixed visualisation
+
+11-06-08 V.Ivant (test45-V09-01-00)
+- first release
+     

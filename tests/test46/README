@@ -1,0 +1,13 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+			    Test45
+                            ------
+                     Author A.Ivantchenko
+             
+The test is based on test44. The purpose of this test is to validate 
+thick target data for low-energy proton and ion beams stopped in 
+different tragets.
+

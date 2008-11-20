@@ -1,0 +1,40 @@
+#
+# Macro file for the initialization phase of "test46.cc"
+# 
+# Sets some default verbose
+# and initializes the graphic.
+#
+# from macro file for "TestEm9.cc" 
+#
+# CMS PbWO4 model
+#
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+/vis/open OGLIX
+#
+# Draw scene
+/vis/viewer/set/viewpointThetaPhi -90 0 deg
+/vis/viewer/zoom 1.0
+/vis/viewer/flush
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+#
+/run/initialize
+/testhadr/DrawTracks       all
+#
+#
+#/tracking/storeTrajectory 100>
+/gun/particle mu-
+/gun/energy 5 GeV
+/run/beamOn 10
