@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.28 2008-09-25 16:22:17 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.29 2008-11-20 12:32:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,7 @@
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
+#include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
@@ -215,8 +216,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QBBC") {
 
     SetBuilderList0();
-    //    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
-    //						    false,false,false,false,true));
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,true,false,false,false));
+
+  } else if (name == "QBBCG") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new G4ChargeExchangePhysics(verboseLevel,false));
+    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
+						    false,true,false,false,true));
+  } else if (name == "QBBCF") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new G4ChargeExchangePhysics(verboseLevel,false));
     hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC",verboseLevel,
 						    false,true,false,false,false));
 
