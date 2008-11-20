@@ -53,7 +53,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
       QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
     endif
   endif
-  ifndef QTGLLIBS
+  ifndef GLQTLIBS
     ifeq ($(QT_VERSION),QT3)
       QTLIBS   := -L$(QTHOME)/lib -lqt-mt
     else
