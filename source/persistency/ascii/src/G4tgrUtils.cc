@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.cc,v 1.5 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgrUtils
 
@@ -44,6 +41,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4UIcommand.hh"
 
 
 G4tgrEvaluator* G4tgrUtils::theEvaluator = new G4tgrEvaluator;
@@ -384,7 +382,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
               // G4Exception("G4tgrUtils::GetDouble()", "ParseError",
               //             FatalException, ErrMess );
             }
-            strnew += ftoa( G4UnitDefinition::GetValueOf(word) );
+            strnew += G4UIcommand::ConvertToString( G4UnitDefinition::GetValueOf(word) );
           }
         }
         if( !bWordOK )
@@ -467,16 +465,6 @@ G4bool G4tgrUtils::GetBool( const G4String& str )
   return val;
 }
 
-//-------------------------------------------------------------
-G4String G4tgrUtils::ftoa( const G4double dou ) 
-{
-  char chartmp[20] = "                   ";
-  gcvt( dou, 10, chartmp );
-
-  G4String str = G4String(chartmp);
-  return str;
-}
-
 
 //-------------------------------------------------------------
 void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
@@ -491,10 +479,10 @@ void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
 
   if( !isOK )
   { 
-    G4String chartmp = ftoa( nWcheck );
+    G4String chartmp = G4UIcommand::ConvertToString( G4int(nWcheck) );
     outStr += chartmp + G4String(" words");
     DumpVS( wl, outStr.c_str() );
-    G4String ErrMessage = " NUMBER OF WORDS: " + ftoa(wlsize);
+    G4String ErrMessage = " NUMBER OF WORDS: " + G4UIcommand::ConvertToString(G4int(wlsize));
     G4Exception("G4tgrUtils::CheckWLsize()", "ParseError",
                 FatalException, ErrMessage);
   }
@@ -638,7 +626,7 @@ G4RotationMatrix G4tgrUtils::GetRotationFromDirection( G4ThreeVector dir )
   {
     G4String WarMessage = "Direction cosines have been normalized to one.\n"
                         + G4String("They were normalized to ")
-                        + ftoa(dir.mag());
+                        + G4UIcommand::ConvertToString(dir.mag());
     G4Exception("G4tgrUtils::GetRotationFromDirection()", "WrongArgument",
                 JustWarning, WarMessage);
     dir /= dir.mag();

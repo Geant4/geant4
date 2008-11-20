@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgbPlaceParameterisation
 
@@ -40,6 +37,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgbRotationMatrixMgr.hh"
+#include "G4UIcommand.hh"
 
 
 G4tgbPlaceParameterisation::G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam)
@@ -70,7 +68,7 @@ CheckNExtraData( G4tgrPlaceParameterisation* tgrParam, G4int nWcheck,
 
   if( !isOK )
   { 
-    G4String chartmp = G4tgrUtils::ftoa( nWcheck );
+    G4String chartmp = G4UIcommand::ConvertToString( nWcheck );
     outStr += chartmp + G4String(" words");
     G4cerr << outStr;
     G4cerr << " NUMBER OF WORDS " << ndata << G4endl;

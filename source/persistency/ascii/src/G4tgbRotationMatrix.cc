@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.5 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgbRotationMatrix
 
@@ -38,6 +35,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrUtils.hh"
+#include "G4UIcommand.hh"
 
 // -------------------------------------------------------------------------
 G4tgbRotationMatrix::G4tgbRotationMatrix()
@@ -72,7 +70,7 @@ G4RotationMatrix* G4tgbRotationMatrix::BuildG4RotMatrix()
   }
   else
   {
-    G4String ErrMessage = "Number of values is: " + G4tgrUtils::ftoa(values.size())
+    G4String ErrMessage = "Number of values is: " + G4UIcommand::ConvertToString(G4int(values.size()))
                         + G4String(". It should be 3, 6, or 9 !");
     G4Exception("G4tgbRotationMatrix::BuildG4RotMatrix()",
                 "InvalidData", FatalException, ErrMessage);

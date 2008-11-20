@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgrVolume
 
@@ -44,6 +41,7 @@
 #include "G4tgrPlaceParameterisation.hh"
 #include "G4tgrFileReader.hh"
 #include "G4tgrMessenger.hh"
+#include "G4UIcommand.hh"
 
 //-------------------------------------------------------------
 G4tgrVolume::G4tgrVolume()
@@ -109,7 +107,7 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 //-------------------------------------------------------------------------
 G4tgrVolume* G4tgrVolume::GetVolume( G4int ii ) const
 {
-  G4String ErrMessage = "Should only be called for composite solids... " + G4tgrUtils::ftoa(ii);
+  G4String ErrMessage = "Should only be called for composite solids... " + G4UIcommand::ConvertToString(ii);
   G4Exception("G4tgrVolume::GetVolume()", "InvalidCall",
               FatalException, ErrMessage);
   return 0;

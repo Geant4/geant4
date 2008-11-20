@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.6 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgrFileIn
 
@@ -42,7 +39,7 @@
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrUtils.hh"
-
+#include "G4UIcommand.hh"
 
 std::vector<G4tgrFileIn*> G4tgrFileIn::theInstances;
 
@@ -429,7 +426,7 @@ void G4tgrFileIn::Close()
 void G4tgrFileIn::DumpException( const G4String& sent )
 {
   G4String Err1 = sent + " in file " + theName;
-  G4String Err2 = " line No: " + G4tgrUtils::ftoa(theLineNo[theCurrentFile]);
+  G4String Err2 = " line No: " + G4UIcommand::ConvertToString(theLineNo[theCurrentFile]);
   G4String ErrMessage = Err1;
   G4Exception("G4tgrFileIn::DumpException()", "FileError",
               FatalException, ErrMessage);  

@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrParameterMgr.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgrParameterMgr
 
@@ -40,7 +37,7 @@
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrFileReader.hh"
 #include "G4tgrMessenger.hh"
-
+#include "G4UIcommand.hh"
 
 G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
 
@@ -78,7 +75,7 @@ void G4tgrParameterMgr::AddParameterNumber( const std::vector<G4String>& wl,
   //----- Convert third argument to double, but then store it as string
   //      for later use in CLHEP evaluator 
   G4float val = G4tgrUtils::GetDouble( wl[2] );
-  theParameterList[ wl[1] ] = G4tgrUtils::ftoa( val );
+  theParameterList[ wl[1] ] = G4UIcommand::ConvertToString( val );
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
