@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyPhysicsList.cc
-// Last modified: G.A.P.Cirrone March 2008;
+// Last modified: M.P. Russo Nov 2008;
 // 
 // See more at: http://geant4infn.wikispaces.com/
 //
@@ -33,7 +33,7 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
@@ -49,6 +49,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyParticles.hh"
@@ -115,6 +120,22 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
   delete messenger;
 }
 
+void HadrontherapyPhysicsList::AddPackage(const G4String& name)
+{
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
+  G4int i=0; 
+  const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+  G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+  while (elem !=0)
+	{
+	  RegisterPhysics(tmp);
+	  elem= phys->GetPhysics(++i) ;
+	  tmp = const_cast<G4VPhysicsConstructor*> (elem);
+	}
+}
+
+
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
   G4cout << "Adding PhysicsList component " << name << G4endl;
@@ -124,6 +145,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 
 
   if (name == "Decay") 
+
     {
       if (decayIsRegistered) 
 	{

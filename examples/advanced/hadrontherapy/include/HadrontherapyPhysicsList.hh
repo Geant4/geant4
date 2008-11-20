@@ -29,7 +29,7 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the National Institute for Nuclear Physics, Catania, Italy
@@ -53,6 +53,7 @@ public:
 
   virtual void SetCuts();
   void AddPhysicsList(const G4String& name);  
+  void AddPackage(const G4String& name);
   
 private:
   G4bool decayIsRegistered;
