@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.6 2008-11-12 08:44:20 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgbVolume
 
@@ -86,6 +83,14 @@
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
 #include "G4AssemblyVolume.hh"
+#include "G4BREPSolidBox.hh"
+#include "G4BREPSolidCylinder.hh"
+#include "G4BREPSolidCone.hh"
+#include "G4BREPSolidSphere.hh"
+#include "G4BREPSolidTorus.hh"
+#include "G4BREPSolidPCone.hh"
+#include "G4BREPSolidPolyhedra.hh"
+#include "G4BREPSolidOpenPCone.hh"
 
 #include "G4Material.hh"
 #include "G4RotationMatrix.hh"
@@ -94,6 +99,7 @@
 #include "G4VisAttributes.hh"
 #include "G4RegionStore.hh"
 #include "G4tgrMessenger.hh"
+#include "G4UIcommand.hh"
 
 
 //-------------------------------------------------------------------
@@ -240,7 +246,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     {
       G4String ErrMessage1 = "Solid type " + stype;
       G4String ErrMessage2 = " should have 11 or 4 parameters,\n";
-      G4String ErrMessage3 = "and it has " + G4tgrUtils::ftoa(solParam.size());
+      G4String ErrMessage3 = "and it has " + G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = ErrMessage1 + ErrMessage2 + ErrMessage3 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -299,10 +305,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4tgrUtils::ftoa(3+nplanes*3) + " (Z,Rmin,Rmax)\n";
-      G4String Err3 = "or " + G4tgrUtils::ftoa(3+nplanes*2);
+      G4String Err2 = G4UIcommand::ConvertToString(G4int(3+nplanes*3)) + " (Z,Rmin,Rmax)\n";
+      G4String Err3 = "or " + G4UIcommand::ConvertToString(G4int(3+nplanes*2));
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " +  G4tgrUtils::ftoa(solParam.size());
+      G4String Err5 = "and it has " +  G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -355,10 +361,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4tgrUtils::ftoa(4+nplanes*3) + " (Z,Rmin,Rmax)\n";
-      G4String Err3 = "or " + G4tgrUtils::ftoa(4+nplanes*2);
+      G4String Err2 = G4UIcommand::ConvertToString(G4int(4+nplanes*3)) + " (Z,Rmin,Rmax)\n";
+      G4String Err3 = "or " + G4UIcommand::ConvertToString(G4int(4+nplanes*2));
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " + G4tgrUtils::ftoa(solParam.size());
+      G4String Err5 = "and it has " + G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -450,6 +456,113 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     solid = new G4TwistedTubs( sname, solParam[0], solParam[1], solParam[2],
                                solParam[3], phiTotal);
 
+  } else if( stype == "BREPBOX" ) { // EntityType is = "Closed_Shell"
+    CheckNoSolidParams( stype, 24, solParam.size() );
+    std::vector<G4Point3D> points;
+    for( size_t ii = 0; ii < 8; ii++ )
+    {
+      points.push_back( G4Point3D(solParam[ii*3+0],solParam[ii*3+1],solParam[ii*3+2]) );
+    }
+    solid = new G4BREPSolidBox( sname, points[0], points[1], points[2], points[3], points[4], points[5], points[6], points[7] );
+
+  } else if( stype == "BREPCYLINDER" ) { // EntityType is = "Closed_Shell"
+    CheckNoSolidParams( stype, 11, solParam.size() );
+    solid = new G4BREPSolidCylinder( sname
+				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
+				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
+				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
+				     , solParam[9], solParam[10] );
+
+  } else if( stype == "BREPCONE" ) { // EntityType is = "Closed_Shell"
+    CheckNoSolidParams( stype, 12, solParam.size() );
+    solid = new G4BREPSolidCone( sname
+				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
+				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
+				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
+				     , solParam[9], solParam[10], solParam[11] );
+
+  } else if( stype == "BREPSPHERE" ) { // EntityType is = "Closed_Shell"
+    CheckNoSolidParams( stype, 10, solParam.size() );
+    solid = new G4BREPSolidSphere( sname
+				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
+				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
+				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
+				     , solParam[9] );
+
+  } else if( stype == "BREPTORUS" ) { // EntityType is = "Closed_Shell"
+    CheckNoSolidParams( stype, 11, solParam.size() );
+    solid = new G4BREPSolidTorus( sname
+				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
+				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
+				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
+				     , solParam[9], solParam[10] );
+
+  } else if( stype == "BREPPCONE" ) { // EntityType is = "Closed_Shell"
+    size_t nplanes = size_t(solParam[2]);
+    CheckNoSolidParams( stype, 4+3*nplanes, solParam.size() );
+    std::vector<G4double>* z_p = new std::vector<G4double>;
+    std::vector<G4double>* rmin_p = new std::vector<G4double>;
+    std::vector<G4double>* rmax_p = new std::vector<G4double>;
+    for( size_t ii = 0; ii < nplanes; ii++ )
+    {
+      (*z_p).push_back( solParam[4+3*ii] );
+      (*rmin_p).push_back( solParam[4+3*ii+1] );
+      (*rmax_p).push_back(  solParam[4+3*ii+2] );
+    }
+    G4double phiTotal = solParam[1];
+    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    CheckNoSolidParams( stype, 12, solParam.size() );
+    solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,delta-ph
+				  nplanes, // sections
+				  solParam[3], // z_start
+				  &((*z_p)[0]),
+				  &((*rmin_p)[0]),
+				  &((*rmax_p)[0]));
+
+  } else if( stype == "BREPPOLYHEDRA" ) { // EntityType is = "Closed_Shell"
+    size_t nplanes = size_t(solParam[3]);
+    CheckNoSolidParams( stype, 5+3*nplanes, solParam.size() );
+    std::vector<G4double>* z_p = new std::vector<G4double>;
+    std::vector<G4double>* rmin_p = new std::vector<G4double>;
+    std::vector<G4double>* rmax_p = new std::vector<G4double>;
+    for( size_t ii = 0; ii < nplanes; ii++ )
+    {
+      (*z_p).push_back( solParam[5+3*ii] );
+      (*rmin_p).push_back( solParam[5+3*ii+1] );
+      (*rmax_p).push_back(  solParam[5+3*ii+2] );
+    }
+    G4double phiTotal = solParam[1];
+    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    CheckNoSolidParams( stype, 12, solParam.size() );
+    solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,delta-ph
+				      G4int(solParam[2]), // sides
+				      nplanes, // sections
+				      solParam[4], // z_start
+				      &((*z_p)[0]),
+				      &((*rmin_p)[0]),
+				      &((*rmax_p)[0]));
+
+  } else if( stype == "BREPOPENPCONE" ) { // EntityType is = "Closed_Shell"
+    size_t nplanes = size_t(solParam[2]);
+    std::vector<G4double>* z_p = new std::vector<G4double>;
+    std::vector<G4double>* rmin_p = new std::vector<G4double>;
+    std::vector<G4double>* rmax_p = new std::vector<G4double>;
+    for( size_t ii = 0; ii < nplanes; ii++ )
+    {
+      (*z_p).push_back( solParam[4+3*ii] );
+      (*rmin_p).push_back( solParam[4+3*ii+1] );
+      (*rmax_p).push_back(  solParam[4+3*ii+2] );
+    }
+    G4double phiTotal = solParam[1];
+    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    CheckNoSolidParams( stype, 12, solParam.size() );
+    solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,delta-ph
+				      nplanes, // sections
+				      solParam[3], // z_start
+				      &((*z_p)[0]),
+				      &((*rmin_p)[0]),
+				      &((*rmax_p)[0]));
+
   } else if( stype.substr(0,7) == "Boolean" ) {
     const G4tgrSolidBoolean* solb = dynamic_cast<const G4tgrSolidBoolean*>(sol);
     G4VSolid* sol1 = FindOrConstructG4Solid( solb->GetSolid(0));
@@ -509,8 +622,8 @@ void G4tgbVolume::CheckNoSolidParams( const G4String& solidType,
   if( NoParamExpected != NoParam )
   {
     G4String Err1 = "Solid type " + solidType + " should have ";
-    G4String Err2 = G4tgrUtils::ftoa(NoParamExpected) + " parameters,\n";
-    G4String Err3 = "and it has " + G4tgrUtils::ftoa(NoParam);
+    G4String Err2 = G4UIcommand::ConvertToString(G4int(NoParamExpected)) + " parameters,\n";
+    G4String Err3 = "and it has " + G4UIcommand::ConvertToString(G4int(NoParam));
     G4String ErrMessage = Err1 + Err2 + Err3 + " !";
     G4Exception("G4tgbVolume::CheckNoSolidParams()", "InvalidSetup",
                 FatalException, ErrMessage);
