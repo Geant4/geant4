@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionData.cc,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGRCRegionData.cc,v 1.2 2008-11-20 20:52:05 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce
@@ -32,6 +32,7 @@
 
 #include "ExTGRCRegionData.hh"
 #include "G4tgrUtils.hh"
+#include "G4UIcommand.hh"
 
 //-----------------------------------------------------------------------
 ExTGRCRegionData::ExTGRCRegionData(const std::vector<G4String>& wl )
@@ -40,7 +41,7 @@ ExTGRCRegionData::ExTGRCRegionData(const std::vector<G4String>& wl )
   { 
     G4Exception("ExTGRCRegionData::ExTGRCRegionData()",
                 "InvalidArgument", FatalErrorInArgument,
-                G4tgrUtils::ftoa( wl.size() ) );
+                G4UIcommand::ConvertToString( G4int(wl.size()) ) );
   }
   theRegionName = wl[0];
   for( size_t ii = 1; ii < wl.size(); ii++ )
@@ -66,7 +67,7 @@ void ExTGRCRegionData::SetCutsData( const std::vector<G4String>& rc )
            << "        It has only " << rc.size() << " !" << G4endl; 
     G4Exception("ExTGRCRegionCutsMgr::AddRegionCuts()",
                 "InvalidArgument", FatalErrorInArgument,
-                G4tgrUtils::ftoa( rc.size() ) );
+                G4UIcommand::ConvertToString( G4int(rc.size()) ) );
   }
 
   if( bCutsSet )

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionCutsMgr.cc,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGRCRegionCutsMgr.cc,v 1.2 2008-11-20 20:52:05 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce
@@ -39,6 +39,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgrUtils.hh"
+#include "G4UIcommand.hh"
 
 //----------------------------------------------------------------------
 ExTGRCRegionCutsMgr* ExTGRCRegionCutsMgr::theInstance = 0;
@@ -88,7 +89,7 @@ void ExTGRCRegionCutsMgr::AddRegionCuts( const std::vector<G4String>& rc )
            << " e-_CUT (e+_CUT)." << G4endl
            << "        It has only " << rc.size() << " !" << G4endl; 
     G4Exception("ExTGRCRegionCutsMgr::AddRegionCuts()", "InvalidArgument",
-                FatalErrorInArgument, G4tgrUtils::ftoa(rc.size()) );
+                FatalErrorInArgument, G4UIcommand::ConvertToString(G4int(rc.size())) );
   }
 
   // Find region
