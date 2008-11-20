@@ -39,7 +39,9 @@
 #include <cmath>
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4UnitsTable.hh"
+#include "G4Timer.hh"
 
 
 #include <iomanip>
@@ -61,188 +63,17 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 
-//////////////////////////////////////////////////////////////////
-//
-// Return refractive index of C6F14 vs. photon energy in eV
-
-G4double GetRefractiveIndexA(G4double photonEnergy)
-{
-  G4double n;
-  G4double a = 1.177;
-  G4double b = 0.0172;
-  n          = a + b*photonEnergy;
-  return n;
-}
-
-//////////////////////////////////////////////////////////////////
-//
-// Return refractive index of quartz vs. photon energy in eV
-
-G4double GetRefractiveIndexB(G4double photonEnergy)
-{
-  G4double result, n2;
-
-  G4double E1 = 10.666;
-  G4double E2 = 18.125;
-  G4double F1 = 46.411;
-  G4double F2 = 228.71;
-  G4double E  = photonEnergy;
-
-  n2 = 1. + F1/( E1*E1 - E*E ) + F2/( E2*E2 - E*E );
-
-  result = std::sqrt(n2); 
-
-  return result;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Photon emitted in B transported to C
-
-G4double TransmissionBC(G4double photonEnergy, G4double gamma)
-{
-  G4double beta, cosB, sinB, nB, thickB, cosC, sinC, tmp, rBC, result;
-
-  if( gamma < 1.) gamma = 1.;
-   
-  beta = std::sqrt(1 - 1/gamma/gamma);
-  nB   = GetRefractiveIndexB(photonEnergy);
-
-  cosB = 1./nB/beta;
-  
-  if( cosB > 1.) cosB = 1.;
-
-  sinB   = std::sqrt(1 - cosB*cosB);
-
-  thickB = 0.5;  // in cm
-
-  sinC   = nB*sinB;
-
-  if( sinC > 1.) sinC = 1.;
-
-  cosC   = std::sqrt(1 - sinC*sinC);
-
-  tmp = ( nB*cosB - cosC )/( nB*cosB + cosC );
-
-  rBC = tmp*tmp;
-
-  if(rBC > 1.)  rBC = 1.;
-
-
-  result = 369.77*thickB*2.;  // 2 eV of band
-
-  result *= sinB*sinB;
-
-  result *= 1. - rBC;
-
-  return result;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Photon emitted in A transported to C
-
-G4double TransmissionABC(G4double photonEnergy, G4double gamma)
-{
-
-
-
-  G4double beta, cosA, sinA, cosB, sinB, nA, nB, thickA, cosC, sinC, tmp, rAB, rBC, result;
-
-  if( gamma < 1.) gamma = 1.;
-   
-  beta = std::sqrt(1 - 1/gamma/gamma);
-  nA   = GetRefractiveIndexA(photonEnergy);
-  nB   = GetRefractiveIndexB(photonEnergy);
-
-  cosA = 1./nA/beta;
-  
-  if( cosA > 1.) cosA = 1.;
-
-  sinA   = std::sqrt(1 - cosA*cosA);
-
-  thickA = 1.5;  // in cm
-
-  sinB = nA*sinA/nB;  
-
-  if( sinB > 1.) sinB = 1.;
-
-  cosB   = std::sqrt(1 - sinB*sinB);
-
-  tmp = ( nA*cosA - nB*cosB )/( nA*cosA + nB*cosB );
-
-  rAB = tmp*tmp;
-
-  if(rAB > 1.)  rAB = 1.;
-
-  sinC   = nB*sinB;
-
-  if( sinC > 1.) sinC = 1.;
-
-  cosC   = std::sqrt(1 - sinC*sinC);
-
-  tmp = ( nB*cosB - cosC )/( nB*cosB + cosC );
-
-  rBC = tmp*tmp;
-
-  if(rBC > 1.)  rBC = 1.;
-
-
-  result = 369.77*thickA*2.;  // 2 eV of band
-
-  result *= sinB*sinB;
-
-  result *= 1. - rAB;
-
-  result *= 1. - rBC;
-
-  return result;
-}
-
 
 int main()
 {
-  G4int i, iMax = 20, k, kMax;
-  G4double energy, refA, refB, gamma, numberBC, numberABC, beta, protonMass, protonMom;
+  G4int i, iMax = 20;  // , k, kMax;
+
+  // G4double energy, refA, refB, gamma, numberBC, numberABC, beta, protonMass, protonMom;
 
   std::ofstream writef("PbWO4.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
   /*
-  for(i=0;i<iMax;i++)
-  {
-    energy = 1. + i*8./iMax;
-    refA = GetRefractiveIndexA(energy);
-    refB = GetRefractiveIndexB(energy);
-    G4cout<<"photon energy = "<<energy<<" eV; C6F14 = "<<refA<<"; quartz = "<<refB<<G4endl;  
-  }
-  
-
-  energy = 7.;
-  protonMass = 0.938; 
-
-
-  for(i=0;i<iMax;i++)
-  {
-    gamma = 1.1 + i*2./iMax;
-    beta = std::sqrt(1 - 1/gamma/gamma);
-    protonMom = protonMass*beta*gamma;
-    numberBC = TransmissionBC(energy, gamma);
-    // G4cout<<"gamma = "<<gamma<<"; numberBC = "<<number<<G4endl;  
-    G4cout<<"protonMom = "<<protonMom<<"; numberBC = "<<numberBC<<G4endl;  
-  }
-
-  for(i=0;i<iMax;i++)
-  {
-    gamma = 1.1 + i*2./iMax;
-    beta = std::sqrt(1 - 1/gamma/gamma);
-    protonMom = protonMass*beta*gamma;
-    numberABC = TransmissionABC(energy, gamma);
-    numberBC = TransmissionBC(energy, gamma);
-    // G4cout<<"gamma = "<<gamma<<"; number = "<<number<<G4endl;  
-    G4cout<<"protonMom = "<<protonMom<<"; numberBC = "<<numberBC
-          <<"; numberABC = "<<numberABC<<G4endl;  
-  }
   
 
   // Arrays of CMS crystal dimensions, table 3.2 from ECAL TDR
@@ -310,12 +141,14 @@ int main()
 
   G4cout << "meanACFR = " << meanACFR << "; meanBFR = "<<meanBFR << G4endl;
 
+  */
 
   G4double lambda[14] = { 375., 400., 425., 450., 475., 
                           500., 525., 550., 575., 600., 
                           625., 650., 675., 700.               };
 
-  G4double omega, photonEnergy[14], meanRefInd[14], ratio, ratio2, cofInd;
+  G4double omega, photonEnergy[14], meanRefInd[14], isoRefInd[14], ratio, ratio2, cofInd, pmsqrt, 
+           isoratio, isolog;
 
   iMax = 14;
 
@@ -354,15 +187,23 @@ int main()
   for( i = 0; i < iMax; i++ )
   {
     ratio  = ordinaryRefInd[i]/extraordinaryRefInd[i];
+    pmsqrt = std::sqrt( (ordinaryRefInd[i]-extraordinaryRefInd[i])* 
+                        (ordinaryRefInd[i]+extraordinaryRefInd[i]) );
     ratio2 = ratio*ratio;
     cofInd = std::sqrt( ratio2 - 1. );
     meanRefInd[i] = std::asin(cofInd/ratio)*ordinaryRefInd[i]/cofInd;
-    G4cout << lambda[i]/nanometer<<" nm;      " << photonEnergy[i]/eV << " eV"
-	   << "\t"<< ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t" << extraordinaryRefInd[i] << G4endl;
+
+    isolog = std::log( ratio + pmsqrt/extraordinaryRefInd[i] ); 
+    isoratio = ordinaryRefInd[i]*pmsqrt/isolog;
+    isoRefInd[i] = std::sqrt(isoratio);
+    G4cout << lambda[i]/nanometer<<" nm; " << photonEnergy[i]/eV << " eV"
+	   << "\t"<< ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t" 
+           << isoRefInd[i]<<"\t" << extraordinaryRefInd[i] << G4endl;
 
     writef
       // <<lambda[i]/nanometer<<" * nanometer      "<<photonEnergy[i]/eV<<" * eV"
-	  <<"\t"<<ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t"<<extraordinaryRefInd[i]<<G4endl;
+	  <<"\t"<<ordinaryRefInd[i]<< "\t"<< meanRefInd[i]<<"\t"
+          << isoRefInd[i]<<"\t" <<extraordinaryRefInd[i]<<G4endl;
   }
   G4cout<<G4endl;
 
@@ -375,7 +216,7 @@ int main()
 
   for( i = iMax - 1; i >= 0; i-- )
   {
-    G4cout << meanRefInd[i]  << ", " ; // << G4endl;
+    G4cout << isoRefInd[i]  << ", " ; // << G4endl;
   }
   G4cout<<G4endl;
 
@@ -397,7 +238,7 @@ int main()
   }
   G4cout<<G4endl;
 
-  */
+  /*
 
   G4double aE, bE, delta, sinT, cosT, sinP, BA, B, D, theta, phi, beta2;
   G4double  det2, det, y1, y2, y3, y4, b2pm, b2re;
@@ -410,7 +251,7 @@ int main()
   aE    = 2.323*2.323;
   bE    = 2.218*2.218;
   delta = bE - aE;
-  beta2 = 0.194; // 1.;
+  beta2 = 0.195;   // 0.194; // 1.;
   G4cout<<"1/aE ="<<1/aE<<"\t"<<"1/bE ="<<1/bE<<G4endl<<G4endl;
   writef<<"1/aE ="<<1/aE<<"\t"<<"1/bE ="<<1/bE<<G4endl<<G4endl;
   G4cout<<"beta = "<<std::sqrt(beta2)<<"\t"<<"beta2 = "<<beta2<<G4endl<<G4endl;
@@ -424,8 +265,12 @@ int main()
 
     b2pm  = cosT*cosT/aE + sinT*sinT/bE; 
 
-    G4cout<<"theta = "<<theta/degree<<" degrees"<<"\t"<<b2pm<<G4endl<<G4endl;
-    writef<<"theta = "<<theta/degree<<" degrees"<<"\t"<<b2pm<<G4endl<<G4endl;
+    G4cout<<"theta = "<<theta/degree<<" degrees"<<";    b2pm = "<<b2pm<<G4endl<<G4endl;
+    writef<<"theta = "<<theta/degree<<" degrees"<<";    b2pm = "<<b2pm<<G4endl<<G4endl;
+
+G4cout<<"phi "<<"\t"<<"y1    "<<"\t"<<"y2    "<<"\t"<<"b2re   "<<"\t"<<"b2pm-b2re  "<<G4endl<<G4endl;
+writef<<"phi "<<"\t"<<"y1    "<<"\t"<<"y2    "<<"\t"<<"b2re   "<<"\t"<<"b2pm-b2re  "<<G4endl<<G4endl;
+
 
     for( k = 0; k <= kMax; k++) 
     {
@@ -440,8 +285,8 @@ int main()
 
       if( det2 < 0.)
       {
-	G4cout<<phi/degree<<"\t"<<"no y1,2"<<G4endl;
-	writef<<phi/degree<<"\t"<<"no y1,2"<<G4endl;
+	G4cout<<phi/degree<<"\t"<<"no y1   "<<"\t"<<"no y2   "<<"\t"<<b2re<<"\t"<<b2pm-b2re<<G4endl;
+	writef<<phi/degree<<"\t"<<"no y1   "<<"\t"<<"no y2   "<<"\t"<<b2re<<"\t"<<b2pm-b2re<<G4endl;
       }
       else
       {
@@ -454,9 +299,14 @@ int main()
 	writef<<phi/degree<<"\t"<<y1<<"\t"<<y2<<"\t"<<b2re<<"\t"<<b2pm-b2re<<G4endl;
       }
     }    
-    G4cout<<G4endl;
+    G4cout<<"aE/bE = "<<aE/bE<<G4endl;
     writef<<G4endl;
   }
+
+  */
+
+
+
 
   return 1 ;
 }
