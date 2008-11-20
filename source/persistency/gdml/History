@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2008-11-17 15:57:10 gcosmo Exp $
+$Id: History,v 1.93 2008-11-20 15:34:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 November 2008 Gabriele Cosmo (gdml-V09-01-18)
+- Implemented mechanism for importing GDML descriptions with extensions
+  to the GDML schema, identified by a new tag "extension".
+- Added implementation .cc file for G4GDMLParser.
 
 17 November 2008 Gabriele Cosmo (gdml-V09-01-17)
 - Get rid of module-name pre-pended to entity names.
