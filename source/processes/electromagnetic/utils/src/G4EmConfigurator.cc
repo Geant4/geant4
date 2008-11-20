@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.1 2008-07-15 16:57:05 vnivanch Exp $
+// $Id: G4EmConfigurator.cc,v 1.2 2008-11-20 20:32:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,6 +123,7 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
 void G4EmConfigurator::AddModels()
 {
   size_t n = particles.size();
+  //G4cout << " G4EmConfigurator::AddModels n= " << n << G4endl;
   if(n > 0) {
     for(size_t i=0; i<n; i++) {
       SetModelForRegion(particles[i],processes[i],models[i],regions[i],
@@ -147,6 +148,8 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 					 const G4String& flucModelName,
 					 G4double emin, G4double emax)
 {
+  //G4cout << " G4EmConfigurator::SetModelForRegion" << G4endl;
+
   // new set
   index--;
 
@@ -157,6 +160,8 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
   while( (*theParticleIterator)() ) {
     const G4ParticleDefinition* part = theParticleIterator->value();
 
+    G4cout << particleName << " " << part->GetParticleName() << G4endl;
+
     if(particleName == part->GetParticleName() || 
        (particleName == "charged" && part->GetPDGCharge() != 0.0) ) {
 
@@ -166,6 +171,8 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
       G4ProcessVector* plist = pmanager->GetProcessList();
       G4int np = pmanager->GetProcessListLength();
   
+      //G4cout << processName << " in list of " << np << G4endl;
+
       G4VProcess* proc = 0;
       for(G4int i=0; i<np; i++) {
 	if(processName == (*plist)[i]->GetProcessName()) {
@@ -179,24 +186,23 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	return;
       }
 
-      // search for model
-      PType ptype = unknown;
+      // classify process
+      PType ptype = discrete;
+      G4int ii = proc->GetProcessSubType();
+      if(10 == ii) ptype = msc;
+      else if(2 <= ii && 4 >= ii) ptype = eloss;
+     
       G4VEmModel* mod = 0;
       G4VEmFluctuationModel* fluc = 0;
 
       G4int nm = modelList.size();
+      //G4cout << "Search model " << modelName << " in " << nm << G4endl;
+
       for(G4int i=0; i<nm; i++) {
 	if(modelName == modelList[i]->GetName()) {
-          G4bool b = true;
-          if(flucModelName != "") {
-            if(!flucModelList[i]) b = false;
-            else if(flucModelList[i]->GetName() != flucModelName) b = false;
-            if(b) {
-	      mod  = modelList[i];
-              fluc = flucModelList[i];
-	      break;
-	    }
-	  }
+	  mod  = modelList[i];
+	  fluc = flucModelList[i];
+	  break;
 	}
       }
 
@@ -230,14 +236,18 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
       // energy limits
       G4double e1 = std::max(emin,mod->LowEnergyLimit());
       G4double e2 = std::min(emax,mod->HighEnergyLimit());
-      if(e2 > e1) e2 = e1;
+      if(e2 < e1) e2 = e1;
       mod->SetLowEnergyLimit(e1);
       mod->SetHighEnergyLimit(e2);
+
+      //G4cout << "e1= " << e1 << " e2= " << e2 << G4endl;
 
       // added model
       if(ptype == eloss) {
         G4VEnergyLossProcess* p = reinterpret_cast<G4VEnergyLossProcess*>(proc);
 	p->AddEmModel(index,mod,fluc,reg);
+	//G4cout << "### Added eloss model order= " << index << " for " 
+	//       << particleName << " and " << processName << G4endl;
       } else if(ptype == discrete) {
         G4VEmProcess* p = reinterpret_cast<G4VEmProcess*>(proc);
 	p->AddEmModel(index,mod,reg);

@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmProcessSubType.hh,v 1.7 2008-10-24 17:17:31 vnivanch Exp $
+// $Id: G4EmProcessSubType.hh,v 1.8 2008-11-20 20:32:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -53,6 +53,8 @@ enum G4EmProcessSubType
   fAnnihilation = 5, 
   fAnnihilationToMuMu = 6,
   fAnnihilationToHadrons = 7,
+
+  fMultipleScattering = 10, 
   
   fRayleigh = 11,
   fPhotoElectricEffect = 12,
