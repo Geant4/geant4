@@ -24,10 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.hh,v 1.4 2008-11-12 08:40:33 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
 // class G4tgbGeometryDumper
 //
 // Class description:
@@ -54,6 +50,8 @@ class G4Isotope;
 class G4VSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4PVParameterised;
+class G4PVReplica;
 
 class G4tgbGeometryDumper
 {
@@ -66,12 +64,14 @@ class G4tgbGeometryDumper
     void DumpGeometry(const G4String& fname );
     G4VPhysicalVolume* GetTopPhysVol();
     void DumpPhysVol( G4VPhysicalVolume* pv );
-    void DumpPVPlacement( G4VPhysicalVolume* pv );
-    void DumpLogVol( G4LogicalVolume* lv );
-    void DumpMaterial( G4Material* mat );
+  void DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvName, G4int copyNo = -999 );
+    void DumpPVParameterised( G4PVParameterised* pv );
+    void DumpPVReplica( G4PVReplica* pv, G4String lvName );
+    G4String DumpLogVol( G4LogicalVolume* lv, G4String extraName = "", G4VSolid* solid = 0, G4Material* mate = 0);
+    G4String DumpMaterial( G4Material* mat );
     void DumpElement( G4Element* ele);
     void DumpIsotope( G4Isotope* ele);
-    void DumpSolid( G4VSolid* solid );
+    G4String DumpSolid( G4VSolid* solid, G4String extraName = "" );
     void DumpBooleanVolume( const G4String& solidType, G4VSolid* so );
     void DumpSolidParams(G4VSolid * so);
     std::vector<G4double> GetSolidParams( const G4VSolid * so);
