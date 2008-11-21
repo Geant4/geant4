@@ -47,7 +47,7 @@ g4geom_assembly.txt :
        % gmake
  		
     - execute textGeom in 'batch' mode from macro file 
-       % exampleTextGeom   run.mac
+       % textGeom run.mac
  		
 It will read the geometry from a file named 'g4geom.txt', and it will create a VRML2 file to visualise the geometry.
 Therefore if you want to try any of the above-mentioned files, copy it to a file with this name,
