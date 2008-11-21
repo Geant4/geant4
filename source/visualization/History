@@ -1,4 +1,4 @@
-$Id: History,v 1.423 2008-04-30 10:09:46 allison Exp $
+$Id: History,v 1.424 2008-11-21 22:03:51 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+21st November 2008  Joseph Perl  (vis-V09-01-06)
+- visman-V09-01-05: Trap recursive use of /vis/reviewKeptEvents.
+- modeling-V09-01-01: Improve message.
+- opengl-V09-01-03: Many changes to add Qt support.
 
 30th April 2008  John Allison  (vis-V09-01-05)
 - visman-V09-01-04: Fixes more gcc-4.3.0 compiler warnings.
