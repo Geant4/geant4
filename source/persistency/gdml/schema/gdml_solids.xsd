@@ -421,6 +421,28 @@
     </xs:complexType>
   </xs:element>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="elcone" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>CSG  cone with elliptical cross section 
+        dx    semiaxis in X
+        dy    semiaxis in Y
+        zmax  height of elliptical cone
+        zcut  upper cut plane level
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:attribute name="dx" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="dy" type="ExpressionOrIDREFType"></xs:attribute>
+	  <xs:attribute name="zmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	  <xs:attribute name="zcut" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+	 </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   
   <xs:element name="polycone" substitutionGroup="Solid">
     <xs:annotation>
