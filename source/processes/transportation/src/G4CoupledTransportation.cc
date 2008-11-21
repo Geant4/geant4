@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.24 2007-12-07 16:29:07 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.25 2008-11-21 16:17:29 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -288,7 +288,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousSftOrigin  = startPosition ;
       fPreviousMassSafety = newMassSafety ;         
       fPreviousFullSafety = newFullSafety ; 
-      // fSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
+      // fpSafetyHelper->SetCurrentSafety( newFullSafety, startPosition);
 
 #ifdef G4DEBUG_TRANSPORT
       if( fVerboseLevel > 1 ){
@@ -407,6 +407,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         //   currently revise the safety  
         //   ==> so we use the all-geometry safety as a precaution
 
+      fpSafetyHelper->SetCurrentSafety( endFullSafety, fTransportEndPosition);
+        // Pushing safety to Helper avoids recalculation at this point
+
       G4ThreeVector centerPt= G4ThreeVector(0.0, 0.0, 0.0);  // Used for return value
       G4double endMassSafety= fPathFinder->ObtainSafety( fNavigatorId, centerPt); 
         //  Retrieves the mass value from PathFinder (it calculated it)
@@ -414,7 +417,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fPreviousMassSafety = endMassSafety ; 
       fPreviousFullSafety = endFullSafety; 
       fPreviousSftOrigin = fTransportEndPosition ;
-      // fSafetyHelper->SetCurrentSafety( endFullSafety, fTransportEndPosition);
 
       // The convention (Stepping Manager's) is safety from the start point
       //
