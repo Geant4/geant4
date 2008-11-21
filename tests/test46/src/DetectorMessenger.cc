@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -163,15 +163,15 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if( command == lCmd ) 
     Detector->SetEcalLength(lCmd->GetNewDoubleValue(newValue));
   else if( command == facCmd1 ) 
-    Detector->SetFactor1(facCmd1->GetNewDoubleValue(newValue));
+    HistoManager::GetPointer()->SetFactor1(facCmd1->GetNewDoubleValue(newValue));
   else if( command == facCmd2 ) 
-    Detector->SetFactor2(facCmd2->GetNewDoubleValue(newValue));
+    HistoManager::GetPointer()->SetFactor2(facCmd2->GetNewDoubleValue(newValue));
   else if( command == gCmd ) 
     Detector->SetGapWidth(gCmd->GetNewDoubleValue(newValue));
   else if( command == binCmd ) 
-    Detector->SetNbins(binCmd->GetNewIntValue(newValue));
+    HistoManager::GetPointer()->SetNbins(binCmd->GetNewIntValue(newValue));
   else if( command == eCmd ) 
-    Detector->SetmaxEnergy(eCmd->GetNewDoubleValue(newValue));
+    HistoManager::GetPointer()->SetMaxEnergy(eCmd->GetNewDoubleValue(newValue));
   else if( command == verbCmd )
     HistoManager::GetPointer()->SetVerbose(verbCmd->GetNewIntValue(newValue));
   else if( command == updateCmd )

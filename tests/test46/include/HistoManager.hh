@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: HistoManager.hh,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -98,6 +98,13 @@ public:
   void SetVerbose(G4int val);        
   G4int GetVerbose() const;
 
+  //
+  void SetNbins(G4int);
+  void SetMaxEnergy(G4double);
+  void SetMaxTotEnergy(G4double);
+  void SetFactor1(G4double);
+  void SetFactor2(G4double);
+
 private:
 
   static HistoManager* fManager;
@@ -136,7 +143,7 @@ private:
   G4double factorHcal;
  
   G4int verbose;
-  //  G4int nbins;
+
   G4double maxEnergy;
   G4double maxTotEnergy;
   G4double maxEnergyAbs;

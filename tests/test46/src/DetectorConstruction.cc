@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,7 +93,7 @@ DetectorConstruction::DetectorConstruction()
   manager->SetVerbose(1);
   G4Element* Zn  = manager->FindOrBuildElement(30);
   G4Element* Cu  = manager->FindOrBuildElement(29);
-  G4Material* Al  = manager->FindOrBuildMaterial("G4_Al");
+  //G4Material* Al  = manager->FindOrBuildMaterial("G4_Al");
   G4Material* Fe  = manager->FindOrBuildMaterial("G4_Fe");
 
   G4int natoms;
@@ -370,42 +370,6 @@ void DetectorConstruction::SetHcalWidth  (G4double val)
 {
   if(val > 0.0) {
     hcalWidth = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  }
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetNbins  (G4int val)
-{
-  if(val > 0.0) {
-    nBins = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  }
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetFactor1 (G4double val)
-{
-  if(val > 0.0) {
-    factorEcal = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  }
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetFactor2 (G4double val)
-{
-  if(val > 0.0) {
-    factorHcal = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  }
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetmaxEnergy  (G4double val)
-{
-  if(val > 0.0) {
-    maxEnergy = val;
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
 }

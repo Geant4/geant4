@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,12 +85,6 @@ public:
   //HCAL
   void SetHcalWidth(G4double);          
 
-  //
-  void SetNbins(G4int);
-  void SetmaxEnergy(G4double);
-  void SetFactor1(G4double);
-  void SetFactor2(G4double);
-
 private:
 
   void ConstructECAL(G4double posCenterEcalZ);
@@ -120,9 +114,6 @@ private:
   G4double ecalWidth;       
   G4double gap;
   G4double posCenterEcalZ;
-  G4double factorHcal;
-  G4double factorEcal;
-
 
   //HCAL
   G4Material* scinMaterial;
@@ -134,8 +125,6 @@ private:
 
   G4double hcalWidth;
   G4double hcalThickness;
-  G4int nBins;
-  G4double maxEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

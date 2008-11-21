@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: HistoManager.cc,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -74,8 +74,7 @@ HistoManager::HistoManager()
   verbose = 0;
   n_evt   = -1;
   maxEnergy = 1.*GeV;
-  //  maxEnergyAbs = 1.0*GeV;
-  maxTotEnergy = 1.0*GeV;
+  maxTotEnergy = 100.0*GeV;
   nBins   = 100;
   histo   = new Histo();
   nmax    = 3;
@@ -98,13 +97,13 @@ void HistoManager::bookHisto()
   histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("3","E0/E3x3;",nBins,0.8,1.2,1);
-  histo->add1D("4","E0/E5x5",nBins,0.8,1.2,1);
-  histo->add1D("5","E3x3/E5x5",nBins,0.8,1.2,1);
+  histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
+  histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
+  histo->add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
   histo->add1D("6","Energy (GeV) Eecal",nBins,0.,maxEnergy,GeV);
   histo->add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy,GeV);
   histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy,GeV);
-  histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy,GeV);
+  histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxTotEnergy,GeV);
   histo->add1D("10","Energy (GeV)",nBins,0.,maxTotEnergy,GeV);
 }
 
@@ -144,7 +143,7 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
-  G4String nam[6] = {"1x1   ", "3x3   ", "5x5   ", "E1/E9 ", "E1/E25", "E9/E25"};
+  G4String nam[6] = {"1x1 (GeV)", "3x3 (GeV)", "5x5 (GeV)", "E1/E9    ", "E1/E25  ", "E9/E25  "};
 
   // Average values
   G4cout<<"========================================================"<<G4endl;
@@ -162,20 +161,29 @@ void HistoManager::EndOfRun()
   G4cout                         << "Number of events                        " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of MIPS (Edep < 0.8 GeV) " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps                 " << xs << G4endl;
-  G4cout<<"========================================================"<<G4endl;
+  G4cout<<"==============  ECAL  ===================================="<<G4endl;
   for(G4int j=0; j<6; j++) {
     G4double xx = stat[j];
     if(xx > 0.0) xx = 1.0/xx;
     G4double e = edep[j]*xx;
     G4double y = erms[j]*xx - e*e;
     G4double r = 0.0;
+    G4double f = 1.0;
+    if(j <= 2) f = 1.0/GeV;
     if(y > 0.0) r = std::sqrt(y);
-    G4cout << "  " << nam[j] << " =         " << e
-           << " +- " << std::setw(12) << r*sqrt(xx) 
-	   << "    RMS= " << r;
+    G4cout << "  " << nam[j] << " =       " << e*f
+           << " +- " << std::setw(12) << f*r*sqrt(xx) 
+	   << "    RMS= " << f*r;
     G4cout << G4endl;
   }
-  G4cout<<"========================================================"<<G4endl;
+  G4cout<<"==============  HCAL  ===================================="<<G4endl;
+  G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)                   " 
+	 << x*hcal/GeV << G4endl;
+  G4cout << std::setprecision(4) << "Average HCAL e- Edep(GeV)                " 
+	 << x*ehcal/GeV << G4endl;
+  G4cout << std::setprecision(4) << "Average HCAL absorber Edep(GeV)          " 
+	 << x*abshcal/GeV << G4endl;
+  G4cout<<"=========================================================="<<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms
@@ -357,5 +365,42 @@ void HistoManager::Fill(G4int id, G4double x, G4double w)
 {
   histo->fill(id, x, w);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetNbins(G4int val)
+{
+  if(val > 0.0) nBins = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetFactor1 (G4double val)
+{
+  if(val > 0.0) factorEcal = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetFactor2(G4double val)
+{
+  if(val > 0.0) factorHcal = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetMaxEnergy(G4double val)
+{
+  if(val > 0.0) maxEnergy = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetMaxTotEnergy(G4double val)
+{
+  if(val > 0.0) maxTotEnergy = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
