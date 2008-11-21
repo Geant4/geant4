@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+$Id: History,v 1.2 2008-11-21 15:37:36 gcosmo Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November, 08  G.Cosmo (ascii-V09-01-03)
+- Use "const G4String&" where possible.
+- Added missing CVS headers, some code cleanup and formatting...
+
+21 November, 08  P.Arce (ascii-V09-01-02)
+- Added handling of G4EllipticalCone.
+- Use G4UIcommand::ConvertToString() in place of custom itoa().
+- Corrected GNUmakefile to add path to BREPS module.
+
+20 November, 08  P.Arce (ascii-V09-01-01)
+- Added BREPS reading, support for any kind of parameterisations and
+  dumping abilities.
+- Corrected handling on strings in error/warnings printouts.
 
 23 October, 08  G.Cosmo (ascii-V09-01-00)
 - Created from original implementation by P.Arce (CIEMAT).
