@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.14 2008-11-20 12:39:33 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.15 2008-11-21 18:42:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -168,12 +168,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theQGSModel->SetMaxEnergy(100*TeV);
 
   //FTFB
-  G4TheoFSGenerator* theFTFBModel = new G4TheoFSGenerator("FTFB");
+  G4TheoFSGenerator* theFTFBModel = new G4TheoFSGenerator("FTFP");
   theFTFBStringModel = new G4FTFModel();
   theFTFBStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
   theFTFBStringModel->SetFragmentationModel(theFTFBStringDecay);
 
-  theFTFBModel->SetTransport(theCascade);
+  //  theFTFBModel->SetTransport(theCascade);
+  theFTFBModel->SetTransport(preCompound);
   theFTFBModel->SetHighEnergyGenerator(theFTFBStringModel);
   theFTFBModel->SetMinEnergy(minFTF);
   theFTFBModel->SetMaxEnergy(100*TeV);
@@ -300,7 +301,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "kaon+"     || 
 		pname == "kaon0S"    || 
 		pname == "kaon0L") {
-        hp->RegisterMe(theFTFCModel);
+        hp->RegisterMe(theFTFBModel);
         hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
@@ -310,17 +311,17 @@ void G4HadronInelasticQBBC::ConstructProcess()
 		pname == "xi-"       || 
 		pname == "xi0") {
 
-	hp->RegisterMe(theFTFCModel);
+	hp->RegisterMe(theFTFBModel);
 	hp->RegisterMe(theBERT);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else if(pname == "anti_proton" || pname == "anti_neutron") {
-	hp->RegisterMe(theFTFCModel);
+	hp->RegisterMe(theFTFBModel);
         hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
 
       } else {
-	hp->RegisterMe(theFTFCModel);
+	hp->RegisterMe(theFTFBModel);
         hp->RegisterMe(theCHIPS);
 	//hp->AddDataSet(new G4UInelasticCrossSection(particle));
       }
