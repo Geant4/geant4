@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.hh,v 1.3 2008-11-12 08:41:19 arce Exp $
+// $Id: G4tgrVolumeDivision.hh,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,8 +73,8 @@ class G4tgrVolumeDivision : public G4tgrVolume
 
     G4tgrPlaceDivRep* GetPlaceDivision() { return thePlaceDiv; }
 
-    friend std::ostream& operator<<(std::ostream& os, const G4tgrVolumeDivision& obj);
-
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const G4tgrVolumeDivision& obj);
   private:
 
     G4tgrPlaceDivRep* thePlaceDiv;

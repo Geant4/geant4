@@ -146,20 +146,24 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
                           ->AddMaterialMixture( wl, "MaterialMixtureByVolume" );
     volmgr->RegisterMe( mate );
 
-  //------------------------------- material Mean Excitation Energy of Ionisation Potential
+    //------------------------------- material Mean Excitation Energy of
+    //                                Ionisation Potential
   }
   else if( wl0 == ":MATE_MEE" )
   {
-    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
-    if( mate == 0 ) {
-      G4Exception("G4tgrLineProcessor::ProcessLine","Material not found",FatalException,G4tgrUtils::GetString( wl[1] ) );
+    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()
+                        ->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
+    if( mate == 0 )
+    {
+      G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
+                  FatalException, G4tgrUtils::GetString( wl[1] ) );
     }
     mate->SetIonisationMeanExcitationEnergy( G4tgrUtils::GetDouble( wl[2] ) );
 
+    //------------------------------- solid
   }
-  //------------------------------- solid
   else if( wl0 == ":SOLID" )
-  {                        // called from here or from G4tgrVolume::G4tgrVolume
+  {                      // called from here or from G4tgrVolume::G4tgrVolume
     volmgr->CreateSolid( wl, 0 );
 
     //------------------------------- volume
@@ -231,7 +235,8 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":VIS" )
   {
-    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    std::vector<G4tgrVolume*> vols =
+       volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
     for( size_t ii = 0; ii < vols.size(); ii++ )
     {
       vols[ii]->AddVisibility( wl );
@@ -239,9 +244,10 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
 
     //--------------------------------- colour
   }
-  else if( wl0 == ":COLOUR"|| wl0 == ":COLOR" )
+  else if( (wl0 == ":COLOUR") || (wl0 == ":COLOR") )
   {
-    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    std::vector<G4tgrVolume*> vols =
+       volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
     for( size_t ii = 0; ii < vols.size(); ii++ )
     {
       vols[ii]->AddRGBColour( wl );
@@ -251,13 +257,12 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
   }
   else if( wl0 == ":CHECK_OVERLAPS" )
   {
-    std::vector<G4tgrVolume*> vols = volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
+    std::vector<G4tgrVolume*> vols =
+       volmgr->FindVolumes( G4tgrUtils::GetString( wl[1] ), 1 );
     for( size_t ii = 0; ii < vols.size(); ii++ )
     {
       vols[ii]->AddCheckOverlaps( wl );
     }
-	   
-    
     //--------------------------------- ERROR
   }
   else

@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgbRotationMatrix.cc,v 1.7 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgbRotationMatrix
 
@@ -70,7 +73,8 @@ G4RotationMatrix* G4tgbRotationMatrix::BuildG4RotMatrix()
   }
   else
   {
-    G4String ErrMessage = "Number of values is: " + G4UIcommand::ConvertToString(G4int(values.size()))
+    G4String ErrMessage = "Number of values is: "
+                        + G4UIcommand::ConvertToString(G4int(values.size()))
                         + G4String(". It should be 3, 6, or 9 !");
     G4Exception("G4tgbRotationMatrix::BuildG4RotMatrix()",
                 "InvalidData", FatalException, ErrMessage);
@@ -92,7 +96,8 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom3( std::vector<G4double>& values )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " Constructing new G4RotationMatrix from 3 numbers " <<  GetName() << " : " << *rotMat << G4endl;
+    G4cout << " Constructing new G4RotationMatrix from 3 numbers "
+           <<  GetName() << " : " << *rotMat << G4endl;
   }
 #endif
 
@@ -122,6 +127,7 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom6( std::vector<G4double>& values )
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the
   // constructor which does not check its input arguments!   
+
   CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(), // matrix representation
                            colx.y(),coly.y(),colz.y(), // (inverted)
                            colx.z(),coly.z(),colz.z());
@@ -131,7 +137,8 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom6( std::vector<G4double>& values )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " Constructing new G4RotationMatrix from 6 numbers " <<  GetName() << " : " << *rotMat << G4endl;
+    G4cout << " Constructing new G4RotationMatrix from 6 numbers "
+           <<  GetName() << " : " << *rotMat << G4endl;
   }
 #endif
 
@@ -149,7 +156,8 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<G4double>& values )
 
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the
-  // constructor which does not check its input arguments!   
+  // constructor which does not check its input arguments!
+
   CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),  // matrix representation
                            colx.y(),coly.y(),colz.y(),  // (inverted)
                            colx.z(),coly.z(),colz.z());
@@ -159,7 +167,8 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<G4double>& values )
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " Constructing new G4RotationMatrix from 9 numbers " <<  GetName() << " : " << *rotMat << G4endl;
+    G4cout << " Constructing new G4RotationMatrix from 9 numbers "
+           <<  GetName() << " : " << *rotMat << G4endl;
   }
 #endif
 

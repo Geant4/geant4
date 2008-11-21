@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.2 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbVolumeMgr.cc,v 1.3 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -170,7 +170,6 @@ G4tgbVolume* G4tgbVolumeMgr::FindVolume( const G4String& volname)
                 FatalException, ErrMessage);
   }
   return (*cite).second;
-
 }
 
 
@@ -277,35 +276,42 @@ G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol()
 //---------------------------------------------------------------------
 G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol()
 {
-
-  //----------- Start from any G4LogicalVolume, because if you go upwards you will always end at the top  
+  //----------- Start from any G4LogicalVolume, because if you go upwards
+  //            you will always end at the top  
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-    G4cout << " G4tgbVolumeMgr::GetTopLogVol theLVInvTresize " << theLVInvTree.size() << G4endl;
+  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  {
+    G4cout << " G4tgbVolumeMgr::GetTopLogVol theLVInvTresize "
+           << theLVInvTree.size() << G4endl;
+  }
 #endif
   if(  theLVInvTree.size() == 0 ) 
-    { 
-      G4Exception("!!! EXITING:  G4tgbVolumeMgr::GetTopLogVol. theLVInvTree has no elements");
-    }
+  { 
+    G4Exception("G4tgbVolumeMgr::GetTopLogVol()", "InvalidSetup",
+                FatalException, "theLVInvTree has no elements.");
+  }
   G4LogicalVolume* lv = (*(theLVInvTree.begin())).second;
 
   //------- if first element is the top LV, its parent is 0
   if( lv == 0 ) 
-    {
+  {
     lv = (*(theLVInvTree.begin())).first;
-    } 
+  } 
   else 
-    {
+  {
     while( (*(theLVInvTree.find( lv ))).second != 0) 
-      {
-	//---------- get parent of first position
-	lv = (*(theLVInvTree.find( lv ))).second;
+    {
+      //---------- get parent of first position
+      lv = (*(theLVInvTree.find( lv ))).second;
 #ifdef G4VERBOSE
-	if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-	  G4cout << " G4tgbVolumeMgr::GetTopPhysVol: lv " << lv->GetName() << G4endl;
-#endif
+      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      {
+        G4cout << " G4tgbVolumeMgr::GetTopPhysVol: lv "
+               << lv->GetName() << G4endl;
       }
+#endif
     }
+  }
   
   return lv;
 }

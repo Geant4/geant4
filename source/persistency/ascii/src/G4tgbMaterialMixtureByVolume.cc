@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
     G4cout << " G4tgbMaterialMixtureByVolume::buildG4Material() -"
            << " Constructing new G4Material:"
            << " " << theTgrMate->GetName() 
-	   << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
+           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
   }
 #endif
  
@@ -125,9 +125,11 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
     if( compMate != 0 )
     {
       // If it is a material add it by weight fraction 
-      theFractionsByWeight.push_back( GetFraction(ii) * compMate->GetDensity() );
+      theFractionsByWeight.push_back( GetFraction(ii)*compMate->GetDensity() );
       totalfd += theFractionsByWeight[ii];
-      G4cout << compMate->GetName() << " BY VOLUME " << ii << " " << GetFraction(ii) << " dens " <<  compMate->GetDensity()/g*cm3 << " --> " << theFractionsByWeight[ii] << G4endl;
+      G4cout << compMate->GetName() << " BY VOLUME " << ii << " "
+             << GetFraction(ii) << " dens " <<  compMate->GetDensity()/g*cm3
+             << " --> " << theFractionsByWeight[ii] << G4endl;
     }
     else
     {
@@ -141,15 +143,17 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
   {
     theFractionsByWeight[ii] /= totalfd;
- G4cout << compMate->GetName() << " BY VOLUME " << ii << " FINAL " << theFractionsByWeight[ii] << G4endl;
+    G4cout << compMate->GetName() << " BY VOLUME " << ii << " FINAL "
+           << theFractionsByWeight[ii] << G4endl;
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
-      G4cout << " G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight() -"
-	     << " Component " << ii  << " : " << mf->FindOrBuildG4Material( GetComponent(ii) )->GetName()
-	     << " FractionByVolume= " << GetFraction(ii)
-	     << " FractionByWeight= " << theFractionsByWeight[ii] 
-	     << G4endl;
+      G4cout << " G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()"
+             << " Component " << ii  << " : "
+             << mf->FindOrBuildG4Material( GetComponent(ii) )->GetName()
+             << " FractionByVolume= " << GetFraction(ii)
+             << " FractionByWeight= " << theFractionsByWeight[ii] 
+             << G4endl;
     }
 #endif
   }

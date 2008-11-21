@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.hh,v 1.4 2008-11-20 16:44:29 arce Exp $
+// $Id: G4tgrUtils.hh,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,9 +99,10 @@ class G4tgrUtils
 
     static G4RotationMatrix GetRotationFromDirection( G4ThreeVector dir );
 
-
-    static G4bool AreWordsEquivalent( const G4String& word1, const G4String& word2 );
-    // Looks if word1 and word2 are equivalent, considering that word1 may have '*', meaning 'any character'
+    static G4bool AreWordsEquivalent( const G4String& word1,
+                                      const G4String& word2 );
+      // Looks if word1 and word2 are equivalent, considering that
+      // word1 may have '*', meaning 'any character'
 
   private:
 

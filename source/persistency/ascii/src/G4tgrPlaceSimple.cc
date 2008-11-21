@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceSimple.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrPlaceSimple.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,13 +81,15 @@ G4tgrPlaceSimple::G4tgrPlaceSimple( const std::vector<G4String>& wl )
      G4cout << " Created " << *this << G4endl;
   }
 #endif
-
 }
+
 
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrPlaceSimple& obj)
 {
-  os << "G4tgrPlaceSimple=  in " << obj.theParentName << " Position= " << obj.thePlace << " RotMatName= " << obj.theRotMatName << G4endl;
+  os << "G4tgrPlaceSimple=  in " << obj.theParentName
+     << " Position= " << obj.thePlace
+     << " RotMatName= " << obj.theRotMatName << G4endl;
      
   return os;
 }

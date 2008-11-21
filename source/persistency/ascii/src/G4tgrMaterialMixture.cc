@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialMixture.cc,v 1.5 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrMaterialMixture.cc,v 1.6 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,8 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
     if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
          G4cout << " G4tgrMaterialMixture::G4tgrMaterialMixture() -"
-                << " adding component: " << wl[ii*2+4] << " Fraction= " << G4tgrUtils::GetDouble(wl[ii*2+1+4]) << G4endl;
+                << " adding component: " << wl[ii*2+4] << " Fraction= "
+                << G4tgrUtils::GetDouble(wl[ii*2+1+4]) << G4endl;
     }
 #endif
     theComponents.push_back(  G4tgrUtils::GetString( wl[ii*2+4] ) );
@@ -87,7 +88,6 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
      G4cout << " Created " << *this << G4endl;
   }
 #endif
-
 }
 
 
@@ -95,8 +95,8 @@ G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
 std::ostream& operator<<(std::ostream& os, const G4tgrMaterialMixture& mate) 
 {
   os << "G4tgrMaterialMixture=: " << mate.theName << G4endl
-     << "density= " << mate.theDensity/g*cm3 << " g/cm3. Number of Components: "
-     << mate.theNoComponents << G4endl;
+     << "density= " << mate.theDensity/g*cm3
+     << " g/cm3. Number of Components: " << mate.theNoComponents << G4endl;
   for (G4int ii=0; ii<mate.theNoComponents; ii++)
   {
     os << '\t' << mate.theComponents[ii]

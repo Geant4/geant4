@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrSolid.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrSolid.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -171,7 +171,8 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrSolid& sol)
 {
-  os << "G4tgrSolid= " << sol.theName << " of type " << sol.theType << " PARAMS: ";
+  os << "G4tgrSolid= " << sol.theName
+     << " of type " << sol.theType << " PARAMS: ";
   if( sol.theSolidParams.size() != 0 )
   {
     std::vector<G4double> solpar = *(sol.theSolidParams[0]); 

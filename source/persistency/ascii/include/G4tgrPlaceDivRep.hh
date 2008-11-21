@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceDivRep.hh,v 1.3 2008-11-12 08:41:19 arce Exp $
+// $Id: G4tgrPlaceDivRep.hh,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,8 +80,8 @@ class G4tgrPlaceDivRep : public G4tgrPlace
     void SetOffset( G4double offset ) { theOffset = offset; }
     void SetDivType( G4DivType typ ) { theDivType = typ; }
     
-    friend std::ostream& operator<<(std::ostream& os, const G4tgrPlaceDivRep& obj);
-
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const G4tgrPlaceDivRep& obj);
   private:
 
     G4int theNDiv;

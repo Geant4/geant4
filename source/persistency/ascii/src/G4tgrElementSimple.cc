@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementSimple.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrElementSimple.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,10 +71,12 @@ G4tgrElementSimple::G4tgrElementSimple( const std::vector<G4String>& wl )
 #endif
 }
 
+
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrElementSimple& obj)
 {
-  os << "G4tgrElementSimple= " << obj.theName << " Z = " << obj.theZ << " A= " << obj.theA << G4endl;
+  os << "G4tgrElementSimple= " << obj.theName
+     << " Z = " << obj.theZ << " A= " << obj.theA << G4endl;
 
   return os;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceDivRep.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrPlaceDivRep.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,10 +109,14 @@ EAxis G4tgrPlaceDivRep::BuildAxis( const G4String& axisName )
   return kXAxis; // to avoid warning errors  
 }
 
+
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrPlaceDivRep& obj)
 {
-  os << "G4tgrPlaceDivRep= in " << obj.theParentName << " NDiv= " << obj.theNDiv << " Width= " << obj.theWidth << " Axis= " << obj.theAxis << " Offset= " << obj.theOffset << " DivType= " << obj.theDivType << G4endl;
+  os << "G4tgrPlaceDivRep= in " << obj.theParentName
+     << " NDiv= " << obj.theNDiv << " Width= " << obj.theWidth
+     << " Axis= " << obj.theAxis << " Offset= " << obj.theOffset
+     << " DivType= " << obj.theDivType << G4endl;
 
   return os;
 }

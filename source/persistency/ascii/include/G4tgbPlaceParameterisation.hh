@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.hh,v 1.3 2008-10-31 18:33:30 arce Exp $
+// $Id: G4tgbPlaceParameterisation.hh,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,8 +55,9 @@ class G4tgbPlaceParameterisation : public G4VPVParameterisation
 { 
   public:  // with description
 
-    G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam);
+    G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam );
     virtual ~G4tgbPlaceParameterisation();
+
     virtual void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
 
     void CheckNExtraData( G4tgrPlaceParameterisation* tgrParam,

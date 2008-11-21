@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrVolumeDivision.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,8 +41,6 @@
 #include "G4tgrFileReader.hh"
 #include "G4tgrPlaceDivRep.hh"
 #include "G4tgrMessenger.hh"
-
-#include "CLHEP/Units/SystemOfUnits.h"
 
 
 G4mmss G4tgrVolumeDivision::theSupportedAxis;
@@ -155,7 +153,8 @@ G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl )
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrVolumeDivision& obj)
 {
-  os << "G4tgrVolumeDivision= " << obj.theName << " Placement= " << *(obj.thePlaceDiv) << G4endl;
+  os << "G4tgrVolumeDivision= " << obj.theName
+     << " Placement= " << *(obj.thePlaceDiv) << G4endl;
 
   return os;
 }

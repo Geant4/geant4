@@ -64,14 +64,16 @@ class G4tgbGeometryDumper
     void DumpGeometry(const G4String& fname );
     G4VPhysicalVolume* GetTopPhysVol();
     void DumpPhysVol( G4VPhysicalVolume* pv );
-  void DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvName, G4int copyNo = -999 );
+    void DumpPVPlacement( G4VPhysicalVolume* pv, const G4String& lvName,
+                          G4int copyNo = -999 );
     void DumpPVParameterised( G4PVParameterised* pv );
-    void DumpPVReplica( G4PVReplica* pv, G4String lvName );
-    G4String DumpLogVol( G4LogicalVolume* lv, G4String extraName = "", G4VSolid* solid = 0, G4Material* mate = 0);
+    void DumpPVReplica( G4PVReplica* pv, const G4String& lvName );
+    G4String DumpLogVol( G4LogicalVolume* lv, G4String extraName = "",
+                         G4VSolid* solid = 0, G4Material* mate = 0);
     G4String DumpMaterial( G4Material* mat );
     void DumpElement( G4Element* ele);
     void DumpIsotope( G4Isotope* ele);
-    G4String DumpSolid( G4VSolid* solid, G4String extraName = "" );
+    G4String DumpSolid( G4VSolid* solid, const G4String& extraName = "" );
     void DumpBooleanVolume( const G4String& solidType, G4VSolid* so );
     void DumpSolidParams(G4VSolid * so);
     std::vector<G4double> GetSolidParams( const G4VSolid * so);
@@ -86,21 +88,21 @@ class G4tgbGeometryDumper
   private:
 
     std::vector<G4VPhysicalVolume*> GetPVChildren( G4LogicalVolume* lv );
-    G4String GetTGSolidType( G4String& solidtype );
+    G4String GetTGSolidType( const G4String& solidtype );
     G4double MatDeterminant(G4RotationMatrix * ro) ;
     G4double approxTo0( G4double val );
     G4String AddQuotes( const G4String& str );
 
     G4String GetIsotopeName( G4Isotope* );
-    template< class TYP>
-    G4String GetObjectName( TYP* obj, std::map<G4String,TYP*> objectsDumped );
+    template< class TYP> G4String GetObjectName( TYP* obj,
+                         std::map<G4String,TYP*> objectsDumped );
     G4bool CheckIfLogVolExists( const G4String& name, G4LogicalVolume* pt );
     G4bool CheckIfPhysVolExists( const G4String& name, G4VPhysicalVolume* );
     G4String LookForExistingRotation( const G4RotationMatrix* rotm );
     G4String SupressRefl( G4String name );
     G4String SubstituteRefl( G4String name );
     G4bool Same2G4Isotopes( G4Isotope* ele1, G4Isotope* ele2 );
-    G4String FindSolidName( G4VSolid* solid );
+    const G4String& FindSolidName( G4VSolid* solid );
 
   private:
 

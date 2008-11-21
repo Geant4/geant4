@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgrVolume.cc,v 1.6 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgrVolume
 
@@ -80,8 +83,8 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
       {
-	G4cout << "Created from new solid: " 
-	       << *this << G4endl;
+        G4cout << "Created from new solid: " 
+               << *this << G4endl;
       }
 #endif
   }
@@ -94,10 +97,10 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
       
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	{
-	  G4cout << "Created from existing solid: " 
-		 << *this << G4endl;
-	}
+        {
+          G4cout << "Created from existing solid: " 
+                 << *this << G4endl;
+        }
 #endif
     }
 
@@ -107,12 +110,12 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 //-------------------------------------------------------------------------
 G4tgrVolume* G4tgrVolume::GetVolume( G4int ii ) const
 {
-  G4String ErrMessage = "Should only be called for composite solids... " + G4UIcommand::ConvertToString(ii);
+  G4String ErrMessage = "Should only be called for composite solids... "
+                      + G4UIcommand::ConvertToString(ii);
   G4Exception("G4tgrVolume::GetVolume()", "InvalidCall",
               FatalException, ErrMessage);
   return 0;
 }
-
 
 
 //-------------------------------------------------------------
@@ -164,10 +167,14 @@ G4tgrVolume::AddPlaceReplica( const std::vector<G4String>& wl )
   G4tgrUtils::CheckWLsize( wl, 6, WLSIZE_GE, " G4tgrVolume::AddPlaceReplica");
   G4tgrUtils::CheckWLsize( wl, 7, WLSIZE_LE, " G4tgrVolume::AddPlaceReplica");
 
-  if( wl.size() == 7 && G4tgrUtils::GetDouble(wl[6]) != 0. && wl[3] != "PHI" )
-    {
-    G4Exception("G4tgrVolume::AddPlaceReplica","Offset set for replica not along PHI, it will not be used",JustWarning,G4String("Volume "+wl[1]+" in volume "+wl[2]).c_str());
-    }
+  if( (wl.size() == 7) && (G4tgrUtils::GetDouble(wl[6]) != 0.)
+                       && (wl[3] != "PHI") )
+  {
+    G4Exception("G4tgrVolume::AddPlaceReplica",
+                "Offset set for replica not along PHI, it will not be used",
+                JustWarning,
+                G4String("Volume "+wl[1]+" in volume "+wl[2]).c_str());
+  }
   
   //---------- set G4tgrPlace 
   G4tgrPlaceDivRep* pl = new G4tgrPlaceDivRep( wl );
@@ -255,11 +262,19 @@ void G4tgrVolume::AddCheckOverlaps( const std::vector<G4String>& wl )
 
 }
 
+
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrVolume& obj)
 {
-  os << "G4tgrVolume= " << obj.theName << " Type= " << obj.theType << " Material= " << obj.theMaterialName << " Visibility " << obj.theVisibility 
-     << " Colour " << (obj.theRGBColour)[0] << " " << (obj.theRGBColour)[1] << " " << (obj.theRGBColour)[2] << (obj.theRGBColour)[3] << " " << " CheckOverlaps " << obj.theCheckOverlaps << " N placements " << obj.thePlacements.size() << G4endl;
+  os << "G4tgrVolume= " << obj.theName << " Type= " << obj.theType
+     << " Material= " << obj.theMaterialName
+     << " Visibility " << obj.theVisibility 
+     << " Colour " << (obj.theRGBColour)[0] << " "
+                   << (obj.theRGBColour)[1] << " "
+                   << (obj.theRGBColour)[2] << " "
+                   << (obj.theRGBColour)[3] << " "
+     << " CheckOverlaps " << obj.theCheckOverlaps
+     << " N placements " << obj.thePlacements.size() << G4endl;
       
   return os;
 }

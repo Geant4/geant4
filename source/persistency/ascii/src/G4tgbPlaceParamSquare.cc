@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamSquare.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbPlaceParamSquare.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,41 +47,61 @@ G4tgbPlaceParamSquare::~G4tgbPlaceParamSquare()
 
 
 // -------------------------------------------------------------------------
-G4tgbPlaceParamSquare::G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam ) : G4tgbPlaceParameterisation(tgrParam)
+G4tgbPlaceParamSquare::
+G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrParam )
+  : G4tgbPlaceParameterisation(tgrParam)
 {
   //---- Get translation and rotation 
-  if( tgrParam->GetParamType() == "SQUARE" ) {
+  if( tgrParam->GetParamType() == "SQUARE" )
+  {
     CheckNExtraData( tgrParam, 12, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
-    theDirection1 = G4ThreeVector( tgrParam->GetExtraData()[6], tgrParam->GetExtraData()[7], tgrParam->GetExtraData()[8] );
-    theDirection2 = G4ThreeVector( tgrParam->GetExtraData()[9], tgrParam->GetExtraData()[10], tgrParam->GetExtraData()[11] );
+    theDirection1 = G4ThreeVector( tgrParam->GetExtraData()[6],
+                                   tgrParam->GetExtraData()[7],
+                                   tgrParam->GetExtraData()[8] );
+    theDirection2 = G4ThreeVector( tgrParam->GetExtraData()[9],
+                                   tgrParam->GetExtraData()[10],
+                                   tgrParam->GetExtraData()[11] );
     theAxis = kZAxis;
-  } else {
+  }
+  else
+  {
     CheckNExtraData( tgrParam, 6, WLSIZE_EQ, "G4tgbPlaceParamSquare:");
-    if( tgrParam->GetParamType() == "SQUARE_XY" ) {
+    if( tgrParam->GetParamType() == "SQUARE_XY" )
+    {
       theDirection1 = G4ThreeVector(1.,0.,0.);
       theDirection2 = G4ThreeVector(0.,1.,0.);
       theAxis = kZAxis;
-    } else if( tgrParam->GetParamType() == "SQUARE_YZ" ) {
+    }
+    else if( tgrParam->GetParamType() == "SQUARE_YZ" )
+    {
       theDirection1 = G4ThreeVector(0.,1.,0.);
       theDirection2 = G4ThreeVector(0.,0.,1.);
       theAxis = kXAxis;
-    } else if( tgrParam->GetParamType() == "SQUARE_XZ" ) {
+    }
+    else if( tgrParam->GetParamType() == "SQUARE_XZ" )
+    {
       theDirection1 = G4ThreeVector(1.,0.,0.);
       theDirection2 = G4ThreeVector(0.,0.,1.);
       theAxis = kYAxis;
     }
   }
 
-  if( theDirection1.mag() == 0. ) {
-    G4cerr << "G4tgbPlaceParamSquare::G4tgbPlaceParamSquare direction1 is 0. = " << theDirection1 << G4endl;
-    G4Exception("");
-  } else {
+  if( theDirection1.mag() == 0. )
+  {
+    G4Exception("G4tgbPlaceParamSquare::G4tgbPlaceParamSquare()",
+                "InvalidSetup", FatalException, "Direction1 is zero !");
+  }
+  else
+  {
     theDirection1 /= theDirection1.mag();
   }
-  if( theDirection2.mag() == 0. ) {
-    G4cerr << "G4tgbPlaceParamSquare::G4tgbPlaceParamSquare direction2 is 0. = " << theDirection2 << G4endl;
-    G4Exception("");
-  } else {
+  if( theDirection2.mag() == 0. )
+  {
+    G4Exception("G4tgbPlaceParamSquare::G4tgbPlaceParamSquare()",
+                "InvalidSetup", FatalException, "Direction2 is zero !");
+  }
+  else
+  {
     theDirection2 /= theDirection2.mag();
   }
   
@@ -97,16 +117,17 @@ G4tgbPlaceParamSquare::G4tgbPlaceParamSquare( G4tgrPlaceParameterisation* tgrPar
   
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 ) 
-    G4cout << "G4tgbPlaceParamSquare: no copies " << theNCopies << " = " << theNCopies1 << " X " << theNCopies2 << G4endl
-	   << " offset1 " << theOffset1 << G4endl
-	   << " offset2 " << theOffset1 << G4endl
-	   << " step1 " << theStep1 << G4endl
-	   << " step2 " << theStep2 << G4endl
-	   << " direction1 " << theDirection1 << G4endl
-	   << " direction2 " << theDirection2 << G4endl
-	   << " translation " << theTranslation << G4endl;
+    G4cout << "G4tgbPlaceParamSquare: no copies "
+           << theNCopies << " = " << theNCopies1
+           << " X " << theNCopies2 << G4endl
+           << " offset1 " << theOffset1 << G4endl
+           << " offset2 " << theOffset1 << G4endl
+           << " step1 " << theStep1 << G4endl
+           << " step2 " << theStep2 << G4endl
+           << " direction1 " << theDirection1 << G4endl
+           << " direction2 " << theDirection2 << G4endl
+           << " translation " << theTranslation << G4endl;
 #endif
-
 }
 
 
@@ -119,10 +140,10 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   {
     G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():" << G4endl;
     G4cout << "   no copies " << theNCopies << G4endl
-	   << "   offset1 " << theOffset1 << G4endl
-	   << "   offset2 " << theOffset2 << G4endl
-	   << "   step1 " << theStep1 << G4endl
-	   << "   step2 " << theStep2 << G4endl;
+           << "   offset1 " << theOffset1 << G4endl
+           << "   offset2 " << theOffset2 << G4endl
+           << "   step1 " << theStep1 << G4endl
+           << "   step2 " << theStep2 << G4endl;
   }
 #endif
 

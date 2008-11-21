@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrRotationMatrix.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrRotationMatrix.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,15 +101,17 @@ G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
 #endif
 }
 
+
 // -------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrRotationMatrix& obj)
 {
-  os << "G4tgrRotationMatrix= " << obj.theName << " InputTyep = " << obj.theInputType << " VALUES= " ;
+  os << "G4tgrRotationMatrix= " << obj.theName
+     << " InputTyep = " << obj.theInputType << " VALUES= ";
 
   for( size_t ii = 0; ii < obj.theValues.size(); ii++ )
-    {
-      os << obj.theValues[ii] << " ";
-    }
+  {
+    os << obj.theValues[ii] << " ";
+  }
 
   os << G4endl;
 

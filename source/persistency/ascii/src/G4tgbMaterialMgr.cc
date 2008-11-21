@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMgr.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbMaterialMgr.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -203,8 +203,8 @@ G4Isotope* G4tgbMaterialMgr::FindBuiltG4Isotope(const G4String & name) const
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
       {
-	G4cout << " G4tgbMaterialMgr::FindBuiltG4Isotope() - Isotope: "
-	       << name << " = " << g4isot << G4endl;
+        G4cout << " G4tgbMaterialMgr::FindBuiltG4Isotope() - Isotope: "
+               << name << " = " << g4isot << G4endl;
       }
 #endif
 
@@ -246,7 +246,7 @@ G4tgbIsotope* G4tgbMaterialMgr::FindG4tgbIsotope(const G4String & name,
 
 // -------------------------------------------------------------------------
 G4Element* G4tgbMaterialMgr::FindOrBuildG4Element(const G4String & name,
-						  G4bool bMustExist ) 
+                                                  G4bool bMustExist ) 
 {
   G4Element* g4elem = FindBuiltG4Element( name );
   if( g4elem == 0 )
@@ -255,53 +255,63 @@ G4Element* G4tgbMaterialMgr::FindOrBuildG4Element(const G4String & name,
     if( tgbelem == 0)
     {
       // If FindG4tgbElement returns 0, look for a G4NISTElement
-      G4cout << "  G4NistManager::Instance()->FindOrBuildElement( " <<  G4endl;
+      G4cout << "  G4NistManager::Instance()->FindOrBuildElement( " << G4endl;
       g4elem = G4NistManager::Instance()->FindOrBuildElement(name);
-    } else {
-      if( tgbelem->GetType() == "ElementSimple" ) {
-	g4elem = tgbelem->BuildG4ElementSimple();
-      } else if( tgbelem->GetType() == "ElementFromIsotopes" ) {
-	g4elem = tgbelem->BuildG4ElementFromIsotopes();
-      } else {
-	G4String ErrMessage = "Element type " + tgbelem->GetType()
-	  + " does not exist !";
-	G4Exception("G4tgbMaterialMgr::GetG4Element()",
-		    "InvalidSetup", FatalException, ErrMessage);
+    }
+    else
+    {
+      if( tgbelem->GetType() == "ElementSimple" )
+      {
+        g4elem = tgbelem->BuildG4ElementSimple();
+      }
+      else if( tgbelem->GetType() == "ElementFromIsotopes" )
+      {
+        g4elem = tgbelem->BuildG4ElementFromIsotopes();
+      }
+      else
+      {
+        G4String ErrMessage = "Element type " + tgbelem->GetType()
+          + " does not exist !";
+        G4Exception("G4tgbMaterialMgr::GetG4Element()",
+                    "InvalidSetup", FatalException, ErrMessage);
       }
     }
     // Register it
-    if( (g4elem != 0) ) {
+    if( (g4elem != 0) )
+    {
       theG4Elements[g4elem->GetName()] = g4elem;
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-	{
-	  G4cout << " G4tgbMaterialMgr::FindOrBuildG4Element() - Element: "
-		 << name << G4endl;
-	}
+        {
+          G4cout << " G4tgbMaterialMgr::FindOrBuildG4Element() - Element: "
+                 << name << G4endl;
+        }
 #endif
-    } else {
-      if( bMustExist ) {
-	G4String ErrMessage = "Element " + name + " not found !";
-	G4Exception("G4tgbMaterialMgr::FindOrBuildG4Element()",
-		    "InvalidSetup", FatalException, ErrMessage);
+    }
+    else
+    {
+      if( bMustExist )
+      {
+        G4String ErrMessage = "Element " + name + " not found !";
+        G4Exception("G4tgbMaterialMgr::FindOrBuildG4Element()",
+                    "InvalidSetup", FatalException, ErrMessage);
       }
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-	{
-	  G4cout << " G4tgbMaterialMgr::FindOrBuildG4Element() - Element: "
-		 << name << " not found  " << G4endl;
-	}
+      {
+        G4cout << " G4tgbMaterialMgr::FindOrBuildG4Element() - Element: "
+               << name << " not found  " << G4endl;
+      }
 #endif
-    } 
-    
+    }
   }
   else
   { 
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
-       G4cout << " G4tgbMaterialMgr::GetG4Element() -"
-              << " G4Element already built: " << g4elem->GetName() << G4endl; 
+      G4cout << " G4tgbMaterialMgr::GetG4Element() -"
+             << " G4Element already built: " << g4elem->GetName() << G4endl; 
     }
 #endif
   }
@@ -321,12 +331,11 @@ G4Element* G4tgbMaterialMgr::FindBuiltG4Element(const G4String & name) const
     g4elem = (*cite).second;
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-      {
-	G4cout << " G4tgbMaterialMgr::FindBuiltG4Element() - Element: "
-	       << name << " = " << g4elem << G4endl;
-      }
+    {
+      G4cout << " G4tgbMaterialMgr::FindBuiltG4Element() - Element: "
+             << name << " = " << g4elem << G4endl;
+    }
 #endif
-
   } 
 
   return g4elem;
@@ -337,7 +346,6 @@ G4Element* G4tgbMaterialMgr::FindBuiltG4Element(const G4String & name) const
 G4tgbElement* G4tgbMaterialMgr::FindG4tgbElement(const G4String & name,
                                                        G4bool bMustExist ) const
 {
- 
   G4tgbElement* elem = 0;
 
   G4mstgbelem::const_iterator cite = theG4tgbElements.find( name ); 
@@ -366,7 +374,7 @@ G4tgbElement* G4tgbMaterialMgr::FindG4tgbElement(const G4String & name,
 
 // -------------------------------------------------------------------------
 G4Material* G4tgbMaterialMgr::FindOrBuildG4Material(const G4String & name,
-						    G4bool bMustExist )  
+                                                    G4bool bMustExist )  
 {
   G4Material* g4mate = FindBuiltG4Material( name );
   if( g4mate == 0)
@@ -382,38 +390,41 @@ G4Material* G4tgbMaterialMgr::FindOrBuildG4Material(const G4String & name,
     {
       g4mate = tgbmate->BuildG4Material();
 
-      if( tgbmate->GetTgrMate()->GetIonisationMeanExcitationEnergy() != -1. ) {
-	g4mate->GetIonisation()->SetMeanExcitationEnergy(tgbmate->GetTgrMate()->GetIonisationMeanExcitationEnergy());
+      if( tgbmate->GetTgrMate()->GetIonisationMeanExcitationEnergy() != -1. )
+      {
+        g4mate->GetIonisation()->SetMeanExcitationEnergy(tgbmate->
+                GetTgrMate()->GetIonisationMeanExcitationEnergy());
       }
-
     }
 
     // Register it
-    if( g4mate != 0 ) {
+    if( g4mate != 0 )
+    {
       theG4Materials[g4mate->GetName()] = g4mate;
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-	{
-	  G4cout << " G4tgbMaterialMgr::FindOrBuildG4Material() - Material: "
-		 << name << G4endl;
-	}
+      {
+        G4cout << " G4tgbMaterialMgr::FindOrBuildG4Material() - Material: "
+               << name << G4endl;
+      }
 #endif
-
-    } else {
-      if( bMustExist ) {
-	G4String ErrMessage = "Material " + name + "  not found !";
+    }
+    else
+    {
+      if( bMustExist )
+      {
+        G4String ErrMessage = "Material " + name + "  not found !";
         G4Exception("G4tgbMaterialMgr::FindOrBuildG4Material()",
                     "InvalidSetup", FatalException, ErrMessage);
       }  
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-	{
-	  G4cout << " G4tgbMaterialMgr::FindOrBuildG4Material() - Element: "
-		 << name << " not found  " << G4endl;
-	}
+      {
+        G4cout << " G4tgbMaterialMgr::FindOrBuildG4Material() - Element: "
+               << name << " not found  " << G4endl;
+      }
 #endif
     }
-
   }
   else
   { 
@@ -441,10 +452,10 @@ G4Material* G4tgbMaterialMgr::FindBuiltG4Material(const G4String & name) const
     g4mate = (*cite).second;
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-      {
-	G4cout << " G4tgbMaterialMgr::FindBuiltG4Material() - Material: "
-	       << name << " = " << g4mate << G4endl;
-      }
+    {
+      G4cout << " G4tgbMaterialMgr::FindBuiltG4Material() - Material: "
+             << name << " = " << g4mate << G4endl;
+    }
 #endif
   }
 

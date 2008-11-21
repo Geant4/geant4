@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.hh,v 1.5 2008-11-12 08:41:19 arce Exp $
+// $Id: G4tgrPlaceParameterisation.hh,v 1.6 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,8 +72,8 @@ class G4tgrPlaceParameterisation : public G4tgrPlace
     std::vector<G4double> GetExtraData() const { return theExtraData; }
     const G4String& GetRotMatName() const { return theRotMatName; }
 
-    friend std::ostream& operator<<(std::ostream& os, const G4tgrPlaceParameterisation& obj);
-
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const G4tgrPlaceParameterisation& obj);
   private:
 
     G4String theParamType;
@@ -81,8 +81,8 @@ class G4tgrPlaceParameterisation : public G4tgrPlace
       // Extra data not common to all parameterisations
 
     G4String theRotMatName;
-    // The rotation matrix (by name, as the rotations
-    // matrices are not yet created)
+      // The rotation matrix (by name, as the rotations
+      // matrices are not yet created)
 };
 
 #endif

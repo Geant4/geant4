@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgrMaterialSimple.cc,v 1.6 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgrMaterialSimple
 
@@ -78,7 +81,8 @@ G4tgrMaterialSimple::G4tgrMaterialSimple(const G4String& matType,
 //-------------------------------------------------------------
 const G4String& G4tgrMaterialSimple::GetComponent(G4int ii) const
 { 
-  G4String ErrMessage = "Should never be called for a MaterialSimple - i:" + G4UIcommand::ConvertToString(ii);
+  G4String ErrMessage = "Should never be called for a MaterialSimple - i:"
+                      + G4UIcommand::ConvertToString(ii);
   G4Exception("G4tgrMaterialSimple::GetComponent()",
               "InvalidCall", FatalException, ErrMessage);
 
@@ -89,7 +93,8 @@ const G4String& G4tgrMaterialSimple::GetComponent(G4int ii) const
 //-------------------------------------------------------------
 G4double G4tgrMaterialSimple::GetFraction(G4int ii)
 {
-  G4String ErrMessage = "Should never be called for a MaterialSimple - i:" + G4UIcommand::ConvertToString(ii);
+  G4String ErrMessage = "Should never be called for a MaterialSimple - i:"
+                      + G4UIcommand::ConvertToString(ii);
   G4Exception("G4tgrMaterialSimple::GetFraction()",
               "InvalidCall", FatalException, ErrMessage);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.hh,v 1.2 2008-11-03 17:04:41 arce Exp $
+// $Id: G4tgrPlace.hh,v 1.3 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,6 @@ class G4tgrPlace
     unsigned int GetCopyNo() const { return theCopyNo; }
     const G4String& GetType() const { return theType; }
     void SetVolume( G4tgrVolume* vol ) { theVolume = vol; }
-
     void SetType( const G4String& typ ){ theType = typ; }
 
     virtual G4ThreeVector GetPlacement() const;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrPlaceParameterisation.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,12 +89,15 @@ G4tgrPlaceParameterisation( const std::vector<G4String>& wl )
 
 
 // -------------------------------------------------------------------------
-std::ostream& operator<<(std::ostream& os, const G4tgrPlaceParameterisation& obj)
+std::ostream& operator<<(std::ostream& os,
+                         const G4tgrPlaceParameterisation& obj)
 {
-  os << "G4tgrPlaceParameterisation= in " << obj.theParentName << " ParamTyep = " << obj.theParamType << " RotMatName= " << obj.theRotMatName << " EXTRA DATA= " ;
+  os << "G4tgrPlaceParameterisation= in " << obj.theParentName
+     << " ParamTyep = " << obj.theParamType
+     << " RotMatName= " << obj.theRotMatName << " EXTRA DATA= ";
   for( size_t ii = 0; ii << obj.theExtraData.size(); ii++ )
-    {
-      os << obj.theExtraData[ii] << " ";
+  {
+    os << obj.theExtraData[ii] << " ";
   }
   os << G4endl;
 

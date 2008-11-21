@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgrParameterMgr.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgrParameterMgr
 

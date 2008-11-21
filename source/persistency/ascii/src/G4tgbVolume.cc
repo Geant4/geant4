@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgbVolume.cc,v 1.8 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgbVolume
 
@@ -222,23 +225,31 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     CheckNoSolidParams( stype, 3, solParam.size() );
     solid = new G4Box( sname, solParam[0], solParam[1], solParam[2] ); 
 
-  } else if( stype == "TUBE" ) {
+  }
+  else if( stype == "TUBE" )
+  {
     CheckNoSolidParams( stype, 3, solParam.size() );
     solid = new G4Tubs( sname, solParam[0], solParam[1], solParam[2],
                         0.*deg, 360.*deg );
-  } else if( stype == "TUBS" ) {
+  }
+  else if( stype == "TUBS" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
     if( phiTotal - twopi  < 1.e-9 ) phiTotal = twopi;
     solid = new G4Tubs( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], phiTotal );
-  } else if( stype == "TRAP" ) {
+  }
+  else if( stype == "TRAP" )
+  {
     if( solParam.size() == 11 )
     {
       solid = new G4Trap( sname, solParam[0], solParam[1], solParam[2],
                           solParam[3], solParam[4], solParam[5], solParam[6],
                           solParam[7], solParam[8], solParam[9], solParam[10] );
-    } else if( solParam.size() == 4 ) {
+    }
+    else if( solParam.size() == 4 )
+    {
       solid = new G4Trap( sname, solParam[0], solParam[1]/deg,
                           solParam[2]/deg, solParam[3]);
     }
@@ -246,35 +257,42 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     {
       G4String ErrMessage1 = "Solid type " + stype;
       G4String ErrMessage2 = " should have 11 or 4 parameters,\n";
-      G4String ErrMessage3 = "and it has " + G4UIcommand::ConvertToString(G4int(solParam.size()));
+      G4String ErrMessage3 = "and it has "
+                         + G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = ErrMessage1 + ErrMessage2 + ErrMessage3 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
     }
     
-  } else if( stype == "TRD" ) {
+  }
+  else if( stype == "TRD" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     solid = new G4Trd( sname, solParam[0], solParam[1], solParam[2],
                        solParam[3], solParam[4] );
-
-  } else if( stype == "PARA" ) {
+  }
+  else if( stype == "PARA" )
+  {
     CheckNoSolidParams( stype, 6, solParam.size() );
     solid = new G4Para( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5] );
-
-  } else if( stype == "CONE" ) {
+  }
+  else if( stype == "CONE" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     solid = new G4Cons( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], 0., 360.*deg);
-
-  } else if( stype == "CONS" ) {
+  }
+  else if( stype == "CONS" )
+  {
     CheckNoSolidParams( stype, 7, solParam.size() );
     G4double phiTotal = solParam[6];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
     solid = new G4Cons( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5], phiTotal);
-
-  } else if( stype == "SPHERE" ) {
+  }
+  else if( stype == "SPHERE" )
+  {
     CheckNoSolidParams( stype, 6, solParam.size() );
     G4double phiTotal = solParam[3];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
@@ -282,33 +300,41 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     if( thetaTotal - twopi  < 1.e-9 ) { thetaTotal = twopi; }
     solid = new G4Sphere( sname, solParam[0], solParam[1], solParam[2],
                           phiTotal, solParam[4], thetaTotal);
-
-  } else if( stype == "ORB" ) {
+  }
+  else if( stype == "ORB" )
+  {
     CheckNoSolidParams( stype, 1, solParam.size() );
     solid = new G4Orb( sname, solParam[0] );
-
-  } else if( stype == "TORUS" ) {
+  }
+  else if( stype == "TORUS" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
     solid = new G4Torus( sname, solParam[0], solParam[1], solParam[2],
                          solParam[3], phiTotal );
-
-  } else if( stype == "POLYCONE" ) {
+  }
+  else if( stype == "POLYCONE" )
+  {
     size_t nplanes = size_t(solParam[2]);
     G4bool genericPoly = false;
-    if( solParam.size() == 3+nplanes*3 ){ 
+    if( solParam.size() == 3+nplanes*3 )
+    { 
       genericPoly = true;
-    } else if( solParam.size() == 3+nplanes*2 ){ 
+    }
+    else if( solParam.size() == 3+nplanes*2 )
+    { 
       genericPoly = false;
     }
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4UIcommand::ConvertToString(G4int(3+nplanes*3)) + " (Z,Rmin,Rmax)\n";
+      G4String Err2 = G4UIcommand::ConvertToString(G4int(3+nplanes*3))
+                    + " (Z,Rmin,Rmax)\n";
       G4String Err3 = "or " + G4UIcommand::ConvertToString(G4int(3+nplanes*2));
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " +  G4UIcommand::ConvertToString(G4int(solParam.size()));
+      G4String Err5 = "and it has "
+                    +  G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -329,9 +355,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
-                              &((*z_p)[0]),
-                              &((*rmin_p)[0]),
-                              &((*rmax_p)[0]));
+                              &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
     }
     else
     {
@@ -346,25 +370,31 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
-                              &((*R_c)[0]),
-                              &((*Z_c)[0]));
+                              &((*R_c)[0]), &((*Z_c)[0]));
     }
 
-  } else if( stype == "POLYHEDRA" ) {
+  }
+  else if( stype == "POLYHEDRA" )
+  {
     size_t nplanes = size_t(solParam[3]);
     G4bool genericPoly = false;
-    if( solParam.size() == 4+nplanes*3 ){ 
+    if( solParam.size() == 4+nplanes*3 )
+    { 
       genericPoly = true;
-    }else if( solParam.size() == 4+nplanes*2 ){ 
+    }
+    else if( solParam.size() == 4+nplanes*2 )
+    { 
       genericPoly = false;
     }
     else
     {
       G4String Err1 = "Solid type " + stype + " should have ";
-      G4String Err2 = G4UIcommand::ConvertToString(G4int(4+nplanes*3)) + " (Z,Rmin,Rmax)\n";
+      G4String Err2 = G4UIcommand::ConvertToString(G4int(4+nplanes*3))
+                    + " (Z,Rmin,Rmax)\n";
       G4String Err3 = "or " + G4UIcommand::ConvertToString(G4int(4+nplanes*2));
       G4String Err4 = " (RZ corners) parameters,\n";
-      G4String Err5 = "and it has " + G4UIcommand::ConvertToString(G4int(solParam.size()));
+      G4String Err5 = "and it has "
+                    + G4UIcommand::ConvertToString(G4int(solParam.size()));
       G4String ErrMessage = Err1 + Err2 + Err3 + Err4 + Err5 + " !";
       G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
                   "InvalidSetup", FatalException, ErrMessage);
@@ -385,9 +415,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
-                               &((*z_p)[0]),
-                               &((*rmin_p)[0]),
-                               &((*rmax_p)[0]));
+                               &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
     }
     else
     {
@@ -402,102 +430,121 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
-                               &((*R_c)[0]),
-                               &((*Z_c)[0]));
+                               &((*R_c)[0]), &((*Z_c)[0]));
     }
-
-  } else if( stype == "ELLIPTICALTUBE" ) {
+  }
+  else if( stype == "ELLIPTICALTUBE" )
+  {
     CheckNoSolidParams( stype, 3, solParam.size() );
     solid = new G4EllipticalTube( sname, solParam[0], solParam[1], solParam[2]);
-
-  } else if( stype == "ELLIPSOID" ) {
+  }
+  else if( stype == "ELLIPSOID" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     solid = new G4Ellipsoid( sname, solParam[0], solParam[1], solParam[2],
                              solParam[3], solParam[4] );
-
-  } else if( stype == "ELLIPTICALCONE" ) {
+  }
+  else if( stype == "ELLIPTICALCONE" )
+  {
     CheckNoSolidParams( stype, 4, solParam.size() );
     solid = new G4EllipticalCone( sname, solParam[0], solParam[1],
                                   solParam[2], solParam[3] );
-
-  } else if( stype == "HYPE" ) {
+  }
+  else if( stype == "HYPE" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     solid = new G4Hype( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4] );
-
-  } else if( stype == "TET" ) {
+  }
+  else if( stype == "TET" )
+  {
     CheckNoSolidParams( stype, 12, solParam.size() );
     G4ThreeVector anchor(solParam[0], solParam[1], solParam[2]);
     G4ThreeVector p2(solParam[3], solParam[4], solParam[5]);
     G4ThreeVector p3(solParam[6], solParam[7], solParam[8]);
     G4ThreeVector p4(solParam[9], solParam[10], solParam[11]);
     solid = new G4Tet( sname, anchor, p2, p3, p4 );
-
-  } else if( stype == "TWISTEDBOX" ) {
+  }
+  else if( stype == "TWISTEDBOX" )
+  {
     CheckNoSolidParams( stype, 4, solParam.size() );
     solid = new G4TwistedBox( sname, solParam[0], solParam[1],
                               solParam[2], solParam[3]);
-
-  } else if( stype == "TWISTEDTRAP" ) {
+  }
+  else if( stype == "TWISTEDTRAP" )
+  {
     CheckNoSolidParams( stype, 11, solParam.size() );
     solid = new G4TwistedTrap( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5], solParam[6],
                         solParam[7], solParam[8], solParam[9], solParam[10] );
-
-  } else if( stype == "TWISTEDTRD" ) {
+  }
+  else if( stype == "TWISTEDTRD" )
+  {
     CheckNoSolidParams( stype, 6, solParam.size() );
     solid = new G4TwistedTrd( sname, solParam[0], solParam[1], solParam[2],
                               solParam[3], solParam[4], solParam[5]);
-
-  } else if( stype == "TWISTEDTUBS" ) {
+  }
+  else if( stype == "TWISTEDTUBS" )
+  {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
-    if( phiTotal - twopi  < 1.e-9 ) phiTotal = twopi;
+    if( phiTotal - twopi  < 1.e-9 )  { phiTotal = twopi; }
     solid = new G4TwistedTubs( sname, solParam[0], solParam[1], solParam[2],
                                solParam[3], phiTotal);
-
-  } else if( stype == "BREPBOX" ) { // EntityType is = "Closed_Shell"
+  }
+  else if( stype == "BREPBOX" )   // EntityType is = "Closed_Shell"
+  {
     CheckNoSolidParams( stype, 24, solParam.size() );
     std::vector<G4Point3D> points;
     for( size_t ii = 0; ii < 8; ii++ )
     {
-      points.push_back( G4Point3D(solParam[ii*3+0],solParam[ii*3+1],solParam[ii*3+2]) );
+      points.push_back( G4Point3D(solParam[ii*3+0],
+                                  solParam[ii*3+1],
+                                  solParam[ii*3+2]) );
     }
-    solid = new G4BREPSolidBox( sname, points[0], points[1], points[2], points[3], points[4], points[5], points[6], points[7] );
-
-  } else if( stype == "BREPCYLINDER" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidBox( sname, points[0], points[1], points[2],
+                                points[3], points[4], points[5], points[6],
+                                points[7] );
+  }
+  else if( stype == "BREPCYLINDER" )   // EntityType is = "Closed_Shell"
+  {
     CheckNoSolidParams( stype, 11, solParam.size() );
-    solid = new G4BREPSolidCylinder( sname
-				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
-				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
-				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
-				     , solParam[9], solParam[10] );
-
-  } else if( stype == "BREPCONE" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidCylinder( sname,
+                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
+                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
+                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
+                  solParam[9], solParam[10] );
+  }
+  else if( stype == "BREPCONE" )   // EntityType is = "Closed_Shell"
+  {
     CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidCone( sname
-				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
-				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
-				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
-				     , solParam[9], solParam[10], solParam[11] );
-
-  } else if( stype == "BREPSPHERE" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidCone( sname,
+                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
+                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
+                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
+                  solParam[9], solParam[10], solParam[11] );
+  }
+  else if( stype == "BREPSPHERE" )   // EntityType is = "Closed_Shell"
+  {
     CheckNoSolidParams( stype, 10, solParam.size() );
-    solid = new G4BREPSolidSphere( sname
-				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
-				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
-				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
-				     , solParam[9] );
+    solid = new G4BREPSolidSphere( sname,
+                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
+                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
+                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
+                  solParam[9] );
 
-  } else if( stype == "BREPTORUS" ) { // EntityType is = "Closed_Shell"
+  }
+  else if( stype == "BREPTORUS" )   // EntityType is = "Closed_Shell"
+  {
     CheckNoSolidParams( stype, 11, solParam.size() );
-    solid = new G4BREPSolidTorus( sname
-				     , G4ThreeVector( solParam[0], solParam[1], solParam[2] )
-				     , G4ThreeVector( solParam[3], solParam[4], solParam[5] )
-				     , G4ThreeVector( solParam[6], solParam[7], solParam[8] )
-				     , solParam[9], solParam[10] );
-
-  } else if( stype == "BREPPCONE" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidTorus( sname,
+                  G4ThreeVector( solParam[0], solParam[1], solParam[2] ),
+                  G4ThreeVector( solParam[3], solParam[4], solParam[5] ),
+                  G4ThreeVector( solParam[6], solParam[7], solParam[8] ),
+                  solParam[9], solParam[10] );
+  }
+  else if( stype == "BREPPCONE" )   // EntityType is = "Closed_Shell"
+  {
     size_t nplanes = size_t(solParam[2]);
     CheckNoSolidParams( stype, 4+3*nplanes, solParam.size() );
     std::vector<G4double>* z_p = new std::vector<G4double>;
@@ -512,14 +559,14 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4double phiTotal = solParam[1];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,delta-ph
-				  nplanes, // sections
-				  solParam[3], // z_start
-				  &((*z_p)[0]),
-				  &((*rmin_p)[0]),
-				  &((*rmax_p)[0]));
-
-  } else if( stype == "BREPPOLYHEDRA" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,dph
+                                  nplanes,                      // sections
+                                  solParam[3],                  // z_start
+                                  &((*z_p)[0]), &((*rmin_p)[0]),
+                                  &((*rmax_p)[0]));
+  }
+  else if( stype == "BREPPOLYHEDRA" )   // EntityType is = "Closed_Shell"
+  {
     size_t nplanes = size_t(solParam[3]);
     CheckNoSolidParams( stype, 5+3*nplanes, solParam.size() );
     std::vector<G4double>* z_p = new std::vector<G4double>;
@@ -534,15 +581,15 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4double phiTotal = solParam[1];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,delta-ph
-				      G4int(solParam[2]), // sides
-				      nplanes, // sections
-				      solParam[4], // z_start
-				      &((*z_p)[0]),
-				      &((*rmin_p)[0]),
-				      &((*rmax_p)[0]));
-
-  } else if( stype == "BREPOPENPCONE" ) { // EntityType is = "Closed_Shell"
+    solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,dph
+                                      G4int(solParam[2]), // sides
+                                      nplanes,            // sections
+                                      solParam[4],        // z_start
+                                      &((*z_p)[0]), &((*rmin_p)[0]),
+                                      &((*rmax_p)[0]));
+  }
+  else if( stype == "BREPOPENPCONE" )   // EntityType is = "Closed_Shell"
+  {
     size_t nplanes = size_t(solParam[2]);
     std::vector<G4double>* z_p = new std::vector<G4double>;
     std::vector<G4double>* rmin_p = new std::vector<G4double>;
@@ -556,14 +603,14 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4double phiTotal = solParam[1];
     if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
-    solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,delta-ph
-				      nplanes, // sections
-				      solParam[3], // z_start
-				      &((*z_p)[0]),
-				      &((*rmin_p)[0]),
-				      &((*rmax_p)[0]));
-
-  } else if( stype.substr(0,7) == "Boolean" ) {
+    solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,dph
+                                      nplanes,                      // sections
+                                      solParam[3],                  // z_start
+                                      &((*z_p)[0]), &((*rmin_p)[0]),
+                                      &((*rmax_p)[0]));
+  }
+  else if( stype.substr(0,7) == "Boolean" )
+  {
     const G4tgrSolidBoolean* solb = dynamic_cast<const G4tgrSolidBoolean*>(sol);
     G4VSolid* sol1 = FindOrConstructG4Solid( solb->GetSolid(0));
     G4VSolid* sol2 = FindOrConstructG4Solid( solb->GetSolid(1));
@@ -571,11 +618,16 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       ->FindOrBuildG4RotMatrix( sol->GetRelativeRotMatName() );
     G4ThreeVector relPlace = solb->GetRelativePlace();
 
-    if( stype == "Boolean_UNION" ){
+    if( stype == "Boolean_UNION" )
+    {
       solid = new G4UnionSolid( sname, sol1, sol2, relRotMat, relPlace );
-    } else if( stype == "Boolean_SUBS" ){
+    }
+    else if( stype == "Boolean_SUBS" )
+    {
       solid = new G4SubtractionSolid( sname, sol1, sol2, relRotMat, relPlace );
-    } else if( stype == "Boolean_INTERS" ){
+    }
+    else if( stype == "Boolean_INTERS" )
+    {
       solid = new G4IntersectionSolid( sname, sol1, sol2, relRotMat, relPlace );
     }
     else
@@ -622,8 +674,10 @@ void G4tgbVolume::CheckNoSolidParams( const G4String& solidType,
   if( NoParamExpected != NoParam )
   {
     G4String Err1 = "Solid type " + solidType + " should have ";
-    G4String Err2 = G4UIcommand::ConvertToString(G4int(NoParamExpected)) + " parameters,\n";
-    G4String Err3 = "and it has " + G4UIcommand::ConvertToString(G4int(NoParam));
+    G4String Err2 = G4UIcommand::ConvertToString(G4int(NoParamExpected))
+                  + " parameters,\n";
+    G4String Err3 = "and it has "
+                  + G4UIcommand::ConvertToString(G4int(NoParam));
     G4String ErrMessage = Err1 + Err2 + Err3 + " !";
     G4Exception("G4tgbVolume::CheckNoSolidParams()", "InvalidSetup",
                 FatalException, ErrMessage);
@@ -742,7 +796,8 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #endif
     physvol = new G4PVPlacement(0, G4ThreeVector(),
                                 const_cast<G4LogicalVolume*>(currentLV),
-                                GetName(), 0, false, 0, theTgrVolume->GetCheckOverlaps());
+                                GetName(), 0, false, 0,
+                                theTgrVolume->GetCheckOverlaps());
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
@@ -781,7 +836,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       {
         //----- Get rotation matrix
         G4tgrPlaceSimple* placeSimple = (G4tgrPlaceSimple*)place; 
-	G4String rmName = placeSimple->GetRotMatName();
+        G4String rmName = placeSimple->GetRotMatName();
 
         G4RotationMatrix* rotmat = G4tgbRotationMatrixMgr::GetInstance()
                                  ->FindOrBuildG4RotMatrix( rmName );
@@ -814,7 +869,9 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #ifdef G4VERBOSE
           if( G4tgrMessenger::GetVerboseLevel() >= 1 )
           {
-            G4cout << "Construction new G4VPhysicalVolume through G4ReflectionFactory " << GetName() << " # " << copyNo 
+            G4cout << "Construction new G4VPhysicalVolume"
+                   << " through G4ReflectionFactory " << GetName()
+                   << " # " << copyNo 
                    << " ROT " << rotmat->colX() 
                    << " " << rotmat->colY() 
                    << " " << rotmat->colZ() << G4endl;
@@ -824,16 +881,18 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                                        const_cast<G4LogicalVolume*>(currentLV),
                                        GetName(),
                                        const_cast<G4LogicalVolume*>(parentLV),
-                                       false, copyNo, theTgrVolume->GetCheckOverlaps());
+                                       false, copyNo,
+                                       theTgrVolume->GetCheckOverlaps() );
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new : G4PVPlacement " 
-             << physvol->GetName() << " in volume " << parentLV->GetName() << " copyNo " << copyNo 
-	     << " position " <<place->GetPlacement() 
-	     << " rotation " << rotmat->colX() 
-	     << " " << rotmat->colY() 
-	     << " " << rotmat->colZ() << G4endl;
+             << physvol->GetName() << " in volume " << parentLV->GetName()
+             << " copyNo " << copyNo 
+             << " position " <<place->GetPlacement() 
+             << " rotation " << rotmat->colX() 
+             << " " << rotmat->colY() 
+             << " " << rotmat->colZ() << G4endl;
     }
 #endif
         }
@@ -851,7 +910,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       }
       else if( place->GetType() == "PlaceParam" )
       {
-	G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
+        G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
 
         //----- See what parameterisation type
 #ifdef G4VERBOSE
@@ -872,17 +931,19 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
         { 
           param = new G4tgbPlaceParamCircle(dp);
           
-        } else if( (dp->GetParamType() == "LINEAR")
-                || (dp->GetParamType() == "LINEAR_X")
-                || (dp->GetParamType() == "LINEAR_Y")
-                || (dp->GetParamType() == "LINEAR_Z") )
+        }
+        else if( (dp->GetParamType() == "LINEAR")
+              || (dp->GetParamType() == "LINEAR_X")
+              || (dp->GetParamType() == "LINEAR_Y")
+              || (dp->GetParamType() == "LINEAR_Z") )
         {   
           param = new G4tgbPlaceParamLinear(dp);
           
-        } else if( (dp->GetParamType() == "SQUARE")
-                || (dp->GetParamType() == "SQUARE_XY")
-                || (dp->GetParamType() == "SQUARE_XZ")
-                || (dp->GetParamType() == "SQUARE_YZ") )
+        }
+        else if( (dp->GetParamType() == "SQUARE")
+              || (dp->GetParamType() == "SQUARE_XY")
+              || (dp->GetParamType() == "SQUARE_XZ")
+              || (dp->GetParamType() == "SQUARE_YZ") )
         {
           param = new G4tgbPlaceParamSquare(dp);
         }
@@ -912,41 +973,41 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVParameterised: " 
-             << physvol->GetName() << " in volume " << parentLV->GetName() << " N copies " << param->GetNCopies() 
-	     << " axis " << param->GetAxis() << G4endl;
+             << physvol->GetName() << " in volume " << parentLV->GetName()
+             << " N copies " << param->GetNCopies() 
+             << " axis " << param->GetAxis() << G4endl;
     }
 #endif
 
       }
       else if( place->GetType() == "PlaceReplica" )
       {
-	//--------------- If it is  PlaceReplica
-	//	G4tgrVolumeDivision* volr = (G4tgrVolumeDivision*)theTgrVolume;
-	G4tgrPlaceDivRep* dpr = (G4tgrPlaceDivRep*)place;
-	//	G4tgrPlaceDivRep* dpr = volr->GetPlaceDivision() ;
+        //--------------- If it is  PlaceReplica
+        G4tgrPlaceDivRep* dpr = (G4tgrPlaceDivRep*)place;
+
 #ifdef G4VERBOSE
-	if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-	  {
-	    G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-		   << "   replica" << " " << currentLV->GetName()
-		   << " in " <<  parentLV->GetName() 
-		   << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
-		   << " offset " << dpr->GetOffset() << G4endl;
-	  }
+        if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+          {
+            G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
+                   << "   replica" << " " << currentLV->GetName()
+                   << " in " <<  parentLV->GetName() 
+                   << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
+                   << " offset " << dpr->GetOffset() << G4endl;
+          }
 #endif
-	physvol = new G4PVReplica(GetName(),
-				  const_cast<G4LogicalVolume*>(currentLV),
-				  const_cast<G4LogicalVolume*>(parentLV),
-				  EAxis(dpr->GetAxis()), dpr->GetNDiv(),
-				  dpr->GetWidth(), dpr->GetOffset());
+        physvol = new G4PVReplica(GetName(),
+                                  const_cast<G4LogicalVolume*>(currentLV),
+                                  const_cast<G4LogicalVolume*>(parentLV),
+                                  EAxis(dpr->GetAxis()), dpr->GetNDiv(),
+                                  dpr->GetWidth(), dpr->GetOffset());
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVReplica: " 
-	     << currentLV->GetName()
-	     << " in " <<  parentLV->GetName() 
-	     << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
-	     << " offset " << dpr->GetOffset() << G4endl;
+             << currentLV->GetName()
+             << " in " <<  parentLV->GetName() 
+             << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
+             << " offset " << dpr->GetOffset() << G4endl;
     }
 #endif
       }
@@ -981,10 +1042,10 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVDivision by number of divisions: " 
-	     << GetName() << " in " <<  parentLV->GetName() 
-	     << " axis " << placeDiv->GetAxis()  
-	     << " Ndiv " << placeDiv->GetNDiv()
-	     << " offset " << placeDiv->GetOffset() << G4endl;
+             << GetName() << " in " <<  parentLV->GetName() 
+             << " axis " << placeDiv->GetAxis()  
+             << " Ndiv " << placeDiv->GetNDiv()
+             << " offset " << placeDiv->GetOffset() << G4endl;
     }
 #endif
            break;
@@ -997,10 +1058,10 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVDivision by width: " 
-	     << GetName() << " in " <<  parentLV->GetName() 
-	     << " axis " << placeDiv->GetAxis()  
-	     << " width " << placeDiv->GetWidth()
-	     << " offset " << placeDiv->GetOffset() << G4endl;
+             << GetName() << " in " <<  parentLV->GetName() 
+             << " axis " << placeDiv->GetAxis()  
+             << " width " << placeDiv->GetWidth()
+             << " offset " << placeDiv->GetOffset() << G4endl;
     }
 #endif
           break;
@@ -1013,12 +1074,13 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
-      G4cout << " Constructing new G4PVDivision by width and number of divisions: " 
-	     << GetName() << " in " <<  parentLV->GetName() 
-	     << " axis " << placeDiv->GetAxis()  
-	     << " Ndiv " << placeDiv->GetNDiv()
-	     << " width " << placeDiv->GetWidth()
-	     << " offset " << placeDiv->GetOffset() << G4endl;
+      G4cout << " Constructing new G4PVDivision by width"
+             << " and number of divisions: " 
+             << GetName() << " in " <<  parentLV->GetName() 
+             << " axis " << placeDiv->GetAxis()  
+             << " Ndiv " << placeDiv->GetNDiv()
+             << " width " << placeDiv->GetWidth()
+             << " offset " << placeDiv->GetOffset() << G4endl;
     }
 #endif
           break;
@@ -1033,11 +1095,12 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       {
         theG4AssemblyVolume = new G4AssemblyVolume;
 #ifdef G4VERBOSE
-	if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	  {
-	    G4cout << " Constructing new G4AssemblyVolume: " 
-		   << " number of assembly components " <<  tgrAssembly->GetNoComponents() << G4endl;
-	  }
+        if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+          {
+            G4cout << " Constructing new G4AssemblyVolume: " 
+                   << " number of assembly components "
+                   <<  tgrAssembly->GetNoComponents() << G4endl;
+          }
 #endif        
         G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
         for( G4int ii = 0; ii < tgrAssembly->GetNoComponents(); ii++ )
@@ -1060,17 +1123,16 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
           // Fill the assembly by the plates
           theG4AssemblyVolume->AddPlacedVolume( logvol, transl, rotmat );
 #ifdef G4VERBOSE
-	  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	    {
-	      G4cout << " G4AssemblyVolume->AddPlacedVolume " << ii  
-		     << " " << logvol->GetName()
-		     << " translation " << transl  
-		     << " rotmat " << rotmat->colX() 
-		     << " " << rotmat->colY() 
-		     << " " << rotmat->colZ() << G4endl;
-	    }
+          if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+            {
+              G4cout << " G4AssemblyVolume->AddPlacedVolume " << ii  
+                     << " " << logvol->GetName()
+                     << " translation " << transl  
+                     << " rotmat " << rotmat->colX() 
+                     << " " << rotmat->colY() 
+                     << " " << rotmat->colZ() << G4endl;
+            }
 #endif
-
         }
       }
 
@@ -1106,18 +1168,23 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
   G4VSolid* solid=0;
   G4double redf = 0.001; //make daugther much smaller, to fit in parent
 
-  if( parentSolid->GetEntityType() == "G4Box" ){
+  if( parentSolid->GetEntityType() == "G4Box" )
+  {
     G4Box* psolid = (G4Box*)(parentSolid);
     solid = new G4Box(GetName(), psolid->GetXHalfLength()*redf,
                                  psolid->GetZHalfLength()*redf,
                                  psolid->GetZHalfLength()*redf);
-  } else if ( parentSolid->GetEntityType() == "G4Tubs" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Tubs" )
+  {
     G4Tubs* psolid = (G4Tubs*)(parentSolid);
     solid = new G4Tubs( GetName(), psolid->GetInnerRadius()*redf,
                                    psolid->GetOuterRadius()*redf,
                                    psolid->GetZHalfLength()*redf,
                                    psolid->GetSPhi(), psolid->GetDPhi());
-  } else if ( parentSolid->GetEntityType() == "G4Cons" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Cons" )
+  {
     G4Cons* psolid = (G4Cons*)(parentSolid);
     solid = new G4Cons( GetName(), psolid->GetInnerRadiusMinusZ()*redf,
                                    psolid->GetOuterRadiusMinusZ()*redf,
@@ -1125,14 +1192,18 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                                    psolid->GetOuterRadiusPlusZ()*redf,
                                    psolid->GetZHalfLength()*redf,
                                    psolid->GetSPhi(), psolid->GetDPhi());
-  } else if ( parentSolid->GetEntityType() == "G4Trd" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Trd" )
+  {
     G4Trd* psolid = (G4Trd*)(parentSolid);
     solid = new G4Trd( GetName(), psolid->GetXHalfLength1()*redf,
                                   psolid->GetXHalfLength2()*redf,
                                   psolid->GetYHalfLength1()*redf,
                                   psolid->GetYHalfLength2()*redf,
                                   psolid->GetZHalfLength()*redf);
-  } else if ( parentSolid->GetEntityType() == "G4Para" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Para" )
+  {
     G4Para* psolid = (G4Para*)(parentSolid);
     solid = new G4Para( GetName(), psolid->GetXHalfLength()*redf,
                                    psolid->GetYHalfLength()*redf,
@@ -1140,7 +1211,9 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                                    std::atan(psolid->GetTanAlpha()),
                                    psolid->GetSymAxis().theta(),
                                    psolid->GetSymAxis().phi() ); 
-  } else if ( parentSolid->GetEntityType() == "G4Polycone" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Polycone" )
+  {
     G4Polycone* psolid = (G4Polycone*)(parentSolid);
     G4PolyconeHistorical origParam = *(psolid->GetOriginalParameters());
     for( G4int ii = 0; ii < origParam.Num_z_planes; ii++ )
@@ -1153,7 +1226,9 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                             origParam.Num_z_planes, origParam.Z_values,
                             origParam.Rmin, origParam.Rmax);
 
-  } else if ( parentSolid->GetEntityType() == "G4Polyhedra" ){
+  }
+  else if ( parentSolid->GetEntityType() == "G4Polyhedra" )
+  {
     G4Polyhedra* psolid = (G4Polyhedra*)(parentSolid);
     G4PolyhedraHistorical origParam = *(psolid->GetOriginalParameters());
     for( G4int ii = 0; ii < origParam.Num_z_planes; ii++ )

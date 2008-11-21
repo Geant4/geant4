@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialSimple.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbMaterialSimple.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,8 +72,7 @@ G4Material* G4tgbMaterialSimple::BuildG4Material()
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << "  Constructing new G4Material simple: " 
-	   << *mate << G4endl;
+    G4cout << "  Constructing new G4Material simple: " << *mate << G4endl;
   }
 #endif
 

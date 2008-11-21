@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeAssembly.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgrVolumeAssembly.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,10 +134,13 @@ std::ostream& operator<<(std::ostream& os, const G4tgrVolumeAssembly& obj)
   os << "G4tgrVolumeAssembly= " << obj.theName;
 
   for( size_t ii = 0; ii < obj.theComponentNames.size(); ii++ )
-    {
-      os << obj.theComponentNames[ii] << " RotMatName= " << obj.theComponentRMs[ii] << " Position= " << obj.theComponentPos[ii].x() << " "  << obj.theComponentPos[ii].y() << " " << obj.theComponentPos[ii].z();
-    }
-
+  {
+    os << obj.theComponentNames[ii] << " RotMatName= "
+       << obj.theComponentRMs[ii] << " Position= "
+       << obj.theComponentPos[ii].x() << " "
+       << obj.theComponentPos[ii].y() << " "
+       << obj.theComponentPos[ii].z();
+  }
   os << G4endl;
 
   return os;

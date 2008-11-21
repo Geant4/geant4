@@ -24,6 +24,9 @@
 // ********************************************************************
 //
 //
+// $Id: G4tgbGeometryDumper.cc,v 1.9 2008-11-21 15:37:18 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4tgbGeometryDumper
 
@@ -35,6 +38,7 @@
 
 #include "G4tgrMessenger.hh"
 
+#include "G4UIcommand.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4VSolid.hh"
@@ -69,7 +73,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VPVParameterisation.hh"
-#include "G4UIcommand.hh"
 #include <iomanip>
 
 //------------------------------------------------------------------------
@@ -137,14 +140,15 @@ G4tgbGeometryDumper::~G4tgbGeometryDumper()
 void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
 {
 
-  //---- Dump logical volume first
+  //--- Dump logical volume first
   G4LogicalVolume* lv = pv->GetLogicalVolume();
 
   G4ReflectionFactory* reffact = G4ReflectionFactory::Instance();
 
-  //---- It is not needed to dump _refl volumes created when parent is reflected 
+  //--- It is not needed to dump _refl volumes created when parent is reflected
   // !!WARNING : it must be avoided to reflect a volume hierarchy if children
   //             has also been reflected, as both will have same name
+
   if( reffact->IsReflected( lv )
    && reffact->IsReflected( pv->GetMotherLogical() ) )  { return; }
 
@@ -159,7 +163,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
       G4String lvName = lv->GetName();
       if( !bVolExists )
       {
-	lvName = DumpLogVol( lv );
+        lvName = DumpLogVol( lv );
       }
       DumpPVPlacement( pv, lvName );
     } 
@@ -173,7 +177,7 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
       G4String lvName = lv->GetName();
       if( !bVolExists )
       {
-	lvName = DumpLogVol( lv );
+        lvName = DumpLogVol( lv );
       }
       G4PVReplica* pvrepl = (G4PVReplica*)(pv);
       DumpPVReplica( pvrepl, lvName );
@@ -198,7 +202,9 @@ void G4tgbGeometryDumper::DumpPhysVol( G4VPhysicalVolume* pv )
 }
 
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvName, G4int copyNo )
+void
+G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv,
+                                      const G4String& lvName, G4int copyNo )
 {
   G4String pvName = pv->GetName();
   
@@ -213,20 +219,20 @@ void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvNam
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
       {
-	G4cout << " G4tgbGeometryDumper::DumpPVPlacement() - Reflected volume: "
-	       << pv->GetName() << G4endl;
+        G4cout << " G4tgbGeometryDumper::DumpPVPlacement() - Reflected volume: "
+               << pv->GetName() << G4endl;
       }
 #endif
-    CLHEP::Hep3Vector colx = rotMat->colX();
-    CLHEP::Hep3Vector coly = rotMat->colY();
-    CLHEP::Hep3Vector colz = rotMat->colZ();
+    G4ThreeVector colx = rotMat->colX();
+    G4ThreeVector coly = rotMat->colY();
+    G4ThreeVector colz = rotMat->colZ();
     // apply a Z reflection (reflection matrix is decomposed in new
     // reflection-free rotation + z-reflection)
     colz *= -1.;
     CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),
-			     colx.y(),coly.y(),colz.y(),
-			     colx.z(),coly.z(),colz.z());
-      // matrix representation (inverted)
+                             colx.y(),coly.y(),colz.y(),
+                             colx.z(),coly.z(),colz.z());
+    // matrix representation (inverted)
     *rotMat = G4RotationMatrix(rottemp);
     *rotMat = (*rotMat).inverse();
     pvName += "_refl";
@@ -244,17 +250,17 @@ void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvNam
     +"/"+pv->GetMotherLogical()->GetName();
   
   if( !CheckIfPhysVolExists(fullname, pv ))
-    {
-      (*theFile)
-	<< ":PLACE "
-	<< SubstituteRefl(AddQuotes(lvName))
-	<< " " << copyNo << " "
-	<< SubstituteRefl(AddQuotes(pv->GetMotherLogical()->GetName()))
-	<< " " << AddQuotes(rotName) << " " 
-           << pos.x() << " " << pos.y() << " " << pos.z() << G4endl;
+  {
+    (*theFile)
+      << ":PLACE "
+      << SubstituteRefl(AddQuotes(lvName))
+      << " " << copyNo << " "
+      << SubstituteRefl(AddQuotes(pv->GetMotherLogical()->GetName()))
+      << " " << AddQuotes(rotName) << " " 
+      << pos.x() << " " << pos.y() << " " << pos.z() << G4endl;
       
-      thePhysVols[fullname] = pv;
-    }
+    thePhysVols[fullname] = pv;
+  }
 }
 
 
@@ -280,7 +286,8 @@ void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
   G4VSolid* newSolid = solid1st;
   G4String lvName;
       
-  G4cout << " DUMPPARAM " << pv->GetName() << " nrep " << nReplicas << " width " << width << " offset " << offset << G4endl;
+  G4cout << " DUMPPARAM " << pv->GetName() << " nrep " << nReplicas
+         << " width " << width << " offset " << offset << G4endl;
   for( G4int ii = 0; ii < nReplicas; ii++ )
   {
     G4Material* newMate = param->ComputeMaterial(ii, pv );
@@ -372,8 +379,9 @@ void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
     {
       G4String extraName = "";
       if( ii != 0 ) 
-      { 
-	extraName= "#"+G4UIcommand::ConvertToString(ii)+"/"+pv->GetMotherLogical()->GetName();
+      {
+        extraName= "#"+G4UIcommand::ConvertToString(ii)
+                      +"/"+pv->GetMotherLogical()->GetName();
       }
       lvName = DumpLogVol( lv, extraName, newSolid, newMate );
     }
@@ -381,11 +389,12 @@ void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
     param->ComputeTransformation(ii, pv);
     DumpPVPlacement( pv, lvName, ii );
   }
-
 }
 
+
 //------------------------------------------------------------------------
-void G4tgbGeometryDumper::DumpPVReplica( G4PVReplica* pv, G4String lvName )
+void G4tgbGeometryDumper::DumpPVReplica( G4PVReplica* pv,
+                                         const G4String& lvName )
 {
   EAxis axis;
   G4int nReplicas;
@@ -412,14 +421,12 @@ void G4tgbGeometryDumper::DumpPVReplica( G4PVReplica* pv, G4String lvName )
     axisName = "PHI";
     break;
   case kRadial3D:
-  case kUndefined: 
-          G4String ErrMessage =  "Unknown axis of replication for volume"
-	    +pv->GetName();
-	  G4Exception("G4tgbGeometryDumper::DumpPVReplica", 
-		      "Wrong axis ",
-		      FatalException, 
-		      ErrMessage);
-      break;
+  case kUndefined:
+    G4String ErrMessage = "Unknown axis of replication for volume"
+                        + pv->GetName();
+    G4Exception("G4tgbGeometryDumper::DumpPVReplica", 
+                "Wrong axis ", FatalException, ErrMessage);
+    break;
   }
 
   G4String fullname = lvName
@@ -448,16 +455,17 @@ void G4tgbGeometryDumper::DumpPVReplica( G4PVReplica* pv, G4String lvName )
 
     thePhysVols[fullname] = pv;
   }
-
 }
 
 
 //------------------------------------------------------------------------
-G4String G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv, G4String extraName, G4VSolid* solid, G4Material* mate )
+G4String
+G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv, G4String extraName,
+                                 G4VSolid* solid, G4Material* mate )
 {
   G4String lvName;
-  //--- take out the '_refl' in the name
-  if( extraName == "" ) 
+ 
+  if( extraName == "" )  //--- take out the '_refl' in the name
   {
     lvName = GetObjectName(lv,theLogVols);
   } 
@@ -466,14 +474,18 @@ G4String G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv, G4String extraNam
     lvName = lv->GetName()+extraName;
   }
 
-  if( theLogVols.find( lvName ) != theLogVols.end() ) return lvName; // alredy dumped
+  if( theLogVols.find( lvName ) != theLogVols.end() )   // alredy dumped
+  {
+    return lvName;
+  }
 
-  if( !solid ) solid = lv->GetSolid(); 
+  if( !solid )  { solid = lv->GetSolid(); }
+
   //---- Dump solid 
   G4String solidName = DumpSolid( solid, extraName );
 
   //---- Dump material
-  if( !mate ) mate = lv->GetMaterial();
+  if( !mate )  { mate = lv->GetMaterial(); }
   G4String mateName = DumpMaterial( mate );
 
   //---- Dump logical volume (solid + material)
@@ -491,15 +503,19 @@ G4String G4tgbGeometryDumper::DumpLogVol( G4LogicalVolume* lv, G4String extraNam
 G4String G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
 {
   G4String mateName = GetObjectName(mat,theMaterials);
-  if( theMaterials.find( mateName ) != theMaterials.end() ) return mateName; // alredy dumped
+  if( theMaterials.find( mateName ) != theMaterials.end() )  // alredy dumped
+  {
+    return mateName;
+  }
 
   size_t numElements           = mat->GetNumberOfElements();
   G4double density             = mat->GetDensity()/g*cm3;
 
   
   // start tag
+  //
   if (numElements == 1)
-    {
+  {
     (*theFile) << ":MATE " << AddQuotes(mateName) << " "
                << mat->GetZ() << " " << mat->GetA()/(g/mole) << " "
                << density << G4endl;
@@ -518,14 +534,16 @@ G4String G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
     // close start element tag and get ready to do composit "parts"
     for (size_t ii = 0; ii < numElements; ii++)
     {
-      (*theFile) << "   " << AddQuotes(GetObjectName((*elems)[ii],theElements)) << " "
+      (*theFile) << "   "
+                 << AddQuotes(GetObjectName((*elems)[ii],theElements)) << " "
                  << fractions[ii] << G4endl;
     }
 
   }
 
   (*theFile) << ":MATE_MEE " << AddQuotes(mateName) << " " 
-	     << mat->GetIonisation()->GetMeanExcitationEnergy()/eV << "*eV" << G4endl;
+             << mat->GetIonisation()->GetMeanExcitationEnergy()/eV
+             << "*eV" << G4endl;
 
   theMaterials[mateName] = mat;
 
@@ -538,10 +556,14 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
 {
   G4String elemName = GetObjectName(ele,theElements);
 
-  if( theElements.find( elemName ) != theElements.end() ) return; // alredy dumped
+  if( theElements.find( elemName ) != theElements.end() )  // alredy dumped
+  {
+    return;
+  }
 
-  //----- Add symbol name: Material mixtures store the components as elements
-  //      (even if the input are materials), but without symbol
+  //--- Add symbol name: Material mixtures store the components as elements
+  //    (even if the input are materials), but without symbol
+  //
   G4String symbol = ele->GetSymbol();
   if( symbol == "" || symbol == " " )
   {
@@ -551,8 +573,8 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
   if( ele->GetNumberOfIsotopes() == 0 )
   {
     (*theFile) << ":ELEM " << AddQuotes(elemName) << " "
-	       << AddQuotes(symbol) << " " << ele->GetZ() << " "
-	       << ele->GetA()/(g/mole) << " " << G4endl;
+               << AddQuotes(symbol) << " " << ele->GetZ() << " "
+               << ele->GetA()/(g/mole) << " " << G4endl;
   } 
   else 
   {
@@ -563,17 +585,16 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
     }
 
     (*theFile) << ":ELEM_FROM_ISOT " << AddQuotes(elemName) << " "
-	       << AddQuotes(symbol) << " " << ele->GetNumberOfIsotopes() << G4endl;
+               << AddQuotes(symbol) << " " << ele->GetNumberOfIsotopes()
+               << G4endl;
     const G4double* fractions    = ele->GetRelativeAbundanceVector();
     for (size_t ii = 0; ii < ele->GetNumberOfIsotopes(); ii++)
     {
-      (*theFile) << "   " << AddQuotes(GetObjectName((*isots)[ii],theIsotopes)) << " "
+      (*theFile) << "   "
+                 << AddQuotes(GetObjectName((*isots)[ii],theIsotopes)) << " "
                  << fractions[ii] << G4endl;
     }
-
-    
   }
-
   theElements[elemName] = ele;
 }
 
@@ -582,18 +603,22 @@ void G4tgbGeometryDumper::DumpElement( G4Element* ele)
 void G4tgbGeometryDumper::DumpIsotope( G4Isotope* isot)
 {
   G4String isotName = GetObjectName(isot,theIsotopes);
-  if( theIsotopes.find( isotName ) != theIsotopes.end() ) return; // alredy dumped
+  if( theIsotopes.find( isotName ) != theIsotopes.end() )    // alredy dumped
+  {
+    return;
+  }
 
-    (*theFile) << ":ISOT " << AddQuotes(isotName) << " "
-	       << isot->GetZ() << " " << isot->GetN() << " "
-	       << isot->GetA()/(g/mole) << " " << G4endl;
-  
+  (*theFile) << ":ISOT " << AddQuotes(isotName) << " "
+             << isot->GetZ() << " " << isot->GetN() << " "
+             << isot->GetA()/(g/mole) << " " << G4endl;
+
   theIsotopes[isotName] = isot;
 }
 
 
 //------------------------------------------------------------------------
-G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid, G4String extraName )
+G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid,
+                                         const G4String& extraName )
 {
   G4String solidName;
   if( extraName == "" ) 
@@ -605,7 +630,10 @@ G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid, G4String extraName )
     solidName = solid->GetName()+extraName;
   }
 
-  if( theSolids.find( solidName ) != theSolids.end() ) return solidName; // alredy dumped
+  if( theSolids.find( solidName ) != theSolids.end() )   // alredy dumped
+  {
+    return solidName;
+  }
 
   G4String solidType = solid->GetEntityType();
   solidType = GetTGSolidType( solidType );
@@ -630,7 +658,6 @@ G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid, G4String extraName )
     (*theFile) << ":SOLID " << AddQuotes(solidName) << " ";
     (*theFile) << AddQuotes(solidType) << " ";
     DumpSolidParams( solid );
-
     theSolids[solidName] = solid;
   }
 
@@ -692,11 +719,11 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
 void G4tgbGeometryDumper::DumpSolidParams( G4VSolid * so) 
 {
   std::vector<G4double> params = GetSolidParams( so );
-  for( size_t ii = 0 ; ii < params.size(); ii++ ){  
+  for( size_t ii = 0 ; ii < params.size(); ii++ )
+  {  
     (*theFile) << params[ii] << " " ;
   }
   (*theFile) << G4endl;
-  
 }
 
 
@@ -752,10 +779,9 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     const G4Para * para = dynamic_cast < const G4Para * > (so);
     double phi;
     if(para->GetSymAxis().z()!=1.0)
-      phi = atan(para->GetSymAxis().y()/para->GetSymAxis().x());
+      { phi = atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
     else
-      phi = 0;
-    
+      { phi = 0; }
     params.push_back( para->GetXHalfLength());
     params.push_back(  para->GetYHalfLength());
     params.push_back( para->GetZHalfLength());
@@ -838,8 +864,8 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     for( mite = rzs.begin(); mite != rzs.end(); mite++ )
     {
       std::vector<G4double> val = (*mite).second; 
-      //      G4cout << " PG z " << (*mite).first << " N R's " << val.size() << G4endl;
-      if( val.size() > 2 ) {
+      if( val.size() > 2 )
+      {
         // take min and max values only
         G4double vmin = DBL_MAX;
         G4double vmax = -DBL_MAX; 
@@ -848,7 +874,6 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
         {
           if( val[ii] < vmin )  { vmin = val[ii]; }
           if( val[ii] > vmax )  { vmax = val[ii]; }
-	  //         G4cout << " PG min R " << vmin << " max R " << vmax << G4endl;
         }
         valnew.push_back( vmin );
         valnew.push_back( vmax );
@@ -864,8 +889,6 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
       if( mite == rzs.begin() || mite == mite2 )
       {
         std::vector<G4double> val = (*mite).second; 
-	//        G4cout << " PG 2nd: z " << (*mite).first
-	//        << " N R's " << val.size() << G4endl;
         if( val.size() == 1 )
         {
           std::vector<G4double> valnew;
@@ -882,8 +905,6 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     {
       if( mite == rzs.begin() )  { continue; }
       std::vector<G4double> val = (*mite).second; 
-      //      G4cout << " PG 2nd: z " << (*mite).first
-      //       << " N R's " << val.size() << G4endl;
       if( val.size() == 1 )
       {
         // Check that neighbours do not also 1
@@ -927,10 +948,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     for( mite = rzs.begin(); mite != rzs.end(); mite++ )
     {
       std::vector<G4double> val = (*mite).second; 
-      //     G4cout << " POLYCONE z " << (*mite).first
-      //       << " rmin " << val[0] << " rmax  " << val[1] << G4endl;
     }
-    //    G4cout << " POLYCONE " << pc->GetName() << *pc );
     
   } else if (solidType == "POLYHEDRA") {
     //--- Dump RZ corners, as original parameters will not be present
@@ -954,21 +972,23 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     }
 
   } else if (solidType == "ELLIPTICALTUBE") {
-    const G4EllipticalTube * eltu = dynamic_cast < const G4EllipticalTube * > (so);
+    const G4EllipticalTube * eltu =
+          dynamic_cast < const G4EllipticalTube * > (so);
     params.push_back( eltu->GetDx());
     params.push_back( eltu->GetDy());
     params.push_back( eltu->GetDz());
 
   } else if (solidType == "ELLIPSOID" ){
     const G4Ellipsoid* dso = dynamic_cast < const G4Ellipsoid * > (so);
-     params.push_back( dso->GetSemiAxisMax(0)  );
-     params.push_back( dso->GetSemiAxisMax(1)  );
-     params.push_back( dso->GetSemiAxisMax(2)  );
-     params.push_back( dso->GetZBottomCut()   );
-     params.push_back( dso->GetZTopCut() );
+    params.push_back( dso->GetSemiAxisMax(0)  );
+    params.push_back( dso->GetSemiAxisMax(1)  );
+    params.push_back( dso->GetSemiAxisMax(2)  );
+    params.push_back( dso->GetZBottomCut()   );
+    params.push_back( dso->GetZTopCut() );
 
   } else if (solidType == "ELLIPTICAL_CONE") {
-    const G4EllipticalCone * elco = dynamic_cast < const G4EllipticalCone * > (so);
+    const G4EllipticalCone * elco =
+          dynamic_cast < const G4EllipticalCone * > (so);
     params.push_back( elco-> GetSemiAxisX() );
     params.push_back( elco-> GetSemiAxisY() );
     params.push_back( elco-> GetZMax() );
@@ -1082,6 +1102,7 @@ G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
   return rotName;
 }
 
+
 //------------------------------------------------------------------------
 std::vector<G4VPhysicalVolume*>
 G4tgbGeometryDumper::GetPVChildren( G4LogicalVolume* lv )
@@ -1107,8 +1128,9 @@ G4tgbGeometryDumper::GetPVChildren( G4LogicalVolume* lv )
   return children;
 }
 
+
 //------------------------------------------------------------------------
-G4String G4tgbGeometryDumper::GetTGSolidType( G4String& solidType )
+G4String G4tgbGeometryDumper::GetTGSolidType( const G4String& solidType )
 {
   G4String newsolidType = solidType.substr(2,solidType.length() );
   for( size_t ii = 0; ii < newsolidType.length(); ii++ )
@@ -1117,6 +1139,7 @@ G4String G4tgbGeometryDumper::GetTGSolidType( G4String& solidType )
   }
   return newsolidType;
 }
+
 
 //------------------------------------------------------------------------
 G4double G4tgbGeometryDumper::MatDeterminant(G4RotationMatrix * ro) 
@@ -1190,78 +1213,94 @@ G4String G4tgbGeometryDumper::SubstituteRefl( G4String name )
 G4String G4tgbGeometryDumper::GetIsotopeName( G4Isotope* isot )
 {
   G4String isotName = isot->GetName();
-  //first look if this is isotope is already dumped, with original isotope name or new one
+  // first look if this is isotope is already dumped,
+  // with original isotope name or new one
+  //
   std::map<G4String,G4Isotope*>::const_iterator ite;
-  for( ite = theIsotopes.begin(); ite != theIsotopes.end(); ite++ ){
-    if( isot == (*ite).second ) return (*ite).first;
+  for( ite = theIsotopes.begin(); ite != theIsotopes.end(); ite++ )
+  {
+    if( isot == (*ite).second )  { return (*ite).first; }
   }
 
-  // Now look if there is another isotope dumped with same name, and if found add _N to the name
+  // Now look if there is another isotope dumped with same name,
+  // and if found add _N to the name
+  //
   ite = theIsotopes.find( isotName );
-  //Isotope found with same name
-  if( ite != theIsotopes.end() )
+  if( ite != theIsotopes.end() )       // Isotope found with same name
   {
     G4Isotope* isotold = (*ite).second;
-    if( isot != isotold ) // new isotope it is not the really the same one as isotope found
-    {
-      if( !Same2G4Isotopes(isot, isotold)) { //it the two have same data, use the old one
-	// G4Nist does names isotopes of same element with same name
-	G4int ii = 2;
-	for(;;ii++) {
-	  G4String newIsotName = isotName + "_" + G4UIcommand::ConvertToString(ii);
-	  std::map<G4String,G4Isotope*>::const_iterator ite2 = theIsotopes.find( newIsotName );
-	  if( ite2 == theIsotopes.end() ) {
-	    isotName = newIsotName;
-	    break;
-	  } else {
-	    if( Same2G4Isotopes( isot, (*ite2).second ) ) 
-	      {
-		isotName = newIsotName;
-		break;
-	      }
-	  }
-	}
+    if( isot != isotold ) // new isotope it is not the really
+    {                     // the same one as isotope found
+      if( !Same2G4Isotopes(isot, isotold))
+      {                   // if the two have same data, use the old one
+        G4int ii = 2;     // G4Nist does names isotopes of same element
+                          // with same name
+        for(;;ii++)
+        {
+          G4String newIsotName = isotName + "_"
+                               + G4UIcommand::ConvertToString(ii);
+          std::map<G4String,G4Isotope*>::const_iterator ite2 =
+               theIsotopes.find( newIsotName );
+          if( ite2 == theIsotopes.end() )
+          {
+            isotName = newIsotName;
+            break;
+          }
+          else
+          {
+            if( Same2G4Isotopes( isot, (*ite2).second ) ) 
+            {
+              isotName = newIsotName;
+              break;
+            }
+          }
+        }
       }
-      
     }
   }
-  
   return isotName;
 }
 
 
 //------------------------------------------------------------------------
-template< class TYP>
-G4String G4tgbGeometryDumper::GetObjectName( TYP* obj, std::map<G4String,TYP*> objectsDumped )
+template< class TYP > G4String G4tgbGeometryDumper::
+GetObjectName( TYP* obj, std::map<G4String,TYP*> objectsDumped )
 {
   G4String objName = obj->GetName();
-  //first look if this is objecy is already dumped, with original object name or new one
+
+  // first look if this is objecy is already dumped,
+  // with original object name or new one
+  //
   typename std::map<G4String,TYP*>::const_iterator ite;
-  for( ite = objectsDumped.begin(); ite != objectsDumped.end(); ite++ ){
-    if( obj == (*ite).second ) return (*ite).first;
+  for( ite = objectsDumped.begin(); ite != objectsDumped.end(); ite++ )
+  {
+    if( obj == (*ite).second )  { return (*ite).first; }
   }
 
-  // Now look if there is another object dumped with same name, and if found add _N to the name
+  // Now look if there is another object dumped with same name,
+  // and if found add _N to the name
+  //
   ite = objectsDumped.find( objName );
-  //Object found with same name
-  if( ite != objectsDumped.end() )
+
+  if( ite != objectsDumped.end() )    // Object found with same name
   {
     TYP* objold = (*ite).second;
-    if( obj != objold ) // new object it is not the really the same one as object found
-    {
+    if( obj != objold ) // new object it is not the really
+    {                   // the same one as object found
       G4int ii = 2;
-      for(;;ii++) {
-	G4String newObjName = objName + "_" + G4UIcommand::ConvertToString(ii);
-	typename std::map<G4String,TYP*>::const_iterator ite2 = objectsDumped.find( newObjName );
-	if( ite2 == objectsDumped.end() ) {
-	  objName = newObjName;
-	  break;
-	}
+      for(;;ii++)
+      {
+        G4String newObjName = objName + "_" + G4UIcommand::ConvertToString(ii);
+        typename std::map<G4String,TYP*>::const_iterator ite2 =
+                 objectsDumped.find( newObjName );
+        if( ite2 == objectsDumped.end() )
+        {
+          objName = newObjName;
+          break;
+        }
       }
     }
   }
-
-  
   return objName;
 }
 
@@ -1347,11 +1386,13 @@ G4tgbGeometryDumper::LookForExistingRotation( const G4RotationMatrix* rotm )
 
 
 //------------------------------------------------------------------------
-G4bool G4tgbGeometryDumper::Same2G4Isotopes( G4Isotope* isot1, G4Isotope* isot2 )
+G4bool
+G4tgbGeometryDumper::Same2G4Isotopes( G4Isotope* isot1, G4Isotope* isot2 )
 {
-  if( isot1->GetZ() != isot2->GetZ() || isot1->GetN() != isot2->GetN() || isot1->GetA() != isot2->GetA() )
+  if ( (isot1->GetZ() != isot2->GetZ())
+    || (isot1->GetN() != isot2->GetN())
+    || (isot1->GetA() != isot2->GetA()) )
   {
-    //    G4cout << " ISOTOPE1 " << *isot1 << " ISOTOPE2 " << *isot2 << G4endl; 
     return 0;
   }
   else
@@ -1362,15 +1403,18 @@ G4bool G4tgbGeometryDumper::Same2G4Isotopes( G4Isotope* isot1, G4Isotope* isot2 
 
 
 //------------------------------------------------------------------------
-G4String G4tgbGeometryDumper::FindSolidName( G4VSolid* solid )
+const G4String& G4tgbGeometryDumper::FindSolidName( G4VSolid* solid )
 {
   std::map<G4String,G4VSolid*>::const_iterator ite;
-  for( ite = theSolids.begin(); ite != theSolids.end(); ite++ ){
-    if( solid == (*ite).second ) return (*ite).first;
+  for( ite = theSolids.begin(); ite != theSolids.end(); ite++ )
+  {
+    if( solid == (*ite).second )  { return (*ite).first; }
   }
 
-  if( ite == theSolids.end() ){
-    G4Exception("G4tgbGeometryDumper::FindSolidName programming error");
+  if( ite == theSolids.end() )
+  {
+    G4Exception("G4tgbGeometryDumper::FindSolidName()", "ReadError",
+                FatalException, "Programming error.");
   }
-  return "";
+  return (*ite).first;
 }

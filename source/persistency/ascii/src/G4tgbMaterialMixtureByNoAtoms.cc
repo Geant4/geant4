@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,11 +64,11 @@ G4tgbMaterialMixtureByNoAtoms( G4tgrMaterial* hg)
 G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
 { 
   //----- construct new G4Material with components materials (a mixture)
+
   G4Material* mate = new G4Material( theTgrMate->GetName(),
                                      theTgrMate->GetDensity(),
                                      theTgrMate->GetNumberOfComponents(),
                                      kStateUndefined, STP_Temperature );
-
  #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
@@ -79,12 +79,13 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
   }
 #endif
 
- //--- add components
+  //--- add components
+
   G4Element* compElem;
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
   {
-    //look if this component is an element
+    // look if this component is an element
     compElem = mf->FindOrBuildG4Element( GetComponent(ii), false );
     if( compElem != 0 )
     {
@@ -95,30 +96,31 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
                << " Adding component element ..." << G4endl;
       }
 #endif
-      //add it by number of atoms
-      G4cout << compElem->GetName() << " BY NATOMS ele " << ii << " " << G4int(GetFraction(ii)) << G4endl;
+      // add it by number of atoms
+      G4cout << compElem->GetName() << " BY NATOMS ele "
+             << ii << " " << G4int(GetFraction(ii)) << G4endl;
       mate->AddElement( compElem, G4int(GetFraction(ii)) );
-      //if it is not an element look if it is a material
+      // if it is not an element look if it is a material
     }
     else
     { 
       G4String ErrMessage = "Component " + GetComponent(ii)
-	+ " of material " +  theTgrMate->GetName()
-	+ "\n" + "is not an element !";
+                          + " of material " +  theTgrMate->GetName()
+                          + "\n" + "is not an element !";
       G4Exception("G4tgbMaterialMixtureByWeight::buildG4Material()",
-		  "InvalidSetup", FatalException, ErrMessage);
+                  "InvalidSetup", FatalException, ErrMessage);
     } 
   }
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
-    G4cout << " Constructing new G4Material by number of atoms: " << *mate << G4endl; 
+    G4cout << " Constructing new G4Material by number of atoms: "
+           << *mate << G4endl; 
   }
 #endif      
 
   return mate;
-
 }
 
 
