@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2008-01-17 10:31:17 gcosmo Exp $
+$Id: History,v 1.148 2008-11-21 17:58:11 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 21st, 2008, J.Apostolakis  transport-V09-01-01
+----------------------------------
+- G4Transportation & G4CoupledTransportation:
+  o Push value & origin of safety to SafetyHelper
+     only when its value comes from ComputeSafety
 
 January 17th, 2008, J.Apostolakis  transport-V09-01-00
 ---------------------------------
