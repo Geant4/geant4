@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.2 2008-11-21 11:27:38 arce Exp $
+# $Id: GNUmakefile,v 1.3 2008-11-21 16:27:42 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
 
-name = G4geomtext
+name := G4geomtext
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
@@ -17,7 +17,7 @@ CPPFLAGS += \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/graphics_reps/include \
-	    -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
@@ -29,6 +29,3 @@ CPPFLAGS += \
             -I$(G4BASE)/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk
-
-
-
