@@ -6,6 +6,7 @@
         <xs:element maxOccurs="unbounded" ref="Solid"/>
 	<xs:element name="volume" type="VolumeType"/>
 	<xs:element name="physvol" type="SinglePlacementType"/>
+	<xs:element name="loop" maxOccurs="unbounded"/>
       </xs:choice>
       <xs:attribute name="for" type="xs:string">
 	<xs:annotation>
@@ -19,7 +20,7 @@
 	  </xs:documentation>
 	</xs:annotation>
       </xs:attribute>
-      <xs:attribute name="to" type="xs:positiveInteger">
+      <xs:attribute name="to" type="ExpressionOrIDREFType">
 	<xs:annotation>
 	  <xs:documentation>
 	  </xs:documentation>
