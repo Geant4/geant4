@@ -1,4 +1,4 @@
-// $Id: History,v 1.8 2008-07-03 20:31:59 gum Exp $
+// $Id: History,v 1.9 2008-11-21 23:35:08 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 21st, 2008 Peter Gumplinger - fieldex04-V09-01-04
+- changed F04PhysicsList.cc according to 
+  examples/extended/hadronic/Hadr01
 
 July 3rd, 2008 Peter Gumplinger - fieldex04-V09-01-03
 - fix: setTheEngine BEFORE setTheSeed in field04.cc
