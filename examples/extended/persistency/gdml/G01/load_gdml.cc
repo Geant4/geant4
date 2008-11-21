@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.4 2008-11-10 15:40:36 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.5 2008-11-21 13:23:52 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,26 @@ int main(int argc,char **argv)
    runManager->Initialize();
 
    G4UImanager* UI = G4UImanager::GetUIpointer();
+ 
+   ///////////////////////////////////////////////////////////////////////
+   // Example How to retrieve Auxiliary Information
+   //
+    const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
+    std::vector<G4LogicalVolume*>::const_iterator lvciter;
+    for( lvciter = lvs->begin(); lvciter != lvs->end(); lvciter++ ) {
+     G4GDMLAuxListType auxInfo=parser.GetVolumeAuxiliaryInformation(*lvciter);
+      
+     std::vector<G4GDMLAuxPairType>::const_iterator ipair;
+     ipair=auxInfo.begin();
+     for( ipair = auxInfo.begin(); ipair != auxInfo.end(); ipair++ ) {
+     G4String str=ipair->type;
+     G4cout<<" Auxiliary Information is found for Logical Volume :  "<< (*lvciter)->GetName()<<G4endl;
+     G4cout<<" Name of Auxiliary type is  =  "<<str<<G4endl;
+     }
+
+    }
+   // End of Example
+   ////////////////////////////////////////////////////////////////////////
 
 #ifdef G4VIS_USE
    G4VisManager* visManager = new G4VisExecutive;
