@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.3 2008-11-14 13:37:09 gcosmo Exp $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.4 2008-11-21 21:17:03 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,9 +44,9 @@
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-  : G4EquationOfMotion( emField )
-{
-  anomaly = 1.165923e-3;
+      : G4EquationOfMotion( emField )
+{ 
+  anomaly = 0.0011659208;
 }
 
 G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
@@ -68,9 +68,8 @@ G4EqEMFieldWithSpin::SetChargeMomentumMass(G4double particleCharge, // e+ units
    E = std::sqrt(sqr(MomentumXc)+sqr(particleMass));
    beta  = MomentumXc/E;
    gamma = E/particleMass;
+
 }
-
-
 
 void
 G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
@@ -121,6 +120,9 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    G4double ucb = (anomaly+1./gamma)/beta;
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
+
+   if (Spin.mag() > 0.) Spin = Spin.unit();
+
    G4ThreeVector dSpin;
 
    dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
