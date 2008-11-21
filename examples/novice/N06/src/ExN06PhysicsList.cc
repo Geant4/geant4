@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.15 2008-06-13 01:57:42 gum Exp $
+// $Id: ExN06PhysicsList.cc,v 1.16 2008-11-21 01:09:56 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -260,7 +260,8 @@ void ExN06PhysicsList::ConstructOp()
 
   SetVerbose(1);
   
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(300);
+  theCerenkovProcess->SetMaxNumPhotonsPerStep(20);
+  theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
   
   theScintillationProcess->SetScintillationYieldFactor(1.);
