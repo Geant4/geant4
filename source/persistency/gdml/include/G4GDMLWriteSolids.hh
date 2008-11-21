@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.31 2008-07-22 14:12:49 tnikitin Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.32 2008-11-21 09:32:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
 #include "G4EllipticalTube.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4Hype.hh"
@@ -83,6 +84,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
    void ConeWrite(xercesc::DOMElement*, const G4Cons* const);
+   void ElconeWrite(xercesc::DOMElement*, const G4EllipticalCone* const);
    void EllipsoidWrite(xercesc::DOMElement*, const G4Ellipsoid* const);
    void EltubeWrite(xercesc::DOMElement*, const G4EllipticalTube* const);
    void XtruWrite(xercesc::DOMElement*, const G4ExtrudedSolid* const);

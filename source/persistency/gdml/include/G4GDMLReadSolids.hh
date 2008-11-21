@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.11 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.12 2008-11-21 09:32:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,7 @@
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
 #include "G4EllipticalTube.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4Hype.hh"
@@ -93,6 +94,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void BooleanRead(const xercesc::DOMElement* const,const BooleanOp);
    void BoxRead(const xercesc::DOMElement* const);
    void ConeRead(const xercesc::DOMElement* const);
+   void ElconeRead(const xercesc::DOMElement* const);
    void EllipsoidRead(const xercesc::DOMElement* const);
    void EltubeRead(const xercesc::DOMElement* const);
    void XtruRead(const xercesc::DOMElement* const);

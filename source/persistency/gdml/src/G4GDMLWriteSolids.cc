@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.58 2008-11-13 16:48:19 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.59 2008-11-21 09:32:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -153,6 +153,22 @@ ConeWrite(xercesc::DOMElement* solidsElement, const G4Cons* const cone)
    coneElement->setAttributeNode(NewAttribute("aunit","deg"));
    coneElement->setAttributeNode(NewAttribute("lunit","mm"));
    solidsElement->appendChild(coneElement);
+}
+
+void G4GDMLWriteSolids::
+ElconeWrite(xercesc::DOMElement* solidsElement,
+            const G4EllipticalCone* const elcone)
+{
+   const G4String& name = GenerateName(elcone->GetName(),elcone);
+
+   xercesc::DOMElement* elconeElement = NewElement("elcone");
+   elconeElement->setAttributeNode(NewAttribute("name",name));
+   elconeElement->setAttributeNode(NewAttribute("dx",elcone->GetSemiAxisX()/mm));
+   elconeElement->setAttributeNode(NewAttribute("dy",elcone->GetSemiAxisY()/mm));
+   elconeElement->setAttributeNode(NewAttribute("zmax",elcone->GetZMax()/mm));
+   elconeElement->setAttributeNode(NewAttribute("zcut",elcone->GetZTopCut()/mm));
+   elconeElement->setAttributeNode(NewAttribute("lunit","mm"));
+   solidsElement->appendChild(elconeElement);
 }
 
 void G4GDMLWriteSolids::
@@ -740,6 +756,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4Cons* const conePtr
      = dynamic_cast<const G4Cons*>(solidPtr))
      { ConeWrite(solidsElement,conePtr); } else
+   if (const G4EllipticalCone* const elconePtr
+     = dynamic_cast<const G4EllipticalCone*>(solidPtr))
+     { ElconeWrite(solidsElement,elconePtr); } else
    if (const G4Ellipsoid* const ellipsoidPtr
      = dynamic_cast<const G4Ellipsoid*>(solidPtr))
      { EllipsoidWrite(solidsElement,ellipsoidPtr); } else

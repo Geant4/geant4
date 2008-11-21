@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.21 2008-08-13 13:58:53 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.22 2008-11-21 09:32:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -212,6 +212,49 @@ void G4GDMLReadSolids::ConeRead(const xercesc::DOMElement* const coneElement)
    deltaphi *= aunit;
 
    new G4Cons(name,rmin1,rmax1,rmin2,rmax2,z,startphi,deltaphi);
+}
+
+void G4GDMLReadSolids::
+ElconeRead(const xercesc::DOMElement* const elconeElement)
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double dx = 0.0;
+   G4double dy = 0.0;
+   G4double zmax = 0.0;
+   G4double zcut = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = elconeElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="dx") { dx = eval.Evaluate(attValue); } else
+      if (attName=="dy") { dy = eval.Evaluate(attValue); } else
+      if (attName=="zmax") { zmax = eval.Evaluate(attValue); } else
+      if (attName=="zcut") { zcut = eval.Evaluate(attValue); }
+   }
+
+   dx *= lunit;
+   dy *= lunit;
+   zmax *= lunit;
+   zcut *= lunit;
+
+   new G4EllipticalCone(name,dx,dy,zmax,zcut);
 }
 
 void G4GDMLReadSolids::
@@ -1500,6 +1543,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
 
       if (tag=="box") { BoxRead(child); } else
       if (tag=="cone") { ConeRead(child); } else
+      if (tag=="elcone") { ElconeRead(child); } else
       if (tag=="ellipsoid") { EllipsoidRead(child); }else
       if (tag=="eltube") { EltubeRead(child); } else
       if (tag=="xtru") { XtruRead(child); } else
