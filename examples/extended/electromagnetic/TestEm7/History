@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2008-11-16 19:17:39 maire Exp $
+$Id: History,v 1.85 2008-11-21 12:53:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-08 V.Ivant (testem7-V09-01-17)
+- Added process type to G4SceenNuclearRecoil process
+- Added "standardICRU73" Physics List in which ion ionisation
+  is simulated using new model G4IonLossParametrisedModel,
+  whihc is configured via G4EmConfigurator
+- removed options from the default "emstandard_local" 
+  Physics List
      
 16-11-08 mma (testem7-V09-01-16)
 - Em options: 20bins/decade  LinLossLimit=default=0.01

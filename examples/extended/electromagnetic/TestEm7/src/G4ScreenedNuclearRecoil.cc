@@ -102,6 +102,8 @@ const char* G4ScreenedCoulombCrossSectionInfo::CVSFileVers() { return
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
 
+#include "G4EmProcessSubType.hh"
+
 #include "G4RangeTest.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
@@ -308,6 +310,7 @@ G4ScreenedNuclearRecoil(const G4String& processName,
 		// SetVerboseLevel(2);
 		AddStage(new G4ScreenedCoulombClassicalKinematics);
 		AddStage(new G4SingleScatter); 
+		SetProcessSubType(fCoulombScattering);
 }
 
 void G4ScreenedNuclearRecoil::ResetTables()
