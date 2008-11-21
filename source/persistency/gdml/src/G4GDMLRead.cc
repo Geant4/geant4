@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.39 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.40 2008-11-21 10:33:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -95,7 +95,8 @@ void G4GDMLRead::StripNames() const
   const G4ElementTable* elements = G4Element::GetElementTable();
   const G4MaterialTable* materials = G4Material::GetMaterialTable();
 
-  G4cout << "Stripping off GDML names of solids and volumes ..." << G4endl;
+  G4cout << "Stripping off GDML names of materials, solids and volumes ..."
+         << G4endl;
 
   G4String sname;
   register size_t i;
