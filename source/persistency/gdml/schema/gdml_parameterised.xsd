@@ -17,35 +17,194 @@
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="BoxDimensionsType">
     <xs:annotation>
-      <xs:documentation>Dimensions for parametrised boxes. </xs:documentation>
+      <xs:documentation>Dimensions for parametrised Boxes. </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="DimensionsType">
-	<xs:attribute default="1.0" name="x" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="y" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="z" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm" name="lunit" type="xs:string"></xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:element name="box_dimensions" substitutionGroup="Dimensions" type="BoxDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="TrdDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Trd. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="x1"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x2"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y1"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y2"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm" name="lunit" type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="trd_dimensions" substitutionGroup="Dimensions" type="TrdDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="TrapDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Trap. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="z"      type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="theta"  type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="phi"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y1"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x1"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x2"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="alpha1" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y2"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x3"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="x4"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="alpha2" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm" name="lunit"   type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="trap_dimensions" substitutionGroup="Dimensions" type="TrapDimensionsType"/>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="TubeDimensionsType">
     <xs:annotation>
-      <xs:documentation>Dimensions for parametrised boxes. </xs:documentation>
+      <xs:documentation>Dimensions for parametrised Tubes. </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="DimensionsType">
 	<xs:attribute default="1.0" name="DeltaPhi" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="InR" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="OutR" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="StartPhi" type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="hz" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="InR"      type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="OutR"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="StartPhi" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="hz"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:element name="tube_dimensions" substitutionGroup="Dimensions" type="TubeDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="ConeDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Cones. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="rmin1"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmax1"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmin2"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmax2"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="startphi" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="deltaphi" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="cone_dimensions" substitutionGroup="Dimensions" type="ConeDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="SphereDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Spheres. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="rmin"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmax"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="starttheta" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="deltatheta" type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="startphi"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="deltaphi"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"      type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit"   type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="sphere_dimensions" substitutionGroup="Dimensions" type="SphereDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="OrbDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Orbs. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="r"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"   type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="orb_dimensions" substitutionGroup="Dimensions" type="OrbDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="TorusDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Torus. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="rmin"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmax"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rtor"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="startphi"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="deltaphi"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"      type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit"   type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="torus_dimensions" substitutionGroup="Dimensions" type="TorusDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="ParaDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Paras. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="x"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="y"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="alpha"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="theta"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="phi"      type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="para_dimensions" substitutionGroup="Dimensions" type="ParaDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="HypeDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Hypes. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="rmin"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="rmax"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="inst"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="outst"    type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="z"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="hype_dimensions" substitutionGroup="Dimensions" type="HypeDimensionsType"/>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType abstract="false" name="ParameterisationAlgorithmType">
     <xs:annotation>
