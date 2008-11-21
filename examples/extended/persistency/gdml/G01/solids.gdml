@@ -28,8 +28,9 @@
   <position name="pos501"  x="-750" y="-125"/>
   <position name="pos601"  x="-750" y=" 125"/>
   <position name="pos701"  x="-750" y=" 0"/>
-  <position name="pos801"  x="950" y=" 125"/>
-  <position name="pos901"  x="950" y="-125"/>
+  <position name="pos801"  x="950"  y=" 125"/>
+  <position name="pos901"  x="950"  y="-125"/>
+  <position name="pos1001"  x="950" y="0"/>
   <rotation name="rotatebyx" x="HALFPI"/>
   <rotation name="rotatebyall" x="HALFPI" y="PI" z="TWOPI"/>
  <position name="v0" unit="mm" x="10" y="10" z="0" />
@@ -119,7 +120,7 @@
 
   <eltube name="testeltube" dx="30.0" dy="50.0" dz="40.0"/>
   <ellipsoid name="testellipsoid" ax="10" by="15" cz="20" zcut2="4" lunit="mm"/>
-
+  <elcone name="testelcone" dx="1" dy="1.5" zmax="2" zcut="1.5" lunit="mm"/>
   <paraboloid name="testparaboloid" rlo="10" rhi="15" dz="20" lunit="mm"/>
   
   <tet name="testtet" vertex1="v4" vertex2="v3" vertex3="v1" vertex4="v2" />
@@ -228,7 +229,10 @@
    <materialref ref="Water"/>
    <solidref ref="testeltube"/>
   </volume>
-
+<volume name="vol1001">
+   <materialref ref="Water"/>
+   <solidref ref="testelcone"/>
+  </volume>
   <volume name="World">
    <materialref ref="Air"/>
    <solidref ref="WorldBox"/>
@@ -353,6 +357,11 @@
    <physvol>
      <volumeref ref="vol701"/>
      <positionref ref="pos701"/>
+     <rotationref ref="identity"/>
+   </physvol> 
+   <physvol>
+     <volumeref ref="vol1001"/>
+     <positionref ref="pos1001"/>
      <rotationref ref="identity"/>
    </physvol> 
    
