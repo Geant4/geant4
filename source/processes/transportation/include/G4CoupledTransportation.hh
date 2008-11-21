@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.6 2007-05-29 13:50:14 japost Exp $
+// $Id: G4CoupledTransportation.hh,v 1.7 2008-11-21 18:27:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
+class G4SafetyHelper; 
 
 class G4CoupledTransportation : public G4VProcess 
 {
@@ -214,6 +215,8 @@ class G4CoupledTransportation : public G4VProcess
   // Statistics for tracks abandoned
      G4double fSumEnergyKilled;
      G4double fMaxEnergyKilled;
+
+     G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
   // Verbosity 
      G4int    fVerboseLevel;
