@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.25 2008-11-21 16:17:29 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.26 2008-11-21 18:38:45 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -396,8 +396,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
 
   // Update safety for the end-point, if becomes negative at the end-point.
-  //                                       To-Try:  No safety update if at a boundary
-  if( startFullSafety < endpointDistance ) // && !fAnyGeometryLimitedStep ) 
+
+  if(   (startFullSafety < endpointDistance ) 
+	&& ( particleCharge != 0.0 ) )        //  Only needed to prepare for Mult Scat.
+   //   && !fAnyGeometryLimitedStep )          // To-Try:  No safety update if at a boundary
   {
       G4double endFullSafety =
 	fPathFinder->ComputeSafety( fTransportEndPosition); 
