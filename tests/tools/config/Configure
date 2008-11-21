@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.21 2008-11-14 15:13:45 bmorgan Exp $
+# $Id: Configure,v 1.22 2008-11-21 11:53:20 bmorgan Exp $
 #
-# Generated on Fri Nov 14 15:14:32 GMT 2008 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 21 11:48:10 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2302,7 +2302,10 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
             \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
             /usr/include/QtCore
-            \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\` 
+            \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
+	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+            \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
+	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
@@ -2312,6 +2315,9 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             \`ls -dr /sw/qt/*/include/QtCore 2>/dev/null\`
             /usr/include
             \`ls -dr /usr/include/qt* 2>/dev/null\`
+            \`ls -dr /usr/local/include 2>/dev/null\`
+	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+            \`ls -dr /usr/local/qt*/include 2>/dev/null\`
             \`ls -dr /opt/qt*/include 2>/dev/null\` 
             \`ls -dr /usr/qt*/include 2>/dev/null\`
             \`ls -dr /usr/qt/*/include 2>/dev/null\` 
@@ -2320,7 +2326,9 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             \`ls -dr /sw/qt*/include 2>/dev/null\`
             \`ls -dr /sw/qt/*/include 2>/dev/null\`
             /usr/include/Qt
-            \`ls -dr /usr/include/qt*/Qt 2>/dev/null\` 
+            \`ls -dr /usr/include/qt*/Qt 2>/dev/null\`
+            \`ls -dr /usr/local/include/Qt 2>/dev/null\`
+            \`ls -dr /usr/local/include/qt*/Qt 2>/dev/null\`
             \`ls -dr /opt/qt*/include/Qt 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/Qt 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/Qt 2>/dev/null\` 
