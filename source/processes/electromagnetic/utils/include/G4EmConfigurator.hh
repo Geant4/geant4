@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.hh,v 1.1 2008-07-15 16:57:04 vnivanch Exp $
+// $Id: G4EmConfigurator.hh,v 1.2 2008-11-21 12:30:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,8 @@ public:
   // Add EM model to the list of extra models potentially to be 
   // declared for the G4Region and energy interval
   // 
-  void AddExtraEmModel(G4VEmModel*, G4VEmFluctuationModel* fm = 0); 
+  void AddExtraEmModel(const G4String& particleName,
+		       G4VEmModel*, G4VEmFluctuationModel* fm = 0); 
 
   // Declare EM model for particle type and process to 
   // be active for the G4Region and energy interval
@@ -119,6 +120,7 @@ private:
   std::vector<G4double> lowEnergy;
   std::vector<G4double> highEnergy;
   
+  std::vector<G4String> particleList;  
   std::vector<G4VEmModel*> modelList;
   std::vector<G4VEmFluctuationModel*> flucModelList;
 
