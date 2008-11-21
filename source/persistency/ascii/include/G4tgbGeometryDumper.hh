@@ -89,7 +89,6 @@ class G4tgbGeometryDumper
     G4String GetTGSolidType( G4String& solidtype );
     G4double MatDeterminant(G4RotationMatrix * ro) ;
     G4double approxTo0( G4double val );
-    G4String itoa(G4int current);
     G4String AddQuotes( const G4String& str );
 
     G4String GetIsotopeName( G4Isotope* );

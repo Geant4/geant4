@@ -69,6 +69,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4UIcommand.hh"
 #include <iomanip>
 
 //------------------------------------------------------------------------
@@ -239,7 +240,7 @@ void G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv, G4String lvNam
   }
 
   G4String fullname = pvName
-    +"#"+itoa(copyNo)
+    +"#"+G4UIcommand::ConvertToString(copyNo)
     +"/"+pv->GetMotherLogical()->GetName();
   
   if( !CheckIfPhysVolExists(fullname, pv ))
@@ -372,7 +373,7 @@ void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
       G4String extraName = "";
       if( ii != 0 ) 
       { 
-	extraName= "#"+itoa(ii)+"/"+pv->GetMotherLogical()->GetName();
+	extraName= "#"+G4UIcommand::ConvertToString(ii)+"/"+pv->GetMotherLogical()->GetName();
       }
       lvName = DumpLogVol( lv, extraName, newSolid, newMate );
     }
@@ -774,7 +775,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 
   } else if (solidType == "SPHERE") {
     const G4Sphere * sphere = dynamic_cast < const G4Sphere * > (so);
-    params.push_back( sphere->GetInsideRadius());
+    params.push_back( sphere->GetInnerRadius());
     params.push_back( sphere->GetOuterRadius());
     params.push_back( sphere->GetStartPhiAngle()/deg);
     params.push_back( sphere->GetDeltaPhiAngle()/deg);
@@ -966,8 +967,12 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
      params.push_back( dso->GetZBottomCut()   );
      params.push_back( dso->GetZTopCut() );
 
-     //  } else if (solidType == "ELLIPTICAL_CONE") {
-     //    const G4EllipticalCone * elco = dynamic_cast < const G4EllipticalCone * > (so);
+  } else if (solidType == "ELLIPTICAL_CONE") {
+    const G4EllipticalCone * elco = dynamic_cast < const G4EllipticalCone * > (so);
+    params.push_back( elco-> GetSemiAxisX() );
+    params.push_back( elco-> GetSemiAxisY() );
+    params.push_back( elco-> GetZMax() );
+    params.push_back( elco-> GetZTopCut() );
 
   } else if (solidType == "HYPE") {
     const G4Hype* hype = dynamic_cast < const G4Hype * > (so);
@@ -1044,7 +1049,7 @@ G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
   {
     (*theFile) << ":ROTM ";
     rotName = "RRM";
-    rotName += itoa(theRotationNumber++);
+    rotName += G4UIcommand::ConvertToString(theRotationNumber++);
  
     (*theFile) << AddQuotes(rotName) << std::setprecision(9) << " " 
                << approxTo0(rotm->xx())  << " "
@@ -1061,7 +1066,7 @@ G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
   {
     (*theFile) << ":ROTM ";
     rotName = "RM";
-    rotName += itoa(theRotationNumber++);
+    rotName += G4UIcommand::ConvertToString(theRotationNumber++);
     
     (*theFile) << AddQuotes(rotName) << " " 
                << approxTo0(rotm->thetaX()/deg)  << " "
@@ -1120,22 +1125,6 @@ G4double G4tgbGeometryDumper::MatDeterminant(G4RotationMatrix * ro)
    return       r.xx_*(r.yy_*r.zz_ - r.zy_*r.yz_)
               - r.yx_*(r.xy_*r.zz_ - r.zy_*r.xz_)
               + r.zx_*(r.xy_*r.yz_ - r.yy_*r.xz_);
-}
-
-//------------------------------------------------------------------------
-G4String G4tgbGeometryDumper::itoa(G4int current)
-{
-  const char theDigits[11] = "0123456789";
-  G4String result;
-  G4int digit;
-  do
-  {
-    digit = current-10*(current/10);
-    result=theDigits[digit]+result;
-    current/=10;
-  }
-  while(current!=0);
-  return result;
 }
 
 
@@ -1219,7 +1208,7 @@ G4String G4tgbGeometryDumper::GetIsotopeName( G4Isotope* isot )
 	// G4Nist does names isotopes of same element with same name
 	G4int ii = 2;
 	for(;;ii++) {
-	  G4String newIsotName = isotName + "_" + itoa(ii);
+	  G4String newIsotName = isotName + "_" + G4UIcommand::ConvertToString(ii);
 	  std::map<G4String,G4Isotope*>::const_iterator ite2 = theIsotopes.find( newIsotName );
 	  if( ite2 == theIsotopes.end() ) {
 	    isotName = newIsotName;
@@ -1262,7 +1251,7 @@ G4String G4tgbGeometryDumper::GetObjectName( TYP* obj, std::map<G4String,TYP*> o
     {
       G4int ii = 2;
       for(;;ii++) {
-	G4String newObjName = objName + "_" + itoa(ii);
+	G4String newObjName = objName + "_" + G4UIcommand::ConvertToString(ii);
 	typename std::map<G4String,TYP*>::const_iterator ite2 = objectsDumped.find( newObjName );
 	if( ite2 == objectsDumped.end() ) {
 	  objName = newObjName;
