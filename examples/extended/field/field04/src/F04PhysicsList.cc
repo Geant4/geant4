@@ -139,7 +139,7 @@ F04PhysicsList::F04PhysicsList(G4String physicsList) : G4VModularPhysicsList()
 //    G4Pythia6Decayer* extDecayer = new G4Pythia6Decayer(pythia6Decayer);
 //    extDecayer->SetVerboseLevel(2);
 
-    G4DecayPhysics* decayPhysics = (G4DecayPhysics*)(decayPhysicsList);
+//    G4DecayPhysics* decayPhysics = (G4DecayPhysics*)(decayPhysicsList);
 //    if(decayPhysics)decayPhysics->GetDecayProcess()->SetExtDecayer(extDecayer);
 
     // EM physics
