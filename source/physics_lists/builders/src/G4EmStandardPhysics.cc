@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.15 2008-10-20 11:28:11 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.16 2008-11-21 16:50:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -198,6 +198,8 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
+               particleName == "anti_sigma_c+" ||
+               particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
                particleName == "anti_xi_c+" ||
@@ -207,6 +209,8 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "kaon-" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
+               particleName == "sigma_c+" ||
+               particleName == "sigma_c++" ||
                particleName == "sigma+" ||
                particleName == "sigma-" ||
                particleName == "tau+" ||

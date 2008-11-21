@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.4 2008-11-20 12:39:33 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.5 2008-11-21 16:50:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -74,6 +74,19 @@
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
+  nlists = 34;
+  G4String s[34] = {
+    "FTFC","FTFP","FTFP_BERY","FTFP_EMV","FTF_BIC",
+    "LBE","LHEP","LHEP_BERT","LHEP_EMV","LHEP_PRECO_HP"
+    "QBBC","QBBCG","QBBCF","QBBC_HP","QGSC",
+    "QGSC_BERT","QGSC_EFLOW","QGSC_EMV","QGSP","QGSP_BERT",
+    "QGSP_BERT_DIF","QGSP_BERT_EMV","QGSP_BERT_HP","QGSP_BERT_NQE","QGSP_BERT_TRV",
+    "QGSP_BIC","QGSP_BIC_HP","QGSP_DIF","QGSP_EMV","QGSP_EMV_NQE",
+    "QGSP_EMX","QGSP_NQE","QGSP_QEL","QGS_BIC"};
+
+  for(size_t i=0; i<nlists; i++) {
+    listnames.push_back(s[i]);
+  }
 }
 
 G4PhysListFactory::~G4PhysListFactory()
@@ -102,7 +115,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
         const G4String& name)
 {
   G4VModularPhysicsList* p = 0;
-  if(name == "FTFC") {p = new FTFC();}
+  if     (name == "FTFC") {p = new FTFC();}
   else if(name == "FTFP") {p = new FTFP();}
   else if(name == "FTFP_BERT") {p = new FTFP_BERT();}
   else if(name == "FTFP_EMV") {p = new FTFP_EMV();}
@@ -148,5 +161,21 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   return p;
 }
   
+G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name)
+{
+  G4bool res = false;
+  for(size_t i=0; i<nlists; i++) {
+    if(name == listnames[i]) {
+      res = true;
+      break;
+    }
+  }
+  return res;
+}
 
+const std::vector<G4String>& 
+G4PhysListFactory::AvailablePhysLists() const
+{
+  return listnames;
+}
 

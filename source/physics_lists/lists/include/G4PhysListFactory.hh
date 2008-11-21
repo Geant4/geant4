@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.1 2008-04-25 14:24:18 vnivanch Exp $
+// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,9 +56,17 @@ public:
   G4VModularPhysicsList* ReferencePhysList();
   // instantiate PhysList by environment variable "PHYSLIST"
 
+  G4bool IsReferencePhysList(const G4String&);
+  // check if the name is in the list of PhysLists names
+
+  const std::vector<G4String>& AvailablePhysLists() const;
+  // list of avalable Phys Lists
+
 private:
 
   G4String defName;  
+  std::vector<G4String> listnames;
+  size_t nlists;
 };
 
 #endif

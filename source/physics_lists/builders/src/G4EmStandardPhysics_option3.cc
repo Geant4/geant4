@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.13 2008-11-14 18:43:27 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.14 2008-11-21 16:50:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -158,7 +158,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
-      //eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
@@ -169,7 +168,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
-      //eIoni->SetLinearLossLimit(1.e-3);
       eIoni->SetStepFunction(0.2, 100*um);      
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
@@ -181,7 +179,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 50*um);          
-      //muIoni->SetLinearLossLimit(1.e-3);
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
@@ -215,6 +212,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
+               particleName == "anti_sigma_c+" ||
+               particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
                particleName == "anti_xi_c+" ||
@@ -224,6 +223,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
                particleName == "kaon-" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
+               particleName == "sigma_c+" ||
+               particleName == "sigma_c++" ||
                particleName == "sigma+" ||
                particleName == "sigma-" ||
                particleName == "tau+" ||
@@ -250,9 +251,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // Physics tables
   //
   opt.SetMinEnergy(100*eV);
-  opt.SetMaxEnergy(100*TeV);
-  opt.SetDEDXBinning(120);
-  opt.SetLambdaBinning(120);
+  opt.SetMaxEnergy(10*TeV);
+  opt.SetDEDXBinning(220);
+  opt.SetLambdaBinning(220);
   //opt.SetSplineFlag(true);
     
   // Ionization
