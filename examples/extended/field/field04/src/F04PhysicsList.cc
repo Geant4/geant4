@@ -106,8 +106,8 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
-#include "G4Pythia6Decayer.hh"
-#include "Pythia6Decayer.hh"
+//#include "G4Pythia6Decayer.hh"
+//#include "Pythia6Decayer.hh"
 
 F04PhysicsList::F04PhysicsList(G4String physicsList) : G4VModularPhysicsList() 
 {
@@ -133,14 +133,14 @@ F04PhysicsList::F04PhysicsList(G4String physicsList) : G4VModularPhysicsList()
     // Add External Decayer to the G4Decay
 
     // Create Geant4 external decayer
-    Pythia6Decayer* pythia6Decayer = new Pythia6Decayer();
-    pythia6Decayer->Init();
+//    Pythia6Decayer* pythia6Decayer = new Pythia6Decayer();
+//    pythia6Decayer->Init();
 
-    G4Pythia6Decayer* extDecayer = new G4Pythia6Decayer(pythia6Decayer);
-    extDecayer->SetVerboseLevel(2);
+//    G4Pythia6Decayer* extDecayer = new G4Pythia6Decayer(pythia6Decayer);
+//    extDecayer->SetVerboseLevel(2);
 
-    G4DecayPhysics* decayPhysics = (G4DecayPhysics*)(decayPhysicsList);
-    if(decayPhysics)decayPhysics->GetDecayProcess()->SetExtDecayer(extDecayer);
+//    G4DecayPhysics* decayPhysics = (G4DecayPhysics*)(decayPhysicsList);
+//    if(decayPhysics)decayPhysics->GetDecayProcess()->SetExtDecayer(extDecayer);
 
     // EM physics
     AddPhysicsList("emstandard");
