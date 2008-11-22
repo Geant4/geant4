@@ -27,7 +27,7 @@
 //      GEANT4 Class file
 //
 //
-//      File name:    G4QMDReaction.hh 
+//      File name: G4QMDReaction.hh 
 //
 //      Author: Koi, Tatsumi (tkoi@slac.stanford.edu)       
 // 
@@ -36,10 +36,13 @@
 //
 // 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
 //            UseFrag (chage criterion of a inelastic reaction)
+// 081121 Add FermiG and related methods  by T. Koi 
 //
 
 #ifndef G4QMDReaction_hh
 #define G4QMDReaction_hh
+
+#include "G4QMDFermiG.hh"
 
 #include "G4QMDSystem.hh"
 #include "G4QMDCollision.hh"
@@ -69,9 +72,12 @@ class G4QMDReaction : public G4HadronicInteraction
       void UnUseGEM(){ gem = false; setEvaporationCh(); };
       void UseFRAG(){ frag = true; };
 
+      void EnableFermiG(){ heg = true; setHighEnergyModel(); };
+
    private:
 
       void setEvaporationCh();
+      void setHighEnergyModel();
 
       G4QMDMeanField* meanField;
 
@@ -111,7 +117,9 @@ class G4QMDReaction : public G4HadronicInteraction
 
       G4bool gem;
       G4bool frag;
+      G4bool heg;
 
+      G4QMDFermiG* heModel;
 };
 
 #endif

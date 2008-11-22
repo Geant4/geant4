@@ -30,6 +30,7 @@
 // 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
 //            UseFrag (chage criterion of a inelastic reaction)
 //        Fix bug in nucleon projectiles  by T. Koi    
+// 081121 Add FermiG and related methods  by T. Koi 
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
@@ -43,6 +44,8 @@ G4QMDReaction::G4QMDReaction()
 , maxTime ( 100 ) // will have maxTime-th time step
 , gem ( true )
 , frag ( false )
+, heg ( false )
+, heModel ( NULL )
 {
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
@@ -61,6 +64,7 @@ G4QMDReaction::~G4QMDReaction()
    delete excitationHandler;
    delete collision;
    delete meanField;
+   if ( heModel != NULL ) delete heModel;
 }
 
 
@@ -68,6 +72,17 @@ G4QMDReaction::~G4QMDReaction()
 G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectile , G4Nucleus & target )
 {
    //G4cout << "G4QMDReaction::ApplyYourself" << G4endl;
+
+   if ( heg == true )
+   {
+      if ( projectile.GetDefinition()->GetParticleType() == "nucleus" )
+      {
+         G4double proj_ke = projectile.Get4Momentum().e() - projectile.Get4Momentum().m();
+         if ( ( proj_ke / ( projectile.GetDefinition()->GetAtomicMass() ) ) > 10*GeV )
+            return heModel->ApplyYourself( projectile ,  target );
+      }
+   }
+
 
    theParticleChange.Clear();
 
@@ -698,3 +713,10 @@ void G4QMDReaction::setEvaporationCh()
 
 }
 
+
+
+void G4QMDReaction::setHighEnergyModel()
+{
+   if ( heg == true && heModel == NULL ) 
+      heModel = new G4QMDFermiG;
+}
