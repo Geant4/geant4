@@ -1,4 +1,4 @@
-// $Id: History,v 1.9 2008-11-21 23:35:08 gum Exp $
+// $Id: History,v 1.10 2008-11-22 00:00:47 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 21st, 2008 Peter Gumplinger - fieldex04-V-9-01-05
+- change to AddPhysicsList("emstandard")
 
 November 21st, 2008 Peter Gumplinger - fieldex04-V09-01-04
 - changed F04PhysicsList.cc according to 
