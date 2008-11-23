@@ -7,7 +7,7 @@ cd $PHYSLIST
 
 set part = "pi-"
 
-source run_part.csh ${part}
+source ../../run_part.csh ${part}
 
-echo "Done!"
+echo $REFERENCE/$PHYSLIST "Done!"
 #
