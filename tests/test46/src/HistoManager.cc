@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2008-11-23 18:22:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -78,8 +78,8 @@ HistoManager::HistoManager()
   nBins   = 100;
   histo   = new Histo();
   nmax    = 3;
-  factorEcal = 1./0.97;
-  factorHcal = 5.0;
+  factorEcal = 1.05;
+  factorHcal = 125.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,17 +94,17 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 { 
   nHisto = 11;
-  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy*0.2,GeV);
+  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy*0.2,GeV);
+  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy*0.2,GeV);
   histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
   histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
   histo->add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
   histo->add1D("6","Energy (GeV) Eecal",nBins,0.,maxEnergy,GeV);
-  histo->add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy,GeV);
-  histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy,GeV);
-  histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxTotEnergy,GeV);
-  histo->add1D("10","Energy (GeV)",nBins,0.,maxTotEnergy,GeV);
+  histo->add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.01,GeV);
+  histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
+  histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
+  histo->add1D("10","Energy (GeV)",nBins,0.,maxEnergy,GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
