@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2008-11-13 16:22:22 vdiez Exp $
+$Id: History,v 1.6 2008-11-24 10:35:21 vdiez Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.5 2008-11-13 16:22:22 vdiez Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Nov-08 V.Diez                     (testtools-QMtest-V09-01-07)
+- fixed execution of test21
 
 13-Nov-08 V.Diez                     (testtools-QMtest-V09-01-06)
 - fixed run of test10, test11 and test12
