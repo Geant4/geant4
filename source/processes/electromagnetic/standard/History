@@ -1,4 +1,4 @@
-$Id: History,v 1.429 2008-11-19 11:47:50 vnivanch Exp $
+$Id: History,v 1.430 2008-11-24 18:28:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 November 08: V.Ivant (emstand-V09-01-45)
+G4PSTARStopping, G4ASTARStopping - fixed non-initialized variable
+   introduced in the previous tag
 
 19 November 08: V.Ivant (emstand-V09-01-44)
 G4WentzelVIModel - minor fix in lateral displacement

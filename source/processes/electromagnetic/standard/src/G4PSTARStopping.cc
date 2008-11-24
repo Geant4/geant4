@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.cc,v 1.7 2008-11-13 12:04:37 vnivanch Exp $
+// $Id: G4PSTARStopping.cc,v 1.8 2008-11-24 18:28:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -52,6 +52,7 @@
 
 G4PSTARStopping::G4PSTARStopping()
 {
+  currentE = 0.0;
   currentMaterial = 0;
   index = 0;
   matIndex = -1;
