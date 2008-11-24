@@ -1,4 +1,4 @@
-# $Id: moc.gmk,v 1.1 2008-05-05 12:48:07 lgarnier Exp $
+# $Id: moc.gmk,v 1.2 2008-11-24 14:19:44 lgarnier Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -57,6 +57,6 @@ ifdef CPPVERBOSE
 	@echo Compiling moc file $*.cc ...
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o moc/$*_moc.cc
 else
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o moc/$*_moc.cc
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o moc/$*_moc.cc
 endif
 endif
