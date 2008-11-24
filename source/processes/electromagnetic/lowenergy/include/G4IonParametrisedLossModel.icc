@@ -185,8 +185,7 @@ LossTableList::iterator G4IonParametrisedLossModel::IsApplicable(
                     const G4ParticleDefinition* particle,  // Projectile (ion) 
                     const G4Material* material) {          // Target material
 
-  LossTableList::iterator iter = 0;
-
+  LossTableList::iterator iter = lossTableList.begin();
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 

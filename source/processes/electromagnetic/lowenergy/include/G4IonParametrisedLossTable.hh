@@ -75,14 +75,14 @@
 // # 
 // #########################################################################
 
-   typedef std::pair<const G4ParticleDefinition*, const G4Material*> CacheKey;
+   typedef std::pair<const G4ParticleDefinition*, const G4Material*> G4CacheKey;
 
    typedef struct CacheValue{
       G4double energyScaling;         // Scaling factor for kinetic energy
       G4PhysicsVector* dedx;          // dEdx vector for current projectile-
                                       // material combination
       G4int dEdxIndex;                // dE/dx vector index
-   };
+   } G4CacheValue;
 
 
 // #########################################################################
@@ -221,30 +221,30 @@ class G4IonParametrisedLossTable : public G4IonLossTableHandle,
 
    // A type definition of cache entry containing a key-value pair
    typedef struct CacheEntry {
-      CacheKey key;
-      CacheValue value;
-   };
+      G4CacheKey key;
+      G4CacheValue value;
+   } G4CacheEntry;
 
    // A cache entry list, and a map of pointers to list iterators (for faster
    // searching)
-   typedef std::list<CacheEntry> CacheEntryList;
+   typedef std::list<G4CacheEntry> CacheEntryList;
    CacheEntryList cacheEntries;
 
-   typedef std::map<CacheKey, void*> CacheIterPointerMap;
+   typedef std::map<G4CacheKey, void*> CacheIterPointerMap;
    CacheIterPointerMap cacheKeyPointers;  
 
    // Maximum number of cache entries
    G4int maxCacheEntries;
 
    // Function for updating the cache
-   CacheValue UpdateCacheValue(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material
+   G4CacheValue UpdateCacheValue(
+                const G4ParticleDefinition*,  // Projectile (ion) 
+                const G4Material*);           // Target material
 
    // Function for retrieving cache values
-   CacheValue GetCacheValue(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material
+   G4CacheValue GetCacheValue(
+                const G4ParticleDefinition*,  // Projectile (ion) 
+                const G4Material*);           // Target material
 
    // Function for clearing the cache
    void ClearCache();
@@ -254,7 +254,7 @@ class G4IonParametrisedLossTable : public G4IonLossTableHandle,
    // #
    // ######################################################################
 
-   typedef std::map<CacheKey, G4LPhysicsFreeVector*> StoppingPowerTable; 
+   typedef std::map<G4CacheKey, G4LPhysicsFreeVector*> StoppingPowerTable; 
    StoppingPowerTable s;
 
    // Flag indicating the usage of splines

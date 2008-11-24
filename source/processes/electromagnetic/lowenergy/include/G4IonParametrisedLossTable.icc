@@ -269,7 +269,7 @@ G4double G4IonParametrisedLossTable <
                    const G4ParticleDefinition* particle,  // Projectile (ion) 
                    const G4Material* material) {          // Target material
 
-  CacheValue value = GetCacheValue(particle, material); 
+  G4CacheValue value = GetCacheValue(particle, material); 
 
   G4double lowerEnergy = 0.0;
      
@@ -291,7 +291,7 @@ G4double G4IonParametrisedLossTable <
                    const G4ParticleDefinition* particle,  // Projectile (ion) 
                    const G4Material* material) {          // Target material
 
-  CacheValue value = GetCacheValue(particle, material); 
+  G4CacheValue value = GetCacheValue(particle, material); 
      
   G4double upperEnergy = 0.0;
      
@@ -349,7 +349,7 @@ void G4IonParametrisedLossTable <
          << "# ------------------------------------------------------"
          << G4endl;
 
-  CacheValue value = GetCacheValue(particle, material); 
+  G4CacheValue value = GetCacheValue(particle, material); 
 
   G4double energyLowerBoundary = lowerBoundary * atomicMassNumber;
   G4double energyUpperBoundary = upperBoundary * atomicMassNumber; 
@@ -393,7 +393,7 @@ G4double G4IonParametrisedLossTable <
 
   G4double dedx = 0.0;
 
-  CacheValue value = GetCacheValue(particle, material); 
+  G4CacheValue value = GetCacheValue(particle, material); 
      
   if(kineticEnergy <= 0.0) dedx = 0.0;
   else if(value.dedx != 0) {
@@ -437,15 +437,15 @@ template <
     class LossTabulation,
     class ScalingAlgorithm
 >
-CacheValue G4IonParametrisedLossTable <
+G4CacheValue G4IonParametrisedLossTable <
     LossTabulation, 
     ScalingAlgorithm
 >::UpdateCacheValue(
               const G4ParticleDefinition* particle,  // Projectile (ion) 
               const G4Material* material) {          // Target material 
 
-  CacheValue value;
-  CacheKey key = std::make_pair(particle, material);
+  G4CacheValue value;
+  G4CacheKey key = std::make_pair(particle, material);
 
   G4double nmbNucleons = G4double(particle -> GetAtomicMass());
   value.energyScaling = 
@@ -487,16 +487,16 @@ template <
     class LossTabulation,
     class ScalingAlgorithm
 >
-CacheValue G4IonParametrisedLossTable <
+G4CacheValue G4IonParametrisedLossTable <
     LossTabulation, 
     ScalingAlgorithm
 >::GetCacheValue(
               const G4ParticleDefinition* particle,  // Projectile (ion) 
               const G4Material* material) {          // Target material 
 
-  CacheKey key = std::make_pair(particle, material);
+  G4CacheKey key = std::make_pair(particle, material);
 
-  CacheEntry entry;
+  G4CacheEntry entry;
   typename CacheEntryList::iterator* pointerIter = 
                   (typename CacheEntryList::iterator*) cacheKeyPointers[key];
 
@@ -520,7 +520,7 @@ CacheValue G4IonParametrisedLossTable <
 
       if(G4int(cacheEntries.size()) > maxCacheEntries) {
 
-  	 CacheEntry lastEntry = cacheEntries.back();
+  	 G4CacheEntry lastEntry = cacheEntries.back();
 	          
          void* pointerIter = cacheKeyPointers[lastEntry.key];
          typename CacheEntryList::iterator* listPointerIter = 
