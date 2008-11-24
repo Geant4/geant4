@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.35 2008-05-07 09:56:29 allison Exp $
+// $Id: exampleN03.cc,v 1.36 2008-11-24 13:54:38 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,6 @@
 #elif defined(G4UI_USE_QT)
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
-#include <qapplication.h>
 #else
 #include "G4UIterminal.hh"
 #endif
