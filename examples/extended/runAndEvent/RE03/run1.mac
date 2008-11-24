@@ -27,10 +27,10 @@
 #
 # drawing projections
 #
-###/score/drawProjection boxMesh_1 eDep
-###/score/drawProjection boxMesh_1 nOfStepGamma
-###/score/drawProjection boxMesh_1 nOfStepEMinus
-###/score/drawProjection boxMesh_1 nOfStepEPlus
+/score/drawProjection boxMesh_1 eDep
+/score/drawProjection boxMesh_1 nOfStepGamma
+/score/drawProjection boxMesh_1 nOfStepEMinus
+/score/drawProjection boxMesh_1 nOfStepEPlus
 #
 ########################################
 #
@@ -45,6 +45,6 @@
 #
 # Dump scores to a file
 #
-###/score/dumpQuantityToFile boxMesh_1 nOfStepGamma nOfStepGamma.txt
+/score/dumpQuantityToFile boxMesh_1 nOfStepGamma nOfStepGamma.txt
 #
 #
