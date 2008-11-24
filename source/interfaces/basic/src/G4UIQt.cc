@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.23 2008-11-19 13:53:31 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.24 2008-11-24 13:50:34 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -105,6 +105,10 @@ G4UIQt::G4UIQt (
   :fHelpDialog(NULL)
 {
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
+  if (!(QApplication*)interactorManager->GetMainInteractor()) {
+    G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
+  }
+  
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
