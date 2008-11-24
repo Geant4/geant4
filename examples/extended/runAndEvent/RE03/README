@@ -5,11 +5,21 @@
  Contact : M.Asai (SLAC), A.Kimura (AIT), T.Aso (TNCMT)
 
 ****************************************************************
-* IMPORTANT NOTICE for version 9.1                             *
-*  This UI-command base scoring is still in alpha release and  *
+* IMPORTANT NOTICE for version 9.2                             *
+*                                                              *
+*  This UI-command base scoring is still in beta release and   *
 * functionality offered is preliminary. We do not guarantee    *
 * the correctness of the code. Also, we may change any of the  *
 * commands / methods in the near future release.               *
+*  In particular for the cylindrical scoring mesh, we are      *
+* aware of rather frequent warning messages issued by the      *
+* G4Navigator for the zero-length steps. I believe the results *
+* is correct, but we appreciate the user's patient for this    *
+* messy warning messages. It is identified that if a track     *
+* enters at exactly the center of the top/bottom circlic face  *
+* exactly along the local z-axis of the scoring cylinder, this *
+* warning message is mostlikely issued.                        *
+*                                                              *
 ****************************************************************
 
 1. Introduction
@@ -36,11 +46,14 @@ have hadronics.
 
 2. Macro files
 
- "run1.mac" through "run3.mac" macro files should be used 
+ "run1.mac" through "run4.mac" macro files should be used 
 independently. Each macro file create its own scoring parallel
-world(s). "vis.mac" and "drawSlics.mac" are used internally.
-Each macro should work for both interactively and batch, but
-interactive mode is advised for better visualization.
+world(s). "vis.mac", "drawSlices.mac" and "drawCylinderSlices.mac" 
+are used internally. Each macro should work for both interactively 
+and batch, but interactive mode is advised for better visualization.
+
+ IMPORTANT: DO NOT use more than one of these macro files in one
+execution of this example.
 
 3. RE03UserScoreWriter
 
