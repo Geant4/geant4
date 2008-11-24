@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2008-11-23 18:22:31 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.4 2008-11-24 10:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -93,10 +93,10 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 { 
-  nHisto = 11;
-  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy*0.2,GeV);
-  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy*0.2,GeV);
-  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy*0.2,GeV);
+  nHisto = 12;
+  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,2.*GeV,GeV);
+  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,2.0*GeV,GeV);
+  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy*0.5,GeV);
   histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
   histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
   histo->add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
@@ -104,7 +104,8 @@ void HistoManager::bookHisto()
   histo->add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.01,GeV);
   histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
   histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
-  histo->add1D("10","Energy (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("11","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,6 +128,8 @@ void HistoManager::BeginOfRun()
   abshcal = 0;
   edepSum = 0;
   edepSum2 = 0;
+  etotSum = 0;
+  etotSum2 = 0;
 
   histo->setVerbose(verbose);
   bookHisto();
@@ -143,7 +146,8 @@ void HistoManager::EndOfRun()
 {
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
-  G4String nam[6] = {"1x1 (GeV)", "3x3 (GeV)", "5x5 (GeV)", "E1/E9    ", "E1/E25  ", "E9/E25  "};
+  G4String nam[8] = {"1x1 (GeV)", "3x3 (GeV)", "5x5 (GeV)", "E1/E9    ", 
+		     "E1/E25  ", "E9/E25  ","Erec(GeV)  ","Etot(GeV)  "};
 
   // Average values
   G4cout<<"========================================================"<<G4endl;
@@ -173,8 +177,7 @@ void HistoManager::EndOfRun()
     if(y > 0.0) r = std::sqrt(y);
     G4cout << "  " << nam[j] << " =       " << e*f
            << " +- " << std::setw(12) << f*r*sqrt(xx) 
-	   << "    RMS= " << f*r;
-    G4cout << G4endl;
+	   << "    RMS= " << f*r << G4endl;
   }
   G4cout<<"==============  HCAL  ===================================="<<G4endl;
   G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)                   " 
@@ -183,6 +186,23 @@ void HistoManager::EndOfRun()
 	 << x*ehcal/GeV << G4endl;
   G4cout << std::setprecision(4) << "Average HCAL absorber Edep(GeV)          " 
 	 << x*abshcal/GeV << G4endl;
+  G4cout<<"=========================================================="<<G4endl;
+  G4double sum = edepSum*x;
+  G4double y = edepSum2*x - sum*sum;
+  if(y > 0.) y = sqrt(y);
+  else       y = 0.0;
+  G4double r = y*sqrt(x);
+  G4cout << "  " << nam[6] << " =       " << sum/GeV
+	 << " +- " << std::setw(12) << r/GeV 
+	 << "    RMS= " << y/GeV << G4endl;
+  sum = etotSum*x;
+  y = etotSum2*x - sum*sum;
+  if(y > 0.) y = sqrt(y);
+  else       y = 0.0;
+  r = y*sqrt(x);
+  G4cout << "  " << nam[6] << " =       " << sum/GeV
+	 << " +- " << std::setw(12) << r/GeV 
+	 << "    RMS= " << y/GeV << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4cout<<G4endl;
 
@@ -270,6 +290,11 @@ void HistoManager::EndOfEvent()
   edepSum += edep;
   edepSum2 += edep*edep;
 
+  // Total sum 
+  G4double etot = e25 + Ehcal + Eabshcal; 
+  etotSum += etot;
+  etotSum2 += etot*etot;
+
   // fill histo
   histo->fill(0,e0,1.0);
   histo->fill(1,e9,1.0);
@@ -282,6 +307,7 @@ void HistoManager::EndOfEvent()
   histo->fill(8,Eehcal,1.0);
   histo->fill(9,Eabshcal,1.0);
   histo->fill(10,edep,1.0);
+  histo->fill(11,etot,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
