@@ -13,6 +13,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+24 November 2008  Dennis Wright  (hadr-hpn-V09-01-25)
+- Protect invalid read which caused run time errors
+        G4NeutronHPFissionData.cc
+
 05 November 2008  Dennis Wright  (hadr-hpn-V09-01-24)
   G4NeutronHPNames.cc: put parentheses around && in || (line 324) to 
   satisfy gcc 4.3 compiler.
