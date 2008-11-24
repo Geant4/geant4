@@ -47,8 +47,8 @@
 #  with the OGLSQT (OpenGL Stored QT) driver
 ###########################################
 
-# Invoke the OGLSQT driver 
-/vis/open OGLSQT
+# Invoke the OGLSQt driver 
+/vis/open OGLSQt
 
 # Bird's-eye view of the detector geometry 
 #

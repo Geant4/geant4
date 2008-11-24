@@ -2,6 +2,9 @@
 examples/novice/N03/visTutor/History
 ====================================
 
+24th November 2008 Laurent Garnier
+- exNo3Vis14.mac,exNo3Vis15.mac : Change OGLSQT by OGLSQt
+
 3rd May 2005  John Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 

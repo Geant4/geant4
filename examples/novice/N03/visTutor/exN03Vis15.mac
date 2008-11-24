@@ -31,7 +31,7 @@
 /vis/scene/create
 
 # Invoke the OpenInventor driver 
-/vis/sceneHandler/create OGLIQT
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 
 # Add the world volume to the current scene
