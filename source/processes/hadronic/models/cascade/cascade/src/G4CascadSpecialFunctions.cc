@@ -25,7 +25,9 @@
 //
 #include "G4CascadSpecialFunctions.hh"
 
-  std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
+std::pair<G4int, G4double> 
+G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) 
+{
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -46,15 +48,17 @@
     if (e <= EMT2[i]) {
       ik = i;
       sk = (e - EMT2[ik - 1]) / (EMT2[ik] - EMT2[ik - 1]);
-
       break;
-    };
-  };
+    }
+  }
 
   return std::pair<G4int, G4double>(ik, sk);
 }
 
-std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
+
+std::pair<G4int, G4double> 
+G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) 
+{
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -98,8 +102,10 @@ std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G
   return std::pair<G4int, G4double>(ik, sk);
 }
 
-G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, 
-							 G4int type) {
+
+G4double 
+G4CascadSpecialFunctions::absorptionCrosSection(G4double e, G4int type) 
+{
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -125,7 +131,10 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
   return corr_fac * csec;
 }
 
-std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
+
+std::pair<G4int, G4double> 
+G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) 
+{
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -168,8 +177,10 @@ std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS
   return std::pair<G4int, G4double>(ik, sk);
 }
 
-G4double G4CascadSpecialFunctions::crossSection(G4double e, 
-						G4int is) {
+
+G4double 
+G4CascadSpecialFunctions::crossSection(G4double e, G4int is) 
+{
   G4int verboseLevel = 2;
 
   if (verboseLevel > 3) {
@@ -265,10 +276,11 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
       18.9, 27.2, 34.9, 29.1, 30.8, 29.6, 28.2, 27.5, 26.9, 26.3,
       25.9, 25.6, 25.2, 26.1, 25.5, 25.4, 25.3, 25.1, 24.9, 24.8, 24.1}},
 
+     // pi- p -> 2 body   (pi+ n -> two body)
     {{5.90, 9.40, 24.5, 62.6, 65.3, 41.3, 29.3, 24.3, 22.7, 22.9,
       23.2, 28.4, 11.7, 10.1, 8.30, 7.16, 6.49, 6.36, 6.60, 5.84, 
-      5.30, 4.50, 3.90, 4.40, 4.74, .794, .824, .714, 0.59, 0.  ,4.60},
-
+       5.3,  5.2,  5.2,  5.1, 4.74, 4.7,  4.6,  4.5,  4.4,  4.3, 4.3},
+     // pi- p -> 3 body
      {0.  , 0.  , 0.  , 0.  , 0.10, 0.40, 2.70, 3.50, 5.30, 6.60,
       9.10, 17.6, 12.2, 9.78, 7.51, 6.91, 6.86, 6.46, 6.19, 5.13,
       3.90, 2.82, 3.10, 3.12, 2.52, 2.22, 2.02, 2.01, 1.98, 2.14, 1.20},
@@ -280,7 +292,7 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
      {0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,
       0.59, 0.74, 1.47, 4.10, 4.78, 4.90, 5.07, 5.50, 5.48, 5.03,
       4.65, 4.39, 4.06, 3.53, 3.08, 3.05, 2.91, 3.42, 3.93, 3.93, 4.10},
-
+     // pi- p -> 6 body
      {0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 
       0.01, .007, 0.03, .099, .251, .376, .419, .582, .755, .777,
       1.13, 1.08, 1.13, 1.08, .962, .866, .738, .674, .645, .613, 1.30},
