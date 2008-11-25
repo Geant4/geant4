@@ -14,8 +14,7 @@
 /run/initialize
 /gun/particle pi-
 /gun/energy 12. GeV
-#/run/beamOn 1000
-/run/beamOn 300
+/run/beamOn 1000
 
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2008-11-24 10:44:39 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.5 2008-11-25 11:25:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -180,11 +180,11 @@ void HistoManager::EndOfRun()
 	   << "    RMS= " << f*r << G4endl;
   }
   G4cout<<"==============  HCAL  ===================================="<<G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)                   " 
+  G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)         =          " 
 	 << x*hcal/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL e- Edep(GeV)                " 
+  G4cout << std::setprecision(4) << "Average HCAL e- Edep(GeV)      =          " 
 	 << x*ehcal/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL absorber Edep(GeV)          " 
+  G4cout << std::setprecision(4) << "Average HCAL absorber Edep(GeV)=          " 
 	 << x*abshcal/GeV << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4double sum = edepSum*x;
@@ -200,7 +200,7 @@ void HistoManager::EndOfRun()
   if(y > 0.) y = sqrt(y);
   else       y = 0.0;
   r = y*sqrt(x);
-  G4cout << "  " << nam[6] << " =       " << sum/GeV
+  G4cout << "  " << nam[7] << " =       " << sum/GeV
 	 << " +- " << std::setw(12) << r/GeV 
 	 << "    RMS= " << y/GeV << G4endl;
   G4cout<<"=========================================================="<<G4endl;
