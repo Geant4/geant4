@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<!DOCTYPE class-directory
+  PUBLIC '-//QM/2.4/Class-Directory//EN'
+  'http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/class-directory//en.dtd'>
+<class-directory>
+ <class kind="test" name="Geant4Test.Geant4Test"/>
+</class-directory>

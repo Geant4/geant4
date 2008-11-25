@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2008-11-24 10:38:41 vdiez Exp $
+$Id: History,v 1.8 2008-11-25 09:38:41 vdiez Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.7 2008-11-24 10:38:41 vdiez Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-Nov-08 V.Diez                     (testtools-QMtest-V09-01-09)
+- added the new custom QMTest test class
+- modified all test classes to implement the new custom test class
 
 24-Nov-08 V.Diez                     (testtools-QMtest-V09-01-08)
 - correctly indented qmt files
