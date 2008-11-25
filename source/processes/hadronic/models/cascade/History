@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 Nov 2008 Dennis Wright (hadr-casc-V09-01-10)
+-----------------------------------------------
+- fix multiplicity sampling in G4ElementaryParticleCollider::generateMultiplicity().
+  Now partial cross sections are normalized to the total cross section instead 
+  of just the sum of 2-body to 6-body final state cross sections.  Also fix 
+  2-body cross sections above 7 GeV where they were too small.
+  Fix the same cross sections which appear in G4CascadSpecialFunctions.cc
+
 21 Nov 2008 Dennis Wright (hadr-casc-V09-01-09)
 -----------------------------------------------
 - add some comments to cross section tables in G4CascadSpecialFunctions.cc
