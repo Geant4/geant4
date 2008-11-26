@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.26 2008-11-21 18:38:45 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.27 2008-11-26 13:01:28 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
@@ -85,6 +85,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
 	   << fNavigatorId << G4endl;
   }
   fPathFinder=  G4PathFinder::GetInstance(); 
+  fpSafetyHelper = transportMgr->GetSafetyHelper();  // New 
 
   // Following assignment is to fix small memory leak from simple use of 'new'
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
