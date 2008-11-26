@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.6 2008-11-26 11:40:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -81,7 +81,7 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
   TransformToFractionsByWeight();
 
   //----- Add components
-  G4Material* compMate;
+  G4Material* compMate = 0;
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
   {
@@ -117,7 +117,7 @@ G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
 void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight() 
 { 
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
-  G4Material* compMate;
+  G4Material* compMate = 0;
   G4double totalfd = 0.;
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
   {
