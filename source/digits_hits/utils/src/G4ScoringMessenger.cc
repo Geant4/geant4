@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.38 2008-08-29 02:50:05 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.39 2008-11-26 21:27:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -481,7 +481,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  G4double unt = mCylinderSizeCmd->ValueOf(token[2]);
 		  vsize[0] *= unt;
 		  vsize[1] *= unt;
-		  vsize[3]  = 0.0;
+		  vsize[2]  = 0.0;
 		  mesh->SetSize(vsize);
 	      } else {
 		  G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
