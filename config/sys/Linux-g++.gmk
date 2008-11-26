@@ -59,10 +59,11 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifndef XMLIBS
     XMLIBS    := -lXm -lXpm
   endif
+
+# ---- QT Setup block -------------------------------------------------------
   ifndef QTHOME
     QTHOME     := /usr
   endif
-
   ifndef QTMOC
     QTMOC      := $(QTHOME)/bin/moc
   endif
@@ -80,8 +81,6 @@ ifeq ($(G4SYSTEM),Linux-g++)
       QTFLAGS    += -I$(QTHOME)/include/qt$(QT_VERSION)
     endif
   endif
-
-
   ifndef QTLIBPATH
     QT_SEARCH_LIB1 := $(shell ls  $(QTHOME)/lib/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
     QT_SEARCH_LIB2 := $(shell ls  $(QTHOME)/lib/libq*  2>/dev/null | wc -l )
@@ -92,7 +91,6 @@ ifeq ($(G4SYSTEM),Linux-g++)
       QTLIBPATH   := /lib
     endif
   endif
-
   ifndef QTLIBS
     QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
     ifeq ($(QT_VERSION),3)
@@ -107,7 +105,6 @@ ifeq ($(G4SYSTEM),Linux-g++)
       QTLIBS    += -lQtCore -lQtGui
     endif
   endif
-
   ifndef GLQTLIBS
     ifeq ($(QT_VERSION),3)
         # already done in QTLIBS
@@ -116,6 +113,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
       GLQTLIBS    := -L$(QTHOME)$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
     endif
   endif
+#----------------------------------------------------------------------------
 
   ifndef XAWFLAGS
     XAWFLAGS   := -I/usr/X11R6/include

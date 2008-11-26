@@ -70,10 +70,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     endif
   endif
+
+# ---- QT Setup block -------------------------------------------------------
   ifndef QTHOME
     QTHOME   := $(shell test -f /Library/Frameworks/Qt3Support.framework/Qt3Support && echo  "/Library/Frameworks" || echo "/sw")
   endif
-
   ifndef QTMOC
    ifeq ($(QTHOME),/Library/Frameworks)
      QTMOC      := /usr/bin/moc
@@ -114,7 +115,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTLIBS    :=  -framework QtCore -framework QtGui
     endif
   endif
-
   ifndef GLQTLIBS
     ifeq ($(QT_VERSION),3)
         # already done in QTLIBS
@@ -124,6 +124,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       GLQTLIBS    += -framework QtOpenGL
     endif
   endif
+#----------------------------------------------------------------------------
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
