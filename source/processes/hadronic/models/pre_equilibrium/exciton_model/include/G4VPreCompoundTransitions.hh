@@ -37,7 +37,7 @@ class G4VPreCompoundTransitions
 {
 public:
 
-  G4VPreCompoundTransitions() {}
+  G4VPreCompoundTransitions():useNGB(false),useCEMtr(false) {}
   virtual ~G4VPreCompoundTransitions() {}
 
   virtual G4double CalculateProbability(const G4Fragment& aFragment) = 0;
