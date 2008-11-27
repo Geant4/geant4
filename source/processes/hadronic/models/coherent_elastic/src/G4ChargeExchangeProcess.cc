@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.14 2008-11-20 12:35:19 vnivanch Exp $
+// $Id: G4ChargeExchangeProcess.cc,v 1.15 2008-11-27 16:43:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName), first(true)
 {
   SetProcessSubType(fChargeExchange);
-  thEnergy = 0.*MeV;
+  thEnergy = 20.*MeV;
   verboseLevel= 1;
   AddDataSet(new G4HadronElasticDataSet);
   theProton   = G4Proton::Proton();
@@ -156,7 +156,8 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
 	   << G4endl;
   G4bool b;
   G4double A = elm->GetN();
-  x *= factors->GetValue(dp->GetTotalMomentum(), b)/std::pow(A, 0.42);
+  G4double ptot = dp->GetTotalMomentum();
+  x *= factors->GetValue(ptot, b)/std::pow(A, 0.42);
   if(theParticle == thePiPlus || theParticle == theProton ||
      theParticle == theKPlus  || theParticle == theANeutron)
     { x *= (1.0 - Z/A); }
@@ -164,6 +165,10 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
   else if(theParticle == thePiMinus || theParticle == theNeutron ||
           theParticle == theKMinus  || theParticle == theAProton)
     { x *= Z/A; }
+
+  if(theParticle->GetPDGMass() < GeV) {
+    if(ptot > 2.*GeV) x *= 4.0*GeV*GeV/(ptot*ptot);
+  }
 
   if(verboseLevel>1) 
     G4cout << "Corrected cross(mb)= " << x/millibarn << G4endl;
