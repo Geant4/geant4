@@ -57,7 +57,7 @@ G4EvaporationChannel::G4EvaporationChannel(const G4int anA, const G4int aZ, cons
 
 G4EvaporationChannel::~G4EvaporationChannel()
 {
-  
+  delete theLevelDensityPtr;
 }
 
 G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & ) : G4VEvaporationChannel()
