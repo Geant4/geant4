@@ -55,6 +55,7 @@
 #include "NestedParamDicomDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
+#include "DicomRunAction.hh"
 #include "DicomHandler.hh"
 
 int main(int argc,char** argv)
@@ -76,7 +77,8 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new DicomPhysicsList);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
-  //  runManager->SetUserAction(new DicomEventAction);
+  runManager->SetUserAction(new DicomRunAction);
+  runManager->SetUserAction(new DicomEventAction);
 
   runManager->Initialize();
 

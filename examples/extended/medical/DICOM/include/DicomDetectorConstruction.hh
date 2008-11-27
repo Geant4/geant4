@@ -78,6 +78,8 @@ protected:
   virtual void ConstructPatient() = 0;
   // construct the patient volumes. This method should be implemented for each of the derived classes
 
+  void SetScorer(G4LogicalVolume* voxel_logic);
+
 protected:
   G4Material* air;
 

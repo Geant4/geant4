@@ -94,5 +94,7 @@ void RegularDicomDetectorConstruction::ConstructPatient()
 
   //----- Set this physical volume as having a regular structure of type 1, so that G4RegularNavigation is used
   patient_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation will be used instead 
+
+  SetScorer(voxel_logic);
 }
 
