@@ -421,11 +421,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
