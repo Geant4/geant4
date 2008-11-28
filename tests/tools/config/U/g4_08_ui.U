@@ -383,11 +383,20 @@ g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw -lXmu -lXt -lX11 -lXext "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4ui_xawflags=" -I$g4ui_xawhome/include "
-	if test "X$g4ui_xawhome" = "X/usr/X11R6" ; then
+	if test "X$g4ui_xawhome" = "X" ; then
+		g4ui_xawflags=""
+	else
+		g4ui_xawflags=" -I$g4ui_xawhome/include "
+	fi
+
+	if test "X$g4ui_xawhome" = "X/usr/X11R6" -o "X$g4ui_xawhome" = "X" ; then
 		g4ui_xawlibs=" -lXaw "
 	else
-		g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		if test -d "$g4ui_xawhome/lib64" ; then
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib64 -lXaw "
+		else
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		fi
 	fi
 fi
 
@@ -586,10 +595,9 @@ done
 fi
 
 if test "X$g4osname" = "XLinux"; then 
-
-if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
-g4vis_xmhome=""
-fi
+	if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+		g4vis_xmhome=""
+	fi
 fi
 fi # g4vis_build_opheglxm_driver
 
@@ -605,11 +613,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
