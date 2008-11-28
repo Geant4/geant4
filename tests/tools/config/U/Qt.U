@@ -381,16 +381,4 @@ else
     echo "configure: Qt already configured, no recheck neccessary"
 fi #END TEST "x\$g4_qt_is_configured" = "x" 
 
-
-echo ""
-echo "DEBUG#####"
-echo "g4_qt_cxxflags    = \$g4_qt_cxxflags"
-echo "g4_qt_gl_cxxflags = \$g4_qt_gl_cxxflags"
-echo "g4_qt_libs        = \$g4_qt_libs"
-echo "g4_qt_gl_libs     = \$g4_qt_gl_libs"
-echo "g4_qt_moc         = \$g4_qt_moc"
-echo "..."
-echo "g4_havegoodqt       = \$g4_havegoodqt"
-echo "g4_qt_is_configured = \$g4_qt_is_configured"
-echo "##########"
 EOSC
