@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GGNNCrossSectionDataTest.cc,v 1.2 2008-11-26 17:28:25 grichine Exp $
+// $Id: G4GGNNCrossSectionDataTest.cc,v 1.3 2008-11-28 16:52:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,6 +117,7 @@ int main()
   G4cout << "18 argon" << G4endl;
   G4cout << "26 iron" << G4endl;
   G4cout << "29 copper" << G4endl;
+  G4cout << "39 yridium" << G4endl;
   G4cout << "48 cadmium" << G4endl;
   G4cout << "74 tugnsten" << G4endl;
   G4cout << "77 iridium" << G4endl;
@@ -125,7 +126,7 @@ int main()
 
   G4int choice;
   // G4cin >> choice;
-  choice = 6;
+  choice = 13;
 
 
   G4Element*     theElement;
@@ -203,6 +204,12 @@ int main()
       theMaterial = man->FindOrBuildMaterial("G4_Cu");
       break;
 
+    case 39:
+
+      theElement  = man->FindOrBuildElement("Y");
+      theMaterial = man->FindOrBuildMaterial("G4_Y");
+      break;
+
     case 48:
 
       theElement  = man->FindOrBuildElement("Cd");
@@ -240,8 +247,8 @@ int main()
   if (! g4State->SetNewState(G4State_Init) );
 
 
-  G4int Z = 6;
-  G4int A = 12;
+  G4int Z = 10;
+  G4int A = 20;
 
   G4DecayPhysics decays;
   decays.ConstructParticle();
@@ -317,7 +324,7 @@ int main()
      <<  ggElaXsc/millibarn << " mb;   in = " <<  ggIneXsc/millibarn<< " mb;   prod = " 
      <<  ggProdXsc/millibarn << G4endl;
 
-     writegg << kinEnergy/A <<"  "<<  ggTotXsc/millibarn << "  "<<  ggElaXsc/millibarn 
+     writegg << kinEnergy/A <<"  "<<  ggTotXsc/millibarn // <<  "  "<<  ggElaXsc/millibarn 
              <<"  " <<  ggIneXsc/millibarn <<"  " <<  ggProdXsc/millibarn << G4endl;
     
      // G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "

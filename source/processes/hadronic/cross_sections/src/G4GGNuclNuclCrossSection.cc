@@ -856,17 +856,21 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
 
   // algorithm from diffuse-elastic
 
-  G4double R, r0, a1, a2, a3;
+  G4double R, r0, a11, a12, a13, a2, a3;
 
-  a1 = 1.26;  // 1.08, 1.16
+  a11 = 1.26;  // 1.08, 1.16
+  a12 = 1.;  // 1.08, 1.16
+  a13 = 1.12;  // 1.08, 1.16
   a2 = 1.1;
-  a3 = 1.7;
+  a3 = 1.;
 
 
   if( A < 50. )
   {
-    if( A > 10. ) r0  = a1*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else          r0  = a2*fermi;
+    if( 10  < A && A <= 15. )     r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else if( 15  < A && A <= 20 ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
+    else if( 20  < A && A <= 30 ) r0  = a13*( 1 - std::pow(A, -2./3.) )*fermi;
+    else                          r0  = a2*fermi;
 
     R = r0*std::pow( A, 1./3. );
   }
