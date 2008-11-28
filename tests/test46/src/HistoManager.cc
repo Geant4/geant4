@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2008-11-25 16:54:26 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.7 2008-11-28 12:27:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -172,6 +172,7 @@ void HistoManager::EndOfRun()
     G4double e = edep[j]*xx;
     edep[j] = e;
     G4double y = erms[j]*xx - e*e;
+    erms[j] = y;
     G4double r = 0.0;
     G4double f = 1.0;
     if(j <= 2) f = 1.0/GeV;
@@ -207,9 +208,10 @@ void HistoManager::EndOfRun()
   G4cout<<"=========================================================="<<G4endl;
   G4double norm = primaryKineticEnergy;
   if(primaryDef->GetBaryonNumber() == 0) norm += primaryDef->GetPDGMass();
-  G4cout << "  Ecal/E0= " << edep[2]/norm 
-	 << "  Hcal/E0= " << (ehcal + abshcal)/norm
-	 << "  Etot/E0= " << sum/norm << G4endl;
+  G4cout << "  Ecal/E0=   " << edep[2]/norm
+	 << "  RMS/E0(%)= " << erms[2]*100./norm 
+	 << "  Hcal/E0=   " << (ehcal + abshcal)/norm
+	 << "  Etot/E0=   " << sum/norm << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4cout<<G4endl;
 
