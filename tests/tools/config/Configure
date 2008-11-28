@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.22 2008-11-21 11:53:20 bmorgan Exp $
+# $Id: Configure,v 1.23 2008-11-28 17:05:29 bmorgan Exp $
 #
-# Generated on Fri Nov 21 11:48:10 GMT 2008 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 28 17:05:26 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2599,18 +2599,6 @@ else
     echo "configure: Qt already configured, no recheck neccessary"
 fi #END TEST "x\$g4_qt_is_configured" = "x" 
 
-
-echo ""
-echo "DEBUG#####"
-echo "g4_qt_cxxflags    = \$g4_qt_cxxflags"
-echo "g4_qt_gl_cxxflags = \$g4_qt_gl_cxxflags"
-echo "g4_qt_libs        = \$g4_qt_libs"
-echo "g4_qt_gl_libs     = \$g4_qt_gl_libs"
-echo "g4_qt_moc         = \$g4_qt_moc"
-echo "..."
-echo "g4_havegoodqt       = \$g4_havegoodqt"
-echo "g4_qt_is_configured = \$g4_qt_is_configured"
-echo "##########"
 EOSC
 : decide how portable to be
 case "$d_portable" in
@@ -3149,13 +3137,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW6.1
+	g4ledata=$g4data/G4EMLOW6.2
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.12
+	g4neutronhpcrosssections=$g4data/G4NDL3.13
 	;;
 esac
 
@@ -3210,8 +3198,8 @@ gans=$ans
 
 		g4levelgammadata=$g4data/PhotonEvaporation2.0
 		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW6.1
-		g4neutronhpcrosssections=$g4data/G4NDL3.12
+		g4ledata=$g4data/G4EMLOW6.2
+		g4neutronhpcrosssections=$g4data/G4NDL3.13
 		g4abladata=$g4data/G4ABLA3.0
 #		g4elasticdata=$g4data/G4ELASTIC1.1
 		fi
@@ -3265,14 +3253,14 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW6.1 data installed ?"
+		rp="Where is G4EMLOW6.2 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='d~'
-		rp="Where is G4NDL3.12 data installed?"
+		rp="Where is G4NDL3.13 data installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
@@ -4362,11 +4350,20 @@ g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw -lXmu -lXt -lX11 -lXext "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4ui_xawflags=" -I$g4ui_xawhome/include "
-	if test "X$g4ui_xawhome" = "X/usr/X11R6" ; then
+	if test "X$g4ui_xawhome" = "X" ; then
+		g4ui_xawflags=""
+	else
+		g4ui_xawflags=" -I$g4ui_xawhome/include "
+	fi
+
+	if test "X$g4ui_xawhome" = "X/usr/X11R6" -o "X$g4ui_xawhome" = "X" ; then
 		g4ui_xawlibs=" -lXaw "
 	else
-		g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		if test -d "$g4ui_xawhome/lib64" ; then
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib64 -lXaw "
+		else
+			g4ui_xawlibs=" -L$g4ui_xawhome/lib -lXaw "
+		fi
 	fi
 fi
 
@@ -4565,10 +4562,9 @@ done
 fi
 
 if test "X$g4osname" = "XLinux"; then 
-
-if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
-g4vis_xmhome=""
-fi
+	if test "X$g4vis_xmhome" = "X/usr" -o "X$g4vis_xmhome" = "X/usr/local" ; then
+		g4vis_xmhome=""
+	fi
 fi
 fi # g4vis_build_opheglxm_driver
 
@@ -4584,11 +4580,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
@@ -5187,11 +5192,20 @@ g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXt -lX11 "
 fi
 
 if test "X$g4osname" = "XLinux" ; then
-g4vis_xmflags=" -I$g4vis_xmhome/include "
-	if test "X$g4vis_xmhome" = "X/usr/X11R6" ; then
+	if test "X$g4vis_xmhome" = "X" ; then
+		g4vis_xmflags=""
+	else
+		g4vis_xmflags=" -I$g4vis_xmhome/include "
+	fi
+
+	if test "X$g4vis_xmhome" = "X/usr/X11R6" -o "X$g4vis_xmhome" = "X" ; then
 		g4vis_xmlibs=" -lXm -lXpm "
 	else
-		g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		if test -d "$g4vis_xmhome/lib64" ; then
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib64 -lXm -lXpm "
+		else
+			g4vis_xmlibs=" -L$g4vis_xmhome/lib -lXm -lXpm "
+		fi
 	fi
 fi
 
