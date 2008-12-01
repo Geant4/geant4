@@ -6,11 +6,11 @@
 #   - test for using site-module packages
 # ==================================================================
 from Geant4 import *
-import NISTmaterials
-from  EZsim import EZgeom
-from EZsim.EZgeom import G4EzVolume
-import EMSTDpl
-import ParticleGun
+import g4py.NISTmaterials
+import g4py.ezgeom
+from g4py.ezgeom import G4EzVolume
+import g4py.EMSTDpl
+import g4py.ParticleGun
 
 # ==================================================================
 # intialize
@@ -20,23 +20,23 @@ def Configure():
   # setup for materials
   # ------------------------------------------------------------------
   # simple materials for Qgeom
-  NISTmaterials.Construct()
+  g4py.NISTmaterials.Construct()
 
   # ------------------------------------------------------------------
   # setup for geometry
   # ------------------------------------------------------------------
-  #Qgeom.Construct()
-  EZgeom.Construct()  # initialize
+  #g4py.Qgeom.Construct()
+  g4py.ezgeom.Construct()  # initialize
 
   # ------------------------------------------------------------------
   # setup for physics list
   # ------------------------------------------------------------------
-  EMSTDpl.Construct()
+  g4py.EMSTDpl.Construct()
 
   # ------------------------------------------------------------------
   # setup for primary generator action
   # ------------------------------------------------------------------
-  ParticleGun.Construct()
+  g4py.ParticleGun.Construct()
   gControlExecute("gun.mac")
 
 
@@ -47,7 +47,7 @@ def ConstructGeom():
   print "* Constructing geometry..."
   # reset world material
   air= G4Material.GetMaterial("G4_AIR")
-  EZgeom.SetWorldMaterial(air)
+  g4py.ezgeom.SetWorldMaterial(air)
 
   # phantom
   global phantom

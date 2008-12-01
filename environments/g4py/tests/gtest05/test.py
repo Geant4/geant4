@@ -6,7 +6,7 @@
 #   - test for CSG geometry construction in Python
 # ==================================================================
 from Geant4 import *
-import ExN01pl, ParticleGun
+import g4py.ExN01pl, g4py.ParticleGun
 import os, math
 
 # ==================================================================
@@ -263,10 +263,10 @@ myDC= MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
 # minimal physics list
-ExN01pl.Construct()
+g4py.ExN01pl.Construct()
 
 # set primary generator action
-ParticleGun.Construct()
+g4py.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize()

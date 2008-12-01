@@ -6,11 +6,10 @@
 #   - test for using site-module packages
 # ==================================================================
 from Geant4 import *
-import Qmaterials, NISTmaterials
-import Qgeom, ExN01geom, ExN03geom
-import ExN01pl, EMSTDpl
-import ParticleGun, MedicalBeam
-
+import g4py.Qmaterials, g4py.NISTmaterials
+import g4py.Qgeom, g4py.ExN01geom, g4py.ExN03geom
+import g4py.ExN01pl, g4py.EMSTDpl
+import g4py.ParticleGun, g4py.MedicalBeam
 
 # ==================================================================
 # user setup
@@ -21,17 +20,17 @@ import ParticleGun, MedicalBeam
 # ------------------------------------------------------------------
 def Setup0():
   # simple materials for Qgeom
-  Qmaterials.Construct()
+  g4py.Qmaterials.Construct()
 
   # NIST materials
-  #NISTmaterials.Construct()
+  #g4py.NISTmaterials.Construct()
   
   # normal way for constructing user geometry
-  #qDC= Qgeom.QDetectorConstruction()
+  #qDC= g4py.Qgeom.QDetectorConstruction()
   #gRunManager.SetUserInitialization(qDC)
 
   # 2nd way, short-cut way
-  Qgeom.Construct()
+  g4py.Qgeom.Construct()
 
   # primary
   global primary_position, primary_direction
@@ -43,7 +42,7 @@ def Setup0():
 # Setup-1 (ExampleN01)
 # ------------------------------------------------------------------
 def Setup1():
-  ExN01geom.Construct()
+  g4py.ExN01geom.Construct()
 
   global primary_position, primary_direction
   primary_position= G4ThreeVector(-2.5*m, 0., 0.)
@@ -54,10 +53,10 @@ def Setup1():
 # Setup-3 (ExampleN03)
 # ------------------------------------------------------------------
 def Setup3():
-  #exN03geom= ExN03geom.ExN03DetectorConstruction()
+  #exN03geom= g4py.ExN03geom.ExN03DetectorConstruction()
   #gRunManager.SetUserInitialization(exN03geom)
 
-  ExN03geom.Construct()
+  g4py.ExN03geom.Construct()
 
   global primary_position, primary_direction
   primary_position= G4ThreeVector(-1.*m, 0., 0.)
@@ -91,10 +90,10 @@ Setup0()
 
 # 2nd way, short-cut way
 # geantino + transportation
-#ExN01pl.Construct()
+#g4py.ExN01pl.Construct()
 
 # electron/gamma standard EM
-EMSTDpl.Construct()
+g4py.EMSTDpl.Construct()
 
 # ------------------------------------------------------------------
 # setup for primary generator action
@@ -103,12 +102,12 @@ EMSTDpl.Construct()
 # Particle Gun
 # ------------
 # normal way for constructing user physics list
-#pgPGA= ParticleGun.ParticleGunAction()
+#pgPGA= g4py.ParticleGun.ParticleGunAction()
 #gRunManager.SetUserAction(pgPGA)
 #pg= pgPGA.GetParticleGun()
 
 # 2nd way, short-cut way
-pg= ParticleGun.Construct()
+pg= g4py.ParticleGun.Construct()
 
 # set parameters of particle gun
 pg.SetParticleByName("e-")
@@ -119,7 +118,7 @@ pg.SetParticleMomentumDirection(primary_direction)
 # ------------
 # Medical Beam
 # ------------
-#beam= MedicalBeam.Construct()
+#beam= g4py.MedicalBeam.Construct()
 
 # ------------------------------------------------------------------
 # go...
