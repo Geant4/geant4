@@ -2,7 +2,7 @@
 # ======================================================================
 #  A script for Geant4 packaging
 #
-#  Version 2.1 June 2008
+#  Version 2.1.1 June 2008
 #
 # ======================================================================
 export LANG=C
@@ -142,7 +142,7 @@ done
 
 # check something
 shlib=so
-if [ $g4system == Darwin-g++ ]; then
+if [ $g4system = Darwin-g++ ]; then
   shlib=dylib
 fi
 
@@ -170,7 +170,7 @@ if [ ! -e $g4dir/config/sys/$g4system.gmk ]; then
 fi
 echo $g4system
 
-if [ $enable_lib == 1 ]; then
+if [ $enable_lib = 1 ]; then
   echo $ac_n "Checking for lib dir ...$ac_c"
   if [ ! -d $g4dir/$libdir ]; then
     echo "no"
@@ -180,7 +180,7 @@ if [ $enable_lib == 1 ]; then
   echo $libdir
 fi
 
-if [ $enable_glib == 1 ]; then
+if [ $enable_glib = 1 ]; then
   echo $ac_n "Checking for glib dir ...$ac_c"
   if [ ! -d $g4dir/$glibdir ]; then
     echo "no"
@@ -190,7 +190,7 @@ if [ $enable_glib == 1 ]; then
   echo $glibdir
 fi
 
-if [ $enable_slib == 1 ]; then
+if [ $enable_slib = 1 ]; then
   echo $ac_n "Checking for slib dir ...$ac_c"
   if [ ! -d $g4dir/$slibdir ]; then
     echo "no"
@@ -226,33 +226,33 @@ cp -pR $g4dir/include $g4packdir/include/
 mv $g4packdir/include/include $g4packdir/include/Geant4
 rm $g4packdir/include/Geant4/README
 
-if [ $enable_glib == 1 ]; then
+if [ $enable_glib = 1 ]; then
   cp -pR $g4dir/$glibdir/$g4system/lib* $g4packdir/lib
 fi
 
-if [ $enable_slib == 1 ]; then
+if [ $enable_slib = 1 ]; then
   cp -pR $g4dir/$slibdir/$g4system/lib* $g4packdir/lib    
 
-  if [ $g4system == Darwin-g++ ]; then
-    if [ $enable_glib == 0 ]; then
+  if [ $g4system = Darwin-g++ ]; then
+    if [ $enable_glib = 0 ]; then
       echo "### gobal static library is required for the operation."
       exit -1
     fi
-    pushd $g4packdir/lib >& /dev/null
+    pushd $g4packdir/lib > /dev/null 2>&1
     rebuild_sharedlib
-    popd >& /dev/null
+    popd > /dev/null 2>&1
   fi
 fi
 
-if [ $enable_lib == 1 ]; then
+if [ $enable_lib = 1 ]; then
   cp -pR $g4dir/$libdir/$g4system/lib* $g4packdir/lib
 fi
 
 # CLHEP links
-pushd $g4packdir/lib >& /dev/null
+pushd $g4packdir/lib > /dev/null 2>&1
 ln -s libCLHEP-[12]*.a libCLHEP.a
 ln -s libCLHEP-[12]*.$shlib libCLHEP.$shlib
-popd >& /dev/null
+popd > /dev/null 2>&1
 
 exit 0
 
