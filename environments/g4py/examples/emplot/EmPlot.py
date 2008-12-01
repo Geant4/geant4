@@ -5,8 +5,8 @@
 # Plotting photon cross sections and stopping power with ROOT
 # ==================================================================
 from Geant4 import *
-import NISTmaterials
-from EZsim import *
+import g4py.NISTmaterials
+import g4py.ezgeom
 
 # ==================================================================
 # geometry setup
@@ -16,15 +16,15 @@ from EZsim import *
 # setup
 # ------------------------------------------------------------------
 def Configure():
-  NISTmaterials.Construct()
-  EZgeom.Construct()
+  g4py.NISTmaterials.Construct()
+  g4py.ezgeom.Construct()
 
 # ------------------------------------------------------------------
 # constructing geometry
 # ------------------------------------------------------------------
 def SetMaterial(material_name):
   material= gNistManager.FindOrBuildMaterial(material_name)
-  EZgeom.SetWorldMaterial(material)
+  g4py.ezgeom.SetWorldMaterial(material)
 
 
 # ==================================================================

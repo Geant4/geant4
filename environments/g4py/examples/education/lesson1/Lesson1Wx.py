@@ -1,9 +1,11 @@
+#!/usr/bin/python
+
 from Geant4 import *
-import NISTmaterials
-from  EZsim import EZgeom
-from EZsim.EZgeom import G4EzVolume
-import ExN03pl
-import ParticleGun
+import g4py.NISTmaterials
+import g4py.ezgeom
+from g4py.ezgeom import G4EzVolume
+import g4py.ExN03pl
+import g4py.ParticleGun
 from time import *
 import sys
 from subprocess import *
@@ -17,22 +19,22 @@ def Configure():
   # setup for materials
   # ------------------------------------------------------------------
   # simple materials for Qgeom
-  NISTmaterials.Construct()
+  g4py.NISTmaterials.Construct()
 
   # ------------------------------------------------------------------
   # setup for geometry
   # ------------------------------------------------------------------
-  EZgeom.Construct()  # initialize
+  g4py.ezgeom.Construct()  # initialize
 
   # ------------------------------------------------------------------
   # setup for physics list of N03
   # ------------------------------------------------------------------
-  ExN03pl.Construct()
+  g4py.ExN03pl.Construct()
 
   # ------------------------------------------------------------------
   # setup for primary generator action
   # ------------------------------------------------------------------
-  ParticleGun.Construct()
+  g4py.ParticleGun.Construct()
   gControlExecute("gun.mac")
 
 # ==================================================================
@@ -54,8 +56,8 @@ def ConstructGeom():
   water = G4Material.GetMaterial("G4_WATER", 1)
   absorber = {"air":air, "aluminum":aluminum, "iron":iron, "lead":lead, "water":water, "gold":gold
 }
-  EZgeom.SetWorldMaterial(galactic)
-  EZgeom.ResizeWorld(120.*cm, 120.*cm, 100.*cm)
+  g4py.ezgeom.SetWorldMaterial(galactic)
+  g4py.ezgeom.ResizeWorld(120.*cm, 120.*cm, 100.*cm)
   # water phantom
   global water_phantom, water_phantom_pv
 
@@ -490,7 +492,7 @@ class MyApp(wx.Frame):
          bxsizer.Add(wx.StaticLine(panel), 0, wx.EXPAND|wx.TOP|wx.BOTTOM, 5)
          bxsizer.Add(self.eventNo.sizer, 0, wx.EXPAND)
 
-         self.solid = EZgeom.G4EzVolume.GetSold(water_phantom)
+         self.solid = g4py.ezgeom.G4EzVolume.GetSold(water_phantom)
          
          panel.SetSizer(bxsizer)
          bxsizer.Fit(self)

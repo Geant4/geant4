@@ -6,11 +6,11 @@
 #   -  using site-module packages
 # ==================================================================
 from Geant4 import *
-import NISTmaterials
-from  EZsim import EZgeom
-from EZsim.EZgeom import G4EzVolume
-import EMSTDpl
-import ParticleGun
+import g4py.NISTmaterials
+import g4py.ezgeom
+from g4py.ezgeom import G4EzVolume
+import g4py.EMSTDpl
+import g4py.ParticleGun
 from time import *
 import sys
 
@@ -22,23 +22,23 @@ def Configure():
   # setup for materials
   # ------------------------------------------------------------------
   # simple materials for Qgeom
-  NISTmaterials.Construct()
+  g4py.NISTmaterials.Construct()
 
   # ------------------------------------------------------------------
   # setup for geometry
   # ------------------------------------------------------------------
-  #Qgeom.Construct()
-  EZgeom.Construct()  # initialize
+  #g4py.Qgeom.Construct()
+  g4py.ezgeom.Construct()  # initialize
 
   # ------------------------------------------------------------------
   # setup for physics list
   # ------------------------------------------------------------------
-  EMSTDpl.Construct()
+  g4py.EMSTDpl.Construct()
 
   # ------------------------------------------------------------------
   # setup for primary generator action
   # ------------------------------------------------------------------
-  ParticleGun.Construct()
+  g4py.ParticleGun.Construct()
   gControlExecute("gun.mac")
 
 # ==================================================================
@@ -58,8 +58,8 @@ def ConstructGeom():
   lead = G4Material.GetMaterial("G4_Pb", 1)
   water = G4Material.GetMaterial("G4_WATER", 1)
   absorber = {"air":air, "aluminum":aluminum, "iron":iron, "lead":lead, "water":water, "gold":gold}
-  EZgeom.SetWorldMaterial(galactic)
-  EZgeom.ResizeWorld(120.*cm, 120.*cm, 100.*cm)
+  g4py.ezgeom.SetWorldMaterial(galactic)
+  g4py.ezgeom.ResizeWorld(120.*cm, 120.*cm, 100.*cm)
   # water phantom
   global water_phantom, water_phantom_pv
 
@@ -84,7 +84,6 @@ HepRandom.setTheSeed(20050830L)
 Configure()
 ConstructGeom()
 
-
 # ------------------------------------------------------------------
 # go...
 # ------------------------------------------------------------------
@@ -99,7 +98,6 @@ gControlExecute("oglx.mac")
 from Tkinter import *
 
 class App(Frame):
-
   
   
   def init(self):
@@ -131,7 +129,7 @@ class App(Frame):
     thick.grid(row=3, column=1, columnspan=5, sticky=W)
     
 #get logical volume and set its half length
-    self.solid = EZgeom.G4EzVolume.GetSold(water_phantom)
+    self.solid = g4py.ezgeom.G4EzVolume.GetSold(water_phantom)
 
 #particle row=4
     particleLabel = Label(self, bg="green",  text="Particle")

@@ -6,7 +6,7 @@
 from Geant4 import *
 from Geant4.G4g4gdml import *
 
-import ExN01pl, ParticleGun
+import g4py.ExN01pl, g4py.ParticleGun
 
 # ==================================================================
 # user actions in python
@@ -39,10 +39,10 @@ myDC= MyDetectorConstruction()
 gRunManager.SetUserInitialization(myDC)
 
 # minimal physics list
-ExN01pl.Construct()
+g4py.ExN01pl.Construct()
 
 # set primary generator action
-ParticleGun.Construct()
+g4py.ParticleGun.Construct()
 
 # initialize
 gRunManager.Initialize()

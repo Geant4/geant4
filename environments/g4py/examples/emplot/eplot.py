@@ -5,14 +5,15 @@
 # Plotting photon cross sections and stopping power
 # ==================================================================
 from Geant4 import *
-import ExN03pl
+import g4py.ExN03pl
+import g4py.emcalculator
 import EmPlot
 
 # initialize
 EmPlot.Configure()
 
 # user physics list
-ExN03pl.Construct()
+g4py.ExN03pl.Construct()
 
 # target material
 material= "G4_Cu"
@@ -30,7 +31,7 @@ for n in range(-3, 3):
 
 # calculate stopping power
 pname= "e-"
-dedx_list= CalculateDEDX(pname, material, elist, 1)
+dedx_list= g4py.emcalculator.CalculateDEDX(pname, material, elist, 1)
 xlist_tot=[]
 xlist_ioni=[]
 xlist_brems=[]
