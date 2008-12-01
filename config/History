@@ -1,4 +1,4 @@
-$Id: History,v 1.336 2008-11-26 16:48:14 gcosmo Exp $
+$Id: History,v 1.337 2008-12-01 11:04:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st December 2008  Ben Morgan (config-V09-01-12)
+- Darwin-g++.gmk, Linux-g++.gmk: corrected definition of temporary QT3_MT
+  by adding missing protection.
 
 24th November 2008  Laurent Garnier (config-V09-01-11)
 - interactivity.gmk: changed flags for OpenGL and QT.
