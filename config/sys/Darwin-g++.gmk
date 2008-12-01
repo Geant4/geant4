@@ -104,7 +104,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef QTLIBS
     ifeq ($(QT_VERSION),3)
       QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
-      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* | wc -l )
+      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
       ifneq ($(QT3_MT),0)
         QTLIBS  += -lqt-mt
       else
