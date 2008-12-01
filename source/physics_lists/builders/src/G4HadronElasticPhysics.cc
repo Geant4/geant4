@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.8 2008-05-19 10:21:34 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.9 2008-12-01 16:57:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -63,6 +63,8 @@
 
 #include "G4VQCrossSection.hh"
 #include "G4UElasticCrossSection.hh"
+#include "G4BGGNucleonElasticXS.hh"
+#include "G4BGGPionElasticXS.hh"
 
 G4HadronElasticPhysics::G4HadronElasticPhysics(
     const G4String& name,  G4int ver, G4bool hp, G4bool glauber)
@@ -122,6 +124,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||
        pname == "anti_neutron" ||
@@ -137,9 +140,6 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "kaon0L"    || 
        pname == "lambda"    || 
        pname == "omega-"    || 
-       pname == "pi-"       || 
-       pname == "pi+"       || 
-       pname == "proton"    || 
        pname == "sigma-"    || 
        pname == "sigma+"    || 
        pname == "xi-"       || 
@@ -147,7 +147,6 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "deuteron"  ||
        pname == "triton") {
       
-      G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	h->SetQElasticCrossSection(man);
@@ -158,11 +157,29 @@ void G4HadronElasticPhysics::ConstructProcess()
       }
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1)
+	G4cout << "### HadronElasticPhysics added for " 
+	       << particle->GetParticleName() << G4endl;
+
+      // proton case
+    } else if(pname == "proton") {
+      if(mname == "elastic") {
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
+	h->SetQElasticCrossSection(man);
+        hel = h;
+        if(glFlag) hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      } else {                   
+	hel = new G4HadronElasticProcess("hElastic");
+      }
+      hel->RegisterMe(model);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1)
+	G4cout << "### HadronElasticPhysics added for " 
+	       << particle->GetParticleName() << G4endl;
 
       // neutron case
     } else if(pname == "neutron") {   
 
-      G4ProcessManager* pmanager = particle->GetProcessManager();
       if(mname == "elastic") {
 	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
 	G4HadronElastic* nhe = new G4HadronElastic();
@@ -171,7 +188,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 	neutronModel = nhe;
 	h->SetQElasticCrossSection(nhe->GetCS());
         hel = h;
-        if(glFlag) hel->AddDataSet(new G4UElasticCrossSection(particle));
+        if(glFlag) hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
       } else {                   
 	hel = new G4HadronElasticProcess("hElastic");
 	neutronModel = new G4LElastic();
@@ -185,6 +202,23 @@ void G4HadronElasticPhysics::ConstructProcess()
       }
 
       hel->RegisterMe(neutronModel);
+      pmanager->AddDiscreteProcess(hel);
+
+      if(verbose > 1)
+	G4cout << "### HadronElasticPhysics added for " 
+	       << particle->GetParticleName() << G4endl;
+
+      // pion case
+    } else if(pname == "pi+" || pname == "pi-") {
+      if(mname == "elastic") {
+	G4UHadronElasticProcess* h = new G4UHadronElasticProcess("hElastic");
+	h->SetQElasticCrossSection(man);
+        hel = h;
+        if(glFlag) hel->AddDataSet(new G4BGGPionElasticXS(particle));
+      } else {                   
+	hel = new G4HadronElasticProcess("hElastic");
+      }
+      hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
 
       if(verbose > 1)
