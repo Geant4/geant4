@@ -9,5 +9,6 @@ set part = "pi-"
 
 source ../../run_part.csh ${part}
 
+cd ../../
 echo $REFERENCE/$PHYSLIST "Done!"
 #
