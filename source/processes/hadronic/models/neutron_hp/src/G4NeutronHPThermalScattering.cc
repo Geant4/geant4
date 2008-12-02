@@ -103,8 +103,7 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
 G4NeutronHPThermalScattering::~G4NeutronHPThermalScattering()
 {
 
-   std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it;
-   for ( std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator  it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
+   for ( std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it = incoherentFSs.begin() ; it != incoherentFSs.end() ; it++ )
    {
       std::map < G4double , std::vector < E_isoAng* >* >::iterator itt;
       for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
