@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.11 2007-11-23 14:17:25 vnivanch Exp $
+// $Id: Tst20PhysicsList.cc,v 1.12 2008-12-02 18:57:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -198,7 +198,6 @@ void Tst20PhysicsList::ConstructEM()
 	  processManager->AddDiscreteProcess(new ExcitationEmfietzoglou);
 	  processManager->AddDiscreteProcess(new ElasticScreenedRutherford);
 	  processManager->AddDiscreteProcess(new ElasticBrennerZaider);
-	  processManager->AddDiscreteProcess(new IonisationBorn);
 	  processManager->AddDiscreteProcess(new IonisationBorn);
 	  processManager->AddDiscreteProcess(new KillBelowThreshold);
 	}

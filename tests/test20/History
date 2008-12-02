@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2007-11-14 19:09:36 pia Exp $
+$Id: History,v 1.16 2008-12-02 18:57:16 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Dec 2008 - S. Incerti, tag test20-V09-01-01
+              Removed e- Ionisation Born process which was registered twice 
+              in Physics list
 
 14 Nov 2007 - MGP, tag test20-V09-00-02
               Added G4Timer for timing information             
