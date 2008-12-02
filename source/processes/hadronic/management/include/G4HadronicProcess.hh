@@ -96,11 +96,11 @@ public:
   inline G4EnergyRangeManager *GetManagerPointer()
   { return &theEnergyRangeManager; }
           
-protected:    
-
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
 			   G4ForceCondition *);
+
+protected:    
 
   // reset number of interaction length and save  
   virtual void ResetNumberOfInteractionLengthLeft()
