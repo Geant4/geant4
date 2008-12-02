@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Version.hh,v 1.16 2008-06-26 06:38:51 gcosmo Exp $
+// $Id: G4Version.hh,v 1.17 2008-12-02 09:15:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Version information
@@ -58,6 +58,6 @@
 #include "G4String.hh"
 
 static const G4String G4Version = "$Name: not supported by cvs2svn $";
-static const G4String G4Date    = "(4-July-2008)";
+static const G4String G4Date    = "(19-December-2008)";
 
 #endif
