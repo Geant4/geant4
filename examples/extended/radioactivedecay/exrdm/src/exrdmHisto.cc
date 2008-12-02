@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#include "exrdmHisto.hh"
-#include "exrdmHistoMessenger.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4Tokenizer.hh"
-
 #ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
 #endif
@@ -46,12 +39,19 @@
 #include "TH1D.h"
 #include "TNtuple.h"
 #endif
+
+#include "exrdmHisto.hh"
+#include "exrdmHistoMessenger.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Tokenizer.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 exrdmHisto::exrdmHisto()
 {
   verbose    = 1;
   histName   = "exrdm";
-  histType   = "root";
+  histType   = "aida";
   nHisto     = 0;
   nTuple     = 0;
   defaultAct = 1;
@@ -79,7 +79,6 @@ exrdmHisto::exrdmHisto()
   tupleId.clear();
   tupleList.clear();
   tupleListROOT.clear();
-  messenger  = 0;
 
   messenger = new exrdmHistoMessenger(this);
 }
@@ -105,15 +104,16 @@ exrdmHisto::~exrdmHisto()
 
 void exrdmHisto::book()
 {
-  G4cout << "### exrdmHisto books " << nHisto << " histograms " << G4endl; 
 #ifdef G4ANALYSIS_USE
+  G4cout << "### exrdmHisto books " << nHisto << " histograms " << G4endl; 
   // Creating the analysis factory
   AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory(); 
   // Creating a tree mapped to a new aida file.
   G4String fileName = histName + "." + histType;
-  tree = tf->create(fileName,histType,false,true,"--noErrors uncompress");
+  if (histType == "root") fileName = histName + "_aida." + histType;
+  tree = tf->create(fileName,histType,false,true,"compress=yes");
   if(tree) { 
     G4cout << "Tree store  : " << tree->storeName() << G4endl;
   } else {
@@ -125,35 +125,36 @@ void exrdmHisto::book()
   G4int i;
   for(i=0; i<nHisto; i++) {
     if(active[i]) {
-      if(verbose>0)
-        G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
+      if(verbose>1)
+        G4cout<<"book: histogram "<< i << " id= " << ids[i] <<G4endl;
       G4String tit = ids[i];
       if(histType == "root") tit = "h" + ids[i];
       histo[i] = hf->createHistogram1D(tit, titles[i], bins[i], xmin[i], xmax[i]);
     }
   }
   G4cout << "AIDA histograms are booked" << G4endl;
+
   // Creating a tuple factory, whose tuples will be handled by the tree  
   AIDA::ITupleFactory* tpf =  af->createTupleFactory( *tree );
   G4cout << "AIDA will book " << nTuple << " ntuples" << G4endl;
   for(i=0; i<nTuple; i++) {
     if(tupleList[i] != "") {
-      G4cout << "Creating Ntuple: " << tupleName[i] << G4endl;
-      ntup[i] = tpf->create(tupleId[i], tupleName[i], tupleList[i]);
+      G4cout << "Creating Ntuple: " << tupleName[i] <<":" <<tupleList[i] <<G4endl;
+      ntup[i] = tpf->create(tupleId[i], tupleName[i], tupleList[i],"");
     }
   }
   G4cout << "AIDA ntuples are booked" << G4endl;
-  delete hf;
-  delete tpf;
-  delete tf;
-  delete af;
+//  delete hf;
+//  delete tpf;
+//  delete tf;
+//  delete af;
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
   new TApplication("App", ((int *)0), ((char **)0));
   G4String fileNameROOT = histName + G4String(".root");
   hfileROOT = new TFile(fileNameROOT.c_str() ,"RECREATE","ROOT file for exRDM");
-  
+  G4cout << "Root file: " << fileNameROOT << G4endl;
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
@@ -169,6 +170,7 @@ void exrdmHisto::book()
       G4cout << "Creating Ntuple "<<tupleId[i] << " in ROOT file: " 
 	     << tupleName[i] << G4endl;
       ROOTntup[i] = new TNtuple(id, tupleName[i], tupleListROOT[i]);
+      G4cout << "ROOT Ntuple " << id << " " << tupleName[i] <<" "<< tupleListROOT[i]<< " booked " << G4endl;
     }
   }
 #endif
@@ -274,7 +276,7 @@ void exrdmHisto::scaleHisto(G4int i, G4double x)
   if(verbose > 0) {
     G4cout << "Scale histogram: #" << i << " by factor " << x << G4endl;   
   }
-#ifdef G4ANALYSIS_USE  
+#ifdef G4ANALYSIS_USE
   if(i>=0 && i<nHisto) {
     histo[i]->scale(x);
     G4cout << "exrdmHisto::scale: WARNING! wrong AIDA histogram index " << i << G4endl;
@@ -314,7 +316,9 @@ void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String
   G4int col = 0;
   while ( token != "") {
    token = next();
-   ROOTList1 = ROOTList1 + token +G4String(":");
+   if (token == ",") token = next();
+   if (token.contains(",")) token.remove(token.size()-1);
+   ROOTList1 = ROOTList1 + token + G4String(":");
    col++;
   }
   G4String ROOTList = ROOTList1.substr(0,ROOTList1.length()-2);
@@ -333,7 +337,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4double x)
     G4cout << "fill tuple # " << i 
 	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
 #ifdef G4ANALYSIS_USE
-  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), (float)x);
+  if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
 }
 
@@ -345,8 +349,8 @@ void exrdmHisto::fillTuple(G4int i, G4int col, G4double x)
     G4cout << "fill tuple # " << i 
 	   <<" in column < " << col << "> = " << x << G4endl; 
   }
-#ifdef G4ANALYSIS_USE  
-  if(ntup[i]) ntup[i]->fill(col, (float)x);
+#ifdef G4ANALYSIS_USE
+  if(ntup[i]) ntup[i]->fill(col,double(x));
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT  
@@ -366,6 +370,7 @@ void exrdmHisto::fillTuple(G4int i, const G4String& parname, G4String& x)
 #ifdef G4ANALYSIS_USE
   if(ntup[i]) ntup[i]->fill(ntup[i]->findColumn(parname), x);
 #endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

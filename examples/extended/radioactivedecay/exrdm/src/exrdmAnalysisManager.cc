@@ -91,9 +91,9 @@ void exrdmAnalysisManager::bookHisto()
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "1", "Emitted Particles","float PID Energy Time Weight" );
-  histo->addTuple( "2", "RadioIsotopes","float PID Time Weight" );
-  histo->addTuple( "3", "Energy Depositions","float Energy Time Weight" );
+  histo->addTuple( "1", "Emitted Particles","double PID, Energy, Time, Weight" );
+  histo->addTuple( "2", "RadioIsotopes","double PID, Time, Weight" );
+  histo->addTuple( "3", "Energy Depositions","double Energy, Time, Weight" );
 
 }
 
@@ -102,10 +102,7 @@ void exrdmAnalysisManager::bookHisto()
 void exrdmAnalysisManager::BeginOfRun()
 {
   histo->book();
-  if(verbose > 0) {
-    G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started"
-           << G4endl;
-  }
+  G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

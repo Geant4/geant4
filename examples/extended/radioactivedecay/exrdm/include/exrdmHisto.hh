@@ -38,19 +38,24 @@
 #include "globals.hh"
 #include <vector>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class exrdmHistoMessenger;
-
+#ifdef G4ANALYSIS_USE
 namespace AIDA {
  class ITree;
  class ITuple;
  class IHistogram1D;
 }
+#endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifdef G4ANALYSIS_USE_ROOT
+// Root classes
 class TFile;
 class TH1D;
 class TNtuple;
+#endif
+
+class exrdmHistoMessenger;
 
 class exrdmHisto
 {
@@ -109,16 +114,19 @@ private:
   G4int    nTuple;
   G4int    verbose;
   G4int    defaultAct;
-
+#ifdef G4ANALYSIS_USE
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
   AIDA::ITree*    tree;
+#endif
 
+#ifdef G4ANALYSIS_USE_ROOT
   TFile* hfileROOT; 
   std::vector<TH1D*> ROOThisto;
   std::vector<TNtuple*>   ROOTntup;
   std::vector< std::vector<float> > Rarray;
   std::vector<G4int> Rcol;
+#endif
 
   exrdmHistoMessenger* messenger;
 

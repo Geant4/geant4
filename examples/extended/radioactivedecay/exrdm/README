@@ -113,31 +113,36 @@
 
      This example implements an AIDA-compliant analysis system as well as the ROOT file format for 
      histograms and ntuples. If the the user has an AIDA-compliant tool such as 
-     AIDAJNI, ANAPHE, or PI installed on his/her system, the analysis part of this example can 
+     AIDAJNI, ANAPHE, OpenScientist or PI installed on his/her system, the analysis part of this example can 
      be activated by 
 	
 	setenv G4ANALYSIS_USE_AIDA 1
 
-     before building the executable.  The user can also add the "root" file format option by define 
-      
-       setenv G4ANALYSIS_USE_RROT 1
-       
-     before the compilation.
+     before building the executable.  
 
-     At the completion of a simulation run a file "exrdm.root" by default is produced which contains 
-     these data structures. The user can change the name of this output file with the command
+     The user can also use the ROOT file format for output by defining 
+      
+       setenv G4ANALYSIS_USE_ROOT 1
+       
+     before the compilation. The AIDA and ROOT systems can be used individually or in parallel!
+
+     At the completion of a run, if no analysis system is activated then there is no output file produced apart from 
+     the screen dump. A file called "exrdm.aida" is produced by default for AIDA system and "exrdm.root" if the ROOT 
+     system is selected. The user can change the name of this output file with the command
 
 	/histo/fileName new-filename
 
-     The output file by default is in "root" format and can be analysed offline using the ROOT tool, 
-     which allows the histograms and ntuples to examined, manipulated, saved and printed.
-
-     User can also change the output file format to "hbook"  or "xml" using the commands
+     The output AIDA file by default is in "aida" format. Some AIDA system allows the use of other internal file format
+     such as "root" and "hbook". User can change the output file format to "hbook"  or "root" using the /histo/fileType 
+     command. e.g.
 	
 	/histo/fileType hbook  
-	/histo/fileType xml
+	/histo/fileType root
      
-     The output file, in "xml" or "hbook" or "root" format, conatins the 3 ntuples (100,200,300) whose details have been 
+     When "root" format is selected for the AIDA file, the output AIDA file name is changed to fileName_aida.root. 
+     This is to separate it from the the native ROOT output file fileName.root, in case the use activated both systems.
+    
+     The output file, in "aida" or "hbook" or "root" format, conatins the 3 ntuples (100,200,300) whose details have been 
      described in section 4. In addition, there are 7 histograms in the file:
 
 	histogram 10: The Pulse Height Spectrum (PHS) of the target.
