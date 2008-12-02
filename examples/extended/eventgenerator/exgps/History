@@ -11,10 +11,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02/12/2008 F.Lei (exgps-V09-01-00)
+- updated exGPSAnalysisManager class to improve the AIDA output
+- removed AIDA setup from GNUmakefile (use G4 default one)
+- removed the ROOT file option
+
 21/12/2006 F.Lei (exgps-V08-02-00)
 -  Added the option for output results in .root file
 -  Changed particle_name to PDGcode in the ntuple
- 
+
 19/07/2005 F.Lei (exgps-V07-01-00)
 -  Changing in GNUmakefile 
    LOADLIBS += `aida-config --lib`

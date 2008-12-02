@@ -30,22 +30,17 @@
 
 #include "globals.hh"
 
-#ifdef G4ANALYSIS_USE_AIDA
-namespace AIDA{
+namespace AIDA {
+
 class IAnalysisFactory;
 class ITree;
 class IHistogramFactory;
 class ITupleFactory;
 class IPlotter;
+class IHistogram1D;
+class IHistogram2D;
+class ITuple;
 }
-#endif
-
-#ifdef G4ANALYSIS_USE_ROOT
-class TFile;
-class TH1D;
-class TH2D;
-class TNtuple;
-#endif
 
 class exGPSAnalysisMessenger;
 
@@ -61,12 +56,11 @@ public:
   virtual ~exGPSAnalysisManager ();
   static exGPSAnalysisManager* getInstance ();
   static void dispose();
-  
-#ifdef G4ANALYSIS_USE_AIDA
+
   AIDA::IHistogramFactory* getHistogramFactory();
   AIDA::ITupleFactory* getTupleFactory();
   AIDA::IPlotter* createPlotter();
-#endif
+
 
 public:
   void BeginOfRun();
@@ -80,7 +74,7 @@ public:
   void SetEngMax(G4double emax) {maxeng = emax;};
   void SetEngMin(G4double emin) {mineng = emin;};
   
-  void Fill(G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double);
+  void Fill(G4String, G4double, G4double, G4double, G4double, G4double, G4double, G4double);
 
 private:
 
@@ -89,35 +83,23 @@ private:
   G4String fileName;
   G4String fileType;
 
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::IHistogramFactory* hFactory;
+  AIDA::ITupleFactory* tFactory;
+  AIDA::ITree* tree;
+
   G4double minpos, maxpos;
   G4double mineng, maxeng;
-  
- #ifdef G4ANALYSIS_USE_AIDA 
-  IAnalysisFactory* analysisFactory;
-  IHistogramFactory* hFactory;
-  ITupleFactory* tFactory;
-  ITree* tree;
-  IHistogram1D* enerHisto;
-  IHistogram2D* posiXY;
-  IHistogram2D* posiXZ;
-  IHistogram2D* posiYZ;
-  IHistogram2D* anglCTP;
-  IHistogram2D* anglTP;
-  ITuple* tuple;
 
-  IPlotter* plotter;
-#endif
+  AIDA::IHistogram1D* enerHisto;
+  AIDA::IHistogram2D* posiXY;
+  AIDA::IHistogram2D* posiXZ;
+  AIDA::IHistogram2D* posiYZ;
+  AIDA::IHistogram2D* anglCTP;
+  AIDA::IHistogram2D* anglTP;
+  AIDA::ITuple* tuple;
 
-#ifdef G4ANALYSIS_USE_ROOT
-  TFile* hfileroot; // the file for histograms, tree ...
-  TH1D* enerHistoroot;
-  TH2D* posiXYroot;
-  TH2D* posiXZroot;
-  TH2D* posiYZroot;
-  TH2D* anglCTProot;
-  TH2D* anglTProot;
-  TNtuple* tupleroot; 	
-#endif
+  AIDA::IPlotter* plotter;
 
   exGPSAnalysisMessenger* analysisMessenger;
 

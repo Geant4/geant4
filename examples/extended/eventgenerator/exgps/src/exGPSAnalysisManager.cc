@@ -25,24 +25,7 @@
 //
 #ifdef G4ANALYSIS_USE
 
-#ifdef G4ANALYSIS_USE_AIDA
 #include <AIDA/AIDA.h>
-#endif
-
-#ifdef G4ANALYSIS_USE_ROOT
-#include "TROOT.h"
-#include "TApplication.h"
-#include "TGClient.h"
-#include "TCanvas.h"
-#include "TSystem.h"
-#include "TTree.h"
-#include "TBranch.h"
-#include "TFile.h"
-#include "TH1D.h"
-#include "TH2D.h"
-#include "TNtuple.h"
-#endif
-
 
 #include "exGPSAnalysisManager.hh"
 #include "exGPSAnalysisMessenger.hh"
@@ -52,10 +35,8 @@
 exGPSAnalysisManager* exGPSAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exGPSAnalysisManager::exGPSAnalysisManager(): fileName("exgps"),
-#ifdef G4ANALYSIS_USE_AIDA
-fileType("xml"),analysisFactory(0), hFactory(0), tFactory(0),
-#endif
+exGPSAnalysisManager::exGPSAnalysisManager(): 
+fileName("exgps.aida"),fileType("xml"),analysisFactory(0), hFactory(0), tFactory(0),
 minpos(-10.),maxpos(10),mineng(0.),maxeng(1000.)
 {
   // Define the messenger and the analysis system
@@ -72,9 +53,8 @@ exGPSAnalysisManager::~exGPSAnalysisManager() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE_AIDA
 
-IHistogramFactory* exGPSAnalysisManager::getHistogramFactory()
+AIDA::IHistogramFactory* exGPSAnalysisManager::getHistogramFactory()
 {
   return hFactory;
 }
@@ -82,26 +62,24 @@ IHistogramFactory* exGPSAnalysisManager::getHistogramFactory()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-ITupleFactory* exGPSAnalysisManager::getTupleFactory()
+AIDA::ITupleFactory* exGPSAnalysisManager::getTupleFactory()
 {
   return tFactory;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-IPlotter* exGPSAnalysisManager::createPlotter()
+AIDA::IPlotter* exGPSAnalysisManager::createPlotter()
 {
-#ifdef JAIDA_HOME 
   if (analysisFactory)
   {
-    IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+    AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
     if (pf) return pf->create("Plotter");
   }
-#endif
   return 0;
 }
 
-#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 exGPSAnalysisManager* exGPSAnalysisManager::getInstance ()
@@ -123,11 +101,10 @@ void exGPSAnalysisManager::dispose()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exGPSAnalysisManager::Fill(G4double pid, G4double e, 
+void exGPSAnalysisManager::Fill(G4String pname, G4double e, 
 				G4double x, G4double y, G4double z,
 				G4double t, G4double p, G4double w)
 {
-#ifdef G4ANALYSIS_USE_AIDA
   enerHisto->fill(e/MeV,w);
   posiXY->fill(x/cm,y/cm,w);
   posiXZ->fill(x/cm,z/cm,w);
@@ -140,7 +117,7 @@ void exGPSAnalysisManager::Fill(G4double pid, G4double e,
   // Fill the tuple
 
   if (tuple) {
-    tuple->fill(0,pid);
+    tuple->fill(0,pname);
     tuple->fill(1,e/MeV);
     tuple->fill(2,x/cm);
     tuple->fill(3,y/cm);
@@ -149,25 +126,8 @@ void exGPSAnalysisManager::Fill(G4double pid, G4double e,
     tuple->fill(6,p/deg);
     tuple->fill(7,w);
     
-    tuple->addRow();    
+    tuple->addRow();
   }
-#endif
-
-#ifdef G4ANALYSIS_USE_ROOT
-  enerHistoroot->Fill(e/MeV,w);
-  posiXYroot->Fill(x/cm,y/cm,w);
-  posiXZroot->Fill(x/cm,z/cm,w);
-  posiYZroot->Fill(y/cm,z/cm,w);
-  anglCTProot->Fill(p/deg,std::cos(t),w);
-  anglTProot->Fill(p/deg,t/deg,w);
-
-  // Fill the tuple
-
-  if (tupleroot) {
-    tupleroot->Fill(pid,e/MeV,x/cm,y/cm,z/cm,t/deg,p/deg,w);
-  }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -178,13 +138,12 @@ void exGPSAnalysisManager::Fill(G4double pid, G4double e,
 */
 void exGPSAnalysisManager::BeginOfRun() 
 { 
-#ifdef G4ANALYSIS_USE_AIDA
+
   // Hooking an AIDA compliant analysis system.
   analysisFactory = AIDA_createAnalysisFactory();
   if(analysisFactory){
-    G4String AIDAfileName         = fileName + G4String(".aida");
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    tree = treeFactory->create(AIDAfileName,fileType,false,true,"compress=yes");
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    tree = treeFactory->create(fileName,fileType,false,true,"compress=yes");
     hFactory = analysisFactory->createHistogramFactory(*tree);
     tFactory = analysisFactory->createTupleFactory(*tree);
     delete treeFactory; // Will not delete the ITree.
@@ -211,7 +170,6 @@ void exGPSAnalysisManager::BeginOfRun()
 						   , 100, -1, 1);
     anglTP = hFactory->createHistogram2D("Source phi-theta distribution",360,0,360
 						  ,180,0,180);
-#ifdef JAIDA_HOME
     plotter = createPlotter();
 
     if (plotter)
@@ -225,40 +183,14 @@ void exGPSAnalysisManager::BeginOfRun()
        plotter->region(5)->plot(*anglTP);
        plotter->show();
      }
-#endif
-
   }
 
   // Create a Tuple
 
   if (tFactory)
   {
-     tuple = tFactory->create("10","10","std::double Pid, Energy, X, Y, Z, Theta, Phi, Weight","");
+     tuple = tFactory->create("MyTuple","MyTuple","string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
   }
-#endif
-
-#ifdef G4ANALYSIS_USE_ROOT
-  new TApplication("App", ((int *)0), ((char **)0));
-  G4String ROOTfileName = fileName + G4String(".root");
-  hfileroot = new TFile(ROOTfileName.c_str() ,"RECREATE","ROOT file for exGPS");
-  
-  // Create the energy histogram
-  enerHistoroot =new TH1D("h1000","Source Energy Spectrum",100,mineng,maxeng);
-
-  // Create some 2d histos 
-  posiXYroot = new TH2D("h2001","Source X-Y distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-  posiXZroot = new TH2D("h2002","Source X-Z distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-  posiYZroot = new TH2D("h2003","Source Y-Z distribution",100,minpos/cm,maxpos/cm
-					    ,100,minpos/cm,maxpos/cm);
-  anglCTProot =new TH2D("h2004","Source phi-std::cos(theta) distribution",360,0,360
-						   , 100, -1, 1);
-  anglTProot = new TH2D("h2005","Source phi-theta distribution",360,0,360
-						  ,180,0,180);
-  
-  tupleroot =  new TNtuple("t10","Event by event data","Pname:X:Y:Z:Theta:Phi:Weight"); 
-#endif
 
 }
 
@@ -269,7 +201,6 @@ void exGPSAnalysisManager::BeginOfRun()
 */
 void exGPSAnalysisManager::EndOfRun() 
 {
-#ifdef G4ANALYSIS_USE_AIDA
   if (analysisFactory)
   {
     if (!tree->commit()) G4cout << "Commit failed: no AIDA file produced!" << G4endl;
@@ -280,15 +211,8 @@ void exGPSAnalysisManager::EndOfRun()
     delete analysisFactory;
   }
   //  dispose();
-#endif
-
-#ifdef G4ANALYSIS_USE_ROOT
-  G4cout << "ROOT: files writing..." << G4endl;
-  hfileroot->Write();
-  G4cout << "ROOT: files closing..." << G4endl;
-  hfileroot->Close();
-#endif
 }
+
 
 #endif // G4ANALYSIS_USE
 
