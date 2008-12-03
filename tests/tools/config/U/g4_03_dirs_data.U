@@ -1,13 +1,41 @@
 ?RCS:
 ?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4abladata g4elasticdata: \
-	g4tmp Myread Getfile cat rm g4system
+	g4tmp Myread Getfile cat rm g4system echo n c
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
 ?S:	used for building G4SYSTEM.
 ?S:.
+?S:g4data:
+?S:	This variable defines the path where Geant4 data libraries are installed
+?S:.
+?S:g4levelgammadata:
+?S:	This variable defines the path to the PhotonEvaporation data libraries
+?S:.
+?S:g4radioactivedata:
+?S:	This variable defines the path to the RadioactiveDecay data libraries
+?S:.
+?S:g4ledata:
+?S:	This variable defines the path to the G4EMLOW data libraries
+?S:.
+?S:g4neutronhpcrosssections:
+?S:	This variable defines the path to the G4NDL data libraries
+?S:.
+?S:g4abladata:
+?S:	This variable defines the path to the G4ABLA data libraries
+?S.
+g4data_photonevaporation_version='PhotonEvaporation2.0'
+g4data_radioactivedecay_version='RadioactiveDecay3.2'
+g4data_g4emlow_version='G4EMLOW6.2'
+g4data_g4ndl_version='G4NDL3.13'
+g4data_g4abla_version='G4ABLA3.0'
+#END GEANT4 DATA OPTIONS
 echo " "
 
+
+#
+# Set defaults for data paths - here, because we depend on g4install
+#
 case "$g4data" in
 '')
 	g4data=$g4install/data
@@ -16,169 +44,252 @@ esac
 
 case "$g4levelgammadata" in
 '')
-	g4levelgammadata=$g4data/PhotonEvaporation2.0
+	g4levelgammadata=$g4data/$g4data_photonevaporation_version
 	;;
 esac
 
 case "$g4radioactivedata" in
 '')
-	g4radioactivedata=$g4data/RadioactiveDecay3.2
+	g4radioactivedata=$g4data/$g4data_radioactivedecay_version
 	;;
 esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4data/G4EMLOW6.2
+	g4ledata=$g4data/$g4data_g4emlow_version
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4data/G4NDL3.13
+	g4neutronhpcrosssections=$g4data/$g4data_g4ndl_version
 	;;
 esac
 
 case "$g4abladata" in
 '')
-	g4abladata=$g4data/G4ABLA3.0
+	g4abladata=$g4data/$g4data_g4abla_version
 	;;
 esac
 
 
-#case "$g4elasticdata" in
-#'')
-#	g4elasticdata=$g4data/G4ELASTIC1.1
-#	;;
-#esac
+#
+# Now we have defaults, prompt user to see if this is where they want to use
+# 
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
 
-#########################################################################
+g4message=`cat <<EOM
+Specify the path where are the Geant4 data libraries 
 
-# while test 1 = 1  ; do
+$g4data_alllibs 
 
-g4message=`cat << EOM
-
-Please, specify default directory where ALL the Geant4 data is installed:
-
- G4LEVELGAMMADATA:		$g4levelgammadata
-
- G4RADIOACTIVEDATA:		$g4radioactivedata
-
- G4LEDATA:			$g4ledata
-
- G4NEUTRONHPDATA:		$g4neutronhpcrosssections
-
- G4ABLADATA:                    $g4abladata
-
-You will be asked about customizing these next.
-
+are installed. For now, a flat directory structure is assumed, and this can 
+be customized at the next step if needed.
 EOM`
 
-#dflt="NO DEFAULT ANSWER"
 dflt=$g4data
-#fn='d~'
-rp=$g4message
-#. ./myread
-gans=$ans
-
-		dflt=$g4data
-		fn='d~'
-		. ./getfile
-
-		if [ X$g4data != X$ans ] ; then
-		g4data=$ans
-
-		g4levelgammadata=$g4data/PhotonEvaporation2.0
-		g4radioactivedata=$g4data/RadioactiveDecay3.2
-		g4ledata=$g4data/G4EMLOW6.2
-		g4neutronhpcrosssections=$g4data/G4NDL3.13
-		g4abladata=$g4data/G4ABLA3.0
-#		g4elasticdata=$g4data/G4ELASTIC1.1
-		fi
-# done
-
-###################################################################
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Please, specify default directory where the Geant4 data is installed:
-
-1) G4LEVELGAMMADATA:		$g4levelgammadata
-
-2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-3) G4LEDATA:			$g4ledata
-
-4) G4NEUTRONHPDATA:		$g4neutronhpcrosssections
-
-5) G4ABLADATA:                  $g4abladata
-
-To modify default settings, select number above (e.g. 2) 
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
-#fn='d~'
 rp=$g4message
 . ./myread
-gans=$ans
+g4data=$ans
 
+#
+# Using this, we can now check that the libs exist, but only on a directory
+# level
+#
+g4data_foundall='yes'
+promptend="no"
+g4data_customize="no"
+
+while test "x$promptend" = "xno" ; do
+	### PhotonEvaporation
+	$echo $n "checking for $g4data_photonevaporation_version... $c"
+	if test -d "$g4data/$g4data_photonevaporation_version" ; then
+		$echo "yes"
+		g4levelgammadata=$g4data/$g4data_photonevaporation_version
+	else
+		$echo "no"
+		g4data_foundall="no"
+	fi
+
+	### RadioactiveDecay
+	$echo $n "checking for $g4data_radioactivedecay_version... $c"
+	if test -d "$g4data/$g4data_radioactivedecay_version" ; then
+        	$echo "yes"
+        	g4radioactivedata=$g4data/$g4data_radioactivedecay_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4EMLOW
+	$echo $n "checking for $g4data_g4emlow_version... $c"
+	if test -d "$g4data/$g4data_g4emlow_version" ; then
+        	$echo "yes"
+        	g4ledata=$g4data/$g4data_emlow_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4NDL
+	$echo $n "checking for $g4data_g4ndl_version... $c"
+	if test -d "$g4data/$g4data_g4ndl_version" ; then
+        	$echo "yes"
+        	g4neutronhpcrosssections=$g4data/$g4data_g4ndl_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	### G4ABLA
+	$echo $n "checking for $g4data_g4abla_version... $c"
+	if test -d "$g4data/$g4data_g4abla_version" ; then
+        	$echo "yes"
+        	g4levelgammadata=$g4data/$g4data_g4abla_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+	#
+	# If we haven't found all the data, query the user as to whether they
+	# want to
+	# 1) try again with a different path
+	# 2) use the path they input
+	# 3) customize paths
+	#
+	if test "x$g4data_foundall" = "xyes" ; then
+		promptend=yes
+	else
+		g4message=`cat << EOM
+
+Failed to locate one or more of the Geant4 data libraries in 
+
+$g4data 
+
+Please enter
+1) Another path to search in
+2) 'f' to force the use of the path you entered previously (the data libraries
+   are not needed to build Geant4, but are needed to run applications later).
+3) 'c' to customize the data paths, e.g. if you have the data libraries
+   installed in different locations.
+EOM`
+		dflt="f"
+		rp=$g4message
+		. ./myread
+		gans=$ans
+
+		if test "x$gans" = "xf" ; then
+			# Force paths
+			promptend="yes"
+			g4levelgammadata="$g4data/$g4data_photonevaporation_version"
+			g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
+			g4ledata="$g4data/$g4data_g4emlow_version"
+			g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
+			g4abladata="$g4data/$g4data_g4abla_version"
+			
+
+		elif test "x$gans" = "xc" ; then
+			# enable customization - we use input g4data to set
+			# defaults
+			promptend="yes"
+			g4data_customize="yes"
+
+			g4levelgammadata="$g4data/$g4data_photonevaporation_version"
+                        g4radioactivedata="$g4data/$g4data_radioactivedecay_version"
+                        g4ledata="$g4data/$g4data_g4emlow_version"
+                        g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
+                        g4abladata="$g4data/$g4data_g4abla_version"
+
+
+		else
+			#try again
+			g4data=$gans
+		fi
+	fi
+done
+
+
+#
+# Now customize paths if required
+#
+if test "x$g4data_customize" = "xyes" ; then
+while test "x" = "x" ; do
+
+	g4message=`cat <<EOM
+
+You have chosen to customize the Geant4 data library paths.
+
+1) $g4data_photonevaporation_version: 
+	$g4levelgammadata
+2) $g4data_radioactivedecay_version: 
+	$g4radioactivedata
+3) $g4data_g4emlow_version: 
+	$g4ledata
+4) $g4data_g4ndl_version: 
+	$g4neutronhpcrosssections
+5) $g4data_g4abla_version: 
+	$g4abladata
+
+Choose a number from the list above to customize that path (e.g. 2)
+EOM`
+
+	dflt="Press [Enter] to exit customization with paths as above"
+	rp=$g4message
+	. ./myread
+	gans=$ans
 
 	case $gans in
 
-	1) 
+	"1")
 		dflt=$g4levelgammadata
 		fn='d~'
-		rp="Where is Geant4 PhotonEvaporation2.0 data installed?"
+		rp="Custom path to $g4data_photonevaporation_version?"
 		. ./getfile
 		g4levelgammadata=$ans
 		;;
-	2) 
+
+	"2")
 		dflt=$g4radioactivedata
 		fn='d~'
-		rp="Where is Geant4 RadioactiveDecay3.2 data installed?"
+		rp="Custom path to $g4data_radioactivedecay_version?"
 		. ./getfile
 		g4radioactivedata=$ans
 		;;
-	3) 
+
+	"3")
 		dflt=$g4ledata
 		fn='d~'
-		rp="Where is G4EMLOW6.2 data installed ?"
+		rp="Custom path to $g4data_g4emlow_version?"
 		. ./getfile
 		g4ledata=$ans
 		;;
-	4) 
+
+	"4")
 		dflt=$g4neutronhpcrosssections
 		fn='d~'
-		rp="Where is G4NDL3.13 data installed?"
+		rp="Custom path to $g4data_g4ndl_version?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
 
-	5)
+	"5")
 		dflt=$g4abladata
 		fn='d~'
-		rp="Where is G4ABLA3.0 data installed?"
+		rp="Custom path to $g4data_g4abla_version?"
 		. ./getfile
 		g4abladata=$ans
 		;;
 
-#	5) 
-#		dflt=$g4elasticdata
-#		fn='d~'
-#		rp="Where is G4ELASTIC1.1 data installed?"
-#		. ./getfile
-#		g4elasticdata=$ans
-#		;;
-
-#	[eE]) 
-#		break
-#		;;
-	*) 
+	*)
 		break
-#		echo " "
 		;;
+
 	esac
+
 done
+fi
+
+
+
 
