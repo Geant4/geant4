@@ -23,41 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4processes.cc,v 1.7 2008-12-03 06:56:18 kmura Exp $
+// $Id: pyG4VCrossSectionHandler.cc,v 1.1 2008-12-03 06:56:18 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4processes.cc
+//   pyG4VCrossSectionHandler.cc
 //
-//                                         2005 Q
+//                                         2008 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4VCrossSectionHandler.hh"
+#include "G4VDataSetAlgorithm.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
 
 using namespace boost::python;
 
 // ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4VCrossSectionHandler {
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Initialise, Initialise, 0, 8);
+
+// FindValue
+G4double (G4VCrossSectionHandler::*f1_FindValue)(G4int, G4double) const
+  = &G4VCrossSectionHandler::FindValue;
+
+G4double (G4VCrossSectionHandler::*f2_FindValue)(G4int, G4double, G4int) const
+  = &G4VCrossSectionHandler::FindValue;
+
+};
+
+using namespace pyG4VCrossSectionHandler;
+
+// ====================================================================
 // module definition
 // ====================================================================
-void export_G4ProcessManager();
-void export_G4ProcessTable();
-void export_G4VProcess();
-void export_G4ProcVector();
-void export_G4ProcessType();
-void export_G4EmCalculator();
-void export_G4LossTableManager();
-void export_G4ProductionCutsTable();
-void export_G4VCrossSectionHandler();
-void export_G4CrossSectionHandler();
-
-BOOST_PYTHON_MODULE(G4processes)
+void export_G4VCrossSectionHandler()
 {
-  export_G4ProcessManager();
-  export_G4ProcessTable();
-  export_G4VProcess();
-  export_G4ProcVector();
-  export_G4ProcessType();
-  export_G4EmCalculator();
-  export_G4LossTableManager();
-  export_G4ProductionCutsTable();
-  export_G4VCrossSectionHandler();
-  export_G4CrossSectionHandler();
+  class_<G4VCrossSectionHandler, boost::noncopyable>
+    ("G4VCrossSectionHandler", "cross section handler", no_init)
+    // ---
+    .def("Initialise",           &G4VCrossSectionHandler::Initialise,
+         f_Initialise())
+    .def("SelectRandomElement",  &G4VCrossSectionHandler::SelectRandomElement,
+         return_value_policy<reference_existing_object>())         
+    .def("SelectRandomShell",    &G4VCrossSectionHandler::SelectRandomShell)
+    .def("FindValue",            f1_FindValue)
+    .def("FindValue",            f2_FindValue)
+    .def("ValueForMaterial",     &G4VCrossSectionHandler::ValueForMaterial)
+    .def("LoadData",             &G4VCrossSectionHandler::LoadData)
+    .def("LoadShellData",        &G4VCrossSectionHandler::LoadShellData)
+    .def("PrintData",            &G4VCrossSectionHandler::PrintData)
+    .def("Clear",                &G4VCrossSectionHandler::Clear)
+    ;
 }
+
