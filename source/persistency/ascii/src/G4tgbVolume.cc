@@ -24,9 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.8 2008-11-21 15:37:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // class G4tgbVolume
 
@@ -94,6 +91,7 @@
 #include "G4BREPSolidPCone.hh"
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4BREPSolidOpenPCone.hh"
+#include "G4VisExtent.hh"
 
 #include "G4Material.hh"
 #include "G4RotationMatrix.hh"
@@ -103,7 +101,7 @@
 #include "G4RegionStore.hh"
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
-
+#include "G4GeometryTolerance.hh"
 
 //-------------------------------------------------------------------
 G4tgbVolume::G4tgbVolume()
@@ -132,48 +130,72 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
-    G4cout << " G4tgbVolume::ConstructG4Volumes - " << GetName() << G4endl
-           << "   " << place << " " << parentLV << G4endl;
+    G4cout << G4endl <<  "@@@ G4tgbVolume::ConstructG4Volumes - " << GetName() << G4endl;
+    if( place && parentLV ) G4cout << "   place in LV " << parentLV->GetName() << G4endl;
   }
 #endif
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
-  if( (logvol == 0) && (theTgrVolume->GetType() != "VOLDivision") )
+  G4bool bFirstCopy = false;
+  if( (logvol == 0) ) 
   {
-    //--- If first time build solid and LogVol
-    G4VSolid* solid = FindOrConstructG4Solid( theTgrVolume->GetSolid() ); 
-    if( solid != 0 )   // for G4AssemblyVolume it is 0
+    bFirstCopy = true;
+    if( theTgrVolume->GetType() != "VOLDivision" )
     {
-      g4vmgr->RegisterMe( solid );
-      logvol = ConstructG4LogVol( solid );
-      g4vmgr->RegisterMe( logvol );
-      g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
-      
-      //--- If first copy build children placements in this LogVol
-      std::pair<G4mmapspl::iterator, G4mmapspl::iterator> children
-        = G4tgrVolumeMgr::GetInstance()->GetChildren( GetName() );
-      G4mmapspl::iterator cite; 
-      for( cite = children.first; cite != children.second; cite++ )
+      //--- If first time build solid and LogVol
+      G4VSolid* solid = FindOrConstructG4Solid( theTgrVolume->GetSolid() ); 
+      if( solid != 0 )   // for G4AssemblyVolume it is 0
       {
-        //----- Call G4tgrPlace ->constructG4Volumes 
-        //---- find G4tgbVolume corresponding to the G4tgrVolume
-        //     pointed by G4tgrPlace
-        G4tgrPlace* pl = const_cast<G4tgrPlace*>((*cite).second);
-        G4tgbVolume* svol = g4vmgr->FindVolume( pl->GetVolume()->GetName() );
-        //--- find copyNo
-        svol->ConstructG4Volumes( pl, logvol );
+	g4vmgr->RegisterMe( solid );
+	logvol = ConstructG4LogVol( solid );
+	g4vmgr->RegisterMe( logvol );
+	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
+	
       }
-    }
-  }
-
+    } 
+  } 
   //--- Construct PhysVol
-
   G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV );
   if( physvol != 0 )  // 0 for G4AssemblyVolumes
   {
     g4vmgr->RegisterMe( physvol );
+
+    if( logvol == 0 ) // case of divisions
+    {
+      logvol = physvol->GetLogicalVolume();
+    }
   }
+  else 
+  {
+    return;
+  }
+
+  //--- If first copy build children placements in this LogVol
+  if(bFirstCopy)
+  {
+    std::pair<G4mmapspl::iterator, G4mmapspl::iterator> children
+      = G4tgrVolumeMgr::GetInstance()->GetChildren( GetName() );
+    G4mmapspl::iterator cite; 
+    for( cite = children.first; cite != children.second; cite++ )
+    {
+      //----- Call G4tgrPlace ->constructG4Volumes 
+      //---- find G4tgbVolume corresponding to the G4tgrVolume
+      //     pointed by G4tgrPlace
+      G4tgrPlace* pl = const_cast<G4tgrPlace*>((*cite).second);
+      G4tgbVolume* svol = g4vmgr->FindVolume( pl->GetVolume()->GetName() );
+      //--- find copyNo
+#ifdef G4VERBOSE
+      if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+      {
+	G4cout << " G4tgbVolume::ConstructG4Volumes - construct daughter " <<  pl->GetVolume()->GetName() << " # " << pl->GetCopyNo() << G4endl;
+      }
+#endif
+      svol->ConstructG4Volumes( pl, logvol );
+    }
+  }
+
 }
+
 
 
 //-------------------------------------------------------------------
@@ -665,7 +687,6 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   return solid;
 }
 
-
 //-------------------------------------------------------------------
 void G4tgbVolume::CheckNoSolidParams( const G4String& solidType,
                                       const unsigned int NoParamExpected,
@@ -796,8 +817,8 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #endif
     physvol = new G4PVPlacement(0, G4ThreeVector(),
                                 const_cast<G4LogicalVolume*>(currentLV),
-                                GetName(), 0, false, 0,
-                                theTgrVolume->GetCheckOverlaps());
+                                GetName(), 0, false, 0, 
+				theTgrVolume->GetCheckOverlaps());
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
@@ -836,7 +857,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       {
         //----- Get rotation matrix
         G4tgrPlaceSimple* placeSimple = (G4tgrPlaceSimple*)place; 
-        G4String rmName = placeSimple->GetRotMatName();
+	G4String rmName = placeSimple->GetRotMatName();
 
         G4RotationMatrix* rotmat = G4tgbRotationMatrixMgr::GetInstance()
                                  ->FindOrBuildG4RotMatrix( rmName );
@@ -870,8 +891,10 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
           if( G4tgrMessenger::GetVerboseLevel() >= 1 )
           {
             G4cout << "Construction new G4VPhysicalVolume"
-                   << " through G4ReflectionFactory " << GetName()
-                   << " # " << copyNo 
+		   << " through G4ReflectionFactory " << GetName() 
+		   << " in volume " << parentLV->GetName() 
+		   << " copyNo " << copyNo 
+		   << " position " << place->GetPlacement() 
                    << " ROT " << rotmat->colX() 
                    << " " << rotmat->colY() 
                    << " " << rotmat->colZ() << G4endl;
@@ -881,36 +904,15 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                                        const_cast<G4LogicalVolume*>(currentLV),
                                        GetName(),
                                        const_cast<G4LogicalVolume*>(parentLV),
-                                       false, copyNo,
-                                       theTgrVolume->GetCheckOverlaps() );
-#ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing new : G4PVPlacement " 
-             << physvol->GetName() << " in volume " << parentLV->GetName()
-             << " copyNo " << copyNo 
-             << " position " <<place->GetPlacement() 
-             << " rotation " << rotmat->colX() 
-             << " " << rotmat->colY() 
-             << " " << rotmat->colZ() << G4endl;
-    }
-#endif
+                                       false, copyNo, 
+				       theTgrVolume->GetCheckOverlaps());
         }
-#ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-        {
-          G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-                 << "   place: " << place->GetPlacement()
-                 << " " << GetName() << " in " <<  parentLV->GetName()
-                 << G4endl;
-        }
-#endif
         
         //--------------- If it is G4tgrPlaceParam
       }
       else if( place->GetType() == "PlaceParam" )
       {
-        G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
+	G4tgrPlaceParameterisation* dp = (G4tgrPlaceParameterisation*)(place);
 
         //----- See what parameterisation type
 #ifdef G4VERBOSE
@@ -931,19 +933,19 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
         { 
           param = new G4tgbPlaceParamCircle(dp);
           
-        }
-        else if( (dp->GetParamType() == "LINEAR")
-              || (dp->GetParamType() == "LINEAR_X")
-              || (dp->GetParamType() == "LINEAR_Y")
-              || (dp->GetParamType() == "LINEAR_Z") )
+        } 
+	else if( (dp->GetParamType() == "LINEAR")
+                || (dp->GetParamType() == "LINEAR_X")
+                || (dp->GetParamType() == "LINEAR_Y")
+                || (dp->GetParamType() == "LINEAR_Z") )
         {   
           param = new G4tgbPlaceParamLinear(dp);
           
-        }
-        else if( (dp->GetParamType() == "SQUARE")
-              || (dp->GetParamType() == "SQUARE_XY")
-              || (dp->GetParamType() == "SQUARE_XZ")
-              || (dp->GetParamType() == "SQUARE_YZ") )
+        } 
+	else if( (dp->GetParamType() == "SQUARE")
+                || (dp->GetParamType() == "SQUARE_XY")
+                || (dp->GetParamType() == "SQUARE_XZ")
+                || (dp->GetParamType() == "SQUARE_YZ") )
         {
           param = new G4tgbPlaceParamSquare(dp);
         }
@@ -973,41 +975,41 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVParameterised: " 
-             << physvol->GetName() << " in volume " << parentLV->GetName()
-             << " N copies " << param->GetNCopies() 
-             << " axis " << param->GetAxis() << G4endl;
+             << physvol->GetName() << " in volume " << parentLV->GetName() 
+	     << " N copies " << param->GetNCopies() 
+	     << " axis " << param->GetAxis() << G4endl;
     }
 #endif
 
       }
       else if( place->GetType() == "PlaceReplica" )
       {
-        //--------------- If it is  PlaceReplica
-        G4tgrPlaceDivRep* dpr = (G4tgrPlaceDivRep*)place;
+	//--------------- If it is  PlaceReplica
+	G4tgrPlaceDivRep* dpr = (G4tgrPlaceDivRep*)place;
 
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 2 )
-          {
-            G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-                   << "   replica" << " " << currentLV->GetName()
-                   << " in " <<  parentLV->GetName() 
-                   << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
-                   << " offset " << dpr->GetOffset() << G4endl;
-          }
+	if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+        {
+	  G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
+		 << "   replica" << " " << currentLV->GetName()
+		 << " in " <<  parentLV->GetName() 
+		 << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
+		 << " offset " << dpr->GetOffset() << G4endl;
+	}
 #endif
-        physvol = new G4PVReplica(GetName(),
-                                  const_cast<G4LogicalVolume*>(currentLV),
-                                  const_cast<G4LogicalVolume*>(parentLV),
-                                  EAxis(dpr->GetAxis()), dpr->GetNDiv(),
-                                  dpr->GetWidth(), dpr->GetOffset());
+	physvol = new G4PVReplica(GetName(),
+				  const_cast<G4LogicalVolume*>(currentLV),
+				  const_cast<G4LogicalVolume*>(parentLV),
+				  EAxis(dpr->GetAxis()), dpr->GetNDiv(),
+				  dpr->GetWidth(), dpr->GetOffset());
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
       G4cout << " Constructing new G4PVReplica: " 
-             << currentLV->GetName()
-             << " in " <<  parentLV->GetName() 
-             << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
-             << " offset " << dpr->GetOffset() << G4endl;
+	     << currentLV->GetName()
+	     << " in " <<  parentLV->GetName() 
+	     << " NDiv " << dpr->GetNDiv() << " Width " << dpr->GetWidth()
+	     << " offset " << dpr->GetOffset() << G4endl;
     }
 #endif
       }
@@ -1016,74 +1018,74 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
     {
       G4tgrVolumeDivision* volr = (G4tgrVolumeDivision*)theTgrVolume;
       G4tgrPlaceDivRep* placeDiv = volr->GetPlaceDivision() ;
-      G4VSolid* solid = BuildSolidForDivision( parentLV->GetSolid() );
+      G4VSolid* solid = BuildSolidForDivision( parentLV->GetSolid(), placeDiv->GetAxis() );
       G4Material* mate = G4tgbMaterialMgr::GetInstance()
                   ->FindOrBuildG4Material( theTgrVolume->GetMaterialName() );
       G4LogicalVolume* divLV = new G4LogicalVolume(solid,
                                                   const_cast<G4Material*>(mate),
-                                                  GetName() );
+						   GetName() );
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing new G4LogicalVolume for division: " 
-             << divLV->GetName() << " mate " << mate->GetName() << G4endl;
-    }
+      if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+      {
+	G4cout << " Constructed new G4LogicalVolume for division: " 
+	       << divLV->GetName() << " mate " << mate->GetName() << G4endl;
+      }
 #endif
  
       G4DivType divType = placeDiv->GetDivType();
       switch (divType)
       {
-        case DivByNdiv:
-          physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
-                                     const_cast<G4LogicalVolume*>(parentLV),
-                                     placeDiv->GetAxis(), placeDiv->GetNDiv(),
-                                     placeDiv->GetOffset());
+      case DivByNdiv:
+	physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
+				   const_cast<G4LogicalVolume*>(parentLV),
+				   placeDiv->GetAxis(), placeDiv->GetNDiv(),
+				   placeDiv->GetOffset());
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing new G4PVDivision by number of divisions: " 
-             << GetName() << " in " <<  parentLV->GetName() 
-             << " axis " << placeDiv->GetAxis()  
-             << " Ndiv " << placeDiv->GetNDiv()
-             << " offset " << placeDiv->GetOffset() << G4endl;
-    }
+	if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+        {
+	  G4cout << " Constructing new G4PVDivision by number of divisions: " 
+		 << GetName() << " in " <<  parentLV->GetName() 
+		 << " axis " << placeDiv->GetAxis()  
+		 << " Ndiv " << placeDiv->GetNDiv()
+		 << " offset " << placeDiv->GetOffset() << G4endl;
+	}
 #endif
-           break;
-        case DivByWidth:
-          physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
-                                     const_cast<G4LogicalVolume*>(parentLV),
-                                     placeDiv->GetAxis(), placeDiv->GetWidth(),
-                                     placeDiv->GetOffset());
+	break;
+      case DivByWidth:
+	physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
+				   const_cast<G4LogicalVolume*>(parentLV),
+				   placeDiv->GetAxis(), placeDiv->GetWidth(),
+				   placeDiv->GetOffset());
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing new G4PVDivision by width: " 
-             << GetName() << " in " <<  parentLV->GetName() 
-             << " axis " << placeDiv->GetAxis()  
-             << " width " << placeDiv->GetWidth()
-             << " offset " << placeDiv->GetOffset() << G4endl;
-    }
+	if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	{
+	  G4cout << " Constructing new G4PVDivision by width: " 
+		 << GetName() << " in " <<  parentLV->GetName() 
+		 << " axis " << placeDiv->GetAxis()  
+		 << " width " << placeDiv->GetWidth()
+		 << " offset " << placeDiv->GetOffset() << G4endl;
+	}
 #endif
-          break;
-        case DivByNdivAndWidth:
-          physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
-                                     const_cast<G4LogicalVolume*>(parentLV),
-                                     placeDiv->GetAxis(), placeDiv->GetNDiv(),
-                                     placeDiv->GetWidth(),
-                                     placeDiv->GetOffset());
+	break;
+      case DivByNdivAndWidth:
+	physvol = new G4PVDivision(GetName(), (G4LogicalVolume*)divLV,
+				   const_cast<G4LogicalVolume*>(parentLV),
+				   placeDiv->GetAxis(), placeDiv->GetNDiv(),
+				   placeDiv->GetWidth(),
+				   placeDiv->GetOffset());
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing new G4PVDivision by width"
-             << " and number of divisions: " 
-             << GetName() << " in " <<  parentLV->GetName() 
-             << " axis " << placeDiv->GetAxis()  
-             << " Ndiv " << placeDiv->GetNDiv()
-             << " width " << placeDiv->GetWidth()
-             << " offset " << placeDiv->GetOffset() << G4endl;
-    }
+	if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	{
+	  G4cout << " Constructing new G4PVDivision by width"
+		 << " and number of divisions: " 
+		 << GetName() << " in " <<  parentLV->GetName() 
+		 << " axis " << placeDiv->GetAxis()  
+		 << " Ndiv " << placeDiv->GetNDiv()
+		 << " width " << placeDiv->GetWidth()
+		 << " offset " << placeDiv->GetOffset() << G4endl;
+	}
 #endif
-          break;
+	break;
       }
     }
     else if( theTgrVolume->GetType() == "VOLAssembly" )
@@ -1095,12 +1097,12 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
       {
         theG4AssemblyVolume = new G4AssemblyVolume;
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-          {
-            G4cout << " Constructing new G4AssemblyVolume: " 
-                   << " number of assembly components "
-                   <<  tgrAssembly->GetNoComponents() << G4endl;
-          }
+	if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	  {
+	    G4cout << " Constructing new G4AssemblyVolume: " 
+		   << " number of assembly components " 
+		   <<  tgrAssembly->GetNoComponents() << G4endl;
+	  }
 #endif        
         G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
         for( G4int ii = 0; ii < tgrAssembly->GetNoComponents(); ii++ )
@@ -1123,16 +1125,17 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
           // Fill the assembly by the plates
           theG4AssemblyVolume->AddPlacedVolume( logvol, transl, rotmat );
 #ifdef G4VERBOSE
-          if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-            {
-              G4cout << " G4AssemblyVolume->AddPlacedVolume " << ii  
-                     << " " << logvol->GetName()
-                     << " translation " << transl  
-                     << " rotmat " << rotmat->colX() 
-                     << " " << rotmat->colY() 
-                     << " " << rotmat->colZ() << G4endl;
-            }
+	  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+	  {
+	    G4cout << " G4AssemblyVolume->AddPlacedVolume " << ii  
+		   << " " << logvol->GetName()
+		   << " translation " << transl  
+		   << " rotmat " << rotmat->colX() 
+		   << " " << rotmat->colY() 
+		   << " " << rotmat->colZ() << G4endl;
+	  }
 #endif
+
         }
       }
 
@@ -1163,10 +1166,13 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 
 
 //-------------------------------------------------------------------
-G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
+G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis  )
 {
   G4VSolid* solid=0;
-  G4double redf = 0.001; //make daugther much smaller, to fit in parent
+  G4double redf = (parentSolid->GetExtent().GetXmax()-parentSolid->GetExtent().GetXmin());
+  redf = std::min(redf,parentSolid->GetExtent().GetYmax()-parentSolid->GetExtent().GetYmin());
+  redf = std::min(redf,parentSolid->GetExtent().GetZmax()-parentSolid->GetExtent().GetZmin());
+  redf *= 0.001; //make daugther much smaller, to fit in parent
 
   if( parentSolid->GetEntityType() == "G4Box" )
   {
@@ -1174,7 +1180,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
     solid = new G4Box(GetName(), psolid->GetXHalfLength()*redf,
                                  psolid->GetZHalfLength()*redf,
                                  psolid->GetZHalfLength()*redf);
-  }
+  } 
   else if ( parentSolid->GetEntityType() == "G4Tubs" )
   {
     G4Tubs* psolid = (G4Tubs*)(parentSolid);
@@ -1182,7 +1188,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                                    psolid->GetOuterRadius()*redf,
                                    psolid->GetZHalfLength()*redf,
                                    psolid->GetSPhi(), psolid->GetDPhi());
-  }
+  } 
   else if ( parentSolid->GetEntityType() == "G4Cons" )
   {
     G4Cons* psolid = (G4Cons*)(parentSolid);
@@ -1192,16 +1198,30 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                                    psolid->GetOuterRadiusPlusZ()*redf,
                                    psolid->GetZHalfLength()*redf,
                                    psolid->GetSPhi(), psolid->GetDPhi());
-  }
+  } 
   else if ( parentSolid->GetEntityType() == "G4Trd" )
   {
     G4Trd* psolid = (G4Trd*)(parentSolid);
-    solid = new G4Trd( GetName(), psolid->GetXHalfLength1()*redf,
-                                  psolid->GetXHalfLength2()*redf,
-                                  psolid->GetYHalfLength1()*redf,
-                                  psolid->GetYHalfLength2()*redf,
-                                  psolid->GetZHalfLength()*redf);
-  }
+    G4double mpDx1 = psolid->GetXHalfLength1();
+    G4double mpDx2 = psolid->GetXHalfLength2();
+
+    if( axis == kXAxis && std::fabs(mpDx1 - mpDx2) > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance() )
+    {
+      solid = new G4Trap( GetName(), psolid->GetZHalfLength()*redf, 
+			  psolid->GetYHalfLength1()*redf, 
+			  psolid->GetXHalfLength2()*redf, 
+			  psolid->GetXHalfLength1()*redf );
+    } 
+    else
+    {
+      solid = new G4Trd( GetName(), psolid->GetXHalfLength1()*redf,
+			 psolid->GetXHalfLength2()*redf,
+			 psolid->GetYHalfLength1()*redf,
+			 psolid->GetYHalfLength2()*redf,
+			 psolid->GetZHalfLength()*redf);
+    }
+    
+  } 
   else if ( parentSolid->GetEntityType() == "G4Para" )
   {
     G4Para* psolid = (G4Para*)(parentSolid);
@@ -1211,7 +1231,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                                    std::atan(psolid->GetTanAlpha()),
                                    psolid->GetSymAxis().theta(),
                                    psolid->GetSymAxis().phi() ); 
-  }
+  } 
   else if ( parentSolid->GetEntityType() == "G4Polycone" )
   {
     G4Polycone* psolid = (G4Polycone*)(parentSolid);
@@ -1226,7 +1246,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
                             origParam.Num_z_planes, origParam.Z_values,
                             origParam.Rmin, origParam.Rmax);
 
-  }
+  } 
   else if ( parentSolid->GetEntityType() == "G4Polyhedra" )
   {
     G4Polyhedra* psolid = (G4Polyhedra*)(parentSolid);
@@ -1261,3 +1281,4 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid )
 #endif
   return solid;
 }
+ 
