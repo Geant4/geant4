@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.14 2008-06-25 05:33:52 kmura Exp $
+#$Id: configure,v 1.15 2008-12-03 07:48:55 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -40,8 +40,7 @@ Options:
 
 Installation directories:
   --prefix=PREFIX           Installation prefix  [./]
-  --libdir=DIR              Python modules installaion dir [PREFIX/lib]
-  --incdir=DIR              Header installaion dir [PREFIX/include]
+  --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [\$G4INCLUDE]
@@ -52,7 +51,7 @@ Fine tuning of the library path:
 
   --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
-  --with-python-libdir=DIR  Python library dir [/usr/lib]
+  --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -63,21 +62,17 @@ Fine tuning of the library path:
 
   --with-extra-dir=DIR      Install path for extra packages [/usr/local]
 
-  --with-gdml-incdir=DIR    GDML header dir
-  --with-gdml-libdir=DIR    GDML library dir
-
   --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
-  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib(64)]
 
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, \$G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, \$G4VIS_USE_RAYTRACERX]
-  gdml         GDML support (external, experimental) [disable]
-               also specifying inc/lib directories
 
 Supported Architectures:
-  linux           for Linux gcc 3.x and 4.x
+  linux           for Linux gcc 3.x and 4.x (32bit)
+  linux64         for Linux gcc 3.x and 4.x (64bit, alias to linuxx8664gcc)
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
   macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
@@ -114,11 +109,7 @@ enable_raytracerx=${enable_raytracerx:-0}
 
 enable_physicslist=0
 
-enable_g4gdml=0
-
 enable_gdml=0
-gdml_incdir=/zzz
-gdml_libdir=/zzz
 
 xercesc_incdir=/usr/include
 
@@ -126,8 +117,11 @@ extra_dir=/usr/local
 
 # checking system
 case $1 in
-  linux|linuxx8664gcc|macosx)
+  linux|linux64|linuxx8664gcc|macosx)
     system=$1
+    if [ $system = linux64 ]; then
+      system=linuxx8664gcc
+    fi
     echo $ac_n "Checking for system type ... $ac_c"
     if [ ! -e "config/sys/$system.gmk" ]; then
       echo "no"
@@ -179,8 +173,6 @@ do
     --with-boost-incdir=*)     boost_incdir=$optarg              ;;
     --with-boost-libdir=*)     boost_libdir=$optarg              ;;
     --with-boost-python-lib=*) boost_python_lib=$optarg          ;;
-    --with-gdml-incdir=*)      gdml_incdir=$optarg               ;;
-    --with-gdml-libdir=*)      gdml_libdir=$optarg               ;;
     --with-xercesc-incdir=*)   xercesc_incdir=$optarg            ;;
     --with-xercesc-libdir=*)   xercesc_libdir=$optarg            ;;
     # ---------------------------------------------------------------
@@ -190,8 +182,6 @@ do
     --disable-openglxm )       enable_openglxm=0                 ;;
     --enable-raytracerx )      enable_raytracerx=1               ;;
     --disable-raytracerx )     enable_raytracerx=0               ;;
-    --enable-gdml )            enable_gdml=1                     ;;
-    --disable-gdml )           enable_gdml=0                     ;;
     # ---------------------------------------------------------------
     -*)
       echo "Unrecognized option: $1"
@@ -227,12 +217,7 @@ echo $ac_n "Checking for prefix ... $ac_c"
 echo $prefix
 
 echo $ac_n "Checking for lib dir ... $ac_c"
-
 libdir=${libdir:-$prefix/lib}
-echo $libdir
-
-echo $ac_n "Checking for include dir ... $ac_c"
-incdir=${incdir:-$prefix/include}
 echo $libdir
 
 echo $ac_n "Checking for G4 include dir ... $ac_c"
@@ -284,7 +269,7 @@ echo "lib${clhep_lib}.${shlib}"
 # ---
 echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
 # check version
-set python python2.5 python2.4 python2.3
+set python python2.5 python2.4 python2.3 python2.2
 for aincdir in $*
 do
   if [ -d /usr/include/$aincdir ]; then
@@ -334,6 +319,28 @@ if [ ! -f "$boost_incdir"/boost/python.hpp ]; then
   exit -1
 fi
 echo "$boost_incdir"
+
+echo $ac_n "Checking for Boost version ... $ac_c"
+cat > conftest.cc <<EOF
+#include <boost/version.hpp>
+
+int main() {
+  if (BOOST_VERSION >= 103200)
+    return 0;
+  else
+    return 1;
+}
+EOF
+g++ -o conftest conftest.cc > /dev/null 2>&1
+./conftest
+q_boost_version=$?
+rm conftest.cc conftest
+if [ $q_boost_version = 0 ]; then
+  echo "ok"
+else
+  echo "boost version >= 1.32.00 is required."
+  exit -1
+fi
 
 echo $ac_n "Checking for Boost lib dir ... $ac_c"
 if [ ! $boost_libdir ]; then
@@ -394,47 +401,17 @@ else
 fi
 
 # ---
-echo $ac_n "Checking for G4GDML support ...$ac_c"
+echo $ac_n "Checking for GDML support ...$ac_c"
 if [ -f "$g4_incdir"/G4GDMLParser.hh ]; then
   echo "yes"
-  enable_g4gdml=1
+  enable_gdml=1
 else
   echo "no"
-  enable_g4gdml=0
-fi  
-
-# ---
-echo $ac_n "Checking for GDML support ...$ac_c"
-if [ $enable_gdml = 0 ]; then
-  echo "no"
-else
-  echo "yes"
+  enable_gdml=0
 fi
 
+# ---
 if [ $enable_gdml = 1 ]; then
-  echo $ac_n "Checking for GDML include dir ...$ac_c"
-  if [ -d "$gdml_incdir"/G4Binding ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### $gdml_incdir/G4Binding does not exist. "
-    echo "Try --with-gdml-incdir option."
-    exit -1
-  fi
-
-  echo $ac_n "Checking for GDML lib dir ...$ac_c"
-  if [ -f "$gdml_libdir"/libG4Processor.so ]; then
-    echo "yes"
-  else
-    echo "no"
-    echo "### $gdml_libdir/libG4Processor.so does not exist. "
-    echo "Try --with-gdml-libdir option."
-    exit -1
-  fi
-fi
-
-# ---
-if [ $enable_g4gdml = 1 -o $enable_gdml = 1 ]; then
   echo $ac_n "Checking for Xerces-C include dir ...$ac_c"
   set $xercesc_incdir $extra_incdir
   for adir in $*
@@ -498,7 +475,6 @@ Q_SYSTEM              := $system
 
 Q_PREFIX              := $prefix
 Q_LIBDIR              := $libdir
-Q_INCDIR              := $incdir
 
 Q_G4_INCDIR           := $g4_incdir
 Q_G4_LIBDIR           := $g4_libdir
@@ -523,18 +499,10 @@ Q_ENABLE_RAYTRACERX   := $enable_raytracerx
 
 Q_ENABLE_PHYSICSLIST  := $enable_physicslist
 
-Q_ENABLE_G4GDML       := $enable_g4gdml
 Q_ENABLE_GDML         := $enable_gdml
 EOF
 
 if [ $enable_gdml = 1 ]; then
-cat >> $make_config <<EOF
-Q_GDML_INCDIR         := $gdml_incdir
-Q_GDML_LIBDIR         := $gdml_libdir
-EOF
-fi
-
-if [ $enable_g4gdml = 1 -o $enable_gdml = 1 ]; then
 cat >> $make_config <<EOF
 Q_XERCESC_INCDIR      := $xercesc_incdir
 Q_XERCESC_LIBDIR      := $xercesc_libdir
@@ -563,10 +531,6 @@ fi
 
 if [ $enable_physicslist = 1 ]; then
   echo $ac_n " physicslist$ac_c"
-fi
-
-if [ $enable_g4gdml = 1 ]; then
-  echo $ac_n " g4gdml$ac_c"
 fi
 
 if [ $enable_gdml = 1 ]; then
