@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeDivision.cc,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgrVolumeDivision.cc,v 1.5 2008-12-03 16:16:33 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -147,6 +147,8 @@ G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl )
      G4cout << " Created " << *this << G4endl;
   }
 #endif
+
+  theSolid = 0;
 }
 
 
