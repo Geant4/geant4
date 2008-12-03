@@ -1,4 +1,4 @@
-$Id: History,v 1.337 2008-12-01 11:04:40 gcosmo Exp $
+$Id: History,v 1.338 2008-12-03 13:35:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd December 2008  Gabriele Cosmo (config-V09-01-13)
+- Define $FIND, $SORT, $TOUCH variables to be customised with absolute
+  path in WIN32-VC in order to pick up correct Cygwin toolset.
 
 1st December 2008  Ben Morgan (config-V09-01-12)
 - Darwin-g++.gmk, Linux-g++.gmk: corrected definition of temporary QT3_MT
