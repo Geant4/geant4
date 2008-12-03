@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamLinear.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbPlaceParamLinear.cc,v 1.5 2008-12-03 16:16:01 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,7 @@ G4tgbPlaceParamLinear( G4tgrPlaceParameterisation* tgrParam )
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbPlaceParamLinear::G4tgbPlaceParamLinear(): "
-           << tgrParam->GetParamType() << G4endl
+           << " param type " << tgrParam->GetParamType() << G4endl
            << "   N copies " << theNCopies << G4endl
            << "   step " << theStep << G4endl
            << "   offset " << theOffset  << G4endl
@@ -117,6 +117,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   { 
     G4cout << " G4tgbPlaceParamLinear::ComputeTransformation() -"
+	   << physVol->GetName() << G4endl
            << " copyNo " << copyNo << " pos " << origin << G4endl;
   }
 #endif

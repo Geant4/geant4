@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamSquare.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgbPlaceParamSquare.cc,v 1.6 2008-12-03 16:16:01 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,8 +138,9 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
-    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():" << G4endl;
-    G4cout << "   no copies " << theNCopies << G4endl
+    G4cout << " G4tgbPlaceParamSquare::ComputeTransformation():" 
+	   << physVol->GetName() << G4endl
+	   << "   no copies " << theNCopies << G4endl
            << "   offset1 " << theOffset1 << G4endl
            << "   offset2 " << theOffset2 << G4endl
            << "   step1 " << theStep1 << G4endl

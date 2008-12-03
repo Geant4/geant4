@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamCircle.cc,v 1.4 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbPlaceParamCircle.cc,v 1.5 2008-12-03 16:16:01 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,6 +108,7 @@ G4tgbPlaceParamCircle( G4tgrPlaceParameterisation* tgrParam )
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbPlaceParamCircle::G4tgbPlaceParamCircle():" << G4endl
+           << " param type " << tgrParam->GetParamType() << G4endl
            << "   no copies - " << theNCopies << G4endl
            << "   step - " << theStep << G4endl
            << "   offset - " << theOffset << G4endl
@@ -138,15 +139,15 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
   {
     pvRm = new G4RotationMatrix;
   }
-  *pvRm = rm;
+  *pvRm  = *theRotationMatrix * rm;
   physVol->SetRotation(pvRm);
   physVol->SetCopyNo( copyNo );
-  physVol->SetRotation( theRotationMatrix );
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
-    G4cout << " G4tgbPlaceParamCircle::ComputeTransformation():" << G4endl
+    G4cout << " G4tgbPlaceParamCircle::ComputeTransformation():" 
+	   << physVol->GetName() << G4endl
            << "   no copies - " << theNCopies  << G4endl
            << "   centre - " << origin << G4endl
            << "   rotation-matrix - " << *pvRm << G4endl;
