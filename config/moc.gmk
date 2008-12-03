@@ -1,4 +1,4 @@
-# $Id: moc.gmk,v 1.2 2008-11-24 14:19:44 lgarnier Exp $
+# $Id: moc.gmk,v 1.3 2008-12-03 13:35:36 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -12,7 +12,7 @@ endif
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 ifneq ($(G4INTY_BUILD_QT),)
-  moc_inc := $(shell (grep -l "Q_OBJECT" include/*.hh))
+  moc_inc := $(shell ($(GREP) -l "Q_OBJECT" include/*.hh))
   moc_sources := $(patsubst include/%.hh, moc/%_moc.cc, $(moc_inc))
   moc_objects := $(patsubst moc/%_moc.cc,$(G4TMPDIR)/%_moc.o,$(moc_sources))
   moc_dependencies := $(patsubst moc/%_moc.cc,$(G4TMPDIR)/%_moc.d,$(moc_sources))
@@ -45,7 +45,7 @@ $(G4TMPDIR)/%_moc.d: moc/%_moc.cc
 moc/%_moc.cc: include/%.hh
 	@echo Making moc file for $< ...
 	@if [ ! -d moc ] ; then mkdir -p moc  ;fi
-	@if [ `$(QTMOC) -v 2>&1 | grep "Qt 3" | wc -l ` -gt 0 ]; then \
+	@if [ `$(QTMOC) -v 2>&1 | $(GREP) "Qt 3" | wc -l ` -gt 0 ]; then \
 	$(QTMOC) -o $@ $<;\
 	else $(QTMOC) $(MOC_MACRO) -o $@ $<; \
 	fi;

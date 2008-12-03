@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.116 2008-11-13 16:15:14 gcosmo Exp $
+# $Id: architecture.gmk,v 1.117 2008-12-03 13:35:36 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -307,6 +307,18 @@ CAT := cat
 # Default sed used with source/GNUmakefile.  Changed for WIN32.
 #
 SED := sed
+
+# Default find used with source/GNUmakefile.  Changed for WIN32.
+#
+FIND := find
+
+# Default sort used with source/GNUmakefile.  Changed for WIN32.
+#
+SORT := sort
+
+# Default touch used with source/GNUmakefile.  Changed for WIN32.
+#
+TOUCH := touch
 
 # Include architecture dependent setups...
 #

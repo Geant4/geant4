@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.52 2008-04-30 10:40:12 lgarnier Exp $
+# $Id: common.gmk,v 1.53 2008-12-03 13:35:36 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -88,7 +88,7 @@ obj: $(G4TMPDIR)/obj.last
 
 # Touch the versioning file
 $(G4TMPDIR)/obj.last: $(objects)
-	@touch $@
+	@$(TOUCH) $@
 
 # Make the .d file(s) and include it(them).
 

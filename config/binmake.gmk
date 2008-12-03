@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.138 2008-11-14 19:58:19 gcosmo Exp $
+# $Id: binmake.gmk,v 1.139 2008-12-03 13:35:36 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -370,7 +370,7 @@ $(G4TMPDIR)/exe/obj.last: lib $(objects)
 else
 $(G4TMPDIR)/exe/obj.last: $(objects)
 endif
-	@touch $@
+	@$(TOUCH) $@
 
 # Make the $(G4TARGET).$(TARGOBJEXT) file.
 $(G4TMPDIR)/exe/$(G4TARGET).$(TARGOBJEXT) : $(G4TARGET).cc
