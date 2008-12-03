@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.21 2008-08-18 14:06:13 tnikitin Exp $
+// $Id: G4PVDivision.cc,v 1.22 2008-12-03 16:41:45 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -73,7 +73,8 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, nDivs,
                       width, offset, DivNDIVandWIDTH);
-  CheckAndSetParameters (pAxis,offset, pMotherLogical);
+  CheckAndSetParameters (pAxis, nDivs, width, offset,
+                         DivNDIVandWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -103,7 +104,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
-  CheckAndSetParameters (pAxis, offset, pMotherLogical);
+  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -133,25 +134,40 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
-  CheckAndSetParameters (pAxis, offset, pMotherLogical);
+  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
 void
 G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
+                                     const G4int nDivs,
+                                     const G4double width,
                                      const G4double offset, 
+                                           DivisionType divType,
                                      const G4LogicalVolume* pMotherLogical )
 {
-  fnReplicas = fparam->GetNoDiv();
- 
+  if( divType == DivWIDTH )
+  {
+    fnReplicas = fparam->GetNoDiv();
+  }
+  else
+  {
+    fnReplicas = nDivs;
+  }
   if (fnReplicas < 1 )
   {
     G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
                 FatalException, "Illegal number of replicas!");
   }
 
-  fwidth = fparam->GetWidth();
-
+  if( divType != DivNDIV)
+  {
+    fwidth = fparam->GetWidth();
+  }
+  else
+  {
+    fwidth = width;
+  }
   if( fwidth < 0 )
   {
     G4Exception("G4PVDivision::G4PVDivision()", "IllegalConstruct",
@@ -201,12 +217,12 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   //
   G4String msolType = pMotherLogical->GetSolid()->GetEntityType();
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
-  if( msolType != dsolType )
+  if( msolType != dsolType && ( msolType != "G4Trd" || dsolType != "G4Trap" ) )
   {
     G4String message =
       "Incorrect solid type for division of volume " + GetName()
     + "    It is: " + msolType + ", while it should be: " + dsolType;
-    G4Exception("G4VDivisionParameterisation::CheckAndSetParameters()",
+    G4Exception("G4PVDivision::CheckAndSetParameters()",
                 "IllegalConstruct", FatalException, message );
   }
 }
