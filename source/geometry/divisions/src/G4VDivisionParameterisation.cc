@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.13 2008-07-25 16:23:35 ivana Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.14 2008-12-03 16:41:15 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -162,7 +162,7 @@ void G4VDivisionParameterisation::CheckNDivAndWidth( G4double maxPar )
            << "        Division of solid " << fmotherSolid->GetName()
            << " has too big offset + width*nDiv = " << G4endl
            << "        " << foffset + fwidth*fnDiv << " > "
-           << maxPar << ". Width = "
+           << foffset << ". Width = "
            << G4endl
            << "        " << fwidth << ". nDiv = " << fnDiv << " !"
            << G4endl;
