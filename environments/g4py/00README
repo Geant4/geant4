@@ -1,4 +1,4 @@
-$Id: 00README,v 1.10 2008-03-13 04:57:10 kmura Exp $
+$Id: 00README,v 1.11 2008-12-03 07:47:59 kmura Exp $
 ==========================================================================
 Geant4Py
 
@@ -18,7 +18,7 @@ Python
 
 Geant4
   - 8.0 or later
-  - should be built in "global" and "shared" libraries.
+  - should be built in "GLOBAL" and "SHARED" libraries.
   - All header files should be collected into $(G4INSTALL)/include
     by "make includes"
 
@@ -27,16 +27,13 @@ CLHEP
   - should be built in shared library.
   - Building shared objects is supported since version 1.9.
 
-BOOST-Python
-  - version 1.32 or later
-
 (Optional)
 ROOT
 
 Before Starting:
 ----------------
 In dafault situation, Geant4 creates and uses "granular static libraries".
-But, the Python interface requires "global shared library".
+But, the Python interface requires "GLOBAL SHARED library".
 If you donot build your Geant4 libraries in global shared mode, 
 you have to recreate your instance additionally.
 
@@ -48,8 +45,7 @@ How to Install:
 ---------------
 There is a configuraton script for building the package.
 
-# ./configure --help 
-
+# ./configure --help
 `configure' configures Geant4Py to adapt to many kinds of systems.
 
 Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]...
@@ -61,8 +57,7 @@ Options:
 
 Installation directories:
   --prefix=PREFIX           Installation prefix  [./]
-  --libdir=DIR              Python modules installaion dir [PREFIX/lib]
-  --incdir=DIR              Header installaion dir [PREFIX/include]
+  --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
   --with-g4-incdir=DIR      Geant4 header dir [$G4INCLUDE]
@@ -71,9 +66,9 @@ Fine tuning of the library path:
   --with-clhep-libdir=DIR   CLHEP library dir [$CLHEP_LIB_DIR]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|$CLHEP_LIB]
 
-  --with-python-incdir=DIR  Python header dir [/usr/include/python],
+  --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
-  --with-python-libdir=DIR  Python library dir [/usr/lib]
+  --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
 
   --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
                             (location of boost/)
@@ -82,33 +77,36 @@ Fine tuning of the library path:
 
   --with-package-dir=DIR    Geant4 Package dir
 
-  --with-gdml-incdir=DIR    GDML header dir
-  --with-gdml-libdir=DIR    GDML library dir
+  --with-extra-dir=DIR      Install path for extra packages [/usr/local]
 
   --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
-  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib]
+  --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib(64)]
 
 Enable/disable options: prefix with either --enable- or --disable-
   openglx      OpenGLX support    [auto]
   openglxm     OpenGLXm support   [disable, $G4VIS_USE_OPENGLXM]
   raytracerx   RayTracerX support [disable, $G4VIS_USE_RAYTRACERX]
-  gdml         GDML support (external, experimental) [disable]
-               also specifying inc/lib directories
 
 Supported Architectures:
-  linux           for Linux gcc 3.x and 4.x
+  linux           for Linux gcc 3.x and 4.x (32bit)
+  linux64         for Linux gcc 3.x and 4.x (64bit, alias to linuxx8664gcc)
   linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
   macosx          for MacOSX with gcc (Tiger/Leopard and Xcode)
 
 You can specify all parameters adopting your environment.
 
-For example, 
-# ./configure linux 
+For example,
+# ./configure linux64  (miserable)
   --with-g4-incdir=/opt/heplib/Geant4/geant4.8.1/include 
   --with-g4-libdir=/opt/heplib/Geant4/geant4.8.1/slib/Linux-g++ 
   --with-clhep-incdir=/opt/heplib/CLHEP/2.0.2.2/include 
   --with-clhep-libdir=/opt/heplib/CLHEP/2.0.2.2/lib 
   --with-clhep-lib=CLHEP-2.0.2.2
+
+# ./configure linux64  (smart)
+  --with-package-dir=/opt/heplib/Geant4/packages/9.1.2
+
+# ./confugre linux64 (intelligent or haphazard ?)
 
 The configuration script will create config/config.gmk, which describes 
 your envrionment.
@@ -136,7 +134,7 @@ Some libraries paths are already specified via "-rpath" linker option,
 so these paths do not have to be added to "LD_LIBRARY_PATH".
  * Geant4
  * CLHEP
- * Boost
+ * boost-python library
  * $(INSTALL_PATH)/lib
  * $(G4PY_EXLIB_LIBDIR) specified in a module makefile.
 
@@ -145,124 +143,25 @@ You can import Geant4Py modules in Python just like
 
 >>> import Geant4
 
-or
-
->>> from Geant4 import *
-
-
 Notes:
 -----
 1) >> IMPORTANT <<
-All users' libraries should be build in shared libaries.
+All users' libraries should be build in SHARED libaries.
 
 2) Development Environment:
-OS:             SuSE Linux 10.3 (x86-64)
-g++ :           4.2.1
-Python:         2.5.1
+OS:             SuSE Linux 11.0 (x86-64)
+g++ :           4.3.1
+Python:         2.5.2
 CLHEP:          1.9.3.2 / 2.0.3.2
-BOOST-Python:   1.33.1
-ROOT:           5.18/00
+ROOT:           5.20/00
+
+3) Tested environment:
+  Linux 32/64-bit
+  SuSE 11.0 10.3
+  SL3.4 SL4.5 SL5.1
+  Ubuntu 8.0.4
+  MacOSX 10.5 (Leopard)
 
 Have A Fun!!
 
 Koichi Murakami <Koichi.Murakami@kek.jp>
-
-
-==========================================================================
-<<<How to install Geant4Py in Mac OSX>>>
-                                 H. Yoshida and K. Murakami
-				 16 November 2006 for Geant4-8.2 release
-==========================================================================
-
-Geant4Py package can be installed in  Linux or Mac OS X systems. Documentation
-on   the    installation   and   the   latest   version    is   available   at
-www-geant4.kek.jp/projects/Geant4Py.
-
-This text  is a supplementary document  dedicated to Mac OS  X.  The following
-installation procedure was tested on a MacBook; Mac OS X 10.4.8 (8L2127), and 
-Darwin-8.8.1.
-       
-
-0) General remarks
-
- You have to install ALL packages from the system DVD, including supplementary
- packages and Xcode packages. Then, OpenGL must work.
-
- a. Compilation of Geant4 libraries; 
-      *.dylib must be created and all header files must be assembled. So
-         %make global; make includes
- b. Linker; 
-      If ld (linker) complains "Undefined symbols", try
-         %setenv MACOSX_DEPLOYMENT_TARGET 10.4
- c. Path of the Dynamic Libraries ;
-      If you have used Configure script to make the Geant4 libraries, the paths
-      to the dylibs are set automatically. The environment variables can be
-      checked in $G4INSTALL/.config/bin/Darwin-g++/env.csh.
- d. X window;
-      For visialization with OpenGL, you have to start Xserver and
-         %setenv DISPLAY localhost:0.0                                                                               
-1) Installation of Python 2.4.3
-
-The  latest  Mac  products  (as   of  October  2006)  include  Python  2.3  by
-default. This  is not  bad for  the basic installation  of Geant4Py,  but some
-examples  here   require  Python  2.4  which  provides   advanced  OS  related
-functionalities.  So, we recommend you to install Python 2.4.3. (Python 2.5 is
-already  published  but  we  don't  tested it  with  respect  to  boost_python
-wrappers.)
-
-Visit  the Python language  Web site;  http://www.python.org/download/mac/ and
-follow   the  instructions.    Universal-MacPython-2.4.3-*.dmg   is  available
-there. Or the site http://pythonmac.org/packages/ provides also *.dmg package,
-too.
-
-2) Installation of Boost-Python 
-
- Visit  the  site  http://boost.org/  and download  boost-1_33_1,  the  latest
-version. Then,  run the configure script and  then make libboost_python.dylib.
-Please make install it to  the default prefix directory, i.e., /usr/local, for
-simplcity.
-
-3) Compilation of Geant4Py
-
-If you have installed Python-2.4  and Boost-1_33_1 as above, you can configure
-Geant4Py as below;
-
-./configure macosx --with-python-incdir=/usr/local/include/python2.4\
-                   --with-python-libdir=/usr/local/lib/python2.4\
-                   --with-boost-incdir=/usr/local/include/boost-1_33_1\
-                   --with-boost-libdir=/usr/local/lib\
-                   --with-boost-python-lib=boost_python-1_33_1
-
-And  then,   %make;  make  install.   The  libraries  will  be   installed  in
-$G4INSTALL/environments/g4py/lib whose path must be added to PYTHONPATH.
-
-If you want to enjoy examples/education, wxPython package is necessary.
-
-4) Installation of wxPython
-
-Download  the latest  version  of wxPython  from http://www.wxpython.org/  and
-create the library. The next instructions are taken from the above Web page.
-
-%cd $WXDIR
-%mkdir bld
-%cd bld
-%../configure --prefix=/opt/wx/2.7 \
-             --with-mac\
-             --with-opengl \
-             --enable-debug \
-             --enable-geometry \
-             --enable-graphics_ctx \
-             --enable-sound --with-sdl \
-             --enable-mediactrl \
-             --enable-display \
-             --disable-debugreport 
-
-And then make; make install.
-You have to setenv/export PYTHONPATH, adding /opt/wx/2.7
-
-5) Run
-
- g4py/examples/education/lesson1/Lesson1Wx.py and lesson2/Lesson2Wx.py are
- exaples, using wxPython GUI toolkits. Run them,
-    %python Lesson1Wx.py
-
