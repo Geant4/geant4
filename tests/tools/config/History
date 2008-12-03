@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2008-11-28 17:06:15 bmorgan Exp $
+$Id: History,v 1.15 2008-12-03 15:34:10 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd December 2008 Ben Morgan
+- Configure: Regenerated after changes to unit files.
+- U/g4_03_dirs_data.U: Upgraded to give only one point of change when library
+versions are changed, cleaner selection and checking for existence and improved
+interface for customization of data library paths.
 
 28th November 2008 Ben Morgan
 - Configure: Regenerated after changes to unit files.
