@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.6 2008-11-26 11:40:12 gcosmo Exp $
+// $Id: G4tgbMaterialMixtureByVolume.cc,v 1.7 2008-12-03 16:14:45 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,9 +127,6 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
       // If it is a material add it by weight fraction 
       theFractionsByWeight.push_back( GetFraction(ii)*compMate->GetDensity() );
       totalfd += theFractionsByWeight[ii];
-      G4cout << compMate->GetName() << " BY VOLUME " << ii << " "
-             << GetFraction(ii) << " dens " <<  compMate->GetDensity()/g*cm3
-             << " --> " << theFractionsByWeight[ii] << G4endl;
     }
     else
     {
@@ -143,8 +140,6 @@ void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
   for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
   {
     theFractionsByWeight[ii] /= totalfd;
-    G4cout << compMate->GetName() << " BY VOLUME " << ii << " FINAL "
-           << theFractionsByWeight[ii] << G4endl;
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
