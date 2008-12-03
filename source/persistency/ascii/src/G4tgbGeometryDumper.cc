@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.9 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.10 2008-12-03 16:13:11 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -286,8 +286,6 @@ void G4tgbGeometryDumper::DumpPVParameterised( G4PVParameterised* pv )
   G4VSolid* newSolid = solid1st;
   G4String lvName;
       
-  G4cout << " DUMPPARAM " << pv->GetName() << " nrep " << nReplicas
-         << " width " << width << " offset " << offset << G4endl;
   for( G4int ii = 0; ii < nReplicas; ii++ )
   {
     G4Material* newMate = param->ComputeMaterial(ii, pv );
@@ -838,117 +836,6 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
       params.push_back( pc->GetCorner(ii).z );
     }
     
-    // transform rz points into z,rmin,rmax
-    //
-    std::map<G4double,std::vector<G4double> > rzs;
-    std::map<G4double,std::vector<G4double> >::iterator mite,mite2,mite3; 
-    for( G4int ii = 0; ii < ncor; ii++ )
-    {
-      mite = rzs.find( pc->GetCorner(ii).z );
-      if( mite == rzs.end() )
-      {
-        std::vector<G4double> val; 
-        val.push_back( pc->GetCorner(ii).r );
-        rzs[pc->GetCorner(ii).z] = val;
-      }
-      else
-      {
-        std::vector<G4double> val = (*mite).second;
-        val.push_back( pc->GetCorner(ii).r );
-        rzs[pc->GetCorner(ii).z] = val;
-      }
-    }
-    
-    // transform 3 R's into 2 (get min and max)
-    //
-    for( mite = rzs.begin(); mite != rzs.end(); mite++ )
-    {
-      std::vector<G4double> val = (*mite).second; 
-      if( val.size() > 2 )
-      {
-        // take min and max values only
-        G4double vmin = DBL_MAX;
-        G4double vmax = -DBL_MAX; 
-        std::vector<G4double> valnew;
-        for( size_t ii = 0; ii < val.size(); ii++ )
-        {
-          if( val[ii] < vmin )  { vmin = val[ii]; }
-          if( val[ii] > vmax )  { vmax = val[ii]; }
-        }
-        valnew.push_back( vmin );
-        valnew.push_back( vmax );
-        (*mite).second = valnew;
-      }
-    }
-    mite2 = rzs.end(); mite2--;
-
-    // transform 1 R into 2. First do end points (easier logic later): min=max
-    //
-    for( mite = rzs.begin(); mite != rzs.end(); mite++)
-    {
-      if( mite == rzs.begin() || mite == mite2 )
-      {
-        std::vector<G4double> val = (*mite).second; 
-        if( val.size() == 1 )
-        {
-          std::vector<G4double> valnew;
-          valnew.push_back( val[0] );
-          valnew.push_back( val[0] );
-          (*mite).second = valnew;
-        }
-      }
-    }
-    
-    // transform 1 R into 2. No end points: interpolate between two neighbours
-    //
-    for( mite = rzs.begin(); mite != mite2; mite++ )
-    {
-      if( mite == rzs.begin() )  { continue; }
-      std::vector<G4double> val = (*mite).second; 
-      if( val.size() == 1 )
-      {
-        // Check that neighbours do not also 1
-        mite3 = mite; mite3--;
-        std::vector<G4double> valleft = (*(mite3)).second;
-        G4double zleft = (*(mite3)).first;
-        mite3++; mite3++;
-        std::vector<G4double> valright = (*(mite3)).second;
-        G4double zright = (*(mite3)).first;
-        if( valleft.size() == 1 || valright.size() == 1 )
-        {
-          G4String ErrMessage = "RZ polygone with only two neighbours Z's \n"
-                              + G4String("that have only 1 R !");
-          G4Exception("G4tgbGeometryDumper::GetSolidParams()",
-                      "InvalidSetup", FatalException, ErrMessage);
-        }
-        // Interpolate min and max and then determine if val[0] ir Rmin or Rmax
-        //
-        G4double rmin = valleft[0]+(valright[0]- valleft[0])/(zright-zleft)
-                                  *((*mite).first-zleft);
-        G4double rmax = valleft[1]+(valright[1]- valleft[1])/(zright-zleft)
-                                  *((*mite).first-zleft);
-        if( val[0] < rmin ) {
-          val.push_back(rmax);
-        } else if ( val[0] > rmax ) {
-          val.push_back(rmin);
-        }
-        else
-        {
-          G4String ErrMessage = "RZ polygone with only 1 R cannot be "
-                 + G4String("determined \n if it is Rmin or Rmax !");
-          G4Exception("G4tgbGeometryDumper::GetSolidParams()",
-                      "InvalidSetup", FatalException, ErrMessage);
-        }
-        (*mite).second = val;
-      }
-    }
-
-    // Print result
-
-    for( mite = rzs.begin(); mite != rzs.end(); mite++ )
-    {
-      std::vector<G4double> val = (*mite).second; 
-    }
     
   } else if (solidType == "POLYHEDRA") {
     //--- Dump RZ corners, as original parameters will not be present
