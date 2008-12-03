@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4geometry.cc,v 1.9 2007-11-13 08:05:27 kmura Exp $
+// $Id: pymodG4geometry.cc,v 1.10 2008-12-03 07:21:56 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4geometry.cc [Geant4Py module]
@@ -37,6 +37,7 @@ using namespace boost::python;
 // ====================================================================
 // module definition
 // ====================================================================
+void export_G4GeometryManager();
 void export_G4VTouchable();
 void export_G4TouchableHistory();
 void export_G4VPhysicalVolume();
@@ -79,6 +80,7 @@ void export_G4ChordFinder();
 
 BOOST_PYTHON_MODULE(G4geometry)
 {
+  export_G4GeometryManager();
   export_G4VTouchable();
   export_G4TouchableHistory();
   export_G4VPhysicalVolume();
