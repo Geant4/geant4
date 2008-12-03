@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyglobals.cc,v 1.6 2008-03-13 07:32:18 kmura Exp $
+// $Id: pyglobals.cc,v 1.7 2008-12-03 07:34:50 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyglobals.cc
@@ -31,13 +31,13 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4indexing.hh"
 #include "G4Version.hh"
 #include "G4strstreambuf.hh"
 #include "G4UImanager.hh"
 #include "G4PyCoutDestination.hh"
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
-#include "pyG4indexing.hh"
 #include <vector>
 
 using namespace boost::python;
