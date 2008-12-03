@@ -1,10 +1,7 @@
-# $Id: script-install.gmk,v 1.1 2008-12-01 06:49:05 kmura Exp $
+# $Id: script-install.gmk,v 1.2 2008-12-03 07:36:08 kmura Exp $
 # ===========================================================
 #   Script for installing modules
 # ===========================================================
-
-install_dir := $(Q_LIBDIR)/g4py
-
 pys  := $(wildcard *.py)
 pycs := $(patsubst %.py, %.pyc, $(pys))
 pyos := $(patsubst %.py, %.pyo, $(pys))
@@ -21,3 +18,4 @@ install: $(pycs) $(pyos)
 
 clean:
 	@-\rm -f $(pycs) $(pyos)
+
