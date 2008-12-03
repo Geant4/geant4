@@ -63,7 +63,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/em_dissociation        PRTruscott@space.qinetiq.com    Pete Truscott
 "/"/"/high_energy            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/incl                   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/incl                   kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
 "/"/"/isotope_production     Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
 "/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
@@ -233,5 +233,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test45                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test52                 Anton.Lechner@cern.ch	     Anton Lechner
+      test61                 tkoi@slac.stanford.edu          Tatsumi Koi
+      test62                 kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison

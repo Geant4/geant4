@@ -1,4 +1,4 @@
-$Id: README,v 1.23 2008-09-15 08:19:05 vnivanch Exp $
+$Id: README,v 1.24 2008-12-03 16:01:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -72,6 +72,8 @@ test50 ## Statistical test suite for e.m. processes:
        ## 4) e-  backscattering;
        ## 5) e-,e+ transmission.
 test52 ## EM low-energy (standard, low-energy, Penelope)
+test61 ## QMD hadronic model.
+test62 ## INCL/ABLA hadronic model.
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________
