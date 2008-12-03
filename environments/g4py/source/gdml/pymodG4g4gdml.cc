@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4g4gdml.cc,v 1.2 2008-12-01 09:20:25 kmura Exp $
+// $Id: pymodG4g4gdml.cc,v 1.3 2008-12-03 06:54:39 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pymodG4g4gdml.cc [Geant4Py module]
@@ -38,10 +38,14 @@ using namespace boost::python;
 // module definition
 // ====================================================================
 
+#ifdef ENABLE_GDML
 void export_G4GDMLParser();
+#endif
 
 BOOST_PYTHON_MODULE(G4gdml)
 {
+#ifdef ENABLE_GDML
   export_G4GDMLParser();
+#endif
 }
 
