@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.hh,v 1.2 2008-10-23 16:00:58 gcosmo Exp $
+// $Id: G4tgbVolume.hh,v 1.3 2008-12-03 15:07:39 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,6 +55,7 @@
 #include <map>
 
 #include "G4tgrVolume.hh"
+#include "geomdefs.hh"
 
 class G4tgrPlace;
 class G4tgrSolid;
@@ -103,7 +104,7 @@ class G4tgbVolume
       // Before building a solid of type 'solydType', check if the number
       // of paramenters is the expected one
 
-    G4VSolid* BuildSolidForDivision( G4VSolid* parentSolid );
+  G4VSolid* BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis );
 
     const G4String& GetName() const { return theTgrVolume->GetName(); }
     G4bool GetVisibility() const { return theTgrVolume->GetVisibility(); }
