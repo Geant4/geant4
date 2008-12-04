@@ -51,9 +51,9 @@ class exGPSAnalysisManager
 
 private:
   exGPSAnalysisManager ();
+  virtual ~exGPSAnalysisManager ();
 
 public:
-  virtual ~exGPSAnalysisManager ();
   static exGPSAnalysisManager* getInstance ();
   static void dispose();
 
