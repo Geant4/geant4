@@ -106,6 +106,7 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
   }   
 #endif
 
+#ifdef G4VIS_USE
   // extract the trajectories and draw them
   if (G4VVisManager::GetConcreteInstance())
     {
@@ -122,6 +123,7 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
 	 trj->DrawTrajectory(0);				   
        }
    }             
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
