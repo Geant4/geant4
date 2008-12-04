@@ -1,8 +1,8 @@
-#! /bin/sh -
+#! /bin/bash -
 # ======================================================================
 #  A script for Geant4 autobuild
 #
-#  Version 2.2 Nov 2008
+#  Version 2.3 Dec 2008
 #
 #  [usage]
 #    g4autobuild [<options>]
@@ -185,7 +185,7 @@ g4sys=`grep '^G4SYS'  $config | awk '{print $2}'`
 g4base=`grep '^G4BASE' $config | awk '{print $2}'`
 clhepbase=`grep '^CLHEPBASE' $config | awk '{print $2}'`
 geant4_set=`grep '^-' $config | awk '{print $2}'`
-clhep_set=( `grep '^-' $config | awk '{print $3}'` )
+clhep_set=`grep '^-' $config | awk '{print $3}'`
 xercescroot=`grep '^XERCESCROOT' $config | awk '{print $2}'`
 vis_set=`grep '^v' $config | awk '{print $2}'`
 ui_set=`grep '^u' $config | awk '{print $2}'`
@@ -215,17 +215,21 @@ fi
 # ======================================================================
 # building Geant4
 
-idx=0
+idx=1
 for g4 in $geant4_set
 do
   echo "@@@ building Geant4 ($g4) ..."
-
+  
   g4dir=$g4base/$g4
 
   if [ ! -d $g4dir ]; then
     echo "*** (error) target directory does not exist."
     exit -1
   fi
+
+  set $clhep_set
+  clhep="clhep=\$$idx"
+  eval $clhep
 
   pushd $g4dir > /dev/null 2>&1
 
@@ -240,7 +244,7 @@ export LANG=C
 # ========================================================================
 export G4SYSTEM=$g4sys
 export G4INSTALL=$g4base/$g4
-export CLHEP_BASE_DIR=$clhepbase/${clhep_set[$idx]}
+export CLHEP_BASE_DIR=$clhepbase/$clhep
 EOF
 
   cat > g4rc.csh << EOF
@@ -254,7 +258,7 @@ setenv LANG C
 # ========================================================================
 setenv G4SYSTEM $g4sys
 setenv G4INSTALL $g4base/$g4
-setenv CLHEP_BASE_DIR $clhepbase/${clhep_set[$idx]}
+setenv CLHEP_BASE_DIR $clhepbase/$clhep
 EOF
 
 if [ $xercescroot ]; then
