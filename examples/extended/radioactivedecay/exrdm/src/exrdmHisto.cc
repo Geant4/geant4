@@ -96,6 +96,9 @@ exrdmHisto::~exrdmHisto()
   //FIXME : G.Barrand : the below is crashy.
   //        In principle the TH are deleted
   //        when doing the TFile::Close !
+  //         In fact the hfileROOT should 
+  //        be deleted in save(). And I am pretty
+  //        sure that the TApplication is not needed.
   for(G4int i=0; i<nHisto; i++) {
     if(ROOThisto[i]) delete ROOThisto[i];
   }
