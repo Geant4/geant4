@@ -12,6 +12,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04/12/2008 G.Barrand
+- exGPSAnalysisManager.hh : have the destructor private.
+- exGPS.cc : then use the exGPSAnalysisManager::dispose() method.
+- exGPS.cc : rm the aMgr which is no more used.
+- exGPSAnalysisManager::createPlotter : rm the "Plotter" string
+  and then ask to the AIDA implementation the default plotter.
+- exGPSAnalysisManager::EndOfRun : reset the variable after the deletions.
+- exGPS.cc and exGPSEventAction : use #ifdef G4VIS_USE in case
+  somone want to build without the G4 vis system.
+
 02/12/2008 F.Lei (exgps-V09-01-00)
 - updated exGPSAnalysisManager class to improve the AIDA output
 - removed AIDA setup from GNUmakefile (use G4 default one)
