@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.1 2008-10-28 08:50:37 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.2 2008-12-04 14:11:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,6 +31,14 @@
 // History:
 // --------
 // 02 Oct 2008   L Pandola    Migration from process to model 
+// 28 Oct 2008   L Pandola    Treat the database data from Penelope according to the 
+//                            original model, namely merging levels below 15 eV in 
+//                            a single one. Still, it is not fully compliant with the 
+//                            original Penelope model, because plasma excitation is not 
+//                            considered.
+// 22 Nov 2008   L Pandola    Make unit of measurements explicit for binding energies 
+//			      that are read from the external files.
+// 24 Nov 2008   L Pandola    Find a cleaner way to delete vectors.
 //
 
 #include "G4PenelopeComptonModel.hh"
@@ -89,15 +97,15 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 
 G4PenelopeComptonModel::~G4PenelopeComptonModel()
 {  
-  for (G4int Z=1;Z<100;Z++)
-    {
-      if (ionizationEnergy)
-	if (ionizationEnergy->count(Z)) delete (ionizationEnergy->find(Z)->second);
-      if (hartreeFunction)
-	if (hartreeFunction->count(Z)) delete (hartreeFunction->find(Z)->second);
-      if (occupationNumber)
-	if (occupationNumber->count(Z)) delete (occupationNumber->find(Z)->second);
-    }
+  std::map <G4int,G4DataVector*>::iterator i;
+  for (i=ionizationEnergy->begin();i != ionizationEnergy->end();i++)
+    if (i->second) delete i->second;
+  for (i=hartreeFunction->begin();i != hartreeFunction->end();i++)
+    if (i->second) delete i->second;
+  for (i=occupationNumber->begin();i != occupationNumber->end();i++)
+    if (i->second) delete i->second;
+
+
   if (ionizationEnergy)
     delete ionizationEnergy;
   if (hartreeFunction)
@@ -118,13 +126,13 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* particle,
   if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
     {
       G4cout << "G4PenelopeComptonModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit << " eV" << G4endl;
+	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
       SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
     }
   if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
     {
       G4cout << "G4PenelopeComptonModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit << " GeV" << G4endl;
+	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
       SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
     }
 
@@ -140,8 +148,7 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* particle,
     fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForGamma();
-  isInitialised = true;
-
+  isInitialised = true; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -237,7 +244,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   //
 
   if (verboseLevel > 3)
-    G4cout << "Calling SamplingSecondaries() of G4PenelopeComptonModel" << G4endl;
+    G4cout << "Calling SampleSecondaries() of G4PenelopeComptonModel" << G4endl;
 
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
@@ -585,7 +592,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING-" 
-	     << "G4PenelopeCompton::PostStepDoIt - Negative energy deposit"
+	     << "G4PenelopeComptonModel::SampleSecondaries - Negative energy deposit"
 	     << G4endl;
       localEnergyDeposit=0.;
     }
@@ -636,7 +643,7 @@ void G4PenelopeComptonModel::ReadData()
   G4String pathFile = pathString + "/penelope/compton-pen.dat";
   std::ifstream file(pathFile);
   
-  if (!(file.is_open()))
+  if (!file.is_open())
     {
       G4String excep = "G4PenelopeComptonModel - data file " + pathFile + " not found!";
       G4Exception(excep);
@@ -645,9 +652,6 @@ void G4PenelopeComptonModel::ReadData()
   G4int k1,test,test1;
   G4double a1,a2;
   G4int Z=1,nLevels=0;
-  G4DataVector* f;
-  G4DataVector* u;
-  G4DataVector* j;
 
   if (!ionizationEnergy || !hartreeFunction || !occupationNumber)
     {
@@ -656,19 +660,42 @@ void G4PenelopeComptonModel::ReadData()
     }
 
   do{
-    f = new G4DataVector;
-    u = new G4DataVector;
-    j = new G4DataVector;
+    G4double harOfElectronsBelowThreshold = 0;
+    G4int nbOfElectronsBelowThreshold = 0;
+    G4DataVector* occVector = new G4DataVector;
+    G4DataVector* harVector = new G4DataVector;
+    G4DataVector* bindingEVector = new G4DataVector;
     file >> Z >> nLevels;
-    for (G4int h=0;h<nLevels;h++){
-      file >> k1 >> a1 >> a2;
-      f->push_back((G4double) k1);
-      u->push_back(a1);
-      j->push_back(a2);
-    }
-    ionizationEnergy->insert(std::make_pair(Z,u));
-    hartreeFunction->insert(std::make_pair(Z,j));
-    occupationNumber->insert(std::make_pair(Z,f));
+    for (G4int h=0;h<nLevels;h++)
+      {
+	file >> k1 >> a1 >> a2;
+	//Make explicit unit of measurements for ionisation energy, which is MeV
+        a1 *= MeV; 
+	if (a1 > 15*eV)
+	  {
+	    occVector->push_back((G4double) k1);
+	    bindingEVector->push_back(a1);
+	    harVector->push_back(a2);
+	  }
+	else
+	  {
+	    nbOfElectronsBelowThreshold += k1;
+	    harOfElectronsBelowThreshold += k1*a2;
+	  }
+      }
+    //Add the "final" level
+    if (nbOfElectronsBelowThreshold)
+      {
+	occVector->push_back(nbOfElectronsBelowThreshold);
+	bindingEVector->push_back(0*eV);
+	G4double averageHartree = 
+	  harOfElectronsBelowThreshold/((G4double) nbOfElectronsBelowThreshold);
+	harVector->push_back(averageHartree);
+      }
+    //Ok, done for element Z
+    occupationNumber->insert(std::make_pair(Z,occVector));
+    ionizationEnergy->insert(std::make_pair(Z,bindingEVector));
+    hartreeFunction->insert(std::make_pair(Z,harVector));
     file >> test >> test1; //-1 -1 close the data for each Z
     if (test > 0) {
       G4String excep = "G4PenelopeComptonModel - data file corrupted!";
@@ -676,7 +703,7 @@ void G4PenelopeComptonModel::ReadData()
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
   file.close();
-   if (verboseLevel > 2)
+  if (verboseLevel > 2)
     {
       G4cout << "Data from G4PenelopeComptonModel read " << G4endl;
     }
@@ -700,11 +727,6 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta)
   G4double cdt1 = 1.0-cosTheta;
   G4double energy = energyForIntegration;
   G4int Z = ZForIntegration;
-  G4double ionEnergy=0.0,Pzimax=0.0,XKN=0.0;
-  G4double diffCS=0.0;
-  G4double x=0.0,siap=0.0;
-  G4double harFunc=0.0;
-  G4int occupNb;
   //energy of Compton line;
   G4double EOEC = 1.0+(energy/electron_mass_c2)*cdt1; 
   G4double ECOE = 1.0/EOEC;
@@ -712,15 +734,17 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta)
   G4double sia = 0.0;
   G4int nosc = occupationNumber->find(Z)->second->size();
   for (G4int i=0;i<nosc;i++){
-    ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
+    G4double ionEnergy = (*(ionizationEnergy->find(Z)->second))[i];
     //Sum only of those shells for which E>Eion
     if (energy > ionEnergy)
       {
-	G4double aux = energy * (energy-ionEnergy)*cdt1;
-	Pzimax = (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*std::sqrt(2*aux+ionEnergy*ionEnergy));
-	harFunc = (*(hartreeFunction->find(Z)->second))[i]/fine_structure_const;
-	occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
-	x = harFunc*Pzimax;
+        G4double aux = energy * (energy-ionEnergy)*cdt1;
+	G4double Pzimax = 
+	  (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*std::sqrt(2*aux+ionEnergy*ionEnergy));
+	G4double harFunc = (*(hartreeFunction->find(Z)->second))[i]/fine_structure_const;
+	G4int occupNb = (G4int) (*(occupationNumber->find(Z)->second))[i];
+	G4double x = harFunc*Pzimax;
+	G4double siap = 0;
 	if (x > 0) 
 	  {
 	    siap = 1.0-0.5*std::exp(k12-(k1+k2*x)*(k1+k2*x));
@@ -732,8 +756,8 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta)
 	sia = sia + occupNb*siap; //sum of all contributions;
       }
   }
-  XKN = EOEC+ECOE-1+cosTheta*cosTheta;
-  diffCS = pi*classic_electr_radius*classic_electr_radius*ECOE*ECOE*XKN*sia;
+  G4double XKN = EOEC+ECOE-1+cosTheta*cosTheta;
+  G4double diffCS = pi*classic_electr_radius*classic_electr_radius*ECOE*ECOE*XKN*sia;
   return diffCS;
 }
 
