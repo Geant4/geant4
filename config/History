@@ -1,4 +1,4 @@
-$Id: History,v 1.338 2008-12-03 13:35:58 gcosmo Exp $
+$Id: History,v 1.339 2008-12-04 09:25:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2008  Gabriele Cosmo, Ben Morgan (config-V09-01-14)
+- Linux-g++.gmk: implemented temporary workaround to allow for automatic
+  detection of location in non-POSIX paths for X11 and GL libraries depending
+  on 32/64 bits architectures.
 
 3rd December 2008  Gabriele Cosmo (config-V09-01-13)
 - Define $FIND, $SORT, $TOUCH variables to be customised with absolute
