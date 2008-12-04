@@ -36,7 +36,7 @@ exGPSAnalysisManager* exGPSAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisManager::exGPSAnalysisManager(): 
-fileName("exgps.aida"),fileType("xml"),analysisFactory(0), hFactory(0), tFactory(0),
+fileName("exgps.aida"),fileType("xml"),analysisFactory(0), hFactory(0), tFactory(0),tree(0),plotter(0),
 minpos(-10.),maxpos(10),mineng(0.),maxeng(1000.)
 {
   // Define the messenger and the analysis system
@@ -71,12 +71,12 @@ AIDA::ITupleFactory* exGPSAnalysisManager::getTupleFactory()
 
 AIDA::IPlotter* exGPSAnalysisManager::createPlotter()
 {
-  if (analysisFactory)
-  {
-    AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
-    if (pf) return pf->create();
-  }
-  return 0;
+  if (!analysisFactory) return 0;
+  AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+  if (!pf) return 0;
+  AIDA::IPlotter* p = pf->create();
+  delete pf;
+  return p;    
 }
 
 
@@ -144,9 +144,9 @@ void exGPSAnalysisManager::BeginOfRun()
   if(analysisFactory){
     AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     tree = treeFactory->create(fileName,fileType,false,true,"compress=yes");
+    delete treeFactory; // Will not delete the ITree.
     hFactory = analysisFactory->createHistogramFactory(*tree);
     tFactory = analysisFactory->createTupleFactory(*tree);
-    delete treeFactory; // Will not delete the ITree.
   }
   //
   enerHisto =0;
@@ -208,10 +208,12 @@ void exGPSAnalysisManager::EndOfRun()
     delete tFactory;
     delete hFactory;
     //    G4cout << "Warning: Geant4 will NOT continue unless you close the JAS-AIDA window." << G4endl;
+    delete plotter;
     delete analysisFactory;
     tree = 0;
     tFactory = 0;
     hFactory = 0;
+    plotter = 0;
     analysisFactory = 0;
   }
   //  dispose();

@@ -87,6 +87,7 @@ private:
   AIDA::IHistogramFactory* hFactory;
   AIDA::ITupleFactory* tFactory;
   AIDA::ITree* tree;
+  AIDA::IPlotter* plotter;
 
   G4double minpos, maxpos;
   G4double mineng, maxeng;
@@ -98,8 +99,6 @@ private:
   AIDA::IHistogram2D* anglCTP;
   AIDA::IHistogram2D* anglTP;
   AIDA::ITuple* tuple;
-
-  AIDA::IPlotter* plotter;
 
   exGPSAnalysisMessenger* analysisMessenger;
 
