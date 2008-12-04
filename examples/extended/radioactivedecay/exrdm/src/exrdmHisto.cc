@@ -93,6 +93,9 @@ exrdmHisto::~exrdmHisto()
   ntup.clear();
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
+  //FIXME : G.Barrand : the below is crashy.
+  //        In principle the TH are deleted
+  //        when doing the TFile::Close !
   for(G4int i=0; i<nHisto; i++) {
     if(ROOThisto[i]) delete ROOThisto[i];
   }

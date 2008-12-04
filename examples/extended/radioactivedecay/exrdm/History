@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2008-12-04 19:35:22 gbarrand Exp $
+$Id: History,v 1.22 2008-12-04 19:39:15 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ track of all tags.
 - exrdmHisto : revisit the AIDA sector, mainly creation/deletion of things.
   Now the program holds in case of multiple /run/beamOn.
   NOTE : someone should do the same with the ROOT sector...
+- EventAction, RunAction : have some #ifdef G4VIS_USE to be able to
+  disconnect properly the G4/vis.
 
 August 10th, 2008 V.Ivanchenko (exrdm-V09-01-01)
 --------------------------------------------------
