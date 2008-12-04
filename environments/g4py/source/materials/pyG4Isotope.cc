@@ -23,38 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4materials.cc,v 1.7 2008-12-04 08:55:25 kmura Exp $
+// $Id: pyG4Isotope.cc,v 1.1 2008-12-04 08:55:25 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
-//   pymodG4materials.cc [Geant4Py module]
+//   pyG4Isotope.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "G4Version.hh"
+#include "pyG4indexing.hh"
+#include "G4Isotope.hh"
 
 using namespace boost::python;
 
 // ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4Isotope {
+
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetIsotope, G4Isotope::GetIsotope, 1, 2);
+
+// copy constructor is private, so ...
+void Print(G4Isotope& iso)
+{
+  G4cout << iso;
+}
+
+};
+
+using namespace pyG4Isotope;
+
+// ====================================================================
 // module definition
 // ====================================================================
-void export_G4Material();
-void export_G4MaterialTable();
-void export_G4Element();
-void export_G4ElementTable();
-void export_G4ElementVector();
-void export_G4Isotope();
-void export_G4NistManager();
-void export_G4AtomicShells();
-
-BOOST_PYTHON_MODULE(G4materials)
+void export_G4Isotope()
 {
-  export_G4Material();
-  export_G4MaterialTable();
-  export_G4Element();
-  export_G4ElementTable();
-  export_G4ElementVector();
-  export_G4Isotope();
-  export_G4NistManager();
-  export_G4AtomicShells();
+  class_<G4Isotope, G4Isotope*, boost::noncopyable>
+    ("G4Isotope", "isotope class", no_init)
+    // constructors
+    .def(init<const G4String&, G4int, G4int>())
+    .def(init<const G4String&, G4int, G4int, G4double>())
+    // ---
+#if G4VERSION_NUMBER >= 920
+    .def("GetName",             &G4Isotope::GetName,
+         return_value_policy<reference_existing_object>())
+    .def("SetName",             &G4Isotope::SetName)
+#else
+    .def("GetName",             &G4Isotope::GetName)
+#endif
+    .def("GetZ",                &G4Isotope::GetZ)
+    .def("GetN",                &G4Isotope::GetN)
+    .def("GetA",                &G4Isotope::GetA)
+    .def("GetCountUse",         &G4Isotope::GetCountUse)
+    .def("GetIsotope",          &G4Isotope::GetIsotope,
+         f_GetIsotope()
+         [return_value_policy<reference_existing_object>()])
+    .staticmethod("GetIsotope")
+    .def("GetIsotopeTable",     &G4Isotope::GetIsotopeTable,
+         return_value_policy<reference_existing_object>())
+    .staticmethod("GetIsotopeTable")
+    .def("GetNumberOfIsotopes", &G4Isotope::GetNumberOfIsotopes)
+    .staticmethod("GetNumberOfIsotopes")
+
+    .def("GetIndex",            &G4Isotope::GetIndex)
+    // ---
+    .def("Print", Print)
+    .def(self == self)
+    .def(self != self)
+    ;
+
+  // G4IsotopeTable
+  class_<G4IsotopeTable> ("G4IsotopeTable", "isotope table")
+    .def(vector_indexing_suite<G4IsotopeTable>())
+    .def(self_ns::str(self))
+    ;
 }
 
