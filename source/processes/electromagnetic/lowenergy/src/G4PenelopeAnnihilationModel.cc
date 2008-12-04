@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeAnnihilationModel.cc,v 1.1 2008-11-04 10:15:01 pandola Exp $
+// $Id: G4PenelopeAnnihilationModel.cc,v 1.2 2008-12-04 14:09:36 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -82,13 +82,13 @@ void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition* particl
   if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
     {
       G4cout << "G4PenelopeAnnihilationModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit << " eV" << G4endl;
+	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
       SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
     }
   if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
     {
       G4cout << "G4PenelopeAnnihilationModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit << " GeV" << G4endl;
+	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
       SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
     }
 

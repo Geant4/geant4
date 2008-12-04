@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.1 2008-10-28 08:50:37 pandola Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.2 2008-12-04 14:09:36 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -100,14 +100,14 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
     {
       G4cout << "G4PenelopePhotoElectricModel: low energy limit increased from " <<
-        LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit << " eV" << 
+        LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << 
 	G4endl;
       SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
     }
   if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
     {
       G4cout << "G4PenelopePhotoElectricModel: high energy limit decreased from " <<
-        HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit << " GeV" 
+        HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" 
 	     << G4endl;
       SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
     }
@@ -235,12 +235,12 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
   
-  G4double cutForLowEnergySecondaryPhotons = 250.0*eV;
+  G4double cutForLowEnergySecondaryParticles = 250.0*eV;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t indx = couple->GetIndex();
   G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cutE = std::max(cutForLowEnergySecondaryPhotons,cutE);
+  cutE = std::max(cutForLowEnergySecondaryParticles,cutE);
 
   // There may be cases where the binding energy of the selected shell is > photon energy
   // In such cases do not generate secondaries
@@ -277,7 +277,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   if (fUseAtomicDeexcitation)
     {
       G4double cutG = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      cutG = std::min(cutForLowEnergySecondaryPhotons,cutG);
+      cutG = std::min(cutForLowEnergySecondaryParticles,cutG);
       
       std::vector<G4DynamicParticle*>* photonVector = 0;
 

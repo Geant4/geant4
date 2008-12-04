@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc,v 1.1 2008-10-28 08:50:37 pandola Exp $
+// $Id: G4PenelopeGammaConversionModel.cc,v 1.2 2008-12-04 14:09:36 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -94,13 +94,13 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
   if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
     {
       G4cout << "G4PenelopeGammaConversionModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit << " eV" << G4endl;
+	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
       SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
     }
   if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
     {
       G4cout << "G4PenelopeGammaConversionModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit << " GeV" << G4endl;
+	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
       SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
     }
 
