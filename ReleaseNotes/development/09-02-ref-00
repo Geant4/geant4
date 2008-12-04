@@ -24,17 +24,19 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-01-13
+config                                           config-V09-01-15
 ------
 - Reviewed Qt setup for Darwin-g++, Linux-g++.gmk and WIN32-VC, to
   automatically detect Qt3/Qt4 installations and set the proper flags.
 - Implemented temporary workaround in Darwin-g++ for automatically set
   GLLIBS for Leopard.
+- Implemented temporary workaround in Linux-g++ for automatically detect
+  and correctly set X11LIBS and GLLIBS for 32/64-bits dual systems on Linux.
 - Added "electromagnetic/adjoint" sub-module in binmake.gmk.
 - Defined $FIND, $SORT, $TOUCH variables overridden in WIN32-VC for defining
   proper absolute path to CygWin tools, to avoid clashes with Windows native
   tools. Used in "source/GNUmakefile" (source-gmk-V09-01-01).
-- Configure script (Configure-V09-01-03): brought up-to-date with new data
+- Configure script (Configure-V09-01-01): brought up-to-date with new data
   sets and configuration options for Qt.
 
 digits_hits                                      digits_hits-V09-01-02
@@ -46,6 +48,12 @@ digits_hits                                      digits_hits-V09-01-02
 g3tog4                                           g3tog4-V09-01-01
 ------
 - Fixed compilation warning for gcc-4.3.X in clparse.cc.
+
+geometry/divisions                               geomdiv-V09-01-02
+------------------
+- Added division along X of TRD (that results in TRAP's).
+- Enhanced G4PVDivision internal utility methods to allow divisions solids
+  to have type different than mother.
 
 geometry/magnetifield                            field-V09-01-05
 ---------------------
@@ -117,10 +125,12 @@ particles                                        particles-V09-01-13
 - Fixed particle name of G4AdjointPositron.
 - Fixed magnetic momentum for leptons.
 
-persistency/ascii                                ascii-V09-01-04
+persistency/ascii                                ascii-V09-01-05
 -----------------
 - Added BREPS reading, support for any kind of parameterisations and
   dumping abilities.
+- Added ability to handle placements inside divisions.
+- Correct rotation matrix in circular parameterisations.
 - Corrected handling on strings in error/warnings printouts.
 - Corrected GNUmakefile to have ':=' instead of '=' for definition
   of library name. Required in order to correctly build libname.map!
@@ -128,7 +138,7 @@ persistency/ascii                                ascii-V09-01-04
 - Use G4UIcommand::ConvertToString() in place of custom itoa().
 - Fixed compilation warnings for uninitialised variables.
 
-persistency/gdml                                 gdml-V09-01-20
+persistency/gdml                                 gdml-V09-01-21
 ----------------
 - Updated schema to include new features introduced in reader/writer plugin.
 - Added missing solid G4EllipticalCone to reader and writer.
@@ -164,11 +174,16 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy              emlowen-V09-01-33
+processes/electromagnetic/lowenergy             emlowen-V09-01-34
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
   G4IonParametrisedLossTable.
+- First inclusion of G4PenelopeIonisationModel.
+- Correction for G4PenelopeComptonModel: now the cross section table
+  calculated by the model corresponds to the original FORTRAN-Penelope;
+  the difference was only for compounds materials and below 1 keV, so
+  irrelevant for virtually all applications.
 - Updated data set to G4EMLOW6.2.
 
 processes/electromagnetic/muons                  emmuons-V09-01-15
@@ -240,11 +255,14 @@ processes/hadronic                               hadr-V09-01-00
     trivial change of A to Af.
   o Fixed memory leak in G4EvaporationChannel.
   o Added comments to modifications of MF model.
-- models/neutron_hp (hadr-hpn-V09-01-27)
+- models/neutron_hp (hadr-hpn-V09-01-28)
   o Fixed memory leak in G4NeutronHPThermalScattering and removed unused
     variable.
   o Added protection for invalid read in G4NeutronHPFissionData which caused
     run time errors.
+  o Fixed bug in G4NeutronHPChannel::Register(); added limitation of trial
+    for creating final states and added protection for pure 1H case in
+    G4NeutronHPInelastic.
   o G4NeutronHPNames: fixed gcc-4.3.2 compilation warning.
   o Updated data set to G4NDL3.13.
 - models/pre_equilibrium (hadr-pre-V09-01-13)
@@ -356,16 +374,16 @@ examples                                         examples-V09-02-00
   o EM options: 20bins/decade, LinLossLimit=default=0.01.
 - extended/optical/LXe (LXe-V09-01-01)
   o Added call to SetMaxBetaChangePerStep() of Cherenkov in LXeOpticalPhysics.
-- extended/persistency/gdml/G01 (G01-V09-01-03)
+- extended/persistency/gdml/G01 (G01-V09-01-04)
   o Updated loop.gdml and solids.gdml descriptions to fix schema validation
     warnings.
   o Added example in main() how to retrieve auxiliary information.
   o Added pTube.gdml, example of parameterisation in Phi for a G4Tubs.
   o Removed obsolete gdml files paramvol.gdml and replicavol.gdml.
   o Updated README and some code cleanup.
-- extended/persistency/gdml/G02 (G02-V09-01-01)
+- extended/persistency/gdml/G02 (G02-V09-01-02)
   o Use "test.gdml" as default GDML file to load.
-- extended/persistency/gdml/G03 (G03-V09-01-00)
+- extended/persistency/gdml/G03 (G03-V09-01-01)
   o New example showing how to extend the GDML schema in input.
 - extended/persistency/P03 (exampleP03-V09-01-03)
   o New example showing usage of ASCII text persistency for detector
