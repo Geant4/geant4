@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.55 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.56 2008-12-04 08:31:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@
 #include "G4GDMLWriteStructure.hh"
 #include "G4STRead.hh"
 
-#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd")
+#define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
 
 class G4GDMLParser
 {
