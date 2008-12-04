@@ -74,7 +74,7 @@ AIDA::IPlotter* exGPSAnalysisManager::createPlotter()
   if (analysisFactory)
   {
     AIDA::IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
-    if (pf) return pf->create("Plotter");
+    if (pf) return pf->create();
   }
   return 0;
 }
@@ -209,6 +209,10 @@ void exGPSAnalysisManager::EndOfRun()
     delete hFactory;
     //    G4cout << "Warning: Geant4 will NOT continue unless you close the JAS-AIDA window." << G4endl;
     delete analysisFactory;
+    tree = 0;
+    tFactory = 0;
+    hFactory = 0;
+    analysisFactory = 0;
   }
   //  dispose();
 }
