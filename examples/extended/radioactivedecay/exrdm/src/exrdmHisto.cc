@@ -99,9 +99,11 @@ exrdmHisto::~exrdmHisto()
   //         In fact the hfileROOT should 
   //        be deleted in save(). And I am pretty
   //        sure that the TApplication is not needed.
-  for(G4int i=0; i<nHisto; i++) {
-    if(ROOThisto[i]) delete ROOThisto[i];
-  }
+  //
+  // removed by F.Lei
+  //  for(G4int i=0; i<nHisto; i++) {
+  //   if(ROOThisto[i]) delete ROOThisto[i];
+  // }
 #endif
   delete messenger;
 }
@@ -159,7 +161,7 @@ void exrdmHisto::book()
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
-  new TApplication("App", ((int *)0), ((char **)0));
+//  new TApplication("App", ((int *)0), ((char **)0));
   G4String fileNameROOT = histName + G4String(".root");
   hfileROOT = new TFile(fileNameROOT.c_str() ,"RECREATE","ROOT file for exRDM");
   G4cout << "Root file: " << fileNameROOT << G4endl;
@@ -207,6 +209,10 @@ void exrdmHisto::save()
   hfileROOT->Write();
   G4cout << "ROOT: files closing..." << G4endl;
   hfileROOT->Close();
+  //
+  // F.Lei added following Guy's suggestion!
+  delete hfileROOT;
+
 #endif
 }
 

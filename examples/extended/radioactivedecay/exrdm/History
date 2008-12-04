@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2008-12-04 20:22:01 gbarrand Exp $
+$Id: History,v 1.25 2008-12-04 23:38:41 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+04/12/2008 F.Lei (exrdm-V09-01-03)
+- exrdmHisto: delete hfileROOT in save();
+- exrdmAnalysisManager.cc, exrdmSteppingAction.cc
+   - used || login between G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT
+- Updated README, macro/f24.mac
 
 04/12/2008 G.Barrand
 - exrdmAnalyisManager : dispose() : cstor, dstor private.
@@ -24,6 +29,10 @@ track of all tags.
 - EventAction, RunAction : have some #ifdef G4VIS_USE to be able to
   disconnect properly the G4/vis.
 
+02/12/2008 F.Lei (exrdm-V09-01-02)
+- exrdmHisto,exrdmHistoMessenger & exrdmAnalysisManager: updated the usage 
+  of AIDA analysis package.
+  
 August 10th, 2008 V.Ivanchenko (exrdm-V09-01-01)
 --------------------------------------------------
 - exdrmMatarialMessenger - fix units of density

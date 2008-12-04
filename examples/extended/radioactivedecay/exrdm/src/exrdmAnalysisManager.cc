@@ -69,12 +69,12 @@ exrdmAnalysisManager::exrdmAnalysisManager()
 
 exrdmAnalysisManager::~exrdmAnalysisManager()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USE 
   delete histo;
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-  //FIXME : G.Barrand : the below is crashy.
-  //delete histo;
+//  F.lei why this not working?
+//  if (histo) delete histo;
 #endif
 }
 
