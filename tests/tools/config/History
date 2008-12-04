@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2008-12-03 15:34:10 bmorgan Exp $
+$Id: History,v 1.16 2008-12-04 14:18:25 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2008 Ben Morgan
+- config/scripts/env.(c)sh.SH: Use CLHEP_LIB_DIR in setting of LD_LIBRARY_PATH
+instead of CLHEP_BASE_DIR/lib.
 
 3rd December 2008 Ben Morgan
 - Configure: Regenerated after changes to unit files.
