@@ -11,6 +11,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+04/12/2008 F.Lei (exgps-V09-01-01)
+- updated README
+- tag Guy's changes
 
 04/12/2008 G.Barrand
 - exGPSAnalysisManager.hh : have the destructor private.

@@ -42,22 +42,23 @@
      If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, or PI installed on his/her system, 
      the analysis part of this example can be activated by: 
 
-	setenv G4ANALYSIS_USE_AIDA 1
+	setenv G4ANALYSIS_USE 1
 
      This needs to be done before building the executable.  
 
      At the end of an excution, an xml file "exgps.aida" is created by default which contains 
-     histograms and ntuples. User can change the name and type of this output file with the commands
+     histograms and ntuples. User can change the name and format of this output file with the commands
 	
 	/analysis/filetype new-type
 	/analysis/fileName new-filename
 
 	e.g.
 
-	/analysis/filetype hbook
-	/analysis/filename myfile 
+	/analysis/filetype root
+	/analysis/filename myfile.root 
 
-     these change the output file type to "hbook" and output file name to "myfile.hbbok"
+     these change the output file format to ROOT and output file name to "myfile.root". There are three file 
+     formats to choose from: xml, root or hbook.
 
      The output file conatins 6 histograms and one ntuple:
 
@@ -78,31 +79,18 @@
 	Incident Angle (theta,phi);
 	Particle weight;
 
-     It is also possible to out put the histograms and ntuple in Root file. To activate all the user has to do
-     is to define the following enveronement varialble before compilation:
-
-        setenv G4ANALYSIS_USE_ROOT 1
-     
-     Of course this assumes you have Root installed on your system before hand. If this option is selected, one
-     will get an additional file "filename.root" in the run running directory.	 
-  
-
   7. GETTING STARTED:
 
      i) If you have an AIDA-compliant analysis package installed, then you should switch on the analysis 
      part of the example by: 
 
-	setenv G4ANALYSIS_USE_AIDA 1
+	setenv G4ANALYSIS_USE 1
      
-     and
-
-	setenv G4ANALYSIS_USE_ROOT 1
-
-     If you like to have results in .root file as well. Otherwise make sure the G4ANALYSIS_USE is not 
-     defined:
- 
+     otherwise do  
+  
 	unsetenv G4ANALYSIS_USE
-        unsetenv G4ANALYSIS_USE_AIDA
+
+     to remove the generation of an output file.
  
      ii) Build the exGPS executable:
 
@@ -119,9 +107,10 @@
 
          $G4BIN/$G4SYSTEM/exGPS exrgps.in
 
-     If G4ANALYSIS_USE is defined, one should see a display of the six histograms. If JAIDA is used, one has 
-     to close the plotter window in order to terminate the execution. After the termination one will find 
-     the "exgps.aida", as well as a vrml file "g4_00.wrl" in the directory.
+     If G4ANALYSIS_USE is defined, and dpends on the particular AIDA system used, e.g. JAIDA, one could see 
+     a display window of the six histograms. It may be neccessary to close the plotter window in order to 
+     terminate the execution. After the termination one will find the "exgps.aida", as well as a vrml file 
+     "g4_00.wrl" in the directory.
 
  8. FURTHER EXAMPLES of MACRO FILES:
 
