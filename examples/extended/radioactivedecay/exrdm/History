@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2008-08-10 13:21:09 vnivanch Exp $
+$Id: History,v 1.21 2008-12-04 19:35:22 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04/12/2008 G.Barrand
+- exrdmAnalyisManager : dispose() : cstor, dstor private.
+- exrdmHisto : revisit the AIDA sector, mainly creation/deletion of things.
+  Now the program holds in case of multiple /run/beamOn.
+  NOTE : someone should do the same with the ROOT sector...
 
 August 10th, 2008 V.Ivanchenko (exrdm-V09-01-01)
 --------------------------------------------------

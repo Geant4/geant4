@@ -52,13 +52,14 @@ exrdmHisto::exrdmHisto()
   verbose    = 1;
   histName   = "exrdm";
   histType   = "aida";
+  //histType   = "root";
   nHisto     = 0;
   nTuple     = 0;
   defaultAct = 1;
   //
 #ifdef G4ANALYSIS_USE
-  histo.clear();
-  ntup.clear();
+  aida = 0;
+  tree = 0;
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
@@ -88,9 +89,8 @@ exrdmHisto::exrdmHisto()
 exrdmHisto::~exrdmHisto()
 {
 #ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) delete histo[i];
-  }
+  histo.clear();
+  ntup.clear();
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
   for(G4int i=0; i<nHisto; i++) {
@@ -107,23 +107,27 @@ void exrdmHisto::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### exrdmHisto books " << nHisto << " histograms " << G4endl; 
   // Creating the analysis factory
-  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+  aida = AIDA_createAnalysisFactory();
+  if(!aida) {
+    G4cout << "ERROR: can't get AIDA." << G4endl; 
+    return;
+  }
   // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory(); 
+ {AIDA::ITreeFactory* tf = aida->createTreeFactory(); 
   // Creating a tree mapped to a new aida file.
   G4String fileName = histName + "." + histType;
   if (histType == "root") fileName = histName + "_aida." + histType;
   tree = tf->create(fileName,histType,false,true,"compress=yes");
-  if(tree) { 
-    G4cout << "Tree store  : " << tree->storeName() << G4endl;
-  } else {
+  delete tf;
+  if(!tree) { 
     G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl; 
+    return;
   }
+  G4cout << "Tree store  : " << tree->storeName() << G4endl;}
   // Creating a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
+ {AIDA::IHistogramFactory* hf = aida->createHistogramFactory(*tree);
   // Creating an 1-dimensional histograms in the root directory of the tree
-  G4int i;
-  for(i=0; i<nHisto; i++) {
+  for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
       if(verbose>1)
         G4cout<<"book: histogram "<< i << " id= " << ids[i] <<G4endl;
@@ -132,22 +136,20 @@ void exrdmHisto::book()
       histo[i] = hf->createHistogram1D(tit, titles[i], bins[i], xmin[i], xmax[i]);
     }
   }
-  G4cout << "AIDA histograms are booked" << G4endl;
+  delete hf;
+  G4cout << "AIDA histograms are booked" << G4endl;}
 
   // Creating a tuple factory, whose tuples will be handled by the tree  
-  AIDA::ITupleFactory* tpf =  af->createTupleFactory( *tree );
+ {AIDA::ITupleFactory* tpf =  aida->createTupleFactory( *tree );
   G4cout << "AIDA will book " << nTuple << " ntuples" << G4endl;
-  for(i=0; i<nTuple; i++) {
+  for(G4int i=0; i<nTuple; i++) {
     if(tupleList[i] != "") {
       G4cout << "Creating Ntuple: " << tupleName[i] <<":" <<tupleList[i] <<G4endl;
       ntup[i] = tpf->create(tupleId[i], tupleName[i], tupleList[i],"");
     }
   }
-  G4cout << "AIDA ntuples are booked" << G4endl;
-//  delete hf;
-//  delete tpf;
-//  delete tf;
-//  delete af;
+  delete tpf;
+  G4cout << "AIDA ntuples are booked" << G4endl;}
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
@@ -187,6 +189,12 @@ void exrdmHisto::save()
   G4cout << "Closing the AIDA tree..." << G4endl;
   tree->close();
   G4cout << "Histograms and Ntuples are saved" << G4endl;
+  delete tree;
+  tree = 0;
+  delete aida;
+  aida = 0;
+  {for(G4int i=0; i<nHisto; i++) histo[i] = 0;}
+  {for(G4int i=0; i<nTuple; i++) ntup[i] = 0;}
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
   G4cout << "ROOT: files writing..." << G4endl;

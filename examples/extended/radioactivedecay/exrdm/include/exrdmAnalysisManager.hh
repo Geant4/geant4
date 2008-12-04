@@ -57,14 +57,14 @@ public:
   // With description
 
   static exrdmAnalysisManager* getInstance();
+  static void dispose();
 
 private:
 
   exrdmAnalysisManager();
+  ~exrdmAnalysisManager();
 
 public: // Without description
-
-  ~exrdmAnalysisManager();
 
   void bookHisto();
 

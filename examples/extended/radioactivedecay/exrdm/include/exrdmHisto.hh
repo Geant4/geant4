@@ -40,6 +40,7 @@
 
 #ifdef G4ANALYSIS_USE
 namespace AIDA {
+ class IAnalysisFactory;
  class ITree;
  class ITuple;
  class IHistogram1D;
@@ -117,6 +118,7 @@ private:
 #ifdef G4ANALYSIS_USE
   std::vector<AIDA::IHistogram1D*> histo;
   std::vector<AIDA::ITuple*>   ntup;
+  AIDA::IAnalysisFactory* aida;
   AIDA::ITree*    tree;
 #endif
 

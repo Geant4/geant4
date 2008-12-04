@@ -45,6 +45,11 @@ exrdmAnalysisManager* exrdmAnalysisManager::getInstance()
   }
   return fManager;
 }
+void exrdmAnalysisManager::dispose()
+{
+  delete fManager;
+  fManager = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,7 +69,7 @@ exrdmAnalysisManager::exrdmAnalysisManager()
 
 exrdmAnalysisManager::~exrdmAnalysisManager()
 {
-//  delete histo;
+  delete histo;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
