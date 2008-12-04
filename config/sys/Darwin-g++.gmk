@@ -65,7 +65,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef OGLLIBS
     ifeq ($(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/'),9)
       # the following lines are for building on MacOSX 10.5 "Leopard"
-      OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo " -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+      OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
     else
       OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     endif
@@ -129,13 +129,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     g++ -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 
