@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.13 2008-08-20 14:51:48 sincerti Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.14 2008-12-05 07:56:45 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationBorn.hh"
@@ -318,25 +318,32 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
     if (particleDefinition == G4Electron::ElectronDefinition()) 
     {
       // k should be in eV and energy transfer eV also
+
       std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
+
       std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
-      std::vector<double>::iterator e11 = e12-1;
 
-      std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
-      std::vector<double>::iterator e21 = e22-1;
+      // SI : the following condition avoids situations where energyTransfer >last vector element
+      if (energyTransfer <= eVecm[(*t1)].back())
+      {
+        std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
+        std::vector<double>::iterator e11 = e12-1;
 
-      valueT1  =*t1;
-      valueT2  =*t2;
-      valueE21 =*e21;
-      valueE22 =*e22;
-      valueE12 =*e12;
-      valueE11 =*e11;
+        std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
+        std::vector<double>::iterator e21 = e22-1;
 
-      xs11 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
-      xs12 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
-      xs21 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
-      xs22 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+        valueT1  =*t1;
+        valueT2  =*t2;
+        valueE21 =*e21;
+        valueE22 =*e22;
+        valueE12 =*e12;
+        valueE11 =*e11;
+
+        xs11 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
+        xs12 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
+        xs21 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
+        xs22 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+      }
 
     }
   
@@ -345,23 +352,29 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
       // k should be in eV and energy transfer eV also
       std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
-      std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
-      std::vector<double>::iterator e11 = e12-1;
+      
+      // SI : the following condition avoids situations where energyTransfer >last vector element
+      if (energyTransfer <= eVecm[(*t1)].back())
+      {
+        std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
+        std::vector<double>::iterator e11 = e12-1;
 
-      std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
-      std::vector<double>::iterator e21 = e22-1;
+        std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
+        std::vector<double>::iterator e21 = e22-1;
  
-      valueT1  =*t1;
-      valueT2  =*t2;
-      valueE21 =*e21;
-      valueE22 =*e22;
-      valueE12 =*e12;
-      valueE11 =*e11;
+        valueT1  =*t1;
+        valueT2  =*t2;
+        valueE21 =*e21;
+        valueE22 =*e22;
+        valueE12 =*e12;
+        valueE11 =*e11;
 
-      xs11 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
-      xs12 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
-      xs21 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
-      xs22 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+        xs11 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
+        xs12 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
+        xs21 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
+        xs22 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
+      }
+
    }
   
    G4double xsProduct = xs11 * xs12 * xs21 * xs22;

@@ -1,4 +1,4 @@
-$Id: History,v 1.318 2008-12-04 16:39:09 pandola Exp $
+$Id: History,v 1.319 2008-12-05 07:56:45 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.12.2008   S. Incerti, tag emlowen-V09-01-35
+             Added protection in G4FinalStateIonisationBorn.cc causing run-time error (valgrind with test20)
 
 04.12.2008   L. Pandola, tag emlowen-V09-01-34
              Correction for G4PenelopeComptonModel: now the cross section table 
