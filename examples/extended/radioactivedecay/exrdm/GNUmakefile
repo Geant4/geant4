@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2008-12-02 20:30:22 flei Exp $
+# $Id: GNUmakefile,v 1.9 2008-12-05 09:57:30 flei Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -30,3 +30,4 @@ include $(G4INSTALL)/config/binmake.gmk
 anaclean:
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/exrdmHisto* 
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/exrdmAnalysis* 
+	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/exrdmStepping* 

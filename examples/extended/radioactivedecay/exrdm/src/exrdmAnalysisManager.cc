@@ -70,11 +70,13 @@ exrdmAnalysisManager::exrdmAnalysisManager()
 exrdmAnalysisManager::~exrdmAnalysisManager()
 {
 #ifdef G4ANALYSIS_USE 
-  delete histo;
+#define HISTDELETE
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-//  F.lei why this not working?
-//  if (histo) delete histo;
+#define HISTDELETE
+#endif
+#ifdef HISTDELETE
+  delete histo;
 #endif
 }
 

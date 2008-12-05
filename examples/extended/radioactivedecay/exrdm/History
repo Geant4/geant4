@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2008-12-04 23:38:41 flei Exp $
+$Id: History,v 1.26 2008-12-05 09:57:30 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05/12/2008 F.Lei (exrdm-V09-01-04)
+- exrdmAnalysisManager.cc, exrdmSteppingAction.cc
+   - better G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT logic 
+- GNUMakefile
+
 04/12/2008 F.Lei (exrdm-V09-01-03)
 - exrdmHisto: delete hfileROOT in save();
 - exrdmAnalysisManager.cc, exrdmSteppingAction.cc

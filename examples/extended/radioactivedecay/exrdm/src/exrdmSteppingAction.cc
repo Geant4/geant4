@@ -48,16 +48,18 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
   G4Track* fTrack = fStep->GetTrack();
   G4int StepNo = fTrack->GetCurrentStepNumber();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
-  G4bool collect = false ;
 
 #ifdef G4ANALYSIS_USE 
-  collect = true;
+#define COLLECT
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-  collect = true;
+#ifndef COLLECT
+#define COLLECT
 #endif
-  if (collect) {
-   if (StepNo == 1) {
+#endif
+
+#ifdef COLLECT
+  if (StepNo == 1) {
     if ( (fTrack->GetDefinition()->GetParticleType() == "nucleus") && 
 	 !( fTrack->GetDefinition()->GetPDGStable()) && 
 	 fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Target" ) {
@@ -101,7 +103,7 @@ void exrdmSteppingAction::UserSteppingAction(const G4Step* fStep)
       }
       //    }
   }
- }
+#endif 
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
