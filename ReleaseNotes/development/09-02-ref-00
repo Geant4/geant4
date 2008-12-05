@@ -414,8 +414,7 @@ examples                                         examples-V09-02-00
 tests                                            tests-V09-02-00
 -----
 - Updated reference outputs and tools.
-- test20 (test20-V09-01-02)
-  o Updated physics list and input macros to cover all DNA processes.
+- test20 (test20-V09-01-01)
   o Removed double-registration of e- Ionisation Born process in physics list.
 - test30 (test30-V09-01-04)
   o Added charge exchange.
