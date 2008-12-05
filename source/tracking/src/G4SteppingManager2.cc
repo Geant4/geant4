@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.33 2008-10-02 01:08:23 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.34 2008-12-05 21:42:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -346,7 +346,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        G4int    num2ndaries;
 
        num2ndaries = fParticleChange->GetNumberOfSecondaries();
-       fN2ndariesAtRestDoIt += num2ndaries;
 
        for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -372,6 +371,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	   }
 	 } else {
 	   fSecondary->push_back( tempSecondaryTrack );
+           fN2ndariesAtRestDoIt++;
 	 }	
        } //end of loop on secondary 
 
@@ -420,7 +420,6 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      G4int    num2ndaries;
 
      num2ndaries = fParticleChange->GetNumberOfSecondaries();
-     fN2ndariesAlongStepDoIt += num2ndaries;
 
      for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -446,6 +445,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	   }
 	 } else {
 	   fSecondary->push_back( tempSecondaryTrack );
+           fN2ndariesAlongStepDoIt++;
 	 }
      } //end of loop on secondary 
      
@@ -531,7 +531,6 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          G4int    num2ndaries;
 
          num2ndaries = fParticleChange->GetNumberOfSecondaries();
-         fN2ndariesPostStepDoIt += num2ndaries;
 
          for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
@@ -557,6 +556,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 	      }
 	    } else {
 	      fSecondary->push_back( tempSecondaryTrack );
+              fN2ndariesPostStepDoIt++;
 	    }
          } //end of loop on secondary 
 
