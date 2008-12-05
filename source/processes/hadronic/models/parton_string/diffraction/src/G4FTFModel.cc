@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.11 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.12 2008-12-05 13:53:34 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,7 +68,11 @@ theExcitation(anExcitation)
 
 
 G4FTFModel::~G4FTFModel()
-{}
+{
+   if( theParameters != NULL ) delete theParameters;   // Uzhi 5.12.08
+   if( theExcitation != NULL ) delete theExcitation;   // Uzhi 5.12.08
+   if( theElastic    != NULL ) delete theElastic;      // Uzhi 5.12.08
+}
 
 
 const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
