@@ -34,8 +34,6 @@ namespace AIDA {
 
 class IAnalysisFactory;
 class ITree;
-class IHistogramFactory;
-class ITupleFactory;
 class IPlotter;
 class IHistogram1D;
 class IHistogram2D;
@@ -56,11 +54,6 @@ private:
 public:
   static exGPSAnalysisManager* getInstance ();
   static void dispose();
-
-  AIDA::IHistogramFactory* getHistogramFactory();
-  AIDA::ITupleFactory* getTupleFactory();
-  AIDA::IPlotter* createPlotter();
-
 
 public:
   void BeginOfRun();
@@ -84,8 +77,6 @@ private:
   G4String fileType;
 
   AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::IHistogramFactory* hFactory;
-  AIDA::ITupleFactory* tFactory;
   AIDA::ITree* tree;
   AIDA::IPlotter* plotter;
 

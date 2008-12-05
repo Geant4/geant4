@@ -11,6 +11,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05/12/2008 G.Barrand
+- exGPSAnalysisManager : have a comment in case the 
+  AIDA_createAnalysisFactory or the AIDA::ITree creation
+  fails ; which is something that may happen.
+- exGPSAnalysisManager : have the creation of the AIDA::IPlotter
+  on the same footing than other AIDA objects. Remove then
+  the createPlotter method.
+- exGPSAnalysisManager : have t,hFactories local in BeginOfRun
+  and then rm getHistogram,getTupleFactories.
+
 04/12/2008 F.Lei (exgps-V09-01-01)
 - updated README
 - tag Guy's changes
