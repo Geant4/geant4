@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.1 2008-12-04 14:11:52 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.2 2008-12-05 09:15:43 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -202,8 +202,25 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
                                            const G4ParticleDefinition* theParticle,
                                            G4double energy,
                                            G4double cutEnergy,
-                                           G4double)					     
+                                           G4double)		
 {  
+  // Penelope model to calculate the cross section for inelastic collisions above the 
+  // threshold. It makes use of the Generalised Oscillator Strength (GOS) model from 
+  //  D. Liljequist, J. Phys. D: Appl. Phys. 16 (1983) 1567 
+  //
+  // The total cross section (hard+soft) is read from a database file (element per 
+  // element), while the ratio hard-to-total is calculated analytically by taking 
+  // into account the atomic oscillators coming into the play for a given threshold. 
+  // This is done by the method CalculateCrossSectionsRatio().
+  // For incident e- the maximum energy allowed for the delta-rays is energy/2. 
+  // because particles are undistinghishable. 
+  //
+  // The contribution is splitted in three parts: distant longitudinal collisions, 
+  // distant transverse collisions and close collisions. Each term is described by 
+  // its own analytical function.
+  // Fermi density correction is calculated analytically according to 
+  //  U. Fano, Ann. Rev. Nucl. Sci. 13 (1963),1 
+  //
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4PenelopeIonisationModel" << G4endl;
 
@@ -268,6 +285,21 @@ G4double G4PenelopeIonisationModel::ComputeDEDXPerVolume(const G4Material* mater
                                		   G4double kineticEnergy,
                                		   G4double cutEnergy)
 {
+  // Penelope model to calculate the stopping power for soft inelastic collisions 
+  // below the threshold. It makes use of the Generalised Oscillator Strength (GOS) 
+  // model from 
+  //  D. Liljequist, J. Phys. D: Appl. Phys. 16 (1983) 1567 
+  //
+  // The stopping power is calculated analytically using the dsigma/dW cross 
+  // section from the GOS models, which includes separate contributions from 
+  // distant longitudinal collisions, distant transverse collisions and 
+  // close collisions. Only the atomic oscillators that come in the play 
+  // (according to the threshold) are considered for the calculation. 
+  // Differential cross sections have a different form for e+ and e-.
+  //
+  // Fermi density correction is calculated analytically according to 
+  //  U. Fano, Ann. Rev. Nucl. Sci. 13 (1963),1 
+
   if (verboseLevel > 3)
     G4cout << "Calling ComputeDEDX() of G4PenelopeIonisationModel" << G4endl;
 
@@ -326,6 +358,38 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 					      G4double,
 					      G4double)
 {
+  // Penelope model to sample the final state following an hard inelastic interaction.
+  // It makes use of the Generalised Oscillator Strength (GOS) model from 
+  //  D. Liljequist, J. Phys. D: Appl. Phys. 16 (1983) 1567 
+  //
+  // The GOS model is used to calculate the individual cross sections for all 
+  // the atomic oscillators coming in the play, taking into account the three 
+  // contributions (distant longitudinal collisions, distant transverse collisions and 
+  // close collisions). Then the target shell and the interaction channel are 
+  // sampled. Final state of the delta-ray (energy, angle) are generated according 
+  // to the analytical distributions (dSigma/dW) for the selected interaction 
+  // channels. 
+  // For e-, the maximum energy for the delta-ray is initialEnergy/2. (because 
+  // particles are indistinghusbable), while it is the full initialEnergy for 
+  // e+. 
+  // The efficiency of the random sampling algorithm (e.g. for close collisions) 
+  // decreases when initial and cutoff energy increase (e.g. 87% for 10-keV primary 
+  // and 1 keV threshold, 99% for 10-MeV primary and 10-keV threshold).
+  // Differential cross sections have a different form for e+ and e-.
+  //
+  // WARNING: The model provides an _average_ description of inelastic collisions.
+  // Anyway, the energy spectrum associated to distant excitations of a given 
+  // atomic shell is approximated as a single resonance. The simulated energy spectra 
+  // show _unphysical_ narrow peaks at energies that are multiple of the shell 
+  // resonance energies. The spurious speaks are automatically smoothed out after 
+  // multiple inelastic collisions. 
+  //
+  // The model determines also the original shell from which the delta-ray is expelled,
+  // in order to produce fluorescence de-excitation (from G4DeexcitationManager)
+  //
+  // Fermi density correction is calculated analytically according to 
+  //  U. Fano, Ann. Rev. Nucl. Sci. 13 (1963),1 
+
   if (verboseLevel > 3)
     G4cout << "Calling SamplingSecondaries() of G4PenelopeIonisationModel" << G4endl;
 
@@ -629,11 +693,6 @@ G4double G4PenelopeIonisationModel::CalculateDeltaFermi(G4double kinEnergy ,G4in
   G4double plasmaEnergyCoefficient = 1.377e-39*(MeV*MeV*m3); //(e*hbar)^2/(epsilon0*electron_mass)
   G4double plasmaEnergySquared = plasmaEnergyCoefficient*electronVolumeDensity;
   // std::sqrt(plasmaEnergySquared) is the plasma energy of the solid (MeV)
-  /*
-  if (verboseLevel > 4)
-      G4cout << "Plasma Energy for Z= " << Z << ": " << std::sqrt(plasmaEnergySquared)/eV << " eV" 
-	     << G4endl;
-  */
   G4double gam = 1.0+kinEnergy/electron_mass_c2;
   G4double gam2=gam*gam;
   G4double delta = 0.0;
@@ -840,6 +899,7 @@ void G4PenelopeIonisationModel::CalculateDiscreteForElectrons(G4double kinEnergy
     return;
   }
 
+  //Testing purposes
   if (verboseLevel > 6)
     {
       for (size_t t=0;t<cumulHardCS->size();t++)
