@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.12 2008-12-02 18:57:16 sincerti Exp $
+// $Id: Tst20PhysicsList.cc,v 1.13 2008-12-05 12:57:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -64,9 +64,13 @@
 #include "G4CrossSectionExcitationEmfietzoglou.hh"
 #include "G4FinalStateExcitationEmfietzoglou.hh"
 
-#include "G4CrossSectionElasticScreenedRutherford.hh"
+#include "G4CrossSectionElasticScreenedRutherfordLE.hh"
+#include "G4CrossSectionElasticScreenedRutherfordHE.hh"
 #include "G4FinalStateElasticScreenedRutherford.hh"
 #include "G4FinalStateElasticBrennerZaider.hh"
+
+#include "G4CrossSectionElasticChampion.hh"
+#include "G4FinalStateElasticChampion.hh"
 
 #include "G4CrossSectionExcitationBorn.hh"
 #include "G4FinalStateExcitationBorn.hh"
@@ -91,8 +95,9 @@
 
 // Processes
 
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticScreenedRutherford> ElasticScreenedRutherford;
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherford,G4FinalStateElasticBrennerZaider> ElasticBrennerZaider;
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,G4FinalStateElasticScreenedRutherford> ElasticScreenedRutherfordHE;
+typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,G4FinalStateElasticBrennerZaider> ElasticScreenedRutherfordLE;
+typedef G4DNAProcess<G4CrossSectionElasticChampion,G4FinalStateElasticChampion> ElasticChampion;
 typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> ExcitationEmfietzoglou;
 typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn> ExcitationBorn;
 typedef G4DNAProcess<G4CrossSectionIonisationBorn,G4FinalStateIonisationBorn> IonisationBorn;
@@ -195,11 +200,14 @@ void Tst20PhysicsList::ConstructEM()
       else if (particleName == "e-") 
 	{
 	  // DNA
-	  processManager->AddDiscreteProcess(new ExcitationEmfietzoglou);
-	  processManager->AddDiscreteProcess(new ElasticScreenedRutherford);
-	  processManager->AddDiscreteProcess(new ElasticBrennerZaider);
-	  processManager->AddDiscreteProcess(new IonisationBorn);
-	  processManager->AddDiscreteProcess(new KillBelowThreshold);
+	  processManager->AddDiscreteProcess(new ExcitationEmfietzoglou("ExcitationEmfietzoglou"));
+/*
+          processManager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
+          processManager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
+*/
+          processManager->AddDiscreteProcess(new ElasticChampion("ElasticChampion"));
+	  processManager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
+
 	}
       else if (particleName == "e+") 
 	{
