@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.hh,v 1.4 2006-06-29 19:35:51 gunter Exp $
+// $Id: G4LogLogInterpolation.hh,v 1.5 2008-12-05 13:15:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,6 +48,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4DataVector.hh"
 
+
 class G4LogLogInterpolation : public G4VDataSetAlgorithm {
  
 public:
@@ -55,6 +56,8 @@ public:
   G4LogLogInterpolation();
 
   ~G4LogLogInterpolation();
+
+//  void InitialiseLogLogInterpolation() const;
  
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
