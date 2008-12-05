@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.4 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4CrossSectionExcitationEmfietzoglou.cc,v 1.5 2008-12-05 11:58:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionExcitationEmfietzoglou.hh"
@@ -32,7 +32,7 @@
 
 G4CrossSectionExcitationEmfietzoglou::G4CrossSectionExcitationEmfietzoglou()
 {
-  lowEnergyLimit = 0. * eV;
+  lowEnergyLimit = 8.23 * eV;
   highEnergyLimit = 10. * MeV;
 }
 

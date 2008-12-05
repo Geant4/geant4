@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.4 2008-08-20 14:51:48 sincerti Exp $
+// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.5 2008-12-05 11:58:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateExcitationEmfietzoglou.hh"
@@ -32,7 +32,7 @@
 
 G4FinalStateExcitationEmfietzoglou::G4FinalStateExcitationEmfietzoglou()
 {
-  lowEnergyLimit = 7.4 * eV;
+  lowEnergyLimit = 8.23 * eV;
   highEnergyLimit = 10 * MeV;
 }
 
@@ -61,10 +61,8 @@ const G4FinalStateProduct& G4FinalStateExcitationEmfietzoglou::GenerateFinalStat
       product.ModifyPrimaryParticle(particle->GetMomentumDirection(),newEnergy);
       product.AddEnergyDeposit(excitationEnergy);
   }
-  else
-  {
-      product.KillPrimaryParticle();
-  }
+ 
+  else product.KillPrimaryParticle();
 
   return product;
 }

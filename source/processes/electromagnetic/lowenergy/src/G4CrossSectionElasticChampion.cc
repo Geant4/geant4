@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElasticChampion.cc,v 1.3 2008-12-05 09:54:37 sincerti Exp $
+// $Id: G4CrossSectionElasticChampion.cc,v 1.4 2008-12-05 11:58:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -33,7 +33,7 @@
 
 G4CrossSectionElasticChampion::G4CrossSectionElasticChampion()
 {
-  lowEnergyLimit = 12.61*eV; // SI : i/o of 7 * eV;
+  lowEnergyLimit = 0.*eV; 
   highEnergyLimit = 10. * keV;
 
   G4double scaleFactor = 1e-16*cm*cm;

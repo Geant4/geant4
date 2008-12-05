@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.4 2008-12-05 09:54:37 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.5 2008-12-05 11:58:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ G4FinalStateElasticChampion::G4FinalStateElasticChampion()
 {
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   
-  lowEnergyLimit = 12.61* eV; // SI : i/o of 7. * eV;
+  lowEnergyLimit = 8.23* eV; // SI : i/o of 7. * eV;
   highEnergyLimit = 10. * keV;
   
   G4double scaleFactor = 1e-16*cm*cm;

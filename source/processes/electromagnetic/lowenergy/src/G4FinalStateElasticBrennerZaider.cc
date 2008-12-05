@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.7 2008-12-05 09:54:37 sincerti Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.8 2008-12-05 11:58:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateElasticBrennerZaider.hh"
@@ -32,7 +32,7 @@
 
 G4FinalStateElasticBrennerZaider::G4FinalStateElasticBrennerZaider()
 {
-  lowEnergyLimit = 12.61 * eV; // SI : i/o of 7.4 * eV;
+  lowEnergyLimit = 8.23 * eV; // SI : i/o of 7.4 * eV;
   highEnergyLimit = 200 * eV;
 
   betaCoeff.push_back(7.51525);
