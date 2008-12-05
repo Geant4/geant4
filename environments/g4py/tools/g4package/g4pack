@@ -2,7 +2,7 @@
 # ======================================================================
 #  A script for Geant4 packaging
 #
-#  Version 2.1.1 June 2008
+#  Version 2.2 Dec 2008
 #
 # ======================================================================
 export LANG=C
@@ -250,8 +250,8 @@ fi
 
 # CLHEP links
 pushd $g4packdir/lib > /dev/null 2>&1
-ln -s libCLHEP-[12]*.a libCLHEP.a
-ln -s libCLHEP-[12]*.$shlib libCLHEP.$shlib
+ln -s libCLHEP-*.a libCLHEP.a
+ln -s libCLHEP-*.$shlib libCLHEP.$shlib
 popd > /dev/null 2>&1
 
 exit 0
