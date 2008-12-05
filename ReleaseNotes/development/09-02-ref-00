@@ -39,6 +39,12 @@ config                                           config-V09-01-15
 - Configure script (Configure-V09-01-01): brought up-to-date with new data
   sets and configuration options for Qt.
 
+environments                                     envs-V09-01-03
+------------
+- Introduced g4py module name.
+- Removed legacy interface to GDML external module.
+- General code cleanup.
+
 digits_hits                                      digits_hits-V09-01-02
 -----------
 - Introducing cylindrical scoring mesh (G4ScoringCylinder and related classes).
@@ -174,7 +180,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-34
+processes/electromagnetic/lowenergy             emlowen-V09-01-37
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -184,6 +190,11 @@ processes/electromagnetic/lowenergy             emlowen-V09-01-34
   calculated by the model corresponds to the original FORTRAN-Penelope;
   the difference was only for compounds materials and below 1 keV, so
   irrelevant for virtually all applications.
+- Updated low energy limits of Geant4-DNA e- models (Brenner-Zaider and
+  Champion's elastic scattering and Emfietzoglou's excitation).
+- Updated G4LogLogInterpolation class for CPU improvement.
+- Added protection in G4FinalStateIonisationBorn causing run-time error
+  detected by Valgrind.
 - Updated data set to G4EMLOW6.2.
 
 processes/electromagnetic/muons                  emmuons-V09-01-15
@@ -265,6 +276,8 @@ processes/hadronic                               hadr-V09-01-00
     G4NeutronHPInelastic.
   o G4NeutronHPNames: fixed gcc-4.3.2 compilation warning.
   o Updated data set to G4NDL3.13.
+- models/parton_string/diffraction (hadr-string-diff-V09-01-03)
+  o Fixed memory leak in G4FTFModel distructor.
 - models/pre_equilibrium (hadr-pre-V09-01-13)
   o JMQ fix to G4PreCompoundNeutron for Zirconium (if (nu < 0.)nu=-nu).
   o Added data member initialisation to G4VPreCompoundTransitions, responsible
@@ -401,7 +414,8 @@ examples                                         examples-V09-02-00
 tests                                            tests-V09-02-00
 -----
 - Updated reference outputs and tools.
-- test20 (test20-V09-01-01)
+- test20 (test20-V09-01-02)
+  o Updated physics list and input macros to cover all DNA processes.
   o Removed double-registration of e- Ionisation Born process in physics list.
 - test30 (test30-V09-01-04)
   o Added charge exchange.
