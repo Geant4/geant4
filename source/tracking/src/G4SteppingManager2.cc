@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.34 2008-12-05 21:42:06 asaim Exp $
+// $Id: G4SteppingManager2.cc,v 1.35 2008-12-05 22:15:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -366,6 +366,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
+             fN2ndariesAtRestDoIt++;
 	   } else {
 	     delete tempSecondaryTrack;
 	   }
@@ -440,6 +441,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
+             fN2ndariesAlongStepDoIt++;
 	   } else {
 	     delete tempSecondaryTrack;
 	   }
@@ -551,6 +553,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );
+                fN2ndariesPostStepDoIt++;
  	      } else {
 		delete tempSecondaryTrack;
 	      }
