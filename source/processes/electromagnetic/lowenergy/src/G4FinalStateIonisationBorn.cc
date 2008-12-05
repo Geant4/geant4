@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.14 2008-12-05 07:56:45 sincerti Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.15 2008-12-05 09:54:37 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationBorn.hh"
@@ -353,9 +353,6 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
       std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
       
-      // SI : the following condition avoids situations where energyTransfer >last vector element
-      if (energyTransfer <= eVecm[(*t1)].back())
-      {
         std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
         std::vector<double>::iterator e11 = e12-1;
 
@@ -373,7 +370,6 @@ double G4FinalStateIonisationBorn::DifferentialCrossSection(G4ParticleDefinition
         xs12 = pDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
         xs21 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
         xs22 = pDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
-      }
 
    }
   
