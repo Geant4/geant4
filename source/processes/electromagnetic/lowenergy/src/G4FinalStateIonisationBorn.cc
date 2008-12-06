@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.15 2008-12-05 09:54:37 sincerti Exp $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.16 2008-12-06 13:47:12 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationBorn.hh"
@@ -32,7 +32,6 @@
 
 G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
 {
-
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
@@ -73,8 +72,12 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       for (int j=0; j<5; j++)
       {
         eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
-        eDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+
+        // SI - only if eof is not reached !
+        if (!eDiffCrossSection.eof()) eDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+
         eVecm[tDummy].push_back(eDummy);
+
       }
     }
 
@@ -108,7 +111,10 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
       for (int j=0; j<5; j++)
       {
         pDiffCrossSection>>pDiffCrossSectionData[j][tDummy][eDummy];
-        pDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+
+        // SI - only if eof is not reached !
+        if (!pDiffCrossSection.eof()) pDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+
         pVecm[tDummy].push_back(eDummy);
       }
     }

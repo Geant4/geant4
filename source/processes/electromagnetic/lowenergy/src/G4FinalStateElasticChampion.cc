@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.5 2008-12-05 11:58:16 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.6 2008-12-06 13:47:12 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -61,13 +61,23 @@ G4FinalStateElasticChampion::G4FinalStateElasticChampion()
 	  double tDummy;
 	  double eDummy;
 	  eDiffCrossSection>>tDummy>>eDummy;
-	  if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
-	  {
-	    eDiffCrossSection>>eDiffCrossSectionData[0][tDummy][eDummy];
-	    eDiffCrossSectionData[0][tDummy][eDummy]*=scaleFactor;
-	    if (eDummy != eVecm[tDummy].back()) eVecm[tDummy].push_back(eDummy);
+
+	  // SI : mandatory eVecm initialization
+          if (tDummy != eTdummyVec.back()) 
+          { 
+            eTdummyVec.push_back(tDummy); 
+            eVecm[tDummy].push_back(0.);
           }
+	  
+          eDiffCrossSection>>eDiffCrossSectionData[0][tDummy][eDummy];
+
+	  // SI : only if not end of file reached !
+          if (!eDiffCrossSection.eof()) eDiffCrossSectionData[0][tDummy][eDummy]*=scaleFactor;
+	  
+          if (eDummy != eVecm[tDummy].back()) eVecm[tDummy].push_back(eDummy);
+          
     }
+
   }
   else
   {

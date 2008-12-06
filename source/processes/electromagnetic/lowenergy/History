@@ -1,4 +1,4 @@
-$Id: History,v 1.322 2008-12-06 08:48:01 sincerti Exp $
+$Id: History,v 1.323 2008-12-06 13:47:12 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.12.2008   S. Incerti, tag emlowen-V09-01-39
+             Added vector initialization and EOF protection in G4FinalStateElasticChampion.cc
+             Added EOF protection in G4FinalStateIonisationBorn.cc
 
 06.12.2008   S. Incerti, tag emlowen-V09-01-38
              Updated G4LogLogInterpolation class (hh and cc) provided by
