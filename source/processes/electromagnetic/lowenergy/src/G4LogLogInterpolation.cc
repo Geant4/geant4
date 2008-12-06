@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.9 2008-12-05 13:15:48 sincerti Exp $
+// $Id: G4LogLogInterpolation.cc,v 1.10 2008-12-06 08:48:01 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//         Nicolas A. Karakatsanis (knicolas@mail.ntua.gr)
-//
+// Authors: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//          Nicolas A. Karakatsanis (knicolas@mail.ntua.gr)
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
-//
+// 5  Oct 2008   Streamlining of the log-log interpolation math formula
 // -------------------------------------------------------------------
 
 #include "G4LogLogInterpolation.hh"
