@@ -50,7 +50,7 @@
 
 # commands below are independent of gps
 #
-/analysis/filename test32
+/analysis/filename test32.aida
 /analysis/maxeng 15 MeV
 /analysis/mineng 0 MeV
 /analysis/maxpos 5 cm 
