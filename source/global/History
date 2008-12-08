@@ -1,4 +1,4 @@
-$Id: History,v 1.214 2008-12-08 10:09:17 gcosmo Exp $
+$Id: History,v 1.215 2008-12-08 10:12:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Dec 08, 2008  G.Cosmo (global-V09-01-18)
-- Added new costructor G4String(const char*, str_size).
+- Added new constructor G4String(const char*, str_size).
 - Fixed inlining issues; added G4String.cc implementation unit.
 
 Dec 02, 2008  G.Cosmo (global-V09-01-17)
