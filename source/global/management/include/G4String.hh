@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.8 2008-03-13 09:35:08 gcosmo Exp $
+// $Id: G4String.hh,v 1.9 2008-12-08 10:07:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,13 +112,15 @@ public:
   enum caseCompare { exact, ignoreCase };
   enum stripType { leading, trailing, both };
 
-  inline G4String ();
+  G4String ();
+ ~G4String ();
+
   inline G4String ( char );
   inline G4String ( const char * );
+  inline G4String ( const char *, str_size );
   inline G4String ( const G4String& );
   inline G4String ( const G4SubString& );
   inline G4String ( const std::string & );
-  ~G4String () {}
 
   inline G4String& operator=(const G4String&);
   inline G4String& operator=(const std::string &);
@@ -165,10 +167,10 @@ public:
   // stripType = 1 end
   // stripType = 2 both
   //
-  inline G4String strip (G4int strip_Type=trailing, char c=' ');
+  G4String strip (G4int strip_Type=trailing, char c=' ');
 
-  inline void toLower ();
-  inline void toUpper ();
+  void toLower ();
+  void toUpper ();
 
   inline G4bool isNull() const;
 
@@ -178,10 +180,10 @@ public:
 
   inline const char* data() const;
 
-  inline G4int strcasecompare(const char*, const char*) const;
+  G4int strcasecompare(const char*, const char*) const;
 
-  inline unsigned int hash( caseCompare cmp = exact ) const;
-  inline unsigned int stlhash() const;
+  unsigned int hash( caseCompare cmp = exact ) const;
+  unsigned int stlhash() const;
 
   // useful for supplying hash functions to template hash collection ctors
   //
