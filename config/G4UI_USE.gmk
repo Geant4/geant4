@@ -1,15 +1,16 @@
-# $Id: G4UI_USE.gmk,v 1.12 2008-05-14 09:48:19 gbarrand Exp $
+# $Id: G4UI_USE.gmk,v 1.13 2008-12-08 16:34:14 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
 
-########################### interfaces/basic #######################
-ifndef G4UI_USE_INCLUDED
-  G4UI_USE_INCLUDED = 1
-  
 ifndef G4UI_NONE
 
-UILIBS :=
+ifndef G4UI_USE_INCLUDED
+G4UI_USE_INCLUDED = 1
+  
+ifndef UILIBS
+  UILIBS :=
+endif
 
 # Sessions not needing external packages or libraries.  These
 # libraries are always built (see G4UI_BUILD.gmk) and linked so the
@@ -101,15 +102,16 @@ ifdef G4UI_USE_OSC
   endif
 endif
 
-########################### interfaces/XVT - not currently implemented #####
-
 ##################### Default to TERMINAL if no environment variables set ##
-##################### (No need actually to use it - see above.) ############
 
 ifndef G4UI_USE
-  G4UI_USE  = 1
   CPPFLAGS += -DG4UI_USE_TERMINAL
 endif
 
-endif #G4UI_NONE
+########################### and finally... #######################
+
+G4UI_USE  = 1
+CPPFLAGS += -DG4UI_USE
+
 endif # G4UI_USE_INCLUDED
+endif # G4UI_NONE
