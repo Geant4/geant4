@@ -241,7 +241,7 @@ processes/hadronic                               hadr-V09-01-00
     in release 9.2 (addressing problem report #1035). In future this method
     will become protected; a specific public method will be provided for it.
     Removed obsolete method SetDispatch().
-- models/binary_cascade (had-binary-V09-01-02)
+- models/binary_cascade (had-binary-V09-01-03)
   o G4BinaryCascade, G4BinaryLightIonReaction: added name of the model;
     commented out welcome message.
   o Made static instance of G4Scatterer in G4BinaryCascade 1H1 a data member
@@ -270,9 +270,9 @@ processes/hadronic                               hadr-V09-01-00
     trivial change of A to Af.
   o Fixed memory leak in G4EvaporationChannel.
   o Added comments to modifications of MF model.
-- models/im_r_matrix (hadr-im_r-V09-01-00)
-  o G4XNNTotalLowE: avoid use of static call to G4ParticleDefinition in
-    destructor; resolves issue detected by Valgrind.
+- models/im_r_matrix (hadr-im_r-V09-01-01)
+  o G4XNNElasticLowE, G4XNNTotalLowE: avoid use of static call to
+    G4ParticleDefinition in destructor; resolves issue detected by Valgrind.
 - models/neutron_hp (hadr-hpn-V09-01-28)
   o Fixed memory leak in G4NeutronHPThermalScattering and removed unused
     variable.
