@@ -180,7 +180,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-37
+processes/electromagnetic/lowenergy             emlowen-V09-01-39
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -192,6 +192,7 @@ processes/electromagnetic/lowenergy             emlowen-V09-01-37
   irrelevant for virtually all applications.
 - Updated low energy limits of Geant4-DNA e- models (Brenner-Zaider and
   Champion's elastic scattering and Emfietzoglou's excitation).
+  Fixed vector initialization and EOF protection in G4FinalStateElasticChampion.
 - Updated G4LogLogInterpolation class for CPU improvement.
 - Added protection in G4FinalStateIonisationBorn causing run-time error
   detected by Valgrind.
@@ -240,9 +241,12 @@ processes/hadronic                               hadr-V09-01-00
     in release 9.2 (addressing problem report #1035). In future this method
     will become protected; a specific public method will be provided for it.
     Removed obsolete method SetDispatch().
-- models/binary_cascade (had-binary-V09-01-01)
+- models/binary_cascade (had-binary-V09-01-02)
   o G4BinaryCascade, G4BinaryLightIonReaction: added name of the model;
     commented out welcome message.
+  o Made static instance of G4Scatterer in G4BinaryCascade 1H1 a data member
+    instead, to avoid issues of static destruction at job closure; resolves
+    issue detected by Valgrind.
 - models/cascade (hadr-casc-V09-01-10)
   o Fixed multiplicity sampling in G4ElementaryParticleCollider method
     generateMultiplicity(). Now partial cross-sections are normalized to the
@@ -266,6 +270,9 @@ processes/hadronic                               hadr-V09-01-00
     trivial change of A to Af.
   o Fixed memory leak in G4EvaporationChannel.
   o Added comments to modifications of MF model.
+- models/im_r_matrix (hadr-im_r-V09-01-00)
+  o G4XNNTotalLowE: avoid use of static call to G4ParticleDefinition in
+    destructor; resolves issue detected by Valgrind.
 - models/neutron_hp (hadr-hpn-V09-01-28)
   o Fixed memory leak in G4NeutronHPThermalScattering and removed unused
     variable.
@@ -363,14 +370,14 @@ examples                                         examples-V09-02-00
     is simulated using new model G4IonLossParametrisedModel, configured
     via G4EmConfigurator.
   o Removed options from the default 'emstandard_local' physics list.
-- extended/electromagnetic/TestEm8 (testem8-V09-01-01)
+- extended/electromagnetic/TestEm8 (testem8-V09-01-02)
   o Remove local components of PhsyicsList and use G4EmConfigurator to
     configure PAI model.
 - extended/electromagnetic/TestEm9 (testem9-V09-01-09)
 - extended/electromagnetic/TestEm11 (testem11-V09-01-07)
 - extended/electromagnetic/TestEm12 (testem12-V09-01-08)
   o EM options: 20bins/decade, LinLossLimit=default=0.01.
-- extended/eventgenerator/exgps (exgps-V09-01-00)
+- extended/eventgenerator/exgps (exgps-V09-01-02)
   o Updated analysis code and macros with AIDA.
 - extended/field/field04 (fieldex04-V09-01-05)
   o Changed physics list to AddPhysicsList("emstandard").
@@ -414,8 +421,9 @@ examples                                         examples-V09-02-00
 tests                                            tests-V09-02-00
 -----
 - Updated reference outputs and tools.
-- test20 (test20-V09-01-01)
+- test20 (test20-V09-01-02)
   o Removed double-registration of e- Ionisation Born process in physics list.
+  o Updated Physics list input macros to cover all DNA processes.
 - test30 (test30-V09-01-04)
   o Added charge exchange.
 - test35 (test35-V09-01-01)
