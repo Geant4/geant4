@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 1.13 2008-12-08 16:34:14 allison Exp $
+# $Id: G4UI_USE.gmk,v 1.14 2008-12-08 17:31:14 gbarrand Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
@@ -88,10 +88,10 @@ ifdef G4UI_USE_OSC
     G4OSC_TMP_1 := $(shell echo "`osc-config --g4lab_incs`")
     CPPFLAGS += $(patsubst /I%,-I"%",$(G4OSC_TMP_1))
   else
-    CPPFLAGS += `osc-config --g4lab_incs`
+    CPPFLAGS += $(shell osc-config --g4lab_incs)
   endif
-  INTYLIBS += `osc-config --g4lab_libs`
-  INTYLIBS += `osc-config --iv_libs`
+  INTYLIBS += $(shell osc-config --g4lab_libs)
+  INTYLIBS += $(shell osc-config --iv_libs)
   #    
   ifndef G4ANALYSIS_AIDA_CONFIG_CFLAGS
     ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
