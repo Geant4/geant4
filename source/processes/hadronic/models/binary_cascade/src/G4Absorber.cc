@@ -33,8 +33,6 @@
 
 #include "G4LorentzRotation.hh"
 
-//----------------------------------------------------------------------------
-
 G4Absorber::G4Absorber(G4double cutOnP)
 {
   theCutOnP = cutOnP;
@@ -42,7 +40,6 @@ G4Absorber::G4Absorber(G4double cutOnP)
   theProducts = new G4KineticTrackVector;
 }
 
-//----------------------------------------------------------------------------
 
 G4Absorber::~G4Absorber()
 {
@@ -50,7 +47,6 @@ G4Absorber::~G4Absorber()
   delete theProducts;
 }
 
-//----------------------------------------------------------------------------
 
 bool G4Absorber::WillBeAbsorbed(const G4KineticTrack & kt)
 {
@@ -69,7 +65,7 @@ bool G4Absorber::WillBeAbsorbed(const G4KineticTrack & kt)
   return false;
 }
 
-//----------------------------------------------------------------------------
+
 
 G4bool G4Absorber::Absorb(G4KineticTrack & kt, G4KineticTrackVector & tgt)
 {
@@ -78,7 +74,6 @@ G4bool G4Absorber::Absorb(G4KineticTrack & kt, G4KineticTrackVector & tgt)
   return FindProducts(kt);
 }
 
-//----------------------------------------------------------------------------
 
 G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
 				 G4KineticTrackVector & tgt)
@@ -122,7 +117,7 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
       G4double charge = curr->GetDefinition()->GetPDGCharge();
       if((charge0+charge1+charge < 0.) ||
 	 (charge0+charge1+charge) > 2*eplus)
-      {  // incompatible: change kt1 with curr.
+      {  // incomatible: change kt1 with curr.
 	kt1 = curr;
 	charge1 = charge;
 	dist1 = dist;
@@ -167,7 +162,6 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
 }
 
 
-//----------------------------------------------------------------------------
 
 G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
 {
@@ -242,10 +236,8 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
 // Build two new kinetic tracks and add to products
   G4KineticTrack * kt1 = new G4KineticTrack(prod1, 0., abs1->GetPosition(),
 					    mom1);
-		   kt1->SetState(G4KineticTrack::inside);
   G4KineticTrack * kt2 = new G4KineticTrack(prod2, 0., abs2->GetPosition(),
 					    mom2);
-		   kt2->SetState(G4KineticTrack::inside);
 // ------ debug
 /*
   G4LorentzVector initialMom1 = abs1->Get4Momentum();
@@ -281,7 +273,7 @@ G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
   return true;
 }
 
-//----------------------------------------------------------------------------
+
 
 G4ThreeVector G4Absorber::GetRandomDirection()
 {
