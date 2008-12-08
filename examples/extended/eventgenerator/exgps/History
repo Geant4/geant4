@@ -11,6 +11,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+08/12/2008 G.Barrand
+- correct / compleete the part concerning AIDA in the README file.
+
 06/12/2008 F.Lei (exgps-V09-01-02)
 - updated g4mac files in ./macros
 
