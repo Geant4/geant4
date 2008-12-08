@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.10 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4Evaporation.cc,v 1.11 2008-12-08 08:40:08 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -180,6 +180,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 			
 	    if( j >= TotNumberOfChannels ) 
 	      {
+		G4cerr << " j has not chosen a channel, j = " << j << " TotNumberOfChannels " << TotNumberOfChannels << G4endl;
+		for (j=0; j < TotNumberOfChannels; j++) 
+		  {
+		    G4cerr << " j: " << j << " EmissionProbChannel: " << EmissionProbChannel[j] << " and shoot: " << shoot << " (<ProbChannel?) " << G4endl;
+		  }		
 		throw G4HadronicException(__FILE__, __LINE__,  "G4Evaporation::BreakItUp: Can't define emission probability of the channels!" );
 	      } 
 	    else 
