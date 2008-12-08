@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.10 2008-12-08 10:07:22 gcosmo Exp $
+// $Id: G4String.icc,v 1.11 2008-12-08 14:16:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,6 +131,8 @@ G4bool G4SubString::isNull() const
 // **************************************************************
 // G4String
 // **************************************************************
+
+G4String::G4String () {}
 
 G4String::G4String ( const char * astring )
  : std_string ( astring ) {}
@@ -247,24 +249,36 @@ G4String::operator const char*() const
   return c_str();
 }
 
+G4int G4String::strcasecompare(const char* s1, const char* s2) const
+{
+  char* buf1 = new char[strlen(s1)+1];
+  char* buf2 = new char[strlen(s2)+1];
+
+  for (str_size i=0; i<=strlen(s1); i++)
+    { buf1[i] = tolower(char(s1[i])); }
+  for (str_size j=0; j<=strlen(s2); j++)
+    { buf2[j] = tolower(char(s2[j])); }
+
+  G4int res = strcmp(buf1, buf2);
+  delete [] buf1;
+  delete [] buf2;
+  return res;
+}
+
 G4int G4String::compareTo(const char* s, caseCompare mode)
 {
-  G4int idx=0;
   if(mode==exact)
-    { idx = strcmp(c_str(),s); }
+    { return strcmp(c_str(),s); }
   else
-    { idx = strcasecompare(c_str(),s); }
-  return idx;
+    { return strcasecompare(c_str(),s); }
 }
 
 G4int G4String::compareTo(const G4String& s, caseCompare mode)
 {
-  G4int idx=0;
   if(mode==exact)
-    { idx = strcmp(c_str(),s.c_str()); }
+    { return strcmp(c_str(),s.c_str()); }
   else
-    { idx = strcasecompare(c_str(),s.c_str()); }
-  return idx;
+    { return strcasecompare(c_str(),s.c_str()); }
 }
 
 G4String& G4String::prepend (const char* str)
@@ -283,14 +297,12 @@ std::istream&
 G4String::readLine (std::istream& s, G4bool skipWhite)
 {
   char tmp[1024];
-  if ( skipWhite )
-  {
+  if ( skipWhite ) {
     s >> std::ws;
     s.getline(tmp,1024);
     *this=tmp;
   }
-  else
-  {
+  else {
     s.getline(tmp,1024);    
     *this=tmp;
   } 
@@ -335,24 +347,78 @@ G4int G4String::last(char c) const
 
 G4bool G4String::contains(std::string s) const
 {
-  G4bool res = false;
   G4int i=std_string::find(s);
   if(i != G4int(std_string::npos))
-    { res = true; }
+    { return true; }
   else
-    { res = false; }
-  return res;
+    { return false; }
 }
 
 G4bool G4String::contains(char c) const
 {
-  G4bool res = false;
   G4int i=std_string::find(c);
   if(i != G4int(std_string::npos))
-    { res = true; }
+    { return true; }
   else
-    { res = false; }
-  return res;
+    { return false; }
+}
+
+G4String G4String::strip (G4int strip_Type, char c)
+{
+  G4String retVal = *this;
+  if(length()==0) { return retVal; }
+  str_size i=0;
+  switch ( strip_Type ) {
+  case leading: 
+    {
+      for(i=0;i<length();i++)
+	{ if (std_string::operator[](i) != c) { break; } }
+      retVal = substr(i,length()-i);
+    }
+    break;
+  case trailing:
+    {
+      G4int j=0;
+      for(j=length()-1;j>=0;j--)
+	{ if (std_string::operator[](j) != c) { break; } }
+      retVal = substr(0,j+1);
+    }
+    break;
+  case both:
+    { 
+      for(i=0;i<length();i++)
+	{ if (std_string::operator[](i) != c) { break; } }
+      G4String tmp(substr(i,length()-i));
+      G4int k=0;
+      for(k=tmp.length()-1;k>=0;k--)
+	{ if (tmp.std_string::operator[](k) != c) { break; } }
+      retVal = tmp.substr(0,k+1);
+    }
+    break;
+  default:
+    break;
+  }
+  return retVal;
+}
+
+void G4String::toLower ()
+{
+  for (str_size i=0; i<size();i++)
+  {
+    //GB:HP-UX-aCC,Linux-KCC 
+    std_string::operator[](i) = tolower(char(std_string::operator[](i)));
+    //at(i) = tolower(at(i)); 
+  } 
+}
+
+void G4String::toUpper ()
+{
+  for (str_size i=0; i<size();i++)
+  {
+    //GB:HP-UX-aCC,Linux-KCC 
+    std_string::operator[](i) = toupper(char(std_string::operator[](i)));
+    //at(i) = toupper(at(i)); 
+  }
 }
 
 G4bool G4String::isNull() const
@@ -386,6 +452,26 @@ G4SubString G4String::operator()(str_size start, str_size extent)
 const char* G4String::data() const
 {
   return c_str();
+}
+
+unsigned int G4String::hash( caseCompare ) const
+{
+  const char*s=c_str();
+  unsigned long h = 0;
+  for ( ; *s; ++s)
+    { h = 5*h + *s; }
+
+  return str_size(h);
+}
+
+unsigned int G4String::stlhash() const
+{
+  const char*s=c_str();
+  unsigned long h = 0;
+  for ( ; *s; ++s)
+    { h = 5*h + *s; }
+
+  return str_size(h);
 }
 
 unsigned int G4String::hash(const G4String& s)
