@@ -117,8 +117,10 @@ G4XNNElasticLowE::G4XNNElasticLowE()
 
 G4XNNElasticLowE::~G4XNNElasticLowE()
 {
-  delete xMap[G4Proton::ProtonDefinition()->GetParticleName()];
-  delete xMap[G4Neutron::NeutronDefinition()->GetParticleName()];
+  G4String name_proton = "proton";
+  G4String name_neutron = "neutron";
+  delete xMap[name_proton];
+  delete xMap[name_neutron];
 }
 
 
