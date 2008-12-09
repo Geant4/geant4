@@ -77,6 +77,7 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double Z = static_cast<G4double>(aFragment.GetZ());
   G4double U = aFragment.GetExcitationEnergy();
   
+  if(U<10*eV) return 0.0;
   
   //J. M. Quesada (Feb. 08) new physics
   // OPT=1 Transitions are calculated according to Gudima's paper (original in G4PreCompound from VL) 
