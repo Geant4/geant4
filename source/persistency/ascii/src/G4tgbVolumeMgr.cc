@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.3 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgbVolumeMgr.cc,v 1.4 2008-12-09 12:06:27 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -244,6 +244,27 @@ G4tgbVolumeMgr::FindG4LogVol( const G4String& name, const G4bool exists )
     {
       G4String ErrMessage = "Logical volume name " + name + " not found !";
       G4Exception("G4tgbVolumeMgr::FindG4LogVol()", "InvalidSetup",
+                  FatalException, ErrMessage);
+    }
+    return 0;
+  }
+  else
+  {
+    return (*mscite).second;
+  }
+}
+
+//---------------------------------------------------------------------
+G4VPhysicalVolume*
+G4tgbVolumeMgr::FindG4PhysVol( const G4String& name, const G4bool exists )
+{
+  G4mmspv::const_iterator mscite = thePVs.find( name );
+  if( mscite == thePVs.end() )
+  {
+    if( exists )
+    {
+      G4String ErrMessage = "Physical volume name " + name + " not found !";
+      G4Exception("G4tgbVolumeMgr::FindG4PhysVol()", "InvalidSetup",
                   FatalException, ErrMessage);
     }
     return 0;

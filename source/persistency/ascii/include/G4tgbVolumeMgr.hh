@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbVolumeMgr.hh,v 1.2 2008-12-09 12:06:27 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,11 +103,11 @@ class G4tgbVolumeMgr
 
     G4LogicalVolume* FindG4LogVol( const G4String& theName,
                                    const G4bool bExists = 0 );
-    std::vector<G4LogicalVolume*> FindLVs( const G4String& theName,
-                                           const G4bool exists = 0 );
-      // Find if LV already exists, comparing the name and the solid 
-      // (with POSP it may happen that the same volume has two different
-      // solidParameter and therefore two solids will be created
+      // Find a G4LogicalVolume if it already exists
+
+    G4VPhysicalVolume* FindG4PhysVol( const G4String& theName,
+                                   const G4bool bExists = 0 );
+      // Find a G4VPhysicalVolume if it already exists
 
     G4VPhysicalVolume* GetTopPhysVol();
       // Get the top PV in the hierarchy tree: calls topLV, because
