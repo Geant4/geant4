@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.cc,v 1.5 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgrVolumeMgr.cc,v 1.6 2008-12-09 12:05:29 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,7 @@ G4tgrVolumeMgr::CreateSolid( const std::vector<G4String>& wl, G4bool bVOLUtag )
   {
     wl2[ii] = toupper( wl2[ii] );
   }
-  if( (wl2 == "UNION") || (wl2 == "SUBS") || (wl2 == "INTERS") )
+  if( (wl2 == "UNION") || (wl2 == "SUBTRACTION") || (wl2 == "INTERSECTION") )
   {
     //---------- Boolean solid
     //---------- Create G4tgrSolidBoolean and fill the solid params
