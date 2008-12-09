@@ -24,7 +24,7 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-01-16
+config                                           config-V09-01-17
 ------
 - Reviewed Qt setup for Darwin-g++, Linux-g++.gmk and WIN32-VC, to
   automatically detect Qt3/Qt4 installations and set the proper flags.
@@ -38,6 +38,8 @@ config                                           config-V09-01-16
   tools. Used in "source/GNUmakefile" (source-gmk-V09-01-01).
 - G4UI_USE.gmk: added -DG4UI_USE to CPPFLAGS. Re-ordered G4UI_NONE
   and G4UI_USE_INCLUDED blocks to be coherent with G4VIS_USE.gmk.
+  Corrected G4UI_USE_OSC to solve a tricky env expansion problem restricted
+  to the Open-Scientist setup.
 - Configure script (Configure-V09-01-01): brought up-to-date with new data
   sets and configuration options for Qt.
 
@@ -182,7 +184,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-39
+processes/electromagnetic/lowenergy             emlowen-V09-01-40
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -285,8 +287,8 @@ processes/hadronic                               hadr-V09-01-00
     G4NeutronHPInelastic.
   o G4NeutronHPNames: fixed gcc-4.3.2 compilation warning.
   o Updated data set to G4NDL3.13.
-- models/parton_string/diffraction (hadr-string-diff-V09-01-03)
-  o Fixed memory leak in G4FTFModel distructor.
+- models/parton_string/diffraction (hadr-string-diff-V09-01-04)
+  o Fixed memory leak in G4FTFModel destructor.
 - models/pre_equilibrium (hadr-pre-V09-01-13)
   o JMQ fix to G4PreCompoundNeutron for Zirconium (if (nu < 0.)nu=-nu).
   o Added data member initialisation to G4VPreCompoundTransitions, responsible
@@ -313,6 +315,10 @@ processes/transportation                         transport-V09-01-03
     neutral particles.
   o Push value & origin of safety to SafetyHelper only when its value
     comes from ComputeSafety().
+
+tracking                                         tracking-V09-01-04
+--------
+- Fixed missing update of secondaries utility counter in G4SteppingManager.
 
 visualization                                    vis-V09-01-06
 -------------
