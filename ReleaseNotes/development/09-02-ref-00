@@ -184,7 +184,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-40
+processes/electromagnetic/lowenergy             emlowen-V09-01-41
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -197,7 +197,6 @@ processes/electromagnetic/lowenergy             emlowen-V09-01-40
 - Updated low energy limits of Geant4-DNA e- models (Brenner-Zaider and
   Champion's elastic scattering and Emfietzoglou's excitation).
   Fixed vector initialization and EOF protection in G4FinalStateElasticChampion.
-- Updated G4LogLogInterpolation class for CPU improvement.
 - Added protection in G4FinalStateIonisationBorn causing run-time error
   detected by Valgrind.
 - Updated data set to G4EMLOW6.2.
@@ -289,10 +288,12 @@ processes/hadronic                               hadr-V09-01-00
   o Updated data set to G4NDL3.13.
 - models/parton_string/diffraction (hadr-string-diff-V09-01-04)
   o Fixed memory leak in G4FTFModel destructor.
-- models/pre_equilibrium (hadr-pre-V09-01-13)
+- models/pre_equilibrium (hadr-pre-V09-01-15)
   o JMQ fix to G4PreCompoundNeutron for Zirconium (if (nu < 0.)nu=-nu).
   o Added data member initialisation to G4VPreCompoundTransitions, responsible
     for run-time errors detected by Valgrind.
+  o Added protection for close to zero excitation energy in
+    G4PreCompoundModel (according to JMQ, MAC) to not try to de-excite.
 - models/qmd (hadr-qmd-V09-01-08)
   o Added Update() method to G4QMDMeanField.
   o Added 'hit' flag and related methods to G4QMDParticipant.
