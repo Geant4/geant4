@@ -644,11 +644,11 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     {
       solid = new G4UnionSolid( sname, sol1, sol2, relRotMat, relPlace );
     }
-    else if( stype == "Boolean_SUBS" )
+    else if( stype == "Boolean_SUBTRACTION" )
     {
       solid = new G4SubtractionSolid( sname, sol1, sol2, relRotMat, relPlace );
     }
-    else if( stype == "Boolean_INTERS" )
+    else if( stype == "Boolean_INTERSECTION" )
     {
       solid = new G4IntersectionSolid( sname, sol1, sol2, relRotMat, relPlace );
     }
