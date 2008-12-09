@@ -162,7 +162,7 @@ G4String G4tgrUtils::SubColon( const G4String& str )
 {
   if( str.find(':') != 0 )
   {
-    G4String ErrMessage = "Trying to substract leading colon from a word\n"
+    G4String ErrMessage = "Trying to subtract leading colon from a word\n"
                         + G4String("that has no leading colon: ") + str;
     G4Exception("G4tgrUtils::SubColon()", "ParseError",
                 FatalException, ErrMessage);
