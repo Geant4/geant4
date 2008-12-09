@@ -62,7 +62,7 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
 
   // Run action that dumps GEANT4 in-memory geometry to text file
-  //  runManager->SetUserAction(new ExTGRunAction);
+  runManager->SetUserAction(new ExTGRunAction);
 
   // Initialize G4 kernel
   //
