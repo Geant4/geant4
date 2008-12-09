@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.343 2008-12-08 17:31:14 gbarrand Exp $
+cvs log $Id: History,v 1.344 2008-12-09 11:20:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9th December 2008  Guy Barrand
-- G4UI_USE.gmk: correct G4UI_USE_OSC to use $(shell ...) instead 
-  of direct backquoting to solve a tricky env expansion problem.
+9th December 2008  Guy Barrand (config-V09-01-17)
+- G4UI_USE.gmk: corrected G4UI_USE_OSC to use $(shell ...) instead 
+  of direct backquoting to solve a tricky env expansion problem,
+  restricted to the Open-Scientist setup.
 
 8th December 2008  John Allison (config-V09-01-16)
 - G4UI_USE.gmk: added -DG4UI_USE to CPPFLAGS. Re-ordered G4UI_NONE
