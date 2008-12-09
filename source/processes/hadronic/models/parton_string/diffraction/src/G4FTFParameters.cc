@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.2 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.3 2008-12-09 10:40:52 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

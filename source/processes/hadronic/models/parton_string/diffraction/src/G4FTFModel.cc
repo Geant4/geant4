@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.12 2008-12-05 13:53:34 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.13 2008-12-09 10:40:52 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,12 +48,14 @@
 // Class G4FTFModel 
 
 G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
-                         theElastic(new G4ElasticHNScattering())      // Uzhi 29.03.08
+                         theElastic(new G4ElasticHNScattering()) // Uzhi 29.03.08
 {
 	G4VPartonStringModel::SetThisPointer(this);
+        theParameters=0;                                         // Uzhi 9.12.08
 }
 
-G4FTFModel::G4FTFModel(G4double , G4double , G4double ):theExcitation(new G4DiffractiveExcitation())
+/*
+G4FTFModel::G4FTFModel(G4double , G4double , G4double ):theExcitation(new // Uzhi 9.12.08 G4DiffractiveExcitation())
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
@@ -64,14 +66,17 @@ theExcitation(anExcitation)
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
-
+*/
 
 
 G4FTFModel::~G4FTFModel()
 {
-   if( theParameters != NULL ) delete theParameters;   // Uzhi 5.12.08
-   if( theExcitation != NULL ) delete theExcitation;   // Uzhi 5.12.08
-   if( theElastic    != NULL ) delete theElastic;      // Uzhi 5.12.08
+   if( theParameters != 0 ) delete theParameters;             // Uzhi 5.12.08
+// Because FTF model can be called for various particles
+// theParameters must be erased at the end of each call.
+// Thus the delete is olso in G4FTFModel::GetStrings() method
+   if( theExcitation != 0 ) delete theExcitation;             // Uzhi 5.12.08
+   if( theElastic    != 0 ) delete theElastic;                // Uzhi 5.12.08
 }
 
 
@@ -110,6 +115,8 @@ G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4
 G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
 G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 */
+
+      if( theParameters != 0 ) delete theParameters;                    // Uzhi 9.12.08
       theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
                                           aNucleus.GetN(),aNucleus.GetZ(),
                                           s);// ------------------------- Uzhi 19.04.08
@@ -125,7 +132,12 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 	if (! ExciteParticipants()) return NULL;;
 //G4cout<<"theStrings = BuildStrings()"<<G4endl;
 	G4ExcitedStringVector * theStrings = BuildStrings();
-//G4cout<<"Return to theStrings"<<G4endl;
+//G4cout<<"Return to theStrings "<<G4endl;
+        if( theParameters != 0 )                              // Uzhi 9.12.08 
+        {                                                     // Uzhi 9.12.08
+          delete theParameters;                               // Uzhi 9.12.08
+          theParameters=0;                                    // Uzhi 9.12.08
+        }                                                     // Uzhi 9.12.08
 	return theStrings;
 }
 
