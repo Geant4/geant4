@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09-December 2008 A.Howard   hadr-pre-V09-01-15
+---------------------------------------------------
+Added protection for close to zero excitation energy in 
+G4PreCompoundModel.cc (according to JMQ, MAC) to not try to de-excite.
+
 09-December 2008 A.Howard   hadr-pre-V09-01-14
 ---------------------------------------------------
 Added protection for close to zero excitation energy in 

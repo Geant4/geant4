@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.16 2008-09-22 10:18:36 ahoward Exp $
+// $Id: G4PreCompoundModel.cc,v 1.17 2008-12-09 14:09:59 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -173,6 +173,13 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   
   // Copy of the initial state 
   G4Fragment aFragment(theInitialState);
+
+  if (aFragment.GetExcitationEnergy() < 10*eV)
+    {
+      // Perform Equilibrium Emission
+      PerformEquilibriumEmission(aFragment,Result);
+      return Result;
+    }
   
   if (aFragment.GetA() < 5) {
     G4ReactionProduct * theRP = new G4ReactionProduct(G4ParticleTable::GetParticleTable()->
