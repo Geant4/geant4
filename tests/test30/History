@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-01-05  10 December 2008 V.Ivanchenko
+- upgrade cout of test30.cc
+
 test30-V09-01-04  21 November 2008 V.Ivanchenko
 - test30.cc and Test30Physics - added charge exchange 
 
