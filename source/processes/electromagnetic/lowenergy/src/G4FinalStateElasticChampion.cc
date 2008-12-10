@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.6 2008-12-06 13:47:12 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.7 2008-12-10 18:25:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -144,6 +144,9 @@ G4double G4FinalStateElasticChampion::DifferentialCrossSection
   G4double xs12 = 0; 
   G4double xs21 = 0; 
   G4double xs22 = 0; 
+
+  //SI : ensure the correct computation of cross section at the 180*deg limit
+  if (theta==180.) theta=theta-1e-9;
 
   if (particleDefinition == G4Electron::ElectronDefinition()) 
   {
