@@ -1129,11 +1129,22 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI>New data for neutron cross-sections, G4NDL.3.13:
     <UL>
-    <LI></LI>
+    <LI>Added rest of isotope in JENDL_HE neutron files:
+        <TT>N(7), Ti(46, 47, 48, 49 50), V(51), Cr(50, 52, 53, 54), Mn(55),
+        Co(59), Ni(58, 60, 61, 62, 62), Zr(90, 91, 92, 94, 96), Nb(94),   
+        W(180, 182, 183, 184, 186), Hg(196, 198, 199, 200, 201, 202, 204)</TT></LI>
+    <LI>New Elastic and Inelastic cross section from "JENDL High Energy File
+        2007"  All 107 isotopes are converted (except for <TT>Am242m</TT>).</LI>
+    <LI>Added data file: <TT>Inelastic/Gammas/z63.a149</TT>.</LI>
+    <LI>Replaced <TT>Nitrogen15</TT> data (source: ENDF6).</LI>
+    <LI>Corrected wrong entries in some Inelastic and Capture data.
+        Previous files are still available in each directory with suffix
+        of .org.</LI>
     </UL></LI>
 <LI>New low-energy data set, G4EMLOW.6.2:
     <UL>
-    <LI></LI>
+    <LI>Added in DNA tables for: Champion elastic scattering model and
+        Champion Positronium creation model.</LI>
     </UL></LI>
 </UL>
 
@@ -1144,14 +1155,26 @@ please refer to the corresponding History files provided in most packages):
 <LI>Updated reference outputs.</LI>
 <LI><B>advanced</B>
     <UL>
-    <LI>air_shower
+    <LI>brachytherapy
         <UL>
-        <LI></LI>
+        <LI>Corrected and updated input macros.</LI>
+        </UL></LI>
+    <LI>gammaray_telescope
+        <UL>
+        <LI>Fixed compilation problems in <TT>MuonPhysicsList</TT> class.</LI>
         </UL></LI>
     <LI>hadrontherapy
         <UL>
         <LI>Reviewed example to update to the new beam line setup.</LI>
-        <LI>Corrections in the Low Energy Electromagnetic physic lists.</LI>
+        <LI>Corrections in the Low Energy Electromagnetic physic lists.
+            Improved the electromagnetic models for the generic ions.
+            Corrected cross sections definitions for ions. Revised the
+            definition and use of the electromagnetic options for the use
+            with the Standard models.</LI>
+        <LI>Added new approach for the choice of the physic models. Now
+            packaged physic lists can be used as alternative to the physic
+            models implemented in the class files EM, HE and HI.</LI>
+        <LI>Fixed path of macro files.</LI>
         </UL></LI>
     <LI>microbeam
         <UL>
@@ -1163,42 +1186,26 @@ please refer to the corresponding History files provided in most packages):
             charge is +e) particle in liquid water using only <TT>G4DNA</TT>
             processes.</LI>
         </UL></LI>
-    <LI>underground_physics
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>Rich
         <UL>
-        <LI></LI>
+        <LI>Fixed compilation problems in <TT>EventAction</TT> class.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
     <UL>
     <LI>Updated EM standard physics-lists and EM options and changed
         default histograms format in EM examples.</LI>
-    <LI>electromagnetic/TestEm1
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm2
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm3
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm5</LI>
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>electromagnetic/TestEm7
         <UL>
-        <LI></LI>
+        <LI>Added process type to <TT>G4SceenNuclearRecoil</TT>.</LI>
+        <LI>Added <LI>standardICRU73</LI> physics list in which ion ionisation
+            is simulated using new model G4IonLossParametrisedModel, configured
+            via <TT>G4EmConfigurator</TT>.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm8
         <UL>
-        <LI></LI>
+        <LI>Removed local components of <TT>PhysicsList</TT> and use
+            <TT>G4EmConfigurator</TT> to configure PAI model.</LI>
         </UL></LI>
     <LI>electromagnetic/TestEm9
         <UL>
@@ -1206,35 +1213,20 @@ please refer to the corresponding History files provided in most packages):
         <LI>Added PhysLists with relativistic LPM model and updated macros.</LI>
         <LI>Added control on number of events with Edep < 80%.</LI>
         </UL></LI>
-    <LI>electromagnetic/TestEm11
+    <LI>eventgenerator/exgps
         <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm12
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm14</LI>
-    <LI>electromagnetic/TestEm15
-        <UL>
-        <LI></LI>
+        <LI>Updated analysis code and macros with AIDA.</LI>
         </UL></LI>
     <LI>eventgenerator/pythia
         <UL>
         <LI>New example <TT>decayer6</TT> of external decayer implementation
             based on Pythia6.</LI>
         </UL></LI>
-    <LI>exoticphysics/monopole
-        <UL>
-        <LI></LI>
-        </UL></LI>
     <LI>field/field04
         <UL>
         <LI>Fixed setup of random engine in <TT>main()</TT>.</LI>
-        </UL></LI>
-    <LI>gdml
-        <UL>
-        <LI></LI>
+        <LI>Changed physics list to <TT>emstandard</TT>. Added charge
+            exchange.</LI>
         </UL></LI>
     <LI>hadronic/Hadr00
         <UL>
@@ -1244,11 +1236,14 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>hadronic/Hadr01
         <UL>
-        <LI>Improved physics-lists output.</LI>
+        <LI>Improved physics-lists output. Added charge exchange.</LI>
         </UL></LI>
     <LI>medical/DICOM
         <UL>
-        <LI></LI>
+        <LI>Included <TT>G4PSDoseDeposit_RegNav</TT> to distribute dose along
+            voxels, including msc and energy loss corrections, for the case
+            of skipping voxel with equal materials when using regular
+            navigation.</LI>
         </UL></LI>
     <LI>medical/fanoCavity[2]
         <UL>
@@ -1259,10 +1254,8 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>Added Birks constant for the LXe scintillator and Polystyrene
             scintillator.</LI>
-        </UL></LI>
-    <LI>parallel/MPI
-        <UL>
-        <LI></LI>
+        <LI>Added call to <TT>SetMaxBetaChangePerStep()</TT> of Cherenkov
+            in <TT>LXeOpticalPhysics</TT>.</LI>
         </UL></LI>
     <LI>persistency/gdml
         <UL>
@@ -1271,14 +1264,18 @@ please refer to the corresponding History files provided in most packages):
             how to import STEP Tools CAD files.
             Imported old GDML example originally placed inside
             <TT>extended/gdml</TT> and renamed <TT>G01</TT>.</LI>
+        <LI><TT>G01</TT>: updated <TT>loop.gdml</TT> and <TT>solids.gdml</TT>
+            descriptions to fix schema validation warnings; added new GDML
+            samples compliant with GDML_3_0_0 and removed obsolete ones.
+            Added example in <TT>main()</TT> how to retrieve auxiliary
+            information.</LI>
+        <LI><TT>G03</TT>: new example showing how to extend the GDML schema
+            in input.</LI>
         </UL></LI>
-    <LI>polarisation/Pol01
+    <LI>persistency/P03
         <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>optical/LXe
-        <UL>
-        <LI></LI>
+        <LI>New example showing usage of ASCII text persistency for detector
+            description.</LI>
         </UL></LI>
     <LI>radioactivedecay/exrdm
         <UL>
@@ -1287,11 +1284,13 @@ please refer to the corresponding History files provided in most packages):
             logic for setting of hadronic physics; corrected problem of double
             instantiation of radioactive decay.</LI>
         <LI>Fixed compilation warnings.</LI>
-        <LI>Use AIDA setup from central scripts.</LI>
+        <LI>Use AIDA setup from central scripts. Updated analysis code and
+            macros with AIDA.</LI>
         </UL></LI>
     <LI>runAndEvent/RE03
         <UL>
-        <LI></LI>
+        <LI>Add new input macro <TT>run4.mac</TT> with cylindrical scoring
+            mesh.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>novice</B>
@@ -1309,15 +1308,14 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>Updated EM standard physics-list.</LI>
         <LI>Use <TT>G4hMultipleScattering</TT> for muons and protons.</LI>
-        </UL></LI>
-    <LI>N05
-        <UL>
-        <LI></LI>
+        <LI>Added Qt setup to vis macros.</LI>
         </UL></LI>
     <LI>N06
         <UL>
         <LI>Use <TT>dynamic_cast</TT> for surface in
             <TT>ExN06DetectorConstruction</TT>.</LI>
+        <LI>Added call to <TT>SetMaxBetaChangePerStep()</TT> of Cherenkov in
+            <TT>ExN06PhysicsList</TT>.</LI>
         </UL></LI>
     </UL></LI>
 </UL>
