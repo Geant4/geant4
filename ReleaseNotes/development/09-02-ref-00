@@ -135,7 +135,7 @@ particles                                        particles-V09-01-13
 - Fixed particle name of G4AdjointPositron.
 - Fixed magnetic momentum for leptons.
 
-persistency/ascii                                ascii-V09-01-05
+persistency/ascii                                ascii-V09-01-06
 -----------------
 - Added BREPS reading, support for any kind of parameterisations and
   dumping abilities.
@@ -263,7 +263,7 @@ processes/hadronic                               hadr-V09-01-00
   o G4ChargeExchangeProcess: added high and low energy protections to 
     cross-section. G4ChargeExchangeProcess and G4ChargeExchange model
     prepared to be used in physics lists; energy threshold is set to 1.0 MeV.
-- models/de_excitation (hadr-deex-V09-01-23)
+- models/de_excitation (hadr-deex-V09-01-25)
   o Switched off FermiBreakUp by default.
   o Fix in G4GEMChannel according to (anA,aZ) -> (AResidual,ZResidual)
     for pairing correction in ExEnergy.
@@ -272,6 +272,8 @@ processes/hadronic                               hadr-V09-01-00
   o Fixed problem report #1028 in G4CompetitiveFission::FissionCharge();
     trivial change of A to Af.
   o Fixed memory leak in G4EvaporationChannel.
+  o Increased verbosity in G4Evaporation to try to understand channel
+    probability failure in very rare case.
   o Added comments to modifications of MF model.
 - models/im_r_matrix (hadr-im_r-V09-01-01)
   o G4XNNElasticLowE, G4XNNTotalLowE: avoid use of static call to
