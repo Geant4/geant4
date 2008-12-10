@@ -148,7 +148,7 @@ int main(int argc, char** argv)
   G4int     nanglpi  = 0;
   G4int     modu     = 10000;
   G4int     targetA  = 0;
-  G4String hFile     = "hbook.paw";
+  G4String hFile     = "test30";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
@@ -887,8 +887,9 @@ int main(int argc, char** argv)
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>1) 
+      if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
+      }
 
       G4double e0 = energy;
       do {
@@ -912,9 +913,6 @@ int main(int argc, char** argv)
       labv -= dee;
 
       G4int n = aChange->GetNumberOfSecondaries();
-
-      if(iter == modu*(iter/modu)) 
-        G4cout << "##### " << iter << "-th event  #####" << G4endl;
 
       G4int nbar = 0;
 
@@ -1120,6 +1118,9 @@ int main(int argc, char** argv)
     if(verbose > 0) G4cout << "###### End of run # " << run << "     ######" << G4endl;
   }
 
+  delete pFrame;
+  delete lFrame;
+  delete sFrame;
   delete mate;
   delete fin;
   delete phys;

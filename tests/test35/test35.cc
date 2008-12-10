@@ -129,6 +129,7 @@ int main(int argc, char** argv)
   G4double  elim     = 30.*MeV;
   G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
+  G4int     modu     = 10000;
   G4int     nbins    = 100;
   G4int     nbinsa   = 40;
   G4int     nbinse   = 80;
@@ -137,7 +138,7 @@ int main(int argc, char** argv)
   G4int     nangl    = 0;
   G4int     nanglpi  = 0;
   G4int     nmompi   = 0;
-  G4String hFile     = "hbook";
+  G4String hFile     = "test35";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
@@ -518,7 +519,7 @@ int main(int argc, char** argv)
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>=1 || iter == 1000*(iter/1000)) { 
+      if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
       }
       G4double e0 = energy;

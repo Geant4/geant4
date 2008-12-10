@@ -8,7 +8,7 @@
 0
 #rad
 #events
-1000
+100
 //--------Proton_processes
 #particle
 proton
@@ -36,11 +36,11 @@ lepar
 lhep
 #run
 //--------
-#verbose
-1
+//#verbose
+//1
 #generator
 bertini
 #paw
 bert
-#run
+//#run
 #exit

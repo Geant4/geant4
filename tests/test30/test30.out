@@ -1,25 +1,6 @@
 ========================================================
 ======        Cascade Test (test30) Start       ========
 ========================================================
-Next line //---------------------------------------
-Next line //
-Next line Macro
-Next line file
-Next line for
-Next line test30
-Next line //
-Next line examine
-Next line PostStepDoIt
-Next line //
-Next line for
-Next line hadronic
-Next line physics
-Next line //
-Next line Created:
-Next line 13.03.2002
-Next line V.Ivanchenko
-Next line //---------------------------------------
-Next line #verbose
 Next line #events
 Next line //--------Proton_processes
 Next line #particle
@@ -40,10 +21,6 @@ Next line #paw
 Next line #run
 ###### Start new run # 0   for 10 events  #####
 ### NIST DataBase for Materials is used
-G4NistMaterialBuilder::FindOrBuildMaterial G4_Zr
-G4NistMaterialBuilder: BuildMaterial #39
-New material nComponents= 1
-G4NistElementBuilder: Build Element <Zr>  Z= 4.000000e+01  A= 9.122363e+01  with natural isotope composition
 Material is selected: G4_Zr
 Test30Physics entry
 Process is created; gen= binary
@@ -68,18 +45,27 @@ pmax   = 2.053098e+02 MeV
 Histograms are booked output file <bic> 
 ### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
-##### 0-th event  #####
-Energy/Momentum balance= (-1.057998e-10,4.094858e-11,-4.151843e-10;-4.901901e-03)
-Energy/Momentum balance= (-2.576002e-09,-4.127401e-10,-2.508585e-09;-1.685216e-03)
+### 0-th event start 
+Energy/Momentum balance= (1.356687e-09,-3.516950e-10,-2.623423e-09;-2.643584e-03)
+### 1-th event start 
 Energy/Momentum balance= (-3.003742e-11,1.705622e-10,1.015998e-09;4.235645e-05)
+### 2-th event start 
 Energy/Momentum balance= (4.955975e-09,-1.955906e-09,7.853157e-09;-9.420930e-04)
-Energy/Momentum balance= (-6.919976e-11,-4.596856e-11,-6.098730e-10;-1.326344e-02)
-Energy/Momentum balance= (1.908328e-09,6.906140e-10,-2.942671e-09;2.280716e-03)
-Energy/Momentum balance= (1.142513e-09,-5.252180e-10,-3.295532e-09;1.406529e-03)
-Energy/Momentum balance= (4.727443e-11,-1.164352e-10,-5.799220e-10;4.336027e-03)
-Energy/Momentum balance= (-5.325116e-11,6.861442e-12,-1.803750e-10;-2.061229e-03)
-Energy/Momentum balance= (4.574190e-10,-4.873897e-10,1.220172e-09;3.630607e-03)
-  User=4.000000e-02s Real=2.200000e-01s Sys=0.000000e+00s
+### 3-th event start 
+Energy/Momentum balance= (-3.594514e-12,-1.830536e-10,-2.404988e-09;-5.206300e-04)
+### 4-th event start 
+Energy/Momentum balance= (-1.592493e-10,2.946823e-10,2.035633e-09;-2.315034e-03)
+### 5-th event start 
+Energy/Momentum balance= (4.673382e-10,-8.271994e-13,-9.179075e-10;6.215368e-03)
+### 6-th event start 
+Energy/Momentum balance= (-4.213803e-10,-3.003180e-10,8.766392e-10;-4.265316e-03)
+### 7-th event start 
+Energy/Momentum balance= (-1.111839e-10,1.399513e-10,-3.295929e-10;1.885890e-03)
+### 8-th event start 
+Energy/Momentum balance= (1.957403e-10,2.955147e-10,-5.234142e-10;-2.627451e-03)
+### 9-th event start 
+Energy/Momentum balance= (1.135774e-09,1.209528e-09,-3.854353e-09;-1.423914e-03)
+  User=3.000000e-02s Real=2.200000e-01s Sys=0.000000e+00s
 ###### Save histograms
 [Histo::save] ROOT: file writing <bic.root>
 [Histo::save] ROOT: files closing...
@@ -88,7 +74,6 @@ Next line #generator
 Next line #paw
 Next line #run
 ###### Start new run # 1   for 10 events  #####
-G4NistMaterialBuilder::FindOrBuildMaterial G4_Zr
 Material is selected: G4_Zr
 Test30Physics entry
 Process is created; gen= bertini
@@ -113,18 +98,27 @@ pmax   = 2.053098e+02 MeV
 Histograms are booked output file <bert> 
 ### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
-##### 0-th event  #####
-Energy/Momentum balance= (6.972353e-05,-2.995110e-05,-3.174165e-05;-2.213488e-01)
-Energy/Momentum balance= (9.194310e-05,-1.413468e-05,1.819470e-04;-2.418553e-01)
-Energy/Momentum balance= (-1.280739e-04,1.636252e-04,5.307045e-05;-2.258117e-01)
-Energy/Momentum balance= (-1.390905e-04,-5.125252e-05,-8.085313e-05;-6.293230e-02)
-Energy/Momentum balance= (-7.599117e-05,1.109854e-04,2.409440e-04;-1.988564e-01)
-Energy/Momentum balance= (2.010197e-04,-2.894882e-04,1.587299e-04;-2.249736e-01)
-Energy/Momentum balance= (-1.028891e-04,1.017449e-04,-1.780352e-04;-2.764067e-01)
-Energy/Momentum balance= (1.905551e-04,-6.722057e-05,-2.452444e-04;-2.583473e-01)
-Energy/Momentum balance= (1.723026e-04,-4.111050e-06,-1.461843e-04;-2.143507e-01)
-Energy/Momentum balance= (-1.158675e-04,-1.642310e-04,-1.192468e-05;-1.532644e-01)
-  User=1.000000e-02s Real=0.000000e+00s Sys=0.000000e+00s
+### 0-th event start 
+Energy/Momentum balance= (1.474629e-04,-5.461981e-05,2.561454e-04;-1.264814e-01)
+### 1-th event start 
+Energy/Momentum balance= (-1.327359e-04,5.327429e-05,-1.161672e-04;-2.211708e-01)
+### 2-th event start 
+Energy/Momentum balance= (4.673489e-04,-4.432417e-04,-2.171975e-04;-4.903004e-01)
+### 3-th event start 
+Energy/Momentum balance= (-4.069126e-05,-1.219368e-04,-1.701446e-04;-2.357373e-01)
+### 4-th event start 
+Energy/Momentum balance= (-1.013151e-04,7.933133e-06,-2.182798e-04;-1.826434e-01)
+### 5-th event start 
+Energy/Momentum balance= (1.041073e-04,9.196315e-05,-1.545226e-04;-2.326803e-01)
+### 6-th event start 
+Energy/Momentum balance= (-7.846882e-05,-9.080491e-05,9.802340e-05;-2.208377e-01)
+### 7-th event start 
+Energy/Momentum balance= (-1.939143e-04,-1.659016e-04,-4.494093e-05;3.191244e-02)
+### 8-th event start 
+Energy/Momentum balance= (-3.812707e-05,-1.954103e-04,7.081845e-05;-2.511566e-01)
+### 9-th event start 
+Energy/Momentum balance= (-6.198758e-05,-1.236937e-04,1.249710e-04;-1.369818e-01)
+  User=0.000000e+00s Real=0.000000e+00s Sys=0.000000e+00s
 ###### Save histograms
 [Histo::save] ROOT: file writing <bert.root>
 [Histo::save] ROOT: files closing...
