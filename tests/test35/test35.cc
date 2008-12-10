@@ -153,17 +153,12 @@ int main(int argc, char** argv)
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
-  //  decays.ConstructProcess();  
 
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
-  //  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
-  // const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
-  // const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-  //const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
 
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
@@ -214,6 +209,7 @@ int main(int argc, char** argv)
   assert(pFrame);
 
   // ---- Read input file
+  /*
   cout << "Available commands are: " << endl;
   cout << "#events" << endl;
   cout << "#exclusive" << endl;
@@ -256,13 +252,14 @@ int main(int argc, char** argv)
   cout << "#eBound" << endl;
   cout << "#kBound" << endl;
   cout << "#rad" << endl;
+  */
 
   G4String line, line1;
   G4bool end = true;
   for(G4int run=0; run<100; run++) {
     do {
       (*fin) >> line;
-      cout << "Next line " << line << endl;
+      if(verbose > 0) cout << "Next line " << line << endl;
       if(line == "#particle") {
         (*fin) >> namePart;
       } else if(line == "#energy(MeV)") {
@@ -349,6 +346,7 @@ int main(int argc, char** argv)
         break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
+        G4cout << "### New verbose level " << verbose << G4endl;
       } else if(line == "#position(mm)") {
         (*fin) >> nx >> ny >> nz;
         aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
@@ -404,14 +402,15 @@ int main(int argc, char** argv)
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
 
-    cout << "The particle:  " << part->GetParticleName() << endl;
-    cout << "The material:  " << material->GetName() 
+    if(verbose > 0) {
+      cout << "The particle:  " << part->GetParticleName() << endl;
+      cout << "The material:  " << material->GetName() 
 	   << "  Z= " << Z << "  A= " << A << endl;
-    cout << "The step:      " << theStep/mm << " mm" << endl;
-    cout << "The position:  " << aPosition/mm << " mm" << endl;
-    cout << "The direction: " << aDirection << endl;
-    cout << "The time:      " << aTime/ns << " ns" << endl;
-
+      cout << "The step:      " << theStep/mm << " mm" << endl;
+      cout << "The position:  " << aPosition/mm << " mm" << endl;
+      cout << "The direction: " << aDirection << endl;
+      cout << "The time:      " << aTime/ns << " ns" << endl;
+    }
     G4double mass = part->GetPDGMass();
     if(m_pmax == 0.0) m_pmax = emax;
     else              emax   = m_pmax;
@@ -428,9 +427,10 @@ int main(int argc, char** argv)
     double cosmax = cos(m_thetamin*0.001);
 
     cout << "energy = " << energy/GeV << " GeV" << endl;
-    cout << "emax   = " << emax/GeV << " GeV" << endl;
-    cout << "pmax   = " << m_pmax/GeV << " GeV" << endl;
-
+    if(verbose > 0) {
+      cout << "emax   = " << emax/GeV << " GeV" << endl;
+      cout << "pmax   = " << m_pmax/GeV << " GeV" << endl;
+    }
     if(usepaw && !isInitH) {
 
       isInitH = true;
@@ -521,9 +521,10 @@ int main(int argc, char** argv)
       mom0 = mompi[k];
     }    
 
-    cout << " nbinTheta= " << nanglpi 
+    if(verbose > 0) {
+      cout << " nbinTheta= " << nanglpi 
 	   << " nbinP= " << nmompi << " ang0= " << angpi[0] << endl; 
-
+    }
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
@@ -562,13 +563,13 @@ int main(int argc, char** argv)
 
     for (G4int iter=0; iter<nevt; iter++) {
 
-      if(verbose>=1) 
-        cout << "### " << iter << "-th event start " << endl;
-
+      if(verbose>=1 || iter == 1000*(iter/1000)) { 
+        G4cout << "### " << iter << "-th event start " << G4endl;
+      }
       G4double e0 = energy;
-      if(sigmae > 0.0) 
+      if(sigmae > 0.0) {
         do {e0 = G4RandGauss::shoot(energy,sigmae);} while (e0 < 0.0);
-
+      }
       dParticle.SetKineticEnergy(e0);
 
       gTrack->SetStep(step);
@@ -580,12 +581,9 @@ int main(int argc, char** argv)
 
       G4int n = aChange->GetNumberOfSecondaries();
 
-      if(verbose>=1 and iter == 1000*(iter/1000)) 
-        cout << "##### " << iter << "-th event  #####" << endl;
-
       G4int nbar = 0;
-      int n_pr = 0;
-      int n_pi = 0;
+      G4int n_pr = 0;
+      G4int n_pi = 0;
       
       for(G4int j=0; j<n; j++) {
 
@@ -603,7 +601,7 @@ int main(int argc, char** argv)
 	if (e < 0.0) e = 0.0;
 
         theta = mom.theta();
-        double cost  = cos(theta);
+        G4double cost  = cos(theta);
 
         m = pd->GetPDGMass();
 	p = sqrt(e*(e + 2.0*m));
@@ -639,8 +637,8 @@ int main(int argc, char** argv)
           histo.fill(1,n_pi,1.0);
 
 	}
-	if((verbose >1) ||
-	   (verbose==1 && (pd == pip || pd == pin || pd == pi0 || pd == proton)))
+	if((verbose >2) ||
+	   (verbose==2 && (pd == pip || pd == pin || pd == pi0 || pd == proton)))
 	  cout << i << "-th secondary: " 
 		 << pd->GetParticleName() << "  p= "<<p
 		 << "  theta= " << theta
@@ -653,7 +651,7 @@ int main(int argc, char** argv)
 	  int kp   = -1;
 	  do {kp++;}   while (p > mompi[kp]);  
 	  do {kang++;} while (theta > angpi[kang]);  
-	  if(verbose>=1)
+	  if(verbose>=2)
 	    cout << " kp= " << kp << " kang= " << kang
 		   <<endl; 
 
@@ -669,7 +667,7 @@ int main(int argc, char** argv)
     }
   
     timer->Stop();
-    cout << "  "  << *timer << endl;
+    G4cout << "  "  << *timer << G4endl;
     delete timer;
 
     // Committing the transaction with the tree
@@ -678,11 +676,11 @@ int main(int argc, char** argv)
       histo.save();
     }
 
-    cout.setf(std::ios::fixed);
-    G4int prec = cout.precision(6);
-    cout << "#################################################################" << endl;
-    cout << "###### Cross section per bin for pi+" << std::setw(6) << endl;
-    cout << endl;    
+    std::cout.setf(std::ios::fixed);
+    G4int prec = std::cout.precision(6);
+    std::cout << "#################################################################" << std::endl;
+    std::cout << "###### Cross section per bin for pi+" << std::setw(6) << std::endl;
+    std::cout << std::endl;    
 
     for(k=0; k<nmompi; k++) {
       for(j=0; j<nanglpi; j++) {
@@ -708,8 +706,8 @@ int main(int argc, char** argv)
         else  errpi0[k][j] = harpcs[k][j];
       }
     }
-    ofstream* fout = new ofstream();
-    string fname = hFile+"_pi+.dpdo";
+    std::ofstream* fout = new std::ofstream();
+    std::string fname = hFile+"_pi+.dpdo";
     fout->open(fname.c_str(), std::ios::out|std::ios::trunc);
     ofstream* fout1 = new ofstream();
     string fname1 = hFile+"_pi-.dpdo";
@@ -897,8 +895,9 @@ int main(int argc, char** argv)
     fout1->close();
     fout2->close();
     fout3->close();
-
-    cout << "###### End of run # " << run << "     ######" << endl;
+    if(verbose > 0) {
+      cout << "###### End of run # " << run << "     ######" << endl;
+    }
     cout.precision(prec);
   }  
 
