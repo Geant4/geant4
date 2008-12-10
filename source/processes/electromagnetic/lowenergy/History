@@ -1,4 +1,4 @@
-$Id: History,v 1.326 2008-12-09 22:31:50 sincerti Exp $
+$Id: History,v 1.327 2008-12-10 16:56:52 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.12.2008   S. Incerti, tag emlowen-V09-01-43
+             Updated G4PenelopeBremsstrahlungContinuous.hh/.cc from Luciano
+             Conatins G4LogLogInterpolation_revision1b.cc
 
 09.12.2008   S. Incerti, tag emlowen-V09-01-42
              Upgrade to G4LogLogInterpolation_revision1b.cc
