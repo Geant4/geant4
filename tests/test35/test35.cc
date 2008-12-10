@@ -96,6 +96,7 @@
 
 #include "Histo.hh"
 #include "G4Timer.hh"
+#include "G4NistManager.hh"
 
 #include <fstream>
 #include <string>
@@ -194,6 +195,7 @@ int main(int argc, char** argv)
 
   Test30Material*  mate = new Test30Material();
   Test30Physics*   phys = new Test30Physics();
+  G4NistManager::Instance()->SetVerbose(verbose);
 
   // Geometry
 
@@ -205,54 +207,6 @@ int main(int argc, char** argv)
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
-
-  assert(pFrame);
-
-  // ---- Read input file
-  /*
-  cout << "Available commands are: " << endl;
-  cout << "#events" << endl;
-  cout << "#exclusive" << endl;
-  cout << "#inclusive" << endl;
-  cout << "#logx" << endl;
-  cout << "#nbins" << endl;
-  cout << "#nbinsa" << endl;
-  cout << "#nbinse" << endl;
-  cout << "#nbinsd" << endl;
-  cout << "#nbinspi" << endl;
-  cout << "#nanglepi" << endl;
-  cout << "#anglespi" << endl;
-  cout << "#nangle" << endl;
-  cout << "#angles" << endl;
-  cout << "#dangle" << endl;
-  cout << "#particle" << endl;
-  cout << "#energy(MeV)" << endl;
-  cout << "#momentum(MeV/c)" << endl;
-  cout << "#mompi(MeV/c)" << endl;
-  cout << "#sigmae(MeV)" << endl;
-  cout << "#emax(MeV)" << endl;
-  cout << "#emaxpi(MeV)" << endl;
-  cout << "#pmax(MeV/c)" << endl;
-  cout << "#elim(MeV)" << endl;
-  cout << "#ebinlog(MeV)" << endl;
-  cout << "#range(mm)" << endl;
-  cout << "#step(mm)" << endl;
-  cout << "#material" << endl;
-  cout << "#generator" << endl;
-  cout << "#paw" << endl;
-  cout << "#verbose" << endl;
-  cout << "#position(mm)" << endl;
-  cout << "#direction" << endl;
-  cout << "#time(ns)" << endl;
-  cout << "#run" << endl;
-  cout << "#exit" << endl;
-  cout << "#HETCEmission" << endl;
-  cout << "#GNASHTransition" << endl;
-  cout << "#GEMEvaporation" << endl;
-  cout << "#eBound" << endl;
-  cout << "#kBound" << endl;
-  cout << "#rad" << endl;
-  */
 
   G4String line, line1;
   G4bool end = true;
@@ -347,6 +301,7 @@ int main(int argc, char** argv)
       } else if(line == "#verbose") {
         (*fin) >> verbose;
         G4cout << "### New verbose level " << verbose << G4endl;
+	G4NistManager::Instance()->SetVerbose(verbose);
       } else if(line == "#position(mm)") {
         (*fin) >> nx >> ny >> nz;
         aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
@@ -402,8 +357,8 @@ int main(int argc, char** argv)
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
 
+    cout << "The particle:  " << part->GetParticleName() << endl;
     if(verbose > 0) {
-      cout << "The particle:  " << part->GetParticleName() << endl;
       cout << "The material:  " << material->GetName() 
 	   << "  Z= " << Z << "  A= " << A << endl;
       cout << "The step:      " << theStep/mm << " mm" << endl;
@@ -901,6 +856,9 @@ int main(int argc, char** argv)
     cout.precision(prec);
   }  
 
+  delete pFrame;
+  delete lFrame;
+  delete sFrame;
   delete mate;
   delete fin;
   delete phys;

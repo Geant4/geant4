@@ -120,7 +120,6 @@ int main(int argc, char** argv)
   // ------- Initialisation 
 
   Histo     histo;
-  G4NistManager::Instance()->SetVerbose(2);
   G4String  namePart = "proton";
   G4bool    ionParticle = false;
   G4bool    Shen     = false;
@@ -246,6 +245,7 @@ int main(int argc, char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
   Test30Material*  mate = new Test30Material();
+  G4NistManager::Instance()->SetVerbose(0);
 
   //--------- Particles definition ---------
   Test30Physics*   phys = new Test30Physics();
@@ -278,9 +278,7 @@ int main(int argc, char** argv)
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
-  assert(pFrame);
 
-  // -------------------------------------------------------------------
   // -------- Loop over run
 
   G4String line, line1;
@@ -290,7 +288,7 @@ int main(int argc, char** argv)
     // ---- Read input file
     do {
       (*fin) >> line;
-      G4cout << "Next line " << line << G4endl;
+      if(verbose > 0) G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
         (*fin) >> namePart;
       } else if(line == "#ion") {
@@ -385,6 +383,7 @@ int main(int argc, char** argv)
         break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
+	G4NistManager::Instance()->SetVerbose(verbose);
       } else if(line == "#position(mm)") {
         (*fin) >> nx >> ny >> nz;
         aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
@@ -531,14 +530,15 @@ int main(int argc, char** argv)
     G4int maxn = A + 1;
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
-    G4cout << "The material:  " << material->GetName() 
-	   << " Z= " << Z << " A= " << A
-	   << "  Amax= " << maxn << G4endl;
-    G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
-    G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
-    G4cout << "The direction: " << aDirection << G4endl;
-    G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
-
+    if(verbose > 0) {
+      G4cout << "The material:  " << material->GetName() 
+	     << " Z= " << Z << " A= " << A
+	     << "  Amax= " << maxn << G4endl;
+      G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
+      G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
+      G4cout << "The direction: " << aDirection << G4endl;
+      G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
+    }
     // linear histograms
     G4double mass = part->GetPDGMass();
     G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
@@ -546,9 +546,10 @@ int main(int argc, char** argv)
     G4double bind = emax/(G4double)nbinsd;
 
     G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
-    G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
-    G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
-
+    if(verbose > 0) {
+      G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
+      G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
+    }
     // logarithmic histograms
     G4double logmax = 2.0;
     G4double logmin = -2.0;
@@ -869,8 +870,9 @@ int main(int argc, char** argv)
     rot->rotateZ(-phi0);
     rot->rotateY(-theta0);
 
-    G4cout << "Test rotation= " << (*rot)*(aDirection) << G4endl;
-
+    if(verbose > 0) {
+      G4cout << "Test rotation= " << (*rot)*(aDirection) << G4endl;
+    }
     G4Timer* timer = new G4Timer();
     timer->Start();
     const G4DynamicParticle* sec = 0;
@@ -1112,10 +1114,10 @@ int main(int argc, char** argv)
     // -------- Committing the transaction with the tree
 
     if(usepaw) {
-      G4cout << "###### Save histograms" << G4endl;
+      if(verbose > 0) G4cout << "###### Save histograms" << G4endl;
       histo.save();
     }
-    G4cout << "###### End of run # " << run << "     ######" << G4endl;
+    if(verbose > 0) G4cout << "###### End of run # " << run << "     ######" << G4endl;
   }
 
   delete mate;
