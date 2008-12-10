@@ -48,11 +48,11 @@ processes is made.                                                      |
 ------------------------------------------------------------------------|
 ----> SET-UP 
                                                                         |
- -example enviroment with the compiler 3.2.3                              
+ -example enviroment with the compiler 3.4.6                              
  -a standard Geant4 example GNUmakefile is provided                     |
 
 setup with:                                                             |
-compiler = gcc-3.2.3
+compiler = gcc-3.4.6
 G4SYSTEM = linux-g++                                                    |
 
 The following environment variables can be set:                         |
