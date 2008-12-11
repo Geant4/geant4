@@ -70,13 +70,17 @@ geometry/magnetifield                            field-V09-01-05
 - Added SetAnomaly() and GetAnomaly() accessors to G4EqEMFieldWithSpin.
   Renormalised spin to 1 in G4EqEMFieldWithSpin and G4Mag_SpinEqRhs.
 
-geometry/navigation                              geomnav-V09-01-09
+geometry/navigation                              geomnav-V09-01-10
 -------------------
 - Introduced first implementation of new optional method in locator classes
   AdjustementOfFoundIntersection() using surface-normal of the intersecting
   solid to boost accuracy. Added the optional call to the new method in each
   concrete locator.
 - Removed unnecessary accessors for Brent locator in G4PropagatorInField.
+- Reinstated G4MultiLevelLocator as the default locator to allow for proper
+  tuning of parameters in propagation in field and avoid CPU penalty currently
+  induced by default parameters.
+- Corrected text in exceptions in locators classes.
 - G4VoxelNavigation: implemented additional check when running in "check"
   mode; if it is on the surface, ensure that it can move on next step;
   either DistanceToIn(p,v) or DistanceToOut(p,v) should return a finite
@@ -124,11 +128,13 @@ interfaces                                       interfaces-V09-01-04
 ----------
 - Reviewed classes for handling of Qt widgets.
 
-materials                                        materials-V09-01-19
+materials                                        materials-V09-01-20
 ---------
 - Added SetName() method to G4Element, G4Isotope, G4Material for use
   in detector persistency. Use "const G4String&" for accessors, instead
   of implicit copy...
+- Added dummy default constructor in G4OpticalSurface and G4SurfaceProperty.
+- Removed debug printout function Overwrite().
 
 particles                                        particles-V09-01-13
 ---------
