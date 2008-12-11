@@ -184,7 +184,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-41
+processes/electromagnetic/lowenergy             emlowen-V09-01-44
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -194,6 +194,7 @@ processes/electromagnetic/lowenergy             emlowen-V09-01-41
   calculated by the model corresponds to the original FORTRAN-Penelope;
   the difference was only for compounds materials and below 1 keV, so
   irrelevant for virtually all applications.
+  Fixes to G4PenelopeBremsstrahlungContinuous.
 - Updated low energy limits of Geant4-DNA e- models (Brenner-Zaider and
   Champion's elastic scattering and Emfietzoglou's excitation).
   Fixed vector initialization and EOF protection in G4FinalStateElasticChampion.
@@ -352,6 +353,8 @@ data sets
 examples                                         examples-V09-02-00
 --------
 - Updated reference outputs.
+- advanced/air_shower (air_shower-V09-01-05)
+  o Updated README.
 - advanced/brachytherapy (brachy-V09-01-03)
   o Corrected and updated input macros.
 - advanced/gammaray_telescope (gammaraytel-V09-01-02)
