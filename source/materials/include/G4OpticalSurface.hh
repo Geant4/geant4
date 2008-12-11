@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.10 2008-07-21 20:54:57 gum Exp $
+// $Id: G4OpticalSurface.hh,v 1.11 2008-12-11 10:23:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,22 +83,10 @@ class G4MaterialPropertiesTable;
 class G4OpticalSurface : public G4SurfaceProperty
 {
 
-public: // Without description
-  
-        //////////////
-        // Operators
-        //////////////
-  
-	G4OpticalSurface(const G4OpticalSurface &right);
-	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
-  
-	G4int operator==(const G4OpticalSurface &right) const;
-	G4int operator!=(const G4OpticalSurface &right) const;
-
 public: // With description
 
         ////////////////////////////////
-        // Constructors and Destructor
+        // Constructor
         ////////////////////////////////
 
 	G4OpticalSurface(const G4String& name,
@@ -110,17 +98,28 @@ public: // With description
 
 public: // Without description
 
+        //////////////
+        // Constructors and destructor
+        //////////////
+
+	G4OpticalSurface();
 	virtual ~G4OpticalSurface();
+	G4OpticalSurface(const G4OpticalSurface &right);
+  
+        //////////////
+        // Operators
+        //////////////
+  
+	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
+  
+	G4int operator==(const G4OpticalSurface &right) const;
+	G4int operator!=(const G4OpticalSurface &right) const;
 
 	////////////
 	// Methods
         ////////////
 
-	// public methods
-
 public: // With description
-
-        virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
 
         G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
         // Returns the optical surface finish.

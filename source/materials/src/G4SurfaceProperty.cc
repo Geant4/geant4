@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.cc,v 1.4 2008-07-21 20:55:34 gum Exp $
+// $Id: G4SurfaceProperty.cc,v 1.5 2008-12-11 10:23:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,9 +60,17 @@ G4SurfaceProperty::G4SurfaceProperty( const G4String& name,
   theSurfacePropertyTable.push_back(this);
 }
 
+//
+// Dummy constructor
+//
+G4SurfaceProperty::G4SurfaceProperty()
+  : theName("Dielectric"), theType(dielectric_metal)
+{
+  theSurfacePropertyTable.push_back(this);
+}
+
 G4SurfaceProperty::~G4SurfaceProperty()
 {
-  Overwrite();
 }
 
 //
