@@ -47,7 +47,7 @@
 #include "G4GeometryTolerance.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
 #include "G4ChordFinder.hh"
-#include "G4BrentLocator.hh"
+#include "G4MultiLevelLocator.hh"
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -85,7 +85,7 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
 
   // Definding Intersection Locator and his parameters
   if(vLocator==0){
-    fIntersectionLocator= new G4BrentLocator(theNavigator);
+    fIntersectionLocator= new G4MultiLevelLocator(theNavigator);
     fAllocatedLocator=true;
   }else{
     fIntersectionLocator=vLocator;
