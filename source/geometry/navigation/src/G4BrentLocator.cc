@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
+// $Id: G4BrentLocator.cc,v 1.5 2008-12-11 10:13:41 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator implementation
@@ -182,11 +182,11 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
   {
-     G4cerr << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+     G4cerr << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
             << G4endl
             << "          Intermediate F point is on top of starting point A."
             << G4endl;
-     G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
+     G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
                  "IntersectionPointIsAtStart", JustWarning,
                  "Intersection point F is exactly at start point A." ); 
   }
@@ -240,11 +240,11 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       if( ApproxIntersecPointV.GetCurveLength() > 
           CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
-        G4cerr << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+        G4cerr << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
                << G4endl
                << "        Intermediate F point is more advanced than"
                << " endpoint B." << G4endl;
-        G4Exception("G4PropagatorInField::LocateIntersectionPoint()", 
+        G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
                     "IntermediatePointConfusion", FatalException,
                     "Intermediate F point is past end B point" ); 
       }
@@ -466,7 +466,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         }
         if( curveDist < 0.0 )
         {
-          G4cerr << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+          G4cerr << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
                  << G4endl
                  << "        Error in advancing propagation." << G4endl;
           fVerboseLevel = 5; // Print out a maximum of information
@@ -506,7 +506,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
           G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
                  << depth << G4endl;
 
-          G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+          G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                       "FatalError", FatalException,
                       "Error in advancing propagation.");
         }
@@ -523,7 +523,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       if( substep_no >= trigger_substepno_print )
       {
         G4cout << "Difficulty in converging in "
-               << "G4PropagatorInField::LocateIntersectionPoint():"
+               << "G4BrentLocator::EstimateIntersectionPoint()"
                << G4endl
                << "    Substep no = " << substep_no << G4endl;
         if( substep_no == trigger_substepno_print )
@@ -678,14 +678,14 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       && !there_is_no_intersection
       && !found_approximate_intersection )
   {
-    G4cerr << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+    G4cerr << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
            << G4endl
            << "          Convergence is requiring too many substeps: "
            << substep_no << G4endl;
     G4cerr << "          Abandoning effort to intersect. " << G4endl;
     G4cerr << "          Information on start & current step follows in cout."
            << G4endl;
-    G4cout << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+    G4cout << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
            << G4endl
            << "          Convergence is requiring too many substeps: "
            << substep_no << G4endl;
@@ -707,27 +707,27 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
     G4cout.precision( 10 ); 
     G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
     G4double full_len = CurveEndPointVelocity.GetCurveLength();
-    G4cout << "ERROR - G4PropagatorInField::LocateIntersectionPoint()"
+    G4cout << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
            << G4endl
            << "        Undertaken only length: " << done_len
            << " out of " << full_len << " required." << G4endl;
     G4cout << "        Remaining length = " << full_len - done_len << G4endl; 
 
-    G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+    G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                 "UnableToLocateIntersection", FatalException,
                 "Too many substeps while trying to locate intersection.");
   }
   else if( substep_no >= warn_substeps )
   {  
     G4int oldprc= G4cout.precision( 10 ); 
-    G4cout << "WARNING - G4PropagatorInField::LocateIntersectionPoint()"
+    G4cout << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
            << G4endl
            << "          Undertaken length: "  
            << CurrentB_PointVelocity.GetCurveLength(); 
     G4cout << " - Needed: "  << substep_no << " substeps." << G4endl
            << "          Warning level = " << warn_substeps
            << " and maximum substeps = " << max_substeps << G4endl;
-    G4Exception("G4PropagatorInField::LocateIntersectionPoint()",
+    G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                 "DifficultyToLocateIntersection", JustWarning,
                 "Many substeps while trying to locate intersection.");
     G4cout.precision( oldprc ); 
