@@ -177,7 +177,7 @@ physics_lists                                    phys-lists-V09-01-19
 - Added interfaces to G4PhysicsListFactory (ALICE request).
 - Added names to string models builders.
 - G4HadronElasticPhysics: added optional Barashenkov cross-section
-- Added QBBCG option to QBBC and G4PhysicsListFactory.
+- Added QBBCG option to QBBC and G4PhysListFactory.
 - G4EmStandardPhysics_option1: disabled 'ApplyCuts' option.
 - G4EmStandardPhysics_option3: 'linLossLimit' set to be default (0.01).
 
