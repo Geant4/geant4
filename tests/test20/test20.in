@@ -4,7 +4,7 @@
 /control/verbose 2
 /run/verbose 1
 /run/initialize
-/tracking/verbose 1
+/tracking/verbose 0
 #
 #/calor/setAbsThick 1 mm 
 #/calor/setAbsRad 1 mm
