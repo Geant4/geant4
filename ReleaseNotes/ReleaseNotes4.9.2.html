@@ -122,7 +122,17 @@ a recompilation of user applications is required.
 <P> </P>
 <B>Geometry</B>
 <P> </P>
->>>>> INPUT HERE !!!!!!!!!!!
+An additional optional Boolean argument has been added to the signature
+of <TT>ComputeSafety()</TT> in <TT>G4Navigator</TT>. Any class inheriting
+from <TT>G4Navigator</TT> has to adapt to the new signature.
+
+<P> </P>
+<B>Particles</B>
+<P> </P>
+Masses and widths of particles have been updated to be compliant with
+PDG-2008. This <U>requires</U> for consistency the upgrade to a new version of
+the underlying CLHEP library (CLHEP-2.0.4.2) for up-to-date constants
+used by Geant4.
 
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
@@ -157,22 +167,24 @@ Please see the last section for the corresponding details.
 
 <H2>4. New Developments and Capabilities </H2>
 
-<B>Geometry</B>
+<B>Geometry & Field</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>New <I>locators</I> classes and options are available for trasportation in
+    field (Simple, Brent, Multi-level) providing for increased accuracy and
+    CPU speed according to the different cases.</LI>
 </UL>
 
 <B>Detector description persistency</B>
 <UL>
+<LI>A new module for importing detector descriptions in ASCII text format
+    comes now built-in in Geant4. Such description can be used in alternative
+    to GDML or other persistency techniques, and is provided with a proper set
+    of UI commands.</LI>
 <LI>GDML: the GDML plugin module now supports also export capabilities,
     replacing completely the external GDML module required in older versions
     of the GDML library. The GDML schema has been upgraded to support missing
     solids and parameterisations.
     The new GDML-3_0_0 schema is now recommended.</LI>
-<LI>A new module for importing detector descriptions in ASCII text format
-    comes now built-in in Geant4. Such description can be used in alternative
-    to GDML or other persistency techniques, and is provided with a proper set
-    of UI commands.</LI>
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -208,6 +220,13 @@ Please see the last section for the corresponding details.
 <!-- ============================================== -->
 
 <H2>5. Expected effects on physics and performance</H2>
+
+<B>Geometry</B>
+<UL>
+<LI>Implementation improvements in <TT>G4Cons</TT> and <TT>G4Tubs</TT>
+    brings speed improvements of the order of 20% for those shapes
+    with pure-tracking (i.e. without field propagation or physics).</LI>
+</UL>
 
 <B>Standard Electromagnetic physics</B>
 <UL>
@@ -698,10 +717,6 @@ please refer to the corresponding History files provided in most packages):
         classes <TT>AdjustementOfFoundIntersection()</TT> using surface-normal
         of the intersecting solid to boost accuracy. Added the optional call
         to the new method in each concrete locator.</LI>
-    </UL></LI>
-<LI><B>Solids (Boolean)</B>
-    <UL>
-    <LI></LI>
     </UL></LI>
 <LI><B>Solids (CSG)</B>
     <UL>
