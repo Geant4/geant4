@@ -137,7 +137,38 @@ used by Geant4.
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
->>>>> INPUT HERE !!!!!!!!!!!
+<U>Geant4-DNA processes</U>: new elastic scattering models are available
+for electrons, replacing the old ones. The user may use in his/her physics
+list either the Screened Rutherford model or the Champion model; the models
+are alternative each other and should not be used together.<BR>
+To use the Screened Rutherford model in the physics list, one should define
+the elastic process as follows:
+<PRE>
+  typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,
+                       G4FinalStateElasticScreenedRutherford> 
+          ElasticScreenedRutherfordHE;
+  typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,
+          G4FinalStateElasticBrennerZaider> 
+          ElasticScreenedRutherfordLE;
+</PRE>
+and register it as follows:
+<PRE>
+  processManager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
+  processManager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
+</PRE>
+More details can be found in the advanced example <TT>microdosimetry</TT>.<BR>
+To use the Champion model in the physics list, define the process as follows:
+<PRE>
+  typedef G4DNAProcess<G4CrossSectionElasticChampion,
+                       G4FinalStateElasticChampion> ElasticChampion;
+</PRE>
+and register it as follows:
+<PRE>
+  processManager->AddDiscreteProcess(new ElasticChampion("ElasticChampion"));
+</PRE>
+Documentation is also available from the
+<A HREF="https://twiki.cern.ch/twiki/bin/view/Geant4/LowEnergyElectromagneticPhysicsWorkingGroup/">Low Energy EM working group page</A>.
+
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
@@ -189,7 +220,33 @@ Please see the last section for the corresponding details.
 
 <B>Low Energy Electromagnetic physics</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>Doppler broadening effect added in <TT>G4LowEnergyCompton</TT> and
+    <TT>G4LowEnergyComptonPolarized</TT> (same model).</LI>
+<LI>Ionisation cross sections for PIXE
+    <UL>
+    <LI>New Orlic semi-empirical model for L-Shells with protons projectiles
+        (<TT>G4OrlicLCrossSection</TT>);</LI>
+    <LI>New ECPSSR model for K-Shells with protons and alpha projectiles
+        (<TT>G4ecpssrCrossSection</TT>);</LI>
+    <LI>New Paul model for K-Shells (<TT>G4PaulKCrossSection</TT>).</LI>
+    </UL></LI>
+<LI>Added new stopping power model for ions, using by default ICRU 73 data
+    tables. New templated classes are <TT>G4IonParametrisedLossModel</TT>
+    and <TT>G4IonParametrisedLossTable</TT>.</LI>
+<LI>Geant4-DNA processes:
+    <UL>
+    <LI>New charge transfer process by incident protons: two cross-section and
+        one final state policy classes: <TT>G4CrossSectionChargeTransferCH</TT>,
+        <TT>G4CrossSectionChargeTransferExp</TT>,
+        <TT>G4FinalStateChargeTransferProton</TT>;</LI>
+    <LI>Two new total cross section classes for electron elastic scattering in
+        liquid water below and above <TT>200 eV</TT>:
+        <TT>G4CrossSectionElasticScreenedRutherfordLE</TT> and
+        <TT>G4CrossSectionElasticScreenedRutherfordHE</TT>;</LI>
+    <LI>New alternative elastic scattering model for electrons in liquid water
+        from C.Champion's model: <TT>G4CrossSectionElasticChampion</TT> and
+        <TT>G4FinalStateElasticChampion</TT>.</LI> 
+    </UL></LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
