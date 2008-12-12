@@ -89,7 +89,7 @@ class G4Nucleon : public G4VKineticNucleon
     G4LorentzVector theMomentum;
     G4double theBindingE;
     G4ParticleDefinition * theParticleType;
-    G4boll isHit;
+    G4bool isHit;
 
 
 };
