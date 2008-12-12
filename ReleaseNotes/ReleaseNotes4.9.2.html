@@ -769,6 +769,7 @@ please refer to the corresponding History files provided in most packages):
 <LI>Corrected definition of copy-constructor and <TT>operator=()</TT> in
     <TT>G4PhysicsVector</TT> and added corresponding definitions in derived
     classes, where needed.</LI>
+<LI>Added missing constructor <TT>G4String(const char*, str_size)</TT>.</LI>
 <LI>Modified <TT>G4RandomDirection</TT> global function to use unit radius
     sphere surface algorithm instead of 8-quadrants technique, giving ~30%
     performance boost in dedicated stress tests.</LI>
@@ -1426,9 +1427,9 @@ please refer to the corresponding History files provided in most packages):
         <LI><TT>exdrmPhysicsList</TT>: fixed definition of cuts; simplified
             logic for setting of hadronic physics; corrected problem of double
             instantiation of radioactive decay.</LI>
-        <LI>Fixed compilation warnings.</LI>
         <LI>Use AIDA setup from central scripts. Updated analysis code and
             macros with AIDA.</LI>
+        <LI>Fixed compilation warnings.</LI>
         </UL></LI>
     <LI>runAndEvent/RE03
         <UL>
