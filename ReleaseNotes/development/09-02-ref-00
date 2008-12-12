@@ -107,11 +107,12 @@ geometry/volumes                                 geomvol-V09-01-03
 - Corrected singleton definition for G4ReflectionFactory.
 - Return 'const G4String&' instead of copy in GetVolumesNameExtension().
 
-global                                           global-V09-01-17
+global                                           global-V09-01-18
 ------
 - Added header G4RandomTools.hh, implementing global utility methods for
   random Lambertian vector and random plane vector. Implementation derived
   from G4OpBoundaryProcess.
+- Added missing constructor G4String(const char*, str_size).
 - Changed date for release 9.2.
 
 graphics_reps                                    greps-V09-01-06
@@ -170,7 +171,7 @@ persistency/gdml                                 gdml-V09-01-21
 - Added implementation .cc file for G4GDMLParser.
 - Cleared compilation warnings on Intel-icc compiler.
 
-physics_lists                                    phys-lists-V09-01-19
+physics_lists                                    phys-lists-V09-01-20
 -------------
 - Added sigma_c+, sigma_c++ in the list of stable hadrons.
 - Added charge exchange process to QBBC physics lists.
@@ -180,6 +181,9 @@ physics_lists                                    phys-lists-V09-01-19
 - Added QBBCG option to QBBC and G4PhysListFactory.
 - G4EmStandardPhysics_option1: disabled 'ApplyCuts' option.
 - G4EmStandardPhysics_option3: 'linLossLimit' set to be default (0.01).
+- Added missing dependency to "run" category in GLOBLIBS for DLL parsing
+  induced by G4PhysicsListFactory which now brings in dependency on
+  G4VModularPhysicsList.
 
 processes/decay                                 decay-V09-01-04
 ---------------
@@ -429,7 +433,7 @@ examples                                         examples-V09-02-00
 - extended/persistency/P03 (exampleP03-V09-01-03)
   o New example showing usage of ASCII text persistency for detector
     description.
-- extended/radioactivedecay/exrdm (exrdm-V09-01-02)
+- extended/radioactivedecay/exrdm (exrdm-V09-01-04)
   o Updated analysis code and macros with AIDA.
 - extended/runAndEvent/RE03 (exampleRE03-V09-01-00)
   o Add new input macro "run4.mac" with cylindrical scoring mesh.
