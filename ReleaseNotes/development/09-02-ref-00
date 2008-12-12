@@ -190,7 +190,7 @@ processes/electromagnetic/adjoint               emadjoint-V09-01-00
 - First release of adjoint (reverse Monte Carlo) processes for Compton,
   photo-electric and Bremsstrahlung.
 
-processes/electromagnetic/lowenergy             emlowen-V09-01-44
+processes/electromagnetic/lowenergy             emlowen-V09-01-45
 -----------------------------------
 - Added new stopping power model for ions, using by default ICRU 73
   data tables. New templated classes: G4IonParametrisedLossModel and
@@ -399,9 +399,10 @@ examples                                         examples-V09-02-00
   o EM options: 20bins/decade, LinLossLimit=default=0.01.
 - extended/eventgenerator/exgps (exgps-V09-01-02)
   o Updated analysis code and macros with AIDA.
-- extended/field/field04 (fieldex04-V09-01-05)
+- extended/field/field04 (fieldex04-V09-01-06)
   o Changed physics list to AddPhysicsList("emstandard").
     Added charge exchange.
+  o Fixed bug: provide density with units.
 - extended/hadronic/Hadr00 (exhadr00-V09-01-02)
 - extended/hadronic/Hadr01 (exhadr01-V09-01-04)
   o Added charge exchange.
