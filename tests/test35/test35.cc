@@ -147,11 +147,12 @@ int main(int argc, char** argv)
   G4double eBound    = 70.*MeV;
   G4double kBound    = 0.2;
   G4Material* material = 0;
-  G4bool nevap = false;
-  G4bool gtran = false;
-  G4bool gemis = false;
-  G4bool xssolang = true;
-  G4bool xsbgg    = true;
+  G4bool nevap       = false;
+  G4bool gtran       = false;
+  G4bool gemis       = false;
+  G4bool xssolang    = true;
+  G4bool xsbgg       = true;
+  G4bool saverand    = false;
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
@@ -303,6 +304,15 @@ int main(int argc, char** argv)
         (*fin) >> verbose;
         G4cout << "### New verbose level " << verbose << G4endl;
 	G4NistManager::Instance()->SetVerbose(verbose);
+      } else if(line == "#saverand") {
+        saverand = true;
+      } else if(line == "#random") {
+        G4String sss("");
+        (*fin) >> sss;
+	CLHEP::HepRandom::restoreEngineStatus(sss);
+	if(verbose>0) G4cout << "Random Engine restored from file <"
+			     << sss << ">" << G4endl;
+	CLHEP::HepRandom::showEngineStatus();
       } else if(line == "#position(mm)") {
         (*fin) >> nx >> ny >> nz;
         aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
@@ -439,9 +449,10 @@ int main(int argc, char** argv)
         GetInelasticCrossSection(&dParticle, elm);
     }
 
-    G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
+    G4double factor = 
+      cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
     cout << "### factor  = " << factor
-           << "    cross(b)= " << cross_sec/barn << endl;
+	 << "    cross(b)= " << cross_sec/barn << endl;
 
     double coeff = cross_sec*GeV*1000.0/(barn*(G4double)nevt);
     int    nmomtet [50][20];
@@ -522,6 +533,8 @@ int main(int argc, char** argv)
       if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
       }
+      if(saverand) CLHEP::HepRandom::saveEngineStatus("random.txt");
+     
       G4double e0 = energy;
       if(sigmae > 0.0) {
         do {e0 = G4RandGauss::shoot(energy,sigmae);} while (e0 < 0.0);
