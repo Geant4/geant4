@@ -8,7 +8,7 @@
 # ---- Assemble PhysicsList with photon processes a' la Penelope
 /lowenergy/addPhysics photon-penelope
 /lowenergy/addPhysics electron-penelope
-/lowenergy/addPhysics positron-standard
+/lowenergy/addPhysics positron-penelope
 #
 /run/initialize
 #
@@ -197,14 +197,14 @@
 #
 /gun/particle gamma
 #------------------
-/process/inactivate LowEnRayleigh
-/process/inactivate LowEnCompton
-/process/inactivate LowEnPhotoElec
+/process/inactivate PenRayleigh
+/process/inactivate PenCompton
+/process/inactivate PenPhotoElec
 /process/inactivate eIoni
-/process/inactivate LowEnergyIoni
+/process/inactivate PenelopeIoni
 /process/inactivate msc
 /process/inactivate eBrem
-/process/inactivate LowEnBrem
+/process/inactivate PenelopeBrem
 
 /calor/setAbsMat Aluminium
 #======================
