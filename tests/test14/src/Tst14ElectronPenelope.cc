@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronPenelope.cc,v 1.3 2006-06-29 21:42:02 gunter Exp $
+// $Id: Tst14ElectronPenelope.cc,v 1.4 2008-12-15 10:23:46 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -31,6 +31,8 @@
 // History:
 // -----------
 // 22 Feb 2003 MGP          Designed for modular Physics List
+// 15 Dec 2008 L. Pandola   Replace LowEnergyIonisation with 
+//                          PenelopeIonisation
 //
 // -------------------------------------------------------------------
 
@@ -40,7 +42,7 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MultipleScattering.hh"
-#include "G4LowEnergyIonisation.hh"
+#include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
 
 
@@ -65,10 +67,8 @@ void Tst14ElectronPenelope::ConstructProcess()
       if (particleName == "e-") 
 	{
 	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
-	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
+	  manager->AddProcess(new G4PenelopeIonisation,    -1, 2,2);
 	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
-	}   
- 	  // Ionisation not available yet
-         
+	}            
     }
 }
