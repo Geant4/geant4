@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.23 2006-06-29 21:42:16 gunter Exp $
+// $Id: Tst14PhysicsList.cc,v 1.24 2008-12-15 10:22:59 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -31,6 +31,7 @@
 // History:
 // -----------
 // 22 Feb 2003 MGP          Re-designed for modular Physics List
+// 15 Dec 2008 L. Pandola   Added constructor for e+ Penelope
 //
 // -------------------------------------------------------------------
 
@@ -45,6 +46,7 @@
 #include "Tst14ElectronEEDL.hh"
 #include "Tst14ElectronPenelope.hh"
 #include "Tst14PositronStandard.hh"
+#include "Tst14PositronPenelope.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
@@ -210,6 +212,22 @@ void Tst14PhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
+
+  if (name == "positron-penelope") 
+    {
+      if (positronIsRegistered) 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- positron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst14PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst14PositronPenelope(name) );
+	  positronIsRegistered = true;
+	}
+    }
+
 
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
     {
