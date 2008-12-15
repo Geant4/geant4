@@ -1,4 +1,4 @@
-$Id: History,v 1.330 2008-12-15 09:28:29 pandola Exp $
+$Id: History,v 1.331 2008-12-15 10:32:39 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.12.2008  L. Pandola, tag emlowen-V09-02-00
+	    Same as the previous one (emlowen-V09-01-46). I arrived too late.
 
 15.12.2008  L. Pandola, tag emlowen-V09-01-46
 	    Added G4PenelopeBremsstrahlungModel, namely bremsstrahlung according to Penelope 
