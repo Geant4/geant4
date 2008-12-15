@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.2 2008-12-05 09:15:43 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.3 2008-12-15 09:23:06 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -516,9 +516,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   else 
     //Penelope subtracted the fluorescence, but one has to match the databases
     eKineticEnergy = energySecondary+ioniEnergy-bindingEnergy;
-    
-  //VERIFICA QUI LA STORIA DEL LOCAL ENERGY DEPOSIT!
-
+  
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.0*eV;
 
