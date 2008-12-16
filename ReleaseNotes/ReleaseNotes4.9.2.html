@@ -130,9 +130,9 @@ from <TT>G4Navigator</TT> has to adapt to the new signature.
 <B>Particles</B>
 <P> </P>
 Masses and widths of particles have been updated to be compliant with
-PDG-2008. This <U>requires</U> for consistency the upgrade to a new version of
-the underlying CLHEP library (CLHEP-2.0.4.2) for up-to-date constants
-used by Geant4.
+PDG-2008. To maintain consistency this <U>requires</U>  the upgrade to a new version of
+the underlying CLHEP library (CLHEP-2.0.4.2), which includes up-to-date constants
+as used by Geant4.
 
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
@@ -140,7 +140,7 @@ used by Geant4.
 <U>Geant4-DNA processes</U>: new elastic scattering models are available
 for electrons, replacing the old ones. The user may use in his/her physics
 list either the Screened Rutherford model or the Champion model; the models
-are alternative each other and should not be used together.<BR>
+are alternatives and must not be used together.<BR>
 To use the Screened Rutherford model in the physics list, one should define
 the elastic process as follows:
 <PRE>
@@ -174,7 +174,6 @@ Documentation is also available from the
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 >>>>> INPUT HERE !!!!!!!!!!!
-
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
@@ -200,20 +199,19 @@ Please see the last section for the corresponding details.
 
 <B>Geometry & Field</B>
 <UL>
-<LI>New <I>locators</I> classes and options are available for trasportation in
-    field (Simple, Brent, Multi-level) providing for increased accuracy and
-    CPU speed according to the different cases.</LI>
+<LI>New <I>locator</I> classes and options are available for identifying the intersection point of a charged particle in a field. These are Simple, Brent, Multi-level and allow the user to investigate tradeoffs between increased accuracy and
+    CPU speed according to  the use case. We note that the Multi-level is used by default, to provide for robustness, and the Brent method is introduced as an alternative.</LI>
 </UL>
 
 <B>Detector description persistency</B>
 <UL>
 <LI>A new module for importing detector descriptions in ASCII text format
-    comes now built-in in Geant4. Such description can be used in alternative
-    to GDML or other persistency techniques, and is provided with a proper set
+    comes is now built into Geant4. Such a description can be used as an alternative
+    to GDML or other persistency techniques, and is provided with a corresponding set
     of UI commands.</LI>
-<LI>GDML: the GDML plugin module now supports also export capabilities,
-    replacing completely the external GDML module required in older versions
-    of the GDML library. The GDML schema has been upgraded to support missing
+<LI>GDML: the GDML plugin module adds export capabilities,
+    and thus replaces completely the external GDML module required in older versions
+    of Geant4. The GDML schema has been upgraded to support missing
     solids and parameterisations.
     The new GDML-3_0_0 schema is now recommended.</LI>
 </UL>
@@ -240,9 +238,9 @@ Please see the last section for the corresponding details.
 
 <B>Low Energy Electromagnetic physics</B>
 <UL>
-<LI>Doppler broadening effect added in <TT>G4LowEnergyCompton</TT> and
+<LI>Doppler broadening effect is added in <TT>G4LowEnergyCompton</TT> and
     <TT>G4LowEnergyComptonPolarized</TT> (same model).</LI>
-<LI>Ionisation cross sections for PIXE
+<LI>Ionisation cross sections for particle-induced X-ray Emission (PIXE)
     <UL>
     <LI>New Orlic semi-empirical model for L-Shells with protons projectiles
         (<TT>G4OrlicLCrossSection</TT>);</LI>
