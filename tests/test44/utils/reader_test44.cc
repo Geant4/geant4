@@ -31,6 +31,7 @@ int main(int argc, char** argv)
   string fname2[nidx] = {"H-110MeV-endep-EXP-norm-max.txt",
 			 "4He-144.3MeV-endep-EXP-M03-norm-max.txt",
 			 "12C100MeVen-dep-EXP-norm-max.txt"}; 
+  double zmax[nidx] = {120., 180., 40.};
 
   string fname = argv[1];
   int idx = 0;
@@ -45,8 +46,8 @@ int main(int argc, char** argv)
 
   string legend[3] = {"QBBC opt0", "QBBC opt2", "QBBC opt3"};
 
-  const int nbin = 3000;
-  double x[nbin], y[nbin];
+  const int nbinmax = 3000;
+  double x[nbinmax], y[nbinmax];
 
   //  const int n_exp = 41;
   //  int n_exp[nidx] = {41, 25, 79};
@@ -58,7 +59,7 @@ int main(int argc, char** argv)
   double maxJ, maxX, maxY, norm;
   char buffer[256];
 
-  //gROOT->Reset(); 
+  gROOT->Reset(); 
   gROOT->SetStyle("Plain");
   TCanvas *c1 = new TCanvas("c1", "c1",6,6,800,600);
   gStyle->SetOptStat(0);
@@ -85,11 +86,18 @@ int main(int argc, char** argv)
     x_exp[i] = 10.*x_exp[i];
   }
 
-  double x_max = x_exp[nn-1]*1.01;
+  //  double x_max = x_exp[nn-1]*1.01;
   string hist_title = tp[idx] + " " + te[idx] + " " + 
     teu[idx] + " " + "in Water, Geant4  " + refer;
 
   cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << endl;
+
+  TH1F* h0 = gPad->DrawFrame(0.0,0.0,zmax[idx],1.2,hist_title.c_str());
+  h0->GetXaxis()->SetTitle("z (mm)");
+  h0->GetYaxis()->SetTitle("dose (relative unit)");
+  h0->Draw("AXIS SAME");
+
+
   /*
   TH1  *h = new TH2F("h", hist_title.c_str(),100,0,x_max,11,0,1.1);
   h->SetLineStyle(2);
@@ -105,7 +113,7 @@ int main(int argc, char** argv)
   TGraph *gr = new TGraph(nn,x_exp,y_exp);
   gr->SetMarkerStyle(22);
   gr->SetMarkerSize(1.2);
-  gr->Draw("P");
+  gr->Draw("P SAME");
 
   TLegend *leg = new TLegend(0.2,0.65,0.45,0.86);
   leg->SetTextFont(52);
@@ -133,15 +141,18 @@ int main(int argc, char** argv)
     }
     cout << "File with MC <" << finName[j] << "> is opened" << endl;
    
-    hh[j] = new TH1D(hhh[j].c_str(),"",nbin,0.,300.);
+    string s1, s2, s3, s4;
+    double xmin = 0.0;
+    double xmax = 300.;
+    int bin;
+    in >> s1 >> s2 >> s3 >> bin >> s4;
+    if(bin > nbinmax) bin = nbinmax;
+    hh[j] = new TH1D(hhh[j].c_str(),"",bin,xmin,xmax);
     hh[j]->SetLineStyle(1);
     hh[j]->SetLineWidth(2);
     hh[j]->SetLineColor(j+2);
 
-    // Ignore first blank line
-    in.getline(buffer,256);
-
-    for (int k = 0; k < nbin; k++) {
+    for (int k = 0; k < bin; k++) {
       in >> x[k] >> y[k];
       if (!in.good()) {
         cout << "Stop reading results at k= " << k << endl;
@@ -153,7 +164,7 @@ int main(int argc, char** argv)
     }
 
     in >> maxJ >> maxX >> maxY;
-    cout << "Histo filled N= " << nbin << " maxJ= " << maxJ 
+    cout << "Histo filled N= " << bin << " maxJ= " << maxJ 
 	 << " maxX= " << maxX << " maxY= " << maxY << endl;
     norm = maxY;
     hh[j]->Scale(1./norm);
