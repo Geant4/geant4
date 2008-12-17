@@ -590,9 +590,11 @@ QTMOC="$g4_qt_moc"
 export QTFLAGS
 export QTLIBS
 export QTMOC
+if test "x\$g4non_display" = "x" ; then
 echo "On this machine the QTFLAGS=\$QTFLAGS"
 echo "On this machine the QTLIBS=\$QTLIBS"
 echo "On this machine the QTMOC=\$QTMOC"
+fi
 fi
 
 if [ "X$g4vis_build_openglqt_driver" = "Xy" -o "X$g4vis_build_openglqt_driver" = "Xy" ] ; then
@@ -608,9 +610,11 @@ GLQTLIBS="$g4_qt_libs $g4_qt_gl_libs"
 export QTFLAGS
 export QTMOC
 export GLQTLIBS
+if test "x\$g4non_display" = "x" ; then
 echo "On this machine the QTFLAGS=\$QTFLAGS"
 echo "On this machine the GLQTLIBS=\$GLQTLIBS"
 echo "On this machine the QTMOC=\$QTMOC"
+fi
 fi
 
 
@@ -622,13 +626,17 @@ fi
 if [ X$g4lib_build_gdml = Xy ] ; then
 G4LIB_BUILD_GDML=1
 export G4LIB_BUILD_GDML
+if test "x\$g4non_display" = "x" ; then
 echo "On this machine the G4LIB_BUILD_GDML=\$G4LIB_BUILD_GDML"
+fi
 fi 
 
 if [ X$g4lib_build_gdml = Xy ] ; then
 XERCESCROOT=$g4gdml_xercesc_root
 export XERCESCROOT
+if test "x\$g4non_display" = "x" ; then
 echo "On this machine the XERCESCROOT=\$XERCESCROOT"
+fi
 fi 
 
 
@@ -770,17 +778,19 @@ fi
 #
 if [ $G4LIB_BUILD_SHARED ] ; then
 #
-# Warning about LD_LIBRARY_PATH
+# Warning about LD_LIBRARY_PATH unless g4non_display is set!
 #
-echo ''
-echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
-echo ''
-echo 'NOTE : verify that the correct path for the CLHEP library'
-echo '- $CLHEP_BASE_DIR/lib - is included in the $LD_LIBRARY_PATH'
-echo 'variable in your environment, and no other outdated installations'
-echo 'of CLHEP are by chance referenced through $LD_LIBRARY_PATH and'
-echo 'present in your system !'
-echo ''
+if test "x\$g4non_display" = "x" ; then
+    echo ''
+    echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+    echo ''
+    echo 'NOTE : verify that the correct path for the CLHEP library'
+    echo '- $CLHEP_BASE_DIR/lib - is included in the $LD_LIBRARY_PATH'
+    echo 'variable in your environment, and no other outdated installations'
+    echo 'of CLHEP are by chance referenced through $LD_LIBRARY_PATH and'
+    echo 'present in your system !'
+    echo ''
+fi
 
 if [ $LD_LIBRARY_PATH ] ; then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
