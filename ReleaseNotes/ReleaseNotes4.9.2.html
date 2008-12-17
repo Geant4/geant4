@@ -273,24 +273,24 @@ Please see the last section for the corresponding details.
     includes tuning of the model to electron data.<BR>
     A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
     hadrons in available as a prototype for validation.</LI>
-<LI>New Bremstrahlung model class, <TT>G4eBremstrahlungRelModel</TT>, includes
+<LI>New Bremsstrahlung model class, <TT>G4eBremsstrahlungRelModel</TT>, includes
     advanced description of LPM effect; it can be applied for electrons and
     positrons with <TT>E > 1 GeV</TT> and provides gamma spectrum describing
     well thin-target experimental data.<BR>
-    The density supression effect in the old <TT>G4eBremstrahlungModel</TT> 
+    The density suppression effect in the old <TT>G4eBremsstrahlungModel</TT> 
     have been reviewed and upgraded.</LI>
 <LI>Cubic spline of <TT>dedx</TT> and cross section tables are used by default.</LI>
 <LI>The <TT>G4IonFluctuations</TT> model has been updated: at high energy 
     it is using <TT>G4UniversalFluctuation</TT>, which provides Landau tail of
     fluctuations. 
-    At low energies Gaussion distribution is based on experimental data.</LI>
+    At low energies Gaussian distribution is based on experimental data.</LI>
 <LI>An extra limitation of step by the <TT>G4Cerenkov</TT> process has been
     added in order to provide more smooth X-ray emission near Cerenkov
     threshold of media.</LI> 
 <LI>A new <TT>G4EmSaturation</TT> class is introduced for sampling of Birks
     saturation.</LI>
 <LI>A new <TT>G4ElectronIonPair</TT> helper class based on ICRU'31 report has
-    been added; it can be used for sampling electorn/ion pairs in sensitive
+    been added; it can be used for sampling electron/ion pairs in sensitive
     detectors.</LI>
 <LI>A new <TT>G4EmConfigurator</TT> class can be used for configuration of
     models in physics lists.</LI>
@@ -351,7 +351,7 @@ Please see the last section for the corresponding details.
     provides wider shower (about 0.5% measured for the CMS calorimeter).</LI>
 <LI>New relativistic Bremsstrahlung model is applied for electrons and 
     positrons; it provides gamma spectrum describing thin-target CERN and
-    SLAC data.</LI>
+    SLAC data and may have effect up to 1% on calorimeter responses at high energy.</LI>
 <LI>The usage of the Spline approximation of <TT>dedx</TT> and cross section
     tables provides Bragg peak position stable within <TT>0.1 mm</TT> versus
     variation of production cut or step limit.</LI>
@@ -567,10 +567,10 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added initialization of <TT>SubType</TT> for all processes.</LI>
     <LI>Added Spline option and promoted to public method
         <TT>ComputeTrueStep()</TT> in <TT>G4EnergyLossForExtrapolator</TT>.
-        Added method <TT>TrueStepLength()</TT>; fixed initialisation before
+        Added method <TT>TrueStepLength()</TT>; fixed initialization before
         a step.</LI>
     <LI>Several fixes and further developments in <TT>G4Mu*</TT> models and
-        associated processesin order to be used as base classes for hadron
+        associated processes in order to be used as base classes for hadron
         induced bremsstrahlung and <TT>e+e-</TT> pair production.</LI>
     </UL></LI>
 <LI><B>Polarisation</B>
@@ -603,7 +603,7 @@ please refer to the corresponding History files provided in most packages):
             <LI>Using <TT>StepStatus</TT> from </TT>preStepPoint</TT> to
                 identify first step for a given track instead of the step
                 number. Fixing a problem observed in ATLAS of small step
-                limits with suspended tracks when using Cherenkov process.</LI>
+                limits with suspended tracks when using Cerenkov process.</LI>
             <LI>Added protection against sampling scattering angle with zero
                 transport cross section.
             </UL></LI>
@@ -614,10 +614,10 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI><TT>G4eBremsstrahlungModel</TT>: corrected Migdal constant to be
             set to the value as in <TT>G4eBremsstrahlungRelModel</TT>.</LI>
-        <LI><TT>G4eBremsstrahlungRelModel</TT>: revised LPM and density effect supressions;
-            results fit CERN thin target exerimental data at 150-300 GeV; 
+        <LI><TT>G4eBremsstrahlungRelModel</TT>: revised LPM and density effect suppressions;
+            results fit CERN thin target experimental data at 150-300 GeV; 
             defined threshold energy for LPM effect depending on atomic number; 
-            defined Thomas-fermi screening function (a'la Tsai).</LI>
+            defined Thomas-Fermi screening function (a'la Tsai).</LI>
         <LI><TT>G4eBremsstrahlung</TT>: uses <TT>G4eBremsstrahlungRelModel</TT> above
             <TT>1 GeV</TT> by default.</LI>
         </UL></LI>
@@ -666,7 +666,7 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Utils</B>
     <UL>
     <LI>New class <TT>G4VMscModel</TT> to keep general multiple-scattering
-        parameters and Get/SEt methods.</LI>
+        parameters and Get/Set methods.</LI>
     <LI>New class <TT>G4EmElementSelector</TT>, a helper class to sample random
         <TT>G4Element</TT> in a compound material.</LI>
     <LI>New helper classes: <TT>G4EmConfigurator</TT>, class to add model per
@@ -693,7 +693,7 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4VEmModel</TT>, <TT>G4VEmProcess</TT>,
         <TT>G4VMultipleScattering</TT>, <TT>G4VEnergyLossProcess</TT>:
         <UL>
-        <LI>Reodering of members and methods of classes and improved comments.</LI> 
+        <LI>Reordering of members and methods of classes and improved comments.</LI> 
         <LI>Setting default table size <TT>0.1 keV - 100 TeV</TT> in 84 bins.</LI>
         <LI>Renamed and improved method <TT>MicroscopicCrossSection()</TT> by
             <TT>CrossSectionPerVolume()</TT>.</LI>
@@ -702,7 +702,7 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI><TT>G4VEmModel</TT>: 
         <UL>
-        <LI>Provided optimisations of <TT>SelectRandomAtom()</TT> and
+        <LI>Provided optimizations of <TT>SelectRandomAtom()</TT> and
             <TT>SelectIsotope()</TT>.</LI> 
         <LI>Added methods <TT>GetParticleCharge()</TT>, <TT>GetChargeSquareRatio()</TT>,
             <TT>CorrectionsAlongStep()</TT> and <TT>ActivateNuclearStopping()</TT>
@@ -723,7 +723,7 @@ please refer to the corresponding History files provided in most packages):
             process is used for ions.</LI>
         <LI>Added new correction methods in order to provide a smooth transition
             between low-energy parameterization and Bethe-Bloch model.</LI> 
-        <LI><TT>dEdx</TT> data for ions are initialised at the start
+        <LI><TT>dEdx</TT> data for ions are initialized at the start
             of a run for materials used in geometry.</LI> 
         <LI>Updated search for ion/material pairs.</LI> 
         <LI>Defined the correction vector <TT>25 keV - 2.5 MeV</TT> in 20 bins
