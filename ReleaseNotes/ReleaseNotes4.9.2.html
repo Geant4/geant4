@@ -177,7 +177,12 @@ Documentation is also available from the
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
->>>>> INPUT HERE !!!!!!!!!!!
+<UL>
+  <LI>G4HadronicProcess::MeanFreePath() was changed from protected to public.
+      This is a temporary measure: in the future it will be made protected again and
+      a new public method with another name will be provided.</LI>
+  <LI>G4HadronicProcess::SetDispatch() has been removed.  It is no longer used.</LI>
+</UL>
 
 <P> </P>
 <B>Data Sets</B>
@@ -301,7 +306,66 @@ Please see the last section for the corresponding details.
 
 <B>Hadronic physics</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>A new hadronic process subtype enum G4HadronicProcessType was created
+    in order to identify active hadronic processes:
+    <PRE> 
+    enum G4HadronicProcessType
+    {
+      fHadronElastic =   111,
+      fHadronInelastic = 121,
+      fCapture =         131,
+      fFission =         141,
+      fHadronAtRest =    151,
+      fChargeExchange =  161
+    };
+    </PRE></LI>
+
+<LI>Bertini cascade:
+  <UL>
+    <LI> Barrier penetration was added to the Coulomb barrier.</LI>
+    <LI> A bug in the final state multiplicity sampling was fixed, thereby 
+         fixing the quasi-elastic peak which was too large.</LI>
+    <LI> Very low values of two-body internal pion cross sections above 7 GeV 
+         were brought up to PDG values</LI> 
+  </UL></LI>
+
+<LI>Binary cascade: a propagate interface was added.  This allows 
+    particles produced outside the nucleus by string (or other) high energy 
+    models to re-enter and interact with the nucleus. This could in principle 
+    increase the particle multiplicity of high energy events. </LI>
+
+<LI>The INCL/ABLA cascade/evaporation model is now officially released.
+    It can be used for incident p, n, d, t, 3He, alpha and pions from 200 MeV 
+    up to 3 GeV, on nuclei ranging from carbon to uranium.</LI>
+
+<LI>The QMD (quantum molecular dynamics nucleus-nucleus collision) code
+    is now in beta release.  It is valid from 50 MeV to 5 GeV.</LI>
+
+<LI>The class G4GlauberGribovCrossSection now provides a smooth transition 
+     from the Barashenkov cross sections at 90 GeV.</LI>
+
+<LI>G4ChargeExchangeProcess and G4ChargeExchange model are now ready to
+     used in Physics Lists; low energy threshold is set to 1.0 MeV </LI>
+
+<LI>Missing pieces of precompound theory were added and several code fixes 
+    were made to G4PreCompoundModel and related classes.  Level densities and 
+    inverse cross sections were improved.</LI>
+
+<LI>De-excitation and evaporation:
+  <UL>
+    <LI>FermiBreakUp is now switched off by default.</LI>
+    <LI>The pairing correction in excitation energy was fixed in G4GEMChannel.</LI>
+  </UL></LI>
+
+<LI>Nuclear mass tables: in order to use nuclear masses consistently throughout the 
+    hadronic code the following changes were made:
+    <UL> 
+      <LI>replace everywhere G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with
+          G4NucleiProperties::GetBindingEnergy(A,Z) to conform to changes in 
+          the particle category</LI>
+      <LI>use GetNuclearMass() everywhere instead of GetAtomicMass()</LI>
+    </UL></LI>
+
 </UL>
 
 <P> </P>
