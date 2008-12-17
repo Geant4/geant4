@@ -130,9 +130,9 @@ from <TT>G4Navigator</TT> has to adapt to the new signature.
 <B>Particles</B>
 <P> </P>
 Masses and widths of particles have been updated to be compliant with
-PDG-2008. To maintain consistency this <U>requires</U>  the upgrade to a new version of
-the underlying CLHEP library (CLHEP-2.0.4.2), which includes up-to-date constants
-as used by Geant4.
+PDG-2008. To maintain consistency this <U>requires</U>  the upgrade to a new
+version of the underlying CLHEP library (CLHEP-2.0.4.2), which includes
+up-to-date constants as used by Geant4.
 
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
@@ -269,7 +269,35 @@ Please see the last section for the corresponding details.
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<UL>
+<LI>A new alternative class for multiple scattering, <TT>G4UrbanMscModel2</TT>,
+    includes tuning of the model to electron data.<BR>
+    A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
+    hadrons in available as a prototype for validation.</LI>
+<LI>New Bremstrahlung model class, <TT>G4eBremstrahlungRelModel</TT>, includes
+    advanced description of LPM effect; it can be applied for electrons and
+    positrons with <TT>E > 1 GeV</TT> and provides gamma spectrum describing
+    well thin-target experimental data.<BR>
+    The density supression effect in the old <TT>G4eBremstrahlungModel</TT> 
+    have been reviewed and upgraded.</LI>
+<LI>Cubic spline of <TT>dedx</TT> and cross section tables are used by default.</LI>
+<LI>The <TT>G4IonFluctuations</TT> model has been updated: at high energy 
+    it is using <TT>G4UniversalFluctuation</TT>, which provides Landau tail of
+    fluctuations. 
+    At low energies Gaussion distribution is based on experimental data.</LI>
+<LI>An extra limitation of step by the <TT>G4Cerenkov</TT> process has been
+    added in order to provide more smooth X-ray emission near Cerenkov
+    threshold of media.</LI> 
+<LI>A new <TT>G4EmSaturation</TT> class is introduced for sampling of Birks
+    saturation.</LI>
+<LI>A new <TT>G4ElectronIonPair</TT> helper class based on ICRU'31 report has
+    been added; it can be used for sampling electorn/ion pairs in sensitive
+    detectors.</LI>
+<LI>A new <TT>G4EmConfigurator</TT> class can be used for configuration of
+    models in physics lists.</LI>
+<LI>Initialization of <TT>SubType</TT> has been added for all processes.</LI>
+<LI>The printout describing processes, models and their parameters 
+    initialised for a run have been upgraded.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -281,12 +309,19 @@ Please see the last section for the corresponding details.
 <B>Physics Lists</B>
 <P> </P>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>A new <TT>G4EmStandardPhysics_option3</TT> physics constructor has been
+    added; it can be used for simulation, where required spatial precision is
+    much less than <TT>1 mm</TT>.</LI>
+<LI>A new utility, <TT>G4PhysicsListFactory</TT>, is introduced; it allows to
+    build any reference physics list.</LI>
 </UL>
 
 <B>Command-based scoring</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>Beta release of cylindrical scoring mesh is included in this release.
+    Any feedback on issues and functionality is welcome.<BR>
+    Please, also see known issues affecting this new development in
+    <A href="6.">Section 6</A> of this document.</LI>
 </UL>
 
 <P> </P>
@@ -303,9 +338,24 @@ Please see the last section for the corresponding details.
     with pure-tracking (i.e. without field propagation or physics).</LI>
 </UL>
 
+<B>Low-energy Electromagnetic physics</B>
+<UL>
+<LI>An updated version of the <TT>G4LogLogInterpolation</TT> class is included
+    in this release. This update improves the speed-up performance of low
+    energy EM Physics processes that use this class, without significative
+    changes on the Physics.</LI>
+</UL>
+
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>More precise multiple scattering model for electrons and positrons 
+    provides wider shower (about 0.5% measured for the CMS calorimeter).</LI>
+<LI>New relativistic Bremsstrahlung model is applied for electrons and 
+    positrons; it provides gamma spectrum describing thin-target CERN and
+    SLAC data.</LI>
+<LI>The usage of the Spline approximation of <TT>dedx</TT> and cross section
+    tables provides Bragg peak position stable within <TT>0.1 mm</TT> versus
+    variation of production cut or step limit.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -320,7 +370,25 @@ Please see the last section for the corresponding details.
 <!-- ============================================== -->
 
 <H2>6. Known Run-Time Problems and Limitations</H2>
-
+<B>Command-based Scoring</B>
+<P></P>
+The following known issues affects cylindrical scoring mesh feature and
+are expected to be fixed in the future releases.
+<UL>
+<LI>Rather frequent warning messages may be issued during tracking by the
+    <TT>G4Navigator</TT>, concerning zero-length steps. This does not affect
+    the correctness of the results and has been identified in the cases
+    where a track enters at exactly the center of the top/bottom circlic
+    face along the local z-axis of the scoring cylinder.</LI>
+<LI>Computational performance of transportation in cylindrical mesh
+    will be improved.</LI>
+<LI>A problem for some scorers which use the volume size for cylindrical
+    mesh is identified due to faulty calculation of the geometrical volume
+    in such configurations. The following scorers currently should not be
+    used for cylindrical meshes: <TT>G4PSCellFlux, G4PSDoseDeposit,
+    G4PSPassageCellFlux, G4PSCylinderSurfaceCurrent,
+    G4PSCylinderSurfaceFlux</TT>.</LI>
+</UL>
 For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
 <A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem
