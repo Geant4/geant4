@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,10 +40,6 @@ Registered filter factories:
 
 Electromagnetic Physics
 Hadronic Physics
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
 ElectroNuclear Physics
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
@@ -73,7 +69,7 @@ RandomNumberEngineStatus restored from file: ./seeds.rndm
 /gps/ang/type cos
 /run/beamOn 10
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -195,6 +191,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -204,7 +201,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -219,7 +216,7 @@ hIoni:   for  proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -260,7 +257,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -322,7 +319,7 @@ hIoni:   for  pi+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -378,27 +375,27 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                      Hadronic Processes for <neutron>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
     NeutronInelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
-                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 6.1
+                                         Binary Cascade: Emin(GeV)= 0.065  Emax(GeV)= 6.1
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
             nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 
                      Hadronic Processes for <pi+>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
-   PionPlusInelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 1.5
+   PionPlusInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
                                   G4LEPionPlusInelastic: Emin(GeV)=   1.4  Emax(GeV)= 6.1
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
 
                      Hadronic Processes for <pi->
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
-  PionMinusInelastic  Models:              CascadeModel: Emin(GeV)=     0  Emax(GeV)= 1.5
+  PionMinusInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
                                  G4LEPionMinusInelastic: Emin(GeV)=   1.4  Emax(GeV)= 6.1
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
 
                      Hadronic Processes for <proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
      ProtonInelastic  Models:          PrecompoundModel: Emin(GeV)=     0  Emax(GeV)= 0.07
-                                           CascadeModel: Emin(GeV)= 0.065  Emax(GeV)= 6.1
+                                         Binary Cascade: Emin(GeV)= 0.065  Emax(GeV)= 6.1
                                         TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
 ============================================================================================
 

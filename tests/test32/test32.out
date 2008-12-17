@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -104,7 +104,7 @@ phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -120,6 +120,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -134,6 +135,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -152,7 +154,7 @@ hIoni:   for  proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -215,7 +217,7 @@ muIoni:   for  mu+    SubType= 2
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -272,7 +274,7 @@ hIoni:   for  pi-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -298,20 +300,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=2.8s Real=2.84s Sys=0.04s
+ User=2.61s Real=2.64s Sys=0.03s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=1.87s Real=1.88s Sys=0.01s
+ User=1.97s Real=1.99s Sys=0.01s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=2.52s Real=2.54s Sys=0.02s
+ User=2.51s Real=2.53s Sys=0.02s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=2.42s Real=2.44s Sys=0.03s
+ User=2.53s Real=2.56s Sys=0.02s

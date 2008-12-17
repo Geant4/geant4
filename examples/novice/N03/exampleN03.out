@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -35,7 +35,7 @@
    --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  46.75 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  53.25 %  ElmAbundance  66.67 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -53,7 +53,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204727680.290 pc   Nucl.Int.Length: 113804204.102 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Beam     density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.486 km   Imean:  85.684 eV   temperature: 273.15 K  pressure:   0.02 atm
@@ -113,7 +113,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -129,6 +129,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -143,6 +144,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -152,7 +154,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -206,7 +208,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -275,7 +277,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -336,16 +338,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 288.30399 MeV       total track length: 19.669329 cm 
-        Gap: total energy: 8.3575488 MeV       total track length: 3.9276253 cm 
+   Absorber: total energy: 276.91466 MeV       total track length: 19.551829 cm 
+        Gap: total energy: 12.904433 MeV       total track length: 6.2370197 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 288.30399 MeV +- 0 eV 
- mean Energy in Gap      : 8.3575488 MeV +- 0 eV 
+ mean Energy in Absorber : 276.91466 MeV +- 0 eV 
+ mean Energy in Gap      : 12.904433 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.669329 cm  +- 0 fm 
- mean trackLength in Gap      : 3.9276253 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.551829 cm  +- 0 fm 
+ mean trackLength in Gap      : 6.2370197 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -367,7 +369,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -383,6 +385,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -397,6 +400,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -406,7 +410,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -460,7 +464,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
           BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -529,7 +533,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -561,19 +565,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1827472974, 487195548
+ Current couple of seeds = 138643018, 90901385
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 278.49243 MeV       total track length: 19.470095 cm 
-        Gap: total energy: 18.420496 MeV       total track length: 8.7504709 cm 
+   Absorber: total energy: 281.17916 MeV       total track length: 19.517122 cm 
+        Gap: total energy: 12.912656 MeV       total track length: 6.0342195 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 278.49243 MeV +- 0 eV 
- mean Energy in Gap      : 18.420496 MeV +- 0 eV 
+ mean Energy in Absorber : 281.17916 MeV +- 0 eV 
+ mean Energy in Gap      : 12.912656 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.470095 cm  +- 0 fm 
- mean trackLength in Gap      : 8.7504709 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.517122 cm  +- 0 fm 
+ mean trackLength in Gap      : 6.0342195 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -595,7 +599,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -611,6 +615,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -625,6 +630,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -634,7 +640,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -688,7 +694,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
           BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -757,7 +763,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -789,19 +795,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1293784752, 1869364064
+ Current couple of seeds = 1424475195, 1293268628
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 318.25393 MeV       total track length: 76.711382 cm 
-        Gap: total energy: 63.169766 MeV       total track length: 1.8242126 m  
+   Absorber: total energy: 418.66961 MeV       total track length: 98.934484 cm 
+        Gap: total energy: 78.013203 MeV       total track length: 2.1775326 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 318.25393 MeV +- 0 eV 
- mean Energy in Gap      : 63.169766 MeV +- 0 eV 
+ mean Energy in Absorber : 418.66961 MeV +- 0 eV 
+ mean Energy in Gap      : 78.013203 MeV +- 0 eV 
 
- mean trackLength in Absorber : 76.711382 cm  +- 0 fm 
- mean trackLength in Gap      : 1.8242126 m   +- 0 fm 
+ mean trackLength in Absorber : 98.934484 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.1775326 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

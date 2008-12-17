@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,7 +9,7 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -17,7 +17,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: Water_vapor     density:  1.000 mg/cm3  RadL: 360.925 m    Nucl.Int.Length: 754.163 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Water_vapor     density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 754.163 m    Imean:  75.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
@@ -93,6 +93,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -108,6 +109,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
       Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -283,7 +285,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.69s Real=2.69s Sys=0s
+  User=2.67s Real=2.67s Sys=0s
 
  ======================== run summary ======================
 
@@ -291,15 +293,15 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5874  stepSize= 6.3024 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 1.5874  stepSize= 6.3025 mm 
 
- d-rays  : eLoss/primary= 248.95 keV	  nb of d-rays= 0.23721  <Tkin>= 1.0495 MeV  Tmin= 347.14 keV  Tmax= 4.9425 MeV
+ d-rays  : eLoss/primary= 249 keV	  nb of d-rays= 0.23725  <Tkin>= 1.0495 MeV  Tmin= 347.14 keV  Tmax= 4.9425 MeV
 
- brems   : eLoss/primary= 170.95 keV	  nb of gammas= 0.30518  <Tkin>= 560.17 keV  Tmin= 2.9024 keV  Tmax= 9.7582 MeV
+ brems   : eLoss/primary= 170.94 keV	  nb of gammas= 0.30516  <Tkin>= 560.18 keV  Tmin= 2.9024 keV  Tmax= 9.7582 MeV
 
- deposit : eLoss/primary= 1.7342 MeV	 <dEcut > table= 1.735 MeV   ---> simul/reference= 0.99956
+ deposit : eLoss/primary= 1.7342 MeV	 <dEcut > table= 1.735 MeV   ---> simul/reference= 0.99955
 
- total   : eLoss/primary= 2.1541 MeV	 <dEfull> table= 2.1645 MeV   ---> simul/reference= 0.99522
+ total   : eLoss/primary= 2.1542 MeV	 <dEfull> table= 2.1645 MeV   ---> simul/reference= 0.99524
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

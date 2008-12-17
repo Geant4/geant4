@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,10 +9,10 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic     density:  0.000 kg/m3   RadL: 204727680.290 pc   Nucl.Int.Length: 113804204.102 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -249,18 +249,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.79s Real=37.16s Sys=2.48s
+  User=8.59s Real=43.28s Sys=2.28s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 468789	muPairProd : 63104	muBrems : 677
+ Number of process calls --->	muIoni : 468853	muPairProd : 63156	muBrems : 675
 
- Simulation: total CrossSection = 0.53257 /cm	 MeanFreePath = 1.8777 cm 	 massicCrossSection = 0.067671 cm2/g
+ Simulation: total CrossSection = 0.53268 /cm	 MeanFreePath = 1.8773 cm 	 massicCrossSection = 0.067685 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1201175363, 1627814176
+ Current couple of seeds = 1001958740, 1620882094
 ----------------------------------------
 #
 /gun/particle pi+
@@ -287,7 +287,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1201175363, 1627814176
+ Current couple of seeds = 1001958740, 1620882094
 ----------------------------------------
 Start Run processing.
 
@@ -313,13 +313,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.99s Real=38.45s Sys=2.43s
+  User=8.94s Real=42.76s Sys=2.53s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 439131	hPairProd : 59677	hBrems : 351
+ Number of process calls --->	hIoni : 439081	hPairProd : 59651	hBrems : 350
 
- Simulation: total CrossSection = 0.49916 /cm	 MeanFreePath = 2.0034 cm 	 massicCrossSection = 0.063426 cm2/g
+ Simulation: total CrossSection = 0.49908 /cm	 MeanFreePath = 2.0037 cm 	 massicCrossSection = 0.063416 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -376,17 +376,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.21s Real=37.37s Sys=2.36s
+  User=8.22s Real=41.47s Sys=2.59s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 439294	hPairProd : 34064	hBrems : 8
+ Number of process calls --->	hIoni : 439254	hPairProd : 34118	hBrems : 8
 
- Simulation: total CrossSection = 0.47337 /cm	 MeanFreePath = 2.1125 cm 	 massicCrossSection = 0.060148 cm2/g
+ Simulation: total CrossSection = 0.47338 /cm	 MeanFreePath = 2.1125 cm 	 massicCrossSection = 0.06015 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1044806642, 1094025570
+ Current couple of seeds = 1573720723, 844772267
 ----------------------------------------
 #
 Graphics systems deleted.

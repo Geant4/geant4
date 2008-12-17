@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,7 +26,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -42,6 +42,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -56,6 +57,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -65,7 +67,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -92,7 +94,7 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -133,7 +135,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -202,7 +204,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -251,12 +253,12 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-   KaonPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <kaon->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-  KaonMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
           CHIPSNuclearAbsorptionAtRest
 
@@ -270,47 +272,47 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 
                      Hadronic Processes for <neutron>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-    NeutronInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+    NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                    G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
             nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
                      Hadronic Processes for <pi+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-   PionPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+   PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <pi->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-  PionMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+  PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
           CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <proton>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-     ProtonInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+     ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                     G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 ============================================================================================
 ### Run 0 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     40 hits are stored in ExN04TrackerHitsCollection.
-     10 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.4851822444093 (GeV)
+     49 hits are stored in ExN04TrackerHitsCollection.
+     11 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.46465652083138 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     41 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.5996634140728 (GeV)
+     204 hits are stored in ExN04TrackerHitsCollection.
+     48 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 56.915735 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     90 hits are stored in ExN04TrackerHitsCollection.
-     21 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.0956999147141 (GeV)
+     15 hits are stored in ExN04TrackerHitsCollection.
+     27 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.7117962905742 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

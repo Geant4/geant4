@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,18 +42,18 @@ Registered filter factories:
 
 ***** Table : Nb of materials = 16 *****
 
- Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727680.290 pc   Nucl.Int.Length: 113804204.102 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      H2O     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  70.893 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    LPAir     density:  0.000 kg/m3   RadL: 56273281.030 km   Nucl.Int.Length: 135377214.500 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
+ Material:    LPAir     density:  0.000 kg/m3   RadL: 56273234.858 km   Nucl.Int.Length: 135377105.890 km   Imean:  87.308 eV   temperature: 293.16 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  71.50 %  ElmAbundance  75.57 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  25.00 %  ElmAbundance  23.14 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   3.50 %  ElmAbundance   1.30 %
@@ -126,10 +126,9 @@ Registered filter factories:
 
  ==========> The phantom contains 53480 voxels 
 
-Thank you for using G4BinaryCascade. 
 MicrobeamPhysicsList::SetCuts:CutLength : 10 nm 
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -251,6 +250,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -260,7 +260,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -278,7 +278,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -298,7 +298,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -419,37 +419,39 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 
 -> Event # 4 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.414506316185
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0074360114522278
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.41476425528526
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0074367276392877
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.64402031898499
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.014025802724063
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.64402061700821
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.014025576412678
 
 -> Event # 6 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.3462900519371
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.055089622735977
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.34616070985794
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.055149801075459
 
 -> Event # 7 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32336857914925
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.097152411937714
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.3083418905735
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.093122653663158
 
 -> Event # 9 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.6310703754425
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.030024504289031
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.6314080953598
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.029831433668733
 
 -> Event # 10 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.30018749833107
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.096404448151588
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 6
 
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9,7 +9,7 @@
 
 ***** Table : Nb of materials = 13 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -64,7 +64,7 @@
 /testem/phys/setCuts 1 mm
 #
 /run/initialize
-Absorber is 17.8481 cm  of PbWO4
+Absorber is 17.848 cm  of PbWO4
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
 #/run/particle/applyCuts
@@ -95,7 +95,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -111,6 +111,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -125,6 +126,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -134,7 +136,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -161,7 +163,7 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -202,7 +204,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -271,7 +273,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -328,31 +330,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=49.77s Real=49.79s Sys=0.01s
+  User=49.26s Real=49.28s Sys=0.01s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    1.12%       0.49%             0-> 1.00 radl:    1.12%     0.49% 
-    1.00-> 2.00 radl:    2.72%       1.16%             0-> 2.00 radl:    3.84%     1.41% 
-    2.00-> 3.00 radl:    5.82%       2.20%             0-> 3.00 radl:    9.66%     3.32% 
-    3.00-> 4.00 radl:    8.86%       2.83%             0-> 4.00 radl:   18.52%     5.68% 
-    4.00-> 5.00 radl:   10.75%       2.77%             0-> 5.00 radl:   29.26%     7.74% 
-    5.00-> 6.00 radl:   11.54%       1.94%             0-> 6.00 radl:   40.81%     8.61% 
-    6.00-> 7.00 radl:   11.21%       2.13%             0-> 7.00 radl:   52.02%     8.70% 
-    7.00-> 8.00 radl:    9.76%       2.12%             0-> 8.00 radl:   61.78%     8.26% 
-    8.00-> 9.00 radl:    8.08%       1.90%             0-> 9.00 radl:   69.86%     7.67% 
-    9.00->10.00 radl:    6.54%       1.80%             0->10.00 radl:   76.40%     6.75% 
-   10.00->11.00 radl:    5.00%       1.55%             0->11.00 radl:   81.40%     5.85% 
-   11.00->12.00 radl:    3.81%       1.39%             0->12.00 radl:   85.21%     4.87% 
-   12.00->13.00 radl:    2.84%       1.19%             0->13.00 radl:   88.06%     3.93% 
-   13.00->14.00 radl:    2.12%       0.99%             0->14.00 radl:   90.18%     3.13% 
-   14.00->15.00 radl:    1.60%       0.86%             0->15.00 radl:   91.78%     2.41% 
-   15.00->16.00 radl:    1.22%       0.75%             0->16.00 radl:   92.99%     1.84% 
-   16.00->17.00 radl:    0.89%       0.61%             0->17.00 radl:   93.89%     1.35% 
-   17.00->18.00 radl:    0.60%       0.46%             0->18.00 radl:   94.48%     1.02% 
-   18.00->19.00 radl:    0.47%       0.38%             0->19.00 radl:   94.95%     0.83% 
-   19.00->20.00 radl:    0.34%       0.29%             0->20.00 radl:   95.29%     0.73% 
+    0.00-> 1.00 radl:    1.24%       0.86%             0-> 1.00 radl:    1.24%     0.86% 
+    1.00-> 2.00 radl:    2.75%       1.44%             0-> 2.00 radl:    3.99%     1.83% 
+    2.00-> 3.00 radl:    5.69%       2.25%             0-> 3.00 radl:    9.68%     3.68% 
+    3.00-> 4.00 radl:    8.45%       2.67%             0-> 4.00 radl:   18.13%     5.76% 
+    4.00-> 5.00 radl:   10.37%       3.08%             0-> 5.00 radl:   28.50%     8.13% 
+    5.00-> 6.00 radl:   10.84%       2.59%             0-> 6.00 radl:   39.34%     9.50% 
+    6.00-> 7.00 radl:   10.50%       2.31%             0-> 7.00 radl:   49.84%    10.19% 
+    7.00-> 8.00 radl:    9.17%       2.02%             0-> 8.00 radl:   59.00%    10.36% 
+    8.00-> 9.00 radl:    8.10%       1.96%             0-> 9.00 radl:   67.10%     9.89% 
+    9.00->10.00 radl:    6.64%       2.02%             0->10.00 radl:   73.74%     8.98% 
+   10.00->11.00 radl:    5.25%       1.78%             0->11.00 radl:   78.99%     7.88% 
+   11.00->12.00 radl:    4.17%       1.64%             0->12.00 radl:   83.15%     6.66% 
+   12.00->13.00 radl:    3.22%       1.34%             0->13.00 radl:   86.37%     5.66% 
+   13.00->14.00 radl:    2.58%       1.20%             0->14.00 radl:   88.95%     4.71% 
+   14.00->15.00 radl:    1.89%       1.19%             0->15.00 radl:   90.84%     3.78% 
+   15.00->16.00 radl:    1.35%       0.87%             0->16.00 radl:   92.19%     3.03% 
+   16.00->17.00 radl:    1.02%       0.81%             0->17.00 radl:   93.20%     2.31% 
+   17.00->18.00 radl:    0.80%       0.74%             0->18.00 radl:   94.01%     1.69% 
+   18.00->19.00 radl:    0.58%       0.67%             0->19.00 radl:   94.59%     1.13% 
+   19.00->20.00 radl:    0.39%       0.45%             0->20.00 radl:   94.98%     0.81% 
 
 
 
@@ -360,39 +362,39 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   34.32%       1.96%             0-> 0.25 radl:   34.32%     1.96% 
-    0.25-> 0.50 radl:   18.88%       1.21%             0-> 0.50 radl:   53.21%     2.25% 
-    0.50-> 0.75 radl:   10.92%       1.09%             0-> 0.75 radl:   64.13%     1.89% 
-    0.75-> 1.00 radl:    6.95%       0.75%             0-> 1.00 radl:   71.08%     1.64% 
-    1.00-> 1.25 radl:    4.85%       0.61%             0-> 1.25 radl:   75.93%     1.55% 
-    1.25-> 1.50 radl:    3.52%       0.46%             0-> 1.50 radl:   79.44%     1.44% 
-    1.50-> 1.75 radl:    2.79%       0.46%             0-> 1.75 radl:   82.23%     1.34% 
-    1.75-> 2.00 radl:    2.19%       0.39%             0-> 2.00 radl:   84.43%     1.26% 
-    2.00-> 2.25 radl:    1.79%       0.32%             0-> 2.25 radl:   86.21%     1.20% 
-    2.25-> 2.50 radl:    1.56%       0.33%             0-> 2.50 radl:   87.78%     1.11% 
-    2.50-> 2.75 radl:    1.36%       0.27%             0-> 2.75 radl:   89.13%     1.09% 
-    2.75-> 3.00 radl:    1.14%       0.24%             0-> 3.00 radl:   90.28%     1.02% 
-    3.00-> 3.25 radl:    0.97%       0.23%             0-> 3.25 radl:   91.25%     0.98% 
-    3.25-> 3.50 radl:    0.83%       0.21%             0-> 3.50 radl:   92.08%     0.92% 
-    3.50-> 3.75 radl:    0.73%       0.21%             0-> 3.75 radl:   92.81%     0.87% 
-    3.75-> 4.00 radl:    0.66%       0.22%             0-> 4.00 radl:   93.46%     0.82% 
-    4.00-> 4.25 radl:    0.57%       0.17%             0-> 4.25 radl:   94.03%     0.81% 
-    4.25-> 4.50 radl:    0.49%       0.15%             0-> 4.50 radl:   94.52%     0.79% 
-    4.50-> 4.75 radl:    0.43%       0.13%             0-> 4.75 radl:   94.95%     0.76% 
-    4.75-> 5.00 radl:    0.34%       0.12%             0-> 5.00 radl:   95.29%     0.73% 
+    0.00-> 0.25 radl:   33.76%       2.11%             0-> 0.25 radl:   33.76%     2.11% 
+    0.25-> 0.50 radl:   18.69%       1.54%             0-> 0.50 radl:   52.44%     2.40% 
+    0.50-> 0.75 radl:   11.11%       1.07%             0-> 0.75 radl:   63.55%     2.14% 
+    0.75-> 1.00 radl:    6.95%       0.80%             0-> 1.00 radl:   70.50%     1.90% 
+    1.00-> 1.25 radl:    4.86%       0.74%             0-> 1.25 radl:   75.36%     1.68% 
+    1.25-> 1.50 radl:    3.60%       0.57%             0-> 1.50 radl:   78.96%     1.55% 
+    1.50-> 1.75 radl:    2.82%       0.43%             0-> 1.75 radl:   81.77%     1.43% 
+    1.75-> 2.00 radl:    2.22%       0.40%             0-> 2.00 radl:   83.99%     1.33% 
+    2.00-> 2.25 radl:    1.91%       0.39%             0-> 2.25 radl:   85.90%     1.22% 
+    2.25-> 2.50 radl:    1.53%       0.35%             0-> 2.50 radl:   87.43%     1.14% 
+    2.50-> 2.75 radl:    1.31%       0.27%             0-> 2.75 radl:   88.73%     1.10% 
+    2.75-> 3.00 radl:    1.15%       0.26%             0-> 3.00 radl:   89.89%     1.02% 
+    3.00-> 3.25 radl:    0.96%       0.23%             0-> 3.25 radl:   90.85%     1.00% 
+    3.25-> 3.50 radl:    0.85%       0.21%             0-> 3.50 radl:   91.69%     0.96% 
+    3.50-> 3.75 radl:    0.77%       0.20%             0-> 3.75 radl:   92.46%     0.91% 
+    3.75-> 4.00 radl:    0.66%       0.17%             0-> 4.00 radl:   93.12%     0.88% 
+    4.00-> 4.25 radl:    0.55%       0.17%             0-> 4.25 radl:   93.67%     0.84% 
+    4.25-> 4.50 radl:    0.51%       0.14%             0-> 4.50 radl:   94.18%     0.80% 
+    4.50-> 4.75 radl:    0.44%       0.14%             0-> 4.75 radl:   94.61%     0.80% 
+    4.75-> 5.00 radl:    0.36%       0.12%             0-> 5.00 radl:   94.98%     0.81% 
 
                               SUMMARY
-                         energy deposit :   95.29 % E0 +-    0.73 % E0
-                         charged traklen:  494.50 radl +-    7.17 radl
-                         neutral traklen: 4697.66 radl +-  129.55 radl
+                         energy deposit :   94.98 % E0 +-    0.81 % E0
+                         charged traklen:  493.23 radl +-    6.69 radl
+                         neutral traklen: 4744.21 radl +-  142.00 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 301192422, 387220284
+ Current couple of seeds = 1394396488, 954734361
 ----------------------------------------
 
 <<<<<ACCEPTANCE>>>>> 100 events for Total Energy in Absorber
-Edep: 0.95287099  delEdep= 0.0014689683 nrms= 1.7914247
+Edep: 0.94977793  delEdep= -0.0016240938 nrms= 1.9806022
 <<<<<END>>>>>   IS ACCEPTED
 
 /testem/det/setField 10 gauss
@@ -420,7 +422,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 301192422, 387220284
+ Current couple of seeds = 1394396488, 954734361
 ----------------------------------------
 Start Run processing.
 
@@ -428,31 +430,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=64.89s Real=64.9s Sys=0s
+  User=65.03s Real=65.04s Sys=0s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    1.25%       0.89%             0-> 1.00 radl:    1.25%     0.89% 
-    1.00-> 2.00 radl:    2.42%       1.24%             0-> 2.00 radl:    3.68%     1.56% 
-    2.00-> 3.00 radl:    5.42%       2.70%             0-> 3.00 radl:    9.10%     3.83% 
-    3.00-> 4.00 radl:    8.00%       3.22%             0-> 4.00 radl:   17.10%     6.67% 
-    4.00-> 5.00 radl:   10.32%       3.42%             0-> 5.00 radl:   27.43%     9.36% 
-    5.00-> 6.00 radl:   11.26%       2.96%             0-> 6.00 radl:   38.68%    11.18% 
-    6.00-> 7.00 radl:   11.15%       2.45%             0-> 7.00 radl:   49.83%    11.99% 
-    7.00-> 8.00 radl:    9.57%       2.31%             0-> 8.00 radl:   59.39%    11.88% 
-    8.00-> 9.00 radl:    8.00%       2.06%             0-> 9.00 radl:   67.39%    11.09% 
-    9.00->10.00 radl:    6.46%       1.89%             0->10.00 radl:   73.85%    10.00% 
-   10.00->11.00 radl:    5.20%       1.99%             0->11.00 radl:   79.05%     8.50% 
-   11.00->12.00 radl:    4.20%       1.83%             0->12.00 radl:   83.25%     7.22% 
-   12.00->13.00 radl:    3.23%       1.67%             0->13.00 radl:   86.48%     5.90% 
-   13.00->14.00 radl:    2.49%       1.42%             0->14.00 radl:   88.97%     4.83% 
-   14.00->15.00 radl:    1.84%       1.12%             0->15.00 radl:   90.81%     3.86% 
-   15.00->16.00 radl:    1.34%       0.97%             0->16.00 radl:   92.15%     3.04% 
-   16.00->17.00 radl:    1.11%       0.87%             0->17.00 radl:   93.26%     2.30% 
-   17.00->18.00 radl:    0.76%       0.68%             0->18.00 radl:   94.02%     1.73% 
-   18.00->19.00 radl:    0.54%       0.56%             0->19.00 radl:   94.56%     1.27% 
-   19.00->20.00 radl:    0.38%       0.39%             0->20.00 radl:   94.94%     0.99% 
+    0.00-> 1.00 radl:    1.12%       0.50%             0-> 1.00 radl:    1.12%     0.50% 
+    1.00-> 2.00 radl:    2.91%       1.50%             0-> 2.00 radl:    4.03%     1.76% 
+    2.00-> 3.00 radl:    6.11%       2.31%             0-> 3.00 radl:   10.14%     3.77% 
+    3.00-> 4.00 radl:    9.05%       2.74%             0-> 4.00 radl:   19.19%     6.02% 
+    4.00-> 5.00 radl:   11.15%       2.93%             0-> 5.00 radl:   30.35%     8.03% 
+    5.00-> 6.00 radl:   11.44%       2.30%             0-> 6.00 radl:   41.79%     9.00% 
+    6.00-> 7.00 radl:   10.79%       2.08%             0-> 7.00 radl:   52.58%     9.34% 
+    7.00-> 8.00 radl:    9.54%       1.87%             0-> 8.00 radl:   62.12%     8.80% 
+    8.00-> 9.00 radl:    7.94%       1.74%             0-> 9.00 radl:   70.06%     7.72% 
+    9.00->10.00 radl:    6.35%       1.73%             0->10.00 radl:   76.41%     6.48% 
+   10.00->11.00 radl:    4.89%       1.64%             0->11.00 radl:   81.29%     5.20% 
+   11.00->12.00 radl:    3.82%       1.47%             0->12.00 radl:   85.12%     4.08% 
+   12.00->13.00 radl:    2.86%       1.09%             0->13.00 radl:   87.98%     3.27% 
+   13.00->14.00 radl:    2.19%       0.92%             0->14.00 radl:   90.16%     2.64% 
+   14.00->15.00 radl:    1.58%       0.67%             0->15.00 radl:   91.74%     2.22% 
+   15.00->16.00 radl:    1.13%       0.57%             0->16.00 radl:   92.88%     1.81% 
+   16.00->17.00 radl:    0.89%       0.56%             0->17.00 radl:   93.77%     1.38% 
+   17.00->18.00 radl:    0.65%       0.49%             0->18.00 radl:   94.42%     1.07% 
+   18.00->19.00 radl:    0.47%       0.40%             0->19.00 radl:   94.89%     0.83% 
+   19.00->20.00 radl:    0.32%       0.28%             0->20.00 radl:   95.22%     0.71% 
 
 
 
@@ -460,39 +462,39 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   34.24%       2.57%             0-> 0.25 radl:   34.24%     2.57% 
-    0.25-> 0.50 radl:   18.72%       1.16%             0-> 0.50 radl:   52.95%     2.51% 
-    0.50-> 0.75 radl:   10.88%       1.04%             0-> 0.75 radl:   63.83%     2.21% 
-    0.75-> 1.00 radl:    6.92%       0.83%             0-> 1.00 radl:   70.76%     1.98% 
-    1.00-> 1.25 radl:    4.84%       0.78%             0-> 1.25 radl:   75.60%     1.76% 
-    1.25-> 1.50 radl:    3.57%       0.57%             0-> 1.50 radl:   79.17%     1.65% 
-    1.50-> 1.75 radl:    2.87%       0.53%             0-> 1.75 radl:   82.04%     1.57% 
-    1.75-> 2.00 radl:    2.21%       0.42%             0-> 2.00 radl:   84.25%     1.44% 
-    2.00-> 2.25 radl:    1.82%       0.35%             0-> 2.25 radl:   86.07%     1.34% 
-    2.25-> 2.50 radl:    1.53%       0.32%             0-> 2.50 radl:   87.60%     1.25% 
-    2.50-> 2.75 radl:    1.29%       0.28%             0-> 2.75 radl:   88.89%     1.20% 
-    2.75-> 3.00 radl:    1.11%       0.26%             0-> 3.00 radl:   89.99%     1.14% 
-    3.00-> 3.25 radl:    0.95%       0.24%             0-> 3.25 radl:   90.95%     1.09% 
-    3.25-> 3.50 radl:    0.83%       0.20%             0-> 3.50 radl:   91.77%     1.07% 
-    3.50-> 3.75 radl:    0.71%       0.18%             0-> 3.75 radl:   92.48%     1.01% 
-    3.75-> 4.00 radl:    0.62%       0.17%             0-> 4.00 radl:   93.10%     0.99% 
-    4.00-> 4.25 radl:    0.56%       0.15%             0-> 4.25 radl:   93.66%     0.99% 
-    4.25-> 4.50 radl:    0.49%       0.17%             0-> 4.50 radl:   94.14%     1.00% 
-    4.50-> 4.75 radl:    0.43%       0.14%             0-> 4.75 radl:   94.57%     0.99% 
-    4.75-> 5.00 radl:    0.37%       0.13%             0-> 5.00 radl:   94.94%     0.99% 
+    0.00-> 0.25 radl:   33.63%       1.73%             0-> 0.25 radl:   33.63%     1.73% 
+    0.25-> 0.50 radl:   18.94%       1.32%             0-> 0.50 radl:   52.57%     1.96% 
+    0.50-> 0.75 radl:   11.16%       0.97%             0-> 0.75 radl:   63.73%     1.82% 
+    0.75-> 1.00 radl:    7.03%       0.82%             0-> 1.00 radl:   70.76%     1.69% 
+    1.00-> 1.25 radl:    4.90%       0.69%             0-> 1.25 radl:   75.66%     1.54% 
+    1.25-> 1.50 radl:    3.66%       0.58%             0-> 1.50 radl:   79.32%     1.44% 
+    1.50-> 1.75 radl:    2.70%       0.44%             0-> 1.75 radl:   82.02%     1.33% 
+    1.75-> 2.00 radl:    2.20%       0.40%             0-> 2.00 radl:   84.22%     1.32% 
+    2.00-> 2.25 radl:    1.91%       0.32%             0-> 2.25 radl:   86.12%     1.27% 
+    2.25-> 2.50 radl:    1.58%       0.34%             0-> 2.50 radl:   87.70%     1.19% 
+    2.50-> 2.75 radl:    1.30%       0.28%             0-> 2.75 radl:   89.00%     1.10% 
+    2.75-> 3.00 radl:    1.15%       0.26%             0-> 3.00 radl:   90.15%     1.00% 
+    3.00-> 3.25 radl:    0.98%       0.21%             0-> 3.25 radl:   91.12%     0.97% 
+    3.25-> 3.50 radl:    0.88%       0.25%             0-> 3.50 radl:   92.01%     0.91% 
+    3.50-> 3.75 radl:    0.74%       0.20%             0-> 3.75 radl:   92.75%     0.86% 
+    3.75-> 4.00 radl:    0.62%       0.19%             0-> 4.00 radl:   93.38%     0.81% 
+    4.00-> 4.25 radl:    0.55%       0.17%             0-> 4.25 radl:   93.93%     0.79% 
+    4.25-> 4.50 radl:    0.49%       0.14%             0-> 4.50 radl:   94.42%     0.77% 
+    4.50-> 4.75 radl:    0.45%       0.16%             0-> 4.75 radl:   94.87%     0.73% 
+    4.75-> 5.00 radl:    0.34%       0.12%             0-> 5.00 radl:   95.22%     0.71% 
 
                               SUMMARY
-                         energy deposit :   94.94 % E0 +-    0.99 % E0
-                         charged traklen:  494.25 radl +-    9.23 radl
-                         neutral traklen: 4731.40 radl +-  143.03 radl
+                         energy deposit :   95.22 % E0 +-    0.71 % E0
+                         charged traklen:  493.92 radl +-    6.94 radl
+                         neutral traklen: 4709.77 radl +-  135.65 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1478478670, 313243448
+ Current couple of seeds = 1550788562, 1026126665
 ----------------------------------------
 
 <<<<<ACCEPTANCE>>>>> 100 events for Total Energy in Absorber
-Edep: 0.94938009805365  delEdep= -0.0020219219463469 nrms= 2.4657584711547
+Edep: 0.95216944189286  delEdep= 0.00076742189286427 nrms= 0.93588035715155
 <<<<<END>>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

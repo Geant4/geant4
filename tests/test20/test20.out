@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -25,6 +25,7 @@
  The ABSORBER is made of 0.001mm of Water, the transverse size (R) is 0.001 mm 
  Z position of the (middle of the) absorber 0  mm
 PhysicsList::SetCuts:CutLength : 1 um 
+/tracking/verbose 0
 #
 #/calor/setAbsThick 1 mm
 #/calor/setAbsRad 1 mm
@@ -33,8 +34,9 @@ PhysicsList::SetCuts:CutLength : 1 um
 /run/initialize
 /process/list
      Transportation,         DNAProcess,                msc,              eIoni
-              eBrem,            annihil,       LowEnCompton,    LowEnConversion
-     LowEnPhotoElec,      LowEnRayleigh
+              eBrem,            annihil,ExcitationEmfietzoglou,    ElasticChampion
+     IonisationBorn,       LowEnCompton,    LowEnConversion,     LowEnPhotoElec
+      LowEnRayleigh
 /particle/list
               Ps-1s,              Ps-2s,              alpha,             alpha+
         anti_proton,                 e+,                 e-,              gamma
@@ -48,9 +50,7 @@ PhysicsList::SetCuts:CutLength : 1 um
 #======================
 #
 /gun/particle e-
-#------------------
 /gun/energy 10000 eV
-/tracking/verbose 0
 /run/beamOn 1
 
 eIoni:   for  e+    SubType= 2
@@ -63,6 +63,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -87,33 +88,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=33.56s Real=33.62s Sys=0.04s
-Time elapsed in 1 events ---- User=33.56s Real=33.62s Sys=0.04s
-/tracking/verbose 0
-/run/beamOn 9
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 9
-  User=294.54s Real=294.74s Sys=0.05s
-Time elapsed in 9 events ---- User=294.54s Real=294.74s Sys=0.05s
+  User=14.61s Real=14.62s Sys=0.01s
+Time elapsed in 1 events ---- User=14.61s Real=14.62s Sys=0.01s
 #
 /gun/particle proton
-#------------------
-/gun/energy 1 MeV
-/tracking/verbose 0
+/gun/energy 0.01 MeV
 /run/beamOn 1
 
 ========= Table of registered couples ==============================
@@ -131,9 +110,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.38s Real=5.39s Sys=0.01s
-Time elapsed in 1 events ---- User=5.38s Real=5.39s Sys=0.01s
-/tracking/verbose 0
+  User=3.05s Real=3.04s Sys=0s
+Time elapsed in 1 events ---- User=3.05s Real=3.04s Sys=0s
+#
+/gun/particle hydrogen
+/gun/energy 0.01 MeV
 /run/beamOn 1
 
 ========= Table of registered couples ==============================
@@ -151,13 +132,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.47s Real=4.47s Sys=0s
-Time elapsed in 1 events ---- User=4.47s Real=4.47s Sys=0s
+  User=4.77s Real=4.81s Sys=0s
+Time elapsed in 1 events ---- User=4.77s Real=4.81s Sys=0s
 #
 /gun/particle alpha
-#------------------
-/gun/energy 2.67 MeV
-/tracking/verbose 0
+/gun/energy 0.01 MeV
 /run/beamOn 1
 
 ========= Table of registered couples ==============================
@@ -175,9 +154,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=25.72s Real=25.74s Sys=0.01s
-Time elapsed in 1 events ---- User=25.72s Real=25.74s Sys=0.01s
-/tracking/verbose 0
+  User=2.76s Real=2.81s Sys=0.05s
+Time elapsed in 1 events ---- User=2.76s Real=2.81s Sys=0.05s
+#
+/gun/particle alpha+
+/gun/energy 0.01 MeV
 /run/beamOn 1
 
 ========= Table of registered couples ==============================
@@ -195,15 +176,40 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=25.17s Real=25.18s Sys=0s
-Time elapsed in 1 events ---- User=25.17s Real=25.18s Sys=0s
+  User=2.71s Real=2.83s Sys=0.07s
+Time elapsed in 1 events ---- User=2.71s Real=2.83s Sys=0.07s
+#
+/gun/particle helium
+/gun/energy 0.01 MeV
+/run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.77s Real=2.82s Sys=0.06s
+Time elapsed in 1 events ---- User=2.77s Real=2.82s Sys=0.06s
 #
 G4 kernel has come to Quit state.
-DNAProcess for alpha in Water : 5060 calls
-DNAProcess for alpha+ in Water : 108 calls
-DNAProcess for e- in Water : 68407 calls
-DNAProcess for helium in Water : 19 calls
-DNAProcess for proton in Water : 960 calls
-Transportation for alpha in Water : 2 calls
-Transportation for e- in Water : 12 calls
-Transportation for proton in Water : 2 calls
+DNAProcess for alpha in Water : 2 calls
+DNAProcess for alpha+ in Water : 11 calls
+DNAProcess for helium in Water : 1877 calls
+DNAProcess for hydrogen in Water : 1106 calls
+DNAProcess for proton in Water : 549 calls
+ElasticChampion for e- in Water : 22220 calls
+ExcitationEmfietzoglou for e- in Water : 148 calls
+IonisationBorn for e- in Water : 100 calls
+Transportation for e- in Water : 1 calls
+Transportation for hydrogen in Water : 1 calls
+Transportation for proton in Water : 1 calls

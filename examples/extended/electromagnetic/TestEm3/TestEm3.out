@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,7 +19,7 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204322278.943 pc   Nucl.Int.Length: 113729036.185 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
@@ -50,17 +50,17 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileName testem3
 /testem/histo/setFileType root
-/testem/histo/setHisto 1 100 700. 1000. MeV 
+/testem/histo/setHisto 1 100 700. 1000. MeV
 ----> SetHisto 1: Edep in absorber 1 (MeV);  100 bins from 700 MeV to 1000 MeV
-/testem/histo/setHisto 2 100 0. 300. MeV 
+/testem/histo/setHisto 2 100 0. 300. MeV
 ----> SetHisto 2: Edep in absorber 2 (MeV);  100 bins from 0 MeV to 300 MeV
-/testem/histo/setHisto 11 52 0. 52. none 
+/testem/histo/setHisto 11 52 0. 52. none
 ----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 12 52 0. 52. none 
+/testem/histo/setHisto 12 52 0. 52. none
 ----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2;  52 bins from 0 none to 52 none
-/testem/histo/setHisto 21 102 0. 102. none 
+/testem/histo/setHisto 21 102 0. 102. none
 ----> SetHisto 21: energy flow (MeV/event);  102 bins from 0 none to 102 none
-/testem/histo/setHisto 22 102 0. 102. none 
+/testem/histo/setHisto 22 102 0. 102. none
 ----> SetHisto 22: lateral energy leak (MeV/event);  102 bins from 0 none to 102 none
 #
 /testem/event/printModulo 50
@@ -81,7 +81,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -97,6 +97,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -111,6 +112,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -120,7 +122,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -147,7 +149,7 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -188,7 +190,7 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -257,7 +259,7 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -346,13 +348,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.14s Real=9.7s Sys=0.06s
+  User=8.94s Real=9.26s Sys=0.04s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 780.95 MeV :  15.66 MeV     2.005 +- 0.2005 %      53.8 cm  +- 1.21 cm 
-   liquidArgon: 208.25 MeV :  15.02 MeV     7.214 +- 0.7214 %      1.03 m   +- 7.77 cm 
+          Lead: 781.51 MeV :  16.87 MeV     2.159 +- 0.2159 %      53.8 cm  +- 1.26 cm 
+   liquidArgon: 207.95 MeV :  14.04 MeV     6.752 +- 0.6752 %      1.03 m   +- 7.13 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -360,15 +362,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 780.954 MeV
-liquidArgon:	 208.098 MeV
+      Lead:	 781.506 MeV
+liquidArgon:	 207.886 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1583352936, 1765720350
+ Current couple of seeds = 40179170, 269466803
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-09    (4-July-2008)
+ Geant4 version Name: global-V09-01-17    (19-December-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,7 +46,7 @@ Material available: Graphite
  Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 321.900 eV 
    --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.541 cm   Imean: 790.000 eV 
+ Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
@@ -56,14 +56,14 @@ Material available: Graphite
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:  Methane CH_4   density:  0.667 kg/m3   RadL: 696.375 m    Nucl.Int.Length: 907.942 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Methane CH_4   density:  0.667 kg/m3   RadL: 696.374 m    Nucl.Int.Length: 907.942 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  25.19 %  ElmAbundance  80.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction:  74.81 %  ElmAbundance  20.00 %
 
- Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.378 cm   Imean:  78.000 eV 
+ Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.377 cm   Imean:  78.000 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.162 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -110,7 +110,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -126,6 +126,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -140,6 +141,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -149,7 +151,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for proton
+msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -261,7 +263,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
 
-msc:   for GenericIon
+msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -293,7 +295,7 @@ G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built 
 G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -341,7 +343,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for pi-
+msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -370,18 +372,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.35s Sys=0s
+  User=0.36s Real=0.36s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18367 +- 0.00529312  microns 
+    Track Length in absorber = 9.18366 +- 0.00529312  microns 
     CSDA  Range  in absorber = 9.05312 +- 0.00568066  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.124669 +- 0.00529312 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.184123 +- 0.00568066 microns 
+    Track Length (G4 - ICRU49) = 0.124661 +- 0.00529312 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.184116 +- 0.00568066 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -413,11 +415,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.36s Sys=0.01s
+  User=0.35s Real=0.35s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18397 +- 0.00602301  microns 
+    Track Length in absorber = 9.18396 +- 0.006023  microns 
     CSDA  Range  in absorber = 9.04681 +- 0.00613386  microns 
 
     Energy deposit in absorber = 0.5  MeV 
@@ -454,12 +456,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.73s Real=0.74s Sys=0s
+  User=0.73s Real=0.72s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56856 +- 0.00123205  microns 
-    CSDA  Range  in absorber = 6.95627 +- 0.0116435  microns 
+    Track Length in absorber = 8.56782 +- 0.00122572  microns 
+    CSDA  Range  in absorber = 6.9412 +- 0.011408  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -496,21 +498,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.14s Real=1.16s Sys=0.01s
+  User=1.14s Real=1.14s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1665 +- 0.0156807  microns 
-    CSDA  Range  in absorber = 9.04396 +- 0.0158766  microns 
+    Track Length in absorber = 9.18294 +- 0.0159437  microns 
+    CSDA  Range  in absorber = 9.04262 +- 0.0188914  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.1075 +- 0.0156807 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.174964 +- 0.0158766 microns 
+    Track Length (G4 - ICRU49) = 0.123937 +- 0.0159437 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.173624 +- 0.0188914 microns 
 
-Average Number electrons per event = 22.12
-Average Number photons per event   = 22.12
+Average Number electrons per event = 22.16
+Average Number photons per event   = 22.16
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -540,20 +542,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.61s Real=2.62s Sys=0s
+  User=2.52s Real=2.53s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17427 +- 0.0172643  microns 
-    CSDA  Range  in absorber = 9.04687 +- 0.0171562  microns 
+    Track Length in absorber = 9.19802 +- 0.0168232  microns 
+    CSDA  Range  in absorber = 9.02832 +- 0.0408519  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.115271 +- 0.0172643 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.177867 +- 0.0171562 microns 
+    Track Length (G4 - ICRU49) = 0.139022 +- 0.0168232 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.159324 +- 0.0408519 microns 
 
-Average Number electrons per event = 522.74
-Average Number photons per event   = 3.16
+Average Number electrons per event = 519.6
+Average Number photons per event   = 2.68
 
 G4 kernel has come to Quit state.
