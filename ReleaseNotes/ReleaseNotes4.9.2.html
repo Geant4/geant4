@@ -187,7 +187,7 @@ Documentation is also available from the
 <P> </P>
 <B>Data Sets</B>
 <P> </P>
-This release introduces two new data sets versions.
+This release introduces new versions of two data sets.
 Please see the last section for the corresponding details.
 <UL>
 <LI>New data for neutron cross-sections, G4NDL.3.13.</LI>
@@ -204,8 +204,12 @@ Please see the last section for the corresponding details.
 
 <B>Geometry & Field</B>
 <UL>
-<LI>New <I>locator</I> classes and options are available for identifying the intersection point of a charged particle in a field. These are Simple, Brent, Multi-level and allow the user to investigate tradeoffs between increased accuracy and
-    CPU speed according to  the use case. We note that the Multi-level is used by default, to provide for robustness, and the Brent method is introduced as an alternative.</LI>
+<LI>New <I>locator</I> classes and options are available for identifying the 
+    intersection point of a charged particle in a field. These are Simple, Brent, 
+    and Multi-level and allow the user to investigate tradeoffs between increased 
+    accuracy and CPU speed according to the use case. We note that the Multi-level 
+    is used by default, to provide for robustness, and the Brent method is 
+    introduced as an alternative.</LI>
 </UL>
 
 <B>Detector description persistency</B>
@@ -277,11 +281,11 @@ Please see the last section for the corresponding details.
 <LI>A new alternative class for multiple scattering, <TT>G4UrbanMscModel2</TT>,
     includes tuning of the model to electron data.<BR>
     A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
-    hadrons in available as a prototype for validation.</LI>
-<LI>New Bremsstrahlung model class, <TT>G4eBremsstrahlungRelModel</TT>, includes
+    hadrons is available as a prototype for validation.</LI>
+<LI>New bremsstrahlung model class, <TT>G4eBremsstrahlungRelModel</TT>, includes
     advanced description of LPM effect; it can be applied for electrons and
-    positrons with <TT>E > 1 GeV</TT> and provides gamma spectrum describing
-    well thin-target experimental data.<BR>
+    positrons with <TT>E > 1 GeV</TT> and provides gamma spectra which agree
+    well with thin-target experimental data.<BR>
     The density suppression effect in the old <TT>G4eBremsstrahlungModel</TT> 
     have been reviewed and upgraded.</LI>
 <LI>Cubic spline of <TT>dedx</TT> and cross section tables are used by default.</LI>
@@ -290,11 +294,11 @@ Please see the last section for the corresponding details.
     fluctuations. 
     At low energies Gaussian distribution is based on experimental data.</LI>
 <LI>An extra limitation of step by the <TT>G4Cerenkov</TT> process has been
-    added in order to provide more smooth X-ray emission near Cerenkov
+    added in order to provide smoother X-ray emission near the Cerenkov
     threshold of media.</LI> 
 <LI>A new <TT>G4EmSaturation</TT> class is introduced for sampling of Birks
     saturation.</LI>
-<LI>A new <TT>G4ElectronIonPair</TT> helper class based on ICRU'31 report has
+<LI>A new <TT>G4ElectronIonPair</TT> helper class based on the ICRU'31 report has
     been added; it can be used for sampling electron/ion pairs in sensitive
     detectors.</LI>
 <LI>A new <TT>G4EmConfigurator</TT> class can be used for configuration of
@@ -348,11 +352,12 @@ Please see the last section for the corresponding details.
      used in Physics Lists; low energy threshold is set to 1.0 MeV </LI>
 
 <LI>Missing pieces of precompound theory were added and several code fixes 
-    were made to G4PreCompoundModel and related classes.  Level densities and 
-    inverse cross sections were improved.</LI>
+    were made to G4PreCompoundModel and related classes.</LI>
 
 <LI>De-excitation and evaporation:
   <UL>
+
+    <LI>New inverse cross sections and fixes of evaporation probabilities</LI>
     <LI>FermiBreakUp is now switched off by default.</LI>
     <LI>The pairing correction in excitation energy was fixed in G4GEMChannel.</LI>
   </UL></LI>
@@ -375,8 +380,8 @@ Please see the last section for the corresponding details.
 <LI>A new <TT>G4EmStandardPhysics_option3</TT> physics constructor has been
     added; it can be used for simulation, where required spatial precision is
     much less than <TT>1 mm</TT>.</LI>
-<LI>A new utility, <TT>G4PhysicsListFactory</TT>, is introduced; it allows to
-    build any reference physics list.</LI>
+<LI>A new utility, <TT>G4PhysicsListFactory</TT>, is introduced; it allows
+    any reference physics list to be built.</LI>
 </UL>
 
 <B>Command-based scoring</B>
@@ -405,8 +410,8 @@ Please see the last section for the corresponding details.
 <UL>
 <LI>An updated version of the <TT>G4LogLogInterpolation</TT> class is included
     in this release. This update improves the speed-up performance of low
-    energy EM Physics processes that use this class, without significative
-    changes on the Physics.</LI>
+    energy EM Physics processes that use this class, without significant
+    changes in the Physics.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
@@ -414,16 +419,35 @@ Please see the last section for the corresponding details.
 <LI>More precise multiple scattering model for electrons and positrons 
     provides wider shower (about 0.5% measured for the CMS calorimeter).</LI>
 <LI>New relativistic Bremsstrahlung model is applied for electrons and 
-    positrons; it provides gamma spectrum describing thin-target CERN and
-    SLAC data and may have effect up to 1% on calorimeter responses at high energy.</LI>
+    positrons; it provides gamma spectra which agree with thin-target CERN and
+    SLAC data and may have effects of up to 1% on calorimeter responses at 
+    high energy.</LI>
 <LI>The usage of the Spline approximation of <TT>dedx</TT> and cross section
-    tables provides Bragg peak position stable within <TT>0.1 mm</TT> versus
-    variation of production cut or step limit.</LI>
+    tables provides a Bragg peak position which is stable within <TT>0.1 mm</TT> 
+    versus variation of production cut or step limit.</LI>
 </UL>
 
 <B>Hadronic physics</B>
 <UL>
-<LI> >>>>> INPUT HERE !!!!!!!!!!!</LI>
+<LI>Changes to the Bertini cascade code have resulted in several changes to energy 
+    spectra and shower shapes:
+  <UL>
+    <LI>the bug fix to multiplicity sampling resulted in cutting the quasi-elastic 
+        peak height in half, more in line with the binary cascade</LI>
+    <LI>the same fix increased the multiplicity and decreased the mean energy of
+        pion secondaries, thus shortening the length of showers in calorimeter
+        tests by roughly 2% (depending on physics list)</LI>
+    <LI>CMS test beam studies show a significant reduction in non-lineraities in 
+        energy response to MIP like particles between 5 and 10 GeV</LI>
+    <LI>improvements to the Coulomb barrier have significantly reduced the number
+        of protons below 20 MeV</LI>
+  </UL></LI>
+
+<LI>Improvements in the precompound model have resulted in more realistic neutron 
+    spectra at low energies.  For 22 MeV protons on Al, for example, the neutron
+    spectrum now falls exponentially, as expected from data.  Before the changes,
+    this spectrum was more or less flat.  This result in proportionately more neutrons
+    at lower energies.</LI>
 </UL>  
 
 <P> </P>
@@ -435,13 +459,13 @@ Please see the last section for the corresponding details.
 <H2>6. Known Run-Time Problems and Limitations</H2>
 <B>Command-based Scoring</B>
 <P></P>
-The following known issues affects cylindrical scoring mesh feature and
+The following known issues affect the cylindrical scoring mesh feature and
 are expected to be fixed in the future releases.
 <UL>
 <LI>Rather frequent warning messages may be issued during tracking by the
     <TT>G4Navigator</TT>, concerning zero-length steps. This does not affect
     the correctness of the results and has been identified in the cases
-    where a track enters at exactly the center of the top/bottom circlic
+    where a track enters at exactly the center of the top/bottom circular
     face along the local z-axis of the scoring cylinder.</LI>
 <LI>Computational performance of transportation in cylindrical mesh
     will be improved.</LI>
@@ -453,7 +477,8 @@ are expected to be fixed in the future releases.
     G4PSCylinderSurfaceFlux</TT>.</LI>
 </UL>
 For a complete list of outstanding run-time problems and to submit any
-problem you may find running this version of Geant4, please refer to the
+problem you may find while running this version of Geant4, please refer 
+to the
 <A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem
 Reporting System</A>.
 
@@ -487,8 +512,8 @@ excessive number of steps ('looping') during the simulation, and the maximum
 energy of such a track. Such behaviour can be due to looping in magnetic fields
 or encountering problems at geometrical boundaries.
 <P></P>
-In case either of these reported energy is significant, we recommend to
-increase the verbosity of <TT>G4Transportation</TT> to obtain information for
+In case either of these reported energies is significant, we recommend
+increasing the verbosity of <TT>G4Transportation</TT> to obtain information for
 each track killed. A user can change the threshold energy above which particles
 are not killed using the method <TT>SetThresholdImportantEnergy</TT> of
 <TT>G4Transportation</TT>. The default value is <TT>250 MeV</TT>.
@@ -1028,7 +1053,7 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4HadronicProcess</TT>:
         <UL>
         <LI>Some cleanup; use method <TT>SampleZandA()</TT> to select an
-            isotope and avoid use debug local <TT>NanCheck()</TT>;
+            isotope and avoid use of debug local <TT>NanCheck()</TT>;
             avoid checking environment variables at run-time; directly fill
            <TT>G4HadronicWhiteBoard</TT>.</LI>
         <LI>Implemented <TT>PostStepDoIt()</TT> and <TT>DumpPhysicsTable()</TT>
@@ -1229,7 +1254,7 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Pre-equilibrium</B>
     <UL>
-    <LI>Fixed <TT>G4PreCompoundNeutron</TT> using date for 22 MeV protons off Zirconium.</LI>
+    <LI>Fixed <TT>G4PreCompoundNeutron</TT> using data for 22 MeV protons off Zirconium.</LI>
     <LI>Added data member initialisation to <TT>G4VPreCompoundTransitions</TT>,
         responsible for run-time errors detected by Valgrind.</LI>
     <LI>Added protection for close to zero excitation energy in
