@@ -380,7 +380,7 @@ examples                                         examples-V09-02-00
   o Fixed path of macro files.
 - advanced/Rich (Rich-V09-01-01)
   o Fixed compilation problems in EventAction class.
-- extended/electromagnetic (electromagnetic-V09-01-00)
+- extended/electromagnetic (electromagnetic-V09-01-01)
   o Updated EM standard physics-lists EM options (option-3) to EM examples.
 - extended/electromagnetic/TestEm0 (testem0-V09-01-01)
 - extended/electromagnetic/TestEm1 (testem1-V09-01-08)
@@ -430,7 +430,7 @@ examples                                         examples-V09-02-00
   o Use "test.gdml" as default GDML file to load.
 - extended/persistency/gdml/G03 (G03-V09-01-01)
   o New example showing how to extend the GDML schema in input.
-- extended/persistency/P03 (exampleP03-V09-01-03)
+- extended/persistency/P03 (exampleP03-V09-01-04)
   o New example showing usage of ASCII text persistency for detector
     description.
 - extended/radioactivedecay/exrdm (exrdm-V09-01-04)
