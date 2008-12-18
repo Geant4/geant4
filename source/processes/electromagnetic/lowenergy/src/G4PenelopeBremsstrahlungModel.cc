@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.1 2008-12-15 09:23:37 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.2 2008-12-18 11:39:23 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -218,6 +218,23 @@ G4double G4PenelopeBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4Parti
 								   G4double cutEnergy,
 								   G4double)
 {
+  // Penelope model to calculate cross section for hard bremsstrahlung emission 
+  // (gamma energy > cutEnergy).
+  //
+  // The total bremsstrahlung cross section is read from database, following data 
+  // reported in the EEDL library
+  //  D.E.Cullen et al., Report UCRL-50400 (Lawrence Livermore National Laboratory) (1989)
+  // The probability to have photon emission above a given threshold is calculated 
+  // analytically using the differential cross section model dSigma/dW = F(x)/x, where 
+  // W is the outgoing photon energy and x = W/E is the ratio of the photon energy to the 
+  // incident energy. The function F(x) is tabulated (for all elements) using 32 points in x 
+  // ranging from 1e-12 to 1. Data are derived from 
+  //  S.M.Seltzer and M.J.Berger, At.Data Nucl.Data Tables 35,345 (1986)
+  // Differential cross sections for electrons and positrons dSigma/dW are assumed to scale 
+  // with a function S(Z,E) which does not depend on W; therefore, only overall cross section 
+  // changes but not the shape of the photon energy spectrum.
+  //
+
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopeBremsstrahlungModel" << G4endl;
   
@@ -249,6 +266,22 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* t
 							     G4double kineticEnergy,
 							     G4double cutEnergy)
 {
+  // Penelope model to calculate the stopping power (in [Energy]/[Length]) for soft 
+  // bremsstrahlung emission (gamma energy < cutEnergy).
+  //
+  // The actual calculation is performed by the helper class 
+  // G4PenelopeBremsstrahlungContinuous and its method CalculateStopping(). Notice:
+  // CalculateStopping() gives the stopping cross section, namely the first momentum of 
+  // dSigma/dW, restricted to W < cut (W = gamma energy) This is dimensionally:
+  //  [Energy]*[Surface]
+  // The calculation is performed by interpolation (in E = incident energy and 
+  // x=W/E) from the tabulated data derived from
+  //  M.J.Berger and S.M.Seltzer, Report NBSIR 82-2550 (National Bureau of Standards) (1982);
+  // for electrons.
+  // For positrons, dSigma/dW are assumed to scale with a function S(Z,E) with respect to electrons. 
+  // An analytical approximation for the scaling function S(Z,E) is given in
+  //  L.Kim et al., Phys.Rev.A 33,3002 (1986)
+  //
   if (!stoppingPowerData)
     stoppingPowerData = new std::map<std::pair<G4int,G4double>,
       G4PenelopeBremsstrahlungContinuous*>;
@@ -285,6 +318,34 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
 						      const G4DynamicParticle* aDynamicParticle,
 						      G4double,G4double)
 {
+  // Penelope model to sample the final state for hard bremsstrahlung emission 
+  // (gamma energy < cutEnergy).
+  // The energy distributionof the emitted photons is sampled according to the F(x) 
+  // function tabulated in the database from 
+  //  S.M.Seltzer and M.J.Berger, At.Data Nucl.Data Tables 35,345 (1986)
+  // The database contains the function F(x) (32 points) for 57 energies of the
+  // incident electron between 1 keV and 100 GeV. For other primary energies,
+  // logarithmic interpolation is used to obtain the values of the function F(x).
+  // The double differential cross section dSigma/(dW dOmega), with W=photon energy,
+  // is described as 
+  //  dSigma/(dW dOmega) = dSigma/dW * p(Z,E,x,cosTheta)
+  // where the shape function p depends on atomic number, incident energy and x=W/E.
+  // Numerical values of the shape function, calculated by partial-waves methods, have been 
+  // reported in 
+  //  L.Kissel et al., At.Data Nucl.Data.Tab. 28,381 (1983); 
+  // for Z=2,8,13,47,79 and 92; E=1,5,10,50,100 and 500 keV; x=0,0.6,0.8 and 0.95. The 
+  // function p(Z,E,x,cosTheta) is approximated by a Lorentz-dipole function as reported in 
+  //  Penelope - A Code System for Monte Carlo Simulation of Electron and Photon Transport, 
+  //  Workshop Proceedings Issy-les-Moulineaux, France, 5-7 November 2001, AEN-NEA;
+  // The analytical function contains two adjustable parameters that are obtained by fitting 
+  // the complete solution from 
+  //  L.Kissel et al., At.Data Nucl.Data.Tab. 28,381 (1983); 
+  // This allows the evaluation of p(Z,E,x,cosTheta) for any choice of Z, E and x. The actual 
+  // sampling of cos(theta) is performed in the helper class
+  //  G4PenelopeBremsstrahlungAngular, method ExtractCosTheta()
+  // Energy and direction of the primary particle are updated according to energy-momentum 
+  // conservation. For positrons, it is sampled the same final state as for electrons.
+  //
    if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4PenelopeBremsstrahlungModel" << G4endl;
                                                                                                         
