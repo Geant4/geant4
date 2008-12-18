@@ -290,14 +290,14 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
 
   G4double factph=factorial(p+h-1);
   
-  G4double logConst =  (p+h)*std::log(g) - log (factph) - log(factp) - log(facth);
+  G4double logConst =  (p+h)*std::log(g) - std::log (factph) - std::log(factp) - std::log(facth);
 
 // initialise values using j=0
 
   G4double t1=1;
   G4double t2=1;
   G4double logt3=(p+h-1) * std::log(E-Aph);
-  G4double tot = exp( logt3 + logConst );
+  G4double tot = std::exp( logt3 + logConst );
 
 // and now sum rest of terms 
   G4int j(1);  

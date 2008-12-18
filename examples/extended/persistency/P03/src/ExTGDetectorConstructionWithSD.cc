@@ -8,7 +8,7 @@
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
 // *                                                                  *
-// * Neither the authors of this software system, nor their emplying *
+// * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstructionWithSD.cc,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+//
+// $Id: ExTGDetectorConstructionWithSD.cc,v 1.2 2008-12-18 12:56:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------

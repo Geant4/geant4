@@ -101,7 +101,7 @@ inline G4double G4IonParametrisedLossModel::DeltaRayMeanEnergyTransferRate(
     G4double cutMaxEnergyRatio = cutEnergy / maxKinEnergy;
 
     meanRate = 
-        (- log(cutMaxEnergyRatio) - (1.0 - cutMaxEnergyRatio) * betaSquared) * 
+        (- std::log(cutMaxEnergyRatio) - (1.0 - cutMaxEnergyRatio) * betaSquared) * 
         twopi_mc2_rcl2 * 
         (material->GetTotNbOfElectPerVolume()) / betaSquared;
 

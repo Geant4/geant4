@@ -1,11 +1,30 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
 //
-// $Id: String_frag.cc,v 1.1 2003-10-07 11:27:10 hpw Exp $
+//
+// $Id: String_frag.cc,v 1.2 2008-12-18 13:02:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -160,7 +179,7 @@ int main()
 // very simple creation of e/p
 
 	   G4LorentzVector ptot(G4ThreeVector(0.,0.,string_momentum),
-	   		sqrt(sqr(string_momentum)+sqr(string_mass)));
+	   		std::sqrt(sqr(string_momentum)+sqr(string_mass)));
 
 	   Pleft->Set4Momentum(0.5*ptot);
 	   Pright->Set4Momentum(0.5*ptot);
@@ -221,7 +240,7 @@ int main()
 	   
 //	   G4cout << " total E : "<< Psum.e() << G4endl;
 	   
-	   if ( abs(Charge - String_charge)  > perCent ) 
+	   if ( std::abs(Charge - String_charge)  > perCent ) 
 	                               G4cout << " N Charge Leptons Barions " 
 				              << result->size() << " , "
 	   				      <<Charge << " , "  
@@ -247,7 +266,7 @@ int main()
 
 G4double Rapidity(const G4double p, const G4double E)
 {
-	return 0.5*log((E+p)/(E-p));
+	return 0.5*std::log((E+p)/(E-p));
 } 
 
 //**************************************************

@@ -1,4 +1,4 @@
-// 
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.2 2008-10-30 21:52:00 alechner Exp $
+//
+// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.3 2008-12-18 12:57:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -70,7 +71,7 @@ G4double G4SimpleMaterialStoppingICRU73::GetDEDX(G4int ionZ, G4int idxMaterial,
   G4double scaledEnergy = kinEnergy/A[ionZ - 3];
   G4double emin = .025*MeV;
   if(scaledEnergy < emin) {
-    res = (dedx[idx])->GetValue(emin, b)*sqrt(scaledEnergy/emin);
+    res = (dedx[idx])->GetValue(emin, b)*std::sqrt(scaledEnergy/emin);
   } else {
     res = (dedx[idx])->GetValue(scaledEnergy, b);
   }

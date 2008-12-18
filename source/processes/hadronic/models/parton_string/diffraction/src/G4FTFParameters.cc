@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.3 2008-12-09 10:40:52 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.4 2008-12-18 13:02:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -209,11 +209,11 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
              {
               SetProjMinDiffMass(1.1);                    // GeV
               SetProjMinNonDiffMass(1.1);                 // GeV
-              SetProbabilityOfProjDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
              }
@@ -221,11 +221,11 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
              {
               SetProjMinDiffMass(0.5);                    // GeV
               SetProjMinNonDiffMass(0.3);                 // GeV
-              SetProbabilityOfProjDiff(0.62*pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.62*pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
 /*
 SetProjMinDiffMass(0.5);
@@ -239,11 +239,11 @@ SetProbabilityOfTarDiff(0.05);
              {
               SetProjMinDiffMass(0.7);                    // GeV 1.1
               SetProjMinNonDiffMass(0.7);                 // GeV
-              SetProbabilityOfProjDiff(0.85*pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.85*pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
              }
@@ -252,11 +252,11 @@ SetProbabilityOfTarDiff(0.05);
              {
               SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
-              SetProbabilityOfProjDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
              };

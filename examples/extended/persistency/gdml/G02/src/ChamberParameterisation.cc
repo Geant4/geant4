@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ChamberParameterisation.cc,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: ChamberParameterisation.cc,v 1.2 2008-12-18 12:57:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class ChamberParameterisation implementation

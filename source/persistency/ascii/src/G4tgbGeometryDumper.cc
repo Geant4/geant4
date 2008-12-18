@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.10 2008-12-03 16:13:11 arce Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.11 2008-12-18 12:59:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -777,14 +777,14 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
     const G4Para * para = dynamic_cast < const G4Para * > (so);
     double phi;
     if(para->GetSymAxis().z()!=1.0)
-      { phi = atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
+      { phi = std::atan(para->GetSymAxis().y()/para->GetSymAxis().x()); }
     else
       { phi = 0; }
     params.push_back( para->GetXHalfLength());
     params.push_back(  para->GetYHalfLength());
     params.push_back( para->GetZHalfLength());
-    params.push_back( atan(para->GetTanAlpha())/deg);
-    params.push_back( acos(para->GetSymAxis().z())/deg);
+    params.push_back( std::atan(para->GetTanAlpha())/deg);
+    params.push_back( std::acos(para->GetSymAxis().z())/deg);
     params.push_back( phi/deg);
     
   } else if (solidType == "CONS") {

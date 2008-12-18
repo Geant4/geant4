@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstructionWithCpp.hh,v 1.1 2008-11-03 10:06:22 gcosmo Exp $
+// $Id: ExTGDetectorConstructionWithCpp.hh,v 1.2 2008-12-18 12:56:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------

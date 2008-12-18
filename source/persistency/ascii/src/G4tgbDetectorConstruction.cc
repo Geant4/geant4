@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorConstruction.cc,v 1.3 2008-11-12 08:44:20 arce Exp $
+// $Id: G4tgbDetectorConstruction.cc,v 1.4 2008-12-18 12:59:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

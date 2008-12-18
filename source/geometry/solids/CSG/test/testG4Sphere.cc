@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.26 2008-07-07 09:35:16 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.27 2008-12-18 12:57:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -539,7 +539,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
 
     Dist=sn12.DistanceToOut(G4ThreeVector(0.,0.,20.),vxmz,calcNorm,pgoodNorm,pNorm);
     // G4cout<<"sn12.DistanceToOut(G4ThreeVector(0.,0.,20.),vxmz... = "<<Dist<<G4endl;
-    assert(ApproxEqual(Dist,20./sqrt(2.)));
+    assert(ApproxEqual(Dist,20./std::sqrt(2.)));
 
     Dist=sn12.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz,calcNorm,pgoodNorm,pNorm);
     // G4cout<<"sn12.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz... = "<<Dist<<G4endl;

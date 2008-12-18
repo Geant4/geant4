@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.6 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.7 2008-12-18 13:01:58 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -160,7 +160,7 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
      G4LorentzRotation toCms(-1*Psum.boostVector());
 
      G4LorentzVector Ptmp=toCms*Pprojectile;
-     if ( Ptmp.pz() <= 0. )
+     if ( Ptmp.pz() <= 0. )
         {
 	   // "String" moving backwards in  CMS, abort collision !!
            //G4cout << " abort Collision!! " << G4endl;
@@ -241,7 +241,7 @@ G4cout << "Ptarget aft boost : " << Ptarget <<" "<<Ptarget.mag()<< G4endl;
 G4cout << "cms aft boost : " << (Pprojectile+ Ptarget) << G4endl;
 G4cout << " Projectile Xplus / Xminus : " <<
             Pprojectile.plus() << " / " << Pprojectile.minus() << G4endl;
-G4cout << " Target Xplus / Xminus : " <<           Ptarget.plus() << " / " << Ptarget.minus() << G4endl;
+G4cout << " Target Xplus / Xminus : " <<           Ptarget.plus() << " / " << Ptarget.minus() << G4endl;
 G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
 */
      G4LorentzVector Qmomentum;
@@ -330,7 +330,8 @@ return false;
 //G4cout<<"   Target difraction"<<G4endl;
 //Uzhi_targetdiffraction++;
          do {
-//             Generate pt//             if (whilecount++ >= 500 && (whilecount%100)==0)
+//             Generate pt
+//             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
 //	   	 << ", loop count/ maxPtSquare : "
 //           	 << whilecount << " / " << maxPtSquare << G4endl;
@@ -494,10 +495,10 @@ G4cout << "pt2" << pt2 << G4endl;
 G4cout << "Qmomentum " << Qmomentum << G4endl;
 G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
            " / " << (Ptarget-Qmomentum).mag() << G4endl;   // mag()
-G4cout<<"Mprojectile "<<sqrt(M0projectile2)<<G4endl;
-G4cout<<"Mtarget     "<<sqrt(M0target2    )<<G4endl;
-G4cout<<"ProjectileDiffStateMinMass "<<sqrt(ProjectileDiffStateMinMass2)<<G4endl;
-G4cout<<"TargetDiffStateMinMass "<<sqrt(TargetDiffStateMinMass2)<<G4endl;
+G4cout<<"Mprojectile "<<std::sqrt(M0projectile2)<<G4endl;
+G4cout<<"Mtarget     "<<std::sqrt(M0target2    )<<G4endl;
+G4cout<<"ProjectileDiffStateMinMass "<<std::sqrt(ProjectileDiffStateMinMass2)<<G4endl;
+G4cout<<"TargetDiffStateMinMass "<<std::sqrt(TargetDiffStateMinMass2)<<G4endl;
 */
        } while (
  ((Pprojectile+Qmomentum).mag2() <  ProjectileNonDiffStateMinMass2) || //No double Diffraction

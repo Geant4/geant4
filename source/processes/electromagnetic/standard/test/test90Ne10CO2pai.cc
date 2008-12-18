@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.5 2008-05-30 16:04:40 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.6 2008-12-18 13:01:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -512,7 +512,7 @@ int main()
 	 }
          nTot++;
 
-	 rTemp = sqrt(rTemp2);
+	 rTemp = std::sqrt(rTemp2);
          rSum += rTemp;
 
 	 // rTemp = rTemp2;

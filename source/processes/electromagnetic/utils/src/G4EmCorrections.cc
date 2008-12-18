@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.50 2008-10-13 14:56:15 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.51 2008-12-18 13:01:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -794,7 +794,7 @@ void G4EmCorrections::BuildCorrectionVector()
     escal = e/massRatio;
     eion  = escal/A;
     if(eion <= eth0) {
-      dedx = v->GetValue(eth0, b)*sqrt(eion/eth0);
+      dedx = v->GetValue(eth0, b)*std::sqrt(eion/eth0);
     } else {
       dedx = v->GetValue(eion, b);
     }

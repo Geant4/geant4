@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.23 2008-09-20 19:39:34 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.24 2008-12-18 13:01:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -177,7 +177,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     effCharge = q*charge;
 
     /*
-    G4double x1 = 1.0*effCharge*(1.0 - 0.132*std::log(y))/(y*sqrt(z));
+    G4double x1 = 1.0*effCharge*(1.0 - 0.132*std::log(y))/(y*std::sqrt(z));
     G4double x2 = 0.1*effCharge*effCharge*energyBohr/reducedEnergy;
 
     chargeCorrection = 1.0 + x1 - x2;

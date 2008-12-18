@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLCrossSection.cc,v 1.4 2008-05-15 13:28:22 habdelou Exp $
+//$Id: G4OrlicLCrossSection.cc,v 1.5 2008-12-18 13:01:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -77,7 +77,7 @@ G4double G4OrlicLCrossSection::CalculateL1CrossSection(G4int zTarget, G4double e
 
   G4double normalizedEnergy =  (energyIncident/keV)/(lamda*l1BindingEnergy);
 
-  G4double x = log(normalizedEnergy);
+  G4double x = std::log(normalizedEnergy);
 
   G4double a0 = 0.;
   G4double a1 = 0.;
@@ -193,12 +193,12 @@ G4double G4OrlicLCrossSection::CalculateL1CrossSection(G4int zTarget, G4double e
       }
       
 
-G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*pow(x,3))+(a4*pow(x,4))+(a5*pow(x,5))+(a6*pow(x,6))+
-	(a7*pow(x,7))+(a8*pow(x,8))+(a9*pow(x,9)); 
+G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::pow(x,4))+(a5*std::pow(x,5))+(a6*std::pow(x,6))+
+	(a7*std::pow(x,7))+(a8*std::pow(x,8))+(a9*std::pow(x,9)); 
 
 
 
-  G4double L1crossSection =  exp(analyticalFunction)/(l1BindingEnergy*l1BindingEnergy);  
+  G4double L1crossSection =  std::exp(analyticalFunction)/(l1BindingEnergy*l1BindingEnergy);  
 
   return L1crossSection;
 }
@@ -234,7 +234,7 @@ G4double G4OrlicLCrossSection::CalculateL2CrossSection(G4int zTarget, G4double e
 
   G4double normalizedEnergy =  (energyIncident/keV)/(lamda*l2BindingEnergy);
 
-  G4double x = log(normalizedEnergy);
+  G4double x = std::log(normalizedEnergy);
 
   G4double a0 = 0.;
   G4double a1 = 0.;
@@ -310,10 +310,10 @@ G4double G4OrlicLCrossSection::CalculateL2CrossSection(G4int zTarget, G4double e
 	}
       
 
- G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*pow(x,3))+(a4*pow(x,4))+(a5*pow(x,5)); 
+ G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::pow(x,4))+(a5*std::pow(x,5)); 
 
 
-   L2crossSection =  exp(analyticalFunction)/(l2BindingEnergy*l2BindingEnergy); 
+   L2crossSection =  std::exp(analyticalFunction)/(l2BindingEnergy*l2BindingEnergy); 
                                                                             
    } 
 
@@ -353,7 +353,7 @@ G4double G4OrlicLCrossSection::CalculateL3CrossSection(G4int zTarget, G4double e
 
   G4double normalizedEnergy =  (energyIncident/keV)/(lamda*l3BindingEnergy);
 
-  G4double x = log(normalizedEnergy);
+  G4double x = std::log(normalizedEnergy);
 
 
   G4double a0 = 0.;
@@ -423,10 +423,10 @@ G4double G4OrlicLCrossSection::CalculateL3CrossSection(G4int zTarget, G4double e
 	}
       
 
- G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*pow(x,3))+(a4*pow(x,4)); 
+ G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::pow(x,4)); 
 
 
-   L3crossSection =  exp(analyticalFunction)/(l3BindingEnergy*l3BindingEnergy); 
+   L3crossSection =  std::exp(analyticalFunction)/(l3BindingEnergy*l3BindingEnergy); 
                                                                             
    } 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrixMgr.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// $Id: G4tgbRotationMatrixMgr.cc,v 1.2 2008-12-18 12:59:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

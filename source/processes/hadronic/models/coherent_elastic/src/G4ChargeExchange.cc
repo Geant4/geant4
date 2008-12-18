@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.13 2008-11-20 12:35:19 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.14 2008-12-18 13:01:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -311,8 +311,8 @@ G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
     cc = 0.4*std::pow(A, 0.40);
     dd = 10.;
   }
-  G4double x1 = (1.0 - exp(-tmax*bb))*aa/bb;
-  G4double x2 = (1.0 - exp(-tmax*dd))*cc/dd;
+  G4double x1 = (1.0 - std::exp(-tmax*bb))*aa/bb;
+  G4double x2 = (1.0 - std::exp(-tmax*dd))*cc/dd;
   
   G4double t;
   G4double y = bb;

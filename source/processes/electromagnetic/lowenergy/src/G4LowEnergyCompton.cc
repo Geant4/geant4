@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.46 2008-09-30 06:49:29 sincerti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.47 2008-12-18 13:01:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -288,7 +288,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   if (electronP2 > 0.)
     {
       cosThetaE = (eTotalEnergy + photonEnergy1 )* (1. - epsilon) / std::sqrt(electronP2);
-      sinThetaE = -1. * sqrt(1. - cosThetaE * cosThetaE); 
+      sinThetaE = -1. * std::sqrt(1. - cosThetaE * cosThetaE); 
     }
   
   G4double eDirX = sinThetaE * std::cos(phi);

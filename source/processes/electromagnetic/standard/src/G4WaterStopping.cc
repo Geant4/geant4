@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.10 2008-09-09 09:30:58 vnivanch Exp $
+// $Id: G4WaterStopping.cc,v 1.11 2008-12-18 13:01:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
   G4double scaledEnergy = energy/A[idx];
   G4double emin = 0.025*MeV;
   if(scaledEnergy < emin) {
-    res = (dedx[idx])->GetValue(emin, b)*sqrt(scaledEnergy/emin);
+    res = (dedx[idx])->GetValue(emin, b)*std::sqrt(scaledEnergy/emin);
   } else {
     res = (dedx[idx])->GetValue(scaledEnergy, b);
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.cc,v 1.2 2008-11-03 14:48:53 ivana Exp $
+// $Id: G4Pythia6Decayer.cc,v 1.3 2008-12-18 12:56:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // According to TPythia6Decayer class in Root:
@@ -156,7 +156,7 @@ G4int G4Pythia6Decayer::CountProducts(G4int channel, G4int particle)
 
    G4int np = 0;
    for ( G4int i=1; i<=5; i++ ) 
-      if ( abs(Pythia6::Instance()->GetKFDP(channel,i) ) == particle ) np++;
+      if ( std::abs(Pythia6::Instance()->GetKFDP(channel,i) ) == particle ) np++;
    return np;
 }
 
@@ -563,7 +563,7 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
     G4int status = particle->fKS;
     G4int pdg = particle->fKF;
     if ( status>0 && status<11 && 
-         abs(pdg)!=12 && abs(pdg)!=14 && abs(pdg)!=16 ) {
+         std::abs(pdg)!=12 && std::abs(pdg)!=14 && std::abs(pdg)!=16 ) {
       // pass to tracking final particles only;
       // skip neutrinos
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCDetectorBuilder.hh,v 1.2 2008-11-03 16:26:56 arce Exp $
+// $Id: ExTGRCDetectorBuilder.hh,v 1.3 2008-12-18 12:56:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce

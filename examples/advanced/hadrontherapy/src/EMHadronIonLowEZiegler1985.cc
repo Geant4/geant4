@@ -22,6 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+//
 // $Id: EMHadronIonLowEZiegler1985.cc; 
 // Last modified: A.Lechner (anton.lechner@cern.ch), August 2008;
 //

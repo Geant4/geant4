@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.10 2008-10-23 09:24:38 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.11 2008-12-18 13:01:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -221,13 +221,13 @@ void G4UrbanMscModel2::SetParticle(const G4ParticleDefinition* p)
 inline
 void G4UrbanMscModel2::UpdateCache()                                   
 {
-    lnZ = log(Zeff);
+    lnZ = std::log(Zeff);
     coeffth1 = 0.885+lnZ*(0.104-0.0170*lnZ);
     coeffth2 = 0.028+lnZ*(0.012-0.00125*lnZ);
     coeffc1  = 2.134-lnZ*(0.1045-0.00602*lnZ);
     coeffc2  = 0.001126-lnZ*(0.0001089+0.0000247*lnZ);
     Z2 = Zeff*Zeff;
-    Z23 = exp(2.*lnZ/3.);
+    Z23 = std::exp(2.*lnZ/3.);
     scr1     = scr1ini*Z23;
     scr2     = scr2ini*Z2*ChargeSquare;
   //  lastMaterial = couple->GetMaterial();

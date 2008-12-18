@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrCrossSection.cc,v 1.4 2008-05-15 13:26:53 habdelou Exp $
+//$Id: G4ecpssrCrossSection.cc,v 1.5 2008-12-18 13:01:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -80,7 +80,7 @@ G4double G4ecpssrCrossSection::ExpIntFunction(G4int n,G4double x)
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1)))
   G4cout << "bad arguments in ExpIntFunction" << G4endl;
   else {
-       if (n==0) ans=exp(-x)/x;
+       if (n==0) ans=std::exp(-x)/x;
         else {
            if (x==0.0) ans=1.0/nm1;
               else {
@@ -96,13 +96,13 @@ G4double G4ecpssrCrossSection::ExpIntFunction(G4int n,G4double x)
 				  c=b+a/c;
 				  del=c*d;
 				  h *=del;
-				      if (fabs(del-1.0) < eps) {
-					ans=h*exp(-x);
+				      if (std::fabs(del-1.0) < eps) {
+					ans=h*std::exp(-x);
 					return ans;
 				      }
 				}
 		   } else {
-		     ans = (nm1!=0 ? 1.0/nm1 : -log(x)-euler);
+		     ans = (nm1!=0 ? 1.0/nm1 : -std::log(x)-euler);
 		     fact=1.0;
 		     for (i=1;i<=maxit;i++) {
 		       fact *=-x/i;
@@ -110,10 +110,10 @@ G4double G4ecpssrCrossSection::ExpIntFunction(G4int n,G4double x)
 		       else {
 			 psi = -euler;
 			 for (ii=1;ii<=nm1;ii++) psi +=1.0/ii;
-			 del=fact*(-log(x)+psi);
+			 del=fact*(-std::log(x)+psi);
 		       }
 		       ans += del;
-		       if (fabs(del) < fabs(ans)*eps) return ans;
+		       if (std::fabs(del) < std::fabs(ans)*eps) return ans;
 		     }
 		   }
 	      }
@@ -173,7 +173,7 @@ G4double G4ecpssrCrossSection::CalculateCrossSection(G4int zTarget,G4int zIncide
 
   const G4double bohrPow2Barn=(Bohr_radius*Bohr_radius)/barn ;        
   
-  G4double sigma0 = 8.*pi*(zIncident*zIncident)*bohrPow2Barn*pow(screenedzTarget,-4.);     //sigma0 is the initial cross section of K shell at stable state
+  G4double sigma0 = 8.*pi*(zIncident*zIncident)*bohrPow2Barn*std::pow(screenedzTarget,-4.);     //sigma0 is the initial cross section of K shell at stable state
 
   //---------------------------------------------------------------------------------------------------------------------
 
@@ -189,24 +189,24 @@ G4double G4ecpssrCrossSection::CalculateCrossSection(G4int zTarget,G4int zIncide
                                        
   if ( x<0.035)  
     {
-      electrIonizationEnergy= 0.75*pi*(log(1./(x*x))-1.);  
+      electrIonizationEnergy= 0.75*pi*(std::log(1./(x*x))-1.);  
     }
   else 
     { 
       if ( x<3.) 
 	{ 
-	  electrIonizationEnergy =exp(-2.*x)/(0.031+(0.213*pow(x,0.5))+(0.005*x)-(0.069*pow(x,3./2.))+(0.324*x*x));
+	  electrIonizationEnergy =std::exp(-2.*x)/(0.031+(0.213*std::pow(x,0.5))+(0.005*x)-(0.069*std::pow(x,3./2.))+(0.324*x*x));
 	}
      
       else  
 	{
-	 electrIonizationEnergy =2.*exp(-2.*x)/pow(x,1.6); }
+	 electrIonizationEnergy =2.*std::exp(-2.*x)/std::pow(x,1.6); }
     }
 
-  G4double hFunction =(electrIonizationEnergy*2.)/(tetaK*pow(velocity,3)); //hFunction represents the correction for polarization effet
+  G4double hFunction =(electrIonizationEnergy*2.)/(tetaK*std::pow(velocity,3)); //hFunction represents the correction for polarization effet
     
-  G4double gFunction = (1.+(9.*velocity)+(31.*velocity*velocity)+(98.*pow(velocity,3.))+(12.*pow(velocity,4.))+(25.*pow(velocity,5.))
-			+(4.2*pow(velocity,6.))+(0.515*pow(velocity,7.)))/pow(1.+velocity,9.); //gFunction represents the correction for binding effet
+  G4double gFunction = (1.+(9.*velocity)+(31.*velocity*velocity)+(98.*std::pow(velocity,3.))+(12.*std::pow(velocity,4.))+(25.*std::pow(velocity,5.))
+			+(4.2*std::pow(velocity,6.))+(0.515*std::pow(velocity,7.)))/std::pow(1.+velocity,9.); //gFunction represents the correction for binding effet
  
   //-----------------------------------------------------------------------------------------------------------------------------
 
@@ -218,11 +218,11 @@ G4double G4ecpssrCrossSection::CalculateCrossSection(G4int zTarget,G4int zIncide
   
   G4double ykFormula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocity/sigmaPSS);
  
-  G4double relativityCorrection = pow((1.+(1.1*ykFormula*ykFormula)),0.5)+ykFormula;// the relativistic correction parameter
+  G4double relativityCorrection = std::pow((1.+(1.1*ykFormula*ykFormula)),0.5)+ykFormula;// the relativistic correction parameter
 
-  G4double reducedVelocity = velocity*pow(relativityCorrection,0.5);  // presents the reduced collision velocity parameter 
+  G4double reducedVelocity = velocity*std::pow(relativityCorrection,0.5);  // presents the reduced collision velocity parameter 
 
-  G4double universalFunction = (pow(2.,9.)/45.)*pow(reducedVelocity/sigmaPSS,8.)*pow((1.+(1.72*(reducedVelocity/sigmaPSS)*(reducedVelocity/sigmaPSS))),-4.);// is the reduced universal cross section
+  G4double universalFunction = (std::pow(2.,9.)/45.)*std::pow(reducedVelocity/sigmaPSS,8.)*std::pow((1.+(1.72*(reducedVelocity/sigmaPSS)*(reducedVelocity/sigmaPSS))),-4.);// is the reduced universal cross section
 
   //----------------------------------------------------------------------------------------------------------------------
 
@@ -232,13 +232,13 @@ G4double G4ecpssrCrossSection::CalculateCrossSection(G4int zTarget,G4int zIncide
 
   G4double pssDeltaK = (4./(systemMass*sigmaPSS*tetaK))*(sigmaPSS/velocity)*(sigmaPSS/velocity);
 
-  G4double energyLoss = pow(1-pssDeltaK,0.5); //energyLoss incorporates the straight-line energy-loss 
+  G4double energyLoss = std::pow(1-pssDeltaK,0.5); //energyLoss incorporates the straight-line energy-loss 
 
-  G4double energyLossFunction = (pow(2.,-9)/8.)*((((9.*energyLoss)-1.)*pow(1.+energyLoss,9.))+(((9.*energyLoss)+1.)*pow(1.-energyLoss,9.)));//energy loss function 
+  G4double energyLossFunction = (std::pow(2.,-9)/8.)*((((9.*energyLoss)-1.)*std::pow(1.+energyLoss,9.))+(((9.*energyLoss)+1.)*std::pow(1.-energyLoss,9.)));//energy loss function 
 
   //----------------------------------------------------------------------------------------------------------------------------------------------
 
-  G4double coulombDeflection = (4.*pi*zIncident/systemMass)*pow(tetaK*sigmaPSS,-2.)*pow(velocity/sigmaPSS,-3.)*(zTarget/screenedzTarget); //incorporates Coulomb deflection parameter 
+  G4double coulombDeflection = (4.*pi*zIncident/systemMass)*std::pow(tetaK*sigmaPSS,-2.)*std::pow(velocity/sigmaPSS,-3.)*(zTarget/screenedzTarget); //incorporates Coulomb deflection parameter 
  
   G4double cParameter = 2.*coulombDeflection/(energyLoss*(energyLoss+1.));
   
@@ -296,7 +296,7 @@ G4double G4ecpssrCrossSection::CalculateVelocity(G4int zTarget, G4int zIncident,
  
 G4double tetaK = kBindingEnergy/(screenedzTarget*screenedzTarget*rydbergMeV);            
   
-G4double velocity =(2./(tetaK*screenedzTarget))*pow(((energyIncident*electron_mass_c2)/(massIncident*rydbergMeV)),0.5);
+G4double velocity =(2./(tetaK*screenedzTarget))*std::pow(((energyIncident*electron_mass_c2)/(massIncident*rydbergMeV)),0.5);
 
   return velocity;
 }

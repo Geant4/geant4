@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
 
@@ -87,7 +112,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
    G4double  cos_theta = 1.;
    G4double gamma   = 1. + electronEnergy/electron_mass_c2;
    if (gamma <= 5.) {
-  	G4double beta  = sqrt(gamma*gamma-1.)/gamma;
+  	G4double beta  = std::sqrt(gamma*gamma-1.)/gamma;
  	G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
 
   	G4double rndm,term,greject,grejsup;
@@ -105,9 +130,9 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
   //---------------------------------------
   
      
-  G4double sin_theta = sqrt(1.-cos_theta*cos_theta);
+  G4double sin_theta = std::sqrt(1.-cos_theta*cos_theta);
   G4double Phi     = twopi * G4UniformRand();
-  G4double dirx = sin_theta*cos(Phi),diry = sin_theta*sin(Phi),dirz = cos_theta;
+  G4double dirx = sin_theta*std::cos(Phi),diry = sin_theta*std::sin(Phi),dirz = cos_theta;
   G4ThreeVector adjoint_gammaDirection(dirx,diry,dirz);
   adjoint_gammaDirection.rotateUz(electronDirection);
   

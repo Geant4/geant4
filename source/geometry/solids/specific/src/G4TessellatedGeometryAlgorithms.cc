@@ -17,13 +17,15 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration and of QinetiQ Ltd,   *
+// * subject to DEFCON 705 IPR conditions.                            *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.5 2007-12-12 16:51:12 gcosmo Exp $
+//
+// $Id: G4TessellatedGeometryAlgorithms.cc,v 1.6 2008-12-18 12:57:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

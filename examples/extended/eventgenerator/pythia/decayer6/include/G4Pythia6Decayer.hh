@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+// $Id: G4Pythia6Decayer.hh,v 1.2 2008-12-18 12:56:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implements the G4VExtDecayer abstract class using the Pythia6 interface.

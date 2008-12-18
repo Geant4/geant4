@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2008-12-18 12:57:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorMessenger implementation

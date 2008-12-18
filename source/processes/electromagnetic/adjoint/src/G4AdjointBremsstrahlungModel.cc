@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
@@ -111,9 +136,9 @@ G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
 
   	G4double fsig = 0.;
   	G4int nmax = 100;
-  	G4double vmin=log(E1);
-  	G4double vmax=log(kinEnergyProj) ;
-  	G4int nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin));
+  	G4double vmin=std::log(E1);
+  	G4double vmax=std::log(kinEnergyProj) ;
+  	G4int nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
   	G4double u,fac,c,v,dv,y ;
   	if(nn > 0) {
 
@@ -122,7 +147,7 @@ G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
       		for(G4int n=0; n<=nn; n++) {
 
         		v += dv;  
-        		u = exp(v);              
+        		u = std::exp(v);              
         		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
         		y = u/kinEnergyProj;
         		fac *= (4.-4.*y+3.*y*y)/3.;
@@ -135,7 +160,7 @@ G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
         		fsig += fac;
       		}
       		y = E1/kinEnergyProj ;
-      		fsig *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
+      		fsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
 
   	} 
 	else {
@@ -149,12 +174,12 @@ G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
 	//-------------------------
 	G4double dfsig = 0.;
   	nn=20;
-	vmax=log(E2) ;
+	vmax=std::log(E2) ;
 	dv = (vmax-vmin)/nn ;
       	v  = vmin-dv ;
       	for(G4int n=0; n<=nn; n++) {
 		v += dv;  
-        	u = exp(v);              
+        	u = std::exp(v);              
         	fac = SupressionFunction(aMaterial, kinEnergyProj, u);
         	y = u/kinEnergyProj;
         	fac *= (4.-4.*y+3.*y*y)/3.;
@@ -167,7 +192,7 @@ G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
         	dfsig += fac;
       	}
       	y = E1/kinEnergyProj;
-      	dfsig *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
+      	dfsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
 	
 	dCrossEprod+=dfsig*cross1/dE;
 	
@@ -245,9 +270,9 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
 
   	G4double fsig1 = 0.;
   	G4int nmax = 100;
-  	G4double vmin=log(E1);
-  	G4double vmax=log(kinEnergyProj) ;
-  	G4int nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin));
+  	G4double vmin=std::log(E1);
+  	G4double vmax=std::log(kinEnergyProj) ;
+  	G4int nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
   	G4double u,fac,c,v,dv,y ;
   	if(nn > 0) {
 
@@ -256,7 +281,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
       		for(G4int n=0; n<=nn; n++) {
 
         		v += dv;  
-        		u = exp(v);              
+        		u = std::exp(v);              
         		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
         		y = u/kinEnergyProj;
         		fac *= (4.-4.*y+3.*y*y)/3.;
@@ -269,7 +294,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
         		fsig1 += fac;
       		}
       		y = E1/kinEnergyProj ;
-      		fsig1 *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
+      		fsig1 *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
 
   	} 
 	else {
@@ -281,8 +306,8 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
 	
 	
 	G4double fsig2 = 0.;
-  	vmin=log(E2);
-	nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin));
+  	vmin=std::log(E2);
+	nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
   	if(nn > 0) {
 
       		dv = (vmax-vmin)/nn ;
@@ -290,7 +315,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
       		for(G4int n=0; n<=nn; n++) {
 
         		v += dv;  
-        		u = exp(v);              
+        		u = std::exp(v);              
         		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
         		y = u/kinEnergyProj;
         		fac *= (4.-4.*y+3.*y*y)/3.;
@@ -303,7 +328,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
         		fsig2 += fac;
       		}
       		y = E2/kinEnergyProj ;
-      		fsig2 *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
+      		fsig2 *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
 
   	} 
 	else {
@@ -326,12 +351,12 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
 		//-------------------------
 		G4double dfsig = 0.;
   		nn=20;
-		vmax=log(E2) ;
+		vmax=std::log(E2) ;
 		dv = (vmax-vmin)/nn ;
       		v  = vmin-dv ;
       		for(G4int n=0; n<=nn; n++) {
 			v += dv;  
-        		u = exp(v);              
+        		u = std::exp(v);              
         		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
         		y = u/kinEnergyProj;
         		fac *= (4.-4.*y+3.*y*y)/3.;
@@ -344,7 +369,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
         		dfsig += fac;
       		}
       		y = E1/kinEnergyProj;
-      		dfsig *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
+      		dfsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
 		dCrossEprod+=dfsig*cross1/dE;
 		
 	}	
@@ -453,7 +478,7 @@ G4double G4AdjointBremsstrahlungModel::SupressionFunction(const G4Material* mate
       if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
       else                 w = s2lpm*(1.+1./sp);
 
-      supr = (sqrt(w*w+4.*s2lpm)-w)/(sqrt(w*w+4.)-w) ;
+      supr = (std::sqrt(w*w+4.*s2lpm)-w)/(std::sqrt(w*w+4.)-w) ;
       supr /= sp;    
     } 
     
@@ -529,8 +554,8 @@ void G4AdjointBremsstrahlungModel::SampleSecondaries(const G4Track& aTrack,
   G4double u;
   const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
 
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1;
-     else                          u = - log(G4UniformRand()*G4UniformRand())/a2;
+  if (9./(9.+d) > G4UniformRand()) u = - std::log(G4UniformRand()*G4UniformRand())/a1;
+     else                          u = - std::log(G4UniformRand()*G4UniformRand())/a2;
 
   G4double theta = u*electron_mass_c2/projectileTotalEnergy;
 

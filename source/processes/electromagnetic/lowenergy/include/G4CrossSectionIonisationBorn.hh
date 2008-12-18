@@ -21,10 +21,10 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-//
 // ********************************************************************
 //
-// $Id: G4CrossSectionIonisationBorn.hh,v 1.2 2008-07-14 20:47:34 sincerti Exp $
+//
+// $Id: G4CrossSectionIonisationBorn.hh,v 1.3 2008-12-18 13:01:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4CROSSSECTIONIONISATIONBORN_HH

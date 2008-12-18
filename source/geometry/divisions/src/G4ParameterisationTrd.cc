@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.15 2008-12-03 16:41:45 arce Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.16 2008-12-18 12:57:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -221,7 +221,7 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 
   G4double cxy1 = -msol->GetXHalfLength1() + foffset + (copyNo+0.5)*pDx1*2;// centre of the side at y=-pDy1
   G4double cxy2 = -msol->GetXHalfLength2() + foffset + (copyNo+0.5)*pDx2*2;// centre of the side at y=+pDy1
-  G4double alp = atan( (cxy2-cxy1)/pDz );
+  G4double alp = std::atan( (cxy2-cxy1)/pDz );
   
   trap.SetAllParameters ( pDz,
 			  0.,

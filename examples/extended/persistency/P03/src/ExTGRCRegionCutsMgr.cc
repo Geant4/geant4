@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionCutsMgr.cc,v 1.2 2008-11-20 20:52:05 arce Exp $
+// $Id: ExTGRCRegionCutsMgr.cc,v 1.3 2008-12-18 12:56:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:      P. Arce

@@ -289,7 +289,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
     for (G4int jj=0 ; jj<4 ; jj++)
     {
-      RINDEX_ACRYLIC[i] +=  (bParam[jj]/1000.0)*pow(LAMBDA_ACRYLIC[i]/nm,jj) ; 
+      RINDEX_ACRYLIC[i] +=  (bParam[jj]/1000.0)*std::pow(LAMBDA_ACRYLIC[i]/nm,jj) ; 
     }
 
     ENERGY_ACRYLIC[i] =   h_Planck*c_light/LAMBDA_ACRYLIC[i] ;  // Convert from wavelength to energy ;

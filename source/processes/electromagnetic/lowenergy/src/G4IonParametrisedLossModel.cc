@@ -250,7 +250,7 @@ G4double G4IonParametrisedLossModel::ComputeCrossSectionPerAtom(
                                      (energy + cacheMass) / (energy * energy);
 
      crosssection = 1.0 / cutEnergy - 1.0 / maxEnergy - 
-                         betaSquared * log(maxEnergy / cutEnergy) / tmax;
+                         betaSquared * std::log(maxEnergy / cutEnergy) / tmax;
 
      crosssection *= twopi_mc2_rcl2 * cacheChargeSquare / betaSquared;
   }
@@ -611,17 +611,17 @@ void G4IonParametrisedLossModel::SampleSecondaries(
   } while( G4UniformRand() >= g );
 
   G4double momentumSec =
-           sqrt(kinEnergySec * (kinEnergySec + 2.0 * electron_mass_c2));
+           std::sqrt(kinEnergySec * (kinEnergySec + 2.0 * electron_mass_c2));
 
-  G4double totMomentum = energy*sqrt(betaSquared);
+  G4double totMomentum = energy*std::sqrt(betaSquared);
   G4double cost = kinEnergySec * (energy + electron_mass_c2) /
                                    (momentumSec * totMomentum);
   if(cost > 1.0) cost = 1.0;
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+  G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi = twopi * G4UniformRand() ;
 
-  G4ThreeVector directionSec(sint*cos(phi),sint*sin(phi), cost) ;
+  G4ThreeVector directionSec(sint*std::cos(phi),sint*std::sin(phi), cost) ;
   directionSec.rotateUz(direction);
 
   // create G4DynamicParticle object for delta ray

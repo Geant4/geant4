@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//// $Id: EMElectronStandard.cc; Last by G.A.P.Cirrone September 2008
+//
+//
+// $Id: EMElectronStandard.cc; Last by G.A.P.Cirrone September 2008
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
