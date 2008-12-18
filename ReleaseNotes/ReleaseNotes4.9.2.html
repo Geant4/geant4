@@ -174,9 +174,7 @@ Documentation is also available from the
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-  <LI>The method <TT>MeanFreePath()</TT> in <TT>G4HadronicProcess</TT> will become
-      protected in the next release. A new public method will be provided.<BR>
-  <LI>The obsolete method <TT>SetDispatch()</TT>, which is no longer used, has
+  <LI>The obsolete method <TT>G4HadronicProcess::SetDispatch()</TT>, which is no longer used, has
       been removed.</LI>
 </UL>
 
@@ -355,6 +353,10 @@ Please see the corresponding details in
     were made to <TT>G4PreCompoundModel</TT> and related classes.</LI>
 <LI>De-excitation and evaporation:
     <UL>
+    <LI>Several fixes of the Multi-Fragmentation model were made by I.Pshenichnov 
+        in collaboration with Alexander Botvina and Igor Mishustin 
+        (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, Moscow, 
+        pshenich@fias.uni-frankfurt.de)</LI>
     <LI>New inverse cross sections and fixes of evaporation probabilities</LI>
     <LI>FermiBreakUp is now switched off by default.</LI>
     <LI>The pairing correction in excitation energy have been fixed in
@@ -442,6 +444,7 @@ Please see the corresponding details in
     for example, the neutron spectrum now falls exponentially, as expected from
     data. Before the changes, this spectrum was more or less flat.
     This results in proportionally more neutrons at lower energies.</LI>
+
 <LI>Performance measurements carried out on realistic setups when using
     <TT>QGSP_BERT</TT> for <TT>50 GeV pi-</TT>, show an improvement of about
     25% in CPU time. A slight degradation in performance of 1 to 3% is instead
