@@ -26,7 +26,10 @@
 <P>
 The code and binary libraries for the supported systems are available
 through our <A TARGET="ext" HREF="http://cern.ch/geant4/support/download.shtml">Source
-Code Web page</A>.
+Code Web page</A>.<BR>
+We'd like to congratulate and thanks all developers and users part or external
+to the Geant4 Collaboration who contributed in developing or providing feedback
+and solutions to the code included in this release.
 </P>
 <P>
 Please refer to the
@@ -95,7 +98,7 @@ Geant4 <U>requires</U> the installation of
 <A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.0.4.2</B>.<BR>
 The installation of <B>CLHEP-2.0.4.2</B> is mandatory for consistency in the
 definition of masses and widths of particles. Earlier versions of CLHEP may
-link, but they will not give correct results.<BR>
+link, but they will not give correct results.
 <P> </P>
 Geant4 9.2 examples with histogramming cowork with analysis tools compliant
 to AIDA 3.2.1 interfaces (for details, see
@@ -138,44 +141,57 @@ up-to-date constants as used by Geant4.
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
-Geant4-DNA processes: new elastic scattering models are available
-for electrons, replacing the old ones. The user may use in his/her physics
-list either the Screened Rutherford model or the Champion model; the models
-are alternatives and must not be used together.<BR>
-To use the Screened Rutherford model in the physics list, one should define
-the elastic process as follows:
-<PRE>
-  typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,
-                       G4FinalStateElasticScreenedRutherford> 
-          ElasticScreenedRutherfordHE;
-  typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,
-          G4FinalStateElasticBrennerZaider> 
-          ElasticScreenedRutherfordLE;
-</PRE>
-and register it as follows:
-<PRE>
-  processManager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
-  processManager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
-</PRE>
-More details can be found in the advanced example <TT>microdosimetry</TT>.<BR>
-To use the Champion model in the physics list, define the process as follows:
-<PRE>
-  typedef G4DNAProcess<G4CrossSectionElasticChampion,
-                       G4FinalStateElasticChampion> ElasticChampion;
-</PRE>
-and register it as follows:
-<PRE>
-  processManager->AddDiscreteProcess(new ElasticChampion("ElasticChampion"));
-</PRE>
-Documentation is also available from the
-<A HREF="https://twiki.cern.ch/twiki/bin/view/Geant4/LowEnergyElectromagneticPhysicsWorkingGroup/">Low Energy EM working group page</A>.
+<UL>
+<LI>Geant4-DNA processes:<BR>
+    new elastic scattering models are available for electrons, replacing the
+    old ones. The user may use in his/her physics list either the Screened
+    Rutherford model or the Champion model; the models are alternatives and
+    must not be used together.<BR>
+    To use the Screened Rutherford model in the physics list, one should
+    define the elastic process as follows:
+    <PRE>
+    typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,
+                         G4FinalStateElasticScreenedRutherford> 
+            ElasticScreenedRutherfordHE;
+    typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,
+            G4FinalStateElasticBrennerZaider> 
+            ElasticScreenedRutherfordLE;
+    </PRE>
+    and register it as follows:
+    <PRE>
+    processManager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
+    processManager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
+    </PRE>
+    More details can be found in the advanced example <TT>microdosimetry</TT>.<BR>
+    To use the Champion model in the physics list, define the process as follows:
+    <PRE>
+    typedef G4DNAProcess<G4CrossSectionElasticChampion,
+                         G4FinalStateElasticChampion> ElasticChampion;
+    </PRE>
+    and register it as follows:
+    <PRE>
+    processManager->AddDiscreteProcess(new ElasticChampion("ElasticChampion"));
+    </PRE>
+    Documentation is also available from the
+    <A HREF="https://twiki.cern.ch/twiki/bin/view/Geant4/LowEnergyElectromagneticPhysicsWorkingGroup/">Low
+    Energy EM working group page</A>.</LI>
+<LI>New alternative implementation of Penelope processes compatible with the
+    standard EM design are included as <I>Beta</I> release. Information on how
+    to use these processes (Compton, Rayleigh, Gamma conversion, photo-electric,
+    annihilation and ionisation) is available through these
+    <A href="http://geant4.lngs.infn.it/lngspage/penelopemigration.htm">migration
+    notes</A>.</LI>
+</UL>
 
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-  <LI>The obsolete method <TT>G4HadronicProcess::SetDispatch()</TT>, which is no longer used, has
-      been removed.</LI>
+  <LI>The method <TT>MeanFreePath()</TT> in <TT>G4HadronicProcess</TT> will
+      become protected in the next release.
+      A new public method will be provided.<BR>
+      The obsolete method <TT>SetDispatch()</TT>, which is no longer used,
+      has been removed.</LI>
 </UL>
 
 <P> </P>
@@ -280,8 +296,8 @@ Please see the corresponding details in
     based on the <TT>G4UrbanMscModel</TT> of previous releases but has an
     improved sampling algorithm and has been tuned to experimental data.
     Several reference physics lists such as <TT>G4EmStandardPhysics</TT> now
-    use this new <TT>G4eMultipleScattering</TT> process.<BR>
-    A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
+    use this new <TT>G4eMultipleScattering</TT> process.</LI>
+<LI>A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
     hadrons is available as a prototype for validation.</LI>
 <LI>New bremsstrahlung model class, <TT>G4eBremsstrahlungRelModel</TT>, includes
     advanced description of LPM effect; it can be applied for electrons and
@@ -295,9 +311,9 @@ Please see the corresponding details in
     it is using <TT>G4UniversalFluctuation</TT>, which provides Landau tail of
     fluctuations. 
     At low energies Gaussian distribution is based on experimental data.</LI>
-<LI>An extra limitation of step by the <TT>G4Cerenkov</TT> process has been
-    added in order to provide smoother X-ray emission near the Cerenkov
-    threshold of media.</LI> 
+<LI>The <TT>G4Cerenkov</TT> process now enforces a step limitation at the
+    Cerenkov threshold and a new user defined step limitation provides for
+    smoother X-ray emission.</LI>
 <LI>A new <TT>G4EmSaturation</TT> class is introduced for sampling of Birks
     saturation.</LI>
 <LI>A new <TT>G4ElectronIonPair</TT> helper class based on the ICRU'31 report has
@@ -353,10 +369,7 @@ Please see the corresponding details in
     were made to <TT>G4PreCompoundModel</TT> and related classes.</LI>
 <LI>De-excitation and evaporation:
     <UL>
-    <LI>Several fixes of the Multi-Fragmentation model were made by I.Pshenichnov 
-        in collaboration with Alexander Botvina and Igor Mishustin 
-        (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, Moscow, 
-        pshenich@fias.uni-frankfurt.de)</LI>
+    <LI>Several fixes to the multi-fragmentation model.</LI>
     <LI>New inverse cross sections and fixes of evaporation probabilities</LI>
     <LI>FermiBreakUp is now switched off by default.</LI>
     <LI>The pairing correction in excitation energy have been fixed in
@@ -610,16 +623,16 @@ please refer to the corresponding History files provided in most packages):
         <I>Y.Namito, S.Ban and H.Hirayama, NIM A 349, pp. 489-494, 1994</I>.
         Added Doppler broadening in <TT>G4LowEnergyComptonPolarized</TT>, same
         model as in <TT>G4LowEnergyCompton</TT>.</LI>
-    <LI>Added new photon models (Penelope and Livermore) compatible with
-        standard EM design.</LI>
     <LI>Added new stopping power model for ions, using by default ICRU 73
         data tables. New templated classes: <TT>G4IonParametrisedLossModel</TT>
         and <TT>G4IonParametrisedLossTable</TT>.</LI>
+    <LI>Added new photon models (Penelope and Livermore) compatible with
+        standard EM design (<I>Beta</I> release).</LI>
     <LI>First inclusion of <TT>G4PenelopeIonisationModel</TT>.
         Correction for <TT>G4PenelopeComptonModel</TT>: now the cross section
         table calculated by the model corresponds to the original Penelope;
         the difference was only for compounds materials and below 1 keV.
-        Fixes to <TT>G4PenelopeBremsstrahlungContinuous</TT>.</LI>
+        Fixes to <TT>G4PenelopeBremsstrahlungContinuous</TT>.<BR>
     <LI>Allow for loading the complete Auger dataset on initialization.</LI>
     <LI>Cleaned and updated energy limits for DNA processes.</LI>
     <LI>Added new elastic scattering process for electrons (Geant4 DNA) from
@@ -833,12 +846,10 @@ please refer to the corresponding History files provided in most packages):
         and <TT>G4Scintillation</TT>.</LI>
     <LI><TT>G4Cerenkov</TT>:
         <UL>
-        <LI>Added extra step limit <TT>MaxBetaChangePerStep</TT>.</LI>
+        <LI>Added extra step limit <TT>MaxBetaChangePerStep</TT> and enforced
+            a step limit at the Cerenkov threshold.</LI>
         <LI>Modified sampling of the Cerenkov photon origins assuming linear
             decrease in the <TT>MeanNumberOfPhotons</TT> over the step.</LI>
-        <LI>Added protection of calculation of a step limit when
-            the minimum beta for a particle to radiate in the material
-            (vacuum) is already 1.</LI>
         <LI>Use direct inheritance from <TT>G4VProcess</TT>.</LI>
         </UL></LI>
     </UL></LI>
