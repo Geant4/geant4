@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.3 2008-05-19 12:56:36 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.4 2008-12-19 12:25:26 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -60,6 +60,8 @@ G4bool G4ElasticHNScattering::
 //G4cout<<"G4ElasticHNScattering::ElasticScattering"<<G4endl;
 
 	   G4LorentzVector Pprojectile=projectile->Get4Momentum();
+
+           if(Pprojectile.z() < 0.){ return true;}
 
 // -------------------- Projectile parameters -----------------------------------
            G4bool PutOnMassShell=0;
@@ -130,6 +132,23 @@ G4bool G4ElasticHNScattering::
                                  2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
            if(PZcms2 < 0) 
              {return false;}   // It can be in an interaction with off-shell nuclear nucleon
+
+           if(PZcms2 < 0.)
+           {  // It can be in an interaction with off-shell nuclear nucleon
+            if(M0projectile > projectile->GetDefinition()->GetPDGMass()) 
+            {  // An attempt to de-excite the projectile
+             M0projectile = projectile->GetDefinition()->GetPDGMass();
+             Mprojectile2=M0projectile*M0projectile;
+             PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
+                    2*S*Mprojectile2 - 2*S*Mtarget2 - 2*Mprojectile2*Mtarget2)
+                    /4./S;
+             if(PZcms2 < 0.){ return true;} // Non succesful attempt
+            }
+            else
+            {
+             return true;                  // We can do only one - skip the interaction!
+            }
+           }
 
            PZcms = std::sqrt(PZcms2);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.13 2008-12-09 10:40:52 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.14 2008-12-19 12:25:26 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -179,6 +179,7 @@ G4cout<<" Inter # "<<counter<<G4endl;
 //G4cout<<"Inelastic"<<G4endl;
             Successfull=theExcitation->ExciteParticipants(projectile, target, theParameters);
            }
+//G4cout<<"Successfull ? "<<Successfull<<G4endl;
 //           if(!Successfull)
 // // Uzhi 29.03.08
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.9 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.10 2008-12-19 12:25:26 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -116,8 +116,9 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	   	     impactX=0;
 	   	     impactY=0;
 	   	}
-		G4VSplitableHadron * targetSplitable;
-	   	if ( (targetSplitable=nucleon->GetSplitableHadron()) == NULL )
+		G4VSplitableHadron * targetSplitable=0;
+//	   	if ( (targetSplitable=nucleon->GetSplitableHadron()) == NULL )
+	   	if ( ! nucleon->AreYouHit() )
 	   	{
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
