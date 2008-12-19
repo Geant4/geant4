@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+19 December 2008 V, Uzhinsky (hadr-mod-util-V09-02-02)
+--------------------------------------------------------
+New method (SortNucleonsDecZ()) for sorting nucleons on decreasing Z-coordanates 
+is inserted in G4Fancy3DNucleus class. It is needed for nucleus-nucleus collision.
+SortNucleonsInc() is re-named in SortNucleonsIncZ().
 
 12 December 2008 Gunter Folger    (hadr-mod-util-V09-02-01)
 -------------------------------------------------------
