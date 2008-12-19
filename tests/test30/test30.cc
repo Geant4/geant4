@@ -968,7 +968,7 @@ int main(int argc, char** argv)
           if(pd == neutron) histo.fill(23,mom.phi()/degree,1.0);
 	}
 
-	if( (e == 0.0 || pt == 0.0) && warn < 50 ) {
+	if( (e == 0.0 || pt == 0.0) && warn < 10 ) {
           warn++;
           G4cout << "Warning! evt# " << iter 
 	         << "  " << i << "-th sec  "
@@ -979,7 +979,7 @@ int main(int argc, char** argv)
 	}
 	de += e;
         if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && 
-	   warn < 50 && verbose>1) {
+	   warn < 15 && verbose>1) {
           warn++;
           G4cout << "Warning! evt# " << iter 
                  << "  " << i << "-th sec  "
