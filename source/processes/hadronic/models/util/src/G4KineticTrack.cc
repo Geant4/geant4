@@ -486,10 +486,12 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 //
 //   Select a possible decay channel
 //
-  //  G4int index1;
-  //  for (index1 = nChannels - 1; index1 >= 0; index1--)
-    //  cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
-    //  cout << "DECAY Actual Mass " << theActualMass << G4endl;
+/*
+    G4int index1;
+    for (index1 = nChannels - 1; index1 >= 0; index1--)
+      G4cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
+      G4cout << "DECAY Actual Mass " << theActualMass << G4endl;
+*/
  
  G4int chargeBalance = G4lrint(theDefinition->GetPDGCharge() );     
  G4int baryonBalance = G4lrint(theDefinition->GetBaryonNumber() );

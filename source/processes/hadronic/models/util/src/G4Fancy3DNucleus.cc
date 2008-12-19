@@ -118,7 +118,6 @@ G4Nucleon * G4Fancy3DNucleus::GetNextNucleon()
 			theNucleons+currentNucleon++  : 0;
 }
 
-
 const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 {
 	if ( theRWNucleons.size()==0 )
@@ -131,12 +130,15 @@ const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 	return theRWNucleons;
 }
 
+//void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.08.08
+
    bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon* nuc1, const G4Nucleon* nuc2)
 {
 	return nuc1->GetPosition().z() < nuc2->GetPosition().z();
 }    
 
-void G4Fancy3DNucleus::SortNucleonsInZ()
+//void G4Fancy3DNucleus::SortNucleonsInZ()
+void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.08.08
 {
 	
 	GetNucleons();   // make sure theRWNucleons is initialised
@@ -161,6 +163,27 @@ void G4Fancy3DNucleus::SortNucleonsInZ()
 	return;
 }
 
+void G4Fancy3DNucleus::SortNucleonsDecZ() // on decreased Z-coordinates Uzhi 29.08.08
+{
+        G4Nucleon * sortedNucleons = new G4Nucleon[myA];
+	
+	GetNucleons();   // make sure theRWNucleons is initialised
+
+	if (theRWNucleons.size() < 2 ) return; 
+	sort( theRWNucleons.begin(),theRWNucleons.end(),G4Fancy3DNucleusHelperForSortInZ); 
+
+// now copy sorted nucleons to theNucleons array. TheRWNucleons are pointers in theNucleons
+//  so we need to copy to new, and then swap. 
+	for ( unsigned int i=0; i<theRWNucleons.size(); i++ )
+	{
+	   sortedNucleons[i]= *(theRWNucleons[myA-1-i]);  // Uzhi 29.08.08
+	}
+	theRWNucleons.clear();   // about to delete array elements these point to....
+	delete [] theNucleons;
+	theNucleons=sortedNucleons;
+
+	return;
+}
 
 G4double G4Fancy3DNucleus::BindingEnergy()
 {
@@ -400,6 +423,9 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     ;
 //     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
 
+//G4cout<<"Fermi momenta"<<G4endl;                       // Uzhi
+//G4cout<<BindingEnergy()/myA<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
 
     G4double energy;
     for ( i=0; i< myA ; i++ )
@@ -407,6 +433,15 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
        energy = theNucleons[i].GetParticleType()->GetPDGMass()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
+//   // Uzhi
+/*   // Uzhi
+       energy = theNucleons[i].GetParticleType()->GetPDGMass()
+	        - BindingEnergy()/myA;
+       G4LorentzVector tempV(0.,0.,0.,energy);
+*/   // Uzhi
+
+//G4cout<<"nucleon 4-mom   "<<tempV<<tempV.mag()<<G4endl;             // Uzhi
+
        theNucleons[i].SetMomentum(tempV);
     }
 
