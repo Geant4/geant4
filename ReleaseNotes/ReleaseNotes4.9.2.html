@@ -29,8 +29,11 @@ through our <A TARGET="ext" HREF="http://cern.ch/geant4/support/download.shtml">
 Code Web page</A>.
 </P>
 <P>
-<I>We  are grateful for the efforts of Geant4 users who have provided
-detailed feedback, comprehensive reports of issues. We thank   in particular those who have contributed corrections, improvements or  developments included in this release. </I></P>
+<I>We are grateful for the efforts of Geant4 users who have provided
+   detailed feedback, comprehensive reports of issues.
+   We thank in particular those who have contributed corrections,
+   improvements or developments included in this release. </I>
+</P>
 <P>
 Please refer to the
 <A TARGET="ext" HREF="http://cern.ch/geant4/support/userdocuments.shtml">Geant4
@@ -290,15 +293,17 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>Cubic spline interpolation of <tt>dedx</tt> and cross section tables is  enabled by default.
-    Better interpolation was found to increase stability when varying transport parameters, such as cuts, of energy deposition of hadrons. The old variant of linear interpolation is available as an option.</LI>
+<LI>Cubic Spline interpolation of <tt>dedx</tt> and cross section tables is
+  enabled by default. Better interpolation was found to increase stability
+  when varying transport parameters, such as cuts, of energy deposition of
+  hadrons. The old variant of linear interpolation is available as an option.</LI>
 <LI>A new process, <TT>G4eMultipleScattering</TT>, specialized for simulation
-  of <TT>e+ and e-</TT> multiple scattering has been added.
-  This process in turn uses a new model, <TT>G4UrbanMscModel2</TT>, which is
-  based on the <TT>G4UrbanMscModel</TT> of previous releases but has an
-  improved sampling algorithm and has been retuned to experimental data.
-  Several reference physics lists such as <TT>G4EmStandardPhysics</TT> now
-  use this new <TT>G4eMultipleScattering</TT> process.</LI>
+    of <TT>e+ and e-</TT> multiple scattering has been added.
+    This process in turn uses a new model, <TT>G4UrbanMscModel2</TT>, which is
+    based on the <TT>G4UrbanMscModel</TT> of previous releases but has an
+    improved sampling algorithm and has been retuned to experimental data.
+    Several reference physics lists such as <TT>G4EmStandardPhysics</TT> now
+    use this new <TT>G4eMultipleScattering</TT> process.</LI>
 <LI>A new class <TT>G4WentzelVIModel</TT> for multiple scattering of muons and 
     hadrons is available as a prototype for validation.</LI>
 <LI>New bremsstrahlung model class, <TT>G4eBremsstrahlungRelModel</TT>, includes
@@ -306,11 +311,11 @@ Please see the corresponding details in
     positrons with <TT>E > 1 GeV</TT> and provides gamma spectra which agree
     well with thin-target experimental data.<BR>
     The density suppression effect in the old <TT>G4eBremsstrahlungModel</TT> 
-    have been reviewed and improved.</LI>
+    has been reviewed and improved.</LI>
 <LI>The <TT>G4IonFluctuations</TT> model has been updated: at high energy 
-    it is uses <TT>G4UniversalFluctuation</TT>, which provides Landau tail of
+    it uses <TT>G4UniversalFluctuation</TT>, which provides Landau tail of
     fluctuations. 
-    At low energies it uses Gaussian distribution  based on experimental data.</LI>
+    At low energies it uses Gaussian distribution based on experimental data.</LI>
 <LI>The <TT>G4Cerenkov</TT> process now enforces a step limitation at the
     Cerenkov threshold and a new user defined step limitation provides for
     smoother X-ray emission.</LI>
@@ -360,15 +365,18 @@ Please see the corresponding details in
     is now in <I>Beta</I> release. It is valid from <TT>50 MeV</TT> to
     <TT>5 GeV</TT>.</LI>
 <LI>The class <TT>G4GlauberGribovCrossSection</TT> now provides a smooth
-    transition with the Barashenkov cross sections at <TT>90 GeV</TT>. </LI>
+    transition with the Barashenkov cross sections at <TT>90 GeV</TT>.</LI>
 <LI><TT>G4ChargeExchangeProcess</TT> and <TT>G4ChargeExchange</TT> model are
     now ready to be used in physics lists; the low energy threshold is set to
     <TT>1.0 MeV</TT>. </LI>
-<LI>Several improvements have been made to the precompound model. Missing pieces of  theory were added and several code fixes 
+<LI>Several improvements have been made to the pre-compound model.
+    Missing pieces of theory were added and several code fixes 
     were made to <TT>G4PreCompoundModel</TT> and related classes.</LI>
 <LI>De-excitation and evaporation:
     <UL>
-    <LI>Several corrections to the multi-fragmentation model  to ensure it conforms with the original  SMM model. These were donated by authors of the SMM model and collaborators.</LI>
+    <LI>Several corrections to the multi-fragmentation model to ensure it
+        conforms with the original SMM model. These were donated by authors
+        of the SMM model and collaborators.</LI>
     <LI>New inverse cross sections and fixes of evaporation probabilities</LI>
     <LI>FermiBreakUp is now switched off by default.</LI>
     <LI>The pairing correction in excitation energy have been fixed in
@@ -417,8 +425,9 @@ Please see the corresponding details in
 <UL>
 <LI>An updated version of the <TT>G4LogLogInterpolation</TT> class is included
     in this release. This update improves the speed of low
-    energy EM Physics processes that use this class.  Only insignificant
-    changes result in the interpolated values obtained and in physics observables.</LI>
+    energy EM Physics processes that use this class. Only insignificant
+    changes result in the interpolated values obtained and in physics
+    observables.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
