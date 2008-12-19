@@ -146,7 +146,7 @@ int main(int argc, char** argv)
   G4int     nangl    = 0;
   G4int     nanglpr  = 0;
   G4int     nanglpi  = 0;
-  G4int     modu     = 10000;
+  G4int     modu     = 20000;
   G4int     targetA  = 0;
   G4String hFile     = "test30";
   G4double theStep   = 0.01*micrometer;
