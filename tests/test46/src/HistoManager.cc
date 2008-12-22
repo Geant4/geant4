@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.7 2008-11-28 12:27:47 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.8 2008-12-22 17:14:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -80,6 +80,7 @@ HistoManager::HistoManager()
   nmax    = 3;
   factorEcal = 1.05;
   factorHcal = 125.0;
+  factorHcal0= 125.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,10 +94,10 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 { 
-  nHisto = 12;
+  nHisto = 13;
   histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,2.*GeV,GeV);
   histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,2.0*GeV,GeV);
-  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy*0.5,GeV);
+  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
   histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
   histo->add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
@@ -105,7 +106,8 @@ void HistoManager::bookHisto()
   histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
   histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
   histo->add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("11","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -294,10 +296,13 @@ void HistoManager::EndOfEvent()
   ehcal += Eehcal;
   abshcal += Eabshcal;
 
-  // Sum of ECAl + HCAL
-  G4double edep = e25*factorEcal + Ehcal*factorHcal; 
+  // Sum of ECAl + HCAL *0
+  G4double edep = e25*factorEcal + Ehcal*factorHcal0; 
   edepSum += edep;
   edepSum2 += edep*edep;
+
+  // Sum of ECAl + HCAL 
+  G4double edep1 = e25*factorEcal + Ehcal*factorHcal; 
 
   // Total sum 
   G4double etot = e25 + Ehcal + Eabshcal; 
@@ -316,7 +321,8 @@ void HistoManager::EndOfEvent()
   histo->fill(8,Eehcal,1.0);
   histo->fill(9,Eabshcal+Ehcal,1.0);
   histo->fill(10,edep,1.0);
-  histo->fill(11,etot,1.0);
+  histo->fill(11,edep1,1.0);
+  histo->fill(12,etot,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

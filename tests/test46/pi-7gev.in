@@ -8,13 +8,13 @@
 /testCalorim/nbins 100
 /testCalorim/maxE 14. GeV
 /testCalorim/factEcal 1.05  
-/testCalorim/factHcal 125.0
+/testCalorim/factHcal 160.0
 #######
 /testhadr/PrintModulo 100
 /run/initialize
 /gun/particle pi-
 /gun/energy 7. GeV
-/run/beamOn 1000
+/run/beamOn 10000
 
 
 

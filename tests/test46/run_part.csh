@@ -14,6 +14,8 @@ source ../../run_single.csh $1"12gev"
 source ../../run_single.csh $1"20gev"
 source ../../run_single.csh $1"30gev"
 source ../../run_single.csh $1"50gev"
+source ../../run_single.csh $1"100gev"
+source ../../run_single.csh $1"200gev"
 source ../../run_single.csh $1"300gev"
 
 #

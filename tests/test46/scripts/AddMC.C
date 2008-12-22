@@ -12,8 +12,10 @@ if(iplot==3) hhh = (TH1F*)fff->Get("h11");
 
 hhh->SetLineColor(col[idir]);
 hhh->SetLineWidth(2);
-leg[iplot]->AddEntry(hhh, hed[idir], "l");
+leg[iplot]->AddEntry(hhh, dir[idir], "l");
 //hhh->Draw("C HIST SAME");
 hhh->Draw("HIST SAME");
 //c1->Update();
+//delete fff;
+cout << "AddMC done" << endl;
 }
