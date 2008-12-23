@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.24 2008-12-03 15:33:32 bmorgan Exp $
+# $Id: Configure,v 1.25 2008-12-23 14:58:40 bmorgan Exp $
 #
-# Generated on Wed Dec  3 15:33:49 GMT 2008 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 23 14:58:23 GMT 2008 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3217,7 +3217,7 @@ while test "x$promptend" = "xno" ; do
 	$echo $n "checking for $g4data_g4emlow_version... $c"
 	if test -d "$g4data/$g4data_g4emlow_version" ; then
         	$echo "yes"
-        	g4ledata=$g4data/$g4data_emlow_version
+        	g4ledata=$g4data/$g4data_g4emlow_version
 	else
         	$echo "no"
         	g4data_foundall="no"
@@ -3296,6 +3296,7 @@ EOM`
 
 		else
 			#try again
+		        g4data_foundall=yes
 			g4data=$gans
 		fi
 	fi
