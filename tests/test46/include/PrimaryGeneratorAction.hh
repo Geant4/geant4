@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2008-12-29 20:27:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,7 @@
 
 class G4ParticleGun;
 class HistoManager;
+class G4ParticleTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,6 +67,8 @@ private:
 
   G4ParticleGun*   particleGun;
   HistoManager*    histo; 
+  G4ParticleTable* pTable;
+  G4String         pname;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

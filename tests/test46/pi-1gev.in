@@ -12,7 +12,6 @@
 #######
 /testhadr/PrintModulo 100
 /run/initialize
-/gun/particle pi-
 /gun/energy 1. GeV
 /run/beamOn 10000
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-12-29 20:27:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -40,6 +40,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "HistoManager.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,7 +48,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   particleGun  = new G4ParticleGun(1);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  pname = "";
+  char* path = getenv("PRIMARYBEAM");
+  if (path) pname = G4String(path); 
   histo = HistoManager::GetPointer();
+  pTable = G4ParticleTable::GetParticleTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +68,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double zVertex = -0.49*histo->GetWorldLength();
   particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if(pname != "") {
+    G4ParticleDefinition* pd = pTable->FindParticle(pname);
+    if(pd) particleGun->SetParticleDefinition(pd); 
+  }
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

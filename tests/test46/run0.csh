@@ -1,6 +1,7 @@
 #/bin/csh
 
-setenv REFERENCE 20081222
+setenv PRIMARYBEAM proton
+setenv REFERENCE p20081229
 setenv PHYSLIST QBBC
 source run.csh
 setenv PHYSLIST QBBCG
