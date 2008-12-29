@@ -1,6 +1,6 @@
 #/bin/csh
 
-setenv REFERENCE 20081221
+setenv REFERENCE 20081222
 setenv PHYSLIST QBBC
 source run.csh
 setenv PHYSLIST QBBCG
@@ -11,7 +11,7 @@ setenv PHYSLIST QGSP_BERT
 source run.csh
 setenv PHYSLIST QGSP_BERT_EMV
 source run.csh
-setenv PHYSLIST FTFP_BERT_EMV
+setenv PHYSLIST FTFP_BERT
 source run.csh
 
 #
