@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.8 2008-12-22 17:14:34 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.9 2009-01-02 12:11:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -174,11 +174,11 @@ void HistoManager::EndOfRun()
     G4double e = edep[j]*xx;
     edep[j] = e;
     G4double y = erms[j]*xx - e*e;
-    erms[j] = y;
     G4double r = 0.0;
     G4double f = 1.0;
     if(j <= 2) f = 1.0/GeV;
     if(y > 0.0) r = std::sqrt(y);
+    erms[j] = r;
     G4cout << "  " << nam[j] << " =       " << e*f
            << " +- " << std::setw(12) << f*r*sqrt(xx) 
 	   << "    RMS= " << f*r << G4endl;
@@ -199,21 +199,21 @@ void HistoManager::EndOfRun()
   G4cout << "  " << nam[6] << " =       " << sum/GeV
 	 << " +- " << std::setw(12) << r/GeV 
 	 << "    RMS= " << y/GeV << G4endl;
-  sum = etotSum*x;
-  y = etotSum2*x - sum*sum;
-  if(y > 0.) y = sqrt(y);
-  else       y = 0.0;
-  r = y*sqrt(x);
-  G4cout << "  " << nam[7] << " =       " << sum/GeV
-	 << " +- " << std::setw(12) << r/GeV 
-	 << "    RMS= " << y/GeV << G4endl;
+  G4double sum1 = etotSum*x;
+  G4double y1 = etotSum2*x - sum1*sum1;
+  if(y1 > 0.) y1 = sqrt(y1);
+  else        y1 = 0.0;
+  G4double r1 = y*sqrt(x);
+  G4cout << "  " << nam[7] << " =       " << sum1/GeV
+	 << " +- " << std::setw(12) << r1/GeV 
+	 << "    RMS= " << y1/GeV << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4double norm = primaryKineticEnergy;
   if(primaryDef->GetBaryonNumber() == 0) norm += primaryDef->GetPDGMass();
   G4cout << "  Ecal/E0=   " << edep[2]/norm
 	 << "  RMS/E0(%)= " << erms[2]*100./norm 
-	 << "  Hcal/E0=   " << (ehcal + abshcal)/norm
-	 << "  Etot/E0=   " << sum/norm << G4endl;
+	 << "  Hcal/E0=   " << x*(ehcal + abshcal)/norm
+	 << "  Etot/E0=   " << sum1/norm << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4cout<<G4endl;
 
