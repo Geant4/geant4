@@ -5,9 +5,7 @@ cd $REFERENCE
 mkdir -p $PHYSLIST
 cd $PHYSLIST
 
-set part = "pi-"
-
-source ../../run_part.csh ${part}
+source $G4INSTALL/tests/test46/run_part.csh pi-
 
 cd ../../
 echo $REFERENCE/$PHYSLIST "Done!"
