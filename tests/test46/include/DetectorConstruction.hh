@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2009-01-04 17:58:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,8 @@ class G4LogicalVolume;
 class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
+class G4ProductionCuts;
+class G4Region;
  
 const G4int MaxAbsor = 17;		       
 
@@ -116,6 +118,9 @@ private:
   G4double posCenterEcalZ;
 
   //HCAL
+  G4ProductionCuts* cutsHCAL;
+  G4Region*   regionHCAL;
+
   G4Material* scinMaterial;
   G4Material* absorMaterial[17];
 
