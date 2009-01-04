@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.3 2008-11-23 18:22:31 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2009-01-04 17:46:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,6 +68,10 @@
 
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
+
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
 
 #include "G4SDManager.hh"
 #include "HcalSD.hh"
@@ -157,9 +161,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   // Cleanup old geometry
   G4GeometryManager::GetInstance()->OpenGeometry();
+  G4RegionStore::GetInstance()->Clean();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+  //G4SolidStore::GetInstance()->Clean();
   
   // World
   G4Box* solidW = new G4Box("World",worldXY*.5,worldXY*.5,worldZ*.5);
@@ -242,6 +247,9 @@ void DetectorConstruction::ConstructECAL(G4double posCenterEcalZ)
 
 void DetectorConstruction::ConstructHCAL(G4double posCenterHcalZ)
 {
+  //  G4Region* HCALregion = new G4Region("HCAL");
+  // HCALregion->SetProductionCuts(new G4ProductionCuts());
+    
   // HCAL envelope
   G4Box* solidHcal = new G4Box("Hcal",hcalWidth*0.5,hcalWidth*0.5,hcalThickness*0.5); 
   G4LogicalVolume* logicHcal = new G4LogicalVolume(solidHcal,worldMaterial,"Hcal");
@@ -295,6 +303,7 @@ void DetectorConstruction::ConstructHCAL(G4double posCenterHcalZ)
     logicV->SetVisAttributes(BoxAbColor);    
     logicMiniV->SetVisAttributes(miniboxAbColor);
     logicMiniV->SetSensitiveDetector(abssd);
+    //    HCALregion->AddRootLogicalVolume(logicMiniV);
     
     // Scint
     box = new G4Box("Sc",hcalWidth*0.6,hcalWidth*0.6,scinThickness[k]*0.5);

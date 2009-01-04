@@ -11,8 +11,8 @@
 /testCalorim/hcalWidth 200. mm
 /testCalorim/nbins 50
 /testCalorim/maxE 10. GeV
-/testCalorim/factEcal 1.03  
-/testCalorim/factHcal 5.0
+/testCalorim/factEcal 1.05  
+/testCalorim/factHcal 125.0
 #######
 /run/initialize
 #/gun/particle mu+
