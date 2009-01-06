@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.5 2009-01-04 17:58:43 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2009-01-06 17:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,6 +90,7 @@ DetectorConstruction::DetectorConstruction()
 {
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
+  magField = 0;
   
   //
   // define Elements
@@ -141,6 +142,7 @@ DetectorConstruction::DetectorConstruction()
 DetectorConstruction::~DetectorConstruction()
 {
   delete detectorMessenger;
+  delete magField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -397,18 +399,23 @@ void DetectorConstruction::SetHcalWidth  (G4double val)
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  //apply a global uniform magnetic field along Z axis
-  //
+  // apply a global uniform magnetic field along X axis
   G4FieldManager* fieldMgr
     = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(magField) delete magField;		//delete the existing magn field
+  // create a new one if non nul
+  if(fieldValue != 0.) {
 
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+    // delete the existing magn field
+    if(magField) delete magField;	
+
+    magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
+
+    // zero field
   } else {
+    delete magField;
     magField = 0;
     fieldMgr->SetDetectorField(magField);
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2009-01-02 12:11:36 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.10 2009-01-06 17:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void HistoManager::EndOfRun()
 
   G4cout << "HistoManager: End of run actions are started" << G4endl;
   G4String nam[8] = {"1x1 (GeV)", "3x3 (GeV)", "5x5 (GeV)", "E1/E9    ", 
-		     "E1/E25  ", "E9/E25  ","Erec(GeV)  ","Etot(GeV)  "};
+		     "E1/E25   ", "E9/E25   ","Erec(GeV)  ","Etot(GeV)  "};
 
   // Average values
   G4cout<<"========================================================"<<G4endl;
@@ -179,41 +179,50 @@ void HistoManager::EndOfRun()
     if(j <= 2) f = 1.0/GeV;
     if(y > 0.0) r = std::sqrt(y);
     erms[j] = r;
-    G4cout << "  " << nam[j] << " =       " << e*f
-           << " +- " << std::setw(12) << f*r*sqrt(xx) 
+    G4cout << "  " << nam[j] << " = " << std::setw(10) << e*f
+           << " +- " << std::setw(10) << f*r*sqrt(xx) 
 	   << "    RMS= " << f*r << G4endl;
   }
   G4cout<<"==============  HCAL  ===================================="<<G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)      =   " 
-	 << x*hcal/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL e- Edep(GeV)   =   " 
-	 << x*ehcal/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average HCAL Edep(GeV)      =   " 
-	 << x*(ehcal + abshcal)/GeV << G4endl;
-  G4cout<<"=========================================================="<<G4endl;
+
   G4double sum = edepSum*x;
   G4double y = edepSum2*x - sum*sum;
   if(y > 0.) y = sqrt(y);
   else       y = 0.0;
   G4double r = y*sqrt(x);
-  G4cout << "  " << nam[6] << " =       " << sum/GeV
-	 << " +- " << std::setw(12) << r/GeV 
-	 << "    RMS= " << y/GeV << G4endl;
+
   G4double sum1 = etotSum*x;
   G4double y1 = etotSum2*x - sum1*sum1;
   if(y1 > 0.) y1 = sqrt(y1);
   else        y1 = 0.0;
-  G4double r1 = y*sqrt(x);
-  G4cout << "  " << nam[7] << " =       " << sum1/GeV
-	 << " +- " << std::setw(12) << r1/GeV 
+  G4double r1 = y1*sqrt(x);
+
+  G4cout << std::setprecision(4) << "Visible HCAL Edep(GeV)     =   " 
+	 << x*hcal/GeV << G4endl;
+  G4cout << std::setprecision(4) << "Visible HCAL e-Edep(GeV)   =   " 
+	 << x*ehcal/GeV << G4endl;
+  G4cout << std::setprecision(4) << "Total HCAL Edep(GeV)       =   " 
+	 << x*(ehcal + abshcal)/GeV 
+	 << " +- " << r1/GeV
+	 << G4endl;
+  G4cout<<"=========================================================="<<G4endl;
+  G4cout << nam[6] << " = " << std::setw(10) << sum/GeV
+	 << " +- " << std::setw(10) << r/GeV 
+	 << "    RMS= " << y/GeV << G4endl;
+  G4cout << nam[7] << " = " << std::setw(10) << sum1/GeV
+	 << " +- " << std::setw(10) << r1/GeV 
 	 << "    RMS= " << y1/GeV << G4endl;
   G4cout<<"=========================================================="<<G4endl;
   G4double norm = primaryKineticEnergy;
   if(primaryDef->GetBaryonNumber() == 0) norm += primaryDef->GetPDGMass();
-  G4cout << "  Ecal/E0=   " << edep[2]/norm
-	 << "  RMS/E0(%)= " << erms[2]*100./norm 
-	 << "  Hcal/E0=   " << x*(ehcal + abshcal)/norm
-	 << "  Etot/E0=   " << sum1/norm << G4endl;
+  G4cout << "Ecal/E0=   " << edep[2]/norm
+	 << "  RMS/E0(%)= " << erms[2]*100./norm << G4endl;
+  G4cout << "Hcal/E0=   " << std::setw(10) << x*(ehcal + abshcal)/norm 
+	 << " +- " << r1/norm << G4endl; 
+  G4cout << "Erec/E0=   " << std::setw(10) << sum/norm
+	 << " +- " << r/norm << G4endl; 
+  G4cout << "Etot/E0=   " << std::setw(10) << sum1/norm 
+	 << " +- " << r1/norm << G4endl; 
   G4cout<<"=========================================================="<<G4endl;
   G4cout<<G4endl;
 

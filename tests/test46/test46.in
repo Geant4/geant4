@@ -18,7 +18,8 @@
 /gun/particle mu+
 /gun/energy 1. GeV
 /run/beamOn 100
-
+/testCalorim/magField 4 tesla
+/run/beamOn 100
 
 
 

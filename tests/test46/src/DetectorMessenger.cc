@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.2 2008-11-21 19:34:39 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.3 2009-01-06 17:24:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -96,6 +96,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   rCmd1->SetRange("HCalW>0");
   rCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/magField",this);
+  fCmd->SetGuidance("Set magnetic field along X axis");
+  fCmd->SetParameterName("field",false);
+  fCmd->SetUnitCategory("Magnetic flux density");
+  fCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   updateCmd = new G4UIcmdWithoutParameter("/testCalorim/UpdateGeometry()",this);
   updateCmd->SetGuidance("Update geometry.");
   updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
@@ -142,6 +148,7 @@ DetectorMessenger::~DetectorMessenger()
   delete facCmd2;
   delete eCmd;
   delete gCmd;
+  delete fCmd;
   delete binCmd;
   delete updateCmd;
   delete testDir;
@@ -168,6 +175,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     HistoManager::GetPointer()->SetFactor2(facCmd2->GetNewDoubleValue(newValue));
   else if( command == gCmd ) 
     Detector->SetGapWidth(gCmd->GetNewDoubleValue(newValue));
+  else if( command == fCmd ) 
+    Detector->SetMagField(fCmd->GetNewDoubleValue(newValue));
   else if( command == binCmd ) 
     HistoManager::GetPointer()->SetNbins(binCmd->GetNewIntValue(newValue));
   else if( command == eCmd ) 
