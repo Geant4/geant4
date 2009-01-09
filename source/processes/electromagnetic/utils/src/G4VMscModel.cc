@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.5 2009-01-09 19:14:49 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.6 2009-01-09 19:21:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,11 +80,11 @@ G4VMscModel::~G4VMscModel()
 
 void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,  
 				      const G4ThreeVector& dir,
-				      G4double r,
+				      G4double displacement,
 				      G4double postsafety)
 {
   const G4ThreeVector* pos = fParticleChange->GetProposedPosition();
-  G4double fac = 1.0;
+  G4double r = displacement;
   if(r >  postsafety) {
     G4double newsafety = safetyHelper->ComputeSafety(*pos);
     if(r > newsafety) r = newsafety;
@@ -95,7 +95,7 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
     G4ThreeVector newPosition = *pos + r*dir;
 
     // definitely not on boundary
-    if(1. == fac) {
+    if(displacement == r) {
       safetyHelper->ReLocateWithinVolume(newPosition);
 
     } else {
