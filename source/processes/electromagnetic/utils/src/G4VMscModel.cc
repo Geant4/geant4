@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.7 2009-01-09 19:25:18 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.8 2009-01-09 19:26:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4VMscModel::~G4VMscModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VMscModel::InitialiseSafetyHelper()
+void G4VMscModel::InitialiseSafetyHelper()
 {
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
