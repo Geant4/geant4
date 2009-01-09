@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.5 2009-01-09 19:14:49 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.6 2009-01-09 19:25:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,8 @@ public:
   G4VMscModel(const G4String& nam);
 
   virtual ~G4VMscModel();
+
+  void InitialiseSafetyHelper();
 
   void ComputeDisplacement(G4ParticleChangeForMSC*,  
 			   const G4ThreeVector& displDir,

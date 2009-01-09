@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.6 2009-01-09 19:21:15 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.7 2009-01-09 19:25:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 
 G4VMscModel::G4VMscModel(const G4String& nam):
   G4VEmModel(nam), 
+  safetyHelper(0),
   facrange(0.02),
   facgeom(2.5),
   facsafety(0.25),
@@ -65,16 +66,23 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
-{
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-  safetyHelper->InitialiseHelper();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VMscModel::~G4VMscModel()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VMscModel::InitialiseSafetyHelper()
+{
+  if(!safetyHelper) {
+    safetyHelper = G4TransportationManager::GetTransportationManager()
+      ->GetSafetyHelper();
+    safetyHelper->InitialiseHelper();
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
