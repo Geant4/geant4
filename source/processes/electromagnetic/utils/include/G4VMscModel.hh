@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.4 2008-03-10 10:39:28 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.5 2009-01-09 19:14:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,11 @@
 #include "G4VEmModel.hh"
 #include "G4MscStepLimitType.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+#include "G4Track.hh"
+#include "G4SafetyHelper.hh"
+
+class G4ParticleChangeForMSC;
 
 class G4VMscModel : public G4VEmModel
 {
@@ -62,6 +67,16 @@ public:
   G4VMscModel(const G4String& nam);
 
   virtual ~G4VMscModel();
+
+  void ComputeDisplacement(G4ParticleChangeForMSC*,  
+			   const G4ThreeVector& displDir,
+                           G4double displacement,
+			   G4double postsafety);
+
+  inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
+
+  inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
+				   G4double limit);
 
   inline void SetStepLimitType(G4MscStepLimitType);
 
@@ -78,6 +93,8 @@ private:
   //  hide assignment operator
   G4VMscModel & operator=(const  G4VMscModel &right);
   G4VMscModel(const  G4VMscModel&);
+
+  G4SafetyHelper* safetyHelper;
 
 protected:
 
@@ -96,6 +113,30 @@ protected:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position, 
+					   G4double)
+{
+  return safetyHelper->ComputeSafety(position);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track, 
+					      G4double& presafety, 
+					      G4double limit)
+{
+  G4double res = limit;
+  if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
+    res = safetyHelper->CheckNextStep(
+          track.GetStep()->GetPreStepPoint()->GetPosition(),
+	  track.GetMomentumDirection(),
+	  limit, presafety);
+  }
+  return res;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetLateralDisplasmentFlag(G4bool val)
