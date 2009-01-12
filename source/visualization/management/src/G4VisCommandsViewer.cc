@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.70 2008-04-30 10:07:28 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.71 2009-01-12 15:10:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -635,37 +635,49 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Parse windowSizeHintString to extract first field for backwards
-  // compatibility...
-  std::istringstream issw;
-  G4int windowSizeHint;
-  size_t i;
-  for (i = 0; i < windowSizeHintString.size(); ++i) {
-    char c = windowSizeHintString[i];
-    if (c == 'x' || c == 'X' || c == '+' || c == '-') break;
+  // Parse windowSizeHintString...
+  G4bool unrecognised = false;
+  const G4String delimiters("xX+-");
+  std::vector<G4int> elements;
+  G4String::size_type i = windowSizeHintString.find_first_not_of(delimiters);
+  while (i != G4String::npos && !unrecognised) {
+    G4String::size_type j = windowSizeHintString.find_first_of(delimiters, i);
+    if (j == G4String::npos) j = windowSizeHintString.length();
+    std::istringstream iss(windowSizeHintString.substr(i, j - i));
+    i = windowSizeHintString.find_first_not_of(delimiters, j);
+    G4int e;
+    iss >> e;
+    if (!iss) {unrecognised = true; break;}
+    elements.push_back(e);
   }
-  if (i != windowSizeHintString.size()) {
-    // x or X or + or - found - must be a X-Window-type geometry string...
-    // Pick out the first field for backwards compatibility...
-    issw.str(windowSizeHintString.substr(0,i));
-    issw >> windowSizeHint;
-  } else { // ...old-style integer...
-    issw.str(windowSizeHintString);
-    if (!(issw >> windowSizeHint)) {
-      if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: Unrecognised geometry string \""
-	       << windowSizeHintString
-	       << "\".  Using 600."
-	       << G4endl;
-      }
-      windowSizeHint = 600;
+  if (elements.size() == 0) unrecognised = true;
+
+  G4int windowSizeHintX = 600, windowSizeHintY = 600;
+  if (elements.size() == 1) {
+    windowSizeHintX = windowSizeHintY = elements[0];
+  } else if (elements.size() > 1) {
+    windowSizeHintX = elements[0];
+    windowSizeHintY = elements[1];
+  }
+
+  if (unrecognised) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised geometry string \""
+	     << windowSizeHintString
+	     << "\".  Using \""
+	     << windowSizeHintX << 'x' << windowSizeHintY << '\"'
+	     << G4endl;
     }
-    // Reconstitute windowSizeHintString...
+  }
+
+  if (elements.size() <= 1) {
+    // Construct a consistent windowSizeHintString
     std::ostringstream ossw;
-    ossw << windowSizeHint << 'x' << windowSizeHint;
+    ossw << windowSizeHintX << 'x' << windowSizeHintY;
     windowSizeHintString = ossw.str();
   }
-  fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
+
+  fpVisManager->SetWindowSizeHint (windowSizeHintX, windowSizeHintY);
   fpVisManager->SetXGeometryString(windowSizeHintString);
   // WindowSizeHint and XGeometryString are picked up from the vis
   // manager in the G4VViewer constructor.  They have to be held by
