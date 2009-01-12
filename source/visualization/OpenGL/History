@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2008-11-21 21:56:28 perl Exp $
+$Id: History,v 1.121 2009-01-12 15:14:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+12th January 2009  John Allison
+- G4OpenGLViewer.cc: Pick up X and Y window size hints to define viewport.
 
 24 October, Laurent Garnier (opengl-V09-01-03)
  - Change GEANT4_QT_DEBUG flag by QTDEBUG

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.41 2008-10-24 13:49:19 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.42 2009-01-12 15:14:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -180,18 +180,24 @@ void G4OpenGLViewer::SetView () {
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
   const G4Point3D cameraPosition =
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
-  const GLdouble pfar    = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  const GLdouble pnear  = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar   = fVP.GetFarDistance  (cameraDistance, pnear, radius);
   const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius);
   const GLdouble left   = -right;
   const GLdouble bottom = left;
   const GLdouble top    = right;
   
+  const G4int& width = fVP.GetWindowSizeHintX();
+  const G4int& height = fVP.GetWindowSizeHintY();
+  G4int side = width;
+  if (height < width) side = height;
+  glViewport((width - side) / 2, (height - side) / 2, side, side);
+
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
 
-  const G4Vector3D scale = fVP.GetScaleFactor();
-  glScaled(scale.x(),scale.y(),scale.z());
+  const G4Vector3D scaleFactor = fVP.GetScaleFactor();
+  glScaled(scaleFactor.x(),scaleFactor.y(),scaleFactor.z());
   
   if (fVP.GetFieldHalfAngle() == 0.) {
     glOrtho (left, right, bottom, top, pnear, pfar);
@@ -216,7 +222,7 @@ void G4OpenGLViewer::SetView () {
   gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
 	     gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
 	     upVector.x(), upVector.y(), upVector.z());     // Up vector.
-  
+
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 
