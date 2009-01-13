@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.72 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.73 2009-01-13 10:10:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -635,50 +635,6 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Parse windowSizeHintString...
-  G4bool unrecognised = false;
-  const G4String delimiters("xX+-");
-  std::vector<G4int> elements;
-  G4String::size_type i = windowSizeHintString.find_first_not_of(delimiters);
-  while (i != G4String::npos && !unrecognised) {
-    G4String::size_type j = windowSizeHintString.find_first_of(delimiters, i);
-    if (j == G4String::npos) j = windowSizeHintString.length();
-    std::istringstream iss(windowSizeHintString.substr(i, j - i));
-    i = windowSizeHintString.find_first_not_of(delimiters, j);
-    G4int e;
-    iss >> e;
-    if (!iss) {unrecognised = true; break;}
-    elements.push_back(e);
-  }
-  if (elements.size() == 0) unrecognised = true;
-
-  G4int windowSizeHintX = 600, windowSizeHintY = 600;
-  if (elements.size() == 1) {
-    windowSizeHintX = windowSizeHintY = elements[0];
-  } else if (elements.size() > 1) {
-    windowSizeHintX = elements[0];
-    windowSizeHintY = elements[1];
-  }
-
-  if (unrecognised) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Unrecognised geometry string \""
-	     << windowSizeHintString
-	     << "\".  Using \""
-	     << windowSizeHintX << 'x' << windowSizeHintY << '\"'
-	     << G4endl;
-    }
-  }
-
-  if (elements.size() <= 1) {
-    // Construct a consistent windowSizeHintString
-    std::ostringstream ossw;
-    ossw << windowSizeHintX << 'x' << windowSizeHintY;
-    windowSizeHintString = ossw.str();
-  }
-
-  fpVisManager->SetWindowSizeHint (windowSizeHintX, windowSizeHintY);
-  fpVisManager->SetXGeometryString(windowSizeHintString);
   // WindowSizeHint and XGeometryString are picked up from the vis
   // manager in the G4VViewer constructor. In G4VisManager, after Viewer
   // creation, we will store theses parameters in G4ViewParameters.
