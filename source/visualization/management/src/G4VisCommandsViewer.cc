@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.71 2009-01-12 15:10:18 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.72 2009-01-13 09:55:15 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -680,11 +680,11 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   fpVisManager->SetWindowSizeHint (windowSizeHintX, windowSizeHintY);
   fpVisManager->SetXGeometryString(windowSizeHintString);
   // WindowSizeHint and XGeometryString are picked up from the vis
-  // manager in the G4VViewer constructor.  They have to be held by
-  // the vis manager until the viewer is contructed - next line...
+  // manager in the G4VViewer constructor. In G4VisManager, after Viewer
+  // creation, we will store theses parameters in G4ViewParameters.
 
-  // Create viewer.
-  fpVisManager -> CreateViewer (newName);
+  fpVisManager -> CreateViewer (newName,windowSizeHintString);
+
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
   if (newViewer && newViewer -> GetName () == newName) {
     if (verbosity >= G4VisManager::confirmations) {

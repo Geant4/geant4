@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.31 2008-04-04 13:48:53 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.32 2009-01-13 09:55:15 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,14 @@
 #include "G4ios.hh"
 
 G4ViewParameters::G4ViewParameters ():
+  fNoValue(0x0000),
+  fXValue(0x0001),
+  fYValue(0x0002),
+  fWidthValue(0x0004),
+  fHeightValue(0x0008),
+  fAllValues(0x000F),
+  fXNegative(0x0010),
+  fYNegative(0x0020),
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
   fRepStyle (polyhedron),
@@ -70,6 +78,10 @@ G4ViewParameters::G4ViewParameters ():
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
+  fWindowLocationHintX(0),
+  fWindowLocationHintY(0),
+  fWindowLocationHintXNegative(true),
+  fWindowLocationHintYNegative(false),
   fAutoRefresh (false),
   fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
   fPicking (false)
@@ -517,3 +529,195 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 
   return false;
 }
+
+
+void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
+
+
+  G4int x,y = 0;
+  unsigned int w,h = 0;
+  G4int m = ParseGeometry( geomString, &x, &y, &w, &h );
+
+  // Check errors
+  if ( ((m & fYValue) == 0) ||
+       ((m & fXValue) == 0) ||
+       ((m & fHeightValue) == 0 ) ||
+       ((m & fWidthValue)  == 0 )) {
+    G4cout << "ERROR: Unrecognised geometry string \""
+           << geomString
+           << "\".  Using default"
+           << G4endl;
+  } else {
+    // Set the string
+    fXGeometryString = geomString;
+
+    // Set values
+    fWindowSizeHintX = w;
+    fWindowSizeHintY = h;
+    fWindowLocationHintX = x;
+    fWindowLocationHintY = y;
+    if ( (m & fXNegative) ) {
+      fWindowLocationHintXNegative = true;
+    } else {
+      fWindowLocationHintXNegative = false;
+    }
+    if ( (m & fYNegative) ) {
+      fWindowLocationHintYNegative = true;
+    } else {
+      fWindowLocationHintYNegative = false;
+    }
+
+  }
+
+}
+
+G4int G4ViewParameters::GetWindowAbsoluteLocationHintX (G4int sizeX ) const {
+#ifdef G4DEBUG
+  printf("G4ViewParameters::GetWindowLocationHintX () :: %d\n",fWindowLocationHintX);
+#endif
+  if ( fWindowLocationHintXNegative ) {
+    return  sizeX  + fWindowLocationHintX - fWindowSizeHintX;
+  }
+  return fWindowLocationHintX;
+}
+
+G4int G4ViewParameters::GetWindowAbsoluteLocationHintY (G4int sizeY ) const {
+#ifdef G4DEBUG
+  printf("G4ViewParameters::GetWindowLocationHintY () :: %d\n",fWindowLocationHintY);
+#endif
+  if (  fWindowLocationHintYNegative ) {
+    return  sizeY  + fWindowLocationHintY - fWindowSizeHintY;
+  }
+  return fWindowLocationHintY;
+}
+
+/* Keep from :
+ * ftp://ftp.trolltech.com/qt/source/qt-embedded-free-3.0.6.tar.gz/qt-embedded-free-3.0.6/src/kernel/qapplication_qws.cpp
+ *
+ *    ParseGeometry parses strings of the form
+ *   "=<width>x<height>{+-}<xoffset>{+-}<yoffset>", where
+ *   width, height, xoffset, and yoffset are unsigned integers.
+ *   Example:  "=80x24+300-49"
+ *   The equal sign is optional.
+ *   It returns a bitmask that indicates which of the four values
+ *   were actually found in the string. For each value found,
+ *   the corresponding argument is updated;  for each value
+ *   not found, the corresponding argument is left unchanged.
+ */
+
+int G4ViewParameters::ParseGeometry (
+ const char *string,
+ G4int *x,
+ G4int *y,
+ unsigned int *width,
+ unsigned int *height)
+{
+
+  G4int mask = fNoValue;
+  register char *strind;
+  unsigned int tempWidth  = 0;
+  unsigned int tempHeight = 0;
+  G4int tempX = 0;
+  G4int tempY = 0;
+  char *nextCharacter;
+  if ( (string == NULL) || (*string == '\0')) {
+    return(mask);
+  }
+  if (*string == '=')
+    string++;  /* ignore possible '=' at beg of geometry spec */
+  strind = (char *)string;
+  if (*strind != '+' && *strind != '-' && *strind != 'x') {
+    tempWidth = ReadInteger(strind, &nextCharacter);
+    if (strind == nextCharacter)
+      return (0);
+    strind = nextCharacter;
+    mask |= fWidthValue;
+  }
+  if (*strind == 'x' || *strind == 'X') {
+    strind++;
+    tempHeight = ReadInteger(strind, &nextCharacter);
+    if (strind == nextCharacter)
+      return (0);
+    strind = nextCharacter;
+    mask |= fHeightValue;
+  }
+
+  if ((*strind == '+') || (*strind == '-')) {
+    if (*strind == '-') {
+      strind++;
+      tempX = -ReadInteger(strind, &nextCharacter);
+      if (strind == nextCharacter)
+        return (0);
+      strind = nextCharacter;
+      mask |= fXNegative;
+
+    }
+    else
+      {	strind++;
+        tempX = ReadInteger(strind, &nextCharacter);
+        if (strind == nextCharacter)
+          return(0);
+        strind = nextCharacter;
+      }
+    mask |= fXValue;
+    if ((*strind == '+') || (*strind == '-')) {
+      if (*strind == '-') {
+        strind++;
+        tempY = -ReadInteger(strind, &nextCharacter);
+        if (strind == nextCharacter)
+          return(0);
+        strind = nextCharacter;
+        mask |= fYNegative;
+      }
+      else
+        {
+          strind++;
+          tempY = ReadInteger(strind, &nextCharacter);
+          if (strind == nextCharacter)
+            return(0);
+          strind = nextCharacter;
+        }
+      mask |= fYValue;
+    }
+  }
+  /* If strind isn't at the end of the string the it's an invalid
+     geometry specification. */
+  if (*strind != '\0') return (0);
+  if (mask & fXValue)
+    *x = tempX;
+  if (mask & fYValue)
+    *y = tempY;
+  if (mask & fWidthValue)
+    *width = tempWidth;
+  if (mask & fHeightValue)
+    *height = tempHeight;
+  return (mask);
+}
+
+/* Keep from :
+ * ftp://ftp.trolltech.com/qt/source/qt-embedded-free-3.0.6.tar.gz/qt-embedded-free-3.0.6/src/kernel/qapplication_qws.cpp
+ *
+ */
+G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
+{
+    register G4int Result = 0;
+    G4int Sign = 1;
+
+    if (*string == '+')
+	string++;
+    else if (*string == '-')
+    {
+	string++;
+	Sign = -1;
+    }
+    for (; (*string >= '0') && (*string <= '9'); string++)
+    {
+	Result = (Result * 10) + (*string - '0');
+    }
+    *NextString = string;
+    if (Sign >= 0)
+	return (Result);
+    else
+ 	return (-Result);
+}
+   

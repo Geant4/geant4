@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.28 2008-04-28 16:14:12 allison Exp $
+// $Id: G4ViewParameters.hh,v 1.29 2009-01-13 09:55:15 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,11 +153,20 @@ public: // With description
         G4double         GetGlobalMarkerScale    () const;
         G4double         GetGlobalLineWidthScale () const;
         G4bool           IsMarkerNotHidden       () const;
-        G4int            GetWindowSizeHintX      () const;
-        G4int            GetWindowSizeHintY      () const;
+        unsigned int     GetWindowSizeHintX      () const;
+        unsigned int     GetWindowSizeHintY      () const;
+        G4int            GetWindowAbsoluteLocationHintX (G4int) const;
+        G4int            GetWindowAbsoluteLocationHintY (G4int) const;
+        G4int            GetWindowLocationHintX  () const;
+        G4int            GetWindowLocationHintY  () const;
   const G4String&        GetXGeometryString      () const;
-  // If non-null, can be interpreted with XParseGeometry (see man
-  // pages).  Supercedes GetWindowSizeHintX/Y.
+  // GetXGeometryString is intended to be parsed by XParseGeometry.
+  // It contains the size information, as in GetWindowSizeHint, but
+  // may also contain the window position, e.g., "600x600-0+200.  The
+  // viewer should use this in preference to GetWindowSizeHint, since
+  // it contains more information.  (The size information in
+  // GetXGeometryString and GetWindowSizeHint is guaranteed to be
+  // identical.)
         G4bool           IsAutoRefresh           () const;
   const G4Colour&        GetBackgroundColour     () const;
         G4bool           IsPicking               () const;
@@ -221,6 +230,7 @@ public: // With description
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
+  void SetWindowLocationHint   (G4int xHint, G4int yHint);
   void SetXGeometryString      (const G4String&);
   void SetAutoRefresh          (G4bool);
   void SetBackgroundColour     (const G4Colour&);
@@ -229,6 +239,17 @@ public: // With description
   void PrintDifferences (const G4ViewParameters& v) const;
 
 private:
+  G4int ParseGeometry ( const char *string, G4int *x, G4int *y, unsigned int *width, unsigned int *height);
+  G4int ReadInteger(char *string, char **NextString);
+
+  G4int fNoValue;
+  G4int fXValue; // XValue set for XGeometry
+  G4int fYValue; // YValue set for XGeometry
+  G4int fWidthValue; // WidthValue set for XGeometry
+  G4int fHeightValue; // HeightValue set for XGeometry
+  G4int fAllValues; // AllValues are set for XGeometry
+  G4int fXNegative; // XValue is from left for XGeometry
+  G4int fYNegative; // YValue is from top for XGeometry
 
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
@@ -269,6 +290,10 @@ private:
   // removed.
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
+  G4int        fWindowLocationHintX; // Location hints for pixel-based window systems.
+  G4int        fWindowLocationHintY;
+  G4bool       fWindowLocationHintXNegative; //  Reference of location hints for pixel-based window systems.
+  G4bool       fWindowLocationHintYNegative;
   G4String     fXGeometryString; // If non-null, geometry string for X Windows.
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;

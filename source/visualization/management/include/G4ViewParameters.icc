@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.16 2007-04-03 13:33:16 allison Exp $
+// $Id: G4ViewParameters.icc,v 1.17 2009-01-13 09:55:15 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,12 +161,20 @@ inline G4bool G4ViewParameters::IsMarkerNotHidden () const {
   return fMarkerNotHidden;
 }
 
-inline G4int G4ViewParameters::GetWindowSizeHintX () const {
+inline unsigned int G4ViewParameters::GetWindowSizeHintX () const {
   return fWindowSizeHintX;
 }
 
-inline G4int G4ViewParameters::GetWindowSizeHintY () const {
+inline unsigned int G4ViewParameters::GetWindowSizeHintY () const {
   return fWindowSizeHintY;
+}
+
+inline G4int G4ViewParameters::GetWindowLocationHintX () const {
+  return fWindowLocationHintX;
+}
+
+inline G4int G4ViewParameters::GetWindowLocationHintY () const {
+  return fWindowLocationHintY;
 }
 
 inline const G4String& G4ViewParameters::GetXGeometryString () const {
@@ -327,8 +335,9 @@ inline void G4ViewParameters::SetWindowSizeHint (G4int xHint, G4int yHint) {
   fWindowSizeHintY = yHint;
 }
 
-inline void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
-  fXGeometryString = geomString;
+inline void G4ViewParameters::SetWindowLocationHint (G4int xHint, G4int yHint) {
+  fWindowLocationHintX = xHint;
+  fWindowLocationHintY = yHint;
 }
 
 inline void G4ViewParameters::SetAutoRefresh (G4bool state) {
