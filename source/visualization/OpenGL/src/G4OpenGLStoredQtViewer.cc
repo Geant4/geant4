@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.20 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.21 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -125,7 +125,7 @@ void G4OpenGLStoredQtViewer::DrawView () {
 void G4OpenGLStoredQtViewer::ComputeView () {
 
 #ifdef G4DEBUG
-  printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
 #endif
   makeCurrent();
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
@@ -194,7 +194,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   }
 
 #ifdef G4DEBUG
-  printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
 #endif
   hasToRepaint =true;
 }
@@ -224,15 +224,15 @@ void G4OpenGLStoredQtViewer::paintGL()
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
   if ( !hasToRepaint) {
-    if (((WinSize_x == (G4int)width())) &&(WinSize_y == (G4int) height())) {
+    if (((fWinSize_x == (unsigned int)width())) &&(fWinSize_y == (unsigned int) height())) {
       return;
     }
   }
 #ifdef G4DEBUG
   printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-  WinSize_x = (G4int) width();
-  WinSize_y = (G4int) height();
+  fWinSize_x = (unsigned int) width();
+  fWinSize_y = (unsigned int) height();
 
   setupViewport(width(),height());
 

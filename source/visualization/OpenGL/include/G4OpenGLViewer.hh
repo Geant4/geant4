@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.23 2008-06-20 13:55:06 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.24 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,7 +83,8 @@ protected:
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
-  unsigned int WinSize_x, WinSize_y;
+  unsigned int fWinSize_x, fWinSize_y;
+  // size of the OpenGL frame
   G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?

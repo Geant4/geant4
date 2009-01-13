@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.6 2006-06-29 21:20:20 gunter Exp $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.7 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,8 +49,8 @@ void G4OpenGLXmViewer::resize_callback (Widget w,
 		 XmNheight, &height, 
 		 NULL);
   
-  pView->WinSize_x = (G4int) width;
-  pView->WinSize_y = (G4int) height;
+  pView->fWinSize_x = (G4int) width;
+  pView->fWinSize_y = (G4int) height;
 }
 
 
@@ -67,8 +67,8 @@ void G4OpenGLXmViewer::expose_callback (Widget w,
 		 XmNheight, &height, 
 		 NULL);
 
-  pView->WinSize_x = (G4int) width;
-  pView->WinSize_y = (G4int) height;
+  pView->fWinSize_x = (G4int) width;
+  pView->fWinSize_y = (G4int) height;
 
   glXMakeCurrent (pView->dpy, XtWindow(pView->glxarea), pView->cx);
   glViewport (0, 0, width, height);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.42 2009-01-12 15:14:11 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.43 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,6 +111,8 @@ fDisplayLightFrontBlue(0.)
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
 
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
@@ -187,11 +189,12 @@ void G4OpenGLViewer::SetView () {
   const GLdouble bottom = left;
   const GLdouble top    = right;
   
-  const G4int& width = fVP.GetWindowSizeHintX();
-  const G4int& height = fVP.GetWindowSizeHintY();
-  G4int side = width;
-  if (height < width) side = height;
-  glViewport((width - side) / 2, (height - side) / 2, side, side);
+  // FIXME
+  //  const G4int& width = fVP.GetWindowSizeHintX();
+  //  const G4int& height = fVP.GetWindowSizeHintY();
+  //  G4int side = width;
+  //  if (height < width) side = height;
+  //  glViewport((width - side) / 2, (height - side) / 2, side, side);
 
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();

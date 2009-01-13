@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.24 2007-08-21 14:05:51 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.25 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,10 +125,19 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   bgnd = XWhitePixelOfScreen (XtScreen(shell));
   borcol = XBlackPixelOfScreen (XtScreen(shell));
   
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
+  G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
+  G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
+
   XtVaSetValues (shell, 
 		 XtNvisual, vi -> visual, 
-       		 XtNdepth, vi -> depth, 
+       		 XtNdepth, vi -> depth,
        		 XtNcolormap, cmap, 
+                 XtNwidth, fWinSize_x,
+                 XtNheight, fWinSize_y,
+                 XtNx, x_origin,
+                 XtNy, y_origin,
 		 XtNborderColor, &borcol,
 		 XtNbackground, &bgnd,
 		 XmNtitle, fName.data(),
@@ -593,11 +602,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   // Once widget is realized (ie, associated with a created X window), we
   // can bind the OpenGL rendering context to the window.
 
-  Dimension width, height;
-  XtVaGetValues (glxarea,XmNwidth,&width,XmNheight,&height,NULL);
-  WinSize_x = (G4int) width;
-  WinSize_y = (G4int) height;
-
   win = XtWindow (glxarea);
 
   glXMakeCurrent (dpy, win, cx);
@@ -629,9 +633,6 @@ fpsetting_top (0),
 fpmiscellany_top (0),
 fpprint_top (0)
 {
-  WinSize_x = 100;
-  WinSize_y = 100;
-  
   GetXmConnection ();
   if (fViewId < 0) return;
 }

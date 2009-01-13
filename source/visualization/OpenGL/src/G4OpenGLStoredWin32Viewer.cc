@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.19 2007-04-04 16:50:27 allison Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.20 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //  glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
+  glViewport (0, 0, fWinSize_x, fWinSize_y);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 

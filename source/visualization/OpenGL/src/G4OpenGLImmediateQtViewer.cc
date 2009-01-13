@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.7 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.8 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,6 +48,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 
   //set true to picking
   fVP.SetPicking(true);
+  fDefaultVP.SetPicking(true);
 #if QT_VERSION < 0x040000
   setFocusPolicy(QWidget::StrongFocus); // enable keybord events
 #else
@@ -116,7 +117,7 @@ void  G4OpenGLImmediateQtViewer::DrawView() {
 void G4OpenGLImmediateQtViewer::ComputeView () {
 
 #ifdef G4DEBUG
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",WinSize_x, WinSize_y);
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
 #endif
   makeCurrent();
   // If a double buffer context has been forced upon us, ignore the
@@ -127,7 +128,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
 
   //Make sure current viewer is attached and clean...
   //Qt version needed
-  //  glViewport (0, 0, WinSize_x, WinSize_y);
+  //  glViewport (0, 0, fWinSize_x, fWinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
@@ -151,7 +152,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
   }
    
 #ifdef G4DEBUG
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",WinSize_x, WinSize_y);
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
 #endif
   hasToRepaint = true;
 }
@@ -191,15 +192,15 @@ void G4OpenGLImmediateQtViewer::paintGL()
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !hasToRepaint) {
-    if (((WinSize_x == (G4int)width())) &&(WinSize_y == (G4int) height())) {
+    if (((fWinSize_x == (unsigned int)width())) &&(fWinSize_y == (unsigned int) height())) {
       return;
     }
   }
 #ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-  WinSize_x = (G4int) width();
-  WinSize_y = (G4int) height();
+  fWinSize_x = (unsigned int) width();
+  fWinSize_y = (unsigned int) height();
 
   setupViewport(width(),height());
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.30 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.31 2009-01-13 09:47:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@
 #include <qdialog.h>
 #include <qprocess.h>
 #include <qapplication.h>
+#include <qdesktopwidget.h>
 
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
@@ -185,27 +186,21 @@ void G4OpenGLQtViewer::CreateMainWindow (
   GLWindow->setLayout(mainLayout);
   GLWindow->setWindowTitle( name);
 #endif
-  GLWindow->resize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
-  GLWindow->move(900,300);
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
+
+  //useful for MACOSX, we have to compt the menuBar height
+  unsigned int offset = QApplication::desktop()->height() 
+                      - QApplication::desktop()->availableGeometry().height();
+
+  G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+  if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+    YPos = offset;
+  }
+  GLWindow->resize(fWinSize_x, fWinSize_y);
+  GLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
   GLWindow->show();
   
-  // delete the pointer if close this
-  //  GLWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-#if QT_VERSION >= 0x040000
-//   QObject ::connect(GLWindow, 
-//                     SIGNAL(rejected()),
-//                     this, 
-//                     SLOT(dialogClosed()));
-#endif
-
-  WinSize_x = 400;
-  WinSize_y = 400;
-  if (WinSize_x < fVP.GetWindowSizeHintX ())
-    WinSize_x = fVP.GetWindowSizeHintX ();
-  if (WinSize_y < fVP.GetWindowSizeHintY ())
-    WinSize_y = fVP.GetWindowSizeHintY ();
-
   if(!fWindow) return;
 #ifdef G4DEBUG
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
@@ -798,11 +793,11 @@ void G4OpenGLQtViewer::G4resizeGL(
 {  
   setupViewport(aWidth,aHeight);
   
-  if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
+  if (((fWinSize_x != (unsigned int)aWidth)) || (fWinSize_y != (unsigned int) aHeight)) {
     hasToRepaint =true;
   }
-  WinSize_x = (G4int) aWidth;
-  WinSize_y = (G4int) aHeight;
+  fWinSize_x = (unsigned int) aWidth;
+  fWinSize_y = (unsigned int) aHeight;
 }
 
 
@@ -1031,7 +1026,7 @@ void G4OpenGLQtViewer::showShortcuts() {
  */
 void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
 
-  G4ViewParameters::DrawingStyle d_style;
+  G4ViewParameters::DrawingStyle d_style = G4ViewParameters::wireframe;
   
 
   // initialize
@@ -1597,9 +1592,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
   G4double coefTrans = 0;
   GLdouble coefDepth = 0;
   if(mouseMove) {
-    coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
-    if (WinSize_y <WinSize_x) {
-      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_x);
+    if (fWinSize_y <fWinSize_x) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_y);
     }
   } else {
     coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
