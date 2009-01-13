@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.43 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.44 2009-01-13 14:19:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,12 +189,9 @@ void G4OpenGLViewer::SetView () {
   const GLdouble bottom = left;
   const GLdouble top    = right;
   
-  // FIXME
-  //  const G4int& width = fVP.GetWindowSizeHintX();
-  //  const G4int& height = fVP.GetWindowSizeHintY();
-  //  G4int side = width;
-  //  if (height < width) side = height;
-  //  glViewport((width - side) / 2, (height - side) / 2, side, side);
+  G4int side = fWinSize_x;
+  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
+  glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);
 
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
