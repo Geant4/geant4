@@ -40,6 +40,12 @@
 #include <iomanip>
 
 #include "G4DiffuseElastic.hh"
+#include "G4HadronElastic.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4IonTable.hh"
+#include "G4QElasticCrossSection.hh"
+#include "G4VQCrossSection.hh"
+#include "G4ElasticHadrNucleusHE.hh"
 
 
 #include "G4UHadronElasticProcess.hh"
@@ -53,13 +59,19 @@
 #include "G4NucleonNuclearCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4PionPlus.hh"
+#include "G4ParticleTable.hh"
+#include  "G4IonTable.hh"
+
 #include "G4Proton.hh"
+#include "G4Neutron.hh"
+#include "G4Deuteron.hh"
+#include "G4Alpha.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
 #include "G4VCrossSectionDataSet.hh"
 
-#include  "G4ParticleTable.hh"
-#include  "G4IonTable.hh"
+
 
 
 using namespace std;
@@ -269,8 +281,10 @@ int main()
   // Initialisation
 
 
-  G4DiffuseElastic* diffelastic = new G4DiffuseElastic(theParticleDefinition);
-
+  G4DiffuseElastic*       diffelastic = new G4DiffuseElastic(theParticleDefinition);
+  G4VQCrossSection*       qCManager   = G4QElasticCrossSection::GetPointer();
+  G4ElasticHadrNucleusHE* hElastic = new G4ElasticHadrNucleusHE();
+  G4HadronElastic*        gElastic = new G4HadronElastic();
   // Physics data
 
   G4double momentum = 9.92*GeV;
@@ -327,6 +341,11 @@ int main()
   G4double      tmax = 4.0*ptot*ptot;
   G4double      t    = 0.0;
 
+
+
+
+
+
   // Choose generator
   G4bool swave = false;
 
@@ -354,7 +373,7 @@ int main()
   }
   simRead.close();
 
-  const G4int kAngle = numberOfSimPoints;
+  const G4int kAngle = 100; // numberOfSimPoints;
   G4double angleDistr[kAngle];
 
   for( k = 0; k < kAngle; k++) 
@@ -367,9 +386,22 @@ int main()
 
   G4double theta, thetaLab, thetaCMS, sigma, integral, transfer;
 
+  // Check for many elements initialisation
+
+  thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, 2., 4.0026);
+  thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z, A);
+  thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, 6., 55.845);
+  thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, 26., A);
+
+
+
+
+
   iMax = 1000000;   // numberOfSimPoints;
   iMod = iMax/10;
   writes << iMax  << G4endl;
+
+  G4cout <<"Start Sampling ... "<<G4endl;
 
   for( i = 0; i < iMax; i++)
   {
