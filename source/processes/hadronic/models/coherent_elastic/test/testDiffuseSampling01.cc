@@ -283,8 +283,10 @@ int main()
 
   G4DiffuseElastic*       diffelastic = new G4DiffuseElastic(theParticleDefinition);
   G4VQCrossSection*       qCManager   = G4QElasticCrossSection::GetPointer();
-  G4ElasticHadrNucleusHE* hElastic = new G4ElasticHadrNucleusHE();
-  G4HadronElastic*        gElastic = new G4HadronElastic();
+  G4ElasticHadrNucleusHE* hElastic    = new G4ElasticHadrNucleusHE();
+  G4HadronElastic*        gElastic    = new G4HadronElastic();
+
+
   // Physics data
 
   G4double momentum = 9.92*GeV;
@@ -308,6 +310,9 @@ int main()
 
   G4int Z   = G4int(theElement->GetZ());
   G4int A    = G4int(theElement->GetN()+0.5);
+  G4int N = A - Z;
+  if(N < 0) N = 0;
+  G4int projPDG = theParticleDefinition->GetPDGEncoding();
 
 
   /*
@@ -340,6 +345,7 @@ int main()
   G4cout <<"cms momentum, ptot = "<<ptot/GeV<<" GeV"<<G4endl;
   G4double      tmax = 4.0*ptot*ptot;
   G4double      t    = 0.0;
+  G4double      tDif, tGla, tChi, tGhe;
 
 
 
@@ -386,6 +392,9 @@ int main()
 
   G4double theta, thetaLab, thetaCMS, sigma, integral, transfer;
 
+  G4double thetaLabGla, thetaLabChi, thetaLabDif, thetaLabGhe;
+  G4double thetaCmsGla, thetaCmsChi, thetaCmsDif, thetaCmsGhe;
+
   // Check for many elements initialisation
 
   thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, 2., 4.0026);
@@ -396,6 +405,7 @@ int main()
 
 
 
+  G4double g2 = GeV*GeV; 
 
   iMax = 1000000;   // numberOfSimPoints;
   iMod = iMax/10;
@@ -424,11 +434,17 @@ int main()
 
     // thetaCMS = std::acos( 1 - std::fabs(transfer)/2./ptot/ptot );
 
-    thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z, A);
+    // thetaCMS = diffelastic->SampleTableThetaCMS(theParticleDefinition, ptot, Z, A);
 
-    theta = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCMS);
+    // theta = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCMS);
 
     // G4cout << transfer/GeV/GeV <<"\t" << thetaCMS/degree << "\t"<< theta/degree << G4endl;
+
+
+    tDif = diffelastic->SampleTableT(theParticleDefinition, ptot, Z, A);
+    tChi = qCManager->GetExchangeT(Z,N,projPDG);
+    tGhe = g2*gElastic->SampleT(tmax/g2,m1,m2,G4double(A));
+    tGla = hElastic->SampleT(theParticleDefinition,plab,Z,A);
 
     for( k = 0; k < kAngle; k++)
     {
