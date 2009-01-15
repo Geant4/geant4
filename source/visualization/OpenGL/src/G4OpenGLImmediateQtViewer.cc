@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.8 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.9 2009-01-15 18:14:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -177,7 +177,9 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int aWidth
 ,int aHeight)
 {  
-  G4resizeGL(aWidth,aHeight);
+  fWinSize_x = aWidth;
+  fWinSize_y = aHeight;
+  hasToRepaint = true;
 }
 
 
@@ -199,10 +201,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
 #ifdef G4DEBUG
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-  fWinSize_x = (unsigned int) width();
-  fWinSize_y = (unsigned int) height();
-
-  setupViewport(width(),height());
 
   SetView();
    

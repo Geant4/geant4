@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.21 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.22 2009-01-15 18:14:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -207,7 +207,10 @@ void G4OpenGLStoredQtViewer::resizeGL(
                                       int aWidth
                                       ,int aHeight)
 {  
-  G4resizeGL(aWidth,aHeight);
+  // Set new size, it will be update when next Repaint()->SetView() called
+  fWinSize_x = aWidth;
+  fWinSize_y = aHeight;
+  hasToRepaint = true;
 }
 
 
@@ -231,10 +234,6 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG
   printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
-  fWinSize_x = (unsigned int) width();
-  fWinSize_y = (unsigned int) height();
-
-  setupViewport(width(),height());
 
   SetView();
           

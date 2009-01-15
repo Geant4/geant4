@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.25 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.26 2009-01-15 18:14:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -579,15 +579,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				     XtNbackground, bgnd,
 				     NULL);
   
-  XtAddCallback (glxarea, 
-		 XmNexposeCallback, 
-		 expose_callback, 
-		 this);
-
-  XtAddCallback (glxarea, 
-		 XmNresizeCallback, 
-		 resize_callback, 
-		 this);
 
   XmMainWindowSetAreas (main_win,  // main widget, children are specified 
 			menubar,   // widget to use as menu bar
@@ -605,6 +596,17 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   win = XtWindow (glxarea);
 
   glXMakeCurrent (dpy, win, cx);
+
+  // This should be add AFTER glXMakeCurrent done because it will fire a resizeCallback
+  XtAddCallback (glxarea, 
+		 XmNresizeCallback, 
+		 resize_callback, 
+		 this);
+
+  XtAddCallback (glxarea, 
+		 XmNexposeCallback, 
+		 expose_callback, 
+		 this);
 
 }
 

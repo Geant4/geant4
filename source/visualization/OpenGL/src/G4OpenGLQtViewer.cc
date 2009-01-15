@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.31 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.32 2009-01-15 18:14:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,23 +88,6 @@ void G4OpenGLQtViewer::SetView (
 {
   G4OpenGLViewer::SetView ();
 }
-
-/**
- * Set the viewport of the scene
- */
-void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
-{
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
-  
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-  glMatrixMode(GL_MODELVIEW);
-}
-
-
 
 
 
@@ -784,20 +767,6 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 #endif
   createRadioAction(fFullScreenOn,fFullScreenOff,SLOT(toggleFullScreen(bool)),2);
 
-}
-
-
-void G4OpenGLQtViewer::G4resizeGL(
- int aWidth
-,int aHeight)
-{  
-  setupViewport(aWidth,aHeight);
-  
-  if (((fWinSize_x != (unsigned int)aWidth)) || (fWinSize_y != (unsigned int) aHeight)) {
-    hasToRepaint =true;
-  }
-  fWinSize_x = (unsigned int) aWidth;
-  fWinSize_y = (unsigned int) aHeight;
 }
 
 

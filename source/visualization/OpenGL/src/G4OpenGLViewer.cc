@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.44 2009-01-13 14:19:47 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.45 2009-01-15 18:14:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,10 +148,26 @@ void G4OpenGLViewer::ClearView () {
   glFlush ();
 }
 
+
+/**
+ * Set the viewport of the scene
+ */
+void G4OpenGLViewer::ResizeGLView()
+{
+#ifdef G4DEBUG
+  printf("G4OpenGLViewer::setupViewport\n");
+#endif
+
+  int side = fWinSize_x;
+  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
+  glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);  
+}
+
+
 void G4OpenGLViewer::SetView () {
 
   if (!fSceneHandler.GetScene()) {
-    G4cerr << "G4OpenGLStoredQtViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
+    G4cerr << "G4OpenGLStoredViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
 	   << G4endl;
     return;
   }
@@ -189,9 +205,9 @@ void G4OpenGLViewer::SetView () {
   const GLdouble bottom = left;
   const GLdouble top    = right;
   
-  G4int side = fWinSize_x;
-  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
-  glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);
+  // FIXME
+  ResizeGLView();
+  //SHOULD SetWindowsSizeHint()...
 
   glMatrixMode (GL_PROJECTION); // set up Frustum.
   glLoadIdentity();
@@ -204,8 +220,8 @@ void G4OpenGLViewer::SetView () {
   }
   else {
     glFrustum (left, right, bottom, top, pnear, pfar);
-  }
-  
+  }  
+
   glMatrixMode (GL_MODELVIEW); // apply further transformations to scene.
   glLoadIdentity();
   
