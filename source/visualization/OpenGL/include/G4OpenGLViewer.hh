@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.24 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.25 2009-01-16 08:29:17 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ protected:
   void HLRSecondPass ();
   void HLRThirdPass ();
   void InitializeGLView ();
+  void ResizeGLView();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   virtual void print();
