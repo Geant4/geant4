@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.1 2009-01-12 14:26:03 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.2 2009-01-19 08:59:56 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -299,7 +299,7 @@ void G4DNAScreenedRutherfordElasticModel::SampleSecondaries(std::vector<G4Dynami
     return ;
   }
 
-  G4double cosTheta;
+  G4double cosTheta = 0.;
 
   if (electronEnergy0>= killBelowEnergy && electronEnergy0 < highEnergyLimit)
   {  
@@ -480,7 +480,7 @@ G4double G4DNAScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosThet
 
  G4double oneOverMax = (4.*n*n);
 
- G4double cosTheta;
+ G4double cosTheta = 0.;
  G4double fCosTheta;
 
  do 
