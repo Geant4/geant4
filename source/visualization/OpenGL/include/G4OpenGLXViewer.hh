@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.28 2007-11-10 14:50:01 allison Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.29 2009-01-19 16:08:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,9 +96,7 @@ protected:
                                     errorBase,
                                     eventBase,
                                     major,
-                                    minor,
-                                    x_origin,
-                                    y_origin;
+                                    minor;
   XSizeHints                        *norm_hints;
   XWMHints                          *wm_hints;
   XClassHint                        *class_hints;

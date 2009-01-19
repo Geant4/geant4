@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.26 2009-01-15 18:14:58 lgarnier Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.27 2009-01-19 16:08:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -599,9 +599,9 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   // This should be add AFTER glXMakeCurrent done because it will fire a resizeCallback
   XtAddCallback (glxarea, 
-		 XmNresizeCallback, 
-		 resize_callback, 
-		 this);
+ 		 XmNresizeCallback, 
+ 		 resize_callback, 
+ 		 this);
 
   XtAddCallback (glxarea, 
 		 XmNexposeCallback, 

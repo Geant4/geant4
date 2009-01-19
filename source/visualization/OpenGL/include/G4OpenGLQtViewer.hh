@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.13 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.14 2009-01-19 16:08:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,6 @@ public:
 protected:
   void CreateGLQtContext ();
   virtual void CreateMainWindow (QGLWidget*,QString);
-  void G4resizeGL(int, int);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void G4MousePressEvent(QMouseEvent *event);
   void G4MouseReleaseEvent();
@@ -119,8 +118,6 @@ protected:
 
 
 protected:
-  G4int WinSize_x;
-  G4int WinSize_y;
   QGLWidget* fWindow;
   QDialog* GLWindow;
   bool hasPendingEvents();
