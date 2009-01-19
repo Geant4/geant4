@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.33 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.34 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1644,7 +1644,6 @@ void G4OpenGLQtViewer::rescaleImage(
 //   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
 //   glRenderMode (GL_FEEDBACK);
   
-//   glViewport (0, 0, aWidth, aHeight);
 //   DrawView();
 //   returned = glRenderMode (GL_RENDER);
 
@@ -1675,9 +1674,7 @@ bool G4OpenGLQtViewer::generateVectorEPS (
   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
   glRenderMode (GL_FEEDBACK);
   
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
+  ResizeGLView();
   DrawView();
 
   returned = glRenderMode (GL_RENDER);

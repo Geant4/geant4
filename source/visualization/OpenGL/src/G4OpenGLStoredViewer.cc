@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.24 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.25 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

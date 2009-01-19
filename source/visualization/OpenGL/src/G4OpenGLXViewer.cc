@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.44 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.45 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -436,9 +436,7 @@ void G4OpenGLXViewer::print() {
     glXMakeCurrent (dpy,
 		    win,
 		    cx);
-    
-    //    glViewport (0, 0, fWinSize_x, fWinSize_y);
-    
+        
     ClearView ();
     SetView ();
     DrawView ();

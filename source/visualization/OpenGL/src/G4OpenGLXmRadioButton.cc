@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRadioButton.cc,v 1.6 2006-06-29 21:19:54 gunter Exp $
+// $Id: G4OpenGLXmRadioButton.cc,v 1.7 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent

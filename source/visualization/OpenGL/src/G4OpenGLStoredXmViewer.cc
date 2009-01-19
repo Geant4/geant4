@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.23 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.24 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,6 @@ void G4OpenGLStoredXmViewer::DrawView () {
 
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, fWinSize_x, fWinSize_y);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 

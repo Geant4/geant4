@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.14 2006-06-29 21:20:02 gunter Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.15 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

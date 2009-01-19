@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.17 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.18 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,6 @@ void G4OpenGLImmediateXViewer::DrawView () {
 
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, fWinSize_x, fWinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {

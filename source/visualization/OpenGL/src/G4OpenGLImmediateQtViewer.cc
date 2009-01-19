@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.10 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.11 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -125,10 +125,6 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
   //  glDrawBuffer (GL_FRONT);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
-
-  //Make sure current viewer is attached and clean...
-  //Qt version needed
-  //  glViewport (0, 0, fWinSize_x, fWinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {

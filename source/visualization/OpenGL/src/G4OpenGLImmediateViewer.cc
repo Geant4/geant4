@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.8 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.9 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

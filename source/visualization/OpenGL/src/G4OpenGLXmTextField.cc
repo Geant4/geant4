@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.7 2006-06-29 21:20:04 gunter Exp $
+// $Id: G4OpenGLXmTextField.cc,v 1.8 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSeparator.cc,v 1.5 2006-06-29 21:19:58 gunter Exp $
+// $Id: G4OpenGLXmSeparator.cc,v 1.6 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent

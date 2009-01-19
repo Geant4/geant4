@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSliderBar.cc,v 1.7 2006-06-29 21:20:00 gunter Exp $
+// $Id: G4OpenGLXmSliderBar.cc,v 1.8 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent

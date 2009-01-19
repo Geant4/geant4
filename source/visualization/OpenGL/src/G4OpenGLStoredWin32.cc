@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.14 2006-08-14 12:07:19 allison Exp $
+// $Id: G4OpenGLStoredWin32.cc,v 1.15 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

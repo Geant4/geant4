@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.45 2009-01-15 18:14:58 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.46 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,10 +154,6 @@ void G4OpenGLViewer::ClearView () {
  */
 void G4OpenGLViewer::ResizeGLView()
 {
-#ifdef G4DEBUG
-  printf("G4OpenGLViewer::setupViewport\n");
-#endif
-
   int side = fWinSize_x;
   if (fWinSize_y < fWinSize_x) side = fWinSize_y;
   glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);  

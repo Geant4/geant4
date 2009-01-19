@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.cc,v 1.4 2007-11-15 10:14:23 allison Exp $
+// $Id: G4OpenGLBitMapStore.cc,v 1.5 2009-01-19 16:53:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
