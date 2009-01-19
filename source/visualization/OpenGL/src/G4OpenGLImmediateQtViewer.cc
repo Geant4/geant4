@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.9 2009-01-15 18:14:58 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.10 2009-01-19 16:26:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,7 +64,7 @@ G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
   readyToPaint = false;
@@ -101,14 +101,14 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 /** To ensure compatibility with DrawView method
  */
 void  G4OpenGLImmediateQtViewer::DrawView() {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::DrawView  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
 #endif
   // That's no the same logic as Stored Viewer, I don't know why...
   // see G4OpenGLStoredQtViewer::DrawView for more informations
 
   updateQWidget();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::DrawView  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 #endif
 }
@@ -116,7 +116,7 @@ void  G4OpenGLImmediateQtViewer::DrawView() {
 
 void G4OpenGLImmediateQtViewer::ComputeView () {
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
 #endif
   makeCurrent();
@@ -137,7 +137,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     NeedKernelVisit ();
     ProcessView ();
     glFlush ();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::ComputeView First ProcessView ok\n");
 #endif
     HaloingSecondPass ();
@@ -151,7 +151,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     savePPMToTemp();
   }
    
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
 #endif
   hasToRepaint = true;
@@ -159,11 +159,11 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
 
 void G4OpenGLImmediateQtViewer::FinishView()
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::FinishView() BEGIN\n");
 #endif
   glFlush ();
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::FinishView() END\n");
 #endif
 
@@ -185,7 +185,7 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("\n\nG4OpenGLImmediateQtViewer::paintGL ??\n");
 #endif
   if (!readyToPaint) {
@@ -198,7 +198,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
       return;
     }
   }
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
 #endif
 
@@ -209,7 +209,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
 
   hasToRepaint = false; // could be set to false by ComputeView
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",readyToPaint);
 #endif
 }

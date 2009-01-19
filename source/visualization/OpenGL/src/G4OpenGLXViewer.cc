@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.43 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.44 2009-01-19 16:26:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,9 +225,6 @@ void G4OpenGLXViewer::CreateMainWindow () {
   size_hints->x = x_origin;
   size_hints->y = y_origin;
   size_hints->flags |= PSize | PPosition;
-#ifdef G4DEBUG
-  printf("G4OpenGLXViewer::CreateMainWindow CreateWindow Size:W:%d H:%d X:%d Y:%d \n",fWinSize_x,fWinSize_y,x_origin,y_origin);
-#endif
 
   G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
@@ -440,7 +437,7 @@ void G4OpenGLXViewer::print() {
 		    win,
 		    cx);
     
-    glViewport (0, 0, fWinSize_x, fWinSize_y);
+    //    glViewport (0, 0, fWinSize_x, fWinSize_y);
     
     ClearView ();
     SetView ();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.33 2009-01-19 15:47:49 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.34 2009-01-19 16:26:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -598,9 +598,6 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
 }
 
 G4int G4ViewParameters::GetWindowAbsoluteLocationHintX (G4int sizeX ) const {
-#ifdef G4DEBUG
-  printf("G4ViewParameters::GetWindowLocationHintX () :: %d\n",fWindowLocationHintX);
-#endif
   if ( fWindowLocationHintXNegative ) {
     return  sizeX  + fWindowLocationHintX - fWindowSizeHintX;
   }
@@ -608,9 +605,6 @@ G4int G4ViewParameters::GetWindowAbsoluteLocationHintX (G4int sizeX ) const {
 }
 
 G4int G4ViewParameters::GetWindowAbsoluteLocationHintY (G4int sizeY ) const {
-#ifdef G4DEBUG
-  printf("G4ViewParameters::GetWindowLocationHintY () :: %d\n",fWindowLocationHintY);
-#endif
   if (  fWindowLocationHintYNegative ) {
     return  sizeY  + fWindowLocationHintY - fWindowSizeHintY;
   }
@@ -653,9 +647,6 @@ int G4ViewParameters::ParseGeometry (
     string++;  /* ignore possible '=' at beg of geometry spec */
   strind = (char *)string;
   if (*strind != '+' && *strind != '-' && *strind != 'x') {
-#ifdef G4DEBUG
-  printf("G4ViewParameters::ParseGeometry !+-x\n");
-#endif
     tempWidth = ReadInteger(strind, &nextCharacter);
     if (strind == nextCharacter)
       return (0);
@@ -663,9 +654,6 @@ int G4ViewParameters::ParseGeometry (
     mask |= fWidthValue;
   }
   if (*strind == 'x' || *strind == 'X') {
-#ifdef G4DEBUG
-  printf("G4ViewParameters::ParseGeometry = xX\n");
-#endif
     strind++;
     tempHeight = ReadInteger(strind, &nextCharacter);
     if (strind == nextCharacter)
@@ -675,9 +663,6 @@ int G4ViewParameters::ParseGeometry (
   }
 
   if ((*strind == '+') || (*strind == '-')) {
-#ifdef G4DEBUG
-  printf("G4ViewParameters::ParseGeometry = +-\n");
-#endif
     if (*strind == '-') {
       strind++;
       tempX = -ReadInteger(strind, &nextCharacter);

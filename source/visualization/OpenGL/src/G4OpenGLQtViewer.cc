@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.32 2009-01-15 18:14:58 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.33 2009-01-19 16:26:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
 #endif
 
@@ -147,13 +147,13 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #endif
 
     if (found==false) {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
       GLWindow = new QDialog();
     }
   } else {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     GLWindow = new QDialog();
@@ -173,7 +173,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   fWinSize_y = fVP.GetWindowSizeHintY();
 
   //useful for MACOSX, we have to compt the menuBar height
-  unsigned int offset = QApplication::desktop()->height() 
+  int offset = QApplication::desktop()->height() 
                       - QApplication::desktop()->availableGeometry().height();
 
   G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
@@ -185,7 +185,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   GLWindow->show();
   
   if(!fWindow) return;
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
 #endif
 
@@ -247,7 +247,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 
   fLastEventTime = new QTime();
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
