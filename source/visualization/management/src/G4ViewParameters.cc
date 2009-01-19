@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.32 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.33 2009-01-19 15:47:49 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -531,17 +531,44 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 }
 
 
-void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
+void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
 
 
   G4int x,y = 0;
   unsigned int w,h = 0;
+  G4String geomString = geomStringArg;
+  // Parse windowSizeHintString for backwards compatibility...
+  const G4String delimiters("xX+-");
+  G4String::size_type i = geomString.find_first_of(delimiters);
+  if (i == G4String::npos) {  // Does not contain "xX+-".  Assume single number
+    std::istringstream iss(geomString);
+    G4int size;
+    iss >> size;
+    if (!iss) {
+      size = 600;
+      G4cout << "Unrecognised windowSizeHint string: \""
+	     << geomString
+	     << "\".  Asuuming " << size << G4endl;
+    }
+    std::ostringstream oss;
+    oss << size << 'x' << size;
+    geomString = oss.str();
+  }
+ 
   G4int m = ParseGeometry( geomString, &x, &y, &w, &h );
 
+  // Handle special case :
+  if ((m & fYValue) == 0)
+    {  // Using default
+      y =  fWindowLocationHintY;      
+    }
+  if ((m & fXValue) == 0)
+    {  // Using default
+      x =  fWindowLocationHintX;      
+    }
+
   // Check errors
-  if ( ((m & fYValue) == 0) ||
-       ((m & fXValue) == 0) ||
-       ((m & fHeightValue) == 0 ) ||
+  if ( ((m & fHeightValue) == 0 ) ||
        ((m & fWidthValue)  == 0 )) {
     G4cout << "ERROR: Unrecognised geometry string \""
            << geomString
@@ -566,7 +593,6 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomString) {
     } else {
       fWindowLocationHintYNegative = false;
     }
-
   }
 
 }
@@ -627,6 +653,9 @@ int G4ViewParameters::ParseGeometry (
     string++;  /* ignore possible '=' at beg of geometry spec */
   strind = (char *)string;
   if (*strind != '+' && *strind != '-' && *strind != 'x') {
+#ifdef G4DEBUG
+  printf("G4ViewParameters::ParseGeometry !+-x\n");
+#endif
     tempWidth = ReadInteger(strind, &nextCharacter);
     if (strind == nextCharacter)
       return (0);
@@ -634,6 +663,9 @@ int G4ViewParameters::ParseGeometry (
     mask |= fWidthValue;
   }
   if (*strind == 'x' || *strind == 'X') {
+#ifdef G4DEBUG
+  printf("G4ViewParameters::ParseGeometry = xX\n");
+#endif
     strind++;
     tempHeight = ReadInteger(strind, &nextCharacter);
     if (strind == nextCharacter)
@@ -643,6 +675,9 @@ int G4ViewParameters::ParseGeometry (
   }
 
   if ((*strind == '+') || (*strind == '-')) {
+#ifdef G4DEBUG
+  printf("G4ViewParameters::ParseGeometry = +-\n");
+#endif
     if (*strind == '-') {
       strind++;
       tempX = -ReadInteger(strind, &nextCharacter);

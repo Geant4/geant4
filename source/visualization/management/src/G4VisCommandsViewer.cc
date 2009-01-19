@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.74 2009-01-19 13:46:39 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.75 2009-01-19 15:47:49 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -639,24 +639,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   // manager in the G4VViewer constructor. In G4VisManager, after Viewer
   // creation, we will store theses parameters in G4ViewParameters.
 
-  // Parse windowSizeHintString for backwards compatibility...
-  const G4String delimiters("xX+-");
-  G4String::size_type i = windowSizeHintString.find_first_of(delimiters);
-  if (i == G4String::npos) {  // Does not contain "xX+-".  Assume single number
-    std::istringstream iss(windowSizeHintString);
-    G4int size;
-    iss >> size;
-    if (!iss) {
-      size = 600;
-      G4cout << "Unrecognised windowSizeHint string: \""
-	     << windowSizeHintString
-	     << "\".  Asuuming " << size << G4endl;
-    }
-    std::ostringstream oss;
-    oss << size << 'x' << size;
-    windowSizeHintString = oss.str();
-  }
-  fpVisManager -> CreateViewer (newName, windowSizeHintString);
+  fpVisManager -> CreateViewer (newName,windowSizeHintString);
 
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
   if (newViewer && newViewer -> GetName () == newName) {
