@@ -41,7 +41,8 @@ G4double G4PreCompoundIon::
 ProbabilityDistributionFunction(const G4double eKin, 
 				const G4Fragment& aFragment)
 {
-  if ( !IsItPossible(aFragment) ) return 0.0;
+  //JMQ 15/01/09
+  if (( !IsItPossible(aFragment) ) && GetFlag()==true) return 0.0;
   
   const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
 
@@ -65,17 +66,23 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double Aj = GetA()*(GetA()+1.0)/4.0/gj; 
 
-
+// JMQ 15/01/09 pruebo a quitar los A's , como Gudima  
   G4double E0 = std::max(0.0,U - A0);
+//  G4double E0 = U ;
   if (E0 == 0.0) return 0.0;
 
-  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1)); 
+  G4double E1 = (std::max(0.0,GetMaximalKineticEnergy() - eKin - A1));
+  //JMQ 20/01/09
+  if (E1 == 0.0) return 0.0;
+//  G4double E1 = GetMaximalKineticEnergy() - eKin - A1; 
 
   G4double Ej = std::max(0.0,eKin + GetBindingEnergy() -Aj); 
+//  G4double Ej = eKin + GetBindingEnergy(); 
 
 
- G4double pA = 1.e-25*(3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
-(eKin+GetBindingEnergy()))))/(pi * r0 * r0 * std::pow(GetRestA(),2.0/3.0) )* eKin*CrossSection(eKin) /(r0*std::pow(GetRestA(),1.0/3.0)) * CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  ;
+ G4double pA = 1.e-25*(3.0/4.0/pi) * std::sqrt( std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))) )/
+(r0 * r0 * r0 * GetRestA())* eKin * CrossSection(eKin)  * CoalescenceFactor(aFragment.GetA()) * 
+FactorialFactor(N,P)* GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())  ;
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
  

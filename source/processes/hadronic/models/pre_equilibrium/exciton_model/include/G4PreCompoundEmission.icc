@@ -34,9 +34,10 @@ inline void G4PreCompoundEmission::Initialize(const G4Fragment & aFragment)
   return;
 }
 
-
 inline G4double G4PreCompoundEmission::GetTotalProbability(const G4Fragment & aFragment) 
 {
+//JMQ 19-01-09
+theFragmentsVector->CalculateProbabilitiesOriginal(aFragment);
   return theFragmentsVector->CalculateProbabilities(aFragment);
 }
 

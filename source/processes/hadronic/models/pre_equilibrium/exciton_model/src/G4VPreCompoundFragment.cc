@@ -171,7 +171,12 @@ Initialize(const G4Fragment & aFragment)
   
   return;
 }
-
+//JMQ 15/01/09
+ void G4VPreCompoundFragment::SetFlag(G4bool f) 
+{flag= f;
+return;}
+G4bool G4VPreCompoundFragment::GetFlag() 
+{ return flag;}
 
 
 

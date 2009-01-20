@@ -102,8 +102,23 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 #ifdef debug
   G4Fragment InitialState(aFragment);
 #endif
-  // Choose a Fragment for emission
+
+
+	//JMQ 15/01/09 
   G4VPreCompoundFragment * theFragment = theFragmentsVector->ChooseFragment();
+  // Choose a Fragment for emission
+//  G4VPreCompoundFragment * theFragment = theFragmentsVector->ChooseFragment();
+  G4VPreCompoundFragment * theFragmentOriginal = theFragmentsVector->ChooseFragmentOriginal();
+ // JMQ 15/01/09 Choose a Scaled Fragment for emission
+//  G4VPreCompoundFragment * theFragmentScaled = theFragmentsVector->ChooseFragmentScaled();
+
+//JMQ 12/01/09 
+//if (theFragment->GetZ()==1 && theFragment->GetA()==1) G4cout<<"SE EMITE UN PROTON DE PREEQUILIBRIO"<<G4endl;
+//if (theFragment->GetZ()==1 && theFragment->GetA()==2) G4cout<<"SE EMITE UN DEUTERON DE PREEQUILIBRIO"<<G4endl;
+ 	theFragment->SetFlag(false);
+        theFragmentOriginal->SetFlag(true);
+
+//
   if (theFragment == 0)
     {
       G4cerr <<  "G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment\n"
@@ -117,7 +132,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   // Calculate the fragment momentum (three vector)
   G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
   
-  // Mass of emittef fragment
+  // Mass of emitted fragment
   G4double EmittedMass = theFragment->GetNuclearMass();
   
   // Now we can calculate the four momentum 
@@ -159,16 +174,16 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   if (anU < 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
     
     
-    
+   //JMQ 15/01/09 the update is done with the "dummy "emission of clusters (Original). 
   // Update nucleus parameters:
   // --------------------------
 
   // Number of excitons
   aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
-				 static_cast<G4int>(theFragment->GetA()));
+				 static_cast<G4int>(theFragmentOriginal->GetA()));
   // Number of charges
   aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
-			       static_cast<G4int>(theFragment->GetZ()));
+			       static_cast<G4int>(theFragmentOriginal->GetZ()));
     
   // Atomic number
   aFragment.SetA(theFragment->GetRestA());

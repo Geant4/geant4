@@ -42,7 +42,8 @@ G4double G4PreCompoundNucleon::
 ProbabilityDistributionFunction(const G4double eKin, 
 				const G4Fragment& aFragment)
 {
-  if ( !IsItPossible(aFragment) ) return 0.0;
+  //JMQ 15/01/09
+  if (( !IsItPossible(aFragment) ) && GetFlag()==true) return 0.0;
 
 
   G4double U = aFragment.GetExcitationEnergy();

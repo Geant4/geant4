@@ -183,6 +183,14 @@ protected:
   G4int OPTxs;
 //for superimposed Coulomb Barrier for inverse cross sections
   G4bool useSICB;
+
+public:
+//JMQ 15/01/09
+  G4bool flag;
+  void SetFlag(G4bool);
+  G4bool GetFlag();
+ 
+
 };
 
 #include "G4VPreCompoundFragment.icc"

@@ -163,3 +163,6 @@ GetKineticEnergy(const G4Fragment & aFragment)
     }   while (G4UniformRand() > NormalizedProbability);  
   return T;
 }
+
+
+
