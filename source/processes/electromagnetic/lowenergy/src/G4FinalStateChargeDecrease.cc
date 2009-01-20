@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateChargeDecrease.cc,v 1.3 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4FinalStateChargeDecrease.cc,v 1.4 2009-01-20 07:50:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateChargeDecrease.hh"
@@ -69,9 +69,13 @@ const G4FinalStateProduct& G4FinalStateChargeDecrease::GenerateFinalState(const 
     G4Exception(message);
   }
   
+  //SI - Added protection against total energy deposit
+  product.DoNotDepositEnergy();
+  //
   product.KillPrimaryParticle();
+
   product.AddEnergyDeposit(waterBindingEnergy);
-  
+
   G4DynamicParticle* aSecondary = new G4DynamicParticle(OutgoingParticleDefinition(definition, finalStateIndex), 
 							track.GetDynamicParticle()->GetMomentumDirection(), 
 							outK);

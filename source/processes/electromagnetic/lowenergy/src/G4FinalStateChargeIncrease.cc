@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateChargeIncrease.cc,v 1.3 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4FinalStateChargeIncrease.cc,v 1.4 2009-01-20 07:50:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateChargeIncrease.hh"
@@ -47,8 +47,12 @@ const G4FinalStateProduct& G4FinalStateChargeIncrease::GenerateFinalState(const 
 {
   product.Clear();
 
+  //SI - Added protection against total energy deposit
+  product.DoNotDepositEnergy();
+  //
   product.KillPrimaryParticle();
   product.AddEnergyDeposit(0.);
+
   G4ParticleDefinition* definition = track.GetDefinition();
  
   G4double inK = track.GetDynamicParticle()->GetKineticEnergy();
