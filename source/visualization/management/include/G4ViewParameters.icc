@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc,v 1.17 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4ViewParameters.icc,v 1.18 2009-01-21 16:59:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,6 +159,22 @@ inline G4double G4ViewParameters::GetGlobalLineWidthScale () const {
 
 inline G4bool G4ViewParameters::IsMarkerNotHidden () const {
   return fMarkerNotHidden;
+}
+
+inline bool G4ViewParameters::IsWindowSizeHintX () const {
+  return (fGeometryMask & fWidthValue);
+}
+
+inline bool G4ViewParameters::IsWindowSizeHintY () const {
+  return (fGeometryMask & fHeightValue);
+}
+
+inline bool G4ViewParameters::IsWindowLocationHintX () const {
+  return (fGeometryMask & fXValue);
+}
+
+inline bool G4ViewParameters::IsWindowLocationHintY () const {
+  return (fGeometryMask & fYValue);
 }
 
 inline unsigned int G4ViewParameters::GetWindowSizeHintX () const {

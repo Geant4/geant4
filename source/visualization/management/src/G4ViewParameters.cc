@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.34 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.35 2009-01-21 16:59:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -555,46 +555,60 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
     geomString = oss.str();
   }
  
-  G4int m = ParseGeometry( geomString, &x, &y, &w, &h );
+  fGeometryMask = ParseGeometry( geomString, &x, &y, &w, &h );
 
   // Handle special case :
-  if ((m & fYValue) == 0)
+  if ((fGeometryMask & fYValue) == 0)
     {  // Using default
-      y =  fWindowLocationHintY;      
+      y =  fWindowLocationHintY;
     }
-  if ((m & fXValue) == 0)
+  if ((fGeometryMask & fXValue) == 0)
     {  // Using default
-      x =  fWindowLocationHintX;      
+      x =  fWindowLocationHintX;
     }
 
   // Check errors
-  if ( ((m & fHeightValue) == 0 ) ||
-       ((m & fWidthValue)  == 0 )) {
-    G4cout << "ERROR: Unrecognised geometry string \""
+  // if there is no Width and Height
+  if ( ((fGeometryMask & fHeightValue) == 0 ) &&
+       ((fGeometryMask & fWidthValue)  == 0 )) {
+    h = fWindowSizeHintY;
+    w = fWindowSizeHintX;
+  } else  if ((fGeometryMask & fHeightValue) == 0 ) {
+
+    // if there is only Width. Special case to be backward compatible
+    // We set Width and Height the same to obtain a square windows.
+    
+    G4cout << "Unrecognised geometry string \""
            << geomString
-           << "\".  Using default"
+           << "\".  No Height found. Using Width value instead"
            << G4endl;
-  } else {
-    // Set the string
-    fXGeometryString = geomString;
-
-    // Set values
-    fWindowSizeHintX = w;
-    fWindowSizeHintY = h;
-    fWindowLocationHintX = x;
-    fWindowLocationHintY = y;
-    if ( (m & fXNegative) ) {
-      fWindowLocationHintXNegative = true;
-    } else {
-      fWindowLocationHintXNegative = false;
-    }
-    if ( (m & fYNegative) ) {
-      fWindowLocationHintYNegative = true;
-    } else {
-      fWindowLocationHintYNegative = false;
-    }
+    h = w;
   }
-
+  if ( ((fGeometryMask & fXValue) == 0 ) ||
+       ((fGeometryMask & fYValue)  == 0 )) {
+    //Using defaults
+    x = fWindowLocationHintX;
+    y = fWindowLocationHintY;
+  }
+  // Set the string
+  fXGeometryString = geomString;
+  
+  // Set values
+  fWindowSizeHintX = w;
+  fWindowSizeHintY = h;
+  fWindowLocationHintX = x;
+  fWindowLocationHintY = y;
+  if ( (fGeometryMask & fXNegative) ) {
+    fWindowLocationHintXNegative = true;
+  } else {
+    fWindowLocationHintXNegative = false;
+  }
+  if ( (fGeometryMask & fYNegative) ) {
+    fWindowLocationHintYNegative = true;
+  } else {
+    fWindowLocationHintYNegative = false;
+  }
+  
 }
 
 G4int G4ViewParameters::GetWindowAbsoluteLocationHintX (G4int sizeX ) const {

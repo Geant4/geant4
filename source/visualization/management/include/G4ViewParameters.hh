@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.29 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4ViewParameters.hh,v 1.30 2009-01-21 16:59:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,6 +167,11 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
+  bool IsWindowSizeHintX () const;
+  bool IsWindowSizeHintY () const;
+  bool IsWindowLocationHintX () const;
+  bool IsWindowLocationHintY () const;
+
         G4bool           IsAutoRefresh           () const;
   const G4Colour&        GetBackgroundColour     () const;
         G4bool           IsPicking               () const;
@@ -250,6 +255,7 @@ private:
   G4int fAllValues; // AllValues are set for XGeometry
   G4int fXNegative; // XValue is from left for XGeometry
   G4int fYNegative; // YValue is from top for XGeometry
+  G4int fGeometryMask; // Mask for ParseGeometry
 
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.

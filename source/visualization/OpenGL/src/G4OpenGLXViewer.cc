@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.45 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.46 2009-01-21 16:59:22 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -224,8 +224,13 @@ void G4OpenGLXViewer::CreateMainWindow () {
   size_hints->base_height = fWinSize_y;
   size_hints->x = x_origin;
   size_hints->y = y_origin;
-  size_hints->flags |= PSize | PPosition;
-
+  if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PSize | PPosition;
+  } else if (fVP.IsWindowSizeHintX () && !(fVP.IsWindowLocationHintX () || fVP.IsWindowLocationHintY ())) {
+    size_hints->flags |= PSize;
+  } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PPosition;
+  }
   G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
