@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.8 2009-01-20 18:29:46 antoni Exp $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.9 2009-01-21 15:03:36 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -82,6 +82,8 @@ CalculateProbabilities(const G4Fragment & aFragment)
   G4double ProtonReferenceProbability=0.;
   G4double Factord=0.8;
   G4double Factort=0.2;
+  G4double Factorhe3=0.2;
+  G4double Factora=0.2;
 //
   TotalEmissionProbability = 0.0;
   pcfvector::iterator aChannel; 
@@ -103,10 +105,20 @@ CalculateProbabilities(const G4Fragment & aFragment)
 		  G4double probJMQ = (*aChannel)->GetMaximalKineticEnergy();
 		  if (probJMQ > 0.0) TotalEmissionProbability += Factord*ProtonReferenceProbability;
 		}
-	else if ((*aChannel)->GetA()==3 && (*aChannel)->GetZ()==1) 
+	 if ((*aChannel)->GetA()==3 && (*aChannel)->GetZ()==1) 
 		{
 		  G4double probJMQ = (*aChannel)->GetMaximalKineticEnergy();
 		  if (probJMQ > 0.0) TotalEmissionProbability += Factort*ProtonReferenceProbability;
+		}
+	 if ((*aChannel)->GetA()==3 && (*aChannel)->GetZ()==2) 
+		{
+		  G4double probJMQ = (*aChannel)->GetMaximalKineticEnergy();
+		  if (probJMQ > 0.0) TotalEmissionProbability += Factorhe3*ProtonReferenceProbability;
+		}
+         else 	 if ((*aChannel)->GetA()==4 && (*aChannel)->GetZ()==2) 
+		{
+		  G4double probJMQ = (*aChannel)->GetMaximalKineticEnergy();
+		  if (probJMQ > 0.0) TotalEmissionProbability += Factora*ProtonReferenceProbability;
 		}
 	else
       TotalEmissionProbability += (*aChannel)->CalcEmissionProbability(aFragment);
@@ -160,7 +172,8 @@ ChooseFragmentOriginal(void)
   running.clear();
   if (ChosenChannel < 0) 
     {
-      G4cerr
+ //     G4cerr
+	G4cout
 	<< "G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel\n"
 	<< "Probabilities: ORIGINAL ";
       for (i = theChannels->begin(); i != theChannels->end(); ++i) 
@@ -190,6 +203,8 @@ ChooseFragment(void)
   G4double ProtonReferenceProbability=0.;
   G4double Factord=0.8;
   G4double Factort=0.2;
+  G4double Factorhe3=0.01;
+  G4double Factora=1;
 //
 
 
@@ -212,11 +227,23 @@ ChooseFragment(void)
 		  G4double probJMQ = (*i)->GetMaximalKineticEnergy();
 		  if (probJMQ > 0.0) accumulation +=Factord*ProtonReferenceProbability;
 		}
-	else if ((*i)->GetA()==3 && (*i)->GetZ()==1) 
+	 if ((*i)->GetA()==3 && (*i)->GetZ()==1) 
 		{
 		  G4double probJMQ = (*i)->GetMaximalKineticEnergy();
 		  if (probJMQ > 0.0) accumulation +=Factort*ProtonReferenceProbability;
 		}
+	 if ((*i)->GetA()==3 && (*i)->GetZ()==2) 
+		{
+		  G4double probJMQ = (*i)->GetMaximalKineticEnergy();
+		  if (probJMQ > 0.0) accumulation +=Factorhe3*ProtonReferenceProbability;
+		}
+	else if ((*i)->GetA()==4 && (*i)->GetZ()==2) 
+		{
+		  G4double probJMQ = (*i)->GetMaximalKineticEnergy();
+		  if (probJMQ > 0.0) accumulation +=Factora*ProtonReferenceProbability;
+		}
+
+
 	else
     accumulation += (*i)->GetEmissionProbability();
 
