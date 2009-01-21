@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.35 2009-01-21 16:59:22 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.36 2009-01-21 17:05:12 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -598,17 +598,21 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
   fWindowSizeHintY = h;
   fWindowLocationHintX = x;
   fWindowLocationHintY = y;
-  if ( (fGeometryMask & fXNegative) ) {
-    fWindowLocationHintXNegative = true;
-  } else {
-    fWindowLocationHintXNegative = false;
-  }
-  if ( (fGeometryMask & fYNegative) ) {
+
+  if ( ((fGeometryMask & fXValue)) &&
+       ((fGeometryMask & fYValue))) {
+
+    if ( (fGeometryMask & fXNegative) ) {
+      fWindowLocationHintXNegative = true;
+    } else {
+      fWindowLocationHintXNegative = false;
+    }
+    if ( (fGeometryMask & fYNegative) ) {
     fWindowLocationHintYNegative = true;
-  } else {
-    fWindowLocationHintYNegative = false;
+    } else {
+      fWindowLocationHintYNegative = false;
+    }
   }
-  
 }
 
 G4int G4ViewParameters::GetWindowAbsoluteLocationHintX (G4int sizeX ) const {
