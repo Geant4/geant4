@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ using namespace std;
 
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),formFactorData(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;
@@ -64,8 +64,8 @@ G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4Par
 
 G4LivermorePolarizedRayleighModel::~G4LivermorePolarizedRayleighModel()
 {  
-  delete crossSectionHandler;
-  delete formFactorData;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (formFactorData) delete formFactorData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,8 +83,12 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePolarizedRayleighModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
+  
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
@@ -115,6 +119,8 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   //
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Polarized Rayleigh model" << G4endl;
+
+  InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore Polarized Rayleigh model is initialized " << G4endl
          << "Energy range: "

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.cc,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermoreRayleighModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ using namespace std;
 
 G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),formFactorData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;
@@ -64,9 +64,9 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
 {  
-  delete meanFreePathTable;
-  delete crossSectionHandler;
-  delete formFactorData;
+  if (meanFreePathTable) delete meanFreePathTable;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (formFactorData) delete formFactorData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,8 +77,12 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreRayleighModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
+  
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
@@ -114,6 +118,8 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
   
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Rayleigh model" << G4endl;
+
+  InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore Rayleigh model is initialized " << G4endl
          << "Energy range: "
@@ -165,7 +171,6 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      // SI - IS THE FOLLOWING RETURN NECESSARY ?
       return ;
   }
 

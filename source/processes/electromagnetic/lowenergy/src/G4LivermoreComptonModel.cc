@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.1 2008-10-30 14:17:46 sincerti Exp $
+// $Id: G4LivermoreComptonModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,14 +37,14 @@ using namespace std;
 
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
-  verboseLevel= 0;
+  verboseLevel=0 ;
   // Verbosity scale:
   // 0 = nothing 
   // 1 = warning for energy non-conservation 
@@ -64,9 +64,11 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 
 G4LivermoreComptonModel::~G4LivermoreComptonModel()
 {  
-  delete meanFreePathTable;
-  delete crossSectionHandler;
-  delete scatterFunctionData;
+
+  if (meanFreePathTable)   delete meanFreePathTable;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (scatterFunctionData) delete scatterFunctionData;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,11 +76,16 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
                                        const G4DataVector& cuts)
 {
+
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
+  
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
@@ -118,6 +125,8 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Compton model" << G4endl;
 
+  InitialiseElementSelectors(particle,cuts);
+
   G4cout << "Livermore Compton model is initialized " << G4endl
          << "Energy range: "
          << LowEnergyLimit() / keV << " keV - "
@@ -134,6 +143,7 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
     fParticleChange = new G4ParticleChangeForGamma();
     
   isInitialised = true;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -144,11 +154,14 @@ G4double G4LivermoreComptonModel::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
+
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModel" << G4endl;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
+  
   return cs;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -159,6 +172,7 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 					      G4double,
 					      G4double)
 {
+
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // then accepted or rejected depending on the Scattering Function multiplied
   // by factor from Klein - Nishina formula.
@@ -183,7 +197,6 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      // SI - IS THE FOLLOWING RETURN NECESSARY ?
       return ;
   }
 
@@ -334,6 +347,7 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   
   G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),eDirection,eKineticEnergy) ;
   fvect->push_back(dp);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

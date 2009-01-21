@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0),shellCrossSectionHandler(0),ElectronAngularGenerator(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;
@@ -63,10 +63,10 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
 
 G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {  
-  delete meanFreePathTable;
-  delete crossSectionHandler;
-  delete shellCrossSectionHandler;
-  delete ElectronAngularGenerator;
+  if (meanFreePathTable) delete meanFreePathTable;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (shellCrossSectionHandler) delete shellCrossSectionHandler;
+  if (ElectronAngularGenerator) delete ElectronAngularGenerator;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,8 +77,18 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePhotoElectricModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
+  
+  if (shellCrossSectionHandler)
+  {
+    shellCrossSectionHandler->Clear();
+    delete shellCrossSectionHandler;
+  }
+  
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
@@ -120,6 +130,8 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore PhotoElectric model" << G4endl;
+
+  InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore PhotoElectric model is initialized " << G4endl
          << "Energy range: "
@@ -176,7 +188,6 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy);
-      // SI - IS THE FOLLOWING RETURN NECESSARY ?
       return ;
     }
  

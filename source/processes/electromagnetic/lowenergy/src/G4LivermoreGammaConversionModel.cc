@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.cc,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermoreGammaConversionModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ using namespace std;
 
 G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false)
+:G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),crossSectionHandler(0),meanFreePathTable(0)
 {
   lowEnergyLimit = 1.022000 * MeV;
   highEnergyLimit = 100 * GeV;
@@ -62,8 +62,8 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4Particl
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
 {  
-  delete meanFreePathTable;
-  delete crossSectionHandler;
+  if (meanFreePathTable) delete meanFreePathTable;
+  if (crossSectionHandler) delete crossSectionHandler;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,7 +74,11 @@ void G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* par
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreGammaConversionModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
 
   // Energy limits
   
@@ -106,6 +110,8 @@ void G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* par
   
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
+
+  InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore Gamma Conversion model is initialized " << G4endl
          << "Energy range: "

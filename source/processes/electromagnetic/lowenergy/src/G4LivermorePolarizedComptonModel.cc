@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermorePolarizedComptonModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@ using namespace std;
 
 G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;
@@ -64,9 +64,9 @@ G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4Parti
 
 G4LivermorePolarizedComptonModel::~G4LivermorePolarizedComptonModel()
 {  
-  delete meanFreePathTable;
-  delete crossSectionHandler;
-  delete scatterFunctionData;
+  if (meanFreePathTable)   delete meanFreePathTable;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (scatterFunctionData) delete scatterFunctionData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +77,11 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePolarizedComptonModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
 
   // Energy limits
   
@@ -118,6 +122,8 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
   //
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Polarized Compton model" << G4endl;
+
+  InitialiseElementSelectors(particle,cuts);
 
   G4cout << "Livermore Polarized Compton model is initialized " << G4endl
          << "Energy range: "
@@ -202,7 +208,6 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy0);
-      // SI - IS THE FOLLOWING RETURN NECESSARY ?
       return;
     }
 
