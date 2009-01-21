@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.27 2009-01-19 16:08:47 lgarnier Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.28 2009-01-21 17:15:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,18 +130,52 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
   G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
 
-  XtVaSetValues (shell, 
-		 XtNvisual, vi -> visual, 
-       		 XtNdepth, vi -> depth,
-       		 XtNcolormap, cmap, 
-                 XtNwidth, fWinSize_x,
-                 XtNheight, fWinSize_y,
-                 XtNx, x_origin,
-                 XtNy, y_origin,
-		 XtNborderColor, &borcol,
-		 XtNbackground, &bgnd,
-		 XmNtitle, fName.data(),
-		 NULL);
+  if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNwidth, fWinSize_x,
+                   XtNheight, fWinSize_y,
+                   XtNx, x_origin,
+                   XtNy, y_origin,
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else if (fVP.IsWindowSizeHintX () && !(fVP.IsWindowLocationHintX () || fVP.IsWindowLocationHintY ())) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNwidth, fWinSize_x,
+                   XtNheight, fWinSize_y,
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNx, x_origin,
+                   XtNy, y_origin,
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  }
+
 
   main_win = XtVaCreateManagedWidget ("main_win", 
 				      xmMainWindowWidgetClass,
