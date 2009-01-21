@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2008-11-16 19:13:33 maire Exp $
+$Id: History,v 1.113 2009-01-21 17:49:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-01-09 vi
+- PhysicsList::SetCuts() : SetEnergyRange(1*eV,100*GeV)
+- add blaha.mac
           
 16-11-08 mma (testem5-V09-01-13)
 - Em options: 20bins/decade  LinLossLimit=default=0.01

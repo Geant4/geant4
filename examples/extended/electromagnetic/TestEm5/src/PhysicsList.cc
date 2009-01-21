@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.27 2009-01-20 18:18:18 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.28 2009-01-21 17:49:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -301,7 +301,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::SetCuts()
 {
   G4double lowlimit=1*eV;
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit,100*GeV);
+  G4ProductionCutsTable::GetProductionCutsTable()
+                                           ->SetEnergyRange(lowlimit,100*GeV);
 
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
