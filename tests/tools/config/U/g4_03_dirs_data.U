@@ -145,7 +145,7 @@ while test "x$promptend" = "xno" ; do
 	$echo $n "checking for $g4data_g4abla_version... $c"
 	if test -d "$g4data/$g4data_g4abla_version" ; then
         	$echo "yes"
-        	g4levelgammadata=$g4data/$g4data_g4abla_version
+        	g4abladata=$g4data/$g4data_g4abla_version
 	else
         	$echo "no"
         	g4data_foundall="no"

@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2008-12-23 14:59:07 bmorgan Exp $
+$Id: History,v 1.19 2009-01-22 14:17:28 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd January 2008 Ben Morgan
+- Configure: Regenerated following changes detailed below.
+- U/g4_03_dirs_data.U: Fixed typo that prevented correct setting of
+G4LEVELGAMMADATA, as reported in Bug 1039.
 
 23rd December 2008 Ben Morgan
 - Configure: Regenerated folowing changes detailed below.
