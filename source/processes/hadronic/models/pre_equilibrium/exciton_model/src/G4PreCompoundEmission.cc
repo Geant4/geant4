@@ -128,6 +128,9 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     }
   // Kinetic Energy of emitted fragment
   G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
+
+//JMQ 22/01/09
+ if (KineticEnergyOfEmittedFragment<6 && theFragment->GetA()==4 && theFragment->GetZ()==2) G4cout<<"WARNING: ALPHA EMISSION BELLOW THE BARRIER  T= "<<KineticEnergyOfEmittedFragment<<G4endl;
   
   // Calculate the fragment momentum (three vector)
   G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
