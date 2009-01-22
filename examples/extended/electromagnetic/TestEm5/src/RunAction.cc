@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.27 2008-01-14 13:21:19 maire Exp $
+// $Id: RunAction.cc,v 1.28 2009-01-22 17:41:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,9 +121,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (rmsStNe>0.) rmsStNe = std::sqrt(rmsTLCh/TotNbofEvents);
   else            rmsStNe = 0.;
 
-  G4double Gamma = (double)nbGamma/TotNbofEvents;
-  G4double Elect = (double)nbElect/TotNbofEvents;
-  G4double Posit = (double)nbPosit/TotNbofEvents;
+  G4double Gamma = (G4double)nbGamma/TotNbofEvents;
+  G4double Elect = (G4double)nbElect/TotNbofEvents;
+  G4double Posit = (G4double)nbPosit/TotNbofEvents;
 
   G4double transmit[2];
   transmit[0] = 100.*Transmit[0]/TotNbofEvents;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.28 2009-01-21 17:49:59 maire Exp $
+// $Id: PhysicsList.cc,v 1.29 2009-01-22 17:41:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,9 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+
+#include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
 
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
@@ -93,6 +96,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   biciIsRegisted = false;
     
   defaultCutValue = 1.*mm;
+  cutLowLimit     = 1.*keV;
+
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -153,6 +158,8 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  em_config.AddModels();
+
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddDecay();  
   AddStepMax();
@@ -264,6 +271,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope(name);
 
+  } else if (name == "pai") {
+
+    emName = name;
+    AddPAIModel(name);
+
   } else if (name == "elastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics());
     helIsRegisted = true;
@@ -300,9 +312,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-  G4double lowlimit=1*eV;
-  G4ProductionCutsTable::GetProductionCutsTable()
-                                           ->SetEnergyRange(lowlimit,100*GeV);
+  // define energy limits for the production threshold 
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cutLowLimit,100*GeV);
 
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
@@ -340,6 +351,55 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetCutLowLimit(G4double val)
+{
+  cutLowLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddPAIModel(const G4String& modname)
+{
+  theParticleIterator->reset();
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String partname = particle->GetParticleName();
+    if(partname == "e-" || partname == "e+") {
+      NewPAIModel(particle, modname, "eIoni");
+
+    } else if(partname == "mu-" || partname == "mu+") {
+      NewPAIModel(particle, modname, "muIoni");
+
+    } else if(partname == "proton" ||
+              partname == "pi+" ||
+              partname == "pi-"
+              ) {
+
+      NewPAIModel(particle, modname, "hIoni");
+    }
+  }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
+                              const G4String& modname,
+                              const G4String& procname)
+{
+  G4String partname = part->GetParticleName();
+  if(modname == "pai") {
+    G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
+    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+                              0.0,100.*TeV,pai);
+  } else if(modname == "pai_photon") {
+    G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
+    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+                              0.0,100.*TeV,pai);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

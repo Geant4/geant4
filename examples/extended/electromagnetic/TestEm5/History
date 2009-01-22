@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2009-01-21 17:49:59 maire Exp $
+$Id: History,v 1.114 2009-01-22 17:41:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-01-09 V.Ivant (testem5-V09-02-00)
+- added command "/testem/phys/cutLimit" allowing to change low limit for
+  production threshold;
+- added notification to G4RunManager when geometry or material are
+  modified between runs;
+- added PAI models configuration to physics list
+- extended number of runs in the TestEm5.in and Opt3 Physics List is used
      
 21-01-09 vi
 - PhysicsList::SetCuts() : SetEnergyRange(1*eV,100*GeV)

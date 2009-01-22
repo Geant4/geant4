@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.8 2008-11-16 19:13:33 maire Exp $
+// $Id: PhysicsList.hh,v 1.9 2009-01-22 17:41:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4EmConfigurator.hh"
 
 class G4VPhysicsConstructor;
 class PhysicsListMessenger;
@@ -58,18 +59,26 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
+  void SetCutLowLimit(G4double);
     
 private:
   
+  void  AddPAIModel(const G4String&);
+  void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname,
+                    const G4String& procname);
+
   PhysicsListMessenger* pMessenger; 
 
   G4String emName;
   G4VPhysicsConstructor*  emPhysicsList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
+
+  G4EmConfigurator em_config;
     
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;    
+  G4double cutLowLimit;
 
   G4bool helIsRegisted;
   G4bool bicIsRegisted;
