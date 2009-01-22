@@ -1,4 +1,4 @@
-$Id: History,v 1.424 2008-11-21 22:03:51 perl Exp $
+$Id: History,v 1.425 2009-01-22 15:39:54 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22th January 2009  Laurent Garnier
+- Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could 
+  pass XString like 400x600-0+0 to viewers and set position and location.
 
 21st November 2008  Joseph Perl  (vis-V09-01-06)
 - visman-V09-01-05: Trap recursive use of /vis/reviewKeptEvents.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.46 2009-01-21 16:59:22 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.47 2009-01-22 15:39:55 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -218,6 +218,9 @@ void G4OpenGLXViewer::CreateMainWindow () {
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
   G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
+
+  // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
+  // size on MAC. L.Garnier 01/2009
   G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
 
   size_hints->base_width = fWinSize_x;
