@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2007-10-29 12:36:26 maire Exp $
+// $Id: RunAction.cc,v 1.4 2009-01-22 18:34:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -324,7 +324,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //ratio simulation/theory
   //
   G4double ratio = doseOverBeam/massTransfCoef;
-  G4double error = ratio*(dEoverE + dToverT);
+  G4double error = ratio*std::sqrt(dEoverE*dEoverE + dToverT*dToverT);
   
   G4cout.precision(5);  
   G4cout 

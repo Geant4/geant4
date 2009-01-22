@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.15 2008-11-16 12:22:54 maire Exp $
+// $Id: PhysicsList.cc,v 1.16 2009-01-22 18:34:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -193,8 +193,7 @@ void PhysicsList::ConstructEM()
   //
   emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
   emOptions.SetLinearLossLimit(1.e-2);		//default
-   
-          
+           
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);		//default=false
