@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.26 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.27 2009-01-22 11:02:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -115,7 +115,7 @@ class G4GDMLRead
      //
      // More pure virtual methods implemented in the reader plugin.
 
-   void Read(const G4String&, G4bool SetValidate, G4bool IsModule);
+   void Read(const G4String&, G4bool validation, G4bool isModule);
      //
      // Main method for reading GDML files.
 
@@ -123,10 +123,14 @@ class G4GDMLRead
      //
      // Strip off pointers from entity IDs.
 
+   void OverlapCheck(G4bool);
+     //
+     // Activate/de-activate surface check for overlaps (default is off)
+
  protected:
 
-   G4GDMLEvaluator eval;
-   G4bool Validate;
+   G4GDMLRead();
+   virtual ~G4GDMLRead();
 
    G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String& name, G4bool strip=false);
@@ -136,9 +140,15 @@ class G4GDMLRead
    void LoopRead(const xercesc::DOMElement* const,
                  void(G4GDMLRead::*)(const xercesc::DOMElement* const));
 
+ protected:
+
+   G4GDMLEvaluator eval;
+   G4bool validate;
+   G4bool check;
+
  private:
 
-   G4int InLoop;
+   G4int inLoop;
 
 };
 

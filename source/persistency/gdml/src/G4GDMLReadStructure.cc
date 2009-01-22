@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.52 2008-11-20 15:37:46 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.53 2009-01-22 11:02:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -225,9 +225,9 @@ FileRead(const xercesc::DOMElement* const fileElement)
       if (attName=="volname") { volname = attValue; }
    }
 
-   const G4bool IsModule = true;
+   const G4bool isModule = true;
    G4GDMLReadStructure structure;
-   structure.Read(name,Validate,IsModule);
+   structure.Read(name,validate,isModule);
 
    if (volname.empty())
    {
@@ -306,7 +306,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement)
 
    G4String pv_name = logvol->GetName() + "_refl";
    G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
-     ->Place(transform,pv_name,logvol,pMotherLogical,false,0,false);
+     ->Place(transform,pv_name,logvol,pMotherLogical,false,0,check);
 
    if (pair.first != 0) { GeneratePhysvolName(name,pair.first); }
    if (pair.second != 0) { GeneratePhysvolName(name,pair.second); }

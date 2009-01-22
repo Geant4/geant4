@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.10 2008-08-13 13:58:53 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.cc,v 1.11 2009-01-22 11:02:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadParamvol Implementation
@@ -626,5 +626,5 @@ ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
    }
    G4String pv_name = logvol->GetName() + "_param";
    new G4PVParameterised(pv_name, logvol, mother, kUndefined,
-                         parameterisation->GetSize(), parameterisation);
+                         parameterisation->GetSize(), parameterisation, check);
 }
