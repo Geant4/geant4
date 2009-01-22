@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.1 2009-01-12 14:26:03 sincerti Exp $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.2 2009-01-22 13:43:09 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -211,14 +211,14 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
 	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
 	    const G4Material* material = couple->GetMaterial();
 
-            size_t i = material->GetNumberOfElements();
-            while (i>0)
+            size_t j = material->GetNumberOfElements();
+            while (j>0)
             {
-               i--;
-               const G4Element* element(material->GetElement(i));
+               j--;
+               const G4Element* element(material->GetElement(j));
                if (element->GetZ() == 8.)
 	       {
-	          G4double density = material->GetAtomicNumDensityVector()[i];
+	          G4double density = material->GetAtomicNumDensityVector()[j];
                   if (density > 0.) 
 		  { 
 		    flagMaterialIsWater = true; 

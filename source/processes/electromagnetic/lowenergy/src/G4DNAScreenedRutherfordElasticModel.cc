@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.2 2009-01-19 08:59:56 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.3 2009-01-22 13:43:09 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -163,14 +163,14 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
 	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
 	    const G4Material* material = couple->GetMaterial();
 
-            size_t i = material->GetNumberOfElements();
-            while (i>0)
+            size_t j = material->GetNumberOfElements();
+            while (j>0)
             {
-               i--;
-               const G4Element* element(material->GetElement(i));
+               j--;
+               const G4Element* element(material->GetElement(j));
                if (element->GetZ() == 8.)
 	       {
-	          G4double density = material->GetAtomicNumDensityVector()[i];
+	          G4double density = material->GetAtomicNumDensityVector()[j];
                   if (density > 0.) 
 		  { 
 		    flagMaterialIsWater = true; 
@@ -385,6 +385,7 @@ G4double G4DNAScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosTheta(G4d
   do
   {
       cosTheta = 2. * G4UniformRand() - 1.;
+      
       leftDenominator = (1. + 2.*gamma - cosTheta);
       rightDenominator = (1. + 2.*delta + cosTheta);
       if ( (leftDenominator * rightDenominator) != 0. )
@@ -486,6 +487,7 @@ G4double G4DNAScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosThet
  do 
  { 
    cosTheta = 2. * G4UniformRand() - 1.;
+//G4cout << "SR cos=" << cosTheta << G4endl;
    fCosTheta = (1 + 2.*n - cosTheta);
    if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
  }
