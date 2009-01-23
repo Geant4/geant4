@@ -337,7 +337,7 @@ void Histo::print(G4int i)
     //   std::ofstream asciiFile(asciiFileName, std::ios::app);
     if(asciiFile.is_open()) {
       asciiFile << " z(mm)      ||       J(MeV/mm/event)  "
-		<< buns[i] << "  bins" << G4endl;
+		<< bins[i] << "  bins" << G4endl;
     } else {
       G4cout << "ERROR file <" << asciiFileName << "> is not opened" << G4endl;
       return;
