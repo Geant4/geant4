@@ -1,11 +1,11 @@
-# $Id: TestEm5.in,v 1.22 2009-01-22 17:41:43 vnivanch Exp $
+# $Id: TestEm5.in,v 1.23 2009-01-23 13:26:29 maire Exp $
 #
 # macro file for TestEm5.cc
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setAbsMat G4_Si
+/testem/det/setAbsMat Silicon
 /testem/det/setAbsThick 20 um
 /testem/det/setAbsYZ    50 um
 #
@@ -25,7 +25,7 @@
 #
 /run/beamOn 100000
 #
-/testem/det/setAbsMat G4_Au
+/testem/det/setAbsMat Gold
 /testem/det/setAbsThick 9.658 um
 /testem/det/setAbsYZ    1 mm
 /testem/det/update
@@ -49,7 +49,7 @@
 #
 /testem/stack/killSecondaries
 #
-/testem/det/setAbsMat G4_Al
+/testem/det/setAbsMat Aluminium
 /testem/det/setAbsThick 8.004 mm
 /testem/det/update
 /testem/gun/setDefault
@@ -57,7 +57,7 @@
 /gun/energy 174.664 GeV
 /run/beamOn 50000
 #
-/testem/det/setAbsMat G4_Fe
+/testem/det/setAbsMat Iron
 /testem/det/setAbsThick 1 m
 /testem/det/update
 /testem/gun/setDefault

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.29 2009-01-22 17:41:43 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.30 2009-01-23 13:26:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -384,6 +384,7 @@ void PhysicsList::AddPAIModel(const G4String& modname)
     }
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
