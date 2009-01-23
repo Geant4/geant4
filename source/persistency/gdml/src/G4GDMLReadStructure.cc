@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.53 2009-01-22 11:02:07 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.54 2009-01-23 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -304,7 +304,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement)
    G4Transform3D transform(GetRotationMatrix(rotation).inverse(),position);
    transform = transform*G4Scale3D(scale.x(),scale.y(),scale.z());
 
-   G4String pv_name = logvol->GetName() + "_refl";
+   G4String pv_name = logvol->GetName() + "_PV";
    G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
      ->Place(transform,pv_name,logvol,pMotherLogical,false,0,check);
 
@@ -384,7 +384,7 @@ ReplicaRead(const xercesc::DOMElement* const replicaElement,
       }
    }
 
-   G4String pv_name = logvol->GetName() + "_refl";
+   G4String pv_name = logvol->GetName() + "_PV";
    G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
      ->Replicate(pv_name,logvol,pMotherLogical,axis,number,width,offset);
 
