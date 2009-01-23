@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.4 2008-12-18 12:57:04 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2009-01-23 13:22:49 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -116,6 +116,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   {
     // **** LOOK HERE*** FOR READING GDML FILES
     //
+    
+    // ACTIVATING OVERLAP CHECK when readed volumes are placed.
+    // Can take long time in case of complexe geometries 
+    // parser.SetOverlapCheck(true);
     parser.Read(fReadFile);
 
     // READING GDML FILES OPTION: 2nd Boolean argument "Validate".
@@ -473,7 +477,8 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
     new G4ReflectedSolid("Refll_Big", BigTube, transform);
   G4LogicalVolume * ReflBigLV =
     new G4LogicalVolume(ReflBig, Xenon, "ReflBigAl");
-
+   new G4PVPlacement(0, G4ThreeVector(0.,0.0,0.0), ReflBigLV,
+                      "AlPhysBigTube", SmallBoxLV, false, 0); 
   //
   // LOOK HERE FOR ASSEMBLY 
   //
@@ -481,7 +486,6 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   // create Assembly of Boxes and Tubs
   //
   G4AssemblyVolume* assembly = new G4AssemblyVolume();
-  G4AssemblyVolume* assemblyDaug = new G4AssemblyVolume();
   G4RotationMatrix* rot = new G4RotationMatrix();
   G4ThreeVector posBig(-bigPlace, 0, 0);
   G4ThreeVector posBig0(bigPlace/4, 0, 0);
@@ -496,15 +500,7 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   // Add to Assembly the Small Box
   //
   assembly->AddPlacedVolume(SmallBoxLV, posMed, rot);
-
-  // Add to AssemblyDaug BigTub
-  //
-  assemblyDaug->AddPlacedVolume(ReflBigLV, position, rot);
-
-  // Add AssemblyDaug to the Assembly
-  //
-  assembly->AddPlacedAssembly(assemblyDaug, posMed, rot);
-
+  
   // Place the Assembly
   //
   assembly->MakeImprint(BigBoxLV, posBig0, rot, 0);
