@@ -4,258 +4,248 @@
   <define/>
 
   <materials>
-    <material Z="13" name="Aluminum0x15e8000" state="solid">
+    <material Z="13" name="Aluminum0x16edd80" state="solid">
       <D unit="g/cm3" value="2.7"/>
       <atom unit="g/mole" value="26.98"/>
     </material>
-    <material Z="54" name="XenonGas0x15ed1a0" state="gas">
+    <material Z="54" name="XenonGas0x16f2970" state="gas">
       <T unit="K" value="293.15"/>
       <D unit="g/cm3" value="0.005458"/>
       <atom unit="g/mole" value="131.29"/>
     </material>
-    <element Z="7" name="Nitrogen0x15e6d30">
+    <element Z="7" name="Nitrogen0x16eccc0">
       <atom unit="g/mole" value="14.01"/>
     </element>
-    <element Z="8" name="Oxygen0x15e6e70">
+    <element Z="8" name="Oxygen0x16ece00">
       <atom unit="g/mole" value="16"/>
     </element>
-    <material name="Air0x15e7180" state="gas">
+    <material name="Air0x16ed110" state="gas">
       <D unit="g/cm3" value="0.00129"/>
-      <fraction n="0.7" ref="Nitrogen0x15e6d30"/>
-      <fraction n="0.3" ref="Oxygen0x15e6e70"/>
+      <fraction n="0.7" ref="Nitrogen0x16eccc0"/>
+      <fraction n="0.3" ref="Oxygen0x16ece00"/>
     </material>
-    <material Z="82" name="Lead0x15ec720" state="solid">
+    <material Z="82" name="Lead0x16f1ee0" state="solid">
       <D unit="g/cm3" value="11.35"/>
       <atom unit="g/mole" value="207.19"/>
     </material>
   </materials>
 
   <solids>
-    <box lunit="mm" name="MBox0x15eee80" x="73.5294117647059" y="73.5294117647059" z="73.5294117647059"/>
-    <box lunit="mm" name="SBox0x15eefe0" x="49.0196078431373" y="49.0196078431373" z="49.0196078431373"/>
-    <tube aunit="deg" deltaphi="180" lunit="mm" name="BTube0x15ef1e0" rmax="24.5098039215686" rmin="0" startphi="-90" z="49.0196078431373"/>
-    <box lunit="mm" name="BBox0x15eed20" x="235.294117647059" y="235.294117647059" z="235.294117647059"/>
-    <box lunit="mm" name="OuterBox0x15ee9b0" x="588.235294117647" y="588.235294117647" z="588.235294117647"/>
-    <tube aunit="deg" deltaphi="180" lunit="mm" name="subTub0x15eea30" rmax="1000" rmin="0" startphi="-90" z="2000"/>
-    <box lunit="mm" name="detHallBox0x15f1a60" x="1000" y="2000" z="1000"/>
-    <box lunit="mm" name="chamber0x15f1ee0" x="200" y="200" z="20"/>
-    <box lunit="mm" name="ChamberBox0x15f1da0" x="833.333333333333" y="833.333333333333" z="833.333333333333"/>
-    <box lunit="mm" name="detHallBox0x15f1c60" x="1000" y="2000" z="1000"/>
-    <box lunit="mm" name="detectorBox0x15ee660" x="8000" y="7000" z="7000"/>
-    <box lunit="mm" name="roomBox0x15ee7f0" x="500" y="500" z="500"/>
-    <box lunit="mm" name="ExpHallBox0x15ed5b0" x="10000" y="10000" z="10000"/>
+    <box lunit="mm" name="MBox0x16f46b0" x="73.5294117647059" y="73.5294117647059" z="73.5294117647059"/>
+    <tube aunit="deg" deltaphi="180" lunit="mm" name="BTube0x16f4a10" rmax="24.5098039215686" rmin="0" startphi="-90" z="49.0196078431373"/>
+    <box lunit="mm" name="SBox0x16f4810" x="49.0196078431373" y="49.0196078431373" z="49.0196078431373"/>
+    <box lunit="mm" name="BBox0x16f4550" x="235.294117647059" y="235.294117647059" z="235.294117647059"/>
+    <box lunit="mm" name="OuterBox0x16f4370" x="588.235294117647" y="588.235294117647" z="588.235294117647"/>
+    <tube aunit="deg" deltaphi="180" lunit="mm" name="subTub0x16f41c0" rmax="1000" rmin="0" startphi="-90" z="2000"/>
+    <box lunit="mm" name="detHallBox0x16f6f70" x="1000" y="2000" z="1000"/>
+    <box lunit="mm" name="chamber0x16f73f0" x="200" y="200" z="20"/>
+    <box lunit="mm" name="ChamberBox0x16f72b0" x="833.333333333333" y="833.333333333333" z="833.333333333333"/>
+    <box lunit="mm" name="detHallBox0x16f7170" x="1000" y="2000" z="1000"/>
+    <box lunit="mm" name="detectorBox0x16f3e40" x="8000" y="7000" z="7000"/>
+    <box lunit="mm" name="roomBox0x16f4000" x="500" y="500" z="500"/>
+    <box lunit="mm" name="ExpHallBox0x16f2d90" x="10000" y="10000" z="10000"/>
   </solids>
 
   <structure>
-    <volume name="AlMedBoxLV10x15eef00">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="MBox0x15eee80"/>
+    <volume name="AlMedBoxLV10x16f4730">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="MBox0x16f46b0"/>
     </volume>
-    <volume name="AlSmaBoxLV0x15ef060">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="SBox0x15eefe0"/>
+    <volume name="ReflBigAl0x16f4d40">
+      <materialref ref="XenonGas0x16f2970"/>
+      <solidref ref="BTube0x16f4a10"/>
     </volume>
-    <volume name="ReflBigAl0x15ef4c0">
-      <materialref ref="XenonGas0x15ed1a0"/>
-      <solidref ref="BTube0x15ef1e0"/>
-    </volume>
-    <volume name="AlBigBoxLV0x15eeda0">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="BBox0x15eed20"/>
-      <physvol name="av_1_impr_1_AlMedBoxLV1_pv_00x15efcc0">
-        <volumeref ref="AlMedBoxLV10x15eef00"/>
-        <position name="av_1_impr_1_AlMedBoxLV1_pv_00x15efcc0_pos" unit="mm" x="78.6764705882353" y="0" z="0"/>
-      </physvol>
-      <physvol name="av_1_impr_1_AlSmaBoxLV_pv_10x15efd70">
-        <volumeref ref="AlSmaBoxLV0x15ef060"/>
-        <position name="av_1_impr_1_AlSmaBoxLV_pv_10x15efd70_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
-      </physvol>
-      <physvol name="av_1_impr_2_ReflBigAl_pv_00x15efe60">
-        <volumeref ref="ReflBigAl0x15ef4c0"/>
-        <position name="av_1_impr_2_ReflBigAl_pv_00x15efe60_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
-        <rotation name="av_1_impr_2_ReflBigAl_pv_00x15efe60_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_2_ReflBigAl_pv_00x15efe60_scl" x="1" y="1" z="-1"/>
+    <volume name="AlSmaBoxLV0x16f4890">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="SBox0x16f4810"/>
+      <physvol name="AlPhysBigTube0x16f4e00">
+        <volumeref ref="ReflBigAl0x16f4d40"/>
+        <rotation name="AlPhysBigTube0x16f4e00_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="AlPhysBigTube0x16f4e00_scl" x="1" y="1" z="-1"/>
       </physvol>
     </volume>
-    <volume name="AlMedBoxLV1_refl0x15f01f0">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="MBox0x15eee80"/>
-    </volume>
-    <volume name="AlSmaBoxLV_refl0x15f0650">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="SBox0x15eefe0"/>
-    </volume>
-    <volume name="ReflBigAl_refl0x15f0b40">
-      <materialref ref="XenonGas0x15ed1a0"/>
-      <solidref ref="BTube0x15ef1e0"/>
-    </volume>
-    <volume name="OuterBoxLV0x15eebc0">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="OuterBox0x15ee9b0"/>
-      <physvol name="AlPhysBig0x15ef140">
-        <volumeref ref="AlBigBoxLV0x15eeda0"/>
-        <position name="AlPhysBig0x15ef140_pos" unit="mm" x="127.647058823529" y="0" z="0"/>
+    <volume name="AlBigBoxLV0x16f45d0">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="BBox0x16f4550"/>
+      <physvol name="av_1_impr_1_AlMedBoxLV1_pv_00x16f5420">
+        <volumeref ref="AlMedBoxLV10x16f4730"/>
+        <position name="av_1_impr_1_AlMedBoxLV1_pv_00x16f5420_pos" unit="mm" x="78.6764705882353" y="0" z="0"/>
       </physvol>
-      <physvol name="av_1_impr_3_AlMedBoxLV1_pv_00x15f0300">
-        <volumeref ref="AlMedBoxLV1_refl0x15f01f0"/>
-        <position name="av_1_impr_3_AlMedBoxLV1_pv_00x15f0300_pos" unit="mm" x="-174.411764705882" y="0" z="0"/>
-        <rotation name="av_1_impr_3_AlMedBoxLV1_pv_00x15f0300_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_3_AlMedBoxLV1_pv_00x15f0300_scl" x="1" y="1" z="-1"/>
-      </physvol>
-      <physvol name="av_1_impr_3_AlSmaBoxLV_pv_10x15f0760">
-        <volumeref ref="AlSmaBoxLV_refl0x15f0650"/>
-        <position name="av_1_impr_3_AlSmaBoxLV_pv_10x15f0760_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
-        <rotation name="av_1_impr_3_AlSmaBoxLV_pv_10x15f0760_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_3_AlSmaBoxLV_pv_10x15f0760_scl" x="1" y="1" z="-1"/>
-      </physvol>
-      <physvol name="av_1_impr_4_ReflBigAl_pv_00x15f0c50">
-        <volumeref ref="ReflBigAl_refl0x15f0b40"/>
-        <position name="av_1_impr_4_ReflBigAl_pv_00x15f0c50_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
+      <physvol name="av_1_impr_1_AlSmaBoxLV_pv_10x16f54b0">
+        <volumeref ref="AlSmaBoxLV0x16f4890"/>
+        <position name="av_1_impr_1_AlSmaBoxLV_pv_10x16f54b0_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
       </physvol>
     </volume>
-    <volume name="tubLV0x15eead0">
-      <materialref ref="Lead0x15ec720"/>
-      <solidref ref="subTub0x15eea30"/>
-      <physvol name="AssemblyPhys0x15ef990">
-        <volumeref ref="OuterBoxLV0x15eebc0"/>
-        <position name="AssemblyPhys0x15ef990_pos" unit="mm" x="333.333333333333" y="0" z="0"/>
+    <volume name="AlMedBoxLV1_refl0x16f5840">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="MBox0x16f46b0"/>
+    </volume>
+    <volume name="ReflBigAl_refl0x16f6070">
+      <materialref ref="XenonGas0x16f2970"/>
+      <solidref ref="BTube0x16f4a10"/>
+    </volume>
+    <volume name="AlSmaBoxLV_refl0x16f5cf0">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="SBox0x16f4810"/>
+      <physvol name="AlPhysBigTube0x16f6180">
+        <volumeref ref="ReflBigAl_refl0x16f6070"/>
+        <rotation name="AlPhysBigTube0x16f6180_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="AlPhysBigTube0x16f6180_scl" x="1" y="1" z="-1"/>
       </physvol>
     </volume>
-    <volume name="AlBigBoxLV_refl0x15f1470">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="BBox0x15eed20"/>
-      <physvol name="av_1_impr_1_AlMedBoxLV1_pv_00x15f15a0">
-        <volumeref ref="AlMedBoxLV1_refl0x15f01f0"/>
-        <position name="av_1_impr_1_AlMedBoxLV1_pv_00x15f15a0_pos" unit="mm" x="78.6764705882353" y="0" z="0"/>
+    <volume name="OuterBoxLV0x16f43f0">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="OuterBox0x16f4370"/>
+      <physvol name="AlPhysBig0x16f4970">
+        <volumeref ref="AlBigBoxLV0x16f45d0"/>
+        <position name="AlPhysBig0x16f4970_pos" unit="mm" x="127.647058823529" y="0" z="0"/>
       </physvol>
-      <physvol name="av_1_impr_1_AlSmaBoxLV_pv_10x15f1610">
-        <volumeref ref="AlSmaBoxLV_refl0x15f0650"/>
-        <position name="av_1_impr_1_AlSmaBoxLV_pv_10x15f1610_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
+      <physvol name="av_1_impr_2_AlMedBoxLV1_pv_00x16f5950">
+        <volumeref ref="AlMedBoxLV1_refl0x16f5840"/>
+        <position name="av_1_impr_2_AlMedBoxLV1_pv_00x16f5950_pos" unit="mm" x="-174.411764705882" y="0" z="0"/>
+        <rotation name="av_1_impr_2_AlMedBoxLV1_pv_00x16f5950_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="av_1_impr_2_AlMedBoxLV1_pv_00x16f5950_scl" x="1" y="1" z="-1"/>
       </physvol>
-      <physvol name="av_1_impr_2_ReflBigAl_pv_00x15f1660">
-        <volumeref ref="ReflBigAl_refl0x15f0b40"/>
-        <position name="av_1_impr_2_ReflBigAl_pv_00x15f1660_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
-        <rotation name="av_1_impr_2_ReflBigAl_pv_00x15f1660_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_2_ReflBigAl_pv_00x15f1660_scl" x="1" y="1" z="-1"/>
-      </physvol>
-    </volume>
-    <volume name="OuterBoxLV_refl0x15f10d0">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="OuterBox0x15ee9b0"/>
-      <physvol name="AlPhysBig0x15f16e0">
-        <volumeref ref="AlBigBoxLV_refl0x15f1470"/>
-        <position name="AlPhysBig0x15f16e0_pos" unit="mm" x="127.647058823529" y="0" z="0"/>
-      </physvol>
-      <physvol name="av_1_impr_3_AlMedBoxLV1_pv_00x15f1730">
-        <volumeref ref="AlMedBoxLV10x15eef00"/>
-        <position name="av_1_impr_3_AlMedBoxLV1_pv_00x15f1730_pos" unit="mm" x="-174.411764705882" y="0" z="0"/>
-        <rotation name="av_1_impr_3_AlMedBoxLV1_pv_00x15f1730_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_3_AlMedBoxLV1_pv_00x15f1730_scl" x="1" y="1" z="-1"/>
-      </physvol>
-      <physvol name="av_1_impr_3_AlSmaBoxLV_pv_10x15f17d0">
-        <volumeref ref="AlSmaBoxLV0x15ef060"/>
-        <position name="av_1_impr_3_AlSmaBoxLV_pv_10x15f17d0_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
-        <rotation name="av_1_impr_3_AlSmaBoxLV_pv_10x15f17d0_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="av_1_impr_3_AlSmaBoxLV_pv_10x15f17d0_scl" x="1" y="1" z="-1"/>
-      </physvol>
-      <physvol name="av_1_impr_4_ReflBigAl_pv_00x15f18a0">
-        <volumeref ref="ReflBigAl0x15ef4c0"/>
-        <position name="av_1_impr_4_ReflBigAl_pv_00x15f18a0_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
+      <physvol name="av_1_impr_2_AlSmaBoxLV_pv_10x16f61f0">
+        <volumeref ref="AlSmaBoxLV_refl0x16f5cf0"/>
+        <position name="av_1_impr_2_AlSmaBoxLV_pv_10x16f61f0_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
+        <rotation name="av_1_impr_2_AlSmaBoxLV_pv_10x16f61f0_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="av_1_impr_2_AlSmaBoxLV_pv_10x16f61f0_scl" x="1" y="1" z="-1"/>
       </physvol>
     </volume>
-    <volume name="tubLV_refl0x15f0d90">
-      <materialref ref="Lead0x15ec720"/>
-      <solidref ref="subTub0x15eea30"/>
-      <physvol name="AssemblyPhys0x15f1940">
-        <volumeref ref="OuterBoxLV_refl0x15f10d0"/>
-        <position name="AssemblyPhys0x15f1940_pos" unit="mm" x="333.333333333333" y="0" z="0"/>
+    <volume name="tubLV0x16f42b0">
+      <materialref ref="Lead0x16f1ee0"/>
+      <solidref ref="subTub0x16f41c0"/>
+      <physvol name="AssemblyPhys0x16f50e0">
+        <volumeref ref="OuterBoxLV0x16f43f0"/>
+        <position name="AssemblyPhys0x16f50e0_pos" unit="mm" x="333.333333333333" y="0" z="0"/>
       </physvol>
     </volume>
-    <volume name="detHallLV0x15f1ae0">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="detHallBox0x15f1a60"/>
+    <volume name="AlBigBoxLV_refl0x16f6aa0">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="BBox0x16f4550"/>
+      <physvol name="av_1_impr_1_AlMedBoxLV1_pv_00x16f6bd0">
+        <volumeref ref="AlMedBoxLV1_refl0x16f5840"/>
+        <position name="av_1_impr_1_AlMedBoxLV1_pv_00x16f6bd0_pos" unit="mm" x="78.6764705882353" y="0" z="0"/>
+      </physvol>
+      <physvol name="av_1_impr_1_AlSmaBoxLV_pv_10x16f6c40">
+        <volumeref ref="AlSmaBoxLV_refl0x16f5cf0"/>
+        <position name="av_1_impr_1_AlSmaBoxLV_pv_10x16f6c40_pos" unit="mm" x="-14.8529411764706" y="0" z="0"/>
+      </physvol>
     </volume>
-    <volume name="Chamber0x15f1f60">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="chamber0x15f1ee0"/>
+    <volume name="OuterBoxLV_refl0x16f6720">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="OuterBox0x16f4370"/>
+      <physvol name="AlPhysBig0x16f6c90">
+        <volumeref ref="AlBigBoxLV_refl0x16f6aa0"/>
+        <position name="AlPhysBig0x16f6c90_pos" unit="mm" x="127.647058823529" y="0" z="0"/>
+      </physvol>
+      <physvol name="av_1_impr_2_AlMedBoxLV1_pv_00x16f6ce0">
+        <volumeref ref="AlMedBoxLV10x16f4730"/>
+        <position name="av_1_impr_2_AlMedBoxLV1_pv_00x16f6ce0_pos" unit="mm" x="-174.411764705882" y="0" z="0"/>
+        <rotation name="av_1_impr_2_AlMedBoxLV1_pv_00x16f6ce0_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="av_1_impr_2_AlMedBoxLV1_pv_00x16f6ce0_scl" x="1" y="1" z="-1"/>
+      </physvol>
+      <physvol name="av_1_impr_2_AlSmaBoxLV_pv_10x16f6d80">
+        <volumeref ref="AlSmaBoxLV0x16f4890"/>
+        <position name="av_1_impr_2_AlSmaBoxLV_pv_10x16f6d80_pos" unit="mm" x="-80.8823529411765" y="0" z="0"/>
+        <rotation name="av_1_impr_2_AlSmaBoxLV_pv_10x16f6d80_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="av_1_impr_2_AlSmaBoxLV_pv_10x16f6d80_scl" x="1" y="1" z="-1"/>
+      </physvol>
     </volume>
-    <volume name="ChamberLV0x15f1e20">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="ChamberBox0x15f1da0"/>
+    <volume name="tubLV_refl0x16f63a0">
+      <materialref ref="Lead0x16f1ee0"/>
+      <solidref ref="subTub0x16f41c0"/>
+      <physvol name="AssemblyPhys0x16f6e50">
+        <volumeref ref="OuterBoxLV_refl0x16f6720"/>
+        <position name="AssemblyPhys0x16f6e50_pos" unit="mm" x="333.333333333333" y="0" z="0"/>
+      </physvol>
+    </volume>
+    <volume name="detHallLV0x16f6ff0">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="detHallBox0x16f6f70"/>
+    </volume>
+    <volume name="Chamber0x16f7470">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="chamber0x16f73f0"/>
+    </volume>
+    <volume name="ChamberLV0x16f7330">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="ChamberBox0x16f72b0"/>
       <paramvol ncopies="5">
-        <volumeref ref="Chamber0x15f1f60"/>
+        <volumeref ref="Chamber0x16f7470"/>
         <parameterised_position_size>
           <parameters number="1">
-            <position name="Chamber0x15f20600_pos" unit="mm" x="0" y="0" z="-150"/>
-            <box_dimensions x="48" y="48" z="20"/>
+            <position name="Chamber0x16f75900_pos" unit="mm" x="0" y="0" z="-150"/>
+            <box_dimensions lunit="mm" x="48" y="48" z="20"/>
           </parameters>
           <parameters number="2">
-            <position name="Chamber0x15f20601_pos" unit="mm" x="0" y="0" z="-70"/>
-            <box_dimensions x="134.4" y="134.4" z="20"/>
+            <position name="Chamber0x16f75901_pos" unit="mm" x="0" y="0" z="-70"/>
+            <box_dimensions lunit="mm" x="134.4" y="134.4" z="20"/>
           </parameters>
           <parameters number="3">
-            <position name="Chamber0x15f20602_pos" unit="mm" x="0" y="0" z="10"/>
-            <box_dimensions x="220.8" y="220.8" z="20"/>
+            <position name="Chamber0x16f75902_pos" unit="mm" x="0" y="0" z="10"/>
+            <box_dimensions lunit="mm" x="220.8" y="220.8" z="20"/>
           </parameters>
           <parameters number="4">
-            <position name="Chamber0x15f20603_pos" unit="mm" x="0" y="0" z="90"/>
-            <box_dimensions x="307.2" y="307.2" z="20"/>
+            <position name="Chamber0x16f75903_pos" unit="mm" x="0" y="0" z="90"/>
+            <box_dimensions lunit="mm" x="307.2" y="307.2" z="20"/>
           </parameters>
           <parameters number="5">
-            <position name="Chamber0x15f20604_pos" unit="mm" x="0" y="0" z="170"/>
-            <box_dimensions x="393.6" y="393.6" z="20"/>
+            <position name="Chamber0x16f75904_pos" unit="mm" x="0" y="0" z="170"/>
+            <box_dimensions lunit="mm" x="393.6" y="393.6" z="20"/>
           </parameters>
         </parameterised_position_size>
       </paramvol>
     </volume>
-    <volume name="detHallLV0x15f1ce0">
-      <materialref ref="Aluminum0x15e8000"/>
-      <solidref ref="detHallBox0x15f1c60"/>
-      <physvol name="AssemblyPhys0x15f2130">
-        <volumeref ref="ChamberLV0x15f1e20"/>
+    <volume name="detHallLV0x16f71f0">
+      <materialref ref="Aluminum0x16edd80"/>
+      <solidref ref="detHallBox0x16f7170"/>
+      <physvol name="AssemblyPhys0x16f7660">
+        <volumeref ref="ChamberLV0x16f7330"/>
       </physvol>
     </volume>
-    <volume name="detLV0x15ee6e0">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="detectorBox0x15ee660"/>
-      <physvol name="PhysSubDetector10x15efee0">
-        <volumeref ref="tubLV0x15eead0"/>
-        <position name="PhysSubDetector10x15efee0_pos" unit="mm" x="1050" y="0" z="0"/>
+    <volume name="detLV0x16f3ec0">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="detectorBox0x16f3e40"/>
+      <physvol name="PhysSubDetector10x16f5520">
+        <volumeref ref="tubLV0x16f42b0"/>
+        <position name="PhysSubDetector10x16f5520_pos" unit="mm" x="1050" y="0" z="0"/>
       </physvol>
-      <physvol name="reflSubDetector0x15f1990">
-        <volumeref ref="tubLV_refl0x15f0d90"/>
-        <position name="reflSubDetector0x15f1990_pos" unit="mm" x="-1050" y="0" z="0"/>
-        <rotation name="reflSubDetector0x15f1990_rot" unit="deg" x="180" y="0" z="180"/>
-        <scale name="reflSubDetector0x15f1990_scl" x="1" y="1" z="-1"/>
+      <physvol name="reflSubDetector0x16f6ea0">
+        <volumeref ref="tubLV_refl0x16f63a0"/>
+        <position name="reflSubDetector0x16f6ea0_pos" unit="mm" x="-1050" y="0" z="0"/>
+        <rotation name="reflSubDetector0x16f6ea0_rot" unit="deg" x="180" y="0" z="180"/>
+        <scale name="reflSubDetector0x16f6ea0_scl" x="1" y="1" z="-1"/>
       </physvol>
-      <physvol name="PhysSubDetectorFirst30x15f1bb0">
-        <volumeref ref="detHallLV0x15f1ae0"/>
-        <position name="PhysSubDetectorFirst30x15f1bb0_pos" unit="mm" x="0" y="1050" z="0"/>
+      <physvol name="PhysSubDetectorFirst30x16f70c0">
+        <volumeref ref="detHallLV0x16f6ff0"/>
+        <position name="PhysSubDetectorFirst30x16f70c0_pos" unit="mm" x="0" y="1050" z="0"/>
       </physvol>
-      <physvol name="PhysSubDetectorSecond30x15f21c0">
-        <volumeref ref="detHallLV0x15f1ce0"/>
-        <position name="PhysSubDetectorSecond30x15f21c0_pos" unit="mm" x="0" y="-1050" z="0"/>
+      <physvol name="PhysSubDetectorSecond30x16f76f0">
+        <volumeref ref="detHallLV0x16f71f0"/>
+        <position name="PhysSubDetectorSecond30x16f76f0_pos" unit="mm" x="0" y="-1050" z="0"/>
       </physvol>
     </volume>
-    <volume name="roomLV0x15ee8a0">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="roomBox0x15ee7f0"/>
+    <volume name="roomLV0x16f4080">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="roomBox0x16f4000"/>
     </volume>
-    <volume name="ExpHallLV0x15edf40">
-      <materialref ref="Air0x15e7180"/>
-      <solidref ref="ExpHallBox0x15ed5b0"/>
-      <physvol name="detPhys0x15ee7a0">
-        <volumeref ref="detLV0x15ee6e0"/>
+    <volume name="ExpHallLV0x16f3720">
+      <materialref ref="Air0x16ed110"/>
+      <solidref ref="ExpHallBox0x16f2d90"/>
+      <physvol name="detPhys0x16f3f80">
+        <volumeref ref="detLV0x16f3ec0"/>
       </physvol>
-      <physvol name="roomPhys0x15ee960">
-        <volumeref ref="roomLV0x15ee8a0"/>
-        <position name="roomPhys0x15ee960_pos" unit="mm" x="4740" y="0" z="0"/>
+      <physvol name="roomPhys0x16f4140">
+        <volumeref ref="roomLV0x16f4080"/>
+        <position name="roomPhys0x16f4140_pos" unit="mm" x="4740" y="0" z="0"/>
       </physvol>
     </volume>
   </structure>
 
   <setup name="Default" version="1.0">
-    <world ref="ExpHallLV0x15edf40"/>
+    <world ref="ExpHallLV0x16f3720"/>
   </setup>
 
 </gdml>
