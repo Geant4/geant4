@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.5 2009-01-23 13:22:49 tnikitin Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2009-01-23 14:32:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -117,9 +117,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // **** LOOK HERE*** FOR READING GDML FILES
     //
     
-    // ACTIVATING OVERLAP CHECK when readed volumes are placed.
-    // Can take long time in case of complexe geometries 
+    // ACTIVATING OVERLAP CHECK when read volumes are placed.
+    // Can take long time in case of complex geometries
+    //
     // parser.SetOverlapCheck(true);
+
     parser.Read(fReadFile);
 
     // READING GDML FILES OPTION: 2nd Boolean argument "Validate".
