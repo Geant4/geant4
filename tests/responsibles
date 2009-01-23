@@ -23,7 +23,7 @@ graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
 interfaces                   Koichi.Murakami@kek.jp          Koichi Murakami
 "/basic                      Koichi.Murakami@kek.jp          Koichi Murakami
-"/GAG                        yoshidah@naruto-u.ac.jp	     Hajime Yoshida
+"/GAG                        yoshidah@keiei.shikoku-u.ac.jp  Hajime Yoshida
 "/common                     barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
@@ -32,6 +32,7 @@ persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 "/ascii                      Pedro.Arce@ciemat.es            Pedro Arce
 "/gdml                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 "/mctruth                    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+physics_lists                Gunter.Folger@cern.ch           Gunter Folger
 processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
@@ -92,16 +93,16 @@ visualization                perl@slac.stanford.edu          Joseph Perl
 visualization/management     John.Allison@man.ac.uk          John Allison
 visualization/modeling       John.Allison@man.ac.uk          John Allison
 visualization/HepRep         perl@slac.stanford.edu          Joseph Perl
-visualization/FukuiRenderer  stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization/FukuiRenderer  stanaka@media.ritsumei.ac.jp    Satoshi Tanaka
 visualization/OpenGL         John.Allison@man.ac.uk          John Allison
 visualization/OpenInventor   barrand@lal.in2p3.fr            Guy Barrand
 visualization/RayTracer      asai@slac.stanford.edu          Makoto Asai
-visualization/Tree           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
-visualization/VRML           stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization/Tree           stanaka@media.ritsumei.ac.jp    Satoshi Tanaka
+visualization/VRML           stanaka@media.ritsumei.ac.jp    Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
 environments                 Koichi.Murakami@kek.jp          Koichi Murakami
   g4py                       Koichi.Murakami@kek.jp          Koichi Murakami
-  MOMO                       yoshidah@naruto-u.ac.jp         Hajime Yoshida
+  MOMO                       yoshidah@keiei.shikoku-u.ac.jp  Hajime Yoshida
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02          John.Apostolakis@cern.ch        John Apostolakis
