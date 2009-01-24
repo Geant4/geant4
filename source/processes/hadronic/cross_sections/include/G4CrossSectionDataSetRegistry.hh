@@ -23,46 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.hh,v 1.3 2009-01-24 11:56:27 vnivanch Exp $
+// $Id: G4CrossSectionDataSetRegistry.hh,v 1.1 2009-01-24 11:54:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 23-Jan-2009 V.Ivanchenko make the class to be a singleton
-
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+//
+// File name:    G4CrossSectionDataSetRegistry
+//
+// Author  V.Ivanchenko  24.01.2009
+//
+// Modifications:
+//
+ 
+//
 // Class Description
-// This is the a singleton class to store all hadronic interactions
+// This is a singleton keeping pointers to all cross section data sets
 // Class Description - End
 
-#ifndef G4HadronicInteractionRegistry_h
-#define G4HadronicInteractionRegistry_h 1
+#ifndef G4CrossSectionDataSetRegistry_h
+#define G4CrossSectionDataSetRegistry_h 1
 
 #include <vector>
 #include "globals.hh"
 
-class G4HadronicInteraction;
+class G4VCrossSectionDataSet;
 
-class G4HadronicInteractionRegistry
+class G4CrossSectionDataSetRegistry
 {
 public:
 
-  static G4HadronicInteractionRegistry* Instance();
+  static G4CrossSectionDataSetRegistry* Instance();
   // access 
   
-  ~G4HadronicInteractionRegistry();
+  ~G4CrossSectionDataSetRegistry();
   
-  void RegisterMe(G4HadronicInteraction * aModel);
-  //register new model
+  void Register(G4VCrossSectionDataSet*);
+  //register new cross section
 
-  void RemoveMe(G4HadronicInteraction * aModel);
-  //deregister model
+  void DeRegister(G4VCrossSectionDataSet*);
+  //deregister cross section
     
 private:
 
-  G4HadronicInteractionRegistry();
+  G4CrossSectionDataSetRegistry();
 
-  static G4HadronicInteractionRegistry* theInstance;
+  static G4CrossSectionDataSetRegistry* theInstance;
   
-  G4int nModels;
-  std::vector <G4HadronicInteraction *> allModels;
+  G4int nxs;
+  std::vector <G4VCrossSectionDataSet*> xSections;
 
 };
 

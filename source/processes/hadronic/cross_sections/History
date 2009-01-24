@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 January 2009 Vladimir Ivantchenko (hadr-cross-V09-02-00)
+------------------------------------------------------------
+- G4CrossSectionDataStore - moved constructor and destructor to source,
+                            added destruction of data sets, use STL
+                            vector instead of C-array
+- G4CrossSectionDataSetRegistry - new singleton to keep pointers to 
+                            cross section data sets
+- G4VCrossSectiondataSet - constructor and detructor moved to source and
+                           registration/deregistration added
+
 01 December 2008 Vladimir Ivantchenko (hadr-cross-V09-01-07)
 ------------------------------------------------------------
 G4BGGPionElasticXS, G4BGGPionInelasticXS, G4BGGNucleonInelasticXS,

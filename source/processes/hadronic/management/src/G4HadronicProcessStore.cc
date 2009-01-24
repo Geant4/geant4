@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.7 2008-10-22 07:58:20 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.8 2009-01-24 11:53:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,9 +38,11 @@
 // Creation date: 09.05.2008
 //
 // Modifications:
-//
+// 23.01.2009 V.Ivanchenko add destruction of processes
 //
 // Class Description:
+// Singleton to store hadronic processes, to provide access to processes
+// and to printout information about processes
 //
 // -------------------------------------------------------------------
 //
@@ -70,11 +72,14 @@ G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 
 G4HadronicProcessStore::~G4HadronicProcessStore()
 {
-  /*
-  for (G4int i=0; i<n_proc; i++) {
+
+  G4int i;
+  for (i=0; i<n_proc; i++) {
     if( process[i] ) delete process[i];
   }
-  */
+  for(i=0; i<n_extra; i++) {
+    if(extraProcess[i]) delete extraProcess[i];
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -396,6 +401,7 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
 {
   for(G4int i=0; i<n_extra; i++) {if(extraProcess[i] == proc) return;}
+  //G4cout << "Extra Process: " << n_extra << "  " <<  proc->GetProcessName() << G4endl;
     
   n_extra++;
   extraProcess.push_back(proc);
@@ -439,6 +445,7 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
   for(G4int i=0; i<n_extra; i++) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = 0;
+      //G4cout << "Extra Process: " << i << " is deregisted " << G4endl;
       break;
     }
   }

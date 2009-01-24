@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.25 2008-09-01 19:04:54 vnivanch Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.26 2009-01-24 11:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ public:
     theHEModel->SetMaxEnergy(100*TeV);
   }
 
-  virtual ~G4ElectroNuclearReaction() {};
+  virtual ~G4ElectroNuclearReaction() {delete  theStringDecay;};
     
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
 				 G4Nucleus& aTargetNucleus);

@@ -23,47 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.hh,v 1.3 2009-01-24 11:56:27 vnivanch Exp $
+//
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.1 2009-01-24 11:54:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 23-Jan-2009 V.Ivanchenko make the class to be a singleton
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:    G4CrossSectionDataSetRegistry
+//
+// Author  V.Ivanchenko  24.01.2009
+//
+// Modifications:
+//
 
-// Class Description
-// This is the a singleton class to store all hadronic interactions
-// Class Description - End
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4VCrossSectionDataSet.hh"
 
-#ifndef G4HadronicInteractionRegistry_h
-#define G4HadronicInteractionRegistry_h 1
+G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
-#include <vector>
-#include "globals.hh"
-
-class G4HadronicInteraction;
-
-class G4HadronicInteractionRegistry
+G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 {
-public:
+  if(0 == theInstance) {
+    static G4CrossSectionDataSetRegistry manager;
+    theInstance = &manager;
+  }
+  return theInstance;
+}
 
-  static G4HadronicInteractionRegistry* Instance();
-  // access 
-  
-  ~G4HadronicInteractionRegistry();
-  
-  void RegisterMe(G4HadronicInteraction * aModel);
-  //register new model
+G4CrossSectionDataSetRegistry::G4CrossSectionDataSetRegistry()
+{
+  nxs = 0;
+}
 
-  void RemoveMe(G4HadronicInteraction * aModel);
-  //deregister model
-    
-private:
+G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
+{
+  for (G4int i=0; i<nxs; i++) {
+    if( xSections[i] ) {
+      delete xSections[i];
+      xSections[i] = 0;
+    }
+  }
+}
 
-  G4HadronicInteractionRegistry();
+void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
+{
+  if(nxs > 0) {
+    for (G4int i=0; i<nxs; i++) {
+      if( p == xSections[i] ) return;
+    }
+  }
+  xSections.push_back(p);
+  nxs++;
+}
 
-  static G4HadronicInteractionRegistry* theInstance;
-  
-  G4int nModels;
-  std::vector <G4HadronicInteraction *> allModels;
+void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
+{
+  if(nxs > 0) {
+    for (G4int i=0; i<nxs; i++) {
+      if( p == xSections[i] ) {
+	xSections[i] = 0;
+	return;
+      }
+    }
+  }
+}
 
-};
 
-#endif

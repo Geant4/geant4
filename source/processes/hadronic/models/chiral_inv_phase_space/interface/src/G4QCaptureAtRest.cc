@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.18 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.19 2009-01-24 11:57:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -104,7 +104,10 @@ void G4QCaptureAtRest::SetParameters(G4double temper, G4double ssin2g, G4double 
 // Destructor
 
 G4QCaptureAtRest::~G4QCaptureAtRest()
-{}
+{
+  // deregister in the store
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+}
 
 G4LorentzVector G4QCaptureAtRest::GetEnegryMomentumConservation()
 {
