@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2009-01-26 10:59:19 gcosmo Exp $
+$Id: History,v 1.8 2009-01-26 11:03:43 gcosmo Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -18,7 +18,8 @@ committal in the CVS repository !
 
 26 January, 09  G.Cosmo (ascii-V09-02-02)
 - Correction for use of std:: namespace when calling standard mathematical
-  functions.
+  functions, introduced in previous tag.
+- Fixed compilation error introduced in previous tag.
 
 6 January, 09  P.Arce (ascii-V09-02-01)
 - Bug fix in definition of delta angle for all solids with section in Phi
