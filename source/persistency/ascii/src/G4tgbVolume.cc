@@ -201,7 +201,8 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 //-------------------------------------------------------------------
 G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol ) 
 {
-  G4double angleTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+  G4double angularTolerance = G4GeometryTolerance::GetInstance()
+                            ->GetAngularTolerance();
 
   if( sol == 0 ) { return 0; }
 
