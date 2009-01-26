@@ -259,7 +259,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4Tubs( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], phiTotal );
   }
@@ -310,7 +310,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 7, solParam.size() );
     G4double phiTotal = solParam[6];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4Cons( sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5], phiTotal);
   }
@@ -318,10 +318,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 6, solParam.size() );
     G4double phiTotal = solParam[3];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     G4double thetaTotal = solParam[1];
-    if( fabs(thetaTotal - twopi) < angularTolerance ) thetaTotal = twopi;
+    if( std::fabs(thetaTotal - twopi) < angularTolerance ) { thetaTotal = twopi; }
     solid = new G4Sphere( sname, solParam[0], solParam[1], solParam[2],
                           phiTotal, solParam[4], thetaTotal);
   }
@@ -334,7 +334,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4Torus( sname, solParam[0], solParam[1], solParam[2],
                          solParam[3], phiTotal );
   }
@@ -376,7 +376,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*rmax_p).push_back(  solParam[3+3*ii+2] );
       }
       G4double phiTotal = solParam[1];
-      if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
@@ -391,7 +391,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*Z_c).push_back( solParam[3+2*ii+1] );
       }
       G4double phiTotal = solParam[1];
-      if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
@@ -436,7 +436,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*rmax_p).push_back(  solParam[4+3*ii+2] );
       }
       G4double phiTotal = solParam[1];
-      if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
                                &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
@@ -451,7 +451,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*Z_c).push_back( solParam[4+2*ii+1] );
       }
       G4double phiTotal = solParam[1];
-      if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
                                &((*R_c)[0]), &((*Z_c)[0]));
@@ -512,7 +512,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4TwistedTubs( sname, solParam[0], solParam[1], solParam[2],
                                solParam[3], phiTotal);
   }
@@ -581,7 +581,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[4+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,dph
                                   nplanes,                      // sections
@@ -603,7 +603,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[5+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,dph
                                       G4int(solParam[2]), // sides
@@ -625,7 +625,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[4+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( fabs(phiTotal - twopi) < angularTolerance ) phiTotal = twopi;
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,dph
                                       nplanes,                      // sections
