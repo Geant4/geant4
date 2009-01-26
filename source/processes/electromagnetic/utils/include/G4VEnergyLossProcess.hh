@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.83 2008-09-12 16:19:01 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.84 2009-01-26 12:20:01 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -333,14 +333,15 @@ public:
   inline void SetStepFunction(G4double v1, G4double v2);
   inline void SetLambdaFactor(G4double val);
 
-
   // Add subcutoff option for the region
   void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
 
   inline G4int NumberOfSubCutoffRegions() const;
 
-  // Activate deexcitation code
+  // Activate deexcitation code for region
   virtual void ActivateDeexcitation(G4bool, const G4Region* region = 0);
+
+  inline G4int NumberOfDERegions() const;
 
   //------------------------------------------------------------------------
   // Public interface to helper functions 
@@ -443,8 +444,11 @@ private:
   std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
   std::vector<const G4Region*>          scoffRegions;
+  std::vector<const G4Region*>          deRegions;
   G4int                                 nSCoffRegions;
+  G4int                                 nDERegions;
   G4int*                                idxSCoffRegions;
+  G4int*                                idxDERegions;
 
   std::vector<G4VEnergyLossProcess*>    scProcesses;
   G4int                                 nProcesses;
@@ -492,6 +496,7 @@ private:
   G4bool   isIon;
   G4bool   isIonisation;
   G4bool   useSubCutoff;
+  G4bool   useDeexcitation;
 
 protected:
 
@@ -1077,6 +1082,13 @@ inline G4bool G4VEnergyLossProcess::TablesAreBuilt() const
 inline G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const
 {
   return nSCoffRegions;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4int G4VEnergyLossProcess::NumberOfDERegions() const
+{
+  return nDERegions;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

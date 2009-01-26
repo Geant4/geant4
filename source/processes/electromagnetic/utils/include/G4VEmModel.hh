@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.59 2008-11-13 19:29:41 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.60 2009-01-26 12:20:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -173,6 +173,11 @@ public:
 				    G4double& eloss,
 				    G4double& niel,
 				    G4double length);
+
+  // sample PIXE deexcitation
+  virtual void SampleDeexcitationAlongStep(const G4Material*,
+					   const G4Track&,
+                                           G4double& eloss);
 
 protected:
 
@@ -459,6 +464,13 @@ inline G4double G4VEmModel::GetParticleCharge(const G4ParticleDefinition* p,
 inline void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 					     const G4DynamicParticle*,
 					     G4double&,G4double&,G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void SampleDeexcitationAlongStep(const G4Material*,
+					const G4Track&,
+					G4double& eloss)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

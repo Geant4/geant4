@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.143 2008-10-17 14:46:16 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.144 2009-01-26 12:20:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -149,7 +149,9 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   G4VContinuousDiscreteProcess(name, type),
   secondaryParticle(0),
   nSCoffRegions(0),
+  nDERegions(0),
   idxSCoffRegions(0),
+  idxDERegions(0),
   nProcesses(0),
   theDEDXTable(0),
   theDEDXSubTable(0),
@@ -175,6 +177,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   isIon(false),
   isIonisation(true),
   useSubCutoff(false),
+  useDeexcitation(false),
   particle(0),
   currentCouple(0),
   nWarnings(0),
@@ -301,6 +304,7 @@ void G4VEnergyLossProcess::Clear()
   delete [] theEnergyOfCrossSectionMax;
   delete [] theCrossSectionMax;
   delete [] idxSCoffRegions;
+  delete [] idxDERegions;
 
   theDEDXAtMaxEnergy = 0;
   theRangeAtMaxEnergy = 0;
@@ -406,25 +410,37 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theCuts = modelManager->Initialise(particle, secondaryParticle, 
 				     minSubRange, verboseLevel);
 
-  // Sub Cutoff Regime
-  if (nSCoffRegions>0) {
+  // Sub Cutoff and Deexcitation
+  if (nSCoffRegions>0 || nDERegions>0) {
     theSubCuts = modelManager->SubCutoff();
 
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
-    idxSCoffRegions = new G4int[numOfCouples];
+
+    if(nSCoffRegions>0) idxSCoffRegions = new G4int[numOfCouples];
+    if(nDERegions>0) idxDERegions = new G4int[numOfCouples];
   
     for (size_t j=0; j<numOfCouples; j++) {
 
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(j);
       const G4ProductionCuts* pcuts = couple->GetProductionCuts();
-      G4int reg = 0;
-      for(G4int i=0; i<nSCoffRegions; i++) {
-        if( pcuts == scoffRegions[i]->GetProductionCuts()) reg = 1;
+      
+      if(nSCoffRegions>0) {
+	G4int reg = 0;
+	for(G4int i=0; i<nSCoffRegions; i++) {
+	  if( pcuts == scoffRegions[i]->GetProductionCuts()) reg = 1;
+	}
+	idxSCoffRegions[j] = reg;
       }
-      idxSCoffRegions[j] = reg;
+      if(nDERegions>0) {
+	G4int reg = 0;
+	for(G4int i=0; i<nDERegions; i++) {
+	  if( pcuts == deRegions[i]->GetProductionCuts()) reg = 1;
+	}
+	idxDERegions[j] = reg;
+      }
     }
   }
 
@@ -498,6 +514,26 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
     nSCoffRegions++;
   } else {
     useSubCutoff = false;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
+{
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  if(val) {
+    useDeexcitation = true;
+    if (!r) {r = regionStore->GetRegion("DefaultRegionForTheWorld", false);}
+    if (nDERegions) {
+      for (G4int i=0; i<nDERegions; i++) {
+	if (r == deRegions[i]) return;
+      }
+    }
+    deRegions.push_back(r);
+    nDERegions++;
+  } else {
+    useDeexcitation = false;
   }
 }
 
@@ -949,6 +985,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // add low-energy subcutoff particles
   eloss += esecdep;
   if(eloss < 0.0) eloss = 0.0;
+
+  // deexcitation
+  else if (useDeexcitation && idxDERegions[currentMaterialIndex]) {
+    currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
+    if(eloss < 0.0) eloss = 0.0;
+  }
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;
@@ -1627,11 +1669,6 @@ G4double G4VEnergyLossProcess::GetDEDXDispersion(
   if(fm) d = fm->Dispersion(currentMaterial,dp,tmax,length);
   return d;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::ActivateDeexcitation(G4bool, const G4Region*)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
