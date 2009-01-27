@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 January 2009 Vladimir Ivanchenko (hadr-deex-V09-02-00)
+--------------------------------------------------------
+- Miguel Cortes fix of Lorentz transformation in G4VGammaDeexcitation,
+  which provides Doppler broading of gamma lines
+
 09 December 2008 Alexander Howard (hadr-deex-V09-01-25)
 ----------------------------------------------------
 - further increased verbosity in G4Evaporation.cc to try to understand channel
