@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.61 2009-01-27 10:17:58 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.62 2009-01-27 10:19:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -470,7 +470,7 @@ inline void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 
 inline void G4VEmModel::SampleDeexcitationAlongStep(const G4Material*,
 						    const G4Track&,
-						    G4double& eloss)
+						    G4double&)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
