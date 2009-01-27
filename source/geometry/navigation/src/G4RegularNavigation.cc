@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.8 2008-11-14 22:50:01 arce Exp $
+// $Id: G4RegularNavigation.cc,v 1.9 2009-01-27 09:31:29 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -40,7 +40,7 @@
 #include "G4NormalNavigation.hh"
 #include "G4Navigator.hh"
 #include "G4GeometryTolerance.hh"
-#include "G4RegNavHelper.hh"
+#include "G4RegularNavigationHelper.hh"
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
@@ -134,24 +134,25 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                                 G4int& blockedReplicaNo,
                                 G4VPhysicalVolume* pCurrentPhysical)
 {
-  G4RegNavHelper::ClearStepLengths();
+  G4RegularNavigationHelper::ClearStepLengths();
 
   G4PhantomParameterisation *param =
     (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
 
-  if( !param->SkipEqualMaterials() ) {
+  if( !param->SkipEqualMaterials() )
+  {
     return fnormalNav->ComputeStep(localPoint,
-				   localDirection,
-				   currentProposedStepLength,
-				   newSafety,
-				   history,
-				   validExitNormal,
-				   exitNormal,
-				   exiting,
-				   entering,
-				   pBlockedPhysical,
-				   blockedReplicaNo);
- }
+                                   localDirection,
+                                   currentProposedStepLength,
+                                   newSafety,
+                                   history,
+                                   validExitNormal,
+                                   exitNormal,
+                                   exiting,
+                                   entering,
+                                   pBlockedPhysical,
+                                   blockedReplicaNo);
+  }
 
 
   G4double ourStep = 0.;
@@ -219,10 +220,13 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     }
     if(totalNewStep > currentProposedStepLength) 
     { 
-      G4RegNavHelper::AddStepLength( copyNo, newStep-totalNewStep+currentProposedStepLength );
+      G4RegularNavigationHelper::
+        AddStepLength(copyNo, newStep-totalNewStep+currentProposedStepLength);
       return currentProposedStepLength;
-    } else {
-      G4RegNavHelper::AddStepLength( copyNo, newStep );
+    }
+    else
+    {
+      G4RegularNavigationHelper::AddStepLength( copyNo, newStep );
     }
 
 
