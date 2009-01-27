@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.27 2008-10-24 14:00:03 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.28 2009-01-27 09:32:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@
 // or to find the physical volume containing a given point in the world
 // reference system. The navigator maintains a transformation history and
 // other information to optimise the tracking time performance.
-//
+
 // History:
 // - Created.                                  Paul Kent,     Jul 95/96
 // - Zero step protections                     J.A. / G.C.,   Nov  2004
