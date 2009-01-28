@@ -46,6 +46,11 @@ global                                           global-V09-02-00
 - Correction in management/GNUmakefile to CPPFLAGS, adding G4RF_DEBUG in
   case enabled.
 
+particles/management                             partman-V09-02-00
+--------------------
+- Optimisation fix to G4IonTable::IsIon() implementation for the usage of
+  strings.
+
 persistency/ascii                                ascii-V09-02-02
 -----------------
 - Fixed bug in definition of delta angle for all solids with section in Phi
