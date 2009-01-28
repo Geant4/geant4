@@ -14,7 +14,6 @@ Some of the development/fixes included since the last development tag are:
  o Added G4RayleighScattering low-energy process to describe Rayleigh
    scattering. Updated Livermore photon processes classes for handling of
    compound materials.
- o Activated default deletion of processes from the process store.
 
 
 ---------- Reference-tag 'Release Notes' -----------
@@ -91,22 +90,9 @@ processes/electromagnetic/lowenergy             emlowen-V09-02-08
 
 processes/hadronic
 ------------------
-- management (hadr-man-V09-02-00)
-  o G4HadronicProcessStore: activated deletion of processes at destruction.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-00)
-  o Added de-registration of process in destructor of G4QCaptureAtRest.
-  o Added string decay destruction to G4ElectroNuclearReaction.
 - models/de_excitation (hadr-deex-V09-02-00)
   o Fix to Lorentz transformation in G4VGammaDeexcitation, which provides
     Doppler broadening of gamma lines.
-- models/management (hadr-modman-V09-02-00)
-  o Made G4HadronicInteractionRegistry a real singleton.
-  o G4HadronicInteraction, G4InelasticInteraction: move constructor,
-    destructor and some inline code to source.
-- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-00)
-  o Added de-registration of process in destructor of G4MuNuclearInteraction.
-- stopping (hadr-stopping-V09-02-00)
-  o Added de-registration of process in destructor of G4MuonMinusCaptureAtRest.
 
 processes/optical                                op-V09-02-00
 -----------------
