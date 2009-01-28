@@ -1,0 +1,131 @@
+
+                       geant4-09-02-ref-01
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Fixed incorrect volume size for cylindrical parameterized volume used in
+   various scorers.
+ o Added possibility to check for overlaps by activating/de-activating the
+   built-in surface check for placement and parameterised volumes, when
+   loading GDML detector descriptions.
+ o Completed migration of Penelope low-energy models to standard package
+   design and started migration for DNA processes.
+ o Added G4RayleighScattering low-energy process to describe Rayleigh
+   scattering. Updated Livermore photon processes classes for handling of
+   compound materials.
+ o Activated default deletion of processes from the process store.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-01-17
+------
+- Added -lXi to X11LIBS for Linux-g++, Linux-icc and WIN32-g++ configurations,
+  required for correct linkage with OpenInventor Coin3D libraries.
+- Configure script (Configure-V09-02-01): corrected handling of G4LEDATA and
+  G4LEVELGAMMADATA paths in generated configuration scripts. Addresses problem
+  report #1037 and #1039.
+
+digits_hits                                      digits_hits-V09-02-00
+-----------
+- Fixed incorrect volume size for cylindrical parameterized volume used in
+  various scorers.
+
+geometry/navigation                              geomnav-V09-02-00
+-------------------
+- Added G4RegularNavigationHelper class, used by G4RegularNavigation for
+  counting the number of step lengths in each voxel of the regular structure.
+- Some code cleanup.
+
+global                                           global-V09-02-00
+------
+- Correction in management/GNUmakefile to CPPFLAGS, adding G4RF_DEBUG in
+  case enabled.
+
+persistency/ascii                                ascii-V09-02-02
+-----------------
+- Fixed bug in definition of delta angle for all solids with section in Phi
+  in G4tgbVolume: take into consideration geometrical tolerance.
+
+persistency/gdml                                 gdml-V09-02-01
+----------------
+- Added possibility to check overlaps by activating/de-activating the
+  built-in surface check for placement and parameterised volumes.
+  By default the overlap check is off. To activate it, use call to the
+  parser 'SetOverlapCheck(true)' before reading the GDML file.
+- Changed post-fix"_refl" to "_PV" for placements made through the
+  reflection-factory.
+
+processes/electromagnetic/lowenergy             emlowen-V09-02-08
+-----------------------------------
+- Added G4PenelopeBremsstrahlungModel, namely Bremsstrahlung according to
+  Penelope model, migrated to the Std-design (inheriting from G4VEmModel).
+  A few minor cleaning of G4PenelopeBremsstrahlungContinuous and
+  G4PenelopeIonisation. Completed migration to Std package design for all
+  Penelope processes.
+- Added G4RayleighScattering process (G4VEmProcess) to describe Rayleigh
+  scattering, not available within the Std package.
+- Added preliminary migrated Geant4-DNA processes and models.
+- Updated Livermore photon processes classes for handling of compound materials.
+  Added pointer removal protections.
+- Added ability for DNA charge change processes to kill particle without
+  total energy deposit.
+- Corrected energy limits in G4CrossSectionIonisationBornPartial.
+- Added proton case in G4CrossSectionExcitationMillerGreenPartial and added
+  protection (waterExcitation.ExcitationEnergy).
+- Added angle initialisation in G4DNAScreenedRutherfordElasticModel.
+- Edited G4PenelopePhotoElectric and G4PenelopePhotoElectricModel to suppress
+  a warning message from G4AtomicTransitionManager appearing for some elements
+  (Oxygen, Fluorine). This is due to the fact that Penelope and
+  G4AtomicTransitionManager databases may contain a different number of shells.
+  Physics results are unchanged.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-02-00)
+  o G4HadronicProcessStore: activated deletion of processes at destruction.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-00)
+  o Added de-registration of process in destructor of G4QCaptureAtRest.
+  o Added string decay destruction to G4ElectroNuclearReaction.
+- models/de_excitation (hadr-deex-V09-02-00)
+  o Fix to Lorentz transformation in G4VGammaDeexcitation, which provides
+    Doppler broadening of gamma lines.
+- models/management (hadr-modman-V09-02-00)
+  o Made G4HadronicInteractionRegistry a real singleton.
+  o G4HadronicInteraction, G4InelasticInteraction: move constructor,
+    destructor and some inline code to source.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-00)
+  o Added de-registration of process in destructor of G4MuNuclearInteraction.
+- stopping (hadr-stopping-V09-02-00)
+  o Added de-registration of process in destructor of G4MuonMinusCaptureAtRest.
+
+processes/optical                                op-V09-02-00
+-----------------
+- Fix to G4OpBoundaryProcess to address problem report #1040.
+
+examples                                         examples-V09-02-01
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm5 (testem5-V09-02-00)
+  o Added command "/testem/phys/cutLimit" allowing to change low limit for
+    production threshold.
+  o Added missing notification to G4RunManager when geometry or material are
+    modified between runs.
+  o Added PAI models configuration to Physics List
+  o Extended number of runs  and use Opt3 physics-list in TestEm5.in.
+  o Modified cuts in PhysicsList: SetEnergyRange(1*eV,100*GeV).
+  o Added blaha.mac input macro.
+- extended/medical/DICOM (DICOM-V09-02-00)
+  o Use new class G4RegularNavigationHistory for counting of step
+    lengths in voxels of the regular structure.
+- extended/persistency/gdml/G02 (G02-V09-02-00)
+  o Corrected loading of default geometry with assembly, resolving some
+    overlaps introduced by mistake.
+
+tests                                            tests-V09-02-01
+-----
+- Updated reference outputs and tools.
