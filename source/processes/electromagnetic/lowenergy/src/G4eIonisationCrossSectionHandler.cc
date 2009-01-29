@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.11 2006-06-29 19:42:00 gunter Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.12 2009-01-29 08:13:34 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,8 @@
 // 10 Oct 2001  M.G. Pia     Revision to improve code quality and consistency with design
 // 19 Jul 2002   VI          Create composite data set for material
 // 21 Jan 2003  V.Ivanchenko Cut per region
+// 28 Jan 2009  L.Pandola    Added public method to make a easier migration of 
+//                           G4LowEnergyIonisation to G4LivermoreIonisationModel
 //
 // -------------------------------------------------------------------
 
@@ -97,11 +99,12 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
     const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
     G4int nElements = material->GetNumberOfElements();
 
-    if(verbose > 0) {
-      G4cout << "eIonisation CS for " << m << "th material "
-             << material->GetName()
-             << "  eEl= " << nElements << G4endl;
-    }
+    if(verbose > 0) 
+      {
+	G4cout << "eIonisation CS for " << m << "th material "
+	       << material->GetName()
+	       << "  eEl= " << nElements << G4endl;
+      }
 
     G4double tcut  = (*energyCuts)[m];
 
@@ -128,7 +131,8 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
             G4double p = theParam->Probability(Z, tcut, e, e, n);
             value += cross * p * density;
 
-            if(verbose>0 && m == 0 && e>=1. && e<=0.) {
+	    if(verbose>0 && m == 0 && e>=1. && e<=0.) 
+	    {
               G4cout << "G4eIonCrossSH: e(MeV)= " << e/MeV
                      << " n= " << n
                      << " cross= " << cross
@@ -138,7 +142,7 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
                      << " rho= " << density
                      << " Z= " << Z
                      << G4endl;
-	    }
+	      }
 
 	  }
 	}
@@ -154,4 +158,19 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
   return set;
 }
 
-
+G4double G4eIonisationCrossSectionHandler::GetCrossSectionAboveThresholdForElement(G4double energy,
+										   G4double cutEnergy,
+										   G4int Z)
+{
+  G4int nShells = NumberOfComponents(Z);
+  G4double value = 0.;
+  if(energy > cutEnergy) 
+    {
+      for (G4int n=0; n<nShells; n++) {
+	G4double cross = FindValue(Z, energy, n);
+	G4double p = theParam->Probability(Z, cutEnergy, energy, energy, n);
+	value += cross * p;
+      }
+    }
+  return value;
+}
