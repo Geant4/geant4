@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2009-01-28 13:56:05 gcosmo Exp $
+$Id: History,v 1.165 2009-01-29 07:25:02 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jan. 29 2008      H.Kurashige  (particles-V09-02-00)
+- include fixes in "partman-V09-02-00" and CalculateAnomaly method
 
 - Jan. 28 2008      G.Cosmo
 - Optimised G4IonTable::IsIon() implementation for usage of strings
