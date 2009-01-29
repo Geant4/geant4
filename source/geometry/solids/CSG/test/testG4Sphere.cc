@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.27 2008-12-18 12:57:22 gunter Exp $
+// $Id: testG4Sphere.cc,v 1.28 2009-01-29 16:54:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -190,6 +190,11 @@ int main(void)
 
     G4Sphere b402("b402", 475*mm, 480*mm, 
                0*degree,360*degree,17.8*degree,144.4*degree);
+
+    G4Sphere b1046("b1046", 4750*km, 4800*km, 
+               0*degree,360*degree,0*degree,90*degree);
+
+
    
 G4ThreeVector p402(471.7356120367253*mm, 51.95081450791341*mm, 5.938043020529463*mm);
 G4ThreeVector v402(-0.519985502840818, 0.2521089719986221, 0.8161226274728446);
@@ -845,6 +850,14 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     Dist=s14.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz);
     // G4cout<<"s14.DistanceToIn(G4ThreeVector(20.,0.,70.),vmz... = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,58.452994616207498));
+
+    Dist=b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz);
+    G4cout<<"b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz... = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,0.));
+
+
+
+
 
      ///////////////////////////////////////////////////////////////////////////
 

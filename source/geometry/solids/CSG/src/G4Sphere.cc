@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.68 2008-07-07 09:35:16 grichine Exp $
+// $Id: G4Sphere.cc,v 1.69 2009-01-29 16:54:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -33,6 +33,7 @@
 //
 // History:
 //
+// 29.01.09 V.Grichine: leave kRadTolerance only
 // 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
 // 22.07.05 O.Link    : Added check for intersection with double cone
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
@@ -978,11 +979,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
   c = rad2 - fRmax*fRmax ;
-  const G4double  flexRadMaxTolerance = // kRadTolerance;
-    std::max(kRadTolerance, fEpsilon * fRmax);
+  //  const G4double  flexRadMaxTolerance = // kRadTolerance;
+  //  std::max(kRadTolerance, fEpsilon * fRmax);
 
   //  if (c > kRadTolerance*fRmax)
-  if (c > flexRadMaxTolerance*fRmax)
+  if (c > kRadTolerance*fRmax)
   {
     // If outside toleranct boundary of outer G4Sphere
     // [should be std::sqrt(rad2)-fRmax > kRadTolerance*0.5]
@@ -1060,7 +1061,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
     // if (rad2 > tolIRMin2 && pDotV3d < 0 )
 
-    if (rad2 > tolIRMax2 && ( d2 >= flexRadMaxTolerance*fRmax && pDotV3d < 0 ) )
+    if (rad2 > tolIRMax2 && ( d2 >= kRadTolerance*fRmax && pDotV3d < 0 ) )
     {
       if (segPhi)
       {
@@ -2036,10 +2037,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   //
   // const G4double  fractionTolerance = 1.0e-12;
 
-  const G4double  flexRadMaxTolerance =            // kRadTolerance;
-    std::max(kRadTolerance, fEpsilon * fRmax);
+  //  const G4double  flexRadMaxTolerance =            // kRadTolerance;
+  //  std::max(kRadTolerance, fEpsilon * fRmax);
 
-  const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
+  const G4double  Rmax_plus = fRmax + kRadTolerance*0.5;
 
   const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
                      fEpsilon * fRmin);
@@ -2051,7 +2052,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   {
     c = rad2 - fRmax*fRmax;
 
-    if (c < flexRadMaxTolerance*fRmax) 
+    if (c < kRadTolerance*fRmax) 
     {
       // Within tolerant Outer radius 
       // 
@@ -2064,7 +2065,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
       d2 = pDotV3d*pDotV3d - c;
 
-      if( (c >- flexRadMaxTolerance*fRmax)       // on tolerant surface
+      if( (c >- kRadTolerance*fRmax)       // on tolerant surface
        && ((pDotV3d >=0) || (d2 < 0)) )          // leaving outside from Rmax 
                                                  // not re-entering
       {
@@ -2254,7 +2255,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           {
             s = -b + d ;    // Second root
           }
-          if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
+          if (s > kRadTolerance*0.5 )   // && s<sr)
           {
             // check against double cone solution
             zi=p.z()+s*v.z();
@@ -2291,7 +2292,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           {
             s=-b+d;    // Second root
           }
-          if (s > flexRadMaxTolerance*0.5 && s < stheta )
+          if (s > kRadTolerance*0.5 && s < stheta )
           {
             // check against double cone solution
             zi=p.z()+s*v.z();
@@ -2323,7 +2324,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       {
         if( v.z() > 0. ) 
         {
-          if ( std::fabs( p.z() ) <= flexRadMaxTolerance*0.5 )
+          if ( std::fabs( p.z() ) <= kRadTolerance*0.5 )
           {
             if(calcNorm)
             {
@@ -2351,7 +2352,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         {
           if( v.z() > 0. )
           {
-            if(std::fabs(distTheta) < flexRadMaxTolerance*0.5) // p on surface
+            if(std::fabs(distTheta) < kRadTolerance*0.5) // p on surface
             {
               if( fSTheta < halfpi && p.z() > 0. )
               {
@@ -2384,7 +2385,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         }
         else   // 2nd order equation, 1st root of fSTheta cone, 2nd if 1st root -ve
         {
-          if( std::fabs(distTheta) < flexRadMaxTolerance*0.5) // && t2 >= 0.) surface
+          if( std::fabs(distTheta) < kRadTolerance*0.5) // && t2 >= 0.) surface
           {
             if( fSTheta > halfpi && t2 >= 0. ) // leave
             {
@@ -2421,13 +2422,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = -b - d;         // First root
 
-              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) ||
+              if( (std::fabs(s) < kRadTolerance*0.5 && t2 < 0.) ||
                               s < 0.  ||
                   ( s > 0. && p.z() + s*v.z() > 0.)                   ) 
               {
                 s = -b + d ; // 2nd root
               }
-              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() <= 0.)  
+              if( s >  kRadTolerance*0.5 && p.z() + s*v.z() <= 0.)  
               {
                 stheta    = s;
                 sidetheta = kSTheta;
@@ -2437,13 +2438,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = -b - d;         // First root
 
-              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) ||
+              if( (std::fabs(s) < kRadTolerance*0.5 && t2 >= 0.) ||
                               s < 0.                                   ||
                   ( s > 0. && p.z() + s*v.z() < 0.)                      )
               {
                 s = -b + d ; // 2nd root
               }
-              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() >= 0.)  
+              if( s >  kRadTolerance*0.5 && p.z() + s*v.z() >= 0.)  
               {
                 stheta    = s;
                 sidetheta = kSTheta;
@@ -2462,7 +2463,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       {
         if( v.z() < 0. ) 
         {
-          if ( std::fabs( p.z() ) <= flexRadMaxTolerance*0.5 )
+          if ( std::fabs( p.z() ) <= kRadTolerance*0.5 )
           {
             if(calcNorm)
             {
@@ -2494,7 +2495,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         {
           if( v.z() < 0. )
           {
-            if(std::fabs(distTheta) < flexRadMaxTolerance*0.5) // p on surface
+            if(std::fabs(distTheta) < kRadTolerance*0.5) // p on surface
             {
               if( fSTheta+fDTheta > halfpi && p.z() < 0. )
               {
@@ -2530,7 +2531,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         }
         else   // 2nd order equation, 1st root of fSTheta cone, 2nd if 1st root -ve
         {
-          if( std::fabs(distTheta) < flexRadMaxTolerance*0.5) // && t2 >= 0.) surface
+          if( std::fabs(distTheta) < kRadTolerance*0.5) // && t2 >= 0.) surface
           {
             if( fSTheta+fDTheta < halfpi && t2 >= 0. ) // leave
             {
@@ -2567,12 +2568,12 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = -b - d;         // First root
 
-              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 < 0.) ||
+              if( (std::fabs(s) < kRadTolerance*0.5 && t2 < 0.) ||
                               s < 0. ) 
               {
                 s = -b + d ; // 2nd root
               }
-              if( s >  flexRadMaxTolerance*0.5 )  
+              if( s >  kRadTolerance*0.5 )  
               {
                 if( s < stheta )
                 {
@@ -2585,13 +2586,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             {
               s = -b - d;         // First root
 
-              if( (std::fabs(s) < flexRadMaxTolerance*0.5 && t2 >= 0.) ||
+              if( (std::fabs(s) < kRadTolerance*0.5 && t2 >= 0.) ||
                               s < 0.                                   ||
                   ( s > 0. && p.z() + s*v.z() > 0.)                      )
               {
                 s = -b + d ; // 2nd root
               }
-              if( s >  flexRadMaxTolerance*0.5 && p.z() + s*v.z() <= 0.)  
+              if( s >  kRadTolerance*0.5 && p.z() + s*v.z() <= 0.)  
               {
                 if( s < stheta )
                 {

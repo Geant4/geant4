@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.6 2007-01-10 16:57:33 grichine Exp $
+// $Id: testG4Orb.cc,v 1.7 2009-01-29 16:54:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Orb Test File
@@ -146,6 +146,8 @@ int main(void)
 
   G4Orb G650("G650",5.0e-05*mm);
 
+  G4Orb b1046("b1046",4800*km);
+
   G4ThreeVector positionG650(-2.61756492392351e-06*mm, 
                              -4.992317579421979e-05*mm, 
                              -9.474848146062698e-07*mm);
@@ -248,6 +250,9 @@ int main(void)
     assert(Dist==kInfinity);
     Dist=s1.DistanceToIn(pbigy,vmy);
     assert(ApproxEqual(Dist,50));
+    Dist=b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz);
+    G4cout<<"b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz) = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0));
 
   // Checking In/Out both return zeros
 
