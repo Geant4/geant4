@@ -1,4 +1,4 @@
-$Id: History,v 1.339 2009-01-22 13:43:09 sincerti Exp $
+$Id: History,v 1.340 2009-01-29 08:15:08 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.01.2009, L. Pandola, tag emlowen-V09-02-09
+	    - Updated public interface of G4eIonisationCrossSectionHandler.cc in order to 
+	      facilitate the migration from G4LowEnergyIonisation to G4LivermoreIonisationModel
 
 22.01.2009, S. Incerti, tag emlowen-V09-02-08
             - Fixed compilation error problem & code syntax in DNA model classes
