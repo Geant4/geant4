@@ -88,12 +88,6 @@ processes/electromagnetic/lowenergy             emlowen-V09-02-08
   G4AtomicTransitionManager databases may contain a different number of shells.
   Physics results are unchanged.
 
-processes/hadronic
-------------------
-- models/de_excitation (hadr-deex-V09-02-00)
-  o Fix to Lorentz transformation in G4VGammaDeexcitation, which provides
-    Doppler broadening of gamma lines.
-
 processes/optical                                op-V09-02-00
 -----------------
 - Fix to G4OpBoundaryProcess to address problem report #1040.
