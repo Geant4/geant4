@@ -362,5 +362,5 @@ Stage 1->2 : 1 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=2.31s Real=2.33s Sys=0s
+  User=1.41s Real=1.43s Sys=0s
 G4 kernel has come to Quit state.
