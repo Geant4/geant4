@@ -153,3 +153,4 @@ SetScorer(voxel_logic);
 --->11) Output
 dicom.out is produced running th macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
+It is produced, as an example, with a compression value of 32
