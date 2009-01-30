@@ -28,6 +28,7 @@
 #include "DicomRun.hh"
 
 //-- In order to obtain detector information.
+#include <fstream>
 #include <iomanip>
 #include "G4THitsMap.hh"
 
@@ -92,18 +93,29 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
     G4cout << "=============================================================" <<G4endl;
 
+    std::ofstream fileout;
+    G4String fname = "dicom.out";
+    fileout.open(fname);
+    G4cout << " opened file " << fname << " for dose output" << G4endl;
+
 
     if( DoseDeposit && DoseDeposit->GetMap()->size() != 0 ) {
       std::ostream *myout = &G4cout;
       PrintHeader(myout);
       std::map<G4int,G4double*>::iterator itr = DoseDeposit->GetMap()->begin();
       for(; itr != DoseDeposit->GetMap()->end(); itr++) {
+        fileout <<  itr->first
+               << "     "  << *(itr->second)
+               << G4endl;
 	G4cout << "    " << itr->first
 	       << "     " << std::setprecision(6) << *(itr->second) << " Gy"
 	       << G4endl;
       }
       G4cout << "============================================="<<G4endl;
     }
+    fileout.close();
+    G4cout << " closed file " << fname << " for dose output" << G4endl;
+  
   }
 }
 //
