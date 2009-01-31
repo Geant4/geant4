@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.13 2007-11-06 17:01:20 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.14 2009-01-31 15:30:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -442,18 +442,18 @@ inline  G4double G4DiffuseElastic::CalculateNuclearRad( G4double A)
 {
   G4double r0;
 
-  if(A < 50.)
+  if( A < 50. )
   {
-    if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else        r0  = 1.1*fermi;
+    if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else          r0  = 1.1*fermi;
 
     fNuclearRadius = r0*std::pow(A, 1./3.);
   }
   else
   {
-    r0 = 1.7*fermi;
+    r0 = 1.7*fermi;   // 1.7*fermi;
 
-    fNuclearRadius = r0*std::pow(A, 0.27);
+    fNuclearRadius = r0*std::pow(A, 0.27); // 0.27);
   }
   return fNuclearRadius;
 }
