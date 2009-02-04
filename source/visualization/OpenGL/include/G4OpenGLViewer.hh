@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.25 2009-01-16 08:29:17 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.26 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 #define G4OPENGLVIEWER_HH
 
 #include "G4VViewer.hh"
-#include "G4OpenGL.hh"
+#include <GL/gl.h>
 
 class G4OpenGLSceneHandler;
 
@@ -69,6 +69,13 @@ protected:
   virtual void print();
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
+  GLubyte* grabPixels (int inColor,
+		       unsigned int width,
+		       unsigned int height);
+  int generateEPS (const char* filnam,
+		   int inColour,
+		   unsigned int width,
+		   unsigned int height);
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);

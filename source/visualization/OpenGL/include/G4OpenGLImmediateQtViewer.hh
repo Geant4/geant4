@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.4 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.5 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ class G4OpenGLImmediateQtViewer:
   
 public:
   G4OpenGLImmediateQtViewer (G4OpenGLImmediateSceneHandler& scene,
-				const G4String& name = "");
+                const G4String& name = "");
   ~G4OpenGLImmediateQtViewer ();
   void Initialise ();
   void initializeGL ();

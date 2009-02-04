@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.39 2008-11-06 13:43:44 lgarnier Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.40 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,8 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4AttHolder.hh"
+#include "G4OpenGLTransform3D.hh"
+#include "G4OpenGLViewer.hh"
 
 G4OpenGLStoredSceneHandler::PO::PO
 (G4int id,

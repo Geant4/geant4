@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmBox.cc,v 1.7 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmBox.cc,v 1.8 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Box container class
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmBox.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetShell.hh"
+#include <Xm/RowColumn.h>
+#include <Xm/Xm.h>
 
 G4OpenGLXmBox::G4OpenGLXmBox (const char* n, 
 			      G4bool r)

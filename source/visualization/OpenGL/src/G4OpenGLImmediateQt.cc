@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.5 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLImmediateQt.cc,v 1.6 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4OpenGLImmediateQt.hh"
 #include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
   G4VGraphicsSystem ("OpenGLImmediateQt",

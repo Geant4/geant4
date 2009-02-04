@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.14 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.15 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 #include "G4Xt.hh"
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4VSceneHandler.hh"
 
 #include "G4Scene.hh"
 

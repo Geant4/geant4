@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.29 2009-01-19 16:08:47 lgarnier Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.30 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,13 +37,10 @@
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 #include "globals.hh"
 
-#include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
-#include <X11/Xmu/StdCmap.h>
 
 #include <GL/glx.h>
 
@@ -71,13 +68,6 @@ protected:
   static int dblBuf_RGBA[13];
 
 //////////////////////////////Pixmap (screen dump) production functions/////
-  GLubyte* grabPixels (int inColor,
-		       unsigned int width,
-		       unsigned int height);
-  int generateEPS (char* filnam,
-		   int inColour,
-		   unsigned int width,
-		   unsigned int height);
   GLXContext create_GL_print_context (XVisualInfo*& pvi);
 
   XWindowAttributes                 xwa;

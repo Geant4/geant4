@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.hh,v 1.7 2006-06-29 21:17:44 gunter Exp $
+// $Id: G4OpenGLImmediateWin32.hh,v 1.8 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

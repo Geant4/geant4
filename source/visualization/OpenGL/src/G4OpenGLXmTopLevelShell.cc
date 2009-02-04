@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTopLevelShell.cc,v 1.6 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmTopLevelShell.cc,v 1.7 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Top level shell class
@@ -33,6 +33,10 @@
 
 #include "G4OpenGLXmTopLevelShell.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
+#include "G4OpenGLXmViewer.hh"
+
+#include <Xm/Frame.h>
+#include <Xm/RowColumn.h>
 
 G4OpenGLXmTopLevelShell::G4OpenGLXmTopLevelShell (G4OpenGLXmViewer* v,
 						  char* n) 

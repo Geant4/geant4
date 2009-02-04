@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2009-01-22 15:39:55 lgarnier Exp $
+$Id: History,v 1.125 2009-02-04 16:48:40 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+2nd February 2009  Laurent Garnier
+- Improve Anticipate headers declaration in all files
+- Factorize grabPixels function in G4OpenGLViewer
+- Begin of refactoring printEPS function
 
 22th January 2009  Laurent Garnier
 - Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers

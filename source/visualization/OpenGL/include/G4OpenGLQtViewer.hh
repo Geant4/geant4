@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.14 2009-01-19 16:08:47 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.15 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,11 +38,12 @@
 
 #include "globals.hh"
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 
 #include <qobject.h>
 #include <qpoint.h>
+
+class G4OpenGLSceneHandler;
 
 class QGLWidget;
 class QDialog;
@@ -72,7 +73,6 @@ public:
   virtual ~G4OpenGLQtViewer ();
   void SetView ();
   virtual void updateQWidget()=0;
-  void setupViewport(int, int);
   QString setEncoderPath(QString path);
   QString getEncoderPath();
   QString setTempFolderPath(QString path);
@@ -143,7 +143,7 @@ private:
   void createPopupMenu();
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
   void rescaleImage(int, int);
-  bool generateEPS(QString,int,QImage);  
+  bool generateEPS2(QString,int,QImage);  
   bool generateVectorEPS (QString,int,int,QImage);
   bool generatePS_PDF(QString,int,QImage);  
   void showMovieParametersDialog();

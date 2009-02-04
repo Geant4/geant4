@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.9 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.10 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,9 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4VSceneHandler.hh"
+#include <Xm/ToggleB.h>
+
 #include "G4Scene.hh"
 
 void G4OpenGLXmViewer::zoom_callback (Widget w, 

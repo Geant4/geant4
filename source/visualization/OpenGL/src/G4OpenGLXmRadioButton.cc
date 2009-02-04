@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRadioButton.cc,v 1.7 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmRadioButton.cc,v 1.8 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmRadioButton.hh"
 #include <X11/Intrinsic.h>
+#include <Xm/ToggleB.h>
+
 #include "globals.hh"
 
 G4OpenGLXmRadioButton::G4OpenGLXmRadioButton (const char* n,

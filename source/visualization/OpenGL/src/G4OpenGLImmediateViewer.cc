@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.9 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.10 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLImmediateViewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene):
 G4VViewer (scene, -1),

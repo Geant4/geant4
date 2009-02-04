@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.2 2007-11-15 10:14:23 allison Exp $
+// $Id: G4OpenGLBitMapStore.hh,v 1.3 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,10 @@
 #define G4OPENGLBITMAPSTORE_HH
 
 #include "globals.hh"
-#include "G4OpenGL.hh"
 #include <map>
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace G4OpenGLBitMapStore {
 

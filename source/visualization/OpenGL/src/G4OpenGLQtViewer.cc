@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.34 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.35 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,9 @@
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQtViewer.hh"
+#include "G4VViewer.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 #include "G4ios.hh"
 #include "G4VisExtent.hh"
@@ -1346,7 +1349,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
       if (exportDialog->getVectorEPS()) {
         res = generateVectorEPS(nomFich,exportDialog->getWidth(),exportDialog->getHeight(),image);
       } else {
-        res = generateEPS(nomFich,exportDialog->getNbColor(),image);
+        res = generateEPS2(nomFich,exportDialog->getNbColor(),image);
       }
     } else if ((format == "ps") || (format == "pdf")) {
       res = generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
@@ -1706,12 +1709,19 @@ bool G4OpenGLQtViewer::generateVectorEPS (
    @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
    @param aImage : Image to print
 */
-bool G4OpenGLQtViewer::generateEPS (
+bool G4OpenGLQtViewer::generateEPS2 (
  QString aFilename
 ,int aInColor
 ,QImage aImage
 )
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::generateEPS call parent\n");
+#endif
+  generateEPS((aFilename+"GL").toStdString().c_str(),3,(unsigned int)aImage.width(),(unsigned int)aImage.height());
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::generateEPS\n");
+#endif
   // FIXME
 
   FILE* fp;

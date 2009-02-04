@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.hh,v 1.4 2006-06-29 21:18:54 gunter Exp $
+// $Id: G4OpenGLXmViewerMessenger.hh,v 1.5 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER

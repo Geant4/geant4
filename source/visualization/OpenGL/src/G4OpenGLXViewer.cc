@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.47 2009-01-22 15:39:55 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.48 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,9 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
+#include "G4VViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include <GL/glu.h>
 
 #include "G4OpenGLFontBaseStore.hh"
 
@@ -48,6 +51,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/Xmu/StdCmap.h>
 
 #include <assert.h>
 
@@ -464,131 +468,6 @@ void G4OpenGLXViewer::print() {
 
 }
 
-GLubyte* G4OpenGLXViewer::grabPixels (int inColor, unsigned int width, unsigned int height) {
-  
-  GLubyte* buffer;
-  GLint swapbytes, lsbfirst, rowlength;
-  GLint skiprows, skippixels, alignment;
-  GLenum format;
-  int size;
-
-  if (inColor) {
-    format = GL_RGB;
-    size = width*height*3;
-  } else {
-    format = GL_LUMINANCE;
-    size = width*height*1;
-  }
-
-  buffer = new GLubyte[size];
-  if (buffer == NULL)
-    return NULL;
-
-  glGetIntegerv (GL_UNPACK_SWAP_BYTES, &swapbytes);
-  glGetIntegerv (GL_UNPACK_LSB_FIRST, &lsbfirst);
-  glGetIntegerv (GL_UNPACK_ROW_LENGTH, &rowlength);
-
-  glGetIntegerv (GL_UNPACK_SKIP_ROWS, &skiprows);
-  glGetIntegerv (GL_UNPACK_SKIP_PIXELS, &skippixels);
-  glGetIntegerv (GL_UNPACK_ALIGNMENT, &alignment);
-
-  glPixelStorei (GL_UNPACK_SWAP_BYTES, GL_FALSE);
-  glPixelStorei (GL_UNPACK_LSB_FIRST, GL_FALSE);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-
-  glReadPixels (0, 0, (GLsizei)width, (GLsizei)height, format, GL_UNSIGNED_BYTE, (GLvoid*) buffer);
-
-  glPixelStorei (GL_UNPACK_SWAP_BYTES, swapbytes);
-  glPixelStorei (GL_UNPACK_LSB_FIRST, lsbfirst);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, rowlength);
-  
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, skiprows);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, skippixels);
-  glPixelStorei (GL_UNPACK_ALIGNMENT, alignment);
-  
-  return buffer;
-}
-
-int G4OpenGLXViewer::generateEPS (char* filnam,
-				int inColour,
-				unsigned int width,
-				unsigned int height) {
-
-  FILE* fp;
-  GLubyte* pixels;
-  GLubyte* curpix;
-  int components, pos, i;
-
-  pixels = grabPixels (inColour, width, height);
-
-  if (pixels == NULL)
-    return 1;
-  if (inColour) {
-    components = 3;
-  } else {
-    components = 1;
-  }
-  
-  fp = fopen (filnam, "w");
-  if (fp == NULL) {
-    return 2;
-  }
-  
-  fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-  fprintf (fp, "%%%%Title: %s\n", filnam);
-  fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
-  fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", width, height);
-  fprintf (fp, "%%%%EndComments\n");
-  fprintf (fp, "gsave\n");
-  fprintf (fp, "/bwproc {\n");
-  fprintf (fp, "    rgbproc\n");
-  fprintf (fp, "    dup length 3 idiv string 0 3 0 \n");
-  fprintf (fp, "    5 -1 roll {\n");
-  fprintf (fp, "    add 2 1 roll 1 sub dup 0 eq\n");
-  fprintf (fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
-  fprintf (fp, "       3 1 roll 5 -1 roll } put 1 add 3 0 \n");
-  fprintf (fp, "    { 2 1 roll } ifelse\n");
-  fprintf (fp, "    }forall\n");
-  fprintf (fp, "    pop pop pop\n");
-  fprintf (fp, "} def\n");
-  fprintf (fp, "systemdict /colorimage known not {\n");
-  fprintf (fp, "   /colorimage {\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       /rgbproc exch def\n");
-  fprintf (fp, "       { bwproc } image\n");
-  fprintf (fp, "   }  def\n");
-  fprintf (fp, "} if\n");
-  fprintf (fp, "/picstr %d string def\n", width * components);
-  fprintf (fp, "%d %d scale\n", width, height);
-  fprintf (fp, "%d %d %d\n", width, height, 8);
-  fprintf (fp, "[%d 0 0 %d 0 0]\n", width, height);
-  fprintf (fp, "{currentfile picstr readhexstring pop}\n");
-  fprintf (fp, "false %d\n", components);
-  fprintf (fp, "colorimage\n");
-  
-  curpix = (GLubyte*) pixels;
-  pos = 0;
-  for (i = width*height*components; i>0; i--) {
-    fprintf (fp, "%02hx ", *(curpix++));
-    if (++pos >= 32) {
-      fprintf (fp, "\n");
-      pos = 0; 
-    }
-  }
-  if (pos)
-    fprintf (fp, "\n");
-
-  fprintf (fp, "grestore\n");
-  fprintf (fp, "showpage\n");
-  delete pixels;
-  fclose (fp);
-  return 0;
-}
 
 GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi) {
   

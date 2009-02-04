@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.30 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.31 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 
 #include "G4OpenGLImmediateSceneHandler.hh"
 
+#include "G4OpenGLViewer.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"

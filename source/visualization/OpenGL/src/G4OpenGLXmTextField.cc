@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.8 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmTextField.cc,v 1.9 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
@@ -33,8 +33,13 @@
 
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
+#include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmTextField.hh"
+
 #include <X11/Intrinsic.h>
+#include <Xm/Label.h>
+#include <Xm/TextF.h>
+
 #include "globals.hh"
 
 G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,

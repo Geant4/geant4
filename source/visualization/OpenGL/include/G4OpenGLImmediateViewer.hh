@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.hh,v 1.9 2006-09-04 12:07:59 allison Exp $
+// $Id: G4OpenGLImmediateViewer.hh,v 1.10 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,11 +38,7 @@
 #ifndef G4OPENGLIMMEDIATEVIEWER_HH
 #define G4OPENGLIMMEDIATEVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLImmediateSceneHandler.hh"
-#include "G4OpenGLTransform3D.hh"
 #include "globals.hh"
 
 class G4OpenGLSceneHandler;

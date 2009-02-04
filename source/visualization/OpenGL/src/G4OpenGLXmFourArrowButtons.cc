@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.6 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.7 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
@@ -35,6 +35,9 @@
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmFourArrowButtons.hh"
 #include <X11/Intrinsic.h>
+#include <Xm/Form.h>
+#include <Xm/ArrowBG.h>
+
 #include "globals.hh"
 
 G4OpenGLXmFourArrowButtons::G4OpenGLXmFourArrowButtons (XtCallbackRec** c)

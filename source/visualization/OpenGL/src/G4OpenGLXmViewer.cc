@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.29 2009-01-22 15:39:55 lgarnier Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.30 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -48,6 +49,9 @@
 
 #include "G4Xt.hh"
 #include <X11/Shell.h>
+#include <Xm/MainW.h>
+#include <Xm/Frame.h>
+#include <Xm/DrawingA.h>
 
 #include <sstream>
 

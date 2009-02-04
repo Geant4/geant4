@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.24 2008-01-04 22:07:01 allison Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.25 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,13 +38,12 @@
 #define G4OPENGLSCENEHANDLER_HH
 
 #include "globals.hh"
-#include "G4RotationMatrix.hh"
-
-#include "G4OpenGL.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLBitMapStore.hh"
+#include "G4OpenGLBitMapStore.hh";
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include <map>
 
 class G4AttHolder;

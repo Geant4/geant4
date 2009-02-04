@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetObject.hh,v 1.6 2006-06-29 21:18:48 gunter Exp $
+// $Id: G4OpenGLXmVWidgetObject.hh,v 1.7 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,8 @@
 
 #include "globals.hh"
 #include <Xm/Xm.h>
-#include "X11/Intrinsic.h"
-#include <X11/Xlib.h>
-#include "G4OpenGLXmViewer.hh"
 
+class G4OpenGLXmViewer;
 class G4OpenGLXmVWidgetObject {
 
 public:

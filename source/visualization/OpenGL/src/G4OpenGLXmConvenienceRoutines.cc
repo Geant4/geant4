@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.12 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.13 2009-02-04 16:48:41 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,14 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+
+#include <Xm/Form.h>
+#include <Xm/ToggleB.h>
+#include <Xm/ArrowBG.h>
+#include <Xm/RowColumn.h>
+#include <Xm/TextF.h>
+#include <Xm/Separator.h>
+#include <Xm/Scale.h>
 
 void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 					     XtCallbackRec** arrow_callbacks,

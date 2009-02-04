@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.27 2008-04-28 16:19:40 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.28 2009-02-04 16:48:40 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,11 +36,7 @@
 #ifndef G4OPENGLSTOREDSCENEHANDLER_HH
 #define G4OPENGLSTOREDSCENEHANDLER_HH
 
-#include "G4VSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLStoredViewer.hh"
 #include "globals.hh"
-#include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include <map>
 #include <vector>
