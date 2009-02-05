@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.6 2009-01-23 14:32:06 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2009-02-05 13:38:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -217,6 +217,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      new G4PVPlacement(0, G4ThreeVector(10.0,0.0,0.0), LogicalVolST,
                        "StepPhys", experimentalHallLV, false, 0);
   }
+
+  // Set Visualization attributes to world
+  //
+  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  fWorldPhysVol->GetLogicalVolume()->SetVisAttributes(BoxVisAtt);  
+
   return fWorldPhysVol;
 }
 
