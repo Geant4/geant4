@@ -42,6 +42,7 @@
 #include "G4StopTheoDeexcitation.hh"
 #include "G4StopDeexcitationAlgorithm.hh"
 #include "G4ReactionKinematics.hh"
+#include "G4HadronicProcessStore.hh"
 
 G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& processName,
                                       G4ProcessType   aType ) :
@@ -79,12 +80,25 @@ G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& process
   sigmaPlusLambdaConversionRate = 0.55; 
   sigmaMinusLambdaConversionRate = 0.55;
   sigmaZeroLambdaConversionRate = 0.55;
+
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 
 G4KaonMinusAbsorptionAtRest::~G4KaonMinusAbsorptionAtRest()
-{ }
+{ 
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+}
 
+void G4KaonMinusAbsorptionAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4KaonMinusAbsorptionAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+}
 
 G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 (const G4Track& track, const G4Step& )

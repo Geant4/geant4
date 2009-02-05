@@ -60,8 +60,10 @@ class G4PionMinusAbsorptionAtRest : public G4VRestProcess
 
      G4bool IsApplicable(const G4ParticleDefinition&);
 
+     void PreparePhysicsTable(const G4ParticleDefinition&);
+
   // null physics table
-     void BuildPhysicsTable(const G4ParticleDefinition&){}
+     void BuildPhysicsTable(const G4ParticleDefinition&);
 
      G4double AtRestGetPhysicalInteractionLength(const G4Track&,
 						 G4ForceCondition*);

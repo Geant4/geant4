@@ -31,6 +31,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
+#include "G4HadronicProcessStore.hh"
 #include <string.h>
 #include <cmath>
 #include <stdio.h>
@@ -67,17 +68,28 @@ G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& p
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];
 
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
  
 // destructor
  
 G4AntiProtonAnnihilationAtRest::~G4AntiProtonAnnihilationAtRest()
 {
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete [] pv;
   delete [] eve;
   delete [] gkin;
 }
  
+void G4AntiProtonAnnihilationAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4AntiProtonAnnihilationAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+}
  
 // methods.............................................................................
  

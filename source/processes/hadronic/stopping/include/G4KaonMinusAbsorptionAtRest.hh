@@ -69,6 +69,10 @@ public:
                return( particle == *(G4KaonMinus::KaonMinus()) );
   }
 
+  void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
   // the main method ...
      G4VParticleChange* AtRestDoIt(const G4Track& aTrack, const G4Step& aStep); 
 

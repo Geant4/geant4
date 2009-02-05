@@ -56,6 +56,7 @@
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessStore.hh"
 
 // Constructor
 
@@ -69,14 +70,26 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
 
   if (verboseLevel>0) 
     { G4cout << GetProcessName() << " is created "<< G4endl; }
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 
 // Destructor
 
 G4PiMinusAbsorptionAtRest::~G4PiMinusAbsorptionAtRest()
-{}
+{
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+}
 
+void G4PiMinusAbsorptionAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4PiMinusAbsorptionAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+}
 
 G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, const G4Step& )
 {

@@ -30,6 +30,7 @@
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
+#include "G4HadronicProcessStore.hh"
 #include "Randomize.hh" 
 #include <string.h>
 #include <cmath>
@@ -67,17 +68,28 @@ G4AntiNeutronAnnihilationAtRest::G4AntiNeutronAnnihilationAtRest(const G4String&
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];
 
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
  
 // destructor
  
 G4AntiNeutronAnnihilationAtRest::~G4AntiNeutronAnnihilationAtRest()
 {
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete [] pv;
   delete [] eve;
   delete [] gkin;
 }
  
+void G4AntiNeutronAnnihilationAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4AntiNeutronAnnihilationAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+}
  
 // methods.............................................................................
  
@@ -88,7 +100,7 @@ G4bool G4AntiNeutronAnnihilationAtRest::IsApplicable(
    return ( &particle == pdefAntiNeutron );
 
 }
- 
+
 // Warning - this method may be optimized away if made "inline"
 G4int G4AntiNeutronAnnihilationAtRest::GetNumberOfSecondaries()
 {

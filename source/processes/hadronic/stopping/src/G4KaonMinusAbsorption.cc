@@ -31,6 +31,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
+#include "G4HadronicProcessStore.hh"
 #include <string.h>
 #include <cmath>
 #include <stdio.h>
@@ -65,17 +66,28 @@ G4KaonMinusAbsorption::G4KaonMinusAbsorption(const G4String& processName,
   eve  = new G4GHEKinematicsVector [MAX_SECONDARIES];
   gkin = new G4GHEKinematicsVector [MAX_SECONDARIES];
 
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
  
 // destructor
  
 G4KaonMinusAbsorption::~G4KaonMinusAbsorption()
 {
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete [] pv;
   delete [] eve;
   delete [] gkin;
 }
- 
+
+void G4KaonMinusAbsorption::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4KaonMinusAbsorption::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+} 
  
 // methods.............................................................................
  
