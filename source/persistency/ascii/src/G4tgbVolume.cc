@@ -259,10 +259,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "TUBS" )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
-    G4double phiTotal = solParam[4];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
+    G4double phiDelta = solParam[4];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Tubs( sname, solParam[0], solParam[1], solParam[2],
-                        solParam[3], phiTotal );
+                        solParam[3], phiDelta );
   }
   else if( stype == "TRAP" )
   {
@@ -310,21 +310,20 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "CONS" )
   {
     CheckNoSolidParams( stype, 7, solParam.size() );
-    G4double phiTotal = solParam[6];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
+    G4double phiDelta = solParam[6];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Cons( sname, solParam[0], solParam[1], solParam[2],
-                        solParam[3], solParam[4], solParam[5], phiTotal);
+                        solParam[3], solParam[4], solParam[5], phiDelta);
   }
   else if( stype == "SPHERE" )
   {
     CheckNoSolidParams( stype, 6, solParam.size() );
-    G4double phiTotal = solParam[3];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-    G4double thetaTotal = solParam[1];
-    if( std::fabs(thetaTotal - twopi) < angularTolerance ) { thetaTotal = twopi; }
+    G4double phiDelta = solParam[3];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
+    G4double thetaDelta = solParam[5];
+    if( std::fabs(thetaDelta - pi) < angularTolerance ) { thetaDelta = pi; }
     solid = new G4Sphere( sname, solParam[0], solParam[1], solParam[2],
-                          phiTotal, solParam[4], thetaTotal);
+                          phiDelta, solParam[4], thetaDelta);
   }
   else if( stype == "ORB" )
   {
@@ -334,10 +333,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "TORUS" )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
-    G4double phiTotal = solParam[4];
-    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
+    G4double phiDelta = solParam[4];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Torus( sname, solParam[0], solParam[1], solParam[2],
-                         solParam[3], phiTotal );
+                         solParam[3], phiDelta );
   }
   else if( stype == "POLYCONE" )
   {
