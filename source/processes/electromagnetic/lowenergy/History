@@ -1,4 +1,4 @@
-$Id: History,v 1.340 2009-01-29 08:15:08 pandola Exp $
+$Id: History,v 1.341 2009-02-10 16:17:55 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.02.2009, L. Pandola, tag emlowen-V09-02-10
+	    - Added G4LivermoreIonisationModel, namely first implementation of 
+	      LowEnergyIonisation in the new design
 
 29.01.2009, L. Pandola, tag emlowen-V09-02-09
 	    - Updated public interface of G4eIonisationCrossSectionHandler.cc in order to 
