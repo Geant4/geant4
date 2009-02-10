@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-02)
+---------------------------------------------------------
+- Jose Manuel Quesada set default OPT=3 for evaporation of protons 
+  and neutrons and OPT=1 for deuterons, tritons, alpha and He3
+
 10 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-01)
 ---------------------------------------------------------
 - Miguel Cortes added extra protection to G4VGammaDeexcitation
