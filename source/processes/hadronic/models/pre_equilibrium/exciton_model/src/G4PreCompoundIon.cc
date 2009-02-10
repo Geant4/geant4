@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc,v 1.15 2009-02-07 15:49:19 vnivanch Exp $
+// $Id: G4PreCompoundIon.cc,v 1.16 2009-02-10 16:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,7 @@
 // Author:         V.Lara
 //
 // Modified:  
-// 07.02.2009 J. M. Quesada fixed bug in density level of light fragments  
+// 10.02.2009 J. M. Quesada fixed bug in density level of light fragments  
 //
 
 #include "G4PreCompoundIon.hh"
@@ -68,8 +68,7 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double g1 = (6.0/pi2)*GetRestA() * 
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
-  //JMQ 06/02/209  This is a bug..lets see if it is THE BUG killing cluster 
-  // emission
+  //JMQ 06/02/209  This is  THE BUG that was killing cluster emission
   // G4double gj = (6.0/pi2)*GetA() *
   //   G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 
@@ -81,6 +80,7 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double Aj = GetA()*(GetA()+1.0)/4.0/gj; 
 
+
   G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
 
@@ -88,12 +88,12 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   G4double Ej = std::max(0.0,eKin + GetBindingEnergy() -Aj); 
 
-  G4double pA = 1.e-25*(3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
-                (eKin+GetBindingEnergy()))))/(pi * r0 * r0 * std::pow(GetRestA(),2.0/3.0) )* 
-                eKin*CrossSection(eKin) /(r0*std::pow(GetRestA(),1.0/3.0))* 
+  // JMQ 10/02/09 reshaping of the formula (unnecessary std::pow elimitated)
+  G4double pA = (3.0/4.0) * std::sqrt(std::max(0.0, 2.0/(GetReducedMass()*
+		(eKin+GetBindingEnergy()))))/(pi * r0 * r0 *r0* GetRestA())* 
+                eKin*CrossSection(eKin)*millibarn* 
                 CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P)* 
-                                  GetRj(aFragment.GetNumberOfParticles(), 
-					aFragment.GetNumberOfCharged());
+                GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged());
 
   G4double pB = std::pow((g1*E1)/(g0*E0),N-GetA()-1.0)*(g1/g0);
  
@@ -103,9 +103,3 @@ ProbabilityDistributionFunction(const G4double eKin,
 
   return Probability;
 }
-
-
-
-
-
-

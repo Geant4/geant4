@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.hh,v 1.5 2009-01-20 18:29:46 antoni Exp $
+// $Id: G4PreCompoundFragmentVector.hh,v 1.6 2009-02-10 16:01:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -38,10 +38,7 @@
 #ifndef G4PreCompoundFragmentVector_h
 #define G4PreCompoundFragmentVector_h 1
 
-
 #include "G4VPreCompoundFragment.hh"
-
-
 
 class G4PreCompoundFragmentVector 
 {
@@ -63,23 +60,16 @@ public:
   inline void ResetStage();
   inline void SetVector(pcfvector * avector);
 
-// JMQ 15/01/09 that substitutes former CalculateProbabilities 	 method
   G4double CalculateProbabilities(const G4Fragment & aFragment);
-	//JMQ 15/01/09
-  G4double CalculateProbabilitiesOriginal(const G4Fragment & aFragment);
-
-// JMQ 15/01/09 that substitutes formr 	ChooseFragment method
-  G4VPreCompoundFragment * ChooseFragmentOriginal(void);
-	//JMQ 15/01/09 new
- G4VPreCompoundFragment * ChooseFragment(void);
+	
+  G4VPreCompoundFragment * ChooseFragment(void);
 		
 private:
 
   pcfvector * theChannels;
 
   G4double TotalEmissionProbability;
-//JMQ 15/01/09 
-  G4double TotalEmissionProbabilityOriginal;
+
 //for inverse cross section choice
 public:
   inline void SetOPTxs(G4int);

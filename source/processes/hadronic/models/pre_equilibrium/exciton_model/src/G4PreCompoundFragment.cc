@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+// $Id: G4PreCompoundFragment.cc,v 1.8 2009-02-10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// J. M. Quesada (August 2008).  
+// Based  on previous work by V. Lara
 // JMQ (06 September 2008) Also external choice has been added for:
 //                      - superimposed Coulomb barrier (if useSICB=true) 
 //
@@ -163,6 +166,3 @@ GetKineticEnergy(const G4Fragment & aFragment)
     }   while (G4UniformRand() > NormalizedProbability);  
   return T;
 }
-
-
-

@@ -24,9 +24,20 @@
 // ********************************************************************
 //
 //
-// Hadronic Process: Nuclear Preequilibrium
-// by V. Lara 
-
+// $Id: G4PreCompoundEmission.cc,v 1.19 2009-02-10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundEmission
+//
+// Author:         V.Lara
+//
+// Modified:  
+//
 
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundParameters.hh"
@@ -41,12 +52,12 @@ const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompou
 }
 
 
-  G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
 {
   return false;
 }
 
-    G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
 {
   return true;
 }
@@ -95,30 +106,13 @@ void G4PreCompoundEmission::SetHETCModel()
   return;
 }
 
-
-
 G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
 #ifdef debug
   G4Fragment InitialState(aFragment);
 #endif
-
-
-	//JMQ 15/01/09 
-  G4VPreCompoundFragment * theFragment = theFragmentsVector->ChooseFragment();
   // Choose a Fragment for emission
-//  G4VPreCompoundFragment * theFragment = theFragmentsVector->ChooseFragment();
-  G4VPreCompoundFragment * theFragmentOriginal = theFragmentsVector->ChooseFragmentOriginal();
- // JMQ 15/01/09 Choose a Scaled Fragment for emission
-//  G4VPreCompoundFragment * theFragmentScaled = theFragmentsVector->ChooseFragmentScaled();
-
-//JMQ 12/01/09 
-//if (theFragment->GetZ()==1 && theFragment->GetA()==1) G4cout<<"SE EMITE UN PROTON DE PREEQUILIBRIO"<<G4endl;
-//if (theFragment->GetZ()==1 && theFragment->GetA()==2) G4cout<<"SE EMITE UN DEUTERON DE PREEQUILIBRIO"<<G4endl;
- 	theFragment->SetFlag(false);
-        theFragmentOriginal->SetFlag(true);
-
-//
+  G4VPreCompoundFragment * theFragment = theFragmentsVector->ChooseFragment();
   if (theFragment == 0)
     {
       G4cerr <<  "G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment\n"
@@ -128,14 +122,11 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     }
   // Kinetic Energy of emitted fragment
   G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
-
-//JMQ 22/01/09
- if (KineticEnergyOfEmittedFragment<6 && theFragment->GetA()==4 && theFragment->GetZ()==2) G4cout<<"WARNING: ALPHA EMISSION BELLOW THE BARRIER  T= "<<KineticEnergyOfEmittedFragment<<G4endl;
   
   // Calculate the fragment momentum (three vector)
   G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
   
-  // Mass of emitted fragment
+  // Mass of emittef fragment
   G4double EmittedMass = theFragment->GetNuclearMass();
   
   // Now we can calculate the four momentum 
@@ -177,16 +168,16 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   if (anU < 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
     
     
-   //JMQ 15/01/09 the update is done with the "dummy "emission of clusters (Original). 
+    
   // Update nucleus parameters:
   // --------------------------
 
   // Number of excitons
   aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
-				 static_cast<G4int>(theFragmentOriginal->GetA()));
+				 static_cast<G4int>(theFragment->GetA()));
   // Number of charges
   aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
-			       static_cast<G4int>(theFragmentOriginal->GetZ()));
+			       static_cast<G4int>(theFragment->GetZ()));
     
   // Atomic number
   aFragment.SetA(theFragment->GetRestA());

@@ -23,29 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M.Quesada (August 08). New source file
-// 
-// Modif (21 August 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+//
+// $Id: G4PreCompoundAlpha.cc,v 1.2 2009-02-10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundAlpha
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 21.08.2008 J. M. Quesada add choice of options  
+// 10.02.2009 J. M. Quesada set default opt1  
+//
 
 #include "G4PreCompoundAlpha.hh"
 
-  G4ReactionProduct * G4PreCompoundAlpha::GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Alpha::AlphaDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+G4ReactionProduct * G4PreCompoundAlpha::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct =
+    new G4ReactionProduct(G4Alpha::AlphaDefinition());
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-    return theReactionProduct;
-  }   
+  return theReactionProduct;
+}   
 
-
-   G4double G4PreCompoundAlpha::FactorialFactor(const G4double N, const G4double P)
-  {
-     return 
+G4double G4PreCompoundAlpha::FactorialFactor(const G4double N, const G4double P)
+{
+  return 
       (N-4.0)*(P-3.0)*(
 		       (((N-3.0)*(P-2.0))/2.0) *(
 						 (((N-2.0)*(P-1.0))/3.0) *(
@@ -53,25 +65,23 @@
 									   )
 						 )
 		       );
-  }
+}
   
-   G4double G4PreCompoundAlpha::CoalescenceFactor(const G4double A)
-  {
-     return 4096.0/(A*A*A);  
-  }    
+G4double G4PreCompoundAlpha::CoalescenceFactor(const G4double A)
+{
+  return 4096.0/(A*A*A);  
+}    
 
-
-
-   G4double G4PreCompoundAlpha::GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2)*(NumberParticles-3);
-    if(NumberCharged >=2 && (NumberParticles-NumberCharged) >=2 ) rj = 6.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))/static_cast<G4double>(denominator);  
- return rj;
+G4double G4PreCompoundAlpha::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+{
+  G4double rj = 0.0;
+  G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2)*(NumberParticles-3);
+  if(NumberCharged >=2 && (NumberParticles-NumberCharged) >=2 ) {
+    rj = 6.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged)*
+				   (NumberParticles-NumberCharged-1))/static_cast<G4double>(denominator);  
   }
-
-
-
+  return rj;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -79,7 +89,7 @@
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4PreCompoundAlpha::CrossSection(const  G4double K)
+G4double G4PreCompoundAlpha::CrossSection(const  G4double K)
 {
 
   ResidualA=GetRestA();
@@ -94,6 +104,8 @@
   if (OPTxs==0) return GetOpt0( K);
   else if( OPTxs==1 || OPTxs==2) return GetOpt12( K);
   else if (OPTxs==3 || OPTxs==4)  return GetOpt34( K);
+  //JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
+  else if (OPTxs==5) return GetOpt12(K);
   else{
     std::ostringstream errOs;
     errOs << "BAD Alpha CROSS SECTION OPTION !!"  <<G4endl;
@@ -139,10 +151,10 @@ G4double G4PreCompoundAlpha::GetOpt0(const  G4double K)
 //
 //--------------------
 // 
-  G4double G4PreCompoundAlpha::GetBeta() 
-  {
-      return -GetCoulombBarrier();
-  }
+G4double G4PreCompoundAlpha::GetBeta() 
+{
+  return -GetCoulombBarrier();
+}
 //
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)

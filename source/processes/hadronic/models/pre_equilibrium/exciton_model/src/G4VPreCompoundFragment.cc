@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VPreCompoundFragment.cc,v 1.12 2009-02-10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+// J. M. Quesada (August 2008).  
+// Based  on previous work by V. Lara
 //
  
 #include "G4VPreCompoundFragment.hh"
@@ -171,12 +173,7 @@ Initialize(const G4Fragment & aFragment)
   
   return;
 }
-//JMQ 15/01/09
- void G4VPreCompoundFragment::SetFlag(G4bool f) 
-{flag= f;
-return;}
-G4bool G4VPreCompoundFragment::GetFlag() 
-{ return flag;}
+
 
 
 
