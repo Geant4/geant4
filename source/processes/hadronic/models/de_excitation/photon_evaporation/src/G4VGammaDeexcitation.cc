@@ -37,7 +37,7 @@
 //
 //      Modifications: 
 //
-//        27 Jan 2009, Miguel A. Cortes-Giraldo (miancortes@us.es)
+//        29 Jan 2009, Miguel A. Cortes-Giraldo (miancortes@us.es)
 //           Modified UpdateNucleus() to perform Lorentz boosts to gamma and
 //           residual nucleus momenta, both calculated at CM frame, in order to
 //           fix the absence of Doppler broadening (discussed at HyperNews)
@@ -248,6 +248,11 @@ void G4VGammaDeexcitation::UpdateNucleus(/*const*/ G4Fragment*  gamma)
 
   // G4LorentzVector p4Residual(-pGamma, p4Nucleus.e() - eGamma);
 
+// MACG (29/01/09) this calculation is done to make sure that the residual
+// excitation energy is positive or zero.
+
+  G4double evapEnergy = eGamma;
+  if (_nucleus.GetExcitationEnergy() < eGamma) evapEnergy = _nucleus.GetExcitationEnergy();
 
 //
 // MACG (22/01/09) this is the new calculation at CM frame
@@ -256,7 +261,7 @@ void G4VGammaDeexcitation::UpdateNucleus(/*const*/ G4Fragment*  gamma)
   G4LorentzVector pCM = p4Nucleus;          // four-vector to calculate Energy at CM frame
   pCM.boost( -(p4Nucleus.boostVector()) );  // now 'pCM' is at CM frame
 
-  G4LorentzVector p4Residual(-pGamma, pCM.e() - eGamma); // momentum and energy conservation at CM frame
+  G4LorentzVector p4Residual(-pGamma, pCM.e() - evapEnergy); // momentum and energy conservation at CM frame
   p4Residual.boost( _nucleus.GetMomentum().boostVector() ); // conversion to Lab frame
 
   // once the residual nucleus 4-momentum is boosted, we boost the gamma
