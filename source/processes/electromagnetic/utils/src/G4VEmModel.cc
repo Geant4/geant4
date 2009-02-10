@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.21 2009-01-28 10:25:51 pandola Exp $
+// $Id: G4VEmModel.cc,v 1.22 2009-02-10 12:17:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -164,6 +164,6 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 void G4VEmModel::SampleDeexcitationAlongStep(const G4Material*,
 					     const G4Track&,
 					     G4double& )
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
