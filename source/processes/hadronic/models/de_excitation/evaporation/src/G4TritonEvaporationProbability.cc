@@ -117,6 +117,8 @@ G4double G4TritonEvaporationProbability::CCoeficient(const G4double aZ)
     return 0.;}
   if( OPTxs==1 || OPTxs==2) return G4TritonEvaporationProbability::GetOpt12( K);
   else if (OPTxs==3 || OPTxs==4)  return G4TritonEvaporationProbability::GetOpt34( K);
+//JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
+  else if (OPTxs==5) return GetOpt12( K);
   else{
     std::ostringstream errOs;
     errOs << "BAD Triton CROSS SECTION OPTION AT EVAPORATION!!"  <<G4endl;

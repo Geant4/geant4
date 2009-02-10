@@ -99,6 +99,8 @@ G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationPro
     return 0.;}
   else if( OPTxs==1 ||OPTxs==2) return GetOpt12( K);
   else if (OPTxs==3 || OPTxs==4)  return GetOpt34( K);
+//JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
+  else if (OPTxs==5) return GetOpt34( K);
   else{
     std::ostringstream errOs;
     errOs << "BAD NEUTRON CROSS SECTION OPTION AT EVAPORATION!!"  <<G4endl;
