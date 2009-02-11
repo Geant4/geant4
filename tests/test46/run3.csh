@@ -4,7 +4,7 @@ cd $VFEM/test46
 mkdir -p $REFERENCE
 cd $REFERENCE
 
-setenv PRIMARYBEAM gamma
+setenv PRIMARYBEAM pi-
 
 setenv PHYSLIST QGSP_BERT
 source $G4INSTALL/tests/test46/run_em.csh g10gev100
