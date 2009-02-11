@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.cc,v 1.3 2009-02-10 16:01:37 vnivanch Exp $
+// $Id: G4PreCompoundProton.cc,v 1.4 2009-02-11 18:06:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,8 +87,6 @@ G4double G4PreCompoundProton::CrossSection(const  G4double K)
   else if( OPTxs==1) return GetOpt1(K);
   else if( OPTxs==2|| OPTxs==4) return GetOpt2(K);
   else if (OPTxs==3)  return GetOpt3(K);
-  //JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
-  else if (OPTxs==5) return GetOpt3(K);
   else{
     std::ostringstream errOs;
     errOs << "BAD PROTON CROSS SECTION OPTION !!"  <<G4endl;

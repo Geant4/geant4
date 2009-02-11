@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.cc,v 1.3 2009-02-10 16:01:37 vnivanch Exp $
+// $Id: G4PreCompoundNeutron.cc,v 1.4 2009-02-11 18:06:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,8 +82,6 @@ G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
   if (OPTxs==0) return GetOpt0( K);
   else if( OPTxs==1 || OPTxs==2) return GetOpt12( K);
   else if (OPTxs==3 || OPTxs==4)  return GetOpt34( K);
-  //JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
-  else if (OPTxs==5) return GetOpt34(K);
   else{
     std::ostringstream errOs;
     errOs << "BAD NEUTRON CROSS SECTION OPTION !!"  <<G4endl;

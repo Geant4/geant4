@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNucleon.cc,v 1.12 2009-02-10 16:01:37 vnivanch Exp $
+// $Id: G4PreCompoundNucleon.cc,v 1.13 2009-02-11 18:06:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +85,8 @@ ProbabilityDistributionFunction(const G4double eKin,
       || CrossSection(eKin) <0) {  
     std::ostringstream errOs;
     G4cout<<"WARNING:  NEGATIVE VALUES "<<G4endl;     
-    errOs << "Rj=" << GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())<<G4endl;
+    errOs << "Rj=" << GetRj(aFragment.GetNumberOfParticles(), aFragment.GetNumberOfCharged())
+	  <<G4endl;
     errOs <<"  xsec("<<eKin<<" MeV) ="<<CrossSection(eKin)<<G4endl;
     errOs <<"  A="<<GetA()<<"  Z="<<GetZ()<<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());

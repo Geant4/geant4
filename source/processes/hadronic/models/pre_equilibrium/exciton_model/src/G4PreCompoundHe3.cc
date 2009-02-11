@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundHe3.cc,v 1.2 2009-02-10 16:01:37 vnivanch Exp $
+// $Id: G4PreCompoundHe3.cc,v 1.3 2009-02-11 18:06:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,8 +75,8 @@ G4double G4PreCompoundHe3::GetRj(const G4int NumberParticles, const G4int Number
   G4double rj = 0.0;
   G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2);
   if(NumberCharged >=2 && (NumberParticles-NumberCharged) >= 1) {
-    rj = 3.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged))/
-      static_cast<G4double>(denominator);  
+    rj = 3.0*static_cast<G4double>(NumberCharged*(NumberCharged-1)*(NumberParticles-NumberCharged))
+      / static_cast<G4double>(denominator);  
   }
   return rj;
 }
@@ -101,8 +101,6 @@ G4double G4PreCompoundHe3::CrossSection(const  G4double K)
   if (OPTxs==0) return GetOpt0( K);
   else if( OPTxs==1 || OPTxs==2) return GetOpt12( K);
   else if (OPTxs==3 || OPTxs==4)  return GetOpt34( K);
-  //JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
-  else if (OPTxs==5) return GetOpt12(K);
   else{
     std::ostringstream errOs;
     errOs << "BAD He3 CROSS SECTION OPTION !!"  <<G4endl;
@@ -245,10 +243,25 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   elab = K * FragmentA / ResidualA;
   sig = 0.;
   
-  if (elab <= ec) { //start for E<Ec
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
-  }           //end for E<Ec
-  else {           //start for E>Ec
+  // JMQ 11/02/09 transparency effect for alpha emission is taken into account here
+  // Matching with kalbach xs is done at f2*Ec energy
+  //  if (elab <= ec) { //start for E<Ec
+  //    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
+  G4double SC = FragmentA/ResidualA;
+  G4double f2 = 1.5;
+  G4double ece= f2*ec;
+  G4double ec1= ec*SC;
+  G4double e0 = ec/3.;
+  G4double ss = (landa*(f2 *ec1) + mu + nu/(f2*ec1))*signor;
+  G4double bb = 500;
+  G4double aa = ss*(bb + (f2*ec1 - e0)*(f2*ec1 - e0))/((f2*ec1 - e0)*(f2*ec1 - e0)) ;
+
+  if (elab <= ece) { //start for E<f2*Ec 
+    if (elab<=e0) sig=0.;
+    else sig = aa*(elab - e0)*(elab - e0)/(bb + (elab - e0)*(elab - e0));
+  }           //end for E<f2*Ec
+
+  else {           //start for E>f2*Ec
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
     if (xnulam < flow || elab < etest) return sig;
@@ -256,7 +269,7 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
     geom = 1.23*ResidualAthrd + ra + 4.573/geom;
     geom = 31.416 * geom * geom;
     sig = std::max(geom,sig);
-  }           //end for E>Ec
+  }           //end for E>f2*Ec
   return sig;
   
 }
