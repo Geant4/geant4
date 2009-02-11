@@ -118,8 +118,6 @@ G4double G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragme
   else if( OPTxs==1 ) return GetOpt1( K);
   else if( OPTxs==2 ||OPTxs==4) return GetOpt2( K);
   else if (OPTxs==3 )  return GetOpt3( K);
-//JMQ 10/02/09 new option (OPT=3  for nucleons and OPT=1 for light ions)
-  else if (OPTxs==5) return GetOpt3( K);
   else{
     std::ostringstream errOs;
     errOs << "BAD PROTON CROSS SECTION OPTION AT EVAPORATION!!"  <<G4endl;
