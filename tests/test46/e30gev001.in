@@ -1,0 +1,24 @@
+#================================================
+#     Macro file for test46
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#/testCalorim/ecalMaterial G4_AIR
+/testCalorim/nbins 100
+/testCalorim/maxE 60. GeV
+/testCalorim/factEcal 1.05  
+/testCalorim/factHcal 160.0
+#/testCalorim/magField 4 tesla
+#######
+/testhadr/PrintModulo 100
+/run/initialize
+/gun/energy 30. GeV
+/run/setCut 0.01 mm
+/run/setCutForRegion HCAL 0.01 mm
+/run/beamOn 10000
+
+
+
+
+
