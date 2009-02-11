@@ -112,7 +112,8 @@ G4CascadSpecialFunctions::absorptionCrosSection(G4double e, G4int type)
     G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection  type:" << type <<G4endl;
   }
 
-  const G4double corr_fac = 0.2;
+  // was 0.2 since the beginning 
+  const G4double corr_fac = 1.0;
   G4double csec = 0.0;
   
   if (e < 0.3) {
