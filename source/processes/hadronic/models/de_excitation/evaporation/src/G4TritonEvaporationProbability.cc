@@ -228,7 +228,7 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   G4double f2 = 1.5;
   G4double ece = f2*ec;
   G4double ec1 = ec*SC;
-  G4double e0 = ec/3.;
+  G4double e0 = ec/2.;
   G4double ss = (landa*(f2 *ec1) + mu + nu/(f2*ec1))*signor;
   G4double bb = 500;
   G4double aa = ss*(bb + (f2*ec1 - e0)*(f2*ec1 - e0))/((f2*ec1 - e0)*(f2*ec1 - e0)) ;
