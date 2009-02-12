@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-05)
+---------------------------------------------------------
+- Jose Manuel Quesada change the shape of probabilities 
+  for d, t, He3, alpha near the Coulomb barrier
+
 11 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-04)
 ---------------------------------------------------------
 - Jose Manuel Quesada set default OPT=3 back for all particles
