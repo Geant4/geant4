@@ -198,7 +198,9 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   
   G4double      ra=0.80;
         
-  ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  //JMQ 13/02/09 increase of reduced radius to lower the barrier
+  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
@@ -220,25 +222,10 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   elab = K * FragmentA / ResidualA;
   sig = 0.;
 
-  // JMQ 11/02/09 transparency effect for alpha emission is taken into account here
-  // Matching with kalbach xs is done at f2*Ec energy
-  //  if (elab <= ec) { //start for E<Ec
-  //    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
-  G4double SC = FragmentA/ResidualA;
-  G4double f2 = 1.5;
-  G4double ece = f2*ec;
-  G4double ec1 = ec*SC;
-  G4double e0 = ec/2.;
-  G4double ss = (landa*(f2 *ec1) + mu + nu/(f2*ec1))*signor;
-  G4double bb = 500;
-  G4double aa = ss*(bb + (f2*ec1 - e0)*(f2*ec1 - e0))/((f2*ec1 - e0)*(f2*ec1 - e0)) ;
-
-  if (elab <= ece) { //start for E<f2*Ec 
-    if (elab<=e0) sig=0.;
-    else sig = aa*(elab - e0)*(elab - e0)/(bb + (elab - e0)*(elab - e0));
-  }           //end for E<f2*Ec
-
-  else {           //start for E>f2*Ec  
+  if (elab <= ec) { //start for E<Ec
+    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
+  }           //end for E<Ec
+  else {           //start for E>Ec  
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
     if (xnulam < flow || elab < etest) return sig;
