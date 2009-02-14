@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.3 2008-10-22 07:58:20 vnivanch Exp $
+// $Id: G4HadronicProcessStore.hh,v 1.4 2009-02-14 19:20:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

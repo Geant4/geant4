@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.8 2009-01-24 11:53:12 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.9 2009-02-14 19:20:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,8 @@
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4HadronicInteractionRegistry.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
@@ -72,7 +74,8 @@ G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 
 G4HadronicProcessStore::~G4HadronicProcessStore()
 {
-
+  G4HadronicInteractionRegistry::Instance()->Clean();
+  G4CrossSectionDataSetRegistry::Instance()->Clean();
   G4int i;
   for (i=0; i<n_proc; i++) {
     if( process[i] ) delete process[i];
