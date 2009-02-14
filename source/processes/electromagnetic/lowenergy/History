@@ -1,4 +1,4 @@
-$Id: History,v 1.341 2009-02-10 16:17:55 pandola Exp $
+$Id: History,v 1.342 2009-02-14 18:04:30 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.02.2009, S. Incerti, tag emlowen-V09-02-11
+            Added several corrections to migrated Geant4-DNA processes:
+            - G4DNABornIonisationModel.cc
+            - G4DNAEmfietzoglouExcitationModel.cc
+            - G4DNARuddIonisationModel.cc
+            - G4DNAIonisation.hh
 
 10.02.2009, L. Pandola, tag emlowen-V09-02-10
 	    - Added G4LivermoreIonisationModel, namely first implementation of 

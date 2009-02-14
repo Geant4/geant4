@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.2 2009-01-22 13:43:09 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.3 2009-02-14 18:04:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -285,7 +285,15 @@ G4double G4DNABornIonisationModel::CrossSectionPerVolume(const G4Material*,
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4DNABornIonisationModel" << G4endl;
 
- // Calculate total cross section for model
+  if (
+      particleDefinition != G4Proton::ProtonDefinition()
+      &&
+      particleDefinition != G4Electron::ElectronDefinition()
+     )
+   	    
+    return 0;
+  
+  // Calculate total cross section for model
 
   G4double lowLim = 0;
   G4double highLim = 0;

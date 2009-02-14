@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.2 2009-01-22 13:43:09 sincerti Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.3 2009-02-14 18:04:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,6 +53,8 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
+  if (verboseLevel > 3)
+
   G4cout << "Emfietzoglou Excitation model is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / eV << " eV - "

@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.2 2009-01-22 13:43:09 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.3 2009-02-14 18:04:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -377,8 +377,15 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
       highLim = pos2->second;
     }
 
-    if (k >= lowLim && k < highLim)
+//    if (k >= lowLim && k < highLim)
+    if (k < highLim)
     {
+      
+//new: SI : XS must not be zero otherwise sampling of secondaries method ignored
+
+      if (k < lowLim) k = lowLim;
+
+//      
       std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
       pos = tableData.find(particleName);
 	
@@ -409,14 +416,26 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
 		  {
 		      G4double tmp1 = table->FindValue(k) + electronDataset->FindValue(kElectron);
 		      delete electronDataset;
-		      return tmp1;
+		      if (verboseLevel > 3)
+                      {
+                        G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^2)=" << tmp1/cm/cm << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp1*densityWater/(1./cm) << G4endl;
+                      } 
+		      return tmp1*densityWater;
 		  }
 
 		  if ( particleDefinition == instance->GetIon("helium") ) 
 		  {
 		      G4double tmp2 = table->FindValue(k) +  2. * electronDataset->FindValue(kElectron);
 		      delete electronDataset;
-		      return tmp2;
+		      if (verboseLevel > 3)
+                      {
+                        G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^2)=" << tmp2/cm/cm << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp2*densityWater/(1./cm) << G4endl;
+                      } 
+		      return tmp2*densityWater;
 		  }
               }      
 
