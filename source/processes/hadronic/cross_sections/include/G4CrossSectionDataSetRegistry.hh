@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataSetRegistry.hh,v 1.1 2009-01-24 11:54:47 vnivanch Exp $
+// $Id: G4CrossSectionDataSetRegistry.hh,v 1.2 2009-02-14 19:22:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,9 @@ public:
 
   void DeRegister(G4VCrossSectionDataSet*);
   //deregister cross section
+
+  void Clean();
+  //clean the store
     
 private:
 

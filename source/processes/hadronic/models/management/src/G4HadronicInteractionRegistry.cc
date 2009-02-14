@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.4 2009-01-24 11:56:27 vnivanch Exp $
+// $Id: G4HadronicInteractionRegistry.cc,v 1.5 2009-02-14 19:24:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
@@ -49,9 +49,15 @@ G4HadronicInteractionRegistry::G4HadronicInteractionRegistry()
 
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 {
+  Clean();
+}
+
+void G4HadronicInteractionRegistry::Clean()
+{
   G4int i;
   for (i=0; i<nModels; i++) {
     if( allModels[i] ) {
+      G4cout << "Delete model <" << allModels[i]->GetModelName() << ">  " << i << G4endl;
       delete allModels[i];
       allModels[i] = 0;
     }
@@ -66,6 +72,7 @@ RegisterMe(G4HadronicInteraction * aModel)
       if( aModel == allModels[i] ) return;
     }
   }
+  G4cout << "Register model <" << aModel->GetModelName() << ">  " << nModels << G4endl;
   allModels.push_back(aModel);
   nModels++;
 }
@@ -76,6 +83,7 @@ RemoveMe(G4HadronicInteraction * aModel)
   if(nModels > 0) {
     for (G4int i=0; i<nModels; i++) {
       if( aModel == allModels[i] ) {
+	G4cout << "DeRegister model <" << aModel->GetModelName() << ">  " << i << G4endl;
 	allModels[i] = 0;
 	return;
       }
