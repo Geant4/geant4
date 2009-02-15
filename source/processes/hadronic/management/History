@@ -16,8 +16,8 @@ code and to keep track of all tags.
 
 14 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-02)
 ---------------------------------------------------------
-- G4HadronicProcessStore - added cleanup of model and cross section 
-                           stores
+- G4HadronicProcessStore - added Clean method and cleanup of model 
+                           and cross section stores
 
 06 February 2009 Vladimir Ivanchenko (hadr-man-V09-02-01)
 ---------------------------------------------------------
