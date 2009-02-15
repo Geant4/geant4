@@ -32,7 +32,9 @@
 // cross section option
 // JMQ (06 September 2008) Also external choices have been added for 
 // superimposed Coulomb barrier (if useSICB is set true, by default is false) 
-
+//
+// JMQ (14 february 2009) bug fixed in emission width: hbarc instead of hbar_Planck in the denominator
+//
 #include <iostream>
 using namespace std;
 
@@ -137,17 +139,17 @@ G4double G4EvaporationProbability::CalculateProbability(const G4Fragment & fragm
    if (MaximalKineticEnergy <= limit)  return 0.0;
 
 
-// if Coulomb barrier cutoff is superimposed for all cross sections the limit is the Coulomb Barrier
-	G4double LowerLimit= limit;
+   // if Coulomb barrier cutoff is superimposed for all cross sections the limit is the Coulomb Barrier
+   G4double LowerLimit= limit;
 
-//  MaximalKineticEnergy: asimptotic value (already accounted for in G4EvaporationChannel)     
+   //  MaximalKineticEnergy: asimptotic value (already accounted for in G4EvaporationChannel)     
 
-  G4double UpperLimit = MaximalKineticEnergy;
+   G4double UpperLimit = MaximalKineticEnergy;
 
 
-  G4double Width = IntegrateEmissionProbability(fragment,LowerLimit,UpperLimit);
+   G4double Width = IntegrateEmissionProbability(fragment,LowerLimit,UpperLimit);
 
-  return Width;
+   return Width;
  } else{
    std::ostringstream errOs;
    errOs << "Bad option for cross sections at evaporation"  <<G4endl;
@@ -243,13 +245,15 @@ G4double G4EvaporationProbability::ProbabilityDistributionFunction( const G4Frag
 
   if (E1<0.) return 0.;
 
+  //JMQ 14/02/09 BUG fixed: hbarc should be in the denominator instead of hbar_Planck 
+  //Without 1/hbar_Panck remains as a width
+  //  G4double  Prob=Gamma*ParticleMass/((pi*hbar_Planck)*(pi*hbar_Planck)*
+  //std::exp(2*std::sqrt(a0*E0)))*K*CrossSection(fragment,K)*std::exp(2*std::sqrt(a1*E1))*millibarn;
 
-//Without 1/hbar_Panck remains as a width
+  G4double Prob=Gamma*ParticleMass/((pi*hbarc)*(pi*hbarc)*std::exp(2*std::sqrt(a0*E0)))
+    *K*CrossSection(fragment,K)*std::exp(2*std::sqrt(a1*E1))*millibarn;
 
-  G4double  Prob=Gamma*ParticleMass/((pi*hbar_Planck)*(pi*hbar_Planck)*std::exp(2*std::sqrt(a0*E0)))*K*CrossSection(fragment,K)*std::exp(2*std::sqrt(a1*E1))*millibarn;
-
-return Prob;
-
+  return Prob;
 }
 
 
