@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.3 2009-02-14 18:04:30 sincerti Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.4 2009-02-16 11:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,7 +58,7 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
   G4cout << "Emfietzoglou Excitation model is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / keV << " keV"
+         << highEnergyLimit / MeV << " MeV"
          << G4endl;
  
 }
@@ -89,7 +89,7 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* pa
   if (HighEnergyLimit() > highEnergyLimit)
   {
     G4cout << "G4DNAEmfietzoglouExcitationModel: high energy limit decreased from " << 
-        HighEnergyLimit()/keV << " keV to " << highEnergyLimit/keV << " keV" << G4endl;
+        HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
 
@@ -101,8 +101,8 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* pa
   
   G4cout << "Emfietzoglou Excitation model is initialized " << G4endl
          << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
+         << LowEnergyLimit() / eV << " eV - "
+         << HighEnergyLimit() / MeV << " MeV"
          << G4endl;
 
   if(!isInitialised) 
@@ -115,7 +115,7 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* pa
       fParticleChangeForGamma = new G4ParticleChangeForGamma();
   }    
 
-  InitialiseElementSelectors(particle,cuts);
+  // InitialiseElementSelectors(particle,cuts);
 
   // Test if water material
 

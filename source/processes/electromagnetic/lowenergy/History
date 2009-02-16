@@ -1,4 +1,4 @@
-$Id: History,v 1.343 2009-02-16 10:25:57 sincerti Exp $
+$Id: History,v 1.344 2009-02-16 11:00:11 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14.02.2009, S. Incerti, tag emlowen-V09-02-12
+16.02.2009, S. Incerti, tag emlowen-V09-02-13
+            - improved energy limit display in Geant4-DNA model classes
+            - commented InitialiseElementSelectors call.
+
+16.02.2009, S. Incerti, tag emlowen-V09-02-12
             Made compatible with tag emutils-V09-02-00 the following files
             - G4DNAElastic.cc
             - G4DNAExcitation.cc 

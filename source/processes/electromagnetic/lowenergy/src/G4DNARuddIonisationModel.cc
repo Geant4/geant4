@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.3 2009-02-14 18:04:30 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.4 2009-02-16 11:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,7 @@ G4DNARuddIonisationModel::~G4DNARuddIonisationModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+                                       const G4DataVector& /*cuts*/)
 {
 
   if (verboseLevel > 3)
@@ -260,7 +260,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
       fParticleChangeForGamma = new G4ParticleChangeForGamma();
   }    
 
-  InitialiseElementSelectors(particle,cuts);
+  // InitialiseElementSelectors(particle,cuts);
 
   // Test if water material
 
@@ -377,15 +377,15 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
       highLim = pos2->second;
     }
 
-//    if (k >= lowLim && k < highLim)
     if (k < highLim)
     {
       
-//new: SI : XS must not be zero otherwise sampling of secondaries method ignored
+      //SI : XS must not be zero otherwise sampling of secondaries method ignored
 
       if (k < lowLim) k = lowLim;
 
-//      
+      //      
+      
       std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
       pos = tableData.find(particleName);
 	

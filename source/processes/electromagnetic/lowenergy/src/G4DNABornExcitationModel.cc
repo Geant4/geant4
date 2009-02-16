@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.2 2009-01-22 13:43:09 sincerti Exp $
+// $Id: G4DNABornExcitationModel.cc,v 1.3 2009-02-16 11:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,8 +77,8 @@ G4DNABornExcitationModel::~G4DNABornExcitationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle*/,
+                                       const G4DataVector& /*cuts*/)
 {
 
   if (verboseLevel > 3)
@@ -123,7 +123,7 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
       fParticleChangeForGamma = new G4ParticleChangeForGamma();
   }    
 
-  InitialiseElementSelectors(particle,cuts);
+  // InitialiseElementSelectors(particle,cuts);
   
   // Test if water material
 

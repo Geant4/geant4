@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.3 2009-01-22 13:43:09 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.4 2009-02-16 11:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
   G4cout << "Screened Rutherford Elastic model is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / keV << " keV"
+         << highEnergyLimit / MeV << " MeV"
          << G4endl;
  
 }
@@ -71,8 +71,8 @@ G4DNAScreenedRutherfordElasticModel::~G4DNAScreenedRutherfordElasticModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
+                                       const G4DataVector& /*cuts*/)
 {
 
   if (verboseLevel > 3)
@@ -90,7 +90,7 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
   if (HighEnergyLimit() > highEnergyLimit)
   {
     G4cout << "G4DNAScreenedRutherfordElasticModel: high energy limit decreased from " << 
-        HighEnergyLimit()/keV << " keV to " << highEnergyLimit/keV << " keV" << G4endl;
+        HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
 
@@ -129,8 +129,8 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
 
   G4cout << "Screened Rutherford elastic model is initialized " << G4endl
          << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
+         << LowEnergyLimit() / eV << " eV - "
+         << HighEnergyLimit() / MeV << " MeV"
          << G4endl;
 
   if(!isInitialised) 
@@ -143,7 +143,7 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
       fParticleChangeForGamma = new G4ParticleChangeForGamma();
   }    
 
-  InitialiseElementSelectors(particle,cuts);
+  // InitialiseElementSelectors(particle,cuts);
 
   // Test if water material
 
