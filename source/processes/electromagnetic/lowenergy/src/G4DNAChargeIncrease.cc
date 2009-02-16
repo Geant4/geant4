@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc,v 1.1 2009-01-12 14:26:03 sincerti Exp $
+// $Id: G4DNAChargeIncrease.cc,v 1.2 2009-02-16 10:25:57 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAChargeIncrease.hh"
@@ -48,18 +48,24 @@ G4DNAChargeIncrease::~G4DNAChargeIncrease()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition*)
+void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 {
   if(!isInitialised) 
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    G4double emin = MinKinEnergy();
-    G4double emax = MaxKinEnergy();
-    if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(emax);
-    AddEmModel(1, Model());
+
+    G4String name = p->GetParticleName();
+
+    if( name == "hydrogen" || name =="alpha+" || name =="helium" )
+    {
+      if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
+      Model()->SetLowEnergyLimit(1*keV);
+      Model()->SetHighEnergyLimit(10*MeV);
+
+      AddEmModel(1, Model());   
+    }
+    
   } 
 }
 
