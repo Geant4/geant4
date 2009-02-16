@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.4 2009-02-16 11:00:11 sincerti Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.5 2009-02-16 12:46:58 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,8 +70,8 @@ G4DNAEmfietzoglouExcitationModel::~G4DNAEmfietzoglouExcitationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*particle*/,
+                                       const G4DataVector& /*cuts*/)
 {
 
   if (verboseLevel > 3)
