@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2009-02-04 16:48:40 lgarnier Exp $
+$Id: History,v 1.126 2009-02-16 15:31:05 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+16 February 2009, Laurent Garnier
+ - Modifications in GNUMakefile for gl2ps.
+ - G4OpenGLViewer,G4OpenGLViewerMessenger.cc,G4OpenGLXmMainMenubarCallbacks.cc
+   ,G4OpenGLXmViewer.cc modified for gl2ps and some renaming "print" in 
+   "printVectoredEPS"
 
 2nd February 2009  Laurent Garnier
 - Improve Anticipate headers declaration in all files

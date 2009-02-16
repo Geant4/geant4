@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.15 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.16 2009-02-16 15:31:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -451,12 +451,12 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	pView->fpprint_col_radio1 = new G4OpenGLXmRadioButton ("Black and white",
 							       prcol_cb_list,
-							       pView->print_colour==false ? True : False,
+							       pView->fPrintColour==false ? True : False,
 							       0);
 	
 	pView->fpprint_col_radio2 = new G4OpenGLXmRadioButton ("Colour",
 							       prcol_cb_list,
-							       pView->print_colour==true ? True : False,
+							       pView->fPrintColour==true ? True : False,
 							       1);
 	
 	pView->fpprint_col_box->AddChild (pView->fpprint_col_radio1);
@@ -473,19 +473,19 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	pView->fpprint_style_radio1 = new G4OpenGLXmRadioButton ("Screen dump (pixmap)",
 								 prsty_cb_list,
-								 pView->vectored_ps==false ? True : False,
+								 pView->fVectoredPs==false ? True : False,
 								 0);
 	
 	pView->fpprint_style_radio2 = new G4OpenGLXmRadioButton ("PostScript",
 								 prsty_cb_list,
-								 pView->vectored_ps==true ? True : False,
+								 pView->fVectoredPs==true ? True : False,
 								 1);
 	
 	pView->fpprint_style_box->AddChild (pView->fpprint_style_radio1);
 	pView->fpprint_style_box->AddChild (pView->fpprint_style_radio2);
 	
 	pView->fpprint_text = new G4OpenGLXmTextField ("Name of .eps file to save",
-						       (pView->print_string));
+						       (pView->fPrintFilename.c_str()));
 	pView->fpprint_box->AddChild (pView->fpprint_text);	
 	
 	pView->fpprint_line = new G4OpenGLXmSeparator ();

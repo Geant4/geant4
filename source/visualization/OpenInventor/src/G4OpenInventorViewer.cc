@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc,v 1.59 2007-04-03 13:35:48 allison Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.60 2009-02-16 15:31:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -479,9 +479,10 @@ void G4OpenInventorViewer::WritePostScript(const G4String& aFile) {
   if(!fGL2PSAction) return;
   fGL2PSAction->setFileName(aFile.c_str());
   G4cout << "Produce " << aFile << "..." << G4endl;
-  fGL2PSAction->enableFileWriting();
-  ViewerRender();
-  fGL2PSAction->disableFileWriting();
+  if (fGL2PSAction->enableFileWriting()) {
+    ViewerRender();
+    fGL2PSAction->disableFileWriting();
+  }
 }
 
 void G4OpenInventorViewer::WritePixmapPostScript(const G4String& aFile) {

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2005-06-04 14:53:18 gcosmo Exp $
+# $Id: GNUmakefile,v 1.22 2009-02-16 15:31:05 lgarnier Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -42,10 +42,12 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4visXXX
 
 ifdef G4VIS_BUILD_OPENGL_DRIVER
+  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenGL
   SUBLIBS += G4OpenGL
 endif
 ifdef G4VIS_BUILD_OI_DRIVER
+  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenInventor
   SUBLIBS += G4OpenInventor
 endif

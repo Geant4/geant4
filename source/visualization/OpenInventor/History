@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2008-04-30 10:05:31 allison Exp $
+$Id: History,v 1.97 2009-02-16 15:31:05 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+16 February 2009, Laurent Garnier
+ - Modifications in GNUMakefile for gl2ps.
+ - SoGL2PSAction Modified.
+ - G4OpenInventorViewer.cc add a protection on file writing in gl2ps
 
 30th April 2008  John Allison  (openinventor-V09-01-01)
 - Fixes more gcc-4.3.0 compiler warnings.

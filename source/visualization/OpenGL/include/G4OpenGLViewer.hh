@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.26 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.27 2009-02-16 15:31:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,9 +37,10 @@
 #define G4OPENGLVIEWER_HH
 
 #include "G4VViewer.hh"
-#include <GL/gl.h>
+#include "G4OpenGL.hh"
 
 class G4OpenGLSceneHandler;
+class G4OpenGL2PSAction;
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -66,7 +67,7 @@ protected:
   void ResizeGLView();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  virtual void print();
+  virtual void printVectoredEPS();
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   GLubyte* grabPixels (int inColor,
@@ -76,6 +77,7 @@ protected:
 		   int inColour,
 		   unsigned int width,
 		   unsigned int height);
+  void WritePostScript(const char *aFile);
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);
@@ -84,10 +86,9 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
-  G4float                           pointSize;
-  char                              print_string[50];
-  G4bool                            print_colour;
-  G4bool                            vectored_ps;
+  std::string                       fPrintFilename;
+  G4bool                            fPrintColour;
+  G4bool                            fVectoredPs;
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
@@ -107,6 +108,10 @@ protected:
   G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
     fDisplayLightFrontT;
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
+  G4OpenGL2PSAction* fGL2PSAction;
+
+private :
+  G4float                           fPointSize;
 };
 
 typedef struct G4OpenGLViewerFeedback3Dcolor {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.47 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.48 2009-02-16 15:31:05 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
+#include "G4OpenGL2PSAction.hh"
 
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
@@ -47,6 +48,10 @@
 #include "G4Plane3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttCheck.hh"
+
+// GL2PS
+#include "Geant4_gl2ps.h"
+
 #include <sstream>
 
 static const char* gouraudtriangleEPS[] =
@@ -81,9 +86,9 @@ static const char* gouraudtriangleEPS[] =
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-pointSize (0),
-print_colour (true),
-vectored_ps (true),
+fPrintFilename ("G4OpenGL.eps"),
+fPrintColour (true),
+fVectoredPs (true),
 fOpenGLSceneHandler(scene),
 background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
@@ -106,7 +111,8 @@ fDisplayLightFrontZ(0.),
 fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
-fDisplayLightFrontBlue(0.)
+fDisplayLightFrontBlue(0.),
+fPointSize (0)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
@@ -114,13 +120,14 @@ fDisplayLightFrontBlue(0.)
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
 
+  fGL2PSAction = new G4OpenGL2PSAction();
+
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
   //  glDisable (GL_BLEND);
   //  glDisable (GL_LINE_SMOOTH);
   //  glDisable (GL_POLYGON_SMOOTH);
 
-  strcpy (print_string, "G4OpenGL.eps");
 }
 
 G4OpenGLViewer::~G4OpenGLViewer () {}
@@ -389,7 +396,7 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glMatrixMode(GL_MODELVIEW);
 }
 
-void G4OpenGLViewer::print() {
+void G4OpenGLViewer::printVectoredEPS() {
 
   // Print vectored PostScript
   
@@ -404,12 +411,13 @@ void G4OpenGLViewer::print() {
   returned = glRenderMode (GL_RENDER);
   
   FILE* file;
-  if (print_string) {
-    file = fopen (print_string, "w");
+  if (!fPrintFilename.empty()) {
+    file = fopen (fPrintFilename.c_str(), "w");
     if (file) {
       spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
+      fclose(file);
     } else {
-      printf("Could not open %s\n", print_string);
+      printf("Could not open %s\n", fPrintFilename.c_str());
     }
   } else {
     printBuffer (returned, feedback_buffer);
@@ -441,7 +449,7 @@ void G4OpenGLViewer::spewWireframeEPS (FILE* file, GLint size, GLfloat* buffer, 
   glGetFloatv (GL_VIEWPORT, viewport);
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clearColor);
   glGetFloatv (GL_LINE_WIDTH, &lineWidth);
-  glGetFloatv (GL_POINT_SIZE, &pointSize);
+  glGetFloatv (GL_POINT_SIZE, &fPointSize);
 
   fputs ("%!PS-Adobe-2.0 EPSF-2.0\n", file);
   fprintf (file, "%%%%Creator: %s (using OpenGL feedback)\n", cr);
@@ -538,7 +546,7 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     dg=vertex[1].green - vertex[0].green;
     db=vertex[1].blue - vertex[0].blue;
 
-    if (!print_colour) {
+    if (!fPrintColour) {
       dr+=(dg+db);
       dr/=3.0;
       dg=dr;
@@ -574,7 +582,7 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
       gnext=vertex[0].green;
       bnext=vertex[0].blue;
 
-      if (!print_colour) {
+      if (!fPrintColour) {
 	rnext+=(gnext+bnext);
 	rnext/=3.0;
 	gnext=rnext;
@@ -589,7 +597,7 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     } else {
       steps=0;
     }
-    if (print_colour) {
+    if (fPrintColour) {
       fprintf (file, "%g %g %g setrgbcolor\n",
 	       vertex[0].red, vertex[0].green, vertex[0].blue);
     } else {
@@ -626,14 +634,14 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
       blue=vertex[0].blue;
       smooth=0;
       
-      if (!print_colour) {
+      if (!fPrintColour) {
 	red+=(green+blue);
 	red/=3.0;
 	green=red;
 	blue=red;
       }
       
-      if (print_colour) {
+      if (fPrintColour) {
 	for (i=1; i<nvertices; i++) {
 	  if (red!=vertex[i].red || green!=vertex[i].green || blue!=vertex[i].blue) {
 	    smooth=1;
@@ -658,7 +666,7 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
 	  fprintf (file, "[%g %g %g %g %g %g]",
 		   vertex[0].x, vertex[i+1].x, vertex[i+2].x,
 		   vertex[0].y, vertex[i+1].y, vertex[i+2].y);
-	  if (print_colour) {
+	  if (fPrintColour) {
 	    fprintf (file, " [%g %g %g] [%g %g %g] [%g %g %g] gouraudtriangle\n",
 		     vertex[0].red, vertex[0].green, vertex[0].blue,
 		     vertex[i+1].red, vertex[i+1].green, vertex[i+1].blue,
@@ -693,14 +701,14 @@ G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
 
   case GL_POINT_TOKEN:
     vertex=(Feedback3Dcolor*)loc;
-    if (print_colour) {
+    if (fPrintColour) {
       fprintf (file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
     } else {
       intensity = vertex[0].red + vertex[0].green + vertex[0].blue;
       intensity/=3.0;
       fprintf (file, "%g %g %g setrgbcolor\n", intensity, intensity, intensity);
     }      
-    fprintf(file, "%g %g %g 0 360 arc fill\n\n", vertex[0].x, vertex[0].y, pointSize / 2.0);
+    fprintf(file, "%g %g %g 0 360 arc fill\n\n", vertex[0].x, vertex[0].y, fPointSize / 2.0);
     loc += 7;           /* Each vertex element in the feedback
                            buffer is 7 GLfloats. */
     break;
@@ -868,6 +876,71 @@ int G4OpenGLViewer::generateEPS (const char* filnam,
   delete pixels;
   fclose (fp);
   return 0;
+}
+
+
+void G4OpenGLViewer::WritePostScript(const char *aFile) {
+
+  if (!fGL2PSAction) return;
+
+  fGL2PSAction->setFileName("PostScriptViaGL2PS.ps");
+  if (fGL2PSAction->enableFileWriting()) {
+    DrawView();
+    fGL2PSAction->disableFileWriting();
+  }
+  FILE *fFile = fopen(aFile,"w");
+  if(!fFile) {
+    G4cout << "G4OpenGLViewer::WritePostScript. Cannot open file " <<aFile << G4endl;
+    return;
+  }
+  
+  // Get the viewport
+  GLint viewport[4]; 
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+
+
+  int psformat;
+  //  psformat = GL2PS_PDF;
+  psformat = GL2PS_PS;
+  //  psformat = GL2PS_SVG;
+  //  psformat = GL2PS_EPS;
+  
+  //  int old_bg_gradient = CTX.bg_gradient;
+  //  if(!CTX.print.eps_background) CTX.bg_gradient = 0;
+  
+//   PixelBuffer buffer(width, height, GL_RGB, GL_FLOAT);
+  
+//   if(CTX.print.eps_quality == 0)
+//     buffer.Fill(CTX.batch);
+  
+  int pssort = GL2PS_SIMPLE_SORT;
+  //       int pssort =
+  //         (CTX.print.eps_quality == 3) ? GL2PS_NO_SORT :
+  //         (CTX.print.eps_quality == 2) ? GL2PS_BSP_SORT :
+  //         GL2PS_SIMPLE_SORT;
+  int psoptions = GL2PS_SIMPLE_LINE_OFFSET | GL2PS_DRAW_BACKGROUND; 
+  //         GL2PS_SIMPLE_LINE_OFFSET | GL2PS_SILENT |
+  //         (CTX.print.eps_occlusion_culling ? GL2PS_OCCLUSION_CULL : 0) |
+  //         (CTX.print.eps_best_root ? GL2PS_BEST_ROOT : 0) |
+  //         (CTX.print.eps_background ? GL2PS_DRAW_BACKGROUND : 0) |
+  //         (CTX.print.eps_compress ? GL2PS_COMPRESS : 0) |
+  //         (CTX.print.eps_ps3shading ? 0 : GL2PS_NO_PS3_SHADING);
+  
+  GLint buffsize = 0;
+  int res = GL2PS_OVERFLOW;
+  while(res == GL2PS_OVERFLOW) {
+    buffsize += 2048 * 2048;
+    gl2psBeginPage("MyTitle", "Geant4", viewport,
+                   psformat, pssort, psoptions, GL_RGBA, 0, NULL,
+                   15, 20, 10, buffsize, fFile, aFile);
+    DrawView();
+    res = gl2psEndPage();
+  }
+  
+  //  CTX.bg_gradient = old_bg_gradient;
+  fclose(fFile);
+
 }
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()

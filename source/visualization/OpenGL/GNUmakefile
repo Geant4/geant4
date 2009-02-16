@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2008-04-29 16:58:04 lgarnier Exp $
+# $Id: GNUmakefile,v 1.9 2009-02-16 15:31:05 lgarnier Exp $
 
 name := G4OpenGL
 
@@ -20,6 +20,7 @@ include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
+CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
@@ -32,6 +33,8 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
+
+INTYLIBS += -L$(G4LIBDIR) -lG4gl2ps
 
 include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

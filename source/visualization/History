@@ -1,4 +1,4 @@
-$Id: History,v 1.425 2009-01-22 15:39:54 lgarnier Exp $
+$Id: History,v 1.426 2009-02-16 15:31:05 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+16 February 2009, Laurent Garnier
+ - Creation of this gl2ps library in order to have a gl2ps for all viewers.
+ - Some modifications in GNUMakefile for gl2ps. Packages OpenInventor,
+   OpenGL had also been modified for gl2ps.
 
 22th January 2009  Laurent Garnier
 - Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could 
