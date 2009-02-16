@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.24 2008-11-24 13:50:34 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.25 2009-02-16 11:40:26 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -247,6 +247,9 @@ G4UIQt::G4UIQt (
   helpMenu->addAction("Show Help", this, SLOT(ShowHelpCallback()));
 #endif
 
+  AddInteractor ("file",(G4Interactor)fileMenu);
+  AddInteractor ("help",(G4Interactor)helpMenu);
+
   // Set the splitter size. The fTextArea sould be 2/3 on the fMainWindow
 #if QT_VERSION < 0x040000
   QValueList<int> vals = splitter->sizes();
@@ -332,6 +335,12 @@ void G4UIQt::Prompt (
   fCommandLabel->setText((char*)aPrompt.data());
 }
 
+
+QMainWindow * G4UIQt::getMainWindow (
+)
+{
+  return fMainWindow;
+}
 
 void G4UIQt::SessionTerminate (
 )
