@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.54 2008-04-04 13:40:04 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.55 2009-02-18 14:21:38 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,6 @@
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoLineSet.h>
 #include <Inventor/nodes/SoCube.h>
-#include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/nodes/SoFaceSet.h>
