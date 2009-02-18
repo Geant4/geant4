@@ -1,0 +1,23 @@
+#verbose
+0
+#rad
+#events
+1000000
+//--------Proton_processes
+#particle
+proton
+//--------
+#material
+Be
+#momentum(MeV/c)
+7500.0
+#isITEP
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+// ---
+#generator
+lepar
+#run
+#exit

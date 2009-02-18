@@ -1,0 +1,112 @@
+#verbose
+0
+#rad
+#events
+1000000
+//--------Proton_processes
+#particle
+pi+
+//--------
+#isITEP
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+C
+#momentum(MeV/c)
+1400.0
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+binary
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+//--------
+#momentum(MeV/c)
+5000.0
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+binary
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+//--------
+#material
+U
+#momentum(MeV/c)
+1400.0
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+binary
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+//--------
+#momentum(MeV/c)
+5000.0
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+binary
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+// ---
+#exit

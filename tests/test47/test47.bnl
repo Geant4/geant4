@@ -1,0 +1,86 @@
+#verbose
+0
+#rad
+#events
+1000000
+//--------Proton_processes
+#particle
+proton
+#momentum(MeV/c)
+14600.0
+#isBNL
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+Cu
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+qgsp
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+//--------
+#material
+Au
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+qgsp
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+//--------
+#material
+Be
+// ---
+#generator
+lepar
+#run
+// ---
+#generator
+bertini
+#run
+// ---
+#generator
+qgsp
+#run
+// ---
+#generator
+qgsc
+#run
+// ---
+#generator
+ftfp
+#run
+// ---
+#exit
