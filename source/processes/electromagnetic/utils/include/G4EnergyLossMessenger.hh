@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.22 2008-10-20 13:27:45 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.23 2009-02-18 14:40:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,6 +106,7 @@ private:
   G4UIcmdWithABool*          SubSecCmd;
   G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
+  G4UIcommand*               deexCmd;
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;
   G4UIcmdWithADoubleAndUnit* MaxEnCmd;

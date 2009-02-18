@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.24 2008-04-17 10:33:27 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.25 2009-02-18 14:40:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -391,21 +391,40 @@ void G4EmProcessOptions::SetLambdaFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
+void G4EmProcessOptions::ActivateDeexcitation(const G4String& pname, 
+					      G4bool val, 
+					      const G4String& reg)
 {
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  const G4Region* r = 0;
+  if(reg == "" || reg == "World") {
+    r = regionStore->GetRegion("DefaultRegionForTheWorld", false);
+  } else {
+    r = regionStore->GetRegion(reg, false);
+  }
+  if(!r) {
+    G4cout << "G4EmProcessOptions::ActivateDeexcitation ERROR: G4Region <"
+	   << reg << "> not found, the command ignored" << G4endl;
+    return;
+  }
+
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->ActivateDeexcitation(val,r);
+    if(p) {
+      if(pname == p->GetProcessName()) p->ActivateDeexcitation(val,r);
+    }
   }
   const std::vector<G4VEmProcess*>& w =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itp;
   for(itp = w.begin(); itp != w.end(); itp++) {
     G4VEmProcess* q = *itp;
-    if(q) q->ActivateDeexcitation(val,r);
+    if(q) {
+      if(pname == q->GetProcessName()) q->ActivateDeexcitation(val,r);
+    }
   }
 }
 

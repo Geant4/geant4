@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.35 2008-10-20 13:27:45 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.36 2009-02-18 14:40:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -177,6 +177,21 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   aplCmd->SetDefaultValue(false);
   aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  deexCmd = new G4UIcommand("/process/em/deexcitation",this);
+  deexCmd->SetGuidance("Set deexcitation flag per process and G4Region.");
+  deexCmd->SetGuidance("  procName  : process name");
+  deexCmd->SetGuidance("  flag      : flag");
+  deexCmd->SetGuidance("  regName   : G4Region name");
+
+  G4UIparameter* pName = new G4UIparameter("pName",'s',false);
+  deexCmd->SetParameter(pName);
+
+  G4UIparameter* flag = new G4UIparameter("flag",'s',false);
+  deexCmd->SetParameter(flag);
+
+  G4UIparameter* regName = new G4UIparameter("regName",'s',false);
+  deexCmd->SetParameter(regName);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -258,6 +273,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete SubSecCmd;
   delete MinSubSecCmd;
   delete StepFuncCmd;
+  delete deexCmd;
   delete eLossDirectory;
   delete mscDirectory;
   delete emDirectory;
@@ -317,6 +333,15 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     v2 *= G4UIcommand::ValueOf(unt);
     G4VEnergyLoss::SetStepFunction(v1,v2);
     opt->SetStepFunction(v1,v2);
+  }
+
+  if (command == deexCmd) {
+    G4String s1 = s2 = s3 = "";
+    G4bool b = false;
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> s3;
+    if(s2 == "true") b = true;
+    opt->ActivateDeexcitation(s1,b,s3);
   }
 
   if (command == mscCmd) {
