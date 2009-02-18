@@ -216,6 +216,11 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
 
 //////////////////////////////////////////////////////////////////
 
+void G4PAIPhotonModel::InitialiseMe(const G4ParticleDefinition*)
+{}
+
+//////////////////////////////////////////////////////////////////
+
 void G4PAIPhotonModel::ComputeSandiaPhotoAbsCof()
 {
   G4int i, j, numberOfElements ;
@@ -625,18 +630,22 @@ G4PAIPhotonModel::GetdEdxCut( G4int iPlace, G4double transferCut)
 
 //////////////////////////////////////////////////////////////////////////////
 
-G4double G4PAIPhotonModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
-                                 const G4ParticleDefinition* p,
-                                       G4double kineticEnergy,
-                                       G4double cutEnergy)
+G4double G4PAIPhotonModel::ComputeDEDXPerVolume(const G4Material*,
+						const G4ParticleDefinition* p,
+						G4double kineticEnergy,
+						G4double cutEnergy)
 {
   G4int iTkin,iPlace;
   size_t jMat;
+
+  G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
+
   G4double particleMass = p->GetPDGMass();
   G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
   G4double charge       = p->GetPDGCharge()/eplus;
   G4double charge2      = charge*charge;
   G4double dEdx         = 0.;
+  const G4MaterialCutsCouple* matCC = CurrentCouple();
 
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
   {
@@ -652,7 +661,7 @@ G4double G4PAIPhotonModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
-  dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cutEnergy) ) ;  
+  dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cut) ) ;  
 
   if( dEdx < 0.) dEdx = 0.;
   return dEdx;
@@ -660,20 +669,22 @@ G4double G4PAIPhotonModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
 
 /////////////////////////////////////////////////////////////////////////
 
-G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
-                                   const G4ParticleDefinition* p,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy,
-                                         G4double maxEnergy  ) 
+G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
+						  const G4ParticleDefinition* p,
+						  G4double kineticEnergy,
+						  G4double cutEnergy,
+						  G4double maxEnergy  ) 
 {
   G4int iTkin,iPlace;
   size_t jMat, jMatCC;
-  G4double tmax = min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   G4double particleMass = p->GetPDGMass();
   G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
   G4double charge       = p->GetPDGCharge();
   G4double charge2      = charge*charge, cross, cross1, cross2;
   G4double photon1, photon2, plasmon1, plasmon2;
+
+  const G4MaterialCutsCouple* matCC = CurrentCouple();
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -1222,6 +1233,30 @@ G4double G4PAIPhotonModel::Dispersion( const G4Material* material,
   meanLoss = sumLoss/fMeanNumber;
   sigma2   = meanLoss*meanLoss + (sumLoss2-2*sumLoss*meanLoss)/fMeanNumber;
   return sigma2;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition* p,
+                                                      G4double kinEnergy) 
+{
+  G4double tmax = kinEnergy;
+  if(p == fElectron) tmax *= 0.5;
+  else if(p != fPositron) { 
+    G4double mass = p->GetPDGMass();
+    G4double ratio= electron_mass_c2/mass;
+    G4double gamma= kinEnergy/mass + 1.0;
+    tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
+                  (1. + 2.0*gamma*ratio + ratio*ratio);
+  }
+  return tmax;
+}
+
+///////////////////////////////////////////////////////////////
+
+void G4PAIPhotonModel::DefineForRegion(const G4Region* r) 
+{
+  fPAIRegionVector.push_back(r);
 }
 
 
