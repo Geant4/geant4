@@ -58,31 +58,83 @@ SoGL2PSAction::SoGL2PSAction(
 )
 :SoGLRenderAction(aViewPortRegion)
 ,G4OpenGL2PSAction()
-,fFileName("out.ps")
-,fFile(0)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  setFileName("out.ps");
   SO_ACTION_CONSTRUCTOR(SoGL2PSAction);
 }
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::setViewport(
+
+bool SoGL2PSAction::enableFileWriting(
 )
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  // Useful ?? L.Garnier 02/2009
+  fFile = ::fopen(fFileName,"w");
+  if(!fFile) {
+    SoDebugError::post("SoGL2PSAction::enableFileWriting",
+                       "Cannot open file %s",fFileName);
+    return false;
+  }
 #ifdef __COIN__
 #else //SGI
   const SbViewportRegion& vpr = getViewportRegion();
   SoViewportRegionElement::set(getState(),vpr);
- 
-  const SbVec2s& win = vpr.getWindowSize();
-  fViewport[0] = 0;
-  fViewport[1] = 0;
-  fViewport[2] = win[0];
-  fViewport[3] = win[1];
+  G4gl2psBegin();
 #endif
+  return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+void SoGL2PSAction::disableFileWriting(
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+#ifdef __COIN__
+#else //SGI
+  gl2psEndPage();        
+#endif
+  ::fclose(fFile);
+  fFile = 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+bool SoGL2PSAction::addBitmap(
+ int aWidth
+,int aHeight
+,float aXorig
+,float aYorig
+,float aXmove
+,float aYmove
+)
+/////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(!fFile) return false;
+  GLboolean valid;
+  glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID,&valid);
+  if(!valid) return false;
+  float pos[4];
+  glGetFloatv(GL_CURRENT_RASTER_POSITION,pos);
+  int xoff = -(int)(aXmove + aXorig);
+  int yoff = -(int)(aYmove + aYorig);
+  int x = (int)(pos[0] + xoff);
+  int y = (int)(pos[1] + yoff);
+  // Should clip against viewport area :
+  GLint vp[4];
+  glGetIntegerv(GL_VIEWPORT,vp);
+  GLsizei w = aWidth;
+  GLsizei h = aHeight;
+  if(x+w>(vp[0]+vp[2])) w = vp[0]+vp[2]-x;
+  if(y+h>(vp[1]+vp[3])) h = vp[1]+vp[3]-y;
+  int s = 3 * w * h;
+  if(s<=0) return false;
+  float* image = (float*)::malloc(s * sizeof(float));
+  if(!image) return false;
+  glReadPixels(x,y,w,h,GL_RGB,GL_FLOAT,image);
+  GLint status = gl2psDrawPixels(w,h,xoff,yoff,GL_RGB,GL_FLOAT,image);
+  ::free(image);
+  return (status!=GL2PS_SUCCESS ? false : true);
 }
 //////////////////////////////////////////////////////////////////////////////
 void SoGL2PSAction::beginTraversal(
@@ -97,9 +149,11 @@ void SoGL2PSAction::beginTraversal(
     SoViewportRegionElement::set(getState(),vpr);
     G4gl2psBegin();
     traverse(aNode);
-    gl2psEndPage();        
+    gl2psEndPage();       
 #else //SGI
+    // Should have already do G4gl2psBegin() before
     SoGLRenderAction::beginTraversal(aNode);
+    // Should do gl2psEndPage() after
 #endif
   } else {
     SoGLRenderAction::beginTraversal(aNode);

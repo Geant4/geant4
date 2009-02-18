@@ -43,9 +43,11 @@ public:
   SoGL2PSAction(const SbViewportRegion&);
 public: /*SoINTERNAL*/
   static void initClass();
+  bool enableFileWriting();
+  void disableFileWriting();
+  bool addBitmap(int,int,float=0,float=0,float=0,float=0);
 protected:
   virtual void beginTraversal(SoNode*);
-  void setViewport();
 };
 
 #endif
