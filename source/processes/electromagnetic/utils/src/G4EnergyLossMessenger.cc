@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.36 2009-02-18 14:40:10 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.37 2009-02-18 14:43:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -336,7 +336,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
 
   if (command == deexCmd) {
-    G4String s1 = s2 = s3 = "";
+    G4String s1 (""), s2(""), s3("");
     G4bool b = false;
     std::istringstream is(newValue);
     is >> s1 >> s2 >> s3;

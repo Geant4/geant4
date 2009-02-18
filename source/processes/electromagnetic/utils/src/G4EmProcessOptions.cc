@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.25 2009-02-18 14:40:10 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.26 2009-02-18 14:43:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 #include "G4VEnergyLossProcess.hh"
 #include "G4VMultipleScattering.hh"
 #include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
