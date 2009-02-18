@@ -1,0 +1,25 @@
+$Id: History,v 1.1 2009-02-18 09:54:12 lgarnier Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+16 February 2009, Laurent Garnier
+ - Creation of this library in order to have a gl2ps for all viewers.
+ - Copying gl2ps.cc and gl2ps.h files form OpenInventor/src
+ - Add a new file G4OpenGL2PSAction.cc to be on the top of gl2ps 
+   external package. This file will be heritate/used by viewers
+   in order to have gl2ps render.
