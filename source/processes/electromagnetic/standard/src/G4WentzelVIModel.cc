@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.16 2008-11-19 11:47:50 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.17 2009-02-19 19:17:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,8 +59,8 @@
 #include "Randomize.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
-#include "G4TransportationManager.hh"
-#include "G4SafetyHelper.hh"
+//#include "G4TransportationManager.hh"
+//#include "G4SafetyHelper.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
@@ -137,9 +137,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
     else
       fParticleChange = new G4ParticleChangeForMSC();
 
-    safetyHelper = G4TransportationManager::GetTransportationManager()
-      ->GetSafetyHelper();
-    safetyHelper->InitialiseHelper();
+    InitialiseSafetyHelper();
   }
 }
 
@@ -276,7 +274,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   // compute presafety again if presafety <= 0 and no boundary
   // i.e. when it is needed for optimization purposes
   if(stepStatus != fGeomBoundary && presafety < tlimitminfix) 
-    presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
+    presafety = ComputeSafety(sp->GetPosition(), tlimit); 
   /*
   G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit tlimit= " 
  	 <<tlimit<<" safety= " << presafety
@@ -569,37 +567,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     */
 
     if(r > tlimitminfix) {
-      G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
-      G4double fac= 1.;
-      if(r >= safety) {
-	//  ******* so safety is computed at boundary too ************
-	G4double newsafety = 
-	  safetyHelper->ComputeSafety(Position) - tlimitminfix;
-        if(newsafety <= 0.0) fac = 0.0;
-	else if(r > newsafety) fac = newsafety/r ;
-        //G4cout << "NewSafety= " << newsafety << " fac= " << fac 
-	// << " r= " << r << " sint= " << sint << " pos " << Position << G4endl;
-      }  
-
-      if(fac > 0.) {
-	// compute new endpoint of the Step
-	G4ThreeVector newPosition = Position + fac*pos;
-
-	// check safety after displacement
-	G4double postsafety = safetyHelper->ComputeSafety(newPosition);
-
-	// displacement to boundary
-	if(postsafety <= 0.0) {
-	  safetyHelper->Locate(newPosition, newDirection);
-
-	  // not on the boundary
-	} else { 
-	  safetyHelper->ReLocateWithinVolume(newPosition);
-	  // if(fac < 1.0) G4cout << "NewPosition " << newPosition << G4endl;
-	}
-     
-	fParticleChange->ProposePosition(newPosition);
-      } 
+      pos /= r;
+      ComputeDisplacement(fParticleChange, pos, r, safety);
     }
   }
   //G4cout << "G4WentzelVIModel::SampleScattering end" << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.7 2008-08-04 08:49:09 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.8 2009-02-19 19:17:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,7 @@
 
 class G4LossTableManager;
 class G4ParticleChangeForMSC;
-class G4SafetyHelper;
+//class G4SafetyHelper;
 class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,7 +132,7 @@ private:
 
   G4ParticleChangeForMSC*   fParticleChange;
 
-  G4SafetyHelper*           safetyHelper;
+  //  G4SafetyHelper*           safetyHelper;
   G4PhysicsTable*           theLambdaTable;
   G4PhysicsTable*           theLambda2Table;
   G4LossTableManager*       theManager;
