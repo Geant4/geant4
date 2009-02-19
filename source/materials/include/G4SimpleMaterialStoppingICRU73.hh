@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.4 2009-02-19 11:09:22 antoni Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.5 2009-02-19 12:19:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
@@ -100,8 +100,8 @@ private:
   G4bool   spline;
   G4int    Z[16];
   G4double A[16];
-  G4String MatName[31];
-  G4double Density[31];
+  G4String MatName[25];
+  G4double Density[25];
 
   // Lower and upper energy boundaries for dE/dx vectors:
   G4double lowerEnergyBoundary;
