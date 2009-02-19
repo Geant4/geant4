@@ -36,8 +36,7 @@
 
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
+#include "G4GDMLParser.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -51,8 +50,8 @@ public:
   G4VPhysicalVolume* ConstructTestes(G4VPhysicalVolume*, G4String, G4bool);
  
 private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
+
+  G4GDMLParser parser;
 
 };
 #endif

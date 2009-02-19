@@ -36,8 +36,6 @@
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VOrgan.hh"
-//#include "Saxana/SAXProcessor.h"
-///#include "Saxana/ProcessingConfigurator.h"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -50,9 +48,5 @@ public:
   ~G4MIRDBrain();
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
 				    const G4String&, G4bool, G4bool);
- 
-private:
-  //AXProcessor sxp;
-  //ProcessingConfigurator config;
 };
 #endif

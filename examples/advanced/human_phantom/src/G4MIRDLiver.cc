@@ -47,17 +47,17 @@
 #include "G4EllipticalTube.hh"
 #include "G4Box.hh"
 #include <cmath>
+
 G4MIRDLiver::G4MIRDLiver()
 {
 }
 
 G4MIRDLiver::~G4MIRDLiver()
 {
-
 }
 
 G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool)
+                                          const G4String&, G4bool, G4bool)
 {
   G4cout << "MIRD Liver is not available yet !!!" << G4endl;
  
@@ -144,4 +144,5 @@ G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String&,G4VPhysicalVolume*,
 //   G4cout << "Mass of Liver = " << LiverMass/gram << " g" << G4endl;
 
 // return physLiver;
+  return 0;
 }

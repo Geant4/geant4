@@ -37,9 +37,6 @@
 #include "G4VBodyFactory.hh"
 #include "G4VPhysicalVolume.hh"
 
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
-
 class G4VBodyFactory;
 class G4ORNLFemaleBodyFactory: public G4VBodyFactory
 {

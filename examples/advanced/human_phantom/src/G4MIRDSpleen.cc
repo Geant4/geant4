@@ -33,7 +33,6 @@
 //
 #include "G4MIRDSpleen.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"

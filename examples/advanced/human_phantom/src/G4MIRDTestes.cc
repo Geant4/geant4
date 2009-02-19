@@ -33,7 +33,6 @@
 //
 #include "G4MIRDTestes.hh"
 
-#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
@@ -44,25 +43,19 @@ G4MIRDTestes::G4MIRDTestes()
 
 G4MIRDTestes::~G4MIRDTestes()
 {
-  sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4MIRDTestes::ConstructTestes(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
 {
   // Initialize GDML Processor
-  sxp.Initialize();
-  config.SetURI( "gdmlData/"+sex+"/MIRDTestes.gdml" );
-  config.SetSetupName( "Default" );
-  sxp.Configure( &config );
+  parser.Read( "gdmlData/"+sex+"/MIRDTestes.gdml" ); 
 
-  // Run GDML Processor
-  sxp.Run();
- 
+  G4LogicalVolume* logicTestes = parser.GetVolume("TestesVolume");
 
-  G4LogicalVolume* logicTestes = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume("TestesVolume");
-
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("TestesPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("TestesRot");
+  G4ThreeVector position = parser.GetPosition("TestesPos");
+  G4ThreeVector rot = parser.GetRotation("TestesRot");
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(rot.x()); rm->rotateY(rot.y()); rm->rotateZ(rot.z()); 
   
   // Define rotation and position here!
   G4VPhysicalVolume* physTestes = new G4PVPlacement(rm,position,

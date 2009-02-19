@@ -34,19 +34,18 @@
 //
 #include "G4ORNLFemaleBodyFactory.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4Processor/GDMLProcessor.h"
+#include "G4GDMLParser.hh"
 #include "globals.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4ORNLFemaleBodyFactory::G4ORNLFemaleBodyFactory()
 {
-
 }
 
 G4ORNLFemaleBodyFactory::~G4ORNLFemaleBodyFactory()
 { 
-  //sxp.Finalize();
 }
 
 G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile, G4VPhysicalVolume* motherVolume,
@@ -54,28 +53,19 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
 							G4bool sensitivity)
 {
   G4cout<< "ORNLBodyFactory: "<< "gdmlData/Female/ORNL"<< gdmlFile <<".gdml" << G4endl;
-  SAXProcessor sxp;
-  ProcessingConfigurator config;
-  // Initialize GDML Processor
-  sxp.Initialize();
-  G4String name = "gdmlData/Female/ORNL"+ gdmlFile + ".gdml";
-  config.SetURI(name);
-  G4cout << "config.SetURI(name);" << G4endl;
-  config.SetSetupName( "Default" );
-  G4cout << "config.SetSetUpName;" << G4endl;
-  sxp.Configure( &config );
-  G4cout << "sxp.Configure( &config );" << G4endl;
-  // Run GDML Processor
-  sxp.Run(); 
-  G4cout << "sxp.Run();" << G4endl;
+
+  G4GDMLParser parser;
+  G4String filename = "gdmlData/Female/ORNL"+ gdmlFile + ".gdml";
+  parser.Read(filename);
  
   G4String logicalVolumeName = gdmlFile + "Volume"; 
-  G4LogicalVolume* logicOrgan = (G4LogicalVolume *)GDMLProcessor::GetInstance()->GetLogicalVolume(logicalVolumeName);
+  G4LogicalVolume* logicOrgan = parser.GetVolume(logicalVolumeName);
+  G4ThreeVector position = parser.GetPosition("OrganPos");
+  G4ThreeVector rot = parser.GetRotation("OrganRot");
+  G4RotationMatrix* rm = new G4RotationMatrix();
+  rm->rotateX(rot.x()); rm->rotateY(rot.y()); rm->rotateZ(rot.z()); 
 
-  G4ThreeVector position = (G4ThreeVector)*GDMLProcessor::GetInstance()->GetPosition("OrganPos");
-  G4RotationMatrix* rm = (G4RotationMatrix*)GDMLProcessor::GetInstance()->GetRotation("OrganRot");
- 
-  G4PhysicalVolumeStore::DeRegister((G4VPhysicalVolume*)GDMLProcessor::GetInstance()->GetWorldVolume());
+  G4PhysicalVolumeStore::DeRegister(parser.GetWorldVolume());
  
   //   sxp.Finalize();
   // Define rotation and position here!
@@ -110,8 +100,7 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
   organVisAtt->SetForceSolid(visAttribute);
   logicOrgan->SetVisAttributes(organVisAtt);
   }
-  G4cout << "Organ created !!!!!!  from " << name <<G4endl;
-  sxp.Finalize();
+  G4cout << "Organ created !!!!!!  from " << filename <<G4endl;
 
   return physOrgan;
 }

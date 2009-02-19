@@ -135,4 +135,5 @@ G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String&,G4VPhysicalVolume*,
   
   return physHeart;
   */
+  return 0;
 }
