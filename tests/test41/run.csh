@@ -1,5 +1,6 @@
 #/bin/csh
 
+cd $VFEM/test41
 mkdir -p $REFERENCE
 cd $REFERENCE
 rm -f *.*
