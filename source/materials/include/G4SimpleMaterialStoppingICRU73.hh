@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.3 2008-11-02 12:22:19 vnivanch Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.4 2009-02-19 11:09:22 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
@@ -35,7 +35,7 @@
 //
 // Description: Data on stopping powers for light ions in compounds
 //
-// Author:      A.Ivantchenko 10.07.2008
+// Author:      Ivantchenko 10.07.2008
 //
 // Modifications:
 //
