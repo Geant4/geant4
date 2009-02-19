@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2009-02-16 10:18:08 vnivanch Exp $
+$Id: History,v 1.78 2009-02-19 12:49:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,9 @@ track of all tags.
 
 16-02-2009, V.Ivanchenko phys-lists-V09-02-01
 G4IonBinaryCascadePhysics - use Shen cross section only if Tripathi is
-                            not applicable
+                            not applicable (fixed order of x-sections)
+G4HadronInelasticQBBC - use G4StringChipsParticleLevelInterface instead of
+                        obsolete G4StringChipsInterface
 
 05-02-2009, V.Ivanchenko phys-lists-V09-02-00
 G4MiscLHEPBuilder - create processes by "new" in order to have proper deletion 
