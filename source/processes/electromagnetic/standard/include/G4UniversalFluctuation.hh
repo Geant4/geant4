@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.7 2009-02-19 11:26:01 vnivanch Exp $
+// $Id: G4UniversalFluctuation.hh,v 1.8 2009-02-19 19:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,12 +80,11 @@ public:
 				  G4double&,
 				  G4double&);
 
+  // Initialisation before the run
   virtual void InitialiseMe(const G4ParticleDefinition*);
 
   // Initialisation prestep
   virtual void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
-
-protected:
 
 private:
 

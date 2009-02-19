@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PAIPhotonModel.hh,v 1.12 2009-02-19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -121,12 +123,10 @@ public:
   G4double GetEnergyTransfer(G4PhysicsTable*, G4int iPlace,
                              G4double position, G4int iTransfer );
 
-
-
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
@@ -144,8 +144,6 @@ private:
   G4int                fMeanNumber;
   G4int                fVerbose; 
   G4PhysicsLogVector*  fProtonEnergyVector ;
-
-
 
   // vectors
 

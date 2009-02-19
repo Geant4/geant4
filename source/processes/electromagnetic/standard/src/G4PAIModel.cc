@@ -23,6 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PAIModel.cc,v 1.46 2009-02-19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class
 // File name:     G4PAIModel.cc
 //
 // Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko code

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.24 2008-10-22 16:25:21 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.25 2009-02-19 19:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -416,6 +416,21 @@ G4double G4IonFluctuations::RelativisticFactor(const G4Material* mat,
   //	 << " bf2= " << bF2 << " q^2= " << chargeSquare << G4endl;
 
   return 1.0 + f;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4IonFluctuations::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+    charge         = part->GetPDGCharge()/eplus;
+    chargeSquare   = charge*charge;
+  }
+  effChargeSquare  = q2;
+  uniFluct.SetParticleAndCharge(part, q2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
