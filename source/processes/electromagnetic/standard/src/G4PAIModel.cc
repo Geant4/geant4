@@ -176,6 +176,9 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       fMaterial  = (*theMaterialTable)[jMat];
       fCutCouple = theCoupleTable->GetMaterialCutsCouple( fMaterial, 
 					  curReg->GetProductionCuts() );
+      //G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
+      //	     << fMaterial->GetName() << ">  fCouple= " 
+      //	     << fCutCouple<<G4endl;
       if( fCutCouple ) {
 	fMaterialCutsCoupleVector.push_back(fCutCouple);
 
@@ -397,7 +400,8 @@ G4PAIModel::GetdNdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    //    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( std::abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*0.5 ;
     else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dNdxCut<<G4endl;
@@ -439,7 +443,8 @@ G4PAIModel::GetdEdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    //    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( std::abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*0.5 ;
     else             dEdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dEdxCut<<G4endl;
@@ -456,7 +461,8 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
   G4int iTkin,iPlace;
   size_t jMat;
   
-  G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
+  //G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
+  G4double cut = cutEnergy;
 
   G4double massRatio  = fMass/p->GetPDGMass();
   G4double scaledTkin = kineticEnergy*massRatio;
@@ -494,6 +500,7 @@ G4double G4PAIModel::CrossSectionPerVolume( const G4Material*,
   G4int iTkin,iPlace;
   size_t jMat;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  if(tmax <= cutEnergy) return 0.0;
   G4double massRatio  = fMass/p->GetPDGMass();
   G4double scaledTkin = kineticEnergy*massRatio;
   G4double charge     = p->GetPDGCharge();

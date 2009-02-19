@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.6 2008-10-22 16:04:33 vnivanch Exp $
+// $Id: G4UniversalFluctuation.hh,v 1.7 2009-02-19 11:26:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,21 +69,21 @@ public:
 
   virtual ~G4UniversalFluctuation();
 
-  G4double SampleFluctuations(const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&,
-                                G4double&);
+  virtual G4double SampleFluctuations(const G4Material*,
+				      const G4DynamicParticle*,
+				      G4double&,
+				      G4double&,
+				      G4double&);
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  virtual G4double Dispersion(    const G4Material*,
+				  const G4DynamicParticle*,
+				  G4double&,
+				  G4double&);
 
-  void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*);
 
   // Initialisation prestep
-  inline void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
+  virtual void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
 
 protected:
 
@@ -124,19 +124,6 @@ private:
   G4double nmaxCont2;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void 
-G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
-					     G4double q2)
-{
-  if(part != particle) {
-    particle       = part;
-    particleMass   = part->GetPDGMass();
-  }
-  chargeSquare = q2;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

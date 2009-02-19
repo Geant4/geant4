@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.145 2009-02-18 12:19:33 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.146 2009-02-19 11:25:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -927,10 +927,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // stopping
   if (length >= fRange) {
     eloss = preStepKinEnergy;
-    currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
-				       eloss, esecdep, length);
+    if (useDeexcitation) {
+      if(idxDERegions[currentMaterialIndex]) {
+	currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
+	if(eloss < 0.0) eloss = 0.0;
+      }
+    }
     fParticleChange.SetProposedKineticEnergy(0.0);
-    fParticleChange.ProposeLocalEnergyDeposit(preStepKinEnergy);
+    fParticleChange.ProposeLocalEnergyDeposit(eloss);
     return &fParticleChange;
   }
 
@@ -1055,8 +1059,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
       G4double tmax = 
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
+      G4double emean = eloss;
       eloss = fluc->SampleFluctuations(currentMaterial,dynParticle,
-				       tmax,length,eloss);
+				       tmax,length,emean);
       /*                            
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV

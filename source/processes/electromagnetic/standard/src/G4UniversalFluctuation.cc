@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.16 2008-10-22 16:04:33 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.17 2009-02-19 11:26:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -302,6 +302,19 @@ G4double G4UniversalFluctuation::Dispersion(
                  * electronDensity * chargeSquare;
 
   return siga;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+  }
+  chargeSquare = q2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

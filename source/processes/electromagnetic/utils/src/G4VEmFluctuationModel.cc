@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.cc,v 1.3 2008-07-15 16:56:39 vnivanch Exp $
+// $Id: G4VEmFluctuationModel.cc,v 1.4 2009-02-19 11:25:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,5 +63,12 @@ G4VEmFluctuationModel::~G4VEmFluctuationModel()
 {
   G4LossTableManager::Instance()->DeRegister(this);
 }
+
+void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
+{}
+
+void G4VEmFluctuationModel::SetParticleAndCharge(const G4ParticleDefinition*, 
+						 G4double)
+{}
 
 
