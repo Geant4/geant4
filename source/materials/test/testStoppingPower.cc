@@ -53,7 +53,7 @@ G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","
 //G4double G4IronStoppingICRU73::GetDEDX(G4int idxMaterial, G4double kinEnergy)
 
   G4int idxmat = 11;
-  G4int idxion = 5;
+  G4int idxion = 5; 
   G4double Energy = .5;
   G4MaterialStoppingICRU73 mS;
   G4double dedx = mS.GetDEDX(Z_Ion[idxion],idxmat,Energy*MeV*AA_Ion[idxion]);
