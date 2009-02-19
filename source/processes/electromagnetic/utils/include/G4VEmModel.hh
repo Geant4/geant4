@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.65 2009-02-18 18:36:26 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.66 2009-02-19 09:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -286,13 +286,15 @@ public:
 
   inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
+  inline void SetCurrentCouple(const G4MaterialCutsCouple*);
+
 protected:
+
+  inline const G4MaterialCutsCouple* CurrentCouple() const;
 
   inline void SetCurrentElement(const G4Element*);
 
   inline const G4Element* GetCurrentElement() const;
-
-  inline const G4MaterialCutsCouple* CurrentCouple() const;
 
 private:
 
@@ -578,6 +580,20 @@ inline void G4VEmModel::SetParticleChange(G4VParticleChange* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
+{
+  currentCouple = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
+{
+  return currentCouple;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   currentElement = elm;
@@ -588,13 +604,6 @@ inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
   return currentElement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
-{
-  return currentCouple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.85 2009-02-18 12:19:33 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.86 2009-02-19 09:57:36 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -287,7 +287,7 @@ protected:
   inline void SelectModel(G4double kinEnergy);
 
 public:
-  // Select model in run time
+  // Select model by energy and region index
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
 					    size_t& idx) const;
 
@@ -580,6 +580,7 @@ inline G4double G4VEnergyLossProcess::GetCurrentRange() const
 inline void G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 {
   currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  currentModel->SetCurrentCouple(currentCouple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

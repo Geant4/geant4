@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.61 2009-02-18 12:19:33 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.62 2009-02-19 09:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,7 +93,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   useDeexcitation(false),
   nDERegions(0),
   idxDERegions(0),
-  selectedModel(0),
+  currentModel(0),
   particle(0),
   currentCouple(0)
 {
@@ -396,7 +396,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     }
   }
 
-  G4VEmModel* currentModel = SelectModel(finalT);
+  SelectModel(finalT);
   if(useDeexcitation) {
     currentModel->SetDeexcitationFlag(idxDERegions[currentMaterialIndex]);
   }
@@ -570,9 +570,9 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
     cross = (((*theLambdaTable)[currentMaterialIndex])->
                            GetValue(kineticEnergy, b));
   } else {
-    G4VEmModel* model = SelectModel(kineticEnergy);
-    cross = 
-      model->CrossSectionPerVolume(currentMaterial,particle,kineticEnergy);
+    SelectModel(kineticEnergy);
+    cross = currentModel->CrossSectionPerVolume(currentMaterial,
+						particle,kineticEnergy);
   }
 
   return cross;

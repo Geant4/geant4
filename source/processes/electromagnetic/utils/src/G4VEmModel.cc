@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.24 2009-02-18 18:36:26 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.25 2009-02-19 09:57:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,31 +84,6 @@ G4VEmModel::~G4VEmModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax)
-{
-  SetupForMaterial(p, material, ekin);
-  G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
-  G4int nelm = material->GetNumberOfElements(); 
-  if(nelm > nsec) {
-    xsec.resize(nelm);
-    nsec = nelm;
-  }
-  for (G4int i=0; i<nelm; i++) {
-    cross += theAtomNumDensityVector[i]*
-      ComputeCrossSectionPerAtom(p,(*theElementVector)[i],ekin,emin,emax);
-    xsec[i] = cross;
-  }
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p, 
 					    const G4DataVector& cuts)
 {
@@ -158,6 +133,31 @@ G4double G4VEmModel::ComputeDEDXPerVolume(const G4Material*,
 					  G4double,G4double)
 {
   return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
+					   const G4ParticleDefinition* p,
+					   G4double ekin,
+					   G4double emin,
+					   G4double emax)
+{
+  SetupForMaterial(p, material, ekin);
+  G4double cross = 0.0;
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  G4int nelm = material->GetNumberOfElements(); 
+  if(nelm > nsec) {
+    xsec.resize(nelm);
+    nsec = nelm;
+  }
+  for (G4int i=0; i<nelm; i++) {
+    cross += theAtomNumDensityVector[i]*
+      ComputeCrossSectionPerAtom(p,(*theElementVector)[i],ekin,emin,emax);
+    xsec[i] = cross;
+  }
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
