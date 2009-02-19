@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.54 2009-01-23 10:39:27 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.55 2009-02-19 09:04:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -229,6 +229,20 @@ FileRead(const xercesc::DOMElement* const fileElement)
    G4GDMLReadStructure structure;
    structure.Read(name,validate,isModule);
 
+   // Register existing auxiliar information defined in child module
+   //
+   const G4GDMLAuxMapType* aux = structure.GetAuxMap();
+   if (!aux->empty())
+   {
+     G4GDMLAuxMapType::const_iterator pos;
+     for (pos = aux->begin(); pos != aux->end(); ++pos)
+     {
+       auxMap.insert(std::make_pair(pos->first,pos->second));
+     }
+   }
+
+   // Return volume structure from child module
+   //
    if (volname.empty())
    {
      return structure.GetVolume(structure.GetSetup("Default"));
@@ -678,6 +692,12 @@ GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
 {
    if (auxMap.find(logvol) != auxMap.end()) { return auxMap[logvol]; }
    else { return G4GDMLAuxListType(); }
+}
+
+const G4GDMLAuxMapType* const G4GDMLReadStructure::
+GetAuxMap() const
+{
+   return &auxMap;
 }
 
 G4VPhysicalVolume* G4GDMLReadStructure::
