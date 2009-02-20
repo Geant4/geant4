@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.14 2009-01-31 15:30:32 grichine Exp $
+// $Id: G4DiffuseElastic.hh,v 1.15 2009-02-20 15:38:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -163,7 +163,8 @@ public:
   G4double ThetaLabToThetaCMS(const G4DynamicParticle* aParticle, 
                                 G4double tmass, G4double thetaLab);
 
-
+  void TestAngleTable(const G4ParticleDefinition* theParticle, G4double partMom,
+		      G4double Z, G4double A);
 
 
 
@@ -174,6 +175,7 @@ public:
 
   G4double GetDiffElasticProb(G4double theta);
   G4double GetDiffElasticSumProb(G4double theta);
+  G4double GetDiffElasticSumProbA(G4double alpha);
   G4double GetIntegrandFunction(G4double theta);
 
 
