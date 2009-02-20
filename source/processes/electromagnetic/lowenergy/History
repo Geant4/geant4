@@ -1,4 +1,4 @@
-$Id: History,v 1.345 2009-02-16 12:46:58 sincerti Exp $
+$Id: History,v 1.346 2009-02-20 10:49:54 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16.02.2009, S. Incerti, tag emlowen-V09-02-15
+            - added protections against FPE in G4hLowEnergyLoss.cc (see EM forum
+              item 893) 
 
 16.02.2009, S. Incerti, tag emlowen-V09-02-14
             - removed compilation warning in G4DNAEmfietzoglouExcitationModel.cc
