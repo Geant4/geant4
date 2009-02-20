@@ -8,6 +8,7 @@
     <set>
       <text>test33-build</text>
       <text>test33-run</text>
+      <text>test33-1-run</text>
     </set>
   </argument>
 </extension>

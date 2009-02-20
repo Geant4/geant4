@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2009-02-19 13:49:41 vdiez Exp $
+$Id: History,v 1.13 2009-02-20 15:03:19 vdiez Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,12 @@ $Id: History,v 1.12 2009-02-19 13:49:41 vdiez Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-Feb-09 V.Diez                     (testtools-QMtest-V09-02-04)
+- Removed not needed advanced tests.
+- Suites cleaned and more legible. Do not use QMTest UI to edit 
+  them. Not used tests commented instead of removed from the 
+  suites.
 
 19-Feb-09 V.Diez                     (testtools-QMtest-V09-02-03)
 - Tests created for all the extended examples.
