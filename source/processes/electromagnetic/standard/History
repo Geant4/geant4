@@ -1,4 +1,4 @@
-$Id: History,v 1.431 2009-02-20 12:10:23 vnivanch Exp $
+$Id: History,v 1.432 2009-02-20 12:11:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,8 @@ G4PEEffectModel - substitute ComputeMeanFreePath by CrossSectionPerVolume
                   (minor CPU speadup for compound materials)
 G4PAIModel, G4PAIPhotonModel - remove usage of random numbers at 
                    initialisation (potential non-reproducibility)
+G4WentzelVIModel - use generic methods of G4VMscModel to access safety
+                   and other geometry information 
 
 24 November 08: V.Ivant (emstand-V09-01-45)
 G4PSTARStopping, G4ASTARStopping - fixed non-initialized variable
