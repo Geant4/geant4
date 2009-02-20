@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.30 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.31 2009-02-20 12:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,10 +73,11 @@ using namespace std;
 G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  isElectron(true),
-  twoln10(2.0*log(10.0)),
-  lowLimit(0.2*keV)
+    particle(0),
+    isElectron(true),
+    twoln10(2.0*log(10.0)),
+    lowLimit(0.2*keV),
+    isInitialised(false)
 {
   theElectron = G4Electron::Electron();
   if(p) SetParticle(p);
@@ -86,14 +87,6 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
 
 G4MollerBhabhaModel::~G4MollerBhabhaModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  if(p != theElectron) isElectron = false;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,15 +100,31 @@ G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						 G4double kinEnergy) 
+{
+  G4double tmax = kinEnergy;
+  if(isElectron) tmax *= 0.5;
+  return tmax;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
   if(!particle) SetParticle(p);
-  if(pParticleChange)
+  SetDeexcitationFlag(false);
+
+  if(isInitialised) return;
+
+  isInitialised = true;
+  if(pParticleChange) {
     fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
                                                      (pParticleChange);
-  else
+  } else {
     fParticleChange = new G4ParticleChangeForLoss();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

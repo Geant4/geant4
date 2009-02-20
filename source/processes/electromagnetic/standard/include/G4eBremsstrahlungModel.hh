@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.25 2008-11-13 19:28:58 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.26 2009-02-20 12:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,8 +74,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*, 
-			const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
+				const G4MaterialCutsCouple*);
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
@@ -101,9 +101,6 @@ public:
 				 G4double maxEnergy);
 
 protected:
-
-  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				     G4double kineticEnergy);
 
   const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple);
 
@@ -187,16 +184,6 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
   return screenVal;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
-                                 const G4ParticleDefinition*,
-    				       G4double kineticEnergy)
-{
-  return kineticEnergy;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

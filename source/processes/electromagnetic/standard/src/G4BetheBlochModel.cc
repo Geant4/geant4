@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.24 2008-10-22 16:00:57 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.25 2009-02-20 12:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,6 +110,8 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   if (!particle) SetParticle(p);
 
   corrFactor = chargeSquare;
+  // always false before the run
+  SetDeexcitationFlag(false);
 
   if(!isInitialised) {
     isInitialised = true;
@@ -450,6 +452,18 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
+					       G4double kinEnergy) 
+{
+  if(isIon) SetParticle(pd);
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return std::min(tmax,tlimit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

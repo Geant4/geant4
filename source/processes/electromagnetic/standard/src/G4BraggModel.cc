@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.20 2008-10-22 16:01:46 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.21 2009-02-20 12:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,6 +110,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
   if(p != particle) SetParticle(p);
+
+  // always false before the run
+  SetDeexcitationFlag(false);
 
   if(!isInitialised) {
     isInitialised = true;
@@ -336,6 +339,18 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 						   deltaKinEnergy);
 
   vdp->push_back(delta);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
+					  G4double kinEnergy)
+{
+  if(pd != particle) SetParticle(pd);
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

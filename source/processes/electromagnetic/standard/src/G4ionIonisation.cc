@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.65 2008-10-15 17:53:44 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.66 2009-02-20 12:06:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,6 +100,24 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
 
 G4ionIonisation::~G4ionIonisation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
+          p.GetParticleType() == "nucleus");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ionIonisation::MinPrimaryEnergy(const G4ParticleDefinition* p, 
+					   const G4Material*, 
+					   G4double cut)
+{
+  return 
+    p->GetPDGMass()*(std::sqrt(1. + 0.5*cut/CLHEP::electron_mass_c2) - 1.0);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
