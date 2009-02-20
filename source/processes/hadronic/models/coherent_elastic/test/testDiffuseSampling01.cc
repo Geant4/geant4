@@ -406,8 +406,9 @@ int main()
 
 
   G4double g2 = GeV*GeV; 
+  G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
 
-  iMax = 1000000;   // numberOfSimPoints;
+  iMax = 1000;   // numberOfSimPoints;
   iMod = iMax/10;
   writes << iMax  << G4endl;
 

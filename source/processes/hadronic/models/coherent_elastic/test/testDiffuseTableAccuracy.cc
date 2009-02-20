@@ -372,7 +372,7 @@ int main()
   // G4double m1 = theParticleDefinition->GetPDGMass();
   G4double plab = theDynamicParticle->GetTotalMomentum();
   G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
-  G4double plabLowLimit = 20.0*MeV;
+
 
   G4int Z   = G4int(theElement->GetZ());
   G4int A    = G4int(theElement->GetN()+0.5);
@@ -402,10 +402,10 @@ int main()
 
   G4int  numberOfExpPoints = 0;
 
-  G4double g2 = GeV*GeV; 
-
   G4double sData, dData, thetaLab[200],  tData[200];
-  G4double distrDif[200];
+  G4double distrDif[200],distrXsc[200];
+
+  G4double thetaLabDif, thetaCmsDif, thetaCmsDif2, tDif;
 
   // read exp data and set angle simulation limit
 
@@ -446,20 +446,30 @@ int main()
 
   // dData = ( tData[numberOfExpPoints-1] - tData[0] )/kAngle;
 
+  G4double thetaMin = 1.*degree;
+
   dData = tData[numberOfExpPoints-1]/kAngle;
 
   for( k = 0; k < kAngle; k++) 
   {
     // thetaLab[k] = tData[0] + k*dData;
 
-    thetaLab[k] = k*dData;
+    thetaLab[k] = k*dData + thetaMin;
     distrDif[k] = 0;
+
+    thetaLabDif = thetaLab[k];
+
+    thetaCmsDif = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,thetaLabDif);
+
+    distrXsc[k] = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCmsDif, ptot, A, Z);
+    distrXsc[k] /= diffelastic->GetNuclearRadius()*diffelastic->GetNuclearRadius();
+
   }
+
+
+
   std::ofstream writes("testTable.dat", std::ios::out ) ;
   writes.setf( std::ios::scientific, std::ios::floatfield );
-
-  G4double thetaLabDif;
-  // G4double thetaCmsDif; // thetaCmsGla, thetaCmsChi,  thetaCmsGhe;
 
 
   // Sampling loop up to iMax
@@ -469,9 +479,9 @@ int main()
   // iMax = 1000000;   // numberOfExpPoints;
   iMax = 1;   // numberOfExpPoints;
   iMod = iMax/10;
-  writes << iMax  << G4endl;
-
-  G4cout <<"Start Sampling ... "<<G4endl;
+ 
+  /*
+  G4cout <<"Start table testing ... "<<G4endl;
 
   timer.Start();
 
@@ -481,6 +491,82 @@ int main()
     diffelastic->TestAngleTable(theParticleDefinition, ptot, Z, A);
 
     
+    // if (i%iMod == 0) G4cout <<"done = "<<100.*G4double(i)/G4double(iMax)<<" %"<<G4endl;
+  }
+  timer.Stop();
+  G4cout.precision(16);
+  G4cout<<"statistics time = "<<timer.GetUserElapsed()<<" s"<<G4endl;
+  G4cout.precision(6);
+
+  G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
+  G4cout << " elastic cross section for " <<
+            theParticleDefinition->GetParticleName() <<
+           " on " << theElement->GetName() << G4endl;
+  G4cout <<"with atomic weight = "<<theElement->GetN() << G4endl;
+
+  // Cross-section test
+
+  G4double sigma[200], sumsigma[200],coulsigma[200], samplesigma[200];
+  G4double dif, mean;
+
+  // writes<<numberOfExpPoints<< G4endl;
+
+  for( i = 0; i < numberOfExpPoints; i++)
+  {
+
+    thetaLabDif = tData[i];
+
+    thetaCmsDif = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,thetaLabDif);
+
+    thetaCmsDif2 = thetaCmsDif*thetaCmsDif;
+
+    sigma[i] = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, thetaCmsDif, ptot, A);
+    sumsigma[i] = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCmsDif, ptot, A, Z);
+    samplesigma[i] = diffelastic->GetDiffElasticSumProbA( thetaCmsDif2);
+    // samplesigma[i] = diffelastic->GetDiffElasticSumProb( thetaCmsDif);
+    samplesigma[i] *= diffelastic->GetNuclearRadius()*diffelastic->GetNuclearRadius();
+
+    dif = std::abs(sumsigma[i]-samplesigma[i]);
+    mean = 0.5*(sumsigma[i]+samplesigma[i]);
+
+    coulsigma[i] = diffelastic->GetCoulombElasticXsc( theParticleDefinition, thetaCmsDif, ptot, Z);
+
+     G4cout << thetaLabDif/degree << "\t" << "\t" << sigma[i]/millibarn << "\t\t" 
+            << sumsigma[i]/millibarn<< "\t\t" << samplesigma[i]/millibarn << "\t\t" <<dif/mean<< G4endl;
+     // writes << thetaLabDif/degree << "\t" << sigma[i]/millibarn << "\t" 
+     //        << sumsigma[i]/millibarn<< "\t" << samplesigma[i]/millibarn <<  "\t" <<dif/mean<<G4endl;
+
+  }
+  */
+
+  iMax = 1000000;   // numberOfExpPoints;
+  // iMax = 1;   // numberOfExpPoints;
+  iMod = iMax/10;
+  // writes << iMax  << G4endl;
+
+  G4cout <<"Start Sampling ... "<<G4endl;
+
+  timer.Start();
+
+  for( i = 0; i < iMax; i++)
+  {
+    
+    tDif = diffelastic->SampleTableT(theParticleDefinition, ptot, Z, A);
+    thetaLabDif =  SampleThetaLab( theDynamicParticle, m2, tDif );
+
+    // tDif = diffelastic->SampleT(theParticleDefinition, ptot, A);
+
+    // thetaCmsDif = diffelastic->SampleTableThetaCMS( theParticleDefinition, ptot, Z, A); 
+    // thetaLabDif = diffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCmsDif);
+
+    for( k = 0; k < kAngle; k++)
+    {
+      if( thetaLabDif <= thetaLab[k] )
+      {
+        distrDif[k] += 1;
+        break;
+      }
+    }    
     if (i%iMod == 0) G4cout <<"done = "<<100.*G4double(i)/G4double(iMax)<<" %"<<G4endl;
   }
   timer.Stop();
@@ -488,11 +574,58 @@ int main()
   G4cout<<"statistics time = "<<timer.GetUserElapsed()<<" s"<<G4endl;
   G4cout.precision(6);
 
-  // distrDif[0] = distrDif[1];
+  std::ofstream writef("angle.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
+
+
+
+
+  distrDif[0] = distrDif[1];
+  distrXsc[0] = distrXsc[1];
+
+  writef <<kAngle<<G4endl;
 
   for( k = 0; k < kAngle; k++) 
   {
+    // angleDistr[k] *= sig/iMax/(2*pi)/std::sin(k*thetaMax/kAngle);
+    // angleDistr[k] *= steradian/millibarn;
+    // G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
+    // writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
+
+    distrDif[k] /= 2*pi*std::sin(thetaLab[k]+0.001);
+
+
+    // G4cout <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+
+    // G4cout <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+
+    G4cout <<thetaLab[k]/degree<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+
+    // writef <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+
+    writef <<thetaLab[k]/degree<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+  
+    // writef <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+  
   }
+
+
+  for( k = 0; k < kAngle; k++) 
+  {
+
+    thetaLabDif = thetaLab[k];
+
+    thetaCmsDif = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,thetaLabDif);
+
+    tDif = 2*ptot*ptot*( 1. - std::cos(thetaCmsDif) );
+
+    thetaLabDif =  SampleThetaLab( theDynamicParticle, m2, tDif );
+
+    G4cout << thetaLab[k]/degree << "\t" << thetaCmsDif/degree<< "\t" << thetaLabDif/degree << G4endl;
+
+  }
+
+
 
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
   G4cout << " elastic cross section for " <<
