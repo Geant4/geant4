@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.6 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4eeToTwoPiModel.cc,v 1.7 2009-02-20 16:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,28 @@ G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr):
 
 G4eeToTwoPiModel::~G4eeToTwoPiModel()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToTwoPiModel::ThresholdEnergy() const
+{
+  return 2.0*massPi;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToTwoPiModel::PeakEnergy() const
+{
+  return massRho;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
+{
+  G4double ee = std::min(HighEnergy(),e);
+  return cross->CrossSection2pi(ee);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh,v 1.6 2008-07-10 18:06:38 vnivanch Exp $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.7 2009-02-20 16:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,16 +90,16 @@ public:
 				 G4double tmin = 0.0,
 				 G4double maxEnergy = DBL_MAX);
 
+  virtual void PrintInfo();
+
+  // Set the factor to artificially increase the crossSection (default 1)
+  void SetCrossSecFactor(G4double fac);
+
   inline G4double ComputeCrossSectionPerElectron(
                                          const G4ParticleDefinition*,
                                          G4double kineticEnergy,
                                          G4double cutEnergy = 0.0,
                                          G4double maxEnergy = DBL_MAX);
-
-  void PrintInfo();
-
-  // Set the factor to artificially increase the crossSection (default 1)
-  void SetCrossSecFactor(G4double fac);
 
 private:
 

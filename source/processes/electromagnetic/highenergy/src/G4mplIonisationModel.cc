@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.5 2007-11-13 18:36:29 vnivanch Exp $
+// $Id: G4mplIonisationModel.cc,v 1.6 2009-02-20 16:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,7 +138,8 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4double bg2)
+G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, 
+						G4double bg2)
 {
   G4double eDensity = material->GetElectronDensity();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -178,6 +179,15 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4do
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+					     const G4MaterialCutsCouple*,
+					     const G4DynamicParticle*,
+					     G4double,
+					     G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4mplIonisationModel::SampleFluctuations(
 				       const G4Material* material,
 				       const G4DynamicParticle* dp,
@@ -203,3 +213,24 @@ G4double G4mplIonisationModel::SampleFluctuations(
   }
   return loss;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4mplIonisationModel::Dispersion(const G4Material* material,
+					  const G4DynamicParticle* dp,
+					  G4double& tmax,
+					  G4double& length)
+{
+  G4double siga = 0.0;
+  G4double tau   = dp->GetKineticEnergy()/mass;
+  if(tau > 0.0) { 
+    G4double electronDensity = material->GetElectronDensity();
+    G4double gam   = tau + 1.0;
+    G4double invbeta2 = (gam*gam)/(tau * (tau+2.0));
+    siga  = (invbeta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+      * electronDensity * chargeSquare;
+  }
+  return siga;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

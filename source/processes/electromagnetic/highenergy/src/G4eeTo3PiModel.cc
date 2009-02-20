@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeTo3PiModel.cc,v 1.1 2008-07-10 18:07:27 vnivanch Exp $
+// $Id: G4eeTo3PiModel.cc,v 1.2 2009-02-20 16:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,30 @@ G4eeTo3PiModel::~G4eeTo3PiModel()
 {
   G4cout << "### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= "
 	 << gmax << " gcash= " << gcash << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeTo3PiModel::ThresholdEnergy() const
+{
+  return std::max(LowEnergy(),2.0*massPi + massPi0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeTo3PiModel::PeakEnergy() const
+{
+  G4double e = massOm;
+  if(HighEnergy() > massPhi) e = massPhi; 
+  return e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeTo3PiModel::ComputeCrossSection(G4double e) const
+{
+  G4double ee = std::min(HighEnergy(),e);
+  return cross->CrossSection3pi(ee);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
