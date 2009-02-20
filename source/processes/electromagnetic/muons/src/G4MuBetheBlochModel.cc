@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.24 2008-03-25 12:31:04 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.25 2009-02-20 14:48:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -87,6 +87,7 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
 {
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();
+  fParticleChange = 0;
 
   if(p) SetParticle(p);
 }
@@ -98,22 +99,21 @@ G4MuBetheBlochModel::~G4MuBetheBlochModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(!particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    massSquare = mass*mass;
-    ratio = electron_mass_c2/mass;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						 G4double kinEnergy) 
+{
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,11 +123,14 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) SetParticle(p);
 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                             (pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!fParticleChange) {
+    if(pParticleChange) {
+      fParticleChange = 
+	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    } else {
+      fParticleChange = new G4ParticleChangeForLoss();
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

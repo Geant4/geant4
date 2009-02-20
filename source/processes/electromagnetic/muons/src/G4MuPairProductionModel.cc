@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.39 2008-07-22 16:11:34 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.40 2009-02-20 14:48:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -133,6 +133,23 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 
 G4MuPairProductionModel::~G4MuPairProductionModel()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
+                                               const G4MaterialCutsCouple* )
+{
+  return minPairEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuPairProductionModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						     G4double kineticEnergy)
+{
+  G4double maxPairEnergy = kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
+  return maxPairEnergy;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
