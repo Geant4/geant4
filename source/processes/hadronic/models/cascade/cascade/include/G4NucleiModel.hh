@@ -132,18 +132,27 @@ public:
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
-  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > 
+  initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
 
   std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
     return std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   };
+
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
   G4InuclElementaryParticle generateNucleon(G4int type, 
 					    G4int zone) const;
 
-private: 
-G4int verboseLevel;
+  G4bool highEnergyInteraction() const {
+    return high_energy_interaction;
+  }
+
+private:
+ 
+  G4int verboseLevel;
+  G4bool high_energy_interaction;
+
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
