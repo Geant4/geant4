@@ -44,6 +44,8 @@ namespace G4CascadSpecialFunctions {
   G4double crossSection(G4double e, 
 			G4int is);
 
+  void printCrossSections();
+
   std::pair<G4int, G4double> getPositionInEnergyScaleEMS(G4double e); 
 
 }
