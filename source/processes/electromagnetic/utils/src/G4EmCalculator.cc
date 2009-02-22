@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.44 2008-08-03 18:47:15 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.45 2009-02-22 17:31:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -754,8 +754,14 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
     currentProcessName = "";
     if(currentProcess) currentProcessName = currentProcess->GetProcessName();
 
-    if(p->GetParticleType() == "nucleus" &&
-       currentParticleName  != "deuteron" && currentParticleName != "triton") {
+    if(p->GetParticleType() == "nucleus" 
+       && currentParticleName != "deuteron"  
+       && currentParticleName != "triton"
+       && currentParticleName != "alpha+"
+       && currentParticleName != "alpha++"
+       && currentParticleName != "helium"
+       && currentParticleName != "hydrogen"
+      ) {
       baseParticle = theGenericIon;
       massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
       isIon = true;
