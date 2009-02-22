@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2007-02-13 17:57:20 maire Exp $
+// $Id: PhysicsListMessenger.cc,v 1.2 2009-02-22 17:48:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,14 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   allCutCmd->SetParameterName("cut",false);
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
-  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  cutLimCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/cutLimit",this);  
+  cutLimCmd->SetGuidance("Set low limit of production threshold.");
+  cutLimCmd->SetParameterName("lim",false);
+  cutLimCmd->SetUnitCategory("Energy");
+  cutLimCmd->SetRange("lim>0.0");
+  cutLimCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +86,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete gammaCutCmd;
   delete electCutCmd;
   delete allCutCmd;
+  delete cutLimCmd;  
   delete physDir;
 }
 
@@ -100,7 +108,10 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
      pPhysicsList->SetCutForGamma(cut);
      pPhysicsList->SetCutForElectron(cut);
-    } 
+    }
+
+  if( command == cutLimCmd )
+   { pPhysicsList->SetCutLowLimit(cutLimCmd->GetNewDoubleValue(newValue));}     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

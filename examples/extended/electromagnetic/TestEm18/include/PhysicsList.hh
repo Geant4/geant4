@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
+// $Id: PhysicsList.hh,v 1.2 2009-02-22 17:48:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,6 +57,8 @@ class PhysicsList: public G4VModularPhysicsList
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);
     
+    void SetCutLowLimit(G4double);
+      
   private:
   
     PhysicsListMessenger* pMessenger; 
@@ -66,6 +68,8 @@ class PhysicsList: public G4VModularPhysicsList
     
     G4double cutForGamma;
     G4double cutForElectron;
+    
+    G4double cutLowLimit;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
