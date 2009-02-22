@@ -45,32 +45,16 @@ public:
   G4CollisionOutput collide(G4InuclParticle* bullet,
 			    G4InuclParticle* target);
 
+  G4bool HighEnergyFlag() const {
+    return high_energy;
+  }
+
 private:
 
-//   G4CascadeKplusPChannel kpp;
-//   G4CascadeKplusNChannel kpn;
-//   G4CascadeKzeroPChannel k0p;
-//   G4CascadeKzeroNChannel k0n;
-//   G4CascadeKminusPChannel kmp;
-//   G4CascadeKminusNChannel kmn;
-//   G4CascadeKzeroBarPChannel k0bp;
-//   G4CascadeKzeroBarNChannel k0bn;
-//   G4CascadeLambdaPChannel lp;
-//   G4CascadeLambdaNChannel ln;
-//   G4CascadeSigmaPlusPChannel spp;
-//   G4CascadeSigmaPlusNChannel spn;
-//   G4CascadeSigmaZeroPChannel s0p;
-//   G4CascadeSigmaZeroNChannel s0n;
-//   G4CascadeSigmaMinusPChannel smp;
-//   G4CascadeSigmaMinusNChannel smn;
-//   G4CascadeXiZeroPChannel x0p;
-//   G4CascadeXiZeroNChannel x0n;
-//   G4CascadeXiMinusPChannel xmp;
-//   G4CascadeXiMinusNChannel xmn;
-
   G4int verboseLevel;
-  G4int generateMultiplicity(G4int is, 
-			     G4double ekin) const;
+  mutable G4bool high_energy;     // Flag indicates beginning of string-like behavior
+
+  G4int generateMultiplicity(G4int is, G4double ekin) const;
 
   void collide(G4InuclElementaryParticle* bullet,
 	       G4InuclElementaryParticle* target,
