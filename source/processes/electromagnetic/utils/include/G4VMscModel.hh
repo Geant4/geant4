@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.6 2009-01-09 19:25:18 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.7 2009-02-22 17:32:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,20 @@ public:
 
   virtual ~G4VMscModel();
 
+  inline void SetStepLimitType(G4MscStepLimitType);
+
+  inline void SetLateralDisplasmentFlag(G4bool val);
+
+  inline void SetRangeFactor(G4double);
+
+  inline void SetGeomFactor(G4double);
+
+  inline void SetSkin(G4double);
+
+  inline void SetSampleZ(G4bool);
+
+protected:
+
   void InitialiseSafetyHelper();
 
   void ComputeDisplacement(G4ParticleChangeForMSC*,  
@@ -79,16 +93,6 @@ public:
 
   inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
 				   G4double limit);
-
-  inline void SetStepLimitType(G4MscStepLimitType);
-
-  inline void SetLateralDisplasmentFlag(G4bool val);
-
-  inline void SetRangeFactor(G4double);
-
-  inline void SetGeomFactor(G4double);
-
-  inline void SetSkin(G4double);
 
 private:
 
@@ -106,6 +110,7 @@ protected:
   G4double skin;
   G4double dtrl;
   G4double lambdalimit;
+  G4double geommax;
 
   G4MscStepLimitType steppingAlgorithm;
 
@@ -115,30 +120,6 @@ protected:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position, 
-					   G4double)
-{
-  return safetyHelper->ComputeSafety(position);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track, 
-					      G4double& presafety, 
-					      G4double limit)
-{
-  G4double res = limit;
-  if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
-    res = safetyHelper->CheckNextStep(
-          track.GetStep()->GetPreStepPoint()->GetPosition(),
-	  track.GetMomentumDirection(),
-	  limit, presafety);
-  }
-  return res;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VMscModel::SetLateralDisplasmentFlag(G4bool val)
@@ -172,6 +153,37 @@ inline void G4VMscModel::SetGeomFactor(G4double val)
 inline void G4VMscModel::SetStepLimitType(G4MscStepLimitType val)
 {
   steppingAlgorithm = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VMscModel::SetSampleZ(G4bool val)
+{
+  samplez = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position, 
+					   G4double)
+{
+  return safetyHelper->ComputeSafety(position);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track, 
+					      G4double& presafety, 
+					      G4double limit)
+{
+  G4double res = geommax;
+  if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
+    res = safetyHelper->CheckNextStep(
+          track.GetStep()->GetPreStepPoint()->GetPosition(),
+	  track.GetMomentumDirection(),
+	  limit, presafety);
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
