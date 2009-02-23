@@ -1,5 +1,10 @@
 #/bin/csh
+#
+# Run single configuration
+#
 
+mkdir -p $REFERENCE
+cd $REFERENCE
 mkdir -p $PHYSLIST
 cd $PHYSLIST
 

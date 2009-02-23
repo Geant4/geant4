@@ -13,7 +13,7 @@ setenv PHYSLIST QBBCG
 setenv PHYSLIST QBBCF
 #source run.csh
 setenv PHYSLIST QGSP_BERT
-source run.csh
+#source run.csh
 setenv PHYSLIST QGSP_BERT_EMV
 source run.csh
 setenv PHYSLIST FTFP_BERT
