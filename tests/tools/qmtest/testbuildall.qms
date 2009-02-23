@@ -29,11 +29,11 @@
       <text>exam-adv-xray_telescope-build</text>
       <text>exam-ext-analysis-a01-build</text>
       <text>exam-ext-analysis-anaex01-build</text>
-      <text>exam-ext-analysis-anaex02-build</text>
+      <!--text>exam-ext-analysis-anaex02-build</text NOT TAGGED-->
       <text>exam-ext-analysis-n03con-build</text>
       <text>exam-ext-biasing-b01-build</text>
-      <text>exam-ext-biasing-b02-build</text>
-      <text>exam-ext-biasing-b03-build</text>
+      <!--text>exam-ext-biasing-b02-build</text EXTERNAL REQUIREMENTS: AIDA-->
+      <!--text>exam-ext-biasing-b03-build</text NOT TAGGED-->
       <text>exam-ext-electromagnetic-testem0-build</text>
       <text>exam-ext-electromagnetic-testem1-build</text>
       <text>exam-ext-electromagnetic-testem10-build</text>
@@ -55,10 +55,10 @@
       <text>exam-ext-electromagnetic-testem9-build</text>
       <text>exam-ext-errorpropagation-build</text>
       <text>exam-ext-eventgenerator-exgps-build</text>
-      <text>exam-ext-eventgenerator-hepmc-hepmcex01-build</text>
-      <text>exam-ext-eventgenerator-hepmc-hepmcex02-build</text>
-      <text>exam-ext-eventgenerator-hepmc-mctruth-build</text>
-      <text>exam-ext-eventgenerator-pythia-decayer6-build</text>
+      <!--text>exam-ext-eventgenerator-hepmc-hepmcex01-build</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-hepmc-hepmcex02-build</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-hepmc-mctruth-build</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-pythia-decayer6-build</text EXTERNAL REQUIREMENTS: PYTHIA.F-->
       <text>exam-ext-exoticphysics-monopole-build</text>
       <text>exam-ext-field-field01-build</text>
       <text>exam-ext-field-field02-build</text>
@@ -66,7 +66,7 @@
       <text>exam-ext-field-field04-build</text>
       <text>exam-ext-g3tog4-clgeometry-build</text>
       <text>exam-ext-g3tog4-cltog4-build</text>
-      <text>exam-ext-gdml-build</text>
+      <!--text>exam-ext-gdml-build</text NOT TAGGED-->
       <text>exam-ext-geometry-olap-build</text>
       <text>exam-ext-hadronic-hadr00-build</text>
       <text>exam-ext-hadronic-hadr01-build</text>
@@ -76,17 +76,17 @@
       <text>exam-ext-medical-gammatherapy-build</text>
       <text>exam-ext-optical-lxe-build</text>
       <text>exam-ext-parallel-exdiane-build</text>
-      <text>exam-ext-parallel-mpi-exmpi01-build</text>
-      <text>exam-ext-parallel-mpi-exmpi02-build</text>
-      <text>exam-ext-parallel-mpi-mpi_interface-build</text>
-      <text>exam-ext-parallel-parn02-build</text>
-      <text>exam-ext-parallel-parn04-build</text>
+      <!--text>exam-ext-parallel-mpi-exmpi01-build</text EXTERNAL REQUIREMENTS: MPIC++-->
+      <!--text>exam-ext-parallel-mpi-exmpi02-build</text EXTERNAL REQUIREMENTS: MPIC++-->
+      <!--text>exam-ext-parallel-mpi-mpi_interface-build</text EXTERNAL REQUIREMENTS: MPIC++-->
+      <!--text>exam-ext-parallel-parn02-build</text EXTERNAL REQUIREMENTS: TOPC-->
+      <!--text>exam-ext-parallel-parn04-build</text EXTERNAL REQUIREMENTS: TOPC-->
       <text>exam-ext-parameterisations-gflash-build</text>
       <text>exam-ext-persistency-gdml-g01-build</text>
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
-      <text>exam-ext-persistency-p01-build</text>
-      <text>exam-ext-persistency-p02-build</text>
+      <!--text>exam-ext-persistency-p01-build</text EXTERNAL REQUIREMENTS: ROOT-->
+      <!--text>exam-ext-persistency-p02-build</text EXTERNAL REQUIREMENTS: ROOT-->
       <text>exam-ext-persistency-p03-build</text>
       <text>exam-ext-polarisation-pol01-build</text>
       <text>exam-ext-radioactivedecay-exrdm-build</text>

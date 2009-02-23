@@ -29,11 +29,11 @@
       <text>exam-adv-xray_telescope-run</text>
       <text>exam-ext-analysis-a01-run</text>
       <text>exam-ext-analysis-anaex01-run</text>
-      <text>exam-ext-analysis-anaex02-run</text>
+      <!--text>exam-ext-analysis-anaex02-run</text NOT TAGGED-->
       <text>exam-ext-analysis-n03con-run</text>
       <text>exam-ext-biasing-b01-run</text>
-      <text>exam-ext-biasing-b02-run</text>
-      <text>exam-ext-biasing-b03-run</text>
+      <!--text>exam-ext-biasing-b02-run</text EXTERNAL REQUIREMENTS: AIDA-->
+      <!--text>exam-ext-biasing-b03-run</text NOT TAGGED-->
       <text>exam-ext-electromagnetic-testem0-run</text>
       <text>exam-ext-electromagnetic-testem1-run</text>
       <text>exam-ext-electromagnetic-testem10-run</text>
@@ -55,10 +55,10 @@
       <text>exam-ext-electromagnetic-testem9-run</text>
       <text>exam-ext-errorpropagation-run</text>
       <text>exam-ext-eventgenerator-exgps-run</text>
-      <text>exam-ext-eventgenerator-hepmc-hepmcex01-run</text>
-      <text>exam-ext-eventgenerator-hepmc-hepmcex02-run</text>
-      <text>exam-ext-eventgenerator-hepmc-mctruth-run</text>
-      <text>exam-ext-eventgenerator-pythia-decayer6-run</text>
+      <!--text>exam-ext-eventgenerator-hepmc-hepmcex01-run</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-hepmc-hepmcex02-run</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-hepmc-mctruth-run</text EXTERNAL REQUIREMENTS: HepMC-->
+      <!--text>exam-ext-eventgenerator-pythia-decayer6-run</text EXTERNAL REQUIREMENTS: PYTHIA.F-->
       <text>exam-ext-exoticphysics-monopole-run</text>
       <text>exam-ext-field-field01-run</text>
       <text>exam-ext-field-field02-run</text>
@@ -66,7 +66,7 @@
       <text>exam-ext-field-field04-run</text>
       <text>exam-ext-g3tog4-clgeometry-run</text>
       <text>exam-ext-g3tog4-cltog4-run</text>
-      <text>exam-ext-gdml-run</text>
+      <!--text>exam-ext-gdml-run</text NOT TAGGED-->
       <text>exam-ext-geometry-olap-run</text>
       <text>exam-ext-hadronic-hadr00-run</text>
       <text>exam-ext-hadronic-hadr01-run</text>
@@ -76,16 +76,16 @@
       <text>exam-ext-medical-gammatherapy-run</text>
       <text>exam-ext-optical-lxe-run</text>
       <text>exam-ext-parallel-exdiane-run</text>
-      <text>exam-ext-parallel-mpi-exmpi01-run</text>
-      <text>exam-ext-parallel-mpi-exmpi02-run</text>
-      <text>exam-ext-parallel-parn02-run</text>
-      <text>exam-ext-parallel-parn04-run</text>
+      <!--text>exam-ext-parallel-mpi-exmpi01-run</text EXTERNAL REQUIREMENTS: MPIC++-->
+      <!--text>exam-ext-parallel-mpi-exmpi02-run</text EXTERNAL REQUIREMENTS: MPIC++-->
+      <!--text>exam-ext-parallel-parn02-run</text EXTERNAL REQUIREMENTS: TOPC-->
+      <!--text>exam-ext-parallel-parn04-run</text EXTERNAL REQUIREMENTS: TOPC-->
       <text>exam-ext-parameterisations-gflash-run</text>
       <text>exam-ext-persistency-gdml-g01-run</text>
       <text>exam-ext-persistency-gdml-g02-run</text>
       <text>exam-ext-persistency-gdml-g03-run</text>
-      <text>exam-ext-persistency-p01-run</text>
-      <text>exam-ext-persistency-p02-run</text>
+      <!--text>exam-ext-persistency-p01-run</text EXTERNAL REQUIREMENTS: ROOT-->
+      <!--text>exam-ext-persistency-p02-run</text EXTERNAL REQUIREMENTS: ROOT-->
       <text>exam-ext-persistency-p03-run</text>
       <text>exam-ext-polarisation-pol01-run</text>
       <text>exam-ext-radioactivedecay-exrdm-run</text>
