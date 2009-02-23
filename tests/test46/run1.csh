@@ -1,7 +1,11 @@
 #/bin/csh
 
+cd $VFEM/test46
+mkdir -p $REFERENCE
+cd $REFERENCE
+
 setenv PRIMARYBEAM pi-
-setenv REFERENCE pi-20081229
+
 setenv PHYSLIST QBBC
 #source run.csh
 setenv PHYSLIST QBBCG

@@ -1,4 +1,7 @@
 #/bin/csh
+#
+# Run all energies 
+#
 
 mkdir -p $REFERENCE
 cd $REFERENCE

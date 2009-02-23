@@ -1,7 +1,11 @@
 #/bin/csh
 
+cd $VFEM/test46
+mkdir -p $REFERENCE
+cd $REFERENCE
+
 setenv PRIMARYBEAM proton
-setenv REFERENCE p20081229
+
 setenv PHYSLIST QBBC
 #source run.csh
 setenv PHYSLIST QBBCG
