@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.hh,v 1.6 2008-10-24 19:23:48 dennis Exp $
+// $Id: G4QTauNuclearCrossSection.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,11 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: reaction cross-sections for tau-nuclear reactions, which
+// are integrals over virtual equivalent photons photons. The tau-nuclear
+// reactions do not exist in GHAD, so by the present physics lists it is not
+// simulated at all.
+// --------------------------------------------------------------------------------
 
 #ifndef G4QTauNuclearCrossSection_h
 #define G4QTauNuclearCrossSection_h 1

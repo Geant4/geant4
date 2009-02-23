@@ -31,10 +31,9 @@
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-May-02
 //
-// ****************************************************************************************
-// ********* This HEADER is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
-// ****************************************************************************************
+// -------------------------------------------------------------------
+// Short description: neutron-nuclear cross-section for hadronic CHIPS
+// -------------------------------------------------------------------
 
 #ifndef G4QNeutronNuclearCrossSection_h
 #define G4QNeutronNuclearCrossSection_h 1

@@ -33,10 +33,8 @@
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-03
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Feb-04
 // --------------------------------------------------------------------------------
-// ****************************************************************************************
-// ****** This CLASS is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
-// *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
-// ****************************************************************************************
+// Short description: neutron-nuclear cross-section for hadronic CHIPS
+// -------------------------------------------------------------------
 //
 //#define debug
 //#define pdebug
@@ -48,7 +46,7 @@
 
 // Initialization of the
 G4double* G4QNeutronNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
-G4double* G4QNeutronNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighEn CS
+G4double* G4QNeutronNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighE CS
 G4int     G4QNeutronNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
 G4int     G4QNeutronNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
 G4double  G4QNeutronNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
@@ -90,9 +88,9 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
     if(lastI) for(G4int i=0; i<lastI; i++) // The partType is found
-	   {                                  // The nucleus with is found in AMDB
+    {                                  // The nucleus with is found in AMDB
       if(colN[i]==tgN && colZ[i]==tgZ)
-						{
+      {
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
@@ -107,7 +105,7 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-	//        if(std::fabs(lastP/pMom-1.)<tolerance)
+ //        if(std::fabs(lastP/pMom-1.)<tolerance)
         if(lastP==pMom)                 // VI do not use tolerance
         {
 #ifdef pdebug
@@ -139,16 +137,16 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
             <<",Z["<<i<<"]="<<colZ[i]<<G4endl;
 #endif
       j++;                             // Increment a#0f records found in DB
-	   }
-	   if(!in)                            // This nucleus has not been calculated previously
-	   {
+    }
+    if(!in)                            // This nucleus has not been calculated previously
+    {
 #ifdef pdebug
       G4cout<<"G4QNtCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,2212,lastZ,lastN,pMom); //calculate & create
       if(lastCS<=0.)
-						{
+      {
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
         G4cout<<"G4QNeutronNuclCSec::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
@@ -160,7 +158,7 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
 #endif
           lastTH=pEn;
         }
-						}
+      }
 #ifdef pdebug
       G4cout<<"G4QNtCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
 #endif
@@ -173,9 +171,9 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
       G4cout<<"G4QNtCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
       return lastCS*millibarn;
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
     else
-				{
+    {
 #ifdef pdebug
       G4cout<<"G4QNeutronNuclearCrossSect::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
@@ -227,7 +225,7 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
   static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
   static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithm energy for the HEN part GeV/c
+  static const G4double milPG=std::log(.001*Pmin);// Low logEnergy for the HEN part GeV/c
   //
   // Associative memory for acceleration
   //static std::vector <G4double>  spA;  // shadowing coefficients (A-dependent)
@@ -243,12 +241,12 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
+    {
       lastLEN=LEN[I];                // Pointer to prepared LowEnergy cross sections
       lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
     }
-	   else                             // This isotope wasn't calculated previously => CREATE
-	   {
+    else                             // This isotope wasn't calculated previously => CREATE
+    {
       lastLEN = new G4double[nL];    // Allocate memory for the new LEN cross sections
       lastHEN = new G4double[nH];    // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
@@ -270,19 +268,19 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       if(sync!=I) G4cerr<<"***G4QNeutronNuclCS::CalcCrossSect:Sync="<<sync<<"#"<<I<<G4endl;
       LEN.push_back(lastLEN);          // added LEN, found by AH 10/7/02
       HEN.push_back(lastHEN);          // added HEN, found by AH 10/7/02
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
   else if (Momentum<Pmin)                     // High Energy region
   {
 #ifdef debug
-	   G4cout<<"G4QNeutCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
+    G4cout<<"G4QNeutCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
 #endif
     if(A<=1.) sigma=0.;
     else      sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
 #ifdef debugn
-	   if(sigma<0.)
+    if(sigma<0.)
       G4cout<<"G4QNeutCS::CalcCS:A="<<A<<",E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
 #endif
   }

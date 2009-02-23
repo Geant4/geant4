@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.cc,v 1.7 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QCoherentChargeExchange.cc,v 1.8 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange class -----------------
@@ -33,7 +33,25 @@
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ****************************************************************************************
-
+// Short description: This class resolves an ambiguity in the definition of the
+// "inelastic" cross section. As it was shown in Ph.D.Thesis (M.Kosov,ITEP,1979)
+// it is more reasonable to subdivide the total cross-section in the coherent &
+// incoherent parts, but the measuring method for the "inelastic" cross-sections
+// consideres the lack of the projectile within the narrow forward solid angle
+// with the consequent extrapolation of these partial cross-sections, corresponding
+// to the particular solid angle, to the zero solid angle. The low angle region
+// is shadowed by the elastic (coherent) scattering. BUT the coherent charge
+// exchange (e.g. conversion p->n) is included by this procedure as a constant term
+// in the extrapolation, so the "inelastic" cross-section differes from the
+// incoherent cross-section by the value of the coherent charge exchange cross
+// section. Fortunately, this cross-sectoion drops ruther fast with energy increasing.
+// All Geant4 inelastic hadronic models (including CHIPS) simulate the incoherent
+// reactions. So the incoherent (including quasielastic) cross-section must be used
+// instead of the inelastic cross-section. For that the "inelastic" cross-section
+// must be reduced by the value of the coherent charge-exchange cross-section, which
+// is estimated (it must be tuned!) in this CHIPS class. The angular distribution
+// is made (at present) identical to the corresponding coherent-elastic scattering 
+// -----------------------------------------------------------------------------------
 //#define debug
 //#define pdebug
 //#define tdebug
@@ -145,12 +163,12 @@ G4double G4QCoherentChargeExchange::GetMeanFreePath(const G4Track& aTrack,G4doub
           if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QCohChX::GetMeanFreePath: Z="
                                          <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QCohChEx::GetMeanFreePath:pair#="<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QCohChEx::GetMeanFreePath: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -177,7 +195,7 @@ G4double G4QCoherentChargeExchange::GetMeanFreePath(const G4Track& aTrack,G4doub
 #ifdef debug
       G4cout<<"G4QCCX::GMFP:true, P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=true;
+      G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
 #ifdef debug
       G4cout<<"G4QCoherentChargeExchange::GMFP: GetCS #1 j="<<j<<G4endl;
@@ -250,7 +268,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
   if(CWinit)
-		{
+  {
     CWinit=false;
     G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
   }
@@ -322,7 +340,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   //else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QCohChrgExchange::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QCohChrgExchange::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -339,19 +357,19 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     fPDG=2212;
   }
   G4double pM2=pM*pM;
-		// Element treatment
+  // Element treatment
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QCohChEx::PostStDoIt:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QCohChEx::PostStDoIt:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QCohChEx::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+      G4cout<<"G4QCohChEx::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -360,7 +378,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -371,7 +389,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QCohChargeExchange::PosStDoIt:nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QCohChargeExchange::PosStDoIt:nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -380,7 +398,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QCohChargEx::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
+      G4cout<<"G4QCohChargEx::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -388,7 +406,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QCohChargeEx::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QCohChargeEx::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
 #endif
   if(N<0)
   {
@@ -504,7 +522,7 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   // Kill scattered hadron
   aParticleChange.ProposeTrackStatus(fStopAndKill);
   // Definition of the scattered nucleon
-		G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
+  G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
   G4ParticleDefinition* theDefinition=G4Proton::Proton();
   if(projPDG==2212) theDefinition=G4Neutron::Neutron();
   theSec->SetDefinition(theDefinition);
@@ -515,10 +533,10 @@ G4VParticleChange* G4QCoherentChargeExchange::PostStepDoIt(const G4Track& track,
   aNewTrack->SetTouchableHandle(trTouchable);
   aParticleChange.AddSecondary( aNewTrack );
   // Filling the recoil nucleus
-		theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
+  theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
   G4int aA = Z+N;
 #ifdef pdebug
-		G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
+  G4cout<<"G4QCoherentChargeExchange::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
 #endif
   theDefinition=G4ParticleTable::GetParticleTable()->FindIon(Z,aA,0,Z);
   if(!theDefinition)G4cout<<"*Warning*G4QCohChEx::PostStepDoIt:drop PDG="<<targPDG<<G4endl;
@@ -576,7 +594,7 @@ G4double G4QCoherentChargeExchange::CalculateXSt(G4bool oxs, G4bool xst, G4doubl
   else if(init)                          // Return t-value for scattering (=G4QElastic)
   {
     if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
-				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
   }
   else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt: NotInitiatedScattering"<<G4endl;
   return res;

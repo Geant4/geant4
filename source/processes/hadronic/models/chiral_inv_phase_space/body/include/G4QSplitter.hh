@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSplitter.hh,v 1.2 2006-06-29 20:06:37 gunter Exp $
+// $Id: G4QSplitter.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QSplitter ----------------
 //             by Mikhail Kossov, Avgust 2005.
 // header for Hadron-Hadron Splitter in parton pairs of the CHIPS Model
 // --------------------------------------------------------------------
+// Short description: the hadron befor the interaction must be splitted
+// in partons: quark-antiquark (mesons) or quark-diquark (baryon) parts
+// (some time in more than two parts, e.g. baryon in three quarks or a
+// few quark-antiquark pairs can be added for the splitting). Then each
+// projectile parton can create a parton pair (G4QPartonPair) with the
+// target parton. This pair with the big rapidity difference on the ends
+// creates a planar Quark-Gluon String (a pole). A pair of the projectile
+// partons with a pair of the target partons can create a cylindrical
+// string (doubled string in the algorithm - a cut).  
+// -------------------------------------------------===------------------
 
 #ifndef G4QSplitter_h
 #define G4QSplitter_h 1
@@ -46,12 +56,12 @@ public:
   //G4QSplitter(G4QHadron projHadron, const G4bool projEnvFlag, const G4int targPDG);
   // projectile Hadron (probably as a part of proj Nucleus) colliding with nuclear Cluster
   G4QSplitter(G4QHadron projHadron, const G4bool projEnvFlag, const G4int targPDG,
-														const G4bool targEnvFlag);   // Cluster can have target nuclear environment
+              const G4bool targEnvFlag);   // Cluster can have target nuclear environment
   // projectile Cluster (probably as a part of proj Nucleus) colliding with nuclear target
   //G4QSplitter(G4QNucleus projCluster, const G4bool projEnvFlag, const G4int targPDG);
   // projectile Cluster (probably as a part of proj Nucleus) colliding with nuclear Cluster
   //G4QSplitter(G4QNucleus projCluster, const G4bool projEnvFlag, const G4int targPDG,
-		//												const G4bool targEnvFlag);   // Cluster can have target nuclear environment
+  //            const G4bool targEnvFlag);   // Cluster can have target nuclear environment
   G4QSplitter(const G4QSplitter& right);   // Copy the splitted system by value
   G4QSplitter(G4QSplitter* right);         // Copy the splitted system by pointer
   ~G4QSplitter();                          // Public Destructor

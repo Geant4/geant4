@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.hh,v 1.2 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QIonIonElastic.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic header ----------------
@@ -34,9 +34,9 @@
 // -------------------------------------------------------------------------------
 // @@ This class is on the testing level @@
 // -------------------------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ****************************************************************************************
+// Short description: a simple process for the Ion-Ion elastic scattering.
+// For heavy by heavy ions it can reach 50% of the total cross-section.
+// -----------------------------------------------------------------------
 
 #ifndef G4QIonIonElastic_hh
 #define G4QIonIonElastic_hh
@@ -83,13 +83,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -106,7 +106,7 @@ private:
   // Copy constructor
   G4QIonIonElastic(const G4QIonIonElastic&);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------

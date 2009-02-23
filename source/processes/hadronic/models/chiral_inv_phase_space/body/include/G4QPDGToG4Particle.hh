@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.hh,v 1.4 2006-06-29 20:06:27 gunter Exp $
+// $Id: G4QPDGToG4Particle.hh,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGToG4Particle header ----------------
@@ -34,6 +34,9 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: This is a helper class, which converts the PDG-defined
+// G4QHadrons of the CHIPS model to the G4 particles, defined by the singetones.
+// -----------------------------------------------------------------------------
 
 #ifndef G4QPDGToG4Particle_hh
 #define G4QPDGToG4Particle_hh

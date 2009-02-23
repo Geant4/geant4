@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.28 2006-06-29 20:06:05 gunter Exp $
+// $Id: G4QContent.hh,v 1.29 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Contents used by the CHIPS Model
 // ----------------------------------------------------------------------
+// Short description: This is the basic class of the CHIPS model. It
+// describes the quark content of the Quasmon, which is a generalized
+// hadronic state. All Quasmons are bags, characterized by the quark
+// Content (QContent), but the spin is not fixed and only light (u,d,s)
+// quarks are considered (SU(3)). The hadrons are the ground states for
+// the corresponding quasmons. The Chipolino (G4QChipolino) or nuclear
+// cluster are examples for another Quark Content.
+// --------------------------------------------------------------------
+// @@ In future total spin & c,b,t of the Hadron can be added @@ M.K.@@
+// --------------------------------------------------------------------
 
 #ifndef G4QContent_h
 #define G4QContent_h 1

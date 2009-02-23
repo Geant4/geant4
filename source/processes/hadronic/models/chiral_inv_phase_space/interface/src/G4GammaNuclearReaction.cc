@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// Short description: The CHIPS model provides the G4QHadronVector
+// output, which is converted to the G4 particle-singletons
+// --------------------------------------------------------------------
 //
-
-//
-// Created:
+// Created: J.P. Wellisch, 2000/08/18 
 // 01.09.2008 V.Ivanchenko 
 //
 

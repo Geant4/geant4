@@ -31,6 +31,10 @@
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
 //
+//=======================================================================
+// Short description: Difraction excitation is a part of the incoherent
+// (inelastic) interaction. This part is calculated in the class.
+// --------------------------------------------------------------------
 
 #ifndef G4QDiffractionRatio_h
 #define G4QDiffractionRatio_h 1
@@ -87,5 +91,5 @@ class G4QDiffractionRatio
 
  // Body
  private:
-}; 					
+};      
 #endif

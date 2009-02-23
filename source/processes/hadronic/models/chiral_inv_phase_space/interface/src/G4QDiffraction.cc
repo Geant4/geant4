@@ -23,16 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.cc,v 1.5 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QDiffraction.cc,v 1.6 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction class -----------------
 //                 by Mikhail Kossov, Aug 2007.
 // G4QDiffraction class of the CHIPS Simulation Branch in GEANT4
 // ---------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the "chips/interface" directory *********
-// ****************************************************************************************
+// Short description: This is a process, which describes the diffraction
+// excitation of the projectile and the nucleus. On nuclei in addition there
+// can be a coherent diffraction process for the projectile, but it is
+// comparably small. The most important part of the diffraction is the
+// progectile diffraction excitation, as in this interaction proton can lose
+// only a small part of its energy and make the shower longer. This is because
+// only 1-2 (n) pions are produce in the diffraction escitation, and the mean
+// kept energy of the nucleon is (1-n/7)=80%. For kaons the kept energy is much
+// smaller (1-n/3.5)=60%, and for pions it is less important (about 40%).
+// ----------------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -143,12 +150,12 @@ G4double G4QDiffraction::GetMeanFreePath(const G4Track&Track,G4double Q,G4ForceC
           if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QDiffract::GetMeanFreePath: Z="
                                          <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QDiffract::GetMeanFreePath:pair#"<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QDiffract::GetMeanFreePath:pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -175,7 +182,7 @@ G4double G4QDiffraction::GetMeanFreePath(const G4Track&Track,G4double Q,G4ForceC
 #ifdef debug
       G4cout<<"G4QDiff::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=true;
+      G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
 #ifdef debug
       G4cout<<"G4QDiffraction::GMFP: GetCS #1 j="<<j<<G4endl;
@@ -249,7 +256,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
   if(CWinit)
-		{
+  {
     CWinit=false;
     G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
     diffRatio=G4QDiffractionRatio::GetPointer();
@@ -322,7 +329,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   //else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QDiffraction::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QDiffraction::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -338,19 +345,19 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
     pM=mProt;
     fPDG=2212;
   }
-		// Element treatment
+  // Element treatment
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QDiffra::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QDiffra::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QDiffra::PostStepDoIt: EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+      G4cout<<"G4QDiffra::PostStepDoIt: EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -359,7 +366,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QDiffraction::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QDiffraction::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -370,7 +377,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QDiffraction::PostStepDoIt: nI="<<nofIsot<<", T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QDiffraction::PostStepDoIt: nI="<<nofIsot<<", T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -379,7 +386,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QDiffraction::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<",r="<<rndI<<G4endl;
+      G4cout<<"G4QDiffraction::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<",r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -387,7 +394,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QDiffraction::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QDiffraction::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
 #endif
   if(N<0)
   {
@@ -469,12 +476,12 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
   aParticleChange.ProposeTrackStatus(fStopAndKill);
   G4QHadronVector* out=diffRatio->TargFragment(projPDG, proj4M, Z, N);
   G4int nSec=out->size();             // #of secondaries in the diffraction reaction
-		G4DynamicParticle* theSec=0;        // A prototype for secondary for the secondary
+  G4DynamicParticle* theSec=0;        // A prototype for secondary for the secondary
   G4LorentzVector dif4M(0.,0.,0.,0.); // Prototype for the secondary 4-momentum
   G4int difPDG=0;                     // PDG code of the secondary
   G4QHadron* difQH=0;                 // Prototype for a Q-secondary
 #ifdef pdebug
-		G4cout<<"G4QDiffraction::PostStepDoIt: =====found===== nSecondaries="<<nSec<<G4endl;
+  G4cout<<"G4QDiffraction::PostStepDoIt: =====found===== nSecondaries="<<nSec<<G4endl;
 #endif
   for(G4int i=0; i<nSec; i++)
   {
@@ -521,12 +528,12 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
       if(S||Z>B||Z<0)G4cout<<"-Warning-G4QDif::PoStDoIt:Z="<<Z<<",A="<<B<<",S="<<S<<G4endl;
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(Z,B,0,0);
 #ifdef pdebug
-		    G4cout<<"G4QDiffraction::PoStDoIt:Ion,Z="<<Z<<",A="<<B<<",D="<<theDefinition<<G4endl;
+      G4cout<<"G4QDiffraction::PoStDoIt:Ion,Z="<<Z<<",A="<<B<<",D="<<theDefinition<<G4endl;
 #endif
     }
     if(theDefinition)
     {
-    		theSec = new G4DynamicParticle;       // A secondary for the recoil hadron 
+      theSec = new G4DynamicParticle;       // A secondary for the recoil hadron 
       theSec->SetDefinition(theDefinition);
       dif4M  = difQH->Get4Momentum();
       EnMomConservation-=dif4M;
@@ -536,7 +543,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
       aNewTrack->SetTouchableHandle(trTouchable);
       aParticleChange.AddSecondary( aNewTrack );
 #ifdef pdebug
-		    G4cout<<"G4QDiffraction::PostStepDoIt: Filled 4M="<<dif4M<<", PDG="<<difPDG<<G4endl;
+      G4cout<<"G4QDiffraction::PostStepDoIt: Filled 4M="<<dif4M<<", PDG="<<difPDG<<G4endl;
 #endif
     }
     else G4cout<<"-Warning-G4QDif::PSDI: Lost PDG="<<difPDG<<", Z="<<difQH->GetCharge()
@@ -567,7 +574,7 @@ G4double G4QDiffraction::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
   //G4double s=x*r;                                            // XS for proj. diffraction
   G4double s=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
 #ifdef debug
-		G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<s<<G4endl;
+  G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<s<<G4endl;
 #endif
   return s;
 }

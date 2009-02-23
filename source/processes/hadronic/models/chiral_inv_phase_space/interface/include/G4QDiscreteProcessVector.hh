@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiscreteProcessVector.hh,v 1.1 2007-08-28 15:48:15 mkossov Exp $
+// $Id: G4QDiscreteProcessVector.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscreteProcessVector ----------------
 //             by Mikhail Kossov, Aug 2007.
 // Type defenition for Vectors of DiscreteProcesses (G4VDiscreteProcess)
 // ---------------------------------------------------------------------
+// Short description: universal mixer of processes (NOT models as in GHAD!)
+// depending on the application energy region G4QDiscProcessMixer is using
+// this vector of the Geant4 processes.
+// ------------------------------------------------------------------------
 
 #ifndef G4QDiscreteProcessVector_h
 #define G4QDiscreteProcessVector_h 1

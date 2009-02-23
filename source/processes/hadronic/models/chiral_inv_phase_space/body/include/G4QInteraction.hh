@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
+// $Id: G4QInteraction.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +40,9 @@
 //   For comparison mirror member functions are taken from G4 class:
 //   G4InteractionContent
 // -------------------------------------------------------------------
+//  Short description: Classify the interaction in soft/hard/diffractive
+//  parts for firther treatment by the QGS algorithm.
+// ---------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4QHadron.hh"

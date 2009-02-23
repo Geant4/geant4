@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.3 2007-05-02 14:59:55 gunter Exp $
+// $Id: G4QFragmentation.cc,v 1.4 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -38,7 +38,8 @@
 //     G4QGSModels
 //     G4ExcitedStringDecay
 // -----------------------------------------------------------------------------
-//
+// Short description: CHIPS string fragmentation class
+// -----------------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -59,13 +60,13 @@ G4double G4QFragmentation::theNucleonRadius=1.5*fermi;
  // Parameters of diffractional fragmentation
 G4double G4QFragmentation::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
 G4double G4QFragmentation::minExtraMass=250.*MeV;// minimum excitation mass 
-G4double G4QFragmentation::minmass=250.*MeV;	    // mean pion transverse mass for Xmin 
+G4double G4QFragmentation::minmass=250.*MeV;     // mean pion transverse mass for Xmin 
 
 G4QFragmentation::G4QFragmentation() : theNucleus(0)
 {
   // Construct Shortlived particles (needed after the 2006 Particles revolution)
-	 G4ShortLivedConstructor ShortLived;
-	 ShortLived.ConstructParticle();
+  G4ShortLivedConstructor ShortLived;
+  ShortLived.ConstructParticle();
 }
 
 G4QFragmentation::~G4QFragmentation() {if(theNucleus) delete theNucleus;}
@@ -87,14 +88,14 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
   G4int attempts = 0, maxAttempts=20;
   while(!strings)
   {
-  	 if (attempts++ > maxAttempts ) 
-  	 {
-				 	G4cerr<<"***G4QFragmentation::Scatter: "<<attempts<<" to create a string ( > max="
+    if (attempts++ > maxAttempts ) 
+    {
+      G4cerr<<"***G4QFragmentation::Scatter: "<<attempts<<" to create a string ( > max="
             <<maxAttempts<<") --> try to increase maxAttempts"<<G4endl;
       G4Exception("G4QFragmentation::Scatter:","72",FatalException,"StringCreation");
-  	 }
-	   InitModel(aNucleus,thePrimary);
-  	 strings = GetStrings();
+    }
+    InitModel(aNucleus,thePrimary);
+    strings = GetStrings();
   }
   
   G4QHadronVector* theResult = 0;
@@ -118,7 +119,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 
 void G4QFragmentation::InitModel(const G4QNucleus& aNucleus,const G4QHadron& aProjectile)
 {
-  static const G4double 	mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
+  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
   Init(aNucleus.GetN(),aNucleus.GetZ());
   theCurrentVelocity.setX(0);    
   theCurrentVelocity.setY(0); 
@@ -132,11 +133,11 @@ void G4QFragmentation::InitModel(const G4QNucleus& aNucleus,const G4QHadron& aPr
   //G4double e_per_projectile = aProjectile.Get4Momentum()*aProjectile.Get4Momentum();
   //e_per_projectile += proj4M.vect()*proj4M.vect();
   //e_per_projectile /=nCons*nCons;
-	 //e_per_projectile = std::sqrt(e_per_projectile);
-	 //e_per_projectile += G4Proton::Proton()->GetPDGMass();//@@Add mass of TargetProtonAtRest
+  //e_per_projectile = std::sqrt(e_per_projectile);
+  //e_per_projectile += G4Proton::Proton()->GetPDGMass();//@@Add mass of TargetProtonAtRest
   G4double vz = pz_per_projectile/e_per_projectile;
 #ifdef debug
-		G4cout<<"G4QFragmentation::Init: Projectile4M="<<proj4M<<", vz="<<vz<<G4endl;
+  G4cout<<"G4QFragmentation::Init: Projectile4M="<<proj4M<<", vz="<<vz<<G4endl;
 #endif
   theCurrentVelocity.setZ(vz);
   DoLorentzBoost(-theCurrentVelocity); 
@@ -277,33 +278,33 @@ G4QHadron* G4QFragmentation::SelectInteractions(const G4QHadron &thePrimary)
 #endif
         G4QHadron* aTarget = new G4QHadron(*pNucleon);
         //G4QFragmentation_NPart ++;                       // ? M.K.
-	       theTargets.push_back(aTarget);
- 	      pNucleon=aTarget;
+        theTargets.push_back(aTarget);
+        pNucleon=aTarget;
         if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
             G4UniformRand() && (ModelMode==SOFT)) || ModelMode==DIFFRACTIVE)
-	       { 
-	         // diffractive interaction occurs
-	         if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
-	         else                          ExciteDiffParticipants(aProjectile, aTarget);
+        { 
+          // diffractive interaction occurs
+          if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
+          else                          ExciteDiffParticipants(aProjectile, aTarget);
           G4QInteraction* aInteraction = new G4QInteraction(aProjectile);
           aInteraction->SetTarget(aTarget); 
           theInteractions.push_back(aInteraction);
-	         aInteraction->SetNumberOfDiffractiveCollisions(1);
+          aInteraction->SetNumberOfDiffractiveCollisions(1);
           totalCuts += 1;
-	       }
-	       else
-	       {
-	         // nondiffractive soft interaction occurs
-	         // sample nCut+1 (cut Pomerons) pairs of strings can be produced
+        }
+        else
+        {
+          // nondiffractive soft interaction occurs
+          // sample nCut+1 (cut Pomerons) pairs of strings can be produced
           G4int nCut;
           G4double* running = new G4double[nCutMax];
           running[0] = 0;
           for(nCut = 0; nCut < nCutMax; nCut++)
           {
-	           running[nCut] = theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
+            running[nCut] = theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
             if(nCut!=0) running[nCut] += running[nCut-1];
           }
-	         G4double random = running[nCutMax-1]*G4UniformRand();
+          G4double random = running[nCutMax-1]*G4UniformRand();
           for(nCut = 0; nCut < nCutMax; nCut++) {if(running[nCut] > random) break;}
           delete [] running;
           nCut = 0;
@@ -415,25 +416,25 @@ G4QHadronVector* G4QFragmentation::FragmentStrings(const G4QStringVector* theStr
     }
     else
     {
-	     //generatedHadrons = new G4QHadronVector;
-	     //generatedHadrons->push_back((*theStrings)[astring]->GetAsQHadron()); //@@ NotImplem
+      //generatedHadrons = new G4QHadronVector;
+      //generatedHadrons->push_back((*theStrings)[astring]->GetAsQHadron()); //@@ NotImplem
     }    
-	   if (!generatedHadrons) 
-	   {
-		    G4cerr<<"G4QFragmentation::FragmentStrings: No Hadrons produced" << G4endl;
-		    continue;
-	   }
+    if (!generatedHadrons) 
+    {
+      G4cerr<<"G4QFragmentation::FragmentStrings: No Hadrons produced" << G4endl;
+      continue;
+    }
     G4LorentzVector KTsum1(0.,0.,0.,0.);
     for(unsigned aTrack=0; aTrack<generatedHadrons->size(); aTrack++)
-	   {
-		    theResult->push_back((*generatedHadrons)[aTrack]);
-		    KTsum1+= (*generatedHadrons)[aTrack]->Get4Momentum();
-	   }
-	
-	   if(std::abs((KTsum1.e()-(*theStrings)[astring]->Get4Momentum().e())/KTsum1.e())
+    {
+      theResult->push_back((*generatedHadrons)[aTrack]);
+      KTsum1+= (*generatedHadrons)[aTrack]->Get4Momentum();
+    }
+ 
+    if(std::abs((KTsum1.e()-(*theStrings)[astring]->Get4Momentum().e())/KTsum1.e())
        > perMillion) NeedEnergyCorrector=true;
     //      clean up
-	   delete generatedHadrons;
+    delete generatedHadrons;
   }
 #ifdef debug
   G4cout<<"G4QFragmentation::FragmentStrings: String4mom="<<KTsum<<endl; 
@@ -471,7 +472,7 @@ G4bool G4QFragmentation::EnergyAndMomentumCorrector(G4QHadronVector* Output,
     {
       G4cerr<<"***G4QFragmentation::EnergyAndMomentumCorrector: SumMass="<<SumMass<<G4endl;
       G4Exception("G4QFragmentation::EnergyAndMomentumCor:","72",FatalException,"NANMass");
-	   }
+    }
   }
   // Cannot correct a single particle
   if(Output->size() < 2) return FALSE;
@@ -530,51 +531,51 @@ G4bool G4QFragmentation::EnergyAndMomentumCorrector(G4QHadronVector* Output,
 G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
                                                 G4QHadron* target) const
 {
-	 G4LorentzVector Pprojectile=projectile->Get4Momentum();
-	 G4double Mprojectile=projectile->GetMass() + minExtraMass;
-	 G4double Mprojectile2=Mprojectile*Mprojectile;
+  G4LorentzVector Pprojectile=projectile->Get4Momentum();
+  G4double Mprojectile=projectile->GetMass() + minExtraMass;
+  G4double Mprojectile2=Mprojectile*Mprojectile;
   G4LorentzVector Ptarget=target->Get4Momentum();
   G4double Mtarget=target->GetMass() + minExtraMass;
   G4double Mtarget2=Mtarget*Mtarget;
 #ifdef debug
-	 G4cout<<"G4QFragm::ExciteDiffPartici:Ep="<<Pprojectile.e()<<",Et="<<Ptarget.e()<<G4endl;
+  G4cout<<"G4QFragm::ExciteDiffPartici:Ep="<<Pprojectile.e()<<",Et="<<Ptarget.e()<<G4endl;
 #endif
   // Transform momenta to cms and then rotate parallel to z axis;
-	 G4LorentzVector Psum=Pprojectile+Ptarget;
-	 G4LorentzRotation toCms(-Psum.boostVector()); // Boost Rotation to CMS
-	 G4LorentzVector Ptmp=toCms*Pprojectile;
-	 if(Ptmp.pz()<=0.) // "String" moving backwards in CMS, abort collision !! ? M.K.
-	 {
+  G4LorentzVector Psum=Pprojectile+Ptarget;
+  G4LorentzRotation toCms(-Psum.boostVector()); // Boost Rotation to CMS
+  G4LorentzVector Ptmp=toCms*Pprojectile;
+  if(Ptmp.pz()<=0.) // "String" moving backwards in CMS, abort collision !! ? M.K.
+  {
 #ifdef debug
-	   G4cout<<"G4QFragmentation::ExciteDiffParticipants: *1* abort Collision!! *1*"<<G4endl;
+    G4cout<<"G4QFragmentation::ExciteDiffParticipants: *1* abort Collision!! *1*"<<G4endl;
 #endif
-		  return false; 
-	 }	   		   
-	 toCms.rotateZ(-Ptmp.phi());
-	 toCms.rotateY(-Ptmp.theta());
+    return false; 
+  }         
+  toCms.rotateZ(-Ptmp.phi());
+  toCms.rotateY(-Ptmp.theta());
 #ifdef debug
   G4cout<<"G4QFragment::ExciteDiffParticipantts: Be4Boost Pproj="<<Pprojectile<<", Ptarg="
         <<Ptarget<<G4endl;
 #endif
-	 G4LorentzRotation toLab(toCms.inverse()); // Boost Rotation to LabSys (LS)
-	 Pprojectile.transform(toCms);
-	 Ptarget.transform(toCms);
+  G4LorentzRotation toLab(toCms.inverse()); // Boost Rotation to LabSys (LS)
+  Pprojectile.transform(toCms);
+  Ptarget.transform(toCms);
 #ifdef debug
-	 G4cout<< "G4QFragment::ExciteDiffParticipantts: AfterBoost Pproj="<<Pprojectile<<"Ptarg="
+  G4cout<< "G4QFragment::ExciteDiffParticipantts: AfterBoost Pproj="<<Pprojectile<<"Ptarg="
         <<Ptarget<<", cms4M="<<Pprojectile+Ptarget<<G4endl;
-	 G4cout<<"G4QFragment::ExciteDiffParticipantts: ProjX+="<<Pprojectile.plus()<<", ProjX-="
+  G4cout<<"G4QFragment::ExciteDiffParticipantts: ProjX+="<<Pprojectile.plus()<<", ProjX-="
         <<Pprojectile.minus()<<", TargX+="<< Ptarget.plus()<<", TargX-="<<Ptarget.minus()
         <<G4endl;
 #endif
-	 G4LorentzVector Qmomentum(0.,0.,0.,0.);
-	 G4int whilecount=0;
-	 do
+  G4LorentzVector Qmomentum(0.,0.,0.,0.);
+  G4int whilecount=0;
+  do
   {
-    //  Generate pt		
-	   G4double maxPtSquare=sqr(Ptarget.pz());
-	   if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
+    //  Generate pt  
+    G4double maxPtSquare=sqr(Ptarget.pz());
+    if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
 #ifdef debug
-	 	 G4cout<<"G4QFragmentation::ExciteDiffParticipantts: can loop, loopCount="<<whilecount
+    G4cout<<"G4QFragmentation::ExciteDiffParticipantts: can loop, loopCount="<<whilecount
           <<", maxPtSquare="<<maxPtSquare<<G4endl;
 #endif
     if(whilecount>1000)                        // @@ M.K. Hardwired limits 
@@ -582,51 +583,51 @@ G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
 #ifdef debug
       G4cout<<"G4QFragmentation::ExciteDiffParticipants: *2* abort Loop!! *2*"<<G4endl;
 #endif
-	 	   return false; 	  //  Ignore this interaction 
+      return false;    //  Ignore this interaction 
     }
-	   Qmomentum=G4LorentzVector(GaussianPt(widthOfPtSquare,maxPtSquare),0);
+    Qmomentum=G4LorentzVector(GaussianPt(widthOfPtSquare,maxPtSquare),0);
 #ifdef debug
     G4cout<<"G4QFragment::ExciteDiffParticipants: generated Pt="<<Qmomentum<<", ProjPt="
           <<Pprojectile+Qmomentum<<", TargPt="<<Ptarget-Qmomentum<<G4endl;
 #endif
     //  Momentum transfer
-	   G4double Xmin = minmass/(Pprojectile.e() + Ptarget.e());
-	   G4double Xmax=1.;
-	   G4double Xplus =ChooseX(Xmin,Xmax);
-	   G4double Xminus=ChooseX(Xmin,Xmax);
+    G4double Xmin = minmass/(Pprojectile.e() + Ptarget.e());
+    G4double Xmax=1.;
+    G4double Xplus =ChooseX(Xmin,Xmax);
+    G4double Xminus=ChooseX(Xmin,Xmax);
 #ifdef debug
-	   G4cout<<"G4QFragment::ExciteDiffParticip: X-plus="<<Xplus<<",X-minus="<<Xminus<<G4endl;
+    G4cout<<"G4QFragment::ExciteDiffParticip: X-plus="<<Xplus<<",X-minus="<<Xminus<<G4endl;
 #endif
-	   G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-	   G4double Qplus =-pt2/Xminus/Ptarget.minus();
-	   G4double Qminus= pt2/Xplus /Pprojectile.plus();
-	   Qmomentum.setPz((Qplus-Qminus)/2);
-	   Qmomentum.setE( (Qplus+Qminus)/2);
+    G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
+    G4double Qplus =-pt2/Xminus/Ptarget.minus();
+    G4double Qminus= pt2/Xplus /Pprojectile.plus();
+    Qmomentum.setPz((Qplus-Qminus)/2);
+    Qmomentum.setE( (Qplus+Qminus)/2);
 #ifdef debug
-	   G4cout<<"G4QFragment::ExciteDiffParticip: Qplus="<<Qplus<<", Qminus="<<Qminus<<", pt2="
+    G4cout<<"G4QFragment::ExciteDiffParticip: Qplus="<<Qplus<<", Qminus="<<Qminus<<", pt2="
           <<pt2<<", Qmomentum="<<Qmomentum<<", ProjM="<<(Pprojectile+Qmomentum).mag()
           <<", TargM="<<(Ptarget-Qmomentum).mag()<<G4endl;
 #endif
-	 } while((Pprojectile+Qmomentum).mag2()<=Mprojectile2 ||
+  } while((Pprojectile+Qmomentum).mag2()<=Mprojectile2 ||
           (Ptarget-Qmomentum).mag2()<=Mtarget2);
-	 Pprojectile += Qmomentum;
-	 Ptarget     -= Qmomentum;
+  Pprojectile += Qmomentum;
+  Ptarget     -= Qmomentum;
 #ifdef debug
-	 G4cout<<"G4QFragment::ExciteDiffParticipan: Proj(Q)="<<Pprojectile<<", Targ(Q)="<<Ptarget
-	       <<", Proj(back)="<<toLab*Pprojectile<<", Targ(bac)="<< toLab*Ptarget << G4endl;
+  G4cout<<"G4QFragment::ExciteDiffParticipan: Proj(Q)="<<Pprojectile<<", Targ(Q)="<<Ptarget
+        <<", Proj(back)="<<toLab*Pprojectile<<", Targ(bac)="<< toLab*Ptarget << G4endl;
 #endif
   // Transform back and update SplitableHadron Participant.
-	 Pprojectile.transform(toLab);
-	 Ptarget.transform(toLab);
+  Pprojectile.transform(toLab);
+  Ptarget.transform(toLab);
 #ifdef debug
-	 G4cout<< "G4QFragmentation::ExciteDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
+  G4cout<< "G4QFragmentation::ExciteDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
 #endif
-	 target->Set4Momentum(Ptarget); 	
+  target->Set4Momentum(Ptarget);  
 #ifdef debug
-	 G4cout<<"G4QFragment::ExciteDiffParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
+  G4cout<<"G4QFragment::ExciteDiffParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
 #endif
-	 projectile->Set4Momentum(Pprojectile);
-	 return true;
+  projectile->Set4Momentum(Pprojectile);
+  return true;
 } // End of ExciteDiffParticipants
 
 
@@ -634,69 +635,69 @@ G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
 G4bool G4QFragmentation::ExciteSingDiffParticipants(G4QHadron* projectile,
                                                     G4QHadron* target) const
 {
-	 G4LorentzVector Pprojectile=projectile->Get4Momentum();
-	 G4double Mprojectile=projectile->GetMass() + minExtraMass;
-	 G4double Mprojectile2=Mprojectile*Mprojectile;
+  G4LorentzVector Pprojectile=projectile->Get4Momentum();
+  G4double Mprojectile=projectile->GetMass() + minExtraMass;
+  G4double Mprojectile2=Mprojectile*Mprojectile;
   G4LorentzVector Ptarget=target->Get4Momentum();
   G4double Mtarget=target->GetMass() + minExtraMass;
   G4double Mtarget2=Mtarget*Mtarget;
 #ifdef debug
-	 G4cout<<"G4QFragm::ExSingDiffPartici:Ep="<<Pprojectile.e()<<",Et="<<Ptarget.e()<<G4endl;
+  G4cout<<"G4QFragm::ExSingDiffPartici:Ep="<<Pprojectile.e()<<",Et="<<Ptarget.e()<<G4endl;
 #endif
-	 G4bool KeepProjectile= G4UniformRand() > 0.5;
+  G4bool KeepProjectile= G4UniformRand() > 0.5;
   // Reset minMass of the non diffractive particle to its value, (minus for rounding...)
-	 if(KeepProjectile ) 
-	 {
+  if(KeepProjectile ) 
+  {
 #ifdef debug
     G4cout<<"--1/2--G4QFragmentation::ExSingDiffParticipants: Projectile is fixed"<<G4endl;
 #endif
-	   Mprojectile2 = projectile->GetMass2()*(1.-perCent); // Isn't it too big reduction? M.K.
-	 }
+    Mprojectile2 = projectile->GetMass2()*(1.-perCent); // Isn't it too big reduction? M.K.
+  }
   else
   {
 #ifdef debug
     G4cout<<"---1/2---G4QFragmentation::ExSingDiffParticipants: Target is fixed"<<G4endl;
 #endif
-	   Mtarget2 = target->GetMass2()*(1.-perCent); // @@ Isn't it too big reduction? M.K.
-	 }
+    Mtarget2 = target->GetMass2()*(1.-perCent); // @@ Isn't it too big reduction? M.K.
+  }
   // @@ From this point it repeats the Diffractional excitation (? Use flag ?)
   // Transform momenta to cms and then rotate parallel to z axis;
-	 G4LorentzVector Psum=Pprojectile+Ptarget;
-	 G4LorentzRotation toCms(-Psum.boostVector()); // Boost Rotation to CMS
-	 G4LorentzVector Ptmp=toCms*Pprojectile;
-	 if(Ptmp.pz()<=0.) // "String" moving backwards in CMS, abort collision !! ? M.K.
-	 {
+  G4LorentzVector Psum=Pprojectile+Ptarget;
+  G4LorentzRotation toCms(-Psum.boostVector()); // Boost Rotation to CMS
+  G4LorentzVector Ptmp=toCms*Pprojectile;
+  if(Ptmp.pz()<=0.) // "String" moving backwards in CMS, abort collision !! ? M.K.
+  {
 #ifdef debug
-	   G4cout<<"G4QFragment::ExciteSingDiffParticipants: *1* abort Collision!! *1*"<<G4endl;
+    G4cout<<"G4QFragment::ExciteSingDiffParticipants: *1* abort Collision!! *1*"<<G4endl;
 #endif
-		  return false; 
-	 }	   		   
-	 toCms.rotateZ(-Ptmp.phi());
-	 toCms.rotateY(-Ptmp.theta());
+    return false; 
+  }         
+  toCms.rotateZ(-Ptmp.phi());
+  toCms.rotateY(-Ptmp.theta());
 #ifdef debug
   G4cout<<"G4QFragm::ExciteSingDiffParticipantts: Be4Boost Pproj="<<Pprojectile<<",Ptarg="
         <<Ptarget<<G4endl;
 #endif
-	 G4LorentzRotation toLab(toCms.inverse()); // Boost Rotation to LabSys (LS)
-	 Pprojectile.transform(toCms);
-	 Ptarget.transform(toCms);
+  G4LorentzRotation toLab(toCms.inverse()); // Boost Rotation to LabSys (LS)
+  Pprojectile.transform(toCms);
+  Ptarget.transform(toCms);
 #ifdef debug
-	 G4cout<< "G4QFragment::ExciteDiffParticipantts: AfterBoost Pproj="<<Pprojectile<<"Ptarg="
+  G4cout<< "G4QFragment::ExciteDiffParticipantts: AfterBoost Pproj="<<Pprojectile<<"Ptarg="
         <<Ptarget<<", cms4M="<<Pprojectile+Ptarget<<G4endl;
 
-	 G4cout<<"G4QFragment::ExciteDiffParticipantts: ProjX+="<<Pprojectile.plus()<<", ProjX-="
+  G4cout<<"G4QFragment::ExciteDiffParticipantts: ProjX+="<<Pprojectile.plus()<<", ProjX-="
         <<Pprojectile.minus()<<", TargX+="<< Ptarget.plus()<<", TargX-="<<Ptarget.minus()
         <<G4endl;
 #endif
-	 G4LorentzVector Qmomentum(0.,0.,0.,0.);
-	 G4int whilecount=0;
-	 do
+  G4LorentzVector Qmomentum(0.,0.,0.,0.);
+  G4int whilecount=0;
+  do
   {
-    //  Generate pt		
-	   G4double maxPtSquare=sqr(Ptarget.pz());
-	   if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
+    //  Generate pt  
+    G4double maxPtSquare=sqr(Ptarget.pz());
+    if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
 #ifdef debug
-	 	 G4cout<<"G4QFragment::ExciteSingDiffParticipantts: can loop, loopCount="<<whilecount
+    G4cout<<"G4QFragment::ExciteSingDiffParticipantts: can loop, loopCount="<<whilecount
           <<", maxPtSquare="<<maxPtSquare<<G4endl;
 #endif
     if(whilecount>1000)                        // @@ M.K. Hardwired limits 
@@ -704,59 +705,59 @@ G4bool G4QFragmentation::ExciteSingDiffParticipants(G4QHadron* projectile,
 #ifdef debug
       G4cout<<"G4QFragmentation::ExciteSingDiffParticipants: *2* abort Loop!! *2*"<<G4endl;
 #endif
-	 	   return false; 	  //  Ignore this interaction 
+      return false;    //  Ignore this interaction 
     }
-	   Qmomentum=G4LorentzVector(GaussianPt(widthOfPtSquare,maxPtSquare),0);
+    Qmomentum=G4LorentzVector(GaussianPt(widthOfPtSquare,maxPtSquare),0);
 #ifdef debug
     G4cout<<"G4QFragm::ExciteSingDiffParticipants: generated Pt="<<Qmomentum<<", ProjPt="
           <<Pprojectile+Qmomentum<<", TargPt="<<Ptarget-Qmomentum<<G4endl;
 #endif
     //  Momentum transfer
-	   G4double Xmin = minmass/(Pprojectile.e() + Ptarget.e());
-	   G4double Xmax=1.;
-	   G4double Xplus =ChooseX(Xmin,Xmax);
-	   G4double Xminus=ChooseX(Xmin,Xmax);
+    G4double Xmin = minmass/(Pprojectile.e() + Ptarget.e());
+    G4double Xmax=1.;
+    G4double Xplus =ChooseX(Xmin,Xmax);
+    G4double Xminus=ChooseX(Xmin,Xmax);
 #ifdef debug
-	   G4cout<<"G4QFragm::ExciteSingDiffPartici:X-plus="<<Xplus<<",X-minus="<<Xminus<<G4endl;
+    G4cout<<"G4QFragm::ExciteSingDiffPartici:X-plus="<<Xplus<<",X-minus="<<Xminus<<G4endl;
 #endif
-	   G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-	   G4double Qplus =-pt2/Xminus/Ptarget.minus();
-	   G4double Qminus= pt2/Xplus /Pprojectile.plus();
-	   if (KeepProjectile)
-	     Qminus=(projectile->GetMass2()+pt2)/(Pprojectile.plus()+Qplus) - Pprojectile.minus();
-	   else Qplus=Ptarget.plus() - (target->GetMass2()+pt2)/(Ptarget.minus()-Qminus);		
-	   Qmomentum.setPz((Qplus-Qminus)/2);
-	   Qmomentum.setE( (Qplus+Qminus)/2);
+    G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
+    G4double Qplus =-pt2/Xminus/Ptarget.minus();
+    G4double Qminus= pt2/Xplus /Pprojectile.plus();
+    if (KeepProjectile)
+      Qminus=(projectile->GetMass2()+pt2)/(Pprojectile.plus()+Qplus) - Pprojectile.minus();
+    else Qplus=Ptarget.plus() - (target->GetMass2()+pt2)/(Ptarget.minus()-Qminus);  
+    Qmomentum.setPz((Qplus-Qminus)/2);
+    Qmomentum.setE( (Qplus+Qminus)/2);
 #ifdef debug
-	   G4cout<<"G4QFragm::ExciteDiffParticip: Qplus="<<Qplus<<", Qminus="<<Qminus<<", pt2="
+    G4cout<<"G4QFragm::ExciteDiffParticip: Qplus="<<Qplus<<", Qminus="<<Qminus<<", pt2="
           <<pt2<<", Qmomentum="<<Qmomentum<<", ProjM="<<(Pprojectile+Qmomentum).mag()
           <<", TargM="<<(Ptarget-Qmomentum).mag()<<G4endl;
 #endif
     // while is different from the Double Diffractive Excitation (@@ !)
-		  //} while((Pprojectile+Qmomentum).mag2()<= Mprojectile2 ||
+    //} while((Pprojectile+Qmomentum).mag2()<= Mprojectile2 ||
     //        (Ptarget-Qmomentum).mag2()<=Mtarget2);
-	 } while((Ptarget-Qmomentum).mag2()<=Mtarget2 ||
+  } while((Ptarget-Qmomentum).mag2()<=Mtarget2 ||
           (Pprojectile+Qmomentum).mag2()<=Mprojectile2 ||
           (Ptarget-Qmomentum).e() < 0. || (Pprojectile+Qmomentum).e() < 0.);
-	 Pprojectile += Qmomentum;
-	 Ptarget     -= Qmomentum;
+  Pprojectile += Qmomentum;
+  Ptarget     -= Qmomentum;
 #ifdef debug
-	 G4cout<<"G4QFragmentation::ExciteSingDiffParticipan: Proj(Q)="<<Pprojectile<<"(E="
+  G4cout<<"G4QFragmentation::ExciteSingDiffParticipan: Proj(Q)="<<Pprojectile<<"(E="
         <<Pprojectile.e()<<"), Targ(Q)="<<Ptarget<<"(E="<<Ptarget.e()
-	       <<"), Proj(back)="<<toLab*Pprojectile<<", Targ(bac)="<< toLab*Ptarget << G4endl;
+        <<"), Proj(back)="<<toLab*Pprojectile<<", Targ(bac)="<< toLab*Ptarget << G4endl;
 #endif
   // Transform back and update SplitableHadron Participant.
-	 Pprojectile.transform(toLab);
-	 Ptarget.transform(toLab);
+  Pprojectile.transform(toLab);
+  Ptarget.transform(toLab);
 #ifdef debug
-	 G4cout<< "G4QFragm::ExciteSingDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
+  G4cout<< "G4QFragm::ExciteSingDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
 #endif
-	 target->Set4Momentum(Ptarget); 	
+  target->Set4Momentum(Ptarget);  
 #ifdef debug
-	 G4cout<<"G4QFragm::ExciteDiffParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
+  G4cout<<"G4QFragm::ExciteDiffParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
 #endif
-	 projectile->Set4Momentum(Pprojectile);
-	 return true;
+  projectile->Set4Momentum(Pprojectile);
+  return true;
 } // End of ExciteSingleDiffParticipants
 
 void G4QFragmentation::SetParameters(G4int nCM, G4double thresh, G4double QGSMth,
@@ -766,34 +767,34 @@ void G4QFragmentation::SetParameters(G4int nCM, G4double thresh, G4double QGSMth
   ThersholdParameter = thresh;         // internal threshold
   QGSMThershold      = QGSMth;         // QGSM threshold
   theNucleonRadius   = radNuc;         // effective radius of the nucleon inside Nucleus
-	 widthOfPtSquare    = -2*SigPt*SigPt;	// width^2 of pt for string excitation
-	 minExtraMass       = extraM;	        // minimum excitation mass 
-	 minmass            = minM;	          // mean pion transverse mass; used for Xmin 
+  widthOfPtSquare    = -2*SigPt*SigPt; // width^2 of pt for string excitation
+  minExtraMass       = extraM;         // minimum excitation mass 
+  minmass            = minM;           // mean pion transverse mass; used for Xmin 
 }
 
 G4double G4QFragmentation::ChooseX(G4double Xmin, G4double Xmax) const
 {
 // choose an x between Xmin and Xmax with P(x) ~ 1/x
 //  to be improved...
-	 G4double range=Xmax-Xmin;
-	 if( Xmin<= 0. || range <=0.) 
-	 {
-		  G4cerr<<"***G4QFragmentation::ChooseX: Xmin="<<Xmin<<", Xmax="<<Xmax<< G4endl;
+  G4double range=Xmax-Xmin;
+  if( Xmin<= 0. || range <=0.) 
+  {
+    G4cerr<<"***G4QFragmentation::ChooseX: Xmin="<<Xmin<<", Xmax="<<Xmax<< G4endl;
     G4Exception("G4QFragmentation::ChooseX:","72",FatalException,"BadXRange");
-	 }
-	 G4double x;
-	 do {x=Xmin+G4UniformRand()*range;} while ( Xmin/x < G4UniformRand() );
+  }
+  G4double x;
+  do {x=Xmin+G4UniformRand()*range;} while ( Xmin/x < G4UniformRand() );
 #ifdef debug
   G4cout<<"G4QFragmentation::ChooseX: DiffractiveX="<<x<<G4endl;
 #endif
-	 return x;
+  return x;
 } // End of ChooseX
 
 // Pt distribution @@ one can use 1/(1+A*Pt^2)^B
 G4ThreeVector G4QFragmentation::GaussianPt(G4double widthSq, G4double maxPtSquare) const
 {
-	 G4double pt2; do{pt2=widthSq*std::log(G4UniformRand());} while (pt2>maxPtSquare);
-		pt2=std::sqrt(pt2);
-	 G4double phi=G4UniformRand()*twopi;
-	 return G4ThreeVector(pt2*std::cos(phi),pt2*std::sin(phi),0.);    
+  G4double pt2; do{pt2=widthSq*std::log(G4UniformRand());} while (pt2>maxPtSquare);
+  pt2=std::sqrt(pt2);
+  G4double phi=G4UniformRand()*twopi;
+  return G4ThreeVector(pt2*std::cos(phi),pt2*std::sin(phi),0.);    
 } // End of GaussianPt

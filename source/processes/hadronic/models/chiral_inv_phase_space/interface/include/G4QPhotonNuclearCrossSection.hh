@@ -35,6 +35,10 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: This is an original CHIPS process for photo-nuclear
+// interactions, which does not include "fast and dirty" corrections for
+// reactions near threshold, with respect to the GHAD application of CHIPS.
+// ------------------------------------------------------------------------
 
 #ifndef G4QPhotonNuclearCrossSection_h
 #define G4QPhotonNuclearCrossSection_h 1

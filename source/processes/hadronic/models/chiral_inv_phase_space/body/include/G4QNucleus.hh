@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.33 2007-10-31 13:23:07 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.34 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
-//  class header for Quasmon initiated Candidates used by the CHIPS Model
-// ----------------------------------------------------------------------
+//  class header for the nuclei and nuclear environment of the CHIPS Model
+// -----------------------------------------------------------------------
+//  Short description: a class describing properties of nuclei, which
+//  are necessary for the CHIPS Model.
+// -----------------------------------------------------------------------
 
 #ifndef G4QNucleus_h
 #define G4QNucleus_h 1

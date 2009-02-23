@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.6 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
 //                 by Mikhail Kossov, December 2003.
-//  Header of G4QCaptureAtRest class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
+// Header of G4QCaptureAtRest class of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Nuclear Capture At Rest Prosesses.
 // -------------------------------------------------------------------------------
@@ -77,6 +77,13 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short Description: This is a universal process for nuclear capture
+// (including annihilation) of all negative particles (negative hadrons,
+// negative leptons: mu- & tau-). It can be used for the cold neutron
+// capture, but somebody should decide what is the probability (defined
+// by the capture cross-section and atomic material properties) to switch
+// the cold neutron to the at-rest neutron. - M.K.2009.
+// ----------------------------------------------------------------------
 
 #ifndef G4QCaptureAtRest_hh
 #define G4QCaptureAtRest_hh

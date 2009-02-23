@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuENuclearCrossSection.hh,v 1.1 2007-10-02 10:00:37 mkossov Exp $
+// $Id: G4QANuENuclearCrossSection.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,7 @@
 // M.V. Kossov, CERN-ITEP(Moscow), 20-SEP-2007
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 20-SEP-2007
 //
-// Short description: this G4 singletone class calculates (nu_e,e) Nuclear cross section
+// Short description: this G4 singletone class calculates (anu_e,e+) Nuclear cross section
 // (Energy limit: E<320GeV->badExtrapolation) for a particular isotope (proportional to A)
 // ****************************************************************************************
 

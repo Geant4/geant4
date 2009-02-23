@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.hh,v 1.2 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QDiffraction.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction header ----------------
@@ -35,6 +35,16 @@
 // At present (Aug-07) it is based on the G4QDiffractionRatio class and is not tested.
 // The normalization is based on the temporary G4QProtonNuclearCrossSection class
 // -------------------------------------------------------------------------------
+// Short description: This is a process, which describes the diffraction
+// excitation of the projectile and the nucleus. On nuclei in addition there
+// can be a coherent diffraction process for the projectile, but it is
+// comparably small. The most important part of the diffraction is the
+// progectile diffraction excitation, as in this interaction proton can lose
+// only a small part of its energy and make the shower longer. This is because
+// only 1-2 (n) pions are produce in the diffraction escitation, and the mean
+// kept energy of the nucleon is (1-n/7)=80%. For kaons the kept energy is much
+// smaller (1-n/3.5)=60%, and for pions it is less important (about 40%).
+// ----------------------------------------------------------------------------
 
 #ifndef G4QDiffraction_hh
 #define G4QDiffraction_hh
@@ -81,13 +91,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -107,7 +117,7 @@ private:
   // Calculate Cross-Section of the Diffraction Reaction (p is in GeV @@ units)
   G4double CalculateXS(G4double p, G4int Z, G4int N, G4int pPDG);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------
@@ -125,4 +135,3 @@ private:
   static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
-

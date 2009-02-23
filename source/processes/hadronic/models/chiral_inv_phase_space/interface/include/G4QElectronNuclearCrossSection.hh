@@ -31,6 +31,10 @@
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
 //
+// --------------------------------------------------------------------------------
+// Short description: reaction cross-sections for electron-nuclear reactions, which
+// are integrals over virtual equivalent photons photons.
+// --------------------------------------------------------------------------------
 
 #ifndef G4QElectronNuclearCrossSection_h
 #define G4QElectronNuclearCrossSection_h 1

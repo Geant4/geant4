@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGluonString.cc,v 1.3 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QGluonString.cc,v 1.4 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QGluonString class -----------------
 //                 by Mikhail Kossov, December 2003.
 // G4QGluonString class of the CHIPS Simulation Branch in GEANT4
 // ---------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ****************************************************************************************
+// Short description: CHIPS object for the Quark-Gluon String
+// ---------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -205,14 +204,14 @@ G4double G4QGluonString::GetMeanFreePath(const G4Track& aTrack,
         {
           G4int N=pElement->GetIsotope(j)->GetN()-Z; // N means A=N+Z !
           if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QCaptureAtRest::GetMeanFreePath"
-																																	<<": Z="<<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+                                 <<": Z="<<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QGluonString::GetMeanFreePath:p#"<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QGluonString::PostStepDoIt:pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -369,7 +368,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   //G4int aProjPDG=std::abs(projPDG);
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QGluonString::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QGluonString::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -378,16 +377,16 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   }
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QCollis::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QCollis::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QGluonString::PostStepDoIt:E["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+      G4cout<<"G4QGluonString::PostStDoIt:E["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -396,7 +395,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QGluonString::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QGluonString::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -407,7 +406,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -416,7 +415,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QGluonString::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
+      G4cout<<"G4QGluonString::PostStepDoIt:SP["<<j<<"]="<<(*SPI)[j]<<",r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -424,7 +423,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QGluonString::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<G4endl;
+  G4cout<<"G4QGluonString::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<G4endl;
 #endif
   if(N<0)
   {
@@ -438,7 +437,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   G4double dsr=0.01*(sr+sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio);// ManualPa
-		//else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP CluPars
+  //else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP CluPars
   //else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.); //Pi- CluPars
 #ifdef debug
   G4cout<<"G4QGluonString::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
@@ -516,7 +515,7 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
     if(nFrag)                // Skip intermediate (decayed) hadrons
     {
 #ifdef debug
-	     G4cout<<"G4QGluonString::PostStepDoIt: Intermediate particle is found i="<<i<<G4endl;
+      G4cout<<"G4QGluonString::PostStepDoIt: Intermediate particle is found i="<<i<<G4endl;
 #endif
       delete hadr;
       continue;
@@ -529,19 +528,19 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
     else if(PDGCode==311 || PDGCode==-311)
     {
       if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
-						else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
+      else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
     }
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
     else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
     else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
-	   else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
+    else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
     {
       G4int aZ = hadr->GetCharge();
       G4int aA = hadr->GetBaryonNumber();
 #ifdef pdebug
-						G4cout<<"G4QGluonString::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
+      G4cout<<"G4QGluonString::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
 #endif
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
@@ -549,11 +548,11 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
     else
     {
 #ifdef pdebug
-						G4cout<<"G4QGluonString::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
+      G4cout<<"G4QGluonString::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
 #endif
       theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
 #ifdef pdebug
-						G4cout<<"G4QGluonString::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
+      G4cout<<"G4QGluonString::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
 #endif
     }
     if(!theDefinition)
@@ -593,11 +592,11 @@ G4VParticleChange* G4QGluonString::PostStepDoIt(const G4Track& track, const G4St
   } //                                                                                    |
   delete output; // instances of the G4QHadrons from the output are already deleted above +
 #ifdef debug
-		G4cout<<"G4QGluonString::PostStDoIt: afterSt="<<aParticleChange.GetTrackStatus()<<G4endl;
+  G4cout<<"G4QGluonString::PostStDoIt: afterSt="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
   aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
 #ifdef debug
-		G4cout<<"G4QGluonString::PostStepDoIt:*** PostStepDoIt is done ***, P="<<aProjPDG
+  G4cout<<"G4QGluonString::PostStepDoIt:*** PostStepDoIt is done ***, P="<<aProjPDG
         <<", St="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
   return G4VDiscreteProcess::PostStepDoIt(track, step);

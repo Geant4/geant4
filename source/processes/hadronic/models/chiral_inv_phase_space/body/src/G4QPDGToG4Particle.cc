@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.5 2006-06-29 20:07:09 gunter Exp $
+// $Id: G4QPDGToG4Particle.cc,v 1.6 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
@@ -34,6 +34,10 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: This is a helper class, which converts the PDG-defined
+// G4QHadrons of the CHIPS model to the G4 particles, defined by the singetones.
+// -----------------------------------------------------------------------------
+
 
 //#define pdebug
 
@@ -60,7 +64,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
 {
   if(!PDG) return 0;
   else if(PDG>0)     // Positive PDG Code
-		{
+  {
     if(PDG<100)
     {
       if(PDG==22) return G4Gamma::Gamma();
@@ -72,7 +76,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
           else return G4NeutrinoE::NeutrinoE();
         }
         else
-								{
+        {
           if(PDG<15)
           {
             if(PDG==13) return G4MuonMinus::MuonMinus();
@@ -88,7 +92,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
       else return 0; // @@ Warning can be added
     } // End of the Lepton definition
     else if(PDG<1000)
-				{
+    {
       if(PDG<420)
       {
         if(PDG<320)
@@ -110,7 +114,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
         }
       }
       else
-						{
+      {
         if(PDG<500)
         {
           if(PDG==421) return G4DMesonZero::DMesonZero();
@@ -128,7 +132,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
       }
     } // Emd of the Meson definition
     else
-				{
+    {
       if(PDG<3333)
       {
         if(PDG<3211)
@@ -136,7 +140,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
           if(PDG<3111)
           {
             if(PDG==2112) return G4Neutron::Neutron();
-						      else if(PDG==2212) return G4Proton::Proton();
+            else if(PDG==2212) return G4Proton::Proton();
             else return 0; // @@ Warning can be added
           }
           else
@@ -198,8 +202,8 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
     } // End of Baryon definition
   } 
   else               // Negative PDG Code
-		{
-		  G4int aPDG=-PDG;
+  {
+    G4int aPDG=-PDG;
 #ifdef pdebug
     G4cout<<"G4QPDGToG4Particle:Antiparticle PDG="<<PDG<<G4endl;
 #endif
@@ -213,7 +217,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
           else return G4AntiNeutrinoE::AntiNeutrinoE();
         }
         else
-								{
+        {
           if(aPDG<15)
           {
             if(aPDG==13) return G4MuonPlus::MuonPlus();
@@ -229,7 +233,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
       else return 0; // @@ Warning can be added
     } // End of the Anti-Lepton definition
     else if(aPDG<1000)
-				{
+    {
 #ifdef pdebug
       G4cout<<"G4QPDGToG4Particle:AntiMesons aPDG="<<aPDG<<G4endl;
 #endif
@@ -281,7 +285,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
       }
     } // Emd of the Anti-Meson definition
     else
-				{
+    {
       if(aPDG<3333)
       {
         if(aPDG<3211)
@@ -289,7 +293,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
           if(aPDG<3111)
           {
             if(aPDG==2112) return G4AntiNeutron::AntiNeutron();
-						      else if(aPDG==2212) return G4AntiProton::AntiProton();
+            else if(aPDG==2212) return G4AntiProton::AntiProton();
             else return 0; // @@ Warning can be added
           }
           else
@@ -356,7 +360,7 @@ G4ParticleDefinition* G4QPDGToG4Particle::GetParticleDefinition(G4int PDG)
 void G4QPDGToG4Particle::DefineAllParticles()
 // ==========================================
 {
-		//======== LEPTONS =========
+  //======== LEPTONS =========
   G4Gamma::GammaDefinition();
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();

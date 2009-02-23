@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.14 2007-11-15 09:36:43 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.15 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,8 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: a basic class for all CHIPS reaction cross-sections.
+// -----------------------------------------------------------------------
 
 //#define debug
 #define edebug
@@ -95,9 +97,9 @@ G4double G4VQCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4doub
                                         G4double* Y)
 {
 #ifdef pdebug
-		G4cout<<"G4VQCrossSection::EquLinearFit: ***Called*** X="<<DX<<", N="<<N<<", X0="<<X0
+  G4cout<<"G4VQCrossSection::EquLinearFit: ***Called*** X="<<DX<<", N="<<N<<", X0="<<X0
         <<", DX="<<DX<<G4endl;
-		G4cout<<"G4VQCrossSection::EquLinearFit: Y[0]="<<Y[0]<<", Y[N-1]="<<Y[N-1]<<G4endl;
+  G4cout<<"G4VQCrossSection::EquLinearFit: Y[0]="<<Y[0]<<", Y[N-1]="<<Y[N-1]<<G4endl;
 #endif
   if(DX<=0. || N<2)
   {

@@ -23,18 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.hh,v 1.3 2008-07-09 19:45:09 dennis Exp $
+// $Id: G4QDiscProcessMixer.hh,v 1.4 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer header ----------------
 //                 by Mikhail Kossov, Aug 2007.
-//  Header of G4QDiscProcessMixer class (hadron+A) of the CHIPS Simulation Branch in GEANT4
-// -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Hadron-Nuclear Diffractive Interaction Prosesses
-// -------------------------------------------------------------------------------
-// At present (Aug-07) it is not tested.
-// The normalization is based on the temporary G4QIonIonCrossSection class
-// -------------------------------------------------------------------------------
+//  Header of G4QDiscProcessMixer class of the CHIPS Simulation Branch in GEANT4
+// -----------------------------------------------------------------------------
+// Short description: universal mixer of processes (NOT models as in GHAD!)
+// depending on the application energy region (defined by users).
+// ------------------------------------------------------------------------
 
 #ifndef G4QDiscProcessMixer_hh
 #define G4QDiscProcessMixer_hh
@@ -67,7 +65,6 @@ public:
   G4QDiscProcessMixer(const G4String& processName = "Mixed Discrete Process",
                       const G4ParticleDefinition* proj = G4Gamma::Gamma(),
                       G4ProcessType pType = fHadronic );
-
   // Destructor
   ~G4QDiscProcessMixer();
 
@@ -75,7 +72,7 @@ public:
 
   G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                                 G4double previousStepSize,
-			                                             G4ForceCondition* condition);
+                                                G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
 
@@ -93,7 +90,7 @@ private:
   // Copy constructor
   G4QDiscProcessMixer(const G4QDiscProcessMixer& DPM);
 
-		// BODY
+  // BODY
   const G4ParticleDefinition* DPParticle;             // Particle for DiscreteProc mixture
   G4QDiscreteProcessVector theDPVector;               // Vector of Discrete Processes
   //G4LorentzVector EnMomConservation;                // Residual of Energy/Momentum Cons.

@@ -27,8 +27,8 @@
 #define G4ChiralInvariantPhaseSpace_h 1
 
 //
-// Modified:
-// 16.01.08 V.Ivanchenko move inlined method to source
+// Created: H.-P. Wellicsh: GHAD model wrapper for the CHIPS model (1997)
+// Modified: 16.01.08 V.Ivanchenko move inlined method to source
 //
 
 #include "globals.hh"

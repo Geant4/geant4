@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.4 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QDiscProcessMixer class -----------------
+//      ---------------- G4QDiscProcessMixer class -------------------
 //                 by Mikhail Kossov, Aug 2007.
 // G4QDiscProcessMixer class of the CHIPS Simulation Branch in GEANT4
-// ---------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the "chips/interface" directory *********
-// ****************************************************************************************
+// ------------------------------------------------------------------------
+// Short description: universal mixer of processes (NOT models as in GHAD!)
+// depending on the application energy region (defined by users).
+// ------------------------------------------------------------------------
 
 //#define debug
 
@@ -79,8 +79,8 @@ G4bool G4QDiscProcessMixer::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4double G4QDiscProcessMixer::PostStepGetPhysicalInteractionLength(const G4Track& Track,
-			                                                         G4double   PrevStSize,
-			                                                         G4ForceCondition* F)
+                                                                   G4double  PrevStSize,
+                                                                   G4ForceCondition* F)
 {
   G4double kEn=Track.GetDynamicParticle()->GetKineticEnergy(); // Projectile kinetic energy
   G4int maxDP=theDPVector.size();

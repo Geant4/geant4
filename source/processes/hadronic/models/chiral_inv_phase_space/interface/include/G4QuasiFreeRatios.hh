@@ -30,7 +30,10 @@
 // GEANT4 physics class: G4QuasiFreeRatios -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
-//
+// ----------------------------------------------------------------------
+// Short description: Provides percentage of quasi-free and quasi-elastic
+// reactions in the inelastic reactions.
+// ----------------------------------------------------------------------
 
 #ifndef G4QuasiFreeRatios_h
 #define G4QuasiFreeRatios_h 1
@@ -95,5 +98,5 @@ class G4QuasiFreeRatios
   static std::vector<G4double*> vT;     // Vector of pointers to LinTable
   static std::vector<G4double*> vL;     // Vector of pointers to LogTable
   static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
-}; 					
+};
 #endif

@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+// (@@ Why only pi-, why not pi+? - Looks like a dummy CHIPS pocess - M.K.)
+// 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
+
 #ifndef G4PionMinusNuclearReaction_h
 #define G4PionMinusNuclearReaction_h
 

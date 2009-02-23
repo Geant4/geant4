@@ -36,6 +36,8 @@
 // ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
 // *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
+// Short description: CHIPS cross-sectons for Ion-Ion interactions
+// ---------------------------------------------------------------
 //
 //#define debug
 //#define pdebug
@@ -84,7 +86,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
   G4cout<<"G4QIICS::GetCS:>>> f="<<fCS<<", Z="<<tZ<<"("<<lastZ<<"), N="<<tN<<"("<<lastN
         <<"),PDG="<<pPDG<<"("<<lastPDG<<"), p="<<pMom<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
-		//CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+  //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
   if(!pPDG)
   {
@@ -105,9 +107,9 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
     if(lastI) for(G4int i=0; i<lastI; i++) if(colPDG[i]==pPDG) // The partType is found
-	   {                                  // The nucleus with projPDG is found in AMDB
+    {                                  // The nucleus with projPDG is found in AMDB
       if(colN[i]==tN && colZ[i]==tZ)
-						{
+      {
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
@@ -128,8 +130,8 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
         if(std::fabs(lastP/pMom-1.)<tolerance)
         {
 #ifdef pdebug
-          G4cout<<"G4QIonIonCS::GetCS:P="<<pMom<<",InXS="<<lastICS*millibarn<<",ElXS="<<lastECS*millibarn
-                <<G4endl;
+          G4cout<<"G4QIonIonCS::GetCS:P="<<pMom<<",InXS="<<lastICS*millibarn<<",ElXS="
+                <<lastECS*millibarn<<G4endl;
 #endif
           CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // Update param's only
           if(fCS) return lastICS*millibarn;     // Use theLastInelasticCS
@@ -160,9 +162,9 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       j++;                             // Increment a#0f records found in DB for this pPDG
-	   }
-	   if(!in)                            // This nucleus has not been calculated previously
-	   {
+    }
+    if(!in)                            // This nucleus has not been calculated previously
+    {
 #ifdef pdebug
       G4cout<<"G4QIICS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
@@ -170,7 +172,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
       lastICS=CalculateCrossSection(true ,0,j,lastPDG,lastZ,lastN,pMom); //calculate&create
       lastECS=CalculateCrossSection(false,0,j,lastPDG,lastZ,lastN,pMom); //calculate&create
       if(lastICS<=0. || lastECS<=0.)
-						{
+      {
         lastTH = ThresholdEnergy(tZ, tN); // The Threshold Energy which is now the last
 #ifdef pdebug
         G4cout<<"G4QIonIonCrossSect::GetCrossSect:NewThresh="<<lastTH<<",P="<<pMom<<G4endl;
@@ -182,7 +184,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
 #endif
           lastTH=pMom;
         }
-						}
+      }
 #ifdef pdebug
       G4cout<<"G4QIICS::GetCS: *New* ICS="<<lastICS<<", ECS="<<lastICS<<",N="<<lastN<<",Z="
             <<lastZ<<G4endl;
@@ -200,9 +202,9 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
 #endif
       if(fCS) return lastICS*millibarn;     // Use theLastInelasticCS
       return         lastECS*millibarn;     // Use theLastElasticCS
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
     else
-				{
+    {
 #ifdef pdebug
       G4cout<<"G4QIICS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
@@ -285,20 +287,20 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
+    {
       lastLENI=LENI[I];              // Pointer to Low Energy inelastic cross sections
       lastHENI=HENI[I];              // Pointer to High Energy inelastic cross sections
       lastLENE=LENE[I];              // Pointer to Low Energy inelastic cross sections
       lastHENE=HENE[I];              // Pointer to High Energy inelastic cross sections
     }
-	   else                             // This isotope wasn't calculated previously => CREATE
-	   {
+    else                             // This isotope wasn't calculated previously => CREATE
+    {
       lastLENI = new G4double[nL];   // Allocate memory for the new LEN cross sections
       lastHENI = new G4double[nH];   // Allocate memory for the new HEN cross sections
       lastLENE = new G4double[nL];   // Allocate memory for the new LEN cross sections
       lastHENE = new G4double[nH];   // Allocate memory for the new HEN cross sections
       G4int er=GetFunctions(pZ,pN,tZ,tN,lastLENI,lastHENI,lastLENE,lastHENE);
-	     if(er<1) G4cerr<<"*W*G4QIonIonCroSec::CalcCrossSection: pA="<<tA<<",tA="<<tA<<G4endl;
+      if(er<1) G4cerr<<"*W*G4QIonIonCroSec::CalcCrossSection: pA="<<tA<<",tA="<<tA<<G4endl;
 #ifdef debug
       G4cout<<"G4QIonIonCrossSection::CalcCS: GetFunctions er="<<er<<",pA="<<pA<<",tA="<<tA
             <<G4endl;
@@ -310,18 +312,18 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
       HENI.push_back(lastHENI);      // added HEN Inelastic
       LENE.push_back(lastLENE);      // added LEN Elastic
       HENE.push_back(lastHENE);      // added HEN Elastic
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
   if (Momentum<lastTH) return 0.;    // It must be already checked in the interface class
-		else if (Momentum<Pmin)            // LEN region (approximated in E, not in lnE)
+  else if (Momentum<Pmin)            // LEN region (approximated in E, not in lnE)
   {
 #ifdef debug
-	   G4cout<<"G4QIICS::CalCS:p="<<pA<<",t="<<tA<<",n="<<nL<<",T="<<THmin<<",d="<<dP<<G4endl;
+    G4cout<<"G4QIICS::CalCS:p="<<pA<<",t="<<tA<<",n="<<nL<<",T="<<THmin<<",d="<<dP<<G4endl;
 #endif
     if(tA<1. || pA<1.)
     {
-  	   G4cout<<"-Warning-G4QIICS::CalcCS: pA="<<pA<<" or tA="<<tA<<" aren't nuclei"<<G4endl;
+      G4cout<<"-Warning-G4QIICS::CalcCS: pA="<<pA<<" or tA="<<tA<<" aren't nuclei"<<G4endl;
       sigma=0.;
     }
     else
@@ -330,7 +332,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
       else   sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLENE);
     }
 #ifdef debugn
-	   if(sigma<0.) G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<",tA="<<tA<<",XS="<<XS<<",P="
+    if(sigma<0.) G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<",tA="<<tA<<",XS="<<XS<<",P="
                        <<Momentum<<", Th="<<THmin<<", dP="<<dP<<G4endl;
 #endif
   }
@@ -342,7 +344,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
 #endif
     if(tA<=1. || pA<=1.)
     {
-  	   G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<"or tA="<<tA<<" aren't composit"<<G4endl;
+      G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<"or tA="<<tA<<" aren't composit"<<G4endl;
       sigma=0.;
     }
     else
@@ -353,7 +355,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   }
   else                                      // UltraHighE region (not frequent)
   {
-				std::pair<G4double, G4double> inelel = CalculateXS(pZ, pN, tZ, tN, Momentum);
+    std::pair<G4double, G4double> inelel = CalculateXS(pZ, pN, tZ, tN, Momentum);
     if(XS) sigma=inelel.first;
     else   sigma=inelel.second;
   }
@@ -422,7 +424,7 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
   G4double inCS=0.;
   G4double elCS=0.;
   if(pA<1.1 || tA<1.1) // Ion-nucleon/nucleon-ion interaction use NA(in,el)
-		{
+  {
     if ( (pZ == 1 && !pN) || (tZ == 1 && !tN) ) // proton-nuclear
     {
       elCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
@@ -433,10 +435,10 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
       elCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
       inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
     }
-				else G4cerr<<"-Warn-G4QIICS::CaCS:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
+    else G4cerr<<"-Warn-G4QIICS::CaCS:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
   }
   else
-		{
+  {
     G4double P2=Mom*Mom;
     G4double P4=P2*P2;
     G4double P8=P4*P4;

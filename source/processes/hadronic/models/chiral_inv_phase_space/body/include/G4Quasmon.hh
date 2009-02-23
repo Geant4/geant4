@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.39 2007-08-09 13:07:47 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.40 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
 //      class for a Quasmon used by the CHIPS Model
 // ------------------------------------------------------------
+// Short description: If partons from the G4QPartonPair are close in
+// rapidity, they create Quasmons, but if they are far in the rapidity
+// space, they can not interact directly. Say the bottom parton (quark)
+// has rapidity 0, and the top parton (antiquark) has rapidity 8, then
+// the top quark splits in two by radiating gluon, and each part has
+// rapidity 4, then the gluon splits in quark-antiquark pair (rapidity
+// 2 each), and then the quark gadiates anothe gluon and reachs rapidity
+// 1. Now it can interact with the bottom antiquark, creating a Quasmon
+// or a hadron. The intermediate partons is the string ladder.
+// ---------------------------------------------------------------------
 
 #ifndef G4Quasmon_h
 #define G4Quasmon_h 1

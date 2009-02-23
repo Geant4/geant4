@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.3 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QIonIonElastic.cc,v 1.4 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
@@ -33,6 +33,9 @@
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ****************************************************************************************
+// Short description: a simple process for the Ion-Ion elastic scattering.
+// For heavy by heavy ions it can reach 50% of the total cross-section.
+// -----------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -152,12 +155,12 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
           if(pElement->GetIsotope(j)->GetZ()!=Z) G4cerr<<"G4QIonIonEl::GetMeanFreePath Z="
                                          <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QIonIonElastic::GetMeanFP:pair#="<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QIonIonElastic::GetMeanFP: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -184,7 +187,7 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
 #ifdef debug
       G4cout<<"G4QIIEl::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=false;                    // Extract elastic Ion-Ion cross-section
+      G4bool ccsf=false;                    // Extract elastic Ion-Ion cross-section
 #ifdef debug
       G4cout<<"G4QIonIonElastic::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
@@ -231,7 +234,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   static const G4double fm2MeV2 = 3*38938./1.09; // (3/1.09)*(hc)^2 in fm^2*MeV^2
   static G4bool CWinit = true;                   // CHIPS Warld needs to be initted
   if(CWinit)
-		{
+  {
     CWinit=false;
     G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
   }
@@ -291,7 +294,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   else G4cout<<"-Warning-G4QIonIonElastic::PostStepDoIt:Unknown projectile Ion"<<G4endl;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QIonIonElastic::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -303,16 +306,16 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4double pN=pA-pZ;                           // Projectile N
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QIonIonElastic::PSDI:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QIonIonElastic::PSDI:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QIonIonElastic::PSDI: EPM["<<i<<"]="<<ElProbInMat[i]<<", r="<<rnd<<G4endl;
+      G4cout<<"G4QIonIonElastic::PSDI: EPM["<<i<<"]="<<ElProbInMat[i]<<", r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -321,7 +324,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QIonIonElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QIonIonElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -332,7 +335,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QIonIonElastic::PosStDoIt: nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QIonIonElastic::PosStDoIt: nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -341,7 +344,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QIonIonElastic::PostStDI: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
+      G4cout<<"G4QIonIonElastic::PostStDI: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -349,7 +352,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QIonIonElastic::PostStepDoIt:j="<<i<<",N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt:j="<<i<<",N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
 #endif
   if(N<0)
   {
@@ -491,10 +494,10 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   aParticleChange.ProposeMomentumDirection(findir); // new direction for the scattered part
   EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
   // This is how in general the secondary should be identified
-		G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
+  G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
   G4int aA = Z+N;
 #ifdef pdebug
-		G4cout<<"G4QIonIonElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
 #endif
   G4ParticleDefinition* theDefinition=G4ParticleTable::GetParticleTable()
                                                                        ->FindIon(Z,aA,0,Z);

@@ -31,6 +31,9 @@
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
 //
+//================================================================================
+// Short description: Interaction cross-sections for the G4QElastic process
+// -------------------------------------------------------------------------------
 
 #ifndef G4QElasticCrossSection_h
 #define G4QElasticCrossSection_h 1
@@ -120,14 +123,14 @@ private:
   static G4double  lastPIN;  // Last initialized max momentum
   static G4double* lastCST;  // Last cross-section table
   static G4double* lastPAR;  // Last parameters for functional calculation
-  static G4double* lastSST;  // E-dep of squared slope of the first difruction	
-  static G4double* lastS1T;  // E-dep of mantissa of the first difruction	
+  static G4double* lastSST;  // E-dep of squared slope of the first difruction 
+  static G4double* lastS1T;  // E-dep of mantissa of the first difruction 
   static G4double* lastB1T;  // E-dep of the slope of the first difruction
   static G4double* lastS2T;  // E-dep of mantissa of the second difruction
   static G4double* lastB2T;  // E-dep of the slope of theSecond difruction
-  static G4double* lastS3T;  // E-dep of mantissa of the third difruction	
+  static G4double* lastS3T;  // E-dep of mantissa of the third difruction 
   static G4double* lastB3T;  // E-dep of the slope of the third difruction
-  static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction	
+  static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction 
   static G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
 
   static std::vector <G4double*> PAR;   // Vector of parameters for functional calculations
@@ -141,5 +144,5 @@ private:
   static std::vector <G4double*> B3T;   // Vector of the third slope
   static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
   static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
- }; 					
+ };
 #endif

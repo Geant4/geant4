@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -37,6 +37,8 @@
 //     G4QGSParticipants
 //     G4QGSModels
 //     G4ExcitedStringDecay
+// -----------------------------------------------------------------------------
+// Short description: CHIPS string fragmentation class
 // -----------------------------------------------------------------------------
 //
 #ifndef G4QFragmentation_h
@@ -69,8 +71,8 @@ class G4QFragmentation
 
   void Init(G4double theZ, G4double theA)
   {
-	   if(!theNucleus) theNucleus = new G4QNucleus(G4int(theZ),G4int(theA-theZ+.0001));
-	   theNucleus->InitByPDG(90000000+G4int(theZ)*1000+G4int(theA-theZ+.0001));
+    if(!theNucleus) theNucleus = new G4QNucleus(G4int(theZ),G4int(theA-theZ+.0001));
+    theNucleus->InitByPDG(90000000+G4int(theZ)*1000+G4int(theA-theZ+.0001));
   }
      
   void SetNucleus(G4QNucleus* aNucleus) {theNucleus=aNucleus;}
@@ -115,11 +117,11 @@ class G4QFragmentation
   static G4double QGSMThershold; 
   static G4double theNucleonRadius;
   // Parameters of diffractional fragmentation
-	 static G4double widthOfPtSquare;	  // width^2 of pt for string excitation
-	 static G4double minExtraMass;	     // minimum excitation mass 
-	 static G4double minmass;	          // mean pion transverse mass; used for Xmin 
+  static G4double widthOfPtSquare;   // width^2 of pt for string excitation
+  static G4double minExtraMass;      // minimum excitation mass 
+  static G4double minmass;           // mean pion transverse mass; used for Xmin 
 
-		// Body
+  // Body
   G4QInteractionVector theInteractions;
   G4QHadronVector      theTargets; 
   G4QPartonPairVector  thePartonPairs;
@@ -133,5 +135,3 @@ class G4QFragmentation
 };
 
 #endif
-
-

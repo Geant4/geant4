@@ -23,18 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.hh,v 1.4 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QLowEnergy.hh,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy header ----------------
 //                 by Mikhail Kossov, Aug 2007.
 //  Header of G4QLowEnergy class (A+A) of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Ion-Ion Low Energy Inelastic Interaction Prosesses
+// This is a unique CHIPS class for the Ion-Ion Low Energy Inelastic Interactions
 // -------------------------------------------------------------------------------
 // At present (Aug-07) it is not tested.
 // The normalization is based on the temporary G4QIonIonCrossSection class
 // -------------------------------------------------------------------------------
+// Short description: This is a fast low energy algorithm for the
+// inelastic interactions of nucleons and nuclei (ions) with nuclei.
+// This is a fase-space algorithm, but not quark level. Provides
+// nuclear fragments upto alpha only. Never was tumed (but can be).
+// ---------------------------------------------------------------
 
 #ifndef G4QLowEnergy_hh
 #define G4QLowEnergy_hh
@@ -82,13 +87,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -111,7 +116,7 @@ private:
   // Calculate Cross-Section of the Diffraction Reaction (p is in GeV @@ units)
   G4double CalculateXS(G4double p, G4int Z, G4int N, G4int pPDG);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------

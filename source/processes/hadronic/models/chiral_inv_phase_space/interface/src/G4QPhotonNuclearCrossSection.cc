@@ -35,7 +35,11 @@
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
-//
+// Short description: This is an original CHIPS process for photo-nuclear
+// interactions, which does not include "fast and dirty" corrections for
+// reactions near threshold, with respect to the GHAD application of CHIPS.
+// ------------------------------------------------------------------------
+
 //#define debug
 //#define pdebug
 //#define debug3
@@ -84,7 +88,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   G4cout<<"G4QPhCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
-		//CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+  //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
   if(!pPDG)
   {
@@ -105,9 +109,9 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
     if(lastI) for(G4int i=0; i<lastI; i++) if(colPDG[i]==pPDG) // The partType is found
-	   {                                  // The nucleus with projPDG is found in AMDB
+    {                                  // The nucleus with projPDG is found in AMDB
       if(colN[i]==tgN && colZ[i]==tgZ)
-						{
+      {
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
@@ -124,7 +128,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-	//        if(std::fabs(lastP/pMom-1.)<tolerance) // VI do not use tolerance
+ //        if(std::fabs(lastP/pMom-1.)<tolerance) // VI do not use tolerance
         if(lastP == pMom)
         {
 #ifdef pdebug
@@ -158,16 +162,16 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       j++;                             // Increment a#0f records found in DB for this pPDG
-	   }
-	   if(!in)                            // This nucleus has not been calculated previously
-	   {
+    }
+    if(!in)                            // This nucleus has not been calculated previously
+    {
 #ifdef pdebug
       G4cout<<"G4QPhCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,lastPDG,lastZ,lastN,pMom); //calculate & create
       if(lastCS<=0.)
-						{
+      {
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
         G4cout<<"G4QPhCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
@@ -179,7 +183,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
           lastTH=pEn;
         }
-						}
+      }
 #ifdef pdebug
       G4cout<<"G4QPhCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
@@ -195,9 +199,9 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       return lastCS*millibarn;
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
     else
-				{
+    {
 #ifdef pdebug
       G4cout<<"G4QPrCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
@@ -265,21 +269,21 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
                            mT = G4NucleiProperties::GetNuclearMass(A,Z)/MeV;
   G4double mP= infEn;
   if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
-     	    mP = G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV; // ResNucMass for a proton
+          mP = G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV;// ResNucMass for a proton
 
   G4double mN= infEn;
   if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
-    	    mN = G4NucleiProperties::GetNuclearMass(A-1.,Z)/MeV;  // ResNucMass for a neutron
+         mN = G4NucleiProperties::GetNuclearMass(A-1.,Z)/MeV;  // ResNucMass for a neutron
 
   G4double mA= infEn;
   if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
-     	    mA=G4NucleiProperties::GetNuclearMass(A-4.,Z-2.)/MeV; // ResNucMass for an alpha
+          mA=G4NucleiProperties::GetNuclearMass(A-4.,Z-2.)/MeV; // ResNucMass for an alpha
 
   G4double dP= mP +mProt - mT;
   G4double dN= mN +mNeut - mT;
   G4double dA= mA +mAlph - mT;
 #ifdef pdebug
-		G4cout<<"G4QPhotoNucCS::ThreshEn: mP="<<mP<<",dP="<<dP<<",mN="<<mN<<",dN="<<dN<<",mA="
+  G4cout<<"G4QPhotoNucCS::ThreshEn: mP="<<mP<<",dP="<<dP<<",mN="<<mN<<",dN="<<dN<<",mA="
         <<mA<<",dA="<<dA<<",mT="<<mT<<",A="<<A<<",Z="<<Z<<G4endl;
 #endif
   if(dP<dN)dN=dP;
@@ -292,7 +296,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
                                           G4int, G4int targZ, G4int targN, G4double Energy)
 {
 #ifdef pdebug
-		G4cout<<"G4QPhotonNucCrossSection::CalculateCrossSection: ***Called***"<<G4endl;
+  G4cout<<"G4QPhotonNucCrossSection::CalculateCrossSection: ***Called***"<<G4endl;
 #endif
   static const G4double THmin=2.;  // minimum Energy Threshold
   static const G4double dE=1.;     // step for the GDR table
@@ -319,7 +323,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   //
   onlyCS=CS;                         // Flag to calculate only CS (not Si/Bi)
 #ifdef pdebug
-		G4cout<<"G4QPhotonNucCS::CalcCS: P="<<Energy<<", F="<<F<<", I="<<I<<", Z="<<targZ
+  G4cout<<"G4QPhotonNucCS::CalcCS: P="<<Energy<<", F="<<F<<", I="<<I<<", Z="<<targZ
         <<", N="<<targN<<", onlyCS="<<CS<<",E="<<Energy<<",th="<<THmin<<G4endl;
   if(F==-27) return 0.;
 #endif
@@ -328,7 +332,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
     lastE=0.;
     lastSig=0.;
 #ifdef pdebug
-				G4cout<<"---> G4QMuonNucCS::CalcCS: CS=0  as E="<<Energy<<" < "<<THmin<<G4endl;
+    G4cout<<"---> G4QMuonNucCS::CalcCS: CS=0  as E="<<Energy<<" < "<<THmin<<G4endl;
 #endif
     return 0.;                      // @@ This can be dangerouse for the heaviest nuc.!
   }
@@ -337,13 +341,13 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
+    {
       lastGDR=GDR[I];                // Pointer to prepared GDR cross sections
       lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
       lastSP =spA[I];                // Shadowing coefficient for UHE
     }
-	   else                             // This isotope wasn't calculated previously => CREATE
-	   {
+    else                             // This isotope wasn't calculated previously => CREATE
+    {
       G4double lnA=std::log(A);          // The nucleus is not found in DB. It is new.
       if(A==1.) lastSP=1.;               // The Reggeon shadowing (A=1)
       else      lastSP=A*(1.-shc*lnA);   // The Reggeon shadowing
@@ -356,7 +360,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       lastGDR = new G4double[nL];        // Allocate memory for the new GDR cross sections
       lastHEN = new G4double[nH];        // Allocate memory for the new HEN cross sections
       G4int er=GetFunctions(A,lastGDR,lastHEN);// set newZeroPosition and fill theFunctions
-	     if(er<1) G4cerr<<"***G4QPhotNucCrosSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
+      if(er<1) G4cerr<<"***G4QPhotNucCrosSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
 #ifdef debug
       G4cout<<"G4QPhotonNuclearCrossSec::CalcCS:**GDR/HEN're made** GetFunEr="<<er<<G4endl;
 #endif
@@ -366,19 +370,19 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       GDR.push_back(lastGDR);            // added GDR, found by AH 10/7/02
       HEN.push_back(lastHEN);            // added HEN, found by AH 10/7/02
       spA.push_back(lastSP);             // Pomeron Shadowing
-	   } // End of creation of the new set of parameters
+    } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
   if (Energy<lastTH) return 0.;             // It must be already checked in the interface
   else if (Energy<Emin)                     // GDR region (approximated in E, not in lnE)
   {
 #ifdef debug
-	   G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
+    G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
 #endif
     if(A<=1.) sigma=0.;
     else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
-	   if(sigma<0.)
+    if(sigma<0.)
       G4cout<<"G4QPhoNucCS::CalcCS:A="<<A<<",E="<<Energy<<",T="<<THmin<<",dE="<<dE<<G4endl;
 #endif
   }
@@ -568,20 +572,20 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     9.389503e-1,9.291078e-1,9.197629e-1,9.108970e-1,9.024933e-1,8.945360e-1,8.870112e-1};
   static const G4double SL9[nL]={
     3.243985e-4,1.122034e-3,3.000932e-3,6.850212e-3,1.414720e-2,2.751937e-2,5.204925e-2,
-				9.887958e-2,1.966468e-1,4.282973e-1,1.041076e+0,2.706630e+0,6.509565e+0,1.085114e+1,
-				1.162472e+1,1.124054e+1,1.202416e+1,1.402207e+1,1.659634e+1,1.891975e+1,2.032292e+1,
-				2.059083e+1,1.993672e+1,1.873926e+1,1.732572e+1,1.590211e+1,1.457097e+1,1.336993e+1,
-				1.230272e+1,1.135820e+1,1.052046e+1,9.773672e+0,9.103884e+0,8.499562e+0,7.951408e+0,
-				7.451996e+0,6.995366e+0,6.576679e+0,6.191930e+0,5.837748e+0,5.511235e+0,5.209864e+0,
-				4.931401e+0,4.673850e+0,4.435420e+0,4.214488e+0,4.009588e+0,3.819384e+0,3.642664e+0,
-				3.478323e+0,3.325356e+0,3.182848e+0,3.049964e+0,2.925943e+0,2.810093e+0,2.701782e+0,
-				2.600432e+0,2.505518e+0,2.416558e+0,2.333114e+0,2.254783e+0,2.181197e+0,2.112021e+0,
-				2.046943e+0,1.985682e+0,1.927976e+0,1.873586e+0,1.822292e+0,1.773891e+0,1.728195e+0,
-				1.685032e+0,1.644242e+0,1.605677e+0,1.569201e+0,1.534686e+0,1.502017e+0,1.471082e+0,
-				1.441781e+0,1.414020e+0,1.387711e+0,1.362772e+0,1.339127e+0,1.316705e+0,1.295438e+0,
-				1.275266e+0,1.256130e+0,1.237976e+0,1.220753e+0,1.204413e+0,1.188912e+0,1.174209e+0,
-				1.160265e+0,1.147042e+0,1.134507e+0,1.122628e+0,1.111376e+0,1.100721e+0,1.090639e+0,
-				1.081106e+0,1.072098e+0,1.063597e+0,1.055582e+0,1.048036e+0,1.040943e+0,1.034290e+0};
+    9.887958e-2,1.966468e-1,4.282973e-1,1.041076e+0,2.706630e+0,6.509565e+0,1.085114e+1,
+    1.162472e+1,1.124054e+1,1.202416e+1,1.402207e+1,1.659634e+1,1.891975e+1,2.032292e+1,
+    2.059083e+1,1.993672e+1,1.873926e+1,1.732572e+1,1.590211e+1,1.457097e+1,1.336993e+1,
+    1.230272e+1,1.135820e+1,1.052046e+1,9.773672e+0,9.103884e+0,8.499562e+0,7.951408e+0,
+    7.451996e+0,6.995366e+0,6.576679e+0,6.191930e+0,5.837748e+0,5.511235e+0,5.209864e+0,
+    4.931401e+0,4.673850e+0,4.435420e+0,4.214488e+0,4.009588e+0,3.819384e+0,3.642664e+0,
+    3.478323e+0,3.325356e+0,3.182848e+0,3.049964e+0,2.925943e+0,2.810093e+0,2.701782e+0,
+    2.600432e+0,2.505518e+0,2.416558e+0,2.333114e+0,2.254783e+0,2.181197e+0,2.112021e+0,
+    2.046943e+0,1.985682e+0,1.927976e+0,1.873586e+0,1.822292e+0,1.773891e+0,1.728195e+0,
+    1.685032e+0,1.644242e+0,1.605677e+0,1.569201e+0,1.534686e+0,1.502017e+0,1.471082e+0,
+    1.441781e+0,1.414020e+0,1.387711e+0,1.362772e+0,1.339127e+0,1.316705e+0,1.295438e+0,
+    1.275266e+0,1.256130e+0,1.237976e+0,1.220753e+0,1.204413e+0,1.188912e+0,1.174209e+0,
+    1.160265e+0,1.147042e+0,1.134507e+0,1.122628e+0,1.111376e+0,1.100721e+0,1.090639e+0,
+    1.081106e+0,1.072098e+0,1.063597e+0,1.055582e+0,1.048036e+0,1.040943e+0,1.034290e+0};
   static const G4double SL10[nL]={
     4.311217e-4,1.384716e-3,3.549518e-3,7.988549e-3,1.667330e-2,3.341344e-2,6.552895e-2,
     1.266167e-1,2.409191e-1,4.501490e-1,8.243911e-1,1.480280e+0,2.612343e+0,4.545249e+0,
@@ -712,20 +716,20 @@ G4int G4QPhotonNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4doub
     3.348730e+0,3.342620e+0,3.336699e+0,3.330967e+0,3.325427e+0,3.320085e+0,3.314951e+0};
   static const G4double SL18[nL]={
     2.220534e-3,5.640053e-3,1.253572e-2,2.881392e-2,7.191580e-2,1.859408e-1,4.687157e-1,
-				1.115760e+0,2.485562e+0,5.183559e+0,1.013008e+1,1.847496e+1,3.103145e+1,4.701870e+1,
-				6.345164e+1,7.777111e+1,8.950804e+1,9.321427e+1,8.410731e+1,6.975786e+1,5.670984e+1,
-				4.641759e+1,3.856198e+1,3.257293e+1,2.796698e+1,2.438084e+1,2.154901e+1,1.927832e+1,
-				1.742802e+1,1.589540e+1,1.460538e+1,1.350313e+1,1.254846e+1,1.171188e+1,1.097157e+1,
-				1.031123e+1,9.718498e+0,9.183826e+0,8.699693e+0,8.260038e+0,7.859873e+0,7.495011e+0,
-				7.161876e+0,6.857372e+0,6.578785e+0,6.323715e+0,6.090025e+0,5.875801e+0,5.679326e+0,
-				5.499048e+0,5.333567e+0,5.181614e+0,5.042039e+0,4.913795e+0,4.795932e+0,4.687583e+0,
-				4.587960e+0,4.496341e+0,4.412068e+0,4.334539e+0,4.263201e+0,4.197551e+0,4.137125e+0,
-				4.081496e+0,4.030275e+0,3.983101e+0,3.939643e+0,3.899598e+0,3.862684e+0,3.828641e+0,
-				3.797233e+0,3.768237e+0,3.741451e+0,3.716686e+0,3.693770e+0,3.672542e+0,3.652854e+0,
-				3.634571e+0,3.617565e+0,3.601721e+0,3.586931e+0,3.573099e+0,3.560132e+0,3.547947e+0,
-				3.536470e+0,3.525629e+0,3.515361e+0,3.505610e+0,3.496321e+0,3.487449e+0,3.478950e+0,
-				3.470787e+0,3.462928e+0,3.455342e+0,3.448006e+0,3.440898e+0,3.434002e+0,3.427303e+0,
-				3.420792e+0,3.414463e+0,3.408314e+0,3.402345e+0,3.396560e+0,3.390968e+0,3.385579e+0};
+    1.115760e+0,2.485562e+0,5.183559e+0,1.013008e+1,1.847496e+1,3.103145e+1,4.701870e+1,
+    6.345164e+1,7.777111e+1,8.950804e+1,9.321427e+1,8.410731e+1,6.975786e+1,5.670984e+1,
+    4.641759e+1,3.856198e+1,3.257293e+1,2.796698e+1,2.438084e+1,2.154901e+1,1.927832e+1,
+    1.742802e+1,1.589540e+1,1.460538e+1,1.350313e+1,1.254846e+1,1.171188e+1,1.097157e+1,
+    1.031123e+1,9.718498e+0,9.183826e+0,8.699693e+0,8.260038e+0,7.859873e+0,7.495011e+0,
+    7.161876e+0,6.857372e+0,6.578785e+0,6.323715e+0,6.090025e+0,5.875801e+0,5.679326e+0,
+    5.499048e+0,5.333567e+0,5.181614e+0,5.042039e+0,4.913795e+0,4.795932e+0,4.687583e+0,
+    4.587960e+0,4.496341e+0,4.412068e+0,4.334539e+0,4.263201e+0,4.197551e+0,4.137125e+0,
+    4.081496e+0,4.030275e+0,3.983101e+0,3.939643e+0,3.899598e+0,3.862684e+0,3.828641e+0,
+    3.797233e+0,3.768237e+0,3.741451e+0,3.716686e+0,3.693770e+0,3.672542e+0,3.652854e+0,
+    3.634571e+0,3.617565e+0,3.601721e+0,3.586931e+0,3.573099e+0,3.560132e+0,3.547947e+0,
+    3.536470e+0,3.525629e+0,3.515361e+0,3.505610e+0,3.496321e+0,3.487449e+0,3.478950e+0,
+    3.470787e+0,3.462928e+0,3.455342e+0,3.448006e+0,3.440898e+0,3.434002e+0,3.427303e+0,
+    3.420792e+0,3.414463e+0,3.408314e+0,3.402345e+0,3.396560e+0,3.390968e+0,3.385579e+0};
   static const G4double SL19[nL]={
     2.305897e-3,5.842654e-3,1.297593e-2,2.991119e-2,7.506153e-2,1.950960e-1,4.938019e-1,
     1.179632e+0,2.638978e+0,5.539887e+0,1.095013e+1,2.037657e+1,3.550284e+1,5.759776e+1,

@@ -24,12 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonString.hh,v 1.4 2006-06-29 20:06:41 gunter Exp $
+// $Id: G4QuasmonString.hh,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonString ----------------
 //             by Mikhail Kossov, October 2004.
 //      header for Hadron-Hadron String Interaction in the CHIPS Model
+// -------------------------------------------------------------------
+// Short description: The Quark-Gluon String can fragment in hadrons
+// (QGS), small hadronic clusters (HERWIG) or in unlimited in mass
+// Quasmons, defined by the G4QPartonPair. This class is made to
+// simulate the string fragmentation in Quasmons, which hadronize in
+// vacuuum or in nuclear environment.
 // -------------------------------------------------------------------
 
 #ifndef G4QuasmonString_h

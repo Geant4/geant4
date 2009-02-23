@@ -23,16 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.7 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QLowEnergy.cc,v 1.8 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
 //                 by Mikhail Kossov, Aug 2007.
 // G4QLowEnergy class of the CHIPS Simulation Branch in GEANT4
 // ---------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the "chips/interface" directory *********
-// ****************************************************************************************
+// Short description: This is a fast low energy algorithm for the
+// inelastic interactions of nucleons and nuclei (ions) with nuclei.
+// This is a fase-space algorithm, but not quark level. Provides
+// nuclear fragments upto alpha only. Never was tumed (but can be).
+// ---------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -156,12 +158,12 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
           if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QDiffract::GetMeanFreePath: Z="
                                          <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QLowEnergy::GetMeanFreePath:pair#"<<j<<",N="<<N<<",a="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QLowEnergy::GetMeanFreePath: pairVectLength="<<newAbund->size()<<G4endl;
 #endif
@@ -188,7 +190,7 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
 #ifdef debug
       G4cout<<"G4QLowE::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=true;                    // Extract inelastic Ion-Ion cross-section
+      G4bool ccsf=true;                    // Extract inelastic Ion-Ion cross-section
 #ifdef debug
       G4cout<<"G4QLowEnergy::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
@@ -255,7 +257,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
   if(CWinit)
-		{
+  {
     CWinit=false;
     G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
   }
@@ -313,26 +315,26 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   else G4cout<<"-Warning-G4QLowEnergy::PostStepDoIt:Unknown projectile Ion"<<G4endl;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QLowEnergy::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QLowEnergy::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
     G4cerr<<"-Warning-G4QLowEnergy::PostStepDoIt:UndefProjHadron(PDG=0) ->ret 0"<<G4endl;
     return 0;
   }
-		// Element treatment
+  // Element treatment
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QLowEn::PostStDoIt: m="<<EPIM<<", n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QLowEn::PostStDoIt: m="<<EPIM<<", n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QLowEn::PostStepDoIt: EPM["<<i<<"]="<<ElProbInMat[i]<<", r="<<rnd<<G4endl;
+      G4cout<<"G4QLowEn::PostStepDoIt: EPM["<<i<<"]="<<ElProbInMat[i]<<", r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -341,7 +343,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   G4Element* pElement=(*theElementVector)[i];
   G4int tZ=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QLowEnergy::PostStepDoIt: i="<<i<<", Z(element)="<<tZ<<G4endl;
+    G4cout<<"G4QLowEnergy::PostStepDoIt: i="<<i<<", Z(element)="<<tZ<<G4endl;
 #endif
   if(tZ<=0)
   {
@@ -352,7 +354,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QLowEnergy::PostStepDoIt: nI="<<nofIsot<<", T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QLowEnergy::PostStepDoIt: nI="<<nofIsot<<", T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -361,7 +363,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QLowEnergy::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<",r="<<rndI<<G4endl;
+      G4cout<<"G4QLowEnergy::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<",r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -369,7 +371,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   }
   G4int tN =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QLowEnergy::PostStepDoIt: j="<<i<<", N(isotope)="<<tN<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QLowEnergy::PostStepDoIt: j="<<i<<", N(isotope)="<<tN<<", MeV="<<MeV<<G4endl;
 #endif
   if(tN<0)
   {
@@ -450,7 +452,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   // algorithm implementation --- STARTS HERE --- All calculations are in IU --------
   G4double totM=tot4M.m(); // total CMS mass of the reaction
-		G4int totN=tN+pN;
+  G4int totN=tN+pN;
   G4int totZ=tZ+pZ;
   // @@ Here mass[i] can be calculated if mass=0
   G4double mass[nCh]={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
@@ -979,10 +981,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   // @@ Can be repeated to take into account the Coulomb Barrier
   if(!G4QHadron(tot4M).CopDecayIn3(fst4Mom,snd4Mom,res4Mom,dir4Mom,cosp))
   {                   //                                          
-		  G4cerr<<"**G4LowEnergy::PoStDoIt:i="<<index<<",tM="<<totM<<"->M1="<<res4Mom.m()<<"+M2="
+    G4cerr<<"**G4LowEnergy::PoStDoIt:i="<<index<<",tM="<<totM<<"->M1="<<res4Mom.m()<<"+M2="
      <<fst4Mom.m()<<"+M3="<<snd4Mom.m()<<"=="<<res4Mom.m()+fst4Mom.m()+snd4Mom.m()<<G4endl;
     throw G4QException("G4QLowEnergy::PostStepDoIt: Can't decay the Compound");
-		}                   //                                          
+  }                   //                                          
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI:r4M="<<res4Mom<<",f4M="<<fst4Mom<<",s4M="<<snd4Mom<<G4endl;
 #endif
@@ -1077,7 +1079,7 @@ G4double G4QLowEnergy::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
     first=false;
   }
 #ifdef debug
-		G4cout<<"G4QLowE::CXS: *DONE* p="<<p<<",Z="<<Z<<",N="<<N<<",PDG="<<PDG<<G4endl;
+  G4cout<<"G4QLowE::CXS: *DONE* p="<<p<<",Z="<<Z<<",N="<<N<<",PDG="<<PDG<<G4endl;
 #endif
   return CSmanager->GetCrossSection(true, p, Z, N, PDG);
 }

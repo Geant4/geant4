@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
+// $Id: G4QHadronBuilder.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -35,6 +35,12 @@
 //     Simple service class building hadron out of two partons; 
 //     For comparison mirror member functions are taken from G4 class:
 //     G4HadronBuilder
+// -----------------------------------------------------------------------------
+// Short description: A CHIPS class for the builder of the G4QHadron, which is a
+// resulting object for the string fragmentation. the G4QHadron has specific
+// parameters, which are not included in the G4QParticle from the CHIPS World,
+// but necessary for the string fragmentation. When the G4QHadron is created
+// (builded), it is converted to the CHIPS particle.
 // -----------------------------------------------------------------------------
 //
 
@@ -57,7 +63,7 @@ private:
   enum Spin {SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4};
   G4QHadron* Meson(G4QParton* black, G4QParton* white, Spin spin);
   G4QHadron* Baryon(G4QParton* black,G4QParton* white, Spin spin);
-		// Body
+  // Body
   G4double mesonSpinMix;
   G4double baryonSpinMix;
   std::vector<G4double> scalarMesonMixings;

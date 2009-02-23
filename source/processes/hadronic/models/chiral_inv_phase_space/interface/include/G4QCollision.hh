@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.11 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QCollision.hh,v 1.12 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -66,6 +66,9 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: This is a universal class for the incoherent (inelastic)
+// nuclear interactions in the CHIPS model.
+// ---------------------------------------------------------------------------
 
 #ifndef G4QCollision_hh
 #define G4QCollision_hh
@@ -123,13 +126,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -169,7 +172,7 @@ private:
   // Random direction in two dimentions pair(first=sin(phi), second=cos(phi))
   std::pair<G4double,G4double> Random2DDirection();
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4bool   manualFlag;  // If false then standard parameters are used
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
@@ -206,4 +209,3 @@ private:
   static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
-

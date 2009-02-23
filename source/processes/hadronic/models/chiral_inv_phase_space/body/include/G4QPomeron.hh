@@ -26,7 +26,7 @@
 #ifndef G4QPomeron_h
 #define G4QPomeron_h 1
 //
-// $Id: G4QPomeron.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
+// $Id: G4QPomeron.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -38,6 +38,13 @@
 //   For comparison mirror member functions are taken from G4 class:
 //   G4PomeronCrossSection
 // ------------------------------------------------------------
+// Short description: Pomeron is one of the possible vacuum pole (the
+// second is Oderon, but they are identical in the present model), by
+// which particle exchang in the ellastic scattering process. Strings,
+// which appear as a cut of the Pomeron (optic theorem connects the
+// amplitude of scattering at zero angle with the total inelastic
+// cross-section), describe most of the processes at high energies.
+// ------------------------------------------------------------------
 
 #include "globals.hh"
 
@@ -63,10 +70,10 @@ class G4QPomeron
                                 {return GetTotalCrossSection(s)-GetElasticCrossSection(s);}
   G4double GetTotalProbability(const G4double s, const G4double imp2)
         {return 2*(1-std::exp(-Eikonal(s,imp2)))/pomeron_C*(1-std::exp(-Eikonal(s,imp2)));}
-  G4double GetDiffractiveProbability(const G4double s,	const G4double imp2)
+  G4double GetDiffractiveProbability(const G4double s, const G4double imp2)
                   {return (pomeron_C-1.)/pomeron_C*(GetTotalProbability(s,imp2) -
                                                     GetNondiffractiveProbability(s,imp2));}
-  G4double GetNondiffractiveProbability(const G4double s,	const G4double imp2)
+  G4double GetNondiffractiveProbability(const G4double s, const G4double imp2)
                                       {return (1.-std::exp(-2*Eikonal(s,imp2)))/pomeron_C;}
   G4double GetElasticProbability(const G4double s, const G4double imp2)
                       {return GetTotalProbability(s,imp2)-GetInelasticProbability(s,imp2);}
@@ -93,12 +100,12 @@ class G4QPomeron
   void InitForPion();
   void InitForKaon();
   void InitForGamma();
-	
+ 
   G4double Expand(G4double z);
   G4double Z(const G4double Scms)    {return 2*pomeron_C*Power(s)/Lambda(Scms);}
   G4double SigP(const G4double Scms) {return 8*pi*hbarc_squared*Power(Scms);}
   G4double Power(const G4double Scms)
-                        {return pomeron_Gamma*std::pow(Scms/pomeron_S,pomeron_Alpha-1);}
+                           {return pomeron_Gamma*std::pow(Scms/pomeron_S,pomeron_Alpha-1);}
   G4double Lambda(const G4double s)
                          {return pomeron_Rsquare+pomeron_Alphaprime*std::log(s/pomeron_S);}
   G4double Eikonal(const G4double s, const G4double imp2)

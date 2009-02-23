@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.9 2007-11-15 09:36:43 mkossov Exp $
+// $Id: G4VQCrossSection.hh,v 1.10 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,8 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: a basic class for all CHIPS reaction cross-sections.
+// -----------------------------------------------------------------------
 
 #ifndef G4VQCrossSection_h
 #define G4VQCrossSection_h 1
@@ -97,7 +99,7 @@ public:
 
   // At present momentum (pMom) must be in GeV (@@ Units)
   virtual G4double GetCrossSection(G4bool, G4double, G4int, G4int, G4int pPDG=0)
-                                                                 		{return G4double(pPDG);}
+                                                                   {return G4double(pPDG);}
 
   virtual G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=0); // Gives 0 by default
 

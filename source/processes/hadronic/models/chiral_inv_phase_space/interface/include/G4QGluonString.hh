@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGluonString.hh,v 1.2 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QGluonString.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QGluonString header ----------------
@@ -43,6 +43,8 @@
 // ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
 // *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
+// Short description: CHIPS object for the Quark-Gluon String
+// ---------------------------------------------------------------
 
 #ifndef G4QGluonString_hh
 #define G4QGluonString_hh
@@ -88,12 +90,12 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -125,7 +127,7 @@ private:
   // Copy constructor
   G4QGluonString(const G4QGluonString&);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4bool   manualFlag;  // If false then standard parameters are used
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
@@ -159,4 +161,3 @@ private:
   static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
-

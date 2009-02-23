@@ -23,49 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.hh,v 1.2 2006-12-13 15:45:16 gunter Exp $
+// $Id: G4QAtomicElectronScattering.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QAtomicElectronScattering header ----------------
 //                 by Mikhail Kossov, December 2003.
-//  Header of G4QAtomicElectronScattering class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
+// Header of G4QAtomicElectronScattering class of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Nuclear Capture At Rest Prosesses.
+// This is a unique CHIPS class for the Nuclear Interactions with Atomic electrons.
 // -------------------------------------------------------------------------------
-// At present (Dec.04) only pi+/-, K+/- proton, neutron, antiproton and antineutron
-// collisions with protons are implemented, which are fundamental for the in matter
-// simulation of hadronic reactions. The interactions of the same particles with
-// nuclei are planned only. The collisions of nuclei with nuclei are possible...
-// The simulation is based on the G4QuasmonString class, which extends the CHIPS model
-// to the highest energyes, implementing the Quasmon string with the
-// String->Quasmons->Hadrons scenario of the quark-gluon string fragmentation
-// --> CHIPS is a SU(3) event generator, so it does not include reactions with the
-// heavy (c,b,t), which can be simulated only by the SU(6) QUIPS (QUark Invariant
-// Phase Space) model which is an expantion of the CHIPS.-December 2003.M.Kossov.-
-// -------------------------------------------------------------------------------
-// Algorithms: the interactions in CHIPS are described by the quark exchange (QE) process.
-// The first step is the low energy quark exchange. If as a result of the QE one or
-// both secondary hadrons are below the pi0 threshold (roughly) they are pushed to the
-// Ground State (GS) value(s). The excited (above the pi0 production threshold) hadronic
-// state is considered as a Quasmon, which is filled in the G4QuasmonVector of the
-// G4QuasmonString class. On the second step all G4Quasmons are decayed by the
-// G4Quasmon class and fiill the G4QHadronVector output. If the exchange quark is too far
-// in the rapidity space (a parameter of the G4QuasmonString class) from any of the quarks
-// of the other hadron it creates a string with the nearest in the rapidity space quark.
-// This string is converted into a Quasmon. This forces the coalescence of the residuals
-// in the another Quasmon, while the possibility exist to create more residual Quasmons
-// instead of one - one per each target-quark+projectile-antiquark(diquark) pair. This
-// possibility is tuned by the Drell-Yan pair production process. If the target (or
-// pojectile) are nuclei, then the Quasmons are created not only in vacuum, where they
-// can be fragmented by the G4Quasmon class, but in nuclear matter of the residual target
-// (or projectile). If the Quasmons are crated in nuclear matter, they are fragmented by
-// the G4QEnvironment class with the subsequent Quark Exchange nuclear fragmentation.
-// This is the planned scenario.- December 2004.Mikhail Kossov.-
-// --------------------------------------------------------------------------------
 // ****************************************************************************************
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: CHIPS is re3sponsible for photo- and lepto-nuclear
+// reactions. In particular for thr electron-nuclear reactions. At High
+// Energies the nucleons (including neutrons) and nuclear fragments can
+// interact with atomic electrons (reversed electro-nuclear reaction -
+// antilab), while they are missing the nucler-nuclear (ion-ion) reac-
+// tions. This nucleo-electron process comes "for-free" in CHIPS, as the
+// cross-sections of the interaction is known from the electro-nuclear
+// reactions. The only problem is to move the output from the antilab to
+// lab system. This is what this process is aiming to do. It can be used
+// for the ion transport in Geant4.
+// ---------------------------------------------------------------------
 
 #ifndef G4QAtomicElectronScattering_hh
 #define G4QAtomicElectronScattering_hh
@@ -115,13 +96,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -146,7 +127,7 @@ private:
   // Copy constructor
   G4QAtomicElectronScattering(const G4QAtomicElectronScattering&);
 
-		// BODY
+  // BODY
   // Static Parameters
   static G4bool   manualFlag;  // If false then standard parameters are used
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)

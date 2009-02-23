@@ -23,16 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.27 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QElastic.cc,v 1.28 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
 // G4QElastic class of the CHIPS Simulation Branch in GEANT4
-// ---------------------------------------------------------------
-// ****************************************************************************************
-// ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ****************************************************************************************
+// --------------------------------------------------------------------
+// Short description: At present this is a process for nucleon-nucleus
+// elastic scattering. Mesons and hyperons exist only for the Hydrogen
+// target (see G4QuasiFreeRatios).
+// --------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -144,12 +145,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
           if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QElastic::GetMeanFreePath: Z="
                                          <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
-								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+          std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
           G4cout<<"G4QElastic::GetMeanFreePath:pair#="<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
-						  }
+        }
 #ifdef debug
         G4cout<<"G4QElastic::GetMeanFreePath: pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -176,7 +177,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #ifdef debug
       G4cout<<"G4QEl::GMFP:*true*,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
-		    G4bool ccsf=true;
+      G4bool ccsf=true;
       if(Q==-27.) ccsf=false;
 #ifdef debug
       G4cout<<"G4QEl::GMFP: GetCS #1 j="<<j<<G4endl;
@@ -243,14 +244,14 @@ G4bool G4QElastic::IsApplicable(const G4ParticleDefinition& particle)
 
 G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
-  //static const G4double mProt=G4Proton::Proton()->GetPDGMass()*GeV; // proton mass (in GeV)
-  //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001;   // CHIPS in GeV
-  //static const G4double mP2=mProt*mProt;                            // squared proton mass
+  //static const G4double mProt=G4Proton::Proton()->GetPDGMass()*GeV;// proton mass in GeV
+  //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001;    // CHIPS m_p in GeV
+  //static const G4double mP2=mProt*mProt;                           // squared proton mass
   //
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;                       // CHIPS Warld needs to be initted
   if(CWinit)
-		{
+  {
     CWinit=false;
     G4QCHIPSWorld::Get()->GetParticles(nPartCWorld); // Create CHIPS World (234 part.max)
   }
@@ -325,7 +326,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   //else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QElastic::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -334,16 +335,16 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   }
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
-		G4cout<<"G4QElastic::PostStDoIt:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
+  G4cout<<"G4QElastic::PostStDoIt:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
   G4int i=0;
   if(EPIM>1)
   {
     G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
     for(i=0; i<nE; ++i)
-		  {
+    {
 #ifdef debug
-				  G4cout<<"G4QElastic::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+      G4cout<<"G4QElastic::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
       if (rnd<ElProbInMat[i]) break;
     }
@@ -352,7 +353,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-				G4cout<<"G4QElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -363,7 +364,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QElastic::PosStDoIt: nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
+  G4cout<<"G4QElastic::PosStDoIt: nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -372,7 +373,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     for(j=0; j<nofIsot; ++j)
     {
 #ifdef debug
-				  G4cout<<"G4QElastic::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
+      G4cout<<"G4QElastic::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
 #endif
       if(rndI < (*SPI)[j]) break;
     }
@@ -380,7 +381,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QElastic::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
 #endif
   if(N<0)
   {
@@ -506,12 +507,12 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   aParticleChange.ProposeMomentumDirection(findir); // new direction for the scattered part
   EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
   // This is how in general the secondary should be identified
-		G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
+  G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
   //G4int targPDG=2212;                      // PDG for the recoil proton @@only for p targ
   //G4ParticleDefinition* theDefinition=G4Proton::Proton(); // @@ only for p target
   G4int aA = Z+N;
 #ifdef pdebug
-		G4cout<<"G4QElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
 #endif
   G4ParticleDefinition* theDefinition=G4ParticleTable::GetParticleTable()
                                                                        ->FindIon(Z,aA,0,Z);
@@ -569,7 +570,7 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
   else if(init)                          // Return t-value for scattering (=G4QElastic)
   {
     if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
-				else res=CSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
+    else res=CSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
   }
   else G4cout<<"*Warning*G4QElastic::CalculateXSt:*NotInitiatedScattering"<<G4endl;
   return res;

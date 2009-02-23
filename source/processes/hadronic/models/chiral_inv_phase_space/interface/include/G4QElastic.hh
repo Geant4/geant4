@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.4 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QElastic.hh,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic header ----------------
@@ -37,6 +37,10 @@
 // The simulation is based on the CHIPS approximation of total elastic and differential
 // elastic cross sections from E=0 to the highest energyes.
 // -------------------------------------------------------------------------------
+// Short description: At present this is a process for nucleon-nucleus
+// elastic scattering. Mesons and hyperons exist only for the Hydrogen
+// target (see G4QuasiFreeRatios).
+// ---------------------------------------------------------------
 
 #ifndef G4QElastic_hh
 #define G4QElastic_hh
@@ -82,13 +86,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -108,7 +112,7 @@ private:
   // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
   G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------
@@ -126,4 +130,3 @@ private:
   static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
-

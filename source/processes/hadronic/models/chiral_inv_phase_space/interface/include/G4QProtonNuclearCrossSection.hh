@@ -35,6 +35,8 @@
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
+// Short description: CHIPS cross-sections for proton-nuclear interactions
+// -----------------------------------------------------------------------
 
 #ifndef G4QProtonNuclearCrossSection_h
 #define G4QProtonNuclearCrossSection_h 1

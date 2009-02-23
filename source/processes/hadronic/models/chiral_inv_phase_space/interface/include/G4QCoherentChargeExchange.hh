@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.5 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QCoherentChargeExchange.hh,v 1.6 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange header ----------------
@@ -32,11 +32,30 @@
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Elastic Scattering Prosesses
 // -------------------------------------------------------------------------------
-// At present (Jan-06) only proton-proton scattering is implemented The interaction with
-// nuclei are planned only. The scattering of nuclei on nuclei are possible...
+// At present (Jan-06) only proton-to-neutron & neutron-to-proton scattering on nuclei
+// are implemented. The scattering of mesons and nuclei on nuclei are possible...
 // The simulation is based on the CHIPS approximation of total elastic and differential
 // elastic cross sections from E=0 to the highest energyes.
 // -------------------------------------------------------------------------------
+// Short description: This class resolves an ambiguity in the definition of the
+// "inelastic" cross section. As it was shown in Ph.D.Thesis (M.Kosov,ITEP,1979)
+// it is more reasonable to subdivide the total cross-section in the coherent &
+// incoherent parts, but the measuring method for the "inelastic" cross-sections
+// consideres the lack of the projectile within the narrow forward solid angle
+// with the consequent extrapolation of these partial cross-sections, corresponding
+// to the particular solid angle, to the zero solid angle. The low angle region
+// is shadowed by the elastic (coherent) scattering. BUT the coherent charge
+// exchange (e.g. conversion p->n) is included by this procedure as a constant term
+// in the extrapolation, so the "inelastic" cross-section differes from the
+// incoherent cross-section by the value of the coherent charge exchange cross
+// section. Fortunately, this cross-sectoion drops ruther fast with energy increasing.
+// All Geant4 inelastic hadronic models (including CHIPS) simulate the incoherent
+// reactions. So the incoherent (including quasielastic) cross-section must be used
+// instead of the inelastic cross-section. For that the "inelastic" cross-section
+// must be reduced by the value of the coherent charge-exchange cross-section, which
+// is estimated (it must be tuned!) in this CHIPS class. The angular distribution
+// is made (at present) identical to the corresponding coherent-elastic scattering 
+// -----------------------------------------------------------------------------------
 
 #ifndef G4QCoherentChargeExchange_hh
 #define G4QCoherentChargeExchange_hh
@@ -83,13 +102,13 @@ public:
   // It returns the MeanFreePath of the process for the current track :
   // (energy, material)
   // The previousStepSize and G4ForceCondition* are not used.
-  // This function overloads a virtual function of the base class.		      
+  // This function overloads a virtual function of the base class.        
   // It is invoked by the ProcessManager of the Particle.
  
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
   // It computes the final state of the process (at end of step),
-  // returned as a ParticleChange object.			    
+  // returned as a ParticleChange object.       
   // This function overloads a virtual function of the base class.
   // It is invoked by the ProcessManager of the Particle.
 
@@ -109,7 +128,7 @@ private:
   // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
   G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);
 
-		// BODY
+  // BODY
   // Static Parameters --------------------------------------------------------------------
   static G4int    nPartCWorld; // The#of particles for hadronization (limit of A of fragm.)
   //--------------------------------- End of static parameters ---------------------------
@@ -127,4 +146,3 @@ private:
   static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
 };
 #endif
-

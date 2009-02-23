@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.2 2006-12-12 11:02:22 mkossov Exp $
+// $Id: G4QString.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -42,6 +42,16 @@
 //   G4ExcitedStringDecay
 //
 // ------------------------------------------------------------
+// Short description: If partons from the G4QPartonPair are close in
+// rapidity, they create Quasmons, but if they are far in the rapidity
+// space, they can not interact directly. Say the bottom parton (quark)
+// has rapidity 0, and the top parton (antiquark) has rapidity 8, then
+// the top quark splits in two by radiating gluon, and each part has
+// rapidity 4, then the gluon splits in quark-antiquark pair (rapidity
+// 2 each), and then the quark gadiates anothe gluon and reachs rapidity
+// 1. Now it can interact with the bottom antiquark, creating a Quasmon
+// or a hadron. The intermediate partons is the string ladder.
+// ---------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -58,7 +68,7 @@ class G4QString
 {
  public:
 
-		enum {PROJECTILE  = 1, TARGET  = -1}; // The same as in quark-pair (@@ ? M.K.)
+  enum {PROJECTILE  = 1, TARGET  = -1}; // The same as in quark-pair (@@ ? M.K.)
 
   G4QString(); // formal creation of the string with future excitation
   G4QString(G4QParton* Color,G4QParton* Gluon, G4QParton* AntiColor, G4int Dir=PROJECTILE);
@@ -153,22 +163,22 @@ class G4QString
   static G4double DiquarkBreakProb;  // is Diquark breaking probability 
   static G4double SmoothParam;       // QGS model parameter
   static G4double StrangeSuppress;   // Strangeness suppression parameter
-	 static G4double widthOfPtSquare;	  // width^2 of pt for string excitation
+  static G4double widthOfPtSquare;   // width^2 of pt for string excitation
   static G4int StringLoopInterrupt;  // String fragmentation LOOP limit 
   static G4int ClusterLoopInterrupt; // Cluster fragmentation LOOP limit 
 
   // Body
-  G4int         theDirection;  // must be 1 or -1 (PROJECTILE or TARGET)
-  G4ThreeVector thePosition;   // Defined by the first quark position
-  G4QPartonVector thePartons;  // would like initial capacity for 3 Partons (? M.K.)
-  G4QHadronBuilder* hadronizer;// Hadronizer of hodrons out of partons
-  G4ThreeVector Ptleft,Ptright;// Pt (px,py) for partons (pz ignored!)
-  G4double Pplus, Pminus;      // p-, p+ of string, Plus is assigned to Left!
-  G4QParton* theStableParton;  // Parton on the stable side of the string
-  G4QParton* theDecayParton;   // Parton on the decaying part of the string
-  enum DecaySide {None, Left, Right}; // @@ To have two         @@ Leav   :  1=Left
-  DecaySide decaying;                 // @@   it's too much     @@  only  :  0=Unknown
-  G4int     SideOfDecay;              // @@     of a good thing @@   one! : -1=Right
+  G4int         theDirection;        // must be 1 or -1 (PROJECTILE or TARGET)
+  G4ThreeVector thePosition;         // Defined by the first quark position
+  G4QPartonVector thePartons;        // would like initial capacity for 3 Partons (? M.K.)
+  G4QHadronBuilder* hadronizer;      // Hadronizer of hodrons out of partons
+  G4ThreeVector Ptleft,Ptright;      // Pt (px,py) for partons (pz ignored!)
+  G4double Pplus, Pminus;            // p-, p+ of string, Plus is assigned to Left!
+  G4QParton* theStableParton;        // Parton on the stable side of the string
+  G4QParton* theDecayParton;         // Parton on the decaying part of the string
+  enum DecaySide {None, Left, Right};// @@ To have two         @@ Leav   :  1=Left
+  DecaySide decaying;                // @@   it's too much     @@  only  :  0=Unknown
+  G4int     SideOfDecay;             // @@     of a good thing @@   one! : -1=Right
 };
 
 #endif

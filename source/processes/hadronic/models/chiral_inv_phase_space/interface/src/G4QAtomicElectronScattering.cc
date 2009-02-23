@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.cc,v 1.4 2008-10-02 21:10:07 dennis Exp $
+// $Id: G4QAtomicElectronScattering.cc,v 1.5 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QAtomicElectronScattering class -----------------
@@ -33,7 +33,18 @@
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ****************************************************************************************
-
+// Short description: CHIPS is re3sponsible for photo- and lepto-nuclear
+// reactions. In particular for thr electron-nuclear reactions. At High
+// Energies the nucleons (including neutrons) and nuclear fragments can
+// interact with atomic electrons (reversed electro-nuclear reaction -
+// antilab), while they are missing the nucler-nuclear (ion-ion) reac-
+// tions. This nucleo-electron process comes "for-free" in CHIPS, as the
+// cross-sections of the interaction is known from the electro-nuclear
+// reactions. The only problem is to move the output from the antilab to
+// lab system. This is what this process is aiming to do. It can be used
+// for the ion transport in Geant4.
+// ---------------------------------------------------------------------
+   
 //#define debug
 //#define pdebug
 
@@ -73,10 +84,12 @@ void G4QAtomicElectronScattering::SetManual()   {manualFlag=true;}
 void G4QAtomicElectronScattering::SetStandard() {manualFlag=false;}
 
 // Fill the private parameters
-void G4QAtomicElectronScattering::SetParameters(G4double temper, G4double ssin2g, G4double etaetap,
-                                     G4double fN, G4double fD, G4double cP, G4double mR,
-                                     G4int nParCW, G4double solAn, G4bool efFlag,
-                                     G4double piThresh, G4double mpisq, G4double dinum)
+void G4QAtomicElectronScattering::SetParameters(G4double temper, G4double ssin2g,
+                                                G4double etaetap, G4double fN, G4double fD,
+                                                G4double cP, G4double mR, G4int nParCW,
+                                                G4double solAn, G4bool efFlag,
+                                                G4double piThresh, G4double mpisq,
+                                                G4double dinum)
 {//  =============================================================================
   Temperature=temper;
   SSin2Gluons=ssin2g;
@@ -262,7 +275,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   else if (particle ==    G4AntiProton::AntiProton()   ) projPDG=-2212;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
-		G4cout<<"G4QAtomElScat::PostStepRestDoIt: projPDG="<<projPDG<<",stPDG="<<prPDG<<G4endl;
+  G4cout<<"G4QAtomElScat::PostStepRestDoIt: projPDG="<<projPDG<<",stPDG="<<prPDG<<G4endl;
 #endif
   if(!projPDG)
   {
@@ -273,7 +286,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   std::vector<G4double> sumfra;
   for(i=0; i<nE; ++i)
   {
-	   G4double frac=material->GetFractionVector()[i];
+    G4double frac=material->GetFractionVector()[i];
     sum+=frac;
     sumfra.push_back(sum);             // remember the summation steps
   }
@@ -298,7 +311,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
     G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
     if(!curInd)                       // The new artificial element must be defined 
-				{
+    {
       std::vector<std::pair<G4int,G4double>*>* newAbund =
                                                new std::vector<std::pair<G4int,G4double>*>;
       G4double* abuVector=pElement->GetRelativeAbundanceVector();
@@ -306,14 +319,14 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
       {
         N=pElement->GetIsotope(j)->GetN()-Z;
         if(pElement->GetIsotope(j)->GetZ()!=Z) G4cerr<<"*G4QCaptureAtRest::AtRestDoIt: Z="
-																																							 <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+                                        <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
         G4double abund=abuVector[j];
-								std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+        std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
         G4cout<<"G4QAtomElScat::PostStepDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
 #endif
         newAbund->push_back(pr);
-						}
+      }
 #ifdef debug
       G4cout<<"G4QAtomElectScat::PostStepDoIt:pairVectorLength="<<newAbund->size()<<G4endl;
 #endif
@@ -332,7 +345,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   G4double dsr=0.01*(sr+sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
-		else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
+  else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
   else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.);//Pi- ClustPars
 #ifdef debug
   G4cout<<"G4QAtomElectScattering::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
@@ -342,8 +355,8 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     G4cerr<<"---Warning---G4QAtomElectScat::PostStepDoIt:Element with N="<<N<< G4endl;
     return 0;
   }
-		if(projPDG==11||projPDG==-11||projPDG==13||projPDG==-13||projPDG==15||projPDG==-15)
-		{ // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + neutrino & QE
+  if(projPDG==11||projPDG==-11||projPDG==13||projPDG==-13||projPDG==15||projPDG==-15)
+  { // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + neutrino & QE
     G4double kinEnergy= projHadron->GetKineticEnergy();
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
@@ -442,34 +455,34 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
 #ifdef debug
   G4cout<<"G4QAtomElScat::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--   -+
+  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->------*
   if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)         |
-		{ //                                                                                   |
+  { //                                                                                   |
     G4QHadronVector projHV;                                 //                           |
-    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
-    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
-    projHV.clear(); // <------------<---------------<-------------------<------------+-+ .
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines -* |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----* | |
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-*
+    projHV.clear(); // <------------<---------------<-------------------<------------+-* .
 #ifdef debug
     G4cout<<"G4QAtomElectScat::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl;// |   .
 #endif
-    try                                                           //                 |   .
-	   {                                                             //                 |   .
-	     delete output;                                              //                 |   .
+    try                                                           //                 |   ^
+    {                                                             //                 |   .
+      delete output;                                              //                 |   ^
       output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |   .
-    }                                                             //                 |   .
+    }                                                             //                 |   ^
     catch (G4QException& error)//                                                    |   .
-	   {                                                             //                 |   .
-	     //#ifdef pdebug
+    {                                                             //                 |   ^
+      //#ifdef pdebug
       G4cerr<<"**G4QAtomElectScat::PostStepDoIt:G4QE Exception is catched"<<G4endl;//|   .
-	     //#endif
+      //#endif
       G4Exception("G4QAtomElScat::PostStepDoIt:","27",FatalException,"CHIPScrash");//|   .
-    }                                                             //                 |   .
-    delete pan;                              // Delete the Nuclear Environment <--<--+   .
-  } //                                                                                   .
+    }                                                             //                 |   ^
+    delete pan;                              // Delete the Nuclear Environment <--<--*   .
+  } //                                                                                   ^
   else               // Use G4QuasmonString                                              .
-		{ //                                                                                   ^
-    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+   |
+  { //                                                                                   ^
+    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --*   .
     delete pH;                                                    // --------<-------+---+
 #ifdef debug
     G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
@@ -477,15 +490,15 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
 #endif
     //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
     try                                                           //                 |
-	   {                                                             //                 |
-				  delete output;                                            //                   |
+    {                                                             //                 |
+      delete output;                                              //                 |
       output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
       // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
       //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
       //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
-				  //{//                                                                          |
+      //{//                                                                          |
       //  elF=true;                   // Just put a flag for the ellastic Scattering |
-	     //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+      //  delete output;              // Delete a prototype of dummy G4QHadronVector |
       //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
       //}//                                                                          |
       //eWei=pan->GetWeight();        // Just an example for the weight of the event |
@@ -495,13 +508,13 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
       // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
     }                                                             //                 |
     catch (G4QException& error)//                                                    |
-	   {                                                             //                 |
-	     //#ifdef pdebug
+    {                                                             //                 |
+      //#ifdef pdebug
       G4cerr<<"**G4QAtomElectScat::PostStepDoIt: GEN Exception is catched"<<G4endl;//|
-	     //#endif
+      //#endif
       G4Exception("G4QAtomElSct::AtRestDoIt:","27",FatalException,"QString Excep");//|
     }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ---<--+
+    delete pan;                              // Delete the Nuclear Environment ---<--*
   }
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
@@ -533,7 +546,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     if(nFrag)                // Skip intermediate (decayed) hadrons
     {
 #ifdef debug
-	     G4cout<<"G4QAtomElScat::PostStepDoIt: Intermediate particle is found i="<<i<<G4endl;
+      G4cout<<"G4QAtomElScat::PostStepDoIt: Intermediate particle is found i="<<i<<G4endl;
 #endif
       delete hadr;
       continue;
@@ -546,19 +559,19 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     else if(PDGCode==311 || PDGCode==-311)
     {
       if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
-						else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
+      else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
     }
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
     else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
     else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
-	   else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
+    else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
     {
       G4int aZ = hadr->GetCharge();
       G4int aA = hadr->GetBaryonNumber();
 #ifdef pdebug
-						G4cout<<"G4QAtomicElectronScattering::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
+      G4cout<<"G4QAtomicElectronScattering::AtRestDoIt:Ion Z="<<aZ<<", A="<<aA<<G4endl;
 #endif
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
     }
@@ -566,11 +579,11 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     else
     {
 #ifdef pdebug
-						G4cout<<"G4QAtomElectScat::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
+      G4cout<<"G4QAtomElectScat::PostStepDoIt:Define particle with PDG="<<PDGCode<<G4endl;
 #endif
       theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
 #ifdef pdebug
-						G4cout<<"G4QAtomElScat::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
+      G4cout<<"G4QAtomElScat::PostStepDoIt:AfterParticleDefinition PDG="<<PDGCode<<G4endl;
 #endif
     }
     if(!theDefinition)
@@ -592,7 +605,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     G4cout<<"G4QAtomElectScat::PostStepDoIt:#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
 #endif
     theSec->Set4Momentum(h4M); //                                                         ^
-    delete hadr; // <-----<-----------<-------------<---------------------<---------<-----+
+    delete hadr; // <-----<-----------<-------------<---------------------<---------<-----*
 #ifdef debug
     G4ThreeVector curD=theSec->GetMomentumDirection();              //                    ^
     G4double curM=theSec->GetMass();                                //                    |
@@ -606,7 +619,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
     G4cout<<"G4QAtomicElectronScattering::PostStepDoIt:#"<<i<<" is done."<<G4endl; //     |
 #endif
   } //                                                                                    |
-  delete output; // instances of the G4QHadrons from the output are already deleted above +
+  delete output; // instances of the G4QHadrons from the output are already deleted above *
   aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
 #ifdef debug

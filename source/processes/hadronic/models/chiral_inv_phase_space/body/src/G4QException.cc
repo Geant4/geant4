@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.cc,v 1.9 2006-06-29 20:06:59 gunter Exp $
+// $Id: G4QException.cc,v 1.10 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QException ----------------
 //           by Mikhail Kossov, November 2003.
 //      class for an Exception used by the CHIPS Model
-// ------------------------------------------------------------
+// -------------------------------------------------------------
+// Short description: Just an internal CHIPS Exception Messenger
+// -------------------------------------------------------------
 
 #include "G4QException.hh"
 

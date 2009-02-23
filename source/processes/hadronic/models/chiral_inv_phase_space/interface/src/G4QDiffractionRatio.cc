@@ -24,15 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.9 2008-03-21 21:40:08 dennis Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.10 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QDiffractionRatio for N+A elastic cross sections
+// G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-06
 // 
-//================================================================================
+//=======================================================================
+// Short description: Difraction excitation is a part of the incoherent
+// (inelastic) interaction. This part is calculated in the class.
+// --------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -113,13 +116,13 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   }
   G4bool found=false;
   G4int i=-1;
-		if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
+  if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
   {
     found=true;                         // The A value is found
     break;
   }
   if(!nDB || !found)                    // Create new line in the AMDB
-	 {
+  {
     lastA = A;
     lastT = new G4double[mps];          // Create the linear Table
     lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
@@ -151,7 +154,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
       for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
       {
         lastL[j]=CalcDiff2Prod_Ratio(sv,A);
-	       if(j!=lastK) sv*=edl;
+        if(j!=lastK) sv*=edl;
       }
     }
     else                                // LogTab is not initialized
@@ -170,7 +173,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     vL.push_back(lastL);
   }
   else                                  // The A value was found in AMDB
-	 {
+  {
     lastA=vA[i];
     lastH=vH[i];
     lastN=vN[i];
@@ -198,13 +201,13 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
         }
       } // End of LinTab update
       if(lastN>=nextN)
-						{
+      {
         vH[i]=lastH;
         vN[i]=lastN;
       }
       G4int nextK=lastK+1;
       if(s>sma && lastK<nls)             // LogTab must be updated
-						{
+      {
         G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
         G4double ls=std::log(s);
         lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
@@ -216,12 +219,12 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
         else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
         for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
         {
-	         sv*=edl;
+          sv*=edl;
           lastL[j]=CalcDiff2Prod_Ratio(sv,A);
         }
       } // End of LogTab update
       if(lastK>=nextK)
-						{
+      {
         vM[i]=lastM;
         vK[i]=lastK;
       }
@@ -229,14 +232,14 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   }
   // Now one can use tabeles to calculate the value
   if(s<sma)                             // Use linear table
-		{
+  {
     G4int n=static_cast<int>(s/ds);     // Low edge number of the bin
     G4double d=s-n*ds;                  // Linear shift
     G4double v=lastT[n];                // Base
     lastR=v+d*(lastT[n+1]-v)/ds;        // Result
   }
-		else                                  // Use log table
-		{
+  else                                  // Use log table
+  {
     G4double ls=std::log(s)-lsi;        // ln(s)-l_min
     G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
     G4double d=ls-n*dl;                 // Log shift
@@ -262,7 +265,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   static G4double p7=0.;
   if(s<=0. || A<=1) return 0.;
   if(A!=mA && A!=1)
-		{
+  {
     mA=A;
     G4double a=mA;
     G4double sa=std::sqrt(a);
@@ -280,7 +283,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
     p2=(1.42*std::pow(a,0.61)+1.6e5/a8+4.5e-8*a4)/(1.+4.e-8*a4+1.2e4/a6);
     G4double q=std::pow(a,0.7);
     p4=(.036/q+.0009*q)/(1.+6./a3+1.e-7*a3);
-				p5=1.3*std::pow(a,0.1168)/(1.+1.2e-8*a3);
+    p5=1.3*std::pow(a,0.1168)/(1.+1.2e-8*a3);
     p6=.00046*(a+11830./a2);
     p7=1./(1.+6.17/a2+.00406*a);
   }
@@ -296,9 +299,9 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   else if(std::fabs(s-S)/S<.0001) return R;
   G4double s2=s*s;
   G4double s4=s2*s2;
-		G4double dl=std::log(s)-p5;
+  G4double dl=std::log(s)-p5;
   R=1./(1.+1./(p1+p2/s4+p4*dl*dl/(1.+p6*std::pow(s,p7))));
-	 return R;
+  return R;
 } // End of CalcQF2IN_Ratio
 
 
@@ -349,16 +352,16 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4LorentzVector tot4M=N4M+p4M;           // total momentum of quasi-free diffraction
   G4double mT=mNeut;                       // Prototype of mass of QF nucleon
   G4double mT2=mNeut2;                     // Squared mass of a free nucleon to be excited
-  G4double dmT=dmNeut;                     // Doubled mass														
+  G4double dmT=dmNeut;                     // Doubled mass              
   G4int Z=0;                               // Prototype of the isotope Z
   G4int N=1;                               // Prototype of the Isotope N
   if(rPDG==2212)                           // Correct it, if this is a proton
   {
     mT=mProt;                              // Prototype of mass of QF nucleon to be excited
     mT2=mProt2;                            // Squared mass of the free nucleon
-    dmT=dmProt;                            // Doubled mass														
-    Z=1;							                            // Z of the isotope
-    N=0;							                            // N of the Isotope
+    dmT=dmProt;                            // Doubled mass              
+    Z=1;                                   // Z of the isotope
+    N=0;                                   // N of the Isotope
   }
   G4double mP2=pr4M.m2();                  // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                       // Can be a problem for photon (m_min = 2*m_pi0)
@@ -395,7 +398,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mDif2=mDif*mDif;
   G4double ds=s-mP2-mDif2;               
   G4double e=ds/dmP;
-		G4double P=std::sqrt(e*e-mDif2);      // Momentum in pseudo laboratory system
+  G4double P=std::sqrt(e*e-mDif2);      // Momentum in pseudo laboratory system
   G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
 #ifdef debug
   G4cout<<"G4QDiffR::TargFrag:Before XS, P="<<P<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
@@ -441,7 +444,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
     else
-				{
+    {
       G4cerr<<"G4QDiffRat::TargFragm: *NAN* cost="<<cost<<",t="<<t<<",tmax="<<maxt<<G4endl;
       return ResHV;                     // Do Nothing Action
     }
@@ -456,7 +459,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     return ResHV; // Do Nothing Action
   }
 #ifdef debug
-		G4cout<<"G4QDifRat::TargFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
+  G4cout<<"G4QDifRat::TargFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
 #endif
   // Now everything is ready for fragmentation and DoNothing projHadron must be wiped out
   ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
@@ -464,32 +467,32 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   hadron = new G4QHadron(pPDG,r4M);     // Hadron for the recoil nucleon
   ResHV->push_back(hadron);             // Fill the recoil nucleon
 #ifdef debug
-		G4cout<<"G4QDiffractionRatio::TargFragm: *Filled* LeadingNuc="<<r4M<<pPDG<<G4endl;
+  G4cout<<"G4QDiffractionRatio::TargFragm: *Filled* LeadingNuc="<<r4M<<pPDG<<G4endl;
 #endif
-  G4QHadronVector* leadhs=new G4QHadronVector;// Quasmon Output G4QHadronVectorum --->---+
+  G4QHadronVector* leadhs=new G4QHadronVector;// Quasmon Output G4QHadronVectorum --->---*
   G4QContent dQC=G4QPDGCode(rPDG).GetQuarkContent(); // QuarkContent of quasiFreeNucleon | 
-  G4Quasmon* quasm = new G4Quasmon(dQC,d4M); // Quasmon=DiffractionExcitationQuasmon-+   |
+  G4Quasmon* quasm = new G4Quasmon(dQC,d4M); // Quasmon=DiffractionExcitationQuasmon-*   |
 #ifdef debug
-		G4cout<<"G4QDiffRatio::TgFrag:tPDG="<<tPDG<<",rPDG="<<rPDG<<",d4M="<<d4M<<G4endl;//|   |
+  G4cout<<"G4QDiffRatio::TgFrag:tPDG="<<tPDG<<",rPDG="<<rPDG<<",d4M="<<d4M<<G4endl;//|   |
 #endif
-  G4QEnvironment* pan= new G4QEnvironment(G4QNucleus(tPDG));// --> DELETED --->---+  |   |
+  G4QEnvironment* pan= new G4QEnvironment(G4QNucleus(tPDG));// --> DELETED --->---*  |   |
   pan->AddQuasmon(quasm);                    // Add diffractiveQuasmon to Environ.|  |   |
 #ifdef debug
   G4cout<<"G4QDiffractionRatio::TargFragment: EnvPDG="<<tPDG<<G4endl; //          |  |   |
 #endif
   try                                                           //                |  |   |
-	 {                                                             //                |  |   |
-	   delete leadhs;                                              //                |  |   |
+  {                                                             //                |  |   |
+    delete leadhs;                                              //                |  |   |
     leadhs = pan->Fragment();// DESTROYED in the end of the LOOP work space       |  |   |
   }                                                             //                |  |   |
   catch (G4QException& error)//                                                   |  |   |
-	 {                                                             //                |  |   |
-	   //#ifdef pdebug
+  {                                                             //                |  |   |
+    //#ifdef pdebug
     G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |  |   |
-	   //#endif
+    //#endif
     G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPSCrash");//|  |   |
   }                                                             //                |  |   |
-  delete pan;                              // Delete the Nuclear Environment <-<--+--+   |
+  delete pan;                              // Delete the Nuclear Environment <-<--*--*   |
   G4int qNH=leadhs->size();                // A#of collected hadrons from diff.frag.     |
   if(qNH) for(G4int iq=0; iq<qNH; iq++)    // Loop over hadrons to fill the result       |
   {                                        //                                            |
@@ -497,7 +500,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     ResHV->push_back(loh);                 // Fill in the result                         |
   }                                        //                                            |
   delete leadhs; // <----<----<----<----<----<----<----<----<----<----<----<----<----<---*
-		return ResHV; // Result
+  return ResHV; // Result
 } // End of TargFragment
 
 
@@ -587,7 +590,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double mDif2=mDif*mDif;
   G4double ds=s-mT2-mDif2;
   G4double e=ds/dmT;
-		G4double P=std::sqrt(e*e-mDif2);          // Momentum in pseudo laboratory system
+  G4double P=std::sqrt(e*e-mDif2);          // Momentum in pseudo laboratory system
   G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
 #ifdef debug
   G4cout<<"G4QDiffR::PFra: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
@@ -631,7 +634,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
     else
-				{
+    {
       G4cerr<<"G4QDiffRat::ProjFragm: *NAN* cost="<<cost<<",t="<<t<<",tmax="<<maxt<<G4endl;
       return ResHV; // Do Nothing Action
     }
@@ -646,7 +649,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
     return ResHV; // Do Nothing Action
   }
 #ifdef debug
-		G4cout<<"G4QDiffR::ProjFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
+  G4cout<<"G4QDiffR::ProjFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
 #endif
   // Now everything is ready for fragmentation and DoNothing projHadron must be wiped out
   ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
@@ -654,12 +657,12 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   hadron = new G4QHadron(tPDG,t4M);  // Hadron for the recoil neucleus
   ResHV->push_back(hadron);          // Fill the recoil nucleus
 #ifdef debug
-		G4cout<<"G4QDiffractionRatio::ProjFragment: *Filled* RecNucleus="<<t4M<<tPDG<<G4endl;
+  G4cout<<"G4QDiffractionRatio::ProjFragment: *Filled* RecNucleus="<<t4M<<tPDG<<G4endl;
 #endif
   hadron = new G4QHadron(rPDG,r4M);  // Hadron for the recoil nucleon
   ResHV->push_back(hadron);          // Fill the recoil nucleon
 #ifdef debug
-		G4cout<<"G4QDiffractionRatio::ProjFragment: *Filled* RecNucleon="<<r4M<<rPDG<<G4endl;
+  G4cout<<"G4QDiffractionRatio::ProjFragment: *Filled* RecNucleon="<<r4M<<rPDG<<G4endl;
 #endif
   G4LorentzVector sum4M(0.,0.,0.,0.);
   // Now the (pPdg,d4M) Quasmon must be fragmented
@@ -667,12 +670,12 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4QContent dQC=G4QPDGCode(pPDG).GetQuarkContent(); // Quark Content of the projectile
   G4Quasmon* pan= new G4Quasmon(dQC,d4M); // --->---->---->----->-----> DELETED -->---*
   try                                                           //                    |
-	 {                                                             //                    |
+  {                                                             //                    |
     G4QNucleus vac(90000000);                                   //                    |
     leadhs=pan->Fragment(vac,1);  // DELETED after it is copied to ResHV vector -->---+-*
   }                                                             //                    | |
   catch (G4QException& error)                                   //                    | |
-	 {                                                             //                    | |
+  {                                                             //                    | |
     G4cerr<<"***G4QDiffractionRatio::ProjFragment: G4Quasmon Exception"<<G4endl;    //| |
     G4Exception("G4QDiffractionRatio::ProjFragment","72",FatalException,"*Quasmon");//| |
   }                                                             //                    | |
@@ -788,7 +791,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           }
         }
         else                                          //(2) n*N+m*(Pi-)   (nL=0)        |
-	       {
+        {
           sPDG = -211;
           qPN  = -nC;
           fPDG = 2112;
@@ -838,7 +841,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           sMass= mLamb;
           nB  = nC;
           fMass= mProt;
-	       }
+        }
         else if(nL  && nC<nB-nL) //(3)n*L+m*P+k*N ***Should not be here***              |
         {
           qPN  = nC;                                  // #of protons                    |
@@ -1004,7 +1007,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
             ResHV->push_back(Hi);            // Fill in the additional nucleon          |
 #ifdef fdebug
             sum4M+=r4M;                      // Sum 4-momenta for the EnMom check       |
-  		        G4cout<<"G4QDR::ProjFrag: *additional Nucleon*="<<f4Mom<<fPDG<<G4endl; //   |
+            G4cout<<"G4QDR::ProjFrag: *additional Nucleon*="<<f4Mom<<fPDG<<G4endl; //   |
 #endif
           }
         }
@@ -1025,7 +1028,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
             ResHV->push_back(Hj);            // Fill in the additional pion             |
 #ifdef fdebug
             sum4M+=r4M;                      // Sum 4-momenta for the EnMom check       |
-  		        G4cout<<"G4QDR::ProjFragm: *additional Pion*="<<f4Mom<<fPDG<<G4endl; //     |
+            G4cout<<"G4QDR::ProjFragm: *additional Pion*="<<f4Mom<<fPDG<<G4endl; //     |
 #endif
           }
         }
@@ -1046,12 +1049,12 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
             ResHV->push_back(Hk);          // Fill in the additional pion               |
 #ifdef fdebug
             sum4M+=r4M;                    // Sum 4-momenta for the EnMom check         |
-  		        G4cout<<"G4QDR::ProjFragm: *additional Hyperon*="<<f4Mom<<fPDG<<G4endl; //  |
+            G4cout<<"G4QDR::ProjFragm: *additional Hyperon*="<<f4Mom<<fPDG<<G4endl; //  |
 #endif
           }
         }
       }                                    // --> End of decay                          |
-				}                                      // -> End of Iso-nuclear treatment           |
+    }                                      // -> End of Iso-nuclear treatment           |
     else if( (nL > 0 && nB > 1) || (nL < 0 && nB < -1) ) 
     {     // Hypernucleus is found                                                      |
       G4bool anti=false;                   // Default=Nucleus (true=antinucleus         |
@@ -1066,28 +1069,28 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4int nSM=0;                         // A#0f unavoidable Sigma-                   |
       G4int nSP=0;                         // A#0f unavoidable Sigma+                   |
       if(nC<0)                             // Negative hypernucleus                     |
-	     {
+      {
         if(-nC<=nL)                        // Partial compensation by Sigma-            |
-		      {
+        {
           nSM=-nC;                         // Can be compensated by Sigma-              |
           nL+=nC;                          // Reduce the residual strangeness           |
         }
         else                               // All Charge is compensated by Sigma-       |
-		      {
+        {
           nSM=nL;                          // The maximum number of Sigma-              |
           nL=0;                            // Kill the residual strangeness             |
         }
       }
       else if(nC>nB-nL)                    // Extra positive hypernucleus               |
-	     {
+      {
         if(nC<=nB)                         // Partial compensation by Sigma+            |
-		      {
+        {
           G4int dH=nB-nC;                  // Isotopic shift                            |
           nSP=nL-dH;                       // Can be compensated by Sigma+              |
           nL=dH;                           // Reduce the residual strangeness           |
         }
         else                               // All Charge is compensated by Sigma+       |
-		      {
+        {
           nSP=nL;                          // The maximum number of Sigma+              |
           nL=0;                            // Kill the residual strangeness             |
         }
@@ -1104,7 +1107,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4cout<<"G4QDiffRatio::PrFrag:*G4*nS+="<<nSP<<",nS-="<<nSM<<",nL="<<nL<<G4endl;// |
 #endif
       if(nSP||nSM)                         // Sigma+/- improvement                      |
-	     {
+      {
         if(nL)                             // By mistake Lambda improvement is found    |
         {
           G4cout<<"***G4QDR::PFr:HypN="<<hPDG<<": bothSigm&Lamb -> ImproveIt"<<G4endl;//|
@@ -1114,13 +1117,13 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           else    nL+=nSM;                 // Convert Sigma- to Lambda                  |
         }
         if(nSP)                            // Sibma+ should be decayed                  |
-		      {
+        {
           nL=nSP;                          // #of decaying hyperons                     |
           sPDG=3222;                       // PDG code of decaying hyperons             |
           MLa=mSigP;                       // Mass of decaying hyperons                 |
         }
         else                               // Sibma+ should be decayed                  |
-		      {
+        {
           nL=nSM;                          // #of decaying hyperons                     |
           sPDG=3112;                       // PDG code of decaying hyperons             |
           MLa=mSigM;                       // Mass of decaying hyperons                 |
@@ -1132,7 +1135,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       if(nL>1) MLa*=nL;                    // Total mass of the decaying hyperons       |
       G4double rlM=G4QNucleus(rlPDG).GetMZNS();// Mass of the NonstrangeNucleus         |
       if(!nSP&&!nSM&&nL==1&&reM>rlM+mSigZ&&G4UniformRand()>.5) // Conv Lambda->Sigma0   |
-	     {
+      {
         sPDG=3212;                         // PDG code of a decaying hyperon            |
         MLa=mSigZ;                         // Mass of the decaying hyperon              |
       }
@@ -1141,7 +1144,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4double rnM=rnN.GetMZNS();          // Mass of the new nonstrange nucleus        |
       // @@ In future take into account Iso-Hypernucleus (Add PI+,R & Pi-,R decays)     |
       if(rlPDG==90000000)                  // Multy Hyperon (HyperNuc of only hyperons) |
-	     {
+      {
         if(nL>1) r4M=r4M/nL;               // split the 4-mom for the MultyLambda       |
         for(G4int il=0; il<nL; il++)       // loop over Lambdas                         |
         {
@@ -1150,17 +1153,17 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(theLam);        // Fill in the Lambda                        |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Lambda*="<<r4M<<sPDG<<G4endl; //        |
+          G4cout<<"G4QDR::ProjFrag: *additional Lambda*="<<r4M<<sPDG<<G4endl; //        |
 #endif
         }
       }
-	     else if(reM>rlM+MLa-eps)              // Lambda (or Sigma) can be split           |
-	     {
+      else if(reM>rlM+MLa-eps)              // Lambda (or Sigma) can be split           |
+      {
         G4LorentzVector n4M(0.,0.,0.,rlM);  // 4-mom of the residual nucleus            |
         G4LorentzVector h4M(0.,0.,0.,MLa);  // 4-mom of the Hyperon                     |
         G4double sum=rlM+MLa;               // Safety sum                               |
-        if(std::fabs(reM-sum)<eps)               // At rest in CMS                           |
-	       {
+        if(std::fabs(reM-sum)<eps)          // At rest in CMS                           |
+        {
           n4M=r4M*(rlM/sum);                // Split tot 4-mom for resNuc               |
           h4M=r4M*(MLa/sum);                // Split tot 4-mom for Hyperon              |
         }
@@ -1177,7 +1180,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
         if(anti && rlPDG==90001000) rlPDG=-2212; // Convert to anti-proton              |
         loh->SetQPDG(G4QPDGCode(rlPDG));   // ConvertedHypernucleus to nonstrange(@anti)|
         if(rlPDG==90000002)                // Additional action with loH changed to 2n  |
-	       {
+        {
           G4LorentzVector newLV=n4M/2.;    // Split 4-momentum                          |
           loh->Set4Momentum(newLV);        // Reupdate the hadron                       |
           if(anti) loh->SetQPDG(G4QPDGCode(-2112)); // Make anti-neutron PDG            |
@@ -1186,11 +1189,11 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(secHadr);       // Fill in the additional neutron            |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProgFrag: *additional Neutron*="<<r4M<<sPDG<<G4endl; //       |
+          G4cout<<"G4QDR::ProgFrag: *additional Neutron*="<<r4M<<sPDG<<G4endl; //       |
 #endif
         }
         else if(rlPDG==90002000)           // Additional action with loH change to 2p   |
-	       {
+        {
           G4LorentzVector newLV=n4M/2.;    // Split 4-momentum                          |
           loh->Set4Momentum(newLV);        // Reupdate the hadron                       |
           if(anti) loh->SetQPDG(G4QPDGCode(-2212)); // Make anti-neutron PDG            |
@@ -1199,7 +1202,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(secHadr);       // Fill in the additional neutron            |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Proton*="<<r4M<<sPDG<<G4endl; //        |
+          G4cout<<"G4QDR::ProjFrag: *additional Proton*="<<r4M<<sPDG<<G4endl; //        |
 #endif
         }
         // @@(?) Add multybaryon decays if necessary (Now it anyhow is made later)      |
@@ -1214,20 +1217,20 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(theLamb);       // Fill in the additional neutron            |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Hyperon*="<<r4M<<sPDG<<G4endl; //       |
+          G4cout<<"G4QDR::ProjFrag: *additional Hyperon*="<<r4M<<sPDG<<G4endl; //       |
 #endif
         }
       }
-	     else if(reM>rnM+mPi0-eps&&!nSP&&!nSM)// Lambda->N only if Sigmas are absent       |
-	     {
+      else if(reM>rnM+mPi0-eps&&!nSP&&!nSM)// Lambda->N only if Sigmas are absent       |
+      {
         G4int nPi=static_cast<G4int>((reM-rnM)/mPi0); // Calc. pion multiplicity        |
         if (nPi>nL) nPi=nL;                // Cut the pion multiplicity                 |
         G4double npiM=nPi*mPi0;            // Total pion mass                           |
         G4LorentzVector n4M(0.,0.,0.,rnM); // Residual nucleus 4-momentum               |
         G4LorentzVector h4M(0.,0.,0.,npiM);// 4-momentum of pions                       |
         G4double sum=rnM+npiM;             // Safety sum                                |
-        if(std::fabs(reM-sum)<eps)              // At rest                                   |
-	       {
+        if(std::fabs(reM-sum)<eps)         // At rest                                   |
+        {
           n4M=r4M*(rnM/sum);               // The residual nucleus part                 |
           h4M=r4M*(npiM/sum);              // The pion part                             |
         }
@@ -1250,11 +1253,11 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(thePion);       // Fill in the Pion                          |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Pion*="<<r4M<<sPDG<<G4endl; //          |
+          G4cout<<"G4QDR::ProjFrag: *additional Pion*="<<r4M<<sPDG<<G4endl; //          |
 #endif
         }
         if(rnPDG==90000002)                // Additional action with loH change to 2n   |
-	       {
+        {
           G4LorentzVector newLV=n4M/2.;    // Split 4-momentum                          |
           loh->Set4Momentum(newLV);        // Reupdate the hadron                       |
           if(anti) loh->SetQPDG(G4QPDGCode(-2112)); // Make anti-neutron PDG            |
@@ -1263,11 +1266,11 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(secHadr);       // Fill in the additional neutron            |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Neutron*="<<r4M<<sPDG<<G4endl; //       |
+          G4cout<<"G4QDR::ProjFrag: *additional Neutron*="<<r4M<<sPDG<<G4endl; //       |
 #endif
         }
         else if(rnPDG==90002000)           // Additional action with loH change to 2p   |
-	       {
+        {
           G4LorentzVector newLV=n4M/2.;    // Split 4-momentum                          |
           loh->Set4Momentum(newLV);        // Reupdate the hadron                       |
           if(anti) loh->SetQPDG(G4QPDGCode(-2212)); // Make anti-neutron PDG            |
@@ -1276,31 +1279,31 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
           ResHV->push_back(secHadr);       // Fill in the additional neutron            |
 #ifdef fdebug
           sum4M+=r4M;                      // Sum 4-momenta for the EnMom check         |
-  		      G4cout<<"G4QDR::ProjFrag: *additional Proton*="<<r4M<<sPDG<<G4endl; //        |
+          G4cout<<"G4QDR::ProjFrag: *additional Proton*="<<r4M<<sPDG<<G4endl; //        |
 #endif
         }
         // @@ Add multybaryon decays if necessary                                       |
       }
       else // If this Excepton shows up (lowProbable appearance) => include gamma decay |
-	     {
+      {
         G4double d=rlM+MLa-reM;            // Hyperon Excessive energy                  |
-		      G4cerr<<"G4QDR::PF:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
+        G4cerr<<"G4QDR::PF:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
         d=rnM+mPi0-reM;                    // Pion Excessive energy                     |
-		      G4cerr<<"G4QDR::PF:"<<oPDG<<","<<hPDG<<",M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
+        G4cerr<<"G4QDR::PF:"<<oPDG<<","<<hPDG<<",M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
         throw G4QException("G4QDiffractionRatio::ProjFragment: Hypernuclear conver");// |
       }
-		  }                                      // => End of G4 Hypernuclear decay           |
+    }                                      // => End of G4 Hypernuclear decay           |
     ResHV->push_back(loh);                 // Fill in the result                        |
 #ifdef debug
     sum4M+=loh->Get4Momentum();            // Sum 4-momenta for the EnMom check         |
-  		G4cout<<"G4QDR::PrFra:#"<<iq<<","<<loh->Get4Momentum()<<loh->GetPDGCode()<<G4endl;//|
+    G4cout<<"G4QDR::PrFra:#"<<iq<<","<<loh->Get4Momentum()<<loh->GetPDGCode()<<G4endl;//|
 #endif
   }                                        //                                           |
   delete leadhs; // <----<----<----<----<----<----<----<----<----<----<----<----<----<--*
 #ifdef debug
-		G4cout<<"G4QDiffractionRatio::ProjFragment: *End* Sum="<<sum4M<<" =?= d4M="<<d4M<<G4endl;
+  G4cout<<"G4QDiffractionRatio::ProjFragment: *End* Sum="<<sum4M<<" =?= d4M="<<d4M<<G4endl;
 #endif
-		return ResHV; // Result
+  return ResHV; // Result
 } // End of ProjFragment
 
 // Calculates Single Diffraction Taarget Excitation Cross-Section (independent Units)
@@ -1311,7 +1314,7 @@ G4double G4QDiffractionRatio::GetTargSingDiffXS(G4double pIU, G4int pPDG, G4int 
     G4cerr<<"G4QDiffractionRatio::GetTargSingDiffXS isn't applicable p="<<mom<<" GeV, PDG="
          <<pPDG<<G4endl;
   G4double A=Z+N;                        // A of the target
-		//return 4.5*std::pow(A,.364)*millibarn; // Result
+  //return 4.5*std::pow(A,.364)*millibarn; // Result
   return 3.7*std::pow(A,.364)*millibarn; // Result after mpi0 correction
 
 } // End of ProjFragment

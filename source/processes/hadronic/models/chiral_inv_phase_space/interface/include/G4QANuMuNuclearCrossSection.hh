@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.hh,v 1.6 2006-12-01 10:57:46 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4QANuMuNuclearCrossSection -- header file
+// GEANT4 physics class: G4QANuMuNuclearCrossSection -- header file for (anu_mu,mu+)A XS
 // M.V. Kossov, CERN-ITEP(Moscow), 20-DEC-2005
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 20-DEC-2005
 //

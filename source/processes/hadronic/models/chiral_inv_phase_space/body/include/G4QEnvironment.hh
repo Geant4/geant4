@@ -24,13 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.32 2007-10-07 13:31:41 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.33 2009-02-23 09:49:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
 //      header for Multy Quasmon Environment in the CHIPS Model
 // ------------------------------------------------------------
+// Short description: The G4QEnvironment class corresponds to the nuclear
+// environment,  containing excited nucleons or nuclear clusters
+// (G4Quasmons). In the constructer the nucleus (G4QNucleus) is clusterized
+// and then the projectile hadron (or hadrons) can create one (or a few)
+// Quasmons, which are fragmented by the Fragment member function. As a
+// result a vector of G4QHadrons is created, which can include the residual
+// nucleus in the ground state.
+//---------------------------------------------------------------------
 
 #ifndef G4QEnvironment_h
 #define G4QEnvironment_h 1
@@ -81,6 +89,7 @@ private:
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
   void             EvaporateResidual(G4QHadron* h);// Final Evaporation of a nucl. fragment
   void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
+  void             DecayAntistrange(G4QHadron* aS);// Decay Antistrange nucleus
   G4bool           CheckGroundState(G4Quasmon* quasm,G4bool corFlag=false);//as G4Q for QHV
   G4bool           DecayInEnvQ(G4Quasmon* quasm);  // Use befor evaporation in PANIC case
 

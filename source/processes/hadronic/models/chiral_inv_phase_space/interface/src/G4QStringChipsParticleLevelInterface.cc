@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+// Short description: Interface of QGSC to CHIPS (Energy Flow  of soft hadrons) 
+// ----------------------------------------------------------------------------
 
 //#define debug
 //#define pdebug
@@ -175,7 +176,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: ALL STRING particles "
           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<" "
           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
-       	  << a4Mom <<G4endl; 
+          << a4Mom <<G4endl; 
 #endif
 #ifdef pdebug
     G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: in C="
@@ -192,9 +193,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       if((*current).first > toSort)        // The current is smaller then existing
       {
-	       theSorted.insert(current, it);     // It shifts the others up
-	       inserted = true;
-	       break;
+        theSorted.insert(current, it);     // It shifts the others up
+        inserted = true;
+        break;
       }
     }
     if(!inserted) theSorted.push_back(it); // It is bigger than any previous
@@ -237,7 +238,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
 #ifdef pdebug
-				G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: nq="
+    G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: nq="
           <<(*current).second->GetDefinition()->GetQuarkContent(3)<<", naq="
           <<(*current).second->GetDefinition()->GetAntiQuarkContent(3)<<", PDG="
           <<(*current).second->GetDefinition()->GetPDGEncoding()<<",4M="
@@ -305,7 +306,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
 
 #ifdef pdebug
-				G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
+    G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
                                                     <<theEnergyLostInFragmentation<<G4endl;
 #endif
 
@@ -315,13 +316,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout <<"G4QStringChipsParticleLevelInterface::Propagate: ABSORBED STRING particles "
            <<(*current).second->GetDefinition()->GetPDGCharge()<<" "
            << (*current).second->GetDefinition()->GetPDGEncoding()<<" "
-	          << (*current).second->Get4Momentum() <<G4endl; 
+           << (*current).second->Get4Momentum() <<G4endl; 
 #endif
 #ifdef pdebug
     G4cout<<"G4QStringChipsParticleLevelInterface::Propagate:C="
           <<current->second->GetDefinition()->GetPDGCharge()<<", PDG="
           <<current->second->GetDefinition()->GetPDGEncoding()<<", 4M="
-	         <<current->second->Get4Momentum()<<G4endl; 
+          <<current->second->Get4Momentum()<<G4endl; 
 #endif
 
     // projectile 4-momentum in target rest frame needed in constructor of QHadron
@@ -381,9 +382,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       for(hp = 0; hp<hitCount; hp++)
       {
         theFinalContents[hp] +=theContents[running];
-	       *(theFinalMomenta[hp])+=*(theMomenta[running]);
-	       running++;
-	       if(running == theContents.size()) break;
+        *(theFinalMomenta[hp])+=*(theMomenta[running]);
+        running++;
+        if(running == theContents.size()) break;
       }
     }
     for(hp = 0; hp<hitCount; hp++)
@@ -401,8 +402,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                         clusteringCoefficient, 
-					                       fusionToExchange);
+                            clusteringCoefficient, 
+                            fusionToExchange);
   G4Quasmon::SetParameters(temperature, halfTheStrangenessOfSee, etaToEtaPrime);
 
 #ifdef CHIPSdebug
@@ -437,7 +438,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       for(size_t i=0; i< projHV.size(); i++)
       {
         G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
-	       <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+        <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
       }
       throw;
     }
@@ -471,7 +472,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
 #ifdef pdebug
-				  G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
+      G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
             <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
       theResult->push_back(theSec);
@@ -486,7 +487,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         theSec->SetTotalEnergy(current4Mom.t());
         theSec->SetMomentum(current4Mom.vect());
 #ifdef pdebug
-				    G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
+        G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
               <<secondaries->operator[](aSecondary)->GetDefinition()->GetPDGEncoding()
               <<",4M="<<current4Mom<<G4endl; 
 #endif
@@ -560,7 +561,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
 #ifdef pdebug
-				  G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* CHIPS PDG="
+      G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: *OUT* CHIPS PDG="
               <<theDefinition->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
       theResult->push_back(theSec);
@@ -575,7 +576,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
-	   << output->operator[](particle)->Get4Momentum() <<G4endl; 
+    << output->operator[](particle)->Get4Momentum() <<G4endl; 
 #endif
 
     delete output->operator[](particle);
@@ -587,13 +588,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << G4endl;
   G4cout << "QUASMON preparation info "
          << 1./MeV*proj4Mom<<" "
-	 << 1./MeV*targ4Mom<<" "
-	 << nD<<" "<<nU<<" "<<nS<<" "<<nAD<<" "<<nAU<<" "<<nAS<<" "
-	 << hitCount<<" "
-	 << particleCount<<" "
-	 << theLow<<" "
-	 << theHigh<<" "
-	 << G4endl;
+  << 1./MeV*targ4Mom<<" "
+  << nD<<" "<<nU<<" "<<nS<<" "<<nAD<<" "<<nAU<<" "<<nAS<<" "
+  << hitCount<<" "
+  << particleCount<<" "
+  << theLow<<" "
+  << theHigh<<" "
+  << G4endl;
 #endif
 
   return theResult;

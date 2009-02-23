@@ -22,6 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// Short description: Interface of QGSC to CHIPS (Energy Flow of soft hadrons) 
+// ---------------------------------------------------------------------------
 //
 #ifndef G4QStringChipsParticleLevelInterface_h
 #define G4QStringChipsParticleLevelInterface_h
