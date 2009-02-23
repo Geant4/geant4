@@ -7,16 +7,16 @@ cd $REFERENCE
 setenv PRIMARYBEAM pi-
 
 setenv PHYSLIST QBBC
-#source run.csh
+#source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QBBCG
-#source run.csh
+#source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QBBCF
-#source run.csh
+#source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT
-#source run.csh
+#source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT_EMV
-source run.csh
+source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST FTFP_BERT
-source run.csh
+source $G4INSTALL/tests/test46/run.csh
 
 #
