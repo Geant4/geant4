@@ -213,14 +213,15 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
     }
   }
 
+  delete[] edep;
+
+#ifdef G4ANALYSIS_USE
   G4ThreeVector pos = primaryGenerator->GetParticlePosition();
   float ener = primaryGenerator->GetParticleEnergy()/GeV;
   float x    = pos.x()/mm;
   float y    = pos.y()/mm;
   float z    = pos.z()/mm;
-  delete[] edep;
 
-#ifdef G4ANALYSIS_USE
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->InsertEnergy(fullE);
   analysis->InsertEnergyHcal(hcalE);
