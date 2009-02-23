@@ -12,6 +12,7 @@
 #######
 /testhadr/PrintModulo 100
 /run/initialize
+/process/em/applyCuts true
 /gun/energy 7. GeV
 /run/beamOn 10000
 
