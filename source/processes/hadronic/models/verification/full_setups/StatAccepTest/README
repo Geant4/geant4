@@ -1,5 +1,5 @@
 
- Last update: 06-Aug-2008
+ Last update: 24-Feb-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -100,10 +100,13 @@
  Notice that this does not mean necessarily that the two 
  distributions are statistically incompatible with each other,
  because, by definition, 1% of pair of distributions coming
- from the same parent distributions have a p-value below 10%.
+ from the same parent distributions have a p-value below 1%.
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
  presence of a bug.
+ Colours in the plot: the first Geant4 version, i.e. "REF1" in
+ in the main script mainScript.py, is plotted in RED; the second
+ Geant4 version, i.e. "REF2" in mainScript.py, is plotted in BLUE. 
 
  The program is also printing, at the end, some useful information
  (with statistical errors):
@@ -124,7 +127,7 @@
 
  Some scripts and one kumac has been provided to allow a full
  automatization of this Statistical Acceptance suite.
- Here the structure of these scripts/kumac:
+ Here is the structure of these scripts/kumac:
 
     1)  mainScript.py 
          ---> 2)  simuDriver.sh  
@@ -205,7 +208,9 @@
  The subdirectory  dirEnergyScan/  is dedicated to the study of
  calorimeter observables (in particular, visible energy and
  energy resolution) as a function of the beam energy, scanning
- the interval 1 - 30 GeV (see the README file in that directory).
+ the interval 1 - 30 GeV and few extra higher energies
+ (usually 50 GeV, 100 GeV, 200 GeV).
+ (See the README file in that directory.)
 
  The subdirectory  dirFluka/  is dedicated to the study of
  the same set of simplified calorimeters used for Geant4
