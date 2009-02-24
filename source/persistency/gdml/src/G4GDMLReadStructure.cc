@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.55 2009-02-19 09:04:49 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.56 2009-02-24 17:41:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -694,7 +694,7 @@ GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
    else { return G4GDMLAuxListType(); }
 }
 
-const G4GDMLAuxMapType* const G4GDMLReadStructure::
+const G4GDMLAuxMapType* G4GDMLReadStructure::
 GetAuxMap() const
 {
    return &auxMap;
