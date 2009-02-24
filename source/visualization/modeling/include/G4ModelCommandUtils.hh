@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandUtils.hh,v 1.2 2006-09-13 12:54:31 allison Exp $
+// $Id: G4ModelCommandUtils.hh,v 1.3 2009-02-24 12:00:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay September 2006
@@ -52,6 +52,7 @@ namespace G4ModelCommandUtils {
     messengers.push_back(new G4ModelCmdSetStepPtsVisible<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsColour<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsSize<G4VisTrajContext>(context, placement));
+    messengers.push_back(new G4ModelCmdSetStepPtsSizeType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetStepPtsFillStyle<G4VisTrajContext>(context, placement));
     
@@ -59,6 +60,7 @@ namespace G4ModelCommandUtils {
     messengers.push_back(new G4ModelCmdSetAuxPtsVisible<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsColour<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsSize<G4VisTrajContext>(context, placement));
+    messengers.push_back(new G4ModelCmdSetAuxPtsSizeType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsType<G4VisTrajContext>(context, placement));
     messengers.push_back(new G4ModelCmdSetAuxPtsFillStyle<G4VisTrajContext>(context, placement));
 
