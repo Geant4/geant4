@@ -12,7 +12,7 @@
       <text>exam-adv-composite_calorimeter-run</text>
       <text>exam-adv-cosmicray_charging-run</text>
       <text>exam-adv-gammaray_telescope-run</text>
-      <text>exam-adv-hadrontherapy-run</text>
+      <!--text>exam-adv-hadrontherapy-run</text  endless output-->
       <!--text>exam-adv-human_phantom-run</text EXTERNAL REQUIREMENTS: SAXANA-->
       <text>exam-adv-lar_calorimeter-run</text>
       <text>exam-adv-medical_linac-run</text>
