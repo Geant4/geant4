@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.133 2008-11-13 09:07:31 gcosmo Exp $
+cvs log $Id: History,v 1.134 2009-02-24 10:58:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th February 2009  John Allison  (greps-V09-02-00)
+- G4VMarker:
+  o Added enum SizeType {none, world, screen};
+  o Added GetSizeType and SetSize/Diameter/Radius(SizeType, G4double).
 
 13th November 2008  Gabriele Cosmo  (greps-V09-01-06)
 - HepPolyhedronHype: fixed arrays upper-bound in constructor, responsible
