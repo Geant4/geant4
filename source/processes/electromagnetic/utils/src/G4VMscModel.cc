@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.9 2009-02-22 17:32:08 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.10 2009-02-24 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,5 +124,13 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
     fParticleChange->ProposePosition(newPosition);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				    const G4MaterialCutsCouple*,
+				    const G4DynamicParticle*,
+				    G4double, G4double)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

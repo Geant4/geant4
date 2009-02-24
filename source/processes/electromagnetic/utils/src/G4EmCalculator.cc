@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.45 2009-02-22 17:31:31 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.46 2009-02-24 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -758,7 +758,6 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
        && currentParticleName != "deuteron"  
        && currentParticleName != "triton"
        && currentParticleName != "alpha+"
-       && currentParticleName != "alpha++"
        && currentParticleName != "helium"
        && currentParticleName != "hydrogen"
       ) {

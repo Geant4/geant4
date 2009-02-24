@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.7 2009-02-22 17:32:08 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.8 2009-02-24 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,17 @@ public:
 
   virtual ~G4VMscModel();
 
+  // empty 
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double tmax);
+
+  //================================================================
+  //  Set parameters of multiple scattering models
+  //================================================================
+ 
   inline void SetStepLimitType(G4MscStepLimitType);
 
   inline void SetLateralDisplasmentFlag(G4bool val);
@@ -82,15 +93,19 @@ public:
 
 protected:
 
+  // initialisation of interface with geometry
   void InitialiseSafetyHelper();
 
+  // shift point of the track PostStep 
   void ComputeDisplacement(G4ParticleChangeForMSC*,  
 			   const G4ThreeVector& displDir,
                            G4double displacement,
 			   G4double postsafety);
 
+  // compute safety
   inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
 
+  // compute linear distance to a geometry boundary
   inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
 				   G4double limit);
 
