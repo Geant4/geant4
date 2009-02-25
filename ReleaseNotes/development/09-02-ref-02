@@ -27,7 +27,7 @@ persistency/ascii                                ascii-V09-02-04
   to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
 - Removed deprecated class G4tgrFileOut, not used.
 
-persistency/gdml                                 gdml-V09-02-02
+persistency/gdml                                 gdml-V09-02-03
 ----------------
 - Fix in G4GDMLStructure class for missing caching of auxiliary information
   from child modules, causing auxiliary information defined within separated
