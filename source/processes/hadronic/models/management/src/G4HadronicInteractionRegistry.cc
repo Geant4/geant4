@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.6 2009-02-14 19:26:51 vnivanch Exp $
+// $Id: G4HadronicInteractionRegistry.cc,v 1.7 2009-02-25 16:30:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
@@ -54,15 +54,19 @@ G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 
 void G4HadronicInteractionRegistry::Clean()
 {
-  G4int i;
-  for (i=0; i<nModels; i++) {
-    if( allModels[i] ) {
-      //G4cout << "Delete model <" << allModels[i]->GetModelName() 
-      //<< ">  " << i << G4endl;
-      delete allModels[i];
-      allModels[i] = 0;
+  //G4cout << "G4HadronicInteractionRegistry::Clean() start " << nModels << G4endl;
+  if(0 < nModels) {
+    for (G4int i=0; i<nModels; i++) {
+      if( allModels[i] ) {
+	//G4cout << "delete " << i << G4endl;
+        //G4cout << allModels[i]->GetModelName() << G4endl;
+	delete allModels[i];
+	allModels[i] = 0;
+      }
     }
   }
+  //G4cout << "G4HadronicInteractionRegistry::Clean() is done " << G4endl; 
+  nModels = 0;
 }
 
 void G4HadronicInteractionRegistry::

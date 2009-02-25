@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.11 2009-02-22 17:44:41 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.12 2009-02-25 16:29:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,16 +84,32 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
 void G4HadronicProcessStore::Clean()
 {
   G4int i;
+  //G4cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
+  //	 << "  Nextra= " << n_extra << G4endl;
   if(n_proc > 0) {
     for (i=0; i<n_proc; i++) {
-      if( process[i] ) delete process[i];
+      if( process[i] ) {
+        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " << i << G4endl;
+	//G4cout <<  process[i]->GetProcessName() << G4endl;
+	delete process[i];
+	process[i] = 0;
+      }
     }
   }
   if(n_extra > 0) {
     for(i=0; i<n_extra; i++) {
-      if(extraProcess[i]) delete extraProcess[i];
+      if(extraProcess[i]) {
+        //G4cout << "G4HadronicProcessStore::Clean() delete extra "  
+	//       << i << G4endl;
+	//G4cout << extraProcess[i]->GetProcessName() << G4endl;
+	delete extraProcess[i];
+        extraProcess[i] = 0;
+      }
     }
   }
+  //G4cout << "G4HadronicProcessStore::Clean() done" << G4endl; 
+  n_extra = 0;
+  n_proc = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -343,8 +359,13 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerIsotope(
 
 void G4HadronicProcessStore::Register(G4HadronicProcess* proc) 
 { 
-  for(G4int i=0; i<n_proc; i++) {if(process[i] == proc) return;}
-    
+  if(0 < n_proc) {
+    for(G4int i=0; i<n_proc; i++) {
+      if(process[i] == proc) return;
+    }
+  }
+  //G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
+  //	 << "  " << proc->GetProcessName() << G4endl;
   n_proc++;
   process.push_back(proc);
 }
@@ -402,10 +423,11 @@ void G4HadronicProcessStore::RegisterInteraction(G4HadronicProcess* proc,
 
 void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 {
+  if(0 == n_proc) return;
   for(G4int i=0; i<n_proc; i++) {
     if(process[i] == proc) {
       process[i] = 0;
-      break;
+      return;
     }
   }
 } 
@@ -414,8 +436,13 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 
 void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
 {
-  for(G4int i=0; i<n_extra; i++) {if(extraProcess[i] == proc) return;}
-  //G4cout << "Extra Process: " << n_extra << "  " <<  proc->GetProcessName() << G4endl;
+  if(0 < n_extra) {
+    for(G4int i=0; i<n_extra; i++) {
+      if(extraProcess[i] == proc) return;
+    }
+  }
+  //G4cout << "Extra Process: " << n_extra << "  " <<  proc->GetProcessName() 
+  //	 << "  " << proc << G4endl;
     
   n_extra++;
   extraProcess.push_back(proc);
@@ -456,11 +483,13 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
 
 void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
 {
+  //G4cout << "Deregister Extra Process: " << proc << "   " << proc->GetProcessName() << G4endl;
+  if(0 == n_extra) return;
   for(G4int i=0; i<n_extra; i++) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = 0;
       //G4cout << "Extra Process: " << i << " is deregisted " << G4endl;
-      break;
+      return;
     }
   }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.2 2009-02-14 19:22:19 vnivanch Exp $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.3 2009-02-25 16:27:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,12 +65,14 @@ G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 
 void G4CrossSectionDataSetRegistry::Clean()
 {
+  if(0 == nxs) return;
   for (G4int i=0; i<nxs; i++) {
     if( xSections[i] ) {
       delete xSections[i];
       xSections[i] = 0;
     }
   }
+  nxs = 0;
 }
 
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
