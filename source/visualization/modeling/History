@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2009-02-25 14:17:11 allison Exp $
+$Id: History,v 1.109 2009-02-25 14:21:45 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,7 +22,8 @@ History file for visualization/modeling
 
 25th February 2009  John Allison  (modeling-V09-02-01 - needs greps-V09-02-01)
 - G4ModelApplyCommandsT: Added visManager->NotifyHandlers() after
-  application (Apply) of all commands.
+  application (Apply) of all commands.  Forces update of all viewers
+  after a change of model, e.g., trajectory colour, point size, etc.
 
 24th February 2009  John Allison  (modeling-V09-02-00 - needs greps-V09-02-00)
 - Added setAux/StepPtsSizeType commands (candidates: "none world screen").
