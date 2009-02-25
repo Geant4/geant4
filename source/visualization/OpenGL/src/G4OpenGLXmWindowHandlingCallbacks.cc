@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.8 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.9 2009-02-25 15:15:50 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,8 +84,8 @@ void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
   
   G4int choice = get_int_userData (w);
   
-  pView->print_colour=(G4bool)choice;
-  G4cout << "Print colour set to " << pView->print_colour;
+  pView->fPrintColour=(G4bool)choice;
+  G4cout << "Print colour set to " << pView->fPrintColour;
   
 }
 
@@ -97,8 +97,8 @@ void G4OpenGLXmViewer::set_print_style_callback (Widget w,
   
   G4int choice = get_int_userData (w);
   
-  pView->vectored_ps=(G4bool)choice;
-  G4cout << "`Produce vectored PostScript ?' set to : " << pView->print_colour;
+  pView->fVectoredPs=(G4bool)choice;
+  G4cout << "`Produce vectored PostScript ?' set to : " << pView->fPrintColour;
   
 }
 

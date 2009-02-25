@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.35 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.36 2009-02-25 15:14:29 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1292,28 +1292,28 @@ void G4OpenGLQtViewer::actionSaveImage() {
   filters += "pdf";
   QString* selectedFormat = new QString();
 #if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getSaveFileName ( ".",
+  fPrintFilename =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
                                                     GLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
-                                                    selectedFormat ); 
+                                                    selectedFormat ).ascii(); 
 #else
-  QString nomFich =  QFileDialog::getSaveFileName ( GLWindow,
+  fPrintFilename =  QFileDialog::getSaveFileName ( GLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
-                                                    selectedFormat ); 
+                                                    selectedFormat ).toStdString().c_str(); 
 #endif
   // bmp jpg jpeg png ppm xbm xpm
-  if (nomFich == "") {
+  if (fPrintFilename.empty()) {
     return;
   }
 #if QT_VERSION < 0x040000
-  nomFich += "."+QString(selectedFormat->ascii());
+  fPrintFilename += "." + selectedFormat->ascii();
   QString format = selectedFormat->lower();
 #else
-  nomFich += "."+QString(selectedFormat->toStdString().c_str());
+  fPrintFilename += "." + selectedFormat->toStdString();
   QString format = selectedFormat->toLower();
 #endif
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,format,fWindow->height(),fWindow->width());
@@ -1347,12 +1347,13 @@ void G4OpenGLQtViewer::actionSaveImage() {
     }    
     if (format == QString("eps")) {
       if (exportDialog->getVectorEPS()) {
-        res = generateVectorEPS(nomFich,exportDialog->getWidth(),exportDialog->getHeight(),image);
+        printVectoredEPS();
+        res = true;
       } else {
-        res = generateEPS2(nomFich,exportDialog->getNbColor(),image);
+        res = generateEPS(fPrintFilename.c_str(),exportDialog->getNbColor(),(unsigned int)image.width(),(unsigned int)image.height());
       }
     } else if ((format == "ps") || (format == "pdf")) {
-      res = generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
+      res = generatePS_PDF(fPrintFilename,exportDialog->getNbColor(),image);
     } else if ((format == "tif") ||
                (format == "tiff") ||
                (format == "jpg") ||
@@ -1365,25 +1366,17 @@ void G4OpenGLQtViewer::actionSaveImage() {
                (format == "xbm") ||
                (format == "xpm")) {
 #if QT_VERSION < 0x040000
-      res = image.save(nomFich,selectedFormat->ascii(),exportDialog->getSliderValue());
+      res = image.save(QString(fPrintFilename.c_str()),selectedFormat->ascii(),exportDialog->getSliderValue());
 #else
-      res = image.save(nomFich,0,exportDialog->getSliderValue());
+      res = image.save(QString(fPrintFilename.c_str()),0,exportDialog->getSliderValue());
 #endif
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
     if (res == false) {
-#if QT_VERSION < 0x040000
-      G4cerr << "Error while saving file... "<<nomFich.ascii()<<"" << G4endl;
-#else
-      G4cerr << "Error while saving file... "<<nomFich.toStdString().c_str()<< G4endl;
-#endif
+      G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
     } else {
-#if QT_VERSION < 0x040000
-      G4cout << "File "<<nomFich.ascii()<<" has been saved " << G4endl;
-#else
-      G4cout << "File "<<nomFich.toStdString().c_str()<<" has been saved " << G4endl;
-#endif
+      G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
     }
     
   } else { // cancel selected
@@ -1652,198 +1645,8 @@ void G4OpenGLQtViewer::rescaleImage(
 
 }
 
-/**
-   Generate Vectorial Encapsulated Postscript form image
-   @param aFilename : name of file
-   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
-   @param aImage : Image to print
-*/
-bool G4OpenGLQtViewer::generateVectorEPS (
- QString aFilename
-,int aWidth
-,int aHeight
-,QImage aImage
-)
-{
-  // Print vectored PostScript
-  
-  G4int size = 5000000;
 
-  GLfloat* feedback_buffer;
-  GLint returned;
-  FILE* file;
-  
-  feedback_buffer = new GLfloat[size];
-  glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
-  glRenderMode (GL_FEEDBACK);
-  
-  ResizeGLView();
-  DrawView();
 
-  returned = glRenderMode (GL_RENDER);
-  
-  
-#if QT_VERSION < 0x040000
-  file = fopen (aFilename.ascii(), "w");
-#else
-  file = fopen (aFilename.toStdString().c_str(), "w");
-#endif
-  if (file) {
-    spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
-  } else {
-#if QT_VERSION < 0x040000
-    G4cerr << "Could not open "<< aFilename.ascii() << G4endl;
-#else
-    G4cerr << "Could not open "<< aFilename.toStdString().c_str() << G4endl;
-#endif
-  }
-  
-  delete[] feedback_buffer;
-
-  return true;
-}
-
-/**
-   Generate Encapsulated Postscript form image
-   @param aFilename : name of file
-   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
-   @param aImage : Image to print
-*/
-bool G4OpenGLQtViewer::generateEPS2 (
- QString aFilename
-,int aInColor
-,QImage aImage
-)
-{
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::generateEPS call parent\n");
-#endif
-  generateEPS((aFilename+"GL").toStdString().c_str(),3,(unsigned int)aImage.width(),(unsigned int)aImage.height());
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::generateEPS\n");
-#endif
-  // FIXME
-
-  FILE* fp;
-
-  if (aImage.bits () == NULL)
-    return false;
-  
-#if QT_VERSION < 0x040000
-  fp = fopen (aFilename.ascii(), "w");
-#else
-  fp = fopen (aFilename.toStdString().c_str(), "w");
-#endif
-  if (fp == NULL) {
-    return false;
-  }
-  
-  fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-#if QT_VERSION < 0x040000
-  fprintf (fp, "%%%%Title: %s\n", aFilename.ascii());
-#else
-  fprintf (fp, "%%%%Title: %s\n", aFilename.toStdString().c_str());
-#endif
-  fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
-  fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", aImage.width(), aImage.height());
-  fprintf (fp, "%%%%EndComments\n");
-  fprintf (fp, "gsave\n");
-  fprintf (fp, "/bwproc {\n");
-  fprintf (fp, "    rgbproc\n");
-  fprintf (fp, "    dup length 3 idiv string 0 3 0 \n");
-  fprintf (fp, "    5 -1 roll {\n");
-  fprintf (fp, "    add 2 1 roll 1 sub dup 0 eq\n");
-  fprintf (fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
-  fprintf (fp, "       3 1 roll 5 -1 roll } put 1 add 3 0 \n");
-  fprintf (fp, "    { 2 1 roll } ifelse\n");
-  fprintf (fp, "    }forall\n");
-  fprintf (fp, "    pop pop pop\n");
-  fprintf (fp, "} def\n");
-  fprintf (fp, "systemdict /colorimage known not {\n");
-  fprintf (fp, "   /colorimage {\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       /rgbproc exch def\n");
-  fprintf (fp, "       { bwproc } image\n");
-  fprintf (fp, "   }  def\n");
-  fprintf (fp, "} if\n");
-  fprintf (fp, "/picstr %d string def\n", aImage.width() * aInColor);
-  fprintf (fp, "%d %d scale\n", aImage.width(), aImage.height());
-  fprintf (fp, "%d %d %d\n", aImage.width(), aImage.height(), 8);
-  fprintf (fp, "[%d 0 0 %d 0 0]\n", aImage.width(), aImage.height());
-  fprintf (fp, "{currentfile picstr readhexstring pop}\n");
-  fprintf (fp, "false %d\n", aInColor);
-  fprintf (fp, "colorimage\n");
-  
-
-  int width = aImage.width();
-  int height = aImage.height();
-  int depth = aImage.depth();
-  int size = width*height;
-  
-  if (depth == 1)
-    size = (width+7)/8*height;
-  else if (aInColor == 1)
-    size = size*3;
-  
-  int i = 0;
-  //  if ( aInColor ==1 ) {
-  // FIXME : L. Garnier. For the moment 10 dec 2007, I could not find a way
-  // to save correctly grayscale Image. I mean that color or grayscale image
-  // have the same file save size !
-  
-  /* } else*/ if (depth == 8) {
-    for(int y=height-1; y >=0 ; y--) {
-      const uchar * s = aImage.scanLine(y);
-      for(int x=0; x <width; x++) {
-        QRgb rgb = aImage.color(s[x]);
-        if (aInColor == 1) {
-          fprintf (fp, " %02hx ",(unsigned char)qGray(rgb));
-          i++;
-        } else {
-          fprintf (fp, " %02hx %02hx %02hx",
-                   (unsigned char) qRed(rgb),
-                   (unsigned char) qGreen(rgb),
-                   (unsigned char) qBlue(rgb));
-          i += 3;
-        }
-      }
-      fprintf (fp, "\n");
-    }
-  } else {
-#if QT_VERSION < 0x040000
-    bool alpha = aImage.hasAlphaBuffer();
-#else
-    bool alpha = aImage.hasAlphaChannel();
-#endif
-    for(int y=height-1; y >=0 ; y--) {
-      QRgb * s = (QRgb*)(aImage.scanLine(y));
-      for(int x=0; x <width; x++) {
-        QRgb rgb = (*s++);
-        if (alpha && qAlpha(rgb) < 0x40) // 25% alpha, convert to white -
-          rgb = qRgb(0xff, 0xff, 0xff);
-        if (aInColor == 1) {
-          fprintf (fp, " %02hx ",(unsigned char)qGray(rgb));
-          i++;
-        } else {
-          fprintf (fp, " %02hx %02hx %02hx",
-                   (unsigned char) qRed(rgb),
-                   (unsigned char) qGreen(rgb),
-                   (unsigned char) qBlue(rgb));
-          i += 3;
-        }
-      }
-      fprintf (fp, "\n");
-    } 
-
-  }
-
-  fprintf (fp, "grestore\n");
-  fprintf (fp, "showpage\n");
-  fclose (fp);
-
-  return true;
-}
 /**
    Generate Postscript or PDF form image
    @param aFilename : name of file
@@ -1851,7 +1654,7 @@ bool G4OpenGLQtViewer::generateEPS2 (
    @param aImage : Image to print
 */
 bool G4OpenGLQtViewer::generatePS_PDF (
- QString aFilename
+ const std::string aFilename
 ,int aInColor
 ,QImage aImage
 )
@@ -1898,7 +1701,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   }
 
 
-  if (aFilename.endsWith(".ps")) {
+  if (aFilename.substr(aFilename.size()-3) == ".ps") {
 #if QT_VERSION > 0x040200
     printer.setOutputFormat(QPrinter::PostScriptFormat);
 #endif
@@ -1908,7 +1711,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 #endif
   }
 #if QT_VERSION > 0x040100
-  printer.setOutputFileName(aFilename);
+  printer.setOutputFileName(QString(aFilename.c_str()));
 #endif
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
