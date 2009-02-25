@@ -62,7 +62,7 @@ public:
 
   Test30HadronProduction(const G4String& processName = "HadronProduction" );
 
-  ~Test30HadronProduction();
+  virtual ~Test30HadronProduction();
 
   void SetSecondaryGenerator(Test30VSecondaryGenerator*);
 
@@ -95,7 +95,6 @@ private:
   G4VParticleChange          theChange;
 
 };
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

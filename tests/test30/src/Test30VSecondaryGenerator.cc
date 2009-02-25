@@ -43,6 +43,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ElementVector.hh"
 #include "G4Material.hh"
+#include "G4NucleiProperties.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,11 +51,14 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
   G4Material* mat):
   hInteraction(hadi),
   material(mat),
-  targetN(0)
+  targetN(0.0)
 {
-  G4cout << "New generator and material= " << material->GetName() 
+  elm = material->GetElement(0);
+  targetZ = elm->GetZ();
+  G4cout << "New generator for material " << material->GetName() 
 	 << " Nelm= " <<  material->GetNumberOfElements() 
 	 << " Nmat= " <<  material->GetNumberOfMaterials() 
+	 << " Target element: " << elm->GetName() 
 	 << G4endl;
   generatorName = "";
 }
@@ -68,18 +72,45 @@ Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
 
 void Test30VSecondaryGenerator::SetA(G4int A) 
 {
-  targetN = A;
-  const G4ElementVector* ev = material->GetElementVector();
-  G4int Z = (G4int)(((*ev)[0])->GetZ() + 0.5);
-  G4int N = (G4int)(((*ev)[0])->GetN() + 0.5);
-  if(targetN > 0) N = targetN;
-  G4cout << "Nucleus with N= " << N << "  Z= " 
-	 << Z << "  " << (*ev)[0]->GetN()<< G4endl;
-  targetNucleus.SetParameters((G4double)N, (G4double)Z);
-  mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);
+  targetN = G4double(A);
+  G4int Z = (G4int)(targetZ + 0.5);
+  G4int N = (G4int)(elm->GetN() + 0.5);
+  if(targetN > 0.0) N = (G4int)(targetN + 0.5);
+  G4cout << "Nucleus with N= " << N << "  Z= " << Z << "  A(amu)= " << elm->GetN();
+  if(targetN == 0.0) G4cout << "  Natural abandances";
+  G4cout << G4endl;
+  G4double mass = G4NucleiProperties::GetNuclearMass(G4double(N), targetZ);
   G4cout << "Mass from targetNucleus(GeV)= " << mass/GeV << G4endl;
-  G4double mass1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
+  G4double mass1 = 
+    G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
   G4cout << "Mass from IonTable(GeV)=      " << mass1/GeV << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double Test30VSecondaryGenerator::GetMass()
+{
+  G4double currentN = targetN;
+  if(targetN == 0.0) {
+    currentN = elm->GetN();
+    G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+    G4int nIsoPerElement = elm->GetNumberOfIsotopes();
+    currentN = G4double((*isoVector)[0]->GetN());
+    if(nIsoPerElement > 1) {
+      G4double* abundVector = elm->GetRelativeAbundanceVector();
+      G4double y = G4UniformRand();
+      for(G4int j=0; j<nIsoPerElement; j++) {
+	y -= abundVector[j];
+	if(y <= 0.0) {
+	  currentN = G4double((*isoVector)[j]->GetN());
+	  break;
+	}
+      }
+    }
+  }
+  targetNucleus.SetParameters(currentN, targetZ);
+  G4double mass = G4NucleiProperties::GetNuclearMass(currentN, targetZ);
+  return mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,18 +123,10 @@ G4HadFinalState* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
     G4HadFinalState *result = hInteraction->ApplyYourself(thePro, targetNucleus);
     result->SetTrafoToLab(thePro.GetTrafoToLab());
     return result;
-//   return hInteraction->ApplyYourself(track, targetNucleus);
 
  } else {
     return 0;
  }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-

@@ -69,7 +69,7 @@ public:
 
   const G4String GeneratorName() const {return generatorName;};
 
-  G4double GetMass() {return mass;};
+  G4double GetMass();
 
   void SetA(G4int A);
 
@@ -85,10 +85,11 @@ private:
 
   G4HadronicInteraction* hInteraction;
   G4Material* material;
+  const G4Element* elm;
   G4Nucleus targetNucleus;
-  G4double mass;
   G4HadFinalState* result;
-  G4int targetN;
+  G4double targetZ;
+  G4double targetN;
 
 };
 

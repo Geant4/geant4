@@ -65,6 +65,7 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
+#include "G4TripathiLightCrossSection.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4PiNuclearCrossSection.hh"
 
@@ -86,6 +87,7 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4Alpha.hh"
+#include "G4He3.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4IonTable.hh"
@@ -172,13 +174,6 @@ int main(int argc, char** argv)
   G4bool xsbgg = true;
   G4bool elastic = false;
 
-  //options for deexcitation
-  G4int  OPTxs=3;
-  G4bool useSICB=false;
-  G4bool useNGB=false;
-  G4bool useSCO=false;
-  G4bool useCEMtr=false;
-
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
   G4double bng2[20] = {0.0};
@@ -258,6 +253,7 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
   const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
   const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  const G4ParticleDefinition* he3 = G4He3::He3Definition();
   const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
   const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
 
@@ -278,6 +274,12 @@ int main(int argc, char** argv)
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
+
+  // construct pre-compound and deexcitation
+  G4ExcitationHandler* theDeExcitation = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theDeExcitation);
+  phys->SetPreCompound(thePreCompound); 
+  phys->SetDeExcitation(theDeExcitation); 
 
   // -------- Loop over run
 
@@ -416,28 +418,44 @@ int main(int argc, char** argv)
       } else if(line == "#GEMEvaporation") {
         nevap = true;
       } else if(line == "#XSoption") {
+        G4int OPTxs;
         (*fin)>>OPTxs;
-        G4cout<<" Option for inverse cross sections : OPTxs="<<OPTxs<<G4endl;
-      }
-      else if(line == "#UseSuperImposedCoulombBarrier") {
-        useSICB=true;
+	if (OPTxs< 0 || OPTxs >4  ){
+	  G4cout << "### WArning: BAD CROSS SECTION OPTION for PreCompound model " 
+		 << OPTxs << " ignored" << G4endl;
+	} else {
+     
+	  thePreCompound->SetOPTxs(OPTxs);
+	  theDeExcitation->SetOPTxs(OPTxs);
+	  G4cout<<" Option for inverse cross sections : OPTxs="<<OPTxs<<G4endl;
+	}
+      } else if(line == "#UseSuperImposedCoulombBarrier") {
         G4cout<<" Coulomb Barrier has been overimposed to ALL inverse cross sections"
 	      <<G4endl;
-      }
-      else if(line == "#UseNeverGoBack") {
-        useNGB=true;
+	thePreCompound->UseSICB();
+	theDeExcitation->UseSICB();
+
+      } else if(line == "#UseNeverGoBack") {
         G4cout<<" Never Go Back hypothesis has been assumed at preequilibrium"
 	      <<G4endl;
-      }
-      else if(line == "#UseSoftCutOff") {
-        useSCO=true;
+	thePreCompound->UseNGB();
+
+      } else if(line == "#UseSoftCutOff") {
         G4cout<<" Soft Cut Off  hypothesis has been assumed at preequilibrium"
 	      <<G4endl;
-      }
-      else if(line == "#UseCEMTransitions") {
-        useCEMtr=true;
+	thePreCompound->UseSCO();
+
+      } else if(line == "#UseCEMTransitions") {
         G4cout<<" Transition probabilities at preequilibrium based on CEM model"
 	      <<G4endl;
+	thePreCompound->UseCEMtr();
+
+      } else if(line == "#MFenergy(MeV)") {
+        G4double tmin;
+        (*fin) >> tmin;
+        G4cout<<" Min energy for multi-fragmentation is set to " << tmin 
+	      << " MeV" << G4endl;
+	theDeExcitation->SetMinEForMultiFrag(tmin*MeV);
       }      
     } while(end);
 
@@ -479,51 +497,20 @@ int main(int argc, char** argv)
     }
     G4DynamicParticle dParticle(part,aDirection,energy);
 
-    // ------- Select deexcitation options
-
-    if(OPTxs !=3 || useSICB || useNGB || useSCO || useCEMtr) {
-
-      G4ExcitationHandler* theDeExcitation = phys->GetDeExcitation();
-      G4PreCompoundModel* thePreCompound = phys->GetPreCompound();
-      if (OPTxs< 0 || OPTxs >4  ){
-	G4cout << "### WArning: BAD CROSS SECTION OPTION for PreCompound model " << OPTxs 
-	       << " ignored" << G4endl;
-	OPTxs = 3;
-      }
-     
-      thePreCompound->SetOPTxs(OPTxs);
-      theDeExcitation->SetOPTxs(OPTxs);
-       
-      if (useSICB) 
-	{
-	  thePreCompound->UseSICB();
-	  theDeExcitation->UseSICB();
-	}
-      if (useNGB) thePreCompound->UseNGB();
-      if (useSCO) thePreCompound->UseSCO();
-      if (useCEMtr) thePreCompound->UseCEMtr();
-      phys->SetPreCompound(thePreCompound); 
-      phys->SetDeExcitation(theDeExcitation); 
-    }
-
     // ------- Select model
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    if(!proc) {
+      G4cout << "For particle: " << part->GetParticleName()
+	     << " generator " << nameGen << " is unavailable"<< G4endl;
+	     exit(1);
+    }
     G4HadronicProcess* extraproc = 0;
 
     // ------- Define target A
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
     if(targetA > 0) A = targetA;
-    phys->SetA(A);
-
-    G4double amass = phys->GetNucleusMass();
-
-    if(!proc) {
-      G4cout << "For particle: " << part->GetParticleName()
-	     << " generator " << nameGen << " is unavailable"
-	     << G4endl;
-	     exit(1);
-    }
+    phys->SetA(targetA);
 
     // ------- Binning 
 
@@ -720,13 +707,35 @@ int main(int argc, char** argv)
       if(xsbgg) cs = new G4BGGPionInelasticXS(part);
       else cs = new G4PiNuclearCrossSection();
 
-    } else if( ionParticle ) {
-      if ( Shen ) {
-        cs = new G4IonsShenCrossSection();
-	G4cout << "Using Shen Cross section for Ions" << G4endl;
+    } else if( ionParticle || 
+	       part == deu || part == tri ||part == he3 ||part == alp) {
+      G4double zz = G4double(Z);
+      G4double aa = G4double(A);
+      cs = new G4TripathiLightCrossSection();
+      if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+	G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
       } else {
+	delete cs;
+	cs = 0;
+      }
+      if(!cs) {
 	cs = new G4TripathiCrossSection();
-	G4cout << "Using Tripathi Cross section for Ions" << G4endl;
+	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
+	} else {
+	  delete cs;
+	  cs = 0;
+	}
+      }
+      if(!cs) {
+	cs = new G4IonsShenCrossSection();
+	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+	  G4cout << "Using Shen Cross section for Ions" << G4endl;
+	} else {
+	  G4cout << "ERROR: no cross section for ion Z= " 
+		 << zz << " A= " << aa << G4endl;
+	  exit(1);
+	}
       }
     } else {
       cs = new G4HadronInelasticDataSet();
@@ -900,6 +909,7 @@ int main(int argc, char** argv)
 
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(e0);
+      G4double amass = phys->GetNucleusMass();
 
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 
 			     e0 + mass + amass);

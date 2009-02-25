@@ -24,10 +24,9 @@ Next line #run
 Material is selected: G4_Zr
 Test30Physics entry
 Process is created; gen= binary
-Deexcitation handler is readybinary
-New generator and material= G4_Zr Nelm= 1 Nmat= 1
+New generator for material G4_Zr Nelm= 1 Nmat= 1 Target element: Zr
 Secondary generator <binary> is initialized
-Nucleus with N= 94  Z= 40  9.131840e+01
+Nucleus with N= 94  Z= 40  A(amu)= 9.131840e+01
 Mass from targetNucleus(GeV)= 8.745283e+01
 Mass from IonTable(GeV)=      8.745283e+01
 The particle:  proton
@@ -46,26 +45,26 @@ Histograms are booked output file <bic>
 ### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 0-th event start 
-Energy/Momentum balance= (1.356687e-09,-3.516950e-10,-2.623423e-09;-2.643584e-03)
+Energy/Momentum balance= (5.771597e-10,-2.360423e-10,-1.286992e-09;-4.269486e-03)
 ### 1-th event start 
-Energy/Momentum balance= (-3.003742e-11,1.705622e-10,1.015998e-09;4.235645e-05)
+Energy/Momentum balance= (1.560970e-09,-2.265629e-09,-4.825623e-09;3.715379e-03)
 ### 2-th event start 
-Energy/Momentum balance= (4.955975e-09,-1.955906e-09,7.853157e-09;-9.420930e-04)
+Energy/Momentum balance= (1.245212e-09,5.351524e-10,2.059409e-09;5.539021e-03)
 ### 3-th event start 
-Energy/Momentum balance= (-3.594514e-12,-1.830536e-10,-2.404988e-09;-5.206300e-04)
+Energy/Momentum balance= (2.369823e-09,-8.189929e-10,-4.321350e-09;-7.840639e-03)
 ### 4-th event start 
-Energy/Momentum balance= (-1.592493e-10,2.946823e-10,2.035633e-09;-2.315034e-03)
+Energy/Momentum balance= (-4.882565e-10,-2.042384e-10,-1.695469e-09;3.007643e-03)
 ### 5-th event start 
-Energy/Momentum balance= (4.673382e-10,-8.271994e-13,-9.179075e-10;6.215368e-03)
+Energy/Momentum balance= (2.027439e-09,-1.086278e-09,-6.673740e-10;-1.180394e-02)
 ### 6-th event start 
-Energy/Momentum balance= (-4.213803e-10,-3.003180e-10,8.766392e-10;-4.265316e-03)
+Energy/Momentum balance= (-2.228096e-10,-3.872375e-10,8.495024e-10;9.074092e-03)
 ### 7-th event start 
-Energy/Momentum balance= (-1.111839e-10,1.399513e-10,-3.295929e-10;1.885890e-03)
+Energy/Momentum balance= (-8.630430e-11,7.922694e-10,-1.695469e-09;4.824556e-03)
 ### 8-th event start 
-Energy/Momentum balance= (1.957403e-10,2.955147e-10,-5.234142e-10;-2.627451e-03)
+Energy/Momentum balance= (-3.986739e-10,-2.324175e-10,6.840687e-10;3.630758e-03)
 ### 9-th event start 
-Energy/Momentum balance= (1.135774e-09,1.209528e-09,-3.854353e-09;-1.423914e-03)
-  User=3.000000e-02s Real=2.200000e-01s Sys=0.000000e+00s
+Energy/Momentum balance= (1.693876e-10,-1.393515e-10,7.706558e-10;-8.780304e-04)
+  User=3.000000e-02s Real=2.000000e-02s Sys=0.000000e+00s
 ###### Save histograms
 [Histo::save] ROOT: file writing <bic.root>
 [Histo::save] ROOT: files closing...
@@ -77,10 +76,9 @@ Next line #run
 Material is selected: G4_Zr
 Test30Physics entry
 Process is created; gen= bertini
-Deexcitation handler is readybertini
-New generator and material= G4_Zr Nelm= 1 Nmat= 1
+New generator for material G4_Zr Nelm= 1 Nmat= 1 Target element: Zr
 Secondary generator <bertini> is initialized
-Nucleus with N= 94  Z= 40  9.131840e+01
+Nucleus with N= 94  Z= 40  A(amu)= 9.131840e+01
 Mass from targetNucleus(GeV)= 8.745283e+01
 Mass from IonTable(GeV)=      8.745283e+01
 The particle:  proton
@@ -99,26 +97,26 @@ Histograms are booked output file <bert>
 ### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 0-th event start 
-Energy/Momentum balance= (1.474629e-04,-5.461981e-05,2.561454e-04;-1.264814e-01)
+Energy/Momentum balance= (4.155837e-05,4.227365e-05,-2.658862e-04;-2.267214e-01)
 ### 1-th event start 
-Energy/Momentum balance= (-1.327359e-04,5.327429e-05,-1.161672e-04;-2.211708e-01)
+Energy/Momentum balance= (1.738655e-04,-9.145326e-05,-1.087722e-04;-1.594253e-01)
 ### 2-th event start 
-Energy/Momentum balance= (4.673489e-04,-4.432417e-04,-2.171975e-04;-4.903004e-01)
+Energy/Momentum balance= (-2.766299e-04,1.586161e-04,5.579118e-05;-2.270459e-01)
 ### 3-th event start 
-Energy/Momentum balance= (-4.069126e-05,-1.219368e-04,-1.701446e-04;-2.357373e-01)
+Energy/Momentum balance= (1.227539e-04,-2.337010e-04,5.948458e-05;-7.651766e-02)
 ### 4-th event start 
-Energy/Momentum balance= (-1.013151e-04,7.933133e-06,-2.182798e-04;-1.826434e-01)
+Energy/Momentum balance= (1.174171e-04,1.542718e-04,-8.923229e-05;-2.248126e-01)
 ### 5-th event start 
-Energy/Momentum balance= (1.041073e-04,9.196315e-05,-1.545226e-04;-2.326803e-01)
+Energy/Momentum balance= (-1.598432e-05,-4.209101e-04,1.465253e-05;5.025685e-02)
 ### 6-th event start 
-Energy/Momentum balance= (-7.846882e-05,-9.080491e-05,9.802340e-05;-2.208377e-01)
+Energy/Momentum balance= (1.532690e-04,-6.130308e-04,-7.050834e-05;-5.040259e-01)
 ### 7-th event start 
-Energy/Momentum balance= (-1.939143e-04,-1.659016e-04,-4.494093e-05;3.191244e-02)
+Energy/Momentum balance= (-2.444286e-05,-1.596243e-04,9.621564e-05;-2.457944e-01)
 ### 8-th event start 
-Energy/Momentum balance= (-3.812707e-05,-1.954103e-04,7.081845e-05;-2.511566e-01)
+Energy/Momentum balance= (-4.297281e-05,1.014020e-04,-1.046672e-04;-2.852680e-01)
 ### 9-th event start 
-Energy/Momentum balance= (-6.198758e-05,-1.236937e-04,1.249710e-04;-1.369818e-01)
-  User=0.000000e+00s Real=0.000000e+00s Sys=0.000000e+00s
+Energy/Momentum balance= (2.670919e-05,6.061970e-05,-1.870158e-05;-1.599362e-01)
+  User=0.000000e+00s Real=1.000000e-02s Sys=0.000000e+00s
 ###### Save histograms
 [Histo::save] ROOT: file writing <bert.root>
 [Histo::save] ROOT: files closing...

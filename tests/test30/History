@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-02-00  25 February 2009 V.Ivanchenko
+- fixed cross section for light ions
+- fixed selection of isotope from natural composition
+- fixed 4-momentum balance check
+
 test30-V09-01-06  10 December 2008 V.Ivanchenko
 test30-V09-01-05  10 December 2008 V.Ivanchenko
 - upgrade cout of test30.cc

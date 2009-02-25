@@ -68,7 +68,7 @@
 #include "G4RPGProtonInelastic.hh"
 #include "G4RPGNeutronInelastic.hh"
 
-#include "G4StringChipsInterface.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
@@ -152,16 +152,19 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   theProcess = new Test30HadronProduction();
   G4cout <<  "Process is created; gen= " << gen_name << G4endl;
 
-  if(!theDeExcitation) theDeExcitation = new G4ExcitationHandler();
-  if(!thePreCompound)  thePreCompound = new G4PreCompoundModel(theDeExcitation);
-  
-  G4cout << "Deexcitation handler is ready" << gen_name << G4endl;
+  if(!theDeExcitation) {
+    theDeExcitation = new G4ExcitationHandler();
+    G4cout << "New deexcitation" << G4endl;
+  }
+  if(!thePreCompound) {
+    thePreCompound = new G4PreCompoundModel(theDeExcitation);
+    G4cout << "New pre-compound" << G4endl;
+  }
 
   // Physics list for the given run
   Test30VSecondaryGenerator* sg = 0;
 
   // Choose generator
-
   if(gen_name == "lepar") {
     if(part_name == "proton")   
       sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
@@ -187,7 +190,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "CHIPS") {
-    sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
+    sg = new Test30VSecondaryGenerator(new G4StringChipsParticleLevelInterface(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -214,8 +217,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theStringModel->SetFragmentationModel(theStringDecay);
 
     theModel->SetTransport(theCascade);
-    //    theQuasiElastic = new G4QuasiElasticChannel;
-    // theModel->SetQuasiElasticChannel(theQuasiElastic);
     theModel->SetHighEnergyGenerator(theStringModel);
     theModel->SetMinEnergy(GeV);
 
