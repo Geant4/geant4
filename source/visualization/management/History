@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2009-01-22 15:39:55 lgarnier Exp $
+$Id: History,v 1.116 2009-02-25 18:28:00 lgarnier Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+25th February 2009  Laurent Garnier
+- Notify handler send by G4VVisManager is implemented in G4VisManager
 
 22th January 2009  Laurent Garnier
 - Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could pass XString like 400x600-0+0 to viewers and set position and location.

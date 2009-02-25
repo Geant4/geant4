@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.69 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4VisManager.hh,v 1.70 2009-02-25 18:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -299,6 +299,11 @@ public: // With description
 
   void GeometryHasChanged ();
   // Used by run manager to notify change.
+
+  void NotifyHandlers();
+  // Notify scene handlers (G4VGraphicsScene objects) that the scene
+  // has changed so that they may rebuild their graphics database, if
+  // any, and redraw all views.
 
   void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.

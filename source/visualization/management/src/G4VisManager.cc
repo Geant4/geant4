@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.116 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4VisManager.cc,v 1.117 2009-02-25 18:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -785,6 +785,37 @@ void G4VisManager::GeometryHasChanged () {
 	G4UImanager::GetUIpointer () ->
 	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
+    }
+  }
+
+  // Check the manager's current scene...
+  if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
+    if (fVerbosity >= warnings) {
+      G4cout << "WARNING: The current scene \""
+	     << fpScene -> GetName ()
+	     << "\" has no models."
+	     << G4endl;
+    }
+  }
+
+}
+void G4VisManager::NotifyHandlers () {
+
+  if (fVerbosity >= confirmations) {
+    G4cout << "G4VisManager::NotifyHandler() called." << G4endl;
+  }
+
+  // Check scenes.
+  G4SceneList& sceneList = fSceneList;
+  G4int iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; iScene++) {
+    G4Scene* pScene = sceneList [iScene];
+    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
+    
+    if (modelList.size ()) {
+      pScene->CalculateExtent();
+      G4UImanager::GetUIpointer () ->
+        ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
     }
   }
 
