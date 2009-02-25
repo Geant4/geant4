@@ -1,7 +1,10 @@
 #/bin/csh
 
 rm -f ${1}.out
-${2} ${3}Aluminum.in >& ${1}.out
+
+echo 'Run test37 at ' $HOST >& $1.out
+
+${2} ${3}Aluminum.in >>& ${1}.out
 mv Sandia.out Al_${1}.log
 
 ${2} ${3}Molybdenum.in >>& ${1}.out

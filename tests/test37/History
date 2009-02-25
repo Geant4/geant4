@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-02-08  V.Ivanchenko (test37-V09-02-00)
+- Cleanup user actions, add output on number of steps
+
 19-11-08  V.Ivanchenko (test37-V09-01-02)
 
 25-08-08  V.Ivanchenko (test37-V09-01-01)

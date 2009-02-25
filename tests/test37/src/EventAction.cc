@@ -34,35 +34,28 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det)
-:detector(det)
-{
-}
+EventAction::EventAction() 
+  : drawFlag("all"),printModulo(10000)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event* )
-{   
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-
-
-// print modulo
+  // print modulo
   G4int event_id = evt->GetEventID();
-  if ( (event_id + 1 )%1000000 == 0) G4cout << (event_id + 1 )/1000000.<<"  million of events" << G4endl;
-
-// visualization
+  if ( event_id%printModulo == 0) G4cout<<"### Event No "<<event_id<<G4endl;
+  // visualization
   if (G4VVisManager::GetConcreteInstance())
     {
      G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();

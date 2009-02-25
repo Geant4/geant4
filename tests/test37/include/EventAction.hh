@@ -28,28 +28,26 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include "DetectorConstruction.hh"
-
+#include "RunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
-  public:  
-    EventAction(DetectorConstruction*);
-   ~EventAction();
+public:  
+  EventAction();
+  virtual ~EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*);
+  void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
-
+  void SetDrawFlag   (G4String val)  {drawFlag    = val;};
+  void SetPrintModulo(G4int    val)  {printModulo = val;};
         
-  private:  
-    DetectorConstruction* detector;
-    G4String              drawFlag; 
-    G4int                 printModulo; 
+private:  
+
+  G4String   drawFlag; 
+  G4int      printModulo; 
 
 };
 

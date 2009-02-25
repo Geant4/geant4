@@ -54,13 +54,16 @@ public:
   void SumEnergy2(G4int k, G4double de){energyDeposit2[k] += de; };  	
   void SumEnergy3(G4int k, G4double de){energyDeposit3[k] += de; };  	
 
-  void AddEnergy1(G4double de) {energyDepositRun1 += de;};
-  void AddEnergy2(G4double de) {energyDepositRun2 += de;};
-  void AddEnergy3(G4double de) {energyDepositRun3 += de;};
+  void AddEnergy1(G4double de) {energyDepositRun1 += de; n_steps++;};
+  void AddEnergy2(G4double de) {energyDepositRun2 += de; n_steps++;};
+  void AddEnergy3(G4double de) {energyDepositRun3 += de; n_steps++;};
     
 private:
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;
+
+  G4int n_steps;
+
   G4String matName1     ;
   G4String matName2     ;
   G4String matName3     ;

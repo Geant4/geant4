@@ -50,14 +50,14 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
   // get particle energy 
   G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
 
@@ -70,11 +70,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   MFP2 = 1.e+10;
   MFP3 = 1.e+10;
 
-// Medium 1
+  // Medium 1
   if (matName1=="G4_Ta") // Tantalum 
     { 
+      // MFP1, MFP2 &  MFP3 values were taken from SANDIA Report
       density1 =16.654*g/cm3; 
-      if(energy==1.033*MeV)      MFP1 = 0.788*g/cm2  ; // MFP1, MFP2 &  MFP3 values were taken from SANDIA Report
+      if(energy==1.033*MeV)      MFP1 = 0.788*g/cm2  ; 
       else if(energy==1.000*MeV) MFP1 = 0.763*g/cm2  ;
       else if(energy==0.521*MeV) MFP1 = 0.339*g/cm2 ;
       else if(energy==0.500*MeV) MFP1 = 0.325*g/cm2  ;
@@ -113,7 +114,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     }
 
 
-// Medium 2
+  // Medium 2
   if (matName2=="G4_Ta") // Tantalum 
     { 
       density2 =16.654*g/cm3; 
@@ -155,7 +156,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 		  << " R0 is not defined!" << G4endl; 
   }
 
-// Medium 3
+  // Medium 3
   if (matName3=="G4_Ta") // Tantalum 
     { 
       density3 =16.654*g/cm3; 
@@ -198,14 +199,22 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     }
 
   //initialize EnergyDeposit per Layer
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium1(); k++)   energyDeposit1[k] = 0.0*MeV;   
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium2(); k++)   energyDeposit2[k] = 0.0*MeV;   
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium3(); k++)   energyDeposit3[k] = 0.0*MeV;   
-
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium1(); k++) {
+    energyDeposit1[k] = 0.0;
+  }   
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium2(); k++) {
+    energyDeposit2[k] = 0.0;
+  }   
+  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium3(); k++) {
+    energyDeposit3[k] = 0.0;   
+  }
   //initialize EnergyDeposit per Medium
-  energyDepositRun1 = 0.*MeV;
-  energyDepositRun2 = 0.*MeV;
-  energyDepositRun3 = 0.*MeV;
+  energyDepositRun1 = 0.;
+  energyDepositRun2 = 0.;
+  energyDepositRun3 = 0.;
+
+  // counters
+  n_steps = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,8 +222,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4double NumbrOfEvents = double (aRun->GetNumberOfEvent());
-  G4double totalAbsEnergy = (energyDepositRun1/MeV)+(energyDepositRun2/MeV)+(energyDepositRun3/MeV);
+  G4double NumbrOfEvents = G4double (aRun->GetNumberOfEvent());
+  G4double totalAbsEnergy = (energyDepositRun1/MeV)+(energyDepositRun2/MeV)
+    +(energyDepositRun3/MeV);
 
   G4int    n12 = detector->GetNbOfLayersOfMedium1();
   G4double thick11 = detector->GetAbsorber1Thickness();
@@ -233,12 +243,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double thick32 = G4double (n32);
   G4double LayerTh3= thick31/thick32;
   G4double deltaX3 = LayerTh3*density3/MFP3;
-  G4cout<<"Thicknesses(mm)= " << thick21/mm<<"  "<<thick22/mm<<"  "<<thick32/mm<<"  "<<G4endl;
-  G4cout<<"Bins(R/R0)=      " << deltaX1<<"  "<<deltaX2<<"  "<<deltaX3<<"  "<<G4endl;
+  G4cout<<"Thicknesses(mm)= " << thick21/mm<<"  "<<thick22/mm
+	<<"  "<<thick32/mm<<"  "<<G4endl;
+  G4cout<<"Bins(R/R0)=      " << deltaX1<<"  "<<deltaX2<<"  "
+	<<deltaX3<<"  "<<G4endl;
 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
   G4cout<<" ----------------  RUN SUMMARY ----------------------------"<<G4endl;
   G4cout<<" ----------------------------------------------------------"<<G4endl;
+  G4cout<<"       Mean number of steps " << G4double(n_steps)/NumbrOfEvents
+	<< G4endl;
 
   asciiFileName="Sandia.out";
   std::ofstream asciiFile(asciiFileName, std::ios::app);
@@ -254,7 +268,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   if(matName1!="G4_Galactic")
     {
-      asciiFile<<"             Medium 1 ==>   "<<matName1<< "  " << n12 << G4endl;
+      asciiFile<<"             Medium 1 ==>   "<<matName1
+	       << "  " << n12 << G4endl;
       G4cout<<"             Medium 1 ==>   "<<matName1<<G4endl;
       G4cout<<"\t FMR (z/r0)    ||       J  "<<G4endl;
 
@@ -276,7 +291,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	asciiFile << normalizedvalue1[k]
 		  << G4endl;
       }
-      G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun1/MeV)/NumbrOfEvents<<G4endl;
+      G4cout<<"\n Deposit energy (MeV) = "
+	    <<(energyDepositRun1/MeV)/NumbrOfEvents<<G4endl;
     }
                 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
@@ -305,7 +321,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       asciiFile << normalizedvalue2[k]
 		<< G4endl;      
     }
-    G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun2/MeV)/NumbrOfEvents<<G4endl;
+    G4cout<<"\n Deposit energy (MeV) = "
+	  <<(energyDepositRun2/MeV)/NumbrOfEvents<<G4endl;
   }
 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
@@ -335,13 +352,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       asciiFile << normalizedvalue3[k]
 		<< G4endl;      
     }
-    G4cout<<"\n Deposit energy (MeV) = "<<(energyDepositRun3/MeV)/(NumbrOfEvents*1.0)<<G4endl;
+    G4cout<<"\n Deposit energy (MeV) = "
+	  <<(energyDepositRun3/MeV)/(NumbrOfEvents*1.0)<<G4endl;
   }
   asciiFile.close();
 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
 
-  G4cout<<" Total Deposit energy (MeV) = "<<(totalAbsEnergy/MeV)/(NumbrOfEvents*1.0)<<G4endl;
+  G4cout<<" Total Deposit energy (MeV) = "
+	<<(totalAbsEnergy/MeV)/(NumbrOfEvents*1.0)<<G4endl;
 
   G4cout<<" ----------------------------------------------------------"<<G4endl;
   G4cout<<" ----------------  END OF RUN SUMMARY ---------------------"<<G4endl;

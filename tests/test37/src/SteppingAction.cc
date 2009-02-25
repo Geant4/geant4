@@ -32,8 +32,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* arun)
-:G4UserSteppingAction(),detector(det),runaction(arun) 
+SteppingAction::SteppingAction(RunAction* arun)
+  : runaction(arun) 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,27 +45,27 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  const G4Track* track = aStep->GetTrack();
-  G4VPhysicalVolume* volume = track->GetVolume();
   G4double edep = aStep->GetTotalEnergyDeposit();
+  if(edep == 0.0) return;
 
-  if ((edep!=0.)&&(volume -> GetName() == "LayerMedium 1"))
-  {// sum per layer
-    runaction->SumEnergy1(volume->GetCopyNo(),edep);
-  // sum per medium  
+  const G4StepPoint* prePoint = aStep->GetPreStepPoint();
+  G4VPhysicalVolume* volume = prePoint->GetTouchableHandle()->GetVolume();
+  G4int copyNo  = prePoint->GetTouchableHandle()->GetCopyNumber(0);
+  G4String vname = volume->GetName();
+
+  if (vname == "LayerMedium 1") {
+    // sum per layer
+    runaction->SumEnergy1(copyNo,edep);
+    // sum per medium  
     runaction -> AddEnergy1(edep);
-  }
 
-  if ((edep!=0.)&&(volume -> GetName() == "LayerMedium 2"))
-  { runaction->SumEnergy2(volume->GetCopyNo(),edep);
+  } else if (vname == "LayerMedium 2") { 
+    runaction->SumEnergy2(copyNo,edep);
     runaction -> AddEnergy2(edep);
-  }
-  
-  if ((edep!=0.)&&(volume -> GetName() == "LayerMedium 3"))
-  { runaction->SumEnergy3(volume->GetCopyNo(),edep);
+
+  } else if (vname == "LayerMedium 3") {
+    runaction->SumEnergy3(volume->GetCopyNo(),edep);
     runaction -> AddEnergy3(edep);
   }
-  
-  
 }
 
