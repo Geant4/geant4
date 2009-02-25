@@ -1,4 +1,4 @@
-$Id: History,v 1.427 2009-02-24 12:27:07 allison Exp $
+$Id: History,v 1.428 2009-02-25 14:20:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th February 2009  John Allison
+- modeling-V09-02-01 - needs greps-V09-02-01:
+  o G4ModelApplyCommandsT: Added visManager->NotifyHandlers() after
+    application (Apply) of all commands.  Forces update of all viewers
+    after a change of model, e.g., trajectory colour, point size, etc.
 
 24th February 2009  John Allison
 - modeling-V09-02-00 - needs greps-V09-02-00:
