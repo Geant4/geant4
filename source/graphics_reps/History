@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.134 2009-02-24 10:58:04 allison Exp $
+cvs log $Id: History,v 1.135 2009-02-25 14:13:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th February 2009  John Allison  (greps-V09-02-01)
+- G4VVisManager: Added NotifyHandlers.
+  Notify scene handlers (G4VGraphicsScene objects) that the scene
+  has changed so that they may rebuild their graphics database, if
+  any, and redraw all views.
 
 24th February 2009  John Allison  (greps-V09-02-00)
 - G4VMarker:
