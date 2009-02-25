@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.36 2008-08-04 08:49:09 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.37 2009-02-25 12:32:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,7 +203,7 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
-    lowEnergyLimit = keV*mass/electron_mass_c2;
+    //lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 

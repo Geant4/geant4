@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.8 2009-02-19 19:17:15 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.9 2009-02-25 12:32:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -250,7 +250,7 @@ void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
-    lowEnergyLimit = keV*mass/electron_mass_c2;
+    //    lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 
@@ -281,7 +281,8 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     if(iz > 99) iz = 99;
     G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x/mom2;
-    if(iz > 1) screenZ *=(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
+    //    if(iz > 1) screenZ *=(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
+    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*alpha2);
     //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
     formfactA = FF[iz];

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.17 2009-02-19 19:17:15 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.18 2009-02-25 12:32:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,6 +96,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
   a0 = alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
+  lowEnergyLimit = keV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   constn = 6.937e-6/(MeV*MeV);
@@ -189,10 +190,11 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xSection += y/targetZ;
   }
   /*
-  G4cout << "G4WentzelVIModel:XS per A " << " Z= " << Z << " e(MeV)= " << kinEnergy/MeV 
+  G4cout << "G4WentzelVIModel:XS per A " << " Z= " << targetZ << " e(MeV)= " << tkin/MeV 
 	 << " cut(MeV)= " << ecut/MeV  
   	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
-	 << " zmaxN= " << (1.0 - cosTetMsxNuc)/screenZ << G4endl;
+	 << " zmaxN= " << (1.0 - cosTetMaxNuc2)/screenZ 
+         << " costm= " << cosTetMaxNuc2 << G4endl;
   */
 
   // scattering off nucleus
@@ -202,6 +204,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     x2 = 1.0/(1.0 - x1); 
     x3 = x/screenZ;
     x4 = formfactA*x;
+    //G4cout << "x1= " <<x1<<"  x2= " <<x2<<"  x3= "<<x3<<"  x4= " << x4<<G4endl;
     // low-energy limit
     if(x3 < numlimit && x1 < numlimit) {
       y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 - 1.5*x1
@@ -230,8 +233,9 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xSection += y; 
   }
   xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2/mom2); 
-  //  G4cout << "   XStotal= " << xSection/barn << " screenZ= " << screenZ 
-  //	 << " formF= " << formfactA << " for " << p->GetParticleName() << G4endl;
+  //G4cout << "Z= " << targetZ << " XStot= " << xSection/barn << " screenZ= " << screenZ 
+  //	 << " formF= " << formfactA << " for " << particle->GetParticleName() 
+  //	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)<< G4endl;
   return xSection; 
 }
 
