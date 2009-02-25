@@ -1,0 +1,168 @@
+
+                       geant4-09-02-ref-01
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Added G4LivermoreIonisationModel, first implementation of
+   LowEnergyIonisation in the new design.
+ o Some code-cleanup in the EM physics module.
+ o Fix in G4FissionProbability for the computation of the emission probability,
+   affecting the de_excitation hadronic model.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+materials                                        materials-V09-02-00
+---------
+- G4MaterialStoppingICRU73: added 4 missing materials from ICRU'73.
+- G4SimpleMaterialStoppingICRU73: fixed density of Mo and number of materials.
+
+persistency/ascii                                ascii-V09-02-04
+-----------------
+- Fix in delta theta for handling of G4Sphere, and renaming 'phiTotal'
+  to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
+- Removed deprecated class G4tgrFileOut, not used.
+
+persistency/gdml                                 gdml-V09-02-02
+----------------
+- Fix in G4GDMLStructure class for missing caching of auxiliary information
+  from child modules, causing auxiliary information defined within separated
+  modules to get lost and therefore not assigned to volumes.
+  Fixes problem report #1049.
+
+physics_lists                                   phys-lists-V09-02-01
+-------------
+- G4MiscLHEPBuilder: corrected creation of processes to happen dinamically
+  in order to have them proper deleted at the end of application.
+- G4IonBinaryCascadePhysics: use Shen cross-section only if Tripathi is
+  not applicable (fixed order of cross-sections).
+- G4HadronInelasticQBBC: use G4StringChipsParticleLevelInterface instead of
+  obsolete G4StringChipsInterface.
+
+processes/electromagnetic/highenergy            emhighenergy-V09-02-00
+------------------------------------
+- Some code cleanup: improved comments, avoid inlined virtual methods, ecc...
+
+processes/electromagnetic/lowenergy             emlowen-V09-02-15
+-----------------------------------
+- Added protections against FPE error in G4hLowEnergyLoss.
+  Fixes problem report #953 (also report in Hypernews EM forum #893).
+- Added G4LivermoreIonisationModel, first implementation of LowEnergyIonisation
+  in the new design.
+- Updated public interface of G4eIonisationCrossSectionHandler in order to
+  facilitate migration from G4LowEnergyIonisation to G4LivermoreIonisationModel.
+- Added several corrections to migrated Geant4-DNA processes and allow for
+  compatibility with general EM utility classes.
+- Improved energy limit display in Geant4-DNA model classes.
+
+processes/electromagnetic/muons                  emmuons-V09-02-00
+-------------------------------
+- Some code cleanup: improved comments, avoid inlined virtual methods, ecc...
+
+processes/electromagnetic/standard               emstand-V09-02-00
+----------------------------------
+- G4PEEffectModel: substitute ComputeMeanFreePath() by CrossSectionPerVolume()
+  resulting in minor CPU speedup for compound materials.
+- G4PAIModel, G4PAIPhotonModel: removed usage of random numbers at
+  initialisation, to avoid potential non-reproducibility issues.
+- G4WentzelVIModel: use generic methods of G4VMscModel to access safety
+  and other geometrical information.
+- Some code cleanup: avoid inlined virtual methods, ecc...
+
+processes/electromagnetic/utils                  emutils-V09-02-02
+-------------------------------
+- G4VEmModel: moved to protected methods to access geometrical information.
+  Added new method SetSampleZ() and SampleDeexcitationAlongStep(); added
+  'geommax' private member. Added 'flagDeexcitation' and related modifiers.
+- G4VMscModel: added methods InitialiseSafetyHelper(), ComputeSafety(),
+  ComputeGeomLimit() and ComputeDisplacement().
+- G4VEmProcess: added possibility to set more than one model.
+- G4VEnegryLossProcess, G4VEmProcess: added calls to de-excitation PostStep.
+  Added ActivateDeexcitation() method in G4EmProcessOptions and
+  '/process/em/deexcitation' UI command to messenger.
+  Added de-excitation AlongStep per region.
+- G4LossTableBuilder: added protection in BuildRangeTable() against zero dEdx.
+- G4EmCalculator: added possibility to be used by DNA low-energy processes;
+  take into account special DNA particles.
+- Some code cleanup: avoid inlined virtual methods, ecc...
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-02-02)
+  o G4CrossSectionDataStore: added Clean() method; constructor and destructor
+    no longer inline; added destruction of data sets; use std::vector instead
+    of flat arrays.
+  o G4CrossSectionDataSetRegistry: new singleton to keep pointers to cross
+    section data sets.
+  o G4VCrossSectiondataSet: constructor and detructor no longer inline; added
+    registration/deregistration mechanism.
+- management (hadr-man-V09-02-03)
+  o G4HadronicProcessStore: activated destruction of processes at application
+    closure; added Clean() method and cleanup of model and cross section stores.
+- models/cascade (hadr-casc-V09-02-00)
+  o Set absorption coefficient 1.0 instead of 0.2 in G4CascadSpecialFunctions.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-01)
+  o Added de-registration in destructor of G4QCaptureAtRest.
+  o Added string decay destruction to G4ElectroNuclearReaction.
+- models/de_excitation (hadr-deex-V09-02-07)
+  o Added smearing of Coloumb barriers for d, t, he3 and alpha particles.
+  o Fix in G4FissionProbability for the computation of EmissionProbability();
+    returned value was wrong to missing parenthesis in the implementation of
+    the formula.
+  o Fix to substitute 'hbar_Plank' with 'hbarc' in G4EvaporationProbability.
+- models/management (hadr-modman-V09-02-02)
+  o G4HadronicInteractionRegistry: modified to conform to singleton definition.
+  o G4HadronicInteraction, G4InelasticInteraction: made constructor, destructor
+    and some other methods not inline.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-01)
+  o G4MuNuclearInteraction: added de-registration of the process.
+- models/pre_equilibrium (hadr-pre-V09-02-03)
+  o G4PreCompoundIon: fixed probability of light ion emission.
+  o G4PreCompoundXXX: added decrease of Coulomb barrier for d, t, a, he3.
+  o Some cleanup of comments.
+- stopping (hadr-stopping-V09-02-01)
+  o Use registration/de-registration mechanism for all LHEP processes.
+
+examples                                         examples-V09-02-02
+--------
+- Updated reference outputs.
+- advanced/brachytherapy (brachy-V09-02-00)
+  o Fixed compilation errors and warnings when G4ANALYSIS_USE is not set.
+- advanced/composite_calorimeter (ccal-V09-02-00)
+  o Fixed compilation warnings in CCalRunAction and CCalEndOfEventAction.
+- advanced/hadrontherapy (hadrontherapy-V09-02-00)
+  o Fixed a compilation warnings in HIIonLEP.
+- advanced/human_phantom (human_phantom-V09-02-01)
+  o Migrated GDML read setup to use embedded GDML reader as in Geant4 9.2.
+  o Corrected URL for standard location of schema in all GDML files.
+  o Use "OrganPos" and "OrganRot" as names for organ's transformations in
+    ORNL files, as implied by code.
+  o Fixed 'solids' tag in ORNLLeftLegBone.gdml files for male and female.
+  o Fixed compilation warnings.
+  o Updated README and GNUmakefile.
+- extended/electromagnetic/TestEm5 (testem5-V09-02-01)
+  o Some code cleanup to Physics List.
+- extended/electromagnetic/TestEm18 (testem18-V09-02-00)
+  o Added command "/testem/phys/cutLimit" allowing to change low limit for
+    production threshold.
+  o PhysicsList: changted EmOptions: 12*20 bins; lll=1.e-2;
+    PhysicsList::SetCuts(): SetEnergyRange(1*keV,100*GeV).
+- extended/medical/DICOM (DICOM-V09-02-01)
+  o Added report on dose per voxel.
+  o Added warning for erroneous inclusion of development code in
+    release 9.2 (to be removed when fix will be included in patch).
+- extended/medical/fanoCavity (fano-V09-02-00)
+  o corrected computation of 'error' in EndOfRun.
+- extended/persistency/gdml/G02 (G02-V09-02-01)
+  o Guarded usage of G4UITCSH with G4UI_USE_TCSH flag, to allow for
+    compilation on Windows.
+  o Added visualization properties for world volume in DetectorConstruction
+    to avoid run-time warning.
+
+tests                                            tests-V09-02-02
+-----
+- Updated reference outputs and tools.
