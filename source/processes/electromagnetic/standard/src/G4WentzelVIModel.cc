@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.19 2009-02-25 14:13:47 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.20 2009-02-25 14:20:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -290,12 +290,9 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
     
     // limit mean scattering angle
   } else {
-    /*
     G4double rlimit = facrange*lambda0;
     G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-    if(rcut > rlimit) rlimit = std::pow(2.0*rcut*rcut*lambda0,0.33333333);
-    */
-    G4double rlimit = facrange*std::min(lambda0,currentRange);
+    if(rcut > rlimit) rlimit = std::pow(rcut*rcut*rlimit,0.33333333);
     rlimit = std::min(rlimit, facgeom*currentMaterial->GetRadlen());
     if(rlimit < tlimit) tlimit = rlimit;
   }
