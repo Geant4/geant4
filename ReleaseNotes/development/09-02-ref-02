@@ -4,6 +4,9 @@
 
 Some of the development/fixes included since the last development tag are:
 
+ o Corrected treatment of brackets and indeces for matrices in GDML reader.
+   Corrected treatment of phi sections for solids read through the ascii
+   persistency module.
  o Added G4LivermoreIonisationModel, first implementation of
    LowEnergyIonisation in the new design.
  o Some code-cleanup in the EM physics module.
@@ -20,6 +23,11 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+geometry/navigation                              geomnav-V09-02-01
+-------------------
+- Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
+  for rare cases of negative steps.
+
 materials                                        materials-V09-02-00
 ---------
 - G4MaterialStoppingICRU73: added 4 missing materials from ICRU'73.
@@ -31,14 +39,16 @@ persistency/ascii                                ascii-V09-02-04
   to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
 - Removed deprecated class G4tgrFileOut, not used.
 
-persistency/gdml                                 gdml-V09-02-03
+persistency/gdml                                 gdml-V09-02-04
 ----------------
+- Corrected treatment of brackets and indeces for matrices in G4GDMLEvaluator.
+  Fixes problem report #1048.
 - Fix in G4GDMLStructure class for missing caching of auxiliary information
   from child modules, causing auxiliary information defined within separated
   modules to get lost and therefore not assigned to volumes.
   Fixes problem report #1049.
 
-physics_lists                                   phys-lists-V09-02-01
+physics_lists                                    phys-lists-V09-02-01
 -------------
 - G4MiscLHEPBuilder: corrected creation of processes to happen dinamically
   in order to have them proper deleted at the end of application.
@@ -47,11 +57,11 @@ physics_lists                                   phys-lists-V09-02-01
 - G4HadronInelasticQBBC: use G4StringChipsParticleLevelInterface instead of
   obsolete G4StringChipsInterface.
 
-processes/electromagnetic/highenergy            emhighenergy-V09-02-00
+processes/electromagnetic/highenergy             emhighenergy-V09-02-00
 ------------------------------------
 - Some code cleanup: improved comments, avoid inlined virtual methods, ecc...
 
-processes/electromagnetic/lowenergy             emlowen-V09-02-15
+processes/electromagnetic/lowenergy              emlowen-V09-02-15
 -----------------------------------
 - Added protections against FPE error in G4hLowEnergyLoss.
   Fixes problem report #953 (also report in Hypernews EM forum #893).
