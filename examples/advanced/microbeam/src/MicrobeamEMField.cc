@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.7 2008-10-23 11:12:12 sincerti Exp $
+// $Id: MicrobeamEMField.cc,v 1.8 2009-02-26 14:13:29 gunter Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
@@ -180,7 +180,7 @@ if (
   // QUADRUPOLE CENTER COORDINATES
   G4double xoprime, zoprime;
   
-if (z>=-1400*mm & z <-200*mm)
+if (z>=-1400*mm && z <-200*mm)
 {
   Bx=0; By=0; Bz=0;
   
