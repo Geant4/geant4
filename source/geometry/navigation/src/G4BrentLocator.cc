@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.6 2009-02-26 08:31:20 tnikitin Exp $
+// $Id: G4BrentLocator.cc,v 1.7 2009-02-26 10:21:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator implementation
@@ -154,7 +154,8 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   static G4int trigger_substepno_print= warn_substeps - 20 ;
 
   // Counter for restarting Bintermed
-  G4int restartB=0;
+  //
+  G4int restartB = 0;
 
   //--------------------------------------------------------------------------  
   //  Algorithm for the case if progress in founding intersection is too slow.
@@ -428,7 +429,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                                     GetEpsilonStepFor());
 
                 restoredFullEndpoint = true;
-                restartB++;//counter
+                restartB++; // counter
               }
               else
               {
@@ -443,7 +444,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                                     CurrentE_Point,
                                                     GetEpsilonStepFor());
                 restoredFullEndpoint = true;
-                restartB++;//counter
+                restartB++; // counter
               }
             }
           } // Endif (Intersects_FB)
@@ -523,9 +524,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                  << substep_no << G4endl;
           G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
                  << depth << G4endl;
-           G4cerr << "        Restarted no= "<< restartB  << " Epsilon= "
-		  << GetEpsilonStepFor()<<" DeltaInters="<<GetDeltaIntersectionFor() << G4endl;
-          
+          G4cerr << "        Restarted no= "<< restartB  << " Epsilon= "
+                 << GetEpsilonStepFor() <<" DeltaInters= "
+                 << GetDeltaIntersectionFor() << G4endl;
 
           G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                       "FatalError", FatalException,
