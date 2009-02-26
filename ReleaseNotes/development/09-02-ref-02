@@ -1,5 +1,5 @@
 
-                       geant4-09-02-ref-01
+                       geant4-09-02-ref-02
                        ===================
 
 Some of the development/fixes included since the last development tag are:
@@ -7,6 +7,8 @@ Some of the development/fixes included since the last development tag are:
  o Added G4LivermoreIonisationModel, first implementation of
    LowEnergyIonisation in the new design.
  o Some code-cleanup in the EM physics module.
+ o Activated automatic cleanup of processes, models and cross-sections at
+   closure of application.
  o Fix in G4FissionProbability for the computation of the emission probability,
    affecting the de_excitation hadronic model.
 
@@ -92,7 +94,7 @@ processes/electromagnetic/utils                  emutils-V09-02-02
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-02-02)
+- cross_sections (hadr-cross-V09-02-03)
   o G4CrossSectionDataStore: added Clean() method; constructor and destructor
     no longer inline; added destruction of data sets; use std::vector instead
     of flat arrays.
@@ -100,7 +102,7 @@ processes/hadronic
     section data sets.
   o G4VCrossSectiondataSet: constructor and detructor no longer inline; added
     registration/deregistration mechanism.
-- management (hadr-man-V09-02-03)
+- management (hadr-man-V09-02-04)
   o G4HadronicProcessStore: activated destruction of processes at application
     closure; added Clean() method and cleanup of model and cross section stores.
 - models/cascade (hadr-casc-V09-02-00)
@@ -114,7 +116,7 @@ processes/hadronic
     returned value was wrong to missing parenthesis in the implementation of
     the formula.
   o Fix to substitute 'hbar_Plank' with 'hbarc' in G4EvaporationProbability.
-- models/management (hadr-modman-V09-02-02)
+- models/management (hadr-modman-V09-02-03)
   o G4HadronicInteractionRegistry: modified to conform to singleton definition.
   o G4HadronicInteraction, G4InelasticInteraction: made constructor, destructor
     and some other methods not inline.
@@ -166,3 +168,9 @@ examples                                         examples-V09-02-02
 tests                                            tests-V09-02-02
 -----
 - Updated reference outputs and tools.
+- tests30 (test30-V09-02-00)
+  o Fixed cross section for light ions.
+  o Fixed selection of isotope from natural composition.
+  o Fixed 4-momentum balance check.
+- tests37 (test37-V09-02-00)
+  o Cleanup of user actions; added output on number of steps.
