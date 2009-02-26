@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.19 2008-10-23 11:12:12 sincerti Exp $
+$Id: History,v 1.20 2009-02-26 14:12:57 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,9 @@ $Id: History,v 1.19 2008-10-23 11:12:12 sincerti Exp $
                        Package History file
                        --------------------
 
+26 February 2009 - G.Folger  - tag microbeam-V09-02-00
+- Correct  MicrobeamEMField.cc to use logical &&, not bit & in if().
+ 
 23 October 2008 - tag microbeam-V09-01-03
 - Corrected typos in zero field region in MicrobeamEMField.cc
 
