@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.350 2009-02-26 16:40:40 gcosmo Exp $
+cvs log $Id: History,v 1.351 2009-02-26 17:29:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27th February 2009  Gabriele Cosmo
+27th February 2009  Gabriele Cosmo (config-V09-02-04)
 - common.gmk, globlib.gmk: added removal of moc sources in clean target.
 
 26th February 2009  Gabriele Cosmo (config-V09-02-03)
