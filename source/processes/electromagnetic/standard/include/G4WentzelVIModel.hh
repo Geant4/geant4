@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.9 2009-02-25 12:32:15 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.10 2009-02-26 11:50:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,6 @@
 
 class G4LossTableManager;
 class G4ParticleChangeForMSC;
-//class G4SafetyHelper;
 class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,12 +88,6 @@ public:
 				      G4double emax= DBL_MAX);
 
   void SampleScattering(const G4DynamicParticle*, G4double safety);
-
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double,
-			 G4double);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4PhysicsTable* theLambdaTable,
@@ -239,8 +232,7 @@ G4double G4WentzelVIModel::GetLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
+inline void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
 {
   // Initialise mass and charge
   if(p != particle) {
@@ -250,7 +242,6 @@ void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
-    //    lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 
@@ -281,9 +272,7 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     if(iz > 99) iz = 99;
     G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x/mom2;
-    //    if(iz > 1) screenZ *=(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
     if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*alpha2);
-    //    screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
     // A.V. Butkevich et al., NIM A 488 (2002) 282
     formfactA = FF[iz];
     if(formfactA == 0.0) {
@@ -293,13 +282,6 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     }
     formfactA *= mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
-    /*
-    G4double ee = 10.*eV*Z;
-    if(1 == iz) ee *= 2.0;
-    G4double z = std::min(cosTetMaxElec, 1.0 - std::max(ecut,ee)*amu_c2
-			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
-    cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
-    */
     cosTetMaxElec2 = cosTetMaxElec;
   } 
 } 

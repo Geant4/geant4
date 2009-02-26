@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.37 2009-02-25 12:32:15 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.38 2009-02-26 11:50:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,7 +203,6 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
-    //lowEnergyLimit = keV*mass/electron_mass_c2;
   }
 }
 
@@ -236,8 +235,7 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     if(iz > 99) iz = 99;
     G4double x = fNistManager->GetZ13(iz);
     screenZ = a0*x*x/mom2;
-    if(iz > 1) screenZ *=(1.13 + 3.76*invbeta2*Z*Z*chargeSquare*alpha2);
-    //screenZ = a0*x*x*(1.13 + 3.76*Z*Z*chargeSquare*alpha2)/mom2;
+    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*alpha2);
     // A.V. Butkevich et al., NIM A 488 (2002) 282
     formfactA = FF[iz];
     if(formfactA == 0.0) {
@@ -250,13 +248,6 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     if(particle == theProton && 1 == iz && cosTetMaxNuc2 < 0.0) {
       cosTetMaxNuc2 = 0.0;
     }
-    /*
-    G4double ee = 10.*eV*Z;
-    if(1 == iz) ee *= 2.0;
-    G4double z = std::min(cosTetMaxElec, 1.0 - std::max(ecut,ee)*amu_c2
-			  *fNistManager->GetAtomicMassAmu(iz)/mom2);
-    cosTetMaxElec2 = std::max(cosTetMaxNuc2, z);
-    */
     cosTetMaxElec2 = cosTetMaxElec;
   } 
 } 

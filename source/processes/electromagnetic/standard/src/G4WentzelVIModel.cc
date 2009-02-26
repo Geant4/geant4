@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.20 2009-02-25 14:20:32 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.21 2009-02-26 11:50:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,7 +51,6 @@
 // -------------------------------------------------------------------
 //
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,8 +58,6 @@
 #include "Randomize.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
-//#include "G4TransportationManager.hh"
-//#include "G4SafetyHelper.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
@@ -779,14 +776,5 @@ void G4WentzelVIModel::ComputeMaxElectronScattering(G4double cutEnergy)
   }
   if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4WentzelVIModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                     const G4MaterialCutsCouple*,
-				     const G4DynamicParticle*,
-				     G4double,
-				     G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
