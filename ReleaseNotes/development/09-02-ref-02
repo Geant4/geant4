@@ -23,6 +23,10 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+config                                           config-V09-02-03
+------
+- Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
+
 geometry/navigation                              geomnav-V09-02-01
 -------------------
 - Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
