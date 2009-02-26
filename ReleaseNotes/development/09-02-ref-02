@@ -9,6 +9,8 @@ Some of the development/fixes included since the last development tag are:
  o Some code-cleanup in the EM physics module.
  o Activated automatic cleanup of processes, models and cross-sections at
    closure of application.
+ o In Bertini cascade model, allow secondaries from HE interaction to
+   leave nucleus without interacting.
  o Fix in G4FissionProbability for the computation of the emission probability,
    affecting the de_excitation hadronic model.
 
@@ -105,8 +107,15 @@ processes/hadronic
 - management (hadr-man-V09-02-04)
   o G4HadronicProcessStore: activated destruction of processes at application
     closure; added Clean() method and cleanup of model and cross section stores.
-- models/cascade (hadr-casc-V09-02-00)
+- models/cascade (hadr-casc-V09-02-01)
+  o In GeElementaryParticleCollider, added high energy flag to distinguish
+    "string-like" behavior.
+  o G4IntraNucleiCascader: allow secondaries from HE interaction to
+    leave nucleus without interacting.
+  o G4NucleiModel: get 'high_energy_interaction' flag value from
+    G4ElementaryParticleCollider.
   o Set absorption coefficient 1.0 instead of 0.2 in G4CascadSpecialFunctions.
+    Added printCrossSection() method.
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-01)
   o Added de-registration in destructor of G4QCaptureAtRest.
   o Added string decay destruction to G4ElectroNuclearReaction.
