@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.92 2009-02-26 16:47:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.93 2009-02-26 16:48:01 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -186,7 +186,7 @@ clean_all::
 	@rm -rf $(G4BIN)
 	@$(ECHO) Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
-	@$(ECHO) Removing Qt moc files ...
+	@$(ECHO) Removing Qt moc source files ...
 	@rm -rf $(G4INSTALL)/source/interfaces/*/moc
 	@rm -rf $(G4INSTALL)/source/visualization/*/moc
 	@$(ECHO) Removing installation configurations ...
