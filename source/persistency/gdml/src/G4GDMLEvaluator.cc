@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.21 2009-02-26 09:58:23 tnikitin Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.22 2009-02-26 10:13:35 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -159,38 +159,38 @@ G4String G4GDMLEvaluator::SolveBrackets(const G4String& in)
    std::string::size_type begin = open;
    std::string::size_type end = 0;
    std::string::size_type end1 = 0;
-
    std::string out;
    out.append(in,0,open);
-   do  //Loop for all possible matrix elements in 'in' 
+
+   do  // Loop for all possible matrix elements in 'in' 
    {
-    do   //SolveBrackets for one matrix element
-    { 
-      end = in.find(",",begin+1);
-      end1= in.find("]",begin+1);
-      if(end>end1)end=end1;
-      if (end==std::string::npos)  { end = close;}
+     do   // SolveBrackets for one matrix element
+     { 
+       end = in.find(",",begin+1);
+       end1= in.find("]",begin+1);
+       if (end>end1)                { end = end1; }
+       if (end==std::string::npos)  { end = close;}
       
-      std::stringstream indexStream;
-      indexStream << "_" << EvaluateInteger(in.substr(begin+1,end-begin-1))-1;
+       std::stringstream indexStream;
+       indexStream << "_" << EvaluateInteger(in.substr(begin+1,end-begin-1))-1;
 
-      out.append(indexStream.str());
+       out.append(indexStream.str());
 
-      begin = end;
+       begin = end;
 
-    } while (end<close);
+     } while (end<close);
     
-    if(full==close)return out;
+     if (full==close) { return out; }
     
-    open  = in.find("[",begin);
-    close = in.find("]",begin+1);
+     open  = in.find("[",begin);
+     close = in.find("]",begin+1);
 
-    if (open==close) { out.append(in.substr(end+1,full-end-1));return out; }
-    out.append(in.substr(end+1,open-end-1));
+     if (open==close) { out.append(in.substr(end+1,full-end-1)); return out; }
+     out.append(in.substr(end+1,open-end-1));
 
-    begin=open;
+     begin=open;
     
-  } while (close<full);
+   } while (close<full);
    
    return out;
 }
