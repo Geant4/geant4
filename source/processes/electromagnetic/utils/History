@@ -1,4 +1,4 @@
-$Id: History,v 1.371 2009-02-22 17:32:08 vnivanch Exp $
+$Id: History,v 1.372 2009-02-26 11:33:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 February 09: V.Ivant (emutils-V09-02-03)
+G4EmConfigurator - fixed for the case if only fluctuation model is set
+                   and main model is default
 
 22 February 09: V.Ivant (emutils-V09-02-02)
 - G4VEmModel - make methods to access geometry protected, added new

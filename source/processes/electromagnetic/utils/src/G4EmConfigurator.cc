@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.3 2008-11-21 12:30:29 vnivanch Exp $
+// $Id: G4EmConfigurator.cc,v 1.4 2009-02-26 11:33:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,7 +116,9 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
   AddExtraEmModel(particleName, mod, fm);
   G4String fname = "";
   if(fm) fname = fm->GetName();
-  AddModelForRegion(particleName, processName, mod->GetName(), regionName,
+  G4String mname = "";
+  if(mod) mname = mod->GetName();
+  AddModelForRegion(particleName, processName, mname, regionName,
 		    emin, emax, fname);
 }
 
@@ -202,7 +204,11 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	//G4cout << "Search model " << modelName << " in " << nm << G4endl;
 
 	for(G4int i=0; i<nm; i++) {
-	  if(modelName == modelList[i]->GetName() &&
+          G4String mname = "";
+          if(modelList[i]) mname = modelList[i]->GetName();
+          G4String fname = "";
+          if(flucModelList[i]) fname = flucModelList[i]->GetName();
+	  if(modelName == mname && flucModelName == fname &&
              (particleList[i] == "" || particleList[i] == particleName) ) {
 	    mod  = modelList[i];
 	    fluc = flucModelList[i];
@@ -213,13 +219,22 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	if("dummy" == modelName) mod = new G4DummyModel();
 
 	if(!mod) {
-	  G4cout << "### G4EmConfigurator WARNING: fails to find a model <"
-		 << modelName << "> for process <" 
-		 << processName << "> and " << particleName 
-		 << G4endl;
-	  if(flucModelName != "")  
-	    G4cout << "                            fluctuation model <" 
-		   << flucModelName << G4endl;
+
+	  // set fluctuation model for ionisation processes
+          if(fluc && ptype == eloss) {
+	    G4VEnergyLossProcess* p = reinterpret_cast<G4VEnergyLossProcess*>(proc);
+	    p->SetFluctModel(fluc);
+	 
+	  } else {
+	    G4cout << "### G4EmConfigurator WARNING: fails to find a model <"
+		   << modelName << "> for process <" 
+		   << processName << "> and " << particleName 
+		   << G4endl;
+	    if(flucModelName != "") {
+	      G4cout << "                            fluctuation model <" 
+		     << flucModelName << G4endl;
+	    }
+	  }
 	} else {
 
 	  // search for region
