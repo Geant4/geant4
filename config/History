@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.348 2009-02-26 11:32:06 gcosmo Exp $
+cvs log $Id: History,v 1.349 2009-02-26 16:30:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th February 2009  Gabriele Cosmo
+- common.gmk: added removal of moc sources in clean target.
 
 26th February 2009  Gabriele Cosmo (config-V09-02-03)
 - Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
