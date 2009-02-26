@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.347 2009-01-26 11:08:24 gcosmo Exp $
+cvs log $Id: History,v 1.348 2009-02-26 11:32:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26-January-2009  Gabriele Cosmo (config-V09-02-02)
+26th February 2009  Gabriele Cosmo (config-V09-02-03)
+- Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
+
+26th January 2009  Gabriele Cosmo (config-V09-02-02)
 - architecture.gmk: restored generic name for XercesC library for WIN32-VC.
 
-20-January-2009  Gunter Folger (config-V09-02-01)
+20th January 2009  Gunter Folger (config-V09-02-01)
 - architecture.gmk: changed name of XercesC library for WIN32-VC.
 
 9th January 2009  Gabriele Cosmo (config-V09-02-00)
