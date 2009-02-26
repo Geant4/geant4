@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2009-02-20 14:48:16 vnivanch Exp $
+$Id: History,v 1.126 2009-02-26 11:04:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 February 09: V.Ivant (emmuons-V09-02-01)
+G4MuIonisation - fixed initialisation alowing to configure external model
+                 of fluctuations
 
 20 February 09: V.Ivant (emmuons-V09-02-00)
 - Cleanup: improved comments, move virtual methods from .hh to .cc

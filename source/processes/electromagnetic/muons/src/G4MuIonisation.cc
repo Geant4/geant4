@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.58 2009-02-20 14:48:16 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.59 2009-02-26 11:04:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,6 +85,7 @@
 #include "G4BetheBlochModel.hh"
 #include "G4MuBetheBlochModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4IonFluctuations.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
@@ -140,20 +141,26 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     mass = theParticle->GetPDGMass();
     SetSecondaryParticle(G4Electron::Electron());
 
-    flucModel = new G4UniversalFluctuation();
+    // Bragg peak model
+    if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(0.2*MeV);
+    AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
-    G4VEmModel* em = new G4BraggModel();
-    em->SetLowEnergyLimit(MinKinEnergy());
-    em->SetHighEnergyLimit(0.2*MeV);
-    AddEmModel(1, em, flucModel);
-    G4VEmModel* em1 = new G4BetheBlochModel();
-    em1->SetLowEnergyLimit(0.2*MeV);
-    em1->SetHighEnergyLimit(1.0*GeV);
-    AddEmModel(2, em1, flucModel);
-    G4VEmModel* em2 = new G4MuBetheBlochModel();
-    em2->SetLowEnergyLimit(1.0*GeV);
-    em2->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(3, em2, flucModel);
+    // high energy fluctuation model
+    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+
+    // moderate energy model
+    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);
+    EmModel(2)->SetLowEnergyLimit(0.2*MeV);
+    EmModel(2)->SetHighEnergyLimit(1.0*GeV);
+    AddEmModel(2, EmModel(2), FluctModel());
+
+    // high energy model
+    if (!EmModel(3)) SetEmModel(new G4MuBetheBlochModel(),3);
+    EmModel(3)->SetLowEnergyLimit(1.0*GeV);
+    EmModel(3)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(3, EmModel(3), FluctModel());
 
     ratio = electron_mass_c2/mass;
     isInitialised = true;
