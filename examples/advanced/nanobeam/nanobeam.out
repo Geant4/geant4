@@ -215,6 +215,9 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
     =>IMAGE : X(microns)=-0.13402537708115 Y(microns)=-0.03910149129876 THETA(mrad)=1.9423788035746 PHI(mrad)=9.124019476355
 
 -> Event= 32: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
+<<<<<<< nanobeam.out
+    =>IMAGE : X(microns)=1.7167643114768 Y(microns)=0.1182655224053 THETA(mrad)=5.8315735842891 PHI(mrad)=9.1248899278439
+=======
     =>IMAGE : X(microns)=1.7167643114768 Y(microns)=0.1182655224053 THETA(mrad)=5.8315735842891 PHI(mrad)=9.1248899278439
 
 
@@ -249,37 +252,38 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 <y|y>=
       101.40557
+>>>>>>> 1.11
 
 
 ===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :
 
 <x|theta>=
-   -0.094690809344595
+     -0.1273886
 
 <x|theta*delta>=
-     -2071.1947571668
+      -2070.676
 
 <x|theta^3>=
-      3270.7592243022
+      3270.7459
 
 <x|theta*phi^2>=
-      379.92859202148
+      379.97114
 
 <x|x>=
-      64.763648771585
+      64.763547
 
 <y|phi>=
-    -0.04083707092393
+   -0.046785448
 
 <y|phi*delta>=
-     -377.55010879544
+     -377.59033
 
 <y|theta^2*phi>=
-      243.05589696122
+      243.08241
 
 <y|phi^3>=
-      158.26722168363
+      158.24003
 
 <y|y>=
-      101.40562696063
+      101.40557
 
