@@ -77,8 +77,10 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-15
   compatibility with general EM utility classes.
 - Improved energy limit display in Geant4-DNA model classes.
 
-processes/electromagnetic/muons                  emmuons-V09-02-00
+processes/electromagnetic/muons                  emmuons-V09-02-01
 -------------------------------
+- G4MuIonisation: fixed initialisation for allowing to configure external
+  model of fluctuations.
 - Some code cleanup: improved comments, avoid inlined virtual methods, ecc...
 
 processes/electromagnetic/standard               emstand-V09-02-00
@@ -91,7 +93,7 @@ processes/electromagnetic/standard               emstand-V09-02-00
   and other geometrical information.
 - Some code cleanup: avoid inlined virtual methods, ecc...
 
-processes/electromagnetic/utils                  emutils-V09-02-02
+processes/electromagnetic/utils                  emutils-V09-02-03
 -------------------------------
 - G4VEmModel: moved to protected methods to access geometrical information.
   Added new method SetSampleZ() and SampleDeexcitationAlongStep(); added
@@ -106,6 +108,8 @@ processes/electromagnetic/utils                  emutils-V09-02-02
 - G4LossTableBuilder: added protection in BuildRangeTable() against zero dEdx.
 - G4EmCalculator: added possibility to be used by DNA low-energy processes;
   take into account special DNA particles.
+- G4EmConfigurator: fix for the case when only fluctuation model is set and
+  main model is the default.
 - Some code cleanup: avoid inlined virtual methods, ecc...
 
 processes/hadronic
@@ -169,6 +173,12 @@ examples                                         examples-V09-02-02
   o Fixed 'solids' tag in ORNLLeftLegBone.gdml files for male and female.
   o Fixed compilation warnings.
   o Updated README and GNUmakefile.
+- advanced/microbeam (microbeam-V09-02-00)
+  o Correction in MicrobeamEMField to use logical '&&', not bit '&' in
+    conditional statements.
+- advanced/nanobeam (nanobeam-V09-02-00)
+  o Correction in TabulatedField3D to use logical '&&', not bit '&' in
+    conditional statements.
 - extended/electromagnetic/TestEm5 (testem5-V09-02-01)
   o Some code cleanup to Physics List.
 - extended/electromagnetic/TestEm18 (testem18-V09-02-00)
