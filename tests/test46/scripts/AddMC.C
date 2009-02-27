@@ -8,13 +8,13 @@ cout <<"Opened file "<<fin<<"  iplot= "<<iplot<<" idir= "<<idir<<endl;
 if(iplot==0) hhh = (TH1F*)fff->Get("h2");
 if(iplot==1) hhh = (TH1F*)fff->Get("h7");
 if(iplot==2) hhh = (TH1F*)fff->Get("h9");
-if(iplot==3) hhh = (TH1F*)fff->Get("h11");
+if(iplot==3) hhh = (TH1F*)fff->Get("h12");
 
 hhh->SetLineColor(col[idir]);
-hhh->SetLineWidth(2);
+//hhh->SetLineWidth(2);
 leg[iplot]->AddEntry(hhh, dir[idir], "l");
 //hhh->Draw("C HIST SAME");
-hhh->Draw("HIST SAME");
+hhh->Draw("HIST SAME 9");
 //c1->Update();
 //delete fff;
 cout << "AddMC done" << endl;

@@ -7,7 +7,7 @@ TLegend* legc = new TLegend(0.3, 0.25, 0.6, 0.45);
 
 Int_t i;
 gPad->SetLogx();
-TH1F* hh = gPad->DrawFrame(0.005,14,200,14.8,tit[1]);
+TH1F* hh = gPad->DrawFrame(0.005,11,200,15,tit[1]);
 hh[i]->GetXaxis()->SetTitle(axtit[0]);
 hh[i]->GetYaxis()->SetTitle(axtit[4]);
 gPad->SetGrid();

@@ -7,7 +7,7 @@ TLegend* legc = new TLegend(0.3, 0.25, 0.6, 0.45);
 
 Int_t i;
 gPad->SetLogx();
-TH1F* hh = gPad->DrawFrame(0.005,0.11,200,0.14,tit[1]);
+TH1F* hh = gPad->DrawFrame(0.005,0.11,200,0.15,tit[1]);
 hh[i]->GetXaxis()->SetTitle(axtit[0]);
 hh[i]->GetYaxis()->SetTitle(axtit[3]);
 gPad->SetGrid();
@@ -18,6 +18,7 @@ hh->Draw("AXIS SAME");
 Int_t nd = 9;
 Double_t cut[nd]  = {0.01, 0.1, 0.3, 0.7, 1, 3, 7, 10, 100};
 Double_t err0[nd] = {0., 0., 0., 0., 0., 0.,0., 0., 0.,};
+Double_t err1[nd] = {0.0006, 0.0006, 0.0006, 0.0006, 0.0006, 0.0006,0.0005, 0.0005, 0.0005,};
 
 //visible energy in HCAL
 Double_t e0[nd] = {0.1353, 0.1381, 0.1383, 0.1369, 0.1374, 0.1363, 0.1347, 0.1339, 0.1355};
@@ -28,11 +29,11 @@ TGraphErrors* gr[6];
 
 for(i=0; i<3; i++) {
   if(i == 0) 
-    gr[i] = new TGraphErrors(nd,cut,e0,err0,err0);
+    gr[i] = new TGraphErrors(nd,cut,e0,err0,err1);
   if(i == 1) 
-    gr[i] = new TGraphErrors(nd,cut,e1,err0,err0);
+    gr[i] = new TGraphErrors(nd,cut,e1,err0,err1);
   if(i == 2) 
-    gr[i] = new TGraphErrors(nd,cut,e2,err0,err0);
+    gr[i] = new TGraphErrors(nd,cut,e2,err0,err1);
 
   cout << "Graph " << i << "  nd= " << nd << endl;
 
