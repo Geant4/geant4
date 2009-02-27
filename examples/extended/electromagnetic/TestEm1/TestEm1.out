@@ -364,15 +364,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-<<<<<<< TestEm1.out
   User=7.11s Real=20.78s Sys=0.39s
-=======
-<<<<<<< TestEm1.out
-  User=7.11s Real=20.78s Sys=0.39s
-=======
-  User=7.4s Real=12.27s Sys=0.34s
->>>>>>> 1.118
->>>>>>> 1.119
 
  ======================== run summary ======================
 
@@ -440,15 +432,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-<<<<<<< TestEm1.out
   User=13.19s Real=22.97s Sys=0.4s
-=======
-<<<<<<< TestEm1.out
-  User=13.19s Real=22.97s Sys=0.4s
-=======
-  User=13.75s Real=18.57s Sys=0.36s
->>>>>>> 1.118
->>>>>>> 1.119
 
  ======================== run summary ======================
 

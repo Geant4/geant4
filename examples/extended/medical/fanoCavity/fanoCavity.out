@@ -151,7 +151,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=27.95s Real=27.95s Sys=0s
+  User=28.48s Real=28.48s Sys=0s
 
  ======================== run summary ======================
 
@@ -179,7 +179,7 @@ Run Summary
  Total dose in cavity = 20.3692 MeV/mg
  Dose/EnergyFluence   = 28.7963 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.96323 +- 0.02520
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.96323 +- 0.02423
 
  StepSize of ch. tracks in wall   = 123.8506 um  +- 122.4018 um 	 (nbSteps/track = 13.6055)
  StepSize of ch. tracks in cavity = 488.7164 um  +- 556.7261 um 	 (nbSteps/track = 5.7839)

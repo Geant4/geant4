@@ -249,7 +249,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.4s Real=27.11s Sys=1.68s
+  User=4.34s Real=32.09s Sys=1.69s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -313,7 +313,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.51s Real=26.92s Sys=1.73s
+  User=4.58s Real=33.37s Sys=1.94s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -376,7 +376,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.24s Real=27.06s Sys=1.7s
+  User=4.19s Real=37.14s Sys=1.96s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 

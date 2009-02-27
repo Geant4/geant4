@@ -249,11 +249,13 @@ hPairProd:   for  pi-    SubType= 4
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+          AntiNeutronAnnihilationAtRest
 
                      Hadronic Processes for <anti_proton>
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
+          AntiProtonAnnihilationAtRest
 
                      Hadronic Processes for <e->
       ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
@@ -271,6 +273,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                  G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+          KaonMinusAbsorption
 
                      Hadronic Processes for <lambda>
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -296,6 +299,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   PionMinusInelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
                                  G4HEPionMinusInelastic: Emin(GeV)=    25  Emax(GeV)= 10000
+          PionMinusAbsorptionAtRest
 
                      Hadronic Processes for <proton>
             hElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305

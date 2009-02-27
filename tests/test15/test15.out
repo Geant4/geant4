@@ -215,6 +215,7 @@ msc:   for pi-    SubType= 10
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
            inelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                  G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
+          KaonMinusAbsorptionAtRest
 
                      Hadronic Processes for <lambda>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -235,6 +236,7 @@ msc:   for pi-    SubType= 10
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
            inelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
                                  G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
+          PiMinusAbsorptionAtRest
 
                      Hadronic Processes for <proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
