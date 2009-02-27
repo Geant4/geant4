@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.41 2009-01-22 11:02:07 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.42 2009-02-27 14:42:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -41,7 +41,7 @@
 #include "G4UnitsTable.hh"
 
 G4GDMLRead::G4GDMLRead()
-  : validate(true), check(false)
+  : validate(true), check(false), inLoop(0), loopCount(0)
 {
    G4UnitDefinition::BuildUnitsTable();
 }
@@ -67,7 +67,13 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
 {
    G4String nameOut(nameIn);
 
-   if (inLoop>0) { nameOut = eval.SolveBrackets(nameOut); }
+   if (inLoop>0)
+   {
+     nameOut = eval.SolveBrackets(nameOut);
+     std::stringstream stream;
+     stream << "_" << inLoop << "_" << loopCount;
+     nameOut = nameOut + stream.str();
+   }
    if (strip) { StripName(nameOut); }
 
    return nameOut;
@@ -241,9 +247,11 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
       (this->*func)(element);
 
       _var += _step;
+      loopCount++;
    }
 
    inLoop--;
+   loopCount = 0;
 }
 
 void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.27 2009-01-22 11:02:07 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.28 2009-02-27 14:42:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -148,7 +148,7 @@ class G4GDMLRead
 
  private:
 
-   G4int inLoop;
+   G4int inLoop, loopCount;
 
 };
 
