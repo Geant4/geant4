@@ -1,0 +1,501 @@
+macro run1 f=5 n=5 z=79 que=32-rb20-hp
+ nEvts = 2000 * [f]
+ exec preco ^27!Al al1314 13 14 29 740 [nEvts] [n] [que] 2 13 | 740 mb is reaction CS
+return
+*
+macro preco targ=^12!C file=al1314 np=13 nn=14 e=29 cs=740 _
+            runn=2000 next=3 pq=32-rb20-hp nzone=2 nvex=13 dir=./
+*
+  hi/del *
+  ve/del *
+  ve/cr angle(3) r 11 30 60 
+  exec creavec [nvex]
+  do i = 35 , $sigma(34+[next])
+   clo [i]
+  enddo
+*
+  exec chips [targ] [file] [np] [nn] [e] [runn] [next] [dir]
+*
+  exec getdat [file] [e]
+*
+  chain -prec29al
+  hi/fil 35 [dir]chips_[file]_e[e]_1.hbook
+  hrin 1
+  chain prec29al //LUN35
+  do i = 2 , [next]
+    lun = 34 + [i]
+    hi/fil [lun] [dir]chips_[file]_e[e]_[i].hbook
+    hrin 1 ! 99999
+    chain prec29al //LUN[lun]
+  enddo
+  cd //prec29al
+*
+  nevts = $hinfo(1,'sum')
+  hi/del 1
+*
+  upcol   = violet
+  downcol = red
+  hxmin =  3.
+  hxmax =  32.
+  kxmin =  0.
+  kxmax =  32.
+  hymin =  1.0001e-5
+  hymax =  .4
+  yfnam =  .2
+  hzero =  0.1e-12
+  xfnam =  24.
+  hfbin =  1
+  hnbin =  25
+  ptsize = 0.24
+  lgndsz = 0.35
+  dangle = 7.5
+  pi = 3.141593
+  danrad = $sigma([pi]*[dangle]/180.)
+  hlxmin = $sigma(log10([hxmin]))
+  hlxmax = $sigma(log10([hxmax]))
+  halfbn = $sigma(0.5*([hlxmax]-[hlxmin])/[hnbin])
+*
+  1d         11 'T?p! at  11 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
+  hi/copy 11 12 'T?p! at  30 deg (MeV)'
+  hi/copy 11 13 'T?p! at  60 deg (MeV)'
+  hi/copy 11 21 'T?d! at  11 deg (MeV)'
+  hi/copy 11 22 'T?d! at  30 deg (MeV)'
+  hi/copy 11 23 'T?d! at  60 deg (MeV)'
+  hi/copy 11 31 'T?t! at  11 deg (MeV)'
+  hi/copy 11 32 'T?t! at  30 deg (MeV)'
+  hi/copy 11 33 'T?t! at  60 deg (MeV)'
+  hi/copy 11 41 'T?a! at  11 deg (MeV)'
+  hi/copy 11 42 'T?a! at  30 deg (MeV)'
+  hi/copy 11 43 'T?a! at  60 deg (MeV)'
+  hi/copy 11 81 'zero level'
+  hi/copy 11 82 'dT in MeV'
+  call hbarx(0)
+*
+* -- adjust zero levels, create dT histogram
+  ve/cr zerol([hnbin]) r [hnbin]*[hzero]
+  put/cont 81 zerol
+  put/err  81 $sigma(0.8*zerol)
+** ___ Reuse of "zerol" to read the bin mean T-values ___
+  get/abs  82 zerol
+  put/cont 82 $sigma(10.**(zerol+[halfbn])-10.**(zerol-[halfbn]))
+  ve/del zerol
+*
+  cut 0 -
+	 cut $1 nd=0.and.PDG=2212.or.(ns=0.and.nz=1.and.nn=0) | protons
+  cut $2 nd=0.and.ns=0.and.nz=1.and.nn=1               | deuteron
+  cut $3 nd=0.and.ns=0.and.nz=1.and.nn=2               | triton
+  cut $4 nd=0.and.ns=0.and.nz=2.and.nn=2               | he4
+*
+  opt zfl
+  swi z
+  zone 2 2
+* --- Loop over angles (secondaries are separate inside the loop) ---
+  do i = 0 , 2
+    k  = [i]+1
+    k1 = [k]+10 | p
+    k2 = [k]+20 | d
+    k3 = [k]+30 | t
+    k4 = [k]+40 | a
+    a=angle([k])
+    arad =  $sigma([pi]*[a]/180.)
+    message 'i=',[i],', adeg=',[a],', arad=',[arad]
+    cut [k1] $1.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
+    cut [k2] $2.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
+    cut [k3] $3.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
+    cut [k4] $4.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
+*    message 'cuts are defined k=',[k1],[k2],[k3],[k4],[k5],[k6]
+    nt/pl 70.log10(E-m+0.001) $[k1] ! ! -[k1]
+    nt/pl 70.log10(E-m+0.001) $[k2] ! ! -[k2]
+    nt/pl 70.log10(E-m+0.001) $[k3] ! ! -[k3]
+    nt/pl 70.log10(E-m+0.001) $[k4] ! ! -[k4]
+    domega = $sigma(2.*[pi]*(cos([arad]-[danrad])-cos([arad]+[danrad])))
+*    w = $sigma([cs]*1000000./[domega]/[nevts])
+    w = $sigma([cs]/[domega]/[nevts])
+*    message 'selection is done dom=',[domega],', w=',[w],', cs=',[cs]
+    div [k1] 82 [k1]  1. 1.
+    add [k1] 81 [k1] [w] 1.
+    div [k2] 82 [k2]  1. 1.
+    add [k2] 81 [k2] [w] 1.
+    div [k3] 82 [k3]  1. 1.
+    add [k3] 81 [k3] [w] 1.
+    div [k4] 82 [k4]  1. 1.
+    add [k4] 81 [k4] [w] 1.
+*    message 'histograms are waighted and added'
+  enddo
+  pi/del ' '
+* Draw & Create the file
+  swi gz
+* Create the output file only
+*  swi z
+*
+*  opt vert
+  size 24 18
+  set xwin 0.0001
+  set ywin 0.0001
+  *title [targ]//'(p,f)X, E='//[E]//'MeV, [q]=30,60,90,130^0! (PRECO-New)'
+  title [targ]//'(p,f)X, E='//[E]//'MeV, [q]=30,60,90,130^0! (CHIPS+QE)'
+  clr
+  zone 2 2
+  set xval
+  opt logy
+  opt linx
+  set dmod 1
+  ***** M.K. ****
+  opt date
+  ***************
+  opt tic
+  opt nsta
+  opt utit
+  set errx 0.01
+  set xlab 1.25
+  ve/cr mrk(4) R 20 25 21 26
+  ve/cr md(4) R 1 2 1 2
+  ve/cr mas(4) R 938.272 1875.61 2809.25 3727.4 
+  f1=proton
+  f2=deuteron
+  f3=triton
+  f4=alpha
+  title ' ' u
+  exec ~/PTOOL/black
+  set xval
+  set yval 70
+  ve/cr xm(1) R 14.
+  ve/cr ym1(1) R .000448
+  ve/cr ym2(1) R .000224
+  ve/cr ym3(1) R .000112
+  ve/cr ym4(1) R .000056
+* --- Loop over pictures for each secondary ---
+  do j = 1 , 4
+    if [j] = 2 THEN
+      set xval 70
+    endif
+    if [j] = 3 THEN
+      set xval
+      set yval
+      hymin=1.001e-6
+      hymax=.04
+      yfnam=.02
+    endif
+    if [j] = 4 THEN
+      set xval 70
+    endif
+    null [kxmin] [kxmax] [hymin] [hymax]
+    if [j] = 1 THEN
+      h/symbols xm ym2 1 20 [ptsize]
+      h/symbols xm ym3 1 26 [ptsize]
+      h/symbols xm ym4 1 21 [ptsize]
+      itx 17. .0001920 11
+      itx 17. .0000960 30
+      itx 17. .0000480 60
+    endif
+    if [j] = 4 then
+      exec ~/PTOOL/black
+      *atitle 'k = (p+T)/2 (MeV)       ^!' ' '
+      atitle 'T (MeV)       ^!' ' '
+    endif
+    title ' '
+    itx [xfnam] [yfnam] [f[j]]
+    if [j] = 1 then
+      exec ~/PTOOL/black
+      atitle ' ' 'd[s]/pdEd[W] (mb MeV^-2! sr^-1!) ^!'
+      exec paramline 0.2 0.2
+    endif
+*    exec ~/PTOOL/snotes 144. 1.0 '1.0' 0. [lgndsz] -40
+*    exec ~/PTOOL/snotes 144. 0.1 '0.1' 0. [lgndsz] -40
+    m = mas([j])
+    exec ~/PTOOL/black
+    do i = 0 , 2
+      k    = [i]+1
+      mk=mrk([k])
+      mod=md([k])
+      a=angle([k])
+      set lwid 7.
+**      fun/pl .11*EXP(-x/25) 30 250 S
+      ve/copy $sigma(sqrt(t[j][a]*(2.*[m]+t[j][a]))) p[j][a]
+      *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
+      h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
+               ?  $sigma(d[j][a]/p[j][a]) 25 [mk] [ptsize] 0
+*************** Temporary **************
+*      ve/re abspr,con p29_au_[j]_[a]_lepr.dat
+*      ve/cop $SIGMA(con*.45) conp
+*      put/cont 6[i] conp
+***********************************^^END
+      exec hsolid [j][k] [hfbin] [hnbin] [downcol] [m] [mod]
+    enddo
+  enddo
+*
+  exec ~/PTOOL/black
+  set xwin
+  set ywin
+  set xval
+  set yval
+  set errx
+  set xlab
+*
+  exec prieps p_[e]_[file]_pdta
+  if [runn] = 0 then
+    wait ' ' 2
+***    shell lpr -P[pq] preco_[file]_e[e].ps
+***    shell xprint -P[pq] preco_[file]_e[e].ps
+  endif
+*
+stop:
+*
+return
+*
+macro chips targ=Al file=al1314 np=13 nn=14 e=90 runn=2000 next=3 dir=./
+  exec readpar pf=[dir]chipstest_[file].in
+  if [runn] > 0 then
+    do i = 1 , [next]
+      pdg  = $sigma([np]*1000+[nn])
+      pdgt = 90000000 + [pdg]
+      nevt = [runn] + [i]
+      ve/cr   work(3) i [pdgt] [nevt] 2212
+      ve/copy work(1:1) pdgtg
+      ve/copy work(2:2) nevnt
+      ve/copy work(3:3) pdgpr
+      ve/del  work
+      energy = [e]+938.273
+      moment = $sigma(sqrt([energy]*[energy]-938.273*938.273))
+      *ve/cr   work(2) r [energy] [moment]
+      *** Make automatic energy calculation ***
+      ve/cr   work(2) r 0 [moment]
+      ve/copy work(1:1) enb
+      ve/copy work(2:2) momb
+      ve/del  work  
+      exec writepar pf=[dir]chipstest.in
+*      shell rm chips_[file].log
+      wait ' ' 2
+      shell ../test19 | > chips_[file].log
+      wait ' ' 2
+	  exec makehbk
+      wait ' ' 2
+      shell mv chips.hbook [dir]chips_[file]_e[e]_[i].hbook
+    enddo
+  endif
+return
+*
+macro readpar  pf=chipstest.in
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC' -/*/  
+return
+macro writepar pf=chipstest.in
+  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
+return
+*
+macro getdat file=au79118 e=29
+*
+* -- in the preco_[file]_h_e[e]_ang.vexp the hadron(h:p,d,t,he3,he4) spectra are given in:
+* --  mbarn MeV^-1 Omega^-1, function of T in MeV 
+* --- Loop over angles ---
+*  do i = 1 , 4
+  do i = 1 , 3
+    a  = angle([i])
+    do j = 1 , 4
+      if [j] = 1 then
+        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_p_[a].dat
+      elseif [j] = 2 then
+        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_d_[a].dat
+      elseif [j] = 3 then
+        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_t_[a].dat
+      elseif [j] = 4 then
+        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_he4_[a].dat
+      endif
+    enddo
+  enddo
+return
+*
+macro hsolid id=66 hf=1 hn=60 col=black m=939.567 mod=1
+  set dmod [mod]
+  nb = $sigma([hn]-[hf]+1)
+  ve/cr wx([nb]) r
+  ve/cr wy([nb]) r
+  ve/cr wd([nb]) r
+  get/abs  [id]([hf]:[hn]) wx
+  get/cont [id]([hf]:[hn]) wy
+  get/err  [id]([hf]:[hn]) wd
+  ve/copy $sigma(10.**wx) wt
+  ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+  exec ~/PTOOL/white 8
+  set lwid 5
+  graph [nb] wt $sigma(wy/wp) l
+  exec ~/PTOOL/[col]
+  set lwid 5
+  graph [nb] wt $sigma(wy/wp) l
+  exec ~/PTOOL/black
+  set dmod 3
+  graph [nb] wt $sigma(wy/wp) l
+  set lwid 5
+  set dmod 1
+***  h/errors wt $sigma(wy/wp) $sigma(0.*wt) $sigma(wd/wp) [nb] 1 .01
+  ve/del wx,wy,wd,wt,wp
+return
+*
+macro creavec dimvex=13
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rMed(1) r
+ ve/cr solA(1) r
+ * --- Loop over particles (1=p, 2=d, 3=t, 4=alpha) ---
+ do i = 1 , 4
+   if [i]=1 then
+     ve/cr nptf(3) r 34 34 34
+   elseif [i]=2 then
+     ve/cr nptg(3) r 18 25 24
+   elseif [i]=3 then
+     ve/cr npth(3) r  9  7  7
+   elseif [i]=4 then
+     ve/cr npti(3) r 37 37 36
+   endif
+* --- Loop over angles (1=11, 2=30, 3=60) ---
+   do j = 1 , 4
+     if [i]=1 then
+       npt=nptf([j])
+     elseif [i]=2 then
+       npt=nptg([j])
+     elseif [i]=3 then
+       npt=npth([j])
+     elseif [i]=4 then
+       npt=npti([j])
+     endif
+     a  = angle([j])
+     ve/cr t[i][a]([npt]) r
+     ve/cr s[i][a]([npt]) r
+     ve/cr d[i][a]([npt]) r
+   enddo
+ enddo
+ ve/del nptf
+ ve/del nptg
+ ve/del npth
+ ve/del npti
+return
+*
+macro prieps fnam=radshow fil=99
+*
+*  for/fil [fil] [fnam].eps
+*  meta -[fil] -113
+*  mess '*** Creating eps-file: '//[fnam]//'.eps'
+  for/fil [fil] [fnam].ps
+  meta -[fil] -115
+  mess '*** Creating ps-file: '//[fnam]//'.ps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro paramline xp=0.05 yp=0.96
+ ttemp   = temp(1)
+ tssse   = ssse(1)
+ teepr   = eepr(1)
+ tmomb   = momb(1)
+ tenb    = enb(1)
+ tfreeN  = freeN(1) 
+ tfreeD  = freeD(1) 
+ tclustP = clustP(1)
+ trMed   = rMed(1)
+ tsolA   = solA(1)
+ txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' p='//[tmomb]_
+//' e='//[tenb]//' fN='//[tfreeN]//' fD='//[tfreeD]//' cP='//[tclustP]_
+//' rM='//[trMed]//' sA='//[tsolA]
+*** exec ~/PTOOL/snotes [xp] [yp] [txtm] 0. 0.25 40 0
+return
+*
+macro plotCm vCm=pCm mk=29 m=939.567 siz=0.08
+ iCm = [vCm](1)
+ jCm = [vCm](2)
+ nCm = $sigma([jCm]-[iCm]+1)
+ ve/copy EkinCm([iCm]:[jCm]) xwork
+ ve/copy  [vCm]([iCm]:[jCm]) ywork
+ ve/copy $sigma(10.**(EkinCm(1)/EkinCm(2)*ywork-4.)) cswork
+ set lwid 1.
+ ve/copy $sigma(sqrt(xwork*(2.*[m]+xwork))) wp
+ h/errors $sigma(0.5*(xwork+wp)) $sigma(cswork/wp) _
+          ? $sigma(0.07*cswork/wp) [nCm] [mk] [siz] 0
+ if [vCm] = 'He4Cm' then
+   ve/copy  $sigma(0.5*(xwork+wp)) kHe4Cm
+   ve/copy  $sigma(cswork/wp)      sHe4Cm
+   ve/copy  $sigma(0.07*cswork/wp) dHe4Cm
+ endif
+ ve/copy $sigma(cswork) Mcw
+ ve/copy xwork Mxw
+ exec aven Mxw Mcw [nCm]
+ avT = [@]
+ ve/del xwork,ywork,cswork,Mxw,Mcw,wp
+ exitm [avT]
+return
+*
+macro aven vtMeV=tn csMeV=scn n=30 
+ n1 = [n] - 1
+ ve/copy $sigma(diff([vtMeV])) df[vtMeV]
+ ve/copy [vtMeV] bf[vtMeV]
+ ve/copy [vtMeV](2:[n]) bf[vtMeV](1:[n1])
+ ve/copy $sigma(0.5*([vtMeV]+bf[vtMeV])) bf[vtMeV]
+ ve/copy [csMeV] bf[csMeV]
+ ve/copy [csMeV](2:[n]) bf[csMeV](1:[n1])
+ ve/copy $sigma(0.5*([csMeV]+bf[csMeV])) bf[csMeV]
+ ve/copy $sigma(bf[csMeV]*df[vtMeV]*bf[vtMeV]) t[csMeV]
+ ve/copy t[csMeV](1:[n1]) tot[csMeV]
+ sum = $sigma(vsum(tot[csMeV]))
+ ve/del df[vtMeV],bf[vtMeV],bf[csMeV],t[csMeV],tot[csMeV]
+ EXITM   [sum]
+return
+*
+macro maven id=66 nbin=30
+ ve/cr mavlt([nbin]) r  
+ ve/cr mavs([nbin]) r  
+ get/abs  [id] mavlt
+ get/cont [id] mavs
+ ve/copy $sigma(10.**mavlt) mavt
+ exec aven mavt mavs [nbin]
+ sum = [@]
+ ve/del mavlt,mavt,mavs
+ EXITM   [sum]
+return
+*
+macro makehbk
+ ve/cr nevts(1) r
+ ve/read nevts histnevt.out
+ 1d 1 'N events' 1 0. 2. 0.
+ put/cont 1 nevts
+ hi/fil 35 chips.hbook ! n
+ nt/create 70 'Incl' 43 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   ND    PDG   NS    NZ    NN    m     Px    _
+  Py    Pz    E
+ nt/read 70 tuplincl.out ! ! 9000000
+ nt/create 72 '3pi' 40 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   m3pi  m12   m13   m23   pdg1  pdg2  pdg3
+ nt/read 72 tuple3pi.out ! ! 9000000
+ nt/create 75 'EvtA' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 75 tuplevta.out ! ! 9000000
+ nt/create 77 'EvtQ' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 77 tuplevtq.out ! ! 9000000
+ hrout *
+ clo 35
+ ve/del nevts
+ hi/del *
+return

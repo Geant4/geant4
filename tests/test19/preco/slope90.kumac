@@ -1,0 +1,71 @@
+igset LWID 5
+set  FWID 5
+set  YLAB 1.
+igset PLCI 1
+igset txci 1
+set   DMOD 1
+set   TXFP -20
+igset MTYP 20
+set chhe .4
+set ASIZ .48
+set CSIZ .40
+set GSIZ .40
+set TSIZ .40
+set VSIZ .40
+set NDVX -10710.00
+set NDVY -10503.00
+*
+  opt ndat
+  set xwin 0.0001
+  set ywin 0.0001
+*  title 'Nucleon'
+  clr
+  zone 1 1
+  set dmod 1
+  ***** M.K. ****
+  *opt date
+  ***************
+  opt tic
+  opt nsta
+  opt utit
+  opt nfit
+  set errx 0.01
+  set xlab 1.25
+  title ' ' u
+  low=-1
+  high=1.
+  opt logy
+  opt linx
+  set xval
+  set yval
+*
+  pmin=20.
+  pmax=200.
+* -----------------------------------------
+  ve/del *
+  ve/cr de(999) R 999*0.
+  null [low] [high] [pmin] [pmax]
+ve/cr q2(49)
+ve/cr ex(49)
+ve/cr er(49)
+SET TXFP -20
+igset MTYP 20
+*
+ve/cr ct(5)
+ve/cr s(5)
+ve/cr d(5)
+ve/re ct,s,d slope90.dat
+igset PMCI 1
+igset PLCI 1
+gra/hp/errors ct s de d 5 21 .24 1
+set DMOD 1
+ve/cr PAR(8)  R 35.0 .80 .3 2.5 .027 17. 93. .029
+ve/cr STEP(8) R 0.01 .01 .1 0.0 .000 0.0 1.0 .005
+ve/cr PMIN(8) R 0.00 0.0 0. 0.0 0.00 0.0 0.0 0.00
+ve/cr PMAX(8) R 999. 1.0 9. 9.0 1.00 99. 99. 1.00
+ve/fit ct s d slope90.f SB0 2 PAR STEP PMIN PMAX
+fun/pl slope90.f [low] [high] S
+*
+  igset txci 1
+  atitle 'cos([t])    ^!' 'Slope (E?p!=90 MeV) in MeV'
+
