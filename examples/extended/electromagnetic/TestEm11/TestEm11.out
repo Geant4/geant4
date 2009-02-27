@@ -399,7 +399,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
+<<<<<<< TestEm11.out
+  User=12.5s Real=106.12s Sys=3.19s
+=======
   User=11.95s Real=64.03s Sys=2.42s
+>>>>>>> 1.45
 
  ======================== run summary ======================
 

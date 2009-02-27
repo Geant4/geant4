@@ -14,7 +14,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:   Vacuum     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   Vacuum     density:  0.000 mg/cm3  RadL: 204727576.737 pc   Nucl.Int.Length: 113804113.435 pc   Imean:  21.800 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -122,100 +122,133 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 -> Event= 1: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-3.5867089010791 Y(microns)=-0.45887737486595 THETA(mrad)=-5.8367647764082 PHI(mrad)=-9.1305836538323
+    =>IMAGE : X(microns)=-3.5837096989494 Y(microns)=-0.45840328257896 THETA(mrad)=-5.8367559094088 PHI(mrad)=-9.1305746641435
 
 -> Event= 2: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-0.48858394982666 Y(microns)=-0.30133481278277 THETA(mrad)=-1.9441075333148 PHI(mrad)=-9.1297089122698
+    =>IMAGE : X(microns)=-0.48769273395751 Y(microns)=-0.30076924583158 THETA(mrad)=-1.9441051704501 PHI(mrad)=-9.1296991086647
 
 -> Event= 3: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=0.48858394982666 Y(microns)=-0.30133481278277 THETA(mrad)=1.9441075333148 PHI(mrad)=-9.1297089122698
+    =>IMAGE : X(microns)=0.48769273395751 Y(microns)=-0.30076924583158 THETA(mrad)=1.9441051704501 PHI(mrad)=-9.1296991086647
 
 -> Event= 4: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=3.5867089010791 Y(microns)=-0.45887737486595 THETA(mrad)=5.8367647764082 PHI(mrad)=-9.1305836538323
+    =>IMAGE : X(microns)=3.5837096989494 Y(microns)=-0.45840328257896 THETA(mrad)=5.8367559094088 PHI(mrad)=-9.1305746641435
 
 -> Event= 5: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-3.3399324435349 Y(microns)=-0.11876365231005 THETA(mrad)=-5.8363619945219 PHI(mrad)=-3.0434522502772
+    =>IMAGE : X(microns)=-3.3369902192034 Y(microns)=-0.11859295504408 THETA(mrad)=-5.8363539166824 PHI(mrad)=-3.0434495582361
 
 -> Event= 6: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-0.40645857802869 Y(microns)=-0.066246823180853 THETA(mrad)=-1.9439736159923 PHI(mrad)=-3.0431621480574
+    =>IMAGE : X(microns)=-0.40542642803648 Y(microns)=-0.066072633849618 THETA(mrad)=-1.9439711398697 PHI(mrad)=-3.0431588807588
 
 -> Event= 7: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=0.40645857802869 Y(microns)=-0.066246823180853 THETA(mrad)=1.9439736159923 PHI(mrad)=-3.0431621480574
+    =>IMAGE : X(microns)=0.40542642803648 Y(microns)=-0.066072633849618 THETA(mrad)=1.9439711398697 PHI(mrad)=-3.0431588807588
 
 -> Event= 8: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=3.3399324435349 Y(microns)=-0.11876365231005 THETA(mrad)=5.8363619945219 PHI(mrad)=-3.0434522502772
+    =>IMAGE : X(microns)=3.3369902192034 Y(microns)=-0.11859295504408 THETA(mrad)=5.8363539166824 PHI(mrad)=-3.0434495582361
 
 -> Event= 9: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-3.3399324435349 Y(microns)=0.11876365231005 THETA(mrad)=-5.8363619945219 PHI(mrad)=3.0434522502772
+    =>IMAGE : X(microns)=-3.3369902192034 Y(microns)=0.11859295504408 THETA(mrad)=-5.8363539166824 PHI(mrad)=3.0434495582361
 
 -> Event= 10: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-0.40645857802869 Y(microns)=0.066246823180853 THETA(mrad)=-1.9439736159923 PHI(mrad)=3.0431621480574
+    =>IMAGE : X(microns)=-0.40542642803648 Y(microns)=0.066072633849618 THETA(mrad)=-1.9439711398697 PHI(mrad)=3.0431588807588
 
 -> Event= 11: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=0.40645857802869 Y(microns)=0.066246823180853 THETA(mrad)=1.9439736159923 PHI(mrad)=3.0431621480574
+    =>IMAGE : X(microns)=0.40542642803648 Y(microns)=0.066072633849618 THETA(mrad)=1.9439711398697 PHI(mrad)=3.0431588807588
 
 -> Event= 12: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=3.3399324435349 Y(microns)=0.11876365231005 THETA(mrad)=5.8363619945219 PHI(mrad)=3.0434522502772
+    =>IMAGE : X(microns)=3.3369902192034 Y(microns)=0.11859295504408 THETA(mrad)=5.8363539166824 PHI(mrad)=3.0434495582361
 
 -> Event= 13: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-3.5867089010791 Y(microns)=0.45887737486595 THETA(mrad)=-5.8367647764082 PHI(mrad)=9.1305836538323
+    =>IMAGE : X(microns)=-3.5837096989494 Y(microns)=0.45840328257896 THETA(mrad)=-5.8367559094088 PHI(mrad)=9.1305746641435
 
 -> Event= 14: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=-0.48858394982666 Y(microns)=0.30133481278277 THETA(mrad)=-1.9441075333148 PHI(mrad)=9.1297089122698
+    =>IMAGE : X(microns)=-0.48769273395751 Y(microns)=0.30076924583158 THETA(mrad)=-1.9441051704501 PHI(mrad)=9.1296991086647
 
 -> Event= 15: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=0.48858394982666 Y(microns)=0.30133481278277 THETA(mrad)=1.9441075333148 PHI(mrad)=9.1297089122698
+    =>IMAGE : X(microns)=0.48769273395751 Y(microns)=0.30076924583158 THETA(mrad)=1.9441051704501 PHI(mrad)=9.1296991086647
 
 -> Event= 16: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 2.9997
-    =>IMAGE : X(microns)=3.5867089010791 Y(microns)=0.45887737486595 THETA(mrad)=5.8367647764082 PHI(mrad)=9.1305836538323
+    =>IMAGE : X(microns)=3.5837096989494 Y(microns)=0.45840328257896 THETA(mrad)=5.8367559094088 PHI(mrad)=9.1305746641435
 
 -> Event= 17: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-1.7196770328417 Y(microns)=-0.11880586487665 THETA(mrad)=-5.8315814398783 PHI(mrad)=-9.124902487762
+    =>IMAGE : X(microns)=-1.7167643114768 Y(microns)=-0.1182655224053 THETA(mrad)=-5.8315735842891 PHI(mrad)=-9.1248899278439
 
 -> Event= 18: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=0.13297208222397 Y(microns)=0.038567370885464 THETA(mrad)=-1.9423814979315 PHI(mrad)=-9.1240303956597
+    =>IMAGE : X(microns)=0.13402537708115 Y(microns)=0.03910149129876 THETA(mrad)=-1.9423788035746 PHI(mrad)=-9.124019476355
 
 -> Event= 19: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-0.13297208222397 Y(microns)=0.038567370885464 THETA(mrad)=1.9423814979315 PHI(mrad)=-9.1240303956597
+    =>IMAGE : X(microns)=-0.13402537708115 Y(microns)=0.03910149129876 THETA(mrad)=1.9423788035746 PHI(mrad)=-9.124019476355
 
 -> Event= 20: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=1.7196770328417 Y(microns)=-0.11880586487665 THETA(mrad)=5.8315814398783 PHI(mrad)=-9.124902487762
+    =>IMAGE : X(microns)=1.7167643114768 Y(microns)=-0.1182655224053 THETA(mrad)=5.8315735842891 PHI(mrad)=-9.1248899278439
 
 -> Event= 21: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-1.4734196916507 Y(microns)=-0.0054541489705432 THETA(mrad)=-5.8311795427551 PHI(mrad)=-3.0415592251015
+    =>IMAGE : X(microns)=-1.4704560959992 Y(microns)=-0.0052814814884359 THETA(mrad)=-5.8311713684199 PHI(mrad)=-3.0415561132898
 
 -> Event= 22: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=0.21499992476237 Y(microns)=0.047025989915602 THETA(mrad)=-1.9422479641261 PHI(mrad)=-3.0412671975718
+    =>IMAGE : X(microns)=0.21592832772898 Y(microns)=0.047208504706013 THETA(mrad)=-1.9422452911008 PHI(mrad)=-3.0412659068894
 
 -> Event= 23: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= -0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-0.21499992476237 Y(microns)=0.047025989915602 THETA(mrad)=1.9422479641261 PHI(mrad)=-3.0412671975718
+    =>IMAGE : X(microns)=-0.21592832772898 Y(microns)=0.047208504706013 THETA(mrad)=1.9422452911008 PHI(mrad)=-3.0412659068894
 
 -> Event= 24: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= -0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=1.4734196916507 Y(microns)=-0.0054541489705432 THETA(mrad)=5.8311795427551 PHI(mrad)=-3.0415592251015
+    =>IMAGE : X(microns)=1.4704560959992 Y(microns)=-0.0052814814884359 THETA(mrad)=5.8311713684199 PHI(mrad)=-3.0415561132898
 
 -> Event= 25: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-1.4734196916507 Y(microns)=0.0054541489705432 THETA(mrad)=-5.8311795427551 PHI(mrad)=3.0415592251015
+    =>IMAGE : X(microns)=-1.4704560959992 Y(microns)=0.0052814814884359 THETA(mrad)=-5.8311713684199 PHI(mrad)=3.0415561132898
 
 -> Event= 26: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=0.21499992476237 Y(microns)=-0.047025989915602 THETA(mrad)=-1.9422479641261 PHI(mrad)=3.0412671975718
+    =>IMAGE : X(microns)=0.21592832772898 Y(microns)=-0.047208504706013 THETA(mrad)=-1.9422452911008 PHI(mrad)=3.0412659068894
 
 -> Event= 27: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-0.21499992476237 Y(microns)=-0.047025989915602 THETA(mrad)=1.9422479641261 PHI(mrad)=3.0412671975718
+    =>IMAGE : X(microns)=-0.21592832772898 Y(microns)=-0.047208504706013 THETA(mrad)=1.9422452911008 PHI(mrad)=3.0412659068894
 
 -> Event= 28: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.03 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=1.4734196916507 Y(microns)=0.0054541489705432 THETA(mrad)=5.8311795427551 PHI(mrad)=3.0415592251015
+    =>IMAGE : X(microns)=1.4704560959992 Y(microns)=0.0052814814884359 THETA(mrad)=5.8311713684199 PHI(mrad)=3.0415561132898
 
 -> Event= 29: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-1.7196770328417 Y(microns)=0.11880586487665 THETA(mrad)=-5.8315814398783 PHI(mrad)=9.124902487762
+    =>IMAGE : X(microns)=-1.7167643114768 Y(microns)=0.1182655224053 THETA(mrad)=-5.8315735842891 PHI(mrad)=9.1248899278439
 
 -> Event= 30: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= -0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=0.13297208222397 Y(microns)=-0.038567370885464 THETA(mrad)=-1.9423814979315 PHI(mrad)=9.1240303956597
+    =>IMAGE : X(microns)=0.13402537708115 Y(microns)=-0.03910149129876 THETA(mrad)=-1.9423788035746 PHI(mrad)=9.124019476355
 
 -> Event= 31: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.03 PHI(mrad)= 0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=-0.13297208222397 Y(microns)=-0.038567370885464 THETA(mrad)=1.9423814979315 PHI(mrad)=9.1240303956597
+    =>IMAGE : X(microns)=-0.13402537708115 Y(microns)=-0.03910149129876 THETA(mrad)=1.9423788035746 PHI(mrad)=9.124019476355
 
 -> Event= 32: X0(mm)= 0 X0(mm) = 0 Z0(m) = -8.87 THETA(mrad)= 0.09 PHI(mrad)= 0.09 E0(MeV)= 3.0003
-    =>IMAGE : X(microns)=1.7196770328417 Y(microns)=0.11880586487665 THETA(mrad)=5.8315814398783 PHI(mrad)=9.124902487762
+    =>IMAGE : X(microns)=1.7167643114768 Y(microns)=0.1182655224053 THETA(mrad)=5.8315735842891 PHI(mrad)=9.1248899278439
+
+
+===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :
+
+<x|theta>=
+     -0.1273886
+
+<x|theta*delta>=
+      -2070.676
+
+<x|theta^3>=
+      3270.7459
+
+<x|theta*phi^2>=
+      379.97114
+
+<x|x>=
+      64.763547
+
+<y|phi>=
+   -0.046785448
+
+<y|phi*delta>=
+     -377.59033
+
+<y|theta^2*phi>=
+      243.08241
+
+<y|phi^3>=
+      158.24003
+
+<y|y>=
+      101.40557
 
 
 ===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :
