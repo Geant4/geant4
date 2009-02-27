@@ -6,6 +6,9 @@ cd $REFERENCE
 
 setenv PRIMARYBEAM pi-
 
+mkdir -p $PRIMARYBEAM
+cd $PRIMARYBEAM
+
 setenv PHYSLIST QBBC
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QBBCG

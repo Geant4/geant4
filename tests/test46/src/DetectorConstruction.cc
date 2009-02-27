@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.6 2009-01-06 17:24:15 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2009-02-27 19:43:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,11 +130,11 @@ DetectorConstruction::DetectorConstruction()
   absorMaterial[1] = Fe;
   absorMaterial[16]= Fe;
   
-  hcalWidth = 200.*mm;
+  hcalWidth = 460.*mm;
 
   regionHCAL = 0;
   cutsHCAL = new G4ProductionCuts();
-  cutsHCAL->SetProductionCut(0.7*mm);
+  cutsHCAL->SetProductionCut(1.0*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -187,7 +187,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   HistoManager* man = HistoManager::GetPointer();
   man->SetWorldLength(worldZ);
 
-  G4cout << "### New geometry is constructed" << G4endl;
+  G4cout << "### New geometry is constructed HCAL width(cm)= " 
+	 << hcalWidth/cm << G4endl;
   if(man->GetVerbose() > 0)
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   

@@ -6,6 +6,9 @@ cd $REFERENCE
 
 setenv PRIMARYBEAM gamma
 
+mkdir -p $PRIMARYBEAM
+cd $PRIMARYBEAM
+
 setenv PHYSLIST QGSP_BERT
 #source $G4INSTALL/tests/test46/run_em.csh g10gev100
 #source $G4INSTALL/tests/test46/run_em.csh g10gev10

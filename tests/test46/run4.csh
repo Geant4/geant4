@@ -6,6 +6,9 @@ cd $REFERENCE
 
 setenv PRIMARYBEAM pi-
 
+mkdir -p $PRIMARYBEAM
+cd $PRIMARYBEAM
+
 setenv PHYSLIST QGSP_BERT
 #source $G4INSTALL/tests/test46/run_em.csh e30gev100
 #source $G4INSTALL/tests/test46/run_em.csh e30gev10
