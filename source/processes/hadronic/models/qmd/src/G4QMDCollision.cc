@@ -27,6 +27,7 @@
 // 081120 Add deltaT in signature of CalKinematicsOfBinaryCollisions
 //        Add several required updating of Mean Filed 
 //        Modified handling of absorption case by T. Koi
+// 090126 Fix in absorption case by T. Koi  
 //
 #include "G4QMDCollision.hh"
 #include "G4ParticleDefinition.hh"
@@ -659,7 +660,9 @@ G4bool G4QMDCollision::CalFinalStateOfTheBinaryCollision( G4int i , G4int j )
       }
       else 
       {
-         if ( theMeanField->IsPauliBlocked ( i ) == false ) 
+         //if ( theMeanField->IsPauliBlocked ( i ) == false ) 
+         //090126                            i-1 cause jth is erased
+         if ( theMeanField->IsPauliBlocked ( i-1 ) == false ) 
          { 
             //G4cout << "Absorption Happen " << theSystem->GetTotalNumberOfParticipant() << G4endl;
             delete absorbed;
