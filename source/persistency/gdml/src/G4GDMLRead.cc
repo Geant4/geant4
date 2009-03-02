@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.43 2009-02-27 15:08:05 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.44 2009-03-02 09:45:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -71,7 +71,7 @@ G4String G4GDMLRead::GenerateName(const G4String& nameIn, G4bool strip)
    {
      nameOut = eval.SolveBrackets(nameOut);
      std::stringstream stream;
-     stream << "_" << inLoop << "_" << loopCount;
+     stream << "_" << loopCount;
      nameOut = nameOut + stream.str();
    }
    if (strip) { StripName(nameOut); }
@@ -250,18 +250,17 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
    }
 
    inLoop++;
-   
+
    while (_var <= _to)
    {
       eval.SetVariable(var,_var);
       (this->*func)(element);
-
       _var += _step;
       loopCount++;
    }
 
    inLoop--;
-   loopCount = 0;
+   if (!inLoop) { loopCount = 0; }
 }
 
 void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
