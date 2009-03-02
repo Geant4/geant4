@@ -261,10 +261,10 @@ void test31Histo::bookHisto()
     for(G4int i=0; i<nHisto; i++) {histo->activate(histoID[i], true);}
   }
 
-  if(nTuple) 
-    if(histo->addTuple( "100", "Range/Energy",
-  "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" ));
-
+  if(nTuple){ 
+    histo->addTuple( "100", "Range/Energy",
+     "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" );
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -461,7 +461,8 @@ void test31Histo::TableControl()
 
       G4double mass = part->GetPDGMass();
   
-      G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, fs, nuc;
+      G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, fs(0), nuc;
+  
       for(G4int i=0; i<nm; i++) {
 	dc = 0.0;
 	mat = mman->FindOrBuildMaterial(nmat[i]);
