@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyBeamLine.cc;
-// Last modified: G.A.P.Cirrone, May 2008;
+// Last modified: G.A.P.Cirrone
 //
-// See more at: http://geant4infn.wikispaces.com/
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -50,10 +50,11 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
-#include "HadrontherapyBeamLine.hh"
+#include "PassiveProtonBeamLine.hh"
 #include "G4Material.hh"
 
-HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
+PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
+  
   physiBeamLineSupport(0), physiBeamLineCover(0), physiBeamLineCover2(0), 
   firstScatteringFoil(0), physiFirstScatteringFoil(0), physiKaptonWindow(0), 
   solidStopper(0), physiStopper(0), 
@@ -371,13 +372,13 @@ HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
 }
 
 /////////////////////////////////////////////////////////////////////////////
-HadrontherapyBeamLine::~HadrontherapyBeamLine()
+PassiveProtonBeamLine::~PassiveProtonBeamLine()
 {
   delete material;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamLineSupport()
+void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 {
   // ------------------//
   // BEAM LINE SUPPORT //
@@ -466,7 +467,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamLineSupport()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamScatteringFoils()
+void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 {
   // ------------//
   // VACUUM PIPE //
@@ -585,7 +586,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamScatteringFoils()
 
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyRangeShifter()
+void PassiveProtonBeamLine::HadrontherapyRangeShifter()
 {
 
   // ---------------------------- //
@@ -619,7 +620,7 @@ void HadrontherapyBeamLine::HadrontherapyRangeShifter()
  }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
+void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 {
   // -----------------//
   // FIRST COLLIMATOR //
@@ -848,7 +849,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamCollimators()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamMonitoring()
+void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 {
   // ----------------------------
   //     THE FIRST MONITOR CHAMBER
@@ -923,7 +924,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamMonitoring()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyMOPIDetector()
+void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 {
   // --------------------------------//
   //        THE MOPI DETECTOR        //
@@ -1108,7 +1109,7 @@ void HadrontherapyBeamLine::HadrontherapyMOPIDetector()
 
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamNozzle()
+void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 {
   // ------------------------------//
   // THE FINAL TUBE AND COLLIMATOR //
@@ -1210,7 +1211,7 @@ void HadrontherapyBeamLine::HadrontherapyBeamNozzle()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::HadrontherapyBeamFinalCollimator()
+void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
 {
   // -----------------------//
   //     FINAL COLLIMATOR   //
@@ -1249,14 +1250,14 @@ void HadrontherapyBeamLine::HadrontherapyBeamFinalCollimator()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetRangeShifterXPosition(G4double value)
+void PassiveProtonBeamLine::SetRangeShifterXPosition(G4double value)
 {
   physiRangeShifterBox -> SetTranslation(G4ThreeVector(value, 0., 0.)); 
   G4cout << "The Range Shifter is translated to"<< value/mm <<"mm along the X axis" <<G4endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetRangeShifterXSize(G4double value)
+void PassiveProtonBeamLine::SetRangeShifterXSize(G4double value)
 {
   solidRangeShifterBox -> SetXHalfLength(value) ;
   G4cout << "RangeShifter size X (mm): "<< ((solidRangeShifterBox -> GetXHalfLength())*2.)/mm
@@ -1264,7 +1265,7 @@ void HadrontherapyBeamLine::SetRangeShifterXSize(G4double value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetFirstScatteringFoilXSize(G4double value)
+void PassiveProtonBeamLine::SetFirstScatteringFoilXSize(G4double value)
 { 
   firstScatteringFoil -> SetXHalfLength(value);
   G4cout <<"The X size of the first scattering foil is (mm):"<<  
@@ -1273,7 +1274,7 @@ void HadrontherapyBeamLine::SetFirstScatteringFoilXSize(G4double value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetSecondScatteringFoilXSize(G4double value)
+void PassiveProtonBeamLine::SetSecondScatteringFoilXSize(G4double value)
 {
   secondScatteringFoil -> SetXHalfLength(value);
   G4cout <<"The X size of the second scattering foil is (mm):"<<  
@@ -1282,7 +1283,7 @@ void HadrontherapyBeamLine::SetSecondScatteringFoilXSize(G4double value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetOuterRadiusStopper(G4double value)
+void PassiveProtonBeamLine::SetOuterRadiusStopper(G4double value)
 { 
   solidStopper -> SetOuterRadius(value);
   G4cout << "OuterRadius od the Stopper is (mm):"
@@ -1291,7 +1292,7 @@ void HadrontherapyBeamLine::SetOuterRadiusStopper(G4double value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetInnerRadiusFinalCollimator(G4double value)
+void PassiveProtonBeamLine::SetInnerRadiusFinalCollimator(G4double value)
 {
   solidFinalCollimator -> SetInnerRadius(value);
   G4cout<<"Inner Radius of the final collimator is (mm):"
@@ -1300,7 +1301,7 @@ void HadrontherapyBeamLine::SetInnerRadiusFinalCollimator(G4double value)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyBeamLine::SetRSMaterial(G4String materialChoice)
+void PassiveProtonBeamLine::SetRSMaterial(G4String materialChoice)
 {
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
  
