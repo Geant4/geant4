@@ -100,7 +100,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   if (matrix)
     {  
       std::ofstream ofs;    	
-      ofs.open("PRECOMPOUNDLowE_09_02_ref_00_3MEvts.out"); 
+      ofs.open("doseDeposited.out"); 
       
       for(G4int l = 0; l < numberVoxelZ; l++) 
 	{
