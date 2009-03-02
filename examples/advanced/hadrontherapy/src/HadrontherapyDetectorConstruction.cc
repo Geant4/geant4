@@ -25,9 +25,8 @@
 //
 //
 // $Id: HadrontherapyDetectorConstruction.cc;
-// Last modified: G.A.P.Cirrone, April 2008;
 //
-// See more at: http://geant4infn.wikispaces.com
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -60,12 +59,13 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMaterial.hh"
-#include "HadrontherapyBeamLine.hh"
+#include "PassiveProtonBeamLine.hh"
 #include "HadrontherapyModulator.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
-  : detectorSD(0), detectorROGeometry(0), beamLine(0), modulator(0),
+  : detectorSD(0), detectorROGeometry(0), 
+    passiveProtonBeamLine(0), modulator(0),
     physicalTreatmentRoom(0),
     patientPhysicalVolume(0), 
     detectorLogicalVolume(0), 
@@ -143,15 +143,15 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
  
-  beamLine = new HadrontherapyBeamLine(physicalTreatmentRoom);
-  beamLine -> HadrontherapyBeamLineSupport();
-  beamLine -> HadrontherapyBeamScatteringFoils();
-  beamLine -> HadrontherapyRangeShifter();
-  beamLine -> HadrontherapyBeamCollimators();
-  beamLine -> HadrontherapyBeamMonitoring();
-  beamLine -> HadrontherapyMOPIDetector();
-  beamLine -> HadrontherapyBeamNozzle();
-  beamLine -> HadrontherapyBeamFinalCollimator();
+  passiveProtonBeamLine = new PassiveProtonBeamLine(physicalTreatmentRoom);
+  passiveProtonBeamLine -> HadrontherapyBeamLineSupport();
+  passiveProtonBeamLine -> HadrontherapyBeamScatteringFoils();
+  passiveProtonBeamLine -> HadrontherapyRangeShifter();
+  passiveProtonBeamLine -> HadrontherapyBeamCollimators();
+  passiveProtonBeamLine -> HadrontherapyBeamMonitoring();
+  passiveProtonBeamLine -> HadrontherapyMOPIDetector();
+  passiveProtonBeamLine -> HadrontherapyBeamNozzle();
+  passiveProtonBeamLine -> HadrontherapyBeamFinalCollimator();
 
   modulator = new HadrontherapyModulator();
   modulator -> BuildModulator(physicalTreatmentRoom);
@@ -262,43 +262,43 @@ void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 
 void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
 {
-  beamLine -> SetRangeShifterXPosition(value);
+  passiveProtonBeamLine -> SetRangeShifterXPosition(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetRangeShifterXSize(G4double value)
 {
-  beamLine -> SetRangeShifterXSize(value);
+  passiveProtonBeamLine -> SetRangeShifterXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetFirstScatteringFoilSize(G4double value)
 {
-  beamLine -> SetFirstScatteringFoilXSize(value);  
+  passiveProtonBeamLine -> SetFirstScatteringFoilXSize(value);  
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetSecondScatteringFoilSize(G4double value)
 {
-  beamLine -> SetSecondScatteringFoilXSize(value);
+  passiveProtonBeamLine -> SetSecondScatteringFoilXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetOuterRadiusStopper(G4double value)
 {
-  beamLine -> SetOuterRadiusStopper(value); 
+  passiveProtonBeamLine -> SetOuterRadiusStopper(value); 
   G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
 }
 
 void HadrontherapyDetectorConstruction::SetInnerRadiusFinalCollimator(G4double value)
 {
-  beamLine -> SetInnerRadiusFinalCollimator(value);
+ passiveProtonBeamLine -> SetInnerRadiusFinalCollimator(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
 {
-  beamLine -> SetRSMaterial(materialChoice);
+  passiveProtonBeamLine -> SetRSMaterial(materialChoice);
 }
 
 
