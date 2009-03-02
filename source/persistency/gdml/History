@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2009-02-26 10:13:49 gcosmo Exp $
+$Id: History,v 1.102 2009-03-02 09:45:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 March 2009 Gabriele Cosmo (gdml-V09-02-05)
+- Fixed association of entities in nested loops for solids and materials.
+  Definitions of materials are not supposed to be included in loops being
+  therefore repeated...
 
 26 February 2009 Tatiana Nikitina (gdml-V09-02-04)
 - Corrected treatment of brackets and indeces for matrices in G4GDMLEvaluator.
