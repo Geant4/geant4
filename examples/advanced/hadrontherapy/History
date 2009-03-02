@@ -11,7 +11,10 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-02.03.2009: G.A.P.Cirrone; Tag:  hadrontherapy-V09-02-01
+02.03.2009: G.A.P. Cirrone; Tag: hadrontherapy-V09-02-02
+           - Changed name of HadrontherapyBeamLine file to PassiveProtonBeamLine
+
+02.03.2009: G.A.P. Cirrone; Tag:  hadrontherapy-V09-02-01
 	   - Added generation of ASCII file with dose deposited in the phantom voxels
 
 22.02.2009: G.Folger; Tag: hadrontherapy-V09-02-00

@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 // $Id: Hadrontherapy.cc Main of the Hadrontherapy example; 
-// Last modified: G.A.P.Cirrone March 2008;
+// Last modified: G.A.P.Cirrone 
 // 
-// See more at: http://geant4infn.wikispaces.com/
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -79,10 +79,10 @@ int main(int argc ,char ** argv)
 
   // Initialize the geometry
   runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
-  
+
   // Initialize the physics 
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
-  
+
   // Initialize the primary particles  
   runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
 
