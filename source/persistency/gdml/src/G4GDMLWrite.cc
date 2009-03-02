@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.50 2008-11-13 17:00:50 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.51 2009-03-02 10:20:50 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -63,9 +63,15 @@ G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 
 G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
 {
+   G4String nameOut;
    std::stringstream stream; stream << name;
-   if (addPointerToName) { stream << ptr; }
-   return G4String(stream.str());
+   if (addPointerToName) { stream << ptr; };
+
+   nameOut=G4String(stream.str());
+   if(nameOut.contains(' '))
+   nameOut.erase(std::remove(nameOut.begin(),nameOut.end(),' '),nameOut.end());
+
+   return nameOut;
 }
 
 xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
