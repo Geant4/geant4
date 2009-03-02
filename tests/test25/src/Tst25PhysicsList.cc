@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25PhysicsList.cc,v 1.4 2006-06-29 21:52:45 gunter Exp $
+// $Id: Tst25PhysicsList.cc,v 1.5 2009-03-02 17:30:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -407,8 +407,7 @@ void Tst25PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4ProtonInelasticProcess* theInelasticProcess = 
                                     new G4ProtonInelasticProcess("inelastic");
-         G4LEProtonInelastic* theInelasticModel = 
-                                new G4LEProtonInelastic;
+//         G4LEProtonInelastic* theInelasticModel = new G4LEProtonInelastic;
 //         theInelasticModel->SetMaxEnergy(70*MeV);
 //         theInelasticProcess->RegisterMe(theInelasticModel);
          theInelasticProcess->RegisterMe(thePreEquilib);
@@ -435,8 +434,7 @@ void Tst25PhysicsList::ConstructHad()
           // inelastic scattering
          G4NeutronInelasticProcess* theInelasticProcess = 
                                     new G4NeutronInelasticProcess("inelastic");
-         G4LENeutronInelastic* theInelasticModel = 
-                                new G4LENeutronInelastic;
+//         G4LENeutronInelastic* theInelasticModel = new G4LENeutronInelastic;
 //         theInelasticModel->SetMaxEnergy(70*MeV);
 //	 theInelasticProcess->RegisterMe(theInelasticModel);
          theInelasticProcess->RegisterMe(thePreEquilib);
