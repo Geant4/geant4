@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.22 2009-02-20 15:38:07 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.23 2009-03-02 09:17:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1042,16 +1042,17 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
     E2 = fEnergyVector->GetLowEdgeEnergy(iMomentum);
 
     // G4cout<<"E2 = "<<E2<<G4endl;
-    /*
+    
     iMomentum--;
     
-    position = (*(*fAngleTable)(iMomentum))(fAngleBin-2)*G4UniformRand();
+    // position = (*(*fAngleTable)(iMomentum))(fAngleBin-2)*G4UniformRand();
 
     // G4cout<<"position = "<<position<<G4endl;
 
     for(iAngle = 0; iAngle < fAngleBin-1; iAngle++)
     {
-      if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
+      // if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
+      if( position > (*(*fAngleTable)(iMomentum))(iAngle) ) break;
     }
     if (iAngle >= fAngleBin-1) iAngle = fAngleBin-2;
     
@@ -1068,8 +1069,8 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
     W2 = (kinE - E1)*W;
 
     randAngle = W1*theta1 + W2*theta2;
-    */
-    randAngle = theta2;
+    
+    // randAngle = theta2;
     // G4cout<<"randAngle = "<<randAngle<<G4endl;
   }
   // G4double angle = randAngle;
