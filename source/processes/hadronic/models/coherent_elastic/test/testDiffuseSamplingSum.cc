@@ -194,7 +194,7 @@ int main()
   G4int choice;
   // G4cin >> choice;
 
-  choice = 6;
+  choice = 2;
 
 
   switch (choice)
@@ -302,7 +302,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
 
   //  G4cin >> choice;
-  choice = 3;
+  choice = 1;
 
   G4ParticleDefinition* theParticleDefinition;
 
@@ -362,12 +362,14 @@ int main()
 
 
   // Physics data
-
+  /*
   G4double momentum = 9.92*GeV;
   G4double pMass    = theParticleDefinition->GetPDGMass();
   G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
+  */
 
   // G4double kinEnergy = 1.*GeV;
+  G4double kinEnergy = 301.*GeV;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -444,11 +446,11 @@ int main()
   // simRead.open("pCT1GeV.dat");
   // simRead.open("pOT1GeV.dat");
   // simRead.open("pHe4T45GeV.dat");
-  // simRead.open("pHe4T301GeV.dat");
+  simRead.open("pHe4T301GeV.dat");
   // pions
   // simRead.open("pipPb9p92GeVc.exp");
   // simRead.open("pimPb9p92GeVc.exp");
-  simRead.open("pipC9p92GeVc.exp");
+  // simRead.open("pipC9p92GeVc.exp");
 
   simRead>>numberOfExpPoints;
   G4cout<<"numberOfExpPoints = "<<numberOfExpPoints<<G4endl;
@@ -463,9 +465,9 @@ int main()
     // simRead>>tData[i]>>sData;
     simRead>>tData[i]>>sData>>dData;
     // simRead>>sData>>tData[i]>>dData;
-    //   tData[i] *= g2;
+    tData[i] *= g2;
     // tData[i] *= degree;
-    tData[i] *= mrad;
+    // tData[i] *= mrad;
   }
   simRead.close();
 
@@ -474,7 +476,8 @@ int main()
   // dData = ( tData[numberOfExpPoints-1] - tData[0] )/kAngle;
 
   // G4double thetaMin = 3.*degree;
-  G4double thetaMin = 3.*mrad;
+  // G4double thetaMin = 3.*mrad;
+  G4double thetaMin = 0.;
 
   dData = tData[numberOfExpPoints-1]/kAngle;
 
@@ -493,11 +496,12 @@ int main()
 
   G4double thetaLabGla, thetaLabChi, thetaLabDif, thetaLabGhe;
   // G4double thetaCmsDif; // thetaCmsGla, thetaCmsChi,  thetaCmsGhe;
-  /*
+  
   G4VQCrossSection*       qCManager   = G4QElasticCrossSection::GetPointer();
+  
   G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
   cs *= 1.;
-  */
+  
   // Sampling loop up to iMax
 
 
@@ -511,15 +515,15 @@ int main()
 
   timer.Start();
 
-  ptot = 0.1*GeV + 10*GeV*G4UniformRand();
+  // ptot = 0.1*GeV + 10*GeV*G4UniformRand();
 
   for( i = 0; i < iMax; i++)
   {
     // ptot = 0.1*GeV + 10*GeV*G4UniformRand();
            
     tDif = diffelastic->SampleTableT(theParticleDefinition, ptot, Z, A);
-    thetaLabDif =  SampleThetaLab( theDynamicParticle, m2, tDif );
-
+    // thetaLabDif =  SampleThetaLab( theDynamicParticle, m2, tDif );
+    thetaLabDif = tDif;
     // tDif = diffelastic->SampleT(theParticleDefinition, ptot, A);
 
     // thetaCmsDif = diffelastic->SampleTableThetaCMS( theParticleDefinition, ptot, Z, A); 
@@ -535,8 +539,8 @@ int main()
     }
        
     tGla = hElastic->SampleT(theParticleDefinition,plab,Z,A);
-    thetaLabGla = SampleThetaLab( theDynamicParticle, m2, tGla ); 
-
+    // thetaLabGla = SampleThetaLab( theDynamicParticle, m2, tGla ); 
+    thetaLabGla = tGla;
     for( k = 0; k < kAngle; k++)
     {
       if( thetaLabGla <= thetaLab[k] )
@@ -545,10 +549,10 @@ int main()
         break;
       }
     }
-    /*       
+           
     tChi = qCManager->GetExchangeT(Z,N,projPDG);
-    thetaLabChi = SampleThetaLab( theDynamicParticle, m2, tChi );
- 
+    // thetaLabChi = SampleThetaLab( theDynamicParticle, m2, tChi );
+    thetaLabChi = tChi;
     for( k = 0; k < kAngle; k++)
     {
       if( thetaLabChi <= thetaLab[k] )
@@ -557,10 +561,10 @@ int main()
         break;
       }
     }
-    */    
+        
     tGhe = g2*gElastic->SampleT(tmax/g2,m1,m2,G4double(A));
-    thetaLabGhe = SampleThetaLab( theDynamicParticle, m2, tGhe ); 
-
+    // thetaLabGhe = SampleThetaLab( theDynamicParticle, m2, tGhe ); 
+    thetaLabGhe = tGhe;
     for( k = 0; k < kAngle; k++)
     {
       if( thetaLabGhe <= thetaLab[k] )
@@ -592,33 +596,33 @@ int main()
     // angleDistr[k] *= steradian/millibarn;
     // G4cout <<k*thetaMax/kAngle/degree<<"\t"<<"\t"<<angleDistr[k]<<G4endl;
     // writef <<k*thetaMax/kAngle/degree<<"\t"<<angleDistr[k]<<G4endl;
-
+    /*
     distrDif[k] /= 2*pi*std::sin(thetaLab[k]+0.001);
     distrGla[k] /= 2*pi*std::sin(thetaLab[k]+0.001);
     distrChi[k] /= 2*pi*std::sin(thetaLab[k]+0.001);
     distrGhe[k] /= 2*pi*std::sin(thetaLab[k]+0.001);
-
+    */
 
     // G4cout <<thetaLab[k]/degree<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
     //     <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
     //  writef <<thetaLab[k]/degree<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
     //       <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
 
-    G4cout <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
-              <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
-     writef <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
-         <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
-
-
-    // G4cout <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
+    // G4cout <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
+    //          <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
+    //  writef <<thetaLab[k]/mrad<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
     //     <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
-    // writef <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
-    //    <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
+
+
+    G4cout <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
+        <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
+     writef <<thetaLab[k]/g2<<"\t"<<distrDif[k]<<"\t"<<distrGla[k]
+        <<"\t"<<distrChi[k]<<"\t"<<distrGhe[k]<<G4endl;
   
   }
 
   G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
-  G4cout << " elastic cross section for " <<
+  G4cout << " elastic cross section for T = " <<kinEnergy/GeV<<" GeV   "<<
             theParticleDefinition->GetParticleName() <<
            " on " << theElement->GetName() << G4endl;
   G4cout <<"with atomic weight = "<<theElement->GetN() << G4endl;
