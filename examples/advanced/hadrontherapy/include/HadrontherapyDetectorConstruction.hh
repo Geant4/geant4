@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
+// $Id: HadrontherapyDetectorConstruction.hh; 
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -47,7 +47,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class HadrontherapyDetectorROGeometry;
-class HadrontherapyBeamLine;
+class PassiveProtonBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
 class HadrontherapyDetectorSD;
@@ -118,7 +118,7 @@ private:
 
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
 
-  HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
+  PassiveProtonBeamLine* passiveProtonBeamLine; // Pointer to the beam line 
                                    // geometry component
 
   HadrontherapyModulator* modulator; // Pointer to the modulator 
