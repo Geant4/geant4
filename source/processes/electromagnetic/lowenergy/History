@@ -1,4 +1,4 @@
-$Id: History,v 1.346 2009-02-20 10:49:54 sincerti Exp $
+$Id: History,v 1.347 2009-03-03 08:23:48 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03.03.2009, S. Incerti, tag emlowen-V09-02-16
+            - added gamma particle and energy range test in cross section computation
+              to all Livermore photon processes 
 
 16.02.2009, S. Incerti, tag emlowen-V09-02-15
             - added protections against FPE in G4hLowEnergyLoss.cc (see EM forum

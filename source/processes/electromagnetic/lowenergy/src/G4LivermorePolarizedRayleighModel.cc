@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.2 2009-01-21 10:58:13 sincerti Exp $
+// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.3 2009-03-03 08:23:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,7 @@ G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4Par
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),formFactorData(0)
 {
-  lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
+  lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
   
   SetLowEnergyLimit(lowEnergyLimit);
@@ -141,13 +141,21 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedRayleighModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
+                                       const G4ParticleDefinition* particleDefinition,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerAtom() of G4LivermorePolarizedRayleighModel" << G4endl;
+
+  if (particleDefinition != G4Gamma::GammaDefinition()
+      ||
+      GammaEnergy < lowEnergyLimit
+      ||
+      GammaEnergy > highEnergyLimit)
+   	    
+    return 0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;

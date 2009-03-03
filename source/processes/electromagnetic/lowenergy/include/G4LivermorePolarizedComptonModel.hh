@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.hh,v 1.1 2008-10-30 14:16:35 sincerti Exp $
+// $Id: G4LivermorePolarizedComptonModel.hh,v 1.2 2009-03-03 08:23:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,7 @@
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
 #include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
 
 class G4LivermorePolarizedComptonModel : public G4VEmModel
 {
