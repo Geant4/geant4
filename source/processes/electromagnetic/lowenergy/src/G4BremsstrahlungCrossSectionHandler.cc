@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.9 2006-06-29 19:38:42 gunter Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.10 2009-03-03 11:19:18 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,8 @@
 // Modifications: 
 // 10.10.2001 MGP Revision to improve code quality and consistency with design
 // 21.01.2003 VI  cut per region
+// 03.03.2009 LP  Added public method to make a easier migration of
+//                G4LowEnergyBremsstrahlung to G4LivermoreBremsstrahlungModel
 //
 // -------------------------------------------------------------------
 
@@ -54,6 +56,8 @@
 #include "G4Material.hh"
 #include "G4ProductionCutsTable.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spec,
 									 G4VDataSetAlgorithm* )
   : theBR(spec)
@@ -61,12 +65,14 @@ G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(const G
   interp = new G4SemiLogInterpolation();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BremsstrahlungCrossSectionHandler::~G4BremsstrahlungCrossSectionHandler()
 {
   delete interp;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4VEMDataSet*>*
 G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
@@ -125,4 +131,20 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
   }
 
   return set;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BremsstrahlungCrossSectionHandler::GetCrossSectionAboveThresholdForElement(G4double energy,
+										      G4double cutEnergy,
+										      G4int Z)
+{
+  G4double value = 0.;
+  if(energy > cutEnergy)
+    {
+      G4double elemCs = FindValue(Z, energy);
+      value  = theBR->Probability(Z,cutEnergy, energy, energy);	  
+      value *= elemCs;
+    }
+  return value;
 }
