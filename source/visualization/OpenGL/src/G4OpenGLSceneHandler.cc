@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.54 2008-04-04 13:32:22 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.55 2009-03-03 14:51:29 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -287,10 +287,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   
   glRasterPos3d(position.x(),position.y(),position.z());
   // No action on offset or layout at present.
-  glPushAttrib(GL_LIST_BIT);
-  glListBase(font_base);
-  glCallLists(strlen(textCString), GL_UNSIGNED_BYTE, (GLubyte *)textCString);
-  glPopAttrib();
+   glPushAttrib(GL_LIST_BIT);
+   glListBase(font_base);
+   glCallLists(strlen(textCString), GL_UNSIGNED_BYTE, (GLubyte *)textCString);
+   glPopAttrib();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -366,18 +366,32 @@ void G4OpenGLSceneHandler::AddCircleSquare
   G4double size = GetMarkerSize(marker, sizeType);
 
   // Draw...
-  if (sizeType == world) {  // Size specified in world coordinates.
+   if (sizeType == world) {  // Size specified in world coordinates.
 
-    DrawXYPolygon (shape, size, centre, pVA);
+     DrawXYPolygon (shape, size, centre, pVA);
 
-  } else { // Size specified in screen (window) coordinates.
+   } else { // Size specified in screen (window) coordinates.
+     glPointSize (size);       
+     glBegin (GL_POINTS);
+     glVertex3f(centre.x(),centre.y(),centre.z());
+     glEnd();
+     //Antialiasing
+     glEnable (GL_POINT_SMOOTH);
+     //Transparency
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glRasterPos3d(centre.x(),centre.y(),centre.z());
-    const GLubyte* marker =
-      G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glBitmap(GLsizei(size), GLsizei(size), size/2., size/2., 0., 0., marker);
-  }
+     // L. GARNIER 1 March 2009
+     // Old method, we draw a bitmap instead of a GL_POINT. 
+     // I remove it because it cost in term of computing performances
+     // and gl2ps can't draw bitmaps
+
+     //      glRasterPos3d(centre.x(),centre.y(),centre.z());
+     //      const GLubyte* marker =
+     //        G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
+     //      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+     //      glBitmap(GLsizei(size), GLsizei(size), size/2., size/2., 0., 0., marker);
+   }
 }
 
 void G4OpenGLSceneHandler::DrawXYPolygon
