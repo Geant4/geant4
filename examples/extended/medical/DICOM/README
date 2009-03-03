@@ -1,7 +1,3 @@
-WARNING: In geant4.9.2 the functionality to score the dose when skipping voxel boundaries taking into account energy loss and multiple scattering, has been mistakenly not released, and therefore this example does not compile. Please read the bug report
-http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1041
-and install the files mentioned therein.
-
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                        DicomG4                          |
 +                                                         +
