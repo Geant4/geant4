@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.1 2009-02-10 16:15:48 pandola Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.2 2009-03-03 11:17:51 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,6 +31,7 @@
 // History:
 // --------
 // 12 Jan 2009   L Pandola    Migration from process to model 
+// 03 Mar 2009   L Pandola    Bug fix (release memory in the destructor)
 //
 
 #include "G4LivermoreIonisationModel.hh"
@@ -85,7 +86,13 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreIonisationModel::~G4LivermoreIonisationModel()
-{;}
+{
+  if (energySpectrum) delete energySpectrum;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (shellVacancy) delete shellVacancy;
+}
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
