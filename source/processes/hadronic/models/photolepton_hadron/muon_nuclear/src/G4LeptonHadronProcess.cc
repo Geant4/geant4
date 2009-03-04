@@ -32,7 +32,7 @@
 //-----------------------------------------------------------------------------
   G4LeptonHadronProcess::G4LeptonHadronProcess( const G4String &processName )
 //-----------------------------------------------------------------------------
-    : G4VDiscreteProcess( processName )
+    : G4VDiscreteProcess( processName ), theInteractionModel(0)
   {
   }
 
@@ -46,8 +46,8 @@
 
 //-----------------------------------------------------------------------------
   G4VParticleChange* 
-  G4LeptonHadronProcess::GeneralPostStepDoIt( const G4Track &leptonTrack,
-                                              const G4Step & )
+  G4LeptonHadronProcess::PostStepDoIt( const G4Track &leptonTrack,
+				       const G4Step & )
 //-----------------------------------------------------------------------------
   {
     targetNucleus.ChooseParameters(leptonTrack.GetMaterial());

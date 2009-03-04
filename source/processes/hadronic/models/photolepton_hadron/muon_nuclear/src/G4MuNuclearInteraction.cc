@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.12 2009-01-24 11:59:37 vnivanch Exp $
+// $Id: G4MuNuclearInteraction.cc,v 1.13 2009-03-04 19:09:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -94,6 +94,12 @@ void G4MuNuclearInteraction::SetPhysicsTableBining(G4double lowE,
 						   G4double highE, G4int nBins)
 {
   LowestKineticEnergy = lowE; HighestKineticEnergy = highE ; TotBin = nBins ;
+}
+
+
+G4bool G4MuNuclearInteraction::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return(   (&particle == theMuonMinus)||(&particle == theMuonPlus)) ;
 }
 
 void G4MuNuclearInteraction::PreparePhysicsTable(
@@ -521,21 +527,20 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    gammaTrack.SetStep(trackData.GetStep());
    G4Nucleus theTarget(aMaterial);
 
-   G4VParticleChange* aHadronicFS;
-   aHadronicFS = theHadronicVertex.ApplyYourself(theTarget, gammaTrack);
-   // delete aGamma;
+   G4VParticleChange* aHadronicFS = theHadronicVertex.ApplyYourself(theTarget, gammaTrack);
+   //delete aGamma;
 
    G4int numSecondaries = aHadronicFS->GetNumberOfSecondaries();
    aParticleChange.SetNumberOfSecondaries(numSecondaries);
 
-   G4ParticleMomentum secondaryMomentum = G4ThreeVector(0.,0.,0.);
+   //   G4ParticleMomentum secondaryMomentum = G4ThreeVector(0.,0.,0.);
    for(G4int iSec=0; iSec<numSecondaries; iSec++) 
    {
-     secondaryMomentum 
-       = secondaryMomentum + aHadronicFS->GetSecondary(iSec)->GetMomentum();
+     //secondaryMomentum 
+     //  = secondaryMomentum + aHadronicFS->GetSecondary(iSec)->GetMomentum();
      aParticleChange.AddSecondary(aHadronicFS->GetSecondary(iSec));
    }
-   aHadronicFS->Clear();
+   //aHadronicFS->Clear();
 
    return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
@@ -572,4 +577,54 @@ void G4MuNuclearInteraction::PrintInfoDefinition()
 
   G4cout << G4endl;
 }
+
+G4double G4MuNuclearInteraction::GetMeanFreePath(const G4Track& trackData,
+						 G4double,
+						 G4ForceCondition* condition)
+{
+   const G4DynamicParticle* aDynamicParticle;
+   G4Material* aMaterial;
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+ 
+   *condition = NotForced ;
+
+   aDynamicParticle = trackData.GetDynamicParticle();
+   aMaterial = trackData.GetMaterial();
+
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+
+   if (KineticEnergy <  LowestKineticEnergy)
+     MeanFreePath = DBL_MAX ;
+   else {
+     if (KineticEnergy > HighestKineticEnergy) 
+                                 KineticEnergy = 0.99*HighestKineticEnergy ;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                                 GetValue( KineticEnergy, isOutRange );
+   }
+   return MeanFreePath; 
+} 
+
+G4double G4MuNuclearInteraction::ComputeMeanFreePath(
+                                     const G4ParticleDefinition* ParticleType,
+				     G4double KineticEnergy,
+				     const G4Material* aMaterial)
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = 
+                                      aMaterial->GetAtomicNumDensityVector();
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  {             
+    SIGMA += theAtomNumDensityVector[i] * 
+             ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                          (*theElementVector)[i]->GetZ(),
+                                          (*theElementVector)[i]->GetA()) ;
+  }       
+
+  return SIGMA<=0.0 ? DBL_MAX : 1./SIGMA ;
+}
+
 

@@ -44,19 +44,10 @@
     public:
 
       G4LeptonHadronProcess(const G4String &processName = "LeptonHadron");
-      ~G4LeptonHadronProcess();
+      virtual ~G4LeptonHadronProcess();
 
-      G4VParticleChange *PostStepDoIt( const G4Track &leptonTrack,
-                                       const G4Step &aStep )
-      {
-        return G4LeptonHadronProcess::GeneralPostStepDoIt(leptonTrack, aStep);
-      }
-
-      G4VParticleChange *GeneralPostStepDoIt( const G4Track &leptonTrack,
-                                              const G4Step &aStep );
-
-      virtual G4LeptonHadronInteractionModel *chooseInteractionModel() = 0;
-
+      virtual G4VParticleChange *PostStepDoIt( const G4Track &leptonTrack,
+					       const G4Step &aStep );
 
     protected:
 
