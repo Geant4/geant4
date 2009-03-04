@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronTruranHilfPairingCorrections.hh,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4CameronTruranHilfPairingCorrections.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -49,7 +49,7 @@ private:
 public:
   static G4CameronTruranHilfPairingCorrections* GetInstance();
 
-  ~G4CameronTruranHilfPairingCorrections() {};
+  ~G4CameronTruranHilfPairingCorrections();
 
   G4double GetParingCorrection(const G4int A, const  G4int Z) const
   {

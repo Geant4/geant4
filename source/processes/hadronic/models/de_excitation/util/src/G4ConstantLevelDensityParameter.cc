@@ -41,6 +41,9 @@ G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter& ) :
   throw G4HadronicException(__FILE__, __LINE__, "G4ConstantLevelDensityParameter::copy_constructor meant to not be accessable");
 }
 
+G4ConstantLevelDensityParameter::~G4ConstantLevelDensityParameter()
+{
+}
 
 const G4ConstantLevelDensityParameter & G4ConstantLevelDensityParameter::
 operator=(const G4ConstantLevelDensityParameter &)

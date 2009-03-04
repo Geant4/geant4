@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLevelDensityParameter.cc,v 1.5 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4VLevelDensityParameter.cc,v 1.6 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -35,13 +35,15 @@
 #include "G4VLevelDensityParameter.hh"
 
 
+G4VLevelDensityParameter::G4VLevelDensityParameter() {}
+G4VLevelDensityParameter::~G4VLevelDensityParameter() {}
+
+
 G4VLevelDensityParameter::
 G4VLevelDensityParameter(const G4VLevelDensityParameter &)
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4VLevelDensityParameter::copy_constructor meant to not be accessable");
 }
-
-
 
 
 const G4VLevelDensityParameter & G4VLevelDensityParameter::

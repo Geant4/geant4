@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.cc,v 1.8 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4EvaporationLevelDensityParameter.cc,v 1.9 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -48,6 +48,8 @@ const G4double G4EvaporationLevelDensityParameter::beta = 0.257*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::gamma = 0.059*(1./MeV);
 const G4double G4EvaporationLevelDensityParameter::Bs = 1.0;
 
+G4EvaporationLevelDensityParameter::G4EvaporationLevelDensityParameter() {}
+G4EvaporationLevelDensityParameter::~G4EvaporationLevelDensityParameter() {}
 
 G4EvaporationLevelDensityParameter::
 G4EvaporationLevelDensityParameter(const G4EvaporationLevelDensityParameter &) : G4VLevelDensityParameter()

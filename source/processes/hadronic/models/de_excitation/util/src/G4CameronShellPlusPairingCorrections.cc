@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronShellPlusPairingCorrections.cc,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4CameronShellPlusPairingCorrections.cc,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -90,6 +90,9 @@ G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::theI
 
 G4CameronShellPlusPairingCorrections::G4CameronShellPlusPairingCorrections()
 {;}
+
+G4CameronShellPlusPairingCorrections::~G4CameronShellPlusPairingCorrections()
+{ delete theInstance; }
 
 G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::GetInstance() {
   if (!theInstance) theInstance = new G4CameronShellPlusPairingCorrections();

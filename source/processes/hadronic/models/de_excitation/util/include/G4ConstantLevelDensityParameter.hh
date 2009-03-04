@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4ConstantLevelDensityParameter.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
@@ -40,7 +40,7 @@ class G4ConstantLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
   G4ConstantLevelDensityParameter() :  EvapLevelDensityParameter(0.125*(1./MeV)) {};
-  virtual ~G4ConstantLevelDensityParameter() {};
+  virtual ~G4ConstantLevelDensityParameter();
 
 private:  
   G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter &right);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertPairingCorrections.cc,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4CameronGilbertPairingCorrections.cc,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -73,6 +73,8 @@ G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::theInsta
 G4CameronGilbertPairingCorrections::G4CameronGilbertPairingCorrections()
 {;}
 
+G4CameronGilbertPairingCorrections::~G4CameronGilbertPairingCorrections()
+{ delete theInstance; }
 
 G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::GetInstance()
 {

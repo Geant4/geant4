@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.hh,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4VCoulombBarrier.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -40,10 +40,10 @@ class G4VCoulombBarrier
 {
 public:
   G4VCoulombBarrier(const G4int anA, const G4int aZ);
-  virtual ~G4VCoulombBarrier() {};
+  virtual ~G4VCoulombBarrier();
 
 protected:
-  G4VCoulombBarrier() : theA(1),theZ(0) {};
+  G4VCoulombBarrier();
 
 private:
   G4VCoulombBarrier(const G4VCoulombBarrier & right);
