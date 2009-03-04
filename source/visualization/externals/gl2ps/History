@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009-02-18 09:54:12 lgarnier Exp $
+$Id: History,v 1.2 2009-03-04 14:13:42 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 March 2009, Laurent Garnier
+ - Update gl2ps to 1.3.3 version (before it was 0.8)
 
 16 February 2009, Laurent Garnier
  - Creation of this library in order to have a gl2ps for all viewers.
