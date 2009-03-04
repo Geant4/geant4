@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElastic.hh,v 1.1 2009-01-12 14:26:02 sincerti Exp $
+// $Id: G4DNAElastic.hh,v 1.2 2009-03-04 13:28:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ public:
 
   virtual ~G4DNAElastic();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
   
   virtual void PrintInfo();
 
@@ -62,14 +62,6 @@ private:
      
   G4bool       isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4DNAElastic::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Electron::Electron());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.hh,v 1.2 2009-02-14 18:04:30 sincerti Exp $
+// $Id: G4DNAIonisation.hh,v 1.3 2009-03-04 13:28:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ public:
 
   virtual ~G4DNAIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
   
   virtual void PrintInfo();
 
@@ -64,25 +64,6 @@ private:
      
   G4bool       isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
-{
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
-  return 
-  (
-      &p == G4Electron::Electron() 
-   || &p == G4Proton::Proton() 
-   || &p == instance->GetIon("hydrogen")
-   || &p == instance->GetIon("alpha++")
-   || &p == instance->GetIon("alpha+")
-   || &p == instance->GetIon("helium")
-  );
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   

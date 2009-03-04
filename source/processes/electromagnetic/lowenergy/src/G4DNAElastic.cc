@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElastic.cc,v 1.2 2009-02-16 10:25:57 sincerti Exp $
+// $Id: G4DNAElastic.cc,v 1.3 2009-03-04 13:28:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAElastic.hh"
@@ -37,9 +37,6 @@ G4DNAElastic::G4DNAElastic(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(51);
-  SetLambdaBinning(101); 
-  SetMinKinEnergy(0*eV);
-  SetMaxKinEnergy(10*MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,17 +46,22 @@ G4DNAElastic::~G4DNAElastic()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4bool G4DNAElastic::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Electron::Electron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) 
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    G4double emin = MinKinEnergy();
-    G4double emax = MaxKinEnergy();
     if(!Model()) SetModel(new G4DNAScreenedRutherfordElasticModel);
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(emax);
+    Model()->SetLowEnergyLimit(0*eV);
+    Model()->SetHighEnergyLimit(10*MeV);
     AddEmModel(1, Model());
   } 
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc,v 1.2 2009-02-16 10:25:57 sincerti Exp $
+// $Id: G4DNAIonisation.cc,v 1.3 2009-03-04 13:28:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAIonisation.hh"
@@ -37,14 +37,30 @@ G4DNAIonisation::G4DNAIonisation(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(51);
-  SetMinKinEnergy(0*eV); // Minimum is for protons
-  SetMaxKinEnergy(100*MeV); // Maximum is for hydrogen
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4DNAIonisation::~G4DNAIonisation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+
+  return 
+  (
+      &p == G4Electron::Electron() 
+   || &p == G4Proton::Proton() 
+   || &p == instance->GetIon("hydrogen")
+   || &p == instance->GetIon("alpha++")
+   || &p == instance->GetIon("alpha+")
+   || &p == instance->GetIon("helium")
+  );
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

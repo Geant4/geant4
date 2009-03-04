@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc,v 1.2 2009-02-16 10:25:57 sincerti Exp $
+// $Id: G4DNAChargeIncrease.cc,v 1.3 2009-03-04 13:28:49 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAChargeIncrease.hh"
@@ -37,14 +37,28 @@ G4DNAChargeIncrease::G4DNAChargeIncrease(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(51);
-  SetMinKinEnergy(1*keV); 
-  SetMaxKinEnergy(10*MeV); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4DNAChargeIncrease::~G4DNAChargeIncrease()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4DNAChargeIncrease::IsApplicable(const G4ParticleDefinition& p)
+{
+
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+
+  return 
+    (
+       &p == instance->GetIon("hydrogen")
+    || &p == instance->GetIon("alpha+")
+    || &p == instance->GetIon("helium")
+    );
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
