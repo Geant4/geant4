@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.27 2009-02-16 15:31:05 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.28 2009-03-05 11:04:20 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,17 +67,17 @@ protected:
   void ResizeGLView();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  virtual void printVectoredEPS();
+  bool printVectoredEPS();
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);
-  int generateEPS (const char* filnam,
-		   int inColour,
-		   unsigned int width,
-		   unsigned int height);
-  void WritePostScript(const char *aFile);
+  int printNonVectoredEPS (int inColour,
+                           unsigned int width,
+                           unsigned int height);
+  bool printGl2PS(unsigned int width,
+                       unsigned int height);
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);

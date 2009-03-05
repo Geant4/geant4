@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.48 2009-02-16 15:31:05 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.49 2009-03-05 11:04:20 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -396,7 +396,7 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glMatrixMode(GL_MODELVIEW);
 }
 
-void G4OpenGLViewer::printVectoredEPS() {
+bool G4OpenGLViewer::printVectoredEPS() {
 
   // Print vectored PostScript
   
@@ -417,13 +417,15 @@ void G4OpenGLViewer::printVectoredEPS() {
       spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
       fclose(file);
     } else {
-      printf("Could not open %s\n", fPrintFilename.c_str());
+      G4cerr << "Could not open " <<fPrintFilename.c_str() <<" for writing"<< G4endl;
+      return false;
     }
   } else {
     printBuffer (returned, feedback_buffer);
   }
 
   delete[] feedback_buffer;
+  return true;
 }
 
 void G4OpenGLViewer::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
@@ -801,8 +803,7 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
   return buffer;
 }
 
-int G4OpenGLViewer::generateEPS (const char* filnam,
-				int inColour,
+int G4OpenGLViewer::printNonVectoredEPS (int inColour,
 				unsigned int width,
 				unsigned int height) {
 
@@ -821,13 +822,13 @@ int G4OpenGLViewer::generateEPS (const char* filnam,
     components = 1;
   }
   
-  fp = fopen (filnam, "w");
+  fp = fopen (fPrintFilename.c_str(), "w");
   if (fp == NULL) {
     return 2;
   }
   
   fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-  fprintf (fp, "%%%%Title: %s\n", filnam);
+  fprintf (fp, "%%%%Title: %s\n", fPrintFilename.c_str());
   fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
   fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", width, height);
   fprintf (fp, "%%%%EndComments\n");
@@ -879,68 +880,28 @@ int G4OpenGLViewer::generateEPS (const char* filnam,
 }
 
 
-void G4OpenGLViewer::WritePostScript(const char *aFile) {
+bool G4OpenGLViewer::printGl2PS(unsigned int width,unsigned int height) {
 
-  if (!fGL2PSAction) return;
+  if (!fGL2PSAction) return false;
 
-  fGL2PSAction->setFileName("PostScriptViaGL2PS.ps");
+  fGL2PSAction->setFileName(fPrintFilename.c_str());
+  // try to resize
+  int X = fWinSize_x;
+  int Y = fWinSize_y;
+
+  fWinSize_x = width;
+  fWinSize_y = height;
+  ResizeGLView();
   if (fGL2PSAction->enableFileWriting()) {
-    DrawView();
+    DrawView ();
     fGL2PSAction->disableFileWriting();
   }
-  FILE *fFile = fopen(aFile,"w");
-  if(!fFile) {
-    G4cout << "G4OpenGLViewer::WritePostScript. Cannot open file " <<aFile << G4endl;
-    return;
-  }
-  
-  // Get the viewport
-  GLint viewport[4]; 
-  glGetIntegerv(GL_VIEWPORT, viewport);
 
+  fWinSize_x = X;
+  fWinSize_y = Y;
+  ResizeGLView();
 
-
-  int psformat;
-  //  psformat = GL2PS_PDF;
-  psformat = GL2PS_PS;
-  //  psformat = GL2PS_SVG;
-  //  psformat = GL2PS_EPS;
-  
-  //  int old_bg_gradient = CTX.bg_gradient;
-  //  if(!CTX.print.eps_background) CTX.bg_gradient = 0;
-  
-//   PixelBuffer buffer(width, height, GL_RGB, GL_FLOAT);
-  
-//   if(CTX.print.eps_quality == 0)
-//     buffer.Fill(CTX.batch);
-  
-  int pssort = GL2PS_SIMPLE_SORT;
-  //       int pssort =
-  //         (CTX.print.eps_quality == 3) ? GL2PS_NO_SORT :
-  //         (CTX.print.eps_quality == 2) ? GL2PS_BSP_SORT :
-  //         GL2PS_SIMPLE_SORT;
-  int psoptions = GL2PS_SIMPLE_LINE_OFFSET | GL2PS_DRAW_BACKGROUND; 
-  //         GL2PS_SIMPLE_LINE_OFFSET | GL2PS_SILENT |
-  //         (CTX.print.eps_occlusion_culling ? GL2PS_OCCLUSION_CULL : 0) |
-  //         (CTX.print.eps_best_root ? GL2PS_BEST_ROOT : 0) |
-  //         (CTX.print.eps_background ? GL2PS_DRAW_BACKGROUND : 0) |
-  //         (CTX.print.eps_compress ? GL2PS_COMPRESS : 0) |
-  //         (CTX.print.eps_ps3shading ? 0 : GL2PS_NO_PS3_SHADING);
-  
-  GLint buffsize = 0;
-  int res = GL2PS_OVERFLOW;
-  while(res == GL2PS_OVERFLOW) {
-    buffsize += 2048 * 2048;
-    gl2psBeginPage("MyTitle", "Geant4", viewport,
-                   psformat, pssort, psoptions, GL_RGBA, 0, NULL,
-                   15, 20, 10, buffsize, fFile, aFile);
-    DrawView();
-    res = gl2psEndPage();
-  }
-  
-  //  CTX.bg_gradient = old_bg_gradient;
-  fclose(fFile);
-
+  return true;
 }
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()

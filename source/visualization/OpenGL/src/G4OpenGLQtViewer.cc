@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.36 2009-02-25 15:14:29 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.37 2009-03-05 11:04:20 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1323,7 +1323,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
     bool res = false;
     if ((exportDialog->getWidth() !=fWindow->width()) ||
         (exportDialog->getHeight() !=fWindow->height())) {
-      if (format != QString("eps")) {
+      if ((format != QString("eps")) && (format != QString("ps"))) {
       G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
       
       //    rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
@@ -1347,13 +1347,21 @@ void G4OpenGLQtViewer::actionSaveImage() {
     }    
     if (format == QString("eps")) {
       if (exportDialog->getVectorEPS()) {
-        printVectoredEPS();
-        res = true;
+        res = printVectoredEPS();
       } else {
-        res = generateEPS(fPrintFilename.c_str(),exportDialog->getNbColor(),(unsigned int)image.width(),(unsigned int)image.height());
+        res = printNonVectoredEPS(exportDialog->getNbColor(),(unsigned int)image.width(),(unsigned int)image.height());
       }
-    } else if ((format == "ps") || (format == "pdf")) {
-      res = generatePS_PDF(fPrintFilename,exportDialog->getNbColor(),image);
+    } else if (format == "ps") {
+      if ((exportDialog->getWidth() !=fWindow->width()) ||
+          (exportDialog->getHeight() !=fWindow->height())) {
+        res = printGl2PS(exportDialog->getWidth(),exportDialog->getHeight());
+      } else {
+      res = printGl2PS(fWindow->width(),fWindow->height());
+      }
+    } else if (format == "pdf") {
+
+      res = printPDF(fPrintFilename,exportDialog->getNbColor(),image);
+
     } else if ((format == "tif") ||
                (format == "tiff") ||
                (format == "jpg") ||
@@ -1653,7 +1661,7 @@ void G4OpenGLQtViewer::rescaleImage(
    @param aInColor : numbers of colors : 1->BW 2->RGB
    @param aImage : Image to print
 */
-bool G4OpenGLQtViewer::generatePS_PDF (
+bool G4OpenGLQtViewer::printPDF (
  const std::string aFilename
 ,int aInColor
 ,QImage aImage
