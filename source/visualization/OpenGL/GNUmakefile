@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2009-02-16 15:31:05 lgarnier Exp $
+# $Id: GNUmakefile,v 1.10 2009-03-05 11:17:42 lgarnier Exp $
 
 name := G4OpenGL
 
@@ -8,6 +8,9 @@ endif
 
 # Definition of macro for moc files (for Qt use only)
 MOC_MACRO = -DG4VIS_BUILD_OPENGLQT_DRIVER
+
+# For debug mode
+# CPPFLAGS += -DG4DEBUG_VIS_OGL
 
 GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
 GLOBLIBS += libG4interfaces.lib libG4run.lib libG4event.lib
