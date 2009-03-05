@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.351 2009-02-26 17:29:40 gcosmo Exp $
+cvs log $Id: History,v 1.352 2009-03-05 09:19:37 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5 Mars 2009  Guy Barrand
+- analysis.gmk: WIN32-VC : arrange so that what is returned
+  by `aida-config --lib`, which may have the Windows LINK.exe syntax,
+  be understood by g++ which is in fact used on CYGWIN
+  to link applications. Then we transform /LIBPATH options to
+  -libpath options and change the path backslash syntax to 
+  a slash syntax. With that someone can use the AIDA implementation
+  coming from an osc-batch or osc-vis binary kit built for
+  Windows-VisualC++, in a G4 example using AIDA built from CYGWIN with 
+  a G4 built with the VisualC++ compiler (then having a WIN32-VC G4SYSTEM).
+- G4UI_USE.gmk: suppress the G4UI_USE_OSC logic.
+  From OpenScientist/16.8, the osc-g4-vis program can instrument
+  directly the GNUmakefile of an example or of a user application
+  which is a clone of some G4 example. And then we let clean
+  the G4 make files concerning OpenScientist.
 
 27th February 2009  Gabriele Cosmo (config-V09-02-04)
 - common.gmk, globlib.gmk: added removal of moc sources in clean target.
