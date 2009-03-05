@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.50 2009-03-05 11:04:20 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.51 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -415,10 +415,7 @@ void G4OpenGLXViewer::print() {
   //cout << "print_col_callback requested with file name: " << fPrintFilename << G4endl;
   
   if (fVectoredPs) {
-
-    printGl2PS(fWinSize_x, fWinSize_y);
-    //    printVectoredEPS();
-    
+    printEPS();    
   } else {
 
     XVisualInfo* pvi;
@@ -454,8 +451,7 @@ void G4OpenGLXViewer::print() {
     SetView ();
     DrawView ();
     
-    printNonVectoredEPS (fPrintColour,
-		 fWinSize_x, fWinSize_y);
+    printEPS ();
     
     win=tmp_win;
     cx=tmp_cx;

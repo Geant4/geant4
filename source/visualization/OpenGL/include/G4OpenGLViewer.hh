@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.28 2009-03-05 11:04:20 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.29 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,28 +67,22 @@ protected:
   void ResizeGLView();
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  bool printVectoredEPS();
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);
-  int printNonVectoredEPS (int inColour,
-                           unsigned int width,
-                           unsigned int height);
-  bool printGl2PS(unsigned int width,
-                       unsigned int height);
-  void printBuffer(GLint, GLfloat*);
-  GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
-  void spewSortedFeedback (FILE*, GLint, GLfloat*);
-  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
-  void print3DcolorVertex(GLint, GLint*, GLfloat*);
+  bool printNonVectoredEPS ();
+  bool printVectoredEPS();
+  void printEPS();
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
   std::string                       fPrintFilename;
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
+  G4int                             fPrintSizeX;
+  G4int                             fPrintSizeY;
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
@@ -112,6 +106,7 @@ protected:
 
 private :
   G4float                           fPointSize;
+  bool printGl2PS();
 };
 
 typedef struct G4OpenGLViewerFeedback3Dcolor {

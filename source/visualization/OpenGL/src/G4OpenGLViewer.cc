@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.49 2009-03-05 11:04:20 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.50 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,6 +89,8 @@ G4VViewer (scene, -1),
 fPrintFilename ("G4OpenGL.eps"),
 fPrintColour (true),
 fVectoredPs (true),
+fPrintSizeX(0),
+fPrintSizeY(0),
 fOpenGLSceneHandler(scene),
 background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
@@ -396,363 +398,8 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glMatrixMode(GL_MODELVIEW);
 }
 
-bool G4OpenGLViewer::printVectoredEPS() {
 
-  // Print vectored PostScript
-  
-  G4int size = 5000000;
-  GLfloat* feedback_buffer = new GLfloat[size];
-  glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
-  glRenderMode (GL_FEEDBACK);
-  
-  DrawView();
 
-  GLint returned;
-  returned = glRenderMode (GL_RENDER);
-  
-  FILE* file;
-  if (!fPrintFilename.empty()) {
-    file = fopen (fPrintFilename.c_str(), "w");
-    if (file) {
-      spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
-      fclose(file);
-    } else {
-      G4cerr << "Could not open " <<fPrintFilename.c_str() <<" for writing"<< G4endl;
-      return false;
-    }
-  } else {
-    printBuffer (returned, feedback_buffer);
-  }
-
-  delete[] feedback_buffer;
-  return true;
-}
-
-void G4OpenGLViewer::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
-{
-  G4int i;
-
-  printf("  ");
-  for (i = 0; i < 7; i++) {
-    printf("%4.2f ", buffer[size - (*count)]);
-    *count = *count - 1;
-  }
-  printf("\n");
-}
-
-void G4OpenGLViewer::spewWireframeEPS (FILE* file, GLint size, GLfloat* buffer, const char* cr) {
-
-  GLfloat EPS_GOURAUD_THRESHOLD=0.1;
-
-  GLfloat clearColor[4], viewport[4];
-  GLfloat lineWidth;
-  G4int i;
-
-  glGetFloatv (GL_VIEWPORT, viewport);
-  glGetFloatv (GL_COLOR_CLEAR_VALUE, clearColor);
-  glGetFloatv (GL_LINE_WIDTH, &lineWidth);
-  glGetFloatv (GL_POINT_SIZE, &fPointSize);
-
-  fputs ("%!PS-Adobe-2.0 EPSF-2.0\n", file);
-  fprintf (file, "%%%%Creator: %s (using OpenGL feedback)\n", cr);
-  fprintf (file, "%%%%BoundingBox: %g %g %g %g\n", viewport[0], viewport[1], viewport[2], viewport[3]);
-  fputs ("%%EndComments\n", file);
-  fputs ("\n", file);
-  fputs ("gsave\n", file);
-  fputs ("\n", file);
-
-  fputs ("% the gouraudtriangle PostScript fragment below is free\n", file);
-  fputs ("% written by Frederic Delhoume (delhoume@ilog.fr)\n", file);
-  fprintf (file, "/threshold %g def\n", EPS_GOURAUD_THRESHOLD);
-  for (i=0; gouraudtriangleEPS[i]; i++) {
-    fprintf (file, "%s\n", gouraudtriangleEPS[i]);
-  }
-
-  fprintf(file, "\n%g setlinewidth\n", lineWidth);
-  
-  fprintf (file, "%g %g %g setrgbcolor\n", clearColor[0], clearColor[1], clearColor[2]);
-  fprintf (file, "%g %g %g %g rectfill\n\n", viewport[0], viewport[1], viewport[2], viewport[3]);
-
-  spewSortedFeedback (file, size, buffer);
-
-  fputs ("grestore\n\n", file);
-  fputs ("showpage\n", file);
-
-  fclose(file);
-}
-
-void G4OpenGLViewer::printBuffer (GLint size, GLfloat* buffer) {
-
-  GLint count;
-  G4int token, nvertices;
-
-  count=size;
-  while(count) {
-    token=G4int (buffer[size-count]);
-    count--;
-    switch (token) {
-
-    case GL_PASS_THROUGH_TOKEN:
-      printf ("GL_PASS_THROUGH_TOKEN\n");
-      printf ("  %4.2f\n", buffer[size-count]);
-      count--;
-      break;
-
-    case GL_POINT_TOKEN:
-      printf ("GL_POINT_TOKEN\n");
-      print3DcolorVertex (size, &count, buffer);
-      break;
-
-    case GL_LINE_TOKEN:
-      printf ("GL_LINE_TOKEN\n");
-      print3DcolorVertex (size, &count, buffer);
-      print3DcolorVertex (size, &count, buffer);
-      break;
-      
-    case GL_LINE_RESET_TOKEN:
-      printf ("GL_LINE_RESET_TOKEN\n");
-      print3DcolorVertex (size, &count, buffer);
-      print3DcolorVertex (size, &count, buffer);
-      break;
-
-    case GL_POLYGON_TOKEN:
-      printf ("GL_POLYGON_TOKEN\n");
-      nvertices=G4int (buffer[size-count]);
-      count--;
-      for (; nvertices>0; nvertices--) {
-	print3DcolorVertex (size, &count, buffer);
-      }
-    }
-  }
-}
-
-G4float* G4OpenGLViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
-  
-  G4int token;
-  G4int nvertices, i;
-  GLfloat red, green, blue, intensity;
-  G4int smooth;
-  GLfloat dx, dy, dr, dg, db, absR, absG, absB, colormax;
-  G4int steps;
-  Feedback3Dcolor *vertex;
-  GLfloat xstep(0.), ystep(0.), rstep(0.), gstep(0.), bstep(0.);
-  GLfloat xnext(0.), ynext(0.), rnext(0.), gnext(0.), bnext(0.), distance(0.);
-
-  token=G4int (*loc);
-  loc++;
-  switch (token) {
-  case GL_LINE_RESET_TOKEN:
-  case GL_LINE_TOKEN:
-    vertex=(Feedback3Dcolor*)loc;
-    dr=vertex[1].red - vertex[0].red;
-    dg=vertex[1].green - vertex[0].green;
-    db=vertex[1].blue - vertex[0].blue;
-
-    if (!fPrintColour) {
-      dr+=(dg+db);
-      dr/=3.0;
-      dg=dr;
-      db=dr;
-    }
-
-    if (dr!=0 || dg!=0 || db!=0) {
-      dx=vertex[1].x - vertex[0].x;
-      dy=vertex[1].y - vertex[0].y;
-      distance=std::sqrt(dx*dx + dy*dy);
-
-      absR=std::fabs(dr);
-      absG=std::fabs(dg);
-      absB=std::fabs(db);
-
-      #define Max(a, b) (((a)>(b))?(a):(b))
-
-      #define EPS_SMOOTH_LINE_FACTOR 0.06
-
-      colormax=Max(absR, Max(absG, absB));
-      steps=Max(1, G4int (colormax*distance*EPS_SMOOTH_LINE_FACTOR));
-      
-      xstep=dx/steps;
-      ystep=dy/steps;
-
-      rstep=dr/steps;
-      gstep=dg/steps;
-      bstep=db/steps;
-
-      xnext=vertex[0].x;
-      ynext=vertex[0].y;
-      rnext=vertex[0].red;
-      gnext=vertex[0].green;
-      bnext=vertex[0].blue;
-
-      if (!fPrintColour) {
-	rnext+=(gnext+bnext);
-	rnext/=3.0;
-	gnext=rnext;
-	bnext=rnext;
-      }
-
-      xnext -= xstep/2.0;
-      ynext -= ystep/2.0;
-      rnext -= rstep/2.0;
-      gnext -= gstep/2.0;
-      bnext -= bstep/2.0;
-    } else {
-      steps=0;
-    }
-    if (fPrintColour) {
-      fprintf (file, "%g %g %g setrgbcolor\n",
-	       vertex[0].red, vertex[0].green, vertex[0].blue);
-    } else {
-      intensity = (vertex[0].red + vertex[0].green + vertex[0].blue) / 3.0;
-      fprintf (file, "%g %g %g setrgbcolor\n",
-	       intensity, intensity, intensity);
-    }      
-    fprintf (file, "%g %g moveto\n", vertex[0].x, vertex[0].y);
-
-    for (i=0; i<steps; i++) {
-
-      xnext += xstep;
-      ynext += ystep;
-      rnext += rstep;
-      gnext += gstep;
-      bnext += bstep;
-
-      fprintf (file, "%g %g lineto stroke\n", xnext, ynext);
-      fprintf (file, "%g %g %g setrgbcolor\n", rnext, gnext, bnext);
-      fprintf (file, "%g %g moveto\n", xnext, ynext);
-    }
-    fprintf (file, "%g %g lineto stroke\n", vertex[1].x, vertex[1].y);
-
-    loc += 14;
-    break;
-
-  case GL_POLYGON_TOKEN:
-    nvertices = G4int (*loc);
-    loc++;
-    vertex=(Feedback3Dcolor*)loc;
-    if (nvertices>0) {
-      red=vertex[0].red;
-      green=vertex[0].green;
-      blue=vertex[0].blue;
-      smooth=0;
-      
-      if (!fPrintColour) {
-	red+=(green+blue);
-	red/=3.0;
-	green=red;
-	blue=red;
-      }
-      
-      if (fPrintColour) {
-	for (i=1; i<nvertices; i++) {
-	  if (red!=vertex[i].red || green!=vertex[i].green || blue!=vertex[i].blue) {
-	    smooth=1;
-	    break;
-	  }
-	}
-      } else {
-	for (i=1; i<nvertices; i++) {
-	  intensity = vertex[i].red + vertex[i].green + vertex[i].blue;
-	  intensity/=3.0;
-	  if (red!=intensity) {
-	    smooth=1;
-	    break;
-	  }
-	}
-      }
-
-      if (smooth) {
-	G4int triOffset;
-	for (i=0; i<nvertices-2; i++) {
-	  triOffset = i*7;
-	  fprintf (file, "[%g %g %g %g %g %g]",
-		   vertex[0].x, vertex[i+1].x, vertex[i+2].x,
-		   vertex[0].y, vertex[i+1].y, vertex[i+2].y);
-	  if (fPrintColour) {
-	    fprintf (file, " [%g %g %g] [%g %g %g] [%g %g %g] gouraudtriangle\n",
-		     vertex[0].red, vertex[0].green, vertex[0].blue,
-		     vertex[i+1].red, vertex[i+1].green, vertex[i+1].blue,
-		     vertex[i+2].red, vertex[i+2].green, vertex[i+2].blue);
-	  } else {
-
-	    intensity = vertex[0].red + vertex[0].green + vertex[0].blue;
-	    intensity/=3.0;
-	    fprintf (file, " [%g %g %g]", intensity, intensity, intensity);
-
-	    intensity = vertex[1].red + vertex[1].green + vertex[1].blue;
-	    intensity/=3.0;
-	    fprintf (file, " [%g %g %g]", intensity, intensity, intensity);
-
-	    intensity = vertex[2].red + vertex[2].green + vertex[2].blue;
-	    intensity/=3.0;
-	    fprintf (file, " [%g %g %g] gouraudtriangle\n", intensity, intensity, intensity);
-	  }
-	}
-      } else {
-	fprintf (file, "newpath\n");
-	fprintf (file, "%g %g %g setrgbcolor\n", red, green, blue);
-	fprintf (file, "%g %g moveto\n", vertex[0].x, vertex[0].y);
-	for (i=1; i<nvertices; i++) {
-	  fprintf (file, "%g %g lineto\n", vertex[i].x, vertex[i].y);
-	}
-	fprintf (file, "closepath fill\n\n");
-      }
-    }
-    loc += nvertices*7;
-    break;
-
-  case GL_POINT_TOKEN:
-    vertex=(Feedback3Dcolor*)loc;
-    if (fPrintColour) {
-      fprintf (file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
-    } else {
-      intensity = vertex[0].red + vertex[0].green + vertex[0].blue;
-      intensity/=3.0;
-      fprintf (file, "%g %g %g setrgbcolor\n", intensity, intensity, intensity);
-    }      
-    fprintf(file, "%g %g %g 0 360 arc fill\n\n", vertex[0].x, vertex[0].y, fPointSize / 2.0);
-    loc += 7;           /* Each vertex element in the feedback
-                           buffer is 7 GLfloats. */
-    break;
-  default:
-    /* XXX Left as an excersie to the reader. */
-    static G4bool spewPrimitiveEPSWarned = false;
-    if (!spewPrimitiveEPSWarned) {
-      std::ostringstream oss;
-      oss <<
-	"Incomplete implementation.  Unexpected token (" << token << ")."
-	"\n  (Seems to be caused by text.)";
-      G4Exception("G4OpenGLViewer::spewPrimitiveEPS",
-		  "Unexpected token",
-		  JustWarning,
-		  oss.str().c_str());
-      spewPrimitiveEPSWarned = true;
-    }
-  }
-  return loc;
-}
-
-typedef struct G4OpenGLViewerDepthIndex {
-  GLfloat *ptr;
-  GLfloat depth;
-} DepthIndex;
-
-extern "C" {
-  int G4OpenGLViewercompare(const void *a, const void *b)
-  {
-    const DepthIndex *p1 = (DepthIndex *) a;
-    const DepthIndex *p2 = (DepthIndex *) b;
-    GLfloat diff = p2->depth - p1->depth;
-    
-    if (diff > 0.0) {
-      return 1;
-    } else if (diff < 0.0) {
-      return -1;
-    } else {
-      return 0;
-    }
-  }
-}
 
 GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned int height) {
   
@@ -803,20 +450,52 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
   return buffer;
 }
 
-int G4OpenGLViewer::printNonVectoredEPS (int inColour,
-				unsigned int width,
-				unsigned int height) {
+void G4OpenGLViewer::printEPS() {
+  bool res;
+  if (fVectoredPs) {
+    res = printVectoredEPS();
+  } else {
+    res = printNonVectoredEPS();
+  }
+  if (res == false) {
+    G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
+  } else {
+    G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
+  }
+}
+
+bool G4OpenGLViewer::printVectoredEPS() {
+  return printGl2PS();
+}
+
+bool G4OpenGLViewer::printNonVectoredEPS () {
+
+  int width = 0;
+  int height = 0;
+
+  if (fPrintSizeX == 0) {
+    width = fWinSize_x;
+  } else {
+    width = fPrintSizeX;
+  }
+  if (fPrintSizeY == 0) {
+    height = fWinSize_y;
+  } else {
+    height = fPrintSizeY;
+  }
 
   FILE* fp;
   GLubyte* pixels;
   GLubyte* curpix;
   int components, pos, i;
 
-  pixels = grabPixels (inColour, width, height);
+  pixels = grabPixels (fPrintColour, width, height);
 
-  if (pixels == NULL)
-    return 1;
-  if (inColour) {
+  if (pixels == NULL) {
+      G4cerr << "Failed to get pixels from OpenGl viewport" << G4endl;
+    return false;
+  }
+  if (fPrintColour) {
     components = 3;
   } else {
     components = 1;
@@ -824,7 +503,8 @@ int G4OpenGLViewer::printNonVectoredEPS (int inColour,
   
   fp = fopen (fPrintFilename.c_str(), "w");
   if (fp == NULL) {
-    return 2;
+    G4cerr << "Can't open filename " << fPrintFilename.c_str() << G4endl;
+    return false;
   }
   
   fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
@@ -876,11 +556,30 @@ int G4OpenGLViewer::printNonVectoredEPS (int inColour,
   fprintf (fp, "showpage\n");
   delete pixels;
   fclose (fp);
-  return 0;
+
+  // Reset for next time (useful is size change)
+  fPrintSizeX = 0;
+  fPrintSizeY = 0;
+
+  return true;
 }
 
 
-bool G4OpenGLViewer::printGl2PS(unsigned int width,unsigned int height) {
+bool G4OpenGLViewer::printGl2PS() {
+
+  int width = 0;
+  int height = 0;
+
+  if (fPrintSizeX == 0) {
+    width = fWinSize_x;
+  } else {
+    width = fPrintSizeX;
+  }
+  if (fPrintSizeY == 0) {
+    height = fWinSize_y;
+  } else {
+    height = fPrintSizeY;
+  }
 
   if (!fGL2PSAction) return false;
 
@@ -900,6 +599,10 @@ bool G4OpenGLViewer::printGl2PS(unsigned int width,unsigned int height) {
   fWinSize_x = X;
   fWinSize_y = Y;
   ResizeGLView();
+
+  // Reset for next time (useful is size change)
+  fPrintSizeX = 0;
+  fPrintSizeY = 0;
 
   return true;
 }
@@ -943,121 +646,6 @@ GLdouble G4OpenGLViewer::getSceneDepth()
 }
 
 
-void G4OpenGLViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
-{
-  int token;
-  GLfloat *loc, *end;
-  Feedback3Dcolor *vertex;
-  GLfloat depthSum;
-  int nprimitives, item;
-  DepthIndex *prims;
-  int nvertices, i;
-
-  end = buffer + size;
-
-  /* Count how many primitives there are. */
-  nprimitives = 0;
-  loc = buffer;
-  while (loc < end) {
-    token = int (*loc);
-    loc++;
-    switch (token) {
-    case GL_LINE_TOKEN:
-    case GL_LINE_RESET_TOKEN:
-      loc += 14;
-      nprimitives++;
-      break;
-    case GL_POLYGON_TOKEN:
-      nvertices = int (*loc);
-      loc++;
-      loc += (7 * nvertices);
-      nprimitives++;
-      break;
-    case GL_POINT_TOKEN:
-      loc += 7;
-      nprimitives++;
-      break;
-    default:
-      /* XXX Left as an excersie to the reader. */
-      static G4bool spewSortedFeedbackWarned = false;
-      if (!spewSortedFeedbackWarned) {
-	std::ostringstream oss;
-	oss <<
-	  "Incomplete implementation.  Unexpected token (" << token << ")."
-	  "\n  (Seems to be caused by text.)";
-	G4Exception("G4OpenGLViewer::spewSortedFeedback",
-		    "Unexpected token",
-		    JustWarning,
-		    oss.str().c_str());
-	spewSortedFeedbackWarned = true;
-      }
-      nprimitives++;
-    }
-  }
-
-  /* Allocate an array of pointers that will point back at
-     primitives in the feedback buffer.  There will be one
-     entry per primitive.  This array is also where we keep the
-     primitive's average depth.  There is one entry per
-     primitive  in the feedback buffer. */
-  prims = (DepthIndex *) malloc(sizeof(DepthIndex) * nprimitives);
-
-  item = 0;
-  loc = buffer;
-  while (loc < end) {
-    prims[item].ptr = loc;  /* Save this primitive's location. */
-    token = int (*loc);
-    loc++;
-    switch (token) {
-    case GL_LINE_TOKEN:
-    case GL_LINE_RESET_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
-      depthSum = vertex[0].z + vertex[1].z;
-      prims[item].depth = depthSum / 2.0;
-      loc += 14;
-      break;
-    case GL_POLYGON_TOKEN:
-      nvertices = int (*loc);
-      loc++;
-      vertex = (Feedback3Dcolor *) loc;
-      depthSum = vertex[0].z;
-      for (i = 1; i < nvertices; i++) {
-        depthSum += vertex[i].z;
-      }
-      prims[item].depth = depthSum / nvertices;
-      loc += (7 * nvertices);
-      break;
-    case GL_POINT_TOKEN:
-      vertex = (Feedback3Dcolor *) loc;
-      prims[item].depth = vertex[0].z;
-      loc += 7;
-      break;
-    default:
-      /* XXX Left as an excersie to the reader. */
-      assert(1);
-    }
-    item++;
-  }
-  assert(item == nprimitives);
-
-  /* Sort the primitives back to front. */
-  qsort(prims, nprimitives, sizeof(DepthIndex), G4OpenGLViewercompare);
-
-  /* Understand that sorting by a primitives average depth
-     doesn't allow us to disambiguate some cases like self
-     intersecting polygons.  Handling these cases would require
-     breaking up the primitives.  That's too involved for this
-     example.  Sorting by depth is good enough for lots of
-     applications. */
-
-  /* Emit the Encapsulated PostScript for the primitives in
-     back to front order. */
-  for (item = 0; item < nprimitives; item++) {
-    (void) spewPrimitiveEPS(file, prims[item].ptr);
-  }
-
-  free(prims);
-}
 
 void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
 {

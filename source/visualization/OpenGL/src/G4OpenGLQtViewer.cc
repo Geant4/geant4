@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.37 2009-03-05 11:04:20 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.38 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1323,6 +1323,8 @@ void G4OpenGLQtViewer::actionSaveImage() {
     bool res = false;
     if ((exportDialog->getWidth() !=fWindow->width()) ||
         (exportDialog->getHeight() !=fWindow->height())) {
+      fPrintSizeX = exportDialog->getWidth();
+      fPrintSizeY = exportDialog->getHeight();
       if ((format != QString("eps")) && (format != QString("ps"))) {
       G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
       
@@ -1346,18 +1348,11 @@ void G4OpenGLQtViewer::actionSaveImage() {
       image = fWindow->grabFrameBuffer();
     }    
     if (format == QString("eps")) {
-      if (exportDialog->getVectorEPS()) {
-        res = printVectoredEPS();
-      } else {
-        res = printNonVectoredEPS(exportDialog->getNbColor(),(unsigned int)image.width(),(unsigned int)image.height());
-      }
+      fVectoredPs = exportDialog->getVectorEPS();
+      printEPS();
     } else if (format == "ps") {
-      if ((exportDialog->getWidth() !=fWindow->width()) ||
-          (exportDialog->getHeight() !=fWindow->height())) {
-        res = printGl2PS(exportDialog->getWidth(),exportDialog->getHeight());
-      } else {
-      res = printGl2PS(fWindow->width(),fWindow->height());
-      }
+      fVectoredPs = true;
+      printEPS();
     } else if (format == "pdf") {
 
       res = printPDF(fPrintFilename,exportDialog->getNbColor(),image);
@@ -1381,10 +1376,12 @@ void G4OpenGLQtViewer::actionSaveImage() {
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
-    if (res == false) {
-      G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
-    } else {
-      G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
+    if ((format == QString("eps")) && (format == QString("ps"))) {
+      if (res == false) {
+        G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
+      } else {
+        G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
+      }
     }
     
   } else { // cancel selected

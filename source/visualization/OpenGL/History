@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2009-03-05 11:04:20 lgarnier Exp $
+$Id: History,v 1.129 2009-03-05 16:36:13 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,12 @@ History file for visualization/OpenGL
  - G4OpenGLQtViewer:
    - Suppress some warnings when saving file
    - Changing size is now allowed when saving (to save with better resolution than screen size)
- - G4OpenGLViewer: Some renaming for print methods to be more clear about Vectored and non Vectored
- - G4OpenGLViewer: Now using Gl2PS method to do PS (changes also in G4OpenGLXViewer and G4OpenGLQtViewer)
+ - G4OpenGLViewer: 
+  - Some renaming for print methods to be more clear about Vectored and non Vectored
+  - Now using Gl2PS method to do PS (changes also in G4OpenGLXViewer and G4OpenGLQtViewer)
+  - Suppress unuseful printX methods (heritated form XViewer)
+  - Add methods to handle printVectored and NonVector cases
+ - G4OpenGLViewerMessanger : Changes methods to get new G4OpenGLViewer methods to print
 
 1st March 2009, Laurent Garnier
  - Remplacing glBitmap by GL_POINTS to draw marker : Speed improvment

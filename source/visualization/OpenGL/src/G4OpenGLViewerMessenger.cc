@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.14 2009-02-16 15:31:05 lgarnier Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.15 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -260,7 +260,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       oss << "G4OpenGL_" << file_count++ << ".eps";
       pOGLViewer->fPrintFilename = std::string(oss.str().c_str());
       // Print eps file...
-      pOGLViewer->printVectoredEPS();
+      pOGLViewer->printEPS();
       // Restore fPrintFilename for Xm...
       pOGLViewer->fPrintFilename = tmp_string;
       return;
@@ -345,14 +345,7 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (command == fpCommandPrintMode)
     {
       if (newValue == "vectored") pViewer->fVectoredPs = true;
-      if (newValue == "pixmap") {
-	pViewer->fVectoredPs = false;
-	if (pVisManager->GetVerbosity() >= G4VisManager::warnings) {
-	  G4cout <<
-	    "WARNING: Only implemented for X Windows at present."
-		 << G4endl;
-	}
-      }
+      if (newValue == "pixmap") pViewer->fVectoredPs = false;
     }
 
   if (command == fpCommandStartTime)

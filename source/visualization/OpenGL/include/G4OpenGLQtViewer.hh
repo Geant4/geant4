@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.15 2009-02-04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.16 2009-03-05 16:36:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,9 +143,7 @@ private:
   void createPopupMenu();
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
   void rescaleImage(int, int);
-  bool generateEPS2(QString,int,QImage);  
-  bool generateVectorEPS (QString,int,int,QImage);
-  bool generatePS_PDF(QString,int,QImage);  
+  bool printPDF(const std::string,int,QImage);  
   void showMovieParametersDialog();
   void initMovieParameters();
   QString createTempFolder();
