@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.10 2009-02-26 11:50:02 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.11 2009-03-05 18:57:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,24 +78,24 @@ public:
 
   virtual ~G4WentzelVIModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-				      G4double KineticEnergy,
-				      G4double AtomicNumber,
-				      G4double AtomicWeight=0., 
-				      G4double cut = DBL_MAX,
-				      G4double emax= DBL_MAX);
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+					      G4double KineticEnergy,
+					      G4double AtomicNumber,
+					      G4double AtomicWeight=0., 
+					      G4double cut = DBL_MAX,
+					      G4double emax= DBL_MAX);
 
-  void SampleScattering(const G4DynamicParticle*, G4double safety);
+  virtual void SampleScattering(const G4DynamicParticle*, G4double safety);
 
-  G4double ComputeTruePathLengthLimit(const G4Track& track,
-				      G4PhysicsTable* theLambdaTable,
-				      G4double currentMinimalStep);
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
+					      G4PhysicsTable* theLambdaTable,
+					      G4double currentMinimalStep);
 
-  G4double ComputeGeomPathLength(G4double truePathLength);
+  virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
-  G4double ComputeTrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
 
 private:
 
@@ -125,7 +125,6 @@ private:
 
   G4ParticleChangeForMSC*   fParticleChange;
 
-  //  G4SafetyHelper*           safetyHelper;
   G4PhysicsTable*           theLambdaTable;
   G4PhysicsTable*           theLambda2Table;
   G4LossTableManager*       theManager;
