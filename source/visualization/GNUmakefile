@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.22 2009-02-16 15:31:05 lgarnier Exp $
+# $Id: GNUmakefile,v 1.23 2009-03-05 11:32:07 lgarnier Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -23,6 +23,11 @@ ifdef G4LIB_BUILD_ZLIB
   SUBDIRS += externals/zlib
   SUBLIBS += G4zlib
 endif
+
+# For Debug mode
+# CPPFLAGS += -DG4DEBUG_VIS_OGL
+# CPPFLAGS += -DG4DEBUG_VIS_OI
+# CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
 
 # Libraries which can be used without external packages or libraries...
 ifdef G4VIS_BUILD
