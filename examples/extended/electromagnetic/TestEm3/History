@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2009-03-04 18:49:17 maire Exp $
+$Id: History,v 1.124 2009-03-05 09:57:19 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- PhysicsList - added option "emstandard_msc91"
      
 04-03-09 mma (testem3-V09-02-00)
 - HistoManager::PrintHisto() : avoid empty ascii file

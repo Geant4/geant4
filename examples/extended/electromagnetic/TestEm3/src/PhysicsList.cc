@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.26 2008-10-16 11:19:54 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.27 2009-03-05 09:57:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,8 +58,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-  // EM physics
-  emName = G4String("standard");
+  // EM physics - default
+  emName = G4String("standard_local");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -177,6 +177,7 @@ void PhysicsList::ConstructProcess()
   // electromagnetic Physics List
   //
   emPhysicsList->ConstructProcess();
+  em_config.AddModels();
 
   // Add Decay Process
   //
@@ -242,6 +243,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
+    
+  } else if (name == "emstandard_msc91") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics();
+    G4UrbanMscModel* msc1 = new G4UrbanMscModel();
+    em_config.SetExtraEmModel("e-","msc",msc1);
+    G4UrbanMscModel* msc2 = new G4UrbanMscModel();
+    em_config.SetExtraEmModel("e-","msc",msc2);
     
   } else if (name == "livermore") {
 
