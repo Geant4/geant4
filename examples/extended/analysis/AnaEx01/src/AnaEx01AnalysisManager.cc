@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.16 2006-06-29 16:33:42 gunter Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.17 2009-03-05 12:55:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   //std::string opts = "compress=yes";
   std::string opts = "compress=no";
   fTree = treeFactory->create("AnaEx01.aida","xml",false,true,opts);
-  //std::string opts = "export=root";
   //fTree = treeFactory->create("AnaEx01.root","ROOT",false,true,opts);
 
   // Factories are not "managed" by an AIDA analysis system.
