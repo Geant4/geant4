@@ -143,6 +143,7 @@ void HadrontherapyDetectorConstruction::ConstructBeamLine()
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
  
+  // Components of the Passive Proton Beam Line
   passiveProtonBeamLine = new PassiveProtonBeamLine(physicalTreatmentRoom);
   passiveProtonBeamLine -> HadrontherapyBeamLineSupport();
   passiveProtonBeamLine -> HadrontherapyBeamScatteringFoils();
@@ -266,6 +267,11 @@ void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
+void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
+{
+  passiveProtonBeamLine -> SetRSMaterial(materialChoice);
+}
+
 void HadrontherapyDetectorConstruction::SetRangeShifterXSize(G4double value)
 {
   passiveProtonBeamLine -> SetRangeShifterXSize(value);
@@ -296,10 +302,7 @@ void HadrontherapyDetectorConstruction::SetInnerRadiusFinalCollimator(G4double v
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
-void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
-{
-  passiveProtonBeamLine -> SetRSMaterial(materialChoice);
-}
+
 
 
 

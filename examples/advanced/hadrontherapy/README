@@ -35,7 +35,8 @@ Istituto Nazionale di Fisica Nucleare, Sezione di Genova Via Dodecaneso, 33
 
 
 More informations on the Hadrontherapy example can be found in the 
-Hadrontherapy Documentation available at http://geant4infn.wikispaces.com/HadrontherapyExample.
+Hadrontherapy Documentation available at
+http://workgroup.lngs.infn.it/geant4lns/
 
 Alternatevely send an e-mail to cirrone@lns.infn.it.
 
@@ -170,10 +171,9 @@ be used in the application.
 ** In this case hadronic inelastic models are directly activated for every particle.
 
 ------------------------------------------------------------------
-SUGGESTED PHYSIC FOR PROTON AND ION BEAMS IN THE RANGE 0 - 400 MeV
+SUGGESTED PHYSIC FOR ION BEAMS IN THE RANGE 0 - 400 MeV
 ------------------------------------------------------------------
-Developers of Hadrontherapy suggest the use of the "QGSP_BIC" package for the correct simulation 
-of proton and ion transposrt in the typical hadrontherapy energy range. This package 
+Developers of Hadrontherapy suggest the use of the "QGSP_BIC" package for the correct simulation of ion transposrt in the typical hadrontherapy energy range. This package 
 can be inserted with one simple command in the .mac file:
 /physics/addPackage QGSP_BIC
 
@@ -182,8 +182,6 @@ An example of macro file for the use of Approach 2 is: packageQGSP_BIC.mac
 
 Developers are improving the quality of the packages and validation results will be soon provided 
 in a dedicated web page
-
-
 
 ------->2. EXPERIMENTAL SET-UP.      
                                       
@@ -217,7 +215,7 @@ for a radiotherapeutic treatment.
 The user has the possibility to vary, via messenger, almost all the geometrical 
 characteristics of the beam line elements (i.e. their position along the beam line, 
 their thickness, etc.). More details on the available user messengers can be 
-found in the Hadronterapy Documentation (http://geant4infn.wikispaces.com/HadrontherapyExample).
+found in the Hadronterapy Documentation: http://workgroup.lngs.infn.it/geant4lns/).
 
 At the end of the beam line, a typical water phantom is reproduced.
 A user-defined region of the phantom is divided (via the ROGeomtry class) in 
@@ -316,9 +314,8 @@ http://aida.freehep.org/
 
 Note that the same information can be stored in different format, 
 like .root or .xml using the same AIDA interface.
-Alternatively users that are more confident with ASCII format, can derive
-their table with energy deposited in each voxel working inside the 
-HadrontherapyMatrix.
+Output is also stored in ASCII .out file. The file contains four columns; the first four columns represent the voxel indexs (that univocally identify the voxel volume) while the last column represent the energy deposited in the given voxel.
+
 
 Please contact cirrone@lns.infn.it for more details.
 
