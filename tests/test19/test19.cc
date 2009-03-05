@@ -45,7 +45,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
 //#define pdebug
-/////#define nout
+//#define nout
 //#define pscan
 //#define csdebug
 //#define smear
@@ -60,12 +60,12 @@
 //#define ekindbg
 //#define histdbg
 //--- Flags of models (only one must be chosen, CHIPS is the default for System Testing ---
-#define chips
-//#define lep
+//#define chips
+#define lep
 //#define hep
 //#define preco
-//#define bertini
-//#define binary
+//#define berti
+//#define binar
 //#define qgsc
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
@@ -107,7 +107,7 @@
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
 //#include "G4QuasmonString.hh"
-#include "G4MuNuclearInteraction.hh"
+//Does not work with shared libraries//#include "G4MuNuclearInteraction.hh"
 #include "G4QMuonNuclearCrossSection.hh"
 
 #include "G4ApplicationState.hh"
@@ -467,11 +467,11 @@ int main()
   G4double nx = 0.;
   G4double ny = 0.;
   G4double nz = 0.;
-  G4int npart=1;                                      // By default only one particle
-  if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
+  G4int npart=1;                                       // By default only one particle
+  if(!pPDG) npart=nPr;                                 // Make a LOOP ove all particles
 #ifdef chips
   // *************** CHIPS process definition starts here *******************************
-  G4QCollision* proc = new G4QCollision;              // A general CHIPS process
+  G4QCollision* proc = new G4QCollision;               // A general CHIPS process
   ///G4QDiffraction* proc = new G4QDiffraction;          // A diffraction CHIPS process
   ///G4QLowEnergy* proc = new G4QLowEnergy;              // fragment-nucleus universal
 #endif
@@ -479,31 +479,41 @@ int main()
 #ifdef preco
   G4PreCompoundModel* aModel = new G4PreCompoundModel(new G4ExcitationHandler); // Preco
 #endif
-#ifdef bertini
+#ifdef berti
   G4CascadeInterface* aModel = new G4CascadeInterface; // Bertini
 #endif
-#ifdef binary
-  G4BinaryCascade* aModel = new G4BinaryCascade; // Binary
+#ifdef binar
+  G4BinaryCascade* aModel = new G4BinaryCascade;       // Binary
 #endif
 #ifdef lep
-  if     (pPDG==2212) G4LEProtonInelastic*     aModel = new G4LEProtonInelastic;
-  else if(pPDG==2112) G4LENeutronInelastic*    aModel = new G4LEProtonInelastic;
-  else if(pPDG==-211) G4LEPionMinusInelastic*  aModel = new G4LEPionMinusInelastic;
-  else if(pPDG== 211) G4LEPionPlusInelastic*   aModel = new G4LEPionMinusInelastic;
-  else if(pPDG==-321) G4LEKaonMinusInelastic*  aModel = new G4LEKaonPlusInelastic;
-  else if(pPDG== 321) G4LEKaonPlusInelastic*   aModel = new G4LEKaonPlusInelastic;
-  else if(pPDG==-2112)G4LEAntiProtonInelastic* aModel = new G4LEAntiProtonInelastic;
-  else G4cout<<"-Error-Test19: Process is not defined in LEP for PDG="<<pPDG<<G4endl;
+  G4HadronicInteraction* aModel;                       // LEP generators
+  if     (pPDG==2212) aModel = new G4LEProtonInelastic;
+  else if(pPDG==2112) aModel = new G4LENeutronInelastic;
+  else if(pPDG==-211) aModel = new G4LEPionMinusInelastic;
+  else if(pPDG== 211) aModel = new G4LEPionPlusInelastic;
+  else if(pPDG==-321) aModel = new G4LEKaonMinusInelastic;
+  else if(pPDG== 321) aModel = new G4LEKaonPlusInelastic;
+  else if(pPDG==-2112)aModel = new G4LEAntiProtonInelastic;
+  else
+  {
+    G4cout<<"-Error-Test19: Process is not defined in LEP for PDG="<<pPDG<<G4endl;
+    aModel = new G4LEProtonInelastic;
+  }
 #endif
 #ifdef hep
-  if     (pPDG==2212) G4HEProtonInelastic*     aModel = new G4HEProtonInelastic;
-  else if(pPDG==2112) G4HENeutronInelastic*    aModel = new G4HEProtonInelastic;
-  else if(pPDG==-211) G4HEPionMinusInelastic*  aModel = new G4HEPionMinusInelastic;
-  else if(pPDG== 211) G4HEPionPlusInelastic*   aModel = new G4HEPionMinusInelastic;
-  else if(pPDG==-321) G4HEKaonMinusInelastic*  aModel = new G4HEKaonPlusInelastic;
-  else if(pPDG== 321) G4HEKaonPlusInelastic*   aModel = new G4HEKaonPlusInelastic;
-  else if(pPDG==-2112)G4HEAntiProtonInelastic* aModel = new G4HEAntiProtonInelastic;
-  else G4cout<<"-Error-Test19: Process is not defined in HEP for PDG="<<pPDG<<G4endl;
+  G4HadronicInteraction* aModel;                       // HEP generators
+  if     (pPDG==2212) aModel = new G4HEProtonInelastic;
+  else if(pPDG==2112) aModel = new G4HEProtonInelastic;
+  else if(pPDG==-211) aModel = new G4HEPionMinusInelastic;
+  else if(pPDG== 211) aModel = new G4HEPionMinusInelastic;
+  else if(pPDG==-321) aModel = new G4HEKaonPlusInelastic;
+  else if(pPDG== 321) aModel = new G4HEKaonPlusInelastic;
+  else if(pPDG==-2112)aModel = new G4HEAntiProtonInelastic;
+  else
+  {
+    aModel = new G4HEProtonInelastic;
+    G4cout<<"-Error-Test19: Process is not defined in HEP for PDG="<<pPDG<<G4endl;
+  }
 #endif
 #ifdef qgsc
   G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF

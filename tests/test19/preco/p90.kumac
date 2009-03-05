@@ -1,0 +1,391 @@
+macro preco j=1 np=13 proj=n targ=^27!Al file=al1314 nn=6 e=90 cs=450 _
+           runn=2000 next=3 pq=2-cor nzone=2 nvex=60 dir=./
+*
+ if [np] = 13 then	
+   mess '>>> Aluminum target is processing (Z=13, N=14)'
+ elseif [np] = 83 then
+   mess '>>> Bismuth target is processing (Z=83, N=126)'
+   targ=^209!Bi
+   file=bi83126
+   cs=1800
+ else
+   mess '*** Target with Z='//[np]//' is not defined (only Z=13=default and Z=83)'
+ endif
+ if [j] = 1 then	
+   mess '>>> for neutron secondaries'
+ elseif [j] = 2 then
+   mess '>>> for proton secondaries'
+   proj=p
+ elseif [j] = 3 then
+   mess '>>> for deuterium secondaries'
+   proj=d
+ elseif [j] = 4 then
+   mess '>>> for tritium secondaries'
+   proj=t
+ elseif [j] = 5 then
+   mess '>>> for He3 secondaries'
+   proj=^3!He
+ elseif [j] = 6 then
+   mess '>>> for He4 secondaries'
+   proj=^4!He
+ else
+   mess '*** Projectile #'//[j]//' is not defined (n=1,p=2,d=3,t=4,He3=5,He4=6)'
+ endif
+  hi/del *
+  ve/del *
+  set TXFP -20
+  set chhe .36
+  set ASIZ .40
+  set CSIZ .40
+  set GSIZ .40
+  set TSIZ .40
+  set VSIZ .36
+  set XVAL .40
+  ve/cr angle(9) r 20 30 45 60 75 90 105 120 140
+  exec creavec [nvex]
+*
+  exec getdat [file] [e] [j]
+*
+  upcol   = violet
+  downcol = red
+  hxmin =  3.
+  hxmax =  90.0
+*  kxmin =  40.
+*  kxmax =  260.
+  kxmin =  0.
+  kxmax =  90.
+  if [j] = 1 then
+   m = 939.565 | neutron
+  elseif [j] = 2 then
+   m = 938.273 | proton
+  elseif [j] = 3 then
+   m = 1875.61 | deuteron
+  elseif [j] = 4 then
+   m = 2809.25 | triton
+  elseif [j] = 5 then
+   m = 2809.23 | He3
+  elseif [j] = 6 then
+   m = 3727.40 | He4
+  else
+   mess '* Mass of projectile #'//[j]//' is not defined (n=1,p=2,d=3,t=4,He3=5,He4=6)'
+  endif
+  if [np] =13 then
+   if [j] = 1 then
+    hymin =  3.e-7
+    hymax =  .049999
+    m = 939.565 | neutron
+   elseif [j] = 2 then
+    hymin =  3.e-6
+    hymax =  .09
+   elseif [j] = 3 then
+    hymin =  9.e-8
+    hymax =  .02
+   elseif [j] = 4 then
+    hymin =  4.e-8
+    hymax =  .002
+   elseif [j] = 5 then
+    hymin =  5.e-8
+    hymax =  .002
+   elseif [j] = 6 then
+    hymin =  1.e-7
+    hymax =  .05
+   else
+    mess '+++ Projectile #'//[j]//' is not defined (n=1,p=2,d=3,t=4,He3=5,He4=6)'
+   endif
+  elseif [np] =83 then
+   if [j] = 1 then
+    hymin =  3.e-6
+    hymax =  .3
+   elseif [j] = 2 then
+    hymin =  7.e-6
+    hymax =  .2
+   elseif [j] = 3 then
+    hymin =  9.e-8
+    hymax =  .02
+   elseif [j] = 4 then
+    hymin =  5.e-8
+    hymax =  .005
+   elseif [j] = 5 then
+    hymin =  5.e-8
+    hymax =  .002
+   elseif [j] = 6 then
+    hymin =  1.e-7
+    hymax =  .009
+   else
+    mess '+++ Projectile #'//[j]//' is not defined (n=1,p=2,d=3,t=4,He3=5,He4=6)'
+   endif
+  else
+    mess '+++ Target with Z='//[np]//' is not defined (only Al(Z=13)=default & Bi(Z=83))'
+  endif
+  han=[hymax]/5
+  hzero =  0.1e-12
+  hfbin =  1
+  hnbin =  50
+  ptsize = 0.24
+  lgndsz = 0.35
+  dangle = 5.0
+  pi = 3.141593
+  Alias/del paperX
+  Alias/cr  paperX '24.0' 
+  Alias/del paperY
+  Alias/cr  paperY '18.0' 
+  SIZE 24. 18.
+*  exec ~/PTOOL/reset
+*  exec ~/PTOOL/setpq
+  danrad = $sigma([pi]*[dangle]/180.)
+  hlxmin = $sigma(log10([hxmin]))
+  hlxmax = $sigma(log10([hxmax]))
+  halfbn = $sigma(0.5*([hlxmax]-[hlxmin])/[hnbin])
+*
+  1d         61 'T?p! prec (MeV)' [hnbin] [hlxmin] [hlxmax]
+  hi/copy 61 62 'T?p! bert (MeV)'
+  hi/copy 61 63 'T?p! binc (MeV)'
+  hi/copy 61 64 'T?p! lepr (MeV)'
+  hi/copy 61 65 'T?p! chip (MeV)'
+*  call hbarx(0)
+*
+*  opt vert
+  set xwin 0.0001
+  set ywin 0.0001
+  title [targ]//'(p,'//[proj]//') reaction at E?p! = '//[E]//' MeV'
+  clr
+  zone 3 3
+  set yval 70.
+  set xval
+  opt logy
+  opt linx
+  null [kxmin] [kxmax] [hymin] [hymax]
+  set dmod 1
+  ***** M.K. ****
+  opt date
+  ***************
+  opt tic
+  opt nsta
+  opt ndat
+  opt utit
+  set errx 0.01
+  set xlab 1.25
+  title ' ' u
+  exec ~/PTOOL/black
+  set DMOD 1
+  set lwid 5.
+  dash=[hymin]*243
+  exec ~/PTOOL/black
+  ve/cr x1(2) r 3 7
+  ve/cr y1(2) r [dash] [dash]
+  graph 2 x1 y1 l
+  itx 10 [hymin]*162 LHEP
+  dash=[hymin]*81
+  exec ~/PTOOL/red
+  ve/cr x2(2) r 3 7
+  ve/cr y2(2) r [dash] [dash]
+  graph 2 x2 y2 l
+  itx 10 [hymin]*54 CHIPS
+  dash=[hymin]*27
+  exec ~/PTOOL/pink
+  ve/cr x3(2) r 3 7
+  ve/cr y3(2) r [dash] [dash]
+  graph 2 x3 y3 l
+  itx 10 [hymin]*18 PRECO
+  dash=[hymin]*9
+  exec ~/PTOOL/green
+  ve/cr x4(2) r 3 7
+  ve/cr y4(2) r [dash] [dash]
+  graph 2 x4 y4 l
+  itx 10 [hymin]*6 BINARY
+  dash=[hymin]*3
+  exec ~/PTOOL/violet
+  ve/cr x5(2) r 3 7
+  ve/cr y5(2) r [dash] [dash]
+  graph 2 x5 y5 l
+  itx 10 [hymin]*2 BERTINI
+  ve/cr ach([hnbin])
+  do i = 1 , 9
+    ve/cr ch[i]([hnbin])
+    ve/cr pr[i]([hnbin])
+    ve/cr be[i]([hnbin])
+    ve/cr bi[i]([hnbin])
+    ve/cr lh[i]([hnbin])
+  enddo
+  ve/re ach,ch1,ch2,ch3,ch4,ch5,ch6,ch7,ch8,ch9 p_90_[file]_[j]_chips.v
+  ve/re ach,pr1,pr2,pr3,pr4,pr5,pr6,pr7,pr8,pr9 p_90_[file]_[j]_preco.v
+  ve/re ach,be1,be2,be3,be4,be5,be6,be7,be8,be9 p_90_[file]_[j]_berti.v
+  ve/re ach,bi1,bi2,bi3,bi4,bi5,bi6,bi7,bi8,bi9 p_90_[file]_[j]_binar.v
+  ve/re ach,lh1,lh2,lh3,lh4,lh5,lh6,lh7,lh8,lh9 p_90_[file]_[j]_lepro.v
+  exec ~/PTOOL/black
+  mess 'j='//[j]
+  do i = 1 , 9
+    a=angle([i])
+    if [i] = 2 .OR. [i] = 3 .OR. [i] = 4 .OR. [i] = 6 .OR. [i] = 8 then
+      if [j] = 1 .AND. [np] = 13 then
+*        ve/re abspr,conpr p90_n_[a]_prec.dat
+*        put/cont 61 conpr
+*        ve/re absbe,conbe p90_n_[a]_bert.dat
+*        put/cont 62 conbe
+*        ve/re absbi,conbi p90_n_[a]_binc.dat
+*        put/cont 63 conbi
+*        ve/re absle,conle p90_n_[a]_lepr.dat
+*        put/cont 64 conle
+      elseif [j] = 2 .AND. [np] = 13 then
+*        ve/re abspr,conpr p90_p_[a]_prec.dat
+*        put/cont 61 conpr
+*        ve/re absbe,conbe p90_p_[a]_bert.dat
+*        put/cont 62 conbe
+*        ve/re absbi,conbi p90_p_[a]_binc.dat
+*        put/cont 63 conbi
+*        ve/re absle,conle p90_p_[a]_lepr.dat
+*        put/cont 64 conle
+      endif
+    endif
+    put/cont 61 pr[i]
+    put/cont 62 be[i]
+    put/cont 63 bi[i]
+    put/cont 64 lh[i]
+    put/cont 65 ch[i]
+    if [i] = 4 then
+      set xval
+    elseif [i] = 2 .OR. [i] = 3 .OR. [i] = 5 .OR. [i] = 6 then
+      set xval 70
+    elseif [i] = 7 then
+      set xval
+      set yval
+    elseif [i] = 8 .OR. [i] = 9 then
+      set xval 70
+    endif
+    if [i] > 1 then
+      null [kxmin] [kxmax] [hymin] [hymax]
+    endif
+    if [i] = 9 then
+*      atitle 'k = (p+T)/2 (MeV)       ^!' ' '
+      atitle 'T (MeV)       ^!' ' '
+    endif
+    title ' '
+    itx 75 [han] [a]^o!
+**  fun/pl .11*EXP(-x/25) 30 250 S
+    exec ~/PTOOL/[upcol]
+    exec ~/PTOOL/black
+      ve/copy $sigma(sqrt(t[j][a]*(2.*[m]+t[j][a]))) p[j][a]
+      *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
+      h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
+               ?  $sigma(d[j][a]/p[j][a]) 25 20 [ptsize] 0
+*    if  [np] = 13 then
+*     if [i] = 2 .OR. [i] = 3 .OR. [i] = 4 .OR. [i] = 6 .OR. [i] = 8 then
+*      exec hsolid 61 [hfbin] [hnbin] pink   [m] 1
+*      exec hsolid 62 [hfbin] [hnbin] violet [m] 1
+*      exec hsolid 63 [hfbin] [hnbin] green  [m] 1
+*      exec hsolid 64 [hfbin] [hnbin] black  [m] 1
+*     endif
+*    endif
+    exec hsolid 61 [hfbin] [hnbin] pink   [m] 1
+    exec hsolid 62 [hfbin] [hnbin] violet [m] 1
+    exec hsolid 63 [hfbin] [hnbin] green  [m] 1
+    exec hsolid 64 [hfbin] [hnbin] black  [m] 1
+    exec hsolid 65 [hfbin] [hnbin] red    [m] 1
+*    txt = [a]//'[\260]'
+*    exec ~/PTOOL/notes .8 .83 [txt] 0. [lgndsz] -40
+    if [i] = 1 then
+      exec ~/PTOOL/black
+      atitle ' ' 'd[s]?n!/pdEd[W] (mb MeV^-2! sr^-1!) ^!'
+    endif
+  enddo
+*
+stop:
+*
+return
+*
+macro hsolid id=66 hf=1 hn=60 col=black m=939.567 mod=1
+  set dmod [mod]
+  nb = $sigma([hn]-[hf]+1)
+  ve/cr wx([nb]) r
+  ve/cr wy([nb]) r
+  ve/cr wd([nb]) r
+  get/abs  [id]([hf]:[hn]) wx
+  get/cont [id]([hf]:[hn]) wy
+*  get/err  [id]([hf]:[hn]) wd
+  ve/copy $sigma(10.**wx) wt
+  ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+  exec ~/PTOOL/white 8
+  set lwid 5
+  graph [nb] wt $sigma(wy/wp) l
+  exec ~/PTOOL/[col]
+  set lwid 5
+  graph [nb] wt $sigma(wy/wp) l
+  exec ~/PTOOL/black
+*  set dmod 3
+*  graph [nb] wt $sigma(wy/wp) l
+*  set lwid 5
+*  set dmod 1
+*  h/errors wt $sigma(wy/wp) _
+*           $sigma(0.*wt) $sigma(wd/wp) [nb] 1 .01
+  ve/del wx,wy,wd,wt,wp
+return
+*
+macro creavec dimvex=60
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rMed(1) r
+ ve/cr solA(1) r
+ ve/cr abspr(50) r
+ ve/cr conpr(50) r
+ ve/cr absbe(50) r
+ ve/cr conbe(50) r
+ ve/cr absbi(50) r
+ ve/cr conbi(50) r
+ ve/cr absle(50) r
+ ve/cr conle(50) r
+ ve/cr absch(50) r
+ ve/cr conch(50) r
+return
+*
+macro prieps fnam=radshow fil=99
+*
+  for/fil [fil] [fnam].eps
+  meta -[fil] -113
+  mess '*** Creating eps-file: '//[fnam]//'.eps'
+*  for/fil [fil] [fnam].ps
+*  meta -[fil] -115
+*  mess '*** Creating ps-file: '//[fnam]//'.ps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro getdat file=al1314 e=90 j=1
+*
+* -- in the preco_[file]_h_e[e]_ang.vexp the hadron(h:p,d,t,he3,he4) spectra are given in:
+* --  mbarn MeV^-1 Omega^-1, function of T in MeV 
+  *ve/cr angle(9) r 20 30 45 60 75 90 105 120 140
+  do i = 1 , 9
+    a  = angle([i])
+    ve/cr t[j][a](25) R 25*0.
+    ve/cr s[j][a](25) R 25*0.
+    if [j] = 1 then
+      ve/cr r1[a](25) R 25*0.
+      ve/re t1[a],s1[a],r1[a] p_e[e]_[file]_n_[a].dat
+      ve/cop $SIGMA(r1[a]*s1[a]/100.) d1[a]
+    else
+      if [j] = 2 then
+        ve/re t[j][a],s[j][a] p_e[e]_[file]_p_[a].dat
+      elseif [j] = 3 then
+        ve/re t[j][a],s[j][a] p_e[e]_[file]_d_[a].dat
+      elseif [j] = 4 then
+        ve/re t[j][a],s[j][a] p_e[e]_[file]_t_[a].dat
+      elseif [j] = 5 then
+        ve/re t[j][a],s[j][a] p_e[e]_[file]_he3_[a].dat
+      elseif [j] = 6 then
+        ve/re t[j][a],s[j][a] p_e[e]_[file]_he4_[a].dat
+      endif
+      ve/cop $SIGMA(s[j][a]/20.) d[j][a]
+    endif
+  enddo
+return

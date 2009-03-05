@@ -206,8 +206,12 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   size 24 18
   set xwin 0.0001
   set ywin 0.0001
-  model=chips
-  title [targ]//'(p,f)X, E='//[E]//'MeV, [q]=20,30,45,60,75,90,105,120,140^0! ([chips])'
+*  model=chips
+*  model=preco
+*  model=berti
+*  model=binar
+  model=lepro
+  title [targ]//'(p,f)X,E='//[E]//'MeV,[q]=20,30,45,60,75,90,105,120,140^0!('//[model]//')'
   clr
   zone 3 2
   set xval
@@ -246,8 +250,9 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   ve/cr ym8(1) R .0000035
   ve/cr ym9(1) R .00000175
 * Vector of the center bins in Kinetic Energy for all spectra (the same)
-  ve/cr ke([hnbin])
-  get/absc 11 ke
+  ve/cr lke([hnbin])
+  get/absc 11 lke
+********  ve/copy $SIGMA(10**lke) ke
 * LOOP over secondary fragments
   do j = 1 , 6
     if [j] = 2 THEN
@@ -326,11 +331,12 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
 ***********************************^^END
       exec hsolid [j][k] [hfbin] [hnbin] [downcol] [m] [mod]
 *     prepare the vector corresponding to the histogram
-      ve/cr v[jk]
+      ve/cr v[jk]([hnbin])
       get/cont [jk] v[jk]
     enddo
 *   n(j=1),p(j=2),d(j=3),t(j=4),He3(j=5),He4(j=6)
-ve/pri ke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5,v[j]6,v[j]7,v[j]8,v[j]9 p_[e]_[file]_[j]_[model].v
+    ve/wri lke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5,v[j]6,v[j]7,v[j]8,v[j]9 _
+    p_[e]_[file]_[j]_[model].v '1X,F9.6,9E10.3' 'OC'
   enddo
 *
   exec ~/PTOOL/black
@@ -375,7 +381,8 @@ macro chips targ=Al file=al1314 np=13 nn=14 e=90 runn=2000 next=3 dir=./
       exec writepar pf=[dir]chipstest.in
 *      shell rm chips_[file].log
       wait ' ' 2
-      shell ../test19 | > chips_[file].log
+*      shell ../test19 | > chips_[file].log
+      shell $G4INSTALL/bin/$G4SYSTEM/test19 | > chips_[file].log
       wait ' ' 2
 	  exec makehbk
       wait ' ' 2
