@@ -1,4 +1,4 @@
-$Id: History,v 1.432 2009-02-20 12:11:37 vnivanch Exp $
+$Id: History,v 1.433 2009-03-05 18:53:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 March 09: V.Ivant (emstand-V09-02-01)
+- New G4GoudsmitSaundersonMscModel is added
+- G4WentzelVIModel, G4eCoulombScattringModel:
+    o substitute scaling of low-energy limit by setting 1 keV for 
+      all particles;
+    o use EGSnrc form of screening parameter (second order correction) 
 
 20 February 09: V.Ivant (emstand-V09-02-00)
 - Move all virtual methods from inline to source
