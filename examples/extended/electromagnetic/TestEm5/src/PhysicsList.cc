@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.31 2009-02-22 19:02:39 maire Exp $
+// $Id: PhysicsList.cc,v 1.32 2009-03-06 18:04:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   emPhysicsList = new PhysListEmStandard(emName);
     
   defaultCutValue = 1.*mm;
-  cutLowLimit     = 1.*keV;
 
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
@@ -266,9 +265,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-  // define energy limits for the production threshold 
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(cutLowLimit,100*GeV);
-
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -308,11 +304,3 @@ void PhysicsList::SetCutForPositron(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutLowLimit(G4double val)
-{
-  cutLowLimit = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

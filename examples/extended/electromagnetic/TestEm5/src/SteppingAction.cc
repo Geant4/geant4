@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.7 2006-06-29 16:56:25 gunter Exp $
+// $Id: SteppingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
      != detector->GetAbsorber()) return;
- 
+
  eventaction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
@@ -66,7 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  } else {
    eventaction->AddTrakLenNeutr(aStep->GetStepLength());
    eventaction->CountStepsNeutr();   
- }     
+ }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

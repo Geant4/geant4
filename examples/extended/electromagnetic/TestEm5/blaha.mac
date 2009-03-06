@@ -1,4 +1,4 @@
-# $Id: blaha.mac,v 1.5 2009-02-22 19:02:39 maire Exp $
+# $Id: blaha.mac,v 1.6 2009-03-06 18:04:23 maire Exp $
 #
 # macro file for TestEm5.cc    
 #     		    
@@ -11,7 +11,7 @@
 #
 /testem/phys/addPhysics standard
 #
-/testem/phys/cutLimit 1 eV      
+/cuts/setLowEdge 1 eV      
 /testem/phys/setCuts 100 um
 #
 /run/initialize
@@ -20,7 +20,7 @@
 /gun/particle pi+ 
 /gun/energy 100 GeV
 #
-/testem/histo/setFileName blaha/new.c100um
+/testem/histo/setFileName blaha.cut
 /testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100  0  3 keV	#energy deposit  
 #
