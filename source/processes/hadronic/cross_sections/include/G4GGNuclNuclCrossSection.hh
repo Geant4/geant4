@@ -71,6 +71,9 @@ public:
 				G4double Z, G4double A, 
 				G4double aTemperature = 0.0);
 
+  G4double GetCoulombBarier(const G4DynamicParticle*, 
+				G4double Z, G4double A, G4double pR, G4double tR);
+
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)
   {}

@@ -41,7 +41,7 @@
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
 : fUpperLimit( 100000 * GeV ),
-  fLowerLimit( 0.1 * GeV ),
+  fLowerLimit( 0.1 * MeV ),
   fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
 {
   theProton   = G4Proton::Proton();
@@ -142,9 +142,17 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
 
   fTotalXsc = xsection;
 
+  G4double cB = GetCoulombBarier(aParticle, tZ, tA, pR, tR);
+
+  fTotalXsc *= cB;
+
   fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
+  fInelasticXsc *= cB;
+
   fElasticXsc   = fTotalXsc - fInelasticXsc;
+
+  // if (fElasticXsc < DBL_MIN) fElasticXsc = DBL_MIN;
     
   G4double difratio = ratio/(1.+ratio);
 
@@ -161,8 +169,45 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
 
   if (fElasticXsc < 0.) fElasticXsc = 0.;
 
-  return xsection; 
+  return fInelasticXsc;   // xsection; 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4GGNuclNuclCrossSection::
+GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double pR, G4double tR)
+{
+  G4double ratio;
+  G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
+
+
+  G4double pTkin = aParticle->GetKineticEnergy();
+  G4double pPlab = aParticle->GetTotalMomentum();
+  G4double pM    = aParticle->GetDefinition()->GetPDGMass();
+  G4double tM    = tZ*proton_mass_c2 + (tA-tZ)*neutron_mass_c2; // ~ 1% accuracy
+
+  G4double pElab = pTkin + pM;
+  G4double pEcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM);
+  G4double pPcm  = pPlab*tM/pEcm;
+  G4double pTcm  = std::sqrt(pM*pM + pPcm*pPcm) - pM;
+
+  G4double bC    = fine_structure_const*hbarc*pZ*tZ;
+           bC   /= pR + tR;
+           bC   /= 4.;  // 4., 2. parametrisation cof ??? vmg
+
+	   // G4cout<<"pTkin = "<<pTkin/GeV<<"; pPlab = "
+	   // <<pPlab/GeV<<"; bC = "<<bC/GeV<<"; pTcm = "<<pTcm/GeV<<G4endl;
+
+  ratio = 1. - bC/pTcm;
+  // if(ratio < DBL_MIN) ratio = DBL_MIN;
+  if(ratio < 0.) ratio = 0.;
+
+  // G4cout <<"ratio = "<<ratio<<G4endl;
+  return ratio;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //
