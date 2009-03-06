@@ -20,30 +20,31 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(*)  Fixes included in release 9.2.p01
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-03
+config                                           config-V09-02-03            (*)
 ------
 - Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
 
-geometry/navigation                              geomnav-V09-02-01
+geometry/navigation                              geomnav-V09-02-01           (*)
 -------------------
 - Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
   for rare cases of negative steps.
 
-materials                                        materials-V09-02-00
+materials                                        materials-V09-02-00         (*)
 ---------
 - G4MaterialStoppingICRU73: added 4 missing materials from ICRU'73.
 - G4SimpleMaterialStoppingICRU73: fixed density of Mo and number of materials.
 
-persistency/ascii                                ascii-V09-02-04
+persistency/ascii                                ascii-V09-02-04             (*)
 -----------------
 - Fix in delta theta for handling of G4Sphere, and renaming 'phiTotal'
   to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
 - Removed deprecated class G4tgrFileOut, not used.
 
-persistency/gdml                                 gdml-V09-02-04
+persistency/gdml                                 gdml-V09-02-04              (*)
 ----------------
 - Corrected treatment of brackets and indeces for matrices in G4GDMLEvaluator.
   Fixes problem report #1048.
@@ -52,7 +53,7 @@ persistency/gdml                                 gdml-V09-02-04
   modules to get lost and therefore not assigned to volumes.
   Fixes problem report #1049.
 
-physics_lists                                    phys-lists-V09-02-01
+physics_lists                                    phys-lists-V09-02-01        (*)
 -------------
 - G4MiscLHEPBuilder: corrected creation of processes to happen dinamically
   in order to have them proper deleted at the end of application.
@@ -67,7 +68,7 @@ processes/electromagnetic/highenergy             emhighenergy-V09-02-00
 
 processes/electromagnetic/lowenergy              emlowen-V09-02-15
 -----------------------------------
-- Added protections against FPE error in G4hLowEnergyLoss.
+- Added protections against FPE error in G4hLowEnergyLoss.                   (*)
   Fixes problem report #953 (also report in Hypernews EM forum #893).
 - Added G4LivermoreIonisationModel, first implementation of LowEnergyIonisation
   in the new design.
@@ -114,7 +115,7 @@ processes/electromagnetic/utils                  emutils-V09-02-03
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-02-03)
+- cross_sections (hadr-cross-V09-02-03)                                      (*)
   o G4CrossSectionDataStore: added Clean() method; constructor and destructor
     no longer inline; added destruction of data sets; use std::vector instead
     of flat arrays.
@@ -122,7 +123,7 @@ processes/hadronic
     section data sets.
   o G4VCrossSectiondataSet: constructor and detructor no longer inline; added
     registration/deregistration mechanism.
-- management (hadr-man-V09-02-04)
+- management (hadr-man-V09-02-04)                                            (*)
   o G4HadronicProcessStore: activated destruction of processes at application
     closure; added Clean() method and cleanup of model and cross section stores.
 - models/cascade (hadr-casc-V09-02-01)
@@ -132,40 +133,41 @@ processes/hadronic
     leave nucleus without interacting.
   o G4NucleiModel: get 'high_energy_interaction' flag value from
     G4ElementaryParticleCollider.
-  o Set absorption coefficient 1.0 instead of 0.2 in G4CascadSpecialFunctions.
-    Added printCrossSection() method.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-01)
+  o Set absorption coefficient 1.0 instead of 0.2 in                         (*)
+    G4CascadSpecialFunctions.
+  o Added printCrossSection() method.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-01)       (*)
   o Added de-registration in destructor of G4QCaptureAtRest.
   o Added string decay destruction to G4ElectroNuclearReaction.
-- models/de_excitation (hadr-deex-V09-02-07)
+- models/de_excitation (hadr-deex-V09-02-07)                                 (*)
   o Added smearing of Coloumb barriers for d, t, he3 and alpha particles.
   o Fix in G4FissionProbability for the computation of EmissionProbability();
     returned value was wrong to missing parenthesis in the implementation of
     the formula.
   o Fix to substitute 'hbar_Plank' with 'hbarc' in G4EvaporationProbability.
-- models/management (hadr-modman-V09-02-03)
+- models/management (hadr-modman-V09-02-03)                                  (*)
   o G4HadronicInteractionRegistry: modified to conform to singleton definition.
   o G4HadronicInteraction, G4InelasticInteraction: made constructor, destructor
     and some other methods not inline.
-- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-01)
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-01)          (*)
   o G4MuNuclearInteraction: added de-registration of the process.
-- models/pre_equilibrium (hadr-pre-V09-02-03)
+- models/pre_equilibrium (hadr-pre-V09-02-03)                                (*)
   o G4PreCompoundIon: fixed probability of light ion emission.
   o G4PreCompoundXXX: added decrease of Coulomb barrier for d, t, a, he3.
   o Some cleanup of comments.
-- stopping (hadr-stopping-V09-02-01)
+- stopping (hadr-stopping-V09-02-01)                                         (*)
   o Use registration/de-registration mechanism for all LHEP processes.
 
 examples                                         examples-V09-02-02
 --------
 - Updated reference outputs.
-- advanced/brachytherapy (brachy-V09-02-00)
+- advanced/brachytherapy (brachy-V09-02-00)                                  (*)
   o Fixed compilation errors and warnings when G4ANALYSIS_USE is not set.
-- advanced/composite_calorimeter (ccal-V09-02-00)
+- advanced/composite_calorimeter (ccal-V09-02-00)                            (*)
   o Fixed compilation warnings in CCalRunAction and CCalEndOfEventAction.
-- advanced/hadrontherapy (hadrontherapy-V09-02-00)
+- advanced/hadrontherapy (hadrontherapy-V09-02-00)                           (*)
   o Fixed a compilation warnings in HIIonLEP.
-- advanced/human_phantom (human_phantom-V09-02-01)
+- advanced/human_phantom (human_phantom-V09-02-01)                           (*)
   o Migrated GDML read setup to use embedded GDML reader as in Geant4 9.2.
   o Corrected URL for standard location of schema in all GDML files.
   o Use "OrganPos" and "OrganRot" as names for organ's transformations in
@@ -173,10 +175,10 @@ examples                                         examples-V09-02-02
   o Fixed 'solids' tag in ORNLLeftLegBone.gdml files for male and female.
   o Fixed compilation warnings.
   o Updated README and GNUmakefile.
-- advanced/microbeam (microbeam-V09-02-00)
+- advanced/microbeam (microbeam-V09-02-00)                                   (*)
   o Correction in MicrobeamEMField to use logical '&&', not bit '&' in
     conditional statements.
-- advanced/nanobeam (nanobeam-V09-02-00)
+- advanced/nanobeam (nanobeam-V09-02-00)                                     (*)
   o Correction in TabulatedField3D to use logical '&&', not bit '&' in
     conditional statements.
 - extended/electromagnetic/TestEm5 (testem5-V09-02-01)
@@ -186,13 +188,13 @@ examples                                         examples-V09-02-02
     production threshold.
   o PhysicsList: changted EmOptions: 12*20 bins; lll=1.e-2;
     PhysicsList::SetCuts(): SetEnergyRange(1*keV,100*GeV).
-- extended/medical/DICOM (DICOM-V09-02-01)
+- extended/medical/DICOM (DICOM-V09-02-01)                                   (*)
   o Added report on dose per voxel.
   o Added warning for erroneous inclusion of development code in
     release 9.2 (to be removed when fix will be included in patch).
 - extended/medical/fanoCavity (fano-V09-02-00)
   o corrected computation of 'error' in EndOfRun.
-- extended/persistency/gdml/G02 (G02-V09-02-01)
+- extended/persistency/gdml/G02 (G02-V09-02-01)                              (*)
   o Guarded usage of G4UITCSH with G4UI_USE_TCSH flag, to allow for
     compilation on Windows.
   o Added visualization properties for world volume in DetectorConstruction
