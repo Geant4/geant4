@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2006-11-20 12:43:02 ahoward Exp $
+# $Id: GNUmakefile,v 1.11 2009-03-06 09:43:52 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -19,11 +19,6 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 ##include hadronic_lists.gmk
-
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS += `aida-config --lib`
-endif
 
 .PHONY: all
 all: lib bin

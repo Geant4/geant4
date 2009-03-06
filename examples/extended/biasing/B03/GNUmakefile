@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2005-03-17 17:20:19 daquinog Exp $
+# $Id: GNUmakefile,v 1.14 2009-03-06 09:49:18 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -45,11 +45,6 @@ LDFLAGS += \
 	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil -lexampleB03 -lpython$(PYTHONVERSION)
 
 include $(G4INSTALL)/config/binmake.gmk
-
-ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
-endif
 
 $(SWIGSO): $(objectfilesWrapper) 
 	@echo Creating shared library:  $@  

@@ -1,4 +1,4 @@
-#  $Id: GNUmakefile,v 1.7 2004-12-08 15:37:13 daquinog Exp $
+#  $Id: GNUmakefile,v 1.8 2009-03-06 09:41:12 gbarrand Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
@@ -12,12 +12,6 @@ include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: Tiara tiaraClean swigClean clean_all all
 all: Tiara
-
-#ifdef G4ANALYSIS_USE
-# CPPFLAGS += `aida-config --include`
-# LDFLAGS  += `aida-config --lib`
-# LDLIBS += `aida-config --lib`
-#endif
 
 Tiara:
 	@for dir in $(TIARA_SRC_DIRS); do ( cd source/$$dir && $(MAKE)); done;:

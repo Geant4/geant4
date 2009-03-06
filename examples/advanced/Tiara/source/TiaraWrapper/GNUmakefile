@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2006-11-23 08:50:29 ahoward Exp $
+# $Id: GNUmakefile,v 1.11 2009-03-06 09:43:52 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -45,11 +45,6 @@ all: $(copyDeps) $(SWIGSO)
 
 
 include $(G4INSTALL)/config/binmake.gmk
-
-ifdef G4ANALYSIS_USE
-CPPFLAGS += `aida-config --include`
-# LDFLAGS  += `aida-config --lib`
-endif
 
 CPPFLAGS += -I$(TIARA_BASE)/source/tiara/include\
 	    -I$(PYTHON_INCLUDE_DIR) \
