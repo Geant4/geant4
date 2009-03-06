@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TiaraSim.cc,v 1.9 2006-06-29 15:45:31 gunter Exp $
+// $Id: TiaraSim.cc,v 1.10 2009-03-06 10:00:42 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -121,7 +121,7 @@ void TiaraSim::initializeVisManager() {
   }else {
     G4cout << "TiaraSim::initializeVisManager(): no VisManager!" << G4endl;
   }
-};
+}
 void TiaraSim::initialize(){
   G4bool ready(true);
   if (!fPrimary) {
