@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.4 2009-02-22 17:48:53 maire Exp $
+// $Id: PhysicsList.cc,v 1.5 2009-03-06 18:24:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +53,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
-  
-  cutLowLimit     = 1.*keV;
     
   SetVerboseLevel(1);
 }
@@ -234,10 +232,6 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-  // define energy limits for the production threshold 
-  G4ProductionCutsTable::GetProductionCutsTable()
-                                        ->SetEnergyRange(cutLowLimit,100*GeV);
-  
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -267,13 +261,6 @@ void PhysicsList::SetCutForElectron(G4double cut)
   cutForElectron = cut;
   SetParticleCuts(cutForElectron, G4Electron::Electron());
   SetParticleCuts(cutForElectron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutLowLimit(G4double val)
-{
-  cutLowLimit = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
