@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GGNNCrossSectionDataTest.cc,v 1.3 2008-11-28 16:52:53 grichine Exp $
+// $Id: G4GGNNCrossSectionDataTest.cc,v 1.4 2009-03-06 15:48:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,7 +89,13 @@
 #include "G4PiNuclearCrossSection.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4PhotoNuclearCrossSection.hh"
+
+
+
 #include "G4TripathiCrossSection.hh"
+#include "G4IonsShenCrossSection.hh"
+#include "G4IonsKoxCrossSection.hh"
+#include "G4IonsSihverCrossSection.hh"
 
 #include "G4VQCrossSection.hh"
 #include "G4QElasticCrossSection.hh"
@@ -117,7 +123,7 @@ int main()
   G4cout << "18 argon" << G4endl;
   G4cout << "26 iron" << G4endl;
   G4cout << "29 copper" << G4endl;
-  G4cout << "39 yridium" << G4endl;
+  G4cout << "39 ytrium" << G4endl;
   G4cout << "48 cadmium" << G4endl;
   G4cout << "74 tugnsten" << G4endl;
   G4cout << "77 iridium" << G4endl;
@@ -246,7 +252,10 @@ int main()
   G4StateManager* g4State = G4StateManager::GetStateManager();
   if (! g4State->SetNewState(G4State_Init) );
 
-
+  // C
+  // G4int Z = 6;
+  // G4int A = 12;
+  // Ne
   G4int Z = 10;
   G4int A = 20;
 
@@ -274,8 +283,14 @@ int main()
 
   G4GGNuclNuclCrossSection ggXsc;
 
-  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc,ggDifXsc, ratio;
+  G4IonsKoxCrossSection    koxXsc;
+  G4IonsShenCrossSection   shenXsc;
+  G4IonsSihverCrossSection sihverXsc;
+  G4TripathiCrossSection   triXsc;
 
+  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc;
+  // G4double ggDifXsc, ratio;
+  G4double koxInXsc, shenInXsc, sihverInXsc, triInXsc;
                                   
   kinEnergy = 10*MeV;
 
@@ -290,8 +305,8 @@ int main()
 
   
                   
-  kinEnergy = 0.1*GeV;
-  iMax = 80;
+  kinEnergy = 0.01*GeV;
+  iMax = 100;
   writegg <<iMax<< G4endl; 
  
 
@@ -302,13 +317,13 @@ int main()
                                                 G4ParticleMomentum(1.,0.,0.), 
                                                 kinEnergy);
 
-     ggTotXsc = ggXsc.GetCrossSection(aDynamicParticle,
+     ggIneXsc = ggXsc.GetCrossSection(aDynamicParticle,
                                  theElement, 273*kelvin);
 
      ggElaXsc = ggXsc.GetElasticGlauberGribovXsc();
      // ggElaXsc = ggXsc.GetHadronNucleaonXscPDG(theDynamicParticle, theElement);
 
-     ggIneXsc  = ggXsc.GetInelasticGlauberGribovXsc();
+     ggTotXsc  = ggXsc.GetTotalGlauberGribovXsc();
      ggProdXsc = ggXsc.GetProductionGlauberGribovXsc();
      // ggDifXsc  = ggXsc.GetDiffractionGlauberGribovXsc();
 
@@ -319,13 +334,15 @@ int main()
      // ratio = ggXsc.GetRatioSD(theDynamicParticle, theElement->GetN(), theElement->GetZ() );
      // ratio = ggXsc.GetRatioQE(theDynamicParticle, theElement->GetN(), theElement->GetZ() );
 
-     G4cout << kinEnergy/A <<" MeV,   tot = "<<  ggTotXsc/millibarn 
+     G4cout << kinEnergy/A <<" MeV/n,   tot = "<<  ggTotXsc/millibarn 
      << " mb;   el = "
      <<  ggElaXsc/millibarn << " mb;   in = " <<  ggIneXsc/millibarn<< " mb;   prod = " 
      <<  ggProdXsc/millibarn << G4endl;
 
      writegg << kinEnergy/A <<"  "<<  ggTotXsc/millibarn // <<  "  "<<  ggElaXsc/millibarn 
-             <<"  " <<  ggIneXsc/millibarn <<"  " <<  ggProdXsc/millibarn << G4endl;
+             <<"  " <<  ggIneXsc/millibarn <<"  " <<  ggProdXsc/millibarn
+       // <<"  " <<  ggElaXsc/millibarn 
+             << G4endl;
     
      // G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "
      //       <<  ggProdXsc/millibarn << " mb; ratio = 1 - prod/in = " <<  ratio << G4endl;
@@ -344,6 +361,64 @@ int main()
   }
               
       
+
+
+  // Check Nucleus-Nucleus inelastic Xsc models
+  G4cout<<"Check Nucleus-Nucleus inelastic Xsc models"<<G4endl;
+ 
+  std::ofstream writenn("nntxs.dat", std::ios::out ) ;
+  writenn.setf( std::ios::scientific, std::ios::floatfield );
+
+  
+                  
+  kinEnergy = 0.01*GeV;
+  iMax = 90;
+  writenn <<iMax<< G4endl; 
+ 
+
+  for(i = 0; i < iMax; i++)
+  {
+   
+    G4DynamicParticle* aDynamicParticle = new G4DynamicParticle(theParticleDefinition,
+                                                G4ParticleMomentum(1.,0.,0.), 
+                                                kinEnergy);
+
+     ggIneXsc    = ggXsc.GetCrossSection(aDynamicParticle,
+                                 theElement, 273*kelvin);
+     koxInXsc    = koxXsc.GetCrossSection(aDynamicParticle,
+                                 theElement, 273*kelvin);
+     shenInXsc   = shenXsc.GetCrossSection(aDynamicParticle,
+                                 theElement, 273*kelvin);
+     sihverInXsc = sihverXsc.GetCrossSection(aDynamicParticle,
+                                 theElement, 273*kelvin);
+     triInXsc    = triXsc.GetCrossSection(aDynamicParticle,
+                                 theElement, 273*kelvin);
+
+     G4cout << kinEnergy/A <<" MeV/n,   gg = "<<  ggIneXsc/millibarn 
+     << " mb;   kox = "
+     <<  koxInXsc/millibarn << " mb;   shen = " <<  shenInXsc/millibarn<< " mb;   sihver = " 
+     <<  sihverInXsc/millibarn << G4endl;
+
+     writenn << kinEnergy/A <<"  "<<  ggIneXsc/millibarn <<  "  "<<  triInXsc/millibarn 
+             <<"  " <<  shenInXsc/millibarn <<"  " <<  sihverInXsc/millibarn << G4endl;
+    
+     // G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "
+     //       <<  ggProdXsc/millibarn << " mb; ratio = 1 - prod/in = " <<  ratio << G4endl;
+    
+     // G4cout << kinEnergy/GeV <<" GeV, in-Xsc = "<<  ggIneXsc/millibarn << " mb; sdif-Xsc = "
+     //        <<  ggDifXsc/millibarn << " mb; ratio = dif/in = " <<  ratio << G4endl;
+    
+
+  // writenn << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
+     // writenn << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
+  // writenn << kinEnergy/GeV <<"\t"<< ggIneXsc/millibarn <<"\t"<< ggProdXsc/millibarn << G4endl;
+     //     writenn << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
+
+     kinEnergy *= 1.145;
+     delete aDynamicParticle;
+  }
+              
+     
 
  
   /*
