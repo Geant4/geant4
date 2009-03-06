@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009-03-06 09:43:52 gbarrand Exp $
+# $Id: GNUmakefile,v 1.12 2009-03-06 09:53:51 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -56,10 +56,6 @@ LDFLAGS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiara \
 	-L$(G4WORKDIR)/lib/plists/$(G4SYSTEM) \
 	-L$(PYTHON_LIB_DIR)
 
-
-ifdef G4ANALYSIS_USE
- LDLIBS += `aida-config --lib`
-endif
 
 LDLIBS +=   -lpython$(PYTHONVERSION) \
 	    -lnsl \
