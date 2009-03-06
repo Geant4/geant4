@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.17 2009-02-19 11:26:01 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.18 2009-03-06 09:40:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -185,6 +185,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
+  /*
   // correction to get better width even using stepmax
   if(abs(meanLoss- oldloss) < 1.*eV)
     samestep += 1;
@@ -195,6 +196,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(width > 4.50) width = 4.50;
   e1 = width*e1Fluct;
   e2 = width*e2Fluct;
+  */
+  e1 = e1Fluct;
+  e2 = e2Fluct;
 
   // cut and material dependent rate 
   G4double rate = 1.0;
