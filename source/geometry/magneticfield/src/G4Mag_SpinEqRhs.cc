@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc,v 1.13 2008-11-21 21:18:26 gum Exp $
+// $Id: G4Mag_SpinEqRhs.cc,v 1.14 2009-03-06 22:36:04 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // This is the standard right-hand side for equation of motion.
@@ -96,7 +96,7 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
-   if (Spin.mag() > 0.) Spin = Spin.unit();
+   // if (Spin.mag() > 0.) Spin = Spin.unit();
 
    G4ThreeVector dSpin;
 
