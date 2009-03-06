@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.8 2006-06-29 18:24:51 gunter Exp $
+// $Id: G4SimpleHeum.cc,v 1.9 2009-03-06 22:33:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Heum:
@@ -103,4 +103,5 @@ G4SimpleHeum::DumbStepper( const G4double  yIn[],
   }
       
   // NormaliseTangentVector( yOut );           
+  if ( fNumberOfVariables == 12 ) NormalisePolarizationVector( yOut );
 }  

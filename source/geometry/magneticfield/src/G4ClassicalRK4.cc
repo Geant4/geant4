@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.12 2006-06-29 18:23:37 gunter Exp $
+// $Id: G4ClassicalRK4.cc,v 1.13 2009-03-06 22:32:11 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,6 +108,7 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
     yOut[i] = yIn[i]+h6*(dydx[i]+dydxt[i]+2.0*dydxm[i]); //+K1/6+K4/6+(K2+K3)/3
   }
   // NormaliseTangentVector( yOut );
+  if ( nvar == 12 ) NormalisePolarizationVector ( yOut );
   
 }  // end of DumbStepper ....................................................
 
