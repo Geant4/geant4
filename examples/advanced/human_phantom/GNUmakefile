@@ -12,11 +12,6 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-ifdef G4ANALYSIS_USE  
-  CPPFLAGS  += `aida-config --include`
-  EXTRALIBS += `aida-config --lib`
-endif
-
 .PHONY: all
 all: lib bin
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2006-03-08 17:55:37 sfonseca Exp $
+# $Id: GNUmakefile,v 1.8 2009-03-06 09:32:29 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples with internal subpackages
 # R. Capra, 09 Sep 2005
@@ -23,13 +23,6 @@ endif
 all: makesub lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
-
-ifdef G4ANALYSIS_USE  
- CPPFLAGS += `aida-config --include`
- CPPFLAGS += -DG4ANALYSIS_USE
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
-endif
 
 CPPFLAGS += -I./detector/include \
             -I./generalPurpose/include \

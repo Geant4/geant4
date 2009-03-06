@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.16 2008-06-12 23:15:27 cirrone Exp $
+$Id: History,v 1.17 2009-03-06 09:25:45 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.16 2008-06-12 23:15:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+6 March 2009 Guy Barrand (in agreement with G.Cosmo)
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
 12.06.2008 - G.A.P.Cirrone (lAr_calorimeter-V09-01-00)
              Fixed a compilation error in the Analysis manager
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2005-12-07 14:35:12 guatelli Exp $
+$Id: History,v 1.9 2009-03-06 09:28:28 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.8 2005-12-07 14:35:12 guatelli Exp $
 
                       Category History file
                       ---------------------
+6 March 2009 Guy Barrand (in agreement with G.Cosmo)
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
 07.12.2005  Susanna Guatelli  (purtag-V07-01-00)
 - The example compiles with CLHEP 2.0.2.2
 - The method SetCutForOthers() is deleted because obsolete
