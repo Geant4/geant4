@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.49 2007-08-17 12:30:33 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.50 2009-03-06 23:21:33 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -501,16 +501,20 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
       h = htry ; // Set stepsize to the initial trial value
 
-      // G4double inv_epspos_sq = 1.0 / eps * eps; 
-      G4double inv_eps_vel_sq = 1.0 / (eps_rel_max*eps_rel_max); 
+      // G4double inv_epspos_sq = 1.0 / eps * eps;
+      G4double inv_eps_vel_sq = 1.0 / (eps_rel_max*eps_rel_max);
 
       G4double errpos_sq=0.0;    // square of displacement error
       G4double errvel_sq=0.0;    // square of momentum vector difference
+      G4double errspin_sq=0.0;   // square of spin vector difference
 
       G4int iter;
 
       static G4int tot_no_trials=0; 
       const G4int max_trials=100; 
+
+      G4ThreeVector Spin(y[9],y[10],y[11]);
+      G4bool     hasSpin= (Spin.mag2() > 0.0); 
 
       for (iter=0; iter<max_trials ;iter++)
       {
@@ -529,10 +533,20 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
           // Accuracy for momentum
           errvel_sq =  (sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) )
                      / (sqr(y[3]) + sqr(y[4]) + sqr(y[5]) );
-          // errvel_sq /= eps_rel_max*eps_rel_max; 
+          // errvel_sq /= eps_rel_max*eps_rel_max;
           errvel_sq *= inv_eps_vel_sq;
 
           errmax_sq = std::max( errpos_sq, errvel_sq ); // Square of maximum error
+
+          if( hasSpin ) { 
+             // Accuracy for spin
+             errspin_sq =  ( sqr(yerr[9]) + sqr(yerr[10]) + sqr(yerr[11]) )
+                        /  ( sqr(y[9]) + sqr(y[10]) + sqr(y[11]) );
+             errspin_sq *= inv_eps_vel_sq;
+             //if( errmax_sq < errspin_sq ) { G4cout << "Spin limited. " ; }  
+             //errmax_sq = std::max( errmax_sq, errspin_sq ); 
+          }
+
           // errmax = std::sqrt( errmax_sq );
 	  if(errmax_sq <= 1.0 ) break ; // Step succeeded. 
 
@@ -968,3 +982,4 @@ void G4MagInt_Driver::SetSmallestFraction(G4double newFraction)
 	    << "  Value must be between 1.e-8 and 1.e-16" << G4endl;
   }
 }
+
