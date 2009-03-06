@@ -28,7 +28,7 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.icc,v 1.6 2006-06-29 16:14:31 gunter Exp $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.7 2009-03-06 10:36:50 gbarrand Exp $
 // Tag:           $Name: not supported by cvs2svn $
 //
 
@@ -185,7 +185,8 @@
  template <typename LabelledObject>
  LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: InsertItemAfter(G4int index)
  {
-  return InsertBefore(index+1);
+  //G.Barrand : return InsertBefore(index+1);
+  return InsertItemBefore(index+1); //G.Barrand
  }
  
  
