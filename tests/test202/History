@@ -1,8 +1,12 @@
-$Id: History,v 1.5 2007-11-10 14:43:34 allison Exp $
+$Id: History,v 1.6 2009-03-09 15:57:26 allison Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+
+9th March 2009  John Allison  (test202-V09-02-00)
+- Suppressed all deselection of problem volumes.  All volumes OK now.
+- Minor refinements.
 
 19th November 2007  John Allison  (test202-V09-00-01)
 - Re-introduced G4EllipticalCone into standard vis.mac.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202PrimaryGeneratorAction.cc,v 1.1 2007-02-08 15:45:29 allison Exp $
+// $Id: Tst202PrimaryGeneratorAction.cc,v 1.2 2009-03-09 15:57:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ Tst202PrimaryGeneratorAction::Tst202PrimaryGeneratorAction()
 #ifndef GPS
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,1.,0.));
   particleGun->SetParticleEnergy(100.*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,-300.*cm,0.*cm));
+  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,-500.*cm,0.*cm));
 #endif
 }
 
