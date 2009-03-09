@@ -105,6 +105,8 @@ List of fixes included in this public patch since the public release 9.2:
       o Some cleanup of comments and formatting...
     + stopping:
       o Activate registration/de-registration for all LHEP processes.
+    + util:
+      o G4StableIsotopes: filled in missing isotope names.
 
   o Generic Processes:
     -----------------
