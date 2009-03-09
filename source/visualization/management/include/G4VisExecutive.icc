@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.19 2008-01-29 22:35:29 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.20 2009-03-09 15:36:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,9 +90,8 @@
 #include "G4VRML2.hh"
 #endif
 
-G4VisExecutive::G4VisExecutive () {}
-
-void G4VisExecutive::RegisterGraphicsSystems () {
+inline void
+G4VisExecutive::RegisterGraphicsSystems () {
 
   // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
@@ -147,7 +146,7 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 
 }
 
-void 
+inline void 
 G4VisExecutive::RegisterModelFactories()
 {
    // Trajectory draw models
