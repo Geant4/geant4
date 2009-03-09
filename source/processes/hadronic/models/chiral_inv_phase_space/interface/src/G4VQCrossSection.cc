@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.15 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4VQCrossSection.cc,v 1.16 2009-03-09 15:41:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,9 +97,10 @@ G4double G4VQCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4doub
                                         G4double* Y)
 {
 #ifdef pdebug
-  G4cout<<"G4VQCrossSection::EquLinearFit: ***Called*** X="<<DX<<", N="<<N<<", X0="<<X0
+  G4cout<<"G4VQCrossSection::EquLinearFit: ***Called*** X="<<X<<", N="<<N<<", X0="<<X0
         <<", DX="<<DX<<G4endl;
   G4cout<<"G4VQCrossSection::EquLinearFit: Y[0]="<<Y[0]<<", Y[N-1]="<<Y[N-1]<<G4endl;
+  //for(G4int i=1; i<N; i++)G4cout<<"-----G4VQCS::EquLinearFit: Y["<<i<<"]="<<Y[i]<<G4endl;
 #endif
   if(DX<=0. || N<2)
   {
@@ -114,5 +115,8 @@ G4double G4VQCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4doub
   d-=j; // excess
   G4double yi=Y[j];
   G4double sigma=yi+(Y[j+1]-yi)*d;
+#ifdef pdebug
+  G4cout<<"G4VQCrossSection::EquLinearFit: CS="<<sigma<<G4endl;
+#endif
   return sigma;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.8 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.9 2009-03-09 15:41:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -94,10 +94,9 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
 #ifdef debug
   G4cout<<"G4QLowEnergy::GetMeanFreePath:"<<nE<<" Elems"<<G4endl;
 #endif
-  G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
   G4int pPDG=0;
-  // @@ At present it is made only for n & p, but can be extended if inXS are available
-  if      ( incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 100001002;
+  if      ( incidentParticleDefinition ==  G4Proton::Proton()         ) pPDG = 2212;
+  else if ( incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 100001002;
   else if ( incidentParticleDefinition ==  G4Alpha::Alpha()           ) pPDG = 100002004;
   else if ( incidentParticleDefinition ==  G4Triton::Triton()         ) pPDG = 100001003;
   else if ( incidentParticleDefinition ==  G4He3::He3()               ) pPDG = 100002003;
@@ -111,7 +110,9 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
     G4cout<<"G4QIonIonElastic::GetMeanFreePath: PDG="<<prPDG<<"="<<pPDG<<G4endl;
 #endif
   }
-  else G4cout<<"-Warning-G4QLowEnergy::GetMeanFreePath: only AA are implemented"<<G4endl;  
+  else G4cout<<"-Warning-G4QLowEnergy::GetMeanFreePath: only AA & pA implemented"<<G4endl;
+  G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
+  if(pPDG == 2212) CSmanager=G4QProtonNuclearCrossSection::GetPointer();
   Momentum/=incidentParticleDefinition->GetBaryonNumber(); // Divide Mom by projectile A
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -1076,6 +1077,7 @@ G4double G4QLowEnergy::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
   if(first)                              // Connection with a singletone
   {
     CSmanager=G4QIonIonCrossSection::GetPointer();
+    if(PDG == 2212) CSmanager=G4QProtonNuclearCrossSection::GetPointer();
     first=false;
   }
 #ifdef debug

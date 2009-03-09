@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.29 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.30 2009-03-09 15:41:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -251,7 +251,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #ifdef debug
     G4cout<<"G4QCollision::GetMeanFreePath: isovectorLength="<<isoSize<<G4endl; // Result
 #endif
-    if(isoSize)                             // The Element has non-trivial abumdance set
+    if(isoSize)                             // The Element has non-trivial abundance set
     {
       indEl=pElement->GetIndex()+1;         // Index of the non-trivial element
       if(!Isotopes->IsDefined(Z,indEl))     // This index is not defined for this Z: define
@@ -608,8 +608,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   // Leptons with photonuclear
   // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + NC (?)
   //
-  if (aProjPDG == 11 || aProjPDG == 13 || aProjPDG == 15) {
-
+  if (aProjPDG == 11 || aProjPDG == 13 || aProjPDG == 15)
+  {
 #ifdef debug
     G4cout<<"G4QCollision::PostStDoIt:startSt="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
@@ -804,8 +804,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //
   // neutrinoNuclear interactions (nu_e, nu_mu only)
   //
-  } else if (aProjPDG == 12 || aProjPDG == 14) {
-
+  }
+  else if (aProjPDG == 12 || aProjPDG == 14)
+  {
     G4double kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
 #ifdef debug
@@ -1163,13 +1164,13 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         return G4VDiscreteProcess::PostStepDoIt(track, step);
       }
     }
-
   //
   // quasi-elastic for p+A(Z,N)
   //
-  } else if (aProjPDG == 2212 && Z > 0 && N > 0) {
-    //else if(2>3)
-
+  }
+  else if (aProjPDG == 2212 && Z > 0 && N > 0)
+  //else if(2>3) 
+  {
     G4QuasiFreeRatios* qfMan=G4QuasiFreeRatios::GetPointer();
     std::pair<G4double,G4double> fief=qfMan->GetRatios(momentum, aProjPDG, Z, N);
     G4double qepart=fief.first*fief.second;

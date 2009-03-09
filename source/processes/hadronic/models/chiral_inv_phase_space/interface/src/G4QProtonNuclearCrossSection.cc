@@ -375,7 +375,7 @@ G4double G4QProtonNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4dou
     if(pex>0.)
     {
       G4double dp=P-pos;
-      sigma+=pex*std::exp(dp*dp/wid);
+      sigma+=pex*std::exp(-dp*dp/wid);
     }
   }
   else
@@ -408,7 +408,7 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
   }
   else if(tZ<93 && tN<146)                // General solution
   {
-    G4double lP=std::log(P);
+    //G4double lP=std::log(P);            // Already calculated
     G4double d=lP-4.2;
     G4double p2=P*P;
     G4double p4=p2*p2;
@@ -428,6 +428,10 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double s=3.57+.009*a2/(1.+.0001*a2*a);
     G4double h=(.01/a4+2.5e-6/a)*(1.+7.e-8*a4)/(1.+6.e7/a12/a2);
     sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
+#ifdef pdebug
+  G4cout<<"G4QProtNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g<<",d="
+        <<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
+#endif
   }
   else
   {
