@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.117 2009-02-25 18:28:00 lgarnier Exp $
+// $Id: G4VisManager.cc,v 1.118 2009-03-09 12:42:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,6 +158,17 @@ G4VisManager::G4VisManager ():
     // #endif
     //   // (Don't forget to delete visManager;)
     //   ...
+
+    // Make top level command directory...
+    G4UIcommand* directory;
+    directory = new G4UIdirectory ("/vis/");
+    directory -> SetGuidance ("Visualization commands.");
+    fDirectoryList.push_back (directory);
+
+    // Instantiate top level basic commands
+    G4VVisCommand::SetVisManager (this);  // Sets shared pointer
+    RegisterMessenger(new G4VisCommandVerbose);
+    RegisterMessenger(new G4VisCommandInitialize);
   }
 }
 
@@ -199,6 +210,12 @@ G4VisManager* G4VisManager::GetInstance () {
 
 void G4VisManager::Initialise () {
 
+  if (fInitialised && fVerbosity >= warnings) {
+    G4cout << "WARNING: G4VisManager::Initialise: already initialised."
+	   << G4endl;
+    return;
+  }
+
   if (fVerbosity >= startup) {
     G4cout << "Visualization Manager initialising..." << G4endl;
   }
@@ -237,14 +254,9 @@ void G4VisManager::Initialise () {
     G4cout << G4endl;
   }
 
-  // Make top level directory...
-  G4UIcommand* directory;
-  directory = new G4UIdirectory ("/vis/");
-  directory -> SetGuidance ("Visualization commands.");
-  fDirectoryList.push_back (directory);
-
-  // ... and make command directory for commands instantiated in the
+  // Make command directories for commands instantiated in the
   // modeling subcategory...
+  G4UIcommand* directory;
   directory = new G4UIdirectory ("/vis/modeling/");
   directory -> SetGuidance ("Modeling commands.");
   fDirectoryList.push_back (directory);
@@ -1001,17 +1013,12 @@ void G4VisManager::RegisterMessengers () {
   // Instantiate individual messengers/commands (often - but not
   // always - one command per messenger).
 
-  G4VVisCommand::SetVisManager (this);  // Sets shared pointer to vis manager.
-
   G4UIcommand* directory;
 
-  // Top level basic commands...
+  // Top level commands...
   RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandVerbose);
-
-  // Other top level commands...
   RegisterMessenger(new G4VisCommandReviewKeptEvents);
 
   // Compound commands...
