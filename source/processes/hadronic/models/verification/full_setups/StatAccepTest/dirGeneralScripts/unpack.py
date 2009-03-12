@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 23-Jun-2008
+# Last update: 12-Mar-2009
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -304,7 +304,8 @@ for dir in listDir :
             runTerminated = 0
             for line in fileOutput :
                 #print " line=", line.strip()
-                if ( line.lower().find( "nan" ) > -1 ) :
+                if ( line.lower().find( "nan" ) > -1  and
+                     line.find( "nAnnihilation" ) == -1 ) :  
                     foundNan = 1
                     countNan += 1
                 if ( line.lower().find( "warning" ) > -1 ) :
