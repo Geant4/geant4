@@ -24,11 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.9 2008-11-20 13:46:27 dennis Exp $
+// $Id: G4CompetitiveFission.cc,v 1.10 2009-03-12 16:17:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
+//
+// J. M. Quesada (March 2009). Bugs fixed:
+//          - Full relativistic calculation (Lorentz boosts)
+//          - Fission pairing energy is included in fragment excitation energies
+// Now Energy and momentum are conserved in fission 
 
 #include "G4CompetitiveFission.hh"
 #include "G4PairingCorrection.hh"
@@ -126,6 +131,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 	return theResult;
     }
 
+
     // Atomic Mass of Nucleus (in MeV)
     G4double M = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A)/MeV;
     // Nucleus Momentum
@@ -146,6 +152,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
     G4double FragmentsExcitationEnergy = 0.0;
     G4double FragmentsKineticEnergy = 0.0;
+
+	//JMQ 04/03/09 It will be used latter to fix the bug in energy conservation
+    G4double FissionPairingEnergy=G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
 
     G4int Trials = 0;
     do {
@@ -179,10 +188,15 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 						       theParameters);
     
 	// Excitation Energy
-	FragmentsExcitationEnergy = Tmax - FragmentsKineticEnergy;
-    
+	//	FragmentsExcitationEnergy = Tmax - FragmentsKineticEnergy;
+	// JMQ 04/03/09 BUG FIXED: in order to fulfill energy conservation the
+	// fragments carry the fission pairing energy in form of 
+	//excitation energy
+
+	FragmentsExcitationEnergy = Tmax - FragmentsKineticEnergy+FissionPairingEnergy;
+
     } while (FragmentsExcitationEnergy < 0.0 && Trials++ < 100);
-  
+    
   
 
     if (FragmentsExcitationEnergy <= 0.0) 
@@ -197,24 +211,42 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     G4double U2 = FragmentsExcitationEnergy * (static_cast<G4double>(A2)/static_cast<G4double>(A));
 
 
-    G4double Pmax = std::sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
-				( (M1+U1)+(M2+U2) ) ) * FragmentsKineticEnergy);
+    //JMQ  04/03/09 Full relativistic calculation is performed
+    //
+        G4double Fragment1KineticEnergy=(FragmentsKineticEnergy*(FragmentsKineticEnergy+2*(M2+U2)))/(2*(M1+U1+M2+U2+FragmentsKineticEnergy));
+        G4ParticleMomentum Momentum1(IsotropicVector(std::sqrt(Fragment1KineticEnergy*(Fragment1KineticEnergy+2*(M1+U1)))));
+        G4ParticleMomentum Momentum2(-Momentum1);
+        G4LorentzVector FourMomentum1(Momentum1,std::sqrt(Momentum1.mag2()+(M1+U1)*(M1+U1)));
+        G4LorentzVector FourMomentum2(Momentum2,std::sqrt(Momentum2.mag2()+(M2+U2)*(M2+U2)));
+	//JMQ 04/03/09 now we do Lorentz boosts (instead of Galileo boosts)
+    FourMomentum1.boost(theNucleusMomentum.boostVector());
+    FourMomentum2.boost(theNucleusMomentum.boostVector());
+    
+    //////////JMQ 04/03: Old version calculation is commented
+    // There was vioation of energy momentum conservation
 
-    G4ParticleMomentum momentum1 = IsotropicVector( Pmax );
-    G4ParticleMomentum momentum2( -momentum1 );
+    //    G4double Pmax = std::sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
+    //				( (M1+U1)+(M2+U2) ) ) * FragmentsKineticEnergy);
+
+//G4ParticleMomentum momentum1 = IsotropicVector( Pmax );
+//  G4ParticleMomentum momentum2( -momentum1 );
 
     // Perform a Galileo boost for fragments
-    momentum1 += (theNucleusMomentum.boostVector() * (M1+U1));
-    momentum2 += (theNucleusMomentum.boostVector() * (M2+U2));
+//    momentum1 += (theNucleusMomentum.boostVector() * (M1+U1));
+//    momentum2 += (theNucleusMomentum.boostVector() * (M2+U2));
 
 
     // Create 4-momentum for first fragment
     // Warning!! Energy conservation is broken
-    G4LorentzVector FourMomentum1( momentum1 , std::sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
+//JMQ 04/03/09 ...NOT ANY MORE!! BUGS FIXED: Energy and momentum are NOW conserved 
+//    G4LorentzVector FourMomentum1( momentum1 , std::sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
 
     // Create 4-momentum for second fragment
     // Warning!! Energy conservation is broken
-    G4LorentzVector FourMomentum2( momentum2 , std::sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
+//JMQ 04/03/09 ...NOT ANY MORE!! BUGS FIXED: Energy and momentum are NOW conserved
+//    G4LorentzVector FourMomentum2( momentum2 , std::sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
+
+//////////
 
     // Create Fragments
     G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
@@ -232,9 +264,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     theResult->push_back(Fragment1);
     theResult->push_back(Fragment2);
 
-#ifdef debug
+    #ifdef debug
     CheckConservation(theNucleus,theResult);
-#endif
+    #endif
 
     return theResult;
 }
