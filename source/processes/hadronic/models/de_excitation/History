@@ -15,7 +15,7 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
-12 March 2009 Alexander Howard (hard-deex-V09-02-08)
+12 March 2009 Alexander Howard (hadr-deex-V09-02-08)
 ----------------------------------------------------
 - Added Tatsumi's fixes ( G4GEMProbability.cc and G4GEMChannel.cc ) to GEM 
   on top of patch9-02 ("hadr-deex-V09-02-07" and "hadr-deex-util-V09-02-00")

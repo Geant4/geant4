@@ -107,8 +107,12 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
     G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
 						      static_cast<G4int>(fragment.GetZ()),U);
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
-									       static_cast<G4int>(fragment.GetZ()));
+//090115
+//G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
+//								       static_cast<G4int>(fragment.GetZ()));
+    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection( static_cast<G4int>( ResidualA ) , static_cast<G4int>( ResidualZ ) );
+//090115
     
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);
