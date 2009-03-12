@@ -145,8 +145,6 @@ List of fixes included in this public patch since the public release 9.2:
 
   o Physics Lists:
     -------------
-    + G4IonBinaryCascadePhysics: use Shen cross section only if Tripathi is
-      not applicable (fixed order of x-sections).
     + G4HadronInelasticQBBC: use G4StringChipsParticleLevelInterface instead
       of obsolete G4StringChipsInterface.
     + G4MiscLHEPBuilder: create processes dynamically for proper deletion at
