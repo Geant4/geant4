@@ -114,7 +114,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 G4double G4GGNuclNuclCrossSection::
 GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double)
 {
-  G4double xsection, sigma, cofInelastic = 2.4, cofTotal = 2.0, nucleusSquare, ratio;
+  G4double xsection, sigma, cofInelastic = 2.4, cofTotal = 2.0, nucleusSquare, cB, ratio;
 
   G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
   G4double pA = aParticle->GetDefinition()->GetBaryonNumber();
@@ -131,44 +131,54 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
   G4double tR = GetNucleusRadius(tA);  
   G4double pR = GetNucleusRadius(pA); 
 
-  sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
+  cB = GetCoulombBarier(aParticle, tZ, tA, pR, tR);
+
+  if(cB > 0.)
+  {
+
+    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
 
-  nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
+    nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
 
-  ratio = sigma/nucleusSquare;
+    ratio = sigma/nucleusSquare;
 
-  xsection =  nucleusSquare*std::log( 1. + ratio );
+    xsection =  nucleusSquare*std::log( 1. + ratio );
 
-  fTotalXsc = xsection;
+    fTotalXsc = xsection;
 
-  G4double cB = GetCoulombBarier(aParticle, tZ, tA, pR, tR);
+    fTotalXsc *= cB;
 
-  fTotalXsc *= cB;
+    fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fInelasticXsc *= cB;
 
-  fInelasticXsc *= cB;
+    fElasticXsc   = fTotalXsc - fInelasticXsc;
 
-  fElasticXsc   = fTotalXsc - fInelasticXsc;
+    // if (fElasticXsc < DBL_MIN) fElasticXsc = DBL_MIN;
+    /*    
+    G4double difratio = ratio/(1.+ratio);
 
-  // if (fElasticXsc < DBL_MIN) fElasticXsc = DBL_MIN;
-    
-  G4double difratio = ratio/(1.+ratio);
+    fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+    */
+    // production to be checked !!! edit MK xsc
 
-  fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
-
-  // production to be checked !!! edit MK xsc
-
-  sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
+    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscMK(theProton, pTkin, theNeutron);
  
-  ratio = sigma/nucleusSquare;
+    ratio = sigma/nucleusSquare;
 
-  fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  if (fElasticXsc < 0.) fElasticXsc = 0.;
-
+    if (fElasticXsc < 0.) fElasticXsc = 0.;
+  }
+  else
+  {
+    fInelasticXsc  = 0.;
+    fTotalXsc      = 0.;
+    fElasticXsc    = 0.;
+    fProductionXsc = 0.;
+  }
   return fInelasticXsc;   // xsection; 
 }
 
@@ -200,9 +210,11 @@ GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G
 	   // G4cout<<"pTkin = "<<pTkin/GeV<<"; pPlab = "
 	   // <<pPlab/GeV<<"; bC = "<<bC/GeV<<"; pTcm = "<<pTcm/GeV<<G4endl;
 
-  ratio = 1. - bC/pTcm;
+  if( pTcm <= bC ) ratio = 0.;
+  else             ratio = 1. - bC/pTcm;
+
   // if(ratio < DBL_MIN) ratio = DBL_MIN;
-  if(ratio < 0.) ratio = 0.;
+  if( ratio < 0.) ratio = 0.;
 
   // G4cout <<"ratio = "<<ratio<<G4endl;
   return ratio;
