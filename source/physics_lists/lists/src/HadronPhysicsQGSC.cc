@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC.cc,v 1.2 2007-04-26 14:47:11 gunter Exp $
+// $Id: HadronPhysicsQGSC.cc,v 1.3 2009-03-12 12:19:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -81,6 +81,8 @@ HadronPhysicsQGSC::~HadronPhysicsQGSC()
    delete theQGSCPro;
    delete theLEPPro;
    delete thePro;
+   delete theQGSCNeutron;
+   delete theNeutrons;
    delete theQGSCPiK;
    delete theLEPPiK;
    delete thePiK;
