@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.1 2009-03-05 18:48:30 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.2 2009-03-12 10:05:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,11 +69,7 @@
 
 using namespace std;
 
-G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
-G4double G4GoudsmitSaundersonMscModel::TCSE[][106]= {-1.} ;
-G4double G4GoudsmitSaundersonMscModel::FTCSE[][106]= {-1.} ;
-G4double G4GoudsmitSaundersonMscModel::TCSP[][106]= {-1.} ;
-G4double G4GoudsmitSaundersonMscModel::FTCSP[][106]= {-1.} ;
+G4double G4GoudsmitSaundersonMscModel::ener[106] = {-1.};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)

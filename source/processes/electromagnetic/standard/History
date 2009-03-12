@@ -1,4 +1,4 @@
-$Id: History,v 1.433 2009-03-05 18:53:43 vnivanch Exp $
+$Id: History,v 1.434 2009-03-12 10:05:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 March 09: V.Ivant (emstand-V09-02-02)
+- G4GoudsmitSaundersonMscModel fixed compillation problem
+- G4UniversalFluctuation - add temporary fix for T2K report
 
 05 March 09: V.Ivant (emstand-V09-02-01)
 - New G4GoudsmitSaundersonMscModel is added
