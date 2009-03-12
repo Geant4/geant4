@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.7 2009-02-27 19:43:31 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2009-03-12 10:36:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -121,9 +121,11 @@ DetectorConstruction::DetectorConstruction()
   G4double absThick[17]={12.977, 7.815, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 5.371, 5.516, 5.516, 5.516, 5.516, 5.516, 9.734};
   G4double scThick[17]={9, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 9}; 
 
+  angularFactor = 1.4;
+
   for(G4int i=0; i<17; i++){ 
-    absorThickness[i]= absThick[i]*cm;
-    scinThickness[i] = scThick[i]*mm;
+    absorThickness[i]= absThick[i]*cm*angularFactor;
+    scinThickness[i] = scThick[i]*mm*angularFactor;
     absorMaterial[i] = CuZn;
   }
   absorMaterial[0] = Fe;

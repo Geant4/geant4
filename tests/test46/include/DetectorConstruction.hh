@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.3 2009-01-04 17:58:43 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.4 2009-03-12 10:36:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -127,6 +127,7 @@ private:
   G4double absorThickness[17];
   G4double scinThickness[17]; 
   G4double posCenterHcalZ;
+  G4double angularFactor;
 
   G4double hcalWidth;
   G4double hcalThickness;
