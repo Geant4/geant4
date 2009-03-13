@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 14-Feb-2008
+# Last update: 13-Mar-2009
 #
 # This python script, which has no input parameters, makes 3
 # tests for checking the reproducibility of the sequence of
@@ -36,18 +36,21 @@
 # The reproducibility is guaranteed if the same final random
 # number is produced in each case.
 #
-# This script assumes that in the directory where it is run
-# the following files exists:
-#   -  setup.sh : Bash-shell script, which defines the
-#                 environment necessary to run the executable:
-#                 $G4BIN/$G4SYSTEM/mainStatAccepTest
-#   -  $G4BIN/$G4SYSTEM/mainStatAccepTest : the main program
-#                 (to select the Physics List look in the main
-#                  program: mainStatAccepTest.cc)
-#   -  start.rndm : the starting seed (it does not matter
-#                   how you get it: you can copy from any
-#                   currentEvent.rndm or currentRun.rndm
-#                   files).
+# This script assumes that the environmental variables needed
+# to run the application have been already properly defined;
+# in particular, the executable:
+#    $G4BIN/$G4SYSTEM/mainStatAccepTest-PHYSICS_LIST
+# should exist
+# (the Physics List can be selected in the main program:
+#    mainStatAccepTest.cc
+#  and then you should set "PHYSICS_LIST" in this script,
+#  see "***LOOKHERE***" below).
+# Furthermore, the script assumes that in the same directory
+# where the script is run the following file exists:
+#    start.rndm
+# which is the starting seed
+# (it does not matter how you get it: you can copy from any
+#  currentEvent.rndm or currentRun.rndm files).
 #
 # The main result of the script is printed out on the screen.
 # As by product, the script writes 3 Geant4 macro files:
@@ -88,6 +91,8 @@ print '  ========== START reproducibilityAll.py ========== '
 
 #***LOOKHERE***
 
+PHYSICS_LIST = 'LHEP'
+
 listParticleTypes = [
     "pi-" ,
     "pi+" ,
@@ -123,8 +128,8 @@ listActiveLayer = [
 #
 BfieldValue = "4 tesla"
 #
-NumEvents1 = "10"
-NumEvents2 = "1"
+NumEvents1 = "1000"
+NumEvents2 = "100"
 
 #***endLOOKHERE***
 
@@ -206,8 +211,8 @@ for iAbsorber in listAbsorbers :
 
                     print ' nameMacro=', nameMacro, ' nameOut=', nameOut
                     
-                    os.system( " . setup.sh ; mainStatAccepTest " +
-                               nameMacro + " > " + nameOut + " 2>&1" )
+                    os.system( " mainStatAccepTest-" + PHYSICS_LIST +
+                               " " + nameMacro + " > " + nameOut + " 2>&1" )
 
                     logfile = open( nameOut, "r" )
                     for line in logfile :
