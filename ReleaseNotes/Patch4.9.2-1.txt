@@ -155,6 +155,13 @@ List of fixes included in this public patch since the public release 9.2:
     + Fixed issue in G4SteppingManager for the special cases of skipping voxel
       boundaries in G4RegularNavigation.
 
+  o Visualization:
+    -------------
+    + Fixed problem in ratio and geometry on X/Xm/Qt/Win32 viewers.
+      Now possible to pass XString like 400x600-0+0 to viewers, set position
+      and location.
+    + Corrected use of G4DEBUG with G4DEBUG_VIS_OGL in OpenGL-Qt code.
+
   o Examples:
     --------
     + advanced/brachytherapy:
