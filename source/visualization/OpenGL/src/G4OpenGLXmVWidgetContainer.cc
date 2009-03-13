@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetContainer.cc,v 1.6 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLXmVWidgetContainer.cc,v 1.7 2009-03-13 09:50:03 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Base class for all Motif container widgets
