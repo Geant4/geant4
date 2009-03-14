@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.20 2009-03-09 15:36:33 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.21 2009-03-14 11:43:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,6 +90,14 @@
 #include "G4VRML2.hh"
 #endif
 
+// The inline keyword prevents the compiler making an external
+// reference even though they cannot actually be inlined since they
+// are virtual functions.  This prevents a "multiple definition" error
+// if it is included in more than one file.  However, as explained in
+// the class description in G4VisExecutive.hh, it should never be
+// necessary to #include "G4VisExecutive.hh" in more than one file
+// since after instantiation the object can be treated as a
+// G4VisManager.
 inline void
 G4VisExecutive::RegisterGraphicsSystems () {
 
@@ -146,6 +154,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
 
 }
 
+// See comments about inlining above.
 inline void 
 G4VisExecutive::RegisterModelFactories()
 {

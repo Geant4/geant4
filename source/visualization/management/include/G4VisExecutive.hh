@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.7 2009-03-09 15:36:33 allison Exp $
+// $Id: G4VisExecutive.hh,v 1.8 2009-03-14 11:43:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,10 +55,10 @@
 //   ...
 // #ifdef G4VIS_USE
 //   // Instantiate and initialise Visualization Manager.
-//   G4VisManager* visManager = new G4VisExecutive;
-//   visManager -> SetVerboseLevel (verbosityString);  // Or Note (a).
-//   visManager -> RegisterGraphicsSystem (new G4XXX); // Or Note (b)
-//   visManager -> Initialize ();                      // Or Note (c).
+//   G4VisManager* visManager = new G4VisExecutive;    // See Nore (a).
+//   visManager -> SetVerboseLevel (verbosityString);  // See Note (b).
+//   visManager -> RegisterGraphicsSystem (new myGS);  // See Note (c).
+//   visManager -> Initialize ();                      // See Note (d).
 // #endif
 //   ...
 // #ifdef G4VIS_USE
@@ -68,11 +68,37 @@
 // #endif
 //
 // Notes:
-// (a) The verbosityString ("quiet", "errors", "warnings",
+
+// (a) After instantiation, all references to this object should be as
+//     a G4VisManager.  The functions RegisterGraphicsSystems and
+//     RegisterModelFactories defined in G4VisExecutive.icc are
+//     virtual functions of G4VisManager.  They are invoked by
+//     G4VisManager::Initialise.  If you need to initialise in a
+//     separate file, see advice below.
+// (b) The verbosityString ("quiet", "errors", "warnings",
 //     "confirmations", etc. - "help /vis/verbose" to see options) can be
 //     set here or with /vis/verbose.
-// (b) You can register your own graphics system like this.
-// (c) Your can intialise like this with C++ code or use /vis/initialize.
+// (c) You can register your own graphics system like this.
+// (d) Your can intialise like this with C++ code or use /vis/initialize.
+//
+// If you need to perform the instantiation and the initialisation in
+// separate files, e.g., to establish the verbosity before
+// initialisation, then the code that initialises must have access, of
+// course, to the G4VisExecutive object, but this should be as a
+// G4VisManager object, i.e., #include "G4VisManager.hh".
+// RegisterGraphicsSystems and RegisterModelFactories are (pure)
+// virtual methods of G4VisManager called from G4VisManager::Initialize.
+// First file:
+// #include "G4VisExecutive.hh"
+// ...
+//   fpVisManager = new G4VisExecutive;
+// where fpVisManager is a G4VisManager*.
+// Second file:
+// #include "G4VisManager.hh"
+// ...
+//   fpVisManager -> Initialize ();
+// where there is some mechanism for getting access to the pointer
+// fpVisManager.
 //
 // The implementation is included as an .icc file because - for those
 // graphics systems that need external libraries - only those systems
