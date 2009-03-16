@@ -47,7 +47,7 @@
 
 void Initialize();
 G4ErrorTarget* BuildTarget( G4int iTarget );
-void ProcessEvent( G4int iProp, uint nEv );
+void ProcessEvent( G4int iProp, size_t nEv );
 void Finalize();
 
 G4ErrorTarget* theTarget;
@@ -76,8 +76,8 @@ int main()
     G4Exception("exG4eReco","Fatal error in Argument",JustWarning,"Variable G4ERROR_PROP not defined, taking it = UNTIL_TARGET");
   } 
 
-  uint nEvents = 3;
-  for( uint ii = 0; ii < nEvents; ii++ ){
+  size_t nEvents = 3;
+  for( size_t ii = 0; ii < nEvents; ii++ ){
     ProcessEvent( iProp, ii );
   }
 
@@ -148,7 +148,7 @@ void Initialize()
 }
 
 
-void ProcessEvent( G4int iProp, uint )
+void ProcessEvent( G4int iProp, size_t )
 {
   
 // Set the starting trajectory.
