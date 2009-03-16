@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.1 2009-02-18 09:54:12 lgarnier Exp $
+// $Id: G4OpenGL2PSAction.cc,v 1.2 2009-03-16 09:07:39 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-#define G4DEBUG_VIS_OGL 1
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
  #define G4VIS_BUILD_OPENGL_GL2PS 
@@ -49,9 +47,6 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::G4OpenGL2PSAction\n");
-#endif
   fFileName = "";
   fFile = 0;
   fViewport[0] = 0;
@@ -67,9 +62,6 @@ void G4OpenGL2PSAction::setFileName(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::setFileName\n");
-#endif
   fFileName = aFileName;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -78,16 +70,10 @@ bool G4OpenGL2PSAction::enableFileWriting(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::enabledFileWriting\n");
-#endif
   fFile = ::fopen(fFileName,"w");
   if(!fFile) {
     return false;
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::enabledFileWriting-------------\n");
-#endif
   G4gl2psBegin();
   return true;
 }
@@ -107,9 +93,6 @@ bool G4OpenGL2PSAction::fileWritingEnabled(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::fileWrintingEnabled\n");
-#endif
   return (fFile?true:false);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -118,9 +101,6 @@ void G4OpenGL2PSAction::G4gl2psBegin(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::G4gl2psBegin\n");
-#endif
   if(!fFile) return;
   int options = GL2PS_OCCLUSION_CULL | 
      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
@@ -138,9 +118,6 @@ void G4OpenGL2PSAction::G4gl2psBegin(
                  GL_RGBA,0, NULL,0,0,0,
                  bufsize, 
                  fFile,fFileName);    
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGL2PSAction::G4gl2psBegin END\n");
-#endif
 }
 
 #endif
