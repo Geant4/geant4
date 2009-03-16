@@ -60,26 +60,28 @@ List of fixes included in this public patch since the public release 9.2:
   o Materials:
     ---------
     + G4MaterialStoppingICRU73: added 4 missing materials from ICRU'73.
-    + G4SimpleMaterialStoppingICRU73: fixed density of Mo and number of
-      materials. 
+    + G4SimpleMaterialStoppingICRU73: fixed typo in density of Mo. 
 
   o Hadronic Processes:
     ------------------
     + cross_sections:
-      o G4CrossSectionDataStore: added Clean() method; constructor and
-        destructor no longer inline; added destruction of data sets;
-        use std::vector instead of flat arrays.
-      o G4CrossSectionDataSetRegistry: new singleton to keep pointers to cross
-        section data sets.
-      o G4VCrossSectiondataSet: constructor and detructor no longer inline;
-        added registration/deregistration mechanism.
+      o Improvements for clearing of memory at end of application:
+        + G4CrossSectionDataStore: added Clean() method; constructor and
+          destructor no longer inline; added destruction of data sets;
+          use std::vector instead of flat arrays.
+        + G4CrossSectionDataSetRegistry: new singleton to keep pointers to
+          cross-section data sets.
+        + G4VCrossSectiondataSet: constructor and detructor no longer inline;
+          added registration/deregistration mechanism.
     + management:
       o G4HadronicProcessStore: activated destruction of processes at
         application closure; added Clean() method and cleanup of model and
         cross section stores.
     + models/cascade:
       o Corrected absorption coefficient to be set to 1.0 instead of 0.2
-        inside G4CascadSpecialFunctions.
+        inside G4CascadSpecialFunctions. Small differences are observed for
+        calorimeter observables in Bertini physics-lists, resulting in slightly
+        wider lateral shower shapes.
     + models/chiral_inv_phase_space/interface
       o Added de-registration in destructor of G4QCaptureAtRest.
       o Added string decay destruction to G4ElectroNuclearReaction.
@@ -90,8 +92,8 @@ List of fixes included in this public patch since the public release 9.2:
         implementation of the formula.
       o Fix to substitute 'hbar_Plank' with 'hbarc' in G4EvaporationProbability.
       o Fixed leaks in singleton classes in the util module.
-      o Corrected wherever needed inlining of constructors/destructors for
-        base classes and usage of virtual specification.
+      o Corrected some inlining of constructors/destructors for base classes
+        and usage of virtual specification.
     + models/management:
       o G4HadronicInteractionRegistry: modified to conform to singleton
         definition.
@@ -104,7 +106,7 @@ List of fixes included in this public patch since the public release 9.2:
       o G4PreCompoundXXX: added decrease of Coulomb barrier for d, t, a, he3.
       o Some cleanup of comments and formatting...
     + stopping:
-      o Activate registration/de-registration for all LHEP processes.
+      o Activated registration/de-registration for all LHEP processes.
     + util:
       o G4StableIsotopes: filled in missing isotope names.
 
