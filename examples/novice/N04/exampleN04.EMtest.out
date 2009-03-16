@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-01-19    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -305,14 +305,14 @@ Stage 1->2 : 1 isolated muon found.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     204 hits are stored in ExN04TrackerHitsCollection.
-     48 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 56.915735 (GeV)
+     120 hits are stored in ExN04TrackerHitsCollection.
+     50 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 56.988937488168 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     15 hits are stored in ExN04TrackerHitsCollection.
-     27 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.7117962905742 (GeV)
+     97 hits are stored in ExN04TrackerHitsCollection.
+     31 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.039796256264 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
