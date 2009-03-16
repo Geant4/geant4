@@ -194,24 +194,25 @@ GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G
 
 
   G4double pTkin = aParticle->GetKineticEnergy();
-  G4double pPlab = aParticle->GetTotalMomentum();
+  // G4double pPlab = aParticle->GetTotalMomentum();
   G4double pM    = aParticle->GetDefinition()->GetPDGMass();
-  G4double tM    = tZ*proton_mass_c2 + (tA-tZ)*neutron_mass_c2; // ~ 1% accuracy
-
+  // G4double tM    = tZ*proton_mass_c2 + (tA-tZ)*neutron_mass_c2; // ~ 1% accuracy
+  G4double tM    = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( G4int(tZ), G4int(tA) );
   G4double pElab = pTkin + pM;
-  G4double pEcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM);
-  G4double pPcm  = pPlab*tM/pEcm;
-  G4double pTcm  = std::sqrt(pM*pM + pPcm*pPcm) - pM;
+  G4double totEcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM);
+  // G4double pPcm  = pPlab*tM/totEcm;
+  // G4double pTcm  = std::sqrt(pM*pM + pPcm*pPcm) - pM;
+  G4double totTcm  = totEcm - pM -tM;
 
   G4double bC    = fine_structure_const*hbarc*pZ*tZ;
            bC   /= pR + tR;
-           bC   /= 4.;  // 4., 2. parametrisation cof ??? vmg
+           bC   /= 2.;  // 4., 2. parametrisation cof ??? vmg
 
 	   // G4cout<<"pTkin = "<<pTkin/GeV<<"; pPlab = "
 	   // <<pPlab/GeV<<"; bC = "<<bC/GeV<<"; pTcm = "<<pTcm/GeV<<G4endl;
 
-  if( pTcm <= bC ) ratio = 0.;
-  else             ratio = 1. - bC/pTcm;
+  if( totTcm <= bC ) ratio = 0.;
+  else             ratio = 1. - bC/totTcm;
 
   // if(ratio < DBL_MIN) ratio = DBL_MIN;
   if( ratio < 0.) ratio = 0.;
