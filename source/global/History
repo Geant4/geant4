@@ -1,4 +1,4 @@
-$Id: History,v 1.217 2009-01-27 08:49:10 gcosmo Exp $
+$Id: History,v 1.218 2009-03-16 16:39:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 16, 2009  G.Cosmo (global-V09-02-01)
+- Changed date for release 9.2.p01.
 
 Jan 27, 2009  G.Cosmo (global-V09-02-00)
 - Correction in management/GNUmakefile to CPPFLAGS, adding G4RF_DEBUG in
