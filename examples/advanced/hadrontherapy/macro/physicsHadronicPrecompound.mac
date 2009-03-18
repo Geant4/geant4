@@ -56,24 +56,41 @@
 
 ###  A) EM PHYSICS AND DECAY
 
+# Standard EM models
+#
 /physics/addPhysics Decay
 /physics/addPhysics EM-Photon-Standard
-/physics/addPhysics EM-Electron-EEDL
-/physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-HadronIon-LowE
+/physics/addPhysics EM-Electron-Standard
+/physics/addPhysics EM-HadronIon-Standard
+
+
+# Low Energy Livermore EM models
+#
+#/physics/addPhysics EM-HadronIon-LowE
+#/physics/addPhysics EM-Photon-EPDL
+#/physics/addPhysics EM-Electron-EEDL
+
+# Models for Muon and Positrons are only from the
+# standard package
+
 /physics/addPhysics EM-Muon-Standard
+/physics/addPhysics EM-Positron-Standard
 
 ###  B) HADRONIC PHYSICS
 
+# Hadronic Elastic
+#
 /physics/addPhysics HadronicEl-HadronIon-LElastic
+
+# Hadronic Inelastic
+#
 /physics/addPhysics HadronicInel-ProtonNeutron-Prec
+
+
 ### Other options for Precompound model (for a description see above):
 ### Option B. /physics/addPhysics HadronicInel-ProtonNeutron-PrecGEM
 ### Option C. /physics/addPhysics HadronicInel-ProtonNeutron-PrecGEMFermi
 ### Option D. /physics/addPhysics HadronicInel-ProtonNeutron-PrecFermi
-/physics/addPhysics HadronicInel-Ion-LEP
-/physics/addPhysics HadronicInel-Pion-LEP
-/physics/addPhysics HadronicAtRest-MuonMinus-Capture
 
 
 ##############################
@@ -89,7 +106,7 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 200
+/run/beamOn 100000
 
 
 

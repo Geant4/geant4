@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonPrecompound.cc; May 2005
+// $Id: HadrontherapyProtonPrecompound.cc;
+//
+// This file permits to apply, if used, the "Bnary Cascade" Hadronic Inelatic
+// model to protons and neutrons.
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -55,10 +58,10 @@
 HIProtonNeutronBinary::HIProtonNeutronBinary(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-  G4cout<< "HADRONIC INELASTIC PROCESS(ES): G4XXXInelasticProcess (protons, neutrons)" 
-        << G4endl
-        << "APPLIED MODEL(S): G4BinaryCascade" 
-        << G4endl;
+  G4cout << "THE FOLLOW INELASTIC MODEL HAS BEEN APPLIED TO PROTONS AND NEUTRONS:" 
+         << G4endl
+         << "G4BinaryCascade" 
+         << G4endl;
 }
 
 HIProtonNeutronBinary::~HIProtonNeutronBinary()
@@ -85,13 +88,12 @@ void HIProtonNeutronBinary::ConstructProcess()
   // **************
   // *** Proton ***
   // **************
-  
   G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess(); 
   G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection(); 
 
   protonInelasticProcess -> RegisterMe(protonNeutronBinaryCascadeModel);
   protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
-   
+
   particle = G4Proton::Proton();
   processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(protonInelasticProcess);
@@ -100,7 +102,6 @@ void HIProtonNeutronBinary::ConstructProcess()
   // ***************
   // *** Neutron ***
   // ***************
-
   G4NeutronInelasticProcess* neutronInelasticProcess = new G4NeutronInelasticProcess; 		  
   G4NeutronInelasticCrossSection* neutronInelasticCrossSection = new G4NeutronInelasticCrossSection; 
   G4HadronCaptureProcess* neutronCaptureProcess = new G4HadronCaptureProcess();
@@ -127,7 +128,6 @@ void HIProtonNeutronBinary::ConstructProcess()
   processManager -> AddDiscreteProcess(neutronInelasticProcess);
   processManager -> AddDiscreteProcess(neutronCaptureProcess); 
   processManager -> AddDiscreteProcess(neutronFissionProcess);   
-
 }
 
 

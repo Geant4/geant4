@@ -1,23 +1,34 @@
 -------------------------------------------------------------------------------
 $Id: History, 2004/02/27  G.A.P. Cirrone, 
 	                  cirrone@lns.infn.it
-			  http://geant4infn.wikispaces.com/
+			  http://workgroup.lngs.infn.it/geant4lns
 -------------------------------------------------------------------------------
 
 
-     ====================================================
-                    Geant4 - Hadrontherapy
-     ====================================================
+         ====================================================
+                          Geant4 - Hadrontherapy
+         ====================================================
+
+
 
                       Category History file
 
-05.03.2009: G.A.P. Cirrone; Tag: hadrontherapy-V09-02-03
+18.03.2009: G.A.P.Cirrone; Tag: hadrontherapy-V09-02-04
+	   - Added commands to Detector Messenger to give the possibility to choose beetween
+	     different beam lines
+	   - Added comments to HadrontherapyMatrix;
+	   _ Improved code and added comments to HIProtonNeutronPrecompound and
+	     HIProtonNeutronBinary;
+	   - Corrected macro file using the Precompound inelastic model;
+	   - Removed the class file HadrontherapyMaterial and improved all the geometry files
+
+05.03.2009: G.A.P.Cirrone; Tag: hadrontherapy-V09-02-03
 	   - Updated README
 
-02.03.2009: G.A.P. Cirrone; Tag: hadrontherapy-V09-02-02
+02.03.2009: G.A.P.Cirrone; Tag: hadrontherapy-V09-02-02
            - Changed name of HadrontherapyBeamLine file to PassiveProtonBeamLine
 
-02.03.2009: G.A.P. Cirrone; Tag:  hadrontherapy-V09-02-01
+02.03.2009: G.A.P.Cirrone; Tag:  hadrontherapy-V09-02-01
 	   - Added generation of ASCII file with dose deposited in the phantom voxels
 
 22.02.2009: G.Folger; Tag: hadrontherapy-V09-02-00

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonPrecompound.cc; May 2005
+// $Id: HadrontherapyProtonPrecompound.cc;
+//
+// This file permits to apply, if used, the "Precompound" Hadronic Inelatic
+// model to protons and neutrons.
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -52,16 +55,14 @@
 #include "G4LCapture.hh"
 #include "G4ExcitationHandler.hh"
 
-
 HIProtonNeutronPrecompound::HIProtonNeutronPrecompound(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-  G4cout<< "HADRONIC INELASTIC PROCESS(ES): G4XXXInelasticProcess (protons, neutrons)" 
-        << G4endl
-        << "APPLIED MODEL(S): G4PreCompound" 
-        << G4endl
-        << "                  combined with Default Evaporation" 
-        << G4endl;
+	G4cout << G4endl << G4endl
+			<< "THE FOLLOW INELASTIC MODEL HAS BEEN APPLIED TO PROTONS AND NEUTRONS:" 
+			<< G4endl
+			<< "G4PreCompound" 
+			<< G4endl << G4endl;
 }
 
 HIProtonNeutronPrecompound::~HIProtonNeutronPrecompound()
@@ -86,17 +87,15 @@ void HIProtonNeutronPrecompound::ConstructProcess()
   protonNeutronPreCompoundModel -> SetMinEnergy(protonNeutronPrecompoundMinEnergy);
   protonNeutronPreCompoundModel -> SetMaxEnergy(protonNeutronPrecompoundMaxEnergy);
 
-
   // **************
   // *** Proton ***
   // **************
-  
   G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess(); 
-  G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection(); 
+  G4ProtonInelasticCrossSection* protonInelasticCrossSection = new G4ProtonInelasticCrossSection(); 
 
   protonInelasticProcess -> RegisterMe(protonNeutronPreCompoundModel);
   protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
-   
+
   particle = G4Proton::Proton();
   processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(protonInelasticProcess);
@@ -105,7 +104,6 @@ void HIProtonNeutronPrecompound::ConstructProcess()
   // ***************
   // *** Neutron ***
   // ***************
-
   G4NeutronInelasticProcess* neutronInelasticProcess = new G4NeutronInelasticProcess; 		  
   G4NeutronInelasticCrossSection* neutronInelasticCrossSection = new G4NeutronInelasticCrossSection; 
   G4HadronCaptureProcess* neutronCaptureProcess = new G4HadronCaptureProcess();
@@ -132,8 +130,6 @@ void HIProtonNeutronPrecompound::ConstructProcess()
   processManager -> AddDiscreteProcess(neutronInelasticProcess);
   processManager -> AddDiscreteProcess(neutronCaptureProcess); 
   processManager -> AddDiscreteProcess(neutronFissionProcess);   
-
-
 }
 
 

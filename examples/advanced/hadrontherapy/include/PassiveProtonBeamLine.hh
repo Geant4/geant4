@@ -112,6 +112,8 @@ public:
 
 private:
 
+	G4Material* kapton;
+	
   G4double vacuumZoneXSize;
   G4double vacuumZoneYSize;
   G4double vacuumZoneZSize;
@@ -180,7 +182,6 @@ G4VPhysicalVolume* physiBeamLineSupport;
   G4VPhysicalVolume* physiMOPIMotherVolume;
   G4LogicalVolume* logicMOPIMotherVolume;
   G4Box* solidMOPIMotherVolume;
-  G4Material* MOPIMotherVolumeMaterial; 
 
   G4double MOPIMotherVolumeXSize;
   G4double MOPIMotherVolumeYSize;
@@ -285,6 +286,32 @@ G4VPhysicalVolume* physiBeamLineSupport;
   G4VPhysicalVolume* physiFinalCollimator; 
   
   HadrontherapyMaterial* material;
-  G4Material* RSMat;
+  G4Material* rangeShifterMaterial;
+  G4Material* beamLineSupportMaterial;
+  G4Material* vacuumZoneMaterial;
+  G4Material* firstScatteringFoilMaterial;
+  G4Material* kaptonWindowMaterial;
+  G4Material* stopperMaterial;
+  G4Material* secondScatteringFoilMaterial;
+  G4Material* firstCollimatorMaterial;
+  G4Material* holeFirstCollimatorMaterial;
+  G4Material* modulatorBoxMaterial;
+  G4Material* holeModulatorBoxMaterial;
+  G4Material* layer1MonitorChamberMaterial;
+  G4Material* layer2MonitorChamberMaterial;
+  G4Material* layer3MonitorChamberMaterial;
+  G4Material* layer4MonitorChamberMaterial;
+  G4Material* MOPIMotherVolumeMaterial;
+  G4Material* MOPIFirstKaptonLayerMaterial;
+  G4Material* MOPIFirstAluminumLayerMaterial;
+  G4Material* MOPIFirstAirGapMaterial;
+  G4Material* MOPICathodeMaterial;
+  G4Material* MOPISecondAirGapMaterial;
+  G4Material* MOPISecondAluminumLayerMaterial;
+  G4Material* MOPISecondKaptonLayerMaterial;
+  G4Material* nozzleSupportMaterial;
+  G4Material* holeNozzleSupportMaterial;
+  G4Material* seconHoleNozzleSupportMaterial;
+  G4Material* finalCollimatorMaterial;
 };
 #endif

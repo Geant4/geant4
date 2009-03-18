@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.hh; May 2005
+// $Id: HadrontherapyDetectorMessenger.hh;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -60,7 +60,10 @@ private:
 
   // Pointer to the detector component
   HadrontherapyDetectorConstruction* hadrontherapyDetector;
-  
+
+  G4UIdirectory* changeTheBeamLineDir;
+  G4UIcmdWithAString*        changeTheBeamLineNameCmd; // Control the name of the beam line 
+
   G4UIdirectory* modulatorDir; // Control of the modulator 
   G4UIdirectory* beamLineDir;  // Control of the beam line
  

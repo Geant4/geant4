@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyModulator.cc; May 2005
+// $Id: HadrontherapyModulator.cc; 
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -50,13 +50,12 @@
 #include "G4RotationMatrix.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "HadrontherapyMaterial.hh"
 #include "HadrontherapyModulator.hh"
-#include "HadrontherapyMaterial.hh"
 #include "G4Transform3D.hh"
 #include "G4ios.hh"
 #include <fstream>
 #include "G4RunManager.hh"
+#include "G4NistManager.hh"
 
 HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
 						 solidMod0(0),         logicMod0(0),          physiMod0(0),
@@ -151,11 +150,13 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 
 
   //Materials used for the modulator wheel
-  HadrontherapyMaterial* material = new HadrontherapyMaterial();
-
-  G4Material* Mod0Mater = material -> GetMat("Air");
-  G4Material* ModMater = material -> GetMat("Air");
-  delete material;
+  //HadrontherapyMaterial* material = new HadrontherapyMaterial();
+	G4bool isotopes = false;
+G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+	
+  G4Material* Mod0Mater = airNist;
+  G4Material* ModMater = airNist;
+  //delete material;
 
   G4double innerRadiusOfTheTube = 2.5 *cm;
   G4double outerRadiusOfTheTube = 9.5 *cm;

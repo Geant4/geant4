@@ -51,7 +51,6 @@ class PassiveProtonBeamLine;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyModulator;
 class HadrontherapyDetectorSD;
-class HadrontherapyMaterial;
 
 class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -64,17 +63,10 @@ public:
   G4VPhysicalVolume* Construct();  
 
 private: 
-
-  void ConstructBeamLine();
-  // This method allows to define the beam line geometry in the
-  // experimental set-up
-
- void ConstructDetector(); 
- // This method allows to define the phantom geometry in the
- // experimental set-up
+  void ConstructPassiveProtonBeamLine();
+  void ConstructDetector();
  
- void ConstructSensitiveDetector();
-  // The sensitive detector is associated to the phantom volume
+  void ConstructSensitiveDetector();
 
 public: 
 
@@ -113,7 +105,8 @@ public:
   // Returns the size of the voxel along the X axis
  
 private:
-  
+
+  G4String emName;
   HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
 
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
@@ -130,7 +123,6 @@ private:
   G4VPhysicalVolume* detectorPhysicalVolume;
   
   HadrontherapyDetectorMessenger* detectorMessenger; 
-  HadrontherapyMaterial* material;
 
   G4double detectorSizeX; 
   G4double detectorSizeY; 

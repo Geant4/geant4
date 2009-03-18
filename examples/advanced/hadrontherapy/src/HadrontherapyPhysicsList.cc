@@ -105,7 +105,9 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
   // A default cut is applied to all volumes
   // Moreover, in the HadrontherapyDetectorConstruction.cc a 
   // spevific cut can be applied to the region where energy is collected
-  defaultCutValue = 0.01 * mm;
+  defaultCutValue = 0.1 * mm;
+
+
 
   // Messenger: it is possible to activate physics processes and models interactively 
   messenger = new HadrontherapyPhysicsListMessenger(this);
@@ -139,7 +141,7 @@ void HadrontherapyPhysicsList::AddPackage(const G4String& name)
 
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
-  // Options activated to improve accuracy and activated for the Standard EM models
+// Options activated to improve accuracy and activated for the Standard EM models
   // Usefull for a medical application
   G4EmProcessOptions opt;
   opt.SetStepFunction(0.2, 10*um);
@@ -148,7 +150,6 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   opt.SetDEDXBinning(360);
   opt.SetLambdaBinning(360);
   opt.SetLinearLossLimit(1.e-6);
-
 
   G4cout << "Adding PhysicsList component " << name << G4endl;
   // ****************
@@ -417,7 +418,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 
   // *** Option IV: Standard
 
-  if (name == "EM-HadronIon-Standard") 
+	if (name == "EM-HadronIon-Standard") 
     {
       if (emIonIsRegistered) 
 	{
@@ -816,7 +817,7 @@ void HadrontherapyPhysicsList::SetCuts()
   G4String regionName = "DetectorLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
-  G4double regionCut = 0.01*mm;
+  G4double regionCut = 0.1*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));

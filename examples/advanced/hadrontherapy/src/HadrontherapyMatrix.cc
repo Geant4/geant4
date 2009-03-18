@@ -25,9 +25,12 @@
 //
 //
 // $Id: HadrontherapyMatrix.cc;
-// Last modified: G.A.P.Cirrone, May 2008;
+// Last modified: G.A.P.Cirrone
 //
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+// This file create a file where information on dose deposited in each matrix voxel 
+// is stored
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -50,8 +53,10 @@
 
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
-  // Number of the voxels of the phantom
-  numberVoxelX = 400;
+// Number of the voxels of the phantom
+// For Y = Z = 1 the phantom is dived in slices (and not in voxels)
+// orthogonal to the beam axis
+  numberVoxelX = 200;
   numberVoxelY = 1;
   numberVoxelZ = 1; 
  
@@ -100,7 +105,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   if (matrix)
     {  
       std::ofstream ofs;    	
-      ofs.open("doseDeposited.out"); 
+      ofs.open("doseDeposited_1.out"); 
       
       for(G4int l = 0; l < numberVoxelZ; l++) 
 	{

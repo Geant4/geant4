@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.cc; May 2005
+// $Id: HadrontherapyDetectorMessenger.cc;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -37,22 +37,31 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
+
 #include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
-HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
-							       HadrontherapyDetectorConstruction* detector)
+HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
   :hadrontherapyDetector(detector)
-{ 
+
+{
+	changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
+	changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
+	
+	changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
+	changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
+	changeTheBeamLineNameCmd -> SetParameterName("List",false);
+	changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
+	
   modulatorDir = new G4UIdirectory("/modulator/");
   modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
-  
+
   beamLineDir = new G4UIdirectory("/beamLine/");
   beamLineDir -> SetGuidance("set specification of range shifter");  
-
+ 
   rangeShifterDir = new G4UIdirectory("/beamLine/RangeShifter/");
   rangeShifterDir -> SetGuidance("set specification of range shifter");  
 
