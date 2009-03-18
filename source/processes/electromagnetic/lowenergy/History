@@ -1,4 +1,4 @@
-$Id: History,v 1.349 2009-03-18 10:56:21 alechner Exp $
+$Id: History,v 1.350 2009-03-18 13:52:26 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.03.2009, L. Pandola, tag emlowen-V09-02-19
+	    - Removed G4Rayleigh to avoid duplication with G4RayleighScattering
+            - Clean-up of G4RayleighScattering (e.g. removed un-necessary dependencies)
 
 16.03.2009, A. Lechner, tag emlowen-V09-02-18
             - Replaced old version of G4IonParametrisedLossModel with newer one
