@@ -37,8 +37,11 @@
 // First implementation: 10. 11. 2008
 //
 // Modifications: 03. 02. 2009 - Bug fix iterators (AL)
-//
-//
+//                11. 03. 2009 - Introduced new table handler (G4IonDEDXHandler)
+//                               and modified method to add/remove tables 
+//                               (tables are now built in initialisation phase),
+//                               Minor bug fix in ComputeDEDXPerVolume (AL) 
+// 
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
 //    parameterisation of dE/dx tables (default ICRU 73 tables). For 
@@ -56,8 +59,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4EmCorrections.hh"
-#include "G4IonParametrisedLossTable.hh"
-#include "G4EmCorrections.hh"
+#include "G4IonDEDXHandler.hh"
 #include <iomanip>
 #include <list>
 #include <map>
@@ -66,8 +68,11 @@
 class G4BraggIonModel;
 class G4BetheBlochModel;
 class G4ParticleChangeForLoss;
+class G4VIonDEDXTable;
+class G4VIonDEDXScalingAlgorithm;
+class G4LPhysicsFreeVector;
 
-typedef std::list<G4IonLossTableHandle*> LossTableList;
+typedef std::list<G4IonDEDXHandler*> LossTableList;
 typedef std::pair<const G4ParticleDefinition*, const G4Material*> IonMatCouple;
 
 
@@ -149,30 +154,20 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 				 G4double&, 
 				 G4double); // Length of current step
 
+   G4double GetRange(const G4ParticleDefinition*, // Projectile
+		     const G4Material*,           // Target Material
+	             G4double);                   // Kinetic energy
 
-   // Template function which allows to add additional stopping power tables
+   // Function which allows to add additional stopping power tables
    // in combination with a scaling algorithm, which may depend on dynamic
    // information like the current particle energy (the table and scaling 
-   // algorithm are used via a wrapper class, which performs e.g.caching or
+   // algorithm are used via a handler class, which performs e.g.caching or
    // which applies the scaling of energy and dE/dx values)
-   template <class TABLE, class SCALING_ALGO>
-   void AddDEDXTable() {
-       G4IonLossTableHandle* table =
-               new G4IonParametrisedLossTable<TABLE, SCALING_ALGO>;      
- 
-       lossTableList.push_front(table);
-   }
+   G4bool AddDEDXTable(const G4String& name,
+                     G4VIonDEDXTable* table, 
+                     G4VIonDEDXScalingAlgorithm* algorithm = 0); 
 
-   // Template function which allows to add additional stopping power tables
-   // (the table itself is used via a wrapper class, which performs e.g.
-   // caching)
-   template <class TABLE>
-   void AddDEDXTable() {
-       G4IonLossTableHandle* table =
-               new G4IonParametrisedLossTable<TABLE>;      
- 
-       lossTableList.push_front(table);
-   }
+   G4bool RemoveDEDXTable(const G4String& name); 
 
    // Function checking the applicability of physics tables to ion-material
    // combinations (Note: the energy range of tables is not checked)
@@ -183,6 +178,16 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // Function printing a dE/dx table for a given ion-material combination
    // and a specified energy grid 
    void PrintDEDXTable(
+                      const G4ParticleDefinition*,  // Projectile (ion) 
+                      const G4Material*, // Absorber material
+                      G4double,          // Minimum energy per nucleon
+                      G4double,          // Maximum energy per nucleon
+                      G4int,             // Number of bins
+                      G4bool);           // Logarithmic scaling of energy
+
+   // Function printing a dE/dx table for a given ion-material combination
+   // and a specified energy grid 
+   void PrintDEDXTableHandlers(
                       const G4ParticleDefinition*,  // Projectile (ion) 
                       const G4Material*, // Absorber material
                       G4double,          // Minimum energy per nucleon

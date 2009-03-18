@@ -37,6 +37,10 @@
 // First implementation: 10. 11. 2008
 //
 // Modifications: 03. 02. 2009 - Bug fix iterators (AL)
+//                11. 03. 2009 - Introduced new table handler (G4IonDEDXHandler)
+//                               and modified method to add/remove tables
+//                               (tables are now built in initialisation phase),
+//                               Minor bug fix in ComputeDEDXPerVolume (AL)
 //
 //
 // Class description:
