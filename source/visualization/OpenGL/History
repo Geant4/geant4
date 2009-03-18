@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2009-03-05 16:36:13 lgarnier Exp $
+$Id: History,v 1.130 2009-03-18 14:34:28 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+18th March 2009  John Allison
+- G4OpenGLViewerMessenger.cc: printMode and transparency are available
+  for all OGL windows (they were previously inadvertently hidden by
+  an OGLS requirement).
 
 4rd March 2009, Laurent Garnier
  - G4OpenGLQtViewer:
