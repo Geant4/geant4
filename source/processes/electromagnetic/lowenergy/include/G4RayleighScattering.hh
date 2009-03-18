@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighScattering.hh,v 1.1 2008-12-19 14:23:04 pandola Exp $
+// $Id: G4RayleighScattering.hh,v 1.2 2009-03-18 13:45:51 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4RayleighScattering physics process -----------------------
 //
 // 19-12-2008, first implementation, Luciano Pandola 
+// 18-03-2009, clean up according to Vladimir's suggestions, Luciano Pandola
 // -----------------------------------------------------------------------------
 
 // class description
@@ -43,23 +44,17 @@
 #ifndef G4RayleighScattering_h
 #define G4RayleighScattering_h 1
 
-#include "globals.hh"
 #include "G4VEmProcess.hh"
-#include "G4Gamma.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4ParticleDefinition;
-class G4VEmModel;
-class G4MaterialCutsCouple;
-class G4DynamicParticle;
 
 class G4RayleighScattering : public G4VEmProcess
 
 {
 public:  // with description
 
-  G4RayleighScattering(const G4String& processName ="rayl",
+  G4RayleighScattering(const G4String& processName ="Rayl",
 		      G4ProcessType type = fElectromagnetic);
 
   virtual ~G4RayleighScattering();
@@ -81,15 +76,6 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4RayleighScattering::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #endif
  

@@ -23,16 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RayleighScattering.cc,v 1.1 2008-12-19 14:23:09 pandola Exp $
+// $Id: G4RayleighScattering.cc,v 1.2 2009-03-18 13:45:51 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-/// 19-12-2008, first implementation, Luciano Pandola 
+// 19-12-2008, first implementation, Luciano Pandola 
+// 18-03-2009, clean up according to Vladimir's suggestions, Luciano Pandola
+//
 // -----------------------------------------------------------------------------
 
 #include "G4RayleighScattering.hh"
 #include "G4LivermoreRayleighModel.hh"
-#include "G4Electron.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,16 +52,20 @@ G4RayleighScattering::~G4RayleighScattering()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4bool G4RayleighScattering::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4RayleighScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
     SetLambdaBinning(200); //use 200 bins instead of 90
     SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
     if(!Model()) SetModel(new G4LivermoreRayleighModel);
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
   } 
 }
