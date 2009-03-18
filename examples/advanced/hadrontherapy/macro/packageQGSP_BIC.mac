@@ -40,7 +40,7 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 500000
+/run/beamOn 1000
 
 
 

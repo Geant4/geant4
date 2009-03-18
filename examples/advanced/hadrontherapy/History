@@ -13,6 +13,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+18.03.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-05
+           - Corrected macro file for the use of the QGSP_BIC package
+           
 18.03.2009: G.A.P.Cirrone; Tag: hadrontherapy-V09-02-04
 	   - Added commands to Detector Messenger to give the possibility to choose beetween
 	     different beam lines
