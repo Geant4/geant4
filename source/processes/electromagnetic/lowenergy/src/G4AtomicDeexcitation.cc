@@ -110,7 +110,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
       else {provShellId = -2;}
     }
   
-  // Look this in a particular way: only one auger emitted! //
+  // Look this in a particular way: only one auger emitted! // ????
   while (provShellId > -2); 
   
   return vectorOfParticles;
@@ -296,8 +296,8 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
  	    {
 //  	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
 // 	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
- 	      return 0;
-// 	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
+ 	      G4Exception("G4AtomicDeexcitation: No Auger transition found");
+	      return 0;
  	    }
 	}
  	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
@@ -393,8 +393,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       G4double partialProb = G4UniformRand();
       // G4int augerOriginatingShellId = 0;
       
-      G4int numberOfPossibleAuger = 
-	  (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+      G4int numberOfPossibleAuger = 0;
+      numberOfPossibleAuger = anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId)->size();
+
+
       G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {
