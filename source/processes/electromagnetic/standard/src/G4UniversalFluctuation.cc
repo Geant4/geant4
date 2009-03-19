@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.20 2009-03-19 14:15:18 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.21 2009-03-19 16:53:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -176,7 +176,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   
     // modification of some model parameters
     // (this part should go to materials later)
-    G4double p = 1.40 ;
+    G4double p = 1.40;
     f2Fluct *= p;
     f1Fluct = 1.-f2Fluct;
     G4double q = 1.00;
@@ -211,6 +211,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   // correction in order to get better FWHM values
   // ( scale parameters a1 and e1)
+  /*
   G4double width = 1.;
   if(meanLoss > 1.*keV)
   {
@@ -220,6 +221,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   } 
   a1 *= width;
   e1 = e1Fluct/width;
+  */
+  e1 = e1Fluct;
   e2 = e2Fluct;
 
   //'nearly' Gaussian fluctuation if a1>nmaxCont2&&a2>nmaxCont2&&a3>nmaxCont2  
