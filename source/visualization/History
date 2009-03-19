@@ -1,4 +1,4 @@
-$Id: History,v 1.432 2009-03-14 11:51:58 allison Exp $
+$Id: History,v 1.433 2009-03-19 12:00:11 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,6 +30,12 @@ History file for visualization category
   o G4VisManager.cc: /vis/verbose and /vis/initialize instantiated in
     constructor so that a user may set verbosity before initialisation.
   o G4VisExecutive.icc: made methods inline.
+
+5th March 2009, Laurent Garnier
+ - Now using Gl2PS method to do PS
+ - Add flag in GNUMakefile to compile in debug mode
+ - Remplacing glBitmap by GL_POINTS to draw marker : Speed improvment
+  and gl2ps can now draw Markers.
 
 25th February 2009  John Allison
 - modeling-V09-02-01 - needs greps-V09-02-01:
