@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.2 2009-03-16 09:07:39 lgarnier Exp $
+// $Id: G4OpenGL2PSAction.cc,v 1.3 2009-03-19 11:59:35 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,26 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
   fViewport[1] = 0;
   fViewport[2] = 0;
   fViewport[3] = 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGL2PSAction::setLineWidth(
+ int width
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  gl2psLineWidth( width );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGL2PSAction::setPointSize(
+ int size
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  gl2psPointSize( size );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -106,18 +126,22 @@ void G4OpenGL2PSAction::G4gl2psBegin(
      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
   //int sort = GL2PS_SIMPLE_SORT;
-    
+  GLint buffsize = 0;
+  buffsize += 1024*1024;
+  
   glGetIntegerv(GL_VIEWPORT,fViewport);
 
-  int bufsize = 0;
   gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
                  fViewport,
                  GL2PS_EPS, 
                  sort, 
                  options, 
                  GL_RGBA,0, NULL,0,0,0,
-                 bufsize, 
+                 buffsize, 
                  fFile,fFileName);    
 }
+
+
+
 
 #endif
