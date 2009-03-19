@@ -62,16 +62,16 @@ XrayFluoRunAction::XrayFluoRunAction()
   data = new G4DataVector;
   
   
-  ReadData(MeV,"mercury_flx_solmin");
+  ReadData(keV,"spec10");
   //ReadResponse("SILIresponse");
   
   G4double minGamma = 0.*keV;
   G4double maxGamma = 10. *keV;
-  G4int nBinsGamma = 5;
+  G4int nBinsGamma = 6;
   
 
   dataGammaSet = normalization.Normalize(minGamma, maxGamma, nBinsGamma,
-				  "FlatSpectrum");
+				  "M_flare");
   
 
   //G4String fileName = "SILIefficiency";

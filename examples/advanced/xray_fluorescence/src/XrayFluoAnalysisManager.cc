@@ -755,10 +755,16 @@ void XrayFluoAnalysisManager::ExtractData(){
     //    AIDA::IFilter* filterEminus = tupleFactory->createFilter(" Particle == std::string(\"e-\")");
     
     
+<<<<<<< XrayFluoAnalysisManager.cc
+    AIDA::IFilter* filterAngle = tupleFactory->createFilter(
+
+"(momentumPhi   >= (220. * (3.1415926/180.) )) && (momentumPhi   <= (230. * (3.1415926/180.) )) && (momentumTheta >= (130. * (3.1415926/180.) )) && (momentumTheta <= (140. * (3.1415926/180.) ))" );
+=======
     AIDA::IFilter* filterAngle = tupleFactory->createFilter("(momentumPhi   >= (220. * (3.1415926/180.) )) && \
                                                              (momentumPhi   <= (230. * (3.1415926/180.) )) && \
                                                              (momentumTheta >= (130. * (3.1415926/180.) )) && \
                                                              (momentumTheta <= (140. * (3.1415926/180.) )) " );
+>>>>>>> 1.22
     
     
     //    filterGamma  ->initialize(*tupleFluo); 

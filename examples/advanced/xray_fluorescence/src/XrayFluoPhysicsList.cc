@@ -68,7 +68,7 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
 {
   pDet = p;
 
-  //  SetGELowLimit(250*eV);
+  SetGELowLimit(250*eV);
 
   defaultCutValue = 10e-6*mm;
 

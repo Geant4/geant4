@@ -559,17 +559,21 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.clear();
   natoms.clear();
 
-
+  /*
   // define germanium
   
   density = 5.32 * g/cm3;
  
   elements.push_back("Ge");     natoms.push_back(1); 
-  HPGe = nistMan->ConstructNewMaterial("HPGe",elements, natoms, density);
+
+  G4cout << elements[1] <<", "<<natoms[1] <<", " << elements.size() << ", " << natoms.size() << G4endl;
+  
+
+  HPGe = nistMan->ConstructNewMaterial("High Purity Germanium",elements, natoms, density);
 
   elements.clear();
   natoms.clear();
-  
+  */
   //define scintillator
 
   elements.push_back("C");     natoms.push_back(9);  
@@ -632,6 +636,29 @@ void XrayFluoNistMaterials::CreateMaterials()
 
 
 
+
+  elements.clear();
+  fractionMass.clear();
+
+  // define silicon
+
+  density = 2330*kg/m3;
+  elements.push_back("Si");;     
+  natoms.push_back(1); 
+  SiLi = nistMan->ConstructNewMaterial("SiLi",elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+
+  // define copper
+
+  density = 8920*kg/m3;
+  elements.push_back("Cu");     
+  natoms.push_back(1); 
+  copper = nistMan->ConstructNewMaterial("Cu",elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

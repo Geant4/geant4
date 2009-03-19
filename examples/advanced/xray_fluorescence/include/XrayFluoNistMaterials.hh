@@ -65,6 +65,8 @@ private:
 
   G4NistManager*     nistMan;
 
+  G4Material*        copper;
+  G4Material*        SiLi;
   G4Material*        dolorite;
   G4Material*        HPGe;
   G4Material*        SiLi;
