@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.1 2009-03-16 12:01:49 pandola Exp $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.2 2009-03-19 09:36:56 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -283,9 +283,14 @@ void G4LivermoreBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicPart
     return;
 
   //Sample gamma direction
-  if((kineticEnergy < 1*MeV && kineticEnergy > 1*keV && generatorName == "2bn"))
-    theta = angularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
+  //Use alternative algorithms, if it is the case.
+  if((kineticEnergy < 1*MeV && kineticEnergy > 1*keV))
+    { 
+      if (generatorName == "2bs" || generatorName == "2bn")
+	theta = angularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
+    }
   else
+    //Otherwise, use tsai
     theta = TsaiAngularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
   
   G4double phi   = twopi * G4UniformRand();
