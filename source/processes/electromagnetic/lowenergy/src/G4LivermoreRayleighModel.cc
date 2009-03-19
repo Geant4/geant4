@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.cc,v 1.3 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermoreRayleighModel.cc,v 1.4 2009-03-19 15:17:05 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
 
   G4cout << "Livermore Rayleigh is constructed " << G4endl
          << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
+         << lowEnergyLimit / eV << " eV - "
          << highEnergyLimit / GeV << " GeV"
          << G4endl;
 }
@@ -88,14 +88,14 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
   if (LowEnergyLimit() < lowEnergyLimit)
   {
     G4cout << "G4LivermoreRayleighModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
+	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
     SetLowEnergyLimit(lowEnergyLimit);
   }
 
   if (HighEnergyLimit() > highEnergyLimit)
   {
     G4cout << "G4LivermoreRayleighModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
+	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
 
@@ -123,7 +123,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
 
   G4cout << "Livermore Rayleigh model is initialized " << G4endl
          << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
+         << LowEnergyLimit() / eV << " eV - "
          << HighEnergyLimit() / GeV << " GeV"
          << G4endl;
 

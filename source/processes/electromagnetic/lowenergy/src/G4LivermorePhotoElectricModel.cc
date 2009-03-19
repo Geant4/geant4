@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.4 2009-03-19 12:07:26 sincerti Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.5 2009-03-19 15:17:05 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,9 +44,9 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   
-  G4cout << "Livermore Compton is constructed " << G4endl
+  G4cout << "Livermore PhotoElectric is constructed " << G4endl
          << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
+         << lowEnergyLimit / eV << " eV - "
          << highEnergyLimit / GeV << " GeV"
          << G4endl;
  
@@ -94,7 +94,7 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   if (LowEnergyLimit() < lowEnergyLimit)
   {
       G4cout << "G4LivermorePhotoElectricModel: low energy limit increased from " <<
-        LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << 
+        LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << 
 	G4endl;
       SetLowEnergyLimit(lowEnergyLimit);
   }
@@ -102,7 +102,7 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   if (HighEnergyLimit() > highEnergyLimit)
   {
       G4cout << "G4LivermorePhotoElectricModel: high energy limit decreased from " <<
-        HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" 
+        HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" 
 	     << G4endl;
       SetHighEnergyLimit(highEnergyLimit);
   }
@@ -122,10 +122,11 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   G4String shellCrossSectionFile = "phot/pe-ss-cs-";
   shellCrossSectionHandler->LoadShellData(shellCrossSectionFile);
   
-  // SI - default is buggy
+  // SI - Simple generator is buggy
   //generatorName = "geant4.6.2";
   //ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
-  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");           
+  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
+
   //
   
   if (verboseLevel > 2) 
@@ -135,7 +136,7 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
 
   G4cout << "Livermore PhotoElectric model is initialized " << G4endl
          << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
+         << LowEnergyLimit() / eV << " eV - "
          << HighEnergyLimit() / GeV << " GeV"
          << G4endl;
 
