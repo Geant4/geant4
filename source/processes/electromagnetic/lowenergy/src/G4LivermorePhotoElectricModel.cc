@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.3 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.4 2009-03-19 12:07:26 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -122,10 +122,10 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   G4String shellCrossSectionFile = "phot/pe-ss-cs-";
   shellCrossSectionHandler->LoadShellData(shellCrossSectionFile);
   
-  // SI - Buggy default ?
+  // SI - default is buggy
   //generatorName = "geant4.6.2";
   //ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
-
+  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");           
   //
   
   if (verboseLevel > 2) 
@@ -230,7 +230,7 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
       // SI - Removed safety
       
       // Generate the electron only if with large enough range w.r.t. cuts and safety
-      //G4double safety = aStep.GetPostStepPoint()->GetSafety();
+      // G4double safety = aStep.GetPostStepPoint()->GetSafety();
 
       //if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
 	{
