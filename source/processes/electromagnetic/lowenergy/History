@@ -1,4 +1,4 @@
-$Id: History,v 1.350 2009-03-18 13:52:26 pandola Exp $
+$Id: History,v 1.351 2009-03-19 09:42:05 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19.03.2009, L. Pandola, tag emlowen-V09-02-20
+	    - First fully tested version of G4LivermoreBremsstrahlungModel
+	    From this tag on, all Livermore models are migrated.
 
 18.03.2009, L. Pandola, tag emlowen-V09-02-19
 	    - Removed G4Rayleigh to avoid duplication with G4RayleighScattering
