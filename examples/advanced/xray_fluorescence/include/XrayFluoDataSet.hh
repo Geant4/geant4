@@ -73,20 +73,12 @@ public:
 
   virtual size_t NumberOfComponents() const { return 0; }
 
-<<<<<<< XrayFluoDataSet.hh
   virtual void SetEnergiesData(G4DataVector*, G4DataVector*, int
     = 0) {}
 
   virtual G4bool SaveData(const G4String&) const {return true;}
 
   virtual G4double RandomSelect(int = 0) const {return 0;}
-=======
-  virtual void SetEnergiesData(G4DataVector*, G4DataVector*, int
-    = 0) {}
-
-  virtual G4bool SaveData(const G4String&) const {return true;}
-
->>>>>>> 1.9
 
   void PrintData() const;
 
@@ -95,16 +87,8 @@ public:
 
 private:
 
-<<<<<<< XrayFluoDataSet.hh
-  //<<<<<<< XrayFluoDataSet.hh
   G4bool LoadData(const G4String& dataFile);
 
-//=======
-//  void LoadData(const G4String& dataFile);
-//>>>>>>> 1.8
-=======
-  bool LoadData(const G4String& dataFile);
->>>>>>> 1.9
   G4int z;
   G4int FindBinLocation(G4double energy) const;
 

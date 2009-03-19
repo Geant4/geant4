@@ -612,49 +612,30 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.clear();
   fractionMass.clear();
 
+  
   // define silicon
 
   density = 2330*kg/m3;
-  elements.push_back("Si");;     
-  natoms.push_back(1); 
+
+  // workaround for a problem in nistMan: it doesn't like material with a single element.
+
+  elements.push_back("Si");       natoms.push_back(1); 
+  elements.push_back("Si");       natoms.push_back(1); 
+  
   SiLi = nistMan->ConstructNewMaterial("SiLi",elements, natoms, density);
 
   elements.clear();
   natoms.clear();
+ 
 
   // define copper
 
   density = 8920*kg/m3;
-  elements.push_back("Cu");;     
-  natoms.push_back(1); 
-  copper = nistMan->ConstructNewMaterial("Cu",elements, natoms, density);
 
-  elements.clear();
-  natoms.clear();
+  // workaround for a problem in nistMan: it doesn't like material with a single element.
+  elements.push_back("Cu");       natoms.push_back(1); 
+  elements.push_back("Cu");       natoms.push_back(1); 
 
-
-
-
-
-
-  elements.clear();
-  fractionMass.clear();
-
-  // define silicon
-
-  density = 2330*kg/m3;
-  elements.push_back("Si");;     
-  natoms.push_back(1); 
-  SiLi = nistMan->ConstructNewMaterial("SiLi",elements, natoms, density);
-
-  elements.clear();
-  natoms.clear();
-
-  // define copper
-
-  density = 8920*kg/m3;
-  elements.push_back("Cu");     
-  natoms.push_back(1); 
   copper = nistMan->ConstructNewMaterial("Cu",elements, natoms, density);
 
   elements.clear();

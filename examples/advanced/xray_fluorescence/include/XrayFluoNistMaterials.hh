@@ -69,7 +69,6 @@ private:
   G4Material*        SiLi;
   G4Material*        dolorite;
   G4Material*        HPGe;
-  G4Material*        SiLi;
   G4Material*        mars1;
   G4Material*        hawaiianWD;
   G4Material*        hawaiianRF;
@@ -87,7 +86,6 @@ private:
   G4Material*        icelandicRF;
   G4Material*        GaAs;
   G4Material*        galactic;
-  G4Material*        copper;            
 
 };
 

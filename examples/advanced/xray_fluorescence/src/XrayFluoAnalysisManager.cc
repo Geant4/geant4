@@ -52,7 +52,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   :outputFileName("xrayfluo"), visPlotter(false), phaseSpaceFlag(false), physicFlag (false), persistencyType("xml"), 
-   deletePersistencyFile(true), gunParticleEnergies(0), gunParticleTypes(0), analysisFactory(0), tree(0),histogramFactory(0), plotter(0)
+   deletePersistencyFile(true), gunParticleEnergies(0), gunParticleTypes(0), analysisFactory(0), tree(0), treeDet(0), histogramFactory(0), plotter(0)
 {
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
@@ -755,16 +755,9 @@ void XrayFluoAnalysisManager::ExtractData(){
     //    AIDA::IFilter* filterEminus = tupleFactory->createFilter(" Particle == std::string(\"e-\")");
     
     
-<<<<<<< XrayFluoAnalysisManager.cc
     AIDA::IFilter* filterAngle = tupleFactory->createFilter(
 
 "(momentumPhi   >= (220. * (3.1415926/180.) )) && (momentumPhi   <= (230. * (3.1415926/180.) )) && (momentumTheta >= (130. * (3.1415926/180.) )) && (momentumTheta <= (140. * (3.1415926/180.) ))" );
-=======
-    AIDA::IFilter* filterAngle = tupleFactory->createFilter("(momentumPhi   >= (220. * (3.1415926/180.) )) && \
-                                                             (momentumPhi   <= (230. * (3.1415926/180.) )) && \
-                                                             (momentumTheta >= (130. * (3.1415926/180.) )) && \
-                                                             (momentumTheta <= (140. * (3.1415926/180.) )) " );
->>>>>>> 1.22
     
     
     //    filterGamma  ->initialize(*tupleFluo); 
