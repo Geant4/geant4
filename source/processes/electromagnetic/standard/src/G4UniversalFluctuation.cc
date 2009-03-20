@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.21 2009-03-19 16:53:30 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.22 2009-03-20 18:11:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 // 03-04-07 correction to get better width of eloss distr.(L.Urban)
 // 13-07-07 add protection for very small step or low-density material (VI)
 // 19-03-09 new width correction (does not depend on previous steps) (L.Urban)         
+// 20-03-09 modification in the width correction (L.Urban)
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,28 +203,24 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
       a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
       a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+      // correction in order to get better FWHM values
+      // ( scale parameters a1 and e1)
+      G4double width = 1.;
+      if(meanLoss > 10.*e1Fluct)
+      {
+        width = 3.1623/sqrt(meanLoss/e1Fluct);
+        if(width < a2/a1)
+        width = a2/a1;
+      } 
+      a1 *= width;
+      e1 = e1Fluct/width;
+      e2 = e2Fluct;
     }
   }
 
   G4double w1 = tmax/e0;
   if(tmax > e0) 
     a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*log(w1));
-
-  // correction in order to get better FWHM values
-  // ( scale parameters a1 and e1)
-  /*
-  G4double width = 1.;
-  if(meanLoss > 1.*keV)
-  {
-    width = 1./sqrt(meanLoss/keV);
-    if(width < a2/a1)
-      width = a2/a1;
-  } 
-  a1 *= width;
-  e1 = e1Fluct/width;
-  */
-  e1 = e1Fluct;
-  e2 = e2Fluct;
 
   //'nearly' Gaussian fluctuation if a1>nmaxCont2&&a2>nmaxCont2&&a3>nmaxCont2  
   G4double emean = 0.;
