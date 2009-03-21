@@ -1,4 +1,4 @@
-$Id: History,v 1.435 2009-03-20 11:03:07 vnivanch Exp $
+$Id: History,v 1.436 2009-03-21 15:47:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 March 09: V.Ivant (emstand-V09-02-04)
+- G4UniversalFluctuation - L.Urban introduce modification in width 
+    correction, the dependence of the correction on energy deposition 
+    at previous steps is removed (addresses T2K report)
 
 20 March 09: V.Ivant (emstand-V09-02-03)
 - G4GoudsmitSaundersonMscModel fixed compillation problem
