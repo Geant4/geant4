@@ -7,11 +7,11 @@ iac[1] = 1;
 iac[2] = 1;
 
 //for(iener = 0; iener<3; iener++) {
-iener = 2;
+iener = 5;
 c1.Divide(2,2);
 for(iplot=0; iplot<nplot; iplot++) {
 gROOT->ProcessLine(".x $G4INSTALL/tests/test46/scripts/PlotSingle.C");
 }
-c1.Print("a"+fil[iener] + ".gif");
+c1.Print("A_"+fil[iener] + ".gif");
 //}
 }

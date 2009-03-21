@@ -5,7 +5,7 @@ gStyle->SetOptStat(0);
 
 Int_t nplot = 4;
 //Int_t nener = 17;
-Int_t nener = 3;
+Int_t nener = 6;
 Int_t ndir  = 7;
 
 Int_t iplot = 0;
@@ -17,10 +17,10 @@ TString tit[nplot] = {"ECAL energy deposit", "HCAL visible energy","HCAL energy 
 
 TString hed[3] = {"QBBC","QBBC+ch.ex","QBBC+ch.ex+xsec"};
 TString dir[ndir] = {"QGSP_BERT_EMV","QGSP_BERT","FTFP_BERT","FTFP_BERT_EML","QBBC","QBBCF","QBBCG"};
-TString fil[nener]= {"pi-9gev","pi-30gev","pi-300gev"};
-TString part[nener]= {"#pi^{-} 9 GeV","#pi^{-} 30 GeV","#pi^{-} 300 GeV"};
-//TString part[nener]= {"proton 9 GeV","proton 30 GeV","proton 300 GeV"};
-Double_t ener[nener]= {9.,30.,300.};
+TString fil[nener]= {"pi-9gev","pi-30gev","pi-300gev","pi-20gev","pi-5gev","pi-50gev"};
+//TString part[nener]= {"#pi^{-} 9 GeV","#pi^{-} 30 GeV","#pi^{-} 300 GeV","#pi^{-} 12 GeV","#pi^{-} 5 GeV","#pi^{-} 50 GeV"};
+TString part[nener]= {"proton 9 GeV","proton 30 GeV","proton 300 GeV","proton 20 GeV","proton 5 GeV","proton 50 GeV"};
+Double_t ener[nener]= {9.,30.,300.,20.,5.,50.};
 //Double_t ener[nener]= {1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,12.,20.,30.,50.,100.,200.,300.};
 Double_t x1[nplot] = {1.0,0.015,1.5,1.5}; 
 //Double_t x2[nxs] = {5,6,5,6,6,6,6}; 
