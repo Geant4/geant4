@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.cc,v 1.1 2009-03-23 16:17:39 grichine Exp $
+// $Id: G4HeatedKleinNishinaCompton.cc,v 1.2 2009-03-23 17:26:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -169,7 +169,7 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
   gamma4v.boost(-bst);
 
   G4ThreeVector gammaMomV = gamma4v.vect();
-  G4double  gamEnergy0 = gammaMomV.mag();
+  G4double  gamEnergy0    = gammaMomV.mag();
  
  
   // G4double gamEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -177,9 +177,9 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
 
   // G4ThreeVector gamDirection0 = /aDynamicGamma->GetMomentumDirection();
 
-  G4ThreeVector gamDirection0 =gammaMomV/gamEnergy0;
-  //
-  // sample the energy rate of the scattered gamma 
+  G4ThreeVector gamDirection0 = gammaMomV/gamEnergy0;
+  
+  // sample the energy rate of the scattered gamma in the electron rest frame
   //
 
   G4double epsilon, epsilonsq, onecost, sint2, greject ;
@@ -224,7 +224,32 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
    
   G4ThreeVector gamDirection1 ( dirx,diry,dirz );
   gamDirection1.rotateUz(gamDirection0);
-  G4double gamEnergy1 = epsilon*gamEnergy0;
+  G4double gamEnergy1  = epsilon*gamEnergy0;
+  gamDirection1       *= gamEnergy1;
+
+  G4LorentzVector gamma4vfinal = G4LorentzVector(gamDirection1,gamEnergy1);
+
+  
+  // kinematic of the scattered electron
+  //
+
+  G4double eKinEnergy = gamEnergy0 - gamEnergy1;
+
+  // if( eKinEnergy > DBL_MIN ) 
+  {
+    G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
+    eDirection = eDirection.unit();
+    G4double eFinalMom = std::sqrt(eKinEnergy*(eKinEnergy+2*electron_mass_c2));
+    eDirection *= eFinalMom
+    G4LorentzVector e4vfinal = G4LorentzVector(eDirection,gamEnergy1+electron_mass_c2);
+  }
+  gamma4vfinal.boost(bst);
+  e4vfinal.boost(bst);
+
+  gamDirection1 = gamma4vfinal.vect();
+  gamEnergy1 = gamDirection1.mag(); 
+  gamDirection1 /= gamEnergy1;
+
 
 
 
@@ -232,6 +257,7 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
 
   if( gamEnergy1 > lowestGammaEnergy ) 
   {
+    gamDirection1 /= gamEnergy1;
     fParticleChange->ProposeMomentumDirection(gamDirection1);
   } 
   else 
@@ -241,18 +267,14 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
     fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
   }
 
-  //
-  // kinematic of the scattered electron
-  //
-
-  G4double eKinEnergy = gamEnergy0 - gamEnergy1;
+  eKinEnergy = e4vfinal.t()-electron_mass_c2
 
   if( eKinEnergy > DBL_MIN ) 
   {
-    G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
-    eDirection = eDirection.unit();
-
     // create G4DynamicParticle object for the electron.
+    eDirection = e4vfinal.vect();
+    G4double eFinMomMag = eDirection.mag();
+    eDirection /= eFinMomMag;
     G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   }
