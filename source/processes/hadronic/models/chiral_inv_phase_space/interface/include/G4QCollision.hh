@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.12 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.13 2009-03-23 14:12:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -88,6 +88,7 @@
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4RandomDirection.hh"
 
 // CHIPS Headers
 #include "G4QEnvironment.hh"

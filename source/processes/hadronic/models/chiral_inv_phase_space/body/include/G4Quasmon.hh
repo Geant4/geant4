@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.40 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.41 2009-03-23 14:14:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -101,6 +101,7 @@ public:
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
+  void              IncreaseBy(G4QContent& qQCont, const G4LorentzVector& q4M);
   void              ClearQuasmon();                   // Clear Quasmon (status=0)
   void              KillQuasmon();                    // Kill Quasmon (status=0)
   G4int             CalculateNumberOfQPartons(G4double qMass);
@@ -177,6 +178,12 @@ inline void G4Quasmon::IncreaseBy(const G4Quasmon* pQuasm)
 {
   valQ  += pQuasm->GetQC();
   q4Mom += pQuasm->Get4Momentum();
+  status= 3;
+}
+inline void G4Quasmon::IncreaseBy(G4QContent& qQCont, const G4LorentzVector& q4M)
+{
+  valQ  += qQCont;
+  q4Mom += q4M;
   status= 3;
 }
 

@@ -70,7 +70,7 @@ class G4QuasiFreeRatios
   // ChargeExchange/QuasiElastic factor pair<for protons (Z), for neutrons(N)>
   std::pair<G4double,G4double> GetChExFactor(G4double pIU, G4int pPDG, G4int Z, G4int N);
   // scatter (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
-  // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
+  // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the projectile happened
   std::pair<G4LorentzVector,G4LorentzVector> Scatter(G4int NPDG, G4LorentzVector N4M,
                                                      G4int pPDG, G4LorentzVector p4M);
   // ChExer (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
