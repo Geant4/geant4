@@ -73,7 +73,6 @@ macro preco j=1 np=13 proj=n targ=^27!Al file=al1314 nn=6 e=90 cs=450 _
    if [j] = 1 then
     hymin =  3.e-7
     hymax =  .049999
-    m = 939.565 | neutron
    elseif [j] = 2 then
     hymin =  3.e-6
     hymax =  .09
@@ -186,7 +185,8 @@ macro preco j=1 np=13 proj=n targ=^27!Al file=al1314 nn=6 e=90 cs=450 _
   ve/cr x3(2) r 3 7
   ve/cr y3(2) r [dash] [dash]
   graph 2 x3 y3 l
-  itx 10 [hymin]*18 PRECO
+*  itx 10 [hymin]*18 PRECO
+  itx 10 [hymin]*18 BICnew
   dash=[hymin]*9
   exec ~/PTOOL/green
   ve/cr x4(2) r 3 7
@@ -213,7 +213,7 @@ macro preco j=1 np=13 proj=n targ=^27!Al file=al1314 nn=6 e=90 cs=450 _
   ve/re ach,bi1,bi2,bi3,bi4,bi5,bi6,bi7,bi8,bi9 p_90_[file]_[j]_binar.v
   ve/re ach,lh1,lh2,lh3,lh4,lh5,lh6,lh7,lh8,lh9 p_90_[file]_[j]_lepro.v
   exec ~/PTOOL/black
-  mess 'j='//[j]
+*  mess 'j='//[j]
   do i = 1 , 9
     a=angle([i])
     if [i] = 2 .OR. [i] = 3 .OR. [i] = 4 .OR. [i] = 6 .OR. [i] = 8 then
@@ -268,6 +268,10 @@ macro preco j=1 np=13 proj=n targ=^27!Al file=al1314 nn=6 e=90 cs=450 _
       *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
       h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
                ?  $sigma(d[j][a]/p[j][a]) 25 20 [ptsize] 0
+**      if [j] < 3 then
+**       mess 'data: h='//[j]//', ang='//[i]
+**       ve/pri $sigma(s[j][a]/p[j][a])
+**      endif
 *    if  [np] = 13 then
 *     if [i] = 2 .OR. [i] = 3 .OR. [i] = 4 .OR. [i] = 6 .OR. [i] = 8 then
 *      exec hsolid 61 [hfbin] [hnbin] pink   [m] 1
@@ -304,6 +308,10 @@ macro hsolid id=66 hf=1 hn=60 col=black m=939.567 mod=1
 *  get/err  [id]([hf]:[hn]) wd
   ve/copy $sigma(10.**wx) wt
   ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+**  if [m] < 1000 then
+**    mess 'fit: m='//[m]//', id='//[id]
+**    ve/pri $sigma(wy/wp)
+**  endif
   exec ~/PTOOL/white 8
   set lwid 5
   graph [nb] wt $sigma(wy/wp) l

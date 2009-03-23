@@ -1,4 +1,4 @@
-macro run1 f=5 n=5 z=83 que=32-rb20-hp
+macro run1 f=5 n=5 z=13 que=32-rb20-hp
  nEvts = 2000 * [f]
  if [z] = 13 then	
   exec preco ^27!Al al1314 13 14 90 450 [nEvts] [n] [que] 2 13 | 450 mb is reaction CS
@@ -76,6 +76,9 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   hlxmax = $sigma(log10([hxmax]))
   halfbn = $sigma(0.5*([hlxmax]-[hlxmin])/[hnbin])
 *
+  opt nzfl
+  swi g
+*
   1d         11 'T?n! at  20 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
   hi/copy 11 12 'T?n! at  30 deg (MeV)'
   hi/copy 11 13 'T?n! at  45 deg (MeV)'
@@ -150,9 +153,6 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   cut $4 nd=0.and.ns=0.and.nz=1.and.nn=2               | triton
   cut $5 nd=0.and.ns=0.and.nz=2.and.nn=1               | he3
   cut $6 nd=0.and.ns=0.and.nz=2.and.nn=2               | he4
-*
-  opt zfl
-  swi z
   zone 3 3
   do i = 0 , 8
     k  = [i]+1
@@ -197,6 +197,8 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
 *    message 'histograms are waighted and added'
   enddo
   pi/del ' '
+*
+  opt zfl
 * Draw & Create the file
   swi gz
 * Create the output file only
@@ -206,11 +208,12 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   size 24 18
   set xwin 0.0001
   set ywin 0.0001
+*  model=lowen
 *  model=chips
-*  model=preco
+  model=preco
 *  model=berti
 *  model=binar
-  model=lepro
+*  model=lepro
   title [targ]//'(p,f)X,E='//[E]//'MeV,[q]=20,30,45,60,75,90,105,120,140^0!('//[model]//')'
   clr
   zone 3 2
@@ -239,7 +242,8 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   exec ~/PTOOL/black
   set xval
   set yval 70
-  ve/cr xm(1) R 7.
+  xt=15
+  ve/cr xm(1) R 11.
   ve/cr ym1(1) R .000448
   ve/cr ym2(1) R .000224
   ve/cr ym3(1) R .000112
@@ -285,15 +289,15 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
       h/symbols xm ym7 1 29 [ptsize]
       h/symbols xm ym8 1 28 [ptsize]
       h/symbols xm ym9 1 23 [ptsize]
-      itx 11. .0003840 20
-      itx 11. .0001920 30
-      itx 11. .0000960 45
-      itx 11. .0000480 60
-      itx 11. .0000240 75
-      itx 11. .0000120 90
-      itx 11. .0000060 105
-      itx 11. .0000030 120
-      itx 11. .0000015 140
+      itx [xt] .0003840 20
+      itx [xt] .0001920 30
+      itx [xt] .0000960 45
+      itx [xt] .0000480 60
+      itx [xt] .0000240 75
+      itx [xt] .0000120 90
+      itx [xt] .0000060 105
+      itx [xt] .0000030 120
+      itx [xt] .0000015 140
     endif
     if [j] = 6 then
       exec ~/PTOOL/black
@@ -324,11 +328,10 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
       *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
       h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
                ?  $sigma(d[j][a]/p[j][a]) 25 [mk] [ptsize] 0
-*************** Temporary **************
-*      ve/re abspr,con p90_[j]_[a]_lepr.dat
-*      ve/cop $SIGMA(con*.45) conp
-*      put/cont 6[i] conp
-***********************************^^END
+*      if [j] < 3 then
+*       mess 'data: h='//[j]//', ang='//[i]
+*       ve/pri $sigma(s[j][a]/p[j][a])
+*      endif
       exec hsolid [j][k] [hfbin] [hnbin] [downcol] [m] [mod]
 *     prepare the vector corresponding to the histogram
       ve/cr v[jk]([hnbin])
@@ -350,8 +353,8 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   exec prieps p_[e]_[file]_npdt_[model]
   if [runn] = 0 then
     wait ' ' 2
-***    shell lpr -P[pq] preco_[file]_e[e].ps
-***    shell xprint -P[pq] preco_[file]_e[e].ps
+***    shell lpr -P[pq] preco_[file]_e[e]_[model].ps
+***    shell xprint -P[pq] preco_[file]_e[e]_[model].ps
   endif
 *
 stop:
@@ -441,6 +444,10 @@ macro hsolid id=66 hf=1 hn=60 col=black m=939.567 mod=1
   get/err  [id]([hf]:[hn]) wd
   ve/copy $sigma(10.**wx) wt
   ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+*  if [m] < 1000 then
+*    mess 'fit: m='//[m]//', id='//[id]
+*    ve/pri $sigma(wy/wp)
+*  endif
   exec ~/PTOOL/white 8
   set lwid 5
   graph [nb] wt $sigma(wy/wp) l

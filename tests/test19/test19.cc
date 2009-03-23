@@ -60,8 +60,8 @@
 //#define ekindbg
 //#define histdbg
 //--- Flags of models (only one must be chosen, CHIPS is the default for System Testing ---
-//#define chips
-#define lep
+#define chips
+//#define lep
 //#define hep
 //#define preco
 //#define berti
@@ -472,8 +472,8 @@ int main()
 #ifdef chips
   // *************** CHIPS process definition starts here *******************************
   G4QCollision* proc = new G4QCollision;               // A general CHIPS process
-  ///G4QDiffraction* proc = new G4QDiffraction;          // A diffraction CHIPS process
-  ///G4QLowEnergy* proc = new G4QLowEnergy;              // fragment-nucleus universal
+  ///G4QDiffraction* proc = new G4QDiffraction;           // A diffraction CHIPS process
+  ///G4QLowEnergy* proc = new G4QLowEnergy;               // fragment-nucleus universal
 #endif
   // **************** GHAD process definition starts here *******************************
 #ifdef preco
@@ -541,6 +541,7 @@ int main()
     G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
     exit(1);
   }
+  // Comment for G4QLowEnergies
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
 #else
   G4HadronInelasticProcess* proc = 0;
