@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23th Mar 2009 Peter Gumplinger (op-V09-02-01)
+              for complex index of refraction: (1)resample the reflectivity
+              every time in the do-while of DielectricMetal, but don't
+              re-calculate theFacetNormal (which has already been chosen
+              in CalculateReflectivity), also (2) avoid an infinite loop by
+              resetting iTE and iTM inside the do-while of GetReflectivity;
+              both are bug-fixes.
+
 14th Jan 2009 Peter Gumplinger (op-V09-02-00)
               respond to bug report 1040 by fixing G4OpBoundaryProcess.cc 
 
