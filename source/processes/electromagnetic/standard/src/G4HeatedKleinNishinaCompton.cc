@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.cc,v 1.2 2009-03-23 17:26:02 grichine Exp $
+// $Id: G4HeatedKleinNishinaCompton.cc,v 1.3 2009-03-23 17:29:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -234,15 +234,12 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
   //
 
   G4double eKinEnergy = gamEnergy0 - gamEnergy1;
-
-  // if( eKinEnergy > DBL_MIN ) 
-  {
-    G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
-    eDirection = eDirection.unit();
-    G4double eFinalMom = std::sqrt(eKinEnergy*(eKinEnergy+2*electron_mass_c2));
-    eDirection *= eFinalMom
-    G4LorentzVector e4vfinal = G4LorentzVector(eDirection,gamEnergy1+electron_mass_c2);
-  }
+  G4ThreeVector eDirection = gamEnergy0*gamDirection0 - gamEnergy1*gamDirection1;
+  eDirection = eDirection.unit();
+  G4double eFinalMom = std::sqrt(eKinEnergy*(eKinEnergy+2*electron_mass_c2));
+  eDirection *= eFinalMom;
+  G4LorentzVector e4vfinal = G4LorentzVector(eDirection,gamEnergy1+electron_mass_c2);
+  
   gamma4vfinal.boost(bst);
   e4vfinal.boost(bst);
 
@@ -267,7 +264,7 @@ void G4HeatedKleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticl
     fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
   }
 
-  eKinEnergy = e4vfinal.t()-electron_mass_c2
+  eKinEnergy = e4vfinal.t()-electron_mass_c2;
 
   if( eKinEnergy > DBL_MIN ) 
   {
