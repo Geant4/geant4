@@ -265,13 +265,16 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
             char beam[8]="proton", int legend=1, char dir[20]=".", 
 	    char dird[40]=".", char markf[4]=" ") {
 
+  int nMods = modelsITEP;
+  if ( ene == "1.40" ) nMods = 3;
+
   char fname[120], list[40], hname[60], titlx[50];
   TH1F *hi[6];
   int i=0, icol=1;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=1, ymi0=100., xlow=0.06, xhigh=0.26;
   if (particle == "neutron") {xlow= 0.0; xhigh=0.20;}
-  for (i=0; i<modelsITEP; i++) {
+  for (i=0; i<nMods; i++) {
     sprintf (list, "%s", ModelsITEP[i].c_str());  icol = colModel[i]; 
     sprintf (fname, "%s/%s%s%s%sGeV.root", dir, beam, element, list, ene);
     sprintf (hname, "KE%s0%s%s%s%sGeV%s", particle, beam, element, list, ene, angle);
@@ -327,14 +330,14 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0) ymi0 = ymin;
-  for (i = 0; i<modelsITEP; i++) {
+  for (i = 0; i<nMods; i++) {
     if (debug) std::cout << "Model " << i << " " << hi[i] << " " << ymi0 << " " << ymx0 << "\n";
     if (hi[i] != 0) hi[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
   }
 
   hi[first]->GetYaxis()->SetTitleOffset(1.6);
   hi[first]->Draw();
-  for (i=0; i<modelsITEP; i++) {
+  for (i=0; i<nMods; i++) {
     if (i != first && hi[i] != 0) hi[i]->Draw("same");
   }
   gr1->Draw("p");
@@ -346,7 +349,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
     if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.90);
     else              leg1 = new TLegend(0.38,0.70,0.90,0.90);
   }
-  for (i=0; i<modelsITEP; i++) {
+  for (i=0; i<nMods; i++) {
     if (hi[i] != 0) {
       sprintf (list, "%s", ModelNamesI[i].c_str()); 
       leg1->AddEntry(hi[i],list,"F");
