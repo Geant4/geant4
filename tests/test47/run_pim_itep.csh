@@ -104,12 +104,13 @@ $G4EXE/test47 ITEP.pim.$energyPIM.$targetPIM[$i]
 
 @ index = ( $i + 4 )
 
-echo " index = " $index
+$ROOTSYS/bin/root -b -p -q Plot.C\($index\) 
 
-###$ROOTSYS/bin/root -b -p -q Plot.C\($index\) 
+set extension = GeV_1.eps
+set outputPlots = piminus$targetPIM[$i]toprotonat$energyPIM_GeV$extension
 
-###set outputPlots = piminus$targetPIM[$i]toprotonat$energyPIM_GeVGeV_1.eps 
-
+### these actions below are just examples of moving the output around...
+###
 ###/usr/bin/X11/gv $outputPlots &
 ###/bin/cp $outputPlots /uscms/home/yarba_j/G4test47/.
 

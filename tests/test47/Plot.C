@@ -30,6 +30,9 @@ std::string ModelsBNL[5]   = {"lepar", "ftfp", "bertini", "qgsp",   "qgsc"};
 std::string ModelNamesB[5] = {"LEP",   "FTFP", "Bertini", "QGSP",   "QGSC"};
 */
 
+// re-order list of models, because it's simpler this way to cut off ftfp & qgsc
+// at the low-energy end, where they may lead to a crash
+//
 std::string ModelsITEP[5]  = {"lepar", "bertini", "binary",  "ftfp", "qgsc"};
 std::string ModelNamesI[5] = {"LEP",   "Bertini", "Binary", "FTFP", "QGSC"};
 
@@ -46,19 +49,31 @@ bool        debug=false;
 void Plot( int index )
 {
 
-   switch(index){
+    switch(index){
       case 1:
          plotKE4("C","1.40",0,1,1,"piplus");
+	 break;
       case 2:
          plotKE4("U","1.40",0,1,1,"piplus");
+	 break;
       case 3:
          plotKE4("C","5.00",0,1,1,"piplus");
+	 break;
       case 4:
          plotKE4("U","5.00",0,1,1,"piplus");
+	 break;
       case 5:
+         plotKE4("C","5.00",0,1,1,"piminus");
+	 break;
       case 6:
+         plotKE4("Cu","5.00",0,1,1,"piminus");
+	 break;
       case 7:
+         plotKE4("Pb","5.00",0,1,1,"piminus");
+	 break;
       case 8:
+         plotKE4("U","5.00",0,1,1,"piminus");
+	 break;
       case 9:
          plotKE4("C","1.40",0,1,1);
 	 break;
@@ -72,7 +87,7 @@ void Plot( int index )
          plotKE4("U","7.50",0,1,1);
 	 break;
    } 
-   
+  
    return;
 
 }
