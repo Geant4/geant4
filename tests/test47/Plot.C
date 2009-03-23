@@ -22,11 +22,19 @@
 
 const int modelsITEP=5, modelsBNL=5;
 
+/*
 std::string ModelsITEP[5]  = {"lepar", "ftfp", "bertini", "binary", "qgsc"};
 std::string ModelNamesI[5] = {"LEP",   "FTFP", "Bertini", "Binary", "QGSC"};
 
 std::string ModelsBNL[5]   = {"lepar", "ftfp", "bertini", "qgsp",   "qgsc"};
 std::string ModelNamesB[5] = {"LEP",   "FTFP", "Bertini", "QGSP",   "QGSC"};
+*/
+
+std::string ModelsITEP[5]  = {"lepar", "bertini", "binary",  "ftfp", "qgsc"};
+std::string ModelNamesI[5] = {"LEP",   "Bertini", "Binary", "FTFP", "QGSC"};
+
+std::string ModelsBNL[5]   = {"lepar", "bertini", "qgsp", "ftfp",  "qgsc"};
+std::string ModelNamesB[5] = {"LEP",   "Bertini", "QGSP",  "FTFP", "QGSC"};
 
 int         colModel[6]    = {1, 2, 6, 3, 7, 9};
 int         symbModel[6]   = {24, 29, 25, 27, 26, 23};
@@ -34,6 +42,41 @@ double      keproton[4]    = {0.09, 0.15, 0.19, 0.23};
 double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
  
+
+void Plot( int index )
+{
+
+   switch(index){
+      case 1:
+         plotKE4("C","1.40",0,1,1,"piplus");
+      case 2:
+         plotKE4("U","1.40",0,1,1,"piplus");
+      case 3:
+         plotKE4("C","5.00",0,1,1,"piplus");
+      case 4:
+         plotKE4("U","5.00",0,1,1,"piplus");
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+         plotKE4("C","1.40",0,1,1);
+	 break;
+      case 10:
+         plotKE4("U","1.40",0,1,1);
+	 break;
+      case 11:
+         plotKE4("C","7.50",0,1,1);
+	 break;
+      case 12:
+         plotKE4("U","7.50",0,1,1);
+	 break;
+   } 
+   
+   return;
+
+}
+
 void plotStandard(char dir[20]=".", char dird[40]=".", int leg1=1, 
 		  int leg2=1, char mark=' ') {
 

@@ -28,4 +28,4 @@ setenv G4RADIOACTIVEDATA g4radiactive
 setup g4elastic   v1_1
 setenv G4ELASTICDATA g4elastic 
 
-setenv LD_LIBRARY_PATH LD_LIBRARY_PATH:$G4LIB/plists/Linux-g++/:$G4LIB/Linux-g++/:$CLHEP_BASE_DIR/lib
+setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH:$G4LIB/plists/Linux-g++/:$G4LIB/Linux-g++/:$CLHEP_BASE_DIR/lib
