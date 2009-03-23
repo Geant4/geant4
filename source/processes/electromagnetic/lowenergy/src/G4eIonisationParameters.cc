@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.23 2006-06-29 19:42:02 gunter Exp $
+// $Id: G4eIonisationParameters.cc,v 1.24 2009-03-23 09:13:44 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,6 +40,7 @@
 // 30.05.02 V.Ivanchenko    Format and names of the data files were
 //                          chenged to "ion-..."
 // 17.02.04 V.Ivanchenko    Increase buffer size
+// 23.03.09 L.Pandola       Updated warning message
 //
 // -------------------------------------------------------------------
 
@@ -198,7 +199,7 @@ void G4eIonisationParameters::LoadData()
 
     if (! (lsdp->is_open()) ) {
       G4String excep = G4String("G4IonisationParameters - data file: ")
-      + name + G4String(" not found. The version 1.# of G4LEDATA should be used");
+      + name + G4String(" not found. Please check and/or update G4LEDATA");
       G4Exception(excep);
     }
 
