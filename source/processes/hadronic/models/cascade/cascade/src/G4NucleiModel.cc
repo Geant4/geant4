@@ -53,7 +53,7 @@
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4NucleiModel::G4NucleiModel()
-  : verboseLevel(2), high_energy_interaction(false) {
+  : verboseLevel(2) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
@@ -759,9 +759,8 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
   return thePartners;
 }
 
-std::vector<G4CascadParticle> 
-G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
-				    G4ElementaryParticleCollider* theElementaryParticleCollider) {
+std::vector<G4CascadParticle> G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
+								    G4ElementaryParticleCollider* theElementaryParticleCollider) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
@@ -813,7 +812,6 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	}
 
 	G4CollisionOutput output = theElementaryParticleCollider->collide(&bullet, &target);
-        high_energy_interaction = theElementaryParticleCollider->HighEnergyFlag();
 
 	if (verboseLevel > 2){
 	  output.printCollisionOutput();

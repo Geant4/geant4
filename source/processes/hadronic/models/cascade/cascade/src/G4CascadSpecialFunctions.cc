@@ -178,41 +178,6 @@ G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e)
   return std::pair<G4int, G4double>(ik, sk);
 }
 
-void
-G4CascadSpecialFunctions::printCrossSections()
-{
-  const G4double ke[74] =
-    {0.00, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10,
-     0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.20, 0.25,
-     0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80,
-     0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35,
-     1.40, 1.45, 1.50, 1.55, 1.60, 1.65, 1.70, 1.75, 1.80, 1.85, 1.90,
-     1.95, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00, 4.00, 5.00, 6.00, 7.00,
-     8.00, 9.00, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0};
-
-  const G4String channel_names[7] = {"pp", "pn", "pi+p", "nn", "pi-p", "pi+n", "pi0p"}; 
-
-  G4cout << " Kinetic energies in GeV " << G4endl;
-  for (G4int i = 0; i < 12; i++) {
-    G4int istart = i*6;
-    G4int istop = istart + 6;
-    for (G4int e = istart; e < istop; e++) G4cout << ke[e] << "  " ;
-    G4cout << G4endl;
-  }
-  G4cout << G4endl;
-
-  for (G4int channel = 1; channel < 8; channel++) {
-    G4cout << " Channel " << channel_names[channel-1] << G4endl;
-    for (G4int i = 0; i < 12; i++) {
-      G4int istart = i*6;
-      G4int istop = istart + 6;
-      for (G4int t = istart; t < istop; t++) G4cout << crossSection(ke[t], channel) << "  " ;
-      G4cout << G4endl;
-    }
-    G4cout << G4endl; 
-  }
-}
-
 
 G4double 
 G4CascadSpecialFunctions::crossSection(G4double e, G4int is) 

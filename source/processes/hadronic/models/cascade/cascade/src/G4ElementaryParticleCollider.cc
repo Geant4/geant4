@@ -53,12 +53,10 @@
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(1), high_energy(false) 
+  : verboseLevel(1) 
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
-
-    printCrossSections();
   }
 }
 
@@ -176,7 +174,7 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 
 G4int 
 G4ElementaryParticleCollider::generateMultiplicity(G4int is, 
-						   G4double ekin) const
+						   G4double ekin) const 
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::generateMultiplicity" 
@@ -378,15 +376,13 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
     G4double sl = inuclRndm();
     G4double ptot = 0.0;
-    mul = 5;
-    high_energy = true;
 
+    mul = 4;
     for (G4int i = 0; i < 5; i++) {
       ptot += sigm[i] / stot;
 
       if (sl <= ptot) {
         mul = i;
-        high_energy = false;
         break;
       } 
     }
@@ -535,8 +531,6 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       generate = false;
 
     } else { // 2 -> many
-
-      if (high_energy) multiplicity = 6;
 
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
@@ -703,7 +697,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	      };
 	    };
 	  }; 
-        };
+	};
       };
 
       if (itry == itry_max) {
@@ -714,7 +708,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	}
 
       };
-    }  // 2->many
+    };
   }; 
 
   if (verboseLevel > 3) {
@@ -723,7 +717,6 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
   return particles;
 }
-
 
 std::vector<G4double> 
 G4ElementaryParticleCollider::generateMomModules(

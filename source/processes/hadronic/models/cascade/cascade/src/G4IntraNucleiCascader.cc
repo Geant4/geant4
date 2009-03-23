@@ -157,8 +157,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							theElementaryParticleCollider);
       if (verboseLevel > 2) {
-	G4cout << " New particles from G4NucleiModel::generateParticleFate " 
-               << new_cascad_particles.size() << G4endl;
+	G4cout << " ew particles " << new_cascad_particles.size() << G4endl;
       }
 
       // handle the result of a new step
@@ -218,26 +217,21 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
           }
         } 
 
-      } else if (model.highEnergyInteraction() ) { // high energy projectile-nucleon interaction
-	cascad_particles.pop_back();
-	for (G4int i = 0; i < G4int(new_cascad_particles.size()); i++) {
-          // send secondaries straight to output - no further cascade
-          // for now, don't check for Coulomb barrier? 
-	  output_particles.push_back(new_cascad_particles[i].getParticle() );
-        }
-	std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
-	theExitonConfiguration.incrementHoles(holes.first);
-	if (holes.second > 0) theExitonConfiguration.incrementHoles(holes.second);
+      } else { // interaction 
 
-      } else { // medium energy projectile-nucleon interaction
 	cascad_particles.pop_back();
+
 	for (G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
+
 	std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
+
 	theExitonConfiguration.incrementHoles(holes.first);
+
 	if (holes.second > 0) theExitonConfiguration.incrementHoles(holes.second);
-      }
-    }
+
+      };
+    };
 
     // Cascade is finished. Check if it's OK.
 
