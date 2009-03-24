@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.50 2009-03-05 16:36:13 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.51 2009-03-24 13:50:07 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,36 +53,6 @@
 #include "Geant4_gl2ps.h"
 
 #include <sstream>
-
-static const char* gouraudtriangleEPS[] =
-{
-  "/bd{bind def}bind def /triangle { aload pop   setrgbcolor  aload pop 5 3",
-  "roll 4 2 roll 3 2 roll exch moveto lineto lineto closepath fill } bd",
-  "/computediff1 { 2 copy sub abs threshold ge {pop pop pop true} { exch 2",
-  "index sub abs threshold ge { pop pop true} { sub abs threshold ge } ifelse",
-  "} ifelse } bd /computediff3 { 3 copy 0 get 3 1 roll 0 get 3 1 roll 0 get",
-  "computediff1 {true} { 3 copy 1 get 3 1 roll 1 get 3 1 roll 1 get",
-  "computediff1 {true} { 3 copy 2 get 3 1 roll  2 get 3 1 roll 2 get",
-  "computediff1 } ifelse } ifelse } bd /middlecolor { aload pop 4 -1 roll",
-  "aload pop 4 -1 roll add 2 div 5 1 roll 3 -1 roll add 2 div 3 1 roll add 2",
-  "div 3 1 roll exch 3 array astore } bd /gouraudtriangle { computediff3 { 4",
-  "-1 roll aload 7 1 roll 6 -1 roll pop 3 -1 roll pop add 2 div 3 1 roll add",
-  "2 div exch 3 -1 roll aload 7 1 roll exch pop 4 -1 roll pop add 2 div 3 1",
-  "roll add 2 div exch 3 -1 roll aload 7 1 roll pop 3 -1 roll pop add 2 div 3",
-  "1 roll add 2 div exch 7 3 roll 10 -3 roll dup 3 index middlecolor 4 1 roll",
-  "2 copy middlecolor 4 1 roll 3 copy pop middlecolor 4 1 roll 13 -1 roll",
-  "aload pop 17 index 6 index 15 index 19 index 6 index 17 index 6 array",
-  "astore 10 index 10 index 14 index gouraudtriangle 17 index 5 index 17",
-  "index 19 index 5 index 19 index 6 array astore 10 index 9 index 13 index",
-  "gouraudtriangle 13 index 16 index 5 index 15 index 18 index 5 index 6",
-  "array astore 12 index 12 index 9 index gouraudtriangle 17 index 16 index",
-  "15 index 19 index 18 index 17 index 6 array astore 10 index 12 index 14",
-  "index gouraudtriangle 18 {pop} repeat } { aload pop 5 3 roll aload pop 7 3",
-  "roll aload pop 9 3 roll 4 index 6 index 4 index add add 3 div 10 1 roll 7",
-  "index 5 index 3 index add add 3 div 10 1 roll 6 index 4 index 2 index add",
-  "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
-  NULL
-};
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -160,12 +130,48 @@ void G4OpenGLViewer::ClearView () {
 
 /**
  * Set the viewport of the scene
+ * MAXIMUM SIZE is :
+ * GLint dims[2];
+ * glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
  */
 void G4OpenGLViewer::ResizeGLView()
 {
-  int side = fWinSize_x;
+  printf("G4OpenGLViewer::ResizeGLView %d %d\n",fWinSize_x,fWinSize_y);
+  // Check size
+  GLint dims[2];
+  glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
+  if (fWinSize_x > (unsigned)dims[0]) {
+    G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
+    fWinSize_x = dims[0];
+  }
+  if (fWinSize_y > (unsigned)dims[1]) {
+    G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
+    fWinSize_y = dims[1];
+  }
+  GLsizei side = fWinSize_x;
   if (fWinSize_y < fWinSize_x) side = fWinSize_y;
-  glViewport((fWinSize_x - side) / 2, (fWinSize_y - side) / 2, side, side);  
+
+  // SPECIAL CASE if fWinSize_x is even (69 for example) 
+  // Ex : X: 69 Y: 26
+  // side = 26
+  // width / 2 = 21,5
+  // height / 2 = 0
+  // Should be fixed to closed : 21 0 for ex
+  // Then size must by change to :
+  // X:68 Y: 26
+
+  // SPECIAL CASE
+  if ((fWinSize_x - side)%2) {
+    fWinSize_x --;
+  }
+  if ((fWinSize_y - side)%2) {
+    fWinSize_y --;
+  }
+  
+  GLint width = (fWinSize_x - side) / 2;
+  GLint height = (fWinSize_y - side) / 2;
+  
+  glViewport(width, height, side, side);  
 }
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2009-03-18 14:34:28 allison Exp $
+$Id: History,v 1.131 2009-03-24 13:50:07 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,10 +20,17 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
+24th March 2009, Laurent Garnier
+ - G4OpenGLViewer : Add a fix and resizing when X/Y size was even (lack of precision
+   in a /2)
+
 18th March 2009  John Allison
 - G4OpenGLViewerMessenger.cc: printMode and transparency are available
   for all OGL windows (they were previously inadvertently hidden by
   an OGLS requirement).
+
+16th March 2009, Laurent Garnier
+ - G4OpenGLViewer : Add a check on max viewport dimensions when setting size.
 
 4rd March 2009, Laurent Garnier
  - G4OpenGLQtViewer:
@@ -55,7 +62,7 @@ History file for visualization/OpenGL
 - Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers
 
 19th January 2009  Laurent Garnier
-- Change G4DEBUG defiition by G4DEBUG_VIS_OGL
+- Change G4DEBUG definition by G4DEBUG_VIS_OGL
 
 12th January 2009  John Allison
 - G4OpenGLViewer.cc: Pick up X and Y window size hints to define viewport.
