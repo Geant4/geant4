@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.16 2008-08-22 10:00:20 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.17 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -34,6 +34,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadMaterials.hh"
+
+G4GDMLReadMaterials::G4GDMLReadMaterials() : G4GDMLReadDefine()
+{
+}
+
+G4GDMLReadMaterials::~G4GDMLReadMaterials()
+{
+}
 
 G4double
 G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)

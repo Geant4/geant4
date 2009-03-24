@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.74 2008-11-13 16:48:19 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.75 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -34,6 +34,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteStructure.hh"
+
+G4GDMLWriteStructure::G4GDMLWriteStructure() : G4GDMLWriteParamvol()
+{
+}
+
+G4GDMLWriteStructure::~G4GDMLWriteStructure()
+{
+}
 
 void
 G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,

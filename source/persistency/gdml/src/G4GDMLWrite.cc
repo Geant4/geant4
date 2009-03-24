@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.51 2009-03-02 10:20:50 tnikitin Exp $
+// $Id: G4GDMLWrite.cc,v 1.52 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -36,6 +36,14 @@
 #include "G4GDMLWrite.hh"
 
 G4bool G4GDMLWrite::addPointerToName = true;
+
+G4GDMLWrite::G4GDMLWrite()
+{
+}
+
+G4GDMLWrite::~G4GDMLWrite()
+{
+}
 
 G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 {

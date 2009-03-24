@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh,v 1.34 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.hh,v 1.35 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,11 @@
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol
 {
+
+ public:
+
+   G4GDMLWriteStructure();
+  ~G4GDMLWriteStructure();
 
  private:
 

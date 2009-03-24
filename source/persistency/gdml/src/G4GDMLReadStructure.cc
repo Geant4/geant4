@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.57 2009-02-27 15:08:05 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.58 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -33,6 +33,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadStructure.hh"
+
+G4GDMLReadStructure::G4GDMLReadStructure() : G4GDMLReadParamvol()
+{
+}
+
+G4GDMLReadStructure::~G4GDMLReadStructure()
+{
+}
 
 G4GDMLAuxPairType G4GDMLReadStructure::
 AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)

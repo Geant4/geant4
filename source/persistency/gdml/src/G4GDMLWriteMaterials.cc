@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.20 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.cc,v 1.21 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
@@ -34,6 +34,16 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteMaterials.hh"
+
+G4GDMLWriteMaterials::
+G4GDMLWriteMaterials() : G4GDMLWriteDefine()
+{
+}
+
+G4GDMLWriteMaterials::
+~G4GDMLWriteMaterials()
+{
+}
 
 void G4GDMLWriteMaterials::
 AtomWrite(xercesc::DOMElement* element,const G4double& a)

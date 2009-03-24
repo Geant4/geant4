@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.20 2008-07-16 15:46:34 gcosmo Exp $
+// $Id: G4GDMLReadDefine.cc,v 1.21 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadDefine Implementation
@@ -81,6 +81,14 @@ size_t G4GDMLMatrix::GetRows() const
 size_t G4GDMLMatrix::GetCols() const
 {
    return cols;
+}
+
+G4GDMLReadDefine::G4GDMLReadDefine() : G4GDMLRead()
+{
+}
+
+G4GDMLReadDefine::~G4GDMLReadDefine()
+{
 }
 
 G4RotationMatrix

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.24 2009-02-24 17:41:44 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.25 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,6 +71,9 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
 {
 
  public:
+
+   G4GDMLReadStructure();
+   virtual ~G4GDMLReadStructure();
 
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;

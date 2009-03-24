@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.32 2008-11-21 09:32:46 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.33 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,6 +76,9 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
 
  protected:
+
+   G4GDMLWriteSolids();
+   virtual ~G4GDMLWriteSolids();
 
    void AddSolid(const G4VSolid* const);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.59 2008-11-21 09:32:46 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.60 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -34,6 +34,16 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteSolids.hh"
+
+G4GDMLWriteSolids::
+G4GDMLWriteSolids() : G4GDMLWriteMaterials()
+{
+}
+
+G4GDMLWriteSolids::
+~G4GDMLWriteSolids()
+{
+}
 
 void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solidsElement,

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.hh,v 1.11 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.hh,v 1.12 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,6 +48,9 @@ class G4GDMLWriteDefine : public G4GDMLWrite
 {
 
  protected:
+
+   G4GDMLWriteDefine();
+   virtual ~G4GDMLWriteDefine();
 
    G4ThreeVector GetAngles(const G4RotationMatrix&);
    void ScaleWrite(xercesc::DOMElement* element, const G4String& name,

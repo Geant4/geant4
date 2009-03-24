@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.37 2008-08-19 15:03:17 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.38 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,7 +71,8 @@ class G4GDMLWrite
 
  protected:
 
-   G4String SchemaLocation;
+   G4GDMLWrite();
+   virtual ~G4GDMLWrite();
 
    VolumeMapType& VolumeMap();
 
@@ -89,6 +90,10 @@ class G4GDMLWrite
                            const G4LogicalVolume* const)=0;
    G4String Modularize(const G4VPhysicalVolume* const topvol,
                        const G4int depth);
+
+ protected:
+
+   G4String SchemaLocation;
 
  private:
 

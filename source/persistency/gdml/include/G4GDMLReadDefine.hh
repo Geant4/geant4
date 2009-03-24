@@ -79,6 +79,9 @@ class G4GDMLReadDefine : public G4GDMLRead
 
  protected:
 
+   G4GDMLReadDefine();
+   virtual ~G4GDMLReadDefine();
+
    G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
    void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String RefRead(const xercesc::DOMElement* const);

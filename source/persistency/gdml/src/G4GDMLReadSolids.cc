@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.22 2008-11-21 09:32:46 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.23 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -33,6 +33,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSolids.hh"
+
+G4GDMLReadSolids::G4GDMLReadSolids() : G4GDMLReadMaterials()
+{
+}
+
+G4GDMLReadSolids::~G4GDMLReadSolids()
+{
+}
 
 void G4GDMLReadSolids::
 BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)

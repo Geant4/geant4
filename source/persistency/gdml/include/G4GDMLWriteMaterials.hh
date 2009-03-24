@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh,v 1.12 2008-07-16 15:46:33 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.hh,v 1.13 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,9 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
 {
 
  protected:
+
+   G4GDMLWriteMaterials();
+   virtual ~G4GDMLWriteMaterials();
 
    void AddIsotope(const G4Isotope* const);
    void AddElement(const G4Element* const);

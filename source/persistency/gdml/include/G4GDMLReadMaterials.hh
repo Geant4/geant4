@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.9 2008-11-20 15:33:52 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.hh,v 1.10 2009-03-24 15:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,6 +61,9 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine
    virtual void MaterialsRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadMaterials();
+   virtual ~G4GDMLReadMaterials();
 
    G4double AtomRead(const xercesc::DOMElement* const);
    G4int CompositeRead(const xercesc::DOMElement* const,G4String&);
