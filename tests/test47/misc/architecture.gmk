@@ -1,0 +1,386 @@
+# $Id: architecture.gmk,v 1.1 2009-03-25 23:17:20 yarba Exp $
+# ------------------------------------------------------------------------
+#       GEANT 4 - Architecture configuration script for GNU Make
+#
+#       First implementation: July 7th 1995
+#
+# Description
+# -----------
+# to override variables defined in this script, use "gmake -e", this will
+# cause environment variables to take precedence. In this case watch for
+# inadvertant overrides!
+#
+# List of the supported architectures/compilers and related flavors for
+# the environment variable G4SYSTEM:
+#
+#          Linux-g++   Linux (Red Hat Enterprise/SCL4), gcc-3.4.6 (default)
+#
+#          Darwin-g++  MacOSX 10.5, gcc-4.0.1
+#
+#          WIN32-VC    Windows/XP and Microsoft Visual C++ 9.0
+#                      Adding CYGWIN32 tools
+# -------------------------------------------------------------------------
+
+MAKEFLAGS= --no-print-directory
+
+# If not specified, the default path for G4 installation G4INSTALL is
+# set to $HOME/geant4 ...
+#
+ifndef G4INSTALL
+  G4INSTALL := $(HOME)/geant4
+endif
+
+# If not specified, the default path for G4 source G4BASE is
+# set to $G4INSTALL/source ...
+#
+ifndef G4BASE
+  G4BASE := $(G4INSTALL)/source
+endif
+
+# If not specified, the default path for the user's workdir is the same
+# as G4INSTALL ...
+#
+ifndef G4WORKDIR
+  G4WORKDIR := $(G4INSTALL)
+endif
+
+# If not specified, the default path for temporary files G4TMP is
+# set to $G4WORKDIR/tmp/$G4SYSTEM ...
+#
+ifndef G4TMP
+  G4TMP := $(G4WORKDIR)/tmp
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMP) ] && mkdir -p $(G4TMP) )
+
+# If not specified, the default path for G4 libraries G4LIB is
+# set to $G4INSTALL/lib/$G4SYSTEM ...
+#
+ifndef G4LIB
+  G4LIB := $(G4INSTALL)/lib
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB)/$(G4SYSTEM) ] && mkdir -p $(G4LIB)/$(G4SYSTEM) )
+
+# If not specified, the default path to install G4 include files is G4INCLUDE 
+# set to $G4INSTALL/include ...
+#
+ifndef G4INCLUDE
+  G4INCLUDE := $(G4INSTALL)/include
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
+
+# Backwards compatibility
+#
+ifneq ($(G4MAKESHLIB),)
+  ifeq ($(G4LIB_NO_SHARED),)
+    G4LIB_BUILD_SHARED = 1
+  endif
+endif
+
+# Defaults for library BUILD. No default for USE, ie. take what is found.
+# Default is building static libraries.
+#
+ifeq ($(G4LIB_BUILD_SHARED),)
+  ifeq ($(G4LIB_BUILD_STATIC),)
+    G4LIB_BUILD_STATIC = 1
+  endif  
+endif
+
+# Specify if to build the DLL libraries on Windows. Default is NO.
+#
+ifneq ($(G4LIB_USE_DLL),)
+  G4LIB_BUILD_DLL = 1
+  CPPFLAGS += -DG4LIB_BUILD_DLL
+endif
+ifneq ($(G4LIB_BUILD_DLL),)
+  G4LIB_BUILD_DLL = 1
+  CPPFLAGS += -DG4LIB_BUILD_DLL
+  G4LIB_USE_DLL = 1
+endif
+
+# Specify if to build the G3TOG4 module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_G3TOG4),)
+  G4LIB_BUILD_G3TOG4 = 1
+  G4LIB_USE_G3TOG4 = 1
+endif
+
+# Specify if to build the ZLIB module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_ZLIB),)
+  G4LIB_BUILD_ZLIB = 1
+  G4LIB_USE_ZLIB = 1
+endif
+
+# If not specified, the default path for G4 binaries G4BIN is
+# set to $G4WORKDIR/bin/$G4SYSTEM ...
+#
+ifndef G4BIN
+  G4BIN := $(G4WORKDIR)/bin
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
+
+# If G4DEBUG or G4NO_OPTIMISE are not specified,
+# the default compilation is optimised ...
+#
+ifdef G4DEBUG
+  CPPFLAGS += -DG4DEBUG
+  G4DEBUG := 1
+else
+  ifndef G4NO_OPTIMISE
+    CPPFLAGS += -DG4OPTIMISE
+    G4OPTIMISE := 1
+  endif
+endif
+
+# CLHEP path, etc.
+#
+ifndef CLHEP_BASE_DIR
+  CLHEP_BASE_DIR    := $(shell ls CLHEP_BASE_DIR--UNDEFINED)
+endif
+ifndef CLHEP_INCLUDE_DIR
+  CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
+endif
+ifndef CLHEP_LIB_DIR
+  CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
+endif
+ifndef CLHEP_LIB
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    CLHEP_LIB := CLHEP.lib
+  else
+    CLHEP_LIB := CLHEP
+#
+# If using the "granular" libraries of CLHEP, uncomment below
+#
+#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
+  endif
+endif
+
+# Paths for G4 data
+#
+ifndef G4DATA
+  G4DATA := $(G4INSTALL)/data
+endif
+
+# Photon evaporation data
+#
+ifndef G4LEVELGAMMADATA
+  G4LEVELGAMMADATA := $(G4DATA)/PhotonEvaporation
+endif
+
+# Toggle variables (positional qualifiers) between WIN32-VC and UNIX...
+#
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  OUT_OBJ := -TP '-Fo'
+  FOR_OBJ := '-Fo'
+  OUT_LIB := '-out:'
+  OUT_EXE := '-Fe'
+  LIB_PATH := '-libpath:'
+  CERNLIB_PATH := "c:\cern\pro\lib"
+  PATH_DEL := \\
+  #
+  # pattern for next substitution
+  #
+  LIB_PATT  := lib(LibName).a
+  FLIB_PATT := (LibName).lib
+else
+  OUT_OBJ := -o 
+  FOR_OBJ := -o 
+  OUT_LIB := 
+  OUT_EXE := -o 
+  LIB_PATH := -L
+  CERNLIB_PATH := /cern/pro/lib
+  PATH_DEL := /
+  #
+  # pattern for next substitution
+  #
+  LIB_PATT  := -l(LibName)
+  FLIB_PATT := $(LIB_PATT)
+endif
+
+# Variables for implicit rules, etc., as suggested in GNU Make manual...
+#
+CPPFLAGS  += -Iinclude 
+CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
+
+# Positional qualifiers in action...
+#
+ifndef LDFLAGS
+  LDFLAGS :=
+endif
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
+  LOADLIBS  := $(CLHEP_LIB)
+else
+  LDFLAGS   += -L$(CLHEP_LIB_DIR)
+  LOADLIBS  := -l$(CLHEP_LIB)
+  LOADLIBS  += -lm
+  ifdef G4LIB_USE_ZLIB
+    ifndef G4LIB_BUILD_ZLIB
+      LOADLIBS += -lz
+    endif
+  endif
+endif
+
+# Graphic variables...
+#
+ifndef VISLIBS
+  VISLIBS :=
+endif
+#
+# ---------------- OpenGL --------------------
+# The user can define his own values of OGLFLAGS and OGLLIBS.
+# OGLFLAGS gives the directory containing include files.
+#   E.g.: OGLFLAGS  := -I$(OGLHOME)/include
+# OGLLIBS gives the libraries.
+#   E.g.: OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+#   Or  : OGLLIBS   := -L$(OGLHOME)/lib -lMesaGLU -lMesaGL
+# OGLHOME is often /usr or /usr/local.  In such case, it is not necessary
+# to specify the path in OGLFLAGS, since added already by default by the
+# compiler.  OGLHOME can also point to a special installation.
+# If the user does not set his/her own values, system-dependent values
+# are set below.  Most system-dependent code assumes OGLHOME is set.
+
+# ------------- OpenInventor -----------------
+# The path to the installation of OpenInventor must be specified
+# if the package is installed in a location different
+# than default system directories (like... /usr or /usr/local).
+#
+ifndef OIVHOME
+  OIVHOME  := /usr/local/Inventor
+endif
+ifndef OIVFLAGS
+  OIVFLAGS  := -I$(OIVHOME)/include 
+endif
+ifndef OIVLIBS
+  OIVLIBS   := -L$(OIVHOME)/lib -lInventorXt -lInventor
+endif
+
+# ----------------- GDML ---------------------
+# Setup path to XERCESC library if GDML plugin build is specified
+#
+ifneq ($(G4LIB_BUILD_GDML),)
+  G4LIB_USE_GDML = 1
+  ifndef XERCESCROOT
+    XERCESCROOT := /usr/local/xercesc
+  endif
+  ifndef GDMLFLAGS
+    GDMLFLAGS := -DG4LIB_USE_GDML -I$(XERCESCROOT)/include
+  endif
+  ifndef GDMLLIBS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-c.lib
+    else
+      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-c
+    endif
+  endif
+  CPPFLAGS  += $(GDMLFLAGS)
+endif
+
+# For cfront compilers the repository location is set to
+# $G4TMP/$G4SYSTEM/g4.ptrepository.
+#
+G4TEMPLATE_REPOSITORY := $(G4SYSTEM)/g4.ptrepository
+G4TEMPEXEC_REPOSITORY := $(G4TEMPLATE_REPOSITORY)/exec
+G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
+
+# Default archive call. Changed for: SUN-CC.
+#
+AR := ar r
+
+# Default echo used with makedepend. Changed for SUN-CC, Linux-g++, WIN32.
+#
+ECHO:= echo
+
+# Default grep used with source/GNUmakefile.  Changed for SUN-CC.
+#
+GREP := grep
+
+# Default cut used with source/GNUmakefile.  Changed for WIN32.
+#
+CUT := cut
+
+# Default cat used with source/GNUmakefile.  Changed for WIN32.
+#
+CAT := cat
+
+# Default sed used with source/GNUmakefile.  Changed for WIN32.
+#
+SED := sed
+
+# Default find used with source/GNUmakefile.  Changed for WIN32.
+#
+FIND := find
+
+# Default sort used with source/GNUmakefile.  Changed for WIN32.
+#
+SORT := sort
+
+# Default touch used with source/GNUmakefile.  Changed for WIN32.
+#
+TOUCH := touch
+
+# Include architecture dependent setups...
+#
+include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
+
+#  make certain that OGLFLAGS does NOT contain -I/usr/include
+#   caused by OGLHOME being /usr, as e.g. on Linux
+#
+ifdef OGLFLAGS
+  OGLFLAGS:= $(filter-out -I/usr/include,$(OGLFLAGS))
+  OGLFLAGS:= $(filter-out -I/usr//include,$(OGLFLAGS))
+endif
+
+# If there is no cbrt() function...
+#
+ifdef G4_NO_CBRT
+  CPPFLAGS += -DG4_NO_CBRT
+endif
+
+# Verbosity code can be left out (for better performance)
+# by defining G4_NO_VERBOSE.
+#
+ifndef G4_NO_VERBOSE
+  CPPFLAGS += -DG4VERBOSE
+endif
+
+# Trajectory related classes can be left out (for better performance)
+# by defining G4_NO_STORE_TRAJECTORY.
+#
+ifndef G4_NO_STORE_TRAJECTORY
+  CPPFLAGS += -DG4_STORE_TRAJECTORY
+endif
+
+# Template setup - repositories, special options etc
+#
+ifdef CFRONT_G4TEMPLATE_REPOSITORY
+  ifeq ($(findstring DEC,$(G4SYSTEM)),DEC)
+      ifdef G4EXEC_BUILD
+        CXXTEMPLATE_FLAGS := -ptr $(G4TREP)/exec -ptr $(G4TREP)
+      else
+        CXXTEMPLATE_FLAGS := -ptr $(G4TREP)
+      endif
+  else
+      ifdef G4EXEC_BUILD
+        CXXTEMPLATE_FLAGS := -ptr$(G4TREP)/exec -ptr$(G4TREP)
+      else
+        CXXTEMPLATE_FLAGS := -ptr$(G4TREP)
+      endif
+  endif
+  CXXFLAGS += $(CXXTEMPLATE_FLAGS)
+  CFRONT := true
+endif
+ifdef CFRONT
+  G4TEMPLATE_REPOSITORY_PARENT := $(shell echo $(G4TREP) | sed 's!/[^/][^/]*/*$$!!' )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TEMPLATE_REPOSITORY_PARENT) ] && mkdir -p $(G4TEMPLATE_REPOSITORY_PARENT) )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP) ] && mkdir -p $(G4TREP) )
+  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP)/exec ] &&mkdir -p $(G4TREP)/exec )
+endif
+
+# If G4SYSTEM is not specified or not valid, issue an ERROR !
+#
+#$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
+#	@echo "ERROR - G4SYSTEM is not defined in the environment"
+#	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
+#	exit 1

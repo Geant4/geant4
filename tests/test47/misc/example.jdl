@@ -1,0 +1,20 @@
+
+universe=vanilla
+
+Executable=run_proton.csh  
+Requirements = Arch !="DUMMY"
+
+Should_Transfer_Files = YES
+When_To_Transfer_Output = ON_EXIT
+
+Output = /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).out
+Error =  /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).err
+Log =    /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).log
+
+notify_user = yarba_j@fnal.gov
+
+X509UserProxy = /tmp/x509up_u5145 
+
+Arguments = $(Process) 
+queue 4
+
