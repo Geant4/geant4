@@ -1,4 +1,4 @@
-$Id: History,v 1.355 2009-03-23 09:24:17 pandola Exp $
+$Id: History,v 1.356 2009-03-25 13:07:16 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.03.2009, L. Pandola, tag emlowen-V09-02-25
+ 	    Fixed bug with momentum normalization in G4PenelopeBremsstrahlungModel.cc
+            Fixed G4PenelopePhotoElectricModel.cc to avoid wrong Warnings
 
 23.03.2009, L. Pandola, tag emlowen-V09-02-24
 	    Same sa previous. For some reason emlowen-V09-02-23 didn't include 
