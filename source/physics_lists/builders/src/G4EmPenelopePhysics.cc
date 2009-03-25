@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc,v 1.1 2009-03-25 13:24:57 pandola Exp $
+// $Id: G4EmPenelopePhysics.cc,v 1.2 2009-03-25 15:34:03 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmPenelopePhysics.hh"
@@ -232,7 +232,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 	G4PenelopeBremsstrahlungModel();
       theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      eBrem->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
+      eBrem->AddEmModel(0,theBremPenelope,new G4UniversalFluctuation());
       pmanager->AddProcess(eBrem, -1,-3, 3);
 
     } else if (particleName == "e+") {
@@ -257,7 +257,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 	G4PenelopeBremsstrahlungModel();
       theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      eBrem->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
+      eBrem->AddEmModel(0,theBremPenelope,new G4UniversalFluctuation());
       pmanager->AddProcess(eBrem, -1,-3, 3);
       
       //Annihilation
