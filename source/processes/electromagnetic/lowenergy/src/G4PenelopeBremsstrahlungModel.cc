@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.2 2008-12-18 11:39:23 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.3 2009-03-25 13:06:00 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 // --------
 // 05 Dec 2008   L Pandola    Migration from process to model
+// 25 Mar 2008   L Pandola    Fixed .unit() call
 //
 #include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PenelopeBremsstrahlungContinuous.hh"
@@ -378,7 +379,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   if (verboseLevel > 2)
     G4cout << "Selected " << anElement->GetName() << G4endl;
   //
-  //VERIFICA SE SERVE LA CROSS SECTION TABLE COME PER IONISATION.
+
   G4double cutForLowEnergySecondaryParticles = 250.0*eV;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -412,8 +413,8 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   
   //Produce final state according to momentum conservation
   G4ThreeVector particleDirection1 = initialMomentum - gammaEnergy*gammaDirection1;
-  particleDirection1.unit(); //normalize
-    
+  particleDirection1 = particleDirection1.unit(); //normalize    
+
   //Update the primary particle
   if (residualPrimaryEnergy > 0)
     {
