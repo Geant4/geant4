@@ -27,7 +27,7 @@ setenv G4LEDATA $G4DATA/G4EMLOW5.1
 
 setenv ROOTSYS /uscmst1/prod/sw/cms/slc4_ia32_gcc345/lcg/root/5.22.00a-cms4/
 
-cd /uscms_data/d2/yarba_j/MyG4Test
+cd /uscms_data/d2/yarba_j/geant4/tests
 setenv G4WORKDIR  $PWD
 setenv G4EXE $G4WORKDIR/bin/$G4SYSTEM
 
@@ -107,12 +107,14 @@ $G4EXE/test47 ITEP.pim.$energyPIM.$targetPIM[$i]
 $ROOTSYS/bin/root -b -p -q Plot.C\($index\) 
 
 set extension = GeV_1.eps
-set outputPlots = piminus$targetPIM[$i]toprotonat$energyPIM_GeV$extension
+set outputPlots1 = piminus$targetPIM[$i]toprotonat$energyPIM_GeV$extension
+set outputPlots2 = piminus$targetPIM[$i]toneutronat$energyPIM_GeV$extension
 
 ### these actions below are just examples of moving the output around...
 ###
-###/usr/bin/X11/gv $outputPlots &
-###/bin/cp $outputPlots /uscms/home/yarba_j/G4test47/.
+###/usr/bin/X11/gv $outputPlots1 &
+###if ( -e $outputPlots1 ) /bin/cp $outputPlots1 /uscms/home/yarba_j/G4test47/.
+###if ( -e $outputPlots2 ) /bin/cp $outputPlots2 /uscms/home/yarba_j/G4test47/.
 
 
 if ( -e ITEP.pim.$energyPIM.$targetPIM[$i] ) then

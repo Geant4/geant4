@@ -46,95 +46,106 @@ double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
  
 
-void Plot( int index )
+void Plot( int index, char test[5]="ITEP" )
 {
 
-   switch(index){
-      case 1:
-         plotKE4("C","1.40",0,1,1,"piplus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","1.40","119.0",0,1,"piplus","neutron");
-	 cnv->SaveAs("piplusCtoneutronat1.40GeV_1.eps");
+   if ( test == "BNL" )
+   {
+      switch(index) {
+         case 1:
+	    plotMT4("Be","14.6", 0,1,1,-1., "piplus",  "proton");
+	    plotMT4("Be","14.6", 0,1,1,-1., "piminus", "proton");
+	    break;
+	 case 2:
+	    plotMT4("Cu","14.6", 0,1,1,-1., "proton", "proton");
+	    plotMT4("Cu","14.6", 0,1,1,-1., "kplus",  "proton");
+	    plotMT4("Cu","14.6", 0,1,1,-1., "kminus", "proton");
+	    break;
+	 case 3:
+	    plotMT4("Au","14.6", 0,1,1,-1., "piplus",  "proton");
+	    plotMT4("Au","14.6", 0,1,1,-1., "piminus", "proton");
+	    break;
+      }
+   }
+   else if ( test == "ITEP" )
+   {
+      TCanvas* cnv = new TCanvas("cnv","",400,300);
+      cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
+      switch(index){
+         case 1:
+            plotKE4("C","1.40",0,1,1,"piplus");
+	    cnv->cd();
+	    plotKE("C","1.40","119.0",0,1,"piplus","neutron");
+	    cnv->SaveAs("piplusCtoneutronat1.40GeV_1.eps");
+	    break;
+         case 2:
+            plotKE4("U","1.40",0,1,1,"piplus");
+	    cnv->cd();
+	    plotKE("U","1.40","119.0",0,1,"piplus","neutron");
+	    cnv->SaveAs("piplusUtoneutronat1.40GeV_1.eps");
+	    break;
+         case 3:
+            plotKE4("C","5.00",0,1,1,"piplus");
+            cnv->cd();
+	    plotKE("C","5.00","119.0",0,1,"piplus","neutron");
+	    cnv->SaveAs("piplusCtoneutronat5.00GeV_1.eps");
+	    break;
+         case 4:
+            plotKE4("U","5.00",0,1,1,"piplus");
+	    cnv->cd();
+	    plotKE("U","5.00","119.0",0,1,"piplus","neutron");
+	    cnv->SaveAs("piplusUtoneutronat5.00GeV_1.eps");
 	 break;
-      case 2:
-         plotKE4("U","1.40",0,1,1,"piplus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("U","1.40","119.0",0,1,"piplus","neutron");
-	 cnv->SaveAs("piplusUtoneutronat1.40GeV_1.eps");
-	 break;
-      case 3:
-         plotKE4("C","5.00",0,1,1,"piplus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","5.00","119.0",0,1,"piplus","neutron");
-	 cnv->SaveAs("piplusCtoneutronat5.00GeV_1.eps");
-	 break;
-      case 4:
-         plotKE4("U","5.00",0,1,1,"piplus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("U","5.00","119.0",0,1,"piplus","neutron");
-	 cnv->SaveAs("piplusUtoneutronat5.00GeV_1.eps");
-	 break;
-      case 5:
-         plotKE4("C","5.00",0,1,1,"piminus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","5.00","119.0",0,1,"piminus","neutron");
-	 cnv->SaveAs("piminusCtoneutronat5.00GeV_1.eps");
-	 break;
-      case 6:
-         plotKE4("Cu","5.00",0,1,1,"piminus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("Cu","5.00","119.0",0,1,"piminus","neutron");
-	 cnv->SaveAs("piminusCutoneutronat5.00GeV_1.eps");
-	 break;
-      case 7:
-         plotKE4("Pb","5.00",0,1,1,"piminus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("Pb","5.00","119.0",0,1,"piminus","neutron");
-	 cnv->SaveAs("piminusPbtoneutronat5.00GeV_1.eps");
-	 break;
-      case 8:
-         plotKE4("U","5.00",0,1,1,"piminus");
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","5.00","119.0",0,1,"piminus","neutron");
-	 cnv->SaveAs("piminusUtoneutronat5.00GeV_1.eps");
-	 break;
-      case 9:
-         plotKE4("C","1.40",0,1,1);
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","1.40","119.0",0,1,"proton","neutron");
-	 cnv->SaveAs("protonCtoneutronat1.40GeV_1.eps");
-	 break;
-      case 10:
-         plotKE4("U","1.40",0,1,1);
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("U","1.40","119.0",0,1,"proton","neutron");
-	 cnv->SaveAs("protonUtoneutronat1.40GeV_1.eps");
-	 break;
-      case 11:
-         plotKE4("C","7.50",0,1,1);
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("C","7.50","119.0",0,1,"proton","neutron");
-	 cnv->SaveAs("protonCtoneutronat7.50GeV_1.eps");
-	 break;
-      case 12:
-         plotKE4("U","7.50",0,1,1);
-	 TCanvas* cnv = new TCanvas("cnv","",400,300);
-	 cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-	 plotKE("U","7.50","119.0",0,1,"proton","neutron");
-	 cnv->SaveAs("protonUtoneutronat7.50GeV_1.eps");
-	 break;
-   } 
+         case 5:
+            plotKE4("C","5.00",0,1,1,"piminus");
+	    cnv->cd();
+	    plotKE("C","5.00","119.0",0,1,"piminus","neutron");
+	    cnv->SaveAs("piminusCtoneutronat5.00GeV_1.eps");
+	    break;
+         case 6:
+            plotKE4("Cu","5.00",0,1,1,"piminus");
+	    cnv->cd();
+	    plotKE("Cu","5.00","119.0",0,1,"piminus","neutron");
+	    cnv->SaveAs("piminusCutoneutronat5.00GeV_1.eps");
+	    break;
+         case 7:
+            plotKE4("Pb","5.00",0,1,1,"piminus");
+	    cnv->cd();
+	    plotKE("Pb","5.00","119.0",0,1,"piminus","neutron");
+	    cnv->SaveAs("piminusPbtoneutronat5.00GeV_1.eps");
+	    break;
+         case 8:
+            plotKE4("U","5.00",0,1,1,"piminus");
+	    cnv->cd();
+	    plotKE("C","5.00","119.0",0,1,"piminus","neutron");
+	    cnv->SaveAs("piminusUtoneutronat5.00GeV_1.eps");
+	    break;
+         case 9:
+            plotKE4("C","1.40",0,1,1);
+	    cnv->cd();
+	    plotKE("C","1.40","119.0",0,1,"proton","neutron");
+	    cnv->SaveAs("protonCtoneutronat1.40GeV_1.eps");
+	    break;
+         case 10:
+            plotKE4("U","1.40",0,1,1);
+	    cnv->cd();
+	    plotKE("U","1.40","119.0",0,1,"proton","neutron");
+	    cnv->SaveAs("protonUtoneutronat1.40GeV_1.eps");
+	    break;
+         case 11:
+            plotKE4("C","7.50",0,1,1);
+	    cnv->cd();
+	    plotKE("C","7.50","119.0",0,1,"proton","neutron");
+	    cnv->SaveAs("protonCtoneutronat7.50GeV_1.eps");
+	    break;
+         case 12:
+            plotKE4("U","7.50",0,1,1);
+	    cnv->cd();
+	    plotKE("U","7.50","119.0",0,1,"proton","neutron");
+	    cnv->SaveAs("protonUtoneutronat7.50GeV_1.eps");
+	    break;
+      }
+   }
   
    return;
 

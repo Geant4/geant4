@@ -35,108 +35,92 @@ setenv LD_LIBRARY_PATH $G4LIB/:$CLHEP_BASE_DIR/lib/:$ROOTSYS/lib/
 
 cd test47 
 
-set lists = ( "lepar" "bertini" "binary" "ftfp" "qgsc" )
+set lists = ( "lepar" "bertini" "qgsp" "ftfp" "qgsc" )
 
-set energyPRO = ( 1400 7500 )
-set targetPRO = ( "C" "U" )
-set energyPRO_GeV = ( 1.40 7.50 )
+set energy = 14600 
+set target = ( "Be" "Cu" "Au" )
+set energy_GeV = 14.6 
 
 
-set NEnTotal = $#energyPRO
-set NTgTotal = $#targetPRO
+set NTgTotal = $#target
 
 if ( $#argv > 0 ) then
 
 set ii=$1
 @ ii = ( $ii + 1 )
 
-if ( $ii > 4 ) then
-@ ii = ( $ii - 8 )
+set i = $ii
+
+if ( $i > 3 ) then
+@ i = ( $i - 12 )
 endif
 
-@ i = ( $ii + 1 )
-@ i = ( $i / $NTgTotal )
-@ NE = $i
-@ jj = ( $ii + 1 )
-@ jj = ( $jj % $NTgTotal )
-@ jj = ( $jj + 1 )
-@ NT = $jj
+set NT = $i
 
 else
 
-set i  = 1
-set NE = $#energyPRO
-set jj = 1
-set NT = $#targetPRO
+set i = 1
+set NT = $#target
 
 endif
 
-while ( $i <= $NE )
+set maxLists = $#lists
 
-set j=$jj
-while ( $j <= $NT )
+while ( $i <= $NT )
 
-cat > ITEP.pro.$energyPRO[$i].$targetPRO[$j] <<EOF
+cat > BNL.proton.$energy.$target[$i] <<EOF
 #verbose
 0
 #rad
 #events
-1000000
+10000
 //--------Proton_processes
 #particle
 proton
 //--------
-#isITEP
+#isBNL
 #position(mm)
 0. 0. 0.
 #direction
 0. 0. 1.
 //--------
 #material
-$targetPRO[$j]
+$target[$i]
 #momentum(MeV/c)
-$energyPRO[$i]
+$energy
 // ---
 EOF
-
-if ( $energyPRO[$i] == 1400 ) then
-set maxLists = 3
-else
-set maxLists = 5
-endif
 
 set k=0
 while ( $k != $maxLists )
 @ k = $k + 1
-printf "#generator\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
-printf "%s\n" $lists[$k] >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
-printf "#run\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "#generator\n" >> BNL.proton.$energy.$target[$i]
+printf "%s\n" $lists[$k] >> BNL.proton.$energy.$target[$i]
+printf "#run\n" >> BNL.proton.$energy.$target[$i]
 end 
-printf "#exit\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "#exit\n" >> BNL.proton.$energy.$target[$i]
 
-$G4EXE/test47 ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+$G4EXE/test47 BNL.proton.$energy.$target[$i]
 
-@ index = ( $i - 1 ) 
-@ index = ( $index * $NTgTotal )
-@ index = ( $index  + $j )
-@ index = ( $index + 8 )
 
-$ROOTSYS/bin/root -b -p -q Plot.C\($index\) 
+$ROOTSYS/bin/root -b -p -q Plot.C\($i,\"BNL\"\) 
 
-set outputPlots = proton$targetPRO[$j]toprotonat$energyPRO_GeV[$i]GeV_1.eps 
+set extension = GeV.eps
+set outputPlots1 = proton$target[$i]topiplusat$energy_GeV$extension
+set outputPlots2 = proton$target[$i]topiminusat$energy_GeV$extension
+set outputPlots3 = proton$target[$i]toprotonat$energy_GeV$extension
+set outputPlots4 = proton$target[$i]tokplusat$energy_GeV$extension
+set outputPlots5 = proton$target[$i]tokminusat$energy_GeV$extension
 
 ### these actions below are just examples of moving the output around...
 ###
-###/usr/bin/X11/gv $outputPlots &
-###/bin/cp $outputPlots /uscms/home/yarba_j/G4test47/.
+###/usr/bin/X11/gv $outputPlots1 &
+###if ( -e outputPlots1) /bin/cp $outputPlots1 /uscms/home/yarba_j/G4test47/.
 
 
-if ( -e ITEP.pro.$energyPRO[$i].$targetPRO[$j] ) then
-rm ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+if ( -e BNL.proton.$energy.$target[$i] ) then
+rm BNL.proton.$energy.$target[$i]
 endif
 
-
-@ j = $j + 1
-end
 @ i = $i + 1
 end

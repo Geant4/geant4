@@ -27,7 +27,7 @@ setenv G4LEDATA $G4DATA/G4EMLOW5.1
 
 setenv ROOTSYS /uscmst1/prod/sw/cms/slc4_ia32_gcc345/lcg/root/5.22.00a-cms4/
 
-cd /uscms_data/d2/yarba_j/MyG4Test
+cd /uscms_data/d2/yarba_j/geant4/tests
 setenv G4WORKDIR  $PWD
 setenv G4EXE $G4WORKDIR/bin/$G4SYSTEM
 

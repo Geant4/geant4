@@ -2,7 +2,7 @@
 0
 #rad
 #events
-1000000
+10000
 //--------Proton_processes
 #particle
 proton
@@ -30,12 +30,13 @@ qgsp
 #run
 // ---
 #generator
-qgsc
+ftfp
 #run
 // ---
 #generator
-ftfp
+qgsc
 #run
+#exit
 //--------
 #material
 Au
