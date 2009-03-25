@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.3 2009-01-08 09:42:54 pandola Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.4 2009-03-25 13:05:06 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,11 +31,12 @@
 // History:
 // --------
 // 08 Oct 2008   L Pandola  Migration from process to model 
-// 08 Jan 2009  L. Pandola  Check shell index to avoid mismatch between 
+// 08 Jan 2009   L Pandola  Check shell index to avoid mismatch between 
 //                          the Penelope cross section database and the 
 //                          G4AtomicTransitionManager database. It suppresses 
 //                          a warning from G4AtomicTransitionManager only. 
 //                          Results are unchanged.
+// 25 Mar 2009   L Pandola  Small fix to avoid wrong energy-violation warnings
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -281,12 +282,14 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 	  fvect->push_back(electron);
 	} 
       else 
-	localEnergyDeposit += eKineticEnergy;    
+	{
+	  localEnergyDeposit += eKineticEnergy;    
+	  eKineticEnergy = 0;
+	}
     }
   else
       bindingEnergy = photonEnergy;
-    
-  
+      
   G4double energyInFluorescence = 0; //testing purposes
 
   //Now, take care of fluorescence, if required
