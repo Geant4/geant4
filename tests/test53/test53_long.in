@@ -1,4 +1,4 @@
-# $Id: test53.in,v 1.2 2009-03-25 13:20:09 pandola Exp $
+# $Id: test53_long.in,v 1.1 2009-03-25 13:20:09 pandola Exp $
 #
 # Macro file for "test53.cc"
 # (can be run in batch, without graphic)
@@ -28,6 +28,6 @@
 /tracking/verbose 0
 /testem/event/printModulo 50
 #
-/run/beamOn 1
+/run/beamOn 100000
 
 
