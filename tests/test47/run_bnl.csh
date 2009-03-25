@@ -73,7 +73,7 @@ cat > BNL.proton.$energy.$target[$i] <<EOF
 0
 #rad
 #events
-10000
+1000000
 //--------Proton_processes
 #particle
 proton
