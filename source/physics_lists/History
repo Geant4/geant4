@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2009-03-12 12:21:27 vnivanch Exp $
+$Id: History,v 1.80 2009-03-25 11:28:07 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-03-2009, S.Incerti phys-lists-V09-02-03
+- added Physics builder G4EmDNAPhysics.hh/cc
 
 12-03-2009, V.Ivanchenko phys-lists-V09-02-02
 - HadronPhysicsQGSC - fixed crash at distruction
