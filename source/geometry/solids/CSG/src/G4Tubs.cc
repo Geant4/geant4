@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.74 2008-11-06 15:26:53 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.75 2009-03-26 16:25:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,9 +101,9 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
+    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
+           << "        Negative Z half-length (" << pDz << ") in solid: "
+           << GetName() << G4endl;
     G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
                 "Invalid Z half-length");
   }
@@ -114,51 +114,17 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
+    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
+           << "        Invalid values for radii in solid " << GetName()
+           << G4endl
            << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
     G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
                 "Invalid radii.");
   }
 
-  fPhiFullTube = true;
-  if ( pDPhi >= twopi-kAngTolerance*0.5 ) // Check angles
-  {
-    fDPhi=twopi;
-    fSPhi=0;
-  }
-  else
-  {
-    fPhiFullTube = false;
-    if ( pDPhi > 0 )
-    {
-      fDPhi = pDPhi;
-    }
-    else
-    {
-      G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
-      G4Exception("G4Tubs::G4Tubs()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
-    }
+  // Check angles
 
-    // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
-
-    if ( pSPhi < 0 )
-    {
-      fSPhi = twopi - std::fmod(std::fabs(pSPhi),twopi);
-    }
-    else
-    {
-      fSPhi = std::fmod(pSPhi,twopi) ;
-    }
-    if ( fSPhi+fDPhi > twopi )
-    {
-      fSPhi -= twopi ;
-    }
-  }
-  InitializeTrigonometry();
+  CheckPhiAngles(pSPhi, pDPhi);
 }
 
 ///////////////////////////////////////////////////////////////////////
