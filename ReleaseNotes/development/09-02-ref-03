@@ -1,0 +1,171 @@
+
+                       geant4-09-02-ref-03
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Implemented migration of ICRU 73 stopping power classes for materials
+   to the G4VIonDEDXTable interface.
+ o Added builders for DNA, Livermore and Penelope physics processes.
+ o First fully tested version of Livermore Bremsstrahlung low-energy model
+   and completed migration for all Livermore models.
+ o Fix to G4UniversalFluctuation in the width correction, fixing the
+   dependency of the correction on energy deposition at previous steps,
+   following a problem report from the T2K setup.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 9.2.p01
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-04            (*)
+------
+- common.gmk, globlib.gmk, source/GNUmakefile: added removal of moc sources
+  in clean target.
+
+geometry/magneticfield                           field-V09-02-01
+----------------------
+- Added 3rd term of BMT equation (Spin x Beta x Efield) to G4EqEMFieldWithSpin,
+  as reported in the Emfield Hypernews Forum posting #155.
+- Moved renormalization of spin from G4EqEMFieldWithSpin and G4Mag_SpinEqRhs
+  to G4ClassicalRK4 and G4SimpleHeum.
+- Added Spin propagation errors to the criteria for 'OneGoodStep' in
+  G4MagIntegratorDriver; not added it yet to the decision logic.
+- Some code cleanup and formatting.
+
+geometry/solids/specific                         geom-specific-V09-02-00     (*)
+------------------------
+- Fix in G4Paraboloid::DistanceToOut(p,v,..) for the computation of
+  normal to surface; added missing normalisation to unit, following
+  remark in the Geometry Forum Hypernews posting #953.
+
+global                                           global-V09-02-01            (*)
+------
+- Changed date for release 9.2.p01.
+
+materials                                        materials-V09-02-01
+---------
+- Implemented migration of ICRU 73 stopping power classes to the
+  G4VIonDEDXTable interface:
+  o Access methods of physics vectors have changed (vectors can also be
+    identified via atomic number of material if material is pure);
+  o Classes now deliver mass stopping powers instead of stopping powers per
+    unit length
+  o Any dependency on ICRU 73 material densities was removed (no densities
+    are included in the classes anymore).
+  o Stopping power vectors are now only built on request and not anymore in
+    the constructor.
+  o Affected classes: G4IronStoppingICRU73, G4MaterialStoppingICRU73 and
+    G4SimpleMaterialStoppingICRU73.
+- G4VIonDEDXTable: added interface class for electronic stopping power
+  tables for ions.
+- G4ExternalDEDXTable: added utility class to handle external electronic
+  stopping power tables for ions.
+
+particles                                        particles-V09-02-01
+---------
+- Fixed values of masses for light ions.                                     (*)
+- Added CalculateAnomaly() method to G4ParticleDefinition.
+
+persistency/gdml                                 gdml-V09-02-06
+----------------
+- Fixed association of entities in nested loops for solids and materials.    (*)
+  Definitions of materials are not supposed to be included in loops being
+  therefore repeated...
+- Strip off white spaces from names G4GDMLWrite::GenerateName(), to avoid    (*)
+  parsing problems in imported files.
+- Added empty default constructor and virtual destructor to classes in the
+  inheritance chain.
+
+physics_lists                                    phys-lists-V09-02-04
+-------------
+- Added builders for DNA, Livermore and Penelope physics processes.
+- Fixed deletion problem at destruction in HadronPhysicsQGSC.                (*)
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-24
+-----------------------------------
+- First fully tested version of G4LivermoreBremsstrahlungModel
+  All Livermore models are migrated.
+- Changed energy range display for migrated Livermore photon processes
+  Set default angular generator in G4LivermorePhotoElectric as Sauter-Gavrila.
+- Added gamma particle and energy range test in cross section computation
+  to all Livermore photon processes.
+- Added protections in G4eIonisationSpectrum and G4eIonisationParameters,
+  addressing problem report #1042.
+  Now requiring new data set G4EMLOW-6.4.
+- Removed G4Rayleigh to avoid duplication with G4RayleighScattering
+  Clean-up of G4RayleighScattering (e.g. removed un-necessary dependencies).
+- Replaced old version of G4IonParametrisedLossModel with newer one
+  Added G4IonDEDXHandler, which is a handler class used by the new
+  G4IonParametrisedLossModel class
+- Added G4VIonDEDXScalingAlgorithm, which is used by G4IonDEDXHandler
+  Removed G4IonParametrisedLossTable, replaced by G4IonDEDXHandler.
+- Moved IsApplicable() method for Geant4-DNA process classes to .cc files.
+
+processes/electromagnetic/standard               emstand-V09-02-04
+----------------------------------
+- G4UniversalFluctuation: modification in width correction, the dependence
+  of the correction on energy deposition at previous steps is now fixed.
+  Addresses report from T2K setup.
+- Added new alternative multiple-scattering G4GoudsmitSaundersonMscModel.
+- G4WentzelVIModel, G4eCoulombScattringModel: substituted scaling of
+  low-energy limit by setting 1 keV for all particles; use EGSnrc form of
+  screening parameter (second order correction).
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-02-04)
+  o Added new Glauber-Gribov cross section for ions, G4GGNuclNuclCrossSection.
+  o G4IonsKoxCrossSection, G4IonsShenCrossSection, G4TripathiCrossSection,
+    G4TripathiLightCrossSection: added protections against numerical FPE
+    exceptions.
+- models/coherent_elastic (hadr-cohe-V09-02-00)
+  o Model precise sampling and 'on the fly' table preparation in
+    G4DiffuseElastic.
+- models/de_excitation (hadr-deex-V09-02-09)
+  o Fixes to GEM code, in G4GEMProbability and G4GEMChannel.
+  o Fixed 4-momentum balance by using direct Lorentz computations in
+    G4CompetitiveFission. Make use of internal units.
+  o Fixed leaks in singleton classes in the 'util' module. Corrected         (*)
+    wherever needed inlining of constructors/destructors for base classes
+    and usage of virtual specification.
+- util (hadr-util-V09-02-00)                                                 (*)
+  o G4StableIsotopes: filled in missing isotope names.
+
+processes/optical                                op-V09-02-01
+-----------------
+- Fix in G4OpBoundaryProcess for complex index of refraction: resample the
+  reflectivity every time for DielectricMetal, and do not re-calculate normal
+  to facet; also fixed possible infinite loop by resetting iTE and iTM inside
+  GetReflectivity().
+
+examples                                         examples-V09-02-03
+--------
+- Updated reference outputs.
+- advanced/nanobeam (nanobeam-V09-02-01)
+  o Fixed compilation warnings on gcc-4.3 on SLC5.
+- extended/biasing/B02 (B02-V09-02-00)
+  o GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
+    since already handled in the internal configuration scripts.
+- extended/electromagnetic/TestEm3 (testem3-V09-02-00)
+  o Fix to HistoManager::PrintHisto(): avoid empty ascii file.
+- extended/electromagnetic/TestEm5 (testem5-V09-02-01)
+- extended/electromagnetic/TestEm18 (testem18-V09-02-01)
+  o Removed command "/testem/phys/cutLimit" already in /cuts/setLowEdge.
+  o PhysicsList::SetCuts(): removed call to SetEnergyRange().
+- extended/errorpropagation (exerrprop-V09-02-00)
+- extended/parallel/ExDiane (ExDiane-V09-02-00)
+  o GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
+    since already handled in the internal configuration scripts.
+
+tests                                            tests-V09-02-03
+-----
+- Updated reference outputs and tools.
+- tests25 (test25-V09-02-00)
+- tests31 (test31-V09-02-00)
+  o Fixed compilation warnings for unused variables on gcc-4.3 on SLC5.
+- tests202 (test202-V09-02-00)
+  o Suppressed all deselection of problematic volumes. All volumes are OK now.
+  o Minor refinements.
