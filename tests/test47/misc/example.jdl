@@ -7,9 +7,9 @@ Requirements = Arch !="DUMMY"
 Should_Transfer_Files = YES
 When_To_Transfer_Output = ON_EXIT
 
-Output = /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).out
-Error =  /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).err
-Log =    /uscms_data/d2/yarba_j/MyG4Test/test47/run_proton_$(Process).log
+Output = /uscms_data/d2/yarba_j/geant4/tests/test47/run_proton_$(Process).out
+Error =  /uscms_data/d2/yarba_j/geant4/tests/test47/run_proton_$(Process).err
+Log =    /uscms_data/d2/yarba_j/geant4/tests/test47/run_proton_$(Process).log
 
 notify_user = yarba_j@fnal.gov
 
