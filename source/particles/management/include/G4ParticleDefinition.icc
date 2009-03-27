@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.13 2008-11-14 16:26:30 kurasige Exp $
+// $Id: G4ParticleDefinition.icc,v 1.14 2009-03-27 20:33:50 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -160,7 +160,7 @@ inline
    // gives the anomaly of magnetic moment for spin 1/2 particles 
    if (thePDGiSpin==1) {
      G4double muB = 0.5*eplus*hbar_Planck/(thePDGMass/c_squared);
-     return 0.5*fabs(thePDGMagneticMoment/muB - 2.*thePDGCharge/eplus);   
+     return 0.5*std::fabs(thePDGMagneticMoment/muB - 2.*thePDGCharge/eplus);   
    } else {	
      return 0.0;
    }
