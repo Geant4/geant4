@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.1 2009-03-17 10:58:43 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.2 2009-03-27 10:27:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,9 @@
 #define G4NuclNuclDiffuseElastic_h 1
  
 #include "globals.hh"
+#include <complex>
+#include "G4Integrator.hh"
+
 #include "G4HadronicInteraction.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
@@ -179,13 +182,40 @@ public:
   G4double GetDiffElasticSumProbA(G4double alpha);
   G4double GetIntegrandFunction(G4double theta);
 
-
   G4double GetNuclearRadius(){return fNuclearRadius;};
 
 
   // Technical math functions for strong Coulomb contribution
 
   G4complex GammaLogarithm(G4complex xx);
+
+  G4double  GetErf(G4double x);
+
+  G4complex GetErfcComp(G4complex z, G4int nMax);
+  G4complex GetErfcSer(G4complex z, G4int nMax);
+  G4complex GetErfcInt(G4complex z); // , G4int nMax);
+
+  G4complex GetErfComp(G4complex z, G4int nMax);  // AandS algorithm != Ser, Int
+  G4complex GetErfSer(G4complex z, G4int nMax);
+
+  G4double GetExpCos(G4double x);
+  G4double GetExpSin(G4double x);
+  G4complex GetErfInt(G4complex z); // , G4int nMax);
+
+
+  G4complex TestErfcComp(G4complex z, G4int nMax);
+  G4complex TestErfcSer(G4complex z, G4int nMax);
+  G4complex TestErfcInt(G4complex z); // , G4int nMax);
+
+  G4complex CoulombAmplitude(G4double theta);
+  void CalculateCoulombPhaseZero();
+  void CalculateRutherfordAnglePar();
+
+  G4double ProfileNear(G4double theta);
+  G4double ProfileFar(G4double theta);
+
+  G4complex PhaseNear(G4double theta);
+  G4complex PhaseFar(G4double theta);
 
 private:
 
@@ -222,7 +252,15 @@ private:
   G4double fBeta;
   G4double fZommerfeld;
   G4double fAm;
-  G4bool fAddCoulomb;
+  G4bool   fAddCoulomb;
+
+  G4double fCoulombPhase0;
+  G4double fHalfRutThetaTg;
+  G4double fRutherfordTheta;
+  G4double fProfileDelta;
+  G4double fProfileAlpha;
+
+  G4double fReZ;
 
 };
 
@@ -551,7 +589,7 @@ inline  G4double G4NuclNuclDiffuseElastic::GetCoulombIntegralXsc( const G4Partic
 // For the calculation of arg Gamma(z) one needs complex extension 
 // of ln(Gamma(z))
 
-G4complex G4NuclNuclDiffuseElastic::GammaLogarithm(G4complex zz)
+inline G4complex G4NuclNuclDiffuseElastic::GammaLogarithm(G4complex zz)
 {
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
@@ -569,5 +607,352 @@ G4complex G4NuclNuclDiffuseElastic::GammaLogarithm(G4complex zz)
   }
   return -tmp + std::log(2.5066282746310005*ser);
 }
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double  G4NuclNuclDiffuseElastic::GetErf(G4double x)
+{
+  G4double t, z, tmp, result;
+
+  z   = std::fabs(x);
+  t   = 1.0/(1.0+0.5*z);
+
+  tmp = t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+		t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
+		t*(-0.82215223+t*0.17087277)))))))));
+
+  if( x >= 0.) result = 1. - tmp;
+  else         result = 1. + tmp; 
+    
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfcComp(G4complex z, G4int nMax)
+{
+  G4complex erfcz = 1. - GetErfComp( z, nMax);
+  return erfcz;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfcSer(G4complex z, G4int nMax)
+{
+  G4complex erfcz = 1. - GetErfSer( z, nMax);
+  return erfcz;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfcInt(G4complex z) // , G4int nMax)
+{
+  G4complex erfcz = 1. - GetErfInt( z); // , nMax);
+  return erfcz;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::TestErfcComp(G4complex z, G4int nMax)
+{
+  G4complex miz = G4complex( z.imag(), -z.real() ); 
+  G4complex erfcz = 1. - GetErfComp( miz, nMax);
+  G4complex w = std::exp(-z*z)*erfcz;
+  return w;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::TestErfcSer(G4complex z, G4int nMax)
+{
+  G4complex miz = G4complex( z.imag(), -z.real() ); 
+  G4complex erfcz = 1. - GetErfSer( miz, nMax);
+  G4complex w = std::exp(-z*z)*erfcz;
+  return w;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::TestErfcInt(G4complex z) // , G4int nMax)
+{
+  G4complex miz = G4complex( z.imag(), -z.real() ); 
+  G4complex erfcz = 1. - GetErfInt( miz); // , nMax);
+  G4complex w = std::exp(-z*z)*erfcz;
+  return w;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfComp(G4complex z, G4int nMax)
+{
+  G4int n;
+  G4double n2, cofn, shny, chny, fn, gn;
+
+  G4double x = z.real();
+  G4double y = z.imag();
+
+  G4double outRe = 0., outIm = 0.;
+
+  G4double twox  = 2.*x;
+  G4double twoxy = twox*y;
+  G4double twox2 = twox*twox;
+
+  G4double cof1 = std::exp(-x*x)/pi;
+
+  G4double cos2xy = std::cos(twoxy);
+  G4double sin2xy = std::sin(twoxy);
+
+  G4double twoxcos2xy = twox*cos2xy;
+  G4double twoxsin2xy = twox*sin2xy;
+
+  for( n = 1; n <= nMax; n++)
+  {
+    n2   = n*n;
+
+    cofn = std::exp(-0.5*n2)/(n2+twox2);  // /(n2+0.5*twox2);
+
+    chny = std::cosh(n*y);
+    shny = std::sinh(n*y);
+
+    fn  = twox - twoxcos2xy*chny + n*sin2xy*shny;
+    gn  =        twoxsin2xy*chny + n*cos2xy*shny;
+
+    fn *= cofn;
+    gn *= cofn;
+
+    outRe += fn;
+    outIm += gn;
+  }
+  outRe *= 2*cof1;
+  outIm *= 2*cof1;
+
+  if(std::abs(x) < 0.0001)
+  {
+    outRe += GetErf(x);
+    outIm += cof1*y;
+  }
+  else
+  {
+    outRe += GetErf(x) + cof1*(1-cos2xy)/twox;
+    outIm += cof1*sin2xy/twox;
+  }
+  return G4complex(outRe, outIm);
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfSer(G4complex z, G4int nMax)
+{
+  G4int n;
+  G4double a =1., b = 1., tmp;
+  G4complex sum = z, d = z;
+
+  for( n = 1; n <= nMax; n++)
+  {
+    a *= 2.;
+    b *= 2.*n +1.;
+    d *= z*z;
+
+    tmp = a/b;
+
+    sum += tmp*d;
+  }
+  sum *= 2.*std::exp(-z*z)/std::sqrt(pi);
+
+  return sum;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+inline  G4double  G4NuclNuclDiffuseElastic::GetExpCos(G4double x)
+{
+  G4double result;
+
+  result = std::exp(x*x-fReZ*fReZ);
+  result *= std::cos(2.*x*fReZ);
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+inline  G4double  G4NuclNuclDiffuseElastic::GetExpSin(G4double x)
+{
+  G4double result;
+
+  result = std::exp(x*x-fReZ*fReZ);
+  result *= std::sin(2.*x*fReZ);
+  return result;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GetErfInt(G4complex z) // , G4int nMax)
+{
+  G4double outRe, outIm;
+
+  G4double x = z.real();
+  G4double y = z.imag();
+  fReZ       = x;
+
+  G4Integrator<G4NuclNuclDiffuseElastic,G4double(G4NuclNuclDiffuseElastic::*)(G4double)> integral;
+
+  outRe = integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetExpSin, 0., y );
+  outIm = integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetExpCos, 0., y );
+
+  outRe *= 2./sqrt(pi);
+  outIm *= 2./sqrt(pi);
+
+  outRe += GetErf(x);
+
+  return G4complex(outRe, outIm);
+}
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4complex G4NuclNuclDiffuseElastic::CoulombAmplitude(G4double theta)
+{
+  G4complex ca;
+  
+  G4double sinHalfTheta  = std::sin(0.5*theta);
+  G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta; 
+  sinHalfTheta2         += fAm;
+  G4double order         = 2.*fCoulombPhase0 - fZommerfeld*std::log(sinHalfTheta2);
+  G4complex z            = G4complex(0., order);
+  ca                     = std::exp(z);
+  ca                    *= -fZommerfeld/(2.*fWaveVector*sinHalfTheta2);
+
+  return ca; 
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+
+inline  void G4NuclNuclDiffuseElastic::CalculateCoulombPhaseZero()
+{
+  G4complex z        = G4complex(1,fZommerfeld); 
+  G4complex gammalog = GammaLogarithm(z);
+  fCoulombPhase0      = gammalog.imag();
+}
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+
+inline  void G4NuclNuclDiffuseElastic::CalculateRutherfordAnglePar()
+{
+  fHalfRutThetaTg  = fZommerfeld/(fWaveVector*fNuclearRadius);
+  fRutherfordTheta = 2.*std::atan(fHalfRutThetaTg);
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline   G4double G4NuclNuclDiffuseElastic::ProfileNear(G4double theta)
+{
+  G4double dTheta = fRutherfordTheta - theta;
+  G4double result = 0., argument = 0.;
+
+  if(std::abs(dTheta) < 0.001) result = fProfileAlpha*fProfileDelta;
+  else
+  {
+    argument = fProfileDelta*dTheta;
+    result = pi*argument*std::exp(fProfileAlpha*argument);
+    result /= std::sinh(pi*argument);
+    result -= 1.;
+    result /= dTheta;
+  }
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline   G4double G4NuclNuclDiffuseElastic::ProfileFar(G4double theta)
+{
+  G4double dTheta = fRutherfordTheta + theta;
+  G4double argument = fProfileDelta*dTheta;
+
+  G4double result = pi*argument*std::exp(fProfileAlpha*argument);
+  result /= std::sinh(pi*argument);
+  result /= dTheta;
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
+{
+  G4double twosigma = 2.*fCoulombPhase0; 
+  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg/(1.+fHalfRutThetaTg*fHalfRutThetaTg));
+  twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - halfpi;
+  twosigma -= fWaveVector*fNuclearRadius*theta - 0.25*pi;
+
+  G4complex z = G4complex(0., twosigma);
+
+  return std::exp(z);
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline   G4complex G4NuclNuclDiffuseElastic::PhaseFar(G4double theta)
+{
+  G4double twosigma = 2.*fCoulombPhase0; 
+  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg/(1.+fHalfRutThetaTg*fHalfRutThetaTg));
+  twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - halfpi;
+  twosigma += fWaveVector*fNuclearRadius*theta - 0.25*pi;
+
+  G4complex z = G4complex(0., twosigma);
+
+  return std::exp(z);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif
