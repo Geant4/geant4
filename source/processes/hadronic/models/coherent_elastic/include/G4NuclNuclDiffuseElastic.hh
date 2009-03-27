@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.2 2009-03-27 10:27:03 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.3 2009-03-27 16:07:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -216,6 +216,9 @@ public:
 
   G4complex PhaseNear(G4double theta);
   G4complex PhaseFar(G4double theta);
+
+  G4complex GammaLess(G4double theta);
+  G4complex GammaMore(G4double theta);
 
 private:
 
@@ -941,7 +944,54 @@ inline   G4complex G4NuclNuclDiffuseElastic::PhaseFar(G4double theta)
   return std::exp(z);
 }
 
+/////////////////////////////////////////////////////////////////
+//
+//
 
+
+inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
+{
+  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+
+  G4double u = std::sqrt(0.5*fWaveVector*fNuclearRadius*/sinThetaR);
+  G4double kappa = u/std::sqrt(pi);
+  G4double dTheta = theta-fRutherfordTheta;
+  u *= dTheta;
+
+  G4complex im = G4complex(0.,1.);
+  G4complex order = G4complex(u,u);
+  G4complex gamma = pi*kappa*std::exp(-order)*std::exp(im*(u*u+0.25*pi));
+  G4complex a0 = 0.5*(1.+3.*(1+im*u*u)*cosHalfThetaR2/3.)/sinThetaR;
+  G4complex a1 = 0.5*(1.+2.*(1+im*u*u*2./3.)*cosHalfThetaR2)/sinThetaR;
+  G4complex out = gamma*(1. + a1*dTheta) - a0;
+  return out;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::GammaMore(G4double theta)
+{
+  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+
+  G4double u = std::sqrt(0.5*fWaveVector*fNuclearRadius*/sinThetaR);
+  G4double kappa = u/std::sqrt(pi);
+  G4double dTheta = theta-fRutherfordTheta;
+  u *= dTheta;
+
+  G4complex im = G4complex(0.,1.);
+  G4complex order = G4complex(u,u);
+  G4complex gamma = pi*kappa*std::exp(order)*std::exp(im*(u*u+0.25*pi));
+  G4complex a0 = 0.5*(1.+3.*(1+im*u*u)*cosHalfThetaR2/3.)/sinThetaR;
+  G4complex a1 = 0.5*(1.+2.*(1+im*u*u*2./3.)*cosHalfThetaR2)/sinThetaR;
+  G4complex out = -gamma*(1. + a1*dTheta) - a0;
+  return out;
+}
 
 
 
