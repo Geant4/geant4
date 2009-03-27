@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,22 +177,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.57s Real=7.57s Sys=0s
+  User=7.53s Real=7.54s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.08
-Average number of gamma                      21.04
-Average number of e+                         0.7823
+Average number of e-                         12.12
+Average number of gamma                      21.13
+Average number of e+                         0.7899
 Average number of neutrons                   0
-Average number of steps in absorber          31.85
-Average number of e- steps in target         18.65
-Average number of g  produced in the target  20.25
-Average number of e- produced in the target  7.163
-Average number of g produced in the phantom  0.5069
-Average number of e- produced in the phantom 2.777
-Total gamma fluence in front of phantom      8.651 MeV 
+Average number of steps in absorber          31.33
+Average number of e- steps in target         18.66
+Average number of g  produced in the target  20.31
+Average number of e- produced in the target  7.189
+Average number of g produced in the phantom  0.507
+Average number of e- produced in the phantom 2.748
+Total gamma fluence in front of phantom      8.586 MeV 
 ========================================================
 
 

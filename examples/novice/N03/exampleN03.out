@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -338,16 +338,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 276.91466 MeV       total track length: 19.551829 cm 
-        Gap: total energy: 12.904433 MeV       total track length: 6.2370197 cm 
+   Absorber: total energy: 278.24965 MeV       total track length: 19.458737 cm 
+        Gap: total energy: 6.8687643 MeV       total track length: 3.2372212 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 276.91466 MeV +- 0 eV 
- mean Energy in Gap      : 12.904433 MeV +- 0 eV 
+ mean Energy in Absorber : 278.24965 MeV +- 0 eV 
+ mean Energy in Gap      : 6.8687643 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.551829 cm  +- 0 fm 
- mean trackLength in Gap      : 6.2370197 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.458737 cm  +- 0 fm 
+ mean trackLength in Gap      : 3.2372212 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,              eIoni
@@ -565,19 +565,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 138643018, 90901385
+ Current couple of seeds = 540555270, 1628458594
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 281.17916 MeV       total track length: 19.517122 cm 
-        Gap: total energy: 12.912656 MeV       total track length: 6.0342195 cm 
+   Absorber: total energy: 280.32417 MeV       total track length: 19.502725 cm 
+        Gap: total energy: 16.13509 MeV       total track length: 7.631321 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 281.17916 MeV +- 0 eV 
- mean Energy in Gap      : 12.912656 MeV +- 0 eV 
+ mean Energy in Absorber : 280.32417 MeV +- 0 eV 
+ mean Energy in Gap      : 16.13509 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.517122 cm  +- 0 fm 
- mean trackLength in Gap      : 6.0342195 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.502725 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.631321 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -795,19 +795,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1424475195, 1293268628
+ Current couple of seeds = 2113072039, 45814956
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 418.66961 MeV       total track length: 98.934484 cm 
-        Gap: total energy: 78.013203 MeV       total track length: 2.1775326 m  
+   Absorber: total energy: 419.706 MeV       total track length: 98.051766 cm 
+        Gap: total energy: 77.76321 MeV       total track length: 2.1483297 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 418.66961 MeV +- 0 eV 
- mean Energy in Gap      : 78.013203 MeV +- 0 eV 
+ mean Energy in Absorber : 419.706 MeV +- 0 eV 
+ mean Energy in Gap      : 77.76321 MeV +- 0 eV 
 
- mean trackLength in Absorber : 98.934484 cm  +- 0 fm 
- mean trackLength in Gap      : 2.1775326 m   +- 0 fm 
+ mean trackLength in Absorber : 98.051766 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.1483297 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

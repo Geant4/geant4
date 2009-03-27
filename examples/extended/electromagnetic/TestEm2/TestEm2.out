@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -317,24 +317,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.29s Real=6.96s Sys=0.02s
+  User=6.64s Real=7s Sys=0.03s
 
  SUMMARY 
 
- energy deposit :   94.65 % E0 +-    1.11 % E0
- charged traklen:  479.04 radl +-    5.67 radl
- neutral traklen: 4445.64 radl +-  131.94 radl
+ energy deposit :   94.77 % E0 +-    1.39 % E0
+ charged traklen:  479.55 radl +-    6.97 radl
+ neutral traklen: 4456.46 radl +-  142.79 radl
 
- 90.00 % confinement: radius = 3.08 radl  (2.75 cm )
+ 90.00 % confinement: radius = 3.02 radl  (2.69 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 868685207, 1645334416
+ Current couple of seeds = 571772313, 1389769409
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94651796  delEdep= -0.0024820373 nrms= -3.0268747
-Erms: 0.011130863  delErms= 0.0029308628 nrms= 3.5742229
+Edep: 0.94769188  delEdep= -0.0013081167 nrms= -1.5952643
+Erms: 0.013908213  delErms= 0.0057082128 nrms= 6.9612351
 <<<<END>>>>   IS NOT ACCEPTED
 
 G4 kernel has come to Quit state.

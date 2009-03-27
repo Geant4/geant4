@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -121,11 +121,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.19s Real=451.09s Sys=18.32s
+  User=4.43s Real=969.62s Sys=20.09s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1068190611, 2126650855
+ Current couple of seeds = 1624853727, 1476589813
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

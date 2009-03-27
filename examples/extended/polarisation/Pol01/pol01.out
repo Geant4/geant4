@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -153,33 +153,33 @@ Run Summary
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.811133 0.670786 0.419067 0.31915 0.637175 0.314616 0.255555 0.941604 0.869501 0.40014 0.576243 0.459917 0.406934 0.398763 0.759094 0.125266 0.325534 0.0675368 0.0205697 0.514129 0.216193 0.204895 0.0710009 0.690242 
- i_lag = 2, j_lag = 12
- carry = 0, count24 = 1
+ float_seed_table[] = 0.666016 0.0392132 0.345886 0.087905 0.920036 0.944204 0.236936 0.608706 0.0723484 0.722772 0.498411 0.947396 0.367028 0.428991 0.530331 0.87666 0.197768 0.0196997 0.605378 0.163502 0.0246642 0.0419614 0.980736 0.583336 
+ i_lag = 5, j_lag = 15
+ carry = 5.96046e-08, count24 = 15
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31070
-	pol-compt = 253
-	msc = 3246
-	pol-eBrem = 314
-	pol-conv = 189
-	pol-eIoni = 538
-	pol-phot = 145
-	pol-annihil = 65
+	Transportation = 31094
+	pol-compt = 241
+	msc = 3353
+	pol-eBrem = 347
+	pol-conv = 181
+	pol-eIoni = 551
+	pol-phot = 159
+	pol-annihil = 57
  Gamma: 
-Mean Number per Event :1.01
-Mean Energy :9.5971 MeV +- 1.8649 MeV
-Mean Polarization :-0.96592 +- 0.17829
+Mean Number per Event :1.0113
+Mean Energy :9.5924 MeV +- 1.8805 MeV
+Mean Polarization :-0.96512 +- 0.18061
  Electron: 
-Mean Number per Event :0.031
-Mean Energy :5.3462 MeV +- 2.4873 MeV
-Mean Polarization :-0.74389 +- 0.27751
+Mean Number per Event :0.0308
+Mean Energy :5.3192 MeV +- 2.5762 MeV
+Mean Polarization :-0.74537 +- 0.2783
  Positron: 
-Mean Number per Event :0.0125
-Mean Energy :4.3364 MeV +- 1.9514 MeV
-Mean Polarization :-0.63862 +- 0.29018
+Mean Number per Event :0.0126
+Mean Energy :3.9121 MeV +- 1.9271 MeV
+Mean Polarization :-0.5574 +- 0.32992
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

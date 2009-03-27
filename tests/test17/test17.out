@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -272,7 +272,7 @@ Cuts are defined
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built 
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
-G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
+G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.38 charge= 2 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built 
@@ -372,7 +372,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.2s Real=0.2s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -415,7 +415,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.19s Real=0.18s Sys=0s
+  User=0.18s Real=0.19s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -456,7 +456,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.38s Real=0.38s Sys=0s
+  User=0.39s Real=0.38s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -498,21 +498,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.73s Real=0.73s Sys=0s
+  User=0.72s Real=0.72s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18294 +- 0.0159437  microns 
-    CSDA  Range  in absorber = 9.04262 +- 0.0188914  microns 
+    Track Length in absorber = 9.15361 +- 0.0163794  microns 
+    CSDA  Range  in absorber = 9.02714 +- 0.0165234  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.123937 +- 0.0159437 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.173624 +- 0.0188914 microns 
+    Track Length (G4 - ICRU49) = 0.0946081 +- 0.0163794 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.158139 +- 0.0165234 microns 
 
-Average Number electrons per event = 22.16
-Average Number photons per event   = 22.16
+Average Number electrons per event = 22.05
+Average Number photons per event   = 22.05
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -542,20 +542,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.38s Real=1.38s Sys=0s
+  User=1.37s Real=1.38s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19802 +- 0.0168232  microns 
-    CSDA  Range  in absorber = 9.02832 +- 0.0408519  microns 
+    Track Length in absorber = 9.16961 +- 0.0157265  microns 
+    CSDA  Range  in absorber = 9.03968 +- 0.0162427  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.139022 +- 0.0168232 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.159324 +- 0.0408519 microns 
+    Track Length (G4 - ICRU49) = 0.110607 +- 0.0157265 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.170685 +- 0.0162427 microns 
 
-Average Number electrons per event = 519.6
-Average Number photons per event   = 2.68
+Average Number electrons per event = 521.6
+Average Number photons per event   = 2.8
 
 G4 kernel has come to Quit state.

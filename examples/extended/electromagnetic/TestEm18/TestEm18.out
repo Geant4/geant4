@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -293,19 +293,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5851  stepSize= 6.3119 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 1.5817  stepSize= 6.3254 mm 
 
- d-rays  : eLoss/primary= 247.74 keV	  nb of d-rays= 0.237  <Tkin>= 1.0453 MeV  Tmin= 348.28 keV  Tmax= 4.9426 MeV
+ d-rays  : eLoss/primary= 246.06 keV	  nb of d-rays= 0.23485  <Tkin>= 1.0477 MeV  Tmin= 348.28 keV  Tmax= 4.9521 MeV
 
- brems   : eLoss/primary= 170.15 keV	  nb of gammas= 0.30483  <Tkin>= 558.18 keV  Tmin= 2.9353 keV  Tmax= 9.5618 MeV
+ brems   : eLoss/primary= 172.24 keV	  nb of gammas= 0.30578  <Tkin>= 563.28 keV  Tmin= 2.936 keV  Tmax= 9.756 MeV
 
- deposit : eLoss/primary= 1.7345 MeV	 <dEcut > table= 1.7352 MeV   ---> simul/reference= 0.9996
+ deposit : eLoss/primary= 1.734 MeV	 <dEcut > table= 1.7351 MeV   ---> simul/reference= 0.99934
 
- total   : eLoss/primary= 2.1524 MeV	 <dEfull> table= 2.1634 MeV   ---> simul/reference= 0.99488
+ total   : eLoss/primary= 2.1523 MeV	 <dEfull> table= 2.1634 MeV   ---> simul/reference= 0.99486
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 940434751, 1012401963
+ Current couple of seeds = 415939755, 593623427
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -333,28 +333,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=15.03s Real=54.81s Sys=1.82s
+  User=15.18s Real=55.64s Sys=1.42s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.6596 cm    rms= 2.96857 mm 
- Mean number of primary steps = 187.502
+ Projected Range= 17.6609 cm    rms= 2.3184 mm 
+ Mean number of primary steps = 187.523
  Total energy deposit= 160 MeV
- NIEL energy deposit = 49.6727 keV
+ NIEL energy deposit = 49.67 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.60333 GeV	0.287708 % 	9.21917e-05 Gy
- tally 1: 	 	5.05233 GeV	0.315771 % 	0.000101184 Gy
- tally 2: 	 	3.43433 GeV	0.214645 % 	6.878e-05 Gy
- tally 3: 	 	2.03024 GeV	0.12689 % 	4.06601e-05 Gy
+ tally 0: 	 	4.58753 GeV	0.286721 % 	9.18755e-05 Gy
+ tally 1: 	 	4.99683 GeV	0.312302 % 	0.000100073 Gy
+ tally 2: 	 	3.39252 GeV	0.212033 % 	6.79427e-05 Gy
+ tally 3: 	 	2.00568 GeV	0.125355 % 	4.01681e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 230043618, 1234715330
+ Current couple of seeds = 474132632, 740970695
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -384,7 +384,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 230043618, 1234715330
+ Current couple of seeds = 474132632, 740970695
 ----------------------------------------
 Start Run processing.
 
@@ -392,28 +392,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.38s Real=9.82s Sys=0.2s
+  User=5.49s Real=11.48s Sys=0.17s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.2716 cm    rms= 488.897 um 
- Mean number of primary steps = 122.789
+ Projected Range= 16.2703 cm    rms= 497.21 um 
+ Mean number of primary steps = 122.875
  Total energy deposit= 3.49997 GeV
- NIEL energy deposit = 1.36444 MeV
+ NIEL energy deposit = 1.364 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	10.4633 GeV	0.298953 % 	0.000209552 Gy
- tally 1: 	 	12.6596 GeV	0.361704 % 	0.000253537 Gy
- tally 2: 	 	15.084 GeV	0.430971 % 	0.00030209 Gy
- tally 3: 	 	24.0559 GeV	0.687311 % 	0.000481772 Gy
+ tally 0: 	 	11.5618 GeV	0.330338 % 	0.000231551 Gy
+ tally 1: 	 	12.956 GeV	0.370171 % 	0.000259472 Gy
+ tally 2: 	 	16.8365 GeV	0.481044 % 	0.000337189 Gy
+ tally 3: 	 	25.822 GeV	0.737771 % 	0.000517142 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 725795611, 6569758
+ Current couple of seeds = 1957935687, 1065549006
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
@@ -713,7 +713,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 725795611, 6569758
+ Current couple of seeds = 1957935687, 1065549006
 ----------------------------------------
 Start Run processing.
 
@@ -721,28 +721,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.03s Real=10.05s Sys=0.2s
+  User=6.19s Real=10.8s Sys=0.13s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.07405 cm    rms= 1.07286 mm 
- Mean number of primary steps = 8.349
- Total energy deposit= 281.211 MeV
+ Projected Range= 2.06456 cm    rms= 1.47811 mm 
+ Mean number of primary steps = 8.303
+ Total energy deposit= 284.874 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.41795 GeV	2.41795 % 	5.40454e-06 Gy
- tally 1: 	 	329.397 keV	0.000329397 % 	7.36262e-10 Gy
- tally 2: 	 	0 eV 	0 % 	0 Gy
- tally 3: 	 	116.072 keV	0.000116072 % 	2.59442e-10 Gy
+ tally 0: 	 	2.43169 GeV	2.43169 % 	5.43527e-06 Gy
+ tally 1: 	 	0 eV 	0 % 	0 Gy
+ tally 2: 	 	76.5252 keV	7.65252e-05 % 	1.71048e-10 Gy
+ tally 3: 	 	0 eV 	0 % 	0 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 828318472, 832611135
+ Current couple of seeds = 943359573, 1762867817
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -1047,7 +1047,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 828318472, 832611135
+ Current couple of seeds = 943359573, 1762867817
 ----------------------------------------
 Start Run processing.
 
@@ -1055,18 +1055,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.39s Sys=0.02s
+  User=0.01s Real=0.71s Sys=0.01s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 331.078 um    rms= 102.411 um 
- Mean number of primary steps = 2.79
- Total energy deposit= 265 eV 
- NIEL energy deposit = 256.97 eV 
+ Projected Range= 329.359 um    rms= 81.2931 um 
+ Mean number of primary steps = 2.8
+ Total energy deposit= 263.509 eV 
+ NIEL energy deposit = 250.515 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	12.8997 keV	48.6779 % 	2.58344e-05 Gy
+ tally 0: 	 	13.2389 keV	49.9582 % 	2.65139e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1076,7 +1076,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 944221002, 24591489
+ Current couple of seeds = 1343020975, 859637104
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1381,7 +1381,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 944221002, 24591489
+ Current couple of seeds = 1343020975, 859637104
 ----------------------------------------
 Start Run processing.
 
@@ -1389,18 +1389,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.41s Sys=0.02s
+  User=0.03s Real=0.47s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.55754 mm    rms= 46.0728 um 
+ Projected Range= 6.56156 mm    rms= 50.0154 um 
  Mean number of primary steps = 31.28
  Total energy deposit= 100 MeV
- NIEL energy deposit = 61.798 keV
+ NIEL energy deposit = 61.8594 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	827.903 MeV	8.27903 % 	1.65806e-05 Gy
+ tally 0: 	 	709.618 MeV	7.09618 % 	1.42117e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1410,6 +1410,6 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1335247067, 214513529
+ Current couple of seeds = 567306393, 179218884
 ----------------------------------------
 G4 kernel has come to Quit state.

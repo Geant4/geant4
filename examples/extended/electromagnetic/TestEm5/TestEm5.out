@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: global-V09-02-01    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -276,14 +276,14 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 7 um     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 1 keV    e- 1 keV    e+ 1 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 7 um     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 1 keV    e- 21.1663 keV    e+ 20.7776 keV
+ Energy thresholds :  gamma 990 eV     e- 20.7856 keV    e+ 20.268 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -324,30 +324,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.98s Real=391.27s Sys=17.64s
+  User=5.19s Real=604.96s Sys=19.24s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.291 keV +- 17.11 eV 
+ Total energy deposit in absorber per event = 6.296 keV +- 15.56 eV 
 
- -----> Mean dE/dx = 3.145 MeV/cm	(1.35 MeV*cm2/g)
+ -----> Mean dE/dx = 3.148 MeV/cm	(1.351 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 2.939 MeV/cm	(1.261 MeV*cm2/g)
+   restricted dEdx = 2.936 MeV/cm	(1.26 MeV*cm2/g)
    full dEdx       = 4.705 MeV/cm	(2.019 MeV*cm2/g)
 
- Leakage :  primary = 5 GeV +- 812.4 eV    secondaries = 2.941 keV +- 811.8 eV 
+ Leakage :  primary = 5 GeV +- 499.1 eV    secondaries = 2.585 keV +- 498.2 eV 
  Energy balance :  edep + eleak = 5 GeV
 
- Total track length (charged) in absorber per event = 20.27 um  +- 8.216 nm 
- Total track length (neutral) in absorber per event = 7.515 Ang +- 3.981 Ang
+ Total track length (charged) in absorber per event = 20.27 um  +- 7.927 nm 
+ Total track length (neutral) in absorber per event = 8.627 Ang +- 4.335 Ang
 
- Number of steps (charged) in absorber per event = 1.18 +- 9.064e-06
- Number of steps (neutral) in absorber per event = 5e-05 +- 9.064e-06
+ Number of steps (charged) in absorber per event = 1.171 +- 8.903e-06
+ Number of steps (neutral) in absorber per event = 6e-05 +- 8.903e-06
 
- Number of secondaries per event : Gammas = 5e-05;   electrons = 0.01721;   positrons = 0
+ Number of secondaries per event : Gammas = 6e-05;   electrons = 0.0173;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -356,13 +356,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02445 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02451 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.597 %
+  central part defined as +- 0.0788 mrad;   Tail ratio = 1.6 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 317798364, 1570990040
+ Current couple of seeds = 959743866, 74890631
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -616,19 +616,19 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 7 um     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 1 keV    e- 1 keV    e+ 1 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 7 um     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 1 keV    e- 21.166343 keV    e+ 20.77756 keV
+ Energy thresholds :  gamma 990 eV     e- 20.785626 keV    e+ 20.267959 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Gold
  Range cuts        :  gamma 7 um     e- 7 um     e+ 7 um 
- Energy thresholds :  gamma 6.4751525 keV    e- 64.745701 keV    e+ 63.597127 keV
+ Energy thresholds :  gamma 6.5175568 keV    e- 65.072458 keV    e+ 63.489878 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -643,7 +643,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 317798364, 1570990040
+ Current couple of seeds = 959743866, 74890631
 ----------------------------------------
 Start Run processing.
 
@@ -659,45 +659,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=5s Real=181.98s Sys=8.64s
+  User=5.3s Real=402.11s Sys=11.06s
 
  ======================== run summary ======================
 
  The run was 50000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.85 keV +- 71.25 eV 
+ Total energy deposit in absorber per event = 18.94 keV +- 61.2 eV 
 
- -----> Mean dE/dx = 19.51 MeV/cm	(1.01 MeV*cm2/g)
+ -----> Mean dE/dx = 19.61 MeV/cm	(1.015 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 18.38 MeV/cm	(0.9515 MeV*cm2/g)
+   restricted dEdx = 18.39 MeV/cm	(0.9518 MeV*cm2/g)
    full dEdx       = 60.19 MeV/cm	(3.115 MeV*cm2/g)
 
- Leakage :  primary = 15.63 MeV +- 2.474 keV   secondaries = 47.8 keV +- 2.465 keV
+ Leakage :  primary = 15.64 MeV +- 2.245 keV   secondaries = 43.26 keV +- 2.234 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.926 um  +- 11.95 nm 
- Total track length (neutral) in absorber per event = 132.8 nm  +- 4.185 nm 
+ Total track length (charged) in absorber per event = 9.931 um  +- 11.44 nm 
+ Total track length (neutral) in absorber per event = 123.3 nm  +- 4.034 nm 
 
- Number of steps (charged) in absorber per event = 8.954 +- 1.546e-05
- Number of steps (neutral) in absorber per event = 0.0304 +- 1.546e-05
+ Number of steps (charged) in absorber per event = 8.97 +- 1.513e-05
+ Number of steps (neutral) in absorber per event = 0.02912 +- 1.513e-05
 
- Number of secondaries per event : Gammas = 0.03026;   electrons = 0.02102;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02898;   electrons = 0.02238;   positrons = 0
 
- Number of events with the primary particle transmitted = 99.98 %
- Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
+ Number of events with the primary particle transmitted = 99.97 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 99.97 %
 
- Number of events with the primary particle reflected = 0.02 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.27 %
+ Number of events with the primary particle reflected = 0.028 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.324 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 32.96 mrad (central part only)
+  rms proj angle of transmit primary particle = 32.95 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 2.624 %
+  central part defined as +- 105.3 mrad;   Tail ratio = 2.777 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1702666161, 874029918
+ Current couple of seeds = 1701812741, 1111485135
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
@@ -958,24 +958,24 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 1 keV    e- 1 keV    e+ 1 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 1 keV    e- 31.642693 keV    e+ 31.36077 keV
+ Energy thresholds :  gamma 990 eV     e- 31.474732 keV    e+ 31.089639 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Gold
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 8.3416123 keV    e- 80.258712 keV    e+ 78.834942 keV
+ Energy thresholds :  gamma 8.2651501 keV    e- 80.220491 keV    e+ 78.269507 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : G4_POLYETHYLENE
  Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 1 keV    e- 14.091558 keV    e+ 13.541478 keV
+ Energy thresholds :  gamma 990 eV     e- 13.612589 keV    e+ 13.429608 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -990,7 +990,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1702666161, 874029918
+ Current couple of seeds = 1701812741, 1111485135
 ----------------------------------------
 Start Run processing.
 
@@ -1006,45 +1006,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.76s Real=449.69s Sys=12.26s
+  User=7.27s Real=413.74s Sys=13.19s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 96.2 MeV through 4.74 mm  of G4_POLYETHYLENE (density: 940 mg/cm3)
 
- Total energy deposit in absorber per event = 1.054 MeV +- 1.027 keV
+ Total energy deposit in absorber per event = 1.053 MeV +- 1.012 keV
 
- -----> Mean dE/dx = 2.223 MeV/cm	(2.365 MeV*cm2/g)
+ -----> Mean dE/dx = 2.222 MeV/cm	(2.364 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 1.761 MeV/cm	(1.873 MeV*cm2/g)
+   restricted dEdx = 1.757 MeV/cm	(1.869 MeV*cm2/g)
    full dEdx       = 2.274 MeV/cm	(2.419 MeV*cm2/g)
 
- Leakage :  primary = 95.12 MeV +- 1.36 keV   secondaries = 25.63 keV +- 703.1 eV 
+ Leakage :  primary = 95.12 MeV +- 2.331 keV   secondaries = 29.47 keV +- 2.655 keV
  Energy balance :  edep + eleak = 96.2 MeV
 
- Total track length (charged) in absorber per event = 5.179 mm  +- 3.922 um 
- Total track length (neutral) in absorber per event = 25.03 um  +- 2.345 um 
+ Total track length (charged) in absorber per event = 5.176 mm  +- 3.85 um 
+ Total track length (neutral) in absorber per event = 24.55 um  +- 2.374 um 
 
- Number of steps (charged) in absorber per event = 11.5 +- 0.0002801
- Number of steps (neutral) in absorber per event = 0.01222 +- 0.0002801
+ Number of steps (charged) in absorber per event = 11.81 +- 0.0002775
+ Number of steps (neutral) in absorber per event = 0.01154 +- 0.0002775
 
- Number of secondaries per event : Gammas = 0.01154;   electrons = 4.067;   positrons = 0
+ Number of secondaries per event : Gammas = 0.011;   electrons = 4.23;   positrons = 2e-05
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
- Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0 %
+ Number of events with the primary particle reflected = 0.002 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.002 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 7.683 mrad (central part only)
+  rms proj angle of transmit primary particle = 7.671 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad;   Tail ratio = 1.144 %
+  central part defined as +- 22.91 mrad;   Tail ratio = 1.266 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1645584252, 1639624093
+ Current couple of seeds = 1341071685, 1501868875
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -1301,29 +1301,29 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1 keV    e- 1 keV    e+ 1 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.9270269 keV    e- 544.81618 keV    e+ 525.65781 keV
+ Energy thresholds :  gamma 6.8873065 keV    e- 540.71814 keV    e+ 521.11295 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Gold
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 111.87937 keV    e- 2.2809985 MeV    e+ 2.1233972 MeV
+ Energy thresholds :  gamma 111.40831 keV    e- 2.2829423 MeV    e+ 2.120395 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : G4_POLYETHYLENE
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.2403326 keV    e- 348.26839 keV    e+ 342.09019 keV
+ Energy thresholds :  gamma 2.2342906 keV    e- 347.13789 keV    e+ 338.6954 keV
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.9108466 keV    e- 595.8229 keV    e+ 574.87088 keV
+ Energy thresholds :  gamma 6.8873065 keV    e- 596.68045 keV    e+ 568.01052 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1338,7 +1338,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1645584252, 1639624093
+ Current couple of seeds = 1341071685, 1501868875
 ----------------------------------------
 Start Run processing.
 
@@ -1354,30 +1354,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.67s Real=380.02s Sys=13.76s
+  User=2.72s Real=465.99s Sys=12.63s
 
  ======================== run summary ======================
 
  The run was 50000 proton of 175 GeV through 8 mm  of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit in absorber per event = 4.952 MeV +- 235.5 keV
+ Total energy deposit in absorber per event = 4.644 MeV +- 121.6 keV
 
- -----> Mean dE/dx = 6.187 MeV/cm	(2.291 MeV*cm2/g)
+ -----> Mean dE/dx = 5.803 MeV/cm	(2.149 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 4.017 MeV/cm	(1.488 MeV*cm2/g)
+   restricted dEdx = 4.018 MeV/cm	(1.488 MeV*cm2/g)
    full dEdx       = 6.043 MeV/cm	(2.238 MeV*cm2/g)
 
- Leakage :  primary = 174.7 GeV +- 235.5 keV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 174.7 GeV +- 121.6 keV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 174.7 GeV
 
  Total track length (charged) in absorber per event = 8.004 mm  +- 0 fm 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 1.268 +- 0
+ Number of steps (charged) in absorber per event = 1.27 +- 0
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0;   electrons = 0.2677;   positrons = 0.00038
+ Number of secondaries per event : Gammas = 0;   electrons = 0.27;   positrons = 0.0006
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1386,13 +1386,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02105 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02099 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad;   Tail ratio = 1.848 %
+  central part defined as +- 0.06333 mrad;   Tail ratio = 1.861 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 30179067, 101057984
+ Current couple of seeds = 454961855, 2131053983
 ----------------------------------------
 #
 /testem/det/setAbsMat Iron
@@ -1645,34 +1645,34 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 1 keV    e- 1 keV    e+ 1 keV
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.9270269 keV    e- 544.81618 keV    e+ 525.65781 keV
+ Energy thresholds :  gamma 6.8873065 keV    e- 540.71814 keV    e+ 521.11295 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Gold
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 111.87937 keV    e- 2.2809985 MeV    e+ 2.1233972 MeV
+ Energy thresholds :  gamma 111.40831 keV    e- 2.2829423 MeV    e+ 2.120395 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : G4_POLYETHYLENE
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.2403326 keV    e- 348.26839 keV    e+ 342.09019 keV
+ Energy thresholds :  gamma 2.2342906 keV    e- 347.13789 keV    e+ 338.6954 keV
 
 Index : 4     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.9108466 keV    e- 595.8229 keV    e+ 574.87088 keV
+ Energy thresholds :  gamma 6.8873065 keV    e- 596.68045 keV    e+ 568.01052 keV
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.743164 keV    e- 1.2863969 MeV    e+ 1.2191431 MeV
+ Energy thresholds :  gamma 20.832343 keV    e- 1.280018 MeV    e+ 1.2185143 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1687,7 +1687,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 30179067, 101057984
+ Current couple of seeds = 454961855, 2131053983
 ----------------------------------------
 Start Run processing.
 
@@ -1703,30 +1703,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=25.64s Real=404.3s Sys=14.6s
+  User=26.01s Real=531.14s Sys=13.42s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 100 GeV through 1 m   of Iron (density: 7.87 g/cm3 )
 
- Total energy deposit in absorber per event = 2.125 GeV +- 13.93 MeV
+ Total energy deposit in absorber per event = 2.16 GeV +- 15.54 MeV
 
- -----> Mean dE/dx = 21.25 MeV/cm	(2.7 MeV*cm2/g)
+ -----> Mean dE/dx = 21.6 MeV/cm	(2.745 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 11.21 MeV/cm	(1.425 MeV*cm2/g)
+   restricted dEdx = 11.21 MeV/cm	(1.424 MeV*cm2/g)
    full dEdx       = 21.6 MeV/cm	(2.745 MeV*cm2/g)
 
- Leakage :  primary = 97.87 GeV +- 13.94 MeV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 97.84 GeV +- 15.54 MeV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 100 GeV
 
- Total track length (charged) in absorber per event = 100 cm  +- 4.884 um 
+ Total track length (charged) in absorber per event = 1 m   +- 298.3 nm 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 47.68 +- 0.0003125
+ Number of steps (charged) in absorber per event = 47.87 +- 7.723e-05
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.05032;   electrons = 46.63;   positrons = 1.239
+ Number of secondaries per event : Gammas = 0.0473;   electrons = 46.83;   positrons = 1.242
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1735,13 +1735,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.2 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.192 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.545 mrad;   Tail ratio = 0.521 %
+  central part defined as +- 3.545 mrad;   Tail ratio = 0.516 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 681565605, 515957490
+ Current couple of seeds = 634646846, 2043606970
 ----------------------------------------
 #
 UserDetectorConstruction deleted.
