@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.22 2009-03-26 16:27:32 gcosmo Exp $
+// $Id: G4Sphere.hh,v 1.23 2009-03-27 09:46:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -211,7 +211,7 @@ class G4Sphere : public G4CSGSolid
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    G4double fEpsilon, kRadTolerance, kAngTolerance;
+    G4double fEpsilon, fRminTolerance, fRmaxTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
 
