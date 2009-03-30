@@ -1,14 +1,14 @@
-macro run1 f=5 n=5 z=6 que=32-rb20-hp
+macro run1 f=5 n=5 z=82 que=32-rb20-hp
  nEvts = 2000 * [f]
- exec pipro ^12!C c0606 6 6 201 208 [nEvts] [n] [que] 2 13 | 208 mb is reaction CS
+ exec pipro ^89!Y y3950 39 50 201 958 [nEvts] [n] [que] 2 13 | 958 mb is pY reaction CS
 return
 *
-macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
+macro pipro targ=^208!Pb file=c82126 np=82 nn=126 e=201 cs=1850 _
             runn=2000 next=3 pq=32-rb20-hp nzone=2 nvex=13 dir=./
 *
   hi/del *
   ve/del *
-  ve/cr angle(6) r 30 45 60 90 116 151 
+  ve/cr angle(5) r 30 60 90 116 151 
   exec creavec [nvex]
   do i = 35 , $sigma(34+[next])
    clo [i]
@@ -18,17 +18,17 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
 *
   exec getdat [file] [e]
 *
-  chain -pipr201c
+  chain -pipr201y
   hi/fil 35 [dir]chips_[file]_e[e]_1.hbook
   hrin 1
-  chain pipr201c //LUN35
+  chain pipr201y //LUN35
   do i = 2 , [next]
     lun = 34 + [i]
     hi/fil [lun] [dir]chips_[file]_e[e]_[i].hbook
     hrin 1 ! 99999
-    chain pipr201c //LUN[lun]
+    chain pipr201y //LUN[lun]
   enddo
-  cd //pipr201c
+  cd //pipr201y
 *
   nevts = $hinfo(1,'sum')
   hi/del 1
@@ -39,11 +39,11 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   hxmax =  63.
   kxmin =  0.
   kxmax =  63.
-  hymin =  2.e-8
-  hymax =  2.e-5
-  yfnam =  .2
+  hymin =  5.e-8
+  hymax =  5.0001e-5
+  yfnam =  [hymax]/2
   hzero =  0.1e-12
-  xfnam =  24.
+  xfnam =  55.
   hfbin =  1
   hnbin =  25
   ptsize = 0.24
@@ -58,12 +58,14 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   opt nzfl
   swi g
 *
-  1d         11 'T?p! at  30 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
-  hi/copy 11 12 'T?p! at  45 deg (MeV)'
-  hi/copy 11 13 'T?p! at  60 deg (MeV)'
-  hi/copy 11 14 'T?d! at  90 deg (MeV)'
-  hi/copy 11 15 'T?d! at 116 deg (MeV)'
-  hi/copy 11 16 'T?d! at 151 deg (MeV)'
+  1d         11 'T?p! at pip  30 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
+  hi/copy 11 12 'T?p! at pip  60 deg (MeV)'
+  hi/copy 11 13 'T?p! at pip  90 deg (MeV)'
+  hi/copy 11 14 'T?d! at pip 116 deg (MeV)'
+  hi/copy 11 15 'T?d! at pip 151 deg (MeV)'
+  hi/copy 11 21 'T?p! at pip  30 deg (MeV)'
+  hi/copy 11 22 'T?p! at pip  60 deg (MeV)'
+  hi/copy 11 23 'T?d! at pip  90 deg (MeV)'
   hi/copy 11 81 'zero level'
   hi/copy 11 82 'dT in MeV'
   call hbarx(0)
@@ -84,30 +86,33 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
 *
 *  opt zfl
 *  swi z
-  zone 3 2
+  zone 4 2
 * Vector of the center bins in Kinetic Energy for all spectra (the same)
   ve/cr lke([hnbin])
   get/absc 11 lke
 * --- Loop over angles (secondaries are separate inside the loop) ---
-  do i = 0 , 5
+  do i = 0 , 4
     k  = [i]+1
     k1 = [k]+10 | pi+
-*    k2 = [k]+20 | pi-
+    k2 = [k]+20 | pi-
     a=angle([k])
     arad =  $sigma([pi]*[a]/180.)
     message 'i=',[i],', adeg=',[a],', arad=',[arad]
     cut [k1] $1.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
-*    cut [k2] $2.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
-*    message 'cuts are defined k=',[k1],[k2],[k3],[k4],[k5],[k6]
     nt/pl 70.log10(E-m+0.001) $[k1] ! ! -[k1]
-*    nt/pl 70.log10(E-m+0.001) $[k2] ! ! -[k2]
+    if [i] < 3 then
+      cut [k2] $2.and.abs(atan2(sqrt(px*px+py*py),pz)-[arad])<[danrad]
+      nt/pl 70.log10(E-m+0.001) $[k2] ! ! -[k2]
+    endif
     domega = $sigma(2.*[pi]*(cos([arad]-[danrad])-cos([arad]+[danrad])))
     w = $sigma([cs]/[domega]/[nevts])
 *    message 'selection is done dom=',[domega],', w=',[w],', cs=',[cs]
     div [k1] 82 [k1]  1. 1.
     add [k1] 81 [k1] [w] 1.
-*    div [k2] 82 [k2]  1. 1.
-*    add [k2] 81 [k2] [w] 1.
+    if [i] < 3 then
+      div [k2] 82 [k2]  1. 1.
+      add [k2] 81 [k2] [w] 1.
+    endif
 *    message 'histograms are waighted and added'
   enddo
   pi/del ' '
@@ -126,13 +131,13 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
 *  model=lowen
 *  model=chips
 *  model=preco
-*  model=berti
-  model=binar
+  model=berti
+*  model=binar
 *  model=lepro
 *
-  title [targ]//'(p,[p]^+!)X, E='//[E]//'MeV, [q]=30,45,60,90,116,151^0! ('//[model]//')'
+  title [targ]//'(p,[p])X, E='//[E]//'MeV, [q]=30,60,90,116,151^0! ('//[model]//')'
   clr
-  zone 1 1
+  zone 2 1
   set xval
   opt logy
   opt linx
@@ -145,15 +150,15 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   opt utit
   set errx 0.01
   set xlab 1.25
-  ve/cr mrk(6) R 20 24 21 25 22 26
-  ve/cr md(6) R 1 2 1 2 1 2
+  ve/cr mrk(5) R 20 24 21 25 22
+  ve/cr md(5) R 1 2 1 2 1
 *  ve/cr mas(6) R 938.272 1875.61 2809.25 3727.4 
   f1=pi+
   f2=pi-
   title ' ' u
   exec ~/PTOOL/black
   set xval
-  set yval 70
+  set yval
   xt=7
   ve/cr xm(1) R 5.
   ve/cr ym1(1) R .00000208
@@ -161,57 +166,43 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   ve/cr ym3(1) R .00000052
   ve/cr ym4(1) R .00000026
   ve/cr ym5(1) R .00000013
-  ve/cr ym6(1) R .000000065
 * --- Loop over pictures for each secondary ---
-*  do j = 1 , 4
-   j=1
-*    if [j] = 2 THEN
+  do j = 1 , 2
+    if [j] = 2 THEN
       set xval 70
-*    endif
-*    if [j] = 3 THEN
-*      set xval
-*      set yval
-*      hymin=1.001e-6
-*      hymax=.04
-*      yfnam=.02
-*    endif
-*    if [j] = 4 THEN
-*      set xval 70
-*    endif
+    endif
     null [kxmin] [kxmax] [hymin] [hymax]
-*    if [j] = 1 THEN
+    if [j] = 1 THEN
       h/symbols xm ym1 1 20 [ptsize]
       h/symbols xm ym2 1 24 [ptsize]
       h/symbols xm ym3 1 21 [ptsize]
       h/symbols xm ym4 1 25 [ptsize]
       h/symbols xm ym5 1 22 [ptsize]
-      h/symbols xm ym6 1 26 [ptsize]
       itx [xt] .00000192 30
-      itx [xt] .00000096 45
-      itx [xt] .00000048 60
-      itx [xt] .00000024 90
-      itx [xt] .00000012 116
-      itx [xt] .00000006 151
-*    endif
-*    if [j] = 4 then
+      itx [xt] .00000096 60
+      itx [xt] .00000048 90
+      itx [xt] .00000024 116
+      itx [xt] .00000012 151
+    endif
+    if [j] = 2 then
       exec ~/PTOOL/black
 *     atitle 'k = (p+T)/2 (MeV)       ^!' ' '
       atitle 'T (MeV)       ^!' ' '
-*    endif
+    endif
     title ' '
-*    itx [xfnam] [yfnam] [f[j]]
-    itx [xfnam] [yfnam] '[p]^+!'
-*    if [j] = 1 then
+    itx [xfnam] [yfnam] [f[j]]
+    if [j] = 1 then
       exec ~/PTOOL/black
       atitle ' ' 'd[s]/pdTd[W] (mb MeV^-2! sr^-1!) ^!'
       exec paramline 0.2 0.2
-*    endif
+    endif
 *    exec ~/PTOOL/snotes 144. 1.0 '1.0' 0. [lgndsz] -40
 *    exec ~/PTOOL/snotes 144. 0.1 '0.1' 0. [lgndsz] -40
 *    m = mas([j])
     m = 139.57
     exec ~/PTOOL/black
-    do i = 0 , 5
+    do i = 0 , 4
+     if [j] = 1 .OR. [i] < 3 then
       k    = [i]+1
       jk   = [j]*10+[k]
       mk=mrk([k])
@@ -219,6 +210,7 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
       a=angle([k])
       set lwid 7.
 **      fun/pl .11*EXP(-x/25) 30 250 S
+*      mess 'plotting: j='//[j]//', k='//[k]
       ve/copy $sigma(sqrt(t[j][a]*(2.*[m]+t[j][a]))) p[j][a]
       *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
       h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
@@ -227,11 +219,16 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
 *     prepare the vector corresponding to the histogram
       ve/cr v[jk]([hnbin])
       get/cont [jk] v[jk]
+     endif
     enddo
-*   pip(j=1) (angles: 1=30, 2=45, 3=60, 4=90, 5=116, 6=151)
-    ve/wri lke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5,v[j]6 p_[e]_[file]_[j]_[model].v _
-      '1X,F9.6,6E10.3' 'OC'
-*  enddo
+*   pip(j=1),pim(j=2) (angles: 1=30, 2=60, 3=90, 4=116, 5=151)
+    if [j] = 1 then
+      ve/wri lke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5 p_[e]_[file]_[j]_[model].v _
+        '1X,F9.6,5E10.3' 'OC'
+    else
+      ve/wri lke,v[j]1,v[j]2,v[j]3 p_[e]_[file]_[j]_[model].v '1X,F9.6,3E10.3' 'OC'
+    endif
+  enddo
 *
   exec ~/PTOOL/black
   set xwin
@@ -298,24 +295,25 @@ macro getdat file=c0606 e=201
 * -- in the pipro_[file]_h_e[e]_ang.vexp the pip spectra are given in:
 * --  mbarn MeV^-1 Omega^-1, function of T in MeV 
 * --- Loop over angles ---
-  ve/cr shift(6) r 5.77 5.05 4.32 2.88 1.44 0.
-  do i = 1 , 6
+  ve/cr shift(5) r 5.77 4.32 2.88 1.44 0.
+  ve/cr shifd(3) r 1.92 0.96 0.
+  do i = 1 , 5
     a  = angle([i])
-*    do j = 1 , 4
-    j=1
-    sh = shift([i])
-*      if [j] = 1 then
-        ve/re t[j][a],x[j][a],e[j][a] p[e]_c_pip_[a].dat
+    do j = 1 , 2
+      if [j] = 1 then
+        sh = shift([i])
+        ve/re t[j][a],x[j][a],e[j][a] p[e]_y_pip_[a].dat
         ve/cop $SIGMA((x[j][a]-[sh])/4780.) s[j][a]
         ve/cop $SIGMA(e[j][a]/4780.) d[j][a]
-*      elseif [j] = 2 then
-*        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_d_[a].dat
-*      elseif [j] = 3 then
-*        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_t_[a].dat
-*      elseif [j] = 4 then
-*        ve/re t[j][a],s[j][a],d[j][a] p_e[e]_[file]_he4_[a].dat
-*      endif
-*    enddo
+      elseif [j] = 2 then
+        if [i] < 4 then
+          sh = shifd([i])
+          ve/re t[j][a],x[j][a],e[j][a] p[e]_y_pim_[a].dat
+          ve/cop $SIGMA((x[j][a]-[sh])/4780.) s[j][a]
+          ve/cop $SIGMA(e[j][a]/4780.) d[j][a]
+        endif
+      endif
+    enddo
   enddo
 return
 *
@@ -361,40 +359,31 @@ macro creavec dimvex=13
  ve/cr rMed(1) r
  ve/cr solA(1) r
  * --- Loop over particles (1=p, 2=d, 3=t, 4=alpha) ---
-* do i = 1 , 4
-   i=1
-*   if [i]=1 then
-     ve/cr nptf(6) r 14 7 13 15 4 4
-*   elseif [i]=2 then
-*     ve/cr nptg(3) r 18 25 24
-*   elseif [i]=3 then
-*     ve/cr npth(3) r  9  7  7
-*   elseif [i]=4 then
-*     ve/cr npti(3) r 37 37 36
-*   endif
+ do i = 1 , 2
+   if [i]=1 then
+     ve/cr nptf(5) r 9 9 12 5 5
+   elseif [i]=2 then
+     ve/cr nptg(5) r 7 3 37 1 1
+   endif
 * --- Loop over angles (1=11, 2=30, 3=60) ---
-   do j = 1 , 6
-*     if [i]=1 then
+   do j = 1 , 5
+     if [i]=1 then
        npt=nptf([j])
-*     elseif [i]=2 then
-*       npt=nptg([j])
-*     elseif [i]=3 then
-*       npt=npth([j])
-*     elseif [i]=4 then
-*       npt=npti([j])
-*     endif
-     a  = angle([j])
-     ve/cr t[i][a]([npt]) r
-     ve/cr s[i][a]([npt]) r
-     ve/cr d[i][a]([npt]) r
-     ve/cr x[i][a]([npt]) r
-     ve/cr e[i][a]([npt]) r
+     elseif [i]=2 then
+       npt=nptg([j])
+     endif
+     if [i] = 1 .OR. [j] < 4 then
+       a  = angle([j])
+       ve/cr t[i][a]([npt]) r
+       ve/cr s[i][a]([npt]) r
+       ve/cr d[i][a]([npt]) r
+       ve/cr x[i][a]([npt]) r
+       ve/cr e[i][a]([npt]) r
+     endif
    enddo
-* enddo
+ enddo
  ve/del nptf
-* ve/del nptg
-* ve/del npth
-* ve/del npti
+ ve/del nptg
 return
 *
 macro prieps fnam=radshow fil=99

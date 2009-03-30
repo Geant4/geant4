@@ -1,6 +1,6 @@
 macro run1 f=5 n=5 z=82 que=32-rb20-hp
  nEvts = 2000 * [f]
- exec pipro ^208!Pb pb82126 82 126 201 1850 [nEvts] [n] [que] 2 13 | 1850 mb is reaction CS
+ exec pipro ^208!Pb pb82126 82 126 201 1762 [nEvts] [n] [que] 2 13 | 1762 mb is reaction CS
 return
 *
 macro pipro targ=^208!Pb file=c82126 np=82 nn=126 e=201 cs=1850 _
@@ -272,7 +272,7 @@ macro chips targ=C file=c0606 np=6 nn=6 e=201 runn=2000 next=3 dir=./
       exec writepar pf=[dir]chipstest.in
 *      shell rm chips_[file].log
       wait ' ' 2
-      shell ../test19 | > chips_[file].log
+      shell $G4WORKDIR/bin/Linux-g++/test19 | > chips_[file].log
       wait ' ' 2
 	  exec makehbk
       wait ' ' 2
