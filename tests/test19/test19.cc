@@ -45,7 +45,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
 //#define pdebug
-//#define nout
+#define nout
 //#define pscan
 //#define csdebug
 //#define smear
@@ -59,6 +59,8 @@
 //#define meandbg
 //#define ekindbg
 //#define histdbg
+//--- Random seed
+#define ranseed
 //--- Flags of models (only one must be chosen, CHIPS is the default for System Testing ---
 #define chips
 //#define lep
@@ -142,6 +144,9 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
+#include "G4RunManager.hh" 
+#include "G4UImanager.hh" 
+
 #include "Test19Physics.hh"
 #include "Test19PhysicsList.hh"
 
@@ -189,6 +194,14 @@
 //int main(int argc, char** argv)
 int main()
 {
+#ifdef ranseed
+  //G4UImanager* UI = G4UImanager::GetUIpointer();
+  //UI->ApplyCommand( "" );
+  CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
+  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
+  G4int seed = time( NULL ); 
+  CLHEP::HepRandom::setTheSeed( seed ); 
+#endif
 #ifdef meandbg
   G4double pE=0.;
   G4double sE=0.;
@@ -1260,7 +1273,7 @@ int main()
         if(prtf)
 #endif
 #ifdef chips
-        if (totCharge || totBaryN || ss>.27 || alarm || nGamma && !EGamma)// Only for CHIPS
+        if (totCharge || totBaryN || ss>.27 || alarm || (nGamma && !EGamma))// OnlyForCHIPS
         {
           G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
                 <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
