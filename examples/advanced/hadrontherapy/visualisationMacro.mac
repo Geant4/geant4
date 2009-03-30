@@ -46,13 +46,13 @@
 /run/initialize
 
 # SET OF THE VISUALISATION CHARACTERISTICS
-#/vis/scene/create
-#/vis/open OGLIX
-#/vis/viewer/flush
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
 
 /vis/viewer/set/viewpointThetaPhi 0 180 deg
-/vis/viewer/zoom 1
-/vis/viewer/pan 10  80 cm
+/vis/viewer/zoom 8
+/vis/viewer/pan -90  80 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #/vis/specify RODetectorLog 1

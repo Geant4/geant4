@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonPrecompound.cc;
+// $Id: HadrontherapyProtonNeutronBinary.cc;
 //
 // This file permits to apply, if used, the "Bnary Cascade" Hadronic Inelatic
 // model to protons and neutrons.
@@ -58,32 +58,31 @@
 HIProtonNeutronBinary::HIProtonNeutronBinary(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
-  G4cout << "THE FOLLOW INELASTIC MODEL HAS BEEN APPLIED TO PROTONS AND NEUTRONS:" 
-         << G4endl
-         << "G4BinaryCascade" 
-         << G4endl;
+	G4cout << G4endl << G4endl
+			<< "THE FOLLOW INELASTIC MODEL HAS BEEN APPLIED TO PROTONS AND NEUTRONS:" 
+			<< G4endl
+			<< "G4BinaryCascade   in the energy range 0 - 500 MeV" 
+			<< G4endl << G4endl;
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HIProtonNeutronBinary::~HIProtonNeutronBinary()
 {}
 
+/////////////////////////////////////////////////////////////////////////////
 void HIProtonNeutronBinary::ConstructProcess()
 {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
 
-
   // *********************************************
   // *** Protons, Neutrons: Common Definitions ***
   // *********************************************
-
   G4double protonNeutronBinaryMinEnergy = 0. * MeV;
-  G4double protonNeutronBinaryMaxEnergy = 100. * MeV;
+  G4double protonNeutronBinaryMaxEnergy = 500. * MeV;
 
   G4BinaryCascade* protonNeutronBinaryCascadeModel = new G4BinaryCascade();
   protonNeutronBinaryCascadeModel -> SetMinEnergy(protonNeutronBinaryMinEnergy);
   protonNeutronBinaryCascadeModel -> SetMaxEnergy(protonNeutronBinaryMaxEnergy);
-
 
   // **************
   // *** Proton ***
@@ -97,7 +96,6 @@ void HIProtonNeutronBinary::ConstructProcess()
   particle = G4Proton::Proton();
   processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(protonInelasticProcess);
-
 
   // ***************
   // *** Neutron ***

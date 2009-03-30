@@ -74,8 +74,6 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   // Messenger to change parameters of the geometry
   detectorMessenger = new HadrontherapyDetectorMessenger(this);
 
-  //material = new HadrontherapyMaterial();
-
   // Detector sizes
   detectorSizeX = 20.*mm;
   detectorSizeY = 20.*mm;
@@ -85,7 +83,8 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   numberOfVoxelsAlongX = 200;
   numberOfVoxelsAlongY = 1;
   numberOfVoxelsAlongZ = 1;
-}
+  
+ }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
@@ -117,22 +116,18 @@ G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
 { 
-	// Definition of the used materials following the NIST database
-	G4bool isotopes = false;
-	G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
-	G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
-
   G4double maxStepTreatmentRoom = 0.1 *mm;
 
   // -----------------------------
   // Treatment room - World volume
   //------------------------------
-
   // Treatment room sizes
   const G4double worldX = 400.0 *cm;
   const G4double worldY = 400.0 *cm;
   const G4double worldZ = 400.0 *cm;
-
+  G4bool isotopes = false;
+ 
+  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
   G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
                                                             airNist, 
@@ -167,7 +162,8 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
   // Patient: 
   // a water box used to approximate tissues
   //----------------------------------------
-   G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
+  G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
+  G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
   G4LogicalVolume* patientLogicalVolume = new G4LogicalVolume(patient,	
 							      waterNist, 
 							      "patientLog", 0, 0, 0);
@@ -179,23 +175,18 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
 					    false,0);
  
   // Visualisation attributes of the patient 
-  G4VisAttributes * redWire = new G4VisAttributes(G4Colour(1. ,0. ,0.));
-  redWire -> SetVisibility(true);
-  redWire -> SetForceWireframe(true);
-  patientLogicalVolume -> SetVisAttributes(redWire); 
+ 
+  //  patientLogicalVolume -> SetVisAttributes(redWire); 
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::ConstructDetector()
 {
-  G4Colour  lightBlue   (0.0, 0.0, .75);
-  G4bool isotopes = false;
+  //-----------
+  // Detector
+  //-----------
+  G4bool isotopes =  false; 
   G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
-  
-  //-----------
-  // Detector   
-  //-----------
-
   G4Box* detector = new G4Box("Detector",detectorSizeX,detectorSizeY,detectorSizeZ);
   detectorLogicalVolume = new G4LogicalVolume(detector,
 					      waterNist,
@@ -203,7 +194,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					      0,0,0);
   
   // Fixing the max step allowed in the detector
-  G4double maxStep = 0.01 *mm;
+  G4double maxStep = 0.1 *mm;
   detectorLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
   
   G4double detectorXtranslation = -180.*mm;
@@ -215,10 +206,10 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					     false,0);
   
   // Visualisation attributes of the phantom
-  G4VisAttributes* simpleBoxVisAttributes = new G4VisAttributes(lightBlue);
-  simpleBoxVisAttributes -> SetVisibility(true);
-  simpleBoxVisAttributes -> SetForceSolid(true);
-  detectorLogicalVolume -> SetVisAttributes(simpleBoxVisAttributes);
+  //    G4VisAttributes* simpleBoxVisAttributes = new G4VisAttributes(lightBlue);
+  //simpleBoxVisAttributes -> SetVisibility(true);
+  // simpleBoxVisAttributes -> SetForceSolid(true);
+  //detectorLogicalVolume -> SetVisAttributes(simpleBoxVisAttributes);
   
   // **************
   // Cut per Region
@@ -230,7 +221,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
   detectorLogicalVolume -> SetRegion(aRegion);
   aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
 {  
   // Sensitive Detector and ReadOut geometry definition
@@ -242,7 +233,6 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
     {
       // The sensitive detector is instantiated
       detectorSD = new HadrontherapyDetectorSD(sensitiveDetectorName);
-      
       // The Read Out Geometry is instantiated
       G4String ROGeometryName = "DetectorROGeometry";
       detectorROGeometry = new HadrontherapyDetectorROGeometry(ROGeometryName,
@@ -258,55 +248,50 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
       detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
     }
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 {  
   modulator -> SetModulatorAngle(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
 {
   passiveProtonBeamLine -> SetRangeShifterXPosition(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
 {
   passiveProtonBeamLine -> SetRSMaterial(materialChoice);
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetRangeShifterXSize(G4double value)
 {
   passiveProtonBeamLine -> SetRangeShifterXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetFirstScatteringFoilSize(G4double value)
 {
   passiveProtonBeamLine -> SetFirstScatteringFoilXSize(value);  
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetSecondScatteringFoilSize(G4double value)
 {
   passiveProtonBeamLine -> SetSecondScatteringFoilXSize(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetOuterRadiusStopper(G4double value)
 {
   passiveProtonBeamLine -> SetOuterRadiusStopper(value); 
   G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetInnerRadiusFinalCollimator(G4double value)
 {
  passiveProtonBeamLine -> SetInnerRadiusFinalCollimator(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
-
-
-
-
-

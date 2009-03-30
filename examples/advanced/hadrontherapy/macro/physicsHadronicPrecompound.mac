@@ -63,18 +63,17 @@
 /physics/addPhysics EM-Electron-Standard
 /physics/addPhysics EM-HadronIon-Standard
 
+# Models for Muon and Positrons 
+# are provided only from the standard package
+/physics/addPhysics EM-Muon-Standard
+/physics/addPhysics EM-Positron-Standard
 
+# Alternatively you can use the
 # Low Energy Livermore EM models
 #
 #/physics/addPhysics EM-HadronIon-LowE
 #/physics/addPhysics EM-Photon-EPDL
 #/physics/addPhysics EM-Electron-EEDL
-
-# Models for Muon and Positrons are only from the
-# standard package
-
-/physics/addPhysics EM-Muon-Standard
-/physics/addPhysics EM-Positron-Standard
 
 ###  B) HADRONIC PHYSICS
 
@@ -85,7 +84,6 @@
 # Hadronic Inelastic
 #
 /physics/addPhysics HadronicInel-ProtonNeutron-Prec
-
 
 ### Other options for Precompound model (for a description see above):
 ### Option B. /physics/addPhysics HadronicInel-ProtonNeutron-PrecGEM
@@ -106,7 +104,7 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 100000
+/run/beamOn 5000
 
 
 

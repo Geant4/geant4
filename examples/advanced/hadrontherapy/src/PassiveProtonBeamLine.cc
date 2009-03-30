@@ -51,6 +51,7 @@
 #include "G4RotationMatrix.hh"
 #include "PassiveProtonBeamLine.hh"
 #include "G4NistManager.hh"
+#include "G4NistElementBuilder.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
@@ -74,20 +75,55 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
   physiSecondHoleNozzleSupport(0),
   solidFinalCollimator(0),
   physiFinalCollimator(0)
-
 {
   // DEFAULTS used in the geometry reconstruction of the beam line
   // HERE THE USER CAN CHANGE THE GEOMETRY CHARACTERISTICS OF BEAM
   // LINE ELEMENTS, ALTERNATIVELY HE/SHE CAN USE THE MACRO FILE (IF A 
   // MESSENGER IS PROVIDED)
   //
-  // DEFAULT MATERIAL ARE ALSO PROVIDED
+  // DEFAULT MATERIAL ARE ALSO PROVIDED	
+  // COLOURS ARE ALSO DEFINED
+  // ----------------------------------------------------------
 	
+  // Set of coulors that can be used
+	white = new G4VisAttributes( G4Colour());
+	white -> SetVisibility(true);
+	white -> SetForceSolid(true);
 	
+	blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
+	blue -> SetVisibility(true);
+	blue -> SetForceSolid(true);
 	
-  // MOTHER VOLUME
+	gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
+	gray-> SetVisibility(true);
+	gray-> SetForceSolid(true);
+	
+	red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
+	red-> SetVisibility(true);
+	red-> SetForceSolid(true);
+	
+	yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
+	yellow-> SetVisibility(true);
+	yellow-> SetForceSolid(true);
+	
+	green = new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
+	green -> SetVisibility(true);
+	green -> SetForceSolid(true);
+	
+	darkGreen = new G4VisAttributes( G4Colour(0/255. , 100/255. ,  0/255. ));
+	darkGreen -> SetVisibility(true);
+	darkGreen -> SetForceSolid(true);
+		
+	darkOrange3 = new G4VisAttributes( G4Colour(205/255. , 102/255. ,  000/255. ));
+	darkOrange3 -> SetVisibility(true);
+	darkOrange3 -> SetForceSolid(true);
+	
+	skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
+	skyBlue -> SetVisibility(true);
+	skyBlue -> SetForceSolid(true);
+  
+	// MOTHER VOLUME
   mother = motherVolume;
-  //material = new HadrontherapyMaterial();  
 
   // VACUUM PIPE: first track of the beam line is inside vacuum;
   // The PIPE contains the FIRST SCATTERING FOIL and the KAPTON WINDOW
@@ -150,7 +186,7 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
 
   G4double defaultStopperYPosition = 0.*m;
   stopperYPosition = defaultStopperYPosition;
-  
+
   G4double defaultStopperZPosition = 0.*m;
   stopperZPosition = defaultStopperZPosition;
 
@@ -160,7 +196,6 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
   // SECOND SCATTERING FOIL: it is another thin foil and provides the
   // final diffusion of the beam. It represents the third element of the scattering
   // system;
-
   G4double defaultSecondScatteringFoilXSize = 0.0125 *mm;  
   secondScatteringFoilXSize = defaultSecondScatteringFoilXSize;
 
@@ -201,7 +236,6 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
 
   G4double defaultRangeShifterZPosition = 0. *mm;
   rangeShifterZPosition = defaultRangeShifterZPosition; 
-
 
   // MOPI DETECTOR: two orthogonal microstrip gas detectors developed 
   // by the INFN Section of Turin in collaboration with some 
@@ -307,14 +341,14 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
 
  G4double defaultMOPICathodeZPosition = 0.0 *mm;
  MOPICathodeZPosition = defaultMOPICathodeZPosition;
-   
+
  // Second Air gap of MOPI
  G4double defaultMOPISecondAirGapXSize = 6000 *um;
  MOPISecondAirGapXSize = defaultMOPISecondAirGapXSize;
- 
+
  G4double defaultMOPISecondAirGapYSize = 30 *cm;
  MOPISecondAirGapYSize = defaultMOPISecondAirGapYSize;
- 
+
  G4double defaultMOPISecondAirGapZSize = 30 *cm;
  MOPISecondAirGapZSize = defaultMOPISecondAirGapZSize;
 
@@ -375,16 +409,21 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  innerRadiusFinalCollimator = defaultinnerRadiusFinalCollimator;
  
  // DEFAULT DEFINITION OF THE MATERIALS
+  // All elements and compound definition follows the NIST database
  
- // Definition of the used materials following the NIST database
+ // ELEMENTS
  G4bool isotopes = false;
  G4Material* aluminumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al", isotopes);
+ G4Material* tantalumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta", isotopes); 
+ G4Material* copperNistAsMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);
+ G4Element* zincNist = G4NistManager::Instance()->FindOrBuildElement("Zn");
+ G4Element* copperNist = G4NistManager::Instance()->FindOrBuildElement("Cu");
+
+ // COMPOUND
  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
  G4Material* kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
  G4Material* galacticNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic", isotopes);
- G4Material* tantalumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta", isotopes); 
  G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
- G4Material* copperNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);
  G4Material* mylarNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_MYLAR", isotopes);
 
  G4double z; // Atomic numebr
@@ -392,31 +431,24 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  G4double d; // Density
  G4int nComponents;// Number of components 
  G4double fractionmass; // Fraction in mass of an element in a material
-	
- a = 65.38*g/mole;
- G4Element* elZn = new G4Element("Zinc","Zn",z = 30.,a);
-  
- a = 63.546*g/mole;
- d = 8.90*g/cm3;
- G4Element* elCu = new G4Element("Copper","Cu", z = 29.,a);
-	
-	
-	// BRASS
+
  d = 8.40*g/cm3;
  nComponents = 2;
- G4Material* brass = new G4Material("Brass", d, nComponents); 
- brass -> AddElement(elZn, fractionmass = 30*perCent);
- brass -> AddElement(elCu, fractionmass = 70*perCent);
+ G4Material* brass = new G4Material("Brass", d, nComponents);  
+ brass -> AddElement(zincNist, fractionmass = 30 *perCent);
+ brass -> AddElement(copperNist, fractionmass = 70 *perCent);
+
  
+ // MATERIAL ASSIGNMENT
  // Range shifter
  rangeShifterMaterial = airNist;
- 
+
  // Support of the beam line
  beamLineSupportMaterial = aluminumNist;
- 
+
  // Vacuum pipe
  vacuumZoneMaterial = galacticNist;
- 
+
  // Material of the fisrt scattering foil
  firstScatteringFoilMaterial = tantalumNist;
  
@@ -439,9 +471,9 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  
  // Materials of the monitor chamber
  layer1MonitorChamberMaterial = kaptonNist;
- layer2MonitorChamberMaterial = copperNist;
+ layer2MonitorChamberMaterial = copperNistAsMaterial;
  layer3MonitorChamberMaterial = airNist;
- layer4MonitorChamberMaterial = copperNist;
+ layer4MonitorChamberMaterial = copperNistAsMaterial;
  
  // Mother volume of the MOPI detector
  MOPIMotherVolumeMaterial = airNist;
@@ -457,7 +489,7 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  nozzleSupportMaterial = PMMANist;
  holeNozzleSupportMaterial = brass;
  seconHoleNozzleSupportMaterial = airNist;
- 
+
  // Material of the final collimator
  finalCollimatorMaterial = brass;
 }
@@ -497,18 +529,15 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 					   mother, false, 0);
  
   // Visualisation attributes of the beam line support
-  G4VisAttributes* gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
-  gray-> SetVisibility(true);
-  gray-> SetForceSolid(true);
+
   logicBeamLineSupport -> SetVisAttributes(gray);
 
   //---------------------------------//
   //  Beam line cover 1 (left panel) //
   //---------------------------------//
-
   const G4double beamLineCoverXSize = 1.5*m;
   const G4double beamLineCoverYSize = 750.*mm;
-  const G4double beamLineCoverZSize = 10.*mm;                               
+  const G4double beamLineCoverZSize = 10.*mm; 
 
   const G4double beamLineCoverXPosition = -1745.09 *mm;
   const G4double beamLineCoverYPosition = -980.*mm; 
@@ -535,7 +564,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
   // ---------------------------------//
   //  Beam line cover 2 (rigth panel) //
   // ---------------------------------//
-
   // It has the same characteristic of beam line cover 1 but set in a different position
   physiBeamLineCover2 = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
 							   beamLineCoverYPosition,
@@ -546,10 +574,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 					  false, 
 					  0);
 
-  // Visualisation attributes of the beam line covers
-  G4VisAttributes* blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
-  blue -> SetVisibility(true);
-  blue -> SetForceSolid(true);
+
   logicBeamLineCover -> SetVisAttributes(blue);
 }
 
@@ -566,7 +591,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   G4LogicalVolume* logicVacuumZone = new G4LogicalVolume(vacuumZone, vacuumZoneMaterial, "VacuumZone");
   G4VPhysicalVolume* physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(vacuumZoneXPosition, 0., 0.),
 				      "VacuumZone", logicVacuumZone, mother, false, 0);
-
   // --------------------------//
   // THE FIRST SCATTERING FOIL //
   // --------------------------//
@@ -584,18 +608,12 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   physiFirstScatteringFoil = new G4PVPlacement(0, G4ThreeVector(firstScatteringFoilXPosition, 0.,0.),
 					       "FirstScatteringFoil", logicFirstScatteringFoil, physiVacuumZone, 
 					       false, 0); 
-
-  G4VisAttributes * blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
-  blue -> SetVisibility(true);
-  blue -> SetForceSolid(true);
-  logicFirstScatteringFoil -> SetVisAttributes(blue);
-
+  
+  logicFirstScatteringFoil -> SetVisAttributes(skyBlue);
   // -------------------//
   // THE KAPTON WINDOWS //
   //--------------------//
   //It prmits the passage of the beam from vacuum to air
-  
-  
   G4Box* solidKaptonWindow = new G4Box("KaptonWindow", 
 				       kaptonWindowXSize,
 				       kaptonWindowYSize,
@@ -609,11 +627,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 					"KaptonWindow", logicKaptonWindow,
 					physiVacuumZone, false,	0); 
 
-  G4VisAttributes * white = new G4VisAttributes( G4Colour());
-  white -> SetVisibility(true);
-  white -> SetForceSolid(true);
-  logicKaptonWindow -> SetVisAttributes(white);
-  
+    logicKaptonWindow -> SetVisAttributes(darkOrange3);
+
   // ------------//
   // THE STOPPER //
   //-------------//
@@ -634,10 +649,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 								   stopperYPosition, 
 								   stopperZPosition)),
 				   "Stopper", logicStopper, mother, false, 0);
-
-  G4VisAttributes * red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
-  red-> SetVisibility(true);
-  red-> SetForceSolid(true);
+ 
   logicStopper -> SetVisAttributes(red);
 
   // ---------------------------//
@@ -662,10 +674,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 						"SeconScatteringFoil", logicSecondScatteringFoil, 
 						mother, false, 0);
   
-  logicSecondScatteringFoil -> SetVisAttributes(blue);
+  logicSecondScatteringFoil -> SetVisAttributes(skyBlue);
 }
-
-
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyRangeShifter()
 {
@@ -690,12 +700,9 @@ void PassiveProtonBeamLine::HadrontherapyRangeShifter()
 					   false,
 					   0);                        
 
-  G4VisAttributes * yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
-  yellow-> SetVisibility(true);
-  yellow-> SetForceSolid(true);
+ 
   logicRangeShifterBox -> SetVisAttributes(yellow);
  }
-
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 {
@@ -703,7 +710,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // FIRST COLLIMATOR //
   // -----------------//
   // It is a slab of PMMA with an hole in its center
-
   const G4double firstCollimatorXSize = 20.*mm;
   const G4double firstCollimatorYSize = 100.*mm;
   const G4double firstCollimatorZSize = 100.*mm;
@@ -716,7 +722,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 					  firstCollimatorXSize, 
 					  firstCollimatorYSize, 
 					  firstCollimatorZSize);
-
 
   G4LogicalVolume* logicFirstCollimator = new G4LogicalVolume(solidFirstCollimator, 
 							      firstCollimatorMaterial, 
@@ -733,13 +738,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // ----------------------------//
   // Hole of the first collimator//
   //-----------------------------//
-
   G4double innerRadiusHoleFirstCollimator   = 0.*mm;
   G4double outerRadiusHoleFirstCollimator   = 15.*mm;
   G4double hightHoleFirstCollimator         = 20.*mm;
   G4double startAngleHoleFirstCollimator    = 0.*deg;
   G4double spanningAngleHoleFirstCollimator = 360.*deg;
-
 
   G4Tubs* solidHoleFirstCollimator = new G4Tubs("HoleFirstCollimator", 
 						innerRadiusHoleFirstCollimator, 
@@ -754,7 +757,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 								  0, 0, 0);
   G4double phi = 90. *deg;     
   // Matrix definition for a 90 deg rotation. Also used for other volumes       
-  G4RotationMatrix rm;               
+  G4RotationMatrix rm;     
   rm.rotateY(phi);
 
   physiHoleFirstCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
@@ -767,7 +770,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // SECOND COLLIMATOR //
   //-------------------//
   // It is a slab of PMMA with an hole in its center
-
   const G4double secondCollimatorXPosition = -1608.00*mm;
   const G4double secondCollimatorYPosition =  0*mm;
   const G4double secondCollimatorZPosition =  0*mm;
@@ -784,14 +786,13 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // ------------------------------//
   // Hole of the second collimator //
   // ------------------------------//
-
    physiHoleSecondCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
 						"HoleSecondCollimator",
 						logicHoleFirstCollimator, 
 						physiSecondCollimator, 
 						false, 
 						0); 
-   
+
    // --------------------------------------//
    // FIRST SIDE OF THE MODULATOR BOX      //
    // --------------------------------------//
@@ -800,7 +801,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
    // In this example only the entrance and exit
    // faces of the box are simulated. 
    // Each face is an aluminum slab with an hole in its center 
-   
+
    const G4double firstCollimatorModulatorXSize = 10.*mm;
    const G4double firstCollimatorModulatorYSize = 200.*mm;
    const G4double firstCollimatorModulatorZSize = 200.*mm;
@@ -851,8 +852,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 							   logicHoleFirstCollimatorModulatorBox,
 							   physiFirstCollimatorModulatorBox, false, 0); 
   
-
-
   // --------------------------------------------------//
   //       SECOND SIDE OF THE MODULATOR BOX            //
   // --------------------------------------------------//
@@ -864,7 +863,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   
   const G4double secondCollimatorModulatorYPosition = 0.*mm;
   const G4double secondCollimatorModulatorZPosition = 0.*mm;
-  
  
   G4Box* solidSecondCollimatorModulatorBox = new G4Box("SecondCollimatorModulatorBox", 
 						       secondCollimatorModulatorXSize,
@@ -881,12 +879,10 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 							"SecondCollimatorModulatorBox",
 							logicSecondCollimatorModulatorBox,
 							mother, false, 0);
-  
-  
+
   // ----------------------------------------------// 
   //   Hole of the second collimator modulator box //
   // ----------------------------------------------//
-
   const G4double innerRadiusHoleSecondCollimatorModulatorBox = 0.*mm;
   const G4double outerRadiusHoleSecondCollimatorModulatorBox = 31.*mm;
   const G4double hightHoleSecondCollimatorModulatorBox = 10.*mm;
@@ -909,14 +905,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 							    "HoleSecondCollimatorModulatorBox",
 							    logicHoleSecondCollimatorModulatorBox,
 							    physiSecondCollimatorModulatorBox, false, 0); 
-
-  G4VisAttributes * blue = new G4VisAttributes( G4Colour(0. ,0. ,1.));
-  blue -> SetVisibility(true);
-  blue -> SetForceSolid(true);
-
-  G4VisAttributes * yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
-  yellow-> SetVisibility(true);
-  yellow-> SetForceSolid(true);
   
   logicFirstCollimator -> SetVisAttributes(yellow);
   logicFirstCollimatorModulatorBox -> SetVisAttributes(blue);
@@ -941,7 +929,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
   const G4double monitor3XSize = 4.5*mm;
   const G4double monitorYSize = 10.*cm; 
   const G4double monitorZSize = 10.*cm;
-    
   const G4double monitor1XPosition = -1262.47498 *mm;
   const G4double monitor2XPosition = -4.500011*mm;
   const G4double monitor4XPosition = 4.500011*mm;
@@ -1012,7 +999,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
   // ----------------------------//
   // THE SECOND MONITOR CHAMBER  //
   // ----------------------------//
-  
   physiSecondMonitorLayer1 = new G4PVPlacement(0, G4ThreeVector(-1131.42493 *mm,0.*cm,0.*cm),
 					       "SecondMonitorLayer1", logicFirstMonitorLayer1,mother, false, 0);
 
@@ -1024,8 +1010,10 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
    
   physiSecondMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), "SecondMonitorLayer4",
 					       logicFirstMonitorLayer4, physiSecondMonitorLayer1, false, 0);
+  
+  logicFirstMonitorLayer3 -> SetVisAttributes(white);
+ 
 }
-
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 {
@@ -1047,21 +1035,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
   // 5  Second anode: 15 mu Al + 35 mu kapton
   // Color used in the graphical output
 
-  G4VisAttributes * yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
-  yellow-> SetVisibility(true);
-  yellow-> SetForceSolid(false);
-
-  G4VisAttributes* blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
-  blue -> SetVisibility(true);
-  blue -> SetForceSolid(true);
-
-  G4VisAttributes * red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
-  red-> SetVisibility(true);
-  red-> SetForceSolid(true);
-  
-  G4VisAttributes * green= new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
-  green -> SetVisibility(true);
-  green -> SetForceSolid(true);
 
   // Mother volume
   solidMOPIMotherVolume = new G4Box("MOPIMotherVolume",
@@ -1081,7 +1054,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 					    mother,
 					    false,
 					    0);
-  logicMOPIMotherVolume -> SetVisAttributes(blue);
 
   // First Kapton layer
   solidMOPIFirstKaptonLayer = new G4Box("MOPIFirstKaptonLayer",
@@ -1103,8 +1075,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 						false,
 						0); 
   
-  logicMOPIFirstKaptonLayer -> SetVisAttributes(green);
-  
   // First Aluminum layer
     solidMOPIFirstAluminumLayer = new G4Box("MOPIFirstAluminumLayer",
 					  MOPIFirstAluminumLayerXSize/2, 
@@ -1122,8 +1092,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 						  "MOPIFirstAluminumLayer",
 						  logicMOPIFirstAluminumLayer, physiMOPIMotherVolume, false, 0); 
  
-  logicMOPIFirstAluminumLayer -> SetVisAttributes(red);
-
   // First Air GAP
   solidMOPIFirstAirGap = new G4Box("MOPIFirstAirGap",
 				   MOPIFirstAirGapXSize/2, 
@@ -1140,8 +1108,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 							 MOPIFirstAirGapZPosition),
 					   "MOPIFirstAirGap",
 					   logicMOPIFirstAirGap, physiMOPIMotherVolume, false, 0); 
-  
-  logicMOPIFirstAirGap -> SetVisAttributes(blue);
   
   
   // The Cathode 
@@ -1162,8 +1128,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 				       logicMOPICathode, 
 				       physiMOPIMotherVolume, false, 0); 
   
-  logicMOPICathode -> SetVisAttributes(red);
-  
   // Second Air GAP
   solidMOPISecondAirGap = new G4Box("MOPISecondAirGap",
 				    MOPISecondAirGapXSize/2, 
@@ -1180,8 +1144,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 							  MOPISecondAirGapZPosition),
 					    "MOPISecondAirGap",
 					    logicMOPISecondAirGap, physiMOPIMotherVolume, false, 0); 
-  
-  logicMOPISecondAirGap -> SetVisAttributes(blue);
   
   // Second Aluminum layer
     solidMOPISecondAluminumLayer = new G4Box("MOPISecondAluminumLayer",
@@ -1203,8 +1165,6 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 						   false, 
 						   0); 
   
-  logicMOPISecondAluminumLayer -> SetVisAttributes(red);
-  
   // Second Kapton layer
   solidMOPISecondKaptonLayer = new G4Box("MOPISecondKaptonLayer",
 					 MOPISecondKaptonLayerXSize/2, 
@@ -1225,9 +1185,10 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 						 false,
 						 0); 
   
-  logicMOPISecondKaptonLayer -> SetVisAttributes(green);
+  logicMOPIFirstAirGap -> SetVisAttributes(darkGreen);
+  logicMOPISecondAirGap -> SetVisAttributes(darkGreen);
+  
 }
-
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 {
@@ -1242,7 +1203,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
   // -------------------//
   //     PMMA SUPPORT   //
   // -------------------//
-
   const G4double nozzleSupportXSize = 29.5 *mm;
   const G4double nozzleSupportYSize = 180. *mm;
   const G4double nozzleSupportZSize = 180. *mm;
@@ -1269,6 +1229,9 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 					 mother, 
 					 false, 
 					 0);
+
+  logicNozzleSupport -> SetVisAttributes(yellow);
+
   // -------------------//
   //     BRASS TUBE     //
   // -------------------//
@@ -1296,10 +1259,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 									      0., 0.)),
 					     "HoleNozzleSupport", logicHoleNozzleSupport, mother, false, 0); 
 
+  logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
+  
   //------------------------------------//
   // HOLE OF THE BRASS TUBE             //
   //------------------------------------//
-
   const G4double innerRadiusSecondHoleNozzleSupport = 0.*mm;
   const G4double outerRadiusSecondHoleNozzleSupport = 18.*mm;
   const G4double hightSecondHoleNozzleSupport = 29.5 *mm;
@@ -1327,10 +1291,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 						   false, 0); 
 
 
-  G4VisAttributes * yellow = new G4VisAttributes( G4Colour(1., 1., 0. ));
-  yellow-> SetVisibility(true);
-  yellow-> SetForceSolid(true);
-  logicHoleNozzleSupport -> SetVisAttributes(yellow); 
+  logicHoleNozzleSupport -> SetVisAttributes(darkOrange3); 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1344,11 +1305,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
   const G4double startAngleFinalCollimator = 0.*deg;
   const G4double spanningAngleFinalCollimator = 360.*deg;
   const G4double finalCollimatorXPosition = -83.5 *mm;  
-  
+
   G4double phi = 90. *deg;     
 
   // Matrix definition for a 90 deg rotation. Also used for other volumes       
-  G4RotationMatrix rm;               
+  G4RotationMatrix rm;
   rm.rotateY(phi);
 
   solidFinalCollimator = new G4Tubs("FinalCollimator", 
@@ -1368,10 +1329,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
   physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(finalCollimatorXPosition,0.,0.)),
 					   "FinalCollimator", logicFinalCollimator, mother, false, 0); 
 
-  G4VisAttributes * yellow2 = new G4VisAttributes( G4Colour(1., 1., 1. ));
-  yellow2-> SetVisibility(true);
-  yellow2-> SetForceSolid(true);
-  logicFinalCollimator -> SetVisAttributes(yellow2); 
+  logicFinalCollimator -> SetVisAttributes(yellow); 
 }
 
 /////////////////////////////////////////////////////////////////////////////

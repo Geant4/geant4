@@ -9,13 +9,18 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
                           Geant4 - Hadrontherapy
          ====================================================
 
-
-
                       Category History file
+
+29.03.2009  G.A.P.Cirrone; Tag: hadrontehrapy-V09-02-06
+	   - Extended limits of Binary Cascade in HIProtonNeutronBinary.cc
+	   - Corrected and improved "default" macro file.
+	   - Improved HadrontherapyDetectorConstruction.cc file;
+           - Comments on HIProtonneutronPrecompound.cc file;
+           - Improved physicsHadronicPrecompound.mac file;
 
 18.03.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-05
            - Corrected macro file for the use of the QGSP_BIC package
-           
+
 18.03.2009: G.A.P.Cirrone; Tag: hadrontherapy-V09-02-04
 	   - Added commands to Detector Messenger to give the possibility to choose beetween
 	     different beam lines

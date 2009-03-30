@@ -4,11 +4,10 @@
 # ============= 
 #
 #  Geant4 Physics List: 
-#  
+#
 #   - QGSP_BIC 3.3
 #
 ##############################################################################
-
 
 ####################
 # VERBOSITY LEVELS #
@@ -19,13 +18,11 @@
 /run/verbose 0
 /event/verbose 0
 
-
 ###########
 # PHYSICS #
 ###########
 
 /physics/addPackage QGSP_BIC
-
 
 ##############################
 # BEAM LINE SETTINGS AND RUN #
@@ -40,7 +37,4 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 1000
-
-
-
+/run/beamOn 1

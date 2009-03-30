@@ -28,19 +28,25 @@
 /run/verbose 0
 /event/verbose 0
 
-# SETTING FOR THE PHYSICS MODELS
-/physics/addPhysics Decay
+# ****** SETTING FOR THE PHYSICS MODELS *******
+
+# ELECTROMAGNETIC MODELS
 /physics/addPhysics EM-Photon-Standard
 /physics/addPhysics EM-Electron-Standard
 /physics/addPhysics EM-Positron-Standard
 /physics/addPhysics EM-HadronIon-Standard
 /physics/addPhysics EM-Muon-Standard
 
+# HADRONIC ELASTIC MODELS
 /physics/addPhysics HadronicEl-HadronIon-LElastic
-/physics/addPhysics HadronicInel-ProtonNeutron-LEP
-/physics/addPhysics HadronicInel-Ion-LEP
+
+# HADRONIC INELASTIC MODELS
+/physics/addPhysics HadronicInel-ProtonNeutron-Binary
 /physics/addPhysics HadronicInel-Pion-LEP
 /physics/addPhysics HadronicAtRest-MuonMinus-Capture
+
+# DECAY MODELS
+/physics/addPhysics Decay
 
 /run/initialize
 
@@ -49,13 +55,7 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 #/tracking/verbose 1
-# SET OF THE VISUALISATION CHARACTERISTICS
-/vis/scene/create
-/vis/open OGLIX
-/vis/viewer/flush
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
-/vis/viewer/update
+
 /run/beamOn 50
 
 

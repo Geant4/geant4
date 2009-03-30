@@ -43,7 +43,7 @@
 #define PassiveProtonBeamLine_H 1
 
 class G4VPhysicalVolume;
-class HadrontherapyMaterial;
+//class HadrontherapyMaterial;
 
 class PassiveProtonBeamLine 
 {
@@ -153,7 +153,7 @@ private:
   G4double rangeShifterZPosition;
 
 
-G4VPhysicalVolume* physiBeamLineSupport; 
+  G4VPhysicalVolume* physiBeamLineSupport; 
   G4VPhysicalVolume* physiBeamLineCover; 
   G4VPhysicalVolume* physiBeamLineCover2;
   G4Box* firstScatteringFoil;
@@ -171,7 +171,7 @@ G4VPhysicalVolume* physiBeamLineSupport;
   G4VPhysicalVolume* physiSecondCollimator;
   G4VPhysicalVolume* physiHoleSecondCollimator; 
 
- G4VPhysicalVolume* physiFirstCollimatorModulatorBox;
+  G4VPhysicalVolume* physiFirstCollimatorModulatorBox;
   G4VPhysicalVolume* physiHoleFirstCollimatorModulatorBox; 
  
   G4VPhysicalVolume* physiSecondCollimatorModulatorBox;
@@ -234,6 +234,7 @@ G4VPhysicalVolume* physiBeamLineSupport;
   G4LogicalVolume* logicMOPICathode;
   G4VPhysicalVolume* physiMOPICathode;
 
+  G4VisAttributes* redWire;
 
   // First Air Gap
   G4double MOPISecondAirGapXSize;
@@ -285,7 +286,16 @@ G4VPhysicalVolume* physiBeamLineSupport;
   G4Tubs* solidFinalCollimator; 
   G4VPhysicalVolume* physiFinalCollimator; 
   
-  HadrontherapyMaterial* material;
+  G4VisAttributes* blue;
+  G4VisAttributes* gray;
+  G4VisAttributes* white;
+  G4VisAttributes* red;
+  G4VisAttributes* yellow;
+  G4VisAttributes* green;
+  G4VisAttributes* darkGreen;
+  G4VisAttributes* darkOrange3;
+  G4VisAttributes* skyBlue;
+  
   G4Material* rangeShifterMaterial;
   G4Material* beamLineSupportMaterial;
   G4Material* vacuumZoneMaterial;

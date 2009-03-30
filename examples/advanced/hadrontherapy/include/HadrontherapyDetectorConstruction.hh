@@ -68,6 +68,9 @@ private:
  
   void ConstructSensitiveDetector();
 
+ 
+  //  G4VisAttributes* redWire;
+  
 public: 
 
   void SetModulatorAngle(G4double angle);
@@ -105,7 +108,10 @@ public:
   // Returns the size of the voxel along the X axis
  
 private:
-
+  //G4VisAttributes* skyBlue;
+  //G4Material* treatmentRoomMaterial;
+  //G4Material* patientMaterial;
+  //G4Material* detectorMaterial;
   G4String emName;
   HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
 

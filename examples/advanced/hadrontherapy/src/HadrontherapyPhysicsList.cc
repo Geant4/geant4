@@ -105,9 +105,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
   // A default cut is applied to all volumes
   // Moreover, in the HadrontherapyDetectorConstruction.cc a 
   // spevific cut can be applied to the region where energy is collected
-  defaultCutValue = 0.1 * mm;
-
-
+  defaultCutValue = 0.01 * mm;
 
   // Messenger: it is possible to activate physics processes and models interactively 
   messenger = new HadrontherapyPhysicsListMessenger(this);
@@ -817,7 +815,7 @@ void HadrontherapyPhysicsList::SetCuts()
   G4String regionName = "DetectorLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
   G4ProductionCuts* cuts = new G4ProductionCuts ;
-  G4double regionCut = 0.1*mm;
+  G4double regionCut = 0.01*mm;
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
   cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));

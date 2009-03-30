@@ -25,7 +25,7 @@
 //
 // $Id: HadrontherapyProtonPrecompound.cc;
 //
-// This file permits to apply, if used, the "Precompound" Hadronic Inelatic
+// This file apply the "Precompound" Hadronic Inelatic
 // model to protons and neutrons.
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -55,6 +55,7 @@
 #include "G4LCapture.hh"
 #include "G4ExcitationHandler.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HIProtonNeutronPrecompound::HIProtonNeutronPrecompound(const G4String& name): 
   G4VPhysicsConstructor(name)
 {
@@ -64,15 +65,14 @@ HIProtonNeutronPrecompound::HIProtonNeutronPrecompound(const G4String& name):
 			<< "G4PreCompound" 
 			<< G4endl << G4endl;
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HIProtonNeutronPrecompound::~HIProtonNeutronPrecompound()
 {}
-
+/////////////////////////////////////////////////////////////////////////////
 void HIProtonNeutronPrecompound::ConstructProcess()
 {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* processManager = 0;
-
 
   // *********************************************
   // *** Protons, Neutrons: Common Definitions ***
@@ -80,6 +80,8 @@ void HIProtonNeutronPrecompound::ConstructProcess()
 
   G4ExcitationHandler* excitationHandler  = new G4ExcitationHandler();
 
+  // Precompound model should not be used for energies higer that this limit.
+  // For higer values you can use the Binary Cascade implemented in the HIProtonNeutronBinary.cc
   G4double protonNeutronPrecompoundMinEnergy = 0. * MeV;
   G4double protonNeutronPrecompoundMaxEnergy = 100. * MeV;
 
@@ -99,7 +101,6 @@ void HIProtonNeutronPrecompound::ConstructProcess()
   particle = G4Proton::Proton();
   processManager = particle -> GetProcessManager();
   processManager -> AddDiscreteProcess(protonInelasticProcess);
-
 
   // ***************
   // *** Neutron ***
@@ -131,6 +132,3 @@ void HIProtonNeutronPrecompound::ConstructProcess()
   processManager -> AddDiscreteProcess(neutronCaptureProcess); 
   processManager -> AddDiscreteProcess(neutronFissionProcess);   
 }
-
-
-
