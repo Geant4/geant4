@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2009-03-25 13:18:02 pandola Exp $
+// $Id: PhysicsList.cc,v 1.3 2009-03-30 15:53:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLivermorePhysics.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4ProcessManager.hh"
@@ -140,23 +141,29 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
     
-  } else if (name == "livermore") {
+  } else if (name == "livermore_old") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore(name);
 
-  } else if (name == "penelope") {
+  } else if (name == "penelope_old") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = //new G4EmPenelopePhysics();
       new PhysListEmPenelope(name);
-  }
-  else if (name == "G4penelope"){
+
+  } else if (name == "empenelope"){
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "emlivermore"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
