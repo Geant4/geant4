@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.23 2009-03-27 09:46:45 gcosmo Exp $
+// $Id: G4Sphere.hh,v 1.24 2009-03-31 07:51:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -229,7 +229,7 @@ class G4Sphere : public G4CSGSolid
       //
       // Cached trigonometric values for Theta angle
 
-    G4bool fPhiFullSphere, fThetaFullSphere, fFullSphere;
+    G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
       //
       // Flags for identification of section, shell or full sphere
 };
