@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFCProtonBuilder.hh,v 1.3 2009-03-31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFCProtonBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4FTFCProtonBuilder_h
 #define G4FTFCProtonBuilder_h 
 
@@ -34,15 +48,12 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4StringChipsParticleLevelInterface.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-
-#include "G4ProtonInelasticCrossSection.hh"
 
 class G4FTFCProtonBuilder : public G4VProtonBuilder
 {
@@ -57,7 +68,7 @@ class G4FTFCProtonBuilder : public G4VProtonBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
+
     G4TheoFSGenerator * theModel;
     G4QuasiElasticChannel * theQuasiElastic;
 
