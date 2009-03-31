@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2009-03-24 13:50:07 lgarnier Exp $
+$Id: History,v 1.132 2009-03-31 17:27:10 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenGL
 -------------------------------------
 
-24th March 2009, Laurent Garnier
+24th March 2009, Laurent Garnier (opengl-V09-02-01)
  - G4OpenGLViewer : Add a fix and resizing when X/Y size was even (lack of precision
    in a /2)
 
