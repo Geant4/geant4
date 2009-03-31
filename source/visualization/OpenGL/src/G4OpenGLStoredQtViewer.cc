@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.23 2009-01-19 16:26:40 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.24 2009-03-31 17:14:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -266,12 +266,12 @@ void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event)
  * This function was build in order to make a zoom on double clic event.
  * It was think to build a rubberband on the zoom area, but never work fine
  */
-void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *event)
+void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *)
 {
   G4MouseDoubleClickEvent();
 }
 
-void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
+void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *)
 {
   G4MouseReleaseEvent();
 }

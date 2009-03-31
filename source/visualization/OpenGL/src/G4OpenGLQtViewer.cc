@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.38 2009-03-05 16:36:13 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.39 2009-03-31 17:14:42 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1634,8 +1634,8 @@ void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
     @param aHeight : new height
 */
 void G4OpenGLQtViewer::rescaleImage(
- int aWidth
-,int aHeight
+ int /* aWidth */
+,int /* aHeight */
 ){
   //  GLfloat* feedback_buffer;
   //  GLint returned;
