@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.25 2009-02-19 19:17:50 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.26 2009-03-31 13:24:40 toshito Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -189,16 +189,18 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
   G4double fac = Factor(material, Z);
 
   // heavy ion correction
-  G4double f1 = 1.065e-4*chargeSquare;
-  if(beta2 > theBohrBeta2)  f1/= beta2;
-  else                      f1/= theBohrBeta2;
-  if(f1 > 2.5) f1 = 2.5;
-  fac *= (1.0 + f1);
+//  G4double f1 = 1.065e-4*chargeSquare;
+//  if(beta2 > theBohrBeta2)  f1/= beta2;
+//  else                      f1/= theBohrBeta2;
+//  if(f1 > 2.5) f1 = 2.5;
+//  fac *= (1.0 + f1);
 
   // taking into account the cut
-  if(fac > 1.0) {
-    siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
+  G4double fac_cut = 1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2));
+  if(fac_cut > 0.01 && fac > 0.01) {
+    siga *= fac_cut;
   }
+
   //G4cout << "siga(keV)= " << sqrt(siga)/keV << " fac= " << fac 
   //	 << "  f1= " << f1 << G4endl;
 
