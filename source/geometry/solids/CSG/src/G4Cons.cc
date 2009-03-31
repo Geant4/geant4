@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.60 2008-11-06 15:26:53 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.61 2009-03-31 09:56:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,11 +80,11 @@ G4Cons::G4Cons( const G4String& pName,
                       G4double pSPhi, G4double pDPhi)
   : G4CSGSolid(pName)
 {
-  // Check z-len
-
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
+  // Check z-len
+  //
   if ( pDz > 0 )
   {
     fDz = pDz;
@@ -99,7 +99,7 @@ G4Cons::G4Cons( const G4String& pName,
   }
 
   // Check radii
-
+  //
   if ( (pRmin1<pRmax1) && (pRmin2<pRmax2) && (pRmin1>=0) && (pRmin2>=0) )
   {
 
@@ -120,44 +120,9 @@ G4Cons::G4Cons( const G4String& pName,
                 FatalException, "Invalid radii.") ;
   }
 
-  fPhiFullCone = true;
-  if ( pDPhi >= twopi-kAngTolerance*0.5 ) // Check angles
-  {
-    fDPhi=twopi;
-    fSPhi=0;
-  }
-  else
-  {
-    fPhiFullCone = false;
-    if ( pDPhi > 0 )
-    {
-      fDPhi = pDPhi;
-    }
-    else
-    {
-      G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
-      G4Exception("G4Cons::G4Cons()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
-    }
-
-    // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
-
-    if ( pSPhi < 0 )
-    {
-      fSPhi = twopi - std::fmod(std::fabs(pSPhi),twopi);
-    }
-    else
-    {
-      fSPhi = std::fmod(pSPhi,twopi) ;
-    }
-    if ( fSPhi+fDPhi > twopi )
-    {
-      fSPhi -= twopi ;
-    }
-  }
-  InitializeTrigonometry();
+  // Check angles
+  //
+  CheckPhiAngles(pSPhi, pDPhi);
 }
 
 ///////////////////////////////////////////////////////////////////////
