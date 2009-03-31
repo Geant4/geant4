@@ -40,7 +40,7 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   kxmin =  0.
   kxmax =  63.
   hymin =  2.e-8
-  hymax =  2.e-5
+  hymax =  5.e-5
   yfnam =  .2
   hzero =  0.1e-12
   xfnam =  24.
@@ -124,10 +124,10 @@ macro pipro targ=^12!C file=c0606 np=6 nn=6 e=201 cs=208 _
   set ywin 0.0001
 *
 *  model=lowen
-*  model=chips
+  model=chips
 *  model=preco
 *  model=berti
-  model=binar
+*  model=binar
 *  model=lepro
 *
   title [targ]//'(p,[p]^+!)X, E='//[E]//'MeV, [q]=30,45,60,90,116,151^0! ('//[model]//')'
