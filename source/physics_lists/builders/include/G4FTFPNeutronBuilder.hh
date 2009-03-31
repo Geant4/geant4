@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFPNeutronBuilder.hh,v 1.3 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFPNeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4FTFPNeutronBuilder_h
 #define G4FTFPNeutronBuilder_h 1
 
@@ -34,7 +48,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -66,7 +79,6 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4NeutronInelasticCrossSection theXSec;
     G4double theMin;
 
 };

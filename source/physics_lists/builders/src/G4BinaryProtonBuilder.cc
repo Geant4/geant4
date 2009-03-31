@@ -23,10 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BinaryProtonBuilder.cc,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BinaryProtonBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4BinaryProtonBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProtonInelasticCrossSection.hh"
 
 G4BinaryProtonBuilder::
 G4BinaryProtonBuilder() 
@@ -39,7 +54,7 @@ G4BinaryProtonBuilder()
 void G4BinaryProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4ProtonInelasticCrossSection);  
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);

@@ -23,14 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4BertiniPiKBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: G4BertiniPiKBuilder.cc,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BertiniPiKBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
+#include "G4BertiniPiKBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4BertiniPiKBuilder::
- G4BertiniPiKBuilder() 
+G4BertiniPiKBuilder::
+G4BertiniPiKBuilder() 
  {
+   thePiData = new G4PiNuclearCrossSection;
    theMin = 0*GeV;
    theMax = 9.9*GeV;
    theModel = new G4CascadeInterface;
@@ -38,58 +53,58 @@
    theModel->SetMaxEnergy(theMax); 
  }
 
- G4BertiniPiKBuilder::
- ~G4BertiniPiKBuilder() 
+G4BertiniPiKBuilder::~G4BertiniPiKBuilder() 
 {
   delete theModel;
 }
 
- void G4BertiniPiKBuilder::
- Build(G4PionPlusInelasticProcess * aP)
+void G4BertiniPiKBuilder::
+Build(G4PionPlusInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(thePiData);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
+
+void G4BertiniPiKBuilder::
+Build(G4PionMinusInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   aP->AddDataSet(thePiData);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
+
+void G4BertiniPiKBuilder::
+Build(G4HadronElasticProcess * ) {}
+
+void G4BertiniPiKBuilder::
+Build(G4KaonPlusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4BertiniPiKBuilder::
- Build(G4PionMinusInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&thePiData);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
- }
-
- void G4BertiniPiKBuilder::
- Build(G4HadronElasticProcess * ) {}
-
- void G4BertiniPiKBuilder::
- Build(G4KaonPlusInelasticProcess * aP)
+void G4BertiniPiKBuilder::
+Build(G4KaonMinusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4BertiniPiKBuilder::
- Build(G4KaonMinusInelasticProcess * aP)
+void G4BertiniPiKBuilder::
+Build(G4KaonZeroLInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4BertiniPiKBuilder::
- Build(G4KaonZeroLInelasticProcess * aP)
- {
-   aP->RegisterMe(theModel);
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(theMax);
- }
-
- void G4BertiniPiKBuilder::
- Build(G4KaonZeroSInelasticProcess * aP)
+void G4BertiniPiKBuilder::
+Build(G4KaonZeroSInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);

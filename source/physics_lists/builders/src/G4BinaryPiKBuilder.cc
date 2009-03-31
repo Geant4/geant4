@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BinaryPiKBuilder.cc,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BinaryPiKBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4BinaryPiKBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -31,6 +45,7 @@
 G4BinaryPiKBuilder::
 G4BinaryPiKBuilder() 
 {
+  thePiData = new G4PiNuclearCrossSection;
   theMin = 0*GeV;
   theMax = 1.3*GeV;
   theModel = new G4BinaryCascade;
@@ -53,7 +68,7 @@ Build(G4PionPlusInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&thePiData);
+  aP->AddDataSet(thePiData);
 }
 
 void G4BinaryPiKBuilder::
@@ -62,7 +77,7 @@ Build(G4PionMinusInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&thePiData);
+  aP->AddDataSet(thePiData);
 }
 
 void G4BinaryPiKBuilder::

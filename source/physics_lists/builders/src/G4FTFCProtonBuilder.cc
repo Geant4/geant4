@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFCProtonBuilder.cc,v 1.3 2009-03-31 11:03:50 vnivanch Exp $
+// $Id: G4FTFCProtonBuilder.cc,v 1.4 2009-03-31 18:38:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,32 +41,54 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "TheoModelFactory.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 
 G4FTFCProtonBuilder::
 G4FTFCProtonBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
-  theModel = TheoModelFactory<G4StringChipsParticleLevelInterface,
-                              G4FTFModel, G4LundStringFragmentation>::New();
+  theModel = new G4TheoFSGenerator;
+
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
+
+  theCascade = new G4StringChipsParticleLevelInterface;
+
+  theModel->SetHighEnergyGenerator(theStringModel);
 			      
-    if (quasiElastic)
+  if (quasiElastic)
   {
      theQuasiElastic=new G4QuasiElasticChannel;
      theModel->SetQuasiElasticChannel(theQuasiElastic);
   } else 
   {  theQuasiElastic=0;}  
 
+  theModel->SetTransport(theCascade);
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+}
+
+G4FTFCProtonBuilder::~G4FTFCProtonBuilder() 
+{
+  delete theCascade;
+  delete theStringDecay;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+  delete theStringModel;
+  delete theModel;
 }
 
 void G4FTFCProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
   aP->AddDataSet(new G4ProtonInelasticCrossSection);  
+}
+
+void G4FTFCProtonBuilder::
+Build(G4HadronElasticProcess * )
+{
 }
 
 // 2002 by J.P. Wellisch

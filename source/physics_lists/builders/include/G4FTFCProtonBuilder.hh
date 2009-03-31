@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFCProtonBuilder.hh,v 1.3 2009-03-31 11:04:01 vnivanch Exp $
+// $Id: G4FTFCProtonBuilder.hh,v 1.4 2009-03-31 18:38:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,10 +59,10 @@ class G4FTFCProtonBuilder : public G4VProtonBuilder
 {
   public: 
     G4FTFCProtonBuilder(G4bool quasiElastic=false);
-    virtual ~G4FTFCProtonBuilder(){};
+    virtual ~G4FTFCProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * ){};
+    virtual void Build(G4HadronElasticProcess * );
     virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
@@ -70,6 +70,9 @@ class G4FTFCProtonBuilder : public G4VProtonBuilder
   private:
 
     G4TheoFSGenerator * theModel;
+    G4StringChipsParticleLevelInterface * theCascade;
+    G4FTFModel * theStringModel;
+    G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4double theMin;
