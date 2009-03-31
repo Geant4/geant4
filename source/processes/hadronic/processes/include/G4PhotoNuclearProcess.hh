@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoNuclearProcess.hh,v 1.8 2007-01-07 04:56:01 dennis Exp $
+// $Id: G4PhotoNuclearProcess.hh,v 1.9 2009-03-31 19:16:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -39,20 +39,15 @@
 #define G4PhotoNuclearProcess_h 1
  
 #include "G4HadronInelasticProcess.hh"
-#include "G4PhotoNuclearCrossSection.hh"
  
-
- class G4PhotoNuclearProcess : public G4HadronInelasticProcess
- {
- public:
+class G4PhotoNuclearProcess : public G4HadronInelasticProcess
+{
+public:
     
-    G4PhotoNuclearProcess( const G4String& processName = "PhotonInelastic" );
-    ~G4PhotoNuclearProcess();
+  G4PhotoNuclearProcess( const G4String& processName = "PhotonInelastic" );
+  virtual ~G4PhotoNuclearProcess();
 
- private:
- 
-   G4PhotoNuclearCrossSection theData;
- };
+};
 
 #endif
 

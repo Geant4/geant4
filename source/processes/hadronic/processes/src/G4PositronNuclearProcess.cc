@@ -24,23 +24,23 @@
 // ********************************************************************
 //
 //
-//
-// $Id: G4PhotoNuclearProcess.cc,v 1.3 2009-03-31 19:16:38 vnivanch Exp $
+// $Id: G4PositronNuclearProcess.cc,v 1.1 2009-03-31 19:16:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4PhotoNuclearProcess.hh"
-#include "G4Gamma.hh"
-#include "G4PhotoNuclearCrossSection.hh"
+#include "G4PositronNuclearProcess.hh" 
+#include "G4Positron.hh"
+#include "G4ElectroNuclearCrossSection.hh"
 
-G4PhotoNuclearProcess::
-G4PhotoNuclearProcess(const G4String& processName)
-  : G4HadronInelasticProcess( processName, G4Gamma::Gamma() )
+G4PositronNuclearProcess::
+G4PositronNuclearProcess(const G4String& processName)
+  : G4HadronInelasticProcess( processName, G4Positron::Positron() )
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-  theStore->AddDataSet(new G4PhotoNuclearCrossSection);
+  theStore->AddDataSet(new G4ElectroNuclearCrossSection);
 } 
     
-G4PhotoNuclearProcess::~G4PhotoNuclearProcess()
+G4PositronNuclearProcess::~G4PositronNuclearProcess()
 {
 }
+

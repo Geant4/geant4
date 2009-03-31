@@ -35,31 +35,17 @@
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
-#include "G4HadronInelasticProcess.hh"
-#include "G4Positron.hh"
-#include "G4ElectroNuclearCrossSection.hh"
- 
+#include "G4HadronInelasticProcess.hh" 
 
- class G4PositronNuclearProcess : public G4HadronInelasticProcess
- {
- public:
+class G4PositronNuclearProcess : public G4HadronInelasticProcess
+{
+public:
     
-    G4PositronNuclearProcess(
-     const G4String& processName = "PositronNuclear" ) :
+  G4PositronNuclearProcess(const G4String& processName = "PositronNuclear" );
+    
+  virtual ~G4PositronNuclearProcess();
 
-    G4HadronInelasticProcess( processName, G4Positron::Positron() )
-    { 
-      G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-      theStore->AddDataSet(&theData);
-    } 
-    
-    ~G4PositronNuclearProcess()
-    { }
-    
- private:
- 
-   G4ElectroNuclearCrossSection theData;
- };
+};
 
 #endif
 
