@@ -188,7 +188,6 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     hiMT52[ii]->GetXaxis()->SetTitle(title);
     sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
     hiMT52[ii]->GetYaxis()->SetTitle(title);
-    // sprintf (name, "MTkplus+0%s%4.2f", tag1Name,  yv);
     sprintf (name, "MTkplus0%s%4.2f", tag1Name,  yv);
     hiMT50.push_back((TH1F*)hiMT52[ii]->Clone());
     hiMT50[ii]->SetName(name); 
