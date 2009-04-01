@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.4 2009-03-27 16:59:29 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.5 2009-04-01 11:14:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -224,6 +224,8 @@ public:
   G4complex AmplitudeFar(G4double theta);
   G4complex Amplitude(G4double theta);
   G4double  AmplitudeMod2(G4double theta);
+  void      InitParameters(const G4ParticleDefinition* theParticle,  
+			      G4double partMom, G4double Z, G4double A); 
 
 private:
 
@@ -256,7 +258,11 @@ private:
   G4double fWaveVector;
   G4double fAtomicWeight;
   G4double fAtomicNumber;
+
+  G4double fNuclearRadius1;
+  G4double fNuclearRadius2;
   G4double fNuclearRadius;
+
   G4double fBeta;
   G4double fZommerfeld;
   G4double fAm;
@@ -265,6 +271,8 @@ private:
   G4double fCoulombPhase0;
   G4double fHalfRutThetaTg;
   G4double fRutherfordTheta;
+
+  G4double fProfileLambda;
   G4double fProfileDelta;
   G4double fProfileAlpha;
 
@@ -494,22 +502,22 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateAm( G4double momentum, G4dou
 
 inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
 {
-  G4double r0;
+  G4double r0, radius;
 
   if( A < 50. )
   {
     if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
     else          r0  = 1.1*fermi;
 
-    fNuclearRadius = r0*std::pow(A, 1./3.);
+    radius = r0*std::pow(A, 1./3.);
   }
   else
   {
     r0 = 1.7*fermi;   // 1.7*fermi;
 
-    fNuclearRadius = r0*std::pow(A, 0.27); // 0.27);
+    radius = r0*std::pow(A, 0.27); // 0.27);
   }
-  return fNuclearRadius;
+  return radius;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -879,6 +887,8 @@ inline  void G4NuclNuclDiffuseElastic::CalculateRutherfordAnglePar()
 {
   fHalfRutThetaTg  = fZommerfeld/(fWaveVector*fNuclearRadius);
   fRutherfordTheta = 2.*std::atan(fHalfRutThetaTg);
+  G4cout<<"fRutherfordTheta = "<<fRutherfordTheta/degree<<" degree"<<G4endl;
+
 }
 
 /////////////////////////////////////////////////////////////////
@@ -961,14 +971,14 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
 
   G4double u              = std::sqrt(0.5*fWaveVector*fNuclearRadius/sinThetaR);
   G4double kappa          = u/std::sqrt(pi);
-  G4double dTheta         = theta-fRutherfordTheta;
+  G4double dTheta         = theta - fRutherfordTheta;
   u                      *= dTheta;
   G4double u2             = u*u;
   G4double u2m2p3         = u2*2./3.;
 
   G4complex im            = G4complex(0.,1.);
   G4complex order         = G4complex(u,u);
-  G4complex gamma         = pi*kappa*std::exp(-order)*std::exp(im*(u*u+0.25*pi));
+  G4complex gamma         = pi*kappa*GetErfcInt(-order)*std::exp(im*(u*u+0.25*pi));
   G4complex a0            = 0.5*(1. + 3.*(1.+im*u2)*cosHalfThetaR2/3.)/sinThetaR;
   G4complex a1            = 0.5*(1. + 2.*(1.+im*u2m2p3)*cosHalfThetaR2)/sinThetaR;
   G4complex out           = gamma*(1. + a1*dTheta) - a0;
@@ -986,14 +996,14 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaMore(G4double theta)
 
   G4double u              = std::sqrt(0.5*fWaveVector*fNuclearRadius/sinThetaR);
   G4double kappa          = u/std::sqrt(pi);
-  G4double dTheta         = theta-fRutherfordTheta;
+  G4double dTheta         = theta - fRutherfordTheta;
   u                      *= dTheta;
   G4double u2             = u*u;
   G4double u2m2p3         = u2*2./3.;
 
   G4complex im            = G4complex(0.,1.);
   G4complex order         = G4complex(u,u);
-  G4complex gamma         = pi*kappa*std::exp(order)*std::exp(im*(u*u+0.25*pi));
+  G4complex gamma         = pi*kappa*GetErfcInt(order)*std::exp(im*(u*u+0.25*pi));
   G4complex a0            = 0.5*(1. + 3.*(1.+im*u2)*cosHalfThetaR2/3.)/sinThetaR;
   G4complex a1            = 0.5*(1. + 2.*(1.+im*u2m2p3)*cosHalfThetaR2)/sinThetaR;
   G4complex out           = -gamma*(1. + a1*dTheta) - a0;
@@ -1058,8 +1068,48 @@ inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeMod2(G4double theta)
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Test for given particle and element table of momentum, angle probability.
+// For the moment in lab system. 
 
+inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition* theParticle,  
+                                          G4double partMom, G4double Z, G4double A) 
+{
+  fAtomicNumber  = Z;     // atomic number
+  fAtomicWeight  = A;     // number of nucleons
 
+  fNuclearRadius2 = CalculateNuclearRad(fAtomicWeight);
+  G4double A1     = G4double( theParticle->GetBaryonNumber() );   
+  fNuclearRadius1 = CalculateNuclearRad(A1);
+  // fNuclearRadius = std::sqrt(fNuclearRadius1*fNuclearRadius1+fNuclearRadius2*fNuclearRadius2);
+  fNuclearRadius = fNuclearRadius1 + fNuclearRadius2;
+
+  G4double a = 0.;
+  G4double z = theParticle->GetPDGCharge();
+  G4double m1 = theParticle->GetPDGMass();
+
+  fWaveVector = partMom/hbarc;
+
+  G4double lambda = fWaveVector*fNuclearRadius;
+
+  if( z )
+  {
+      a           = partMom/m1; // beta*gamma for m1
+      fBeta       = a/std::sqrt(1+a*a);
+      fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+      fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
+  }
+  fProfileLambda = lambda*std::sqrt(1.-2*fZommerfeld/lambda);
+  G4cout<<"fProfileLambda = "<<fProfileLambda<<G4endl;
+  fProfileDelta  = 0.1*fProfileLambda;
+  fProfileAlpha  = 0.05*fProfileLambda;
+
+  CalculateCoulombPhaseZero();
+  CalculateRutherfordAnglePar();
+
+  return;
+}
 
 
 
