@@ -28,9 +28,9 @@
 //        Add several required updating of Mean Filed 
 //        Modified handling of absorption case by T. Koi
 // 090126 Fix in absorption case by T. Koi  
+// 090331 Fix for gamma participant by T. Koi 
 //
 #include "G4QMDCollision.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Scatterer.hh"
 #include "Randomize.hh"
 
@@ -260,6 +260,8 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
       G4LorentzVector p4i =  theSystem->GetParticipant( i )->Get4Momentum();
       G4double rmi =  theSystem->GetParticipant( i )->GetMass();
       G4ParticleDefinition* pdi =  theSystem->GetParticipant( i )->GetDefinition();
+//090331 gamma 
+      if ( pdi->GetPDGMass() == 0.0 ) continue;
 
       //std::cout << " p4i00 " << p4i << std::endl;
       for ( G4int j = 0 ; j < i ; j++ )
@@ -295,6 +297,8 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4LorentzVector p4j =  theSystem->GetParticipant( j )->Get4Momentum();
          G4double rmj =  theSystem->GetParticipant( j )->GetMass();
          G4ParticleDefinition* pdj =  theSystem->GetParticipant( j )->GetDefinition();
+//090331 gamma 
+         if ( pdj->GetPDGMass() == 0.0 ) continue;
 
          G4double rr2 = theMeanField->GetRR2( i , j );
 
@@ -332,7 +336,7 @@ void G4QMDCollision::CalKinematicsOfBinaryCollisions( G4double dt )
          G4double pij = p4i*p4j; 
          G4double pidr = p4i.vect()*dr;
          G4double pjdr = p4j.vect()*dr;
-  
+
          G4double aij = 1.0 - ( rmi*rmj /pij ) * ( rmi*rmj /pij ); 
          G4double bij = pidr / rmi - pjdr*rmi/pij;
          G4double cij = rsq + ( pidr / rmi ) * ( pidr / rmi );
