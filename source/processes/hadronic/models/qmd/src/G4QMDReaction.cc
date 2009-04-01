@@ -31,6 +31,7 @@
 //            UseFrag (chage criterion of a inelastic reaction)
 //        Fix bug in nucleon projectiles  by T. Koi    
 // 090122 Be8 -> Alpha + Alpha 
+// 090331 Change member shenXS and genspaXS object to pointer 
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
@@ -45,6 +46,10 @@ G4QMDReaction::G4QMDReaction()
 , gem ( true )
 , frag ( false )
 {
+
+   //090331
+   shenXS = new G4IonsShenCrossSection();
+   //genspaXS = new G4GeneralSpaceNNCrossSection();
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
@@ -99,8 +104,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
      const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
      G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
-     //G4double xs_0 = shenXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
-     G4double xs_0 = genspaXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
+     //090331
+     G4double xs_0 = shenXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+     //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 

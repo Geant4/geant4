@@ -36,13 +36,11 @@
 //
 // 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
 //            UseFrag (chage criterion of a inelastic reaction)
-// 081121 Add FermiG and related methods  by T. Koi 
+// 090331 Change member shenXS and genspaXS object to pointer 
 //
 
 #ifndef G4QMDReaction_hh
 #define G4QMDReaction_hh
-
-#include "G4QMDFermiG.hh"
 
 #include "G4QMDSystem.hh"
 #include "G4QMDCollision.hh"
@@ -112,14 +110,14 @@ class G4QMDReaction : public G4HadronicInteraction
       G4double coulomb_collision_px_targ;
       G4double coulomb_collision_pz_targ;
 
-      G4IonsShenCrossSection shenXS;
-      G4IonsShenCrossSection genspaXS;
+//090331
+      G4IonsShenCrossSection* shenXS;
+      G4GeneralSpaceNNCrossSection* genspaXS;
 
       G4bool gem;
       G4bool frag;
       G4bool heg;
 
-      G4QMDFermiG* heModel;
 };
 
 #endif
