@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniNeutronBuilder.cc,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// $Id: G4BertiniNeutronBuilder.cc,v 1.3 2009-04-01 15:54:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,6 +56,7 @@ Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
+  G4cout << "Bertini Neutron Emin= " << theMin << " Emax= " << theMax << G4endl;
   aP->RegisterMe(theModel);
   aP->AddDataSet(new G4NeutronInelasticCrossSection);  
 }
