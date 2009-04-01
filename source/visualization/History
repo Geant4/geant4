@@ -1,4 +1,4 @@
-$Id: History,v 1.434 2009-03-26 14:57:31 lgarnier Exp $
+$Id: History,v 1.435 2009-04-01 16:34:13 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+1st April 2009  Laurent Garnier (vis-V09-02-01)
+- opengl-V09-02-01 : Improvments in order to use GL2PS for printing
+- openinventor-V09-02-01 : Improvments in order to use GL2PS for printing
+- visexternal-V09-02-01 :  Add GL2PS library in external (it was in 
+  OpenInventor before)
 
 14th March 2009  John Allison
 - visman-V09-02-01:
