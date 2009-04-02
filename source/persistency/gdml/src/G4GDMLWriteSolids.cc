@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.60 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.61 2009-04-02 16:07:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -831,8 +831,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
      { TwistedtubsWrite(solidsElement,twistedtubsPtr); }
    else
    {
-     G4String error_msg = "Unknown solid: " + solidPtr->GetName();
-     G4Exception("G4GDMLWriteSolids::AddSolid()", "ReadError",
+     G4String error_msg = "Unknown solid: " + solidPtr->GetName()
+                        + "; Type: " + solidPtr->GetEntityType();
+     G4Exception("G4GDMLWriteSolids::AddSolid()", "WriteError",
                  FatalException, error_msg);
    }
 }
