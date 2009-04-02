@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.5 2006-06-29 19:30:22 gunter Exp $
+// $Id: G4RToEConvForElectron.cc,v 1.6 2009-04-02 02:43:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
  
   G4double Mass = theParticle->GetPDGMass();       
   //  calculate dE/dx for electrons
-  if( std::abs(AtomicNumber-Z)>0.1 ) {
+  if( std::fabs(AtomicNumber-Z)>0.1 ) {
     Z = AtomicNumber;
     taul = Tlow/Mass;
     ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;
