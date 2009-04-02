@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.6 2009-04-02 08:37:44 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.7 2009-04-02 09:33:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -226,6 +226,11 @@ public:
   G4double  AmplitudeMod2(G4double theta);
   void      InitParameters(const G4ParticleDefinition* theParticle,  
 			      G4double partMom, G4double Z, G4double A); 
+
+  G4double GetProfileLambda(){return fProfileLambda;};
+
+  void SetProfileDelta(G4double pd) {fProfileDelta = pd;};
+  void SetProfileAlpha(G4double pa){fProfileAlpha = pa;};
 
 private:
 
@@ -904,10 +909,10 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileNear(G4double theta)
   else
   {
     argument = fProfileDelta*dTheta;
-    result = pi*argument*std::exp(fProfileAlpha*argument);
-    result /= std::sinh(pi*argument);
-    result -= 1.;
-    result /= dTheta;
+    result   = pi*argument*std::exp(fProfileAlpha*argument);
+    result  /= std::sinh(pi*argument);
+    result  -= 1.;
+    result  /= dTheta;
   }
   return result;
 }
@@ -918,12 +923,13 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileNear(G4double theta)
 
 inline   G4double G4NuclNuclDiffuseElastic::ProfileFar(G4double theta)
 {
-  G4double dTheta = fRutherfordTheta + theta;
+  G4double dTheta   = fRutherfordTheta + theta;
   G4double argument = fProfileDelta*dTheta;
 
-  G4double result = pi*argument*std::exp(fProfileAlpha*argument);
-  result /= std::sinh(pi*argument);
-  result /= dTheta;
+  G4double result   = pi*argument*std::exp(fProfileAlpha*argument);
+  result           /= std::sinh(pi*argument);
+  result           /= dTheta;
+
   return result;
 }
 
@@ -978,7 +984,7 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
 
   G4complex im            = G4complex(0.,1.);
   G4complex order         = G4complex(u,u);
-  order                  /= std::sqrt(2.):
+  order                  /= std::sqrt(2.);
   G4complex gamma         = pi*kappa*GetErfcInt(-order)*std::exp(im*(u*u+0.25*pi));
   G4complex a0            = 0.5*(1. + 4.*(1.+im*u2)*cosHalfThetaR2/3.)/sinThetaR;
   G4complex a1            = 0.5*(1. + 2.*(1.+im*u2m2p3)*cosHalfThetaR2)/sinThetaR;
@@ -1004,7 +1010,7 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaMore(G4double theta)
 
   G4complex im            = G4complex(0.,1.);
   G4complex order         = G4complex(u,u);
-  order                  /= std::sqrt(2.):
+  order                  /= std::sqrt(2.);
   G4complex gamma         = pi*kappa*GetErfcInt(order)*std::exp(im*(u*u+0.25*pi));
   G4complex a0            = 0.5*(1. + 3.*(1.+im*u2)*cosHalfThetaR2/3.)/sinThetaR;
   G4complex a1            = 0.5*(1. + 2.*(1.+im*u2m2p3)*cosHalfThetaR2)/sinThetaR;
