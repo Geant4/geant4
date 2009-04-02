@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.51 2009-03-24 13:50:07 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.52 2009-04-02 09:31:37 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,9 @@ void G4OpenGLViewer::ClearView () {
  */
 void G4OpenGLViewer::ResizeGLView()
 {
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::ResizeGLView %d %d\n",fWinSize_x,fWinSize_y);
+#endif
   // Check size
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
