@@ -25,7 +25,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.15 2007-09-03 09:43:14 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.16 2009-04-02 06:44:49 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -40,6 +40,9 @@
 // 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
 // 03 Sep 2007 L.Pandola      Bug fix for the filling of physics table for 
 //                            compounds defined by the mass fraction (bug #965)
+// 02 Apr 2009 L.Pandola      Bux fixed in the calculation of mfp for compound 
+//                            materials defined as fraction of mass 
+//                            (reported by Zhang Qiwei)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -161,7 +164,9 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	  cs = cs*(ec/energyVector[bin])*(ec/energyVector[bin])*pi*classic_electr_radius*classic_electr_radius;
 	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	  const G4int* stechiometric = material->GetAtomsVector();
-	  G4double density = vector_of_atoms[iright]; //non-bound molecules (default)
+	  //cs is the cross section _per atom_ in the case of compounds, while it is 
+	  //_per molecule_ in the case of molecules
+	  G4double density = material->GetTotNbOfAtomsPerVolume();  //non-bound molecules (default)
 	  if (stechiometric)
 	    {
 	      if (stechiometric[iright])
