@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.30 2007-03-30 01:03:53 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.31 2009-04-02 02:22:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -453,7 +453,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
   if ( theEnergyChange >0.) {
-    accuracy = std::abs(theMomentumDirectionChange.mag2()-1.0);
+    accuracy = std::fabs(theMomentumDirectionChange.mag2()-1.0);
     if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
       G4cout << "  G4ParticleChange::CheckIt  : ";
