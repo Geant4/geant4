@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryNeutronBuilder.cc,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// $Id: G4BinaryNeutronBuilder.cc,v 1.3 2009-04-02 08:11:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,7 +33,7 @@
 // Author: 2002 H.P. Wellisch
 //
 // Modified:
-// 30.03.2009 V.Ivanchenko create cross section by new
+// 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +41,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 
 G4BinaryNeutronBuilder::
 G4BinaryNeutronBuilder() 
@@ -57,12 +56,10 @@ G4BinaryNeutronBuilder()
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
    aP->RegisterMe(theModel);
-   aP->AddDataSet(new G4NeutronInelasticCrossSection);  
  }
 
 G4BinaryNeutronBuilder::~G4BinaryNeutronBuilder() 
 {
-  delete theModel;
 }
 
 void G4BinaryNeutronBuilder::
