@@ -143,7 +143,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
         rn3dim(xx,yy,zz,x);
 
-        if(std::abs((xx*xx)+(yy*yy)+(zz*zz)-(x*x))>0.001){
+        if(std::fabs((xx*xx)+(yy*yy)+(zz*zz)-(x*x))>0.001){
           G4cout << "Norm of x not correct" << G4endl;
         }
 
@@ -172,7 +172,7 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
         rn3dim(xx,yy,zz,y);
 
-        if(std::abs((xx*xx)+(yy*yy)+(zz*zz)-(y*y))>0.001){
+        if(std::fabs((xx*xx)+(yy*yy)+(zz*zz)-(y*y))>0.001){
           G4cout << " Norm of y not correct " << G4endl;
         }
 
@@ -199,8 +199,8 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 //
 ////      if (cthetaE    > 0.01)goto leap2;
 ////      if (cthetaG    > 0.01)goto leap2;
-////      if (std::abs(x-0.5) > 0.5 )goto leap2;
-////      if (std::abs(y-0.5) > 0.5 )goto leap2;
+////      if (std::fabs(x-0.5) > 0.5 )goto leap2;
+////      if (std::fabs(y-0.5) > 0.5 )goto leap2;
 //
 //-----------------------------------------------------------------------
 //

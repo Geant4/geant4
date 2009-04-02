@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.18 2008-11-06 13:17:36 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.19 2009-04-02 02:24:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,7 +203,7 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
 #endif 
     return 0.0;
 
-  } else if (std::abs(A - G4int(A)) > 1.e-10) {
+  } else if (std::fabs(A - G4int(A)) > 1.e-10) {
     return AtomicMass(A,Z);
 
   } else {

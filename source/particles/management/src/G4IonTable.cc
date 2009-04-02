@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.54 2009-01-28 13:49:04 gcosmo Exp $
+// $Id: G4IonTable.cc,v 1.55 2009-04-02 02:24:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -381,7 +381,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 
     if ( (A == anAtomicMass) && 
          (Z == anAtomicNumber ) && 
-	 ( std::abs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+	 ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
       isFound = true;
       break;
     }
@@ -436,7 +436,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
     if ( (A == anAtomicMass) && 
          (Z == anAtomicNumber ) && 
 	 (L == lambdaNumber ) && 
-	 ( std::abs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+	 ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
       isFound = true;
       break;
     }
