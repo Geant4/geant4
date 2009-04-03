@@ -143,8 +143,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   G4int targetPDGCode = 90000000 + 1000*resZ + (resA-resZ);    // PDG of theResidualNucleus
-  G4double targetMass = theNucleus->GetMass();                 // Its mass
-  targetMass -= hitMass; // subtract masses of knocked out nucleons (binding?! M.K.) E/M
+  //G4double targetMass = theNucleus->GetMass();                 // Its mass
+  //targetMass -= hitMass; // subtract masses of knocked out nucleons (binding?! M.K.) E/M
+  G4double targetMass=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ)
+                                                         ->GetPDGMass();
   G4double targetEnergy = std::sqrt(hitMomentum.mag2()+targetMass*targetMass);
   // !! @@ Target should be at rest: hitMomentum=(0,0,0) @@ !! M.K. (go to this system)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
@@ -153,17 +155,17 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   std::pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();
   G4double impactX = theImpact.first;
   G4double impactY = theImpact.second;
-  G4double inpactPar2 = impactX*impactX + impactY*impactY;
+  G4double impactPar2 = impactX*impactX + impactY*impactY;
   
   G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   radius2 *= radius2;
   G4double pathlength = 0.;
 #ifdef pdebug
   G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: r="<<std::sqrt(radius2)/fermi
-        <<", b="<<std::sqrt(inpactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
-        <<", b/r="<<std::sqrt(inpactPar2/radius2)<<G4endl; 
+        <<", b="<<std::sqrt(impactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
+        <<", b/r="<<std::sqrt(impactPar2/radius2)<<G4endl; 
 #endif
-  if(radius2 - inpactPar2>0) pathlength = 2.*std::sqrt(radius2 - inpactPar2);
+  if(radius2 - impactPar2>0) pathlength = 2.*std::sqrt(radius2 - impactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
@@ -234,7 +236,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: Absorption nS="
         <<theSorted.size()<<G4endl; 
 #endif
-  
+  G4bool EscapeExists = false;
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
 #ifdef pdebug
@@ -309,9 +311,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
                                                     <<theEnergyLostInFragmentation<<G4endl;
 #endif
-
-    if(runningEnergy > theEnergyLostInFragmentation) break;
-    
+    if(runningEnergy > theEnergyLostInFragmentation)
+    {
+      EscapeExists = true;
+      break;
+    }
 #ifdef CHIPSdebug
     G4cout <<"G4QStringChipsParticleLevelInterface::Propagate: ABSORBED STRING particles "
            <<(*current).second->GetDefinition()->GetPDGCharge()<<" "
@@ -424,6 +428,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     //  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
     G4QCHIPSWorld::Get()->GetParticles(nop);
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+#ifdef pdebug
+      G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: CHIPS fragmentation, rA="
+            <<resA<<", #AbsPt="<<particleCount<<G4endl; 
+#endif
     try
     {
       output = pan->Fragment();                 // The main fragmentation member function
@@ -447,15 +455,21 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     projHV.clear();
     delete pan;
   }
-  else output = new G4QHadronVector;
-   
+  else
+  {
+#ifdef pdebug
+    G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: NO CHIPS fragmentation, rA="
+          <<resA<<", #AbsPt="<<particleCount<<G4endl; 
+#endif
+    output = new G4QHadronVector;
+  }   
   // Fill the result.
 #ifdef CHIPSdebug
-  G4cout << "NEXT EVENT"<<endl;
+  G4cout << "NEXT EVENT, EscapeExists="<<EscapeExists<<G4endl;
 #endif
 
   // first decay and add all escaping particles.
-  for(current = firstEscape; current!=theSorted.end(); current++)
+  if (EscapeExists) for (current = firstEscape; current!=theSorted.end(); current++)
   {
     G4KineticTrack* aResult = (*current).second;
     G4ParticleDefinition* pdef=aResult->GetDefinition();
@@ -580,6 +594,26 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
 
     delete output->operator[](particle);
+  }
+  else
+  {
+    if(resA>0)
+    {
+      G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
+      if(resA==1) // The residual nucleus at rest must be added to conserve BaryN & Charge
+      {
+        if(resZ == 1) theDefinition = G4Proton::Proton();
+      }
+      else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);
+      theSec = new G4ReactionProduct(theDefinition);
+      theSec->SetTotalEnergy(0.);
+      theSec->SetMomentum(G4ThreeVector(0.,0.,0.));
+#ifdef pdebug
+      G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: ResNucleus at rest PDG="
+              <<targetPDGCode<<G4endl; 
+#endif
+      theResult->push_back(theSec);
+    }
   }
   delete output;
 
