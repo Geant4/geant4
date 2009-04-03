@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.23 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.24 2009-04-03 13:41:23 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1548,9 +1548,9 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-
-      if (tag=="box") { BoxRead(child); } else
-      if (tag=="cone") { ConeRead(child); } else
+      if (tag=="define") { DefineRead(child);  }  else 
+      if (tag=="box")    { BoxRead(child); } else
+      if (tag=="cone")   { ConeRead(child); } else
       if (tag=="elcone") { ElconeRead(child); } else
       if (tag=="ellipsoid") { EllipsoidRead(child); }else
       if (tag=="eltube") { EltubeRead(child); } else
