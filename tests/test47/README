@@ -1,0 +1,61 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test47
+                            ------
+                   Responsible: S.Banerjee, J.Yarba (Fermilab)
+
+
+Intermediate energy validation is done by comparing Monte Carlo predictions vs experimental data.
+
+This test consists of 2 parts:
+
+I. We compare Geant4-predicted and experimentally measured inclusive productions of protons and neutrons 
+   in the following reactions:
+  0) pi+ C at 1.4GeV     4) pi- C  at 5.0GeV     8) p C at 1.4GeV
+  1) pi+ U at 1.4GeV     5) pi- Cu at 5.0GeV     9) p U at 1.4GeV
+  2) pi+ C at 5.0GeV     6) pi- Pb at 5.0GeV    10) p C at 7.5GeV
+  3) pi+ U at 5.0GeV     7) pi- U  at 5.0GeV    11) p U at 7.5GeV
+   (so called ITEP test)
+
+
+II. We compare Geant4-predicted and experimentally measured inclusive production of pi+/-, K+/-, or protons
+   in p Be, p Cu, or P Au reactions at 14.6GeV (aka BNL test)
+
+Data are stored in CVS, together with the C++ code of the package, in a form of ASCII tables, under /itep
+or /bnl subdirectories.
+
+We are validatng the following Geant4 models: LEP, Bertini, Binary, FTFP, QGSC (except that FTFP and QGSC
+are not supposed to run at 1.4GeV, and we do NOT employ then in low energy tests).
+
+
+Monte Carlo predictions can be obtained by running Geant4-based application, which can be configured at run 
+time, to model given number of events (1,000,000 in this case) for a given beam-target combination at a given 
+energy, and to employ one or another Geant4 hadronic model, or to execute sequentially several hadronis models.
+
+The outputof a job will be one or several ROOT files (histograms). Each ROOT file will correspond to a given
+combination beam-target-energy and a given Geant4 hadronic model.  
+
+To analize the output and to compare predictions of different Geant4 hadronic models (vs experimental data, or
+vs each other) we also provide several ROOT scripts (macros), combined in a single script Plot.C, also stored
+in CVS as part of the package.
+
+Together with the Geant4 application code and the data tables we store shell run scripts that allow to execute
+these tests, either interactively, on in batch, or in a grid-like environment:
+
+-- run_pip_itep.csh will execute either all 4 tests 0)-3), or if given an input argument from 0 through 3, it'll
+   execute a given test
+
+-- run_pim_itep.csh will execute either all 4 tests 4)-7), or if given an input argument, will execute selected
+
+-- run_proton_itep.csh will execute all 4 tests 8)-11), or if given an input argument, will run selected 
+
+-- run_bnl.csh - *** DOCS COMING ***
+ 
+Each shell script executes not only Geant4 run, but also analysis step, and delivers comparison plots, in the
+encapsulated postscript format (eps).
+
+
+
