@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.17 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.18 2009-04-03 13:28:40 tnikitin Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -531,7 +531,8 @@ MaterialsRead(const xercesc::DOMElement* const materialsElement)
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-
+      
+      if (tag=="define")   { DefineRead(child);  }  else 
       if (tag=="element")  { ElementRead(child); }  else 
       if (tag=="isotope")  { IsotopeRead(child); }  else 
       if (tag=="material") { MaterialRead(child); }
