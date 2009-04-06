@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-04-06 19:03:52 perl Exp $
+$Id: History,v 1.4 2009-04-06 19:29:22 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6 April 2009, Laurent Garnier (isexternal-V09-02-02)
+ - Adjustments to poit and line size
 
 19 March 2009, Laurent Garnier (visexternal-V09-02-01)
  - Add methods to change GL_Point and GL_Line size
