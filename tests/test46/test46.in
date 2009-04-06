@@ -20,7 +20,7 @@
 #/gun/particle pi-
 /gun/particle mu-
 /gun/energy 30. GeV
-/run/beamOn 200
+/run/beamOn 400
 #/testCalorim/magField 4 tesla
 #/testCalorim/addPreShower
 #/testCalorim/updateGeometry
