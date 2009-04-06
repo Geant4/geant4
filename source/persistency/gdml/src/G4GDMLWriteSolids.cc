@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.61 2009-04-02 16:07:10 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.62 2009-04-06 16:14:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -49,6 +49,8 @@ void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solidsElement,
              const G4BooleanSolid* const boolean)
 {
+   G4int displaced=0;
+
    G4String tag("undefined");
    if (dynamic_cast<const G4IntersectionSolid*>(boolean))
      { tag = "intersection"; } else
@@ -62,20 +64,54 @@ BooleanWrite(xercesc::DOMElement* solidsElement,
    
    G4ThreeVector firstpos,firstrot,pos,rot;
 
-   if (const G4DisplacedSolid* disp
-       = dynamic_cast<const G4DisplacedSolid*>(firstPtr))
-   {   
-      firstpos = disp->GetObjectTranslation();
-      firstrot = GetAngles(disp->GetObjectRotation());
-      firstPtr = disp->GetConstituentMovedSolid();
-   }
-
-   if (const G4DisplacedSolid* disp
-       = dynamic_cast<const G4DisplacedSolid*>(secondPtr))
+   // Solve possible displacement of referenced solids!
+   //
+   while (true)
    {
-      pos = disp->GetObjectTranslation();
-      rot = GetAngles(disp->GetObjectRotation());
-      secondPtr = disp->GetConstituentMovedSolid();
+      if ( displaced>8 )
+      {
+        G4String ErrorMessage = "The referenced solid '"
+                              + firstPtr->GetName() +
+                              + "in the Boolean shape '" +
+                              + boolean->GetName() +
+                              + "' was displaced too many times!";
+        G4Exception("G4GDMLWriteSolids::BooleanWrite()",
+                    "InvalidSetup", FatalException, ErrorMessage);
+      }
+
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
+      {
+         firstpos += disp->GetObjectTranslation();
+         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstPtr = disp->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+      break;
+   }
+   displaced = 0;
+   while (true)
+   {
+      if ( displaced>8 )
+      {
+        G4String ErrorMessage = "The referenced solid '"
+                              + secondPtr->GetName() +
+                              + "in the Boolean shape '" +
+                              + boolean->GetName() +
+                              + "' was displaced too many times!";
+        G4Exception("G4GDMLWriteSolids::BooleanWrite()",
+                    "InvalidSetup", FatalException, ErrorMessage);
+      }
+
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(secondPtr))
+      {
+         pos += disp->GetObjectTranslation();
+         rot += GetAngles(disp->GetObjectRotation());
+         secondPtr = disp->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+      break;
    }
 
    AddSolid(firstPtr);   // At first add the constituent solids!
