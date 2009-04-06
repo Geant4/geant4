@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.139 2009-03-23 14:14:35 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.140 2009-04-06 12:50:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -713,7 +713,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
   nBarClust = 1;                            // By default only quasi-free nucleons
   G4LorentzVector proj4M=pro4M;             // Fake equivalence to avoid & const
   G4double  projE=proj4M.e();               // energy of the projectile
-  G4int projPDG=projQC.GetSPDGCode();     // Minimum hadron for the projectile QC
+  G4int projPDG=projQC.GetSPDGCode();       // Minimum hadron for the projectile QC
   if(projE<0.)
   {
     G4cout<<"*Warning*G4QEnvironment::CreateQuasmon:Epr="<<projE<<"<0,QC="<<projQC<<G4endl;
@@ -721,6 +721,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
     proj4M=G4LorentzVector(0.,0.,0.,0.);
   }
   G4double  projM2=proj4M.m2();             // projectile's squared mass (print & v.gamma)
+  G4bool Pr1 = theProjectiles.size() == 1;  // A#ofHadronsInTheInputVector = 1 condition
+  if(Pr1 && std::fabs(G4QPDGCode(projPDG).GetMass2()-projM2) > .1 ) Pr1=false; // MassShell
   G4int     targPDG=theEnvironment.GetPDG();// PDG Code of the target nucleus
   if(targPDG>80000000&&targPDG!=90000000&&(theEnvironment.Get4Momentum().m2())>1.)//Nucleus
   {
@@ -1105,7 +1107,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       }
     }
     G4double envMass=theEnvironment.GetGSMass();   // Mass of residual nuclear environment
-    if(projPDG==22&&projE<PiPrThresh+(M2ShiftVir+projM2)/DiNuclMass) // Gam+quark Interact
+    // @@ Pr1 condition (individual particle) can be taken out of brackets for all if's
+    if(Pr1&&projPDG==22&&projE<PiPrThresh+(M2ShiftVir+projM2)/DiNuclMass) // ==> Gamma+q
     //if(2>3)                                      //@@ TMP:PhotoAbsorbtion by q is closed
     {
       q4Mom=G4LorentzVector(0.,0.,0.,tgMass-envMass);// PhotoInteracts with BoundedCluster
@@ -1116,7 +1119,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, proj4M);//Interaction gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
     }
-    else if((std::fabs(projM2-mPi2)<.00001 && projE-mPi<0.1) && projPDG==-211 && !fake)
+    else if(Pr1&&(std::fabs(projM2-mPi2)<.00001 && projE-mPi<0.1) && projPDG==-211 &&!fake)
     //if(2>3)                                //@@ ***TMP*** PionAbsorbAtRest by q is closed
     {
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);// PION + BoundCluster
@@ -1128,7 +1131,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, -proj4M);//Interact gam+q inside
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon without incid. gamma (del.eq.)
     }
-    //else if(projPDG==2212 && G4UniformRand()<.6+.4*std::exp(-envMass/8192)) // keep proj.
+    //else if(Pr1&&projPDG==2212&&G4UniformRand()<.6+.4*std::exp(-envMass/8192))// keepProj
     else if(2>3)                          // free flying projectile is closed
     {
       q4Mom=proj4M;                       // 4M: QUASMON=Projectile
@@ -1140,7 +1143,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
       theQuasmons.push_back(curQuasmon);  // Insert Quasmon (even hadron/gamma) (del.eq.)
     }
-    else if(projPDG==2212 && G4UniformRand()>15./(proj4M.e()-mProt))//Excitation Of Cluster
+    else if(Pr1&&projPDG==2212&&G4UniformRand()>15./(proj4M.e()-mProt))//ExcitatedCluster
+    //else if(2>3)                          // No excitation of a cluster by projScattering
     {
       G4double prM=mProt;                 // mass of the projectile (M) (for future gener.)
       G4double prM2=mPro2;                // squared mass of the projectile (M^2)
@@ -1227,7 +1231,8 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
             <<c4M.rho()<<", mc2="<<rmu2<<" = "<<c4M.m2()<<G4endl;
       G4cout<<"G4QEnv::CQA:ht="<<(tnM2+rmu2)/2-tnM*om<<"="<<prM2-prE*ep+Pi*po*cost<<G4endl;
 #endif
-      if(std::fabs(c4M.m2()-rmu2)>.1)G4cout<<"-W-G4QE::C:m2="<<rmu2<<"#"<<c4M.m2()<<G4endl;
+      if(std::fabs(c4M.m2()-rmu2)>.1)
+        G4cout<<"-W-G4QE::CrQ:m2="<<rmu2<<"#"<<c4M.m2()<<",P="<<proj4M<<",M="<<tnM<<G4endl;
       G4QHadron* projH = new G4QHadron(scQC,s4M); // Create scattered Projectile Hadron
       theQHadrons.push_back(projH);       // Fill it to the output vector
       G4Quasmon* curQuasmon = new G4Quasmon(curQC+chQC, c4M); // Q=ExcitedCluster
@@ -2055,8 +2060,11 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                 delete output;                // >========================================^
                 throw G4QException("G4QEnvironment::HadronizeQEnvironment:DoNothingEr");//^
               }                               //                                          ^
-              else if(status==2 && eCount==1 && cAN<mcAN)// Abs N to Q from Env (status=2)^
+              else if(status==2 && eCount==1 && cAN<mcAN && envM>500.)// Add N from E to Q^
               {                               //                                          ^
+#ifdef pdebug
+		    G4cout<<"G4QE::HQE:E="<<theEnvironment<<",cAN="<<cAN<<"<"<<mcAN<<G4endl;//^
+#endif
                 cAN++;                        // Increment the counter of absorptions     ^
                 G4int envPDG = theEnvironment.GetPDG(); // PDGCode of the NuclQEnvironment^
                 G4LorentzVector env4M=theEnvironment.Get4Momentum(); // 4mom of the NucEnv^
@@ -2066,11 +2074,14 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                 G4double parZ=envZ/envA;      // For randomization of the isospin         ^
                 G4int resPDG=envPDG-1;        // Residual for the neutron (prototype)     ^
                 G4QContent nucQC=neutQC;      // Nucleon Quark Content                    ^
-                if ( G4UniformRand() > parZ ) // Change to a proton                       ^
+                if ( envN && G4UniformRand() > parZ ) // Change to a proton               ^
                 {                             //                                          ^
                   resPDG=envPDG-1000;         // new PDG for the Environment              ^
                   nucQC=protQC;               // proton QContent                          ^
                 }                             //                                          ^
+#ifdef pdebug
+		    G4cout<<"G4QE::HQE:P,eZ="<<envZ<<",eN="<<envN<<",rPDG="<<resPDG<<G4endl;//^
+#endif
                 G4QNucleus resNuc(resPDG);    // Create the residual nucleus (future Env) ^
                 G4double resM=resNuc.GetGSMass();       // Mass of the residual nucleus   ^
                 G4double eM=theEnvironment.GetGSMass(); // Mass of the current environment^
@@ -2084,9 +2095,15 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                 }                                       //                                ^
                 theEnvironment=G4QNucleus(res4M,resPDG);// Update the Environment         ^
                 theQuasmons[0]->IncreaseBy(nucQC,nuc4M);// Update the Only Quasmon        ^
+#ifdef pdebug
+		    G4cout<<"G4QE::HQE:P,Q="<<nucQC<<nuc4M<<",env="<<theEnvironment<<G4endl;//^
+#endif
               }                                         //                                ^
               else if(status==2&&nCount>nCnMax)// Treat PANIC for stat=2 (NothingWasDone) ^
               {                               //                                          ^
+#ifdef pdebug
+		    G4cout<<"G4QE::HQE:PANIC,nC="<<nCount<<">"<<nCnMax<<G4endl; //            ^
+#endif
                 G4QContent qQC=pQ->GetQC();   // QuarkContent of the Quasmon              ^
                 G4int      pqC=qQC.GetCharge(); // Charge (nP) of the Current Quasmon     ^
                 G4int      pqS=qQC.GetStrangeness(); // Strangeness (nL) of theCurrQuasmon^
