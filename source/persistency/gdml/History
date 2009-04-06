@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2009-03-24 15:47:53 gcosmo Exp $
+$Id: History,v 1.105 2009-04-06 08:39:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 April 2009 Tatiana Nikitina (gdml-V09-02-07)
+- Correction in materials and solids tags for allowing parsing of
+  definitions within the tag scope; possibility foreseen by the schema.
 
 24 March 2009 Gabriele Cosmo (gdml-V09-02-06)
 - Added empty default constructor and virtual destructor to classes in the
