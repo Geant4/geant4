@@ -8,54 +8,87 @@
                    Responsible: S.Banerjee, J.Yarba (Fermilab)
 
 
-Intermediate energy validation is done by comparing Monte Carlo predictions vs experimental data.
+NOTE: this is a zero-draft, still work-in-progress !!! 
+
+Intermediate energy validation is done by comparing Monte Carlo predictions 
+vs experimental data.
 
 This test consists of 2 parts:
 
-I. We compare Geant4-predicted and experimentally measured inclusive productions of protons and neutrons 
-   in the following reactions:
-  0) pi+ C at 1.4GeV     4) pi- C  at 5.0GeV     8) p C at 1.4GeV
-  1) pi+ U at 1.4GeV     5) pi- Cu at 5.0GeV     9) p U at 1.4GeV
-  2) pi+ C at 5.0GeV     6) pi- Pb at 5.0GeV    10) p C at 7.5GeV
-  3) pi+ U at 5.0GeV     7) pi- U  at 5.0GeV    11) p U at 7.5GeV
-   (so called ITEP test)
+I. We compare Geant4-predicted and experimentally measured inclusive productions 
+   of protons and neutrons in the following reactions:
+   0) pi+ C at 1.4GeV     4) pi- C  at 5.0GeV     8) p C at 1.4GeV
+   1) pi+ U at 1.4GeV     5) pi- Cu at 5.0GeV     9) p U at 1.4GeV
+   2) pi+ C at 5.0GeV     6) pi- Pb at 5.0GeV    10) p C at 7.5GeV
+   3) pi+ U at 5.0GeV     7) pi- U  at 5.0GeV    11) p U at 7.5GeV
+      (so called ITEP test)
 
 
-II. We compare Geant4-predicted and experimentally measured inclusive production of pi+/-, K+/-, or protons
-   in p Be, p Cu, or P Au reactions at 14.6GeV (aka BNL test)
+II. We compare Geant4-predicted and experimentally measured inclusive production 
+    of pi+/-, K+/-, or protons in the following reactions:
+    12) p Be at 14.6GeV 
+    13) p Cu at 14.6GeV
+    14) p Au at 14.6GeV 
+        (BNL test).
 
-Data are stored in CVS, together with the C++ code of the package, in a form of ASCII tables, under /itep
-or /bnl subdirectories.
+Data are stored in CVS, together with the C++ code of the package, in a form 
+of ASCII tables, under /itep or /bnl subdirectories.
 
-We are validatng the following Geant4 models: LEP, Bertini, Binary, FTFP, QGSC (except that FTFP and QGSC
-are not supposed to run at 1.4GeV, and we do NOT employ then in low energy tests).
+We are validatng the following Geant4 models: LEP, Bertini, Binary, FTFP, QGSC 
+(except that FTFP and QGSC are not supposed to run at 1.4GeV; we do NOT employ 
+them in low energy tests).
 
 
-Monte Carlo predictions can be obtained by running Geant4-based application, which can be configured at run 
-time, to model given number of events (1,000,000 in this case) for a given beam-target combination at a given 
-energy, and to employ one or another Geant4 hadronic model, or to execute sequentially several hadronis models.
+Monte Carlo predictions can be obtained by running Geant4-based application, that 
+can be configured at run time, to simulate a given number of events (1,000,000 in 
+this case) for a given beam-target combination at a given energy, and to employ 
+one or another Geant4 hadronic model, or to execute sequentially several hadronis 
+models.
 
-The outputof a job will be one or several ROOT files (histograms). Each ROOT file will correspond to a given
-combination beam-target-energy and a given Geant4 hadronic model.  
+Example input/configuration applications are provided as part of the package:
+test47pip.itep, test47pim.itep, test47p.itep, and test47.bnl.
+These job input files exemplify how this Geant4-based executable can be configured
+to simulate user-specified number of interactions (card #events) of a beam particle 
+(card #particle) of a given momentum (card #momentum) with a target (card #material),
+using one or another Geant4 hadronic model (card #generator), or a sequence of
+Geant4 hadronic models, all in one job. 
+If several beam-target-model combo's are requested in a single job configuration
+file, the job will loop over them; card #run will trigger the execution of 
+a beam-target-model combo, for the given number of events.
+Card #exit will terminate the job.
+(NOTE: in principal, job configuration language allows to run also more than
+one combination of beam-target, but such job may be very CPU-heavy, and we do
+not recommend it).  
 
-To analize the output and to compare predictions of different Geant4 hadronic models (vs experimental data, or
-vs each other) we also provide several ROOT scripts (macros), combined in a single script Plot.C, also stored
-in CVS as part of the package.
+The output of a job will be one or several ROOT files (histograms). Each ROOT 
+file will correspond to a given combination of beam-target-energy and a given 
+Geant4 hadronic model.  
 
-Together with the Geant4 application code and the data tables we store shell run scripts that allow to execute
-these tests, either interactively, on in batch, or in a grid-like environment:
+To analize the output and to compare predictions of different Geant4 hadronic 
+models (vs experimental data, or vs each other) we also provide several ROOT 
+scripts, combined in a single script Plot.C, also stored in CVS as part of the 
+package.
 
--- run_pip_itep.csh will execute either all 4 tests 0)-3), or if given an input argument from 0 through 3, it'll
-   execute a given test
+Together with the Geant4 application code and the data tables we provide shell 
+run scripts that allow to execute these tests, either interactively, in batch, 
+or in a grid-like environment.
+As part of the workflow, each run script will automatically generate necessary
+job configuration input files (and will clean it/them after the job completion). 
+Each shell script executes not only the Geant4 run, but also analysis step, and 
+delivers comparison plots, in the encapsulated postscript format (eps).
 
--- run_pim_itep.csh will execute either all 4 tests 4)-7), or if given an input argument, will execute selected
+-- run_pip_itep.csh will execute either all 4 tests 0)-3), or if given an input 
+   argument from 0 through 3, it'll execute a given test
 
--- run_proton_itep.csh will execute all 4 tests 8)-11), or if given an input argument, will run selected 
+-- run_pim_itep.csh will execute either all 4 tests 4)-7), or if given an input 
+   argument, will execute selected
 
--- run_bnl.csh - *** DOCS COMING ***
+-- run_proton_itep.csh will execute all 4 tests 8)-11), or if given an input 
+   argument, will run selected 
+
+-- run_bnl.csh will execure all 3 12)-14), of if given an input argument, will
+   run selected
  
-Each shell script executes not only Geant4 run, but also analysis step, and delivers comparison plots, in the
-encapsulated postscript format (eps).
 
 
 
