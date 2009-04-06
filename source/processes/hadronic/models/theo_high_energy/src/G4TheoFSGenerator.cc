@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.9 2007-11-13 16:01:36 gunter Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.10 2009-04-06 09:35:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator

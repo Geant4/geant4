@@ -133,7 +133,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
 	break;
       }
     }
-    
+#ifdef debug_G4ExcitedStringDecay     
     if(!success)
     {
       G4cout << "G4ExcitedStringDecay::EnergyAndMomentumCorrector - Warning"<<G4endl;
@@ -143,7 +143,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
       G4cout << "   Increase number of attempts or increase ERRLIMIT"<<G4endl;
 //       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay failed to correct...");
     }
-
+#endif     
     // Compute c.m.s. interaction velocity and KTV back boost   
     Beta = TotalCollisionMom.boostVector();
     Output->Boost(Beta);

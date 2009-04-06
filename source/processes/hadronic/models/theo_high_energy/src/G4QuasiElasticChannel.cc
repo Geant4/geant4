@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.5 2009-04-03 16:57:55 mkossov Exp $
+// $Id: G4QuasiElasticChannel.cc,v 1.6 2009-04-06 09:35:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Author : Gunter Folger March 2007
+// Modified by Mikhail Kossov. Apr2009, E/M conservation: ResidualNucleus is added (ResNuc)
 // Class Description
 // Final state production model for theoretical models of hadron inelastic
 // quasi elastic scattering in geant4;
@@ -66,9 +67,9 @@ G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
 	       << "  = " << ratios.first*ratios.second << G4endl;
 #endif
 	       
-	return ratios.first*ratios.second;
+	//return ratios.first*ratios.second;
 	//return 0.; // Switch off quasielastic (temporary) M.K.
-	//return 1.; // Only quasielastic (temporary) M.K.
+	return 1.; // Only quasielastic (temporary) M.K.
 }
 
 G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
@@ -112,11 +113,14 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	result=theQuasiElastic->Scatter(pDef->GetPDGEncoding(),pNucleon,
 	                       thePrimary.GetDefinition()->GetPDGEncoding(),
 			        thePrimary.Get4Momentum());
-				
-	if (result.first.e() == 0.)
+      G4LorentzVector scatteredHadron4Mom=result.second;                  // M.K. ResNuc
+	if (result.first.e() <= 0.)
 	{
-	   G4cout << "Warning - G4QuasiElasticChannel::Scatter no scattering" << G4endl;
-	   return 0;       //no scatter
+        //G4cout << "Warning - G4QuasiElasticChannel::Scatter no scattering" << G4endl;
+	  //return 0;       //no scatter
+        G4LorentzVector scatteredHadron4Mom=thePrimary.Get4Momentum();   // M.K. ResNuc
+        residualNucleus4Mom=G4LorentzVector(0.,0.,0.,targetNucleusMass); // M.K. ResNuc
+        resDef=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);    // M.K. ResNuc
 	}
 
 #ifdef debug_scatter
@@ -133,13 +137,15 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 	G4KineticTrackVector * ktv;
 	ktv=new G4KineticTrackVector();
 	G4KineticTrack * sPrim=new G4KineticTrack(thePrimary.GetDefinition(),
-			0.,G4ThreeVector(0), result.second);
-	ktv->push_back(sPrim);
-	G4KineticTrack * sNuc=new G4KineticTrack(pDef,
-			0.,G4ThreeVector(0), result.first);
-	ktv->push_back(sNuc);
+                                                0.,G4ThreeVector(0), scatteredHadron4Mom);
+      ktv->push_back(sPrim);
+	if (result.first.e() > 0.)
+	{
+        G4KineticTrack * sNuc=new G4KineticTrack(pDef, 0.,G4ThreeVector(0), result.first);
+        ktv->push_back(sNuc);
+      }
 	G4KineticTrack * rNuc=new G4KineticTrack(resDef,
-			0.,G4ThreeVector(0), residualNucleus4Mom);              // M.K. ResNuc
+                               0.,G4ThreeVector(0), residualNucleus4Mom); // M.K. ResNuc
 	ktv->push_back(rNuc);                                               // M.K. ResNuc
 	
 #ifdef debug_scatter
