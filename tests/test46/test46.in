@@ -16,7 +16,7 @@
 /testCalorim/addPreShower
 #######
 /run/initialize
-/process/em/applyCuts true
+#/process/em/applyCuts true
 #/gun/particle pi-
 /gun/particle mu-
 /gun/energy 30. GeV

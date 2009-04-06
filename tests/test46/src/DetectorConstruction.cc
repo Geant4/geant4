@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.9 2009-04-06 12:44:16 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2009-04-06 12:55:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,7 +109,7 @@ DetectorConstruction::DetectorConstruction()
   CuZn->AddElement(Zn, fractionmass = 0.3);
   worldMaterial = manager->FindOrBuildMaterial("G4_AIR");
   ecalMaterial  = manager->FindOrBuildMaterial("G4_PbWO4");
-  ecalMaterial->GetIonisation()->SetBirksConstant(.008415*mm/MeV);
+  //  ecalMaterial->GetIonisation()->SetBirksConstant(.008415*mm/MeV);
   scinMaterial = manager->FindOrBuildMaterial("G4_POLYSTYRENE");
 
   // Geometry parameters of ECAl
