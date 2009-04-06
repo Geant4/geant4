@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.2 2009-01-06 17:24:15 vnivanch Exp $
+// $Id: DetectorMessenger.hh,v 1.3 2009-04-06 12:44:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -80,6 +80,7 @@ private:
   G4UIcmdWithADouble*        facCmd2;
   G4UIcmdWithAnInteger*      verbCmd;
   G4UIcmdWithAnInteger*      binCmd;
+  G4UIcmdWithoutParameter*   mCmd;
   G4UIcmdWithoutParameter*   updateCmd;
 
 };

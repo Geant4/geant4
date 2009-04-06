@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.8 2009-03-12 10:36:47 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2009-04-06 12:44:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -121,7 +121,8 @@ DetectorConstruction::DetectorConstruction()
   G4double absThick[17]={12.977, 7.815, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 4.932, 5.371, 5.516, 5.516, 5.516, 5.516, 5.516, 9.734};
   G4double scThick[17]={9, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 9}; 
 
-  angularFactor = 1.4;
+  //  angularFactor = 1.4;
+  angularFactor = 1.0;
 
   for(G4int i=0; i<17; i++){ 
     absorThickness[i]= absThick[i]*cm*angularFactor;
@@ -137,6 +138,8 @@ DetectorConstruction::DetectorConstruction()
   regionHCAL = 0;
   cutsHCAL = new G4ProductionCuts();
   cutsHCAL->SetProductionCut(1.0*mm);
+
+  buildPreShower = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,9 +166,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     hcalThickness += (2*gap + absorThickness[i] + scinThickness[i]);
   }
 
-  worldZ = 1.2*(hcalThickness + crystalLength);
+  G4double coeff = 1.2;
+  if(buildPreShower) coeff = 2.2;
+  worldZ = coeff*(hcalThickness + crystalLength);
   posCenterHcalZ = crystalLength*.5; 
   posCenterEcalZ = -hcalThickness*.5;
+  posCenterPreShowerZ = posCenterEcalZ - crystalLength;
   
   // Cleanup old geometry
   if(regionHCAL) {
@@ -183,8 +189,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   logicWorld = new G4LogicalVolume(solidW,worldMaterial,"World");
   physiWorld = new G4PVPlacement(0,G4ThreeVector(),"World",logicWorld,0,false,0);
   
-  ConstructECAL(posCenterEcalZ);
-  ConstructHCAL(posCenterHcalZ);
+  ConstructECAL();
+  ConstructHCAL();
+  if(buildPreShower) ConstructPreShower();
 
   HistoManager* man = HistoManager::GetPointer();
   man->SetWorldLength(worldZ);
@@ -200,7 +207,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::ConstructECAL(G4double posCenterEcalZ)
+void DetectorConstruction::ConstructECAL()
 {
   // ECAL envelope
   G4Box* solidE = new G4Box("VolECal",ecalWidth*0.5,ecalWidth*0.5,crystalLength*0.5);
@@ -258,7 +265,7 @@ void DetectorConstruction::ConstructECAL(G4double posCenterEcalZ)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::ConstructHCAL(G4double posCenterHcalZ)
+void DetectorConstruction::ConstructHCAL()
 {
   if(!regionHCAL) {
     regionHCAL = new G4Region("HCAL");
@@ -342,6 +349,31 @@ void DetectorConstruction::ConstructHCAL(G4double posCenterHcalZ)
     z += 0.5*scinThickness[k];
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ConstructPreShower()
+{
+  G4NistManager* manager = G4NistManager::Instance();
+  const std::vector<G4String>& mat = manager->GetNistMaterialNames();
+  G4int nmat  = mat.size();
+  G4cout << "### DetectorConstruction::ConstructPreShower() added " 
+	 << nmat << " materials " << G4endl;
+  G4double dz = crystalLength/G4double(nmat);
+  G4double z0 = posCenterPreShowerZ - crystalLength*0.5 - dz*0.5;
+  G4Box* solid = new G4Box("PreShower",ecalWidth*0.5,ecalWidth*0.5,dz*0.5);
+  G4LogicalVolume* logic;
+
+  for(G4int i=0; i<nmat; i++) {
+
+    z0 += dz;
+    G4String matname = mat[i];
+    G4Material* m = manager->FindOrBuildMaterial(matname);
+    logic = new G4LogicalVolume(solid,m,matname);
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,z0),matname,logic,physiWorld,false,0);
+  }
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -444,6 +476,14 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
     if(logicWorld) logicWorld->SetMaterial(worldMaterial);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void DetectorConstruction::SetBuildPreShower(G4bool val)
+{
+  buildPreShower = val;
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

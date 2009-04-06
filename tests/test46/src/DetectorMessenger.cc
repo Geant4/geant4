@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.3 2009-01-06 17:24:15 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.4 2009-04-06 12:44:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fCmd->SetUnitCategory("Magnetic flux density");
   fCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  updateCmd = new G4UIcmdWithoutParameter("/testCalorim/UpdateGeometry()",this);
+  updateCmd = new G4UIcmdWithoutParameter("/testCalorim/updateGeometry",this);
   updateCmd->SetGuidance("Update geometry.");
   updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   updateCmd->SetGuidance("if you changed geometrical value(s)");
@@ -133,6 +133,10 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   facCmd2->SetGuidance("Set Hcal factor ");
   facCmd2->SetParameterName("fac2",false);
   facCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  mCmd = new G4UIcmdWithoutParameter("/testCalorim/addPreShower",this);
+  mCmd->SetGuidance("Build PreShower ");
+  mCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,6 +157,7 @@ DetectorMessenger::~DetectorMessenger()
   delete updateCmd;
   delete testDir;
   delete verbCmd;
+  delete mCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,6 +190,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     HistoManager::GetPointer()->SetVerbose(verbCmd->GetNewIntValue(newValue));
   else if( command == updateCmd )
     Detector->UpdateGeometry();
+  else if( command == mCmd )
+    Detector->SetBuildPreShower(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

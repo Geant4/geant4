@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2008-11-20 08:55:42 antoni Exp $
+$Id: History,v 1.2 2009-04-06 12:44:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,12 +15,6 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25-08-08 V.Ivant (test45-V09-01-02)
-- updated scripts
-
-11-06-08 V.Ivant (test45-V09-01-01)
-- fixed visualisation
-
-11-06-08 V.Ivant (test45-V09-01-00)
+12-04-09 V.Ivant (test46-V09-02-00)
 - first release
      

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.4 2009-03-12 10:36:47 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.5 2009-04-06 12:44:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,10 +87,13 @@ public:
   //HCAL
   void SetHcalWidth(G4double);          
 
+  void SetBuildPreShower(G4bool);
+
 private:
 
-  void ConstructECAL(G4double posCenterEcalZ);
-  void ConstructHCAL(G4double posCenterHcalZ);
+  void ConstructECAL();
+  void ConstructHCAL();
+  void ConstructPreShower();
 
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
@@ -131,9 +134,11 @@ private:
 
   G4double hcalWidth;
   G4double hcalThickness;
-};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+  //PreShower
+  G4double posCenterPreShowerZ;
+  G4bool buildPreShower;
+};
 
 #endif
 
