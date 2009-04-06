@@ -82,8 +82,8 @@ class G4QGSParticipants : public G4VParticipants
     // model parameters HPW
     enum  { SOFT, DIFFRACTIVE };
     const G4int nCutMax; 
-    const G4double ThersholdParameter; 
-    const G4double QGSMThershold; 
+    const G4double ThresholdParameter; 
+    const G4double QGSMThreshold; 
     const G4double theNucleonRadius;
     
 };
