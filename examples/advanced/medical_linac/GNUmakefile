@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.3 2009-03-06 09:27:11 gbarrand Exp $
+# $Id: GNUmakefile,v 1.4 2009-04-06 06:43:24 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -17,6 +17,10 @@ endif
 all: lib bin
 include $(G4INSTALL)/config/binmake.gmk
 
+<<<<<<< GNUmakefile
+
+=======
+>>>>>>> 1.3
 ifdef G4STORE_DATA
   CPPFLAGS += -DG4STORE_DATA
 endif
