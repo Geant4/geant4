@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2009-03-06 09:25:45 gbarrand Exp $
+# $Id: GNUmakefile,v 1.10 2009-04-06 06:36:59 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,8 +13,12 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+<<<<<<< GNUmakefile
+
+=======
 #G4ANALYSIS_USE:= true
 
+>>>>>>> 1.9
 .PHONY: all
 all: lib bin
 
