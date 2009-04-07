@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.1 2009-04-07 08:48:00 mkossov Exp $
+// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.2 2009-04-07 15:09:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -82,6 +82,7 @@ void HadronPhysicsQGSC_CHIPS::CreateModels()
   //theBertiniPiK->SetMaxEnergy(9.0*GeV);
    
   theMiscLHEP=new G4MiscLHEPBuilder;            // To be replaced by QGSC
+  //theMiscQGSC=new G4MiscQGSCBuilder;
 }
 
 HadronPhysicsQGSC_CHIPS::~HadronPhysicsQGSC_CHIPS() 
@@ -96,7 +97,9 @@ HadronPhysicsQGSC_CHIPS::~HadronPhysicsQGSC_CHIPS()
    delete theQGSCPiK;
    //delete theBertiniPiK;
    delete thePiK;
+
    delete theMiscLHEP;
+   //delete theMiscQGSC;
 }
 
 void HadronPhysicsQGSC_CHIPS::ConstructParticle()

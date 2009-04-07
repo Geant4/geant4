@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.7 2008-09-24 18:10:51 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.8 2009-04-07 15:09:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
