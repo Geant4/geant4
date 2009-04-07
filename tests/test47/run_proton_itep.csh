@@ -8,26 +8,39 @@
 # must be done EXPLICITLY
 
 # the following settings have been done to run in the OS Grid,
-# submitted via cmslpc cluster;
+# submitted via CMSLPC cluster;
 # application has been composed against CMS build of G4.9.2
+#
+###setenv G4INSTALL /uscmst1/prod/sw/cms/slc4_ia32_gcc345/external/geant4/9.2
+###setenv ROOTSYS /uscmst1/prod/sw/cms/slc4_ia32_gcc345/lcg/root/5.22.00a-cms4/
+###setenv CLHEP_BASE_DIR /uscmst1/prod/sw/cms/slc4_ia32_gcc345/external/clhep/1.9.4.2
+
+#
+# this sets it up to CMS build of G4 on LXPLUS
+#
+setenv G4INSTALL /afs/cern.ch/cms/sw/slc4_ia32_gcc345/external/geant4/9.2
+setenv ROOTSYS /afs/cern.ch/cms/sw/slc4_ia32_gcc345/lcg/root/5.22.00a-cms5
+setenv CLHEP_BASE_DIR /afs/cern.ch/cms/sw/slc4_ia32_gcc345/external/clhep/1.9.4.2
+
+setenv CLHEP_LIB CLHEP
 
 setenv G4SYSTEM Linux-g++
-setenv G4INSTALL /uscmst1/prod/sw/cms/slc4_ia32_gcc345/external/geant4/9.2
-setenv G4LIB /uscmst1/prod/sw/cms/slc4_ia32_gcc345/external/geant4/9.2/lib
-
-setenv G4DATA $G4INSTALL/data
-
-setenv CLHEP_BASE_DIR /uscmst1/prod/sw/cms/slc4_ia32_gcc345/external/clhep/1.9.4.2
-setenv CLHEP_LIB CLHEP
+setenv G4LIB    $G4INSTALL/lib
+setenv G4DATA   $G4INSTALL/data
 
 setenv G4LEVELGAMMADATA $G4DATA/PhotonEvaporation2.0
 setenv G4NEUTRONHPDATA $G4DATA/G4NDL3.12
 setenv G4RADIOACTIVEDATA $G4DATA/RadioactiveDecay3.2
 setenv G4LEDATA $G4DATA/G4EMLOW5.1
 
-setenv ROOTSYS /uscmst1/prod/sw/cms/slc4_ia32_gcc345/lcg/root/5.22.00a-cms4/
+# this is for CMSLPC
+#
+###cd /uscms_data/d2/yarba_j/geant4/tests
+#
+# this is for LXPLUS
+#
+cd $HOME/scratch0/geant4/tests
 
-cd /uscms_data/d2/yarba_j/geant4/tests
 setenv G4WORKDIR  $PWD
 setenv G4EXE $G4WORKDIR/bin/$G4SYSTEM
 
