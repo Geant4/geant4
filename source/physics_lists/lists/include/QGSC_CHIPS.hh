@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef TQGSC_QGSC_h
-#define TQGSC_QGSC_h 1
+#ifndef TQGSC_CHIPS_h
+#define TQGSC_CHIPS_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>
-class TQGSC_QGSC: public T
+class TQGSC_CHIPS: public T
 {
 public:
-  TQGSC_QGSC(G4int ver = 1);
-  virtual ~TQGSC_QGSC();
+  TQGSC_CHIPS(G4int ver = 1);
+  virtual ~TQGSC_CHIPS();
   
 public:
   // SetCuts() 
@@ -44,8 +44,8 @@ public:
 private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
-#include "QGSC_QGSC.icc"
-typedef TQGSC_BERT<G4VModularPhysicsList> QGSC_QGSC;
+#include "QGSC_CHIPS.icc"
+typedef TQGSC_BERT<G4VModularPhysicsList> QGSC_CHIPS;
 
 #endif
 
