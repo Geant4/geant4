@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.86 2009-02-19 09:57:36 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.87 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -273,8 +273,6 @@ protected:
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
 				       G4double cut);
 
-  inline G4ParticleChangeForLoss* GetParticleChange();
-
   inline size_t CurrentMaterialCutsCoupleIndex() const;
 
   inline G4double GetCurrentRange() const;
@@ -294,26 +292,26 @@ public:
   // Add EM model coupled with fluctuation model for region, smaller value 
   // of order defines which pair of models will be selected for a given 
   // energy interval  
-  inline void AddEmModel(G4int, G4VEmModel*, 
-			 G4VEmFluctuationModel* fluc = 0,
-			 const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, 
+		  G4VEmFluctuationModel* fluc = 0,
+		  const G4Region* region = 0);
 
   // Define new energy range for the model identified by the name
-  inline void UpdateEmModel(const G4String&, G4double, G4double);
+  void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Assign a model to a process
-  inline void SetEmModel(G4VEmModel*, G4int index=1);
+  void SetEmModel(G4VEmModel*, G4int index=1);
   
   // return the assigned model
-  inline G4VEmModel* EmModel(G4int index=1);
+  G4VEmModel* EmModel(G4int index=1);
   
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
-  inline G4int NumberOfModels();
+  G4int NumberOfModels();
 
   // Assign a fluctuation model to a process
-  inline void SetFluctModel(G4VEmFluctuationModel*);
+  void SetFluctModel(G4VEmFluctuationModel*);
   
   // return the assigned fluctuation model
   inline G4VEmFluctuationModel* FluctModel();
@@ -556,13 +554,6 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4ParticleChangeForLoss* G4VEnergyLossProcess::GetParticleChange()
-{
-  return &fParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentMaterialIndex;
@@ -589,58 +580,6 @@ inline G4VEmModel* G4VEnergyLossProcess::SelectModelForMaterial(
                    G4double kinEnergy, size_t& idx) const
 {
   return modelManager->SelectModel(kinEnergy, idx);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline
-void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
-				      G4VEmFluctuationModel* fluc,
-				      const G4Region* region)
-{
-  modelManager->AddEmModel(order, p, fluc, region);
-  if(p) p->SetParticleChange(pParticleChange, fluc);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, 
-						G4double emin, G4double emax)
-{
-  modelManager->UpdateEmModel(nam, emin, emax);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
-{
-  G4int n = emModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
-  emModels[index] = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
-{
-  G4VEmModel* p = 0;
-  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
-  return p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver)
-{
-  return modelManager->GetModel(idx, ver);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4int G4VEnergyLossProcess::NumberOfModels()
-{
-  return modelManager->NumberOfModels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

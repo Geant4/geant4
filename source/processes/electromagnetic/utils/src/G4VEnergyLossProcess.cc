@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.146 2009-02-19 11:25:50 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.147 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -324,6 +324,56 @@ G4double G4VEnergyLossProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
 						G4double cut)
 {
   return cut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
+				      G4VEmFluctuationModel* fluc,
+				      const G4Region* region)
+{
+  modelManager->AddEmModel(order, p, fluc, region);
+  if(p) p->SetParticleChange(pParticleChange, fluc);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, 
+					 G4double emin, G4double emax)
+{
+  modelManager->UpdateEmModel(nam, emin, emax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
+{
+  G4int n = emModels.size();
+  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  emModels[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
+{
+  G4VEmModel* p = 0;
+  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver)
+{
+  return modelManager->GetModel(idx, ver);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEnergyLossProcess::NumberOfModels()
+{
+  return modelManager->NumberOfModels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

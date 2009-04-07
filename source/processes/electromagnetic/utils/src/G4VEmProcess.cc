@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.62 2009-02-19 09:57:36 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.63 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -153,6 +153,49 @@ void G4VEmProcess::Clear()
   mfpKinEnergy  = DBL_MAX;
   deRegions.clear();
   nDERegions = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
+			      const G4Region* region)
+{
+  G4VEmFluctuationModel* fm = 0;
+  modelManager->AddEmModel(order, p, fm, region);
+  if(p) p->SetParticleChange(pParticleChange);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
+{
+  G4int n = emModels.size();
+  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  emModels[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEmProcess::Model(G4int index)
+{
+  G4VEmModel* p = 0;
+  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::UpdateEmModel(const G4String& nam, 
+				 G4double emin, G4double emax)
+{
+  modelManager->UpdateEmModel(nam, emin, emax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
+{
+  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

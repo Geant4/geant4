@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.8 2009-02-24 09:56:03 vnivanch Exp $
+// $Id: G4VMscModel.hh,v 1.9 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,7 @@
 // Creation date: 07.03.2008
 //
 // Modifications:
-//
+// 07.04.2009 V.Ivanchenko moved msc methods from G4VEmModel to G4VMscModel 
 //
 // Class Description:
 //
@@ -68,6 +68,17 @@ public:
 
   virtual ~G4VMscModel();
 
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, 
+					      G4PhysicsTable* theLambdaTable, 
+					      G4double currentMinimalStep);
+
+  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+
+  virtual G4double ComputeTrueStepLength(G4double geomPathLength);
+
+  virtual void SampleScattering(const G4DynamicParticle*,
+				G4double safety);
+
   // empty 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -92,6 +103,9 @@ public:
   inline void SetSampleZ(G4bool);
 
 protected:
+
+  // initialisation of the ParticleChange for the model
+  G4ParticleChangeForMSC* GetParticleChangeForMSC();
 
   // initialisation of interface with geometry
   void InitialiseSafetyHelper();

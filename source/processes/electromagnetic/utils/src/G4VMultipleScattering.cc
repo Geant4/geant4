@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.60 2008-11-20 20:32:40 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.61 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -131,6 +131,23 @@ G4VMultipleScattering::~G4VMultipleScattering()
     delete theLambdaTable;
   }
   (G4LossTableManager::Instance())->DeRegister(this);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
+				       const G4Region* region)
+{
+  G4VEmFluctuationModel* fm = 0;
+  modelManager->AddEmModel(order, p, fm, region);
+  if(p) p->SetParticleChange(pParticleChange);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver)
+{
+  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

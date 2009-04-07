@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.66 2009-02-19 09:57:36 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.67 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,8 @@
 // 21-07-08 Added vector of G4ElementSelector and methods to use it (VI)
 // 12-09-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
 //          CorrectionsAlongStep, ActivateNuclearStopping (VI)
-// 16-02-09 Move implementations of virtual methods to source (VI)
+// 16-02-09 Moved implementations of virtual methods to source (VI)
+// 07-04-09 Moved msc methods from G4VEmModel to G4VMscModel (VI)
 //
 // Class Description:
 //
@@ -92,6 +93,8 @@
 class G4PhysicsTable;
 class G4Region;
 class G4VParticleChange;
+class G4ParticleChangeForLoss;
+class G4ParticleChangeForGamma;
 class G4Track;
 
 class G4VEmModel
@@ -167,34 +170,27 @@ public:
 					   const G4Track&,
                                            G4double& eloss);
 
+  // add region for the model
+  virtual void DefineForRegion(const G4Region*);
+
+  // initilisation at run time for given material
+  virtual void SetupForMaterial(const G4ParticleDefinition*,
+				const G4Material*,
+                                G4double kineticEnergy);
+
 protected:
+
+  // initialisation of the ParticleChange for the model
+  G4ParticleChangeForLoss* GetParticleChangeForLoss();
+
+  // initialisation of the ParticleChange for the model
+  G4ParticleChangeForGamma* GetParticleChangeForGamma();
 
   // kinematically allowed max kinetic energy of a secondary
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kineticEnergy);  
-				          
-  //------------------------------------------------------------------------
-  // Methods for msc simulation which needs to be overwritten 
-  //------------------------------------------------------------------------
 
 public:
-
-  virtual void SampleScattering(const G4DynamicParticle*,
-				G4double safety);
-
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, 
-					      G4PhysicsTable* theLambdaTable, 
-					      G4double currentMinimalStep);
-
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
-
-  virtual G4double ComputeTrueStepLength(G4double geomPathLength);
-
-  virtual void DefineForRegion(const G4Region*);
-
-  virtual void SetupForMaterial(const G4ParticleDefinition*,
-				const G4Material*,
-                                G4double kineticEnergy);
 
   //------------------------------------------------------------------------
   // Generic methods common to all models

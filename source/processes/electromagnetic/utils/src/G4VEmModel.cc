@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.25 2009-02-19 09:57:36 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.26 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,8 @@
 #include "G4VEmModel.hh"
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParticleChangeForLoss.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,6 +82,32 @@ G4VEmModel::~G4VEmModel()
       delete elmSelectors[i]; 
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
+{
+  G4ParticleChangeForLoss* p = 0;
+  if (pParticleChange) {
+    p = static_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  } else {
+    p = new G4ParticleChangeForLoss();
+  }
+  return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
+{
+  G4ParticleChangeForGamma* p = 0;
+  if (pParticleChange) {
+    p = static_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  } else {
+    p = new G4ParticleChangeForGamma();
+  }
+  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -214,34 +242,6 @@ G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 					G4double kineticEnergy)
 {
   return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VEmModel::SampleScattering(const G4DynamicParticle*, G4double)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VEmModel::ComputeTruePathLengthLimit(const G4Track&, 
-						G4PhysicsTable*, 
-						G4double)
-{
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VEmModel::ComputeGeomPathLength(G4double truePathLength)
-{
-  return truePathLength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VEmModel::ComputeTrueStepLength(G4double geomPathLength)
-{
-  return geomPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

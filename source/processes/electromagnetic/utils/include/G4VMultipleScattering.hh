@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.55 2009-02-18 12:19:33 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.56 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,6 +63,7 @@
 // 12-02-07 Add get/set skin (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 15-07-08 Reorder class members for further multi-thread development (VI)
+// 07-04-09 Moved msc methods from G4VEmModel to G4VMscModel (VI) 
 //
 
 // -------------------------------------------------------------------
@@ -79,7 +80,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4EmModelManager.hh"
-#include "G4VEmModel.hh"
+#include "G4VMscModel.hh"
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
@@ -205,10 +206,10 @@ public:
 
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
-  inline void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
+  void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
 
   // Access to models by index
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   //------------------------------------------------------------------------
   // Get/Set parameters for simulation of multiple scattering
@@ -238,7 +239,7 @@ public:
 
 protected:
 
-  // This method is used for tracking, it returns mean free path value
+  // This method is not used for tracking, it returns mean free path value
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double,
 			   G4ForceCondition* condition);
@@ -249,6 +250,7 @@ protected:
 				  G4double currentMinimalStep,
 				  G4double& currentSafety);
 
+  // This method returns inversed transport cross section
   inline G4double GetLambda(const G4ParticleDefinition* p, 
 			    G4double& kineticEnergy);
 
@@ -258,13 +260,10 @@ protected:
 					    G4double currentMinimalStep,
 					    G4double& currentSafety);
 
-  // define current material
+  // defines current material in run time
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
   inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
-
-  inline G4ParticleChangeForMSC* GetParticleChange();
-
 
 private:
 
@@ -304,7 +303,7 @@ protected:
 
 private:
 
-  G4VEmModel*                 currentModel;
+  G4VMscModel*                currentModel;
 
   // cache
   const G4ParticleDefinition* currentParticle;
@@ -391,16 +390,6 @@ inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
-					      const G4Region* region)
-{
-  G4VEmFluctuationModel* fm = 0;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 {
   return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
@@ -412,14 +401,6 @@ inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
 		   G4double kinEnergy, size_t& idxRegion) const
 {
   return modelManager->SelectModel(kinEnergy, idxRegion);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver)
-{
-  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -538,7 +519,7 @@ inline G4double G4VMultipleScattering::GetMscContinuousStepLimit(
 {
   G4double x = currentMinimalStep;
   DefineMaterial(track.GetMaterialCutsCouple());
-  currentModel = SelectModel(scaledKinEnergy);
+  currentModel = static_cast<G4VMscModel*>(SelectModel(scaledKinEnergy));
   if(x > 0.0 && scaledKinEnergy > 0.0) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
@@ -569,13 +550,6 @@ G4VMultipleScattering::CurrentMaterialCutsCouple() const
 {
   return currentCouple;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4ParticleChangeForMSC* G4VMultipleScattering::GetParticleChange()
-{
-  return &fParticleChange;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

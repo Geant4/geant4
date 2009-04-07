@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.50 2009-02-19 09:57:36 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.51 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -210,19 +210,19 @@ public:
    
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
-  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   // Assign a model to a process
-  inline void SetModel(G4VEmModel*, G4int index = 1);
+  void SetModel(G4VEmModel*, G4int index = 1);
   
   // return the assigned model
-  inline G4VEmModel* Model(G4int index = 1);
+  G4VEmModel* Model(G4int index = 1);
     
   // Define new energy range for the model identified by the name
-  inline void UpdateEmModel(const G4String&, G4double, G4double);
+  void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
 
   inline void SetLambdaFactor(G4double val);
 
@@ -479,49 +479,6 @@ inline G4VEmModel* G4VEmProcess::SelectModelForMaterial(
                                    G4double kinEnergy, size_t& idxRegion) const
 {
   return modelManager->SelectModel(kinEnergy, idxRegion);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
-				     const G4Region* region)
-{
-  G4VEmFluctuationModel* fm = 0;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
-{
-  G4int n = emModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
-  emModels[index] = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VEmProcess::Model(G4int index)
-{
-  G4VEmModel* p = 0;
-  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
-  return p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::UpdateEmModel(const G4String& nam, 
-					G4double emin, G4double emax)
-{
-  modelManager->UpdateEmModel(nam, emin, emax);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
-{
-  return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

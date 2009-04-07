@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.10 2009-02-24 09:56:03 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.11 2009-04-07 18:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -76,6 +76,19 @@ G4VMscModel::~G4VMscModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
+{
+  G4ParticleChangeForMSC* p = 0;
+  if (pParticleChange) {
+    p = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  } else {
+    p = new G4ParticleChangeForMSC();
+  }
+  return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4VMscModel::InitialiseSafetyHelper()
 {
   if(!safetyHelper) {
@@ -123,6 +136,34 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
     }
     fParticleChange->ProposePosition(newPosition);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, 
+						 G4PhysicsTable*, 
+						 G4double)
+{
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMscModel::ComputeGeomPathLength(G4double truePathLength)
+{
+  return truePathLength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMscModel::ComputeTrueStepLength(G4double geomPathLength)
+{
+  return geomPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
