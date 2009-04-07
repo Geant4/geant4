@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.18 2008-10-28 07:12:31 kurasige Exp $
+// $Id: G4NucleiProperties.hh,v 1.19 2009-04-07 03:24:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,13 +37,14 @@
 // Added Shell-Pairing corrections to the Cameron mass 
 // excess formula by V.Lara (9 May 99)
 // 
+// 090331 Migrate to AME03 by Koi, Tatsumi 
 
 #ifndef G4NucleiProperties_h
 #define G4NucleiProperties_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiPropertiesTableAME03.hh"
 #include "G4NucleiPropertiesTheoreticalTable.hh"
 #include "G4ParticleTable.hh"
 

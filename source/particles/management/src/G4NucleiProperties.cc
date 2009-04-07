@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.19 2009-04-02 02:24:53 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.20 2009-04-07 03:24:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,7 @@
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
 // Added Shell-Pairing corrections to the Cameron mass 
 // excess formula by V.Lara (9 May 99)
-
+// 090331 Migrate to AME03 by Koi, Tatsumi 
 
 #include "G4NucleiProperties.hh"
 
@@ -54,8 +54,8 @@ G4double G4NucleiProperties::electronMass[MaxZ];
 
 G4double  G4NucleiProperties::AtomicMass(G4double A, G4double Z)
 {
-  const G4double hydrogen_mass_excess = G4NucleiPropertiesTable::GetMassExcess(1,1);
-  const G4double neutron_mass_excess =  G4NucleiPropertiesTable::GetMassExcess(0,1);
+  const G4double hydrogen_mass_excess = G4NucleiPropertiesTableAME03::GetMassExcess(1,1);
+  const G4double neutron_mass_excess =  G4NucleiPropertiesTableAME03::GetMassExcess(0,1);
 
   G4double mass =
       (A-Z)*neutron_mass_excess + Z*hydrogen_mass_excess - BindingEnergy(A,Z) + A*amu_c2;
@@ -101,7 +101,9 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 
     for (int iz=1; iz<MaxZ; iz+=1){
       electronMass[iz] =  iz*electron_mass_c2 
-	                         - 1.433e-5*MeV*std::pow(G4double(iz),2.39); ;
+//	                         - 1.433e-5*MeV*std::pow(G4double(iz),2.39); ;
+//    Migrate to AME03
+      - ( 14.4381*std::pow ( Z , 2.39 ) + 1.55468*1e-6*std::pow ( Z , 5.35 ) ) *eV;
     }
   }
 
@@ -132,7 +134,9 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
     }
     if (mass < 0.) {
       if (Z >= MaxZ) {
-	mass = GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);      
+	//mass = GetAtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*std::pow(Z,2.39);      
+//    Migrate to AME03
+	mass = GetAtomicMass(A,Z) - Z*electron_mass_c2 + ( 14.4381*std::pow ( Z , 2.39 ) + 1.55468*1e-6*std::pow ( Z , 5.35 ) )*eV;      
       } else {
 	mass = GetAtomicMass(A,Z) - electronMass[G4int(Z)];
       }
@@ -156,7 +160,7 @@ G4bool G4NucleiProperties::IsInStableTable(const G4double A, const G4double Z)
   } else {
     G4int iA = G4int(A);
     G4int iZ = G4int(Z);
-    return G4NucleiPropertiesTable::IsInTable(iZ,iA);
+    return G4NucleiPropertiesTableAME03::IsInTable(iZ,iA);
   }
 }
 
@@ -180,8 +184,8 @@ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
     
   } else {
 
-    if (G4NucleiPropertiesTable::IsInTable(Z,A)){
-      return G4NucleiPropertiesTable::GetMassExcess(Z,A);
+    if (G4NucleiPropertiesTableAME03::IsInTable(Z,A)){
+      return G4NucleiPropertiesTableAME03::GetMassExcess(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
       return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
     } else {
@@ -209,8 +213,8 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
   } else {
     G4int iA = G4int(A);
     G4int iZ = G4int(Z);
-    if (G4NucleiPropertiesTable::IsInTable(iZ,iA)) {
-      return G4NucleiPropertiesTable::GetAtomicMass(iZ,iA);
+    if (G4NucleiPropertiesTableAME03::IsInTable(iZ,iA)) {
+      return G4NucleiPropertiesTableAME03::GetAtomicMass(iZ,iA);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(iZ,iA)){
       return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(iZ,iA);
     } else {
@@ -238,8 +242,8 @@ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
     return 0.0;
 
   } else {
-    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
-      return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
+    if (G4NucleiPropertiesTableAME03::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTableAME03::GetBindingEnergy(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
       return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
     }else {
@@ -254,4 +258,3 @@ G4double G4NucleiProperties::MassExcess(G4double A, G4double Z)
 {
   return GetAtomicMass(A,Z) - A*amu_c2;
 }
-	
