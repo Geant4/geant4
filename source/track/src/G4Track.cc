@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.31 2009-04-02 02:22:30 kurasige Exp $
+// $Id: G4Track.cc,v 1.32 2009-04-08 08:07:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -211,8 +211,12 @@ G4double G4Track::GetVelocity() const
     }
 
   } else {
-    G4double T = fpDynamicParticle->GetKineticEnergy();
-    velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass);
+    if (mass<DBL_MIN) {
+      velocity = c_light;
+    } else {
+      G4double T = fpDynamicParticle->GetKineticEnergy();
+      velocity = c_light*std::sqrt(T*(T+2.*mass))/(T+mass);
+    }
   }
                                                                                 
   return velocity ;
