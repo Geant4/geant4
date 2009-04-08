@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.9 2009-02-25 15:15:50 lgarnier Exp $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.10 2009-04-08 16:55:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ void G4OpenGLXmViewer::print_callback (Widget,
 				    XtPointer) 
 {
   G4OpenGLXViewer* pView = (G4OpenGLXmViewer*) clientData;
-  pView->print();
+  pView->printEPS();
 }
 
 void G4OpenGLXmViewer::set_print_colour_callback (Widget w,

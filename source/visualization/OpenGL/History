@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2009-04-08 15:15:07 lgarnier Exp $
+$Id: History,v 1.135 2009-04-08 16:55:44 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,20 @@ History file for visualization/OpenGL
 
 8th April 2009, Laurent Garnier
  - G4OpenGLBitmapStore.hh : BugFix correction for windows (introduce 2nd February ?)
+ - G4OpenGLViewer.hh : move methods in private
+ - G4OpenGLXViewer.hh : Add debug methods
+ - G4OpenGLImmediateXmViewer.cc, G4OpenGLStoredViewer.cc, G4OpenGLStoredXmViewer.cc,
+   G4OpenGLStoredXViewer.cc, G4OpenGLViewer.cc   : Add debug messages
+ - G4OpenGLStoredXmViewer.cc,G4OpenGLStoredXViewer.cc, G4OpenGLStoredWin32Viewer.cc :
+   - Add a DrawDisplay list in case of KernelVisit=1 and  nothing new to display. 
+   - Add a flush at the end of the view.
+ - G4OpenGLViewer.cc : 
+   - Improve the fix and resizing when X/Y size was even (lack of precision
+     in a /2)
+   - Set line/point size at a default size when printing.
+ - G4OpenGLXmWindowsHandlingCallbacks.cc : print method rename in printEPS
+ - G4OpenGLXViewer.cc : Lot of changes, try to debug it. Pb when printing in pixmap
+   mode on some windows size
 
 6th April 2009, Joseph Perl (opengl-V09-02-02)
  - New tag to clean up all of the cases of files that changed only in the cvs id.

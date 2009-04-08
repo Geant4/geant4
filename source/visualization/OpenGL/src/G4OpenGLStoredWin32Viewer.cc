@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.20 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.21 2009-04-08 16:55:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,9 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
 	ClearView();
 	DrawDisplayLists ();
 	FinishView ();
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
       }
     }
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.29 2009-03-05 16:36:13 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.30 2009-04-08 16:55:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,12 +69,9 @@ protected:
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
-  GLubyte* grabPixels (int inColor,
-		       unsigned int width,
-		       unsigned int height);
-  bool printNonVectoredEPS ();
-  bool printVectoredEPS();
   void printEPS();
+  // print EPS file. Depending of fVectoredPs, it will print Vectored or not
+  
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
@@ -107,6 +104,14 @@ protected:
 private :
   G4float                           fPointSize;
   bool printGl2PS();
+  GLubyte* grabPixels (int inColor,
+		       unsigned int width,
+		       unsigned int height);
+  bool printNonVectoredEPS ();
+  // print non vectored EPS files
+
+  bool printVectoredEPS();
+  // print vectored EPS files
 };
 
 typedef struct G4OpenGLViewerFeedback3Dcolor {

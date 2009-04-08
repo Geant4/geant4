@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.51 2009-03-05 16:36:13 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.52 2009-04-08 16:55:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,7 @@
 #include "G4VSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
+#include "G4StateManager.hh"
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -409,15 +410,37 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
   }
 }
 
-void G4OpenGLXViewer::print() {
+void G4OpenGLXViewer::printEPS() {
   
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print \n");
+#endif
+
   //using namespace std;
   //cout << "print_col_callback requested with file name: " << fPrintFilename << G4endl;
   
   if (fVectoredPs) {
-    printEPS();    
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print Vectored\n");
+#endif
+    G4OpenGLViewer::printEPS();    
   } else {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print non Vectored\n");
+#endif
+//     G4StateManager* stateManager = G4StateManager::GetStateManager(); 
+//     G4ApplicationState oldState = stateManager->GetCurrentState(); 
+//     stateManager->SetNewState(G4State_Idle);  
 
+//     printEPS ();
+
+//     stateManager->SetNewState(oldState);  
+    
+//     //    fPrintFilename =   fPrintFilename+"-Gl2ps.ps"; 
+//     return;
+
+// save context before
+    tmp_cx = cx;
     XVisualInfo* pvi;
     GLXContext pcx = create_GL_print_context(pvi);
 
@@ -426,8 +449,9 @@ void G4OpenGLXViewer::print() {
       return;
     }
 
-    GLXContext tmp_cx;
-    tmp_cx = cx;
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print Create pixmap  Size :%d %d\n",fWinSize_x, fWinSize_y);
+#endif
     cx=pcx;
     
     Pixmap pmap = XCreatePixmap (dpy,
@@ -435,30 +459,101 @@ void G4OpenGLXViewer::print() {
 				 fWinSize_x, fWinSize_y,
 				 pvi->depth);
     
+
+    if (!pmap) {
+      G4cout << "Unable to create pixmap." << G4endl;
+      return;
+    }
+
+
     GLXPixmap glxpmap = glXCreateGLXPixmap (dpy, 
 					    pvi,
 					    pmap);
     
+    if (!glxpmap) {
+      G4cout << "Unable to create glx pixmap." << G4endl;
+      return;
+    }
+
+
     GLXDrawable tmp_win;
     tmp_win=win;
     win=glxpmap;
     
-    glXMakeCurrent (dpy,
-		    win,
-		    cx);
-        
+//     int winX=fWinSize_x;
+//     int winY=fWinSize_y;
+
+    //#define CHECK_MULTIPLE_PRINT 1
+#ifdef CHECK_MULTIPLE_PRINT
+    for (int tstX  = 3000-2;tstX <=3000+2;tstX++) {
+      for (int tstY  = 3000-2;tstY <=3000+2;tstY++) {
+        fWinSize_y = tstY;
+        fWinSize_x = tstX;
+        std::string file = "G4OpenGL_XPixmap";
+        file += tstX;
+        file +="x";
+        file +=tstY;
+        file +=".eps";
+#else
+        std::string file = "G4OpenGL_XPixmapTest.eps";
+#endif
+
+    // clear the buffers and window.
+    SetView();
     ClearView ();
-    SetView ();
-    DrawView ();
+
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print Call DrawView \n");
+#endif
+
+
+
+    // Need to force redraw for SXm mode
+    NeedKernelVisit ();
+
+    // Need to change state to IDLE
+    G4StateManager* stateManager = G4StateManager::GetStateManager(); 
+    G4ApplicationState oldState = stateManager->GetCurrentState(); 
+    stateManager->SetNewState(G4State_Idle);  
+
     
-    printEPS ();
+
+    DrawView (); // Will make current glX
+
+    // Restore state
+    stateManager->SetNewState(oldState);  
+
+
+
     
+    generateEPSX (file.c_str(),
+                 fPrintColour,
+                 fWinSize_x, fWinSize_y);
+    
+#ifdef CHECK_MULTIPLE_PRINT
+      }
+    }
+    fWinSize_y = winY;
+    fWinSize_x = winX;
+#endif
     win=tmp_win;
     cx=tmp_cx;
     
-    glXMakeCurrent (dpy,
-		    win,
-		    cx);
+//     bool er2 = glXMakeCurrent (dpy,
+//  		    win,
+//  		    cx);
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLXViewer::print Restored \n");
+#endif
+    //    printf("Error 1:%d 2:%d\n",er1,er2);
+    
+    // Free print context 
+    XFreePixmap(dpy,pmap);
+    glXDestroyContext(dpy,pcx);
+    glXDestroyGLXPixmap(dpy,glxpmap);
+    
+    // Restore view in display context
+    SetView();
     
   }
 
@@ -477,10 +572,230 @@ GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi) {
 			   dblBuf_RGBA);
   }
 
+//    GLXFBConfig *fbc;
+//    XVisualInfo *vi;
+//    Colormap cmap;
+//    XSetWindowAttributes swa;
+//    Window win;
+//    GLXContext cx;
+//    GLXWindow gwin;
+//    XEvent event;
+//    int nelements;
+ 
+//    /* Find a FBConfig that uses RGBA.  Note that no attribute list is */
+//    /* needed since GLX_RGBA_BIT is a default attribute.               */
+//    fbc = glXChooseFBConfig(dpy,XRootWindow (dpy, pvi->screen), 0, &nelements);
+//    vi = glXGetVisualFromFBConfig(dpy, fbc[0]);
+ 
+//    /* Create a GLX context using the first FBConfig in the list. */
+//    return  glXCreateNewContext(dpy, fbc[0], GLX_RGBA_TYPE, 0, GL_FALSE);
+ 
+
+  
   return glXCreateContext (dpy,
 			   pvi,
-			   NULL,
+			   0,
 			   False);
 }
+
+
+bool G4OpenGLXViewer::grabPixelsX (unsigned int width, unsigned int height,GLenum format,GLubyte* buffer) {
+#ifdef G4DEBUG_VIS_OGL
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+  printf("G4OpenGLXViewer::grabPixelsX %d %d     viewport %d %d %d %d\n",width,height,viewport[0],viewport[1],viewport[2],viewport[3]);
+#endif
+	 
+  GLint swapbytes, lsbfirst, rowlength;
+  GLint skiprows, skippixels, alignment;
+
+  unsigned int lineSize = 0;
+  if (format == GL_RGB){
+    lineSize = width*3;
+  } else {
+    lineSize = width*1;
+  }
+  
+  GLubyte* lineBuffer = new GLubyte[lineSize];
+  if (lineBuffer == NULL)
+    return false;
+  for (unsigned int y = 0; y<lineSize; y++) {
+    lineBuffer[y] = 0;
+  }
+
+  glGetIntegerv (GL_UNPACK_SWAP_BYTES, &swapbytes);
+  glGetIntegerv (GL_UNPACK_LSB_FIRST, &lsbfirst);
+  glGetIntegerv (GL_UNPACK_ROW_LENGTH, &rowlength);
+	
+  glGetIntegerv (GL_UNPACK_SKIP_ROWS, &skiprows);
+  glGetIntegerv (GL_UNPACK_SKIP_PIXELS, &skippixels);
+  glGetIntegerv (GL_UNPACK_ALIGNMENT, &alignment);
+	
+  glPixelStorei (GL_UNPACK_SWAP_BYTES, GL_FALSE);
+  glPixelStorei (GL_UNPACK_LSB_FIRST, GL_FALSE);
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+	
+  glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+	
+  // FIXME L.Garnier 25 03 2009
+  // Try to read at first a block of width by height
+  // But on mac osX 10.5.6 on some window size their is
+  // some stranges effects: 
+  // Pixels should came 3 values by 3 values but on border
+  // it seems that with some window size there is a lack of
+  // 1 or 2 values. For example a gray level picture like
+  // (1,1,1) (2,2,2) (3,3,3) 
+  // (4,4,4) (5,5,5) (6,6,6) 
+  // (7,7,7) (8,8,8) (9,9,9)
+  // appear as (with all buffer values init to 999) :
+  // (1,1,1) (2,2,2) (3,3,3) 
+  // (999,999,4) (4,4,5) (5,5,6) 
+  // (6,6,999) (999,999,7) (7,7,8)
+  // STRANGE EFFECT....
+
+  // Then we read line by line...and NO problem ! 
+
+
+  for (unsigned int i=0;i<height;i++) {
+    glReadPixels (0, i, (GLsizei)width, 1, format, GL_UNSIGNED_BYTE, (GLvoid*) lineBuffer);
+    glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+    //    printf("\n%d ",i);
+    for (unsigned int j=0;j<lineSize;j++) {
+      buffer[j+i*lineSize] = lineBuffer[j];
+      //      printf("%d ",buffer[j]);
+    }
+  }
+  //                 //be propagated before progressing.
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLXViewer::GrabPixelX flush\n");
+#endif
+  glFlush ();
+
+  delete [] lineBuffer;
+  
+  glPixelStorei (GL_UNPACK_SWAP_BYTES, swapbytes);
+  glPixelStorei (GL_UNPACK_LSB_FIRST, lsbfirst);
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, rowlength);
+	 
+  glPixelStorei (GL_UNPACK_SKIP_ROWS, skiprows);
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, skippixels);
+  glPixelStorei (GL_UNPACK_ALIGNMENT, alignment);
+	 
+  
+  return true;
+}
+	
+int G4OpenGLXViewer::generateEPSX (const char* filnam,
+                                  int inColour,
+                                  unsigned int width,
+                                  unsigned int height) {
+	
+  FILE* fp;
+  GLubyte* pixels;
+  GLubyte* curpix;
+  int components;
+
+  GLenum format;
+  int size;
+	
+  if (inColour) {
+    format = GL_RGB;
+    size = width*height*3;
+  } else {
+    format = GL_LUMINANCE;
+    size = width*height*1;
+  }
+	
+  pixels = new GLubyte[size];
+  if (pixels == NULL)
+    return NULL;
+  for (int y = 0; y<size; y++) {
+    pixels[y] = 0;
+  }
+
+	
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLXViewer::generateEPSX\n");
+#endif
+  
+
+  if (!grabPixelsX (width, height,format,pixels)) {
+    return 1;
+  }
+#ifdef G4DEBUG_VIS_OGL
+    printf("--\n--\n--\n");
+#endif
+	
+  if (inColour) {
+    components = 3;
+  } else {
+    components = 1;
+  }
+	 
+  fp = fopen (filnam, "w");
+  if (fp == NULL) {
+    return 2;
+  }
+	 
+  fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
+  fprintf (fp, "%%%%Title: %s\n", filnam);
+  fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
+  fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", width, height);
+  fprintf (fp, "%%%%EndComments\n");
+  fprintf (fp, "gsave\n");
+  fprintf (fp, "/bwproc {\n");
+  fprintf (fp, "    rgbproc\n");
+  fprintf (fp, "    dup length 3 idiv string 0 3 0 \n");
+  fprintf (fp, "    5 -1 roll {\n");
+  fprintf (fp, "    add 2 1 roll 1 sub dup 0 eq\n");
+  fprintf (fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
+  fprintf (fp, "       3 1 roll 5 -1 roll } put 1 add 3 0 \n");
+  fprintf (fp, "    { 2 1 roll } ifelse\n");
+  fprintf (fp, "    }forall\n");
+  fprintf (fp, "    pop pop pop\n");
+  fprintf (fp, "} def\n");
+  fprintf (fp, "systemdict /colorimage known not {\n");
+  fprintf (fp, "   /colorimage {\n");
+  fprintf (fp, "       pop\n");
+  fprintf (fp, "       pop\n");
+  fprintf (fp, "       /rgbproc exch def\n");
+  fprintf (fp, "       { bwproc } image\n");
+  fprintf (fp, "   }  def\n");
+  fprintf (fp, "} if\n");
+  fprintf (fp, "/picstr %d string def\n", width * components);
+  fprintf (fp, "%d %d scale\n", width, height);
+  fprintf (fp, "%d %d %d\n", width, height, 8);
+  fprintf (fp, "[%d 0 0 %d 0 0]\n", width, height);
+  fprintf (fp, "{currentfile picstr readhexstring pop}\n");
+  fprintf (fp, "false %d\n", components);
+  fprintf (fp, "colorimage\n");
+	 
+  curpix = (GLubyte*) pixels;
+  unsigned int pos = 0;
+  for (unsigned int i = width*height*components; i>0; i--) {
+    fprintf (fp, "%02hx ", *(curpix++));
+    if (++pos >= width) {
+      //    if (++pos >= 32) {
+      fprintf (fp, "\n");
+      pos = 0;
+    }
+  }
+  if (pos)
+    fprintf (fp, "\n");
+	
+  fprintf (fp, "grestore\n");
+  fprintf (fp, "showpage\n");
+  delete pixels;
+  fclose (fp);
+
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLXViewer::generateEPSX END\n");
+#endif
+
+  return 0;
+}
+	
 
 #endif

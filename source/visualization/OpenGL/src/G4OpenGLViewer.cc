@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.52 2009-04-02 09:31:37 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.53 2009-04-08 16:55:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,6 +114,9 @@ void G4OpenGLViewer::InitializeGLView ()
 }  
 
 void G4OpenGLViewer::ClearView () {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::ClearView\n");
+#endif
   glClearColor (background.GetRed(),
 		background.GetGreen(),
 		background.GetBlue(),
@@ -124,6 +127,9 @@ void G4OpenGLViewer::ClearView () {
   glClear (GL_COLOR_BUFFER_BIT);
   glClear (GL_DEPTH_BUFFER_BIT);
   glClear (GL_STENCIL_BUFFER_BIT);
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::ClearView flush\n");
+#endif
   glFlush ();
 }
 
@@ -164,16 +170,28 @@ void G4OpenGLViewer::ResizeGLView()
 
   // SPECIAL CASE
   if ((fWinSize_x - side)%2) {
-    fWinSize_x --;
+    //    fWinSize_x --;
+
+    side = fWinSize_x;
+    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
   }
   if ((fWinSize_y - side)%2) {
-    fWinSize_y --;
+    //    fWinSize_y --;
+
+    side = fWinSize_x;
+    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
   }
   
-  GLint width = (fWinSize_x - side) / 2;
-  GLint height = (fWinSize_y - side) / 2;
+  GLint X = (fWinSize_x - side) / 2;
+  GLint Y = (fWinSize_y - side) / 2;
   
-  glViewport(width, height, side, side);  
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::ResizeGLView X:%d Y:%d W:%d H:%d --side%d\n",(fWinSize_x - side) / 2,(fWinSize_y - side) / 2,fWinSize_x,fWinSize_y,side);
+#endif
+  glViewport(X, Y, side, side);
+  //    glViewport(0, 0, fWinSize_x,fWinSize_y);  
+  
+
 }
 
 
@@ -460,6 +478,9 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
 
 void G4OpenGLViewer::printEPS() {
   bool res;
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::printEPS file:%s Vec:%d\n",fPrintFilename.c_str(),fVectoredPs);
+#endif
   if (fVectoredPs) {
     res = printVectoredEPS();
   } else {
@@ -492,6 +513,9 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
     height = fPrintSizeY;
   }
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d\n",fPrintFilename.c_str(),fVectoredPs,width,height,fPrintColour);
+#endif
   FILE* fp;
   GLubyte* pixels;
   GLubyte* curpix;
@@ -600,6 +624,12 @@ bool G4OpenGLViewer::printGl2PS() {
   fWinSize_y = height;
   ResizeGLView();
   if (fGL2PSAction->enableFileWriting()) {
+
+    // By default, we choose the line width (trajectories...)
+    fGL2PSAction->setLineWidth(1);
+    // By default, we choose the point size (markers...)
+    fGL2PSAction->setPointSize(2);
+
     DrawView ();
     fGL2PSAction->disableFileWriting();
   }
