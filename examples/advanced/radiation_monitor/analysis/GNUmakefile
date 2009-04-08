@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2009-03-06 10:37:37 gbarrand Exp $
+# $Id: GNUmakefile,v 1.3 2009-04-08 11:25:36 cirrone Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -42,6 +42,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I../generalPurpose/include \
             -I../sensitivity/include \
             -I../userActions/include
+
 
 include $(G4INSTALL)/config/analysis.gmk
 

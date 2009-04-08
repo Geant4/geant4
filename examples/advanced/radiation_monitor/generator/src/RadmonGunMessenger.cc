@@ -30,7 +30,7 @@
 //    *****************************************
 //
 //
-// $Id: RadmonGunMessenger.cc,v 1.1 2006-03-17 17:13:04 sfonseca Exp $
+// $Id: RadmonGunMessenger.cc,v 1.2 2009-04-08 11:25:36 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ RadmonGunMessenger::~RadmonGunMessenger()
  
 void RadmonGunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
- if (command == dataCmd) primary -> ReadProbability(newValue);
+  // if (command == dataCmd) primary -> ReadProbability(newValue);
  //if (command == dataCmd) primary -> ReadProbability(newValue);
   
 
