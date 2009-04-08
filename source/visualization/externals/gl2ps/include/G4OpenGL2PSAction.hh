@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4OpenGL2PSAction.hh,v 1.2 2009-04-08 15:26:59 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #ifndef G4OpenGL2PSAction_h
 #define G4OpenGL2PSAction_h 
 
@@ -42,6 +46,8 @@ public:
  void disableFileWriting();
 
  bool fileWritingEnabled() const;
+ void setLineWidth(int);
+ void setPointSize(int);
 
 protected:
  void G4gl2psBegin();
