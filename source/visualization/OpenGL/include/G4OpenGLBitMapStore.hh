@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.3 2009-02-04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLBitMapStore.hh,v 1.4 2009-04-08 15:15:07 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 #include "globals.hh"
 #include <map>
 
+#include "G4OpenGL.hh"
 #include <GL/gl.h>
 #include <GL/glu.h>
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2009-04-06 19:24:51 perl Exp $
+$Id: History,v 1.134 2009-04-08 15:15:07 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+8th April 2009, Laurent Garnier
+ - G4OpenGLBitmapStore.hh : BugFix correction for windows (introduce 2nd February ?)
 
 6th April 2009, Joseph Perl (opengl-V09-02-02)
  - New tag to clean up all of the cases of files that changed only in the cvs id.
