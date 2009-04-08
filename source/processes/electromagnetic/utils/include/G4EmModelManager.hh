@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.25 2008-10-13 14:56:56 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.26 2009-04-08 20:14:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@ private:
 
   ~G4RegionModels();
 
-  G4int SelectIndex(G4double e) const {
+  inline G4int SelectIndex(G4double e) const {
     G4int idx = 0;
     if (nModelsForRegion>1) {
       idx = nModelsForRegion;
@@ -99,19 +99,19 @@ private:
     return theListOfModelIndexes[idx];
   };
 
-  G4int ModelIndex(G4int n) const {
+  inline G4int ModelIndex(G4int n) const {
     return theListOfModelIndexes[n];
   };
 
-  G4int NumberOfModels() const {
+  inline G4int NumberOfModels() const {
     return nModelsForRegion;
   };
 
-  G4double LowEdgeEnergy(G4int n) const {
+  inline G4double LowEdgeEnergy(G4int n) const {
     return lowKineticEnergy[n];
   };
 
-  const G4Region* Region() const {
+  inline const G4Region* Region() const {
     return theRegion;
   };
 
@@ -189,6 +189,7 @@ private:
   std::vector<G4VEmFluctuationModel*>     flucModels;
   std::vector<const G4Region*>            regions;
   std::vector<G4int>                      orderOfModels;
+  std::vector<G4int>                      isUsed;
 
   G4int                       nEmModels;
   G4int                       nRegions;
@@ -208,9 +209,8 @@ private:
 
   G4int                       verboseLevel;
 
-  // cash
-  G4int                       currentIdx;
-
+  // may be changed in run time
+  G4RegionModels*             currRegionModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -219,9 +219,8 @@ private:
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
 						 size_t& index)
 {
-  currentIdx = 
-    (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
-  return models[currentIdx];
+  if(nRegions > 1) currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+  return models[currRegionModel->SelectIndex(kinEnergy)];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.63 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.64 2009-04-08 20:14:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -220,8 +220,9 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
     theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
     theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
-    if(buildLambdaTable)
+    if(buildLambdaTable){
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+    }
   }
   // Sub Cutoff and Deexcitation
   if (nDERegions>0) {

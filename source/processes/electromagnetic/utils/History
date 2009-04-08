@@ -1,4 +1,4 @@
-$Id: History,v 1.373 2009-04-07 18:39:47 vnivanch Exp $
+$Id: History,v 1.374 2009-04-08 20:14:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 April 09: V.Ivant (emutils-V09-02-04)
+- G4EmModelManager - fixed energy range selection algorithm for the case 
+                     when there is an intersection of energy regions of standard
+                     and low-energy models, 
+                   - reduce internal vectors if no model per region are initialized.
+                   - do not initilise unused models.
 - G4VEmModel - msc methods are moved to G4VMscModel, added protected
                methods for initialisation of ParticleChange             
 - G4VMultipleScattering, G4VEmProcess, G4VEnergyLossProcess:
   methods for initialisations are moved from inline to source
-
 
 26 February 09: V.Ivant (emutils-V09-02-03)
 G4EmConfigurator - fixed for the case if only fluctuation model is set
