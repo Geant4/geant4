@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.33 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.34 2009-04-09 13:42:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,15 +74,15 @@
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
+  public:
 
- protected:
+   void AddSolid(const G4VSolid* const);
+   virtual void SolidsWrite(xercesc::DOMElement*);
+
+  protected:
 
    G4GDMLWriteSolids();
    virtual ~G4GDMLWriteSolids();
-
-   void AddSolid(const G4VSolid* const);
-
- private:
 
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
@@ -110,12 +110,12 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TwistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
    void ZplaneWrite(xercesc::DOMElement*, const G4double&,
                     const G4double&, const G4double&);
-   void SolidsWrite(xercesc::DOMElement*);
 
- private:
+  protected:
 
    std::vector<const G4VSolid*> solidList;
    xercesc::DOMElement* solidsElement;
+
 };
 
 #endif
