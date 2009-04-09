@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.27 2009-04-09 11:48:48 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.28 2009-04-09 15:53:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,27 +150,27 @@ public:
 				       G4double,
                                        G4int);
 
-  const G4DataVector* Cuts() const;
-
-  const G4DataVector* SubCutoff() const;
-
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
 		      G4EmTableType t = fRestricted);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                         G4bool startFromNull = true, G4EmTableType t = fRestricted);
 
-  G4VEmModel* SelectModel(G4double& energy, size_t& index);
-
   G4VEmModel* GetModel(G4int, G4bool ver = false);
-
-  G4int NumberOfModels() const;
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   void DumpModelList(G4int verb);
+
+  inline G4VEmModel* SelectModel(G4double& energy, size_t& index);
+
+  inline const G4DataVector* Cuts() const;
+
+  inline const G4DataVector* SubCutoff() const;
+
+  inline G4int NumberOfModels() const;
 
 private:
 
