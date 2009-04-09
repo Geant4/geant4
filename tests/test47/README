@@ -16,20 +16,18 @@ vs experimental data.
 This test consists of 2 parts:
 
 I. We compare Geant4-predicted and experimentally measured inclusive productions 
-   of protons and neutrons in the following reactions:
+   of protons and neutrons in the following reactions (so called ITEP test):
    0) pi+ C at 1.4GeV     4) pi- C  at 5.0GeV     8) p C at 1.4GeV
    1) pi+ U at 1.4GeV     5) pi- Cu at 5.0GeV     9) p U at 1.4GeV
    2) pi+ C at 5.0GeV     6) pi- Pb at 5.0GeV    10) p C at 7.5GeV
    3) pi+ U at 5.0GeV     7) pi- U  at 5.0GeV    11) p U at 7.5GeV
-      (so called ITEP test)
 
 
 II. We compare Geant4-predicted and experimentally measured inclusive production 
-    of pi+/-, K+/-, or protons in the following reactions:
+    of pi+/-, K+/-, or protons in the following reactions (BNL test):
     12) p Be at 14.6GeV 
     13) p Cu at 14.6GeV
     14) p Au at 14.6GeV 
-        (BNL test).
 
 Data are stored in CVS, together with the C++ code of the package, in a form 
 of ASCII tables, under /itep or /bnl subdirectories.
@@ -89,6 +87,12 @@ delivers comparison plots, in the encapsulated postscript format (eps).
 -- run_bnl.csh will execure all 3 12)-14), of if given an input argument, will
    run selected
  
-
+-- run_itep.csh will submit to batch 12 jobs that compose ITEP test; if a user
+   prefers to submit a selected subset of jobs of the ITEP test, she/he can use
+   2 input arguments: the 1st one will specify the number of jobs (max/default=12), 
+   and the 2nd one will specify at where to start (default=0)
+   
+-- run_all.csh will submit to batch 15 jobs, i.e. the 12 jobs of the ITEP tests,
+   and the 3 jobs of the BNL test
 
 
