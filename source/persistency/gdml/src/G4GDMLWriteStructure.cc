@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.75 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.76 2009-04-09 13:04:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -204,11 +204,11 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
-   G4int reflected = 0;
+   G4int reflected=0, displaced=0;
 
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
-      if (reflected>maxReflections)
+      if ((reflected>maxTransforms) || (displaced>maxTransforms))
       {
         G4String ErrorMessage = "Referenced solid in volume '"
                               + volumePtr->GetName()
@@ -230,15 +230,17 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
          R = R*G4Transform3D(disp->GetObjectRotation(),
                              disp->GetObjectTranslation());
          solidPtr = disp->GetConstituentMovedSolid();
-         reflected++;
+         displaced++;
          continue;
       }
 
       break;
    }
 
+   // Only compute the inverse when necessary!
+   //
    if (reflected>0) { invR = R.inverse(); }
-     // Only compute the inverse when necessary!
+   else             { invR = R; }
 
    const G4String name
          = GenerateName(volumePtr->GetName(),volumePtr);
