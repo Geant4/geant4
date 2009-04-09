@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.34 2009-04-09 13:42:40 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.35 2009-04-09 13:55:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,7 +115,9 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 
    std::vector<const G4VSolid*> solidList;
    xercesc::DOMElement* solidsElement;
-
+   static const G4int maxTransforms = 8; // Constant for limiting the number
+                                         // of displacements/reflections
+                                         // applied to a single solid
 };
 
 #endif

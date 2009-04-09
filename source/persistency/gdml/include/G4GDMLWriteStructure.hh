@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh,v 1.36 2009-04-09 13:06:54 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.hh,v 1.37 2009-04-09 13:55:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,9 +74,6 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
  protected:
 
    xercesc::DOMElement* structureElement;
-   static const G4int maxTransforms = 8; // Constant for limiting the number
-                                         // of displacements/reflections
-                                         // applied to a single solid
 };
 
 #endif

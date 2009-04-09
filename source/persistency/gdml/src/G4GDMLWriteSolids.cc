@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.62 2009-04-06 16:14:04 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.63 2009-04-09 13:55:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -92,7 +92,7 @@ BooleanWrite(xercesc::DOMElement* solidsElement,
    displaced = 0;
    while (true)
    {
-      if ( displaced>8 )
+      if ( displaced>maxTransforms )
       {
         G4String ErrorMessage = "The referenced solid '"
                               + secondPtr->GetName() +
