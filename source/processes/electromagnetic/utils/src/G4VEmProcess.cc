@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.64 2009-04-08 20:14:11 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.65 2009-04-09 16:10:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,6 +77,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4PhysicsTableHelper.hh"
+#include "G4EmConfigurator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -210,6 +211,8 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	   << " local particle " << particle->GetParticleName() 
            << G4endl;
   }
+
+  (G4LossTableManager::Instance())->EmConfigurator()->AddModels();
 
   if(particle == &part) {
     Clear();

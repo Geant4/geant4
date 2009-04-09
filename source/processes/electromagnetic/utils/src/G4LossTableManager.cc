@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.95 2008-11-13 18:23:39 schaelic Exp $
+// $Id: G4LossTableManager.cc,v 1.96 2009-04-09 16:10:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmCorrections.hh"
 #include "G4EmSaturation.hh"
+#include "G4EmConfigurator.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
 
@@ -163,6 +164,7 @@ G4LossTableManager::G4LossTableManager()
   tableBuilder = new G4LossTableBuilder();
   emCorrections= new G4EmCorrections();
   emSaturation = new G4EmSaturation();
+  emConfigurator = new G4EmConfigurator();
   integral = true;
   integralActive = false;
   buildCSDARange = false;
@@ -929,6 +931,13 @@ G4EmCorrections* G4LossTableManager::EmCorrections()
 G4EmSaturation* G4LossTableManager::EmSaturation()
 {
   return emSaturation;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmConfigurator* G4LossTableManager::EmConfigurator()
+{
+  return emConfigurator;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

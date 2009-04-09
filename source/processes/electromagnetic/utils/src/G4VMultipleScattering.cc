@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.61 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.62 2009-04-09 16:10:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,6 +82,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4GenericIon.hh"
 #include "G4Electron.hh"
+#include "G4EmConfigurator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -224,6 +225,8 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
            << " local particle " << firstParticle->GetParticleName()
            << G4endl;
   }
+
+  (G4LossTableManager::Instance())->EmConfigurator()->AddModels();
 
   if(firstParticle == &part) {
 

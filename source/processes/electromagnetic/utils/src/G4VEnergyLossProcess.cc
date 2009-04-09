@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.147 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.148 2009-04-09 16:10:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -141,6 +141,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
+#include "G4EmConfigurator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -427,6 +428,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   Clean();
+  lManager->EmConfigurator()->AddModels();
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
