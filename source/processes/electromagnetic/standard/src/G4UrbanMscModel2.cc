@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.18 2008-12-18 13:01:36 gunter Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.19 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -180,14 +180,8 @@ void G4UrbanMscModel2::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   SetParticle(p);
 
-  if (pParticleChange)
-   fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  else
-   fParticleChange = new G4ParticleChangeForMSC();
-
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-  safetyHelper->InitialiseHelper();
+  fParticleChange = GetParticleChangeForMSC();
+  InitialiseSafetyHelper();
 
   isInitialized = true;
 }

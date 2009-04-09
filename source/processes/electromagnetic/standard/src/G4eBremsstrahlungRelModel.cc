@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.13 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.14 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -177,12 +177,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
   InitialiseElementSelectors(p, cuts);
 
   if(isInitialised) return;
-
-  if(pParticleChange) {
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  } else {
-    fParticleChange = new G4ParticleChangeForLoss();
-  }
+  fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
 }
 

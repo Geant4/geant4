@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.21 2009-02-26 11:50:02 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.22 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,12 +129,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   if(!isInitialized) {
     isInitialized = true;
-
-    if (pParticleChange)
-      fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-    else
-      fParticleChange = new G4ParticleChangeForMSC();
-
+    fParticleChange = GetParticleChangeForMSC();
     InitialiseSafetyHelper();
   }
 }

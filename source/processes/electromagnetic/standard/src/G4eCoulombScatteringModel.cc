@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.60 2009-02-25 12:32:15 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.61 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -121,12 +121,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   if(!isInitialised) {
     isInitialised = true;
-
-    if(pParticleChange)
-      fParticleChange = 
-	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChange = new G4ParticleChangeForGamma();
+    fParticleChange = GetParticleChangeForGamma();
   }
   if(mass < GeV && particle->GetParticleType() != "nucleus") {
     InitialiseElementSelectors(p,cuts);

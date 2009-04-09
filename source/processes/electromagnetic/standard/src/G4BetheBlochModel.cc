@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.25 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.26 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,15 +115,7 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 
   if(!isInitialised) {
     isInitialised = true;
-
-    if(!fParticleChange) {
-      if (pParticleChange) {
-	fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-	  (pParticleChange);
-      } else { 
-	fParticleChange = new G4ParticleChangeForLoss();
-      }
-    }
+    fParticleChange = GetParticleChangeForLoss();
   }
 }
 

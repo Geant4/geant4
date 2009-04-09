@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.10 2008-10-29 14:15:30 vnivanch Exp $
+// $Id: G4UrbanMscModel90.cc,v 1.11 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,14 +112,8 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
   // set values of some data members
   SetParticle(p);
 
-  if (pParticleChange) {
-   fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  } else {
-   fParticleChange = new G4ParticleChangeForMSC();
-  }
-  safetyHelper = G4TransportationManager::GetTransportationManager()
-    ->GetSafetyHelper();
-  safetyHelper->InitialiseHelper();
+  fParticleChange = GetParticleChangeForMSC();
+  InitialiseSafetyHelper();
 
   isInitialized = true;
 }

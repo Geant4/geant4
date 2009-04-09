@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.3 2009-03-19 14:17:51 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.4 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,13 +106,9 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
   skindepth=skin*stepmin;
   SetParticle(p);
   if(isInitialized) return;
-  if (pParticleChange) fParticleChange = 
-			 reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  else   fParticleChange = new G4ParticleChangeForMSC();
-
+  fParticleChange = GetParticleChangeForMSC();
   InitialiseSafetyHelper();
   isInitialized=true;
-
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

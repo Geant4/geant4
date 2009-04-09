@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.6 2008-03-13 17:20:07 vnivanch Exp $
+// $Id: G4MscModel71.cc,v 1.7 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,7 +139,7 @@ void G4MscModel71::Initialise(const G4ParticleDefinition* p,
   xsi = 3.00 ;
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
+    fParticleChange = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForMSC();
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.21 2009-02-19 19:17:50 vnivanch Exp $
+// $Id: G4PAIPhotonModel.cc,v 1.22 2009-04-09 18:41:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,10 +165,7 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
 
   if(!fParticle) SetParticle(p);
 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  fParticleChange = GetParticleChangeForLoss();
 
   const G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
