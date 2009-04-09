@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh,v 1.35 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.hh,v 1.36 2009-04-09 13:06:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,24 +58,25 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
  public:
 
    G4GDMLWriteStructure();
-  ~G4GDMLWriteStructure();
+   virtual ~G4GDMLWriteStructure();
 
- private:
+   virtual void StructureWrite(xercesc::DOMElement*);
+
+ protected:
 
    void DivisionvolWrite(xercesc::DOMElement*,const G4PVDivision* const);
    void PhysvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const topVol,
                                           const G4Transform3D& transform,
                                           const G4String& moduleName);
    void ReplicavolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const);
-   void StructureWrite(xercesc::DOMElement*);
    G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const topVol,
                                     const G4int depth);
- private:
+ protected:
 
    xercesc::DOMElement* structureElement;
-   static const int maxReflections = 8; // Constant for limiting the number
-                                        // of displacements/reflections applied
-                                        // to a single solid
+   static const G4int maxTransforms = 8; // Constant for limiting the number
+                                         // of displacements/reflections
+                                         // applied to a single solid
 };
 
 #endif
