@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_QGSC.hh,v 1.2 2009-04-07 15:09:39 mkossov Exp $
+// $Id: HadronPhysicsQGSC_QGSC.hh,v 1.3 2009-04-09 08:22:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,17 +47,17 @@
 //#include "G4MiscQGSCBuilder.hh"
 
 #include "G4PiKBuilder.hh"
-#include "G4QGSCPiKBuilder.hh"
+#include "G4QGSC_QGSCPiKBuilder.hh"
 //#include "G4BertiniPiKBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
-#include "G4QGSCProtonBuilder.hh"
+#include "G4QGSC_QGSCProtonBuilder.hh"
 //#include "G4BertiniProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
-#include "G4QGSCNeutronBuilder.hh"
+#include "G4QGSC_QGSCNeutronBuilder.hh"
 //#include "G4BertiniNeutronBuilder.hh"
-//#include "G4LEPNeutronBuilder.hh"
+#include "G4LEPNeutronBuilder.hh"
 
 class HadronPhysicsQGSC_QGSC : public G4VPhysicsConstructor
 {
@@ -72,16 +72,16 @@ class HadronPhysicsQGSC_QGSC : public G4VPhysicsConstructor
   private:
     void CreateModels();
     G4NeutronBuilder * theNeutrons;
-    G4QGSCNeutronBuilder * theQGSCNeutron;
+    G4QGSC_QGSCNeutronBuilder * theQGSCNeutron;
     //G4BertiniNeutronBuilder * theBertiniNeutron;
-    //G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
+    G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
     
     G4PiKBuilder * thePiK;
-    G4QGSCPiKBuilder * theQGSCPiK;
+    G4QGSC_QGSCPiKBuilder * theQGSCPiK;
     //G4BertiniPiKBuilder * theBertiniPiK;
     
     G4ProtonBuilder * thePro;
-    G4QGSCProtonBuilder * theQGSCPro;    
+    G4QGSC_QGSCProtonBuilder * theQGSCPro;    
     //G4BertiniProtonBuilder * theBertiniPro;
 
     //G4MiscQGSCBuilder * theMiscQGSC;    

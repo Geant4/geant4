@@ -143,10 +143,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   G4int targetPDGCode = 90000000 + 1000*resZ + (resA-resZ);    // PDG of theResidualNucleus
-  //G4double targetMass = theNucleus->GetMass();                 // Its mass
-  //targetMass -= hitMass; // subtract masses of knocked out nucleons (binding?! M.K.) E/M
-  G4double targetMass=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ)
-                                                         ->GetPDGMass();
+  G4double targetMass=mNeut;
+  if (!resZ)                                                   // Nucleus of only neutrons
+  {
+    if (resA>1) targetMass*=resA;
+  }
+  else targetMass=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ)
+                                                                            ->GetPDGMass();
   G4double targetEnergy = std::sqrt(hitMomentum.mag2()+targetMass*targetMass);
   // !! @@ Target should be at rest: hitMomentum=(0,0,0) @@ !! M.K. (go to this system)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
@@ -606,13 +609,16 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       }
       else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);
       theSec = new G4ReactionProduct(theDefinition);
-      theSec->SetTotalEnergy(0.);
+      theSec->SetTotalEnergy(theDefinition->GetPDGMass());
       theSec->SetMomentum(G4ThreeVector(0.,0.,0.));
-#ifdef pdebug
-      G4cout<<"G4QStringChipsParticleLevelInterface::Propagate: ResNucleus at rest PDG="
-              <<targetPDGCode<<G4endl; 
-#endif
       theResult->push_back(theSec);
+      if(!resZ && resA>0) for(G4int ni=1; ni<resA; ni++) 
+      {
+        theSec = new G4ReactionProduct(theDefinition);
+        theSec->SetTotalEnergy(theDefinition->GetPDGMass());
+        theSec->SetMomentum(G4ThreeVector(0.,0.,0.));
+        theResult->push_back(theSec);
+      }
     }
   }
   delete output;

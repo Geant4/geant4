@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.10 2009-04-06 09:35:46 mkossov Exp $
+// $Id: G4TheoFSGenerator.cc,v 1.11 2009-04-09 08:28:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
@@ -90,9 +90,11 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   
      if ( theQuasielastic->GetFraction(theNucleus, *aPart) > G4UniformRand() )
      {
-        G4KineticTrackVector *result= theQuasielastic->Scatter(theNucleus, *aPart);
-	if (result)
-	{
+       //G4cout<<"___G4TheoFSGenerator: before Scatter (1) QE=" << theQuasielastic<<G4endl;
+       G4KineticTrackVector *result= theQuasielastic->Scatter(theNucleus, *aPart);
+       //G4cout << "^^G4TheoFSGenerator: after Scatter (1) " << G4endl;
+       if (result)
+       {
 	    for(unsigned int  i=0; i<result->size(); i++)
 	    {
 	      G4DynamicParticle * aNew = 
@@ -104,24 +106,26 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	    }
 	    delete result;
 	   
-	} else 
-	{
+       } else 
+       {
 	    theParticleChange->SetStatusChange(isAlive);
 	    theParticleChange->SetEnergyChange(thePrimary.GetKineticEnergy());
 	    theParticleChange->SetMomentumChange(thePrimary.Get4Momentum().vect().unit());
  
-	}
+       }
 	return theParticleChange;
      } 
   }
   if ( theProjectileDiffraction) {
   
      if ( theProjectileDiffraction->GetFraction(theNucleus, *aPart) > G4UniformRand() )
-        // strictly, this returns fraction on inelastic, so quasielastic should 
+      // strictly, this returns fraction on inelastic, so quasielastic should 
 	//    already be substracted, ie. quasielastic should always be used
 	//     before diffractive
      {
-        G4KineticTrackVector *result= theProjectileDiffraction->Scatter(theNucleus, *aPart);
+       //G4cout << "____G4TheoFSGenerator: before Scatter (2) " << G4endl;
+       G4KineticTrackVector *result= theProjectileDiffraction->Scatter(theNucleus, *aPart);
+       //G4cout << "^^^^G4TheoFSGenerator: after Scatter (2) " << G4endl;
 	if (result)
 	{
 	    for(unsigned int  i=0; i<result->size(); i++)
@@ -145,10 +149,10 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	return theParticleChange;
      } 
   }
-
+  //G4cout << "____G4TheoFSGenerator: before Scatter (3) " << G4endl;
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
-  
+  //G4cout << "^^^^G4TheoFSGenerator: after Scatter (3) " << G4endl;
   
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;

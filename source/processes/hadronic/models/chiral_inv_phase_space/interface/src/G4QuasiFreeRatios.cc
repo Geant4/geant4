@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.20 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.21 2009-04-09 08:25:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,14 +83,24 @@ G4QuasiFreeRatios* G4QuasiFreeRatios::GetPointer()
 std::pair<G4double,G4double> G4QuasiFreeRatios::GetRatios(G4double pIU, G4int pPDG,
                                                            G4int tgZ,    G4int tgN)
 {
-  std::pair<G4double,G4double> ElTot=GetElTot(pIU, pPDG, tgZ, tgN); // mean hN El&Tot(IU)
+#ifdef pdebug
+  G4cout<<">>>IN>>>G4QFRat::GetQF:P="<<pIU<<",pPDG="<<pPDG<<",Z="<<tgZ<<",N="<<tgN<<G4endl;
+#endif
   G4double R=0.;
-  G4double QF2In=1.;               // Prototype of QuasiFree/Inelastic ratio for hN_tot
-  if(ElTot.second>0.)
+  G4double QF2In=1.;                        // Prototype of QuasiFree/Inel ratio for hN_tot
+  G4int tgA=tgZ+tgN;
+  if(tgA<2) return std::make_pair(QF2In,R); // No quasi-elastic on the only nucleon
+  std::pair<G4double,G4double> ElTot=GetElTot(pIU, pPDG, tgZ, tgN); // mean hN El&Tot(IU)
+  //if( ( (pPDG>999 && pIU<227.) || pIU<27.) && tgA>1) R=1.; // @@ TMP to accelerate @lowE
+  if(pPDG>999 && pIU<227. && tgZ+tgN>1) R=1.;                // To accelerate @lowE
+  else if(ElTot.second>0.)
   {
-    R=ElTot.first/ElTot.second;    // Elastic/Total ratio (does not depend on units
-    QF2In=GetQF2IN_Ratio(ElTot.second/millibarn, tgZ+tgN); // QuasiFree/Inelastic ratio
+    R=ElTot.first/ElTot.second;             // El/Total ratio (does not depend on units
+    QF2In=GetQF2IN_Ratio(ElTot.second/millibarn, tgZ+tgN);   // QuasiFree/Inelastic ratio
   }
+#ifdef pdebug
+  G4cout<<">>>OUT>>>G4QuasiFreeRatio::GetQF2IN_Ratio: QF2In="<<QF2In<<", R="<<R<<G4endl;
+#endif
   return std::make_pair(QF2In,R);
 }
 
@@ -127,6 +137,9 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   static G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
   static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
   // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
+#ifdef pdebug
+  G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<", s="<<s<<G4endl;
+#endif
   if(s<toler || A<2) return 1.;
   if(s>ms) return 0.;
   if(A>238)
@@ -144,6 +157,9 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     found=true;                         // The A value is found
     break;
   }
+#ifdef pdebug
+  G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio: nDB="<<nDB<<", found="<<found<<G4endl;
+#endif
   if(!nDB || !found)                    // Create new line in the AMDB
   {
     lastA = A;
@@ -165,12 +181,12 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
       sv+=ds;
       lastT[j]=CalcQF2IN_Ratio(sv,A);
     }
+    lastL=new G4double[mls];          // Create the logarithmic Table
     if(s>sma)                           // Initialize the logarithmic Table
     {
 #ifdef pdebug
-    G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewL, A="<<A<<", nDB="<<nDB<<G4endl;
+      G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewL, A="<<A<<", nDB="<<nDB<<G4endl;
 #endif
-      lastL=new G4double[mls];          // Create the logarithmic Table
       G4double ls=std::log(s);
       lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
       if(lastK>nls)
@@ -188,7 +204,6 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     }
     else                                // LogTab is not initialized
     {
-      lastL = 0;
       lastK = 0;
       lastM = 0.;
     }
@@ -210,9 +225,15 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     lastK=vK[i];
     lastT=vT[i];
     lastL=vL[i];
+#ifdef pdebug
+    G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: Found, s="<<s<<", lastM="<<lastM<<G4endl;
+#endif
     if(s>lastM)                          // At least LinTab must be updated
     {
       G4int nextN=lastN+1;               // The next bin to be initialized
+#ifdef pdebug
+      G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: lastN="<<lastN<<" ?< nps="<<nps<<G4endl;
+#endif
       if(lastN<nps)
       {
         lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
@@ -228,13 +249,23 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
           sv+=ds;
           lastT[j]=CalcQF2IN_Ratio(sv,A);
         }
+#ifdef pdebug
+        G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: End of LinTab update"<<G4endl;
+#endif
       } // End of LinTab update
+#ifdef pdebug
+      G4cout<<"G4QFRatios::GetQF2IN_Ratio: lN="<<lastN<<", nN="<<nextN<<", i="<<i<<G4endl;
+#endif
       if(lastN>=nextN)
       {
         vH[i]=lastH;
         vN[i]=lastN;
       }
       G4int nextK=lastK+1;
+      if(!lastK) nextK=0;
+#ifdef pdebug
+      G4cout<<"G4QFRat::GetQF2IN_Ratio: sma="<<sma<<", lastK="<<lastK<<" < "<<nls<<G4endl;
+#endif
       if(s>sma && lastK<nls)             // LogTab must be updated
       {
         G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
@@ -246,12 +277,24 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
           lastM=lsa-lsi;
         }
         else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
+#ifdef pdebug
+        G4cout<<"G4QFRat::GetQF2IN_Ratio: nK="<<nextK<<", lK="<<lastK<<", sv="<<sv<<G4endl;
+#endif
         for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
         {
           sv*=edl;
+#ifdef pdebug
+          G4cout<<"G4QFRat::GetQF2IN_Ratio: j="<<j<<", sv="<<sv<<", A="<<A<<G4endl;
+#endif
           lastL[j]=CalcQF2IN_Ratio(sv,A);
         }
+#ifdef pdebug
+        G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: End of LinTab update"<<G4endl;
+#endif
       } // End of LogTab update
+#ifdef pdebug
+      G4cout<<"G4QFRatios::GetQF2IN_Ratio: lK="<<lastK<<", nK="<<nextK<<", i="<<i<<G4endl;
+#endif
       if(lastK>=nextK)
       {
         vM[i]=lastM;
@@ -259,6 +302,9 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
       }
     }
   }
+#ifdef pdebug
+  G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: BeforeTab s="<<s<<", sma="<<sma<<G4endl;
+#endif
   // Now one can use tabeles to calculate the value
   if(s<sma)                             // Use linear table
   {
@@ -277,6 +323,9 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   }
   if(lastR<0.) lastR=0.;
   if(lastR>1.) lastR=1.;
+#ifdef pdebug
+  G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: BeforeRet lastR="<<lastR<<G4endl;
+#endif
   return lastR;
 } // End of CalcQF2IN_Ratio
 
@@ -721,6 +770,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   G4double t=lastX[n].second;                // T-Base
   lastR.second=t+d*(lastX[n+1].second-t)/dl; // T-Result
   if(lastR.second<0.) lastR.second= 0.;
+#ifdef pdebug
+  G4cout<<"=O=>G4QuasiFreeR::FetchElTot:1st="<<lastR.first<<", 2nd="<<lastR.second<<G4endl;
+#endif
   if(lastR.first>lastR.second) lastR.first = lastR.second;
   return lastR;
 } // End of FetchElTot
@@ -730,6 +782,9 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pIU, G4int hPD
                                                          G4int Z,       G4int N)
 {
   G4double pGeV=pIU/gigaelectronvolt;
+#ifdef pdebug
+  G4cout<<"-->G4QuasiFreeR::GetElTot: P="<<pIU<<",pPDG="<<hPDG<<",Z="<<Z<<",N="<<N<<G4endl;
+#endif
   if(Z<1 && N<1)
   {
     G4cout<<"-Warning-G4QuasiFreeRatio::GetElTot:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
@@ -737,6 +792,10 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTot(G4double pIU, G4int hPD
   }
   std::pair<G4double,G4double> hp=FetchElTot(pGeV, hPDG, true);
   std::pair<G4double,G4double> hn=FetchElTot(pGeV, hPDG, false);
+#ifdef pdebug
+  G4cout<<"-OUT->G4QFRat::GetElTot: hp("<<hp.first<<","<<hp.second<<"), hn("<<hn.first<<","
+        <<hn.second<<")"<<G4endl;
+#endif
   G4double A=(Z+N)/millibarn;                // To make the result in independent units(IU)
   return std::make_pair((Z*hp.first+N*hn.first)/A,(Z*hp.second+N*hn.second)/A);
 } // End of GetElTot
@@ -797,6 +856,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   G4LorentzVector pr4M=p4M/megaelectronvolt;   // Convert 4-momenta in MeV (keep p4M)
   N4M/=megaelectronvolt;
   G4LorentzVector tot4M=N4M+p4M;
+#ifdef ppdebug
+  G4cerr<<"->G4QFR::Scat:p4M="<<pr4M<<",N4M="<<N4M<<",t4M="<<tot4M<<",NPDG="<<NPDG<<G4endl;
+#endif
   G4double mT=mNeut;
   G4int Z=0;
   G4int N=1;
@@ -845,14 +907,14 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   G4double E2=E*E;
   if(E<0. || E2<mP2)
   {
-#ifdef pdebug
+#ifdef ppdebug
     G4cerr<<"-Warning-G4QFR::Scat:*Negative Energy*E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
 #endif
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
   G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
   G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
   // @@ Temporary NN t-dependence for all hadrons
@@ -861,7 +923,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
   G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
   //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
-#ifdef debug
+#ifdef ppdebug
   G4cout<<"G4QElast::Scatter:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
 #endif
 #ifdef nandebug
@@ -871,7 +933,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
-#ifdef pdebug
+#ifdef ppdebug
     G4cerr<<"-Warning-G4QFR::Scat:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
 #endif
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
