@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.26 2009-04-08 20:14:11 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.27 2009-04-09 11:48:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 13-05-06 Add GetModel by index method (VI)
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
+// 08-04-08 Simplify Select method for only one G4RegionModel (VI)
 //
 // Class Description:
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.47 2009-04-08 20:14:11 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.48 2009-04-09 11:48:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,7 @@
 // 13-05-06 Add GetModel by index method (VI)
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
+// 08-04-08 Fixed and simplified initialisation of G4RegionModel (VI)
 //
 // Class Description:
 //
@@ -276,10 +277,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
-  if(nRegions > 1) {
-    idxOfRegionModels = new G4int[numOfCouples+1];
-    idxOfRegionModels[numOfCouples] = 0;
-  }
+  if(nRegions > 1) idxOfRegionModels = new G4int[numOfCouples];
   setOfRegionModels = new G4RegionModels*[nRegions];
 
   std::vector<G4int>    modelAtRegion(nEmModels);
