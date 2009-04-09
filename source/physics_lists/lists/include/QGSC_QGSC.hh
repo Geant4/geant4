@@ -45,7 +45,7 @@ private:
   enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
 #include "QGSC_QGSC.icc"
-typedef TQGSC_BERT<G4VModularPhysicsList> QGSC_QGSC;
+typedef TQGSC_QGSC<G4VModularPhysicsList> QGSC_QGSC;
 
 #endif
 
