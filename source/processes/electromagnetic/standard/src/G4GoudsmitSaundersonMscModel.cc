@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.5 2009-04-10 16:34:56 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.6 2009-04-10 18:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -411,7 +411,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track&
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, tPathLength);
+      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
    
       // is far from boundary
       if(currentRange <= presafety)

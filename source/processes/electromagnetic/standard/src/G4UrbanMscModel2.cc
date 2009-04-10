@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.20 2009-04-10 16:34:56 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.21 2009-04-10 18:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -477,7 +477,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, tPathLength);
+      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
 
       // is it far from boundary ?
       if(currentRange < presafety)
