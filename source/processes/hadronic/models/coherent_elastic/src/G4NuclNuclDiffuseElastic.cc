@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc,v 1.1 2009-03-17 10:58:43 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.cc,v 1.2 2009-04-10 13:22:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,6 +96,10 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   fZommerfeld = 0.;
   fAm = 0.;
   fAddCoulomb = false;
+
+  fProfileDelta  = 1.;
+  fProfileAlpha   = 0.5;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1378,6 +1382,7 @@ G4NuclNuclDiffuseElastic::ThetaCMStoThetaLab( const G4DynamicParticle* aParticle
 
   return thetaLab;
 }
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return scattering angle in CMS system (target at rest) knowing theta in Lab

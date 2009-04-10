@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.7 2009-04-02 09:33:44 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.8 2009-04-10 13:22:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -229,6 +229,7 @@ public:
 
   G4double GetProfileLambda(){return fProfileLambda;};
 
+  void SetProfileLambda(G4double pl) {fProfileLambda = pl;};
   void SetProfileDelta(G4double pd) {fProfileDelta = pd;};
   void SetProfileAlpha(G4double pa){fProfileAlpha = pa;};
 
