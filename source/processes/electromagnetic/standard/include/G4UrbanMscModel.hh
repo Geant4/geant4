@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.33 2008-03-10 10:39:21 vnivanch Exp $
+// $Id: G4UrbanMscModel.hh,v 1.34 2009-04-10 16:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,8 +145,6 @@ private:
   G4double SampleDisplacement();
 
   G4double LatCorrelation();
-
-  void GeomLimit(const G4Track& track);
 
   inline G4double GetLambda(G4double kinEnergy);
 

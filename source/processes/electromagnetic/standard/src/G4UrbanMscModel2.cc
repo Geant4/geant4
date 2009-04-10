@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.19 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.20 2009-04-10 16:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,8 +103,6 @@
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
-#include "G4TransportationManager.hh"
-#include "G4SafetyHelper.hh"
 
 #include "G4Poisson.hh"
 #include "globals.hh"
@@ -479,7 +477,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      GeomLimit(track);
+      G4double geomlimit = ComputeGeomLimit(track, presafety, tPathLength);
 
       // is it far from boundary ?
       if(currentRange < presafety)
@@ -572,7 +570,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       // compute presafety again if presafety <= 0 and no boundary
       // i.e. when it is needed for optimization purposes
       if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
-        presafety = safetyHelper->ComputeSafety(sp->GetPosition()); 
+	presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
 
       // is far from boundary
       if(currentRange < presafety)
@@ -627,31 +625,6 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
   // G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
   return tPathLength ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4UrbanMscModel2::GeomLimit(const G4Track&  track)
-{
-  geomlimit = geombig;
-
-  // no geomlimit for the World volume
-  if((track.GetVolume() != 0) &&
-     (track.GetVolume() != safetyHelper->GetWorldVolume()))  
-  {
-    G4double cstep = currentRange;
-
-    geomlimit = safetyHelper->CheckNextStep(
-                  track.GetStep()->GetPreStepPoint()->GetPosition(),
-                  track.GetMomentumDirection(),
-                  cstep,
-                  presafety);
-    /*
-    G4cout << "!!!G4UrbanMscModel2::GeomLimit presafety= " << presafety
-	   << " r= " << currentRange
-    	   << " limit= " << geomlimit << G4endl;
-    */
-  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -853,40 +826,8 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
         G4ThreeVector latDirection(dirx,diry,0.0);
         latDirection.rotateUz(oldDirection);
 
-        G4ThreeVector Position = *(fParticleChange->GetProposedPosition());
-        G4double fac = 1.;
-        if(r >  safety) {
-          //  ******* so safety is computed at boundary too ************
-	  G4double newsafety = safetyHelper->ComputeSafety(Position);
-          if(r > newsafety)
-            fac = newsafety/r ;
-        }  
-
-        if(fac > 0.)
-        {
-          // compute new endpoint of the Step
-          G4ThreeVector newPosition = Position+fac*r*latDirection;
-
-	  // definitely not on boundary
-	  if(1. == fac) {
-	    safetyHelper->ReLocateWithinVolume(newPosition);
-	    
-	  } else {
-            // check safety after displacement
-	    G4double postsafety = safetyHelper->ComputeSafety(newPosition);
-
-	    // displacement to boundary
-            if(postsafety <= 0.0) {
-	      safetyHelper->Locate(newPosition, newDirection);
-
-	    // not on the boundary
-            } else {
-	      safetyHelper->ReLocateWithinVolume(newPosition);
-	    }
-	  }
-          fParticleChange->ProposePosition(newPosition);
-        } 
-     }
+	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+      }
   }
 }
 

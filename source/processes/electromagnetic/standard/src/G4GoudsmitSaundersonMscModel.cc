@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.4 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.5 2009-04-10 16:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -258,6 +258,7 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						     G4double &cost, G4double &sint)
 {
@@ -669,73 +670,73 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTrueStepLength(G4double geomStepLe
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
 { 
   ///////////////////////////////////////
   //Total & first transport x sections of e-/e+ from ELSEPA code
   G4String filename = "XSECTIONS.dat";
 
-    char* path = getenv("G4LEDATA");
-    if (!path)
-      {
-        G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
-        G4Exception(excep);
-      }
+  char* path = getenv("G4LEDATA");
+  if (!path)
+    {
+      G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
+      G4Exception(excep);
+    }
 
-    G4String pathString(path);
-    G4String dirFile = pathString + "/msc_GS/" + filename;
-    FILE *infile;
-    infile = fopen(dirFile,"r"); 
-    if (infile == 0)
-      {
-	G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
-	G4Exception(excep);
-      }
+  G4String pathString(path);
+  G4String dirFile = pathString + "/msc_GS/" + filename;
+  FILE *infile;
+  infile = fopen(dirFile,"r"); 
+  if (infile == 0)
+    {
+      G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
+      G4Exception(excep);
+    }
 
-    // Read parameters from tables and take logarithms
-    G4float aRead;
-    for(G4int i=0 ; i<106 ;i++){
-	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
-          else  aRead = 0.0;
-          ener[i]=aRead;
+  // Read parameters from tables and take logarithms
+  G4float aRead;
+  for(G4int i=0 ; i<106 ;i++){
+    fscanf(infile,"%f\t",&aRead);
+    if(aRead > 0.0) aRead = std::log(aRead);
+    else  aRead = 0.0;
+    ener[i]=aRead;
+  }        
+  for(G4int j=0;j<103;j++){
+    for(G4int i=0;i<106;i++){
+      fscanf(infile,"%f\t",&aRead);
+      if(aRead > 0.0) aRead = std::log(aRead);
+      else  aRead = 0.0;
+      TCSE[j][i]=aRead;
     }        
-    for(G4int j=0;j<103;j++){
-      for(G4int i=0;i<106;i++){
-	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
-          else  aRead = 0.0;
-	  TCSE[j][i]=aRead;
-	}        
-     }
-    for(G4int j=0;j<103;j++){
-      for(G4int i=0;i<106;i++){
-	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
-          else  aRead = 0.0;
-	  FTCSE[j][i]=aRead;      
-	}        
-      }    
-    for(G4int j=0;j<103;j++){
-      for(G4int i=0;i<106;i++){
-	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
-          else  aRead = 0.0;
-	  TCSP[j][i]=aRead;      
-	}        
-     }
-    for(G4int j=0;j<103;j++){
-      for(G4int i=0;i<106;i++){
-	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
-          else  aRead = 0.0;
-	  FTCSP[j][i]=aRead;      
-	}        
-     }
+  }
+  for(G4int j=0;j<103;j++){
+    for(G4int i=0;i<106;i++){
+      fscanf(infile,"%f\t",&aRead);
+      if(aRead > 0.0) aRead = std::log(aRead);
+      else  aRead = 0.0;
+      FTCSE[j][i]=aRead;      
+    }        
+  }    
+  for(G4int j=0;j<103;j++){
+    for(G4int i=0;i<106;i++){
+      fscanf(infile,"%f\t",&aRead);
+      if(aRead > 0.0) aRead = std::log(aRead);
+      else  aRead = 0.0;
+      TCSP[j][i]=aRead;      
+    }        
+  }
+  for(G4int j=0;j<103;j++){
+    for(G4int i=0;i<106;i++){
+      fscanf(infile,"%f\t",&aRead);
+      if(aRead > 0.0) aRead = std::log(aRead);
+      else  aRead = 0.0;
+      FTCSP[j][i]=aRead;      
+    }        
+  }
 
-    fclose(infile);
-   //End loading XSections and Energies
-
+  fclose(infile);
+  //End loading XSections and Energies
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

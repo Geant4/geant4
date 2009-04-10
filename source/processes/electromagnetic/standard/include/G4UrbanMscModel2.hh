@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.11 2008-12-18 13:01:34 gunter Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.12 2009-04-10 16:34:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,8 +113,6 @@ private:
 
   G4double LatCorrelation();
 
-  void GeomLimit(const G4Track& track);
-
   inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetParticle(const G4ParticleDefinition*);
@@ -128,11 +126,9 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
-
 
   G4double mass;
   G4double charge,ChargeSquare;
