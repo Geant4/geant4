@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.hh,v 1.1 2009-03-23 16:17:39 grichine Exp $
+// $Id: G4HeatedKleinNishinaCompton.hh,v 1.2 2009-04-11 13:05:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,12 +33,12 @@
 //
 // File name:     G4HeatedKleinNishinaCompton
 //
-// Author:        Vladimir Grichine on base of Michel Maire code
+// Author:        Vladimir Grichine on base of M. Maire and V. Ivanchenko code
 //
-// Creation date: 15.03.2005
+// Creation date: 15.03.2009
 //
 // Modifications:
-// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
+// 
 //
 //
 // Class Description:
