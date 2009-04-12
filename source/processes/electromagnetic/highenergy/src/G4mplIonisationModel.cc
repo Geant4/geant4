@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.6 2009-02-20 16:38:33 vnivanch Exp $
+// $Id: G4mplIonisationModel.cc,v 1.7 2009-04-12 17:35:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
   chargeSquare = magCharge * magCharge;
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,11 +93,7 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 {
   monopole = p;
   mass     = monopole->GetPDGMass();
-
-  if(pParticleChange) 
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else 
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
