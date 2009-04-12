@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.6 2007-07-10 09:38:17 schaelic Exp $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.7 2009-04-12 17:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,13 +82,7 @@ void G4PolarizedAnnihilationModel::Initialise(const G4ParticleDefinition*,
 {
   //  G4eeToTwoGammaModel::Initialise(part,dv);
   if(gIsInitialised) return;
-
-  if(pParticleChange)
-    gParticleChange =
-      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    gParticleChange = new G4ParticleChangeForGamma();
-
+  gParticleChange = G4ParticleChangeForGamma();
   gIsInitialised = true;
 }
 
