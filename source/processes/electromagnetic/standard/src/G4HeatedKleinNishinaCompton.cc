@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HeatedKleinNishinaCompton.cc,v 1.4 2009-04-11 13:05:03 grichine Exp $
+// $Id: G4HeatedKleinNishinaCompton.cc,v 1.5 2009-04-12 17:09:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,7 @@ G4HeatedKleinNishinaCompton::G4HeatedKleinNishinaCompton(const G4ParticleDefinit
   theElectron = G4Electron::Electron();
   lowestGammaEnergy = 1.0*eV;
   fTemperature = 1.0*keV;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,10 +84,7 @@ G4HeatedKleinNishinaCompton::~G4HeatedKleinNishinaCompton()
 void G4HeatedKleinNishinaCompton::Initialise(const G4ParticleDefinition*,
                                        const G4DataVector&)
 {
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  if(!fParticleChange) fParticleChange = GetParticleChangeForGamma();
 }
 
 ////////////////////////////////////////////////////////////////////////////
