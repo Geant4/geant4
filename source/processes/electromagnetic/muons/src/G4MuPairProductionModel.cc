@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.40 2009-02-20 14:48:16 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.41 2009-04-12 17:19:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -160,13 +160,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
     if(p) SetParticle(p);
     MakeSamplingTables();
   }
-  if(!fParticleChange) {
-    if(pParticleChange) 
-      fParticleChange = 
-	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-    else 
-      fParticleChange = new G4ParticleChangeForLoss();
-  }
+  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
