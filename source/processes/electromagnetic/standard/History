@@ -1,4 +1,4 @@
-$Id: History,v 1.437 2009-04-07 16:18:59 vnivanch Exp $
+$Id: History,v 1.438 2009-04-12 17:12:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 April 09: V.Ivant (emstand-V09-02-06)
+- Simplified initialisation of all models
+- G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90 - use methods
+   of G4VMscModel for interface to geometry
 
 07 April 09: V.Ivant (emstand-V09-02-05)
 - G4IonFluctuations - T.Toshito removed extra phenomenological factor
