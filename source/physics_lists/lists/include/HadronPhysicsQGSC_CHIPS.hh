@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_CHIPS.hh,v 1.3 2009-04-09 08:22:53 mkossov Exp $
+// $Id: HadronPhysicsQGSC_CHIPS.hh,v 1.4 2009-04-14 07:23:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -43,8 +43,8 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
-//#include "G4MiscQGSCBuilder.hh"
+//#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscQGSCBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4QGSC_CHIPSPiKBuilder.hh"
@@ -84,8 +84,8 @@ class HadronPhysicsQGSC_CHIPS : public G4VPhysicsConstructor
     G4QGSC_CHIPSProtonBuilder * theQGSCPro;    
     //G4BertiniProtonBuilder * theBertiniPro;
     
-    //G4MiscQGSCBuilder * theMiscQGSC;
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscQGSCBuilder * theMiscQGSC;
+    //G4MiscLHEPBuilder * theMiscLHEP;
     
     G4bool QuasiElastic;
 };

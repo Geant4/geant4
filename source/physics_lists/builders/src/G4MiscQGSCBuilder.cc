@@ -31,7 +31,6 @@
 //
 // Author: 2009 M. Kosov (on the basis of the G4MiscLHEPBuilder)
 //
-//
 //----------------------------------------------------------------------------
 //
 #include "G4MiscQGSCBuilder.hh"
@@ -40,7 +39,12 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4MiscQGSCBuilder::G4MiscQGSCBuilder(G4int ver): verbose(ver), wasActivated(false) {}
+G4MiscQGSCBuilder::G4MiscQGSCBuilder(G4int ver): verbose(ver), wasActivated(false)
+{
+  // pointer to the particle table
+  theParticleTable = G4ParticleTable::GetParticleTable();
+  theParticleIterator = theParticleTable->GetIterator();
+}
 
 G4MiscQGSCBuilder::~G4MiscQGSCBuilder() {}
 
@@ -76,15 +80,20 @@ void G4MiscQGSCBuilder::Build()
     {
       if(verbose>1)G4cout<<"** G4MiscQGSCBuilder: "<<pname<<" already defined"<<G4endl;
     }
-    else
-    {
+    else if(
+       pname == "anti_proton"  || pname == "anti_neutron" || pname == "anti_lambda"  ||
+       pname == "anti_sigma+"  || pname == "anti_sigma0"  || pname == "anti_sigma-"  || 
+       pname == "anti_xi0"     || pname == "anti_xi-"     || pname == "anti_omega-"  || 
+       pname == "lambda"       || pname == "sigma+"       || pname == "sigma0"       ||
+       pname == "sigma-"       || pname == "xi0" || pname == "xi-" || pname == "omega-")
+     {
       if(verbose>1)G4cout<< "__ G4MiscQGSCBuilder: "<< pname <<" is defined here"<<G4endl;
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4HadronInelasticProcess* hp = new G4HadronInelasticProcess("hInelastic", particle);
       pmanager->AddDiscreteProcess(hp);
-	hp->RegisterMe(theModel);
+      hp->RegisterMe(theModel);
       if(verbose>1)
-	G4cout<<"^^ G4MiscQGSCBuilder: "<<hp->GetProcessName()<<" added for "<<pname<<G4endl;
+      G4cout<<"^^ G4MiscQGSCBuilder: "<<hp->GetProcessName()<<" added for "<<pname<<G4endl;
     }
   }
 }

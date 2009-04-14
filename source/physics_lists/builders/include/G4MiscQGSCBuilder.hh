@@ -54,14 +54,15 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-class G4HadronicProcess;
-class G4TheoFSGenerator;
-class G4StringChipsParticleLevelInterface;
-class G4ExcitedStringDecay;
-class G4HadronProcessStore;
-class G4QuasiElasticChannel;
+//class G4HadronicProcess;
+//class G4TheoFSGenerator;
+//class G4StringChipsParticleLevelInterface;
+//class G4ExcitedStringDecay;
+//class G4HadronProcessStore;
+//class G4QuasiElasticChannel;
 
-class G4MiscQGSCBuilder : public G4VPhysicsConstructor
+class G4MiscQGSCBuilder
+//class G4MiscQGSCBuilder : public G4VPhysicsConstructor
 {
   public: 
     G4MiscQGSCBuilder(G4int verbose);
@@ -70,7 +71,12 @@ class G4MiscQGSCBuilder : public G4VPhysicsConstructor
   public: 
     void Build();
 
-  private:
+ protected:
+  // the particle table has the complete List of existing particle types
+  G4ParticleTable* theParticleTable;
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+
+ private:
     G4TheoFSGenerator * theModel;
     G4StringChipsParticleLevelInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theQGSCModel;

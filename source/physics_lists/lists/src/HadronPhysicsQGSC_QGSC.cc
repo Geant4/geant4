@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_QGSC.cc,v 1.3 2009-04-09 08:22:53 mkossov Exp $
+// $Id: HadronPhysicsQGSC_QGSC.cc,v 1.4 2009-04-14 07:23:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -82,8 +82,8 @@ void HadronPhysicsQGSC_QGSC::CreateModels()
   theQGSCPiK->SetMinEnergy(0.0*GeV);
   //theBertiniPiK->SetMaxEnergy(9.0*GeV);
    
-  theMiscLHEP=new G4MiscLHEPBuilder;            // To be replaced by QGSC
-  //theMiscQGSC=new G4MiscQGSCBuilder;
+  //theMiscLHEP=new G4MiscLHEPBuilder;            // To be replaced by QGSC
+  theMiscQGSC=new G4MiscQGSCBuilder(0);           // No verbose (@@ to be developed)
 }
 
 HadronPhysicsQGSC_QGSC::~HadronPhysicsQGSC_QGSC() 
@@ -101,8 +101,8 @@ HadronPhysicsQGSC_QGSC::~HadronPhysicsQGSC_QGSC()
    //delete theBertiniPiK;
    delete thePiK;
 
-   delete theMiscLHEP;
-   //delete theMiscQGSC;
+   //delete theMiscLHEP;
+   delete theMiscQGSC;
 }
 
 void HadronPhysicsQGSC_QGSC::ConstructParticle()
@@ -124,7 +124,7 @@ void HadronPhysicsQGSC_QGSC::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
-  //theMiscQGSC->Build();
+  //theMiscLHEP->Build();
+  theMiscQGSC->Build();
 }
 
