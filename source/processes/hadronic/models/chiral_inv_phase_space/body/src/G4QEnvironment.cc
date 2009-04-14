@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.140 2009-04-06 12:50:44 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.141 2009-04-14 13:18:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -2063,18 +2063,16 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
               else if(status==2 && eCount==1 && cAN<mcAN && envM>500.)// Add N from E to Q^
               {                               //                                          ^
 #ifdef pdebug
-		    G4cout<<"G4QE::HQE:E="<<theEnvironment<<",cAN="<<cAN<<"<"<<mcAN<<G4endl;//^
+		    G4cout<<"G4QE::HQE:E="<<theEnvironment<<",M="<<envM<<",c="<<cAN<<G4endl;//^
 #endif
                 cAN++;                        // Increment the counter of absorptions     ^
                 G4int envPDG = theEnvironment.GetPDG(); // PDGCode of the NuclQEnvironment^
                 G4LorentzVector env4M=theEnvironment.Get4Momentum(); // 4mom of the NucEnv^
                 G4int envN=theEnvironment.GetN();                    // N of Env          ^
                 G4int envZ=theEnvironment.GetZ();                    // Z of Env          ^
-                G4double envA=envN+envZ;      // Atomic weight of the Environment         ^
-                G4double parZ=envZ/envA;      // For randomization of the isospin         ^
                 G4int resPDG=envPDG-1;        // Residual for the neutron (prototype)     ^
                 G4QContent nucQC=neutQC;      // Nucleon Quark Content                    ^
-                if ( envN && G4UniformRand() > parZ ) // Change to a proton               ^
+                if ( envN && (envN+envZ)*G4UniformRand() > envZ ) // Change to a proton   ^
                 {                             //                                          ^
                   resPDG=envPDG-1000;         // new PDG for the Environment              ^
                   nucQC=protQC;               // proton QContent                          ^
