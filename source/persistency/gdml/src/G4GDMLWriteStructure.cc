@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.77 2009-04-09 13:55:57 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.78 2009-04-15 13:29:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -57,11 +57,11 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
-   if (axis==kXAxis) { axisString = "kXAxis"; } else
-   if (axis==kYAxis) { axisString = "kYAxis"; } else
-   if (axis==kZAxis) { axisString = "kZAxis"; } else
-   if (axis==kRho) { axisString = "kRho";     } else
-   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+   if (axis==kXAxis) { axisString = "kXAxis"; }
+   else if (axis==kYAxis) { axisString = "kYAxis"; }
+   else if (axis==kZAxis) { axisString = "kZAxis"; }
+   else if (axis==kRho)   { axisString = "kRho";     }
+   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "degree"; }
 
    const G4String name
          = GenerateName(divisionvol->GetName(),divisionvol);
@@ -161,16 +161,20 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
-
    xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
    replicavolElement->appendChild(replicateElement);
 
    xercesc::DOMElement* dirElement = NewElement("direction");
-   if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
-   if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
-   if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
-   if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
-   if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
+   if(axis==kXAxis)
+     { dirElement->setAttributeNode(NewAttribute("x","1")); }
+   else if(axis==kYAxis)
+     { dirElement->setAttributeNode(NewAttribute("y","1")); }
+   else if(axis==kZAxis)
+     { dirElement->setAttributeNode(NewAttribute("z","1")); }
+   else if(axis==kRho)
+     { dirElement->setAttributeNode(NewAttribute("rho","1")); }
+   else if(axis==kPhi)
+     { dirElement->setAttributeNode(NewAttribute("phi","1")); }
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");
@@ -334,10 +338,13 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    VolumeMap()[volumePtr] = R;
 
-   G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());
+   AddExtension(volumeElement, volumePtr);
+     // Add any possible user defined extension attached to a volume
+
+   AddMaterial(volumePtr->GetMaterial());
      // Add the involved materials and solids!
 
-   G4GDMLWriteSolids::AddSolid(solidPtr);
+   AddSolid(solidPtr);
 
    return R;
 }

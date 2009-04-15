@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.57 2009-01-22 11:02:07 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.58 2009-04-15 13:29:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,7 @@ class G4GDMLParser
 
    G4GDMLParser();
    G4GDMLParser(G4GDMLReadStructure*);
+   G4GDMLParser(G4GDMLReadStructure*, G4GDMLWriteStructure*);
   ~G4GDMLParser();
      //
      // Parser constructors & destructor
@@ -112,7 +113,7 @@ class G4GDMLParser
 
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
-   G4bool ucode;
+   G4bool urcode, uwcode;
 
 };
 

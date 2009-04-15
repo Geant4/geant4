@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.38 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.39 2009-04-15 13:29:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,57 +55,74 @@
 
 class G4GDMLWrite
 {
-   typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
-   typedef std::map<const G4VPhysicalVolume*,G4String> PhysVolumeMapType;
-   typedef std::map<G4int,G4int> DepthMapType;
+  typedef std::map<const G4LogicalVolume*,G4Transform3D> VolumeMapType;
+  typedef std::map<const G4VPhysicalVolume*,G4String> PhysVolumeMapType;
+  typedef std::map<G4int,G4int> DepthMapType;
 
- public:  // without description
+  public:  // with description
 
-   G4Transform3D Write(const G4String& filename,
-                       const G4LogicalVolume* const topLog,
-                       const G4String& schemaPath,
-                       const G4int depth, G4bool storeReferences=true);
-   void AddModule(const G4VPhysicalVolume* const topVol);
-   void AddModule(const G4int depth);
-   static void SetAddPointerToName(G4bool);
+    G4Transform3D Write(const G4String& filename,
+                        const G4LogicalVolume* const topLog,
+                        const G4String& schemaPath,
+                        const G4int depth, G4bool storeReferences=true);
+      //
+      // Main method for writing GDML files.
 
- protected:
+    void AddModule(const G4VPhysicalVolume* const topVol);
+    void AddModule(const G4int depth);
+      //
+      // Split geometry structure in modules, by volume subtree or level
 
-   G4GDMLWrite();
-   virtual ~G4GDMLWrite();
+    static void SetAddPointerToName(G4bool);
+      //
+      // Specify if to add or not memory addresses to IDs.
 
-   VolumeMapType& VolumeMap();
+    virtual void DefineWrite(xercesc::DOMElement*)=0;
+    virtual void MaterialsWrite(xercesc::DOMElement*)=0;
+    virtual void SolidsWrite(xercesc::DOMElement*)=0;
+    virtual void StructureWrite(xercesc::DOMElement*)=0;
+    virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,
+                                             const G4int)=0;
+    virtual void SetupWrite(xercesc::DOMElement*,
+                            const G4LogicalVolume* const)=0;
+      //
+      // Pure virtual methods implemented in concrete writer plugin's classes
 
-   G4String GenerateName(const G4String&,const void* const);
-   xercesc::DOMAttr* NewAttribute(const G4String&, const G4String&);
-   xercesc::DOMAttr* NewAttribute(const G4String&, const G4double&);
-   xercesc::DOMElement* NewElement(const G4String&);
-   virtual void DefineWrite(xercesc::DOMElement*)=0;
-   virtual void MaterialsWrite(xercesc::DOMElement*)=0;
-   virtual void SolidsWrite(xercesc::DOMElement*)=0;
-   virtual void StructureWrite(xercesc::DOMElement*)=0;
-   virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,
-                                            const G4int)=0;
-   virtual void SetupWrite(xercesc::DOMElement*,
-                           const G4LogicalVolume* const)=0;
-   G4String Modularize(const G4VPhysicalVolume* const topvol,
-                       const G4int depth);
+    virtual void ExtensionWrite(xercesc::DOMElement*);
+    virtual void AddExtension(xercesc::DOMElement*,
+                              const G4LogicalVolume* const);
+      //
+      // To be implemented in the client code for handling extensions
+      // to the GDML schema, identified with the tag "extension".
+      // The implementation should be placed inside a user-class
+      // inheriting from G4GDMLWriteStructure and being registered
+      // as argument to G4GDMLParser.
 
- protected:
+  protected:
 
-   G4String SchemaLocation;
+    G4GDMLWrite();
+    virtual ~G4GDMLWrite();
 
- private:
+    VolumeMapType& VolumeMap();
 
-   G4bool FileExists(const G4String&) const;
-   PhysVolumeMapType& PvolumeMap();
-   DepthMapType& DepthMap();
+    G4String GenerateName(const G4String&,const void* const);
+    xercesc::DOMAttr* NewAttribute(const G4String&, const G4String&);
+    xercesc::DOMAttr* NewAttribute(const G4String&, const G4double&);
+    xercesc::DOMElement* NewElement(const G4String&);
+    G4String Modularize(const G4VPhysicalVolume* const topvol,
+                        const G4int depth);
 
- private:
+    G4bool FileExists(const G4String&) const;
+    PhysVolumeMapType& PvolumeMap();
+    DepthMapType& DepthMap();
 
-   static G4bool addPointerToName;
-   xercesc::DOMDocument* doc;
-   XMLCh tempStr[100];
+  protected:
+
+    G4String SchemaLocation;
+    static G4bool addPointerToName;
+    xercesc::DOMDocument* doc;
+    xercesc::DOMElement* extElement;
+    XMLCh tempStr[100];
 
 };
 
