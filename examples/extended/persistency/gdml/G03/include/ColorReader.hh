@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ColorReader.hh,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// $Id: ColorReader.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,9 @@ class ColorReader : public G4GDMLReadStructure
 {
 
  public:
+
+   ColorReader();
+  ~ColorReader();
 
    void ExtensionRead(const xercesc::DOMElement* const element);
    void ColorRead(const xercesc::DOMElement* const element);

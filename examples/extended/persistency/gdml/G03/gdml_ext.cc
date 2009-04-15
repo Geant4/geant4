@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: read_ext.cc,v 1.1 2008-11-20 15:41:53 gcosmo Exp $
+// $Id: gdml_ext.cc,v 1.1 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

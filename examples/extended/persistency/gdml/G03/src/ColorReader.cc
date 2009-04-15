@@ -23,12 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ColorReader.cc,v 1.2 2008-11-20 16:29:50 gcosmo Exp $
+// $Id: ColorReader.cc,v 1.3 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
 #include "ColorReader.hh"
+
+ColorReader::ColorReader()
+  : G4GDMLReadStructure()
+{
+}
+
+ColorReader::~ColorReader()
+{
+  std::map<G4String, G4VisAttributes*>::iterator pos;
+  for (pos=attribs.begin(); pos!=attribs.end(); pos++)
+  {  delete pos->second;  }
+}
 
 void ColorReader::ExtensionRead(const xercesc::DOMElement* const extElement)
 {

@@ -24,78 +24,40 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: ColorWriter.hh,v 1.1 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorConstruction
 //
-// A detector construction class loading the geometry from GDML files.
+// class ColorWriter
 //
-// ----------------------------------------------------------------------------
+// Custom writer for handling "color" tags extensions in GDML.
+// -------------------------------------------------------------------------
 
-#ifndef DetectorConstruction_H
-#define DetectorConstruction_H 1
+#ifndef ColorWriter_H
+#define ColorWriter_H 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "G4GDMLParser.hh"
+#include <vector>
+#include "G4GDMLWriteStructure.hh"
 
-class G4Material;
-class DetectorMessenger;
-
-// ----------------------------------------------------------------------------
-
-class DetectorConstruction : public G4VUserDetectorConstruction
+class ColorWriter : public G4GDMLWriteStructure
 {
-  public:
 
-    // Constructor and destructor
-    //
-    DetectorConstruction();
-   ~DetectorConstruction();
+ public:
 
-    // Construction of Detector
-    //
-    G4VPhysicalVolume* Construct();
+   ColorWriter();
+  ~ColorWriter();
 
-    // Make List of materials
-    //
-    void ListOfMaterials();
+   void AddExtension(xercesc::DOMElement* volumeElement,
+                     const G4LogicalVolume* const vol);
+   void ExtensionWrite(xercesc::DOMElement* element);
+   void ColorWrite(xercesc::DOMElement* volumeElement,
+                   const G4VisAttributes* const att);
 
-    // Reading/writing GDML
-    //
-    void SetReadFile( const G4String& fname );
-    void SetWriteFile( const G4String& fname );
+   G4bool BookAttribute(const G4VisAttributes* const att);
 
-  private:
+ private:
 
-    G4Material* Air ;
-    G4Material* Aluminum ;
-    G4Material* Pb;
-    G4Material* Xenon;
-
-    // Extended reader
-    //
-    G4GDMLReadStructure* reader;
-
-    // Extended writer
-    //
-    G4GDMLWriteStructure* writer;
-
-    // GDMLparser
-    //
-    G4GDMLParser* parser;
-        
-    // Read/write Settings
-    //
-    G4String fReadFile, fWriteFile;
-    G4bool writingChoice;
- 
-    // Detector Messenger
-    //
-    DetectorMessenger* detectorMessenger;
+   std::vector<const G4VisAttributes*> attribs;
 };
-
-// ----------------------------------------------------------------------------
 
 #endif
