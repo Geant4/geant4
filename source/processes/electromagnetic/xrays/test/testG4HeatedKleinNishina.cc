@@ -59,6 +59,7 @@
 #include "G4VEmModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4HeatedKleinNishinaCompton.hh"
+#include "G4PEEffectModel.hh"
 
 
 using namespace std;
@@ -93,13 +94,14 @@ int main()
   G4cout << "26 iron" << G4endl;
   G4cout << "29 copper" << G4endl;
   G4cout << "48 cadmium" << G4endl;
+  G4cout << "54 xenon" << G4endl;
   G4cout << "74 tugnsten" << G4endl;
   G4cout << "77 iridium" << G4endl;
   G4cout << "82 lead" << G4endl;
   G4cout << "92 uranium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 6;
+  choice = 54;
 
 
   switch (choice)
@@ -188,6 +190,14 @@ int main()
 
       theElement  = man->FindOrBuildElement("Cd");
       theMaterial = man->FindOrBuildMaterial("G4_Cd");
+      g4Xrad = theMaterial->GetRadlen();
+      break;
+
+
+    case 54:
+
+      theElement  = man->FindOrBuildElement("Xe");
+      theMaterial = man->FindOrBuildMaterial("G4_Xe");
       g4Xrad = theMaterial->GetRadlen();
       break;
 
@@ -289,6 +299,7 @@ int main()
 
   // G4VEmModel* comp = new G4KleinNishinaCompton();
   G4VEmModel* comp = new G4HeatedKleinNishinaCompton();
+  G4VEmModel* photo = new G4PEEffectModel();
 
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
@@ -322,8 +333,8 @@ int main()
   for( i = 0; i < iMax; i++ )
   {
     energyMscXR = std::exp(i*0.2)*0.001*keV;
-    xsc = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,
-					   G4double(Z ) );
+    //xsc = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
+    xsc = photo->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
     G4cout<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
     writef<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
   }
