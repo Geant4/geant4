@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.hh,v 1.3 2006-06-29 20:54:46 gunter Exp $
+// $Id: G4HadronBuilder.hh,v 1.4 2009-04-16 09:17:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -47,31 +47,33 @@
 class G4HadronBuilder
 {
 public:
-	
-
-     G4ParticleDefinition * Build(G4ParticleDefinition * black, G4ParticleDefinition * white);
-     G4ParticleDefinition * BuildLowSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
-     G4ParticleDefinition * BuildHighSpin(G4ParticleDefinition * black, G4ParticleDefinition * white);
-
-//  ctor
-     G4HadronBuilder(G4double mesonMix, G4double barionMix,
-		     std::vector<double> scalarMesonMix,
-		     std::vector<double> vectorMesonMix); 
+ 
+  G4ParticleDefinition* Build(G4ParticleDefinition* black,
+                              G4ParticleDefinition* white);
+  G4ParticleDefinition* BuildLowSpin(G4ParticleDefinition* black,
+                                     G4ParticleDefinition* white);
+  G4ParticleDefinition* BuildHighSpin(G4ParticleDefinition* black,
+                                      G4ParticleDefinition* white);
+  //  ctor
+  G4HadronBuilder(G4double mesonMix, G4double barionMix,
+                  std::vector<double> scalarMesonMix,
+                  std::vector<double> vectorMesonMix); 
 
 private:
 
-     G4HadronBuilder(); // no default ctor
+  G4HadronBuilder(); // no default ctor
 
-     enum Spin { SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4 };
+  enum Spin { SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4 }; // Why spin < 2 ?(M.K.)
 
-     G4ParticleDefinition * Meson(G4ParticleDefinition * black, G4ParticleDefinition * white, Spin spin);
+  G4ParticleDefinition* Meson(G4ParticleDefinition* black,
+                              G4ParticleDefinition* white, Spin spin);
 
-     G4ParticleDefinition * Barion(G4ParticleDefinition * black, G4ParticleDefinition * white, Spin spin);
-     
-     G4double mesonSpinMix;
-     G4double barionSpinMix;
-     std::vector<double> scalarMesonMixings;
-     std::vector<double> vectorMesonMixings;
+  G4ParticleDefinition* Barion(G4ParticleDefinition* black,
+                               G4ParticleDefinition* white, Spin spin);
+  G4double mesonSpinMix;
+  G4double barionSpinMix;
+  std::vector<double> scalarMesonMixings;
+  std::vector<double> vectorMesonMixings;
           
 };
 
