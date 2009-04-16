@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.hh,v 1.4 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QDiscProcessMixer.hh,v 1.5 2009-04-16 09:20:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer header ----------------
@@ -76,7 +76,12 @@ public:
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
 
-  void AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME);
+  // DP is the name of the Discrete Process, MaxE is the maximum energy for this process
+  // The processes must be defined, starting from high energy processes (MaxE decreasing)
+  // The MaxE for the first (highest energy process) is always infinity (automatic)
+  // The MinE = MaxE of the lower energy process (MinE=0 for the lowest energy process)
+
+  void AddDiscreteProcess(G4VDiscreteProcess* DP, G4double MaxE);
 
   //G4LorentzVector GetEnegryMomentumConservation();
 

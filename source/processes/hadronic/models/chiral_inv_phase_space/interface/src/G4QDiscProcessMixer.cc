@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.5 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.6 2009-04-16 09:20:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer class -------------------
@@ -58,17 +58,27 @@ G4QDiscProcessMixer::~G4QDiscProcessMixer()
 
 void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME)
 {
-  if(ME>theDPVector[theDPVector.size()-1]->second)
+  static const G4double maxEn = 1.E8*megaelectronvolt; // Conditional INF
+  if(!theDPVector.size()) // The first process in the DiscreteProcessVector (MaxE=INF)
   {
     std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-      new std::pair<G4VDiscreteProcess*, G4double>(DP, ME);
+      new std::pair<G4VDiscreteProcess*, G4double>(DP, 1.E14);
     theDPVector.push_back( QDiscProc );
   }
-  else // Wrong Max Energy Order for the new process in the sequence of processes
+  else
   {
-    G4cerr<<"G4QDiscProcessMixer::AddDiscreteProcess:LastMaxE("<<theDPVector.size()-1<<")="
-          <<theDPVector[theDPVector.size()-1]->second<<" >= MaxE="<<ME<<G4endl;
-    G4Exception("G4QDiscProcessMixer::AddDiscreteProcess: Wrong Max Energy Order");
+    if(ME<theDPVector[theDPVector.size()-1]->second)
+    {
+      std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
+        new std::pair<G4VDiscreteProcess*, G4double>(DP, ME);
+      theDPVector.push_back( QDiscProc );
+    }
+    else // Wrong Max Energy Order for the new process in the sequence of processes
+    {
+      G4cerr<<"G4QDiscProcessMixer::AddDiscreteProcess:LastMaxE("<<theDPVector.size()-1
+            <<")="<<theDPVector[theDPVector.size()-1]->second<<" <= MaxE="<<ME<<G4endl;
+      G4Exception("G4QDiscProcessMixer::AddDiscreteProcess: Wrong Max Energy Order");
+    }
   }
 }
 
@@ -84,7 +94,7 @@ G4double G4QDiscProcessMixer::PostStepGetPhysicalInteractionLength(const G4Track
 {
   G4double kEn=Track.GetDynamicParticle()->GetKineticEnergy(); // Projectile kinetic energy
   G4int maxDP=theDPVector.size();
-  if(maxDP) for(G4int i=0; i<maxDP; ++i) if(kEn < theDPVector[i]->second)
+  if(maxDP) for(G4int i=maxDP-1; i>-1; i--) if(kEn < theDPVector[i]->second)
     return theDPVector[i]->first->PostStepGetPhysicalInteractionLength(Track,PrevStSize,F);
   return DBL_MAX;
 }
@@ -94,7 +104,7 @@ G4VParticleChange* G4QDiscProcessMixer::PostStepDoIt(const G4Track& Track,
 {
   G4double kEn=Track.GetDynamicParticle()->GetKineticEnergy(); // Projectile kinetic energy
   G4int maxDP=theDPVector.size();
-  if(maxDP) for(G4int i=0; i<maxDP; ++i) if(kEn < theDPVector[i]->second)
+  if(maxDP) for(G4int i=maxDP-1; i>-1; i--) if(kEn < theDPVector[i]->second)
   {
     //EnMomConservation= theDPVector[i]->first->GetEnegryMomentumConservation();
     //nOfNeutrons      = theDPVector[i]->first->GetNumberOfNeutronsInTarget();
