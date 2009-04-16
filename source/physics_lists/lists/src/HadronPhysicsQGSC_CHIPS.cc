@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.4 2009-04-14 07:23:08 mkossov Exp $
+// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.5 2009-04-16 09:26:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -55,20 +55,20 @@ HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(const G4String& name, G4bool qu
 
 void HadronPhysicsQGSC_CHIPS::CreateModels()
 {
-  theNeutrons = new G4NeutronBuilder;
+  theNeutrons = new G4QNeutronBuilder;
   theNeutrons->RegisterMe(theQGSCNeutron=new G4QGSC_CHIPSNeutronBuilder(QuasiElastic));
   //theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
 
-  // M.K. ???
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
+  // M.K. Now LHEP is not used at all
+  //theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
+  //theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
+  //theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
 
   theQGSCNeutron->SetMinEnergy(0.0*GeV);
   //theBertiniNeutron->SetMinEnergy(0.0*GeV);
   //theBertiniNeutron->SetMaxEnergy(9.0*GeV);
 
-  thePro=new G4ProtonBuilder;
+  thePro=new G4QProtonBuilder;
   thePro->RegisterMe(theQGSCPro=new G4QGSC_CHIPSProtonBuilder(QuasiElastic));
   //thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
 
@@ -90,7 +90,7 @@ HadronPhysicsQGSC_CHIPS::~HadronPhysicsQGSC_CHIPS()
 {
    delete theQGSCNeutron;
    //delete theBertiniNeutron;
-   delete theLEPNeutron;
+   //delete theLEPNeutron;
    delete theNeutrons;
 
    delete theQGSCPro;
