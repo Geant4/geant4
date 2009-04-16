@@ -1,0 +1,414 @@
+
+*************************************************************
+ Geant4 version Name: geant4-09-02-cand-01    (19-December-2008)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 4 *****
+
+ Material:     Lead     density: 11.200 g/cm3   RadL:   5.687 mm   Nucl.Int.Length:  18.492 cm   Imean: 820.000 eV 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.20 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Scintillator     density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.639 cm   Imean:  65.013 eV 
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  92.24 %  ElmAbundance  50.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   7.76 %  ElmAbundance  50.00 %
+
+ Material:      Air     density:  1.290 kg/m3   RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322175.595 pc   Nucl.Int.Length: 113728945.578 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+/run/verbose 2
+#
+/ams/phys/addPhysics emstandard_local
+/ams/phys/setCuts 1 km
+#
+/run/initialize
+userDetector->Construct() start.
+
+-------------------------------------------------------------
+ ---> The calorimeter is 9 superLayers
+ ---> A superLayer is 10 Layers
+ ---> A Layer is 1.68 mm  thickness of Lead
+ ---> A Layer include 490 fibers of Scintillator
+      ---> diameter : 1.08 mm 
+      ---> length   : 66.285 cm 
+      ---> distance : 1.35 mm 
+-------------------------------------------------------------
+
+world is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/ams/gun/setDefault
+/gun/particle mu+
+/gun/energy 1 GeV
+/ams/gun/beam 1 cm
+#
+/ams/event/printModulo 1000
+#
+/run/beamOn 10000
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   2 MeV
+          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+
+msc:   for mu+    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   200 keV
+          BetheBloch :     Emin=        200 keV        Emax=   1 GeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+msc:   for pi-    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 1
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      NuclearStopping= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
+      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <world> world volume
+ Root logical volume(s) : world 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Galactic Lead Scintillator 
+ Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma 1 km     e- 1 km     e+ 1 km 
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   18 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00           17k layer
+       0.00         0.00         0.00            0k superLayer
+       0.00         0.00         0.00            0k calorimeter
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      95.45         17k         1      490        980         0.00    layer
+       2.37          0k         1       11         20         0.00    superLayer
+       2.18          0k         1       10         18         0.00    calorimeter
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin Of Event: 0
+
+---> Begin Of Event: 1000
+
+---> Begin Of Event: 2000
+
+---> Begin Of Event: 3000
+
+---> Begin Of Event: 4000
+
+---> Begin Of Event: 5000
+
+---> Begin Of Event: 6000
+
+---> Begin Of Event: 7000
+
+---> Begin Of Event: 8000
+
+---> Begin Of Event: 9000
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=9.61s Real=23.04s Sys=13.37s
+
+-------------------------------------------------------------
+ ---> The calorimeter is 9 superLayers
+ ---> A superLayer is 10 Layers
+ ---> A Layer is 1.68 mm  thickness of Lead
+ ---> A Layer include 490 fibers of Scintillator
+      ---> diameter : 1.08 mm 
+      ---> length   : 66.285 cm 
+      ---> distance : 1.35 mm 
+-------------------------------------------------------------
+
+ The run was 10000 mu+ of 1 GeV through the calorimeter
+------------------------------------------------------------
+
+             visible Energy          (rms/mean)        total Energy           (rms/mean)
+
+   pixel 0: 702.04 keV +- 1.404 MeV  (2e+02 %)     7.9092 MeV +- 5.129 MeV  ( 65 %)
+   pixel 1: 734.65 keV +- 1.968 MeV  (2.7e+02 %)     8.0372 MeV +- 5.661 MeV  ( 70 %)
+   pixel 2: 686.66 keV +- 1.464 MeV  (2.1e+02 %)     8.0206 MeV +-  5.74 MeV  ( 72 %)
+   pixel 3: 713.94 keV +- 1.586 MeV  (2.2e+02 %)     8.0351 MeV +- 5.728 MeV  ( 71 %)
+   pixel 4: 722.69 keV +- 1.768 MeV  (2.4e+02 %)     7.9523 MeV +- 5.298 MeV  ( 67 %)
+   pixel 5: 726.36 keV +- 1.763 MeV  (2.4e+02 %)     8.0312 MeV +- 5.409 MeV  ( 67 %)
+   pixel 6: 711.01 keV +- 1.495 MeV  (2.1e+02 %)     7.8758 MeV +- 4.745 MeV  ( 60 %)
+   pixel 7: 717.26 keV +- 1.378 MeV  (1.9e+02 %)     8.0079 MeV +- 5.297 MeV  ( 66 %)
+   pixel 8: 719.61 keV +-  1.34 MeV  (1.9e+02 %)     8.0091 MeV +- 5.189 MeV  ( 65 %)
+   pixel 9:    712 keV +- 1.316 MeV  (1.8e+02 %)      7.882 MeV +- 5.015 MeV  ( 64 %)
+   pixel 10: 739.07 keV +-  1.76 MeV  (2.4e+02 %)     7.9577 MeV +- 5.091 MeV  ( 64 %)
+   pixel 11: 723.87 keV +- 1.465 MeV  (2e+02 %)     7.9779 MeV +- 5.231 MeV  ( 66 %)
+   pixel 12: 715.02 keV +-  1.55 MeV  (2.2e+02 %)     7.9924 MeV +- 5.373 MeV  ( 67 %)
+   pixel 13: 746.74 keV +-  1.72 MeV  (2.3e+02 %)     7.9331 MeV +- 4.866 MeV  ( 61 %)
+   pixel 14: 714.02 keV +- 1.368 MeV  (1.9e+02 %)     7.9014 MeV +- 4.687 MeV  ( 59 %)
+   pixel 15: 721.24 keV +- 1.385 MeV  (1.9e+02 %)     7.9553 MeV +- 5.125 MeV  ( 64 %)
+   pixel 16: 735.84 keV +- 1.634 MeV  (2.2e+02 %)     7.9565 MeV +- 5.008 MeV  ( 63 %)
+   pixel 17: 737.76 keV +- 1.507 MeV  (2e+02 %)     8.0085 MeV +-   5.1 MeV  ( 64 %)
+
+   total calor :  12.98 MeV +- 6.622 MeV  ( 51 %)     143.44 MeV +- 22.43 MeV  ( 16 %)
+------------------------------------------------------------
+
+       Leakage : 856.56 MeV +- 22.43 MeV  (Eleak/Ebeam = 86 %)
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 62181348, 1807834259
+----------------------------------------
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
