@@ -1,0 +1,21 @@
+# $Id: run1.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+#
+# Macro file for "amsEcal.cc" 
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/ams/phys/addPhysics  emstandard_local
+/ams/phys/setCuts 1 km
+#
+/run/initialize
+#
+/ams/gun/setDefault
+/gun/particle mu+
+/gun/energy 1 GeV
+/ams/gun/beam 1 cm
+#
+/ams/event/printModulo 1000
+#
+/run/beamOn 10000

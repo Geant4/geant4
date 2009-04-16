@@ -1,0 +1,53 @@
+# $Id: rndmSeed.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+#
+# This macro illustrates how to save random number seeds
+#
+/control/verbose 2
+/run/verbose 2
+#
+/ams/phys/addPhysics  emstandard_local
+/ams/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/ams/gun/setDefault
+/gun/particle mu+
+/gun/energy 1 GeV
+/ams/gun/beam 1 cm
+#
+/control/shell mkdir random
+#
+/run/beamOn 12
+/control/shell mv ./currentRun.rndm ./random/seed0
+#
+/run/beamOn 23
+/control/shell mv ./currentRun.rndm ./random/seed1
+#
+/run/beamOn 34
+/control/shell mv ./currentRun.rndm ./random/seed2
+#
+/run/beamOn 45
+/control/shell mv ./currentRun.rndm ./random/seed3
+#
+/run/beamOn 56
+/control/shell mv ./currentRun.rndm ./random/seed4
+#
+/run/beamOn 65
+/control/shell mv ./currentRun.rndm ./random/seed5
+#
+/run/beamOn 54
+/control/shell mv ./currentRun.rndm ./random/seed6
+#
+/run/beamOn 43
+/control/shell mv ./currentRun.rndm ./random/seed7
+#
+/run/beamOn 32
+/control/shell mv ./currentRun.rndm ./random/seed8
+#
+/run/beamOn 21
+/control/shell mv ./currentRun.rndm ./random/seed9
+#
+# restart run 1 
+#
+/random/resetEngineFrom ./random/seed1
+/run/beamOn 23

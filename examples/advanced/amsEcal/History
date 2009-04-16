@@ -1,0 +1,71 @@
+$Id: History,v 1.1 2009-04-16 11:05:40 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    amsEcal History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+06-04-09 mma
+- rndmSeed.mac : macro to generate random seeds
+- run2.mac : add command to handle random seed
+     
+01-04-09 mma
+- complete README
+- SteppingAction. Code for trigger: kill event under given conditions 
+     
+28-03-09 mma
+- HistoManager : add Ntuple booking
+     
+27-03-09 mma
+- pass informations to EventAction and RunAction
+- modify HistoManager
+     
+26-03-09 mma 
+- modify SteppingAction: read layer and superLayer copyNumber
+                         compute Pixel index
+     
+25-03-09 mma 
+- DetectorConstruction: suppress biLayer-> put 10 layers directly in superLayer
+- numbering from 0 to n-1
+     
+24-03-09 mma 
+- DetectorConstruction: compute fiberLength coherently;
+     
+23-03-09 mma 
+- physList emstandard_local : mscStepLimitation UseSafety;
+- spline : 10 bin per decade       
+     
+22-03-09 mma 
+- fiberDiameter = 1.08 mm; distanceInterLayers = 1.68 mm 
+- fiberLength = 664 mm
+    
+19-03-09 mma 
+- PrimaryGeneratorAction & Messenger : /ams/gun/beam
+- HistoManager
+- EventAction: FillHisto
+     
+18-03-09 mma 
+- EventAction -> RunAction : totalEnergy, leakage
+     
+12-03-09 mma 
+- EventAction -> RunAction
+- rm TrackingAction
+     
+12-03-09 mma 
+- SteppingAction -> EventAction
+     
+10-03-09 mma 
+- DetectorConstruction, PhysicsList, PrimaryGeneratorAction
+     
+08-03-09 mma 
+- created from TestEm3

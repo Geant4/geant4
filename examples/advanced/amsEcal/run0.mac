@@ -1,0 +1,19 @@
+# $Id: run0.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+#
+# Macro file for "amsEcal.cc" 
+#
+/control/verbose 2
+/run/verbose 2
+#
+/ams/phys/setCuts 1 km
+#
+/run/initialize
+#
+/ams/gun/setDefault
+/gun/particle geantino
+/gun/energy 1 GeV
+/ams/gun/beam 2 mm
+#
+/control/execute vis.mac
+#
+/run/beamOn 10
