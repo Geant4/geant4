@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.48 2009-04-09 11:48:48 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.49 2009-04-17 10:35:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -323,7 +323,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	    //G4cout << "tmin= " << tmin << "  tmax= " 
 	    //	   << tmax << "  ord= " << ord <<G4endl;
 	    // empty energy range
-	    if(tmin >= tmax) push = false;
+	    if( tmax - tmin <= eV) push = false;
 	    // low-energy model
             else if (tmax == eLow[0]) {
 	      push = false;
@@ -337,14 +337,18 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 		if(ord >= modelOrd[k]) {
 		  if(tmin < eHigh[k]  && tmin >= eLow[k]) tmin = eHigh[k];
 		  if(tmax <= eHigh[k] && tmax >  eLow[k]) tmax = eLow[k];
-                  if(tmin >= tmax) {
+		  if(tmax > eHigh[k] && tmin < eLow[k]) {
+                    if(tmax - eHigh[k] > eLow[k] - tmin) tmin = eHigh[k];
+                    else tmax = eLow[k];
+		  }
+                  if( tmax - tmin <= eV) {
                     push = false;
                     break;
 		  }
 		}
 	      }
 	      //G4cout << "tmin= " << tmin << "  tmax= " 
-	      //	   << tmax << "  push= " << push <<G4endl;
+	      //     << tmax << "  push= " << push << " idx= " << idx <<G4endl;
               if(push) {
 		if (tmax == eLow[0]) {
 		  push = false;
@@ -384,7 +388,8 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	      eHigh[k+1] = eHigh[k];
 	    }
 	  }
-	  //G4cout << "push= " << push << " insert= " << insert << G4endl;
+	  //G4cout << "push= " << push << " insert= " << insert 
+	  //<< " idx= " << idx <<G4endl;
 	  if (push || insert) {
             n++;
 	    modelAtRegion[idx] = ii;
