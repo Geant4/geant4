@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.22 2009-04-17 14:42:20 gcosmo Exp $
+// $Id: G4GDMLReadDefine.cc,v 1.23 2009-04-17 15:24:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadDefine Implementation
@@ -35,10 +35,8 @@
 #include "G4GDMLReadDefine.hh"
 
 G4GDMLMatrix::G4GDMLMatrix()
+  : m(0), rows(0), cols(0)
 {
-   rows = 0;
-   cols = 0;
-   m = 0;
 }
 
 G4GDMLMatrix::G4GDMLMatrix(size_t rows0, size_t cols0)
@@ -54,17 +52,14 @@ G4GDMLMatrix::G4GDMLMatrix(size_t rows0, size_t cols0)
 }
 
 G4GDMLMatrix::G4GDMLMatrix(const G4GDMLMatrix& rhs)
+  : m(0), rows(0), cols(0)
 {
-   rows = rhs.rows;
-   cols = rhs.cols;
    if (rhs.m)
    {
+     rows = rhs.rows;
+     cols = rhs.cols;
      m = new G4double[rows*cols];
      for (size_t i=0; i<rows*cols; i++)  { m[i] = rhs.m[i]; }
-   }
-   else
-   {
-     m = 0;
    }
 }
 
