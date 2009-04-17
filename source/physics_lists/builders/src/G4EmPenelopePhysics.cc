@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc,v 1.2 2009-03-25 15:34:03 pandola Exp $
+// $Id: G4EmPenelopePhysics.cc,v 1.3 2009-04-17 10:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmPenelopePhysics.hh"
@@ -169,7 +169,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 	     << particleName << G4endl;
 
     //Applicability range for Penelope models
-    G4double PenelopeLowEnergyLimit = 100.0*eV;
+    //    G4double PenelopeLowEnergyLimit = 100.0*eV;
     G4double PenelopeHighEnergyLimit = 1.0*GeV;
     //for higher energies, the Standard models are used   
 
@@ -179,7 +179,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
 	G4PenelopePhotoElectricModel();
-      thePEPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //thePEPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
@@ -188,7 +188,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4PenelopeComptonModel* theComptonPenelopeModel = 
 	new G4PenelopeComptonModel();
-      theComptonPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //theComptonPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
       pmanager->AddDiscreteProcess(theComptonScattering);
@@ -197,7 +197,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4PenelopeGammaConversionModel* theGCPenelopeModel = 
 	new G4PenelopeGammaConversionModel();
-      theGCPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      //theGCPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theGammaConversion->AddEmModel(0,theGCPenelopeModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
@@ -205,7 +205,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4PenelopeRayleighModel* theRayleighPenelopeModel = 
 	new G4PenelopeRayleighModel();
-      theRayleighPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //theRayleighPenelopeModel->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
       pmanager->AddDiscreteProcess(theRayleigh);
@@ -220,7 +220,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4PenelopeIonisationModel* theIoniPenelope = 
 	new G4PenelopeIonisationModel();
-      theIoniPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //theIoniPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
@@ -230,9 +230,9 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4PenelopeBremsstrahlungModel* theBremPenelope = new 
 	G4PenelopeBremsstrahlungModel();
-      theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      // theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      eBrem->AddEmModel(0,theBremPenelope,new G4UniversalFluctuation());
+      eBrem->AddEmModel(0,theBremPenelope);
       pmanager->AddProcess(eBrem, -1,-3, 3);
 
     } else if (particleName == "e+") {
@@ -245,7 +245,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4PenelopeIonisationModel* theIoniPenelope = 
 	new G4PenelopeIonisationModel();
-      theIoniPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //theIoniPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
@@ -255,16 +255,16 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4PenelopeBremsstrahlungModel* theBremPenelope = new 
 	G4PenelopeBremsstrahlungModel();
-      theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      // theBremPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      eBrem->AddEmModel(0,theBremPenelope,new G4UniversalFluctuation());
+      eBrem->AddEmModel(0,theBremPenelope);
       pmanager->AddProcess(eBrem, -1,-3, 3);
       
       //Annihilation
       G4eplusAnnihilation* eAnni = new G4eplusAnnihilation();
       G4PenelopeAnnihilationModel* theAnnPenelope = new 
 	G4PenelopeAnnihilationModel();
-      theAnnPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
+      //theAnnPenelope->SetLowEnergyLimit(PenelopeLowEnergyLimit);
       theAnnPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eAnni->AddEmModel(0,theAnnPenelope);
       pmanager->AddProcess(eAnni,0,-1, 4);
