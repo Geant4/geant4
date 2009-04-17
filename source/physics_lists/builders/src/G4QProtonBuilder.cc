@@ -23,47 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QProtonBuilder.cc,v 1.1 2009-04-16 09:24:05 mkossov Exp $
+// $Id: G4QProtonBuilder.cc,v 1.2 2009-04-17 15:24:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4QProtonBuilder
 //
-// Author: 2002 J.P. Wellisch
+// Author: 2009 M. Kosov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
+// Short description: for G4QDiscProcessMixer use in the QGSC_CHIPS physics list
+//-----------------------------------------------------------------------------
 //
- #include "G4QProtonBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#include "G4QProtonBuilder.hh"
 
- 
- void G4QProtonBuilder::Build()
- {
-   wasActivated = true;
-   std::vector<G4VProtonBuilder *>::iterator i;
-   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
-   {
-     (*i)->Build(theProtonInelastic);
-   }
-   G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-   theProcMan->AddDiscreteProcess(theProtonInelastic);
- }
+G4QProtonBuilder::G4QProtonBuilder(): wasActivated(false)  
+{
+  theProtonInelastic = new G4ProtonInelasticProcess;
+  theCHIPSInelastic  = new G4QCollision;
+  const G4String& processName = "MixedProtonInelasticProcess";
+  const G4ParticleDefinition* proj = G4Proton::Proton();
+  theProcessMixer= new G4QDiscProcessMixer(processName, proj);
+}
 
- G4QProtonBuilder::
- G4QProtonBuilder(): wasActivated(false)  
- {
-   theProtonInelastic=new G4ProtonInelasticProcess;
- }
+G4QProtonBuilder::~G4QProtonBuilder() 
+{
+  delete theProcessMixer;
+  delete theCHIPSInelastic;
+  delete theProtonInelastic;
+}
 
- G4QProtonBuilder::
- ~G4QProtonBuilder() 
- {
-   delete theProtonInelastic;
- }
+void G4QProtonBuilder::Build()
+{
+  wasActivated = true;
+  std::vector<G4VProtonBuilder *>::iterator i;
+  for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
+  {
+    (*i)->Build(theProtonInelastic);
+  }
+  G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
+  theProcessMixer->AddDiscreteProcess(theProtonInelastic, 1.E8); // the second par is fake
+  theProcessMixer->AddDiscreteProcess(theCHIPSInelastic, 290*megaelectronvolt);
+  theProcMan->AddDiscreteProcess(theProcessMixer);
+}
 
- // 2009 by M. Kosov
+// 2009 by M. Kosov

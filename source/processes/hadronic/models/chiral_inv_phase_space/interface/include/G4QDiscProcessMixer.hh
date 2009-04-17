@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.hh,v 1.5 2009-04-16 09:20:31 mkossov Exp $
+// $Id: G4QDiscProcessMixer.hh,v 1.6 2009-04-17 15:22:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer header ----------------
@@ -73,6 +73,9 @@ public:
   G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                                 G4double previousStepSize,
                                                 G4ForceCondition* condition);
+
+  G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize,
+                           G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep); 
 

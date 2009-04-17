@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.6 2009-04-16 09:20:31 mkossov Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.7 2009-04-17 15:22:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer class -------------------
@@ -62,7 +62,7 @@ void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME
   if(!theDPVector.size()) // The first process in the DiscreteProcessVector (MaxE=INF)
   {
     std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-      new std::pair<G4VDiscreteProcess*, G4double>(DP, 1.E14);
+      new std::pair<G4VDiscreteProcess*, G4double>(DP, maxEn);
     theDPVector.push_back( QDiscProc );
   }
   else
@@ -96,6 +96,12 @@ G4double G4QDiscProcessMixer::PostStepGetPhysicalInteractionLength(const G4Track
   G4int maxDP=theDPVector.size();
   if(maxDP) for(G4int i=maxDP-1; i>-1; i--) if(kEn < theDPVector[i]->second)
     return theDPVector[i]->first->PostStepGetPhysicalInteractionLength(Track,PrevStSize,F);
+  return DBL_MAX;
+}
+
+// A fake class for compilation only
+G4double G4QDiscProcessMixer::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+{
   return DBL_MAX;
 }
 

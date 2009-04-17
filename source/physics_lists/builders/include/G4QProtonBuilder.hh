@@ -33,7 +33,9 @@
 //
 // Modified:
 //
-//----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Short description: for G4QDiscProcessMixer use in the QGSC_CHIPS physics list
+//-----------------------------------------------------------------------------
 //
 #ifndef G4QProtonBuilder_h
 #define G4QProtonBuilder_h 1
@@ -41,26 +43,32 @@
 #include "globals.hh"
 
 #include "G4ProtonInelasticProcess.hh"
+#include "G4QCollision.hh"
+#include "G4QDiscProcessMixer.hh"
 #include "G4VProtonBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
 #include <vector>
 
 class G4QProtonBuilder
 {
-  public: 
-    G4QProtonBuilder();
-    virtual ~G4QProtonBuilder();
+public:
+  G4QProtonBuilder();
+  virtual ~G4QProtonBuilder();
 
-  public: 
-    void Build();
-    void RegisterMe(G4VProtonBuilder * aB) {theModelCollections.push_back(aB);}
+public: 
+  void Build();
+  void RegisterMe(G4VProtonBuilder * aB) {theModelCollections.push_back(aB);}
 
-  private:
-    G4ProtonInelasticProcess * theProtonInelastic;
-    
-    std::vector<G4VProtonBuilder *> theModelCollections;
+private:
+  G4QDiscProcessMixer*            theProcessMixer;
+  std::vector<G4VProtonBuilder *> theModelCollections;
+  G4ProtonInelasticProcess*       theProtonInelastic;
+  G4QCollision*                   theCHIPSInelastic;    
 
-    G4bool wasActivated;
+  G4bool wasActivated;
 };
 
 // 2009 by M. Kosov

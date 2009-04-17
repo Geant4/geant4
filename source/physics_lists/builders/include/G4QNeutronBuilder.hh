@@ -34,6 +34,8 @@
 // Modified:
 //
 //----------------------------------------------------------------------------
+// Short description: for possible use in QGSC_QGSC (not needed for QGSC_CHIPS)
+//-----------------------------------------------------------------------------
 //
 #ifndef G4QNeutronBuilder_h
 #define G4QNeutronBuilder_h 1

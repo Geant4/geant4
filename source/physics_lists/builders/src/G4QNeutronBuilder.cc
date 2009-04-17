@@ -34,6 +34,8 @@
 // Modified:
 //
 //----------------------------------------------------------------------------
+// Short description: for possible use in QGSC_QGSC (not needed for QGSC_CHIPS)
+//-----------------------------------------------------------------------------
 //
 #include "G4QNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"

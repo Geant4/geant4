@@ -23,20 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.5 2009-04-16 09:26:47 mkossov Exp $
+// $Id: HadronPhysicsQGSC_CHIPS.cc,v 1.6 2009-04-17 15:29:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   HadronPhysicsQGSC_CHIPS
 //
-// Author: 2007  G.Folger
-//           created from HadronPhysicsQGSC, created by J.P. Wellisch
+// Author: 2009  M. Kosov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
-//
+// Short description: In fact this is the definition of the Hadronic Inelastic
+// physics. The definition of the Hadronic Elastic physics one can find in the
+// G4HadronQElasticPhysics, which is stable (the same for all physics lists).
+// The only "unstable" part of the physics is the Hadronic Inelastic physics,
+// which is usually composed of the wixing of the High Energy Inelastic Model
+// (HEIM) and the Low Energy Inelastic Model (LEIM), which are applied only for
+// some hadrons (mostly nucleons and pi-mesons), above the LHEP model, which
+// usually covers all particles (but for Sigma_0 ?) and sometimes covers the
+// "hole" between the LEIM and HIME at intermediate energies. The name of the
+// Physics list is usually have a form HEIM_LEIM and the inelastic interactions
+// are defined in the HadronicPhysicsHEIM_LEIM class. So in this particular
+// physics list the low energy model is CHIPS (G4QCollision process) and the
+// high energy model is QGSC (QGS with the Energy Flow interface to CHIPS),
+// which are in terms of the energy boundary are mixed not on the model level,
+// but on the process level (G4DiscProcessMixer class). The LHEP is completely
+// excluded from this physics list, because the MiscLHEP is substituted by the
+// MiscQGSC class (QGS with the Energy Flow interface to CHIPS), covering all
+// particles, which are not N, pi, or K, defined by the separate builders. 
+//---------------------------------------------------------------------------
+
 #include "HadronPhysicsQGSC_CHIPS.hh"
 
 #include "globals.hh"
@@ -50,59 +68,43 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name)  , QuasiElastic(quasiElastic)
+                    :  G4VPhysicsConstructor(name), QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSC_CHIPS::CreateModels()
 {
-  theNeutrons = new G4QNeutronBuilder;
-  theNeutrons->RegisterMe(theQGSCNeutron=new G4QGSC_CHIPSNeutronBuilder(QuasiElastic));
-  //theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
+  theNeut = new G4QNeutronBuilder;
+  theNeut->RegisterMe(theQGSCNeut=new G4QGSC_CHIPSNeutronBuilder(QuasiElastic));
+  //theQGSCNeut = new G4QGSC_CHIPSNeutronBuilder(QuasiElastic));
 
-  // M.K. Now LHEP is not used at all
-  //theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  //theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  //theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
+  theQGSCNeut->SetMinEnergy(0.0*GeV);
 
-  theQGSCNeutron->SetMinEnergy(0.0*GeV);
-  //theBertiniNeutron->SetMinEnergy(0.0*GeV);
-  //theBertiniNeutron->SetMaxEnergy(9.0*GeV);
+  theProt = new G4QProtonBuilder;
+  theProt->RegisterMe(theQGSCProt = new G4QGSC_CHIPSProtonBuilder(QuasiElastic));
+  //theQGSCProt = new G4QGSC_CHIPSProtonBuilder(QuasiElastic);
 
-  thePro=new G4QProtonBuilder;
-  thePro->RegisterMe(theQGSCPro=new G4QGSC_CHIPSProtonBuilder(QuasiElastic));
-  //thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
+  theQGSCProt->SetMinEnergy(0.0*GeV);
 
-  theQGSCPro->SetMinEnergy(0.0*GeV);
-  //theBertiniPro->SetMaxEnergy(9.0*GeV);
-
-  thePiK=new G4PiKBuilder;
+  thePiK = new G4PiKBuilder;
   thePiK->RegisterMe(theQGSCPiK=new G4QGSC_CHIPSPiKBuilder(QuasiElastic));
-  //thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   
   theQGSCPiK->SetMinEnergy(0.0*GeV);
-  //theBertiniPiK->SetMaxEnergy(9.0*GeV);
    
-  //theMiscLHEP=new G4MiscLHEPBuilder;            // To be replaced by QGSC
   theMiscQGSC=new G4MiscQGSCBuilder(0);           // No verbose (@@ to be developed)
 }
 
 HadronPhysicsQGSC_CHIPS::~HadronPhysicsQGSC_CHIPS() 
 {
-   delete theQGSCNeutron;
-   //delete theBertiniNeutron;
-   //delete theLEPNeutron;
-   delete theNeutrons;
+  delete theQGSCNeut;
+  delete theNeut;
 
-   delete theQGSCPro;
-   //delete theBertiniPro;
-   delete thePro;
+  delete theQGSCProt;
+  delete theProt;
 
-   delete theQGSCPiK;
-   //delete theBertiniPiK;
-   delete thePiK;
+  delete theQGSCPiK;
+  delete thePiK;
 
-   //delete theMiscLHEP;
-   delete theMiscQGSC;
+  delete theMiscQGSC;
 }
 
 void HadronPhysicsQGSC_CHIPS::ConstructParticle()
@@ -121,10 +123,9 @@ void HadronPhysicsQGSC_CHIPS::ConstructParticle()
 void HadronPhysicsQGSC_CHIPS::ConstructProcess()
 {
   CreateModels();
-  theNeutrons->Build();
-  thePro->Build();
+  theNeut->Build();
+  theProt->Build();
   thePiK->Build();
-  //theMiscLHEP->Build();
   theMiscQGSC->Build();
 }
 

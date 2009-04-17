@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.31 2009-03-23 14:12:49 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.32 2009-04-17 15:22:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -38,6 +38,7 @@
 // ---------------------------------------------------------------------------
 //#define debug
 //#define pdebug
+//#define ldebug
 //#define ppdebug
 //#define qedebug
 
@@ -459,7 +460,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cerr<<"*G4QCollision::PostStepDoIt: P="<<Momentum<<"#"<<momentum<<G4endl;
 #ifdef debug
   G4double mp=proj4M.m();
-  G4cout<<"G4QCollis::PostStepDoIt:called, P="<<Momentum<<"="<<momentum<<",m="<<mp<<G4endl;
+  G4cout<<"-->G4QCollis::PostStDoIt:called,P="<<Momentum<<"="<<momentum<<",m="<<mp<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
@@ -564,7 +565,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   }
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-  G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<G4endl;
+  G4cout<<"G4QCollision::PostStepDoIt: Z="<<Z<<", j="<<i<<", N(isotope)="<<N<<G4endl;
 #endif
   if(N<0)
   {
@@ -1187,8 +1188,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     if (N) pickup+=qepart;
     else   pickup =qepart;
     G4double rnd=G4UniformRand();
-#ifdef qedebug
-    G4cout<<"G4QCol::PSD:QE[p("<<proj4M<<")+(Z="<<Z<<",N="<<N<<",)="<<qepart<<G4endl;
+#ifdef ldebug
+    G4cout<<"-->G4QCol::PSD:QE[p("<<proj4M<<")+(Z="<<Z<<",N="<<N<<")]="<<qepart
+          <<", pickup="<<pickup<<G4endl;
 #endif
     if(rnd<pickup) // Make a quasi free scattering (out:A-1,h,N) @@ KinLim,CoulBar,PauliBl
     {
@@ -1458,7 +1460,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       else G4cout<<"G4QCol::PSD: OUT, M2="<<s4M.m2()<<"<"<<minM*minM<<", N="<<nPDG<<G4endl;
 #endif
      } // end of proton quasi-elastic (including QE on NF)
-     else                        // Pickup process (pickup 1 or 2 n and make d or t)
+     else // @@ make cost-condition @@ Pickup process (pickup 1 or 2 n and make d or t)
      {
        restPDG--;                // Res. nucleus PDG is one neutron less than targ. PDG
        G4double mPUF=mDeut;      // Prototype of the mass of the created pickup fragment
@@ -1508,7 +1510,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
        G4double srm=proj4M.e()*den;
        G4double cost=(nM2+mProt2+srm+srm-mPUF2)/(qp+qp);
        G4int ict=0;
-       while(std::fabs(cost)>1.)
+       while(std::fabs(cost)>1. && ict<3)
        {
          dmom=91.;  // Fermi momentum (proto default for a deuteron)
          if(Z>1||N>1) dmom=fmm*std::pow(-std::log(G4UniformRand()),third);
@@ -1528,56 +1530,57 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
          srm=proj4M.e()*den;
          cost=(nM2+mProt2+srm+srm-mPUF2)/(qp+qp);
          ict++;
-#ifdef debug
+#ifdef ldebug
          if(ict>2)G4cout<<"G4QCollis::PStDoIt:i="<<ict<<",d="<<dmom<<",ct="<<cost<<G4endl;
 #endif
        }
-       // ---- @@ From here can be a MF for QF nucleon extraction (if used by others)
-       G4ThreeVector vdir = proj4M.vect();  // 3-Vector in the projectile direction
-       G4ThreeVector vx(0.,0.,1.);          // ProtoOrt in the direction of the projectile
-       G4ThreeVector vy(0.,1.,0.);          // First ProtoOrt orthogonal to the direction
-       G4ThreeVector vz(1.,0.,0.);          // Second ProtoOrt orthoganal to the direction
-       if(vdir.mag2() > 0.)                 // the projectile isn't at rest
-       {
-         vx = vdir.unit();                  // Ort in the direction of the projectile
-         G4ThreeVector vv= vx.orthogonal(); // Not normed orthogonal vector (!)
-         vy = vv.unit();                    // First ort orthogonal to the proj. direction
-         vz = vx.cross(vy);                 // Second ort orthoganal to the proj. direction
-       }
-       // ---- @@ End of possible MF (Similar is in G4QEnvironment)
-       G4double tdom=dmom*std::sqrt(1-cost*cost);// Transversal component of the Fermi-Mom
-       G4double phi=twopi*G4UniformRand();  // Phi of the Fermi-Mom
-       G4ThreeVector vedm=vx*dmom*cost+vy*tdom*std::sin(phi)+vz*tdom*std::cos(phi); // bQFN
-       G4LorentzVector bqf(vedm,den);      // 4-mom of the bQF nucleon
-       r4M=t4M-bqf;                         // 4mom of the residual nucleus
-       if(std::fabs(r4M.m()-rM)>.001) G4cout<<"G4QCol::PSD:rM="<<rM<<"#"<<r4M.m()<<G4endl;
-       G4LorentzVector f4M=proj4M+bqf;      // Prototype of 4-mom of Deuteron
-       if(std::fabs(f4M.m()-mPUF)>.001)
-                               G4cout<<"G4QCol::PSD:mDeut="<<mPUF<<" # "<<f4M.m()<<G4endl;
-       aParticleChange.ProposeEnergy(0.);   // @@ ??
-       aParticleChange.ProposeTrackStatus(fStopAndKill);// projectile nucleon is killed
-       aParticleChange.SetNumberOfSecondaries(2); 
-       // Fill pickup hadron
-       G4DynamicParticle* theQFN = new G4DynamicParticle(theDefinition,f4M);
-       G4Track* scatQFN = new G4Track(theQFN, localtime, position ); //    pickup
-       scatQFN->SetWeight(weight);                                   //    weighted
-       scatQFN->SetTouchableHandle(trTouchable);                     //    nuclear
-       aParticleChange.AddSecondary(scatQFN);                        //    cluster
-       // ----------------------------------------------------
-       // Fill residual nucleus
-       if     (restPDG==90000001) theDefinition = G4Neutron::Neutron();
-       else if(restPDG==90001000) theDefinition = G4Proton::Proton();
-       else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);//ion
-       G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
-       G4Track* scatReN = new G4Track(theReN, localtime, position ); //    scattered
-       scatReN->SetWeight(weight);                                   //    weighted
-       scatReN->SetTouchableHandle(trTouchable);                     //    residual
-       aParticleChange.AddSecondary(scatReN);                        //    nucleus
-       return G4VDiscreteProcess::PostStepDoIt(track, step);
+       if(std::fabs(cost)<=1.)
+       {// ---- @@ From here can be a MF for QF nucleon extraction (if used by others)
+        G4ThreeVector vdir = proj4M.vect();  // 3-Vector in the projectile direction
+        G4ThreeVector vx(0.,0.,1.);          // ProtoOrt in theDirection of the projectile
+        G4ThreeVector vy(0.,1.,0.);          // First ProtoOrt orthogonal to the direction
+        G4ThreeVector vz(1.,0.,0.);          // SecondProtoOrt orthoganal to the direction
+        if(vdir.mag2() > 0.)                 // the projectile isn't at rest
+        {
+          vx = vdir.unit();                  // Ort in the direction of the projectile
+          G4ThreeVector vv= vx.orthogonal(); // Not normed orthogonal vector (!)
+          vy = vv.unit();                    // First ort orthogonal to the proj direction
+          vz = vx.cross(vy);                 // Second ort orthoganal to the projDirection
+        }
+        // ---- @@ End of possible MF (Similar is in G4QEnvironment)
+        G4double tdom=dmom*std::sqrt(1-cost*cost);// Transversal component of the Fermi-Mom
+        G4double phi=twopi*G4UniformRand();  // Phi of the Fermi-Mom
+        G4ThreeVector vedm=vx*dmom*cost+vy*tdom*std::sin(phi)+vz*tdom*std::cos(phi);// bQFN
+        G4LorentzVector bqf(vedm,den);      // 4-mom of the bQF nucleon
+        r4M=t4M-bqf;                         // 4mom of the residual nucleus
+        if(std::fabs(r4M.m()-rM)>.001) G4cout<<"G4QCol::PSD:rM="<<rM<<"#"<<r4M.m()<<G4endl;
+        G4LorentzVector f4M=proj4M+bqf;      // Prototype of 4-mom of Deuteron
+        if(std::fabs(f4M.m()-mPUF)>.001)
+                              G4cout<<"G4QCol::PSD:mDeut="<<mPUF<<" # "<<f4M.m()<<G4endl;
+        aParticleChange.ProposeEnergy(0.);   // @@ ??
+        aParticleChange.ProposeTrackStatus(fStopAndKill);// projectile nucleon is killed
+        aParticleChange.SetNumberOfSecondaries(2); 
+        // Fill pickup hadron
+        G4DynamicParticle* theQFN = new G4DynamicParticle(theDefinition,f4M);
+        G4Track* scatQFN = new G4Track(theQFN, localtime, position ); //    pickup
+        scatQFN->SetWeight(weight);                                   //    weighted
+        scatQFN->SetTouchableHandle(trTouchable);                     //    nuclear
+        aParticleChange.AddSecondary(scatQFN);                        //    cluster
+        // ----------------------------------------------------
+        // Fill residual nucleus
+        if     (restPDG==90000001) theDefinition = G4Neutron::Neutron();
+        else if(restPDG==90001000) theDefinition = G4Proton::Proton();
+        else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);//ion
+        G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
+        G4Track* scatReN = new G4Track(theReN, localtime, position ); //    scattered
+        scatReN->SetWeight(weight);                                   //    weighted
+        scatReN->SetTouchableHandle(trTouchable);                     //    residual
+        aParticleChange.AddSecondary(scatReN);                        //    nucleus
+        return G4VDiscreteProcess::PostStepDoIt(track, step);
+	 }
      }
     } // end of decoupled processes for the proton projectile
   }  // end lepto-nuclear, neutrino-nuclear, proton quasi-elastic
-
   EnMomConservation=proj4M+G4LorentzVector(0.,0.,0.,tM);    // Total 4-mom of the reaction
   if(absMom) EnMomConservation+=lead4M;         // Add E/M of leading System
 #ifdef debug
@@ -1588,8 +1591,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //G4bool elF=false; // Flag of the ellastic scattering is "false" by default
   //G4double eWei=1.;
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End  
-#ifdef debug
-  G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
+#ifdef ldebug
+  G4cout<<"^^G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
   G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->----+*
   //if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)      |
@@ -1668,8 +1671,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     delete leadhs;
   }
-
-
   // ------------- From here the secondaries are filled -------------------------
   G4int tNH = output->size();       // A#of hadrons in the output
   aParticleChange.SetNumberOfSecondaries(tNH); 
@@ -1796,7 +1797,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"G4QCollision::PostStepDoIt: E="<<aParticleChange.GetEnergy()
           <<", d="<<*aParticleChange.GetMomentumDirection()<<G4endl;
 #endif
-#ifdef debug
+#ifdef ldebug
   G4cout<<"G4QCollision::PostStepDoIt:*** PostStepDoIt is done ***, P="<<aProjPDG<<", St="
         <<aParticleChange.GetTrackStatus()<<G4endl;
 #endif

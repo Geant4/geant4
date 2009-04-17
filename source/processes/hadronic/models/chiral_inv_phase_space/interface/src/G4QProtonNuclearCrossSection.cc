@@ -69,17 +69,17 @@ G4VQCrossSection* G4QProtonNuclearCrossSection::GetPointer()
 G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int)
 {
-  static G4int j;                      // A#0f records found in DB for this projectile
+  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
+  static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
   static std::vector <G4double> colP;  // Vector of last momenta for the reaction
   static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
-  G4double pEn=pMom;
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QPrCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG=2212, P="<<pEn<<"("<<lastTH<<")"<<",Sz="<<colN.size()<<G4endl;
+        <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
@@ -90,86 +90,87 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     lastZ   = tgZ;                     // The last Z of the calculated nucleus
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
-    if(lastI) for(G4int i=0; i<lastI; i++) // The partType is found
-    {                                  // The nucleus with is found in AMDB
-      if(colN[i]==tgN && colZ[i]==tgZ)
+#ifdef debug
+    G4cout<<"G4QPrCS::GetCS: the amount of records in the AMDB lastI="<<lastI<<G4endl;
+#endif
+    if(lastI) for(G4int i=0; i<lastI; i++) // AMDB exists, try to find the (Z,N) isotope
+    {
+      if(colN[i]==tgN && colZ[i]==tgZ) // Try the record "i" in the AMDB
       {
-        lastI=i;
-        lastTH =colTH[i];                // Last THreshold (A-dependent)
-#ifdef pdebug
+        lastI=i;                       // Remember the index for future fast/last use
+        lastTH =colTH[i];              // The last THreshold (A-dependent)
+#ifdef debug
         G4cout<<"G4QPrCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
 #endif
-        if(pEn<=lastTH)
+        if(pMom<=lastTH)
         {
-#ifdef pdebug
-          G4cout<<"G4QPrCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
+#ifdef debug
+          G4cout<<"G4QPCS::GetCS:Found,P="<<pMom<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
 #endif
-          return 0.;                     // Energy is below the Threshold value
+          return 0.;                   // Energy is below the Threshold value
         }
-        lastP  =colP [i];                // Last Momentum  (A-dependent)
-        lastCS =colCS[i];                // Last CrossSect (A-dependent)
- //        if(std::fabs(lastP/pMom-1.)<tolerance)
-        if(lastP==pMom)                  // VI do not use tolerance
+        lastP  =colP [i];              // Last Momentum  (A-dependent)
+        lastCS =colCS[i];              // Last CrossSect (A-dependent)
+        if(std::fabs(lastP-pMom)<tolerance*pMom)
+        //if(lastP==pMom)              // VI do not use tolerance
         {
-#ifdef pdebug
-          G4cout<<"G4QPrCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+#ifdef debug
+          G4cout<<"..G4QPrCS::GetCS:.DoNothing.P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
 #endif
-          CalculateCrossSection(fCS,-1,j,2212,lastZ,lastN,pMom); // Update param's only
+          //CalculateCrossSection(fCS,-1,j,2212,lastZ,lastN,pMom); // Update param's only
           return lastCS*millibarn;     // Use theLastCS
         }
-        in = true;                       // This is the case when the isotop is found in DB
+        in = true;                     // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
-#ifdef pdebug
+#ifdef debug
         G4cout<<"G4QPrCS::G:UpdatDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
 #endif
         lastCS=CalculateCrossSection(fCS,-1,j,2212,lastZ,lastN,pMom); // read & update
-#ifdef pdebug
+#ifdef debug
         G4cout<<"G4QPrCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
 #endif
-        if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
+        if(lastCS<=0. && pMom>lastTH)  // Correct the threshold (@@ No intermediate Zeros)
         {
-#ifdef pdebug
-          G4cout<<"G4QPrCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#ifdef debug
+          G4cout<<"G4QPrCS::GetCS: New P="<<pMom<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
-          lastTH=pEn;
+          lastCS=0.;
+          lastTH=pMom;
         }
-        break;                           // Go out of the LOOP
+        break;                         // Go out of the LOOP
       }
-#ifdef pdebug
+#ifdef debug
       G4cout<<"-->G4QPrCrossSec::GetCrosSec: pPDG=2212, j="<<j<<", N="<<colN[i]
             <<",Z["<<i<<"]="<<colZ[i]<<G4endl;
 #endif
       j++;                             // Increment a#0f records found in DB
     }
-    if(!in)                            // This nucleus has not been calculated previously
+#ifdef debug
+    G4cout<<"-?-G4QPrCS::GetCS:RC Z="<<tgZ<<",N="<<tgN<<",in="<<in<<",j="<<j<<" ?"<<G4endl;
+#endif
+    if(!in)                            // This isotope has not been calculated previously
     {
-#ifdef pdebug
-      G4cout<<"G4QPrCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
+#ifdef debug
+      G4cout<<"^^^G4QPrCS::GetCS:CalcNew P="<<pMom<<", f="<<fCS<<", lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,2212,lastZ,lastN,pMom); //calculate & create
-      if(lastCS<=0.)
+      if(lastCS>0.)                   // It means that the AMBD was initialized
       {
+
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
-#ifdef pdebug
-        G4cout<<"G4QPrCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+#ifdef debug
+        G4cout<<"G4QPrCrossSection::GetCrossSect: NewThresh="<<lastTH<<",P="<<pMom<<G4endl;
 #endif
-        if(pEn>lastTH)
-        {
-#ifdef pdebug
-          G4cout<<"G4QPrCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+        colN.push_back(tgN);
+        colZ.push_back(tgZ);
+        colP.push_back(pMom);
+        colTH.push_back(lastTH);
+        colCS.push_back(lastCS);
+#ifdef debug
+        G4cout<<"G4QPrCS::GetCrosSec:recCS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
 #endif
-          lastTH=pEn;
-        }
       }
-#ifdef pdebug
-      G4cout<<"G4QPrCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
-#endif
-      colN.push_back(tgN);
-      colZ.push_back(tgZ);
-      colP.push_back(pMom);
-      colTH.push_back(lastTH);
-      colCS.push_back(lastCS);
 #ifdef pdebug
       G4cout<<"G4QPrCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
@@ -177,38 +178,38 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     } // End of creation of the new set of parameters
     else
     {
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QPrCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
       colP[lastI]=pMom;
       colCS[lastI]=lastCS;
     }
   } // End of parameters udate
-  else if(pEn<=lastTH)
+  else if(pMom<=lastTH)
   {
-#ifdef pdebug
-    G4cout<<"G4QPrCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
+#ifdef debug
+    G4cout<<"G4QPrCS::GetCS: Current P="<<pMom<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  //  else if(std::fabs(lastP/pMom-1.)<tolerance)
-  else if(lastP==pMom)                // VI do not use tolerance
+  else if(std::fabs(lastP-pMom)<tolerance*pMom)
+  //else if(lastP==pMom)               // VI do not use tolerance
   {
-#ifdef pdebug
-    G4cout<<"G4QPrCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
+#ifdef debug
+    G4cout<<"..G4QPCS::GetCS:OldNZ&P="<<lastP<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
 #endif
-    return lastCS*millibarn;     // Use theLastCS
+    return lastCS*millibarn;           // Use theLastCS
   }
-  else
+  else                                 // It is the last used -> use the current tables
   {
-#ifdef pdebug
-    G4cout<<"G4QPrCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+#ifdef debug
+    G4cout<<"-!-G4QPCS::GetCS:UseCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
 #endif
-    lastCS=CalculateCrossSection(fCS,1,j,2212,lastZ,lastN,pMom); // Only UpdateDB
+    lastCS=CalculateCrossSection(fCS,1,j,2212,lastZ,lastN,pMom); // Only read and UpdateDB
     lastP=pMom;
   }
-#ifdef pdebug
-  G4cout<<"G4QPrCS::GetCroSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+#ifdef debug
+  G4cout<<"==>G4QPrCS::GetCroSec: P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
   return lastCS*millibarn;
 }
@@ -217,7 +218,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double THmin=27.;     // minimum Momentum (MeV/c) Threshold
+  static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
   static const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
   static const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
   static const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
@@ -235,25 +236,31 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   static std::vector <G4double*> LEN;  // Vector of pointers to LowEnProtonCrossSection
   static std::vector <G4double*> HEN;  // Vector of pointers to HighEnProtonCrossSection
 #ifdef debug
-  G4cout<<"G4QProtonNuclearCS::CalcCS: N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<G4endl;
+  G4cout<<"G4QProtNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
-  if (Momentum<THmin) return 0.;       // @@ This can be dangerouse for the heaviest nuc.!
+  if (Momentum<THmin) return 0.;       // @@ This can be dangerouse for the heaviest nuc.?!
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;              // A of the target
-  if(F<=0)                           // This isotope was not the last used isotop
+#ifdef debug
+  G4cout<<"G4QProtNucCS::CalCS: A="<<A<<",F="<<F<<",I="<<I<<",nL="<<nL<<",nH="<<nH<<G4endl;
+#endif
+  if(F<=0)                             // This isotope was not the last used isotop
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
+    if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
     {
-      lastLEN=LEN[I];                // Pointer to prepared LowEnergy cross sections
-      lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
+      G4int sync=LEN.size();
+      if(sync<=I) G4cerr<<"*!*G4QProtonNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
+      lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
+      lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
     }
-    else                             // This isotope wasn't calculated previously => CREATE
+    else if(Momentum<ThresholdMomentum(targZ,targN)) return 0.; // BelowThreshold -> NotIni
+    else                               // This isotope wasn't calculated before => CREATE
     {
-      lastLEN = new G4double[nL];    // Allocate memory for the new LEN cross sections
-      lastHEN = new G4double[nH];    // Allocate memory for the new HEN cross sections
+      lastLEN = new G4double[nL];      // Allocate memory for the new LEN cross sections
+      lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
-      G4double P=THmiG;              // Table threshold in GeV/c
+      G4double P=THmiG;                // Table threshold in GeV/c
       for(G4int m=0; m<nL; m++)
       {
         lastLEN[m] = CrossSectionLin(targZ, targN, P);
@@ -265,17 +272,28 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
         lastHEN[n] = CrossSectionLog(targZ, targN, lP);
         lP+=dlP;
       }
+#ifdef debug
+      G4cout<<"-*->G4QPr0tNucCS::CalcCS:Tab for Z="<<targZ<<",N="<<targN<<",I="<<I<<G4endl;
+#endif
       // --- End of possible separate function
       // *** The synchronization check ***
       G4int sync=LEN.size();
-      if(sync!=I) G4cerr<<"**G4QPhortonNuclCS::CalcCrossSect: Sync="<<sync<<"#"<<I<<G4endl;
-      LEN.push_back(lastLEN);          // added LEN, found by AH 10/7/02
-      HEN.push_back(lastHEN);          // added HEN, found by AH 10/7/02
+      if(sync!=I)
+      {
+        G4cerr<<"***G4QProtonNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
+              <<", N="<<targN<<", F="<<F<<G4endl;
+        //G4Exception("G4ProtonNuclearCS::CalculateCS:","39",FatalException,"overflow DB");
+      }
+      LEN.push_back(lastLEN);          // remember the Low Energy Table
+      HEN.push_back(lastHEN);          // remember the High Energy Table
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
+#ifdef debug
+  G4cout<<"G4QPrNCS::CalcCS:lTH="<<lastTH<<",Pmi="<<Pmin<<",dP="<<dP<<",dlP="<<dlP<<G4endl;
+#endif
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
-  else if (Momentum<Pmin)                     // High Energy region
+  else if (Momentum<Pmin)              // High Energy region
   {
 #ifdef debug
     G4cout<<"G4QPrNCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
@@ -287,7 +305,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
       G4cout<<"G4QPrNuCS::CalcCS:A="<<A<<",E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
 #endif
   }
-  else if (Momentum<Pmax)                     // High Energy region
+  else if (Momentum<Pmax)              // High Energy region
   {
     G4double lP=std::log(Momentum);
 #ifdef debug
@@ -295,13 +313,13 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
 #endif
     sigma=EquLinearFit(lP,nH,milP,dlP,lastHEN);
   }
-  else                                      // UHE region (calculation, not frequent)
+  else                                 // UHE region (calculation, not frequent)
   {
-    G4double P=0.001*Momentum;              // Approximation formula is for P in GeV/c
+    G4double P=0.001*Momentum;         // Approximation formula is for P in GeV/c
     sigma=CrossSectionFormula(targZ, targN, P, std::log(P));
   }
 #ifdef debug
-  G4cout<<"G4QProtonNuclearCrossSection::CalcCS: sigma="<<sigma<<G4endl;
+  G4cout<<"G4QProtonNuclearCrossSection::CalcCS: CS="<<sigma<<G4endl;
 #endif
   if(sigma<0.) return 0.;
   return sigma;
@@ -315,6 +333,7 @@ G4double G4QProtonNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
   static const G4double tpM= pM+pM;       // Doubled proton mass (MeV)
   G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
+  else if(tZ==1 && tN==0) return 800.;    // A threshold on the free proton
   //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
   G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
   return std::sqrt(dE*(tpM+dE));
