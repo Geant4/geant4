@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.hh,v 1.1 2009-03-16 12:01:40 pandola Exp $
+// $Id: G4LivermoreBremsstrahlungModel.hh,v 1.2 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -46,8 +46,6 @@
 #include "globals.hh"
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForLoss.hh"
-
-
 
 class G4ParticleDefinition;
 class G4MaterialCutsCouple;
@@ -87,6 +85,10 @@ public:
                                G4double kineticEnergy,
                                G4double cutEnergy);
 			 
+  // min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+                                const G4MaterialCutsCouple*);
+
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
 
   void SetAngularGenerator(G4VBremAngularDistribution* distribution);

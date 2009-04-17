@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh,v 1.2 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermorePhotoElectricModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ class G4LivermorePhotoElectricModel : public G4VEmModel
 public:
 
   G4LivermorePhotoElectricModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermorePhotoElectric");
+		     const G4String& nam = "LivermorePhElectric");
 
   virtual ~G4LivermorePhotoElectricModel();
 
@@ -88,10 +88,11 @@ public:
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
-
+  /*
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
+  */
 private:
 
   G4double lowEnergyLimit;  

@@ -23,13 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.3 2009-03-25 13:06:00 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.4 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 // --------
 // 05 Dec 2008   L Pandola    Migration from process to model
 // 25 Mar 2008   L Pandola    Fixed .unit() call
+// 16 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - added MinEnergyCut method
+//                  - do not change track status
 //
 #include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PenelopeBremsstrahlungContinuous.hh"
@@ -42,8 +47,6 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4ProcessManager.hh" 
 #include "G4LogLogInterpolation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,7 +58,7 @@ G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDef
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   
@@ -161,20 +164,6 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* parti
 	if (j->second) delete j->second;
       delete stoppingPowerData;
     }
-  //Done.
-
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopeBremsstrahlungModel: low energy limit increased from " <<
-        LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopeBremsstrahlungModel: high energy limit decreased from " <<
-        HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
   
   crossSectionHandler = new G4CrossSectionHandler();
   crossSectionHandler->Clear();
@@ -187,27 +176,32 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* parti
   //This is used to retrieve cross section values later on
   crossSectionHandler->BuildMeanFreePathForMaterials();
    
- if (verboseLevel > 2)
+  if (verboseLevel > 2)
     G4cout << "Loaded cross section files for PenelopeBremsstrahlungModel" << G4endl;
- 
- 
-  G4cout << "Penelope Bremsstrahlung model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-	 << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
- 
+  
+  if (verboseLevel > 0) {
+    G4cout << "Penelope Bremsstrahlung model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / keV << " keV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  } 
+
   //This has to be invoked AFTER the crossSectionHandler has been created, 
   //because it makes use of ComputeCrossSectionPerAtom()
   InitialiseElementSelectors(particle,cuts);
 
   if(isInitialised) return;
- 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
+						     const G4MaterialCutsCouple*)
+{
+  return 250.*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -241,12 +235,13 @@ G4double G4PenelopeBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4Parti
   
   G4int iZ = (G4int) Z;
 
-  if (!crossSectionHandler)
-    {
-      G4cout << "G4PenelopeBremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
-    }
+  // VI - not needed in run time
+  // if (!crossSectionHandler)
+  //  {
+  //    G4cout << "G4PenelopeBremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
+  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
+  //    G4Exception();
+  //  }
   G4double totalCs = crossSectionHandler->FindValue(iZ,kinEnergy);
   G4double cs = totalCs * energySpectrum->Probability(iZ,cutEnergy,kinEnergy,kinEnergy);
 
@@ -262,10 +257,11 @@ G4double G4PenelopeBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4Parti
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* theMaterial,
-							     const G4ParticleDefinition* theParticle,
-							     G4double kineticEnergy,
-							     G4double cutEnergy)
+G4double 
+G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* theMaterial,
+						    const G4ParticleDefinition* theParticle,
+						    G4double kineticEnergy,
+						    G4double cutEnergy)
 {
   // Penelope model to calculate the stopping power (in [Energy]/[Length]) for soft 
   // bremsstrahlung emission (gamma energy < cutEnergy).
@@ -304,9 +300,10 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* t
   
    if (verboseLevel > 2)
     {
-      G4cout << "Bremsstrahlung stopping power at " << kineticEnergy/MeV << " MeV for material " << 
-	theMaterial->GetName() << " and energy < " << cutEnergy/keV << " keV --> " << 
-	sPower/(keV/mm) << " keV/mm" << G4endl;
+      G4cout << "Bremsstrahlung stopping power at " << kineticEnergy/MeV 
+	     << " MeV for material " << theMaterial->GetName() 
+	     << " and energy < " << cutEnergy/keV << " keV --> " 
+	     << sPower/(keV/mm) << " keV/mm" << G4endl;
     }
 
   return sPower;
@@ -317,7 +314,7 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* t
 void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 						      const G4MaterialCutsCouple* couple,
 						      const G4DynamicParticle* aDynamicParticle,
-						      G4double,G4double)
+						      G4double cutG,G4double)
 {
   // Penelope model to sample the final state for hard bremsstrahlung emission 
   // (gamma energy < cutEnergy).
@@ -347,24 +344,18 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   // Energy and direction of the primary particle are updated according to energy-momentum 
   // conservation. For positrons, it is sampled the same final state as for electrons.
   //
-   if (verboseLevel > 3)
+  if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4PenelopeBremsstrahlungModel" << G4endl;
-                                                                                                        
+
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
   const G4ParticleDefinition* theParticle = aDynamicParticle->GetDefinition();
 
-  if (kineticEnergy <= LowEnergyLimit())
+  if (kineticEnergy <= fIntrinsicLowEnergyLimit)
    {
      fParticleChange->SetProposedKineticEnergy(0.);
      fParticleChange->ProposeLocalEnergyDeposit(kineticEnergy);
-     //Check if there are AtRest processes
-     if (theParticle->GetProcessManager()->GetAtRestProcessVector()->size())
-       //In this case there is at least one AtRest process
-       fParticleChange->ProposeTrackStatus(fStopButAlive);
-     else
-       fParticleChange->ProposeTrackStatus(fStopAndKill);
      return ;
-  }
+   }
  
   G4ParticleMomentum particleDirection0 = aDynamicParticle->GetMomentumDirection();
   //This is the momentum
@@ -379,14 +370,6 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   if (verboseLevel > 2)
     G4cout << "Selected " << anElement->GetName() << G4endl;
   //
-
-  G4double cutForLowEnergySecondaryParticles = 250.0*eV;
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutG = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-  //Production cut for gamma 
-  cutG = std::max(cutForLowEnergySecondaryParticles,cutG);
 
   //Sample gamma's energy according to the spectrum
   G4double gammaEnergy = energySpectrum->SampleEnergy(iZ,cutG,kineticEnergy,kineticEnergy);
@@ -416,22 +399,15 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   particleDirection1 = particleDirection1.unit(); //normalize    
 
   //Update the primary particle
-  if (residualPrimaryEnergy > 0)
+  if (residualPrimaryEnergy > 0.)
     {
       fParticleChange->ProposeMomentumDirection(particleDirection1);
       fParticleChange->SetProposedKineticEnergy(residualPrimaryEnergy);
     }
   else
     {
-      fParticleChange->ProposeMomentumDirection(particleDirection1);
-      fParticleChange->SetProposedKineticEnergy(0.*eV);
-      if (theParticle->GetProcessManager()->GetAtRestProcessVector()->size())
-        //In this case there is at least one AtRest process
-        fParticleChange->ProposeTrackStatus(fStopButAlive);
-      else
-        fParticleChange->ProposeTrackStatus(fStopAndKill);
+      fParticleChange->SetProposedKineticEnergy(0.);
     }
-  fParticleChange->ProposeLocalEnergyDeposit(0.*eV);
 
   //Now produce the photon
   G4DynamicParticle* theGamma = new G4DynamicParticle(G4Gamma::Gamma(),
@@ -487,9 +463,10 @@ G4PenelopeBremsstrahlungAngular* G4PenelopeBremsstrahlungModel::GetAngularDataFo
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PenelopeBremsstrahlungContinuous* G4PenelopeBremsstrahlungModel::GetStoppingPowerData(G4int iZ,G4double energyCut,
-											const G4ParticleDefinition* 
-											theParticle)
+G4PenelopeBremsstrahlungContinuous* 
+G4PenelopeBremsstrahlungModel::GetStoppingPowerData(G4int iZ,G4double energyCut,
+						    const G4ParticleDefinition* 
+						    theParticle)
 {  
   if (!stoppingPowerData)
     stoppingPowerData = new std::map<std::pair<G4int,G4double>,G4PenelopeBremsstrahlungContinuous*>;

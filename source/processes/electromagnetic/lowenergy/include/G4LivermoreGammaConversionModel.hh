@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.hh,v 1.2 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermoreGammaConversionModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ class G4LivermoreGammaConversionModel : public G4VEmModel
 public:
 
   G4LivermoreGammaConversionModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermoreGammaConversion");
+		     const G4String& nam = "LivermoreConversion");
 
   virtual ~G4LivermoreGammaConversionModel();
 

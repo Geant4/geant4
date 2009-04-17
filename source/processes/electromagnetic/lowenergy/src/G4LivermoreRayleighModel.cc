@@ -23,9 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.cc,v 1.4 2009-03-19 15:17:05 sincerti Exp $
+// $Id: G4LivermoreRayleighModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// History:
+// --------
+// 16 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - remove GetMeanFreePath method and table
+//                  - remove initialisation of element selector 
 
 #include "G4LivermoreRayleighModel.hh"
 
@@ -36,13 +46,14 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),formFactorData(0),crossSectionHandler(0)
+						   const G4String& nam)
+  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),
+   formFactorData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
   
-  SetLowEnergyLimit(lowEnergyLimit);
+  //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   //
   verboseLevel= 0;
@@ -53,26 +64,27 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  G4cout << "Livermore Rayleigh is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "Livermore Rayleigh is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / eV << " eV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
 {  
-  if (meanFreePathTable) delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
   if (formFactorData) delete formFactorData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition*,
+					  const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreRayleighModel::Initialise()" << G4endl;
@@ -83,22 +95,6 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
     delete crossSectionHandler;
   }
   
-  // Energy limits
-  
-  if (LowEnergyLimit() < lowEnergyLimit)
-  {
-    G4cout << "G4LivermoreRayleighModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-    SetLowEnergyLimit(lowEnergyLimit);
-  }
-
-  if (HighEnergyLimit() > highEnergyLimit)
-  {
-    G4cout << "G4LivermoreRayleighModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" << G4endl;
-    SetHighEnergyLimit(highEnergyLimit);
-  }
-
   // Data are read for all materials
   
   crossSectionHandler = new G4CrossSectionHandler;
@@ -106,34 +102,25 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
   G4String crossSectionFile = "rayl/re-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
-  meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
-
   G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
   G4String formFactorFile = "rayl/re-ff-";
   formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
   formFactorData->LoadData(formFactorFile);
 
-  //
-  
+  //  
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Rayleigh model" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
-  G4cout << "Livermore Rayleigh model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) { 
+    G4cout << "Livermore Rayleigh model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / eV << " eV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 
 }
@@ -141,7 +128,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* particleDefinition,
+                                       const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
@@ -149,12 +136,7 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerAtom() of G4LivermoreRayleighModel" << G4endl;
 
-  if (particleDefinition != G4Gamma::GammaDefinition()
-      ||
-      GammaEnergy < lowEnergyLimit
-      ||
-      GammaEnergy > highEnergyLimit)
-   	    
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit)
     return 0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
@@ -173,14 +155,15 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     G4cout << "Calling SampleSecondaries() of G4LivermoreRayleighModel" << G4endl;
 
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
-  
+
+  // absorption of low-energy gamma  
   if (photonEnergy0 <= lowEnergyLimit)
-  {
+    {
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
       return ;
-  }
+    }
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
@@ -200,17 +183,21 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   do
     {
       do
-      {
-      cosTheta = 2. * G4UniformRand() - 1.;
-      fcostheta = ( 1. + cosTheta*cosTheta)/2.;
-      } while (fcostheta < G4UniformRand());
+	{
+	  cosTheta = 2. * G4UniformRand() - 1.;
+	  fcostheta = ( 1. + cosTheta*cosTheta)/2.;
+	} while (fcostheta < G4UniformRand());
 
       G4double sinThetaHalf = std::sqrt((1. - cosTheta) / 2.);
       x = sinThetaHalf / (wlPhoton/cm);
       if (x > 1.e+005)
-         dataFormFactor = formFactorData->FindValue(x,Z-1);
+	{
+	  dataFormFactor = formFactorData->FindValue(x,Z-1);
+	}
       else
-         dataFormFactor = formFactorData->FindValue(0.,Z-1);
+	{
+	  dataFormFactor = formFactorData->FindValue(0.,Z-1);
+	}
       randomFormFactor = G4UniformRand() * Z * Z;
       sinTheta = std::sqrt(1. - cosTheta*cosTheta);
       gReject = dataFormFactor * dataFormFactor;
@@ -231,21 +218,4 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   fParticleChange->SetProposedKineticEnergy(photonEnergy0); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermoreRayleighModel::GetMeanFreePath(const G4Track& track, 
-					      G4double, // previousStepSize
-					      G4ForceCondition*)
-{
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  size_t materialIndex = couple->GetIndex();
-
-  G4double meanFreePath;
-  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-  return meanFreePath;
-}
 

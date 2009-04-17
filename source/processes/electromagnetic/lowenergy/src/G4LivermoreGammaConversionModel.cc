@@ -23,9 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.cc,v 1.4 2009-03-19 15:17:05 sincerti Exp $
+// $Id: G4LivermoreGammaConversionModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// History:
+// --------
+// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - use CLHEP electron mass for low-enegry limit
+//                  - remove MeanFreePath method and table
+
 
 #include "G4LivermoreGammaConversionModel.hh"
 
@@ -36,18 +48,14 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-:G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),crossSectionHandler(0),meanFreePathTable(0)
+								 const G4String& nam)
+  :G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),
+   crossSectionHandler(0),meanFreePathTable(0)
 {
-  lowEnergyLimit = 1.022000 * MeV;
+  lowEnergyLimit = 2.0*electron_mass_c2;
   highEnergyLimit = 100 * GeV;
-  
-  G4cout << "Livermore Gamma conversion is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / MeV << " MeV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
-	 
+  SetHighEnergyLimit(highEnergyLimit);
+  	 
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -56,20 +64,27 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4Particl
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  if(verboseLevel > 0) {
+    G4cout << "Livermore Gamma conversion is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / MeV << " MeV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
 {  
-  if (meanFreePathTable) delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void 
+G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition*,
+					    const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreGammaConversionModel::Initialise()" << G4endl;
@@ -80,71 +95,44 @@ void G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* par
     delete crossSectionHandler;
   }
 
-  // Energy limits
-  
-  if (LowEnergyLimit() < lowEnergyLimit)
-  {
-    G4cout << "G4LivermoreGammaConversionModel: low energy limit increased from " << 
-	LowEnergyLimit()/MeV << " MeV to " << lowEnergyLimit/MeV << " MeV" << G4endl;
-    SetLowEnergyLimit(lowEnergyLimit);
-  }
-
-  if (HighEnergyLimit() > highEnergyLimit)
-  {
-    G4cout << "G4LivermoreGammaConversionModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" << G4endl;
-    SetHighEnergyLimit(highEnergyLimit);
-  }
-
   // Read data tables for all materials
   
   crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Initialise(0,1.0220*MeV,100.*GeV,400);
+  crossSectionHandler->Initialise(0,lowEnergyLimit,100.*GeV,400);
   G4String crossSectionFile = "pair/pp-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
-
-  meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 
   //
   
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
-  G4cout << "Livermore Gamma Conversion model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / MeV << " MeV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) { 
+    G4cout << "Livermore Gamma Conversion model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / MeV << " MeV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-  isInitialised = true;}
+  fParticleChange = GetParticleChangeForGamma();
+  isInitialised = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* particleDefinition,
-                                             G4double GammaEnergy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
+G4double 
+G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+							    G4double GammaEnergy,
+							    G4double Z, G4double,
+							    G4double, G4double)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreGammaConversionModel" << G4endl;
-
-  if (particleDefinition != G4Gamma::GammaDefinition()
-      ||
-      GammaEnergy < lowEnergyLimit
-      ||
-      GammaEnergy > highEnergyLimit)
-   	    
-    return 0;
+  if (verboseLevel > 3) {
+    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreGammaConversionModel" 
+	   << G4endl;
+  }
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
@@ -190,12 +178,16 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
 
       if (element == 0)
 	{
-	  G4cout << "G4LivermoreGammaConversionModel::SampleSecondaries - element = 0" << G4endl;
+	  G4cout << "G4LivermoreGammaConversionModel::SampleSecondaries - element = 0" 
+		 << G4endl;
+	  return;
 	}
       G4IonisParamElm* ionisation = element->GetIonisation();
-       if (ionisation == 0)
+      if (ionisation == 0)
 	{
-	  G4cout << "G4LivermoreGammaConversionModel::SampleSecondaries - ionisation = 0" << G4endl;
+	  G4cout << "G4LivermoreGammaConversionModel::SampleSecondaries - ionisation = 0" 
+		 << G4endl;
+	  return;
 	}
 
       // Extract Coulomb factor for this Element
@@ -285,10 +277,9 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
   // the electron and positron are assumed to have a symetric angular 
   // distribution with respect to the Z axis along the parent photon
   
-//  aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
   
-// SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
+  // SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
 
   G4ThreeVector electronDirection (dxEle, dyEle, dzEle);
   electronDirection.rotateUz(photonDirection);
@@ -300,7 +291,7 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
   G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
 
-// SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
+  // SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
 
   G4ThreeVector positronDirection (dxPos, dyPos, dzPos);
   positronDirection.rotateUz(photonDirection);   
@@ -349,22 +340,4 @@ G4double G4LivermoreGammaConversionModel::ScreenFunction2(G4double screenVariabl
   
   return value;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermoreGammaConversionModel::GetMeanFreePath(const G4Track& track, 
-						     G4double, // previousStepSize
-						     G4ForceCondition*)
-{
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  size_t materialIndex = couple->GetIndex();
-
-  G4double meanFreePath;
-  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-  return meanFreePath;
-}
 

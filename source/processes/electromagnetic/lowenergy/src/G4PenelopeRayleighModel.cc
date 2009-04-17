@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.2 2008-12-04 14:09:36 pandola Exp $
+// $Id: G4PenelopeRayleighModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,6 +31,9 @@
 // History:
 // --------
 // 14 Oct 2008   L Pandola    Migration from process to model 
+// 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
 //
 
 #include "G4PenelopeRayleighModel.hh"
@@ -55,7 +58,7 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   verboseLevel= 0;
@@ -89,41 +92,28 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeRayleighModel::Initialise()" << G4endl;
 
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopeRayleighModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopeRayleighModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
 
-  G4cout << "Penelope Rayleigh model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) {
+    G4cout << "Penelope Rayleigh model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / keV << " keV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
-                                           const G4ParticleDefinition* p,
-                                           G4double ekin,
-                                           G4double,
-                                           G4double)
+G4double 
+G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
+					       const G4ParticleDefinition* p,
+					       G4double ekin,
+					       G4double,
+					       G4double)
 {
   // Penelope model to calculate the Rayleigh scattering inverse mean 
   // free path. 
@@ -232,10 +222,10 @@ G4double G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* materi
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* ,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* aDynamicGamma,
+						G4double,
+						G4double)
 {
   // Penelope model to sample the Rayleigh scattering final state.
   //
@@ -248,16 +238,16 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   if (verboseLevel > 3)
     G4cout << "Calling SamplingSecondaries() of G4PenelopeRayleighModel" << G4endl;
-                                                                                                    
+
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
  
-  if (photonEnergy0 <= LowEnergyLimit())
-  {
+  if (photonEnergy0 <= fIntrinsicLowEnergyLimit)
+    {
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
       return ;
-  }
+    }
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
    

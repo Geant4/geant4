@@ -1,4 +1,4 @@
-$Id: History,v 1.357 2009-04-02 06:46:07 pandola Exp $
+$Id: History,v 1.358 2009-04-17 10:29:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.04.2009, V.Ivanchenko, tag emlowen-V09-02-27 
+            Cleanup of new model classes G4LivermoreBremsstrahlungModel,
+            G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
+            G4LivermoreIonisationModel, G4LivermorePhotoElectricModel,
+            G4LivermoreRayleighModel,G4PenelopeAnnihilationModel
+            G4PenelopeBremsstrahlungModel, G4PenelopeComptonModel, 
+	    G4PenelopeGammaConversionModel, G4PenelopeIonisationModel,
+            G4PenelopePhotoElectricModel, G4PenelopeRayleighModel
+              - defined high energy limit for a model in constructor
+              - do not overwright default (zero) low energy limit of a model
+              - do not change energy limits in Initiliation methods 
+              - added MinEnergyCut method for models used for energy loss
+              - do not change track status inside the model for charged particles
+              - simplified initialisation
+              - protect all printouts by verbosityLevel variable
+              - removed MeanFreePath method and table
+              - cleaned logic in applying of deexcitation module
+            G4ShellVacancy - substitute "set" varibale, 
+                           - comment out destructor to avoid crash
 
 02.04.2009, L. Pandola, tag emlowen-V09-02-26
             Fixed bug in G4PenelopeRayleigh.cc (calculation of mfp for compounds).

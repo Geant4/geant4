@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.hh,v 1.1 2009-02-10 16:16:17 pandola Exp $
+// $Id: G4LivermoreIonisationModel.hh,v 1.2 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -93,6 +93,10 @@ public:
   virtual void SampleDeexcitationAlongStep(const G4Material*,
                                            const G4Track&,
                                            G4double& eloss);
+
+  // min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+                                const G4MaterialCutsCouple*);
 		 
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
   void SetUseAtomicDeexcitation(G4bool val){fUseAtomicDeexcitation = val;};

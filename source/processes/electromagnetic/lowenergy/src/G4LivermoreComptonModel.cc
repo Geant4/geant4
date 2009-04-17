@@ -23,9 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.4 2009-03-19 15:17:05 sincerti Exp $
+// $Id: G4LivermoreComptonModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// History:
+// --------
+// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - remove GetMeanFreePath method and table
+//                  - added protection against numerical problem in energy sampling 
 
 #include "G4LivermoreComptonModel.hh"
 
@@ -36,12 +47,13 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
-                                             const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
+						 const G4String& nam)
+  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),
+   scatterFunctionData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
-  SetLowEnergyLimit(lowEnergyLimit);
+  //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
   verboseLevel=0 ;
@@ -51,24 +63,22 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
-  
-  G4cout << "Livermore Compton model is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
- 
+
+  if(  verboseLevel>0 ) { 
+    G4cout << "Livermore Compton model is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / eV << " eV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreComptonModel::~G4LivermoreComptonModel()
 {  
-
-  if (meanFreePathTable)   delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
   if (scatterFunctionData) delete scatterFunctionData;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -76,7 +86,6 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
                                        const G4DataVector& cuts)
 {
-
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
 
@@ -86,22 +95,6 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
     delete crossSectionHandler;
   }
   
-  // Energy limits
-  
-  if (LowEnergyLimit() < lowEnergyLimit)
-    {
-      G4cout << "G4LivermoreComptonModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-    }
-
-  if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4LivermoreComptonModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-    }
-
   // Reading of data files - all materials are read
   
   crossSectionHandler = new G4CrossSectionHandler;
@@ -119,66 +112,47 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   G4String file = "/doppler/shell-doppler";
   shellData.LoadData(file);
 
-  meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
-  
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Compton model" << G4endl;
 
   InitialiseElementSelectors(particle,cuts);
 
-  G4cout << "Livermore Compton model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
-
-  //
-  
+  if(  verboseLevel>0 ) { 
+    G4cout << "Livermore Compton model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / eV << " eV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
+  //  
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-    
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermoreComptonModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* particleDefinition,
+                                       const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModel" << G4endl;
 
-  if (particleDefinition != G4Gamma::GammaDefinition()
-      ||
-      GammaEnergy < lowEnergyLimit
-      ||
-      GammaEnergy > highEnergyLimit)
-   	    
-    return 0;
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0.0;
     
-  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
-  
+  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);  
   return cs;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* aDynamicGamma,
+						G4double, G4double)
 {
 
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
@@ -200,13 +174,14 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
   
-  if (photonEnergy0 <= lowEnergyLimit)
-  {
+  // low-energy gamma is absorpted by this process
+  if (photonEnergy0 <= lowEnergyLimit) 
+    {
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
       return ;
-  }
+    }
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
@@ -258,8 +233,8 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   // Doppler broadening -  Method based on:
   // Y. Namito, S. Ban and H. Hirayama, 
-  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon Into the EGS4 Code" 
-  // NIM A 349, pp. 489-494, 1994
+  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon 
+  // into the EGS4 Code", NIM A 349, pp. 489-494, 1994
   
   // Maximum number of sampling iterations
   G4int maxDopplerIterations = 1000;
@@ -319,17 +294,24 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double photonEnergy1 = photonE;
 
   if (photonEnergy1 > 0.)
-  {
-    fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
-  }
+    {
+      fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
+    }
   else
-  {
-    fParticleChange->SetProposedKineticEnergy(0.) ;
-    fParticleChange->ProposeTrackStatus(fStopAndKill);
-  }
+    {
+      photonEnergy1 = 0.;
+      fParticleChange->SetProposedKineticEnergy(0.) ;
+      fParticleChange->ProposeTrackStatus(fStopAndKill);   
+    }
 
   // Kinematics of the scattered electron
   G4double eKineticEnergy = photonEnergy0 - photonEnergy1 - bindingE;
+
+  // protection against negative final energy: no e- is created
+  if(eKineticEnergy < 0.0) {
+    fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0 - photonEnergy1);
+    return;
+  }
   G4double eTotalEnergy = eKineticEnergy + electron_mass_c2;
 
   G4double electronE = photonEnergy0 * (1. - epsilon) + electron_mass_c2; 
@@ -349,30 +331,12 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
   eDirection.rotateUz(photonDirection0);
 
-// SI - The range test has been removed wrt original G4LowEnergyCompton class
+  // SI - The range test has been removed wrt original G4LowEnergyCompton class
 
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
   
-  G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),eDirection,eKineticEnergy) ;
+  G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
+						 eDirection,eKineticEnergy) ;
   fvect->push_back(dp);
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermoreComptonModel::GetMeanFreePath(const G4Track& track,
-					     G4double, // previousStepSize
-					     G4ForceCondition*)
-{
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  size_t materialIndex = couple->GetIndex();
-
-  G4double meanFreePath;
-  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-  return meanFreePath;
 }
 

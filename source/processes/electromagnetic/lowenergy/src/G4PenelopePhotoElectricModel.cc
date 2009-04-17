@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.4 2009-03-25 13:05:06 pandola Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -37,6 +37,10 @@
 //                          a warning from G4AtomicTransitionManager only. 
 //                          Results are unchanged.
 // 25 Mar 2009   L Pandola  Small fix to avoid wrong energy-violation warnings
+// 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - do not apply production threshold on secondaries
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -63,7 +67,7 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   fUseAtomicDeexcitation = true;
@@ -102,23 +106,6 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
       delete shellCrossSectionHandler;
     }
 
-  //Check energy limits
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopePhotoElectricModel: low energy limit increased from " <<
-        LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << 
-	G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopePhotoElectricModel: high energy limit decreased from " <<
-        HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" 
-	     << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
-
-
   //Re-initialize cross section handlers
   crossSectionHandler = new G4CrossSectionHandler();
   crossSectionHandler->Clear();
@@ -134,18 +121,16 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopePhotoElectric" << G4endl;
 
-  G4cout << "Penelope Photo-Electric model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / MeV << " MeV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) { 
+    G4cout << "Penelope Photo-Electric model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / MeV << " MeV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
@@ -167,12 +152,12 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopePhotoElectricModel" << G4endl;
 
   G4int iZ = (G4int) Z;
-  if (!crossSectionHandler)
-    {
-      G4cout << "G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
-    }
+  //  if (!crossSectionHandler) // VI: should not be 
+  //  {
+  //    G4cout << "G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom" << G4endl;
+  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
+  //    G4Exception();
+  //  }
   G4double cs = crossSectionHandler->FindValue(iZ,energy);
  
   if (verboseLevel > 2)
@@ -208,13 +193,15 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
 
-  if (photonEnergy <= LowEnergyLimit())
-  {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
+  // always kill primary
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
+  fParticleChange->SetProposedKineticEnergy(0.);
+
+  if (photonEnergy <= fIntrinsicLowEnergyLimit)
+    {
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy);
       return ;
-  }
+    }
 
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
 
@@ -222,7 +209,8 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   if (verboseLevel > 2)
     G4cout << "Going to select element in " << couple->GetMaterial()->GetName() << G4endl;
   //use crossSectionHandler instead of G4EmElementSelector because in this case 
-  //the dimension of the table is equal to the dimension of the database (less interpolation errors)
+  //the dimension of the table is equal to the dimension of the database 
+  //(less interpolation errors)
   G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
   if (verboseLevel > 2)
     G4cout << "Selected Z = " << Z << G4endl;
@@ -252,103 +240,87 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
   
-  G4double cutForLowEnergySecondaryParticles = 250.0*eV;
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cutE = std::max(cutForLowEnergySecondaryParticles,cutE);
-
   // There may be cases where the binding energy of the selected shell is > photon energy
   // In such cases do not generate secondaries
   if (eKineticEnergy > 0.)
     {
       //Now check if the electron is above cuts: if so, it is created explicitely
-      if (eKineticEnergy > cutE)
-	{
-	  // The electron is created
-	  // Direction sampled from the Sauter distribution
-	  G4double cosTheta = SampleElectronDirection(eKineticEnergy);
-	  G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
-	  G4double phi = twopi * G4UniformRand() ;
-	  G4double dirx = sinTheta * std::cos(phi);
-	  G4double diry = sinTheta * std::sin(phi);
-	  G4double dirz = cosTheta ;
-	  G4ThreeVector electronDirection(dirx,diry,dirz); //electron direction
-	  electronDirection.rotateUz(photonDirection);
-	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
-							       electronDirection, 
-							       eKineticEnergy);
-	  fvect->push_back(electron);
-	} 
-      else 
-	{
-	  localEnergyDeposit += eKineticEnergy;    
-	  eKineticEnergy = 0;
-	}
-    }
+      //VI: checking cut here provides inconsistency in testing
+      //      if (eKineticEnergy > cutE)
+      // The electron is created
+      // Direction sampled from the Sauter distribution
+      G4double cosTheta = SampleElectronDirection(eKineticEnergy);
+      G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
+      G4double phi = twopi * G4UniformRand() ;
+      G4double dirx = sinTheta * std::cos(phi);
+      G4double diry = sinTheta * std::sin(phi);
+      G4double dirz = cosTheta ;
+      G4ThreeVector electronDirection(dirx,diry,dirz); //electron direction
+      electronDirection.rotateUz(photonDirection);
+      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
+							   electronDirection, 
+							   eKineticEnergy);
+      fvect->push_back(electron);
+    } 
+  //  else 
+  //  {
+  //    localEnergyDeposit += eKineticEnergy;    
+  //    eKineticEnergy = 0;
+  //  }
+  //  }
   else
+    {
       bindingEnergy = photonEnergy;
-      
+    }
   G4double energyInFluorescence = 0; //testing purposes
 
   //Now, take care of fluorescence, if required
-  if (fUseAtomicDeexcitation)
+  if(DeexcitationFlag() && Z > 5) 
     {
+      const G4ProductionCutsTable* theCoupleTable=
+	G4ProductionCutsTable::GetProductionCutsTable();
+      size_t indx = couple->GetIndex();
       G4double cutG = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      cutG = std::min(cutForLowEnergySecondaryParticles,cutG);
+      G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
       
-      std::vector<G4DynamicParticle*>* photonVector = 0;
-
       // Protection to avoid generating photons in the unphysical case of 
       // shell binding energy > photon energy
-      if (Z > 5  && (bindingEnergy > cutG || bindingEnergy > cutE))
+      if (bindingEnergy > cutG || bindingEnergy > cutE)
 	{
-	  photonVector = deexcitationManager.GenerateParticles(Z,shellId); 
-	  //Check for single photons (if they are above threshold)
-	  for (size_t k=0; k< photonVector->size(); k++)
+	  deexcitationManager.SetCutForSecondaryPhotons(cutG);
+	  deexcitationManager.SetCutForAugerElectrons(cutE);
+	  std::vector<G4DynamicParticle*>* photonVector = 
+	    deexcitationManager.GenerateParticles(Z,shellId); 
+	  //Check for secondaries
+          if(photonVector) 
 	    {
-	      G4DynamicParticle* aPhoton = (*photonVector)[k];
-	      if (aPhoton)
+	      for (size_t k=0; k< photonVector->size(); k++)
 		{
-		  G4double itsCut = cutG;
-		  if(aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cutE;
-		  G4double itsEnergy = aPhoton->GetKineticEnergy();
-		  
-		  if (itsEnergy > itsCut && itsEnergy <= bindingEnergy)
+		  G4DynamicParticle* aPhoton = (*photonVector)[k];
+		  if (aPhoton)
 		    {
-		      // Local energy deposit is given as the sum of the 
-		      // energies of incident photons minus the energies
-		      // of the outcoming fluorescence photons
-		      bindingEnergy -= itsEnergy;
-		      
-		    }
-		  else
-		    { 
-		      (*photonVector)[k] = 0;
+		      G4double itsEnergy = aPhoton->GetKineticEnergy();
+		      if (itsEnergy <= bindingEnergy)
+			{
+			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
+			    energyInFluorescence += itsEnergy;
+			  bindingEnergy -= itsEnergy;
+			  fvect->push_back(aPhoton);
+			}
+		      else
+			{
+			  delete aPhoton;
+			  (*photonVector)[k] = 0;
+			}
 		    }
 		}
+	      delete photonVector;
 	    }
-	}
-      //Register valid secondaries
-      if (photonVector)
-	{
-	  for ( size_t ll = 0; ll <photonVector->size(); ll++) 
-	    {
-	      G4DynamicParticle* aPhoton = (*photonVector)[ll];
-	      if (aPhoton) 
-		{
-		  energyInFluorescence += aPhoton->GetKineticEnergy();
-		  fvect->push_back(aPhoton);
-		}
-	    }
-	  delete photonVector;
 	}
     }
   //Residual energy is deposited locally
   localEnergyDeposit += bindingEnergy;
       
-
   if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING - "
@@ -357,10 +329,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
       localEnergyDeposit = 0;
     }
 
- //Update the status of the primary gamma (kill it)
-  fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);
-  fParticleChange->ProposeTrackStatus(fStopAndKill);
 
   if (verboseLevel > 1)
     {
@@ -378,10 +347,12 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
     }
   if (verboseLevel > 0)
     {
-      G4double energyDiff = std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit-photonEnergy);
+      G4double energyDiff = 
+	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit-photonEnergy);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV << " keV (final) vs. " << 
+	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV 
+	       << " keV (final) vs. " << 
 	  photonEnergy/keV << " keV (initial)" << G4endl;
     }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.hh,v 1.1 2008-12-15 09:23:48 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungModel.hh,v 1.2 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -89,6 +89,9 @@ public:
                                G4double kineticEnergy,
                                G4double cutEnergy);
 				 
+  // min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+                                const G4MaterialCutsCouple*);
 
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};

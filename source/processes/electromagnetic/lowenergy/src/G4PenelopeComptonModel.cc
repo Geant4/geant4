@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.2 2008-12-04 14:11:21 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -39,6 +39,10 @@
 // 22 Nov 2008   L Pandola    Make unit of measurements explicit for binding energies 
 //			      that are read from the external files.
 // 24 Nov 2008   L Pandola    Find a cleaner way to delete vectors.
+// 16 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - do not apply production threshold on level of the model
 //
 
 #include "G4PenelopeComptonModel.hh"
@@ -68,7 +72,7 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   energyForIntegration = 0.0;
@@ -123,31 +127,17 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* particle,
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;
 
   InitialiseElementSelectors(particle,cuts);
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopeComptonModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopeComptonModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
 
-  G4cout << "Penelope Compton model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) {
+    G4cout << "Penelope Compton model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / keV << " keV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
 }
 
@@ -248,13 +238,13 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
-  if (photonEnergy0 <= LowEnergyLimit())
-  {
+  if (photonEnergy0 <= fIntrinsicLowEnergyLimit)
+    {
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
       return ;
-  }
+    }
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
@@ -262,7 +252,8 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   if (verboseLevel > 2)
     G4cout << "Going to select element in " << couple->GetMaterial()->GetName() << G4endl;
   // atom can be selected effitiantly if element selectors are initialised 
-  const G4Element* anElement = SelectRandomAtom(couple,G4Gamma::GammaDefinition(),photonEnergy0);
+  const G4Element* anElement = 
+    SelectRandomAtom(couple,G4Gamma::GammaDefinition(),photonEnergy0);
   G4int Z = (G4int) anElement->GetZ();
   if (verboseLevel > 2)
     G4cout << "Selected " << anElement->GetName() << G4endl;
@@ -319,7 +310,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
       }while((epsilon*photonEnergy0-photonEnergy0+ionEnergy) >0);
     }
-  else //photonEnergy0<5 MeV
+  else //photonEnergy0 < 5 MeV
     {
       //Incoherent scattering function for theta=PI
       G4double s0=0.0;
@@ -471,11 +462,11 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
   }
   
-
   //Create scattered electron
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*(ionizationEnergy->find(Z)->second))[iosc];
-  G4double Q2 = photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
+  G4double Q2 = 
+    photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
     {
@@ -495,71 +486,81 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
   G4double ionEnergyInPenelopeDatabase = ionEnergy;
-  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase); //protection against energy non-conservation 
+  //protection against energy non-conservation
+  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase);  
 
-  G4double eKineticEnergy = diffEnergy - ionEnergy; //subtract the excitation energy. If not emitted by fluorescence,
+  //subtract the excitation energy. If not emitted by fluorescence
   //the ionization energy is deposited as local energy deposition
+  G4double eKineticEnergy = diffEnergy - ionEnergy; 
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.; //testing purposes only
 
   if (eKineticEnergy < 0) 
     {
-      //It means that there was some problem/mismatch between the two databases. Try to make it work
+      //It means that there was some problem/mismatch between the two databases. 
+      //Try to make it work
       //In this case available Energy (diffEnergy) < ionEnergy
       //Full residual energy is deposited locally
       localEnergyDeposit = diffEnergy;
       eKineticEnergy = 0.0;
     }
-  G4double cutForLowEnergySecondaryPhotons = 250.0*eV;
-
-  //Get the cut for electrons
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  cutE = std::max(cutForLowEnergySecondaryPhotons,cutE);
      
   //the local energy deposit is what remains: part of this may be spent for fluorescence.
-  if (fUseAtomicDeexcitation)
-    { 
-      G4int nPhotons=0;
+  if(DeexcitationFlag() && Z > 5) {
 
-      G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      cutg = std::max(cutForLowEnergySecondaryPhotons,cutg);
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
 
-      G4DynamicParticle* aPhoton;
-      G4AtomicDeexcitation deexcitationManager;
+    size_t index = couple->GetIndex();
+    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
+    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
+
+    // Generation of fluorescence
+    // Data in EADL are available only for Z > 5
+    // Protection to avoid generating photons in the unphysical case of
+    // shell binding energy > photon energy
+    if (localEnergyDeposit > cutg || localEnergyDeposit > cute)
+      { 
+	G4DynamicParticle* aPhoton;
+	G4AtomicDeexcitation deexcitationManager;
+	deexcitationManager.SetCutForSecondaryPhotons(cutg);
+	deexcitationManager.SetCutForAugerElectrons(cute);
+	deexcitationManager.ActivateAugerElectronProduction(false);
       
-      if (Z>5 && (localEnergyDeposit > cutg || localEnergyDeposit > cutE))
-	{
-	  photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-	  for (size_t k=0;k<photonVector->size();k++){
-	    aPhoton = (*photonVector)[k];
-	    if (aPhoton)
+	photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+	if(photonVector) 
+	  {
+	    size_t nPhotons = photonVector->size();
+	    for (size_t k=0; k<nPhotons; k++)
 	      {
-		G4double itsCut = cutg;
-		if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cutE;
-		G4double itsEnergy = aPhoton->GetKineticEnergy();
-		if (itsEnergy > itsCut && itsEnergy <= localEnergyDeposit)
+		aPhoton = (*photonVector)[k];
+		if (aPhoton)
 		  {
-		    nPhotons++;
-		    localEnergyDeposit -= itsEnergy;
-		    energyInFluorescence += itsEnergy;
-		  }
-		else
-		  {
-		    delete aPhoton;
-		    (*photonVector)[k]=0;
+		    G4double itsEnergy = aPhoton->GetKineticEnergy();
+		    if (itsEnergy <= localEnergyDeposit)
+		      {
+			localEnergyDeposit -= itsEnergy;
+			if (aPhoton->GetDefinition() == G4Gamma::Gamma()) 
+			  energyInFluorescence += itsEnergy;;
+			fvect->push_back(aPhoton);		    
+		      }
+		    else
+		      {
+			delete aPhoton;
+			(*photonVector)[k]=0;
+		      }
 		  }
 	      }
+	    delete photonVector;
 	  }
-	}
-    }
+      }
+  }
 
   //Produce explicitely the electron only if its proposed kinetic energy is 
   //above the cut, otherwise add local energy deposition
   G4DynamicParticle* electron = 0;
-  if (eKineticEnergy > cutE)
+  //  if (eKineticEnergy > cutE) // VI: may be consistency problem if cut is applied here
+  if (eKineticEnergy > 0.0)
     {
       G4double xEl = sinThetaE * std::cos(phi+pi); 
       G4double yEl = sinThetaE * std::sin(phi+pi);
@@ -575,20 +576,6 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
       localEnergyDeposit += eKineticEnergy;
     }
 
-  //This block below is executed only if there is at least one secondary photon produced by
-  //AtomicDeexcitation
-  if (photonVector)
-    {
-      for (size_t ll=0;ll<photonVector->size();ll++)
-	{
-	  if ((*photonVector)[ll]) 
-	    {
-	      G4DynamicParticle* aFluorescencePhoton = (*photonVector)[ll];
-	      fvect->push_back(aFluorescencePhoton);
-	    }
-	}
-    }
-  delete photonVector;
   if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING-" 

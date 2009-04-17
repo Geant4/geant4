@@ -23,9 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.5 2009-03-19 15:17:05 sincerti Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.6 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// History:
+// --------
+// 15 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - remove GetMeanFreePath method and table
+//                  - simplify sampling of deexcitation by using cut in energy
+//                  - added protection against numerical problem in energy sampling 
 
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -37,19 +49,16 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0),shellCrossSectionHandler(0),ElectronAngularGenerator(0)
+:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),
+ crossSectionHandler(0),shellCrossSectionHandler(0),ElectronAngularGenerator(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
-  SetLowEnergyLimit(lowEnergyLimit);
+  //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
-  
-  G4cout << "Livermore PhotoElectric is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / GeV << " GeV"
-         << G4endl;
- 
+
+  ActivateAuger(false);
+   
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -57,13 +66,19 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+  if(verboseLevel>0) {
+    G4cout << "Livermore PhotoElectric is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / eV << " eV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {  
-  if (meanFreePathTable) delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
   if (shellCrossSectionHandler) delete shellCrossSectionHandler;
   if (ElectronAngularGenerator) delete ElectronAngularGenerator;
@@ -71,8 +86,9 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void 
+G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
+					  const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePhotoElectricModel::Initialise()" << G4endl;
@@ -89,33 +105,12 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
     delete shellCrossSectionHandler;
   }
   
-  // Energy limits
-  
-  if (LowEnergyLimit() < lowEnergyLimit)
-  {
-      G4cout << "G4LivermorePhotoElectricModel: low energy limit increased from " <<
-        LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << 
-	G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-  }
- 
-  if (HighEnergyLimit() > highEnergyLimit)
-  {
-      G4cout << "G4LivermorePhotoElectricModel: high energy limit decreased from " <<
-        HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" 
-	     << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-  }
-
   // Read data tables for all materials
   
   crossSectionHandler = new G4CrossSectionHandler();
   crossSectionHandler->Clear();
   G4String crossSectionFile = "phot/pe-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
-
-  meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 
   shellCrossSectionHandler = new G4CrossSectionHandler();
   shellCrossSectionHandler->Clear();
@@ -125,48 +120,41 @@ void G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition* parti
   // SI - Simple generator is buggy
   //generatorName = "geant4.6.2";
   //ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
-  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
+  ElectronAngularGenerator = 
+    new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
 
-  //
-  
+  //  
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore PhotoElectric model" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
+  //  InitialiseElementSelectors(particle,cuts);
 
-  G4cout << "Livermore PhotoElectric model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) { 
+    G4cout << "Livermore PhotoElectric model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / eV << " eV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* particleDefinition,
+                                       const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
   if (verboseLevel > 3)
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePhotoElectricModel" << G4endl;
+    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePhotoElectricModel" 
+	   << G4endl;
 
-  if (particleDefinition != G4Gamma::GammaDefinition()
-      ||
-      GammaEnergy < lowEnergyLimit
-      ||
-      GammaEnergy > highEnergyLimit)
-   	    
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit)
     return 0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
@@ -175,11 +163,12 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+void 
+G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+						 const G4MaterialCutsCouple* couple,
+						 const G4DynamicParticle* aDynamicGamma,
+						 G4double,
+						 G4double)
 {
 
   // Fluorescence generated according to:
@@ -192,15 +181,19 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
   
+  // kill incident photon
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);   
+
+  // low-energy gamma is absorpted by this process
   if (photonEnergy <= lowEnergyLimit)
     {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy);
-      return ;
+      return;
     }
  
-  G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection(); // Returns the normalized direction of the momentum
+  // Returns the normalized direction of the momentum
+  G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection(); 
 
   // Select randomly one element in the current material
   G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
@@ -214,13 +207,6 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
 
-  // Create lists of pointers to DynamicParticles (photons and electrons)
-  // (Is the electron vector necessary? To be checked)
-  std::vector<G4DynamicParticle*>* photonVector = 0;
-  std::vector<G4DynamicParticle*> electronVector;
-
-  G4double energyDeposit = 0.0;
-
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
 
@@ -228,118 +214,75 @@ void G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParti
   // In such cases do not generate secondaries
   if (eKineticEnergy > 0.)
     {
-      // SI - Removed safety
-      
-      // Generate the electron only if with large enough range w.r.t. cuts and safety
-      // G4double safety = aStep.GetPostStepPoint()->GetSafety();
+      // Calculate direction of the photoelectron
+      G4ThreeVector gammaPolarization = aDynamicGamma->GetPolarization();
+      G4ThreeVector electronDirection = 
+	ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,
+							    eKineticEnergy,
+							    gammaPolarization,
+							    shellId);
 
-      //if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
-	{
-
-	  // Calculate direction of the photoelectron
-	  G4ThreeVector gammaPolarization = aDynamicGamma->GetPolarization();
-	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy,gammaPolarization,shellId);
-
-	  // The electron is created ...
-	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
-							       electronDirection,
-							       eKineticEnergy);
-	  electronVector.push_back(electron);
-	}
-      /*else
-	{
-	  energyDeposit += eKineticEnergy;
-	}*/
+      // The electron is created ...
+      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
+							   electronDirection,
+							   eKineticEnergy);
+      fvect->push_back(electron);
     }
   else
     {
       bindingEnergy = photonEnergy;
     }
 
-  G4int nElectrons = electronVector.size();
-  size_t nTotPhotons = 0;
-  G4int nPhotons=0;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
+  // deexcitation
+  if(DeexcitationFlag() && Z > 5) {
 
-  size_t index = couple->GetIndex();
-  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
-  
-  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
 
-  G4DynamicParticle* aPhoton;
+    size_t index = couple->GetIndex();
+    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
+    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
 
-  // Generation of fluorescence
-  // Data in EADL are available only for Z > 5
-  // Protection to avoid generating photons in the unphysical case of
-  // shell binding energy > photon energy
-  if (Z > 5  && (bindingEnergy > cutg || bindingEnergy > cute))
-    {
-      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-      nTotPhotons = photonVector->size();
-      for (size_t k=0; k<nTotPhotons; k++)
-	{
-	  aPhoton = (*photonVector)[k];
-	  if (aPhoton)
-	    {
-              G4double itsCut = cutg;
-              if(aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
-	      G4double itsEnergy = aPhoton->GetKineticEnergy();
-
-	      if (itsEnergy > itsCut && itsEnergy <= bindingEnergy)
-		{
-		  nPhotons++;
-		  // Local energy deposit is given as the sum of the
-		  // energies of incident photons minus the energies
-		  // of the outcoming fluorescence photons
-		  bindingEnergy -= itsEnergy;
-
-		}
-	      else
-		{
-                  delete aPhoton;
-                  (*photonVector)[k] = 0;
-                }
-	    }
-	}
-    }
-
-  energyDeposit += bindingEnergy;
-
-  // Final state
-  
-  for (G4int l = 0; l<nElectrons; l++ )
-    {
-      aPhoton = electronVector[l];
-      if(aPhoton) {
-        fvect->push_back(aPhoton);
+    // Generation of fluorescence
+    // Data in EADL are available only for Z > 5
+    // Protection to avoid generating photons in the unphysical case of
+    // shell binding energy > photon energy
+    if (bindingEnergy > cutg || bindingEnergy > cute)
+      {
+	G4DynamicParticle* aPhoton;
+	deexcitationManager.SetCutForSecondaryPhotons(cutg);
+	deexcitationManager.SetCutForAugerElectrons(cute);
+ 
+	std::vector<G4DynamicParticle*>* photonVector = 
+	  deexcitationManager.GenerateParticles(Z,shellId);
+	size_t nTotPhotons = photonVector->size();
+	for (size_t k=0; k<nTotPhotons; k++)
+	  {
+	    aPhoton = (*photonVector)[k];
+	    if (aPhoton)
+	      {
+		G4double itsEnergy = aPhoton->GetKineticEnergy();
+		if (itsEnergy <= bindingEnergy)
+		  {
+		    // Local energy deposit is given as the sum of the
+		    // energies of incident photons minus the energies
+		    // of the outcoming fluorescence photons
+		    bindingEnergy -= itsEnergy;
+		    fvect->push_back(aPhoton);
+		  }
+		else
+		  {
+		    // abnormal case of energy non-conservation
+		    delete aPhoton;
+		    (*photonVector)[k] = 0;
+		  }
+	      }
+	  }
+	delete photonVector;
       }
-    }
-  for ( size_t ll = 0; ll < nTotPhotons; ll++)
-    {
-      aPhoton = (*photonVector)[ll];
-      if(aPhoton) {
-        fvect->push_back(aPhoton);
-      }
-    }
-
-  delete photonVector;
-
-  if (energyDeposit < 0)
-    {
-      G4cout << "WARNING - "
-	     << "G4LowEnergyPhotoElectric::PostStepDoIt - Negative energy deposit"
-	     << G4endl;
-      energyDeposit = 0;
-    }
-
-  // kill incident photon
-  fParticleChange->ProposeMomentumDirection( 0., 0., 0. );
-  fParticleChange->SetProposedKineticEnergy(0.);
-  fParticleChange->ProposeTrackStatus(fStopAndKill);   
-  fParticleChange->ProposeLocalEnergyDeposit(energyDeposit);
+  }
+  // excitation energy left
+  fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -367,9 +310,10 @@ void G4LivermorePhotoElectricModel::ActivateAuger(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution)
+void 
+G4LivermorePhotoElectricModel::SetAngularGenerator(G4VPhotoElectricAngularDistribution* dist)
 {
-  ElectronAngularGenerator = distribution;
+  ElectronAngularGenerator = dist;
   ElectronAngularGenerator->PrintGeneratorInformation();
 }
 
@@ -380,19 +324,22 @@ void G4LivermorePhotoElectricModel::SetAngularGenerator(const G4String& name)
   if (name == "default") 
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANT4LowEnergySimpleGenerator");
+      ElectronAngularGenerator = 
+	new G4PhotoElectricAngularGeneratorSimple("GEANT4LowEnergySimpleGenerator");
       generatorName = name;
     }
   else if (name == "standard")
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANT4SauterGavrilaGenerator");
+      ElectronAngularGenerator = 
+	new G4PhotoElectricAngularGeneratorSauterGavrila("GEANT4SauterGavrilaGenerator");
       generatorName = name;
     }
   else if (name == "polarized")
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorPolarized("GEANT4LowEnergyPolarizedGenerator");
+      ElectronAngularGenerator = 
+	new G4PhotoElectricAngularGeneratorPolarized("GEANT4LowEnergyPolarizedGenerator");
       generatorName = name;
     }
   else
@@ -401,29 +348,5 @@ void G4LivermorePhotoElectricModel::SetAngularGenerator(const G4String& name)
     }
 
   ElectronAngularGenerator->PrintGeneratorInformation();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermorePhotoElectricModel::GetMeanFreePath(const G4Track& track,
-						   G4double, // previousStepSize
-					       G4ForceCondition*)
-{
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  //  size_t materialIndex = material->GetIndex();
-
-  G4double meanFreePath = DBL_MAX;
-
-  //  if (energy > highEnergyLimit) 
-  //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-
-  G4double cross = shellCrossSectionHandler->ValueForMaterial(material,energy);
-  if(cross > 0.0) meanFreePath = 1.0/cross;
-
-  return meanFreePath;
 }
 
