@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.8 2009-04-07 15:09:39 mkossov Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.9 2009-04-17 11:24:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -48,9 +48,6 @@
 #include "G4FTFModel.hh"
 #include "G4CascadeInterface.hh"
 
-#include "G4PiNuclearCrossSection.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4NeutronHPInelasticData.hh"
 #include "G4NeutronHPCaptureData.hh"
 #include "G4NeutronHPFissionData.hh"
@@ -64,6 +61,9 @@ class G4GeneratorPrecompoundInterface;
 class G4BinaryCascade;
 class G4PreCompoundModel;
 class G4QuasiElasticChannel;
+class G4PiNuclearCrossSection;
+class G4ProtonInelasticCrossSection;
+class G4NeutronInelasticCrossSection;
 
 class G4HadronInelasticQBBC : public G4VPhysicsConstructor
 {
@@ -89,9 +89,9 @@ public:
 
 private:
 
-  G4PiNuclearCrossSection thePiCross;
-  G4ProtonInelasticCrossSection  theXSecP;
-  G4NeutronInelasticCrossSection theXSecN;
+  G4PiNuclearCrossSection* thePiCross;
+  G4ProtonInelasticCrossSection*  theXSecP;
+  G4NeutronInelasticCrossSection* theXSecN;
 
   G4NeutronHPInelasticData*  theHPXSecI;
   G4NeutronHPCaptureData*    theHPXSecC;

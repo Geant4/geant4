@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.16 2009-02-19 12:45:42 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.17 2009-04-17 11:24:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -72,6 +72,10 @@
 #include "G4NeutronHPCapture.hh"
 
 #include "G4UInelasticCrossSection.hh"
+
+#include "G4PiNuclearCrossSection.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, 
     G4int ver, G4bool ftf, G4bool bert, G4bool chips, G4bool hp, G4bool glauber)
@@ -135,6 +139,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4double maxEcascade = 7.5*GeV;
   G4double minFTF      = 4.5*GeV;
   G4double maxFTF      = 25.*GeV;
+
+  thePiCross = new G4PiNuclearCrossSection;
+  theXSecP = new G4ProtonInelasticCrossSection;
+  theXSecN = new G4NeutronInelasticCrossSection;
 
   //Binary
   G4HadronicInteraction* theBIC = new G4BinaryCascade();
@@ -225,7 +233,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       pmanager->AddDiscreteProcess(hp);
 
       if(pname == "proton") {
-	hp->AddDataSet(&theXSecP);
+	hp->AddDataSet(theXSecP);
 
 	hp->RegisterMe(theQGSModel);
         hp->RegisterMe(theFTFCModel);
@@ -239,7 +247,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
 
       } else if(pname == "neutron") {
-	hp->AddDataSet(&theXSecN);
+	hp->AddDataSet(theXSecN);
 	hp->RegisterMe(theQGSModel);
         hp->RegisterMe(theFTFCModel);
         //if(ftfFlag) hp->RegisterMe(theFTFCModel);
@@ -247,14 +255,17 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
 	G4HadronCaptureProcess* theNeutronCapture = 
 	  new G4HadronCaptureProcess("nCapture");
-	G4HadronFissionProcess* theNeutronFission = 
-	  new G4HadronFissionProcess("nFission");
 	pmanager->AddDiscreteProcess(theNeutronCapture);
-	pmanager->AddDiscreteProcess(theNeutronFission);
 
 	G4double emin = 0.0;
 	if(hpFlag) {
 	  emin = 19.5*MeV;
+	  G4HadronFissionProcess* theNeutronFission = 
+	    new G4HadronFissionProcess("nFission");
+	  pmanager->AddDiscreteProcess(theNeutronFission);
+	  G4HadronicInteraction* theF = new G4LFission();
+	  theF->SetMinEnergy(emin);
+	  theNeutronFission->RegisterMe(theF);
           theHPXSecI = new G4NeutronHPInelasticData;
           theHPXSecC = new G4NeutronHPCaptureData;
 	  theHPXSecF = new G4NeutronHPFissionData;
@@ -280,12 +291,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	theC->SetMinEnergy(emin);
 	theNeutronCapture->RegisterMe(theC);
 
-        G4HadronicInteraction* theF = new G4LFission();
-	theF->SetMinEnergy(emin);
-	theNeutronFission->RegisterMe(theF);
-
       } else if(pname == "pi-" || pname == "pi+") {
-	hp->AddDataSet(&thePiCross);
+	hp->AddDataSet(thePiCross);
 	hp->RegisterMe(theQGSModel);
         hp->RegisterMe(theFTFCModel);
         //if(ftfFlag) hp->RegisterMe(theFTFCModel);

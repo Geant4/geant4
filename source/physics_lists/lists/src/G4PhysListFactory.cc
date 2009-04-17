@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.6 2008-11-25 15:36:19 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.7 2009-04-17 11:24:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,8 +52,10 @@
 #include "QBBC.hh"
 #include "QGSC.hh"
 #include "QGSC_BERT.hh"
+#include "QGSC_CHIPS.hh"
 #include "QGSC_EFLOW.hh"
 #include "QGSC_EMV.hh"
+#include "QGSC_QGSC.hh"
 #include "QGSP.hh"
 #include "QGSP_BERT.hh"
 #include "QGSP_BERT_DIF.hh"
@@ -74,12 +76,12 @@
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 35;
-  G4String s[35] = {
+  nlists = 37;
+  G4String s[37] = {
     "FTFC","FTFP","FTFP_BERY","FTFP_EMV","FTF_BIC",
     "LBE","LHEP","LHEP_BERT","LHEP_EMV","LHEP_PRECO_HP"
     "QBBB","QBBC","QBBCG","QBBCF","QBBC_HP","QGSC",
-    "QGSC_BERT","QGSC_EFLOW","QGSC_EMV","QGSP","QGSP_BERT",
+    "QGSC_BERT","QGSC_CHIPS","QGSC_EFLOW","QGSC_EMV","QGSC_QGSC","QGSP","QGSP_BERT",
     "QGSP_BERT_DIF","QGSP_BERT_EMV","QGSP_BERT_HP","QGSP_BERT_NQE","QGSP_BERT_TRV",
     "QGSP_BIC","QGSP_BIC_HP","QGSP_DIF","QGSP_EMV","QGSP_EMV_NQE",
     "QGSP_EMX","QGSP_NQE","QGSP_QEL","QGS_BIC"};
@@ -132,8 +134,10 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QBBC_HP") {p = new QBBC(1, "QBBC_HP");}
   else if(name == "QGSC") {p = new QGSC();}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
+  else if(name == "QGSC_CHIPS") {p = new QGSC_CHIPS();}
   else if(name == "QGSC_EFLOW") {p = new QGSC_EFLOW();}
   else if(name == "QGSC_EMV") {p = new QGSC_EMV();}
+  else if(name == "QGSC_QGSC") {p = new QGSC_QGSC();}
   else if(name == "QGSP") {p = new QGSP();}
   else if(name == "QGSP_BERT") {p = new QGSP_BERT();}
   else if(name == "QGSP_BERT_DIF") {p = new QGSP_BERT_DIF();}
