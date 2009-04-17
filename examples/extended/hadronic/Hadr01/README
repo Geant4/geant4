@@ -14,21 +14,21 @@
 This example application is based on the application IION developed for
 simulation of proton or ion beam interaction with a water target. Different 
 aspects of beam target interaction are demonstrating in the example including 
-logitudinal profile of energy deposition, spectra of secondary  particles,
+longitudinal profile of energy deposition, spectra of secondary  particles,
 spectra of particles leaving the target. The results are presenting in a form
 of average numbers and histograms. 
 
 
                            GEOMETRY
 
-The Target volume is a cilinder placed inside Check cilindrical volume. The 
+The Target volume is a cylinder placed inside Check cylindrical volume. The 
 Check volume is placed inside the World volume. The radius and the length of
-the Check volume are 1 mm larger than the radiaus and the length of the Target.
+the Check volume are 1 mm larger than the radius and the length of the Target.
 The material of the Check volume is the same as the World material.  The World
-volume has the sizes 10 mm larger than that of the Target volume.  Any naterial
+volume has the sizes 10 mm larger than that of the Target volume.  Any material
 from the Geant4 database can be defined. The default World  material is
 G4Galactic and the default  Target material is aluminum. The Target is
-subdivided on number of equal slices. Follwoing UI commands are available to
+subdivided on number of equal slices. Following UI commands are available to
 modify the geometry:
 
 /testhadr/TargetMat     G4_Pb
@@ -37,12 +37,12 @@ modify the geometry:
 /testhadr/TargetLength  20 cm
 /testhadr/NumberDivZ    200
 
-If geometry was changed between two runs, then the follwoing command need to
+If geometry was changed between two runs, then the following command need to
 be executed:
 
 /testhadr/Update
 
-Beam direction coinsides with the target axis and is Z axis in the global
+Beam direction coincides with the target axis and is Z axis in the global
 coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
 is used as a primary generator. The energy and the type of the beam can be
 defined via standard UI commands
@@ -101,7 +101,7 @@ To see the list of available configurations one can use
 
 /testhadr/ListPhysics
 
-The cuts for electromagnetic phsyics can be established via
+The cuts for electromagnetic physics can be established via
 
 /testhadr/CutsAll       1 mm
 /testhadr/CutsGamma   0.1 mm
@@ -109,7 +109,7 @@ The cuts for electromagnetic phsyics can be established via
 /testhadr/CutsPos     0.3 mm
 
 
-                          VISUALISATION
+                          VISUALIZATION
 
 For interactive mode G4 visualization options and variables should be
 defined, then the example should be recompiled:
@@ -165,8 +165,8 @@ stored in the file "name.hbook", "name.root", or "name.aida".
 If the environment variable HISTODIR is defined, files are stored in this 
 subdirectory.
 
-To show the contence of a histogram ID=i the commands may be applied:
+To show the content of a histogram ID=i the commands may be applied:
 
 /testhadr/HistoPrint  i
 
-All histograms are normalised to the number of events.
+All histograms are normalized to the number of events.
