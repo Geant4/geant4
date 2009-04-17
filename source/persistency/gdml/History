@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2009-04-15 13:29:51 gcosmo Exp $
+$Id: History,v 1.108 2009-04-17 14:41:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 April 2009 Gabriele Cosmo (gdml-V09-02-10)
+- Defined missing copy constructor and operator=() to G4GDMLMatrix
+  internal class, to avoid cases of memory corruption when handling matrices.
 
 15 April 2009 Gabriele Cosmo (gdml-V09-02-09)
 - Completed virtual layer for allowing customisation of the writer for
