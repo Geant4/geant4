@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.21 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadDefine.cc,v 1.22 2009-04-17 14:42:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadDefine Implementation
@@ -41,16 +41,59 @@ G4GDMLMatrix::G4GDMLMatrix()
    m = 0;
 }
 
-G4GDMLMatrix::G4GDMLMatrix(size_t rows0,size_t cols0)
+G4GDMLMatrix::G4GDMLMatrix(size_t rows0, size_t cols0)
 {   
+   if ((rows<=0) || (cols<=0))
+   {
+     G4Exception("G4GDMLMatrix::G4GDMLMatrix(r,c)", "InvalidSetup",
+                 FatalException, "Zero indeces as arguments!?");
+   }
    rows = rows0;
    cols = cols0;
    m = new G4double[rows*cols];
 }
 
+G4GDMLMatrix::G4GDMLMatrix(const G4GDMLMatrix& rhs)
+{
+   rows = rhs.rows;
+   cols = rhs.cols;
+   if (rhs.m)
+   {
+     m = new G4double[rows*cols];
+     for (size_t i=0; i<rows*cols; i++)  { m[i] = rhs.m[i]; }
+   }
+   else
+   {
+     m = 0;
+   }
+}
+
+G4GDMLMatrix& G4GDMLMatrix::operator=(const G4GDMLMatrix& rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy data
+   //
+   rows = rhs.rows;
+   cols = rhs.cols;
+   if (rhs.m)
+   {
+     m = new G4double[rows*cols];
+     for (size_t i=0; i<rows*cols; i++)  { m[i] = rhs.m[i]; }
+   }
+   else
+   {
+     m = 0;
+   }
+
+   return *this;
+}
+
 G4GDMLMatrix::~G4GDMLMatrix()
 {
-   if (m) { delete [] m; }
+   delete [] m;
 }
 
 void G4GDMLMatrix::Set(size_t r,size_t c,G4double a)
