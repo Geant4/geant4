@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2009-03-21 18:51:28 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.2 2009-04-18 17:43:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ HistoManager::HistoManager()
   }	     
 #endif 
  
-  fileName[0] = "testem5";
+  fileName[0] = "test54";
   fileType    = "root";
   fileOption  = "--noErrors export=root uncompress";  
   // histograms
@@ -274,14 +274,14 @@ void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
 
- if (!ascii[0]) return;
+  if (!ascii[0]) return;
  
- G4String name = fileName[0] + ".ascii";
- std::ofstream File(name, std::ios::out);
- File.setf( std::ios::scientific, std::ios::floatfield );
+  G4String name = fileName[0] + ".ascii";
+  std::ofstream File(name, std::ios::out);
+  File.setf( std::ios::scientific, std::ios::floatfield );
  
- //write selected histograms
- for (G4int ih=0; ih<MaxHisto; ih++) {
+  //write selected histograms
+  for (G4int ih=0; ih<MaxHisto; ih++) {
     if (exist[ih] && ascii[ih]) {
       File << "\n  1D histogram " << ih << ": " << Title[ih] 
            << "\n \n \t     X \t\t     Y" << G4endl;
@@ -294,7 +294,7 @@ void HistoManager::saveAscii()
 	      << G4endl;
       } 
     }
- }
+  }
 #endif
 }
 
