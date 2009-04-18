@@ -1,11 +1,11 @@
-$Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
+$Id: README,v 1.2 2009-04-18 17:28:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            TestEm3
+                            test53
                             -------
   
  How to collect energy deposition in a sampling calorimeter.
@@ -60,22 +60,22 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  
     Physics lists can be local (eg. in this example) or from G4 kernel
     physics_lists subdirectory.
-     
-    Local physics lists:	 
-    - "standard"	standard EM physics with current 'best' options setting.
-                        these options are explicited in PhysListEmStandard
-    - "livermore"       low-energy EM physics using Livermore data
-    - "penelope"        low-energy EM physics implementing Penelope models
-    
+         
     From geant4/source/physics_lists/builders:	 
     - "emstandard"      recommended standard EM physics for LHC
     - "emstandard_opt1" best CPU performance standard physics for LHC
     - "emstandard_opt2"     
     - "emstandard_opt3" 
+    - "emlivermore" 
+    - "empenelope" 
     
+    Local physics lists:	 
+    - "livermore_old"   low-energy EM physics using old Livermore processes
+    - "penelope_old"    low-energy EM physics implementing old Penelope models
+
     Physics lists and options can be (re)set with UI commands
     
-    Please, notice that options set through G4EmProcessOPtions are global, eg
+    Please, notice that options set through G4EmProcessOptions are global, eg
     for all particle types. In G4 builders, it is shown how to set options per
     particle type.
         	    
@@ -92,7 +92,7 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  	
   A RUN is a set of events.
   
-  TestEm3 computes the energy deposited per absorber and the energy flow through
+  test53 computes the energy deposited per absorber and the energy flow through
   the calorimeter 
  				
  4- VISUALIZATION
@@ -128,14 +128,14 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  6- HOW TO START ?
  
   - compile and link to generate an executable
- 	% cd TestEm3
+ 	% cd test53
  	% gmake
  		
-  - execute TestEm3 in 'batch' mode from macro files
- 	% TestEm3   run01.mac
+  - execute test53 in 'batch' mode from macro files
+ 	% test53   run01.mac
  		
-  - execute TestEm3 in 'interactive mode' with visualization
- 	% TestEm3
+  - execute test53 in 'interactive mode' with visualization
+ 	% test53
  	....
  	Idle> type your commands. For instance:
  	Idle> /control/execute run01.mac
@@ -144,7 +144,7 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  	
  7- HISTOGRAMS
  
- Testem3 can produce histograms : 
+ test53 can produce histograms : 
   histo 1 : energy deposit in absorber 1
   histo 2 : energy deposit in absorber 2
   ...etc...........
@@ -152,7 +152,7 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  One can control the binning of the histo with the command:
   /testem/histo/setHisto   idAbsor  nbin  Emin  Emax  unit 
   ...etc...........  
-  where unit is the desired energy unit for that histo (see TestEm3.in).
+  where unit is the desired energy unit for that histo (see test53.in).
   
   histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
   histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
@@ -172,7 +172,7 @@ $Id: README,v 1.1 2009-03-21 18:37:26 vnivanch Exp $
  	
  It is also possible to print selected histograms on an ascii file:
  /testem/histo/printHisto id
- All selected histos will be written on a file name.ascii  (default testem3)
+ All selected histos will be written on a file name.ascii  (default test53)
      
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.

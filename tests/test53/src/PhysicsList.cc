@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2009-03-30 15:53:53 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.4 2009-04-18 17:28:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,8 +151,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = //new G4EmPenelopePhysics();
-      new PhysListEmPenelope(name);
+    emPhysicsList = new PhysListEmPenelope(name);
 
   } else if (name == "empenelope"){
     emName = name;
@@ -162,7 +161,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "emlivermore"){
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    emPhysicsList = new G4EmLivermorePhysics();
 
   } else {
 

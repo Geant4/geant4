@@ -1,4 +1,4 @@
-# $Id: test53.in,v 1.4 2009-03-30 17:15:53 vnivanch Exp $
+# $Id: test53.in,v 1.5 2009-04-18 17:28:23 vnivanch Exp $
 #
 # Macro file for "test53.cc"
 # (can be run in batch, without graphic)
@@ -9,12 +9,16 @@
 /run/verbose 2
 #
 /testem/phys/addPhysics  empenelope
+#/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt3
 #
 /run/initialize
 /process/eLoss/verbose 1
 #
 /gun/particle e-
-/gun/energy 10 MeV
+#/gun/energy 10 MeV
+/gun/energy 1 GeV
 #
 /testem/histo/setFileName testem3
 /testem/histo/setFileType root
@@ -29,5 +33,10 @@
 /testem/event/printModulo 50
 #
 /run/beamOn 100
+#
+#/run/particle/storePhysicsTable data_stand
+#/run/particle/storePhysicsTable data_pen
+#/run/particle/storePhysicsTable data_liv
+#
 
 

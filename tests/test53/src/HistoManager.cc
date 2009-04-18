@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2009-03-21 18:37:27 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.2 2009-04-18 17:28:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,13 +46,13 @@ HistoManager::HistoManager()
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
   if(!af) {
-    G4cout << "TestEm1::HistoManager::HistoManager :" 
+    G4cout << "Test53::HistoManager::HistoManager :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
   }	   
 #endif
  
-  fileName[0] = "testem3";
+  fileName[0] = "test53";
   fileType    = "root";  
   fileOption  = "--noErrors export=root uncompress";  
   // histograms
@@ -92,7 +92,7 @@ void HistoManager::book()
  tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
  delete tf;
  if(!tree) {
-   G4cout << "TestEm1::HistoManager::book :" 
+   G4cout << "Test53::HistoManager::book :" 
           << " problem creating the AIDA tree with "
           << " storeName = " << fileName[1]
           << " storeType = " << fileType
