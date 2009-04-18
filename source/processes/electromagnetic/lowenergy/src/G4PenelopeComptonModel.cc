@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.4 2009-04-18 18:29:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -121,7 +121,7 @@ G4PenelopeComptonModel::~G4PenelopeComptonModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+					const G4DataVector& cuts)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.6 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.7 2009-04-18 18:29:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 //                  - remove GetMeanFreePath method and table
 //                  - simplify sampling of deexcitation by using cut in energy
 //                  - added protection against numerical problem in energy sampling 
+//                  - use G4ElementSelector
 
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -196,7 +197,10 @@ G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection(); 
 
   // Select randomly one element in the current material
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+  //  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple->GetMaterial(),particle,photonEnergy);
+  G4int Z = (G4int)elm->GetZ();
 
   // Select the ionised shell in the current atom according to shell cross sections
   size_t shellIndex = shellCrossSectionHandler->SelectRandomShell(Z,photonEnergy);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreComptonModel.cc,v 1.6 2009-04-18 18:29:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,11 +32,12 @@
 //
 // History:
 // --------
-// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+// 18 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
 //                  - apply internal high-energy limit only in constructor 
 //                  - do not apply low-energy limit (default is 0)
 //                  - remove GetMeanFreePath method and table
 //                  - added protection against numerical problem in energy sampling 
+//                  - use G4ElementSelector
 
 #include "G4LivermoreComptonModel.hh"
 
@@ -84,7 +85,7 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+					 const G4DataVector& cuts)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
@@ -169,10 +170,13 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   // The random number techniques of Butcher & Messel are used
   // (Nucl Phys 20(1960),15).
 
-  if (verboseLevel > 3)
-    G4cout << "Calling SampleSecondaries() of G4LivermoreComptonModel" << G4endl;
-
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
+
+  if (verboseLevel > 3) {
+    G4cout << "G4LivermoreComptonModel::SampleSecondaries() E(MeV)= " 
+	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
+	   << G4endl;
+  }
   
   // low-energy gamma is absorpted by this process
   if (photonEnergy0 <= lowEnergyLimit) 
@@ -187,7 +191,10 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Select randomly one element in the current material
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
+  //  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
+  G4int Z = (G4int)elm->GetZ();
 
   G4double epsilon0 = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0 * epsilon0;
@@ -207,7 +214,8 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
       {
-        epsilon = std::exp(-alpha1 * G4UniformRand());  // std::pow(epsilon0,G4UniformRand())
+	// std::pow(epsilon0,G4UniformRand())
+        epsilon = std::exp(-alpha1 * G4UniformRand());  
         epsilonSq = epsilon * epsilon;
       }
       else
@@ -252,7 +260,8 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
       
       eMax = photonEnergy0 - bindingE;
      
-      // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
+      // Randomly sample bound electron momentum 
+      // (memento: the data set is in Atomic Units)
       G4double pSample = profileData.RandomSelectMomentum(Z,shell);
       // Rescale from atomic units
       G4double pDoppler = pSample * fine_structure_const;
