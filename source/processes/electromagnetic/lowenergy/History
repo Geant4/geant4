@@ -1,4 +1,4 @@
-$Id: History,v 1.359 2009-04-18 18:30:49 vnivanch Exp $
+$Id: History,v 1.360 2009-04-18 18:31:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18.04.2009, V.Ivanchenko, tag emlowen-V09-02-28 
+18.04.2009, V.Ivanchenko, tag emlowen-V09-02-27
             Cleanup of new model classes G4LivermoreBremsstrahlungModel,
             G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
             G4LivermoreIonisationModel, G4LivermorePhotoElectricModel,
