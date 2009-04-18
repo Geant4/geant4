@@ -1,4 +1,4 @@
-$Id: History,v 1.358 2009-04-17 10:29:20 vnivanch Exp $
+$Id: History,v 1.359 2009-04-18 18:30:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17.04.2009, V.Ivanchenko, tag emlowen-V09-02-27 
+18.04.2009, V.Ivanchenko, tag emlowen-V09-02-28 
             Cleanup of new model classes G4LivermoreBremsstrahlungModel,
             G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
             G4LivermoreIonisationModel, G4LivermorePhotoElectricModel,
@@ -34,6 +34,7 @@ committal in the CVS repository !
               - protect all printouts by verbosityLevel variable
               - removed MeanFreePath method and table
               - cleaned logic in applying of deexcitation module
+              - use G4ElementSelector if possible
             G4ShellVacancy - substitute "set" varibale, 
                            - comment out destructor to avoid crash
 
