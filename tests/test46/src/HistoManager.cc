@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.10 2009-01-06 17:24:15 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.11 2009-04-19 17:13:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -79,8 +79,8 @@ HistoManager::HistoManager()
   histo   = new Histo();
   nmax    = 3;
   factorEcal = 1.05;
-  factorHcal = 125.0;
-  factorHcal0= 125.0;
+  factorHcal = 105.0;
+  factorHcal0= 105.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
