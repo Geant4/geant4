@@ -1,4 +1,4 @@
-# $Id: test55.in,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+# $Id: test55.in,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -7,6 +7,8 @@
 /control/verbose 1
 /run/verbose 1
 #
+/testem/det/setMat TechVacuum
+/testem/det/setMat G4_Cu
 /testem/det/setMat G4_WATER
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
@@ -18,7 +20,10 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics   emstandard_opt3
+#/testem/phys/addPhysics  empenelope
+/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt3
 #
 /run/initialize
 #
@@ -41,8 +46,9 @@
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
 /testem/det/update
-/gun/particle kaon+
-/gun/energy 100 MeV
+/gun/particle ion
+/gun/ion 36 84 36
+/gun/energy 42 GeV
 /run/beamOn 1000
 #
 /testem/det/setMat TechVacuum

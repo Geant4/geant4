@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+$Id: README,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,49 +35,26 @@ $Id: README,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
  	
  2- PHYSICS LIST
  
- Physics lists can be local (eg. in this example) or from G4 kernel
- physics_lists subdirectory.
-     
- Local physics lists:	 
- - "standard"	standard EM physics with current 'best' options setting.
-                these options are explicited in PhysListEmStandard		
- - "standardSS" standard EM physics with single Coulomb scattering 
-                instead of multiple scattering; 
- - "standardNR" standard EM physics with single Coulomb scattering 
-                process G4ScreenedNuclearRecoil instead of the 
-                multiple scattering for ions with energy less than 
-                100 MeV/nucleon; the new process was developed 
-                by M.H. Mendenhall and R.A. Weller from Vanderbuilt 
-                University and published in NIM B 277 (2005) 420.
-                In later Geant4 releases the process will be a part
-                of Geant4 source, currently it is released together
-                with its mathematical tool c2_functions in current 
-                example 
- - "livermore"  low-energy EM physics using Livermore data
- - "penelope"   low-energy EM physics implementing Penelope models 
+    Physics lists can be local (eg. in this example) or from G4 kernel
+    physics_lists subdirectory.
+         
+    From geant4/source/physics_lists/builders:	 
+    - "emstandard"      recommended standard EM physics for LHC
+    - "emstandard_opt1" best CPU performance standard physics for LHC
+    - "emstandard_opt2"     
+    - "emstandard_opt3" 
+    - "emlivermore" 
+    - "empenelope" 
     
- From geant4/source/physics_lists/builders:	 
- - "emstandard"      recommended standard EM physics for LHC
- - "emstandard_opt1" best CPU performance standard physics for LHC
-                     option1 in physics_list library (simplified msc, 
-                     the most fast simulation, precision is limited)
- - "emstandard_opt2" option2 in physics_list library (subcutoff, 
-                     use spline, step function per particle type)
- - "emstandard_opt3" option3 in physics_list library (advanced msc, 
-                     use spline, step function per particle type) 
+    Local physics lists:	 
+    - "livermore_old"   low-energy EM physics using old Livermore processes
+    - "penelope_old"    low-energy EM physics implementing old Penelope models
+
+    Physics lists and options can be (re)set with UI commands
     
- Optional components can be added:
- - "elastic"       elastic scattering of hadrons
- - "HElastic"
- - "QElastic"    
- - "binary"        QBBC configuration of hadron inelastic models
- - "binary_ion"    Binary ion inelastic models
-     		        
- Physics lists and options can be (re)set with UI commands
-    
- Please, notice that options set through G4EmProcessOPtions are global, eg
- for all particle types. In G4 builders, it is shown how to set options per
- particle type.		
+    Please, notice that options set through G4EmProcessOptions are global, eg
+    for all particle types. In G4 builders, it is shown how to set options per
+    particle type.
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  

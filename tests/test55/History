@@ -1,11 +1,11 @@
-$Id: History,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+$Id: History,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    test53 History file
+                    test55 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -15,3 +15,5 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+18-04-09  V.Ivanchenko (test55-V09-02-00)
+- First version

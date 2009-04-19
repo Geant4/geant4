@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+// $Id: RunAction.cc,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
   binLength = 1.*mm; 
   offsetX = 0.;
   histo = new Histo();
-  histo->setFileName("testem7");
+  histo->setFileName("test55");
   histo->add1D("1","Edep (MeV/mm) along absorber (mm)", 100, 0, 100);
   histo->add1D("2","Edep (MeV/mm) along absorber zoomed (mm)", 100, 0, 100);
   histo->add1D("3","Projectile range (mm)", 100, 0, 100);
