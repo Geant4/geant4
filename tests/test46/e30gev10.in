@@ -8,7 +8,7 @@
 /testCalorim/nbins 100
 /testCalorim/maxE 60. GeV
 /testCalorim/factEcal 1.05  
-/testCalorim/factHcal 160.0
+/testCalorim/factHcal 105.0
 /testCalorim/magField 4 tesla
 /process/em/applyCuts true
 #######

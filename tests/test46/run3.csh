@@ -21,7 +21,7 @@ setenv PHYSLIST QGSP_BERT
 #source $G4INSTALL/tests/test46/run_em.csh g10gev001
 #source $G4INSTALL/tests/test46/run_em.csh g10gev0001
 
-setenv PHYSLIST QGSP_BERT_EMV
+setenv PHYSLIST QGSP_BERT_EML
 source $G4INSTALL/tests/test46/run_em.csh g10gev100
 source $G4INSTALL/tests/test46/run_em.csh g10gev10
 source $G4INSTALL/tests/test46/run_em.csh g10gev7
