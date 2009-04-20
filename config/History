@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.353 2009-04-08 13:56:09 lgarnier Exp $
+cvs log $Id: History,v 1.354 2009-04-20 10:10:25 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 April 2009  Laurent Garnier
+- sys/Linux-g++.gmk: Corrections to respect Standard location for include
+  and lib paths for Qt. Try to find better if Qt is not located in a standard
+  place  
 
 8 Mars 2009  Laurent Garnier
 - sys/Darwin-g++.gmk: Bug fix for Qt non standard installation
