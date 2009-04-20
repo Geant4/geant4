@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.26 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.27 2009-04-20 12:03:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,12 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
-  if (!particle) SetParticle(p);
+  SetParticle(p);
+  //  if (!particle) SetParticle(p);
+
+  G4cout << "G4BetheBlochModel::Initialise for " << p->GetParticleName()
+	 << "  isIon= " << isIon 
+	 << G4endl;
 
   corrFactor = chargeSquare;
   // always false before the run
