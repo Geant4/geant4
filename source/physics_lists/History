@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2009-04-17 11:24:07 vnivanch Exp $
+$Id: History,v 1.84 2009-04-20 10:25:41 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-04-2009, M.Kosov phys-lists-V09-02-14
+- Two new physics lists QGSC_QGSC and QGSC_CHIPS are added.
+- QGSC_QGSC physics list uses the QGS model with the MultySoft
+  interface to CHIPS at all energies, starting from E=0. For neutrons
+  it still uses LHEP models for the radiativ capture and fission.
+- QGSC_CHIPS physics list uses the QGS model with the EnergyFlow
+  interface to CHIPS at all energies. For the pA interactions the
+  native CHIPS process G4QCollision is used below 290 MeV. The QGSC and
+  G4QCollision processes are joined in one process by the CHIPS
+  G4QDiscProcessMixer interface.
+- The corresponding physics builders are added.
 
 17-04-2009, V.Ivanchenko phys-lists-V09-02-12
 - Restore History after modification of CHIPS builders
