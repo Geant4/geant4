@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.17 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.18 2009-04-20 19:15:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,13 +135,16 @@ protected:
 
 private:
 
-  void SetParticle(const G4ParticleDefinition* p);
+  void SetupParameters();
+
+  inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator
   G4BetheBlochModel & operator=(const  G4BetheBlochModel &right);
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
   const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* genericIon;
   const G4Material*           currentMaterial;
   G4ParticleDefinition*       theElectron;
   G4EmCorrections*            corr;
@@ -164,5 +167,16 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(particle != p) {
+    isIon = false;
+    particle = p;
+    if (p == genericIon || 
+	(p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2)) isIon = true;
+    SetupParameters();
+  }
+}
 
 #endif
