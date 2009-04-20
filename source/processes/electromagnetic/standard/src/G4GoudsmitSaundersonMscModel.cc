@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.6 2009-04-10 18:10:58 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.7 2009-04-20 19:22:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,10 @@
 // Modifications:
 // 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
 //
+// 15.04.2009 O.Kadri: cleanup: discard no scattering and single scattering theta 
+//                     sampling from SampleCosineTheta() which means the splitting 
+//                     step into two sub-steps occur only for msc regime
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //REFERENCES:
@@ -46,7 +50,7 @@
 //Ref.2:I. Kawrakow et al.,"On the condensed ... transport",NIMB 142 (1998) pp 253-280;
 //Ref.3:I. Kawrakow et al.,"On the representation ... calculations",NIMB 134 (1998) pp 325-336;
 //Ref.4:Bielajew et al.,".....", NIMB 173 (2001) 332-343;
-//Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp. Phys. Comm. 165 (2005) pp 157-190;
+//Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp.Phys.Comm.165 (2005) pp 157-190;
 //Ref.6:G4UrbanMscModel G4_v9.1Ref09; 
 //Ref.7:G4eCoulombScatteringModel G4_v9.1Ref09.
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,13 +71,13 @@
 #include "Randomize.hh"
 #include "G4Poisson.hh"
 
-G4double G4GoudsmitSaundersonMscModel::ener[106] = {-1.};
-G4double G4GoudsmitSaundersonMscModel::TCSE[103][106];
-G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106];
-G4double G4GoudsmitSaundersonMscModel::TCSP[103][106];
-G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106];
-
 using namespace std;
+
+G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
+G4double G4GoudsmitSaundersonMscModel::TCSE[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::TCSP[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
@@ -137,17 +141,16 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)) return ;
 
-  G4double scrA,llambda0,llambda1;
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
-  G4double phi1,cosPhi1,sinPhi1,phi2,cosPhi2,sinPhi2;
-  G4double us,vs,ws,q1,Gamma,Eta,delta,nu,nu0,nu1,nu2,nu_interm,x_coord,y_coord,z_coord;
+  G4double phi1,phi2,cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
+  G4double q1,Gamma,Eta,delta,nu,nu0,nu1,nu2,nu_interm;
 
   ///////////////////////////////////////////
   // Effective energy and path-length from Eq. 4.7.15+16 of Ref.4
   G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
+  if(eloss>0.5*kineticEnergy)return;
   G4double ee       = kineticEnergy - 0.5*eloss;
   G4double ttau     = ee/electron_mass_c2;
-
   G4double ttau2    = ttau*ttau;
   G4double epsilonpp= eloss/ee;
   G4double temp2  = 0.166666*(4+ttau*(6+ttau*(7+ttau*(4+ttau))))*(epsilonpp/(ttau+1)/(ttau+2))*(epsilonpp/(ttau+1)/(ttau+2));
@@ -162,7 +165,8 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theFraction = mat->GetFractionVector();
   G4double atomPerVolume = mat->GetTotNbOfAtomsPerVolume();
-  llambda0 =0.;llambda1=0.;
+  G4double scrA,llambda0,llambda1;
+  scrA=0.0;llambda0 =0.;llambda1=0.;
   for(G4int i=0;i<nelm;i++)
     {
       G4double l0,l1;
@@ -170,8 +174,8 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
       llambda0 += (theFraction[i]/l0);
       llambda1 += (theFraction[i]/l1);
     } 
-  llambda0 =1./llambda0;
-  llambda1 =1./llambda1;
+  if(llambda0>DBL_MIN)llambda0 =1./llambda0;
+  if(llambda1>DBL_MIN)llambda1 =1./llambda1;
   G4double g1=llambda0/llambda1;
   G4double x1,x0;
 
@@ -184,13 +188,33 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
     } while (delta > 1e-10);
   scrA = x1;
 
+  G4double us=0.0,vs=0.0,ws=1.0,x_coord=0.0,y_coord=0.0,z_coord=1.0;
   G4double lambdan=0.;
-  if((tPathLength>0.)&&(llambda0>0.))lambdan=std::max((atomPerVolume*tPathLength/llambda0),1.0e-12);
+  if(llambda0>0.)lambdan=atomPerVolume*tPathLength/llambda0;
+  if((lambdan<=1.0e-12)||(lambdan>1.0e+5))return;
+  G4bool noscatt=false;
+  G4bool singlescatt=false;
+  G4bool mscatt=false;
 
+  G4double epsilon1=G4UniformRand();
+  if(epsilon1<(exp(-lambdan)))noscatt=true;// no scattering     
+  else if(epsilon1<((1.+lambdan)*exp(-lambdan)))//single scattering
+    {singlescatt=true;
+     ws=G4UniformRand();
+     ws= 1.-2.*scrA*ws/(1.-ws + scrA);
+     G4double phi0=twopi*G4UniformRand(); 
+     us=sqrt(1.-ws*ws)*cos(phi0);
+     vs=sqrt(1.-ws*ws)*sin(phi0);
+     G4double rr=G4UniformRand();
+     x_coord=(rr*us);
+     y_coord=(rr*vs);
+     z_coord=((1.-rr)+rr*ws);     
+    }
+  else
+  {mscatt=true;
   // Ref.2 subsection 4.4 "The best solution found"
   // Sample first substep scattering angle
   SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
-
   phi1  = twopi*G4UniformRand();
   cosPhi1 = cos(phi1);
   sinPhi1 = sin(phi1);
@@ -204,22 +228,23 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   // Scattering direction
   us = sinTheta2*(cosTheta1*cosPhi1*cosPhi2 - sinPhi1*sinPhi2) + cosTheta2*sinTheta1*cosPhi1;
   vs = sinTheta2*(cosTheta1*sinPhi1*cosPhi2 + cosPhi1*sinPhi2) + cosTheta2*sinTheta1*sinPhi1;
-  ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2;  
-
+  ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2; 
+  }
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
-
+  
   if((safety > tlimitminfix)&&(latDisplasment))
     {  
       // Scattering coordinates
+      if(mscatt)
+      {
       if(scrA<DBL_MIN)scrA=DBL_MIN;
-      if(llambda0<DBL_MIN)llambda0=DBL_MIN;
       q1       = 2.*scrA*((1. + scrA)*log(1. + 1./scrA) - 1.);
       if(q1<DBL_MIN)q1=DBL_MIN;
-      Gamma    = 6.*scrA*(1. + scrA)*((1. + 2.*scrA)*log(1. + 1./scrA)* - 2.)/q1;
-      Eta      = atomPerVolume*tPathLength/llambda0;
+      Gamma    = 6.*scrA*(1. + scrA)*((1. + 2.*scrA)*log(1. + 1./scrA) - 2.)/q1;
+      Eta      = atomPerVolume*tPathLength/llambda1;      
       delta    = 0.90824829 - Eta*(0.102062073-Gamma*0.026374715);
 
       nu = G4UniformRand(); 
@@ -227,57 +252,38 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
       nu0 = (1.0 - nu)/2.;
       nu1 = nu*delta;
       nu2 = nu*(1.0-delta);
-      nu_interm = 1.0 - nu0 - nu1 - nu2;
-      x_coord=nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu_interm*us;
-      y_coord=nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu_interm*vs;
-      z_coord=nu0+nu1*cosTheta1+nu2*cosTheta2+ nu_interm*ws  ;
-
-      G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
-      if(r<DBL_MIN){x_coord=0.;y_coord=0.;z_coord=0.;}
-      else {
-	x_coord /=r; 
-	y_coord /=r; 
-	z_coord /=r; 
+      nu_interm = 1.0 - nu0 - nu1 - nu2; 
+      x_coord=(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu_interm*us);
+      y_coord=(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu_interm*vs);
+      z_coord=(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu_interm*ws)  ;
       }
+      G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
 
       G4double check= 1.- tPathLength/zPathLength;
-      if(check<=0.)    r=0.;
-      else if(r>check) r=check;
+      if(check<=0.)    return;
+      else if(r>check) {r=check;x_coord /=r;y_coord /=r;z_coord /=r;}
 
       r *=tPathLength;
       
       if(r > tlimitminfix) {
 
-        G4ThreeVector latDirection(x_coord,y_coord,z_coord);
-        latDirection.rotateUz(oldDirection);
+	G4ThreeVector latDirection = G4ThreeVector(x_coord*tPathLength,y_coord*tPathLength,z_coord*tPathLength);
+	latDirection.rotateUz(oldDirection);
  
 	ComputeDisplacement(fParticleChange, latDirection, r, safety);
-
       }     
     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						     G4double &cost, G4double &sint)
 {
   G4double u,Qn1,r1,tet;
-
   G4double xi=0.;
-  G4double epsilon1=G4UniformRand();
-  if(epsilon1<(exp(-lambdan))) xi=0.0;// no scattering
-  else 
-    { 
-      Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
-      if(epsilon1<((1.+lambdan)*exp(-lambdan)))//just one collision 
-	{ 
-	  xi = G4UniformRand();
-	  xi= 2.*scrA*xi/(1.-xi + scrA); 
-	}  
-      else    //two or more collisions
-	{
-	  if((lambdan<1.)||(Qn1<0.001))//plural scatt. or small angle scatt.
+  Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+
+  if((lambdan<1.)||(Qn1<0.001))//plural scatt. or small angle scatt.
 	    {
 	      G4double xi1,lambdai=0.;
 	      G4int i=0;
@@ -286,24 +292,25 @@ void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double 
 	      xi +=2.*scrA*xi1/(1.-xi1 + scrA);
 	      i++;
 	      }while((lambdai<lambdan)&&(i<30));
+	    
 	    }
 	  else {
-	    if(Qn1>0.5)xi=G4UniformRand();//isotropic distribution
+	    if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
 	    else{// procedure described by Benedito in Ref.1
-	      do{r1=G4UniformRand();
-	      u=G4UniformRand();
-	      u=GSTable->SampleTheta(lambdan,scrA,u);
-	      xi = 2.*u;
-	      tet=acos(1.-xi);
-	      }while(tet*r1*r1>sin(tet));
-	    }    
-	  }
-	}
-    }       	 
+	         do{r1=G4UniformRand();
+	         u=GSTable->SampleTheta(lambdan,scrA,G4UniformRand());
+ 	         xi = 2.*u;
+       	         tet=acos(1.-xi);
+                 }while(tet*r1*r1>sin(tet));
+	       } 
+	      }
 
-  if(!((xi>=0.)&&(xi<=2.)))xi=0.;
+
+  if(xi<0.)xi=0.;
+  if(xi>2.)xi=2.;
   cost=(1. - xi);
   sint=sqrt(xi*(2.-xi));
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -411,7 +418,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track&
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      G4double geomlimit = ComputeGeomLimit(track, presafety, tPathLength);
    
       // is far from boundary
       if(currentRange <= presafety)
@@ -670,73 +677,73 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTrueStepLength(G4double geomStepLe
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
 { 
   ///////////////////////////////////////
   //Total & first transport x sections of e-/e+ from ELSEPA code
   G4String filename = "XSECTIONS.dat";
 
-  char* path = getenv("G4LEDATA");
-  if (!path)
-    {
-      G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
-      G4Exception(excep);
-    }
+    char* path = getenv("G4LEDATA");
+    if (!path)
+      {
+        G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
+        G4Exception(excep);
+      }
 
-  G4String pathString(path);
-  G4String dirFile = pathString + "/msc_GS/" + filename;
-  FILE *infile;
-  infile = fopen(dirFile,"r"); 
-  if (infile == 0)
-    {
-      G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
-      G4Exception(excep);
-    }
+    G4String pathString(path);
+    G4String dirFile = pathString + "/msc_GS/" + filename;
+    FILE *infile;
+    infile = fopen(dirFile,"r"); 
+    if (infile == 0)
+      {
+	G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
+	G4Exception(excep);
+      }
 
-  // Read parameters from tables and take logarithms
-  G4float aRead;
-  for(G4int i=0 ; i<106 ;i++){
-    fscanf(infile,"%f\t",&aRead);
-    if(aRead > 0.0) aRead = std::log(aRead);
-    else  aRead = 0.0;
-    ener[i]=aRead;
-  }        
-  for(G4int j=0;j<103;j++){
-    for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = std::log(aRead);
-      else  aRead = 0.0;
-      TCSE[j][i]=aRead;
+    // Read parameters from tables and take logarithms
+    G4float aRead;
+    for(G4int i=0 ; i<106 ;i++){
+	  fscanf(infile,"%f\t",&aRead);
+          if(aRead > 0.0) aRead = std::log(aRead);
+          else  aRead = 0.0;
+          ener[i]=aRead;
     }        
-  }
-  for(G4int j=0;j<103;j++){
-    for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = std::log(aRead);
-      else  aRead = 0.0;
-      FTCSE[j][i]=aRead;      
-    }        
-  }    
-  for(G4int j=0;j<103;j++){
-    for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = std::log(aRead);
-      else  aRead = 0.0;
-      TCSP[j][i]=aRead;      
-    }        
-  }
-  for(G4int j=0;j<103;j++){
-    for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = std::log(aRead);
-      else  aRead = 0.0;
-      FTCSP[j][i]=aRead;      
-    }        
-  }
+    for(G4int j=0;j<103;j++){
+      for(G4int i=0;i<106;i++){
+	  fscanf(infile,"%f\t",&aRead);
+          if(aRead > 0.0) aRead = std::log(aRead);
+          else  aRead = 0.0;
+	  TCSE[j][i]=aRead;
+	}        
+     }
+    for(G4int j=0;j<103;j++){
+      for(G4int i=0;i<106;i++){
+	  fscanf(infile,"%f\t",&aRead);
+          if(aRead > 0.0) aRead = std::log(aRead);
+          else  aRead = 0.0;
+	  FTCSE[j][i]=aRead;      
+	}        
+      }    
+    for(G4int j=0;j<103;j++){
+      for(G4int i=0;i<106;i++){
+	  fscanf(infile,"%f\t",&aRead);
+          if(aRead > 0.0) aRead = std::log(aRead);
+          else  aRead = 0.0;
+	  TCSP[j][i]=aRead;      
+	}        
+     }
+    for(G4int j=0;j<103;j++){
+      for(G4int i=0;i<106;i++){
+	  fscanf(infile,"%f\t",&aRead);
+          if(aRead > 0.0) aRead = std::log(aRead);
+          else  aRead = 0.0;
+	  FTCSP[j][i]=aRead;      
+	}        
+     }
 
-  fclose(infile);
-  //End loading XSections and Energies
+    fclose(infile);
+   //End loading XSections and Energies
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

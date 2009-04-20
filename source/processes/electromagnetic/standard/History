@@ -1,4 +1,4 @@
-$Id: History,v 1.438 2009-04-12 17:12:01 vnivanch Exp $
+$Id: History,v 1.439 2009-04-20 19:22:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 April 09: V.Ivant (emstand-V09-02-07)
+- G4BetheBlochModel - fixed and simplified initialisation for ions needed for
+                      the new G4IonParametrisedLossModel of low-energy package
+- G4GoudsmitSaundersonMscModel - (O.Kadri) cleanup: discarded no scattering and 
+                      single scattering theta sampling from SampleCosineTheta() 
+                      which means the splitting step into two sub-steps occur 
+                      only for msc regime  
 
 12 April 09: V.Ivant (emstand-V09-02-06)
 - Simplified initialisation of all models
