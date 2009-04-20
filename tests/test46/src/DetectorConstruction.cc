@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.11 2009-04-06 12:56:11 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.12 2009-04-20 08:43:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -268,7 +268,7 @@ void DetectorConstruction::ConstructECAL()
 void DetectorConstruction::ConstructHCAL()
 {
   if(!regionHCAL) {
-    regionHCAL = new G4Region("HCAL");
+    regionHCAL = new G4Region("HcalRegion");
     regionHCAL->SetProductionCuts(cutsHCAL);
   }
 

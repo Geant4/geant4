@@ -13,9 +13,10 @@
 /testCalorim/maxE 60. GeV
 /testCalorim/factEcal 1.05  
 /testCalorim/factHcal 102.0
-/testCalorim/addPreShower
+#/testCalorim/addPreShower
 #######
 /run/initialize
+#/process/eLoss/verbose 2
 #/process/em/applyCuts true
 #/gun/particle pi-
 /gun/particle mu-
