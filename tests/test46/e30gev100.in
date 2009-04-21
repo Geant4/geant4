@@ -16,7 +16,7 @@
 /run/initialize
 /gun/energy 30. GeV
 /run/setCut 100 mm
-/run/setCutForRegion HCAL 100 mm
+/run/setCutForRegion HcalRegion 100 mm
 /run/beamOn 10000
 
 

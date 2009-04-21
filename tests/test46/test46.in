@@ -16,6 +16,8 @@
 #/testCalorim/addPreShower
 #######
 /run/initialize
+/run/setCut 0.3 mm
+/run/setCutForRegion HcalRegion 0.1 mm
 #/process/eLoss/verbose 2
 #/process/em/applyCuts true
 #/gun/particle pi-
