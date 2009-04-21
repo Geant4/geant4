@@ -10,7 +10,7 @@
 /testCalorim/factEcal 1.05  
 /testCalorim/factHcal 105.0
 /testCalorim/magField 4 tesla
-/process/em/applyCuts true
+#/process/em/applyCuts true
 #######
 /testhadr/PrintModulo 100
 /run/initialize

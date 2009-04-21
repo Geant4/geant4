@@ -8,11 +8,12 @@
 /testCalorim/nbins 100
 /testCalorim/maxE 10. GeV
 /testCalorim/factEcal 1.05  
-/testCalorim/factHcal 160.0
+/testCalorim/factHcal 105.0
 #######
 /testhadr/PrintModulo 100
 /run/initialize
-/process/em/applyCuts true
+#/process/em/applyCuts true
+/run/setCutForRegion HcalRegion 0.7 mm
 /gun/energy 5. GeV
 /run/beamOn 10000
 
