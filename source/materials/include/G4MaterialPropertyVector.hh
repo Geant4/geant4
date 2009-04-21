@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.12 2009-04-21 15:35:45 gcosmo Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.13 2009-04-21 15:41:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,7 +105,7 @@ class G4MaterialPropertyVector
   public: // With description
 
     inline void ResetIterator();
-    inline G4double Entries() const;
+    inline G4int Entries() const;
 
     inline void AddElement(G4double aPhotonEnergy, G4double aPropertyValue);
       // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
