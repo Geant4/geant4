@@ -16,5 +16,5 @@
 #/process/em/applyCuts true
 /run/setCutForRegion HcalRegion 0.7 mm
 /gun/energy 9. GeV
-/run/beamOn 100
+/run/beamOn 10000
 

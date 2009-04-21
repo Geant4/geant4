@@ -12,15 +12,15 @@
 #/testCalorim/nbins 50
 /testCalorim/maxE 60. GeV
 /testCalorim/factEcal 1.05  
-/testCalorim/factHcal 102.0
+/testCalorim/factHcal 105.0
 #/testCalorim/addPreShower
 #######
 /run/initialize
-/run/setCut 0.3 mm
-/run/setCutForRegion HcalRegion 0.1 mm
+/run/setCut 0.5 mm
+/run/setCutForRegion HcalRegion 0.7 mm
 #/process/eLoss/verbose 2
 #/process/em/applyCuts true
-#/gun/particle pi-
+/gun/particle pi-
 /gun/particle mu-
 /gun/energy 30. GeV
 /run/beamOn 400
