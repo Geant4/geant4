@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.cc,v 1.7 2009-04-17 15:22:31 mkossov Exp $
+// $Id: G4QDiscProcessMixer.cc,v 1.8 2009-04-22 12:26:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer class -------------------
@@ -53,7 +53,8 @@ G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
 // Destructor
 G4QDiscProcessMixer::~G4QDiscProcessMixer()
 {
-  for_each(theDPVector.begin(), theDPVector.end(), DeleteDiscreteProcess());
+  // Now the responsibility of deleting is deligated to the user, who created them
+  //for_each(theDPVector.begin(), theDPVector.end(), DeleteDiscreteProcess());
 }
 
 void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME)
