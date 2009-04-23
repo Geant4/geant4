@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.21 2009-04-10 18:10:58 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.22 2009-04-23 11:51:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -490,21 +490,10 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
       insideskin = false;
 
       if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
-	{
+        {
           rangeinit = currentRange;
-	  if(stepStatus == fUndefined) smallstep = 1.e10;
-	  else  smallstep = 1.;
-
-	  // constraint from the geometry 
-	  if((geomlimit < geombig) && (geomlimit > geommin))
-	    {
-	      if(stepStatus == fGeomBoundary)  
-	        tgeom = geomlimit/facgeom;
-	      else
-	        tgeom = 2.*geomlimit/facgeom;
-	    }
-            else
-              tgeom = geombig;
+          if(stepStatus == fUndefined) smallstep = 1.e10;
+          else  smallstep = 1.;
 
           //define stepmin here (it depends on lambda!)
           //rough estimation of lambda_elastic/lambda_transport
@@ -513,12 +502,27 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
           //stepmin ~ lambda_elastic
           stepmin = rat*lambda0;
           skindepth = skin*stepmin;
-
           //define tlimitmin
           tlimitmin = 10.*stepmin;
           if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
 
+          // constraint from the geometry
+          if((geomlimit < geombig) && (geomlimit > geommin))
+            {
+              // geomlimit is a geometrical step length
+              // transform it to true path length (estimation)
+              if((1.-geomlimit/lambda0) > 0.)
+                geomlimit = -lambda0*log(1.-geomlimit/lambda0)+tlimitmin ;
+
+              if(stepStatus == fGeomBoundary)
+                tgeom = geomlimit/facgeom;
+              else
+                tgeom = 2.*geomlimit/facgeom;
+            }
+            else
+              tgeom = geombig;
         }
+
 
       //step limit 
       tlimit = facrange*rangeinit;              
@@ -758,9 +762,9 @@ G4double G4UrbanMscModel2::ComputeTheta0(G4double trueStepLength,
   y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
   y = log(y);
-  // correction factor from e-/proton scattering data
+  // correction factor from e- scattering data
   G4double corr = coeffth1+coeffth2*y;                
-  if(y < -6.5) corr -= 0.011*(6.5+y);
+
   theta0 *= corr ;                                               
 
   return theta0;
@@ -928,13 +932,12 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       if(xmean1 <= 0.999*xmeanth)
         return SimpleScattering(xmeanth,x2meanth);
 
-      // from MUSCAT H,Be,Fe data 
-      G4double c = coeffc1;                         
-      if(y > -13.5) 
-        c += coeffc2*exp(3.*log(y+13.5));
+      // for  e- scattering
+      G4double c = coeffc1+coeffc2*y;
 
-      if(abs(c-3.) < 0.001)  c = 3.001;      
-      if(abs(c-2.) < 0.001)  c = 2.001;      
+      if(abs(c-3.) < 0.001)  c = 3.001;
+      if(abs(c-2.) < 0.001)  c = 2.001;
+      if(abs(c-1.) < 0.001)  c = 1.001;
 
       G4double c1 = c-1.;
 
