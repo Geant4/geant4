@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.29 2009-04-23 16:53:22 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.30 2009-04-23 17:44:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,6 @@
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,30 +123,6 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForLoss();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4BetheBlochModel::SetupParameters()
-{
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  ratio = electron_mass_c2/mass;
-  G4double magmom = particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
-  magMoment2 = magmom*magmom - 1.0;
-  formfact = 0.0;
-  if(particle->GetLeptonNumber() == 0) {
-    G4double x = 0.8426*GeV;
-    if(spin == 0.0 && mass < GeV) {x = 0.736*GeV;}
-    else if(mass > GeV) {
-      x /= nist->GetZ13(mass/proton_mass_c2);
-      //	tlimit = 51.2*GeV*A13[iz]*A13[iz];
-    }
-    formfact = 2.0*electron_mass_c2/(x*x);
-    tlimit   = 2.0/formfact;
   }
 }
 
