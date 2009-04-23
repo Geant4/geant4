@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.25 2009-02-04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.26 2009-04-23 10:13:56 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "globals.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLBitMapStore.hh";
+#include "G4OpenGLBitMapStore.hh"
 #include <GL/gl.h>
 #include <GL/glu.h>
 
