@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.28 2009-04-20 19:15:37 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.29 2009-04-23 16:53:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,6 @@
 #include "G4BetheBlochModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
-#include "G4GenericIon.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
@@ -83,9 +82,11 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
     isInitialised(false)
 {
   fParticleChange = 0;
-  if(p) SetParticle(p);
+  if(p) {
+    SetGenericIon(p);
+    SetParticle(p);
+  }
   theElectron = G4Electron::Electron();
-  genericIon  = G4GenericIon::GenericIon();
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
   SetLowEnergyLimit(2.0*MeV);
@@ -109,6 +110,7 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
+  SetGenericIon(p);
   SetParticle(p);
 
   //G4cout << "G4BetheBlochModel::Initialise for " << p->GetParticleName()
@@ -447,6 +449,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 					       G4double kinEnergy) 
 {
+  // here particle type is checked for any method
   SetParticle(pd);
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
