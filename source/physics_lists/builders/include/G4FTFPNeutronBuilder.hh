@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPNeutronBuilder.hh,v 1.3 2009-03-31 18:38:33 vnivanch Exp $
+// $Id: G4FTFPNeutronBuilder.hh,v 1.4 2009-04-23 18:54:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -70,6 +70,7 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
     virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -80,7 +81,7 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4double theMin;
-
+    G4double theMax;
 };
 
 // 2002 by J.P. Wellisch

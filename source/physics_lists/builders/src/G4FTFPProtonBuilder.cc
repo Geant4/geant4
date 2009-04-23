@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPProtonBuilder.cc,v 1.5 2009-03-31 18:38:34 vnivanch Exp $
+// $Id: G4FTFPProtonBuilder.cc,v 1.6 2009-04-23 18:54:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,6 +47,7 @@ G4FTFPProtonBuilder::
 G4FTFPProtonBuilder(G4bool quasiElastic) 
 {
   theMin = 4*GeV;
+  theMax = 100.*TeV; 
   theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
@@ -74,6 +75,7 @@ void G4FTFPProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
   aP->AddDataSet(new G4ProtonInelasticCrossSection);  
 }

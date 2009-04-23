@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPPiKBuilder.cc,v 1.4 2009-03-31 18:38:34 vnivanch Exp $
+// $Id: G4FTFPPiKBuilder.cc,v 1.5 2009-04-23 18:54:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,6 +47,7 @@ G4FTFPPiKBuilder(G4bool quasiElastic)
  {
    thePiData = new G4PiNuclearCrossSection;
    theMin = 4*GeV;
+   theMax = 100*TeV;
    theModel = new G4TheoFSGenerator("FTFP");
 
    theStringModel = new G4FTFModel;
@@ -86,6 +87,7 @@ void G4FTFPPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->AddDataSet(thePiData);
    aP->RegisterMe(theModel);
  }
@@ -94,6 +96,7 @@ void G4FTFPPiKBuilder::
 Build(G4PionMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->AddDataSet(thePiData);
    aP->RegisterMe(theModel);
  }
@@ -102,6 +105,7 @@ void G4FTFPPiKBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->RegisterMe(theModel);
  }
 
@@ -109,6 +113,7 @@ void G4FTFPPiKBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->RegisterMe(theModel);
  }
 
@@ -116,6 +121,7 @@ void G4FTFPPiKBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->RegisterMe(theModel);
  }
 
@@ -123,6 +129,7 @@ void G4FTFPPiKBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
    aP->RegisterMe(theModel);
  }
 

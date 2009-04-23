@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPProtonBuilder.hh,v 1.3 2009-03-31 11:04:01 vnivanch Exp $
+// $Id: G4FTFPProtonBuilder.hh,v 1.4 2009-04-23 18:54:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -68,6 +68,7 @@ class G4FTFPProtonBuilder : public G4VProtonBuilder
     virtual void Build(G4ProtonInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -78,6 +79,7 @@ class G4FTFPProtonBuilder : public G4VProtonBuilder
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4double theMin;
+    G4double theMax;
 
 };
 
