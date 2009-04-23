@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.13 2009-04-23 11:51:43 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.14 2009-04-23 19:28:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@
 // Creation date: 06.03.2008
 //
 // Modifications:
-//
+// 23.04.2009 L.Urban updated parameterization in UpdateCache method
 //
 //
 // Class Description:
@@ -217,29 +217,25 @@ void G4UrbanMscModel2::SetParticle(const G4ParticleDefinition* p)
 inline
 void G4UrbanMscModel2::UpdateCache()                                   
 {
-    lnZ = std::log(Zeff);
+  lnZ = std::log(Zeff);
 
-    coeffth1 = 1.0;
-    if(Zeff < 13.)
-      coeffth2 = 7.091e-2-Zeff*(3.716e-3-1.470e-4*Zeff);
-    else
-      coeffth2 = 4.607e-2+1.065e-4*Zeff;
+  coeffth1 = 1.0;
+  if(Zeff < 13.) {
+    coeffth2 = 7.091e-2 - Zeff*(3.716e-3 - 1.470e-4*Zeff);
+    coeffc1  = 1.901 + 2.22e-3*Zeff;
+  } else {
+    coeffth2 = 4.607e-2 + 1.065e-4*Zeff;
+    coeffc1  = 1.72 + 5.5e-5*(75. - Zeff)*(75. - Zeff);
+  }
+  if(Zeff < 47.) coeffc2 = 1.e-3 + 6.5e-6*(47. - Zeff)*(47. - Zeff);
+  else           coeffc2 = 1.89e-3 - 1.89e-5*Zeff;
 
-    if(Zeff < 13.)
-      coeffc1 = 1.901+2.22e-3*Zeff;
-    else
-      coeffc1 = 1.72+5.5e-5*(Zeff-75.)*(Zeff-75.);
-    if(Zeff < 47.)
-      coeffc2 = 1.e-3+6.5e-6*(Zeff-47.)*(Zeff-47.);
-    else
-      coeffc2 = 1.89e-3-1.89e-5*Zeff;
-
-    Z2 = Zeff*Zeff;
-    Z23 = std::exp(2.*lnZ/3.);
-    scr1     = scr1ini*Z23;
-    scr2     = scr2ini*Z2*ChargeSquare;
-
-    Zold = Zeff;
+  Z2   = Zeff*Zeff;
+  Z23  = std::exp(2.*lnZ/3.);
+  scr1 = scr1ini*Z23;
+  scr2 = scr2ini*Z2*ChargeSquare;
+  
+  Zold = Zeff;
 }
 
 #endif
