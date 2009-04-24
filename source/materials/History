@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2009-04-21 15:36:32 gcosmo Exp $
+$Id: History,v 1.137 2009-04-24 09:35:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-04-09 G.Cosmo (materials-V09-02-03)
+- Make visible GetEntry() accessor in G4MaterialPropertyVector for use
+  restricted to persistency.
 
 20-04-09 G.Cosmo (materials-V09-02-02)
 - Use 'const' references for strings as arguments/return-values in material
