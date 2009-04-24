@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2009-04-24 09:10:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,8 +243,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // calorimeter
   //
-  G4double calorimeterThick = superLayerThick*nbOfSuperLayers;
-  sizeX = calorimeterThick;
+  calorThickness = superLayerThick*nbOfSuperLayers;
+  sizeX = calorThickness;
   sizeY = fiberLength;
   sizeZ = fiberLength;
   
@@ -259,7 +259,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // put superLayers inside calorimeter
   //  
-  Xcenter = -0.5*(calorimeterThick + superLayerThick);
+  Xcenter = -0.5*(calorThickness + superLayerThick);
   
   //rotation matrix to place superLayers
   G4RotationMatrix* rotm = 0;  
@@ -281,7 +281,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // world
   //
-  sizeX = 1.2*calorimeterThick;
+  sizeX = 1.2*calorThickness;
   sizeY = 1.2*fiberLength;
   sizeZ = 1.2*fiberLength;
   

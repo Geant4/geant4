@@ -23,62 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2009-04-24 09:10:22 maire Exp $
+// $Id: TrackingAction.hh,v 1.1 2009-04-24 09:11:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef TrackingAction_h
+#define TrackingAction_h 1
 
-#include "DetectorConstruction.hh"
-
-#include "G4UserRunAction.hh"
+#include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-#include <vector>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+class DetectorConstruction;
+class RunAction;
 class PrimaryGeneratorAction;
+class EventAction;
 class HistoManager;
 
-class G4Run;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
-{
-public:
+class TrackingAction : public G4UserTrackingAction {
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-  ~RunAction();
-
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
-
-  void fillPerEvent_1(G4int,G4double,G4double);
-  void fillPerEvent_2(G4double,G4double,G4double);
-  void fillDetailedLeakage(G4int,G4double);  
-
-private:
-  
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;    
-  HistoManager*           histoManager;
-  
-  std::vector<G4double> visibleEnergy, visibleEnergy2;
-  std::vector<G4double>   totalEnergy,   totalEnergy2;
-
-  G4int    nbEvents;  
-  G4double calorEvis, calorEvis2;
-  G4double calorEtot, calorEtot2;
-  G4double Eleak,     Eleak2;
-  G4double EdLeak[3];  
+  public:  
+    TrackingAction(DetectorConstruction*,RunAction*, PrimaryGeneratorAction*,
+                   EventAction*,HistoManager* );
+   ~TrackingAction() {};
+   
+    void  PreUserTrackingAction(const G4Track*);   
+    void PostUserTrackingAction(const G4Track*);
+    
+  private:
+    DetectorConstruction*   detector;
+    RunAction*              runAct;
+    PrimaryGeneratorAction* primary;                
+    EventAction*            eventAct;
+    HistoManager*           histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

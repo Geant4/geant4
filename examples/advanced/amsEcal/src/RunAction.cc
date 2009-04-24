@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: RunAction.cc,v 1.2 2009-04-24 09:10:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +74,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   nbEvents = 0;  
   calorEvis = calorEvis2 = calorEtot = calorEtot2 = Eleak = Eleak2 = 0.;
+  EdLeak[0] = EdLeak[1] = EdLeak[2] = 0.;
                     
   //histograms
   //
@@ -101,6 +102,15 @@ void RunAction::fillPerEvent_2(G4double calEvis, G4double calEtot,
   calorEvis += calEvis;  calorEvis2 += calEvis*calEvis;
   calorEtot += calEtot;  calorEtot2 += calEtot*calEtot;  
   Eleak += eleak;  Eleak2 += eleak*eleak;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::fillDetailedLeakage(G4int icase, G4double energy)
+{
+  //forward, backward, lateral leakage
+  //
+  EdLeak[icase] += energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,17 +236,25 @@ void RunAction::EndOfRunAction(const G4Run*)
   rmsEleak = 0.;
   if (varianceEleak > 0.) rmsEleak = std::sqrt(varianceEleak);
   ratio = 100*meanEleak/energy;
-    
+  
+  G4double forward = 100*EdLeak[0]/(nbEvents*energy);
+  G4double bakward = 100*EdLeak[1]/(nbEvents*energy);
+  G4double lateral = 100*EdLeak[2]/(nbEvents*energy);      
   //print
   //
   G4cout
-    << "\n       Leakage : "
+    << "\n   Leakage : "
     << std::setprecision(5)
     << std::setw(6) << G4BestUnit(meanEleak,"Energy") << " +- "
     << std::setprecision(4)
-    << std::setw(5) << G4BestUnit( rmsEleak,"Energy") << "  (Eleak/Ebeam ="
-    << std::setprecision(2) 
-    << std::setw(3) << ratio  << " %)" << G4endl;
+    << std::setw(5) << G4BestUnit( rmsEleak,"Energy") 
+    << "\n   Eleak/Ebeam ="
+    << std::setprecision(3) 
+    << std::setw(4) << ratio  << " %  ( forward ="
+    << std::setw(4) << forward  << " %;   backward ="
+    << std::setw(4) << bakward  << " %;   lateral ="
+    << std::setw(4) << lateral  << " %)"             
+    << G4endl;
 
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);

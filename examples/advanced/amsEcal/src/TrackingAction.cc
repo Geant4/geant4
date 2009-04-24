@@ -23,62 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2009-04-24 09:10:22 maire Exp $
+//
+// $Id: TrackingAction.cc,v 1.1 2009-04-24 09:11:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
+#include "RunAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "EventAction.hh"
+#include "HistoManager.hh"
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-#include <vector>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PrimaryGeneratorAction;
-class HistoManager;
-
-class G4Run;
+#include "G4Track.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
-{
-public:
+TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run,
+                               PrimaryGeneratorAction* prim, EventAction* evt,
+			       HistoManager* hist)
+:G4UserTrackingAction(),detector(det),runAct(run),primary(prim),eventAct(evt),
+ histoManager(hist)
+{ }
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-  ~RunAction();
+void TrackingAction::PreUserTrackingAction(const G4Track*)
+{ }
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  void fillPerEvent_1(G4int,G4double,G4double);
-  void fillPerEvent_2(G4double,G4double,G4double);
-  void fillDetailedLeakage(G4int,G4double);  
-
-private:
+void TrackingAction::PostUserTrackingAction(const G4Track* track)
+{ 
+  //compute leakage
+  //
+  // if not at World boundaries, return
+  if (track->GetVolume() != detector->GetPvolWorld()) return;
+     
+  //get position
+  G4double x = (track->GetPosition()).x();
+  G4double xlimit = 0.5*(detector->GetCalorThickness());
+  G4int icase = 2;
+  if (x >= xlimit) icase = 0;
+  else if (x <= -xlimit) icase = 1;
   
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;    
-  HistoManager*           histoManager;
-  
-  std::vector<G4double> visibleEnergy, visibleEnergy2;
-  std::vector<G4double>   totalEnergy,   totalEnergy2;
-
-  G4int    nbEvents;  
-  G4double calorEvis, calorEvis2;
-  G4double calorEtot, calorEtot2;
-  G4double Eleak,     Eleak2;
-  G4double EdLeak[3];  
-};
+  //get particle energy
+  G4double Eleak = track->GetKineticEnergy();
+  if (track->GetDefinition() == G4Positron::Positron())
+     Eleak += 2*electron_mass_c2;
+     
+  //sum leakage
+  runAct->fillDetailedLeakage(icase,Eleak);         
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
 

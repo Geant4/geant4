@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: amsEcal.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: amsEcal.cc,v 1.2 2009-04-24 09:10:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "HistoManager.hh"
@@ -77,11 +78,14 @@ int main(int argc,char** argv) {
   //
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,primary,histo);
+  TrackingAction* trkAct = new TrackingAction(detector,runAct,primary,evtAct,
+                                              histo);  
   SteppingAction* stpAct = new SteppingAction(detector,runAct,primary,evtAct,
                                               histo);
   
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(evtAct);
+  runManager->SetUserAction(trkAct);  
   runManager->SetUserAction(stpAct);
   
   // get the pointer to the User Interface manager 
