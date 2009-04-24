@@ -6,6 +6,7 @@
   </argument>
   <argument name="test_ids">
     <set>
+      <text>exam-adv-amsEcal-run</text>
       <text>exam-adv-cosmicray_charging-run</text>
       <text>exam-adv-microbeam-run</text>
       <text>exam-adv-microdosimetry-run</text>
