@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
+$Id: History,v 1.3 2009-04-24 17:50:24 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+24-04-09  A.Lechner
+- Added scoring functionality for the mean energy loss of primaries
+  transmitted through a material layer. Affected classes are:
+   SteppingAction, RunAction 
+- Added functionality to compare range and energy loss of primaries
+  against reference values (specified in macro file). New classes are
+   Test, TestSeries, RunActionMessenger     
 18-04-09  V.Ivanchenko (test55-V09-02-00)
 - First version

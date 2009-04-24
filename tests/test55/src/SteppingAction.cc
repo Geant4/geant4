@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.2 2009-04-24 17:50:24 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,13 +57,28 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   runAction->FillEdep(edep,aStep->GetNonIonizingEnergyDeposit());
 
-  if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
- 
-  //Bragg curve
-  //	
   G4StepPoint* prePoint  = aStep->GetPreStepPoint();
   G4StepPoint* postPoint = aStep->GetPostStepPoint();
-   
+
+  if(aStep->GetTrack()->GetTrackID() == 1) {
+     runAction->AddPrimaryStep();  
+
+     G4VPhysicalVolume* preVolume = prePoint -> GetPhysicalVolume();
+     G4VPhysicalVolume* postVolume = postPoint -> GetPhysicalVolume();
+
+     if( preVolume != postVolume ) {
+
+       G4VPhysicalVolume* detVolume = detector -> GetAbsorPhysVol();
+
+       if( detVolume == postVolume )
+	 runAction->FillEnIncoming( prePoint -> GetKineticEnergy() );
+       if( detVolume == preVolume )
+	 runAction->FillEnOutgoing( postPoint -> GetKineticEnergy() );
+     }
+  }
+
+  //Bragg curve
+  //	
   G4double x1 = prePoint->GetPosition().x(), x2 = postPoint->GetPosition().x();  
   G4double x = runAction->GetOffsetX() + x1 + G4UniformRand()*(x2-x1);
   runAction->FillHisto(0, x/mm , edep);

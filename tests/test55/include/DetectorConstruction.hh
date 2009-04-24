@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2009-04-24 17:50:24 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4ThreeVector.hh"
 
 class G4LogicalVolume;
+class G4VPhysicalVolume; 
 class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
@@ -74,6 +75,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double     GetAbsorSizeX()    {return absorSizeX;};
      G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};           
      G4Material*  GetAbsorMaterial() {return absorMaterial;};
+     G4VPhysicalVolume* GetAbsorPhysVol() {return pAbsor;};
      
      G4LogicalVolume* GetLogicalTally() {return lTally;}
      G4double         GetTallyMass()    {return tallyMass;};
@@ -91,7 +93,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Material*         absorMaterial;
      G4UniformMagField*  magField;
      G4LogicalVolume*    lAbsor;
-               
+     G4VPhysicalVolume*  pAbsor;     
+          
      G4ThreeVector       tallySize;
      G4Material*         tallyMaterial;
      G4double            tallyMass;

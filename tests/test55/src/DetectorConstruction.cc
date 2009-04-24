@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2009-03-21 19:03:31 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2009-04-24 17:50:24 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,7 +178,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                               "Absorber");		//name
   
                               
-           new G4PVPlacement(0,				//no rotation
+  pAbsor = new G4PVPlacement(0,				//no rotation
   			   G4ThreeVector(),		//at (0,0,0)
                            lAbsor,			//logical volume
 			   "Absorber",			//name

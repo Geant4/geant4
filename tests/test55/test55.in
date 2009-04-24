@@ -1,67 +1,213 @@
-# $Id: test55.in,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
+# $Id: test55.in,v 1.3 2009-04-24 17:50:24 alechner Exp $
 #
-# Macro file for "TestEm7.cc"
+# Macro file for "test55.cc"
 # (can be run in batch, without graphic)
 #
 #
 /control/verbose 1
 /run/verbose 1
 #
-/testem/det/setMat TechVacuum
-/testem/det/setMat G4_Cu
-/testem/det/setMat G4_WATER
+# ### Detector: default material and size
+#
+/testem/det/setMat G4_Al
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat G4_WATER
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
+# ### Physics lists
 #
 #/testem/phys/addPhysics  empenelope
 /testem/phys/addPhysics  emlivermore
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt3
 #
+# ### Initialization
+#
 /run/initialize
 #
-/gun/particle proton
-/gun/energy 160 MeV
-# beam size
+#
+#
 /testem/gun/rndm 3 mm
-#
 /testem/event/printModulo 1000
-/testem/stepMax 1 mm
 #
-/run/beamOn 10000
 #
-/testem/stepMax 100 mm
-/gun/particle ion
-/gun/ion 6 12 6
-/gun/energy 3.5 GeV
-/run/beamOn 1000
+########################################################
+# RANGE Tests
+# Ref. values from:
+#    Northcliffe and Schilling,  
+#    NUCLEAR DATA TABLES, A7,233-463 (1970
+########################################################
 #
-/testem/det/setMat G4_Cu
-/testem/det/tallyMat G4_Cu
+# 
+#
+# ##### Range of 12C ion in aluminum
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_Al
+/testem/det/tallyMat               G4_Al
 /testem/det/update
-/gun/particle ion
-/gun/ion 36 84 36
-/gun/energy 42 GeV
-/run/beamOn 1000
+/testem/run/testRange              300.1 15.005 um
+/gun/particle                      ion
+/gun/ion                           6 12 6
+/gun/energy                        144.0 MeV
+/run/beamOn                        1000
 #
-/testem/det/setMat TechVacuum
-/testem/det/tallyMat TechVacuum
-/testem/det/update
-/gun/particle alpha
-/gun/energy 0.265 keV
-/run/beamOn 100
 #
-/testem/det/setMat G4_WATER
-/testem/det/tallyMat G4_WATER
+# ##### Range of 12C ion in beryllium
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_Be
+/testem/det/tallyMat               G4_Be
 /testem/det/update
-/gun/particle alpha
-/gun/energy 100 MeV
-/run/beamOn 100
+/testem/run/testRange              381.5 19.075 um
+/gun/particle                      ion
+/gun/ion                           6 12 6
+/gun/energy                        144.0 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Range of 12C ion in carbon
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_C
+/testem/det/tallyMat               G4_C
+/testem/det/update
+/testem/run/testRange              327.7 16.385 um
+/gun/particle                      ion
+/gun/ion                           6 12 6
+/gun/energy                        144.0 MeV
+/run/beamOn                        1000
+#
+#
+#
+########################################################
+# ENERGY LOSS (TRANSMISSION) Tests
+#
+########################################################
+#
+#
+# ##### Energy loss of 7Li ions in kapton foil (9.96 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_KAPTON
+/testem/det/tallyMat               G4_KAPTON
+/testem/det/setSizeX               70.14 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     8.44 0.422 MeV
+/gun/particle                      ion
+/gun/ion                           3  7  3
+/gun/energy                        29.818 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 7Li ions in polycarbonate foil (3.52 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_POLYCARBONATE
+/testem/det/tallyMat               G4_POLYCARBONATE
+/testem/det/setSizeX               29.333 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     2.93 0.1465 MeV
+/gun/particle                      ion
+/gun/ion                           3  7  3
+/gun/energy                        29.818 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 7Li ions in mylar foil (3.24 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_MYLAR
+/testem/det/tallyMat               G4_MYLAR
+/testem/det/setSizeX               23.143 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     2.61 0.1305 MeV
+/gun/particle                      ion
+/gun/ion                           3  7  3
+/gun/energy                        29.818 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 12C ions in kapton foil (9.96 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_KAPTON
+/testem/det/tallyMat               G4_KAPTON
+/testem/det/setSizeX               70.14 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     23.17 1.159 MeV
+/gun/particle                      ion
+/gun/ion                           6  12  6
+/gun/energy                        79.08 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 12C ions in polycarbonate foil (3.52 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_POLYCARBONATE
+/testem/det/tallyMat               G4_POLYCARBONATE
+/testem/det/setSizeX               29.333 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     7.34 0.367 MeV
+/gun/particle                      ion
+/gun/ion                           6  12  6
+/gun/energy                        79.08 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 12C ions in mylar foil (3.24 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_MYLAR
+/testem/det/tallyMat               G4_MYLAR
+/testem/det/setSizeX               23.143 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     9.39 0.4695 MeV
+/gun/particle                      ion
+/gun/ion                           6  12  6
+/gun/energy                        59.04 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 16O ions in kapton foil (6.64 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_KAPTON
+/testem/det/tallyMat               G4_KAPTON
+/testem/det/setSizeX               46.7 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     35.47 1.7735 MeV
+/gun/particle                      ion
+/gun/ion                           8  16  8
+/gun/energy                        78.215 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 16O ions in polycarbonate foil (3.52 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_POLYCARBONATE
+/testem/det/tallyMat               G4_POLYCARBONATE
+/testem/det/setSizeX               29.333 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     18.18 0.909 MeV
+/gun/particle                      ion
+/gun/ion                           8  16  8
+/gun/energy                        78.215 MeV
+/run/beamOn                        1000
+#
+#
+# ##### Energy loss of 16O ions in mylar foil (3.24 mg/cm2)
+#
+/testem/stepMax                    0.001 mm
+/testem/det/setMat                 G4_MYLAR
+/testem/det/tallyMat               G4_MYLAR
+/testem/det/setSizeX               23.143 um
+/testem/det/update
+/testem/run/testMeanEnergyLoss     16.32 0.816 MeV
+/gun/particle                      ion
+/gun/ion                           8  16  8
+/gun/energy                        78.215 MeV
+/run/beamOn                        1000
+#
 #

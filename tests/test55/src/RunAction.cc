@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
+// $Id: RunAction.cc,v 1.3 2009-04-24 17:50:24 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "RunActionMessenger.hh" 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "StepMax.hh"
@@ -42,6 +43,7 @@
 
 #include "Randomize.hh"
 #include "Histo.hh"
+#include "TestSeries.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,12 +59,25 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
   histo->add1D("1","Edep (MeV/mm) along absorber (mm)", 100, 0, 100);
   histo->add1D("2","Edep (MeV/mm) along absorber zoomed (mm)", 100, 0, 100);
   histo->add1D("3","Projectile range (mm)", 100, 0, 100);
+
+  testRange = new TestSeries("range", "Length", detector, kinematic);
+  testEnergyLoss = new TestSeries("mean energy loss primary", "Energy", 
+                               detector, kinematic);
+
+  messenger = new RunActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
+  testRange -> Print();
+  testEnergyLoss -> Print();
+
+  delete testRange;
+  delete testEnergyLoss;
+  delete messenger;
+
   delete [] tallyEdep;
   delete histo;  
 }
@@ -90,6 +105,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nRange = 0;
   projRange = projRange2 = 0.;
   edeptot = eniel = 0.;
+  eintot = eouttot = 0;
+  nmbein = nmbeout = 0;
+
   for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
   kinematic->ResetEbeamCumul();
 
@@ -181,6 +199,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
+
+  // Pass computed values to tests
+  testRange -> EndOfRunAction(projRange);
+  if(nmbein > 0 && nmbeout >0) testEnergyLoss -> EndOfRunAction(eintot/nmbein-eouttot/nmbeout);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CreateRangeTest(G4double refRange,
+                                G4double relError) {
+
+  testRange -> CreateTestForRun(refRange, relError);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CreateEnergyLossTest(G4double refLoss,
+                                     G4double relError) {
+
+  testEnergyLoss -> CreateTestForRun(refLoss, relError);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

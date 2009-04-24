@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
+$Id: README,v 1.3 2009-04-24 17:50:24 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -149,3 +149,28 @@ $Id: README,v 1.2 2009-04-19 14:17:23 vnivanch Exp $
 
      The default name "testem7" can be changed:
      /testem/histo/setHistoName myname
+
+  9- TESTING AGAINST REFERENCE VALUES
+
+     Following physical quantities may be tested against reference values:
+        - The mean range of primary particles in bulk materials.
+        - The mean energy loss of primary particles transmitted through
+          a material layer.
+    
+     Reference values (e.g. derived from experiments) may be specified in
+     the macro according to
+         /testem/run/testRange           refValue error unit
+         /testem/run/testMeanEnergyLoss  refValue error unit
+     where "refValue" indicates the reference value, "error" indicates the
+     absolute error of the reference and "unit" is the corresponding unit.
+     For example:
+         /testem/run/testRange 0.155 0.01 mm
+
+     A summary of the comparison of computed values against the reference
+     will be printed at the end of all runs.
+
+     NOTE: For range comparisons, the material dimension in beam direction
+     must be larger than the range of the projectile. In contrast, for
+     evaluating the mean loss in a material layer the layer thickness must
+     be shorter than the range (the mean loss is calculated as the energy 
+     difference of entering and exiting primaries).
