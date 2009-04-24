@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.38 2009-02-26 11:50:02 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.39 2009-04-24 17:14:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,8 +64,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
-#include "G4NistManager.hh"
 #include "globals.hh"
+#include "G4NistManager.hh"
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
@@ -136,7 +136,6 @@ protected:
   G4int                       currentMaterialIndex;
 
   G4double                  coeff;
-  G4double                  constn;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
   G4double                  cosTetMinNuc;
@@ -170,10 +169,11 @@ protected:
 
 private:
 
-  G4double                  a0;
   G4double                  alpha2;
   G4double                  faclim;
-  G4double                  FF[100];
+
+  static G4double ScreenRSquare[100];
+  static G4double FormFactor[100];
 
   G4bool                    isInitialised;             
 };
@@ -217,7 +217,7 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
     invbeta2 = 1.0 +  mass*mass/mom2;
     cosTetMinNuc = cosThetaMin;
     cosTetMaxNuc = cosThetaMax;
-    if(ekin <= 10.*cut && mass < MeV && cosThetaMin < 1.0) {
+    if(mass < MeV && cosThetaMin < 1.0 && ekin <= 10.*cut) {
       cosTetMinNuc = ekin*(cosThetaMin + 1.0)/(10.*cut) - 1.0;
     }
     ComputeMaxElectronScattering(cut);
@@ -233,19 +233,11 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     targetZ = Z;
     G4int iz= G4int(Z);
     if(iz > 99) iz = 99;
-    G4double x = fNistManager->GetZ13(iz);
-    screenZ = a0*x*x/mom2;
-    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*alpha2);
-    // A.V. Butkevich et al., NIM A 488 (2002) 282
-    formfactA = FF[iz];
-    if(formfactA == 0.0) {
-      x = fNistManager->GetA27(iz); 
-      formfactA = constn*x*x;
-      FF[iz] = formfactA;
-    }
-    formfactA *= mom2;
+    screenZ = ScreenRSquare[iz]/mom2;
+    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2);
+    formfactA = FormFactor[iz]*mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
-    if(particle == theProton && 1 == iz && cosTetMaxNuc2 < 0.0) {
+    if(1 == iz && particle == theProton && cosTetMaxNuc2 < 0.0) {
       cosTetMaxNuc2 = 0.0;
     }
     cosTetMaxElec2 = cosTetMaxElec;

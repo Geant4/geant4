@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.22 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.23 2009-04-24 17:14:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,8 +65,12 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4WentzelVIModel::ScreenRSquare[] = {0.0};
+G4double G4WentzelVIModel::FormFactor[]    = {0.0};
 
 using namespace std;
 
@@ -92,20 +96,31 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
-  a0 = alpha2*electron_mass_c2*electron_mass_c2/(0.885*0.885);
   lowEnergyLimit = keV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
-  constn = 6.937e-6/(MeV*MeV);
   tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   particle = 0;
   nelments = 5;
   xsecn.resize(nelments);
   prob.resize(nelments);
-  for(size_t j=0; j<100; j++) {
-    FF[j]    = 0.0;
-  } 
+
+  // Thomas-Fermi screening radiuses
+  // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
+
+  if(0.0 == ScreenRSquare[0]) {
+    G4double a0 = electron_mass_c2/0.885; 
+    G4double constn = 6.937e-6/(MeV*MeV);
+
+    ScreenRSquare[0] = alpha2*a0*a0;
+    for(G4int j=1; j<100; j++) {
+      G4double x = a0*fNistManager->GetZ13(j);
+      ScreenRSquare[j] = alpha2*x*x;
+      x = fNistManager->GetA27(j); 
+      FormFactor[j] = constn*x*x;
+    } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

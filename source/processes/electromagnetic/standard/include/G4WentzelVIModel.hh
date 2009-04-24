@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.11 2009-03-05 18:57:33 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.12 2009-04-24 17:14:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,11 +61,11 @@
 #include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4NistManager.hh"
 
 class G4LossTableManager;
 class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
+class G4NistManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -164,7 +164,6 @@ private:
 
   // single scattering parameters
   G4double coeff;
-  G4double constn;
   G4double cosThetaMin;
   G4double cosThetaMax;
   G4double cosTetMaxNuc;
@@ -173,7 +172,6 @@ private:
   G4double cosTetMaxElec2;
   G4double q2Limit;
   G4double alpha2;
-  G4double a0;
 
   // projectile
   const G4ParticleDefinition* particle;
@@ -191,7 +189,9 @@ private:
   G4double targetZ;
   G4double screenZ;
   G4double formfactA;
-  G4double FF[100];
+
+  static G4double ScreenRSquare[100];
+  static G4double FormFactor[100];
 
   // flags
   G4bool   isInitialized;
@@ -253,7 +253,7 @@ inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     cosTetMaxNuc = cosThetaMax;
-    if(ekin <= 10.*cut && mass < MeV) {
+    if(mass < MeV && ekin <= 10.*cut) {
       cosTetMaxNuc = ekin*(cosThetaMax + 1.0)/(10.*cut) - 1.0;
     }
     ComputeMaxElectronScattering(cut);
@@ -269,17 +269,9 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     targetZ = Z;
     G4int iz= G4int(Z);
     if(iz > 99) iz = 99;
-    G4double x = fNistManager->GetZ13(iz);
-    screenZ = a0*x*x/mom2;
-    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*alpha2);
-    // A.V. Butkevich et al., NIM A 488 (2002) 282
-    formfactA = FF[iz];
-    if(formfactA == 0.0) {
-      x = fNistManager->GetA27(iz); 
-      formfactA = constn*x*x;
-      FF[iz] = formfactA;
-    }
-    formfactA *= mom2;
+    screenZ = ScreenRSquare[iz]/mom2;
+    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2);
+    formfactA = FormFactor[iz]*mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
     cosTetMaxElec2 = cosTetMaxElec;
   } 
