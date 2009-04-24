@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.33 2009-04-24 14:24:00 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.34 2009-04-24 17:15:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -344,25 +344,13 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
     G4double b4  = y122*y12;
     G4double b3  = b4 + y122;
 
-    y     = xmax*xmax;
-    grej  = -xmin*b1;
-    grej += y*b2;
-    grej -= xmin*xmin*xmin*b3;
-    grej += y*y*b4;
-    grej *= beta2;
-    grej += 1.0;
+    y    = xmax*xmax;
+    grej = 1.0 + (y*y*b4 - xmin*xmin*xmin*b3 + y*b2 - xmin*b1)*beta2; 
     do {
-      q  = G4UniformRand();
-      x  = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
-      z  = -x*b1;
-      y  = x*x;
-      z += y*b2;
-      y *= x;
-      z -= y*b3;
-      y *= x;
-      z += y*b4;
-      z *= beta2;
-      z += 1.0;
+      q = G4UniformRand();
+      x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+      y = x*x;
+      z = 1.0 + (y*y*b4 - x*y*b3 + y*b2 - x*b1)*beta2; 
       /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
