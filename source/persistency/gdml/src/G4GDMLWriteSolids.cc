@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.63 2009-04-09 13:55:57 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.64 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -772,6 +772,23 @@ ZplaneWrite(xercesc::DOMElement* element, const G4double& z,
    zplaneElement->setAttributeNode(NewAttribute("rmin",rmin/mm));
    zplaneElement->setAttributeNode(NewAttribute("rmax",rmax/mm));
    element->appendChild(zplaneElement);
+}
+
+void G4GDMLWriteSolids::
+OpticalSurfaceWrite(xercesc::DOMElement* solidsElement,
+                    const G4OpticalSurface* const surf)
+{
+   xercesc::DOMElement* optElement = NewElement("opticalsurface");
+   G4OpticalSurfaceModel smodel = surf->GetModel();
+   G4double sval = (smodel==glisur) ? surf->GetPolish() : surf->GetSigmaAlpha();
+
+   optElement->setAttributeNode(NewAttribute("name", surf->GetName()));
+   optElement->setAttributeNode(NewAttribute("model", smodel));
+   optElement->setAttributeNode(NewAttribute("finish", surf->GetFinish()));
+   optElement->setAttributeNode(NewAttribute("type", surf->GetType()));
+   optElement->setAttributeNode(NewAttribute("value", sval));
+
+   solidsElement->appendChild(optElement);
 }
 
 void G4GDMLWriteSolids::SolidsWrite(xercesc::DOMElement* gdmlElement)

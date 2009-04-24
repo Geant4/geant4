@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.21 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.cc,v 1.22 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
@@ -33,6 +33,7 @@
 //
 // --------------------------------------------------------------------
 
+#include <sstream>
 #include "G4GDMLWriteMaterials.hh"
 
 G4GDMLWriteMaterials::
@@ -143,6 +144,13 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
    materialElement->setAttributeNode(NewAttribute("name",name));
    materialElement->setAttributeNode(NewAttribute("state",state_str));
 
+   // Write any property attached to the material...
+   //
+   if (materialPtr->GetMaterialPropertiesTable())
+   {
+     PropertyWrite(materialElement, materialPtr);
+   }
+
    if (materialPtr->GetTemperature() != STP_Temperature)
      { TWrite(materialElement,materialPtr->GetTemperature()); }
    if (materialPtr->GetPressure() != STP_Pressure)
@@ -174,8 +182,62 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
       AtomWrite(materialElement,materialPtr->GetA());
    }
 
+   // Append the material AFTER all the possible components are appended!
+   //
    materialsElement->appendChild(materialElement);
-     // Append the material AFTER all the possible components are appended!
+}
+
+void G4GDMLWriteMaterials::PropertyVectorWrite(xercesc::DOMElement* matElement,
+                                    const G4String& key,
+                                    const G4MaterialPropertyVector* const pvec)
+{
+   xercesc::DOMElement* matrixElement = NewElement("matrix");
+   matrixElement->setAttributeNode(NewAttribute("name", key));
+   matrixElement->setAttributeNode(NewAttribute("coldim", "2"));
+   std::ostringstream pvalues;
+   for (G4int i=0; i<pvec->Entries(); i++)
+   {
+     G4MPVEntry cval = pvec->GetEntry(i);
+     if (i!=0)  { pvalues << " "; }
+     pvalues << cval.GetPhotonEnergy() << " " << cval.GetProperty();
+   }
+   matrixElement->setAttributeNode(NewAttribute("values", pvalues.str()));
+
+   defineElement->appendChild(matrixElement);
+}
+
+void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
+                                         const G4Material* const mat)
+{
+   xercesc::DOMElement* propElement;
+   G4MaterialPropertiesTable* ptable = mat->GetMaterialPropertiesTable();
+   const std::map< G4String, G4MaterialPropertyVector*,
+                 std::less<G4String> >* pmap = ptable->GetPropertiesMap();
+   const std::map< G4String, G4double,
+                 std::less<G4String> >* cmap = ptable->GetPropertiesCMap();
+   std::map< G4String, G4MaterialPropertyVector*,
+                 std::less<G4String> >::const_iterator mpos;
+   std::map< G4String, G4double,
+                 std::less<G4String> >::const_iterator cpos;
+   for (mpos=pmap->begin(); mpos!=pmap->end(); mpos++)
+   {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute("name", mpos->first));
+      propElement->setAttributeNode(NewAttribute("ref", mpos->first));
+      PropertyVectorWrite(matElement, mpos->first, mpos->second);
+      matElement->appendChild(propElement);
+   }
+   for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
+   {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute("name", cpos->first));
+      propElement->setAttributeNode(NewAttribute("ref", cpos->first));
+      xercesc::DOMElement* constElement = NewElement("constant");
+      constElement->setAttributeNode(NewAttribute("name", cpos->first));
+      constElement->setAttributeNode(NewAttribute("value", cpos->second));
+      defineElement->appendChild(constElement);
+      matElement->appendChild(propElement);
+   }
 }
 
 void G4GDMLWriteMaterials::MaterialsWrite(xercesc::DOMElement* element)

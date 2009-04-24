@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.36 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.hh,v 1.37 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,6 +69,8 @@
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
 #include "G4UnionSolid.hh"
+#include "G4OpticalSurface.hh"
+#include "G4SurfaceProperty.hh"
 
 #include "G4GDMLWriteMaterials.hh"
 
@@ -110,6 +112,8 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TwistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
    void ZplaneWrite(xercesc::DOMElement*, const G4double&,
                     const G4double&, const G4double&);
+   void OpticalSurfaceWrite(xercesc::DOMElement*,
+                    const G4OpticalSurface* const);
 
   protected:
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.18 2009-04-03 13:28:40 tnikitin Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.19 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -504,18 +504,25 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
    }
    if (matrix.GetRows() == 0) { return; }
 
-   G4MaterialPropertiesTable* matprop = material->GetMaterialPropertiesTable();
+   G4MaterialPropertiesTable* matprop=material->GetMaterialPropertiesTable();
    if (!matprop)
    {
-     material->SetMaterialPropertiesTable(
-               matprop = new G4MaterialPropertiesTable());
+     matprop = new G4MaterialPropertiesTable();
+     material->SetMaterialPropertiesTable(matprop);
    }
-   G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
-   for (size_t i=0; i<matrix.GetRows(); i++)
+   if (matrix.GetCols() == 1)  // constant property assumed
    {
-     propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
+     matprop->AddConstProperty(Strip(name), matrix.Get(0,0));
    }
-   matprop->AddProperty(Strip(name),propvect);
+   else  // build the material properties vector
+   {
+     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
+     for (size_t i=0; i<matrix.GetRows(); i++)
+     {
+       propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
+     }
+     matprop->AddProperty(Strip(name),propvect);
+   }
 }
 
 void G4GDMLReadMaterials::

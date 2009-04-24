@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.24 2009-04-03 13:41:23 tnikitin Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.25 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1485,7 +1485,7 @@ ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 }
 
 void G4GDMLReadSolids::
-OpticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
+OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 {
    G4String name;
    G4String smodel;
@@ -1576,7 +1576,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="twistedtrd") { TwistedtrdRead(child); } else
       if (tag=="twistedtubs") { TwistedtubsRead(child); } else
       if (tag=="union") { BooleanRead(child,UNION); } else
-      if (tag=="opticalsurface") { OpticalsurfaceRead(child); } else
+      if (tag=="opticalsurface") { OpticalSurfaceRead(child); } else
       if (tag=="loop") { LoopRead(child,&G4GDMLRead::SolidsRead); }
       else
       {

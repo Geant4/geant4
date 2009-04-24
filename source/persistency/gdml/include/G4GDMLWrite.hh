@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.39 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.40 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,6 +83,7 @@ class G4GDMLWrite
     virtual void StructureWrite(xercesc::DOMElement*)=0;
     virtual G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const,
                                              const G4int)=0;
+    virtual void SurfacesWrite()=0;
     virtual void SetupWrite(xercesc::DOMElement*,
                             const G4LogicalVolume* const)=0;
       //

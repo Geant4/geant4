@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.13 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.14 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,7 +124,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    G4TriangularFacet* TriangularRead(const xercesc::DOMElement* const);
    G4TwoVector TwoDimVertexRead(const xercesc::DOMElement* const,G4double);
    zplaneType ZplaneRead(const xercesc::DOMElement* const);
-   void OpticalsurfaceRead(const xercesc::DOMElement* const);
+   void OpticalSurfaceRead(const xercesc::DOMElement* const);
 };
 
 #endif

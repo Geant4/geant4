@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.58 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.59 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -72,7 +72,7 @@ AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 }
 
 void G4GDMLReadStructure::
-BordersurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
+BorderSurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
 {
    G4String name;
    G4VPhysicalVolume* pv1 = 0;
@@ -517,7 +517,7 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
 }
 
 void G4GDMLReadStructure::
-SkinsurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
+SkinSurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 {
    G4String name;
    G4LogicalVolume* logvol = 0;
@@ -650,8 +650,8 @@ StructureRead(const xercesc::DOMElement* const structureElement)
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
 
-      if (tag=="bordersurface") { BordersurfaceRead(child); } else
-      if (tag=="skinsurface") { SkinsurfaceRead(child); } else
+      if (tag=="bordersurface") { BorderSurfaceRead(child); } else
+      if (tag=="skinsurface") { SkinSurfaceRead(child); } else
       if (tag=="volume") { VolumeRead(child); } else
       if (tag=="loop") { LoopRead(child,&G4GDMLRead::StructureRead); }
       else

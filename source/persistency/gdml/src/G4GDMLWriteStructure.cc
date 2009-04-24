@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.78 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.79 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -35,7 +35,8 @@
 
 #include "G4GDMLWriteStructure.hh"
 
-G4GDMLWriteStructure::G4GDMLWriteStructure() : G4GDMLWriteParamvol()
+G4GDMLWriteStructure::G4GDMLWriteStructure()
+  : G4GDMLWriteParamvol()
 {
 }
 
@@ -190,6 +191,137 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    volumeElement->appendChild(replicavolElement);
 }
 
+void G4GDMLWriteStructure::
+BorderSurfaceCache(const G4LogicalBorderSurface* const bsurf)
+{
+   if (!bsurf)  { return; }
+
+   const G4SurfaceProperty* psurf = bsurf->GetSurfaceProperty();
+
+   // Generate the new element for border-surface
+   //
+   xercesc::DOMElement* borderElement = NewElement("bordersurface");
+   borderElement->setAttributeNode(NewAttribute("name", bsurf->GetName()));
+   borderElement->setAttributeNode(NewAttribute("surfaceproperty",
+                                                psurf->GetName()));
+
+   const G4String volumeref1 = GenerateName(bsurf->GetVolume1()->GetName(),
+                                            bsurf->GetVolume1());
+   const G4String volumeref2 = GenerateName(bsurf->GetVolume2()->GetName(),
+                                            bsurf->GetVolume2());
+   xercesc::DOMElement* volumerefElement1 = NewElement("physvolref");
+   xercesc::DOMElement* volumerefElement2 = NewElement("physvolref");
+   volumerefElement1->setAttributeNode(NewAttribute("ref",volumeref1));
+   volumerefElement2->setAttributeNode(NewAttribute("ref",volumeref2));
+   borderElement->appendChild(volumerefElement1);
+   borderElement->appendChild(volumerefElement2);
+
+   if (FindOpticalSurface(psurf))
+   {
+     OpticalSurfaceWrite(solidsElement,
+                         dynamic_cast<const G4OpticalSurface*>(psurf));
+   }
+
+   borderElementVec.push_back(borderElement);
+}
+
+void G4GDMLWriteStructure::
+SkinSurfaceCache(const G4LogicalSkinSurface* const ssurf)
+{
+   if (!ssurf)  { return; }
+
+   const G4SurfaceProperty* psurf = ssurf->GetSurfaceProperty();
+
+   // Generate the new element for border-surface
+   //
+   xercesc::DOMElement* skinElement = NewElement("skinsurface");
+   skinElement->setAttributeNode(NewAttribute("name", ssurf->GetName()));
+   skinElement->setAttributeNode(NewAttribute("surfaceproperty",
+                                              psurf->GetName()));
+
+   const G4String volumeref = GenerateName(ssurf->GetLogicalVolume()->GetName(),
+                                           ssurf->GetLogicalVolume());
+   xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+   volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
+   skinElement->appendChild(volumerefElement);
+
+   if (FindOpticalSurface(psurf))
+   {
+     OpticalSurfaceWrite(solidsElement,
+                         dynamic_cast<const G4OpticalSurface*>(psurf));
+   }
+
+   skinElementVec.push_back(skinElement);
+}
+
+G4bool G4GDMLWriteStructure::FindOpticalSurface(const G4SurfaceProperty* psurf)
+{
+   const G4OpticalSurface* osurf = dynamic_cast<const G4OpticalSurface*>(psurf);
+   std::vector<const G4OpticalSurface*>::const_iterator pos;
+   pos = std::find(opt_vec.begin(), opt_vec.end(), osurf);
+   if (pos != opt_vec.end()) { return false; }  // item already created!
+
+   opt_vec.push_back(osurf);              // cache it for future reference
+   return true;
+}
+
+const G4LogicalSkinSurface*
+G4GDMLWriteStructure::GetSkinSurface(const G4LogicalVolume* const lvol)
+{
+  G4LogicalSkinSurface* surf = 0;
+  G4int nsurf = G4LogicalSkinSurface::GetNumberOfSkinSurfaces();
+  if (nsurf)
+  {
+    const G4LogicalSkinSurfaceTable* stable =
+          G4LogicalSkinSurface::GetSurfaceTable();
+    std::vector<G4LogicalSkinSurface*>::const_iterator pos;
+    for (pos = stable->begin(); pos != stable->end(); pos++)
+    {
+      if (lvol == (*pos)->GetLogicalVolume())
+      {
+        surf = *pos; break;
+      }
+    }
+  }
+  return surf;
+}
+
+const G4LogicalBorderSurface*
+G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
+{
+  G4LogicalBorderSurface* surf = 0;
+  G4int nsurf = G4LogicalBorderSurface::GetNumberOfBorderSurfaces();
+  if (nsurf)
+  {
+    const G4LogicalBorderSurfaceTable* btable =
+          G4LogicalBorderSurface::GetSurfaceTable();
+    std::vector<G4LogicalBorderSurface*>::const_iterator pos;
+    for (pos = btable->begin(); pos != btable->end(); pos++)
+    {
+      if (pvol == (*pos)->GetVolume1())  // just the first in the couple 
+      {                                  // is enough
+        surf = *pos; break;
+      }
+    }
+  }
+  return surf;
+}
+
+void G4GDMLWriteStructure::SurfacesWrite()
+{
+   G4cout << "G4GDML: Writing surfaces..." << G4endl;
+
+   std::vector<xercesc::DOMElement*>::const_iterator pos;
+   for (pos = skinElementVec.begin(); pos != skinElementVec.end(); pos++)
+   {
+     structureElement->appendChild(*pos);
+   }
+   for (pos = borderElementVec.begin(); pos != borderElementVec.end(); pos++)
+   {
+     structureElement->appendChild(*pos);
+   }
+}
+
 void G4GDMLWriteStructure::StructureWrite(xercesc::DOMElement* gdmlElement)
 {
    G4cout << "G4GDML: Writing structure..." << G4endl;
@@ -330,6 +462,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
          G4Transform3D P(rot,physvol->GetObjectTranslation());
          PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
+      BorderSurfaceCache(GetBorderSurface(physvol));
    }
 
    structureElement->appendChild(volumeElement);
@@ -345,6 +478,8 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
      // Add the involved materials and solids!
 
    AddSolid(solidPtr);
+
+   SkinSurfaceCache(GetSkinSurface(volumePtr));
 
    return R;
 }

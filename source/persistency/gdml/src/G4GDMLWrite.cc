@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.53 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.54 2009-04-24 09:37:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -187,6 +187,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
 
    G4Transform3D R = TraverseVolumeTree(logvol,depth);
 
+   SurfacesWrite();
    xercesc::XMLFormatTarget *myFormTarget =
      new xercesc::LocalFileFormatTarget(fname.c_str());
 
