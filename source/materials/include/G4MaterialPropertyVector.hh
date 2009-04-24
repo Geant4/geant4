@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.13 2009-04-21 15:41:20 gcosmo Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.14 2009-04-24 09:35:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,13 +97,6 @@ class G4MaterialPropertyVector
                              G4int     NumElements);
       // Constructor of G4MaterialPropertyVector object.
 
-  public: // Without description
-
-    G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
-   ~G4MaterialPropertyVector();
-
-  public: // With description
-
     inline void ResetIterator();
     inline G4int Entries() const;
 
@@ -131,13 +124,16 @@ class G4MaterialPropertyVector
     inline G4double GetMaxPhotonEnergy() const;
     inline G4double GetMinPhotonEnergy() const;
     
+  public: // Without description
+
+    G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
+   ~G4MaterialPropertyVector();
+
     //////////
     // Tests
     //////////
 
     void DumpVector();
-
-  private:
 
     /////////////////////
     // Helper Functions
@@ -145,8 +141,12 @@ class G4MaterialPropertyVector
 
     inline G4MPVEntry GetEntry(G4int i) const;
 
+  private:
+
     void GetAdjacentBins(G4double aPhotonEnergy,
                          G4int *left, G4int *right) const;
+
+  private:
 
     /////////////////////////
     // Private Data Members
