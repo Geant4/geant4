@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2009-04-24 13:30:24 vdiez Exp $
+$Id: History,v 1.20 2009-04-24 14:30:18 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.19 2009-04-24 13:30:24 vdiez Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-Apr-09 G.Folger		     (testtools-QMtest-V09-02-11)
+ - Add test53 and test54 testing low energy Livermore and 
+   low energy Penelope
 
 24-Apr-09 V.Diez		     (testtools-QMtest-V09-02-10)
  - Improved Geant4 test class for QMTest. Now it saves the output
