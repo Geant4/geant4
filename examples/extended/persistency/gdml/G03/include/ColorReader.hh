@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ColorReader.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: ColorReader.hh,v 1.3 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,8 @@
 
 #include <map>
 #include "G4GDMLReadStructure.hh"
+
+class G4VisAttributes;
 
 class ColorReader : public G4GDMLReadStructure
 {

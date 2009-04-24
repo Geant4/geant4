@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ColorWriter.hh,v 1.1 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: ColorWriter.hh,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,9 @@
 
 #include <vector>
 #include "G4GDMLWriteStructure.hh"
+
+class G4LogicalVolume;
+class G4VisAttributes;
 
 class ColorWriter : public G4GDMLWriteStructure
 {
