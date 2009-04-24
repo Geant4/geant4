@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.7 2009-02-05 13:38:15 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class DetectorConstruction implementation
@@ -47,6 +47,7 @@
 //
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
