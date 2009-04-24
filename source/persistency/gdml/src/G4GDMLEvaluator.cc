@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.22 2009-02-26 10:13:35 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.23 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -34,6 +34,9 @@
 // --------------------------------------------------------------------
 
 #include <sstream>
+
+#include "globals.hh"
+
 #include "G4GDMLEvaluator.hh"
 
 G4GDMLEvaluator::G4GDMLEvaluator()

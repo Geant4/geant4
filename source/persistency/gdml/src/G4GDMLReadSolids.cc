@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.25 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.26 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -33,6 +33,39 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSolids.hh"
+
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Hype.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4Orb.hh"
+#include "G4Para.hh"
+#include "G4Paraboloid.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4Sphere.hh"
+#include "G4SolidStore.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4Tet.hh"
+#include "G4Torus.hh"
+#include "G4Transform3D.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4TriangularFacet.hh"
+#include "G4Tubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
+#include "G4UnionSolid.hh"
+#include "G4OpticalSurface.hh"
+#include "G4SurfaceProperty.hh"
 
 G4GDMLReadSolids::G4GDMLReadSolids() : G4GDMLReadMaterials()
 {

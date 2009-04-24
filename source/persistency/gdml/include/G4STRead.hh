@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4STRead.hh,v 1.3 2008-07-17 14:05:50 gcosmo Exp $
+// $Id: G4STRead.hh,v 1.4 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,17 +43,15 @@
 #ifndef _G4STREAD_INCLUDED_
 #define _G4STREAD_INCLUDED_
 
-#include <fstream>
 #include <vector>
 #include <map>
 
-#include "G4TessellatedSolid.hh"
-#include "G4QuadrangularFacet.hh"
-#include "G4TriangularFacet.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4Material.hh"
-#include "G4Box.hh"
+#include "G4ThreeVector.hh"
+
+class G4Material;
+class G4Box;
+class G4TessellatedSolid;
+class G4LogicalVolume;
 
 class G4STRead
 {

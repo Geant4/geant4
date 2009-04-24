@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadParamvol.hh,v 1.7 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.hh,v 1.8 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,13 +41,10 @@
 #ifndef _G4GDMLREADPARAMVOL_INCLUDED_
 #define _G4GDMLREADPARAMVOL_INCLUDED_
 
-#include "G4LogicalVolume.hh"
-#include "G4PVParameterised.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
-
-#include "G4GDMLParameterisation.hh"
 #include "G4GDMLReadSetup.hh"
+#include "G4GDMLParameterisation.hh"
+
+class G4LogicalVolume;
 
 class G4GDMLReadParamvol : public G4GDMLReadSetup
 {

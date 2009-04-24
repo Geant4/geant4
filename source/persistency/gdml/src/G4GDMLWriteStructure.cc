@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.79 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.80 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -34,6 +34,17 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteStructure.hh"
+
+#include "G4Material.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4DisplacedSolid.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4PVDivision.hh"
+#include "G4PVReplica.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
 
 G4GDMLWriteStructure::G4GDMLWriteStructure()
   : G4GDMLWriteParamvol()

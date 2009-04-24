@@ -40,6 +40,8 @@
 #include <map>
 
 #include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+
 #include "G4GDMLRead.hh"
 
 class G4GDMLMatrix

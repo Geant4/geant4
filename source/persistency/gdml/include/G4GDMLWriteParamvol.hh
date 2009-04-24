@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.hh,v 1.12 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.hh,v 1.13 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,10 +41,19 @@
 #ifndef _G4GDMLWRITEPARAMVOL_INCLUDED_
 #define _G4GDMLWRITEPARAMVOL_INCLUDED_
 
-#include "G4PVParameterised.hh"
-#include "G4VPhysicalVolume.hh"
-
 #include "G4GDMLWriteSetup.hh"
+
+class G4Box;
+class G4Trd;
+class G4Trap;
+class G4Tubs;
+class G4Cons;
+class G4Sphere;
+class G4Orb;
+class G4Torus;
+class G4Para;
+class G4Hype;
+class G4VPhysicalVolume;
 
 class G4GDMLWriteParamvol : public G4GDMLWriteSetup
 {

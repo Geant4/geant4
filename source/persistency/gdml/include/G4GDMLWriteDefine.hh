@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.hh,v 1.13 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.hh,v 1.14 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,8 +41,11 @@
 #ifndef _G4GDMLWRITEDEFINE_INCLUDED_
 #define _G4GDMLWRITEDEFINE_INCLUDED_
 
+#include "G4Types.hh"
+#include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+
 #include "G4GDMLWrite.hh"
-#include <sstream>
 
 class G4GDMLWriteDefine : public G4GDMLWrite
 {

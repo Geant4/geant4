@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.54 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.55 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -33,7 +33,14 @@
 //
 // --------------------------------------------------------------------
 
+#include <sys/stat.h>
+#include <iostream>
+
 #include "G4GDMLWrite.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4Transform3D.hh"
+#include "G4PVDivision.hh"
 
 G4bool G4GDMLWrite::addPointerToName = true;
 

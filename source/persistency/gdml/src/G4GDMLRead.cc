@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.44 2009-03-02 09:45:27 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.45 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -32,13 +32,16 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
+#include "globals.hh"
+
 #include "G4GDMLRead.hh"
+
+#include "G4UnitsTable.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4UnitsTable.hh"
 
 G4GDMLRead::G4GDMLRead()
   : validate(true), check(false), inLoop(0), loopCount(0)

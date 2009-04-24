@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.19 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.20 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -34,6 +34,11 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadMaterials.hh"
+
+#include "G4Element.hh"
+#include "G4Isotope.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
 
 G4GDMLReadMaterials::G4GDMLReadMaterials() : G4GDMLReadDefine()
 {

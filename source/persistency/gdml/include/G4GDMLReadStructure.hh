@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.26 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.27 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,22 +41,13 @@
 #ifndef _G4GDMLREADSTRUCTURE_INCLUDED_
 #define _G4GDMLREADSTRUCTURE_INCLUDED_
 
-#include "G4AssemblyVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4PVDivision.hh"
-#include "G4PVPlacement.hh"
-#include "G4PVReplica.hh"
-#include "G4SolidStore.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ReflectionFactory.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalSkinSurface.hh"
-#include "G4LogicalBorderSurface.hh"
-#include "G4PVDivisionFactory.hh"
+#include "G4Types.hh"
+#include "geomdefs.hh"
 
 #include "G4GDMLReadParamvol.hh"
+
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 struct G4GDMLAuxPairType
 {

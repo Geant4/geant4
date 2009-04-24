@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.29 2009-02-27 15:08:05 gcosmo Exp $
+// $Id: G4GDMLRead.hh,v 1.30 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -46,13 +46,12 @@
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/dom/DOM.hpp>
 
+#include "G4Types.hh"
+
 #include "G4GDMLEvaluator.hh"
 
-#include "G4LogicalVolume.hh"
-#include "G4VisAttributes.hh"
-#include "G4PVPlacement.hh"
-
-#include <sstream>
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 class G4GDMLErrorHandler : public xercesc::ErrorHandler
 {

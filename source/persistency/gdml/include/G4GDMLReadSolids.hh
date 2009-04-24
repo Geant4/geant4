@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.14 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLReadSolids.hh,v 1.15 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,41 +41,14 @@
 #ifndef _G4GDMLREADSOLIDS_INCLUDED_
 #define _G4GDMLREADSOLIDS_INCLUDED_
 
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Ellipsoid.hh"
-#include "G4EllipticalCone.hh"
-#include "G4EllipticalTube.hh"
-#include "G4ExtrudedSolid.hh"
-#include "G4Hype.hh"
-#include "G4IntersectionSolid.hh"
-#include "G4Orb.hh"
-#include "G4Para.hh"
-#include "G4Paraboloid.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-#include "G4QuadrangularFacet.hh"
-#include "G4ReflectedSolid.hh"
-#include "G4Sphere.hh"
-#include "G4SolidStore.hh"
-#include "G4SubtractionSolid.hh"
-#include "G4TessellatedSolid.hh"
-#include "G4Tet.hh"
-#include "G4Torus.hh"
-#include "G4Transform3D.hh"
-#include "G4Trap.hh"
-#include "G4Trd.hh"
-#include "G4TriangularFacet.hh"
-#include "G4Tubs.hh"
-#include "G4TwistedBox.hh"
-#include "G4TwistedTrap.hh"
-#include "G4TwistedTrd.hh"
-#include "G4TwistedTubs.hh"
-#include "G4UnionSolid.hh"
-#include "G4OpticalSurface.hh"
-#include "G4SurfaceProperty.hh"
-
+#include "G4Types.hh"
 #include "G4GDMLReadMaterials.hh"
+#include "G4ExtrudedSolid.hh"
+
+class G4VSolid;
+class G4QuadrangularFacet;
+class G4TriangularFacet;
+class G4SurfaceProperty;
 
 class G4GDMLReadSolids : public G4GDMLReadMaterials
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.59 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.60 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -33,6 +33,17 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadStructure.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4ReflectionFactory.hh"
+#include "G4PVDivisionFactory.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4VisAttributes.hh"
 
 G4GDMLReadStructure::G4GDMLReadStructure() : G4GDMLReadParamvol()
 {

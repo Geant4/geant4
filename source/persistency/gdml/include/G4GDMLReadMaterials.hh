@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.10 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.hh,v 1.11 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,12 +42,12 @@
 #ifndef _G4GDMLREADMATERIALS_INCLUDED_
 #define _G4GDMLREADMATERIALS_INCLUDED_
 
-#include "G4Element.hh"
-#include "G4Isotope.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
-
+#include "G4Types.hh"
 #include "G4GDMLReadDefine.hh"
+
+class G4Element;
+class G4Isotope;
+class G4Material;
 
 class G4GDMLReadMaterials : public G4GDMLReadDefine 
 {

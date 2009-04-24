@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.40 2009-04-24 09:37:06 gcosmo Exp $
+// $Id: G4GDMLWrite.hh,v 1.41 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,17 +41,17 @@
 #ifndef _G4GDMLWRITE_INCLUDED_
 #define _G4GDMLWRITE_INCLUDED_
 
-#include <sys/stat.h>
-#include <iostream>
+#include <map>
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 
-#include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
-#include "G4PVDivision.hh"
+
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 class G4GDMLWrite
 {

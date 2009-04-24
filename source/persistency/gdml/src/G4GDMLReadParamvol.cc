@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.12 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLReadParamvol.cc,v 1.13 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadParamvol Implementation
@@ -33,6 +33,11 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLReadParamvol.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
 
 G4GDMLReadParamvol::G4GDMLReadParamvol() : G4GDMLReadSetup()
 {

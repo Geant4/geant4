@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.24 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteParamvol.cc,v 1.25 2009-04-24 15:34:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLParamVol Implementation
@@ -34,7 +34,21 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteParamvol.hh"
-#include <sstream>
+
+#include "G4Box.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Tubs.hh"
+#include "G4Cons.hh"
+#include "G4Sphere.hh"
+#include "G4Orb.hh"
+#include "G4Torus.hh"
+#include "G4Para.hh"
+#include "G4Hype.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVParameterised.hh"
+#include "G4VPVParameterisation.hh"
 
 G4GDMLWriteParamvol::
 G4GDMLWriteParamvol() : G4GDMLWriteSetup()
