@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.30 2009-04-23 17:44:43 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.31 2009-04-24 14:24:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -381,6 +381,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
+  /*
   if(cost > 1.0) {
     G4cout << "### G4BetheBlochModel WARNING: cost= " 
 	   << cost << " > 1 for "
@@ -395,6 +396,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 	   << G4endl;
     cost = 1.0;
   }
+  */
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi = twopi * G4UniformRand() ;
@@ -406,7 +408,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-                                                 deltaDirection,deltaKinEnergy);
+						   deltaDirection,deltaKinEnergy);
 
   vdp->push_back(delta);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.32 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.33 2009-04-24 14:24:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -292,10 +292,12 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
 					    G4double tmin,
 					    G4double maxEnergy)
 {
-  G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
+  G4double kineticEnergy = dp->GetKineticEnergy();
+  G4double tmax = kineticEnergy;
+  if(isElectron) tmax *= 0.5;
+  if(maxEnergy < tmax) tmax = maxEnergy;
   if(tmin >= tmax) return;
 
-  G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
   G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
   G4double xmin   = tmin/kineticEnergy;
@@ -399,7 +401,7 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-						 deltaDirection,deltaKinEnergy);
+						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
 }
 
