@@ -6,34 +6,11 @@
   </argument>
   <argument name="test_ids">
     <set>
-      <text>exam-adv-air_shower-build</text>
-      <text>exam-adv-brachytherapy-build</text>
-      <!--text>exam-adv-cell_irradiation-build</text NOT TAGGED-->
-      <text>exam-adv-composite_calorimeter-build</text>
-      <text>exam-adv-cosmicray_charging-build</text>
-      <text>exam-adv-gammaray_telescope-build</text>
-      <text>exam-adv-hadrontherapy-build</text>
-      <!--text>exam-adv-human_phantom-build</text EXTERNAL REQUIREMENTS: SAXANA-->
-      <text>exam-adv-lar_calorimeter-build</text>
-      <text>exam-adv-medical_linac-build</text>
       <text>exam-adv-microbeam-build</text>
       <text>exam-adv-microdosimetry-build</text>
+      <text>exam-adv-cosmicray_charging-build</text>
       <text>exam-adv-nanobeam-build</text>
-      <text>exam-adv-purging_magnet-build</text>
-      <text>exam-adv-radiation_monitor-build</text>
-      <text>exam-adv-radioprotection-build</text>
-      <text>exam-adv-rich-build</text>
-      <!--text>exam-adv-tiara-build</text EXTERNAL REQUIREMENTS: SWIG-->
-      <text>exam-adv-underground_physics-build</text>
-      <text>exam-adv-xray_fluorescence-build</text>
-      <text>exam-adv-xray_telescope-build</text>
-      <text>exam-ext-analysis-a01-build</text>
-      <text>exam-ext-analysis-anaex01-build</text>
-      <!--text>exam-ext-analysis-anaex02-build</text NOT TAGGED-->
-      <text>exam-ext-analysis-n03con-build</text>
       <text>exam-ext-biasing-b01-build</text>
-      <!--text>exam-ext-biasing-b02-build</text EXTERNAL REQUIREMENTS: AIDA-->
-      <!--text>exam-ext-biasing-b03-build</text NOT TAGGED-->
       <text>exam-ext-electromagnetic-testem0-build</text>
       <text>exam-ext-electromagnetic-testem1-build</text>
       <text>exam-ext-electromagnetic-testem10-build</text>
@@ -53,49 +30,18 @@
       <text>exam-ext-electromagnetic-testem7-build</text>
       <text>exam-ext-electromagnetic-testem8-build</text>
       <text>exam-ext-electromagnetic-testem9-build</text>
-      <text>exam-ext-errorpropagation-build</text>
-      <text>exam-ext-eventgenerator-exgps-build</text>
-      <!--text>exam-ext-eventgenerator-hepmc-hepmcex01-build</text EXTERNAL REQUIREMENTS: HepMC-->
-      <!--text>exam-ext-eventgenerator-hepmc-hepmcex02-build</text EXTERNAL REQUIREMENTS: HepMC-->
-      <!--text>exam-ext-eventgenerator-hepmc-mctruth-build</text EXTERNAL REQUIREMENTS: HepMC-->
-      <!--text>exam-ext-eventgenerator-pythia-decayer6-build</text EXTERNAL REQUIREMENTS: PYTHIA.F-->
-      <text>exam-ext-exoticphysics-monopole-build</text>
       <text>exam-ext-field-field01-build</text>
       <text>exam-ext-field-field02-build</text>
       <text>exam-ext-field-field03-build</text>
       <text>exam-ext-field-field04-build</text>
-      <text>exam-ext-g3tog4-clgeometry-build</text>
       <text>exam-ext-g3tog4-cltog4-build</text>
-      <!--text>exam-ext-gdml-build</text NOT TAGGED-->
-      <text>exam-ext-geometry-olap-build</text>
-      <text>exam-ext-hadronic-hadr00-build</text>
+      <text>exam-ext-g3tog4-clgeometry-build</text>
       <text>exam-ext-hadronic-hadr01-build</text>
-      <text>exam-ext-medical-dicom-build</text>
       <text>exam-ext-medical-fanocavity-build</text>
       <text>exam-ext-medical-fanocavity2-build</text>
       <text>exam-ext-medical-gammatherapy-build</text>
       <text>exam-ext-optical-lxe-build</text>
-      <text>exam-ext-parallel-exdiane-build</text>
-      <!--text>exam-ext-parallel-mpi-exmpi01-build</text EXTERNAL REQUIREMENTS: MPIC++-->
-      <!--text>exam-ext-parallel-mpi-exmpi02-build</text EXTERNAL REQUIREMENTS: MPIC++-->
-      <!--text>exam-ext-parallel-mpi-mpi_interface-build</text EXTERNAL REQUIREMENTS: MPIC++-->
-      <!--text>exam-ext-parallel-parn02-build</text EXTERNAL REQUIREMENTS: TOPC-->
-      <!--text>exam-ext-parallel-parn04-build</text EXTERNAL REQUIREMENTS: TOPC-->
-      <text>exam-ext-parameterisations-gflash-build</text>
-      <text>exam-ext-persistency-gdml-g01-build</text>
-      <text>exam-ext-persistency-gdml-g02-build</text>
-      <text>exam-ext-persistency-gdml-g03-build</text>
-      <!--text>exam-ext-persistency-p01-build</text EXTERNAL REQUIREMENTS: ROOT-->
-      <!--text>exam-ext-persistency-p02-build</text EXTERNAL REQUIREMENTS: ROOT-->
-      <text>exam-ext-persistency-p03-build</text>
       <text>exam-ext-polarisation-pol01-build</text>
-      <text>exam-ext-radioactivedecay-exrdm-build</text>
-      <text>exam-ext-runandevent-re01-build</text>
-      <text>exam-ext-runandevent-re02-build</text>
-      <text>exam-ext-runandevent-re03-build</text>
-      <text>exam-ext-visualization-perspective-build</text>
-      <text>exam-ext-visualization-standalone-build</text>
-      <text>exam-ext-visualization-uservisaction-build</text>
       <text>exam-nov-n01-build</text>
       <text>exam-nov-n02-build</text>
       <text>exam-nov-n03-build</text>
@@ -119,30 +65,25 @@
       <text>test18-build</text>
       <text>test19-build</text>
       <text>test20-build</text>
-      <text>test201-build</text>
-      <text>test202-build</text>
       <text>test21-build</text>
       <text>test22-build</text>
       <text>test23-build</text>
       <text>test24-build</text>
       <text>test25-build</text>
-      <text>test26-build</text>
       <text>test27-build</text>
       <text>test28-build</text>
       <text>test29-build</text>
-      <text>test30-build</text>
       <text>test31-build</text>
       <text>test32-build</text>
       <text>test33-build</text>
       <text>test34-build</text>
       <text>test35-build</text>
-      <text>test36-build</text>
       <text>test37-build</text>
       <text>test39-build</text>
-      <text>test40-build</text>
       <text>test41-build</text>
-      <text>test50-build</text>
-      <text>test52-build</text>
+      <text>test40-build</text>
+      <text>test53-build</text>
+      <text>test54-build</text>
       <text>test61-build</text>
       <text>test62-build</text>
     </set>
