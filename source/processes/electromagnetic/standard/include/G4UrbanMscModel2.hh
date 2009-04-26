@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.14 2009-04-23 19:28:28 vnivanch Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.15 2009-04-26 07:01:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -220,13 +220,11 @@ void G4UrbanMscModel2::UpdateCache()
   lnZ = std::log(Zeff);
 
   coeffth1 = 1.0;
-  if(Zeff < 13.) {
-    coeffth2 = 7.091e-2 - Zeff*(3.716e-3 - 1.470e-4*Zeff);
-    coeffc1  = 1.901 + 2.22e-3*Zeff;
-  } else {
-    coeffth2 = 4.607e-2 + 1.065e-4*Zeff;
-    coeffc1  = 1.72 + 5.5e-5*(75. - Zeff)*(75. - Zeff);
-  }
+  if(Zeff < 6.) coeffth2 = 1.53206e-1-Zeff*(3.56055e-2-Zeff*2.976e-3);
+  else          coeffth2 = 4.607e-2+1.065e-4*Zeff;
+
+  if(Zeff < 13.) coeffc1  = 1.901 + 2.22e-3*Zeff;
+  else           coeffc1  = 1.72 + 5.5e-5*(75. - Zeff)*(75. - Zeff);
   if(Zeff < 47.) coeffc2 = 1.e-3 + 6.5e-6*(47. - Zeff)*(47. - Zeff);
   else           coeffc2 = 1.89e-3 - 1.89e-5*Zeff;
 
