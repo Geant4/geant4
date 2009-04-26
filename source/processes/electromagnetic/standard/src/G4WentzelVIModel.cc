@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.23 2009-04-24 17:14:40 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.24 2009-04-26 15:26:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,7 +96,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
-  lowEnergyLimit = keV;
+  lowEnergyLimit = 0.1*keV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = DBL_MIN;
@@ -194,16 +194,16 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
       }
       y = 0.0;
     }
-    xSection += y/targetZ;
+    xSection = y/targetZ;
   }
-  /*
-  G4cout << "G4WentzelVIModel:XS per A " << " Z= " << targetZ << " e(MeV)= " << tkin/MeV 
+  /*  
+  G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
+	 << " e(MeV)= " << tkin/MeV << " XSel= " << xSection
 	 << " cut(MeV)= " << ecut/MeV  
   	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
 	 << " zmaxN= " << (1.0 - cosTetMaxNuc2)/screenZ 
          << " costm= " << cosTetMaxNuc2 << G4endl;
   */
-
   // scattering off nucleus
   if(cosTetMaxNuc2 < 1.0) {
     x  = 1.0 - cosTetMaxNuc2;
@@ -211,10 +211,9 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     x2 = 1.0/(1.0 - x1); 
     x3 = x/screenZ;
     x4 = formfactA*x;
-    //G4cout << "x1= " <<x1<<"  x2= " <<x2<<"  x3= "<<x3<<"  x4= " << x4<<G4endl;
     // low-energy limit
     if(x3 < numlimit && x1 < numlimit) {
-      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.333333*x3 + 1.5*x3*x3 - 1.5*x1
+      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.3333333*x3 + 1.5*x3*x3 - 1.5*x1
       			      + 3.0*x1*x1 + 2.666666*x3*x1);
       // high energy limit
     } else if(1.0 < x1) {
@@ -225,6 +224,8 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
       y = ((1.0 + x1)*x2*log((1. + x3)/(1. + x4)) 
 	   - x3/(1. + x3) - x4/(1. + x4))*x2*x2; 
     }
+    //G4cout << "y= " << y << " x1= " <<x1<<"  x2= " <<x2
+    //	   <<"  x3= "<<x3<<"  x4= " << x4<<G4endl;
     if(y < 0.0) {
       nwarnings++;
       if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) { 
@@ -240,9 +241,13 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xSection += y; 
   }
   xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2/mom2); 
-  //G4cout << "Z= " << targetZ << " XStot= " << xSection/barn << " screenZ= " << screenZ 
-  //	 << " formF= " << formfactA << " for " << particle->GetParticleName() 
-  //	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)<< G4endl;
+  /*
+  G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
+	 << " screenZ= " << screenZ << " formF= " << formfactA 
+	 << " for " << particle->GetParticleName() 
+  	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)
+	 << G4endl;
+  */
   return xSection; 
 }
 
