@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2009-04-24 09:10:22 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2009-04-26 16:16:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -335,7 +335,7 @@ void DetectorConstruction::PrintCalorParameters()
      << "\n ---> The calorimeter is " << nbOfSuperLayers << " superLayers"
      << "\n ---> A superLayer is " << nbOfLayers << " Layers";
      
-  G4cout 
+  G4cout  
      << "\n ---> A Layer is " << G4BestUnit(distanceInterLayers,"Length")  
      << " thickness of " << absorberMat->GetName();    
      
@@ -347,6 +347,10 @@ void DetectorConstruction::PrintCalorParameters()
      << "\n      ---> diameter : " << G4BestUnit(fiberDiameter,"Length")
      << "\n      ---> length   : " << G4BestUnit(fiberLength,"Length")
      << "\n      ---> distance : " << G4BestUnit(distanceInterFibers,"Length");
+     
+  G4cout 
+   << "\n\n ---> Total calor thickness " << G4BestUnit(calorThickness,"Length")
+   <<   "\n      Tranverse size        " << G4BestUnit(fiberLength,"Length");        
 
   G4cout << "\n-------------------------------------------------------------\n";
   G4cout << G4endl;

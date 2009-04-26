@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-04-24 09:10:22 maire Exp $
+$Id: History,v 1.4 2009-04-26 16:16:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26-04-09 mma
+- print calorimeter dimensions
      
 24-04-09 mma (amsEcal-V09-02-01)
 - add TrackingAction class
