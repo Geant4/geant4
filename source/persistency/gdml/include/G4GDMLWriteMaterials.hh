@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.hh,v 1.16 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.hh,v 1.17 2009-04-27 07:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    void ElementWrite(const G4Element* const);
    void MaterialWrite(const G4Material* const);
    void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
-   void PropertyVectorWrite(xercesc::DOMElement*, const G4String&,
+   void PropertyVectorWrite(const G4String&,
                             const G4MaterialPropertyVector* const);
  protected:
 

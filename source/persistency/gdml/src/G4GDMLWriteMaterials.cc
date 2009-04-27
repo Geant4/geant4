@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.23 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.cc,v 1.24 2009-04-27 07:22:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
@@ -191,9 +191,8 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
    materialsElement->appendChild(materialElement);
 }
 
-void G4GDMLWriteMaterials::PropertyVectorWrite(xercesc::DOMElement* matElement,
-                                    const G4String& key,
-                                    const G4MaterialPropertyVector* const pvec)
+void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
+                           const G4MaterialPropertyVector* const pvec)
 {
    xercesc::DOMElement* matrixElement = NewElement("matrix");
    matrixElement->setAttributeNode(NewAttribute("name", key));
@@ -228,7 +227,7 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
       propElement = NewElement("property");
       propElement->setAttributeNode(NewAttribute("name", mpos->first));
       propElement->setAttributeNode(NewAttribute("ref", mpos->first));
-      PropertyVectorWrite(matElement, mpos->first, mpos->second);
+      PropertyVectorWrite(mpos->first, mpos->second);
       matElement->appendChild(propElement);
    }
    for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
