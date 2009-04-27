@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.52 2009-04-08 16:55:44 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.53 2009-04-27 17:03:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -710,7 +710,7 @@ int G4OpenGLXViewer::generateEPSX (const char* filnam,
 	
   pixels = new GLubyte[size];
   if (pixels == NULL)
-    return NULL;
+    return 0;
   for (int y = 0; y<size; y++) {
     pixels[y] = 0;
   }
