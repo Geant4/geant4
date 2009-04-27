@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2009-04-08 15:26:59 lgarnier Exp $
+$Id: History,v 1.6 2009-04-27 15:09:10 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 April 2009, Laurent Garnier
+ - gl2ps/src/gl2ps.cc : Fix some warnings on Linux
 
 8 April 2009, Laurent Garnier
  - gl2ps/include/G4OpenGL2PSAction.hh : Add missing header methods(forgot
