@@ -10,12 +10,12 @@ class Geant4Test (ShellCommandTest):
     bindir = os.environ['G4BIN']
     system = os.environ['G4SYSTEM']
    
+    self.command = self.command.replace('$G4INSTALL',installdir)
+    self.command = self.command.replace('$G4BIN',bindir)
+    self.command = self.command.replace('$G4SYSTEM',system)
+
     if sys.platform == 'win32':
-        self.command = self.command.replace('$G4INSTALL',installdir)
-        self.command = self.command.replace('$G4BIN',bindir)
-        self.command = self.command.replace('$G4SYSTEM',system)
         self.command = self.command.replace(';',' && ')
-       
         self.command = self.command.replace('/','\\')
        
         folder = self.command.split('&&')
