@@ -1,4 +1,4 @@
-$Id: README,v 1.25 2008-12-13 16:51:58 vnivanch Exp $
+$Id: README,v 1.26 2009-04-28 14:39:40 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -73,6 +73,9 @@ test50 ## Statistical test suite for e.m. processes:
        ## 4) e-  backscattering;
        ## 5) e-,e+ transmission.
 test52 ## EM low-energy (standard, low-energy, Penelope)
+test53 ## EM low-energy Penelope
+test54 ## EM low-energy Livermore
+test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
 test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
 test201 # Visualization and graphical interfaces
