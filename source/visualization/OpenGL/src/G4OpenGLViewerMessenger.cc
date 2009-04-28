@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.16 2009-03-18 14:34:28 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.17 2009-04-28 15:05:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -270,6 +270,7 @@ void G4OpenGLViewerMessenger::SetNewValue
     {
       if (newValue == "vectored") pOGLViewer->fVectoredPs = true;
       if (newValue == "pixmap") pOGLViewer->fVectoredPs = false;
+      return;
     }
 
   if (command == fpCommandTransparency)
@@ -277,19 +278,21 @@ void G4OpenGLViewerMessenger::SetNewValue
       pOGLViewer->transparency_enabled = command->ConvertToBool(newValue);
       if (pOGLViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
   G4OpenGLStoredViewer* pOGLSViewer =
     dynamic_cast<G4OpenGLStoredViewer*>(pViewer);
 
-  if (!pOGLSViewer) {
-    G4cout <<
+  if (!pOGLSViewer)
+    {
+      G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type OGLS."
   "\n  The time slice viewing feature is only implemented for OGL Stored"
   "\n  viewers at present.  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
-           << G4endl;
-    return;
-  }
+	     << G4endl;
+      return;
+    }
 
   if (command == fpCommandDisplayHeadTime)
     {
@@ -305,6 +308,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       pOGLSViewer->fDisplayHeadTimeRed = red;
       pOGLSViewer->fDisplayHeadTimeGreen = green;
       pOGLSViewer->fDisplayHeadTimeBlue = blue;
+      return;
     }
 
   if (command == fpCommandDisplayLightFront)
@@ -328,6 +332,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       pOGLSViewer->fDisplayLightFrontRed = red;
       pOGLSViewer->fDisplayLightFrontGreen = green;
       pOGLSViewer->fDisplayLightFrontBlue = blue;
+      return;
     }
 
   if (command == fpCommandEndTime)
@@ -346,6 +351,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
   if (command == fpCommandFade)
@@ -371,6 +377,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
 }

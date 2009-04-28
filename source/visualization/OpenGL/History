@@ -1,4 +1,4 @@
-$Id: History,v 1.137 2009-04-28 14:33:04 lgarnier Exp $
+$Id: History,v 1.138 2009-04-28 15:05:22 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+28th April 2009, John Allison
+ - G4OpenGLViewerMessenger.cc: Added return statement at end of every
+   "if (command == ..." statement.  (Because of test for OGLS, it is
+   not elegant to use "if...else if...else" structure.)
+
 28th April 2009, Laurent Garnier
  - G4OpenGLXViewer,G4OpenGLViewer : End of moving printEPS and associated 
    functions from GLXViewer to GLViewer.   
