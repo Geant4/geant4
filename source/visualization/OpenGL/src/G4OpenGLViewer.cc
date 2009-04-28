@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.53 2009-04-08 16:55:44 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.54 2009-04-28 14:33:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -463,6 +463,7 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
   glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
   glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
 
+  glReadBuffer(GL_FRONT);
   glReadPixels (0, 0, (GLsizei)width, (GLsizei)height, format, GL_UNSIGNED_BYTE, (GLvoid*) buffer);
 
   glPixelStorei (GL_UNPACK_SWAP_BYTES, swapbytes);

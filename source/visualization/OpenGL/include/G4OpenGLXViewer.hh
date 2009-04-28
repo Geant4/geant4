@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.31 2009-04-08 16:55:44 lgarnier Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.32 2009-04-28 14:33:04 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,13 +62,11 @@ protected:
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
   virtual void CreateFontLists ();
-  void printEPS();
 
   static int snglBuf_RGBA[12];
   static int dblBuf_RGBA[13];
 
 //////////////////////////////Pixmap (screen dump) production functions/////
-  GLXContext create_GL_print_context (XVisualInfo*& pvi);
 
   XWindowAttributes                 xwa;
   Display                           *dpy;
@@ -96,9 +94,6 @@ protected:
   XTextProperty                     windowName,
                                     iconName;
   char                              charViewName [100];
-
-  bool grabPixelsX (unsigned int width, unsigned int height,GLenum format, GLubyte* buffer);
-  int generateEPSX (const char* filnam,int inColour, unsigned int width,unsigned int height);
 
 
 private:
