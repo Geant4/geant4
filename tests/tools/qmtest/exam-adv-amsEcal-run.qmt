@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-adv-amsEcal</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-adv-amsEcal-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
