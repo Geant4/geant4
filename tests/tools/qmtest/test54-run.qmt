@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/tests/test54; $G4BIN/$G4SYSTEM/test54 standard.mac</text>
+    <text>cd $G4INSTALL/tests/test54; $G4BIN/$G4SYSTEM/test54 test54.in</text>
   </argument>
   <argument name="stderr">
     <text/>
