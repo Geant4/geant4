@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IronStoppingICRU73.cc,v 1.4 2009-03-18 10:15:10 alechner Exp $
+// $Id: G4IronStoppingICRU73.cc,v 1.5 2009-04-29 13:31:48 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -52,11 +52,11 @@ G4IronStoppingICRU73::G4IronStoppingICRU73(G4bool splineFlag)
 {
   spline = splineFlag;
 
-  G4int matZ[16] = {1,2,4,6,7,8,10,13,14,18,22,26,28,29,32,36};
+  G4int matZ[17] = {1,2,4,6,7,8,10,13,14,18,22,26,28,29,32,36,1000};
 
-  G4String matName[16] = {"G4_H", "G4_He", "G4_Be", "G4_C", "G4_N", "G4_O", "G4_Ne", "G4_Al", "G4_Si", "G4_Ar", "G4_Ti", "G4_Fe", "G4_Ni", "G4_Cu", "G4_Ge", "G4_Kr"};
+  G4String matName[17] = {"G4_H", "G4_He", "G4_Be", "G4_C", "G4_N", "G4_O", "G4_Ne", "G4_Al", "G4_Si", "G4_Ar", "G4_Ti", "G4_Fe", "G4_Ni", "G4_Cu", "G4_Ge", "G4_Kr","G4_WATER"};
 
-  for( size_t i = 0; i < 16; i++ ) {
+  for( size_t i = 0; i < 17; i++ ) {
       atomicNumbersMat.push_back( matZ[i] );
       namesMat.push_back( matName[i] );
   }
@@ -155,7 +155,7 @@ G4double G4IronStoppingICRU73::GetDEDX(G4double kinEnergyPerNucleon,
      G4double lowerEnergyEdge = physicsVector -> GetLowEdgeEnergy(0);
      G4double upperEnergyEdge = physicsVector -> GetLowEdgeEnergy(nmbBins-1);
 
-     if(kinEnergyPerNucleon < upperEnergyEdge) {
+     if(kinEnergyPerNucleon <= upperEnergyEdge) {
      	  G4bool b;
  
         if(kinEnergyPerNucleon < lowerEnergyEdge) {
@@ -293,6 +293,11 @@ G4PhysicsVector* G4IronStoppingICRU73::GetPhysicsVector(
 
     G4double Kr_Fe[53] ={2.888E+00, 3.222E+00, 3.838E+00, 4.386E+00, 4.875E+00, 5.326E+00, 5.754E+00, 6.164E+00, 6.563E+00, 8.427E+00, 9.958E+00, 1.119E+01, 1.221E+01, 1.383E+01, 1.508E+01, 1.608E+01, 1.689E+01, 1.753E+01, 1.802E+01, 1.840E+01, 1.922E+01, 1.926E+01, 1.903E+01, 1.870E+01, 1.792E+01, 1.712E+01, 1.635E+01, 1.563E+01, 1.496E+01, 1.433E+01, 1.375E+01, 1.139E+01, 9.689E+00, 8.425E+00, 7.454E+00, 6.071E+00, 5.143E+00, 4.482E+00, 3.990E+00, 3.610E+00, 3.309E+00, 3.064E+00, 2.309E+00, 1.921E+00, 1.685E+00, 1.526E+00, 1.327E+00, 1.209E+00, 1.133E+00, 1.081E+00, 1.044E+00, 1.016E+00, 9.949E-01};
     physicsVector = CreatePhysicsVector(E,Kr_Fe,factor);
+  }
+  else if(matName == namesMat[16]) {
+
+    G4double WATER_Fe[53] ={6.5394, 7.3060, 8.7367, 10.0690, 11.3310, 12.5470, 13.7280, 14.8780, 15.9980, 21.1160, 25.4850, 29.1260, 32.0640, 36.1770, 38.6920, 40.2760, 41.2950, 41.9530, 42.3710, 42.6210, 42.5910, 41.6900, 40.5190, 39.2690, 36.8000, 34.5040, 32.4190, 30.5410, 28.8480, 27.3170, 25.9310, 20.6170, 17.0680, 14.5540, 12.6930, 10.1410, 8.4892, 7.3402, 6.4976, 5.8545, 5.3479, 4.9387, 3.6892, 3.0503, 2.6620, 2.4014, 2.0756, 1.8825, 1.7569, 1.6702, 1.6079, 1.5619, 1.5267};
+    physicsVector = CreatePhysicsVector(E,WATER_Fe,factor);
   }
 
   if(physicsVector != 0) {

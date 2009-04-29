@@ -52,37 +52,31 @@ G4String NameMaterial[31]={"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","
 //G4double G4SimpleMaterialStoppingICRU73::GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy)
 //G4double G4IronStoppingICRU73::GetDEDX(G4int idxMaterial, G4double kinEnergy)
 
-  G4int idxmat = 11;
-  G4int idxion = 5; 
+  G4String matN = "G4_NYLON-6/6";
+  G4int ionZ = 14; 
   G4double Energy = .5;
   G4MaterialStoppingICRU73 mS;
-  G4double dedx = mS.GetDEDX(Z_Ion[idxion],idxmat,Energy*MeV*AA_Ion[idxion]);
-  G4String matN = mS.GetMaterialName(idxmat);
-  G4double dens = mS.GetDensity(idxmat);
-  G4cout << "Z=" << Z_Ion[idxion] << " in " << matN << " at E = " << Energy << "MeV, DEDX is "<< dedx*mm/MeV << " MeV/mm,  or " 
-  << dedx*gram/(1000*dens*MeV*cm2) << " MeV/g/cm2, Density= " << dens*cm3/gram << " g/cm3 " << G4endl;
+  G4double dedx = mS.GetDEDX(Energy,ionZ, matN);
+  G4cout << "Z=" << ionZ << " in " << matN << " at E = " << Energy << "MeV, DEDX is "<< dedx*gram/(1000*MeV*cm2) << G4endl;
+  matN = "G4_NYLON-6/6";
+  dedx = mS.GetDEDX(Energy, 3, matN);
+  G4cout << "Z=" << ionZ << " in " << matN << " at E = " << Energy << "MeV, DEDX is "<< dedx*gram/(1000*MeV*cm2) << G4endl;
 
-  idxmat = 20;
-  idxion = 5;
-  Energy = 1.;
+  matN = "G4_Cu";
+  ionZ = 5; 
+  Energy = 5.;
   G4SimpleMaterialStoppingICRU73 mS1;
-  G4double dedx1 = mS1.GetDEDX(Z_Ion[idxion],idxmat,Energy*MeV*AA_Ion[idxion]);
-  G4String matN1 = mS1.GetMaterialName(idxmat);
-  G4double dens1 = mS1.GetDensity(idxmat);
-  G4cout << "Z=" << Z_Ion[idxion] << " in " << matN1 << "               at E = " << Energy << "MeV, DEDX is "
-	 << dedx1*mm/MeV << " MeV/mm, or " 
-	 << dedx1*gram/(1000*dens1*MeV*cm2) << " MeV/g/cm2, Density= " << dens1*cm3/gram << " g/cm3 " << G4endl;
+  G4double dedx1 = mS1.GetDEDX(Energy,ionZ, matN);
+  G4cout << "Z=" << ionZ << " in " << matN << " at E = " << Energy << "MeV, DEDX is "<< dedx1*gram/(1000*MeV*cm2) << G4endl;
      
-  idxmat = 10;
-  Energy = .5;
+  matN = "G4_WATER";
+  ionZ = 26; 
+  Energy = 10.;
   G4IronStoppingICRU73 mS2;
-  G4double dedx2 = mS2.GetDEDX(idxmat,Energy*MeV*56);
-  G4String matN2 = mS2.GetMaterialName(idxmat);
-  G4double dens2 = mS2.GetDensity(idxmat);
-  G4cout << "Z=26 in " << matN2 << "               at E = " << Energy << "MeV, DEDX =" << dedx2*mm/MeV << " MeV/mm,  or " 
-	  << dedx2*gram/(1000*dens2*MeV*cm2) << " MeV/g/cm2,  Density= " << dens2*cm3/gram << " g/cm3 " << G4endl;
-   G4cout << "### End ###" << G4endl; 
-   
+  G4double dedx2 = mS2.GetDEDX(Energy,ionZ, matN);
+  G4cout << "Z=26 in " << matN << " at E = " << Energy << "MeV, DEDX =" << dedx2*gram/(1000*MeV*cm2)<< " MeV" << G4endl;
+  G4cout << "### End ###" << G4endl; 
+  
    return 0;
 } 
 
