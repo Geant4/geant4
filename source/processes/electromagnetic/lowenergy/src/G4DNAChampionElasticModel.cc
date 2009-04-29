@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.3 2009-02-16 11:00:11 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.4 2009-04-29 13:43:00 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -254,8 +254,12 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
  {
   const G4String& particleName = p->GetParticleName();
 
-  if (ekin >= lowEnergyLimitOfModel && ekin < highEnergyLimit)
+  if (ekin < highEnergyLimit)
   {
+      //SI : XS must not be zero otherwise sampling of secondaries method ignored
+      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
+      //      
+      
 	std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
 	pos = tableData.find(particleName);
 	

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.4 2009-02-16 11:00:11 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.5 2009-04-29 13:43:00 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -207,8 +207,13 @@ G4double G4DNAScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Mate
  if (flagMaterialIsWater)
  {
 
-  if (ekin >= lowEnergyLimitOfModel && ekin < highEnergyLimit)
+  if (ekin < highEnergyLimit)
   {
+      
+      //SI : XS must not be zero otherwise sampling of secondaries method ignored
+      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
+      //
+      
       G4double z = 10.;
       G4double n = ScreeningFactor(ekin,z);
       G4double crossSection = RutherfordCrossSection(ekin, z);
