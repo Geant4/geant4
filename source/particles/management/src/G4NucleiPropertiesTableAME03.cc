@@ -24,22 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.cc,v 1.1 2009-04-07 03:24:23 kurasige Exp $
+// $Id: G4NucleiPropertiesTableAME03.cc,v 1.2 2009-04-29 14:05:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
-//
-//      File name:     G4NucleiPropertiesTable.cc 
-//
-//      Authors:       Vicente Lara (Vicente.Lara@cern.ch)
-//                     Christian V'olcker (Christian.Volcker@cern.ch),
-//
-//      Creation date: November 1997
-//
-//      Modifications: 
 // -------------------------------------------------------------------
 //
 //      File name:     G4NucleiPropertiesTableAME03.cc 
@@ -47,16 +34,22 @@
 //      Authors:       Tatsumi Koi (tkoi@slac.stanford.edu)
 // 
 //      Data are update to 
-//      The Ame2003 atomic mass evaluation (II)  
-//      by G.Audi, A.H.Wapstra and C.Thibault";
+//      The Ame2003 atomic mass evaluation (II)
+//      by G.Audi, A.H.Wapstra and C.Thibault 
 //      Nuclear Physics A729 p. 337-676, December 22, 2003.
 //
+//      Creation date: Apr. 2009 
+//                     based on G4NucleiPropertiesTable
+//
+//      Modifications: 
+//
 
+#include "G4ios.hh"
 #include "G4NucleiPropertiesTableAME03.hh"
 
 // Class G4NucleiPropertiesTableAME03 
-
 // Determine the table index for a Nuclide with Z protons and A nucleons
+
 
 G4int G4NucleiPropertiesTableAME03::GetIndex(G4int Z, G4int A) 
 {

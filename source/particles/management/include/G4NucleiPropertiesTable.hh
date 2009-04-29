@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.14 2008-10-22 12:35:46 kurasige Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.15 2009-04-29 14:05:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
+//      GEANT 4 class file
 //
 //      File name:     G4NucleiPropertiesTable.cc 
 //
@@ -38,8 +36,6 @@
 //                     Christian V"olcker (Christian.Volcker@cern.ch),
 //
 //      Creation date: November 1997
-//
-//      Testfiles:
 //
 //      Modifications: 
 //

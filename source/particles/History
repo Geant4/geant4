@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2009-04-07 03:24:23 kurasige Exp $
+$Id: History,v 1.169 2009-04-29 14:05:12 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Apr. 29 2009      H.Kurashige  (particles-V09-02-04)
+- Clean up comments in G4NucleiPropertiesTableAME03 
+
 - Apr. 7 2009      H.Kurashige  (particles-V09-02-03)
-- Migrate to G4NucleiPropertiesTableAME03 (T.Koi) 
+- Migrate to use G4NucleiPropertiesTableAME03 instead of G4NucleiPropertiesTable
+- Introduce  G4NucleiPropertiesTableAME03 to use AME 03 mass table (T.Koi) 
 
 - Apr. 2 2009      H.Kurashige  (particles-V09-02-02)
 - Use std::fabs() instead of abs()

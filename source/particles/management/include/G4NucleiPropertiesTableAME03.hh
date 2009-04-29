@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -24,30 +23,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.hh,v 1.1 2009-04-07 03:24:23 kurasige Exp $
+// $Id: G4NucleiPropertiesTableAME03.hh,v 1.2 2009-04-29 14:05:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
-//
-//      File name:     G4NucleiPropertiesTable.cc 
-//
-//      Authors:       Vicente Lara (Vicente.Lara@cern.ch)
-//                     Christian V"olcker (Christian.Volcker@cern.ch),
-//
-//      Creation date: November 1997
-//
-//      Testfiles:
-//
-//      Modifications: 
-//
-// Migrate into particles category by H.Kurashige (17 Nov. 98)
-// Subtract electron mass by H.Kurashige
-// Avoid substraction of electron mass in Atomic masses by V.Lara (12 May 99)
-// Remove "theInstance"  by H.Kurashige (12 Dec. 03)
-// -------------------------------------------------------------------
 // -------------------------------------------------------------------
 //
 //      File name:     G4NucleiPropertiesTableAME03.cc 
@@ -56,14 +34,20 @@
 // 
 //      Data are update to 
 //      The Ame2003 atomic mass evaluation (II)  
-//      by G.Audi, A.H.Wapstra and C.Thibault";
+//      by G.Audi, A.H.Wapstra and C.Thibault
 //      Nuclear Physics A729 p. 337-676, December 22, 2003.
-#include "globals.hh"
-#include <cmath>
-
+//
+//      Creation date: Apr. 2009 
+//                     based on G4NucleiPropertiesTable
+//
+//      Modifications: 
+// 
 
 #ifndef G4NucleiPropertiesTableAME03_h
-#define G4NucleiPropertiesTableAME03_h 1
+#define G4NucleiPropertiesTableAME03_h  1
+
+#include <cmath>
+#include "globals.hh"
 
 // Class Description
 // Class: G4NucleiPropertiesTable
