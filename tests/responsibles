@@ -113,12 +113,13 @@ examples/novice/N06          gum@triumf.ca                   Peter Gumplinger
 examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
 examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   air_shower                 bernardo@lip.pt                 Bernardo Tome
+  amsEcal                    Michel.Maire@lapp.in2p3.fr      Michel Maire
   brachytherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
-  human_phantom              cirrone@lns.infn.it             Pablo Cirrone
+  human_phantom              sug@ansto.gov.au                Susanna Guatelli
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
   medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
@@ -235,6 +236,9 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test46                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test52                 Anton.Lechner@cern.ch	     Anton Lechner
+      test53                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test54                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+      test55                 Anton.Lechner@cern.ch	     Anton Lechner
       test61                 tkoi@slac.stanford.edu          Tatsumi Koi
       test62                 kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
       test201                barrand@lal.in2p3.fr            Guy Barrand
