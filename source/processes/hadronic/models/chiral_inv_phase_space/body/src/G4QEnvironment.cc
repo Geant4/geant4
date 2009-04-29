@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.141 2009-04-14 13:18:10 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.142 2009-04-29 10:52:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7102,13 +7102,51 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         }
         // @@ Add multybaryon decays if necessary
       }
-      else // If this Excepton shows up (lowProbable appearance) => include gamma decay
+      else if(reM>rnM-eps)    // Decay in nonstange and gamma
+      {
+        G4LorentzVector n4M(0.,0.,0.,rnM);
+        G4LorentzVector h4M(0.,0.,0.,0.);
+        G4double sum=rnM;
+        if(fabs(reM-sum)<eps) n4M=r4M;
+        else if(reM<sum || !G4QHadron(r4M).DecayIn2(n4M,h4M))
+        {
+          G4cerr<<"***G4QE::FSI:Hypern, M="<<reM<<"<A+n*Pi0="<<sum<<",d="<<sum-reM<<G4endl;
+          throw G4QException("***G4QEnvironment::FSInter: Hypernuclear gamma decay error");
+        }
+        curHadr->Set4Momentum(n4M);
+        curHadr->SetQPDG(G4QPDGCode(rnPDG));   // converted hypernucleus
+#ifdef fdebug
+        G4cout<<"*G4QE::FSI:HypNg "<<r4M<<"->A="<<rnPDG<<n4M<<",gamma="<<h4M<<G4endl;
+#endif
+        G4QHadron* theGamma = new G4QHadron(22,h4M);// Make a New Hadr for the gamma
+        theQHadrons.push_back(theGamma);      // (del.eq.- user is responsible for del)
+        if(rnPDG==90000002)                   // Additional action with curHadr change
+        {
+          G4LorentzVector newLV=n4M/2.;
+          curHadr->Set4Momentum(newLV);
+          curHadr->SetQPDG(G4QPDGCode(90000001));
+          G4QHadron* secHadr = new G4QHadron(curHadr);
+          theQHadrons.push_back(secHadr);     // (del.eq.- user is responsible for del)
+          //theFragments->push_back(secHadr);   // (del.eq.- user is responsible for del)
+        }
+        else if(rnPDG==90002000)              // Additional action with curHadr change
+        {
+          G4LorentzVector newLV=n4M/2.;
+          curHadr->Set4Momentum(newLV);
+          curHadr->SetQPDG(G4QPDGCode(90001000));
+          G4QHadron* secHadr = new G4QHadron(curHadr);
+          theQHadrons.push_back(secHadr);    // (del.eq.- user is responsible for del)
+          //theFragments->push_back(secHadr);    // (del.eq.- user is responsible for del)
+        }
+        // @@ Add multybaryon decays if necessary
+      }
+      else // If this Error shows up (lowProbable appearance) => now it is left as is
       {
         G4double d=rlM+MLa-reM;
-  G4cerr<<"G4QE::FSI:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
+        G4cerr<<"G4QE::FSI:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
         d=rnM+mPi0-reM;
-  G4cerr<<"***G4QE::FSI: HypN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
-        throw G4QException("G4QEnvironment::FSInteract: Hypernuclear conversion");
+        G4cerr<<"***G4QE::FSI: HypN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
+        //throw G4QException("G4QEnvironment::FSInteract: Hypernuclear conversion");
       }
     }
     //unsigned nHd=theQHadrons.size()-1;

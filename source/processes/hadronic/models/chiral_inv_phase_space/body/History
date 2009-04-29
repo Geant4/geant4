@@ -12,6 +12,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31-Mar-2008 M.Kosov               (hadr-chips-body-V09-02-03)
+-------------------------------------------------------------------
+The rare situation was Found by Alberto. It is improved in G4QEnvironment.
+When the Hypernucleus can not decay in the residual nucleus and pion, then
+now it is decayed in the residual nucleus and gamma. 
+
 31-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-04)
 -------------------------------------------------------------------
 - add more parentheses around && within || to satisfy gcc-4.3 compiler
