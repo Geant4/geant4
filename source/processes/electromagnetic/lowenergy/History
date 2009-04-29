@@ -1,4 +1,4 @@
-$Id: History,v 1.361 2009-04-29 13:43:00 sincerti Exp $
+$Id: History,v 1.362 2009-04-29 17:25:20 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.04.2009, S.Incerti, tag emlowen-V09-02-29
+            Increased energy range validity of e- elastic Champion model
+            up to 10 MeV (Geant4-DNA process). 
+            From this tag, G4LEDATA version 6.5 is needed.
 
 29.04.2009, S.Incerti, tag emlowen-V09-02-28
             Fixed cross section computation bug in:

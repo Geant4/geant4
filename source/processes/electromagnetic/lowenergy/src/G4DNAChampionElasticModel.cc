@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.4 2009-04-29 13:43:00 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.5 2009-04-29 17:25:21 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,7 +43,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
   killBelowEnergy = 8.23*eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
   lowEnergyLimitOfModel = 7 * eV; // The model lower energy is 7 eV
-  highEnergyLimit = 10 * keV;
+  highEnergyLimit = 10 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
@@ -58,7 +58,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
   G4cout << "Champion Elastic model is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / keV << " keV"
+         << highEnergyLimit / MeV << " MeV"
          << G4endl;
  
 }
@@ -103,7 +103,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   if (HighEnergyLimit() > highEnergyLimit)
   {
     G4cout << "G4DNAChampionElasticModel: high energy limit decreased from " << 
-        HighEnergyLimit()/keV << " keV to " << highEnergyLimit/keV << " keV" << G4endl;
+        HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
 
@@ -176,7 +176,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   G4cout << "Champion Elastic model is initialized " << G4endl
          << "Energy range: "
          << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / keV << " keV"
+         << HighEnergyLimit() / MeV << " MeV"
          << G4endl;
 
   if(!isInitialised) 
