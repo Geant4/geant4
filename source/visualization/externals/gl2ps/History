@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2009-04-27 15:29:46 allison Exp $
+$Id: History,v 1.8 2009-04-29 09:37:55 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 April 2009, Laurent Garnier
+ - G4OpenGL2PSAction : Fix a circular dependency to G4OpenGL on Linux
 
 27 April 2009, Laurent Garnier (visexternal-V09-02-03)
  - gl2ps/src/gl2ps.cc : Fix some warnings on Linux

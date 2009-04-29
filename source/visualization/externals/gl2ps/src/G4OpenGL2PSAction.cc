@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.3 2009-03-19 11:59:35 lgarnier Exp $
+// $Id: G4OpenGL2PSAction.cc,v 1.4 2009-04-29 09:37:55 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 #ifdef G4VIS_BUILD_OPENGL_GL2PS
 
 #include "G4OpenGL2PSAction.hh"
-#include "Geant4_gl2ps.h"
 
 
 G4OpenGL2PSAction::G4OpenGL2PSAction(

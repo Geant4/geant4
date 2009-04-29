@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh,v 1.2 2009-04-08 15:26:59 lgarnier Exp $
+// $Id: G4OpenGL2PSAction.hh,v 1.3 2009-04-29 09:37:55 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,7 @@
 
 
 #include <string>
-#include "G4OpenGL.hh"
+#include "Geant4_gl2ps.h"
 
 class G4OpenGL2PSAction {
 
