@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.15 2009-04-26 07:01:23 urban Exp $
+// $Id: G4UrbanMscModel2.hh,v 1.16 2009-04-29 13:30:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,12 +82,6 @@ public:
 				      G4double AtomicWeight=0., 
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
-
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double,
-			 G4double);
 
   void SampleScattering(const G4DynamicParticle*,
 			G4double safety);

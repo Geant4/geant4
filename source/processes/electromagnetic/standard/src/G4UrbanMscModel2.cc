@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.22 2009-04-23 11:51:43 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.23 2009-04-29 13:30:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1051,14 +1051,5 @@ G4double G4UrbanMscModel2::LatCorrelation()
 
   return latcorr;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4UrbanMscModel2::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-					 const G4MaterialCutsCouple*,
-					 const G4DynamicParticle*,
-					 G4double,
-					 G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
