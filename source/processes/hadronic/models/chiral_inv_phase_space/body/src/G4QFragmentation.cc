@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.4 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.5 2009-04-29 07:53:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -508,18 +508,20 @@ G4bool G4QFragmentation::EnergyAndMomentumCorrector(G4QHadronVector* Output,
       success = true;
       break;
     }
-#ifdef debug 
+#ifdef debug
     G4cout<<"G4QFragmentation::EnergyAndMomentumCorrector: Scale-1="<<Scale-1<<", TotM="
           <<TotalCollisionMass<<", Sum="<<Sum<<G4endl;
-#endif     
-  }   
+#endif
+  }
+#ifdef debug
   if(!success)
   {
     G4cout<<"***G4QFragmentation::EnergyAndMomentumCorrector: Scale #1 at end of loop M="
           <<TotalCollisionMass<<", S"<<Sum<<", Sc="<<Scale
-          <<" Increase number of attempts or increase ERRLIMIT"<<G4endl;
-    G4Exception("G4QFragmentation::SelectInteractions:","72",FatalException,"NotCorrect");
+          <<" Increase number of attempts or increase the ErrLimit parameter"<<G4endl;
+    //G4Exception("G4QFragmentation::EnergyAndMomCor:","72",FatalException,"NoCorrection");
   }
+#endif
   // Compute c.m.s. interaction velocity and KTV back boost
   Beta = TotalCollisionMom.boostVector(); 
   nOut=Output->size();

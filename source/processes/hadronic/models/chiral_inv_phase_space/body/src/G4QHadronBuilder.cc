@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.cc,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QHadronBuilder.cc,v 1.4 2009-04-29 07:53:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -142,6 +142,10 @@ G4QHadron* G4QHadronBuilder::Meson(G4QParton* black, G4QParton* white, Spin theS
     G4bool IsUp = (std::abs(id1)&1) == 0; // quark 1 is up type quark (u or c?)
     G4bool IsAnti = id1 < 0;              // quark 1 is an antiquark?
     if( (IsUp && IsAnti) || (!IsUp && !IsAnti) )  PDGEncoding = - PDGEncoding;
+    // Correction for the true neutral mesons
+    if( PDGEncoding == -111 || PDGEncoding == -113 || PDGEncoding == -223 || 
+        PDGEncoding == -221 || PDGEncoding == -331 || PDGEncoding == -333 )
+                                                               PDGEncoding = - PDGEncoding;
   }
   G4QHadron* Meson= new G4QHadron(PDGEncoding);
 #ifdef debug
@@ -151,7 +155,7 @@ G4QHadron* G4QHadronBuilder::Meson(G4QParton* black, G4QParton* white, Spin theS
           <<white->->GetParticleName()<<"), qM="<<Meson->GetCharge()<<"/"<<PDGEncoding
           <<G4endl;
 #endif
- return Meson;
+  return Meson;
 }
 
 G4QHadron* G4QHadronBuilder::Baryon(G4QParton* black, G4QParton* white, Spin theSpin)
@@ -220,5 +224,5 @@ G4QHadron* G4QHadronBuilder::Baryon(G4QParton* black, G4QParton* white, Spin the
           <<white->->GetParticleName()<<"), qB="<<Baryon->GetCharge()<<"/"<<PDGEncoding
           <<G4endl;
 #endif
- return Baryon;
+  return Baryon;
 }
