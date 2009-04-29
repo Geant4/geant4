@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IronStoppingICRU73.cc,v 1.5 2009-04-29 13:31:48 antoni Exp $
+// $Id: G4IronStoppingICRU73.cc,v 1.6 2009-04-29 13:51:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -36,6 +36,8 @@
 // Author:    A.Ivanchenko 10.08.2008
 //
 // Modifications:
+// 29.04.2009 A.Ivantchenko added data for G4WATER
+//            provided by  Prof.P.Sigmund Univ. Southern Denmark
 //
 //----------------------------------------------------------------------------
 //

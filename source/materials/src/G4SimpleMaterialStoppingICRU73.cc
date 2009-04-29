@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.6 2009-04-29 13:31:48 antoni Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.7 2009-04-29 13:51:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -36,6 +36,8 @@
 // Author:      A.Ivantchenko 07.08.2008
 //
 // Modifications:
+// 29.04.2009 A.Ivantchenko added revised data for G4_Cu
+//            provided by  Prof.P.Sigmund Univ. Southern Denmark
 //
 //----------------------------------------------------------------------------
 //
