@@ -1,0 +1,246 @@
+
+                       geant4-09-02-ref-04
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Making use of new experimental class G4NucleiPropertiesTableAME03
+   including data updated to the Ame-2003 atomic mass evaluation.
+ o Implemented virtual layer for allowing customisation of the GDML
+   writer for user-extended schemas.
+ o Implemented ability in GDML to read and write surface properties
+   associated to volumes and material properties.
+ o New physics lists: QGSP_FTFP_BERT, based on QGSP_BERT replacing the
+   bridging LEP with FTFP, and transitioning from BERT to FTFP between
+   7 and 9 GeV; QGSC_QGSC and QGSC_CHIPS, using the QGS model with different
+   interfaces to CHIPS at all energies.
+ o Cleanup of new model classes for Livermore and Penelope low-energy
+   processes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-05
+------
+- Corrections in analysis.gmk for AIDA setup on Windows.
+- Improved non-standard setup for Qt on Linux, Mac and Windows.
+- Removed "-lcxa -lunwind" LOADLIBS addition in Linux-icc.gmk,
+  no longer necessary since icc version 11.0.083.
+
+geometry/management                              geommng-V09-02-00
+-------------------
+- Adopt 'const' references for strings as arguments/return-values in
+  G4LogicalSurface. Some minor cleanup...
+
+geometry/solids/specific                         geom-specific-V09-02-01
+------------------------
+- Relaxed error condition in G4TessellatedSolid::Inside(p) to warning, for
+  excess of max trials and anomalous conditions in distance calculation.
+  Added more printout information when error condition is detected.
+
+materials                                        materials-V09-02-03
+---------
+- Use 'const' references for strings as arguments/return-values in material
+  properties tables and related classes. Inlined some methods and some minor
+  cleanup.
+- Added Entries() method to G4MaterialPropertyVector and accessors for maps
+  in G4MaterialPropertiesTable, required for internal use in persistency of
+  material properties. Make visible GetEntry() accessor in
+  G4MaterialPropertyVector for use restricted to persistency.
+
+particles                                        particles-V09-02-03
+---------
+- Make use of new experimental class G4NucleiPropertiesTableAME03
+  including data updated to the Ame-2003 atomic mass evaluation (II) by
+  G.Audi, A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.
+- Fixed use of std::fabs() in place of of abs().
+
+persistency/gdml                                 gdml-V09-02-13
+----------------
+- Correction in materials and solids tags for allowing parsing of
+  definitions within the tag scope; possibility foreseen by the schema.
+- Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
+  cases of nested displaced solids given to both operands in a Boolean
+  operation (ATLAS use case).
+- Completed virtual layer for allowing customisation of the writer for
+  user-extended schemas.
+- Implemented ability to write surface properties associated to volumes
+  and material properties.
+- Allow for reading/writing of constant material properties.
+- Defined missing copy constructor and operator=() to G4GDMLMatrix
+  internal class, to avoid cases of memory corruption when handling matrices.
+- Renamed flag for maximum number of transformations applied to a solid
+  and moved to G4GDMLWriteSolids base class.
+- Some code cleanup: rationalised inclusion of headers, replacing them
+  with forward declarations where possible.
+
+physics_lists                                    phys-lists-V09-02-15
+-------------
+- Added MaxEnergy() method in FTF builders.
+- Added QGSP_FTFP_BERT based on QGSP_BERT replacing the bridging LEP
+  with FTFP, and transitioning from BERT to FTFP between 7 and 9 GeV;
+- Added FB68 as variant of FTFP_BERT with transition between 6 and 8 GeV.
+- Added two new physics lists QGSC_QGSC and QGSC_CHIPS are added.
+  QGSC_QGSC physics list uses the QGS model with the MultiSoft
+  interface to CHIPS at all energies, starting from E=0. For neutrons
+  it still uses LHEP models for the radioactive capture and fission.
+  QGSC_CHIPS physics list uses the QGS model with the EnergyFlow
+  interface to CHIPS at all energies. For the pA interactions the
+  native CHIPS process G4QCollision is used below 290 MeV. The QGSC and
+  G4QCollision processes are unified in one process by the CHIPS
+  G4QDiscProcessMixer interface.
+  Added the corresponding physics builders.
+- Fixed G4EmLivermorePhysics, G4EmPenelopePhysics
+- Fix in G4HadronInelasticQBBC: cross sections are created dynamically
+  not by value, fission only instantiated for HP.
+- Fix to address problem report #1056: all cross section data sets are
+  created dynamically and no longer member of the class.
+- Inline constructor and destructors are moved to source for classes:
+  G4VNeutronBuilder, G4VPiKBuilder, G4VProtonBuilder, G4WarnPLStatus.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-02-01
+------------------------------------
+- Simplified initialisation in G4mplIonisationModel and G4eeToHadronsMultiModel.
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-27
+-----------------------------------
+- Cleanup of new model classes for Livermore and Penelope processes:
+  o defined high energy limit for a model in constructor;
+  o avoid overwriting default (zero) low energy limit of a model;
+  o avoid change of energy limits in initialisation methods;
+  o added MinEnergyCut() method for models used for energy loss;
+  o avoid change of track status inside the model for charged particles;
+  o simplified initialisation;
+  o protect all printouts by 'verbosityLevel' flag;
+  o removed MeanFreePath() method and table;
+  o cleaned logic in application of de-excitation module;
+  o use G4ElementSelector where possible;
+- Substituted 'set' variable in G4ShellVacancy; commented out destructor.
+- Fixed bug in G4PenelopeRayleigh (calculation of mfp for compounds).
+- Fixed bug with momentum normalization in G4PenelopeBremsstrahlungModel.
+  Fix in G4PenelopePhotoElectricModel to avoid misleading warnings.
+
+processes/electromagnetic/muons                  emmuons-V09-02-02
+-------------------------------
+- Simplified initialisation in G4MuBetheBlochModel, G4MuBremsstrahlungModel
+  and G4MuPairProductionModel.
+
+processes/electromagnetic/polarisation           empolar-V09-02-00
+--------------------------------------
+- Simplified initialisation in G4PolarizedAnnihilationModel.
+
+processes/electromagnetic/standard               emstand-V09-02-08
+----------------------------------
+- G4BetheBlochModel: fixed and simplified initialisation for ions needed for
+  the new G4IonParametrisedLossModel of low-energy package.
+- G4IonFluctuations: removed extra phenomenological factor in fluctuation width.
+- Added new class G4HeatedKleinNishinaCompton, prototype model for plasma.
+- Simplified initialisation of all models
+- Cleanup in G4GoudsmitSaundersonMscModel: discarded no scattering and single
+  scattering Theta sampling from SampleCosineTheta() which means the splitting
+  step into two sub-steps occurs only for multiple-scattering regime.
+- G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90: use methods of
+  G4VMscModel for interfacing to geometry.
+
+processes/electromagnetic/utils                  emutils-V09-02-06
+-------------------------------
+- G4EmModelManager:
+  o Fixed energy range selection algorithm for the case of
+    a small intersection of model energy intervals.
+  o Fixed energy range selection algorithm for the case when there is an
+    intersection of energy regions of standard and low-energy models.
+    Reduced internal vectors if no model per region are initialized;
+    avoid to initilise unused models.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering:
+  o Set high energy limit to 10 TeV and number of bins to 77.
+  o Added initialisation of G4EmConfigurator.
+  o Methods for initialisations are moved from inline to source.
+- Added G4EmConfigurator in G4LossTableManager providing easier addition of
+  models per region
+- G4VEmModel: multiple-scattering methods are moved to G4VMscModel; added
+  protected methods for initialisation of ParticleChange.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V09-02-02)
+  o Withdrawn changes introduced in previous tag; back to "hadr-casc-V09-02-00".
+- models/chiral_inv_phase_space (hadr-chips-V09-02-01)
+  o Better readability of the CHIPS code (get rid of tab's) and code
+    improvements.
+  o Tuning of the G4QCollision for better description of the pA interactions
+    (E<290 MeV).
+  o Improvement of the G4QuasiFreeRatios for application in QGSC from E=0.
+  o Order of models is changed in G4QDiscProcessMixer (was from L to H,
+    now from H to L).
+  o Bug fix in 'body' module against division by zero in G4QEnvironment;
+    improvement for the case when the Hypernucleus cannot decay in the
+    residual nucleus and pion; now it is decayed in the residual nucleus
+    and gamma. (hadr-chips-body-V09-02-03).
+- models/parton_string/hadronization (hadr-prtn-hadr-V09-02-01)
+  o Removed warning in G4ExcitedStringDecay for applying QGSC from zero energy.
+- models/parton_string/qgsm (hadr-qgsm-V09-02-01)
+  o Modifications in G4GammaParticipants and G4QGSParticipants for applying
+    QGSC from zero energy.
+- models/qmd (hadr-qmd-V09-02-01)
+  o Fixed bug in gamma (mass zero) participants in G4QMDCollision.
+  o Changed object data member to pointer in G4QMDReaction.
+- models/theo_high_energy (had-theo-HE-V09-02-02)
+  o Quasi Elastic part is made more used in QGSC at low energies to improve
+    the performance of QGSC at low energies.
+- processes (hadr-proc-V09-02-00)
+  o Fix to address problem report #1056: cross section data set now are
+    created dynamically in G4PhotoNuclearProcess, G4ElectronNuclearProcess
+    and G4PositronNuclearProcess.
+  o Moved inline constructor and destructors to source in class
+    G4PositronNuclearProcess.
+
+track                                track-V09-02-01
+-----
+- Modified implementation of GetVelocity() for particle-change for
+  performance improvement.
+
+examples                                         examples-V09-02-04
+--------
+- Updated reference outputs.
+- advanced/amsEcal (amsEcal-V09-02-01)
+  o New example implementing the AMS Ecal calorimeter.
+- advanced/lAr_calorimenter (lAr_calorimeter-V09-02-00)
+- advanced/human_phantom (human_phantom-V09-02-02)
+- advanced/medical_linac (medical_linac-V09-02-00)
+- advanced/purging_magnet (purtag-V09-02-00)
+  o Removed unnecessary AIDA setup in GNUmakefile.
+- advanced/radiation_monitor (radmon-V09-02-00)
+  o Added macros reproducing run results: new results with proton at
+    254MeV, 150 Mev and 50 Mev of energy; new macros with Kapton material.
+  o Changed limits of LENeutronInelastic for 0.1 GeV in
+    RadmonPhysicsNeutronBertini and RadmonPhysicsNeutronBinary classes.
+  o Fix for compilation error in RadmonTLabelledCollection.
+  o Removed unnecessary AIDA setup in GNUmakefile.
+- advanced/radioprotection (radioprotection-V09-02-00)
+- advanced/Rich (Rich-V09-02-00)
+  o Removed unnecessary AIDA setup in GNUmakefile.
+- advanced/xray_fluorescence (XrayFluo-V09-02-00)
+  o Reviewed physics setup and analysis.
+  o Removed unnecessary AIDA setup in GNUmakefile.
+- extended/persistency/gdml/G01 (G01-V09-02-01)
+  o Added new GDML samples for matrices+loops and optical-surfaces.
+  o Added missing inclusion of headers in main() translation unit.
+- extended/persistency/gdml/G02 (G02-V09-02-02)
+  o Added missing inclusion of headers after cleanup.
+- extended/persistency/gdml/G03 (G03-V09-02-01)
+  o Extended example to show also capability to write extended schema;
+    Added custom writer class.
+  o Renamed translation unit for main to "gdml_ext.cc".
+  o Added missing inclusion of headers after cleanup.
+
+tests                                            tests-V09-02-04
+-----
+- Updated reference outputs and tools.
+- test53 (test53-V09-02-00)
+  o New test for EM low-energy Penelope processes.
+- test54 (test54-V09-02-00)
+  o New test for EM low-energy Livermore processes.
+- test55 (test54-V09-02-01)
+  o New test for ICRU 73-based ionization model (G4IonParametrisedLossModel).
