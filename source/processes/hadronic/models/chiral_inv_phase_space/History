@@ -14,6 +14,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+29 Apr 2009 - M.Kosov (hadr-chips-V09-02-01)
+--------------------------------------------
+History file update with the coheren change with the QGSC from E=0 improvement
+
 29 Apr 2009 - M.Kosov (hadr-chips-inter-V09-02-02  to  hadr-chips-inter-V09-02-05)
 --------------------------------------------------------------------------------------
 1. Better readability of the CHIPS code (get rid of tab's etc)
