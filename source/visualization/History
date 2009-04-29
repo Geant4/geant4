@@ -1,4 +1,4 @@
-$Id: History,v 1.437 2009-04-27 16:23:06 allison Exp $
+$Id: History,v 1.438 2009-04-29 20:06:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+29 April 2009, John Allison (vis-V09-02-03)
+- visexternal-V09-02-04: Fix a circular dependency to G4OpenGL.
 
 27th April 2009  John Allison (vis-V09-02-02)
 - opengl-V09-02-03: Fix compiler warnings.
