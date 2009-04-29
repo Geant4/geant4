@@ -1,4 +1,4 @@
-$Id: History,v 1.442 2009-04-27 11:39:19 urban Exp $
+$Id: History,v 1.443 2009-04-29 13:31:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 April 09: L.Urban
-- G4UrbanMscModel2 - new tuning for the central part and for the tail of
-                     the angular distribution using the 'old'
-                     e- scattering data only + corr. in
-                     ComputeTruePathLengthLimit (for type=2 only)
+28 April 09: V.Ivant (emstand-V09-02-09)
+- G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the 
+                      tail of the angular distribution using the old e- 
+                      scattering data only (Phys. Rev. 84 (1951) 634; 
+                      Phys. Rev. 61 (1942) 254) 
+                    - corrected logic in ComputeTruePathLengthLimit method 
+                      for type=fUseDistanceToBoundary
+- G4UrbanMscModel   - frozen version of G4UrbanMscModel2 of g4 9.2
+- G4WentzelVIModel, G4eCoulombScattering  - reduce low-limit from 1 keV to 0.1 keV 
+                      to provide smooth transport cross section table
 
 23 April 09: V.Ivant (emstand-V09-02-08)
 - G4BetheBlochModel - do not use pointer to GenericIon introduced in the

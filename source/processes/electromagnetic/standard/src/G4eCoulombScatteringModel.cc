@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.62 2009-04-24 17:14:40 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.63 2009-04-29 13:31:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,11 +96,11 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   particle = 0;
   currentCouple = 0;
 
-  // Thomas-Fermi screening radiuses
+  // Thomas-Fermi screening radii
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
 
   if(0.0 == ScreenRSquare[0]) {
-    G4double a0 = electron_mass_c2/0.885; 
+    G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
 
     ScreenRSquare[0] = alpha2*a0*a0;
