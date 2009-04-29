@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2008-06-27 20:33:05 sincerti Exp $
+$Id: History,v 1.9 2009-04-29 14:17:03 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.8 2008-06-27 20:33:05 sincerti Exp $
 
                        Package History file
                        --------------------
+
+29 April 2009 - S. Incerti - microdosimetry-V09-02-01
+- modified Physics List for migrated Geant4-DNA processes
+- modified SteppingAction accordingly
+- updated README
 
 27 June 2008 - S. Incerti - microdosimetry-V09-01-04
 - modified PhysicsList.cc and SteppingAction.cc to take into account
