@@ -9,6 +9,7 @@ class Geant4Test (ShellCommandTest):
     installdir = os.environ['G4INSTALL']
     bindir = os.environ['G4BIN']
     system = os.environ['G4SYSTEM']
+    plat = os.environ['CMTCONFIG']
    
     self.command = self.command.replace('$G4INSTALL',installdir)
     self.command = self.command.replace('$G4BIN',bindir)
@@ -29,10 +30,10 @@ class Geant4Test (ShellCommandTest):
     ShellCommandTest.Run(self, context, result)
    
     os.chdir(folder)
-    stdout_file = open(result.GetId()+'_stdout.txt', 'w')
+    stdout_file = open(result.GetId()+'_stdout_'+plat+'.txt', 'w')
     stdout_file.write(result["ExecTest.stdout"])
     stdout_file.close()
    
-    stderr_file = open(result.GetId()+'_stderr.txt', 'w')
+    stderr_file = open(result.GetId()+'_stderr_'+plat+'.txt', 'w')
     stderr_file.write(result["ExecTest.stderr"])
     stderr_file.close()
