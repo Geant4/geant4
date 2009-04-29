@@ -25,7 +25,8 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/persistency/gdml/G03;$G4BIN/$G4SYSTEM/read_ext read_ext.mac</text>
+    <text>cd
+    $G4INSTALL/examples/extended/persistency/gdml/G03;$G4BIN/$G4SYSTEM/gdml_ext read_ext.mac</text>
   </argument>
   <argument name="stderr">
     <text/>
