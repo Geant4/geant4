@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-02-01    (13-March-2009)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -162,170 +166,170 @@ Region <Calor-C> -- appears in <World> world volume
 /run/beamOn 10
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+       Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+       Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+       PhotoElectric :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+            eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
-          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
-          BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 msc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
-          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
-          BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
+          BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -387,7 +391,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.84s Real=3.06s Sys=0.22s
+  User=2.49s Real=2.66s Sys=0.17s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -395,141 +399,141 @@ Region : Calor-A
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 3.7191102 GeV      Gap 415.80235 MeV
+    Absorber 3.1914738 GeV      Gap 369.01213 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1444.7    in Gap 77.5
-    e-    in Absorber 2332.3    in Gap 230.6
-    e+    in Absorber 140.2    in Gap 3.8
+    gamma in Absorber 1124.9    in Gap 58.3
+    e-    in Absorber 1813.4    in Gap 178.1
+    e+    in Absorber 109.8    in Gap 3.7
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 100.52306 keV    in Gap 6.1908047 keV
-    e-    in Absorber 48.08406 eV     in Gap 26.546449 eV 
-    e+    in Absorber 19.905814 keV    in Gap 258.33974 keV
+    gamma in Absorber 100.53614 keV    in Gap 6.4090102 keV
+    e-    in Absorber 29.633768 eV     in Gap 131.72967 eV 
+    e+    in Absorber 243.72325 eV     in Gap 147.69399 keV
  Total track length of e+/e- in an event :
-    Absorber 1.6440139 m        Gap 1.0587037 m  
+    Absorber 1.2773831 m        Gap 83.451219 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 6654.9      Gap 1034.1
+    Absorber 5186.8      Gap 804.1
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  3779.4086     1368.7     1932.2      120.9  2325.7317     5935.7
-       1  217.37167       99.7        349       15.3   244.2581     1010.6
-       2  77.324694       32.2      146.1        5.2  72.403821      393.6
-       3  26.661973        9.7       60.6          1  22.958181      148.8
-       4  15.751892          6         34        0.9  14.300551       77.9
-       5  7.2520975        2.3       14.3        0.4  11.531349       35.7
-       6  3.6306865        1.3        9.7        0.1   3.405432         32
-       7  2.4407766        1.1        5.6        0.2  2.3760741         19
-       8  1.5503902        0.4        3.8          0 0.99895002        7.7
-       9 0.79756955        0.1        1.9          0  0.8317231       10.4
-      10  1.2826658        0.4        2.3          0  2.0028393        8.5
-      11 0.35829981          0        1.1          0 0.20031217        1.6
-      12 0.15784153          0        0.8          0 0.10062061          1
-      13          0          0          0          0          0          0
-      14 0.15561621          0        0.3          0 0.11221383        0.4
-      15 0.33111202        0.2        0.3          0  1.0617309        1.7
-      16 0.079554276          0        0.2          0 0.039312252        0.3
-      17 0.26252895        0.1        0.4          0 0.36347165        3.3
-      18 0.073058387          0        0.2          0 0.037957618        0.3
-      19 0.021500821          0        0.1          0 0.0032976434        0.5
+       0  3296.8099     1065.3     1515.7       94.9  1856.1341     4686.7
+       1  172.26138         81      282.1       13.2  169.17996      767.9
+       2  47.683858       18.8       95.7        2.9   41.81928      260.4
+       3  21.241613       10.1       45.6        1.5  20.793781      132.9
+       4  10.902111        3.9       24.5        0.5  10.778578       67.6
+       5  3.9415829        1.3       10.6          0   4.185443       25.1
+       6  2.6645952        0.9        5.8        0.2  3.0508174         16
+       7  2.8027595        1.4        4.6        0.3   2.648113         13
+       8  0.6693132        0.1        2.1          0 0.83303736        4.4
+       9 0.49965251        0.2        1.7          0 0.35070411        2.7
+      10 0.33046506        0.1        1.3          0 0.51499978          2
+      11 0.068743704          0        0.3          0  0.0247726        0.5
+      12 0.13609555        0.1        0.3          0 0.18730253        0.7
+      13 0.095453199          0        0.3          0 0.05044072        0.9
+      14 0.023651921          0        0.1          0 0.0052628465        0.2
+      15 0.12700248          0        0.2          0 0.67513793        2.3
+      16 0.054851099          0          0          0 0.19596662        3.6
+      17 0.064338768          0        0.3          0 0.086182275        0.4
+      18          0          0          0          0          0          0
+      19 0.086983872          0        0.2          0  0.3773654        3.4
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 1 cm     e- 1 cm     e+ 1 cm 
  Energy deposition in an event :
-    Absorber 4.5241932 GeV      Gap 588.78078 MeV
+    Absorber 2.9123924 GeV      Gap 330.17857 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1438.5    in Gap 113.6
-    e-    in Absorber 2080.1    in Gap 236.2
-    e+    in Absorber 184.4    in Gap 8.9
+    gamma in Absorber 619.1    in Gap 34
+    e-    in Absorber 1124.4    in Gap 93.3
+    e+    in Absorber 86.7    in Gap 2.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 274.00258 keV    in Gap 19.270059 keV
-    e-    in Absorber 14.552062 eV     in Gap 13.900916 eV 
-    e+    in Absorber 437.80577 eV     in Gap 254.55095 keV
+    gamma in Absorber 282.63451 keV    in Gap 19.092423 keV
+    e-    in Absorber 22.855883 eV     in Gap 57.127883 eV 
+    e+    in Absorber 29.478841 keV    in Gap 140.12246 keV
  Total track length of e+/e- in an event :
-    Absorber 1.9982476 m        Gap 1.7654175 m  
+    Absorber 91.558361 cm       Gap 53.649669 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 6167.8      Gap 1161.7
+    Absorber 3172.9      Gap 487.6
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  4826.0341     1472.5     1818.2        176  3434.2006     5925.5
-       1  174.47364       52.1      275.8       10.7  213.03382      775.2
-       2  58.823342       15.1      109.9        3.7  61.252393      323.7
-       3  25.699486        6.2       50.4        1.4  24.778171      128.1
-       4  13.084281        2.9       26.7        0.5  13.105247       66.2
-       5   7.555965          2       14.7        0.6   8.794336       43.4
-       6  1.9784706        0.2        6.1          0   1.426441       29.6
-       7  1.9130516        0.2        4.9        0.1  1.6689714        8.3
-       8   1.625783        0.4        3.9        0.2  2.1355735       10.1
-       9 0.41893941          0        1.4          0 0.39169315        5.9
-      10 0.097553609          0        0.5          0 0.19941825        0.8
-      11 0.75784318        0.5        2.2        0.1  1.3641869        5.7
-      12 0.16384465          0        0.7          0 0.17730317        5.3
-      13 0.030980231          0        0.2          0 0.0071508927        0.3
-      14          0          0          0          0          0          0
-      15          0          0          0          0          0          0
-      16 0.039512606          0        0.1          0 0.015570225        0.2
-      17 0.063442836          0        0.1          0 0.24082156        0.2
-      18          0          0          0          0          0          0
-      19  0.1873347          0        0.2          0 0.85449304        0.6
+       0  3035.7586      596.4      864.2       78.2  1231.5649     2709.1
+       1  124.23986       36.8        195        7.2  131.98311      523.5
+       2  42.575226         11       75.8        2.3  42.418747        215
+       3  17.312727        3.4       35.7        0.7  17.957364       91.7
+       4  10.305229          3         20        0.6  12.841734       50.7
+       5  5.0055499        0.7       10.8        0.2  6.6677063       29.5
+       6  2.7227313        0.6          6        0.1  2.9074184         13
+       7  1.4424879        0.5        3.4        0.2  1.7907317        6.8
+       8  1.3395465        0.6        1.7        0.1  1.1395583        5.9
+       9  0.3566549        0.1        0.5          0 0.24482799        1.8
+      10 0.35148969          0        1.6          0 0.24532881          4
+      11 0.39677382          0          1          0 0.52943097        2.8
+      12 0.37596351          0        0.6          0  1.2761574        3.2
+      13 0.013983406          0        0.2          0 0.041108741          1
+      14 0.14096577          0        0.6          0 0.064037298        1.4
+      15 0.060445731          0        0.1          0 0.031622221        0.2
+      16 0.10534311          0        0.2          0 0.30231524        0.5
+      17          0          0          0          0          0          0
+      18 0.067395264          0        0.3          0 0.074196956        0.4
+      19          0          0          0          0          0          0
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 10 cm     e- 10 cm     e+ 10 cm 
  Energy deposition in an event :
-    Absorber 3.0527093 GeV      Gap 300.53809 MeV
+    Absorber 4.0757642 GeV      Gap 391.8593 MeV
  Number of secondaries in an event :
-    gamma in Absorber 181.7    in Gap 16.3
-    e-    in Absorber 327.1    in Gap 27
-    e+    in Absorber 50    in Gap 1.6
+    gamma in Absorber 440.2    in Gap 50.2
+    e-    in Absorber 808    in Gap 79
+    e+    in Absorber 122.2    in Gap 5.4
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 309.27644 keV    in Gap 56.986072 keV
-    e-    in Absorber 165.1627 eV     in Gap 1.5354352 keV
-    e+    in Absorber 52.551115 keV    in Gap 575.68323 keV
+    gamma in Absorber 313.24956 keV    in Gap 56.768049 keV
+    e-    in Absorber 121.34699 eV     in Gap 132.46832 eV 
+    e+    in Absorber 4.1527678 keV    in Gap 313.07406 keV
  Total track length of e+/e- in an event :
-    Absorber 47.064661 cm       Gap 26.862428 cm 
+    Absorber 1.1487093 m        Gap 73.540123 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1116      Gap 156.6
+    Absorber 2790      Gap 492.1
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  3253.2376      178.7      246.4       43.4  636.96816      929.5
-       1  61.370827       12.7       59.9        5.2  69.139901      208.6
-       2  21.060962        4.2       22.7          2  17.710728       65.3
-       3  8.2654556        1.4       11.1        0.6  5.9499841       24.2
-       4  5.4974367        0.7        6.4        0.3  4.2589188         18
-       5  2.0636882        0.1        3.8          0  3.3313654       14.8
-       6 0.67286164          0        1.1          0 0.78958465        2.2
-       7 0.56015159          0        1.2          0 0.81850122        2.7
-       8 0.083109511          0        0.4          0 0.036803049        0.6
-       9 0.35186777        0.2        0.6        0.1 0.22355526        3.3
-      10 0.045367454          0        0.4          0 0.029160627        3.2
-      11          0          0          0          0          0          0
-      12          0          0          0          0          0          0
-      13 0.038036289          0        0.1          0 0.014226826        0.2
-      14          0          0          0          0          0          0
-      15          0          0          0          0          0          0
-      16          0          0          0          0          0          0
+       0  4208.1177      439.8      590.8      107.2  1613.7641     2324.8
+       1  159.14484       34.2        161       13.5  168.75224      552.1
+       2  48.884212          8       59.6        3.2     55.754      188.7
+       3  26.398249        4.2       35.5        1.8  22.202275      100.1
+       4  12.301593        2.2       17.9          1  9.8846229       49.4
+       5  5.2389669          1        8.4        0.5  3.3720806       19.6
+       6  2.4457461        0.1        4.5          0  4.6755587       16.4
+       7  1.3565417        0.2        2.7        0.1  1.9670924       10.1
+       8  1.0993229        0.2        1.4        0.1 0.65579685        6.2
+       9 0.83961268        0.2        1.2        0.1 0.49667505          4
+      10 0.45333086          0        0.5          0 0.89369358          1
+      11 0.16946605          0        0.9          0  0.1303194        1.3
+      12 0.26306125          0        0.6          0 0.16710919          1
+      13 0.49764949        0.1        0.8          0 0.27443776        3.3
+      14 0.16617518          0        0.2          0 0.49007832        1.8
+      15 0.12396943        0.2        0.3        0.1 0.54828437        1.3
+      16 0.050181308          0        0.3          0 0.010617216        0.5
       17          0          0          0          0          0          0
-      18          0          0          0          0          0          0
+      18 0.072946889          0        0.4          0 0.071509981        0.5
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0xa7e6c8
+CPU Time spent by each region0x2a9946e188
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.99  Real=1.05  Sys=0.04
- e+ / e-       : User=0.73  Real=0.79  Sys=0.02
+ All particles : User=0.83  Real=0.85  Sys=0.04
+ e+ / e-       : User=0.67  Real=0.63  Sys=0.03
 
 Region <Calor-B>
- All particles : User=1  Real=1.02  Sys=0.07
- e+ / e-       : User=0.7  Real=0.69  Sys=0.08
+ All particles : User=0.6  Real=0.56  Sys=0.03
+ e+ / e-       : User=0.4  Real=0.43  Sys=0.02
 
 Region <Calor-C>
- All particles : User=0.16  Real=0.2  Sys=0.01
- e+ / e-       : User=0.11  Real=0.15  Sys=0.01
+ All particles : User=0.49  Real=0.53  Sys=0.02
+ e+ / e-       : User=0.35  Real=0.41  Sys=0.05
 
 /run/dumpCouples
 
@@ -620,170 +624,170 @@ Region <Calor-C> -- appears in <World> world volume
 /run/beamOn 10
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.0219978 MeV to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 1.0219978 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+       Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+       Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+       PhotoElectric :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+            eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 msc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -845,7 +849,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=5.45s Real=5.81s Sys=0.36s
+  User=3.67s Real=3.89s Sys=0.23s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -853,39 +857,39 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 5.8275771 GeV      Gap 613.56519 MeV
+    Absorber 3.5760736 GeV      Gap 419.83294 MeV
  Number of secondaries in an event :
-    gamma in Absorber 3448.3    in Gap 174.2
-    e-    in Absorber 5489.7    in Gap 570
-    e+    in Absorber 264.9    in Gap 8.6
+    gamma in Absorber 1749.8    in Gap 87.4
+    e-    in Absorber 2842    in Gap 330.6
+    e+    in Absorber 130.1    in Gap 4.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 47.195452 keV    in Gap 2.7934513 keV
-    e-    in Absorber 1.0798392 eV     in Gap 6.5498068 eV 
-    e+    in Absorber 755.75092 eV     in Gap 120.68331 keV
+    gamma in Absorber 47.185508 keV    in Gap 2.7998111 keV
+    e-    in Absorber 5.5568854 eV     in Gap 39.379981 eV 
+    e+    in Absorber 1.9211341 keV    in Gap 28.66228 keV
  Total track length of e+/e- in an event :
-    Absorber 3.2670235 m        Gap 2.0790469 m  
+    Absorber 1.6536881 m        Gap 1.1246441 m  
  Total number of steps of e+/e- in an event :
-    Absorber 15258.1      Gap 2232.8
+    Absorber 7782.9      Gap 1186.8
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  5785.5007     3260.9     4770.7      231.1  4665.7058    13987.5
-       1  399.34425      231.3      733.7       26.4  425.79653       2002
-       2  128.68759       70.1      271.8        8.9   123.6451      717.9
-       3  62.648802       30.4      124.8        3.1  63.423397      347.9
-       4  27.963476       13.9       65.9        1.9   25.56046      187.4
-       5    15.0846        6.6       37.6        0.9  17.719253      102.1
-       6  7.0854915          3       17.3        0.3  8.7025393         60
-       7  7.7734289        3.4         17        0.6  9.0582105       37.4
-       8  3.2333147          1        7.8        0.1  3.0676026         20
-       9  1.5975317          1        5.2        0.1  1.2530237       13.5
-      10 0.72922106        0.5        2.5          0 0.40649671        5.8
-      11 0.59921062        0.3        1.6        0.1 0.47101451        3.6
-      12 0.12830642          0        0.8          0 0.13808377        1.1
-      13 0.14513472          0        0.7          0 0.24441706          1
-      14 0.17847008          0        0.6          0 0.54410974        1.2
-      15 0.26966083        0.1        0.9          0 0.22107408        1.5
-      16 0.13041577          0        0.5          0 0.091851958        0.6
+       0  3648.0403     1628.8       2488      110.3  2414.5921     7118.9
+       1   212.7187      131.5      389.4       14.8  227.26272     1111.6
+       2  73.614605       43.4      151.4        5.4  81.722076      394.6
+       3  29.604114       16.6       68.7        1.6  26.350991      162.2
+       4  13.765454          8       30.8          1  13.277753         84
+       5  9.2287694        5.3       20.7        0.7  7.0317182       42.1
+       6  3.4227981        1.1        8.4        0.3  3.5452374       22.2
+       7  1.9178418        0.5        5.2          0  1.3268161       11.6
+       8  1.3850949        0.5        3.1        0.1  1.6909812          9
+       9 0.78616866        0.3        2.5          0 0.50752668        4.6
+      10 0.95975465          1        2.4        0.1 0.60045941        4.8
+      11 0.060294569          0        0.4          0 0.14883385        0.6
+      12 0.24151993        0.2        0.7          0 0.12488334        2.2
+      13 0.063207084          0        0.4          0 0.10901153        0.6
+      14          0          0          0          0          0          0
+      15 0.046748815          0        0.2          0 0.016302097        0.3
+      16 0.051099891          0        0.3          0 0.02469895        0.4
       17          0          0          0          0          0          0
       18          0          0          0          0          0          0
       19          0          0          0          0          0          0
@@ -894,100 +898,100 @@ Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 3.0753743 GeV      Gap 375.82493 MeV
+    Absorber 3.6030617 GeV      Gap 411.14479 MeV
  Number of secondaries in an event :
-    gamma in Absorber 973.4    in Gap 56.1
-    e-    in Absorber 1594.7    in Gap 154.4
-    e+    in Absorber 97.7    in Gap 3.9
+    gamma in Absorber 1258.4    in Gap 69.8
+    e-    in Absorber 2068.4    in Gap 185.3
+    e+    in Absorber 125.7    in Gap 5
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 120.65249 keV    in Gap 8.5999372 keV
-    e-    in Absorber 18.517551 eV     in Gap 67.635608 eV 
-    e+    in Absorber 3.0697131 keV    in Gap 5.1206906 keV
+    gamma in Absorber 120.60219 keV    in Gap 8.6431327 keV
+    e-    in Absorber 43.357784 eV     in Gap 84.581941 eV 
+    e+    in Absorber 10.533733 keV    in Gap 264.12236 keV
  Total track length of e+/e- in an event :
-    Absorber 1.1482513 m        Gap 84.266704 cm 
+    Absorber 1.5070169 m        Gap 1.0187168 m  
  Total number of steps of e+/e- in an event :
-    Absorber 4555      Gap 744.7
+    Absorber 5937.9      Gap 930.5
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  3187.5846      918.3     1285.6       82.8  1721.3391     4013.8
-       1  152.87831       66.3      246.8       11.7  153.26049      688.1
-       2  48.674986       20.3       95.8        3.3  48.007897      264.9
-       3  31.890076       12.4       54.5        2.3  35.874999      151.4
-       4  13.083326        5.5         27        0.6  13.896721       63.5
-       5  7.3611732          3       15.1        0.6   8.374955       37.8
-       6  3.0709647        0.7        6.4        0.1  3.5504655       17.8
-       7  2.2526729        1.1        6.8          0  2.2399391       22.6
-       8  1.0963704        0.3        2.4          0  1.1398071       12.9
-       9  1.1040009        0.3        3.3        0.1 0.71733528        9.5
-      10 0.44291787        0.2        1.6          0 0.39402092        4.4
-      11 0.22758339        0.1          1          0 0.14001114        1.6
-      12 0.65674911        0.7        1.3        0.1 0.43464977        2.8
-      13 0.015246549          0        0.1          0 0.029578875        0.1
-      14 0.49217502        0.3        0.6          0  1.0295973        4.1
-      15 0.20255985          0        0.3          0 0.12073106        3.6
-      16 0.068466385          0        0.2          0 0.10001816        0.3
-      17          0          0          0          0          0          0
-      18 0.02524985          0        0.1          0 0.065664035        0.1
-      19 0.071760643          0        0.2          0 0.20230932        0.4
+       0   3676.788     1198.5     1669.2      110.3  2207.4234     5254.6
+       1  208.29041       83.6        336       12.9  200.76612      975.9
+       2   65.78109       24.8      119.9        3.6  59.467626      302.3
+       3  35.332261       11.9       61.4        2.1  30.507078      160.6
+       4  12.375717        4.7       29.6        0.9  10.194578       70.7
+       5  5.6636499        2.1       16.8        0.4  5.6808747       45.6
+       6  3.9151575        0.9          8        0.1  4.2671861       20.1
+       7  2.1626536        0.3        3.6        0.1  2.2603391       11.8
+       8  2.0888324        0.9        4.8        0.2   2.815619         13
+       9 0.16138714          0        0.7          0 0.13076293        4.8
+      10 0.23846697        0.2          1          0 0.19885174        1.6
+      11 0.28755969        0.1        0.7          0 0.15704163        1.1
+      12          0          0          0          0          0          0
+      13 0.74394281        0.2        1.1        0.1  1.2168023          4
+      14 0.021237764          0        0.1          0 0.0039713157        0.2
+      15          0          0          0          0          0          0
+      16          0          0          0          0          0          0
+      17 0.031788712          0        0.2          0 0.0097170848        0.3
+      18 0.17968569          0        0.2          0 0.55751465        1.2
+      19          0          0          0          0          0          0
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 5.1770722 GeV      Gap 549.93228 MeV
+    Absorber 2.8263235 GeV      Gap 356.66515 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1397.8    in Gap 98.2
-    e-    in Absorber 2639.5    in Gap 240.4
-    e+    in Absorber 225.1    in Gap 7.9
+    gamma in Absorber 458.7    in Gap 36
+    e-    in Absorber 866.3    in Gap 82.6
+    e+    in Absorber 73.2    in Gap 2.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 287.06426 keV    in Gap 27.232454 keV
-    e-    in Absorber 90.159607 eV     in Gap 72.979994 eV 
-    e+    in Absorber 878.9994 eV     in Gap 48.416329 keV
+    gamma in Absorber 294.87995 keV    in Gap 27.468895 keV
+    e-    in Absorber 147.95339 eV     in Gap 22.530102 eV 
+    e+    in Absorber 36.406995 keV    in Gap 97.685205 keV
  Total track length of e+/e- in an event :
-    Absorber 2.3535677 m        Gap 1.5113278 m  
+    Absorber 76.958431 cm       Gap 64.543225 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 7548.8      Gap 1181.1
+    Absorber 2572.4      Gap 449.6
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  5145.8523     1349.9     1958.8        197  3280.3292     6263.1
-       1   343.1497       92.5      489.7       21.6  349.41709     1323.5
-       2  119.17346       28.2      208.5        7.7  110.24613      555.5
-       3  57.173244       11.6         99        3.2   61.31465      270.9
-       4  29.880905        7.8       57.1          2  30.241532      142.8
-       5  13.555415        2.7       27.8        0.8  14.441064       76.8
-       6  8.6268387          2       16.2        0.5  8.2895875       38.7
-       7  3.5076371        0.2        8.4          0  2.7353181         18
-       8  1.8158836          0        5.6          0  1.4863016       10.1
-       9  1.5058663        0.7        2.8        0.1  3.0598123        6.6
-      10 0.74293747        0.2        1.9        0.1  1.2653372       15.1
-      11  1.2026774        0.2        2.2          0  1.5287449        5.3
-      12 0.10792002          0        0.4          0 0.059713853        1.1
-      13 0.076234527          0        0.3          0 0.077134881        0.3
-      14 0.24690306          0        0.4          0 0.16380825        0.5
+       0  2980.2771      445.8      645.6       63.4  1205.6524     2193.9
+       1   118.6464       30.4      162.4        7.5  132.17533        471
+       2  40.763741       11.1       67.4        3.2   32.94978      157.8
+       3  21.894169        4.1       37.1          1  22.216786      100.9
+       4  9.8823021        1.5       16.7        0.5  9.0816178       45.3
+       5  5.9534995        1.2        8.9        0.3  7.5192578       25.5
+       6  2.4965819        0.4        3.7        0.2  2.6140273        9.6
+       7   1.009277          0        1.9          0 0.87167533          5
+       8  1.0935048        0.2        2.7          0 0.98119638        7.3
+       9 0.45608437          0        1.2          0 0.62757733        2.7
+      10 0.32363203          0        0.7          0 0.18563295        2.1
+      11 0.14170726          0        0.5          0 0.11709253        0.7
+      12          0          0          0          0          0          0
+      13 0.050714406          0        0.1          0 0.024203131        0.2
+      14          0          0          0          0          0          0
       15          0          0          0          0          0          0
-      16 0.33703645          0        0.5          0 0.21084472        1.2
+      16          0          0          0          0          0          0
       17          0          0          0          0          0          0
-      18 0.049471533          0        0.3          0 0.029312862        0.4
+      18          0          0          0          0          0          0
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0xa7e6c8
+CPU Time spent by each region0x2a9946e188
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=2.3  Real=2.25  Sys=0.11
- e+ / e-       : User=1.69  Real=1.73  Sys=0.08
+ All particles : User=1.22  Real=1.38  Sys=0.06
+ e+ / e-       : User=0.9  Real=1.09  Sys=0.05
 
 Region <Calor-B>
- All particles : User=0.68  Real=0.69  Sys=0.03
- e+ / e-       : User=0.52  Real=0.55  Sys=0.04
+ All particles : User=0.95  Real=0.95  Sys=0.01
+ e+ / e-       : User=0.58  Real=0.63  Sys=0.03
 
 Region <Calor-C>
- All particles : User=1.13  Real=1.14  Sys=0.04
- e+ / e-       : User=0.79  Real=0.87  Sys=0.02
+ All particles : User=0.49  Real=0.48  Sys=0.03
+ e+ / e-       : User=0.37  Real=0.33  Sys=0.01
 
 /run/dumpCouples
 
@@ -1077,170 +1081,170 @@ Region <Calor-C> -- appears in <World> world volume
 /run/beamOn 10
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.0219978 MeV to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 1.0219978 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+       Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+       Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+       PhotoElectric :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+            eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 msc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -1332,7 +1336,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.6s Real=0.63s Sys=0.04s
+  User=0.62s Real=0.67s Sys=0.05s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1340,141 +1344,141 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 632.94554 MeV      Gap 277.14215 MeV
+    Absorber 548.32423 MeV      Gap 240.68919 MeV
  Number of secondaries in an event :
-    gamma in Absorber 64.2    in Gap 18.7
-    e-    in Absorber 412.4    in Gap 192.9
-    e+    in Absorber 3    in Gap 0.8
+    gamma in Absorber 41.9    in Gap 9.2
+    e-    in Absorber 269.1    in Gap 137.8
+    e+    in Absorber 1    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.2740129 keV    in Gap 1.4720879 keV
-    e-    in Absorber 12.164634 eV     in Gap 6.6413455 eV 
-    e+    in Absorber 498.43337 keV    in Gap 1.9183958 MeV
+    gamma in Absorber 3.2697897 keV    in Gap 1.6642384 keV
+    e-    in Absorber 1.767539 eV     in Gap 25.342417 eV 
+    e+    in Absorber 635.80863 keV    in Gap 4.1448307 MeV
  Total track length of e+/e- in an event :
-    Absorber 58.882825 cm       Gap 55.799807 cm 
+    Absorber 38.190832 cm       Gap 36.245104 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 908.3      Gap 467.1
+    Absorber 663.5      Gap 337.9
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  818.06261       58.6      304.2        1.9  854.52481      813.6
-       1  44.876617       12.1       69.7        0.9  156.50476      186.4
-       2  23.116274        6.1         54        0.5  72.700525      110.1
-       3  12.129008        3.6       40.5        0.2  38.883988       81.5
-       4  2.3041357        0.4       29.4          0  5.0552681       43.7
-       5  2.6937433        0.4       24.6          0   6.822411       33.4
-       6  1.3255512          0       17.4          0  2.1454727       21.6
-       7  0.8230638        0.2       11.4          0  1.2964438       14.4
-       8 0.64968173        0.1        9.8          0  1.0519765       11.9
-       9  1.0644272        0.3        8.7        0.1  2.2074187       11.5
-      10 0.66100095        0.5        8.3        0.1  1.4576493       11.8
-      11  0.5347219        0.1          7          0 0.78528283        8.3
-      12  1.1473294        0.5        4.6        0.1  2.7128959        6.9
-      13 0.16017516          0        3.9          0 0.11365554        4.4
-      14 0.12250702          0          4          0 0.10243408        4.4
-      15 0.14197269          0        1.9          0 0.14748228        2.9
-      16 0.14383297          0        1.7          0 0.22087971        3.9
-      17 0.026753316          0        1.7          0 0.013225966        1.9
-      18 0.069141992          0        1.4          0 0.051300742        1.6
-      19 0.0063602864          0        0.2          0 0.0056576058        0.2
+       0  749.14905         41      254.5        0.6  621.06642      729.8
+       1  19.200232        5.1       31.6        0.2  67.212655       74.2
+       2  7.1110411        1.6       27.5        0.1  21.680169       50.3
+       3  2.7275896        0.8       18.6        0.1  6.9026388       37.5
+       4  2.6229118        0.8       17.1          0  5.3105399       22.8
+       5  4.7868705        1.1       16.8        0.1  14.753043       26.8
+       6  0.9437371          0        9.6          0   2.696958       15.4
+       7  1.4781497        0.4       11.8        0.1  3.4273692       17.2
+       8 0.17760045          0        5.5          0 0.11053174        6.1
+       9 0.32135459        0.1        4.1          0    0.65902        6.3
+      10 0.051960885          0        1.2          0 0.051564902        1.7
+      11 0.058056896          0        2.4          0 0.024320644        3.2
+      12 0.13863872        0.1        2.1          0 0.22395178        4.8
+      13 0.071331548          0        1.4          0 0.044770721        1.7
+      14 0.025088588          0        0.8          0 0.013785089        0.9
+      15 0.045646016          0        0.6          0 0.057026401        0.7
+      16 0.020507372          0        0.3          0 0.011119482        0.4
+      17          0          0          0          0          0          0
+      18 0.036201881        0.1        0.7          0 0.027356576        0.9
+      19 0.047451712          0        0.3          0 0.08612191        0.7
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 587.36773 MeV      Gap 258.10543 MeV
+    Absorber 531.05733 MeV      Gap 236.27975 MeV
  Number of secondaries in an event :
-    gamma in Absorber 41.2    in Gap 10
-    e-    in Absorber 209    in Gap 93.5
-    e+    in Absorber 1.9    in Gap 0.4
+    gamma in Absorber 30.1    in Gap 8.3
+    e-    in Absorber 161    in Gap 68.2
+    e+    in Absorber 1.6    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.5859269 keV    in Gap 4.2260638 keV
-    e-    in Absorber 3.7333887 eV     in Gap 35.819953 eV 
-    e+    in Absorber 459.04188 keV    in Gap 4.7867348 MeV
+    gamma in Absorber 10.741388 keV    in Gap 5.0733681 keV
+    e-    in Absorber 8.1240541 eV     in Gap 122.01769 eV 
+    e+    in Absorber 131.05136 keV    in Gap 9.3217821 MeV
  Total track length of e+/e- in an event :
-    Absorber 40.615922 cm       Gap 40.244437 cm 
+    Absorber 26.51602 cm       Gap 28.5108 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 515.1      Gap 255.1
+    Absorber 372.5      Gap 197
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  797.11911       42.2       98.4        1.6  669.90707      441.6
-       1  27.227987        6.1       47.5        0.4  85.540531       98.9
-       2  5.9575879        0.7       35.3          0  16.544271       49.5
-       3  4.6794063          1       28.4        0.2  11.286518       39.8
-       4  3.0584181        0.4         22        0.1  7.8995348       37.9
-       5  1.7693771        0.2       14.5          0  4.7748913         22
-       6  1.0921076        0.1       12.4          0  2.0158095       17.1
-       7  1.2967361        0.3       10.7          0  2.2819184         16
-       8  1.2389458        0.1        7.5          0  4.1315625       11.2
-       9 0.64633655        0.1        5.8          0  1.4667534        9.8
-      10 0.32301382          0        4.8          0 0.49362316        7.4
-      11 0.20314094          0        3.5          0 0.25103238        3.9
-      12 0.064818445          0        2.7          0 0.032534103          3
-      13 0.081757788          0        2.4          0 0.050189314        2.7
-      14 0.031939592          0          1          0 0.023065356        1.1
-      15 0.095194759          0        1.4          0 0.10745325        1.5
-      16 0.34395062          0        0.8          0  1.1602448        2.4
-      17 0.16087656          0        1.5          0 0.56842776        2.2
-      18 0.047828403          0        1.5          0 0.033652259        1.7
-      19          0          0          0          0          0          0
+       0  745.32758         32       80.1        1.1  498.41879      359.8
+       1  9.3962224        3.8       32.4        0.3  25.139025       56.1
+       2  4.9899834        1.3       20.7        0.1  11.984192       32.2
+       3  2.7399965        0.9       20.6        0.3  6.1550531       29.3
+       4  1.4205892        0.1         18          0  2.3770613       21.5
+       5  1.1014532        0.1       11.9          0  2.7324207       16.1
+       6 0.43956615          0        9.6          0 0.38879189       11.1
+       7 0.36780572          0        9.7          0 0.40584255       10.6
+       8 0.34004217          0        7.2          0 0.46192242          8
+       9 0.22507048          0        3.6          0 0.61605131        4.9
+      10  0.1615379        0.1        3.8          0 0.10869962        4.9
+      11  0.1573087          0        2.9          0 0.18836862        3.2
+      12  0.2706948          0        1.6          0 0.59186094          2
+      13 0.20309983        0.1          2          0 0.55202922        4.1
+      14 0.072159302          0        1.7          0 0.052096453        1.9
+      15 0.038390623          0        1.5          0 0.017566198        1.7
+      16 0.020206161          0        0.3          0 0.018057883        0.4
+      17 0.043598253          0        0.8          0 0.048930074        0.9
+      18 0.00017834003          0        0.1          0 1.4091181e-05        0.1
+      19 0.010694341          0        0.5          0 0.0045573036        0.5
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 646.04919 MeV      Gap 274.10004 MeV
+    Absorber 771.2076 MeV      Gap 329.36093 MeV
  Number of secondaries in an event :
-    gamma in Absorber 37.3    in Gap 9.8
-    e-    in Absorber 237.4    in Gap 94.3
-    e+    in Absorber 2.1    in Gap 0.7
+    gamma in Absorber 69.7    in Gap 22.9
+    e-    in Absorber 387.9    in Gap 152.2
+    e+    in Absorber 5.3    in Gap 0.9
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.260505 keV    in Gap 10.35737 keV
-    e-    in Absorber 13.58906 eV     in Gap 82.552729 eV 
-    e+    in Absorber 546.07578 keV    in Gap 1.0752045 MeV
+    gamma in Absorber 28.510729 keV    in Gap 10.757876 keV
+    e-    in Absorber 5.2586714 eV     in Gap 44.649836 eV 
+    e+    in Absorber 49.809123 keV    in Gap 61.483629 keV
  Total track length of e+/e- in an event :
-    Absorber 40.168961 cm       Gap 39.26117 cm 
+    Absorber 69.013727 cm       Gap 67.919556 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 458      Gap 198.4
+    Absorber 734.6      Gap 294.2
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  841.46878         34       61.2        1.2  561.02573      213.2
-       1  35.464807        6.3       52.8        0.4  114.33631      110.6
-       2  15.931899        2.8       46.6        0.5  44.474795       79.7
-       3  9.0119915        1.8         38        0.4  28.422815         62
-       4  5.2775791        1.2       28.8        0.1   14.59989       39.6
-       5  3.0442026        0.1       22.9          0  7.4877789       33.3
-       6  2.8596545        0.2       17.1          0  8.8651614       33.6
-       7 0.76325278          0         13          0 0.93577919       16.2
-       8 0.93612542        0.1         12          0  2.0376703       15.9
-       9 0.79049779        0.2       10.6        0.1  1.3220262       12.7
-      10 0.68320744          0        8.3          0    1.00929       10.2
-      11  1.5057808        0.1        5.8          0  3.6567264        8.8
-      12  1.3232458        0.1        2.9          0  3.3689614        5.7
-      13 0.21143675          0        2.7          0  0.2732467          3
-      14 0.21483545          0        3.8          0 0.25874144        4.4
-      15 0.06257534          0        2.8          0 0.025139944        3.3
-      16 0.053519725          0        1.2          0 0.070735751        1.7
-      17 0.037733801          0        0.7          0 0.023049927        0.9
-      18  0.2738611          0        0.1          0  1.3777045        0.6
-      19 0.0052719472          0        0.2          0 0.0046276077        0.2
+       0  999.50725       73.1      107.4        4.5  1084.1839      393.2
+       1  60.436982       13.9         90          1  186.24253      173.9
+       2  16.835488        2.7       75.7        0.2  49.372863      116.5
+       3  8.7759033        1.2       53.3        0.1  21.860032       72.5
+       4   4.233941        0.4       46.5        0.1  7.2472754       56.9
+       5  1.8377554          0       42.3          0  1.7475938       47.8
+       6  2.8880644        0.8       29.2        0.2  7.2601583       41.1
+       7  2.0610681        0.1       21.6          0  5.4915494       33.8
+       8 0.72021491          0       17.1          0   0.601916       20.2
+       9 0.52000649          0       14.2          0 0.59200373       20.5
+      10  1.0061547        0.4       12.6        0.1  1.9133827       16.1
+      11  0.4211751          0        7.8          0 0.51327951        9.5
+      12 0.39920288          0        6.4          0 0.82848455        7.7
+      13 0.10532865          0        4.1          0 0.04839834        4.5
+      14 0.11448251          0          2          0  0.0812592        2.2
+      15 0.090339524          0        2.4          0 0.092401187        2.6
+      16 0.16596697          0        3.1          0 0.38598447        3.8
+      17 0.098350374          0        1.6          0 0.18199515        2.4
+      18 0.026139626          0        0.5          0 0.021257035        0.5
+      19 0.056586786          0        1.1          0 0.045547359        1.5
 ############################################################
-CPU Time spent by each region0xa7e6c8
+CPU Time spent by each region0x2a9946e188
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.27  Real=0.22  Sys=0.02
- e+ / e-       : User=0.12  Real=0.11  Sys=0.02
+ All particles : User=0.11  Real=0.2  Sys=0
+ e+ / e-       : User=0.06  Real=0.12  Sys=0.01
 
 Region <Calor-B>
- All particles : User=0.1  Real=0.12  Sys=0
- e+ / e-       : User=0.05  Real=0.05  Sys=0
+ All particles : User=0.13  Real=0.14  Sys=0.01
+ e+ / e-       : User=0.09  Real=0.1  Sys=0
 
 Region <Calor-C>
- All particles : User=0.09  Real=0.15  Sys=0.01
- e+ / e-       : User=0.05  Real=0.07  Sys=0.01
+ All particles : User=0.24  Real=0.27  Sys=0.02
+ e+ / e-       : User=0.12  Real=0.15  Sys=0.01
 
 /run/dumpCouples
 
@@ -1595,170 +1599,170 @@ Region <Calor-C> -- appears in <World> world volume
 /run/beamOn 10
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.0219978 MeV to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 1.0219978 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
+       Bethe-Heitler :     Emin=          0 eV         Emax=   10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :     Emin=          0 eV         Emax=   100 TeV
+       Klein-Nishina :     Emin=          0 eV         Emax=   10 TeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+       PhotoElectric :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+            eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
-          BetheBloch :     Emin=   1.052311 MeV        Emax=   100 TeV
+          BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 msc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
-        MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
+        MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :     Emin=          0 eV         Emax=   100 TeV
+              MuBrem :     Emin=          0 eV         Emax=   10 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :     Emin=          0 eV         Emax=   100 TeV
+          muPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
-          BetheBloch :     Emin=  297.50434 keV        Emax=   100 TeV
+          BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -1850,7 +1854,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.2s Real=1.29s Sys=0.09s
+  User=1.2s Real=1.28s Sys=0.09s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1858,141 +1862,141 @@ Region : Calor-A
  Production thresholds :
     gamma 10 um     e- 10 um     e+ 10 um 
  Energy deposition in an event :
-    Absorber 571.09222 MeV      Gap 252.18843 MeV
+    Absorber 523.41088 MeV      Gap 234.36805 MeV
  Number of secondaries in an event :
-    gamma in Absorber 62.4    in Gap 14.3
-    e-    in Absorber 1032.6    in Gap 995.4
-    e+    in Absorber 2    in Gap 0.1
+    gamma in Absorber 45.2    in Gap 10.4
+    e-    in Absorber 915.5    in Gap 896.8
+    e+    in Absorber 0.9    in Gap 0.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.0124784 keV    in Gap 1.2318312 keV
-    e-    in Absorber 2.5513928 eV     in Gap 9.6704706 eV 
-    e+    in Absorber 53.129907 keV    in Gap 3.0871906 MeV
+    gamma in Absorber 1.0009045 keV    in Gap 1.0630069 keV
+    e-    in Absorber 15.600892 eV     in Gap 73.259479 eV 
+    e+    in Absorber 132.92155 keV    in Gap 14.725208 MeV
  Total track length of e+/e- in an event :
-    Absorber 47.388863 cm       Gap 45.207059 cm 
+    Absorber 35.227353 cm       Gap 34.945996 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1677.5      Gap 1503.5
+    Absorber 1424.7      Gap 1298.5
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  768.26303       59.8       1729        1.1  744.57649     2657.4
-       1   27.07828        9.5       97.6        0.5  96.165652      200.2
-       2  8.3863182        2.7       47.5        0.3  24.078587       82.5
-       3  8.1067811          2       41.6        0.1  29.070283       76.3
-       4  2.1519638        0.6       20.5          0  5.6198103       30.2
-       5   1.497063        0.2       16.3          0  5.0855881       23.5
-       6 0.73964387        0.2       10.9          0  1.2953394       15.9
-       7  2.8481454        0.6       16.5          0   8.959416       27.8
-       8  1.1369783        0.2       11.9          0  3.3344565       19.1
-       9 0.68187787        0.4        8.4        0.1  1.1528185       12.1
-      10 0.37619493          0        7.7          0 0.36736724        8.8
-      11 0.31702531        0.1        4.7          0 0.49623294        5.6
-      12 0.37963398        0.1          5          0  1.1665548        6.5
-      13 0.17283315        0.1        2.2          0 0.24679072          3
-      14 0.10130238          0        2.9          0 0.10177833        3.3
-      15 0.84130945        0.2        3.1          0  3.8978934        5.5
-      16  0.1501452          0        0.9          0 0.31564962        1.6
-      17 0.02328966          0        0.6          0 0.011469504        0.8
-      18 0.011706506          0        0.2          0 0.0072169524        0.3
-      19 0.0099666091          0        0.4          0 0.0059885981        0.4
+       0  741.89583       51.9     1667.5        0.9   655.1353     2498.8
+       1   6.457664          2       33.7          0  21.783786       65.5
+       2  3.9014458        0.8       27.8          0  14.589051       47.3
+       3  1.8270734        0.6       21.6        0.1  3.7831134       33.7
+       4 0.85766024          0       15.3          0    1.31403       19.5
+       5  0.3263426          0        7.7          0 0.37545627        8.9
+       6 0.49157687          0       10.7          0 0.86418473       13.4
+       7 0.59469334        0.2        9.1          0  1.5932821       12.3
+       8 0.23619652          0        3.1          0  0.3842021        3.8
+       9  0.1238622          0        3.4          0 0.082978984        3.8
+      10 0.17149513          0        2.9          0 0.17129374        3.6
+      11 0.25943767          0        2.3          0 0.50774964        2.8
+      12 0.48417374        0.1        2.8          0  1.0529489        4.1
+      13 0.060502635          0        1.3          0 0.042118658        2.1
+      14 0.021578537          0        0.8          0 0.012215896        0.9
+      15 0.023111974          0        0.5          0  0.0126636        0.6
+      16 0.034136547          0        0.9          0 0.024916479        1.1
+      17 0.0059070274          0        0.6          0 0.0015234227        0.6
+      18          0          0          0          0          0          0
+      19 0.0062327385          0        0.3          0 0.0026699508        0.4
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 um     e- 100 um     e+ 100 um 
  Energy deposition in an event :
-    Absorber 659.74077 MeV      Gap 288.27596 MeV
+    Absorber 609.18687 MeV      Gap 253.98234 MeV
  Number of secondaries in an event :
-    gamma in Absorber 80.3    in Gap 22.6
-    e-    in Absorber 529.4    in Gap 272.3
-    e+    in Absorber 3.7    in Gap 0.9
+    gamma in Absorber 63.2    in Gap 15.3
+    e-    in Absorber 462.2    in Gap 225.1
+    e+    in Absorber 2.7    in Gap 0.5
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.3254421 keV    in Gap 1.1109833 keV
-    e-    in Absorber 0.4198173 eV     in Gap 32.383271 eV 
-    e+    in Absorber 509.50875 keV    in Gap 2.3688503 MeV
+    gamma in Absorber 2.3377472 keV    in Gap 1.1072008 keV
+    e-    in Absorber 21.485359 eV     in Gap 6.9646913 eV 
+    e+    in Absorber 391.69636 keV    in Gap 187.18941 keV
  Total track length of e+/e- in an event :
-    Absorber 66.695098 cm       Gap 62.914726 cm 
+    Absorber 53.966501 cm       Gap 43.897728 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1104.1      Gap 579
+    Absorber 964      Gap 451.6
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  880.00725       83.1      485.5          3  1081.1203     1164.4
-       1  44.685476       14.1       85.6        1.1  151.06924        210
-       2  10.227285        2.8       63.1        0.2  32.269862       99.2
-       3  5.7999663        1.4         44        0.2   16.75198       59.7
-       4  1.8092075        0.6       29.9          0  3.9423281       35.7
-       5  2.1688522        0.6       24.1        0.1  6.6239168       31.3
-       6  0.6712571        0.1       17.3          0 0.61381847       19.7
-       7 0.63373771        0.1       14.6          0 0.74156615       17.6
-       8 0.57853025          0       10.3          0 0.62066581       12.5
-       9 0.23781675        0.1        8.2          0 0.14537476        9.3
-      10 0.16482389          0          4          0 0.24586388        4.5
-      11 0.42518206          0        4.7          0 0.90727937        5.9
-      12 0.15549611          0        3.2          0 0.14853384        3.4
-      13 0.09120798          0        2.4          0 0.067773718        3.5
-      14 0.05836952          0        1.6          0 0.033263679          2
-      15 0.044603134          0        0.9          0 0.033218911        1.1
-      16 0.044386261          0        0.8          0 0.031398232        0.9
-      17 0.020647528          0        0.4          0 0.012735852        0.6
-      18 0.026361046          0        0.3          0 0.016462753        0.3
+       0  813.98516       64.9      439.9        2.1  841.30428     1039.3
+       1  24.424986        7.1       56.9        0.3  75.212238      117.4
+       2   9.429281        2.4       44.3        0.3  28.622463       64.7
+       3  4.4267424        1.1       33.9        0.1  9.4285245       48.1
+       4  1.5719327          0       19.8          0  2.4246619       27.5
+       5  1.9127584        0.4       17.2        0.1  4.8071718       21.8
+       6  1.1881625        0.4       13.9        0.1  3.1932287       19.6
+       7  2.1465422        0.6       13.3        0.1  5.7595002       17.6
+       8 0.30009915        0.1        8.8          0 0.23269811       10.8
+       9 0.26883984          0        7.8          0 0.19097464        8.5
+      10 0.25127711        0.1        8.2          0 0.17289289        9.8
+      11 0.13908152          0        5.5          0 0.13543782        6.2
+      12 0.14405444          0        5.1          0 0.10468775        5.7
+      13 0.08855391        0.1        2.6          0 0.10933604          3
+      14  2.6841861        1.2        5.7        0.1  6.6972945       10.2
+      15 0.11122213          0        1.9          0 0.11647396        2.4
+      16 0.085204024        0.1        2.2          0 0.11676879        2.7
+      17 0.0096897334          0        0.2          0 0.013406796        0.2
+      18 0.0014401768          0        0.1          0 0.00024792317        0.1
       19          0          0          0          0          0          0
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 646.06021 MeV      Gap 287.18789 MeV
+    Absorber 649.46127 MeV      Gap 293.37334 MeV
  Number of secondaries in an event :
-    gamma in Absorber 61.6    in Gap 15.5
-    e-    in Absorber 334.6    in Gap 154.8
-    e+    in Absorber 3.1    in Gap 0.7
+    gamma in Absorber 61.5    in Gap 17.6
+    e-    in Absorber 322.6    in Gap 146.1
+    e+    in Absorber 2.9    in Gap 1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 6.8961822 keV    in Gap 3.0086876 keV
-    e-    in Absorber 28.181741 eV     in Gap 2.2098254 eV 
-    e+    in Absorber 35.422633 keV    in Gap 752.70162 keV
+    gamma in Absorber 6.9426391 keV    in Gap 2.9426402 keV
+    e-    in Absorber 7.7567104 eV     in Gap 10.01614 eV 
+    e+    in Absorber 543.09009 keV    in Gap 1.6896326 MeV
  Total track length of e+/e- in an event :
-    Absorber 57.173577 cm       Gap 58.250146 cm 
+    Absorber 58.406427 cm       Gap 62.114921 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 827.8      Gap 381.9
+    Absorber 804.6      Gap 388
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0  863.90757       63.2      159.6        2.6  962.12062      689.5
-       1  34.025633        7.6       67.6        0.6  102.71269      144.8
-       2  9.6719001        2.1       50.7        0.1  25.227139       86.9
-       3  6.7034474        1.1       43.4        0.1  16.787039       67.9
-       4  4.6467401          1       30.9        0.1  13.290496       43.3
-       5   5.209405        0.6       26.6        0.1  16.511644       39.7
-       6  1.2650597        0.1       25.3          0  1.6995463       29.3
-       7  1.9575565        0.6       17.7        0.1  4.1145151       24.6
-       8   1.381963          0       12.9          0   4.309545       16.2
-       9 0.66712795        0.2       10.2        0.1   1.000856       13.1
-      10 0.37810771          0        8.6          0 0.38359471        9.5
-      11  1.1891873        0.4        7.2          0   2.413078       11.4
-      12 0.93638986          0        8.1          0  1.8433854        9.6
-      13 0.20059796          0        5.5          0 0.17456355        6.2
-      14 0.47419894        0.2        4.6          0 0.80466115        5.6
-      15  0.3952125          0        3.7          0 0.68927592        4.2
-      16 0.061825284          0        1.4          0 0.042810299        1.7
-      17 0.062540991          0          2          0 0.040719271        2.2
-      18 0.044751005          0        1.6          0 0.027076369          2
-      19 0.028951677          0        1.3          0 0.010546097        1.4
+       0   852.2191       58.8        156        1.8  918.70339      651.5
+       1  48.015872       10.7       69.5          1  163.01675      164.3
+       2  18.688443        5.3       46.8        0.4  65.090711       88.4
+       3  8.8087545        1.3       43.2        0.1  26.323385       71.2
+       4  3.1047215        0.6       34.3        0.2  5.5937881       47.2
+       5  3.9914791        1.3       23.7        0.2  10.672109       39.3
+       6  3.5632634        0.4       20.8        0.1  9.1966905       35.6
+       7 0.82796898        0.1       16.3          0  1.2460364       25.4
+       8 0.88037715          0       15.3          0  1.5521027         19
+       9  1.1440004        0.4        9.6        0.1   2.146837       11.9
+      10 0.21198378          0        5.2          0 0.17334186        5.8
+      11 0.26718543          0        5.6          0 0.27619355        6.6
+      12 0.36392633        0.2        4.9          0 0.56805248        5.9
+      13 0.16479776          0          4          0 0.14912789        5.4
+      14 0.087717294          0        2.4          0 0.056588688        2.7
+      15 0.10331523          0        2.7          0 0.10108076        3.1
+      16 0.04658801          0        2.4          0 0.018222849        2.6
+      17 0.14388934          0        1.7          0 0.15548197        1.9
+      18 0.071100253          0        1.1          0 0.084542028        1.3
+      19 0.050513507          0        1.4          0 0.028912421        1.6
 ############################################################
-CPU Time spent by each region0xa7e6c8
+CPU Time spent by each region0x2a9946e188
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.4  Real=0.46  Sys=0.03
- e+ / e-       : User=0.22  Real=0.24  Sys=0.03
+ All particles : User=0.43  Real=0.47  Sys=0.02
+ e+ / e-       : User=0.28  Real=0.28  Sys=0.01
 
 Region <Calor-B>
- All particles : User=0.25  Real=0.22  Sys=0.01
- e+ / e-       : User=0.17  Real=0.13  Sys=0
+ All particles : User=0.28  Real=0.24  Sys=0.01
+ e+ / e-       : User=0.18  Real=0.12  Sys=0.02
 
 Region <Calor-C>
- All particles : User=0.19  Real=0.15  Sys=0.01
- e+ / e-       : User=0.1  Real=0.1  Sys=0
+ All particles : User=0.16  Real=0.22  Sys=0
+ e+ / e-       : User=0.08  Real=0.11  Sys=0
 
 /run/dumpCouples
 
@@ -2082,3 +2086,4 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+

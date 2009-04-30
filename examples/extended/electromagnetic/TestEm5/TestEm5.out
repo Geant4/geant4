@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-02-01    (13-March-2009)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -324,7 +328,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.19s Real=604.96s Sys=19.24s
+  User=4.18s Real=7.36s Sys=2.38s
 
  ======================== run summary ======================
 
@@ -659,7 +663,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=5.3s Real=402.11s Sys=11.06s
+  User=4.69s Real=5.71s Sys=1.02s
 
  ======================== run summary ======================
 
@@ -1006,7 +1010,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.27s Real=413.74s Sys=13.19s
+  User=6.75s Real=7.92s Sys=1.18s
 
  ======================== run summary ======================
 
@@ -1354,7 +1358,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.72s Real=465.99s Sys=12.63s
+  User=2.13s Real=3.35s Sys=1.22s
 
  ======================== run summary ======================
 
@@ -1703,7 +1707,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=26.01s Real=531.14s Sys=13.42s
+  User=26.41s Real=27.64s Sys=1.21s
 
  ======================== run summary ======================
 
@@ -1755,3 +1759,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

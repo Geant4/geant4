@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-02-01    (13-March-2009)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -129,7 +133,7 @@ Registered filter factories:
 MicrobeamPhysicsList::SetCuts:CutLength : 10 nm 
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -241,27 +245,27 @@ LowEnBrem:  Total cross sections from EEDL database.
       The process must work with G4LowEnergyIonisation.
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+        MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
-            eBremRel :     Emin=          1 GeV        Emax=   100 TeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :     Emin=          0 eV         Emax=   100 TeV
+            eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -299,7 +303,7 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
@@ -449,5 +453,6 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 -> Total number of particles detected by the gas detector : 4
 
-Graphics systems deleted.
+Idle> Graphics systems deleted.
 Visualization Manager deleting...
+

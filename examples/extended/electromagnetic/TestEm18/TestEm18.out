@@ -1,13 +1,17 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-02-01    (13-March-2009)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 11 *****
+***** Table : Nb of materials = 12 *****
 
  Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
@@ -44,6 +48,9 @@
 
  Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: ArgonGas     density:  1.782 mg/cm3  RadL: 109.702 m    Nucl.Int.Length: 671.416 m    Imean: 187.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: ArgonGas ( )   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 /run/verbose 2
@@ -244,7 +251,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.9348 keV    e- 348.268 keV    e+ 342.09 keV
+ Energy thresholds :  gamma 2.90186 keV    e- 347.138 keV    e+ 338.695 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -285,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.52s Real=1.52s Sys=0s
+  User=1.76s Real=1.76s Sys=0s
 
  ======================== run summary ======================
 
@@ -293,19 +300,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 1.5817  stepSize= 6.3254 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 1.5828  stepSize= 6.321 mm 
 
- d-rays  : eLoss/primary= 246.06 keV	  nb of d-rays= 0.23485  <Tkin>= 1.0477 MeV  Tmin= 348.28 keV  Tmax= 4.9521 MeV
+ d-rays  : eLoss/primary= 247.08 keV	  nb of d-rays= 0.23574  <Tkin>= 1.0481 MeV  Tmin= 347.15 keV  Tmax= 4.9585 MeV
 
- brems   : eLoss/primary= 172.24 keV	  nb of gammas= 0.30578  <Tkin>= 563.28 keV  Tmin= 2.936 keV  Tmax= 9.756 MeV
+ brems   : eLoss/primary= 174.34 keV	  nb of gammas= 0.30624  <Tkin>= 569.29 keV  Tmin= 2.9029 keV  Tmax= 9.7559 MeV
 
- deposit : eLoss/primary= 1.734 MeV	 <dEcut > table= 1.7351 MeV   ---> simul/reference= 0.99934
+ deposit : eLoss/primary= 1.734 MeV	 <dEcut > table= 1.7349 MeV   ---> simul/reference= 0.99949
 
- total   : eLoss/primary= 2.1523 MeV	 <dEfull> table= 2.1634 MeV   ---> simul/reference= 0.99486
+ total   : eLoss/primary= 2.1554 MeV	 <dEfull> table= 2.1635 MeV   ---> simul/reference= 0.99629
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 415939755, 593623427
+ Current couple of seeds = 530078168, 1739162146
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -318,3 +325,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

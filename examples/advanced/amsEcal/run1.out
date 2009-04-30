@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-02-cand-01    (19-December-2008)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,11 +20,11 @@
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  92.24 %  ElmAbundance  50.00 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   7.76 %  ElmAbundance  50.00 %
 
- Material:      Air     density:  1.290 kg/m3   RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204322175.595 pc   Nucl.Int.Length: 113728945.578 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -310,22 +314,22 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   18 kByte
+    Total memory consumed for geometry optimisation:   32 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00           17k layer
-       0.00         0.00         0.00            0k superLayer
-       0.00         0.00         0.00            0k calorimeter
+       0.00         0.00         0.00           31k layer
+       0.00         0.00         0.00            1k superLayer
+       0.00         0.00         0.00            1k calorimeter
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      95.45         17k         1      490        980         0.00    layer
-       2.37          0k         1       11         20         0.00    superLayer
-       2.18          0k         1       10         18         0.00    calorimeter
+      95.57         30k         1      490        980         0.00    layer
+       2.31          0k         1       11         20         0.00    superLayer
+       2.12          0k         1       10         18         0.00    calorimeter
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -356,7 +360,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.61s Real=23.04s Sys=13.37s
+  User=24.66s Real=24.95s Sys=0.3s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 superLayers
@@ -373,33 +377,34 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   pixel 0: 702.04 keV +- 1.404 MeV  (2e+02 %)     7.9092 MeV +- 5.129 MeV  ( 65 %)
-   pixel 1: 734.65 keV +- 1.968 MeV  (2.7e+02 %)     8.0372 MeV +- 5.661 MeV  ( 70 %)
-   pixel 2: 686.66 keV +- 1.464 MeV  (2.1e+02 %)     8.0206 MeV +-  5.74 MeV  ( 72 %)
-   pixel 3: 713.94 keV +- 1.586 MeV  (2.2e+02 %)     8.0351 MeV +- 5.728 MeV  ( 71 %)
-   pixel 4: 722.69 keV +- 1.768 MeV  (2.4e+02 %)     7.9523 MeV +- 5.298 MeV  ( 67 %)
-   pixel 5: 726.36 keV +- 1.763 MeV  (2.4e+02 %)     8.0312 MeV +- 5.409 MeV  ( 67 %)
-   pixel 6: 711.01 keV +- 1.495 MeV  (2.1e+02 %)     7.8758 MeV +- 4.745 MeV  ( 60 %)
-   pixel 7: 717.26 keV +- 1.378 MeV  (1.9e+02 %)     8.0079 MeV +- 5.297 MeV  ( 66 %)
-   pixel 8: 719.61 keV +-  1.34 MeV  (1.9e+02 %)     8.0091 MeV +- 5.189 MeV  ( 65 %)
-   pixel 9:    712 keV +- 1.316 MeV  (1.8e+02 %)      7.882 MeV +- 5.015 MeV  ( 64 %)
-   pixel 10: 739.07 keV +-  1.76 MeV  (2.4e+02 %)     7.9577 MeV +- 5.091 MeV  ( 64 %)
-   pixel 11: 723.87 keV +- 1.465 MeV  (2e+02 %)     7.9779 MeV +- 5.231 MeV  ( 66 %)
-   pixel 12: 715.02 keV +-  1.55 MeV  (2.2e+02 %)     7.9924 MeV +- 5.373 MeV  ( 67 %)
-   pixel 13: 746.74 keV +-  1.72 MeV  (2.3e+02 %)     7.9331 MeV +- 4.866 MeV  ( 61 %)
-   pixel 14: 714.02 keV +- 1.368 MeV  (1.9e+02 %)     7.9014 MeV +- 4.687 MeV  ( 59 %)
-   pixel 15: 721.24 keV +- 1.385 MeV  (1.9e+02 %)     7.9553 MeV +- 5.125 MeV  ( 64 %)
-   pixel 16: 735.84 keV +- 1.634 MeV  (2.2e+02 %)     7.9565 MeV +- 5.008 MeV  ( 63 %)
-   pixel 17: 737.76 keV +- 1.507 MeV  (2e+02 %)     8.0085 MeV +-   5.1 MeV  ( 64 %)
+   pixel 0: 715.91 keV +- 1.319 MeV  (1.8e+02 %)     8.0162 MeV +- 5.745 MeV  ( 72 %)
+   pixel 1: 711.98 keV +- 1.467 MeV  (2.1e+02 %)     7.9627 MeV +- 5.374 MeV  ( 67 %)
+   pixel 2: 699.68 keV +- 1.311 MeV  (1.9e+02 %)     7.9684 MeV +- 5.274 MeV  ( 66 %)
+   pixel 3: 720.77 keV +- 1.317 MeV  (1.8e+02 %)     7.9716 MeV +-  5.23 MeV  ( 66 %)
+   pixel 4: 728.57 keV +- 1.777 MeV  (2.4e+02 %)     7.9612 MeV +- 5.263 MeV  ( 66 %)
+   pixel 5: 713.68 keV +- 1.506 MeV  (2.1e+02 %)     7.9739 MeV +- 5.231 MeV  ( 66 %)
+   pixel 6: 750.69 keV +-  1.94 MeV  (2.6e+02 %)     7.9878 MeV +- 5.242 MeV  ( 66 %)
+   pixel 7: 714.63 keV +- 1.462 MeV  (2e+02 %)     7.8565 MeV +- 4.829 MeV  ( 61 %)
+   pixel 8: 728.82 keV +- 1.655 MeV  (2.3e+02 %)     8.0089 MeV +- 5.636 MeV  ( 70 %)
+   pixel 9: 726.04 keV +- 1.802 MeV  (2.5e+02 %)     8.0026 MeV +- 5.465 MeV  ( 68 %)
+   pixel 10: 723.49 keV +- 1.482 MeV  (2e+02 %)     7.9892 MeV +- 5.169 MeV  ( 65 %)
+   pixel 11: 742.81 keV +- 1.733 MeV  (2.3e+02 %)     8.0698 MeV +- 5.528 MeV  ( 68 %)
+   pixel 12: 724.86 keV +- 1.745 MeV  (2.4e+02 %)     8.0736 MeV +- 5.715 MeV  ( 71 %)
+   pixel 13: 701.87 keV +-  1.38 MeV  (2e+02 %)     7.9717 MeV +- 4.933 MeV  ( 62 %)
+   pixel 14: 718.67 keV +- 1.564 MeV  (2.2e+02 %)     7.9677 MeV +-  5.14 MeV  ( 65 %)
+   pixel 15: 716.78 keV +-  1.64 MeV  (2.3e+02 %)      7.966 MeV +- 4.946 MeV  ( 62 %)
+   pixel 16:  706.6 keV +- 1.113 MeV  (1.6e+02 %)     7.9341 MeV +- 4.865 MeV  ( 61 %)
+   pixel 17: 720.17 keV +- 1.468 MeV  (2e+02 %)     7.9666 MeV +- 5.195 MeV  ( 65 %)
 
-   total calor :  12.98 MeV +- 6.622 MeV  ( 51 %)     143.44 MeV +- 22.43 MeV  ( 16 %)
+   total calor : 12.966 MeV +- 6.669 MeV  ( 51 %)     143.65 MeV +- 22.97 MeV  ( 16 %)
 ------------------------------------------------------------
 
-       Leakage : 856.56 MeV +- 22.43 MeV  (Eleak/Ebeam = 86 %)
+   Leakage : 856.35 MeV +- 22.97 MeV
+   Eleak/Ebeam =85.6 %  ( forward =85.6 %;   backward =0.0206 %;   lateral =0.0171 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 62181348, 1807834259
+ Current couple of seeds = 1320992004, 834142749
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -412,3 +417,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

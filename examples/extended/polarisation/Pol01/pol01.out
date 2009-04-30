@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-02-01    (13-March-2009)
+ Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,7 +50,7 @@ pol-phot:   for  gamma    SubType= 12
  Total cross sections from Sandia parametrisation. 
       Sampling according Polarized-PhotoElectric model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-PhotoElectric :     Emin=          0 eV         Emax=   100 TeV
+Polarized-PhotoElectric :     Emin=          0 eV         Emax=   10 TeV
 
 pol-compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 1
@@ -63,7 +67,7 @@ pol-conv:   for  gamma    SubType= 14
              polConv :     Emin=          0 eV         Emax=   100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
@@ -77,8 +81,8 @@ pol-eIoni:   for  e-    SubType= 2
 PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
 pol-eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PolBrem :     Emin=          0 eV         Emax=   100 TeV
 
@@ -91,8 +95,8 @@ pol-eIoni:   for  e+    SubType= 2
 PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
 
 pol-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PolBrem :     Emin=          0 eV         Emax=   100 TeV
 
@@ -147,39 +151,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.21s Real=0.21s Sys=0s
+  User=0.23s Real=0.22s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.666016 0.0392132 0.345886 0.087905 0.920036 0.944204 0.236936 0.608706 0.0723484 0.722772 0.498411 0.947396 0.367028 0.428991 0.530331 0.87666 0.197768 0.0196997 0.605378 0.163502 0.0246642 0.0419614 0.980736 0.583336 
- i_lag = 5, j_lag = 15
- carry = 5.96046e-08, count24 = 15
+ float_seed_table[] = 0.248965 0.827292 0.18298 0.902567 0.859822 0.689111 0.0350202 0.929433 0.930535 0.583797 0.0579996 0.783419 0.0545318 0.538488 0.368696 0.389027 0.276013 0.964975 0.744972 0.580091 0.269208 0.140315 0.053248 0.380391 
+ i_lag = 21, j_lag = 7
+ carry = 0, count24 = 1
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31094
-	pol-compt = 241
-	msc = 3353
-	pol-eBrem = 347
+	Transportation = 31084
+	pol-compt = 240
+	msc = 3418
+	pol-eBrem = 342
 	pol-conv = 181
-	pol-eIoni = 551
-	pol-phot = 159
-	pol-annihil = 57
+	pol-eIoni = 552
+	pol-phot = 157
+	pol-annihil = 53
  Gamma: 
-Mean Number per Event :1.0113
-Mean Energy :9.5924 MeV +- 1.8805 MeV
-Mean Polarization :-0.96512 +- 0.18061
+Mean Number per Event :1.0099
+Mean Energy :9.6053 MeV +- 1.8468 MeV
+Mean Polarization :-0.96685 +- 0.17647
  Electron: 
-Mean Number per Event :0.0308
-Mean Energy :5.3192 MeV +- 2.5762 MeV
-Mean Polarization :-0.74537 +- 0.2783
+Mean Number per Event :0.0312
+Mean Energy :5.1781 MeV +- 2.6099 MeV
+Mean Polarization :-0.72955 +- 0.28786
  Positron: 
-Mean Number per Event :0.0126
-Mean Energy :3.9121 MeV +- 1.9271 MeV
-Mean Polarization :-0.5574 +- 0.32992
+Mean Number per Event :0.0131
+Mean Energy :4.0427 MeV +- 1.9451 MeV
+Mean Polarization :-0.58205 +- 0.33093
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -192,3 +196,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

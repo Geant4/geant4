@@ -338,20 +338,20 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   1 kByte
+    Total memory consumed for geometry optimisation:   3 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            3k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.57          1k         1       50         50         0.00    Calorimeter
-       8.43          0k         1        3          4         0.00    Layer
+      92.05          2k         1       50         50         0.00    Calorimeter
+       7.95          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -460,13 +460,13 @@ AugerTransitionTable complete
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.92s Real=11.71s Sys=0.05s
+  User=10.49s Real=10.51s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 763.81 MeV :  31.97 MeV     4.186 +- 0.4186 %      54.5 cm  +- 2.33 cm 
-   liquidArgon: 209.14 MeV :   16.7 MeV     7.985 +- 0.7985 %      1.04 m   +-  8.6 cm 
+          Lead: 769.96 MeV :  22.68 MeV     2.945 +- 0.2945 %      55.1 cm  +- 1.72 cm 
+   liquidArgon: 206.55 MeV :  15.34 MeV     7.425 +- 0.7425 %      1.02 m   +- 7.65 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -474,15 +474,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 763.811 MeV
-liquidArgon:	 209.136 MeV
+      Lead:	 769.957 MeV
+liquidArgon:	 206.549 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 227015293, 1341787049
+ Current couple of seeds = 1891305773, 868348681
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
@@ -500,3 +500,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+
