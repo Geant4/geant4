@@ -242,5 +242,5 @@ tests                                            tests-V09-02-04
   o New test for EM low-energy Penelope processes.
 - test54 (test54-V09-02-00)
   o New test for EM low-energy Livermore processes.
-- test55 (test54-V09-02-01)
+- test55 (test55-V09-02-01)
   o New test for ICRU 73-based ionization model (G4IonParametrisedLossModel).
