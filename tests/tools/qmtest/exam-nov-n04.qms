@@ -7,6 +7,7 @@
   <argument name="test_ids">
     <set>
       <text>exam-nov-n04-build</text>
+      <text>exam-nov-n04-EMtest-run</text>
       <text>exam-nov-n04-run</text>
     </set>
   </argument>
