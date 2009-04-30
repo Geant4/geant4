@@ -1,4 +1,4 @@
-$Id: History,v 1.362 2009-04-29 17:25:20 sincerti Exp $
+$Id: History,v 1.363 2009-04-30 07:35:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30.04.2009, S.Incerti, tag emlowen-V09-02-30
+	    Removed annoying G4cout in G4AugerData.cc.
+	    (AugerTransitionTable)
+	    
 29.04.2009, S.Incerti, tag emlowen-V09-02-29
             Increased energy range validity of e- elastic Champion model
             up to 10 MeV (Geant4-DNA process). 

@@ -485,7 +485,7 @@ void G4AugerData::BuildAugerTransitionTable()
       augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
       //	G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
       // G4cout << "G4AugerData for Element no. " << element << " are loaded" << G4endl;
-      G4cout << "AugerTransitionTable complete"<< G4endl;
+      //G4cout << "AugerTransitionTable complete"<< G4endl;
     }
 }
 
