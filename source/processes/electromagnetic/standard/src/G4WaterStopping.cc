@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.14 2009-04-29 17:40:41 antoni Exp $
+// $Id: G4WaterStopping.cc,v 1.15 2009-04-30 17:03:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -35,6 +35,9 @@
 // Author:      V.Ivanchenko 12.05.2006
 //
 // Modifications:
+// 29.04.2009 A.Ivantchenko added revised data for G4WATER, provided by 
+//            Prof.P.Sigmund Univ. Southern Denmark in the framework of 
+//            the ESA Technology Research Programme (ESA contract 21435/08/NL/AT)
 //
 //----------------------------------------------------------------------------
 //
