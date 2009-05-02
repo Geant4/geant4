@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.cc,v 1.2 2009-04-29 14:05:12 kurasige Exp $
+// $Id: G4NucleiPropertiesTableAME03.cc,v 1.3 2009-05-02 11:58:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,12 @@
 // Class G4NucleiPropertiesTableAME03 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 
+G4bool  G4NucleiPropertiesTableAME03::isIntialized = false;
+G4double G4NucleiPropertiesTableAME03::electronMass[ZMax];
+
+G4NucleiPropertiesTableAME03::G4NucleiPropertiesTableAME03()
+{
+}
 
 G4int G4NucleiPropertiesTableAME03::GetIndex(G4int Z, G4int A) 
 {
@@ -93,21 +99,24 @@ G4int G4NucleiPropertiesTableAME03::MaxZ(G4int A)
 }
 
 
-
-
 G4double G4NucleiPropertiesTableAME03::GetNuclearMass(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);	
-  if (i >= 0){
-
-    // Following formula migrate to AME03 
-    const G4double NuclearMass = GetAtomicMass(Z,A) - G4double(Z)*electron_mass_c2 +
-      ( 14.4381*std::pow ( Z , 2.39 ) + 1.55468*1e-6*std::pow ( Z , 5.35 ) ) *eV;
-
-    return NuclearMass;
-  } else { 
-    return 0.0;
+  if (!isIntialized) {
+    // calculate electron mass in orbit with binding energy
+    isIntialized = true;
+    for (int iz=1; iz<ZMax; iz+=1){
+      electronMass[iz] =  iz*electron_mass_c2 
+	  - ( 14.4381 * std::pow( G4double(iz) , 2.39 )) *eV
+	  - ( 1.55468*1e-6 * std::pow( G4double(iz) , 5.35 ) ) *eV;
+    }
   }
+
+  G4double nuclearMass = GetAtomicMass(Z,A) - electronMass[Z];
+
+  if (nuclearMass <0.0) nuclearMass = 0.0;
+
+  return nuclearMass;
+
 }
 
 
@@ -117,7 +126,7 @@ G4double G4NucleiPropertiesTableAME03::GetMassExcess(G4int Z, G4int A)
     if (i >= 0) {
       return MassExcess[i]*keV;
     } else {
-        return 0.0;
+      return 0.0;
     }
 }
 

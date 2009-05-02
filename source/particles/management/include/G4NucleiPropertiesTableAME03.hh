@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableAME03.hh,v 1.2 2009-04-29 14:05:12 kurasige Exp $
+// $Id: G4NucleiPropertiesTableAME03.hh,v 1.3 2009-05-02 11:58:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,8 @@
 //	Binding Energy
 //	Beta Decay Energy
 //	Atomic Mass
-
+//
+//      
 class G4NucleiProperties;
 
 class G4NucleiPropertiesTableAME03 
@@ -71,7 +72,7 @@ class G4NucleiPropertiesTableAME03
 private:
   
   // Default constructor - this class should exist only once!
-  G4NucleiPropertiesTableAME03(){};
+  G4NucleiPropertiesTableAME03();
 
 public:
 
@@ -79,7 +80,7 @@ public:
   ~G4NucleiPropertiesTableAME03() { };
 
   // Following values migrate to AME03
-  enum  {nEntries = 3179,MaxA = 293}; 
+  enum  {nEntries = 3179,MaxA = 293, ZMax = 120}; 
 
   // Other Operations 
   // all methods are private and can be used only by G4NucleiProperties
@@ -89,9 +90,15 @@ public:
 private:
 
   // Operation: GetMassExcess
+  //   values imported from The Ame2003 atomic mass evaluation (II)  
   static G4double GetMassExcess(G4int Z, G4int A); 
 
+  // Operation: GetAtomicMass .. in Geant4 Energy units!
+  //      Atomic_Mass =  MassExcess + A*amu_c2
+  static G4double GetAtomicMass(G4int Z, G4int A);
+
   // Operation: GetNuclearMass
+  //      Nuclear_Mass = Atomic_Mass - electronMass
   static G4double GetNuclearMass(G4int Z, G4int A);
 
   // Operation: GetBindingEnergy
@@ -99,9 +106,6 @@ private:
 
   // Operation: GetBetaDecayEnergy
   static G4double GetBetaDecayEnergy(G4int Z, G4int A);
-
-  // Operation: GetAtomicMass .. in Geant4 Energy units!
-  static G4double GetAtomicMass(G4int Z, G4int A);
 
   // Is the nucleus (A,Z) in table?
   static G4bool IsInTable(G4int Z, G4int A);
@@ -141,6 +145,9 @@ private:
   //         the indexArray[][]
   static G4int shortTable[MaxA+1];
 
+  // electrom mass
+  static G4double electronMass[ZMax];
+  static G4bool   isIntialized;
 
 };
 
