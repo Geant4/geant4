@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.8 2008-12-05 11:58:16 sincerti Exp $
+// $Id: G4FinalStateElasticBrennerZaider.cc,v 1.9 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateElasticBrennerZaider.hh"
@@ -63,6 +63,16 @@ G4FinalStateElasticBrennerZaider::G4FinalStateElasticBrennerZaider()
   gamma100_200Coeff.push_back(2.4775E-2);
   gamma100_200Coeff.push_back(-2.96264E-5);
   gamma100_200Coeff.push_back(-1.20655E-7);
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4FinalStateElasticBrennerZaider is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

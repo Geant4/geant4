@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.7 2008-12-10 18:25:28 sincerti Exp $
+// $Id: G4FinalStateElasticChampion.cc,v 1.8 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 
@@ -83,6 +83,16 @@ G4FinalStateElasticChampion::G4FinalStateElasticChampion()
   {
       G4Exception("G4FinalStateElastiChampion : constructor: electron is not defined");
   }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4FinalStateElastiChampion is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

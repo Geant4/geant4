@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionExcitationBorn.cc,v 1.4 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4CrossSectionExcitationBorn.cc,v 1.5 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionExcitationBorn.hh"
@@ -35,6 +35,16 @@ G4CrossSectionExcitationBorn::G4CrossSectionExcitationBorn()
   lowEnergyLimit = 500. * keV;
   highEnergyLimit = 10 * MeV;
   table = 0;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4CrossSectionExcitationBorn is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

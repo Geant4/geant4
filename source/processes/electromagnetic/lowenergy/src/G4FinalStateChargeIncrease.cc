@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateChargeIncrease.cc,v 1.4 2009-01-20 07:50:28 sincerti Exp $
+// $Id: G4FinalStateChargeIncrease.cc,v 1.5 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateChargeIncrease.hh"
@@ -34,6 +34,16 @@ G4FinalStateChargeIncrease::G4FinalStateChargeIncrease()
 {
   lowEnergyLimit = 1 * keV;
   highEnergyLimit = 10 * MeV;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class 4FinalStateChargeIncrease is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionChargeIncrease.cc,v 1.4 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4CrossSectionChargeIncrease.cc,v 1.5 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionChargeIncrease.hh"
@@ -78,6 +78,15 @@ G4CrossSectionChargeIncrease::G4CrossSectionChargeIncrease()
     G4Exception("G4CrossSectionChargeIncrease Constructor: helium is not defined");
   }
 
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4CrossSectionChargeIncrease is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

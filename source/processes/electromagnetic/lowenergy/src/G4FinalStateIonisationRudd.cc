@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationRudd.cc,v 1.8 2008-08-20 14:51:48 sincerti Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.9 2009-05-02 15:07:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4FinalStateIonisationRudd.hh"
@@ -69,6 +69,16 @@ G4FinalStateIonisationRudd::G4FinalStateIonisationRudd()
   helium = heliumDef->GetParticleName();
   lowEnergyLimit[helium] = 1. * keV;
   highEnergyLimit[helium] = 10. * MeV;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4FinalStateIonisationRudd is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
