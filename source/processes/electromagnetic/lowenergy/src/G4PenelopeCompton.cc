@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.33 2008-06-03 15:44:25 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.34 2009-05-02 09:59:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -119,6 +119,18 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
 	     << highEnergyLimit / GeV << " GeV"
 	     << G4endl;
     }
+
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopeCompton is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+
 }
 
 G4PenelopeCompton::~G4PenelopeCompton()

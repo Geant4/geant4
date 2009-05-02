@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.13 2009-01-08 09:42:54 pandola Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.14 2009-05-02 09:59:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -93,6 +93,17 @@ G4PenelopePhotoElectric::G4PenelopePhotoElectric(const G4String& processName)
 	     << highEnergyLimit / GeV << " GeV" 
 	     << G4endl;
     }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopePhotoElectric is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+
 }
 
 G4PenelopePhotoElectric::~G4PenelopePhotoElectric()

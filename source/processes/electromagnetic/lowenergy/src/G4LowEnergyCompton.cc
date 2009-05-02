@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.47 2008-12-18 13:01:28 gunter Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.48 2009-05-02 09:59:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -103,6 +103,16 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4LowEnergyCompton is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 G4LowEnergyCompton::~G4LowEnergyCompton()

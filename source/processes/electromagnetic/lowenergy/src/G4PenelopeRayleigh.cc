@@ -25,7 +25,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.16 2009-04-02 06:44:49 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.17 2009-05-02 09:59:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -95,6 +95,16 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
 	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopeRayleigh is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 G4PenelopeRayleigh::~G4PenelopeRayleigh()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.103 2008-05-02 19:23:38 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.104 2009-05-02 09:59:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -130,6 +130,16 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   cutForPhotons = 250.0*eV;
   cutForElectrons = 250.0*eV;
   verboseLevel = 0;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4LowEnergyIonisation is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 

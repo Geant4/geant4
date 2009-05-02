@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.7 2006-06-29 19:40:27 gunter Exp $
+// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.8 2009-05-02 09:59:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -62,6 +62,15 @@ G4LowEnergyPolarizedRayleigh::G4LowEnergyPolarizedRayleigh(const G4String& proce
     G4Exception("G4LowEnergyPolarizedRayleigh::G4LowEnergyPolarizedRayleigh - Energy limit outside intrinsic process validity range");
  
  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4LowEnergyPolarizedRayleigh is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 
