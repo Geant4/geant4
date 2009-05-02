@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.hh,v 1.2 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermorePolarizedComptonModel.hh,v 1.3 2009-05-02 15:20:52 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,9 +71,11 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
+  /*
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
+			   */
 private:
 
   G4double lowEnergyLimit;  

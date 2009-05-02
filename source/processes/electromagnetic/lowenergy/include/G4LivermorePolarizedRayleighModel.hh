@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.2 2009-03-03 08:23:48 sincerti Exp $
+// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.3 2009-05-02 15:20:52 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

@@ -23,9 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc,v 1.4 2009-03-19 15:17:05 sincerti Exp $
+// $Id: G4LivermorePolarizedComptonModel.cc,v 1.5 2009-05-02 15:20:53 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// History:
+// --------
+// 02 May 2009   S Incerti as V. Ivanchenko proposed in G4LivermoreComptonModel.cc
+//
+// Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - remove GetMeanFreePath method and table
+//                  - added protection against numerical problem in energy sampling 
+//                  - use G4ElementSelector
 
 #include "G4LivermorePolarizedComptonModel.hh"
 
@@ -41,7 +51,7 @@ G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4Parti
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
-  SetLowEnergyLimit(lowEnergyLimit);
+  //SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   
   verboseLevel= 0;
@@ -52,12 +62,13 @@ G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4Parti
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  if( verboseLevel>0 ) { 
   G4cout << "Livermore Polarized Compton is constructed " << G4endl
          << "Energy range: "
          << lowEnergyLimit / eV << " eV - "
          << highEnergyLimit / GeV << " GeV"
          << G4endl;
-
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,22 +94,6 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
     delete crossSectionHandler;
   }
 
-  // Energy limits
-  
-  if (LowEnergyLimit() < lowEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedComptonModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-    }
-
-  if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedComptonModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-    }
-
   // Reading of data files - all materials are read
   
   crossSectionHandler = new G4CrossSectionHandler;
@@ -119,34 +114,30 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
   G4String file = "/doppler/shell-doppler";
   shellData.LoadData(file);
 
-  //
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Polarized Compton model" << G4endl;
 
   InitialiseElementSelectors(particle,cuts);
 
-  G4cout << "Livermore Polarized Compton model is initialized " << G4endl
+  if(  verboseLevel>0 ) { 
+    G4cout << "Livermore Polarized Compton model is initialized " << G4endl
          << "Energy range: "
          << LowEnergyLimit() / eV << " eV - "
          << HighEnergyLimit() / GeV << " GeV"
          << G4endl;
-
+  }
+  
   //
     
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-    
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedComptonModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition* particleDefinition,
+                                       const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
@@ -154,13 +145,7 @@ G4double G4LivermorePolarizedComptonModel::ComputeCrossSectionPerAtom(
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePolarizedComptonModel" << G4endl;
 
-  if (particleDefinition != G4Gamma::GammaDefinition()
-      ||
-      GammaEnergy < lowEnergyLimit
-      ||
-      GammaEnergy > highEnergyLimit)
-   	    
-    return 0;
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0.0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
@@ -222,8 +207,10 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   G4double E0_m = gammaEnergy0 / electron_mass_c2 ;
 
   // Select randomly one element in the current material
-
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,gammaEnergy0);
+  //G4int Z = crossSectionHandler->SelectRandomAtom(couple,gammaEnergy0);
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple,particle,gammaEnergy0);
+  G4int Z = (G4int)elm->GetZ();
 
   // Sample the energy and the polarization of the scattered photon
 
@@ -441,6 +428,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
     }
   else
     {
+      photonEnergy1 = 0.;
       fParticleChange->SetProposedKineticEnergy(0.) ;
       fParticleChange->ProposeTrackStatus(fStopAndKill);
     }
@@ -451,6 +439,13 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
 
   G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 -bindingE;
 
+  // SI -protection against negative final energy: no e- is created
+  // like in G4LivermoreComptonModel.cc
+  if(ElecKineEnergy < 0.0) {
+    fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy0 - gammaEnergy1);
+    return;
+  }
+ 
   // SI - Removed range test
   
   G4double ElecMomentum = std::sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
@@ -674,23 +669,6 @@ void G4LivermorePolarizedComptonModel::SystemOfRefChange(G4ThreeVector& directio
 
   polarization1 = (polarization_x*Axis_X0 + polarization_y*Axis_Y0 + polarization_z*Axis_Z0).unit();
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermorePolarizedComptonModel::GetMeanFreePath(const G4Track& track,
-						      G4double,
-						      G4ForceCondition*)
-{
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  size_t materialIndex = couple->GetIndex();
-  G4double meanFreePath;
-  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-  return meanFreePath;
 }
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.366 2009-05-02 15:07:46 sincerti Exp $
+$Id: History,v 1.367 2009-05-02 15:20:52 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.05.2009, S.Incerti, tag emlowen-V09-02-34
+            Clean-up of G4LivermorePolarizedCompton and -Rayleigh models
 
 02.05.2009, S.Incerti, tag emlowen-V09-02-33
             Added message to obsolete non-migrated Geant4-DNA cross section and final state classes
