@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreGammaConversionModel.cc,v 1.6 2009-05-02 09:14:43 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -174,7 +174,9 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
   else
     {
       // Select randomly one element in the current material
-      const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
+      //const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
+      const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+      const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
       if (element == 0)
 	{

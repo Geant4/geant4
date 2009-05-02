@@ -1,4 +1,4 @@
-$Id: History,v 1.363 2009-04-30 07:35:35 sincerti Exp $
+$Id: History,v 1.364 2009-05-02 09:14:43 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.05.2009, S.Incerti, tag emlowen-V09-02-31
+            Fixed handling of compounds in G4LivermoreGammaConversionModel.cc
 
 30.04.2009, S.Incerti, tag emlowen-V09-02-30
 	    Removed annoying G4cout in G4AugerData.cc.
