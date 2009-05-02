@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: printMassTable.cc,v 1.1 2009-05-02 07:23:11 kurasige Exp $
+// $Id: printMassTable.cc,v 1.2 2009-05-02 11:17:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ int main(int ,char** ) {
 	       << std::setw(4) << ia << "  " 
 	       << std::setw(12) << massExces/keV << "   "
 	       << std::setw(12) << bindE/keV << "   "
-	       << std::setw(15) << mass/GeV << "   "
+	       << std::setw(15) << mass/MeV << "   "
 	       << std::endl;
     }
   }
