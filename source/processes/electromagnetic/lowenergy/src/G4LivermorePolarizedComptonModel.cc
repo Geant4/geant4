@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc,v 1.5 2009-05-02 15:20:53 sincerti Exp $
+// $Id: G4LivermorePolarizedComptonModel.cc,v 1.6 2009-05-03 08:29:55 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -428,7 +428,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
     }
   else
     {
-      photonEnergy1 = 0.;
+      gammaEnergy1 = 0.;
       fParticleChange->SetProposedKineticEnergy(0.) ;
       fParticleChange->ProposeTrackStatus(fStopAndKill);
     }
