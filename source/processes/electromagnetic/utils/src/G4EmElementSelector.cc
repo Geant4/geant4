@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.4 2008-08-21 18:53:32 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.5 2009-05-03 17:34:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,6 +102,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   G4int i;
   G4int n = nElmMinusOne + 1;
   G4double* xsec = new G4double[n];  
+  G4bool startFromNull = false;
 
   // loop over bins
   for(G4int j=0; j<nbins; j++) {
@@ -115,10 +116,19 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 					  cutEnergy, e);
       xsec[i] = cross;
     }
-    if(DBL_MIN >= cross) cross = 1.0;
+    // zero cross section no normalisation
+    if(DBL_MIN >= cross) {
+      cross = 1.0;
+      if(0 == j) startFromNull = true;
+    }
+
     // normalise cross section sum 
     for (i=0; i<nElmMinusOne; i++) {
       xSections[i]->PutValue(j, xsec[i]/cross);
+
+      // xSections start from null, so use probabilities from the next bin
+      if(startFromNull && 1 == j) xSections[i]->PutValue(0, xsec[i]/cross);
+
       //G4cout << "i= " << i << " xs= " << xsec[i]/cross << G4endl;
     }
   }
