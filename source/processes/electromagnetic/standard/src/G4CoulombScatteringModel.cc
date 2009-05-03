@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.37 2008-07-31 13:11:34 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.38 2009-05-03 17:35:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,7 +92,7 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   G4double xinvb = invbeta2;
 
   // CM system
-  G4int iz      = G4int(Z);
+  iz            = G4int(Z);
   G4double m2   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
   G4double etot = tkin + mass;
   G4double ptot = sqrt(mom2);
@@ -136,7 +136,7 @@ void G4CoulombScatteringModel::SampleSecondaries(
   currentElement = SelectRandomAtom(couple,particle,ekin,ecut,tkin);
 
   G4double Z  = currentElement->GetZ();
-  G4int iz    = G4int(Z);
+  iz          = G4int(Z);
   G4int ia    = SelectIsotopeNumber(currentElement);
   G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
 
