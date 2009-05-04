@@ -1,4 +1,4 @@
-$Id: README,v 1.26 2009-04-28 14:39:40 gunter Exp $
+$Id: README,v 1.27 2009-05-04 10:16:05 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -40,7 +40,7 @@ test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
 test19 ## discrete process verification test for Physics On Flight
-test20 ## Geant4-DNA LowE processes.
+test20 ## Geant4-DNA LowE non-migrated processes.
 test21 ## CHIPS as intra-nuclear transport, with photo/lepton + T>1GeV cut.
 test22 ## Gamma and electro-nuclear physics.
 test23 ## Muon capture for CHIPS, stopping.
@@ -76,6 +76,7 @@ test52 ## EM low-energy (standard, low-energy, Penelope)
 test53 ## EM low-energy Penelope
 test54 ## EM low-energy Livermore
 test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
+test60 ## Geant4-DNA LowE migrated processes.
 test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
 test201 # Visualization and graphical interfaces
