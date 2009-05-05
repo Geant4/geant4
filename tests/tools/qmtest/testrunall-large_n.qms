@@ -1,1 +1,32 @@
-<?xml version="1.0" ?><!DOCTYPE extension  PUBLIC '-//QM/2.4/Extension//EN'  'http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd'><extension class="explicit_suite.ExplicitSuite" kind="suite"><argument name="suite_ids"><set/></argument><argument name="test_ids"><set><text>test40-large_n-run</text><text>test23-large_n-run</text><text>test22-large_n-run</text><text>test20-large_n-run</text><text>test18-large_n-run</text><text>test17-large_n-run</text><text>test14-large_n-run</text><text>test10-large_n-run</text><text>test09-large_n-run</text><text>test07-large_n-run</text><text>test05-large_n-run</text><text>test02-large_n-run</text><text>test01-large_n-run</text><text>exam-nov-n07-large_n-run</text><text>exam-nov-n05-large_n-run</text><text>exam-nov-n04-large_n-run</text><text>exam-nov-n03-large_n-run</text><text>exam-nov-n02-large_n-run</text><text>exam-ext-electromagnetic-testem8-large_n-run</text><text>exam-ext-electromagnetic-testem10-large_n-run</text></set></argument></extension>
+<?xml version="1.0" ?>
+<!DOCTYPE extension  PUBLIC '-//QM/2.4/Extension//EN'  'http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd'>
+<extension class="explicit_suite.ExplicitSuite" kind="suite">
+<argument name="suite_ids">
+  <set/>
+</argument>
+<argument name="test_ids">
+  <set>
+    <text>test60-large_n-run</text>
+    <text>test40-large_n-run</text>
+    <text>test23-large_n-run</text>
+    <text>test22-large_n-run</text>
+    <text>test20-large_n-run</text>
+    <text>test18-large_n-run</text>
+    <text>test17-large_n-run</text>
+    <text>test14-large_n-run</text>
+    <text>test10-large_n-run</text>
+    <text>test09-large_n-run</text>
+    <text>test07-large_n-run</text>
+    <text>test05-large_n-run</text>
+    <text>test02-large_n-run</text>
+    <text>test01-large_n-run</text>
+    <text>exam-nov-n07-large_n-run</text>
+    <text>exam-nov-n05-large_n-run</text>
+    <text>exam-nov-n04-large_n-run</text>
+    <text>exam-nov-n03-large_n-run</text>
+    <text>exam-nov-n02-large_n-run</text>
+    <text>exam-ext-electromagnetic-testem8-large_n-run</text>
+    <text>exam-ext-electromagnetic-testem10-large_n-run</text>
+  </set>
+</argument>
+</extension>
