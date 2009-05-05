@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.28 2009-05-05 07:15:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.29 2009-05-05 19:19:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -629,9 +629,8 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
 
     G4double esec = 0.0;
     G4double nsec = 0.0;
-    G4double x1 = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-    G4double f  = fac*targetZ*density*x1*x1; 
-    x1 = 1.0 - cosThetaMin + screenZ;
+    G4double x1 = 1.0 - cosThetaMin + screenZ;
+    G4double f  = fac*targetZ*density; 
 
     // scattering off electrons
     if(cosThetaMin > cosem) {
