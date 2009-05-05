@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.14 2009-05-03 17:35:33 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.15 2009-05-05 07:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
 
 private:
 
-  G4double ComputeTransportXSectionPerVolume();
+  G4double ComputeTransportXSectionPerAtom();
 
   G4double ComputeXSectionPerVolume();
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.27 2009-05-03 17:35:33 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.28 2009-05-05 07:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -116,7 +116,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 0.5*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -161,7 +161,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   SetupTarget(Z, ekin);
-  G4double xsec = ComputeTransportXSectionPerVolume();
+  G4double xsec = ComputeTransportXSectionPerAtom();
   /*  
   G4cout << "CS: e= " << tkin << " cosEl= " << cosTetMaxElec2 
 	 << " cosN= " << cosTetMaxNuc2 << " xsec(bn)= " << xsec/barn
@@ -172,7 +172,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
+G4double G4WentzelVIModel::ComputeTransportXSectionPerAtom()
 {
   G4double xSection = 0.0;
   G4double x, y, x1, x2, x3, x4;
@@ -208,21 +208,21 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
   if(cosTetMaxNuc2 < 1.0) {
     x  = 1.0 - cosTetMaxNuc2;
     x1 = screenZ*formfactA;
-    x2 = 1.0/(1.0 - x1); 
+    x2 = 1.0 - x1; 
     x3 = x/screenZ;
     x4 = formfactA*x;
     // low-energy limit
     if(x3 < numlimit && x1 < numlimit) {
-      y = 0.5*x3*x3*x2*x2*x2*(1.0 - 1.3333333*x3 + 1.5*x3*x3 - 1.5*x1
-      			      + 3.0*x1*x1 + 2.666666*x3*x1);
+      y = 0.5*x3*x3*(1.0 - 1.3333333*x3 + 1.5*x3*x3 - 1.5*x1
+		     + 3.0*x1*x1 + 2.666666*x3*x1)/(x2*x2*x2);
       // high energy limit
-    } else if(1.0 < x1) {
+    } else if(x2 <= 0.0) {
       x4 = x1*(1.0 + x3);
       y  = x3*(1.0 + 0.5*x3 - (2.0 - x1)*(1.0 + x3 + x3*x3/3.0)/x4)/(x4*x4);
       // middle energy 
     } else {
       y = ((1.0 + x1)*x2*log((1. + x3)/(1. + x4)) 
-	   - x3/(1. + x3) - x4/(1. + x4))*x2*x2; 
+	   - x3/(1. + x3) - x4/(1. + x4))/(x2*x2); 
     }
     //G4cout << "y= " << y << " x1= " <<x1<<"  x2= " <<x2
     //	   <<"  x3= "<<x3<<"  x4= " << x4<<G4endl;
@@ -240,13 +240,14 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     }
     xSection += y; 
   }
-  G4double m2 = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-  xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2*m2/((mass + m2)*mom2)); 
+  x = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
+  xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2*x*x/mom2); 
   /*
   G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
 	 << " screenZ= " << screenZ << " formF= " << formfactA 
 	 << " for " << particle->GetParticleName() 
   	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)
+	 << " x= " << x 
 	 << G4endl;
   */
   return xSection; 
@@ -419,7 +420,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     // normal case
   } else {
 
-    // define threshold angle as 2 sigma of central value
+    // define threshold angle between single and multiple scattering 
     cosThetaMin = 1.0 - 3.0*x1;
 
     // for low-energy e-,e+ no limit
@@ -621,15 +622,16 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     // recompute the angular limit 
     cosTetMaxNuc2  = std::max(cosnm,cosThetaMin); 
     cosTetMaxElec2 = std::max(cosem,cosThetaMin); 
-    xtsec += ComputeTransportXSectionPerVolume()*density;
+    xtsec += ComputeTransportXSectionPerAtom()*density;
     // return limit back
     cosTetMaxElec2 = cosem;
     cosTetMaxNuc2  = cosnm;
 
     G4double esec = 0.0;
     G4double nsec = 0.0;
-    G4double x1 = 1.0 - cosThetaMin + screenZ;
-    G4double f  = fac*targetZ*density; 
+    G4double x1 = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
+    G4double f  = fac*targetZ*density*x1*x1; 
+    x1 = 1.0 - cosThetaMin + screenZ;
 
     // scattering off electrons
     if(cosThetaMin > cosem) {
@@ -642,7 +644,8 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
       // Reserford part
       G4double s  = screenZ*formfactA;
       G4double z1 = 1.0 - cosnm + screenZ;
-      G4double d  = (1.0 - s)/formfactA;
+      G4double s1 = 1.0 - s;
+      G4double d  = s1/formfactA;
 
       // check numerical limit
       if(d < numlimit*x1) {
@@ -653,8 +656,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
       } else {
 	G4double x2 = x1 + d;
 	G4double z2 = z1 + d;
-	nsec = (1.0 + 2.0*s)*((cosThetaMin - cosnm)*(1.0/(x1*z1) + 1.0/(x2*z2)) -
-			   2.0*log(z1*x2/(z2*x1))/d);
+	nsec = (1.0/x1 - 1.0/z1 + 1.0/x2 - 1.0/z2 - 2.0*log(z1*x2/(z2*x1))/d)/(s1*s1);
       }
       nsec *= f*targetZ;
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.65 2009-05-03 17:35:33 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.66 2009-05-05 07:15:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,7 +106,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 0.5*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -188,8 +188,8 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(cosTetMaxNuc < cosTetMinNuc) {
     SetupTarget(Z, ekin);
     xsec = CrossSectionPerAtom();  
-    G4double m2  = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    xsec *= m2/(m2 + mass);
+    G4double x  = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
+    xsec *= x*x;
   }
   /*
   G4cout << "e(MeV)= " << ekin/MeV << "cosTetMinNuc= " << cosTetMinNuc
@@ -226,7 +226,8 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
   if(cosTetMaxNuc2 < cosTetMinNuc) {
     G4double s  = screenZ*formfactA;
     G4double z1 = 1.0 - cosTetMaxNuc2 + screenZ;
-    G4double d  = (1.0 - s)/formfactA;
+    G4double s1 = 1.0 - s;
+    G4double d  = s1/formfactA;
     //G4cout <<"x1= "<<x1<<" z1= " <<z1<<" s= "<<s << " d= " <<d <<G4endl;
     if(d < 0.2*x1) {
       G4double x2 = x1*x1;
@@ -236,8 +237,7 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
     } else {
       G4double x2 = x1 + d;
       G4double z2 = z1 + d;
-      G4double s1 = 1.0 - s;
-      x = (1.0/z1 - 1.0/z2 + 1.0/x1 - 1.0/x2 - 2.0*log(z1*x2/(z2*x1))/d)/(s1*s1);
+      x = (1.0/x1 - 1.0/z1 + 1.0/x2 - 1.0/z2 - 2.0*log(z1*x2/(z2*x1))/d)/(s1*s1);
     }
     nucXSection += fac*targetZ*x;
   }
