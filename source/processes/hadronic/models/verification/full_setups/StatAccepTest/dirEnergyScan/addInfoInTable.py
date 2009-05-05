@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------------
-# Last update: 15-Aug-2008
+# Last update: 05-May-2009
 #
 # This script requires at least 2 input arguments, and should be
 # run as:
@@ -489,7 +489,10 @@ else :
                     for line in table :
                         #print line,
                         newline = updateLine( listInformation, line.rstrip() )
-                        newtable.write( newline + "\n" )
+                        for item in newline.split() :
+                            mystring = item.ljust( 12 )[:10]
+                            newtable.write( mystring )
+                        newtable.write( "\n" )
 
                 newtable.close()
             table.close()
