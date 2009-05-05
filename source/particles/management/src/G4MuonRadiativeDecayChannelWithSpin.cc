@@ -329,7 +329,8 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
                                 (daughtermomentum[0]+daughtermomentum[1]))*
                                (energy2+
                                 (daughtermomentum[0]+daughtermomentum[1])));
-  G4double beta = -1.0*(daughtermomentum[0]+daughtermomentum[1])/energy2;
+  G4double beta = (daughtermomentum[0]+daughtermomentum[1])/energy2;
+  beta = -1.0 * std::min(beta,0.99);
 
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
@@ -345,19 +346,18 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
     = new G4DynamicParticle( daughters[3], direction2*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
-  G4LorentzVector p4;
-  p4 = daughterparticle2->Get4Momentum();
 
-  p4.boost( (direction0.x()+direction1.x())*beta,
-            (direction0.y()+direction1.y())*beta,
-            (direction0.z()+direction1.z())*beta);
+  G4ThreeVector direction34(direction0.x()+direction1.x(),
+                            direction0.y()+direction1.y(),
+                            direction0.z()+direction1.z());
+  direction34 = direction34.unit();
 
+  G4LorentzVector p4 = daughterparticle2->Get4Momentum();
+  p4.boost(direction34.x()*beta,direction34.y()*beta,direction34.z()*beta);
   daughterparticle2->Set4Momentum(p4);
-  p4 = daughterparticle3->Get4Momentum();
 
-  p4.boost( (direction0.x()+direction1.x())*beta, 
-            (direction0.y()+direction1.y())*beta,
-            (direction0.z()+direction1.z())*beta);
+  p4 = daughterparticle3->Get4Momentum();
+  p4.boost(direction34.x()*beta,direction34.y()*beta,direction34.z()*beta);
   daughterparticle3->Set4Momentum(p4);
 
   products->PushProducts(daughterparticle2);
