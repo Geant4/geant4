@@ -177,8 +177,12 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
         else {
           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
-               << " The Navigator reports that it returned an invalid normal"
-               << G4endl;
+                 << " The Navigator reports that it returned an invalid normal"
+                 << G4endl;
+          G4Exception("G4OpBoundaryProcess::PostStepDoIt",
+                      "Invalid Surface Normal",
+                      EventMustBeAborted,
+                      "Geometry must return valid surface normal");
         }
 
         theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
