@@ -273,6 +273,23 @@ echo "On this machine, G4UI_NONE is set, so no user interfaces are available"
 fi
 fi
 
+
+# Check for Windows!
+if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
+#+
+#
+# UI_USE_TCSH for Unix
+#
+if [ X$g4ui_none != Xy ] ; then
+G4UI_USE_TCSH=1
+export G4UI_USE_TCSH
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
+fi
+fi
+fi
+
+
 #+
 if [ X$g4ui_build_xaw_session = Xy ] ; then
 G4UI_BUILD_XAW_SESSION=1
@@ -735,18 +752,6 @@ echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 fi
 fi 
 
-# Check for Windows!
-if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
-#+
-#
-# UI_USE_TCSH for Unix
-#
-G4UI_USE_TCSH=1
-export G4UI_USE_TCSH
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
-fi 
-fi
 
 #####################################################################
 
