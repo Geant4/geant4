@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.2 2009-04-24 09:10:22 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,6 +70,7 @@ public:
   G4LogicalVolume*   GetLvolLayer()         {return lvol_layer;};  	
   G4LogicalVolume*   GetLvolSuperLayer()    {return lvol_superlayer;};
   G4LogicalVolume*   GetLvolCalorimeter()   {return lvol_calorimeter;};
+  G4LogicalVolume*   GetLvolWorld()         {return lvol_world;};  
   
   G4int              GetNbFibers()          {return nbOfFibers;};  
   G4int              GetNbLayers()          {return nbOfLayers;};    
@@ -109,7 +110,8 @@ private:
   //world
   //
   G4Material*        worldMat;
-  G4double           worldSizeX;  
+  G4double           worldSizeX;
+  G4LogicalVolume*   lvol_world;                
   G4VPhysicalVolume* pvol_world;
   
   G4Material*        defaultMat;

@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2009-04-16 11:05:40 maire Exp $
+$Id: README,v 1.2 2009-05-06 18:39:32 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -57,7 +57,7 @@ $Id: README,v 1.1 2009-04-16 11:05:40 maire Exp $
 
  4- DETECTOR RESPONSE
   
-  The program computes the 'visible' energy 'visible', eg. the energy deposited
+  The program computes the 'visible' energy, eg. the energy deposited
   in scintillating fibers. The fibers are packed in pixels.
    
   It also computes the total energy deposited per pixel, either in absorber

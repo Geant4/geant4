@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 #include "G4Step.hh"
 #include "G4RunManager.hh"
+#include "G4Geantino.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +50,7 @@ SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
  histoManager(hist) 
 {
   first = true;
-  lvol_slayer = lvol_layer = lvol_fiber = 0;
+  lvol_world = lvol_slayer = lvol_layer = lvol_fiber = 0;
   nbOfSuperLayers = nbOfLayers = nbOfLayersPerPixel = 0;
   
   trigger = false;
@@ -69,6 +70,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //some initialisation
  // 
  if (first) {
+   lvol_world  = detector->GetLvolWorld();
    lvol_slayer = detector->GetLvolSuperLayer();
    lvol_layer  = detector->GetLvolLayer();
    lvol_fiber  = detector->GetLvolFiber();
@@ -79,16 +81,29 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    
    first = false;   
  }
-  
- //if no edep, return
- //
- G4double edep = step->GetTotalEnergyDeposit();
- if (edep == 0.) return;
 
  //local point in geometry
  //  
  G4TouchableHandle touch1 = step->GetPreStepPoint()->GetTouchableHandle(); 
  G4LogicalVolume* lvol = touch1->GetVolume()->GetLogicalVolume();
+ 
+ //if world, return
+ //
+ if (lvol == lvol_world) return;
+ 
+ //sum nb of radiation length with geantino
+ //
+ G4ParticleDefinition* particle = step->GetTrack()->GetDefinition();
+ if (particle == G4Geantino::Geantino()) {
+   G4double radl  = lvol->GetMaterial()->GetRadlen();
+   G4double stepl = step->GetStepLength();
+   eventAct->SumNbRadLength(stepl/radl);
+ }
+    
+ //if no edep, return
+ //
+ G4double edep = step->GetTotalEnergyDeposit();
+ if (edep == 0.) return;
 
  G4int ilayer, islayer, indexPixel;
   

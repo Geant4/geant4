@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: SteppingAction.hh,v 1.2 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +64,7 @@ class SteppingAction : public G4UserSteppingAction
     HistoManager*           histoManager;
     
     G4bool           first;
+    G4LogicalVolume* lvol_world;
     G4LogicalVolume* lvol_slayer;
     G4LogicalVolume* lvol_layer;
     G4LogicalVolume* lvol_fiber;

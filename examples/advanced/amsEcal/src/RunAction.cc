@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2009-04-24 09:10:22 maire Exp $
+// $Id: RunAction.cc,v 1.3 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Geantino.hh"
 
 #include "Randomize.hh"
 
@@ -75,6 +76,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nbEvents = 0;  
   calorEvis = calorEvis2 = calorEtot = calorEtot2 = Eleak = Eleak2 = 0.;
   EdLeak[0] = EdLeak[1] = EdLeak[2] = 0.;
+  nbRadLen  = nbRadLen2 = 0.;
                     
   //histograms
   //
@@ -115,6 +117,15 @@ void RunAction::fillDetailedLeakage(G4int icase, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void RunAction::fillNbRadLen(G4double dn)
+{
+  //total number of radiation length
+  //
+  nbRadLen += dn; nbRadLen2 += dn*dn;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 void RunAction::EndOfRunAction(const G4Run*)
 { 
@@ -133,9 +144,10 @@ void RunAction::EndOfRunAction(const G4Run*)
   
   G4cout << " The run was " << nbEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through the calorimeter" << G4endl;
+	 
+  G4cout << "------------------------------------------------------------"
+         << G4endl;
 
-  G4cout.precision(prec);
-  
   //if no events, return
   //
   if (nbEvents == 0) return;
@@ -143,8 +155,28 @@ void RunAction::EndOfRunAction(const G4Run*)
   //compute and print statistic
   //
   std::ios::fmtflags mode = G4cout.flags();
-  G4cout << "------------------------------------------------------------"
-         << G4endl;
+  
+  //number of radiation length
+  //
+  if (particle == G4Geantino::Geantino() ) {
+    G4double meanNbRadL  = nbRadLen/ nbEvents;
+    G4double meanNbRadL2 = nbRadLen2/nbEvents;
+    G4double varNbRadL = meanNbRadL2 - meanNbRadL*meanNbRadL;
+    G4double rmsNbRadL = 0.;
+    if (varNbRadL > 0.) rmsNbRadL = std::sqrt(varNbRadL);
+    G4double effRadL = (detector->GetCalorThickness())/meanNbRadL;
+    G4cout.precision(3);
+    G4cout
+      << "\n Calor : mean number of Rad Length = " 
+      << meanNbRadL << " +- "<< rmsNbRadL
+      << "  --> Effective Rad Length = "
+      << G4BestUnit( effRadL,"Length") << G4endl;    
+    
+    G4cout << "------------------------------------------------------------"
+           << G4endl;        
+  }
+  
+  G4cout.precision(prec);	 
   G4cout << "\n             " 
          << "visible Energy          (rms/mean)        "
          << "total Energy           (rms/mean)" << G4endl;

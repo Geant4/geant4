@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.3 2009-04-26 16:16:51 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@
 DetectorConstruction::DetectorConstruction()
 :fiberMat(0),lvol_fiber(0), absorberMat(0),lvol_layer(0),
  superLayerMat(0),lvol_superlayer(0), calorimeterMat(0),lvol_calorimeter(0),
- worldMat(0),pvol_world(0), defaultMat(0), magField(0)
+ worldMat(0),lvol_world(0),pvol_world(0), defaultMat(0), magField(0)
 {
   // materials
   DefineMaterials();
@@ -291,7 +291,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   svol_world = new G4Box("world",			//name
                   0.5*sizeX, 0.5*sizeY, 0.5*sizeZ);	//size
 
-  G4LogicalVolume*
   lvol_world = new G4LogicalVolume(svol_world,		//solid
                                    worldMat,		//material
                                    "world");		//name 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: EventAction.cc,v 1.2 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +74,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   G4int nbOfPixels = detector->GetNbPixels();
   visibleEnergy.resize(nbOfPixels);  visibleEnergy.clear();  
     totalEnergy.resize(nbOfPixels);    totalEnergy.clear();
+   
+  nbRadLen = 0.;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,7 +108,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   G4double Ebeam = primary->GetParticleGun()->GetParticleEnergy();
   G4double Eleak = Ebeam - calorEtot;
   runAct->fillPerEvent_2(calorEvis,calorEtot,Eleak);
-       
+  
+  runAct->fillNbRadLen(nbRadLen);  
+         
   //parameters for trajectory visualisation
   //
   if (G4VVisManager::GetConcreteInstance())

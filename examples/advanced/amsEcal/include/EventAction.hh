@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: EventAction.hh,v 1.2 2009-05-06 18:39:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +63,9 @@ class EventAction : public G4UserEventAction
 			         	    
     void SumTotalEnergy  (G4int pixel, G4double de)
                                  {totalEnergy[pixel] += de;};
-				         
+				 
+    void SumNbRadLength  (G4double dn)  {nbRadLen += dn;};
+    				         
   private:  
     DetectorConstruction*   detector;
     RunAction*              runAct;
@@ -71,6 +73,7 @@ class EventAction : public G4UserEventAction
           
     std::vector<G4double>   visibleEnergy;
     std::vector<G4double>     totalEnergy;
+    G4double                nbRadLen;   
             
     G4String              drawFlag; 
     G4int                 printModulo;         
