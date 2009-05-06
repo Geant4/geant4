@@ -53,6 +53,7 @@ unsetenv  G4LIB_USE_ZLIB
 
 unsetenv  G4SYSTEM
 
+unsetenv  G4UI_NONE
 unsetenv  G4UI_BUILD_WIN32_SESSION
 unsetenv  G4UI_BUILD_XAW_SESSION
 unsetenv  G4UI_BUILD_XM_SESSION
@@ -62,6 +63,7 @@ unsetenv  G4UI_USE_XAW
 unsetenv  G4UI_USE_XM
 unsetenv  G4UI_USE_QT
 
+unsetenv  G4VIS_NONE
 unsetenv  G4VIS_BUILD_DAWN_DRIVER
 unsetenv  G4VIS_BUILD_OIWIN32_DRIVER
 unsetenv  G4VIS_BUILD_OIX_DRIVER
@@ -210,6 +212,12 @@ endif
 # g4ui
 #
 #+
+if ( X$g4ui_none == Xy ) then
+setenv G4UI_NONE 1
+echo "On this machine G4UI_NONE is set, so no user interfaces are available"
+endif
+
+#+
 if ( X$g4ui_build_xaw_session == Xy ) then
 setenv G4UI_BUILD_XAW_SESSION 1
 echo "On this machine the G4UI_BUILD_XAW_SESSION=\$G4UI_BUILD_XAW_SESSION"
@@ -262,6 +270,12 @@ endif
 #
 # g4vis
 #
+#+
+if ( X$g4vis_none == Xy ) then
+setenv G4VIS_NONE 1
+echo "On this machine G4VIS_NONE is set, so no vis drivers are available"
+endif
+
 #+
 if ( X$g4vis_build_dawn_driver == Xy ) then
 setenv G4VIS_BUILD_DAWN_DRIVER 1
