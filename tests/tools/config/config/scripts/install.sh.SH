@@ -237,10 +237,10 @@ fi
 if [ X$g4ui_none = Xy ] ; then
 G4UI_NONE=1
 export G4UI_NONE
-echo "On this machine, G4UI_NONE is set - no UIs will be built"
+echo "On this machine G4UI_NONE is set - no UIs will be built"
 
 else
-echo "On this machine, G4UI_NONE is not set, following UIs will be built:"
+echo "On this machine G4UI_NONE is not set - following UIs will be built:"
 
 #+
 if [ X$g4ui_build_xaw_session = Xy ] ; then
@@ -309,10 +309,10 @@ fi
 if [ X$g4vis_none = Xy ] ; then
 G4VIS_NONE=1
 export G4VIS_NONE
-echo "On this machine G4VIS_NONE is set, no drivers will be built"
+echo "On this machine G4VIS_NONE is set - no drivers will be built"
 
 else
-echo "On this machine G4VIS_NONE is not set, following drivers will be built:"
+echo "On this machine G4VIS_NONE is not set - following drivers will be built:"
 
 #+
 if [ X$g4vis_build_dawn_driver = Xy ] ; then
