@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.66 2009-05-05 07:15:30 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.67 2009-05-06 14:39:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -188,8 +188,6 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(cosTetMaxNuc < cosTetMinNuc) {
     SetupTarget(Z, ekin);
     xsec = CrossSectionPerAtom();  
-    G4double x  = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-    xsec *= x*x;
   }
   /*
   G4cout << "e(MeV)= " << ekin/MeV << "cosTetMinNuc= " << cosTetMinNuc
@@ -206,8 +204,10 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
+  G4double mfac = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
+
   // This method needs initialisation before be called
-  G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2; 
+  G4double fac = coeff*targetZ*chargeSquare*invbeta2/(mom2*mfac*mfac); 
   elecXSection = 0.0;
   nucXSection  = 0.0;
 

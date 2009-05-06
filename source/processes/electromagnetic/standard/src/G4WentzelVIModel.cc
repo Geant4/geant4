@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.29 2009-05-05 19:19:39 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.30 2009-05-06 14:39:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -241,7 +241,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerAtom()
     xSection += y; 
   }
   x = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-  xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2*x*x/mom2); 
+  xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2/(mom2*x*x)); 
   /*
   G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
 	 << " screenZ= " << screenZ << " formF= " << formfactA 

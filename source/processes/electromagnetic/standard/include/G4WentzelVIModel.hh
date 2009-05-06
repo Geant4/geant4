@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.15 2009-05-05 07:15:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.16 2009-05-06 14:39:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -271,8 +271,8 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     iz= G4int(Z);
     if(iz > 99) iz = 99;
     screenZ = ScreenRSquare[iz]/mom2;
-    //if(iz > 1) 
-    screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
+    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*alpha2);
+    //screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
     formfactA = FormFactor[iz]*mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
     cosTetMaxElec2 = cosTetMaxElec;
