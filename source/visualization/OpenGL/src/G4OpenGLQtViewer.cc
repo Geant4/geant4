@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.39 2009-03-31 17:14:42 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.40 2009-05-06 13:51:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1310,7 +1310,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
     return;
   }
 #if QT_VERSION < 0x040000
-  fPrintFilename += "." + selectedFormat->ascii();
+  fPrintFilename += "." + std::string(selectedFormat->ascii());
   QString format = selectedFormat->lower();
 #else
   fPrintFilename += "." + selectedFormat->toStdString();
@@ -1666,7 +1666,7 @@ bool G4OpenGLQtViewer::printPDF (
 {
 
 #if QT_VERSION < 0x040000
-#ifdef Q_WS_MAC || Q_WS_X11
+#if defined(Q_WS_MAC) || defined(Q_WS_X11)
   QPrinter printer;
   //  printer.setPageSize(pageSize);
   if (aInColor == 1) {
@@ -1689,6 +1689,13 @@ bool G4OpenGLQtViewer::printPDF (
   paint.end();
 #else
   G4cerr << "This fonction is only supported on Mac OsX or X11 with Qt3. Full platform supported with Qt4" << G4endl;
+  // FIXME 
+  // L.Garnier 6 May 2009 : Only to fix compilation warnings
+  if (aFilename.empty()) {
+    aInColor = 0;
+    aImage = 0;
+  }
+  // END_OF FIXME
 #endif
 #else
   QPrinter printer;
