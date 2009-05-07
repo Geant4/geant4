@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.67 2009-05-06 14:39:35 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.68 2009-05-07 18:41:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,7 +106,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      ScreenRSquare[j] = 0.5*alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -166,7 +166,8 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double mom22 = t1*(t1 + 2.0*mass);
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       //G4cout << "ctm= " << ctm << G4endl;
-      if(ctm < 1.0) cosTetMaxElec = ctm;
+      if(ctm <  1.0) cosTetMaxElec = ctm;
+      if(ctm < -1.0) cosTetMaxElec = -1.0;
     }
   }
 }

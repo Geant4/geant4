@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.12 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4CoulombScattering.hh,v 1.13 2009-05-07 18:41:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,7 @@ class G4CoulombScattering : public G4VEmProcess
 
 public:
 
-  G4CoulombScattering(const G4String& name = "eCoulombScat");
+  G4CoulombScattering(const G4String& name = "CoulombScat");
 
   virtual ~G4CoulombScattering();
 
