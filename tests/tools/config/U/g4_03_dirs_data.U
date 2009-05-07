@@ -79,7 +79,7 @@ esac
 g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
 
 g4message=`cat <<EOM
-Specify the path where are the Geant4 data libraries 
+Specify the path where the Geant4 data libraries 
 
 $g4data_alllibs 
 
