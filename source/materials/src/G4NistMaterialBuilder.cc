@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.19 2008-04-28 08:51:29 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.20 2009-05-07 18:50:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1688,7 +1688,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
 
-  AddMaterial("G4_WATER", 1.0,0, 75., 2);
+  AddMaterial("G4_WATER", 1.0,0, 78., 2);
   AddElementByWeightFraction( 1, 0.111894);
   AddElementByWeightFraction( 8, 0.888106);
   AddChemicalFormula("G4_WATER","H_2O");
