@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IronStoppingICRU73.cc,v 1.6 2009-04-29 13:51:53 vnivanch Exp $
+// $Id: G4IronStoppingICRU73.cc,v 1.7 2009-05-07 18:51:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -180,10 +180,10 @@ G4PhysicsVector* G4IronStoppingICRU73::CreatePhysicsVector(
                                        G4double* stoppower, 
 				       G4double factor)
 {
-  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(31,energy[0],energy[30]);
+  G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(53,energy[0],energy[52]);
   pv->SetSpline(spline);
 
-  for( G4int i = 0; i < 31; i++ ) {
+  for( G4int i = 0; i < 53; i++ ) {
     pv->PutValues(i,energy[i],stoppower[i]*factor);
   }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2009-04-29 13:51:53 vnivanch Exp $
+$Id: History,v 1.139 2009-05-07 18:51:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-05-09 V.Ivanchenko (materials-V09-02-05)
+- G4IronStoppingICRU73: the upper limit of the data vector is extended 
+                        from 10 MeV to 1 GeV; 53 bins are used
+- G4NistMaterialBuilder: mean ionisation potential for G4_WATER is set
+                        to 78 eV according to GSI Annual Report (2008) p.373
+                        and recommendation of Prof.P.Sigmund in order to
+                        conssitent with ICRU'73 tables 
 
 29-04-09 V.Ivanchenko (materials-V09-02-04)
   Fixed ICRI'73 data provided by Prof.P.Sigmund Univ. Southern Denmark
