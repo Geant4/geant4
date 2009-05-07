@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.112 2009-01-22 14:26:31 bmorgan Exp $
+# $Id: Configure,v 1.113 2009-05-07 11:28:35 bmorgan Exp $
 #
-# Generated on Thu Jan 22 14:06:57 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Thu May  7 12:30:28 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3171,7 +3171,7 @@ esac
 g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
 
 g4message=`cat <<EOM
-Specify the path where are the Geant4 data libraries 
+Specify the path where the Geant4 data libraries 
 
 $g4data_alllibs 
 
@@ -6161,9 +6161,12 @@ fi # if platform (Unix vs Win)
 # BEGIN QTVIS/QT PROBE
 #
 # Because the vis driver only works with UI, only probe if g4ui_none is
-# NOT set AND also that g4vis_none is NOT set
+# NOT set AND g4vis_none is NOT set.
+# Also, Qt vis driver has dependency on Qt UI module - so only ask if
+# build is required IF Qt UI was selected.
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
+if test "x$g4ui_build_qt_session" = "xy" ; then
     # Query the user to see if build of Qt UI module is needed
     g4message=`cat <<EOM
 
@@ -6248,6 +6251,7 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
 
 #
