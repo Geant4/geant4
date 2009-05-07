@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4vis_build_dawn_driver Qt Myread Getfile Loc cat test
+?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4vis_build_dawn_driver Qt g4ui_build_qt_session Myread Getfile Loc cat test
 ?MAKE:	-pick add $@ %<
 ?S:g4vis_build_openglqt_driver:
 ?S:	This variable determines whether the Qt OpenGL driver will be built 
@@ -16,9 +16,12 @@
 # BEGIN QTVIS/QT PROBE
 #
 # Because the vis driver only works with UI, only probe if g4ui_none is
-# NOT set AND also that g4vis_none is NOT set
+# NOT set AND g4vis_none is NOT set.
+# Also, Qt vis driver has dependency on Qt UI module - so only ask if
+# build is required IF Qt UI was selected.
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
+if test "x$g4ui_build_qt_session" = "xy" ; then
     # Query the user to see if build of Qt UI module is needed
     g4message=`cat <<EOM
 
@@ -103,4 +106,5 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
