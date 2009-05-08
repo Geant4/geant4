@@ -9,7 +9,7 @@
 // * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
-// * institutes,for the agencies providing financial support for this *
+// * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.73 2009-05-08 09:24:47 tnikitin Exp $
+// $Id: G4Sphere.cc,v 1.74 2009-05-08 10:34:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
