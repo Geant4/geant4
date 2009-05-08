@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+23-Jan-2009 M.Kosov (hadr-chips-inter-V09-02-06)
+------------------------------------------------------
+- Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)
+  To be consistent with the new Hisaya's developments. The changes are made in
+  the G4Q(Photon,Electron,Muon,Tau)NuclearCrossSection classes
+
 23-Jan-2009 V.Ivanchenko (hadr-chips-inter-V09-02-00)
 ------------------------------------------------------
 - added deregistration in destructor of G4QCaptureAtRest
