@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2009-05-06 16:41:35 bmorgan Exp $
+$Id: History,v 1.22 2009-05-08 11:42:30 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,13 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+8th Math 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_12_make.U: Rewritten to only check for make on WIN32, make and gmake
+on all other systems. Will prompt user is not GNU make or gmake is found.
+
+7th May 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_03_dirs_data.U: Minor edit to improve grammar on some of the user prompts
+- U/g4_09_vis_qt.U: Qt vis driver is now only built if Qt UI module was
+selected earlier in configure process - vis driver requires UI module. Fixes
+Bug 1053.
+
 6th May 2009 Ben Morgan
 - config/scripts/env.*.SH: Added setting of G4UI_NONE and G4VIS_NONE variables
 to ensure user can't include UI/visualization in a standard Geant4 based
-project if they haven't been built.
+project if they haven't been built. Fixes Bug 1051.
 - config/scripts/install.sh.SH: Added setting of G4UI_NONE and G4VIS_NONE
 variables to ensure UI/VIS don't get built or part built if user has requested
-this. 
+this. Fixes Bug 1051.
 
 22nd January 2008 Ben Morgan
 - Configure: Regenerated following changes detailed below.
