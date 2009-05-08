@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.14 2007-07-18 14:29:54 tnikitin Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.15 2009-05-08 06:54:39 tnikitin Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -39,6 +39,7 @@
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Box.hh"
 #include "G4Orb.hh"
 #include "G4Tubs.hh"
@@ -190,17 +191,20 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   G4LogicalVolume * aVolume_log 
     = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
 
+   G4RotationMatrix *mat=new G4RotationMatrix();
+  mat->rotateX(30.*deg); 
+
   G4VPhysicalVolume * aVolume_phys1
     = new G4PVPlacement(0,G4ThreeVector(50*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys2
-    = new G4PVPlacement(0,G4ThreeVector(-50*cm, 0*cm, 0*cm),val, 
+    = new G4PVPlacement(mat,G4ThreeVector(-50*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys3
-    = new G4PVPlacement(0,G4ThreeVector(0*cm, 50*cm, 0*cm),val, 
+    = new G4PVPlacement(mat,G4ThreeVector(0*cm, 50*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys4
-    = new G4PVPlacement(0,G4ThreeVector(0*cm, -50*cm, 0*cm),val, 
+    = new G4PVPlacement(mat,G4ThreeVector(0*cm, -50*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
   G4VPhysicalVolume * aVolume_phys5
     = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 50*cm),val, 
