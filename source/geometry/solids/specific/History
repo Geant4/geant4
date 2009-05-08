@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2009-04-27 08:06:52 gcosmo Exp $
+$Id: History,v 1.153 2009-05-08 14:30:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-May-2009, G.Cosmo (geom-specific-V09-02-02)
+- Corrected typo in base implementation of G4VCSGfaceted::GetSurfaceArea(),
+  which was erroneously returning cubic volume estimation.
+  Addresses problem report #1062.
 
 27-Apr-2009, G.Cosmo (geom-specific-V09-02-01)
 - Relaxed error condition in G4TessellatedSolid::Inside(p) to warning, for
