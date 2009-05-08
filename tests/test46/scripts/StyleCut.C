@@ -24,9 +24,9 @@ gStyle->SetPadBorderMode(0);
 gStyle->SetMarkerSize(1.5);
 TCanvas c1("c1"," ",0.5, 5, 800, 800);
 
-Int_t col[6] = {4, 2, 3, 5, 6, 3};
-Int_t mar[6] = {21, 20, 22, 21, 20, 22};
+Int_t col[6] = {4, 2, 5, 5, 6, 7};
+Int_t mar[6] = {21, 20, 22, 25, 24, 26};
 
 TString tit[3]  = {"#gamma 10 GeV in HCAL","#pi^{-} 30 GeV in HCAL","#pi^{-} 30 GeV in ECAL + HCAL"};
-TString axtit[6] = {"cut (mm)","E_{vis}/E_{0}","#sigma_{E}/E_{vis} (%)","E_{vis} (GeV)","E_{HCAL} (GeV)","E_{rec} (GeV)"};
+TString axtit[6] = {"cut (mm)","E_{vis}/E_{0}","#sigma_{E}/E_{vis} (%)","E_{vis} (GeV)","E_{HCAL} (GeV)","E_{rec}/E_{0}"};
 }
