@@ -9,7 +9,7 @@
 // * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
+// * institutes,for the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.72 2009-03-31 07:51:49 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.73 2009-05-08 09:24:47 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -402,10 +402,10 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
   G4double pPhi,pTheta;
   EInside in = kOutside;
   static const G4double halfAngTolerance = kAngTolerance*0.5;
-  static const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
-  static const G4double halfRminTolerance = fRminTolerance*0.5;
-  static const G4double Rmax_minus = fRmax - halfRmaxTolerance;
-  static const G4double Rmin_plus  = (fRmin > 0) ? fRmin+halfRminTolerance : 0;
+  const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
+  const G4double halfRminTolerance = fRminTolerance*0.5;
+  const G4double Rmax_minus = fRmax - halfRmaxTolerance;
+  const G4double Rmin_plus  = (fRmin > 0) ? fRmin+halfRminTolerance : 0;
 
   rho2 = p.x()*p.x() + p.y()*p.y() ;
   rad2 = rho2 + p.z()*p.z() ;
@@ -807,15 +807,15 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
   static const G4double halfCarTolerance = kCarTolerance*0.5;
   static const G4double halfAngTolerance = kAngTolerance*0.5;
-  static const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
-  static const G4double halfRminTolerance = fRminTolerance*0.5;
-  static const G4double tolORMin2 = (fRmin>halfRminTolerance)
+  const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
+  const G4double halfRminTolerance = fRminTolerance*0.5;
+  const G4double tolORMin2 = (fRmin>halfRminTolerance)
                ? (fRmin-halfRminTolerance)*(fRmin-halfRminTolerance) : 0;
-  static const G4double tolIRMin2 =
+  const G4double tolIRMin2 =
                (fRmin+halfRminTolerance)*(fRmin+halfRminTolerance);
-  static const G4double tolORMax2 =
+  const G4double tolORMax2 =
                (fRmax+halfRmaxTolerance)*(fRmax+halfRmaxTolerance);
-  static const G4double tolIRMax2 =
+  const G4double tolIRMax2 =
                (fRmax-halfRmaxTolerance)*(fRmax-halfRmaxTolerance);
 
   // Intersection point
@@ -1818,10 +1818,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   static const G4double halfCarTolerance = kCarTolerance*0.5;
   static const G4double halfAngTolerance = kAngTolerance*0.5;
-  static const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
-  static const G4double halfRminTolerance = fRminTolerance*0.5;
-  static const G4double Rmax_plus  = fRmax + halfRmaxTolerance;
-  static const G4double Rmin_minus = (fRmin > 0) ? fRmin-halfRminTolerance : 0;
+  const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
+  const G4double halfRminTolerance = fRminTolerance*0.5;
+  const G4double Rmax_plus  = fRmax + halfRmaxTolerance;
+  const G4double Rmin_minus = (fRmin > 0) ? fRmin-halfRminTolerance : 0;
 
   G4double t1,t2;
   G4double b,c,d;
