@@ -269,15 +269,15 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
                            mT = G4NucleiProperties::GetNuclearMass(A,Z)/MeV;
   G4double mP= infEn;
   if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
-          mP = G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV;// ResNucMass for a proton
+          mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1)/MeV;// ResNucMass for a proton
 
   G4double mN= infEn;
   if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
-         mN = G4NucleiProperties::GetNuclearMass(A-1.,Z)/MeV;  // ResNucMass for a neutron
+          mN = G4NucleiProperties::GetNuclearMass(A-1,Z)/MeV;  // ResNucMass for a neutron
 
   G4double mA= infEn;
   if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
-          mA=G4NucleiProperties::GetNuclearMass(A-4.,Z-2.)/MeV; // ResNucMass for an alpha
+          mA=G4NucleiProperties::GetNuclearMass(A-4,Z-2)/MeV;  // ResNucMass for an alpha
 
   G4double dP= mP +mProt - mT;
   G4double dN= mN +mNeut - mT;

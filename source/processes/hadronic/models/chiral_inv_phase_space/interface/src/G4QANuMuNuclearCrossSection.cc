@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.cc,v 1.12 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.cc,v 1.13 2009-05-08 15:16:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -244,9 +244,9 @@ G4double G4QANuMuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
 // Gives the threshold energy = the same for all nuclei (@@ can be reduced for hevy nuclei)
 G4double G4QANuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 {
-  //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1.,0.)/GeV;
-  //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1.,1.)/GeV;
-  //static const G4double mDeut = G4NucleiProperties::GetNuclearMass(2.,1.)/GeV/2.;
+  //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0)/GeV;
+  //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1)/GeV;
+  //static const G4double mDeut = G4NucleiProperties::GetNuclearMass(2,1)/GeV/2.;
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
   static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
   static const G4double mmu=.105658369; // Mass of a muon in GeV

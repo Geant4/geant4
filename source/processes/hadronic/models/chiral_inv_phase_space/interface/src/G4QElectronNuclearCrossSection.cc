@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.14 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.15 2009-05-08 15:16:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -276,11 +276,11 @@ G4double G4QElectronNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int
   G4double mP= infEn;
   //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
   if(Z&&G4NucleiProperties::IsInStableTable(A-1,Z-1))
-         mP = G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV;// ResNucMass for a proton
+         mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1)/MeV;  // ResNucMass for a proton
   G4double mN= infEn;
   //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
   if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
-         mN = G4NucleiProperties::GetNuclearMass(A-1.,Z-0.)/MeV;// ResNucMass for a neutron
+         mN = G4NucleiProperties::GetNuclearMass(A-1,Z)/MeV;    // ResNucMass for a neutron
 
   G4double mA= infEn;
   if(N>1&&Z>1&&G4NucleiProperties::IsInStableTable(A-4,Z-2))
