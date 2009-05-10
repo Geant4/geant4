@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.16 2009-05-10 18:46:51 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.17 2009-05-10 19:34:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,7 +56,6 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
 
 #include "G4MultipleScattering.hh"
 #include "G4eMultipleScattering.hh"
@@ -159,7 +158,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-      pmanager->AddDiscreteProcess(new G4RayleighScattering);
 
     } else if (particleName == "e-") {
 
