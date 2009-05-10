@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.16 2009-05-06 14:39:35 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.17 2009-05-10 16:09:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,11 +61,11 @@
 #include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4NistManager.hh"
 
 class G4LossTableManager;
 class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
-class G4NistManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -182,11 +182,13 @@ private:
   G4double tkin;
   G4double mom2;
   G4double invbeta2;
+  G4double kinFactor;
   G4double etag;
   G4double lowEnergyLimit;
 
   // target
   G4double targetZ;
+  G4double targetMass;
   G4double screenZ;
   G4double formfactA;
   G4int    iz;
@@ -268,11 +270,18 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
   if(Z != targetZ || e != etag) {
     etag    = e; 
     targetZ = Z;
-    iz= G4int(Z);
+    iz = G4int(Z);
     if(iz > 99) iz = 99;
+    targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
+    G4double m12  = mass*mass;
+    G4double x    = 1.0 + mass/targetMass;
+    kinFactor  = coeff*targetZ*chargeSquare*(1.0 +  m12/mom2)/mom2;
     screenZ = ScreenRSquare[iz]/mom2;
-    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*alpha2);
-    //screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
+    if(iz > 1) {
+      screenZ *=(1.13 + 3.76*Z*Z*alpha2);
+      kinFactor /= (x*x);
+    }
+    //if(iz > 1) screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
     formfactA = FormFactor[iz]*mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
     cosTetMaxElec2 = cosTetMaxElec;

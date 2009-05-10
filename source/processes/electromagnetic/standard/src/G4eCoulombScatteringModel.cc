@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.68 2009-05-07 18:41:45 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.69 2009-05-10 16:09:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = DBL_MIN;
   elecXSection = nucXSection = 0.0;
-  recoilThreshold = DBL_MAX;
+  recoilThreshold = 100.*keV;
   ecut = DBL_MAX;
   particle = 0;
   currentCouple = 0;
@@ -106,7 +106,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 0.5*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -205,10 +205,8 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
-  G4double mfac = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-
   // This method needs initialisation before be called
-  G4double fac = coeff*targetZ*chargeSquare*invbeta2/(mom2*mfac*mfac); 
+  G4double fac = coeff*targetZ*chargeSquare*kinFactor;
   elecXSection = 0.0;
   nucXSection  = 0.0;
 
@@ -242,7 +240,6 @@ G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
     }
     nucXSection += fac*targetZ*x;
   }
-
   //G4cout<<" cross(bn)= "<<nucXSection/barn<<" xsElec(bn)= "<<elecXSection/barn
   //	<< " Asc= " << screenZ << G4endl; 
   
@@ -294,11 +291,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(lowEnergyLimit < kinEnergy) {
     G4int ia = SelectIsotopeNumber(currentElement);
     G4double Trec = z1*mom2/(amu_c2*G4double(ia));
-    G4double th = 
-      std::min(recoilThreshold,
-	       targetZ*currentElement->GetIonisation()->GetMeanExcitationEnergy());
 
-    if(Trec > th) {
+    if(Trec > recoilThreshold) {
       G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
       Trec = z1*mom2/ion->GetPDGMass();
       if(Trec < kinEnergy) {

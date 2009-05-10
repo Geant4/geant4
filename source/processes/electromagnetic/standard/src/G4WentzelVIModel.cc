@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.31 2009-05-07 18:41:45 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.32 2009-05-10 16:09:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
-#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,7 +115,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 0.5*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -194,7 +193,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerAtom()
       }
       y = 0.0;
     }
-    xSection = y/targetZ;
+    xSection = y;
   }
   /*  
   G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
@@ -238,10 +237,9 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerAtom()
       }
       y = 0.0;
     }
-    xSection += y; 
+    xSection += y*targetZ; 
   }
-  x = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-  xSection *= (coeff*targetZ*targetZ*chargeSquare*invbeta2/(mom2*x*x)); 
+  xSection *= kinFactor;
   /*
   G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
 	 << " screenZ= " << screenZ << " formF= " << formfactA 
@@ -611,8 +609,6 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
   xtsec = 0.0;
   G4double xs = 0.0;
 
-  G4double fac = coeff*chargeSquare*invbeta2/mom2;
-
   for (G4int i=0; i<nelm; i++) {
     SetupTarget((*theElementVector)[i]->GetZ(), tkin);
     G4double density = theAtomNumDensityVector[i];
@@ -630,8 +626,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     G4double esec = 0.0;
     G4double nsec = 0.0;
     G4double x1 = 1.0 - cosThetaMin + screenZ;
-    G4double x  = 1.0 + mass/(fNistManager->GetAtomicMassAmu(iz)*amu_c2);
-    G4double f  = fac*targetZ*density/(x*x); 
+    G4double f  = kinFactor*density; 
 
     // scattering off electrons
     if(cosThetaMin > cosem) {

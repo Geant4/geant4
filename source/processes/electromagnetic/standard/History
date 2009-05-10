@@ -1,4 +1,4 @@
-$Id: History,v 1.443 2009-04-29 13:31:03 vnivanch Exp $
+$Id: History,v 1.444 2009-05-10 16:09:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 May 09: V.Ivant (emstand-V09-02-10)
+- G4WentzelVIModel, G4eCoulombScattering, G4CoulombScattering - added relativistic
+                      factor to Reserford cross section
+
 28 April 09: V.Ivant (emstand-V09-02-09)
 - G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the 
                       tail of the angular distribution using the old e- 
@@ -30,7 +34,7 @@ committal in the CVS repository !
 
 23 April 09: V.Ivant (emstand-V09-02-08)
 - G4BetheBlochModel - do not use pointer to GenericIon introduced in the
-                      previous tagoblem of simple PhysLists without ions
+                      previous tag due to problem of simple PhysLists without ions
 
 20 April 09: V.Ivant (emstand-V09-02-07)
 - G4BetheBlochModel - fixed and simplified initialisation for ions needed for
