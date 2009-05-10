@@ -1,4 +1,4 @@
-$Id: History,v 1.444 2009-05-10 16:09:29 vnivanch Exp $
+$Id: History,v 1.445 2009-05-10 16:15:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,8 @@ committal in the CVS repository !
 
 10 May 09: V.Ivant (emstand-V09-02-10)
 - G4WentzelVIModel, G4eCoulombScattering, G4CoulombScattering - added relativistic
-                      factor to Reserford cross section
+                      factor to Reserford cross section; set default limit on
+                      kinetic energy of the recoil 100 keV
 
 28 April 09: V.Ivant (emstand-V09-02-09)
 - G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the 
