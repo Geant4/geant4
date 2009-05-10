@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePhysics.cc,v 1.2 2009-04-17 10:36:59 vnivanch Exp $
+// $Id: G4EmLivermorePhysics.cc,v 1.3 2009-05-10 18:46:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePhysics.hh"
@@ -168,37 +168,35 @@ void G4EmLivermorePhysics::ConstructProcess()
 	     << particleName << G4endl;
 
     //Applicability range for Livermore models
-    //    G4double LivermoreLowEnergyLimit = 250*eV;
-    //    G4double LivermoreHighEnergyLimit = 100*GeV;
     //for higher energies, the Standard models are used   
+    G4double LivermoreHighEnergyLimit = GeV;
 
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
 	new G4LivermorePhotoElectricModel();
-      //theLivermorePhotoElectricModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
-      // theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
-      //theLivermoreComptonModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
-      //theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      G4LivermoreComptonModel* theLivermoreComptonModel = 
+	new G4LivermoreComptonModel();
+      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
-      // theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
+	new G4LivermoreGammaConversionModel();
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      // theRayleighModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
-      // theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theRayleigh->AddEmModel(0, theRayleighModel);
       pmanager->AddDiscreteProcess(theRayleigh);
 
@@ -229,10 +227,9 @@ void G4EmLivermorePhysics::ConstructProcess()
 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
+
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      
-      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
-      
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);      
       pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
 
     } else if (particleName == "mu+" ||
@@ -244,10 +241,9 @@ void G4EmLivermorePhysics::ConstructProcess()
 
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 50*um);          
+
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
-      
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 
     } else if (particleName == "GenericIon") {
@@ -272,6 +268,8 @@ void G4EmLivermorePhysics::ConstructProcess()
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ||
+	       particleName == "kaon+" ||
+               particleName == "kaon-" ||
                particleName == "proton" ) {
 
       // Identical to G4EmStandardPhysics_option3
@@ -280,10 +278,9 @@ void G4EmLivermorePhysics::ConstructProcess()
       
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
-      pmanager->AddProcess(hIoni,                     -1, 2, 2);
-      
-      pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
 
+      pmanager->AddProcess(hIoni,                     -1, 2, 2);      
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
 
     } else if (particleName == "B+" ||
@@ -302,8 +299,6 @@ void G4EmLivermorePhysics::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||
@@ -319,7 +314,6 @@ void G4EmLivermorePhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
 
     }

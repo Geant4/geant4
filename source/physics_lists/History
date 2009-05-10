@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2009-04-23 19:11:51 japost Exp $
+$Id: History,v 1.86 2009-05-10 18:51:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-05-2009, V.Ivanchenko phys-lists-V09-02-16
+G4EmStandardPhysics, G4EmStandardPhysics_option1 - use 9.2 msc
+                                                   model for e+-
+G4EmStandardPhysics_option2 - use G4WentzelVIModel for e+-, added
+                              G4RayleighScattering
+G4EmStandardPhysics_option3 - use updated G4UrbanMscModel2 and 
+                              G4RayleighScattering
+
 23-04-2009, J.Apostolakis phys-lists-V09-02-15
 - Added MaxEnergy method in FTF builders.
 - Added QGSP_FTFP_BERT based on QGSP_BERT replacing the bridging LEP with FTFP, 

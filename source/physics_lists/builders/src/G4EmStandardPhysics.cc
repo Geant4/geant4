@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.16 2008-11-21 16:50:30 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.17 2009-05-10 18:46:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -154,13 +154,13 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung(),  -1,-3, 3);
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
@@ -182,6 +182,8 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ||
+	       particleName == "kaon+" ||
+               particleName == "kaon-" ||
                particleName == "proton" ) {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
@@ -205,8 +207,6 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||
