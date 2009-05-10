@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.6 2009-05-10 16:13:02 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.7 2009-05-10 18:26:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   G4int n = material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
+  element = (*theElementVector)[0];
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
     for(G4int i=0; i<n; i++) {

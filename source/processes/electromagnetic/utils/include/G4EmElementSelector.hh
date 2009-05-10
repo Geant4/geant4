@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh,v 1.3 2009-05-10 16:13:02 vnivanch Exp $
+// $Id: G4EmElementSelector.hh,v 1.4 2009-05-10 18:26:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,7 @@ private:
 
   G4VEmModel*       model;
   const G4Material* material;
+  const G4Element*  element;
   const G4ElementVector* theElementVector;
 
   G4int    nElmMinusOne;
@@ -106,18 +107,17 @@ private:
 
 inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
 {
-  const G4Element* elm = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
     G4bool b;
     G4double x = G4UniformRand();
     for(G4int i=0; i<nElmMinusOne; i++) {
       if (x <= (xSections[i])->GetValue(e,b)) {
-	elm = (*theElementVector)[i];
+	element = (*theElementVector)[i];
 	break;
       }
     }
   }
-  return elm;
+  return element;
 }
 
 inline const G4Material* G4EmElementSelector::GetMaterial() const
