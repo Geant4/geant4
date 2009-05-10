@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.5 2009-05-03 17:34:47 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.6 2009-05-10 16:13:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,8 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
   if(nElmMinusOne > 0) {
-    for(G4int i=0; i<nElmMinusOne; i++) {
+    xSections.reserve(n);
+    for(G4int i=0; i<n; i++) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
       v->SetSpline(spline);
       xSections.push_back(v);
@@ -79,7 +80,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 G4EmElementSelector::~G4EmElementSelector()
 {
   if(nElmMinusOne > 0) {
-    for(G4int i=0; i<nElmMinusOne; i++) {
+    for(G4int i=0; i<=nElmMinusOne; i++) {
       delete xSections[i];
     }
   }
@@ -100,9 +101,6 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
 
   G4int i;
-  G4int n = nElmMinusOne + 1;
-  G4double* xsec = new G4double[n];  
-  G4bool startFromNull = false;
 
   // loop over bins
   for(G4int j=0; j<nbins; j++) {
@@ -110,29 +108,36 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
     model->SetupForMaterial(part, material, e);
     cross = 0.0;
     //G4cout << "j= " << j << " e(MeV)= " << e/MeV << G4endl;
-    for (i=0; i<n; i++) {
+    for (i=0; i<=nElmMinusOne; i++) {
       cross += theAtomNumDensityVector[i]*      
 	model->ComputeCrossSectionPerAtom(part, (*theElementVector)[i], e, 
 					  cutEnergy, e);
-      xsec[i] = cross;
-    }
-    // zero cross section no normalisation
-    if(DBL_MIN >= cross) {
-      cross = 1.0;
-      if(0 == j) startFromNull = true;
-    }
-
-    // normalise cross section sum 
-    for (i=0; i<nElmMinusOne; i++) {
-      xSections[i]->PutValue(j, xsec[i]/cross);
-
-      // xSections start from null, so use probabilities from the next bin
-      if(startFromNull && 1 == j) xSections[i]->PutValue(0, xsec[i]/cross);
-
-      //G4cout << "i= " << i << " xs= " << xsec[i]/cross << G4endl;
+      xSections[i]->PutValue(j, cross);
     }
   }
-  delete [] xsec;
+
+  // xSections start from null, so use probabilities from the next bin
+  if(DBL_MIN >= (*xSections[nElmMinusOne])[0]) {
+    for (i=0; i<=nElmMinusOne; i++) {
+      xSections[i]->PutValue(0, (*xSections[i])[1]);
+    }
+  }
+  // xSections ends with null, so use probabilities from the previous bin
+  if(DBL_MIN >= (*xSections[nElmMinusOne])[nbins-1]) {
+    for (i=0; i<=nElmMinusOne; i++) {
+      xSections[i]->PutValue(nbins-1, (*xSections[i])[nbins-2]);
+    }
+  }
+  // perform normalization
+  for(G4int j=0; j<nbins; j++) {
+    cross = (*xSections[nElmMinusOne])[j];
+    // only for positive X-section 
+    if(cross > DBL_MIN) {
+      for (i=0; i<nElmMinusOne; i++) {
+	xSections[i]->PutValue(j, (*xSections[i])[j]/cross);
+      }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
