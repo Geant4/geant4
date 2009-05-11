@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.18 2008-09-22 08:26:33 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.19 2009-05-11 17:33:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //    09 Mar. 2001, H.Kurashige : Added G4PhysicsVectorType & Store/Retrieve()
 //    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
+//    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
 //
 //---------------------------------------------------------------
 
@@ -92,10 +93,12 @@ class G4PhysicsVector
 
     G4int operator==(const G4PhysicsVector &right) const ;
     G4int operator!=(const G4PhysicsVector &right) const ;
+
     inline G4double operator[](const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will be Done. If you
          // don't want this check, use the operator ().
+
     inline G4double operator()(const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be Done. If 
@@ -109,20 +112,31 @@ class G4PhysicsVector
          // be the crosssection/energyloss value corresponding to the low 
          // edge energy of the bin specified by 'binNumber'. You can get
          // the low edge energy value of a bin by GetLowEdgeEnergy().
+
     virtual G4double GetLowEdgeEnergy(size_t binNumber) const;
          // Get the energy value at the low edge of the specified bin.
          // Take note that the 'binNumber' starts from '0'.
          // This value is defined when a physics vector is constructed
          // by a constructor of a derived class. Use this function
          // when you fill physis vector by PutValue().
+
     inline size_t GetVectorLength() const;
          // Get the toal length (bin number) of the vector. 
+
+    void ComputeSecondDerivatives(G4double firstPointDerivative, 
+				  G4double endPointDerivative);
+         // Initialise second derivatives for spline using 
+         // user defined 1st derivatives at edge points
+         // Warning: this method should be called when the vector 
+         // is already filled
+
     inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
     inline void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
+
     inline const G4String& GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
 
@@ -174,7 +188,8 @@ class G4PhysicsVector
     inline void Interpolation();
 
     void FillSecondDerivatives();
-      // Initialise second derivatives for spline
+        // Initialise second derivatives for spline keeping 
+        // 3d derivative continues - default algorithm
 
     G4double*  secDerivative;
 

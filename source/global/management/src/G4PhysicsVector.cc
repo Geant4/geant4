@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.27 2008-10-16 12:14:36 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.28 2009-05-11 17:33:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,11 @@
 //    18 Jan. 2001, H.Kurashige : removed ptrNextTable
 //    09 Mar. 2001, H.Kurashige : added G4PhysicsVector type 
 //    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
+//    11 may  2009, A.Bagulya : added new implementation of methods 
+//            ComputeSecondDerivatives - first derivatives at edge points 
+//                                       should be provided by a user
+//            FillSecondDerivatives - default computation base on "not-a-knot"
+//                                    algorithm
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
@@ -244,29 +249,137 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
 // --------------------------------------------------------------
 
-void G4PhysicsVector::FillSecondDerivatives()
-{  
-  secDerivative = new G4double [numberOfBin];
+void 
+G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative, 
+					  G4double endPointDerivative)
+  //  A standard method of computation of second derivatives 
+  //  First derivatives at the first and the last point should be provided
+  //  See for example W.H. Press et al. "Numerical reciptes and C"
+  //  Cambridge University Press, 1997.
+{
+  secDerivative = new G4double [numberOfBin]; 
 
-  size_t n = numberOfBin-1;
+  G4int n = numberOfBin-1;
 
   // cannot compute derivatives for less than 3 points
-  if(3 > numberOfBin)
-  {
+  if(3 > numberOfBin) {
     secDerivative[0] = 0.0;
     secDerivative[n] = 0.0;
     return;
   }
 
-  for(size_t i=1; i<n; i++)
+  G4double* u = new G4double [n];
+  
+  G4double p, sig, un;
+
+  u[0] = (6.0/(binVector[1]-binVector[0]))
+    * ((dataVector[1]-dataVector[0])/(binVector[1]-binVector[0])
+       - firstPointDerivative);
+ 
+  secDerivative[0] = - 0.5;
+
+  // Decomposition loop for tridiagonal algorithm. secDerivative[i]
+  // and u[i] are used for temporary storage of the decomposed factors.
+
+  for(G4int i=1; i<n; i++)
   {
-    secDerivative[i] = 
-      3.0*((dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
-           (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]))
-      /(binVector[i+1]-binVector[i-1]);
+    sig = (binVector[i]-binVector[i-1]) / (binVector[i+1]-binVector[i-1]);
+    p = sig*secDerivative[i-1] + 2.0;
+    secDerivative[i] = (sig - 1.0)/p;
+    u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i])
+         - (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]);
+    u[i] = 6.0*u[i]/(binVector[i+1]-binVector[i-1]) - sig*u[i-1]/p;
   }
-  secDerivative[n] = secDerivative[n-1];
-  secDerivative[0] = secDerivative[1];
+
+  sig = (binVector[n-1]-binVector[n-2]) / (binVector[n]-binVector[n-2]);
+  p = sig*secDerivative[n-2] + 2.0;
+  un = (6.0/(binVector[n]-binVector[n-1]))
+    *(endPointDerivative - 
+      (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])) - u[n-1]/p;  
+  secDerivative[n] = un/(secDerivative[n-1] + 2.0);
+
+  // The back-substitution loop for the triagonal algorithm of solving
+  // a linear system of equations.
+   
+  for(G4int k=n-1; k>0; k--)
+  {
+    secDerivative[k] = secDerivative[k]
+      *(secDerivative[k+1] - 
+	u[k]*(binVector[k+1]-binVector[k-1])/(binVector[k+1]-binVector[k]));
+  }
+  secDerivative[0] = 0.5*(u[0] - secDerivative[1]);
+
+  delete [] u;
+}
+
+// --------------------------------------------------------------
+
+void G4PhysicsVector::FillSecondDerivatives()
+  // Computation of second derivatives using "Not-a-knot" endpoint conditions
+  // B.I. Kvasov "Methods of shape-preserving spline approximation"
+  // World Scientific, 2000
+{  
+  secDerivative = new G4double [numberOfBin]; 
+
+  G4int n = numberOfBin-1;
+
+  // cannot compute derivatives for less than 3 points
+  if(3 > numberOfBin) {
+    secDerivative[0] = 0.0;
+    secDerivative[n] = 0.0;
+    return;
+  }
+
+  G4double* u = new G4double [n];
+  
+  G4double p, sig;
+
+  u[1] = ((dataVector[2]-dataVector[1])/(binVector[2]-binVector[1]) -
+	  (dataVector[1]-dataVector[0])/(binVector[1]-binVector[0]));
+  u[1] = 6.0*u[1]*(binVector[2]-binVector[1])
+    / ((binVector[2]-binVector[0])*(binVector[2]-binVector[0]));
+ 
+  // Decomposition loop for tridiagonal algorithm. secDerivative[i]
+  // and u[i] are used for temporary storage of the decomposed factors.
+
+  secDerivative[1] = (2.0*binVector[1]-binVector[0]-binVector[2])
+    / (2.0*binVector[2]-binVector[0]-binVector[1]);
+
+  for(G4int i=2; i<n-1; i++)
+  {
+    sig = (binVector[i]-binVector[i-1]) / (binVector[i+1]-binVector[i-1]);
+    p = sig*secDerivative[i-1] + 2.0;
+    secDerivative[i] = (sig - 1.0)/p;
+    u[i] = (dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i])
+         - (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]);
+    u[i] = (6.0*u[i]/(binVector[i+1]-binVector[i-1])) - sig*u[i-1]/p;
+  }
+
+  sig = (binVector[n-1]-binVector[n-2]) / (binVector[n]-binVector[n-2]);
+  p = sig*secDerivative[n-2] + 2.0;
+  u[n-1] = (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])
+    - (dataVector[n-1]-dataVector[n-2])/(binVector[n-1]-binVector[n-2]);
+  u[n-1] = (6.0*sig*u[n-1]/(binVector[n]-binVector[n-2]))
+    - (2.0*sig - 1.0)*u[n-2]/p;  
+
+  p = (1.0+sig) + (2.0*sig-1.0)*secDerivative[n-2];
+  secDerivative[n-1] = u[n-1]/p;
+
+  // The back-substitution loop for the triagonal algorithm of solving
+  // a linear system of equations.
+   
+  for(G4int k=n-2; k>1; k--)
+  {
+    secDerivative[k] = secDerivative[k]
+      *(secDerivative[k+1] - u[k]*(binVector[k+1]-binVector[k-1])/
+	(binVector[k+1]-binVector[k]));
+  }
+  secDerivative[n] = (secDerivative[n-1] - (1.0-sig)*secDerivative[n-2])/sig;
+  sig = 1.0 - ((binVector[2]-binVector[1])/(binVector[2]-binVector[0]));
+  secDerivative[1] *= (secDerivative[2] - u[1]/(1.0-sig));
+  secDerivative[0]  = (secDerivative[1] - (1.0-sig)*secDerivative[2])/sig;
+
+  delete [] u;
 }
    
 // --------------------------------------------------------------
