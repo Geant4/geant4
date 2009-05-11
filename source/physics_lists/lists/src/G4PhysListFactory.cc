@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.7 2009-04-17 11:24:07 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.8 2009-05-11 11:10:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,53 +38,45 @@
 //
 
 #include "G4PhysListFactory.hh"
-#include "FTFC.hh"
 #include "FTFP.hh"
 #include "FTFP_BERT.hh"
-#include "FTFP_EMV.hh"
+#include "FTFP_BERT_EMV.hh"
+#include "FTFP_BERT_EMX.hh"
+#include "FTFP_BERT_TRV.hh"
 #include "FTF_BIC.hh"
 #include "LBE.hh"
 #include "LHEP.hh"
-#include "LHEP_BERT.hh"
-#include "LHEP_BERT_HP.hh"
 #include "LHEP_EMV.hh"
-#include "LHEP_PRECO_HP.hh"
 #include "QBBC.hh"
 #include "QGSC.hh"
 #include "QGSC_BERT.hh"
 #include "QGSC_CHIPS.hh"
-#include "QGSC_EFLOW.hh"
 #include "QGSC_EMV.hh"
 #include "QGSC_QGSC.hh"
 #include "QGSP.hh"
 #include "QGSP_BERT.hh"
-#include "QGSP_BERT_DIF.hh"
 #include "QGSP_BERT_EMV.hh"
+#include "QGSP_BERT_EMX.hh"
 #include "QGSP_BERT_HP.hh"
-#include "QGSP_BERT_NQE.hh"
 #include "QGSP_BERT_TRV.hh"
 #include "QGSP_BIC.hh"
+#include "QGSP_BIC_EMY.hh"
 #include "QGSP_BIC_HP.hh"
-#include "QGSP_DIF.hh"
-#include "QGSP_EMV.hh"
-#include "QGSP_EMV_NQE.hh"
-#include "QGSP_EMX.hh"
-#include "QGSP_NQE.hh"
-#include "QGSP_QEL.hh"
+#include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 37;
-  G4String s[37] = {
-    "FTFC","FTFP","FTFP_BERY","FTFP_EMV","FTF_BIC",
-    "LBE","LHEP","LHEP_BERT","LHEP_EMV","LHEP_PRECO_HP"
-    "QBBB","QBBC","QBBCG","QBBCF","QBBC_HP","QGSC",
-    "QGSC_BERT","QGSC_CHIPS","QGSC_EFLOW","QGSC_EMV","QGSC_QGSC","QGSP","QGSP_BERT",
-    "QGSP_BERT_DIF","QGSP_BERT_EMV","QGSP_BERT_HP","QGSP_BERT_NQE","QGSP_BERT_TRV",
-    "QGSP_BIC","QGSP_BIC_HP","QGSP_DIF","QGSP_EMV","QGSP_EMV_NQE",
-    "QGSP_EMX","QGSP_NQE","QGSP_QEL","QGS_BIC"};
+  nlists = 30;
+  G4String s[30] = {
+    "FTFP","FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
+    "LBE","LHEP","LHEP_EMV",
+    "QBBBG","QBBC","QBBCG","QBBCF","QBBC_HP",
+    "QGSC","QGSC_BERT","QGSC_CHIPS","QGSC_EMV","QGSC_QGSC",
+    "QGSP","QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
+    "QGSP_BERT_TRV","QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
+    "QGSP_FTFP_BERT","QGS_BIC"};
 
   for(size_t i=0; i<nlists; i++) {
     listnames.push_back(s[i]);
@@ -117,16 +109,15 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
         const G4String& name)
 {
   G4VModularPhysicsList* p = 0;
-  if     (name == "FTFC") {p = new FTFC();}
-  else if(name == "FTFP") {p = new FTFP();}
+  if     (name == "FTFP") {p = new FTFP();}
   else if(name == "FTFP_BERT") {p = new FTFP_BERT();}
-  else if(name == "FTFP_EMV") {p = new FTFP_EMV();}
+  else if(name == "FTFP_BERT_EMV") {p = new FTFP_BERT_EMV();}
+  else if(name == "FTFP_BERT_EMX") {p = new FTFP_BERT_EMX();}
+  else if(name == "FTFP_BERT_TRV") {p = new FTFP_BERT_TRV();}
   else if(name == "FTF_BIC") {p = new FTF_BIC();}
   else if(name == "LBE") {p = new LBE();}
   else if(name == "LHEP") {p = new LHEP();}
-  else if(name == "LHEP_BERT") {p = new LHEP_BERT();}
   else if(name == "LHEP_EMV") {p = new LHEP_EMV();}
-  else if(name == "LHEP_PRECO_HP") {p = new LHEP_PRECO_HP();}
   else if(name == "QBBBG") {p = new QBBC(1, "QBBBG");}
   else if(name == "QBBC") {p = new QBBC();}
   else if(name == "QBBCG") {p = new QBBC(1, "QBBCG");}
@@ -135,24 +126,18 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QGSC") {p = new QGSC();}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
   else if(name == "QGSC_CHIPS") {p = new QGSC_CHIPS();}
-  else if(name == "QGSC_EFLOW") {p = new QGSC_EFLOW();}
   else if(name == "QGSC_EMV") {p = new QGSC_EMV();}
   else if(name == "QGSC_QGSC") {p = new QGSC_QGSC();}
   else if(name == "QGSP") {p = new QGSP();}
   else if(name == "QGSP_BERT") {p = new QGSP_BERT();}
-  else if(name == "QGSP_BERT_DIF") {p = new QGSP_BERT_DIF();}
   else if(name == "QGSP_BERT_EMV") {p = new QGSP_BERT_EMV();}
+  else if(name == "QGSP_BERT_EMX") {p = new QGSP_BERT_EMX();}
   else if(name == "QGSP_BERT_HP") {p = new QGSP_BERT_HP();}
-  else if(name == "QGSP_BERT_NQE") {p = new QGSP_BERT_NQE();}
   else if(name == "QGSP_BERT_TRV") {p = new QGSP_BERT_TRV();}
   else if(name == "QGSP_BIC") {p = new QGSP_BIC();}
+  else if(name == "QGSP_BIC_EMY") {p = new QGSP_BIC_EMY();}
   else if(name == "QGSP_BIC_HP") {p = new QGSP_BIC_HP();}
-  else if(name == "QGSP_DIF") {p = new QGSP_DIF();}
-  else if(name == "QGSP_EMV") {p = new QGSP_EMV();}
-  else if(name == "QGSP_EMV_NQE") {p = new QGSP_EMV_NQE();}
-  else if(name == "QGSP_EMX") {p = new QGSP_EMX();}
-  else if(name == "QGSP_NQE") {p = new QGSP_NQE();}
-  else if(name == "QGSP_QEL") {p = new QGSP_QEL();}
+  else if(name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT();}
   else if(name == "QGS_BIC") {p = new QGS_BIC();}
   else {
     G4cout << "### G4PhysListFactory WARNING: "
