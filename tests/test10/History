@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2007-07-18 16:07:08 gcosmo Exp $
+$Id: History,v 1.22 2009-05-11 14:04:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 11, 2009  Tatiana Nikitina (test10-V09-02-00)
+- Added few cases of non-zero rotation matrices for tested solids.
 
 July 18, 2007  Tatiana Nikitina (test10-V09-00-00)
 - Added G4Paraboloid solid to the test suite.
