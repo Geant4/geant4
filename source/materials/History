@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2009-05-11 14:34:31 alechner Exp $
+$Id: History,v 1.141 2009-05-11 17:55:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11-05-09 A.Lechner
-- G4ExternalDEDXTable: Bug-fix in ClearTable function to avoid illegal
-                       deletion of physics vectors.
+11-05-09 V.Ivanchenko (materials-V09-02-06)
+- G4ExternalDEDXTable: A.Lechner bug-fix in ClearTable function to avoid 
+                       illegal deletion of physics vectors.
 
 07-05-09 V.Ivanchenko (materials-V09-02-05)
 - G4IronStoppingICRU73: the upper limit of the data vector is extended 
