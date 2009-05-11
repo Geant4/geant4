@@ -567,20 +567,17 @@ G4int G4ExternalDEDXTable::FindAtomicNumberElement(
 
 void G4ExternalDEDXTable::ClearTable() {
 
-  G4IonDEDXMapElem::iterator iterElem = dedxMapElements.begin();
-  G4IonDEDXMapElem::iterator iterElem_end = dedxMapElements.end();
-
-  for(;iterElem != iterElem_end; iterElem++) { 
-    if(iterElem -> second != 0) delete iterElem -> second;
-  }
-  dedxMapElements.clear();
-
   G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
   G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
 
   for(;iterMat != iterMat_end; iterMat++) { 
-    if(iterElem -> second != 0) delete iterElem -> second;
+
+    G4PhysicsVector* vec = iterMat -> second;
+
+    if(vec != 0) delete vec;
   }
+
+  dedxMapElements.clear();
   dedxMapMaterials.clear();
 }
 
