@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2009-04-27 07:22:51 gcosmo Exp $
+$Id: History,v 1.112 2009-05-11 14:37:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 2009 Gabriele Cosmo (gdml-V09-02-14)
+- Allow for name stripping of volumes which are included in loops; do not
+  store appended internal counter reference. Addresses issue reported in
+  problem report #1063.
 
 27 April 2009 Gabriele Cosmo (gdml-V09-02-13)
 - Get rid of unused parameter in G4GDMLWriteMaterials::PropertyVectorWrite().
