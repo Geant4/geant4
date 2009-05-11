@@ -1,4 +1,4 @@
-$Id: History,v 1.218 2009-03-16 16:39:18 gcosmo Exp $
+$Id: History,v 1.219 2009-05-11 17:32:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4PhysicsVector: A.Bagulya added method ComputeSecondDerivatives() for 
+  the case when user provides first derivative at endpoits;
+  use "Not-a-Knot" algorithm for the computation of second
+  derivatives in FillSecondDerivatives() (default method)
 
 Mar 16, 2009  G.Cosmo (global-V09-02-01)
 - Changed date for release 9.2.p01.
