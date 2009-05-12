@@ -41,18 +41,14 @@
  <solids>
   <tet aunit="degree" lunit="mm" name="Tet" vertex1="v0" vertex2="v1" vertex3="v2" vertex4="v3" />
   <box aunit="radian" lunit="mm" name="WorldBox" x="(m[ii,j]+m[j,ii]+la[9-ii+ii])" y="(m[j-1,ii*3-1]+m[j*1,ii+2])" z="(la[ii]+la[j*2+1])+2" />
-  <loop for="i" to="9" step="1">
-   <box aunit="radian" lunit="mm" name="LoopBox" x="k[i]/2" y="la[i]" z="i*3" />
-  </loop>
+  <box aunit="radian" lunit="mm" name="LoopBox" x="k[9]/2" y="la[9]" z="27" />
  </solids>
 
  <structure>
-  <loop for="ll" to="26" step="2">
-   <volume name="LoopVol" >
-    <materialref ref="Air" />
-    <solidref ref="LoopBox" />
-   </volume>
-  </loop>
+  <volume name="LoopVol" >
+   <materialref ref="Air" />
+   <solidref ref="LoopBox" />
+  </volume>
   <volume name="Tetvol" >
    <materialref ref="Air" />
    <solidref ref="Tet" />
