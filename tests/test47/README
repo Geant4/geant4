@@ -8,52 +8,69 @@
                    Responsible: S.Banerjee, J.Yarba (Fermilab)
 
 
-NOTE: this is a zero-draft, still work-in-progress !!! 
+NOTE: this is a draft, still work-in-progress !!! 
 
 Intermediate energy validation is done by comparing Monte Carlo predictions 
-vs experimental data.
+vs experimental data. The data come from 2 experiments:
+ (1) ITEP data on inclusive proton/neutron production in pi+/pi-/p induced
+     processes with a number of nuclei for beam momenta between 1 and 9 GeV/c,
+     Yu.D.Bayukov et al, Preprint ITEP-148-1983, Sov.J.Nucl.Phys. 42, 116;
+ (2) BNL data on inclusive pion/kaon/proton production in proton-nuclei
+     collision at 14.6 GeV/c, T. Abbott et al, Phys.Rev. D45, 3906
 
-This test consists of 2 parts:
+The ITEP experiment measures Lorentz invariant cross section as a function
+of kinetic energy of the final state particle at certain fixed angles. The
+BNL experiment measures Lorentz invariant cross section as a function of
+reduced transverse mass in fixed rapidity bins. Accordingly the test is
+made of 2 parts:
 
-I. We compare Geant4-predicted and experimentally measured inclusive productions 
-   of protons and neutrons in the following reactions (so called ITEP test):
-   0) pi+ C at 1.4GeV     4) pi- C  at 5.0GeV     8) p C at 1.4GeV
-   1) pi+ U at 1.4GeV     5) pi- Cu at 5.0GeV     9) p U at 1.4GeV
-   2) pi+ C at 5.0GeV     6) pi- Pb at 5.0GeV    10) p C at 7.5GeV
-   3) pi+ U at 5.0GeV     7) pi- U  at 5.0GeV    11) p U at 7.5GeV
+I. Comparison of Geant4 predictions with experimentally measured inclusive 
+   distributions for protons and neutrons in the following reactions 
+   (ITEP test):
+   0) pi+ C at 1.4 GeV/c   4) pi- C  at 5.0 GeV/c   8) p C at 1.4 GeV/c
+   1) pi+ U at 1.4 GeV/c   5) pi- Cu at 5.0 GeV/c   9) p U at 1.4 GeV/c
+   2) pi+ C at 5.0 GeV/c   6) pi- Pb at 5.0 GeV/c  10) p C at 7.5 GeV/c
+   3) pi+ U at 5.0 GeV/c   7) pi- U  at 5.0 GeV/c  11) p U at 7.5 GeV/c
 
 
-II. We compare Geant4-predicted and experimentally measured inclusive production 
-    of pi+/-, K+/-, or protons in the following reactions (BNL test):
-    12) p Be at 14.6GeV 
-    13) p Cu at 14.6GeV
-    14) p Au at 14.6GeV 
+II. Comparison of Geant4 predictions and experimentally measured inclusive 
+    distributions for pi+/-, K+/-, or protons in the following reactions 
+    (BNL test):
+    12) p Be at 14.6 GeV/c
+    13) p Cu at 14.6 GeV/c
+    14) p Au at 14.6 GeV/c
 
 Data are stored in CVS, together with the C++ code of the package, in a form 
 of ASCII tables, under /itep or /bnl subdirectories.
 
-We are validatng the following Geant4 models: LEP, Bertini, Binary, FTFP, QGSC 
-(except that FTFP and QGSC are not supposed to run at 1.4GeV; we do NOT employ 
-them in low energy tests).
+The following Geant4 models: LEP, Bertini, Binary, FTF/Preco, FTF/Binary, 
+QGS/CHIPS (except that FTF/Preco and QGS/Chips are not supposed to run at 
+1.4 GeV/c; and they are NOT employed in the low energy tests).
 
 
-Monte Carlo predictions can be obtained by running Geant4-based application, that 
-can be configured at run time, to simulate a given number of events (1,000,000 in 
-this case) for a given beam-target combination at a given energy, and to employ 
-one or another Geant4 hadronic model, or to execute sequentially several hadronis 
-models.
+Monte Carlo predictions are obtained by running Geant4-based application, that 
+can be configured at run time, to simulate a given number of events (1,000,000 
+in this case) for a given beam-target combination at a given energy, and to 
+employ one or another Geant4 hadronic model, or to execute sequentially 
+several hadronis models.
 
 Example input/configuration applications are provided as part of the package:
-test47pip.itep, test47pim.itep, test47p.itep, and test47.bnl.
-These job input files exemplify how this Geant4-based executable can be configured
-to simulate user-specified number of interactions (card #events) of a beam particle 
-(card #particle) of a given momentum (card #momentum) with a target (card #material),
-using one or another Geant4 hadronic model (card #generator), or a sequence of
-Geant4 hadronic models, all in one job. 
-If several beam-target-model combo's are requested in a single job configuration
-file, the job will loop over them; card #run will trigger the execution of 
-a beam-target-model combo, for the given number of events.
+
+    test47pip.itep, test47pim.itep, test47p.itep, and test47.bnl.
+
+These job input files exemplify how this Geant4-based executable can be 
+configured to simulate 
+  user-specified number of interactions (card #events)
+  a beam particle  (card #particle) 
+  a given momentum (card #momentum) in MeV/c 
+  a target         (card #material),
+  a given Geant4 hadronic model (card #generator), 
+A sequence of Geant4 hadronic models can be provided in a single job. 
+If several beam-target-model combo's are requested in a single job 
+configuration file, the job will loop over them; card #run will trigger the 
+execution of a beam-target-model combo, for the given number of events.
 Card #exit will terminate the job.
+
 (NOTE: in principal, job configuration language allows to run also more than
 one combination of beam-target, but such job may be very CPU-heavy, and we do
 not recommend it).  
@@ -62,37 +79,38 @@ The output of a job will be one or several ROOT files (histograms). Each ROOT
 file will correspond to a given combination of beam-target-energy and a given 
 Geant4 hadronic model.  
 
-To analize the output and to compare predictions of different Geant4 hadronic 
-models (vs experimental data, or vs each other) we also provide several ROOT 
-scripts, combined in a single script Plot.C, also stored in CVS as part of the 
-package.
+To analyze the output and to compare predictions of different Geant4 hadronic 
+models (vs experimental data, or vs each other) several ROOT scripts are
+provided and they are combined in a single script Plot.C, also stored in CVS 
+as a part of the package.
 
-Together with the Geant4 application code and the data tables we provide shell 
-run scripts that allow to execute these tests, either interactively, in batch, 
-or in a grid-like environment.
-As part of the workflow, each run script will automatically generate necessary
-job configuration input files (and will clean it/them after the job completion). 
-Each shell script executes not only the Geant4 run, but also analysis step, and 
-delivers comparison plots, in the encapsulated postscript format (eps).
+Together with the Geant4 application code and the data tables shell run 
+scripts are provided that allow to execute these tests, either interactively, 
+in batch, or in a grid-like environment.
 
--- run_pip_itep.csh will execute either all 4 tests 0)-3), or if given an input 
+As part of the work flow, each run script will automatically generate necessary
+job configuration input files (and will clean it/them after job completion). 
+Each shell script executes not only the Geant4 run, but also analysis step, 
+and delivers comparison plots in the encapsulated postscript format (eps).
+
+-- run_pip_itep.csh will execute either all 4 tests 0)-3), or if given an input
    argument from 0 through 3, it'll execute a given test
 
--- run_pim_itep.csh will execute either all 4 tests 4)-7), or if given an input 
+-- run_pim_itep.csh will execute either all 4 tests 4)-7), or if given an input
    argument, will execute selected
 
 -- run_proton_itep.csh will execute all 4 tests 8)-11), or if given an input 
    argument, will run selected 
 
--- run_bnl.csh will execure all 3 12)-14), of if given an input argument, will
+-- run_bnl.csh will execute all 3 12)-14), of if given an input argument, will
    run selected
  
 -- run_itep.csh will submit to batch 12 jobs that compose ITEP test; if a user
    prefers to submit a selected subset of jobs of the ITEP test, she/he can use
-   2 input arguments: the 1st one will specify the number of jobs (max/default=12), 
-   and the 2nd one will specify at where to start (default=0)
+   2 input arguments: the 1st one will specify the number of jobs 
+   (max/default=12), and the 2nd one will specify at where to start (default=0)
    
--- run_all.csh will submit to batch 15 jobs, i.e. the 12 jobs of the ITEP tests,
-   and the 3 jobs of the BNL test
+-- run_all.csh will submit to batch 15 jobs, i.e. the 12 jobs of the ITEP 
+   tests, and the 3 jobs of the BNL test
 
 
