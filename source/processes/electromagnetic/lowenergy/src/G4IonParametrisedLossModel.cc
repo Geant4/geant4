@@ -41,7 +41,8 @@
 //                               and modified method to add/remove tables
 //                               (tables are now built in initialisation phase),
 //                               Minor bug fix in ComputeDEDXPerVolume (AL)
-//
+//                11. 05. 2009 - Introduced scaling algorithm for heavier ions:
+//                               G4IonDEDXScalingICRU73 (AL)
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -61,6 +62,7 @@
 #include "G4IronStoppingICRU73.hh"
 #include "G4VIonDEDXTable.hh"
 #include "G4VIonDEDXScalingAlgorithm.hh"
+#include "G4IonDEDXScalingICRU73.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4ProductionCutsTable.hh"
@@ -100,10 +102,46 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   braggIonModel = new G4BraggIonModel();
   betheBlochModel = new G4BetheBlochModel();
 
-  // By default ICRU 73 stopping power tables are loaded
-  AddDEDXTable("ICRU73-elemmat",new G4SimpleMaterialStoppingICRU73);
-  AddDEDXTable("ICRU73-ironions",new G4IronStoppingICRU73);
-  AddDEDXTable("ICRU73-compmat",new G4MaterialStoppingICRU73);
+  // By default ICRU 73 stopping power tables are loaded:
+
+  // Ions with Z above between 19 and 21: Ar-40 data is used as basis 
+  // for stopping power scaling
+  G4int ionZMin = 19;
+  G4int ionZMax = 21;
+  G4int refIonZ = 18;
+  G4int refIonA = 40;
+
+  AddDEDXTable("ICRU73-elemmat",
+           new G4SimpleMaterialStoppingICRU73,
+	   new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA));
+
+  // Ions with Z above 21: Fe-56 data is used as basis for stopping power 
+  // scaling
+  ionZMin = 22;
+  ionZMax = 102;
+  refIonZ = 26;
+  refIonA = 56;
+
+  AddDEDXTable("ICRU73-ironions",
+               new G4IronStoppingICRU73,
+	       new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA));
+
+  // Compound materials: Ar-40 data is used as basis for stopping power 
+  // scaling (except for iron ions)
+  ionZMin = 19;
+  ionZMax = 102;
+  refIonZ = 18;
+  refIonA = 40;
+
+  G4IonDEDXScalingICRU73* scaling =
+            new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA);
+
+  G4int ironIonAtomicNumber = 26;
+  scaling -> AddException(ironIonAtomicNumber);
+
+  AddDEDXTable("ICRU73-compmat",
+               new G4MaterialStoppingICRU73,
+	       scaling);
 
   // The boundaries for the range tables are set
   lowerEnergyEdgeIntegr = 0.025 * MeV;
@@ -231,7 +269,7 @@ void G4IonParametrisedLossModel::Initialise(
     const G4Material* material = couple -> GetMaterial();
     //    G4ProductionCuts* productionCuts = couple -> GetProductionCuts();
 
-    for(G4int atomicNumberIon = 3; atomicNumberIon < 90; atomicNumberIon++) {
+    for(G4int atomicNumberIon = 3; atomicNumberIon < 102; atomicNumberIon++) {
 
        LossTableList::iterator iter = lossTableList.begin();
        LossTableList::iterator iter_end = lossTableList.end();
