@@ -1,0 +1,58 @@
+# G.A.P.Cirrone
+#
+# Macro file recommended for the use with proton beams and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+# 
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+/physic/addPhysics emstandard_opt3  # Electromagnetic model
+/physic/addPhysics elastic          # Hadronic elastic model
+/physic/addPhysics binary           # Hadronic inelastic model
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+##########################
+# Visualisation 
+#
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+#/vis/specify RODetectorLog 1
+#/vis/viewer/update
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 300 keV
+/beam/position/Xposition -270 mm
+
+##########################
+# Set here the cut and the step max for the tracking 
+#
+/physic/setCuts 0.01 mm
+#/Step/waterPhantomStepMax 0.01 mm
+
+
+/run/beamOn 100000
