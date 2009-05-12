@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.60 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.61 2009-05-12 15:46:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -514,7 +514,7 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
       if (tag=="auxiliary")
         { auxList.push_back(AuxiliaryRead(child)); } else
       if (tag=="materialref")
-        { materialPtr = GetMaterial(GenerateUniqueName(RefRead(child),true)); } else
+        { materialPtr = GetMaterial(GenerateName(RefRead(child),true)); } else
       if (tag=="solidref")
         { solidPtr = GetSolid(GenerateName(RefRead(child))); }
    }
