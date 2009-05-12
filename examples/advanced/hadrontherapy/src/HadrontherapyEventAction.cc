@@ -24,9 +24,8 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyEventAction.cc;
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example

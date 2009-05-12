@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PassiveBeamLine.cc;
-// Last modified: G.A.P.Cirrone
+// PassiveBeamLine.cc;
 //
 // See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------

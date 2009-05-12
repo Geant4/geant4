@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyAnalisysManager.cc; Last modified: G.A.P.Cirrone, February 2008;
+// $Id: HadrontherapyAnalisysManager.cc;
+// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -43,13 +45,14 @@
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() : 
   aFact(0), theTree(0), histFact(0), tupFact(0), h1(0), h2(0), h3(0),
   h4(0), h5(0), h6(0), h7(0), h8(0), h9(0), h10(0), h11(0), h12(0), h13(0), h14(0), ntuple(0),
   ionTuple(0)
 {  
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager() 
 { 
   delete ionTuple;
@@ -112,13 +115,14 @@ HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()
   delete aFact;
   aFact = 0;
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::getInstance()
 {
   if (instance == 0) instance = new HadrontherapyAnalysisManager;
   return instance;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::book() 
 {
   // Build up  the  analysis factory
@@ -126,8 +130,8 @@ void HadrontherapyAnalysisManager::book()
   AIDA::ITreeFactory* treeFact = aFact -> createTreeFactory();
 
   // Create the .hbk or the .root file
-  G4String fileName = "hadrontherapyOutput.hbk";
-  G4String rootFileName = "hadrontherapyOutput.root";
+  G4String fileName = "DoseDistribution.hbk";
+  G4String rootFileName = "DoseDistribution.root";
   
   std::string opts = "export=root";
  
@@ -182,6 +186,7 @@ void HadrontherapyAnalysisManager::book()
   if (tupFact) ionTuple = tupFact -> create("2","2", columnNames2, options2);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i, 
 						     G4int j, 
 						     G4int k,
@@ -201,76 +206,91 @@ void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i,
   ntuple -> addRow(); 
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::BraggPeak(G4int slice, G4double energy)
 {
   h1 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryProtonEnergyDeposit(G4int slice, G4double energy)
 {
   h2 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryNeutronEnergyDeposit(G4int slice, G4double energy)
 {
   h3 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryAlphaEnergyDeposit(G4int slice, G4double energy)
 {
   h4 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryGammaEnergyDeposit(G4int slice, G4double energy)
 {
   h5 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryElectronEnergyDeposit(G4int slice, G4double energy)
 {
   h6 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryTritonEnergyDeposit(G4int slice, G4double energy)
 {
   h7 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryDeuteronEnergyDeposit(G4int slice, G4double energy)
 {
   h8 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SecondaryPionEnergyDeposit(G4int slice, G4double energy)
 {
   h9 -> fill(slice,energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::electronEnergyDistribution(G4double energy)
 {
   h10 -> fill(energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::gammaEnergyDistribution(G4double energy)
 {
   h11 -> fill(energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::deuteronEnergyDistribution(G4double energy)
 {
   h12 -> fill(energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::tritonEnergyDistribution(G4double energy)
 {
   h13 -> fill(energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::alphaEnergyDistribution(G4double energy)
 {
   h14 -> fill(energy);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::genericIonInformation(G4int a, 
 							 G4double z, 
 							 G4int electronOccupancy,
@@ -290,6 +310,7 @@ void HadrontherapyAnalysisManager::genericIonInformation(G4int a,
    ionTuple -> addRow(); 
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::finish() 
 {  
   // Write all histograms to file

@@ -43,7 +43,7 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-
+#include "G4VisAttributes.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class HadrontherapyDetectorROGeometry;
@@ -108,10 +108,9 @@ public:
   // Returns the size of the voxel along the X axis
  
 private:
-  //G4VisAttributes* skyBlue;
-  //G4Material* treatmentRoomMaterial;
-  //G4Material* patientMaterial;
-  //G4Material* detectorMaterial;
+  G4VisAttributes* skyBlue;
+  G4VisAttributes* red;
+
   G4String emName;
   HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
 

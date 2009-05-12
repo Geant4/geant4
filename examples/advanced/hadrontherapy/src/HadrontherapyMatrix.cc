@@ -105,7 +105,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   if (matrix)
     {  
       std::ofstream ofs;    	
-      ofs.open("doseDeposited_1.out"); 
+      ofs.open("DoseDistribution.out"); 
       
       for(G4int l = 0; l < numberVoxelZ; l++) 
 	{

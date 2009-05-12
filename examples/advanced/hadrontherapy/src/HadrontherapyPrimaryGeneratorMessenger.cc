@@ -23,20 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorMessenger.cc; May 2005
+// HadrontherapyPrimaryGeneratorMessenger.cc;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F.Romano(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
 // 
 // * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
+// ------------------------------------------------------------------------------
 
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"

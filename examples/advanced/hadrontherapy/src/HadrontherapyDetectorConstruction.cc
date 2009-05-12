@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HadrontherapyDetectorConstruction.cc;
+// HadrontherapyDetectorConstruction.cc
 //
 // See more at: http://workgroup.lngs.infn.it/geant4lns/
 //
@@ -37,11 +36,10 @@
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
+// (b) INFN Section of Genova
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4Box.hh"
@@ -116,8 +114,6 @@ G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
 { 
-  G4double maxStepTreatmentRoom = 0.1 *mm;
-
   // -----------------------------
   // Treatment room - World volume
   //------------------------------
@@ -139,7 +135,6 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
 					    logicTreatmentRoom, 
 					    0,false,0);
  
-  logicTreatmentRoom -> SetUserLimits(new G4UserLimits(maxStepTreatmentRoom));
 
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
@@ -155,12 +150,16 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
   passiveProtonBeamLine -> HadrontherapyBeamNozzle();
   passiveProtonBeamLine -> HadrontherapyBeamFinalCollimator();
 
+  // The following lines construc a typical modulator wheel inside the Passive Beam line.
+  // Please remember to set the nodulator material (default is air, i.e. no modulator!) 
+  // in the HadrontherapyModulator.cc file
   modulator = new HadrontherapyModulator();
   modulator -> BuildModulator(physicalTreatmentRoom);
 
   //----------------------------------------
-  // Patient: 
+  // Water phantom:
   // a water box used to approximate tissues
+  // Here is called 'Patient'
   //----------------------------------------
   G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
   G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
@@ -173,10 +172,13 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
 					    patientLogicalVolume,
 					    physicalTreatmentRoom,
 					    false,0);
- 
-  // Visualisation attributes of the patient 
- 
-  //  patientLogicalVolume -> SetVisAttributes(redWire); 
+
+  // Visualisation attributes of the patient
+  red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
+  red -> SetVisibility(true);
+  red -> SetForceSolid(true);
+  //red -> SetForceWireframe(true);
+  patientLogicalVolume -> SetVisAttributes(red);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -193,11 +195,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					      "DetectorLog",
 					      0,0,0);
   
-  // Fixing the max step allowed in the detector
-  G4double maxStep = 0.1 *mm;
-  detectorLogicalVolume -> SetUserLimits(new G4UserLimits(maxStep));
-  
-  G4double detectorXtranslation = -180.*mm;
+   G4double detectorXtranslation = -180.*mm;
   detectorPhysicalVolume = new G4PVPlacement(0,
 					     G4ThreeVector(detectorXtranslation, 0.0 *mm, 0.0 *mm),
 					     "DetectorPhys",
@@ -206,10 +204,11 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					     false,0);
   
   // Visualisation attributes of the phantom
-  //    G4VisAttributes* simpleBoxVisAttributes = new G4VisAttributes(lightBlue);
-  //simpleBoxVisAttributes -> SetVisibility(true);
-  // simpleBoxVisAttributes -> SetForceSolid(true);
-  //detectorLogicalVolume -> SetVisAttributes(simpleBoxVisAttributes);
+  skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
+  skyBlue -> SetVisibility(true);
+  skyBlue -> SetForceSolid(true);
+
+  detectorLogicalVolume -> SetVisAttributes(skyBlue);
   
   // **************
   // Cut per Region
@@ -217,9 +216,9 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
   
   // A smaller cut is fixed in the phantom to calculate the energy deposit with the
   // required accuracy 
-  G4Region* aRegion = new G4Region("DetectorLog");
-  detectorLogicalVolume -> SetRegion(aRegion);
-  aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
+  // G4Region* aRegion = new G4Region("DetectorLog");
+  //detectorLogicalVolume -> SetRegion(aRegion);
+  //aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
 /////////////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()

@@ -11,6 +11,14 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+14.05.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-07
+	   - Physic implementation completely changed. Now Hadrontherapy can be launched 
+             with physics lists, packages and built-in physic models;
+             In the README we give some suggestion in the physic models to use.
+             All models can be activated via macro command.
+           - Improved HadrontherapyModulator.cc file;
+
+
 29.03.2009  G.A.P.Cirrone; Tag: hadrontehrapy-V09-02-06
 	   - Extended limits of Binary Cascade in HIProtonNeutronBinary.cc
 	   - Corrected and improved "default" macro file.

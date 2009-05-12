@@ -37,7 +37,6 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4Box.hh"
@@ -139,38 +138,31 @@ HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
   G4double phi = 270. *deg;     
   rm -> rotateY(phi); 
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyModulator::~HadrontherapyModulator() 
 {
   delete rm;
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 {
+  G4bool isotopes = false;
+  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  G4Material* PMMANist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_PMMA", isotopes);
 
-
-  //Materials used for the modulator wheel
-  //HadrontherapyMaterial* material = new HadrontherapyMaterial();
-	G4bool isotopes = false;
-G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
-	
   G4Material* Mod0Mater = airNist;
   G4Material* ModMater = airNist;
-  //delete material;
-
+ 
   G4double innerRadiusOfTheTube = 2.5 *cm;
   G4double outerRadiusOfTheTube = 9.5 *cm;
   G4double hightOfTheTube = 0.03*cm;
 
   // Mother of the modulator wheel  
-
   G4ThreeVector positionMotherMod = G4ThreeVector(-1960.50 *mm, 30 *mm, 50 *mm);
  
   G4Box* solidMotherMod = new G4Box("MotherMod", 12 *cm, 12 *cm, 12 *cm);
  
   G4LogicalVolume * logicMotherMod = new G4LogicalVolume(solidMotherMod, Mod0Mater,"MotherMod",0,0,0);
-
- 
 
   physiMotherMod = new G4PVPlacement(rm,positionMotherMod,  "MotherMod", 
 				     logicMotherMod,    				  
@@ -200,7 +192,6 @@ G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", 
   
   logicMod0 = new G4LogicalVolume(solidMod0, Mod0Mater, "Mod0",0,0,0);
   
-  
   physiMod0 = new G4PVPlacement(G4Transform3D(rm2, positionMod0), 
 				logicMod0,    
 				"Mod0",       
@@ -212,7 +203,6 @@ G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", 
   //----------------------------------------------------------
   // First modulator sclice
   //----------------------------------------------------------
- 
  
   G4double startAngleOfTheTube1 = 54.267*deg;
   G4double spanningAngleOfTheTube1 = 71.466*deg;
