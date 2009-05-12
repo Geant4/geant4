@@ -11,6 +11,10 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+
+14.05.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-08
+           - README file improved.
+
 14.05.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-07
 	   - Physic implementation completely changed. Now Hadrontherapy can be launched 
              with physics lists, packages and built-in physic models;

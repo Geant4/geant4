@@ -8,7 +8,7 @@
                            ----------------------
 
 
-Last revsion: G.A.P.Cirrone,  April 2008;
+Last revsion: G.A.P.Cirrone,  April 2009;
 
 
                                     ACTUAL AUTHORS 
@@ -22,7 +22,6 @@ Laboratori Nazionali del Sud - Istituto Nazionale di Fisica Nucleare
 
 
                                    PAST AUTHORS
-
 S.GUATELLI, M.G. PIA
 Istituto Nazionale di Fisica Nucleare, Sezione di Genova Via Dodecaneso, 33
 16146, Genova, Italy
@@ -84,102 +83,58 @@ The elements simulated are:
 
 A particular care is addressed to the simulation of the physic processes.
 
-The User (since the December 2009 release) has the possibility to choice between two main
-approaches to insert the physic models: 
+Three differnt approaches can be used for the choose of the physic models.
 
-Approach 1. The User can individually and selectively define all the models via macro command;
-            
-Approach 2. The User can choice a "built-in" physic package containing all the needed 
-            models for the transport of proton and ion in the typical hadron-therapy range. 
-            This second approach make the definition of the physic models simpler.  
-            Developers strongly suggest the use of this second approach for Users are not
-            specifically interested in the test of a specific physic model. Moreover they
-            also suggest to send them results of comparison and report problems. This will
-            permit the improvment of the overall quality of the implemented physic.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+APPROACH 1:
+>>>>>>>>>>
 
--------------------------------------  Approach 1  ----------------------------- 
+Using the macro command 
 
-With this apprach, at moment, inelastic models can be swiched-on only for neutrons
-and protons. The activation of inelastic nucleus-nucleus models will be provided in 
-the next release.
+/physic/addPhysics/<physics List name>.
 
-** Both electromagnetic and hadronic physic processes can be activated for 
-   the particles of the experimental set-up.
-   The different physics models can be activated by the user interactively via commands
-   that can be inserted in the macro files
+In this case the models (for electromagnetic, hadronic elastic and hadronic inelstic) can be 
+activated directly calling the name of the Physics Lists that are available inside the 
+Geant4 kernel in the directory:
 
-** Examples of activation are provided in the numerous macro files starting
-   with the string "physics":
+$G4INSTALL/source/physics_lists/builders/include 
 
-** All possible physics options are summarized in the file 
-   physicsAllOptions.mac.
+An example of the use of the Physics List can be found in the macro files:
+proton_therapy.mac and ion_therapy.mac
 
-** Different options concerning electromagnetic interactions of protons
-   and neutrons can be tested with the files: 
-   physicsElectromagneticStandard.mac
-   
-   physicsElectromagneticICRU49.mac
-   physicsElectromagneticZiegler77.mac
-   physicsElectromagneticZiegler85.mac
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+APPROACH 2:
+>>>>>>>>>>
 
-** Different options concerning hadronic interactions of protons and
-   neutrons can be tested with the files: 
+A set of built-in physic models are also contained inside the Hadrontherapy directory. These
+are called Local*.cc and Local*.hh and can be activated using the macro command:
+/physic/addPhysics/<name>.
 
-   physicsHadronicBertini.mac
-   physicsHadronicBinary.mac
-   physicsHadronicLEP.mac
-   physicsHadronicPrecompound.mac
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+APPROACH 3:
+>>>>>>>>>>
 
-NOTE: Apart from the different models for protons and neutrons, a user
-can also select among several interaction models for particles like
-electrons or photons. All possible options are listed in the file
-physicsAllOptions.mac.
-
-----------------------------------------------------------
-SUGGESTED PHYSIC FOR PROTON BEAMS IN THE RANGE 0 - 400 MeV
-----------------------------------------------------------
-
-Developers of hadrontehrapy suggest to the Users want follow the Approach 1, the use of 
-the following physic configuration for the
-various processes (command must be inserted in a .mac file):
-
-Electromagnetic processes:
-/physics/addPhysics EM-Photon-EPDL (or) /physics/addPhysics EM-Photon-Standard
-/physics/addPhysics EM-Electron-EEDL (or) /physics/addPhysics EM-Electron-Standard
-/physics/addPhysics EM-HadronIon-LowE (or) /physics/addPhysics EM-HadronIon-Standard
-/physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-Muon-Standard
-
-Hadronic elastic processes:
-/physics/addPhysics HadronicEl-HadronIon-UElastic
-
-Hadronic inelastic processes:
-/physics/addPhysics HadronicInel-ProtonNeutron-Prec  
-
--------------------------------------  Approach 2  ----------------------------- 
 We developed this approach in order to semplify the choice of the physic models to 
 be used in the application.
 **  With this approach the user must only insert a command line in his/her .mac file
     (using the /physics/addPackage PACKAGE_NAME).
-    This permits to switch-on an already build physic package.
+    
+This permits to switch-on an already build physic package.
 
 ** Various packages are already present in the Geant4 tree: they are in the directory:
    geant4/source/physics_lists/lists/include
 
 ** In this case hadronic inelastic models are directly activated for every particle.
+*****************************************************************************************
 
 ------------------------------------------------------------------
 SUGGESTED PHYSIC FOR ION BEAMS IN THE RANGE 0 - 400 MeV
 ------------------------------------------------------------------
-Developers of Hadrontherapy suggest the use of the "QGSP_BIC" package for the correct simulation of ion transposrt in the typical hadrontherapy energy range. This package 
-can be inserted with one simple command in the .mac file:
-/physics/addPackage QGSP_BIC
+Two macro files (proton_therapy.mac and ion_therapy.mac) can be used for proton and ion
+simulations.
 
-An example of macro file for the use of Approach 2 is: packageQGSP_BIC.mac 
+Also the QGSP_BIC package can be used if the *Approach 3* is preferred.
 
-
-Developers are improving the quality of the packages and validation results will be soon provided 
-in a dedicated web page
 
 ------->2. EXPERIMENTAL SET-UP.      
                                       
