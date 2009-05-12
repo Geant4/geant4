@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.28 2009-05-11 17:33:53 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.29 2009-05-12 08:53:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -303,9 +303,9 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
    
   for(G4int k=n-1; k>0; k--)
   {
-    secDerivative[k] = secDerivative[k]
-      *(secDerivative[k+1] - 
-	u[k]*(binVector[k+1]-binVector[k-1])/(binVector[k+1]-binVector[k]));
+    secDerivative[k] *= 
+      (secDerivative[k+1] - 
+       u[k]*(binVector[k+1]-binVector[k-1])/(binVector[k+1]-binVector[k]));
   }
   secDerivative[0] = 0.5*(u[0] - secDerivative[1]);
 
@@ -356,7 +356,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   }
 
   sig = (binVector[n-1]-binVector[n-2]) / (binVector[n]-binVector[n-2]);
-  p = sig*secDerivative[n-2] + 2.0;
+  p = sig*secDerivative[n-3] + 2.0;
   u[n-1] = (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])
     - (dataVector[n-1]-dataVector[n-2])/(binVector[n-1]-binVector[n-2]);
   u[n-1] = (6.0*sig*u[n-1]/(binVector[n]-binVector[n-2]))
@@ -370,14 +370,14 @@ void G4PhysicsVector::FillSecondDerivatives()
    
   for(G4int k=n-2; k>1; k--)
   {
-    secDerivative[k] = secDerivative[k]
-      *(secDerivative[k+1] - u[k]*(binVector[k+1]-binVector[k-1])/
-	(binVector[k+1]-binVector[k]));
+    secDerivative[k] *= 
+      (secDerivative[k+1] - 
+       u[k]*(binVector[k+1]-binVector[k-1])/(binVector[k+1]-binVector[k]));
   }
   secDerivative[n] = (secDerivative[n-1] - (1.0-sig)*secDerivative[n-2])/sig;
   sig = 1.0 - ((binVector[2]-binVector[1])/(binVector[2]-binVector[0]));
   secDerivative[1] *= (secDerivative[2] - u[1]/(1.0-sig));
-  secDerivative[0]  = (secDerivative[1] - (1.0-sig)*secDerivative[2])/sig;
+  secDerivative[0]  = (secDerivative[1] - sig*secDerivative[2])/(1.0-sig);
 
   delete [] u;
 }
