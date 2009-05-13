@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2009-03-14 11:44:46 allison Exp $
+$Id: History,v 1.121 2009-05-13 18:18:03 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+13th May 2009  John Allison  (visman-V09-02-02)
+- G4VisCommandsViewerSet.hh/cc: Added /vis/viewer/set/targetPoint.
+- G4VisManager.cc: End of run event keeping information improved.
 
 14th March 2009  John Allison  (visman-V09-02-01)
 - G4VisCommands.hh/.cc: Introduced /vis/initialize.
