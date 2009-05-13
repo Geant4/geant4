@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.24 2007-05-18 07:38:01 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.25 2009-05-13 15:48:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -297,17 +297,21 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
   rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
 
+  G4double rad = std::sqrt(rad2);
+
   // G4double rad = std::sqrt(rad2);
   // Check radial surface
   // sets `in'
   
   tolRMax = fRmax - fRmaxTolerance*0.5 ;
     
-  if ( rad2 <= tolRMax*tolRMax )  in = kInside ;
+  // if ( rad2 <= tolRMax*tolRMax )  in = kInside ;
+  if ( rad <= tolRMax )  in = kInside ;
   else
   {
     tolRMax = fRmax + fRmaxTolerance*0.5 ;       
-    if ( rad2 <= tolRMax*tolRMax ) in = kSurface ;
+    // if ( rad2 <= tolRMax*tolRMax ) in = kSurface ;
+    if ( rad <= tolRMax ) in = kSurface ;
     else                           in = kOutside ;
   }
   return in;
@@ -383,7 +387,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
-  c = rad2 - fRmax*fRmax ;
+
+  // c = rad2 - fRmax*fRmax;
+  G4double rad = std::sqrt(rad2);
+  c = (rad - fRmax)*(rad + fRmax);
 
   if ( c > fRmaxTolerance*fRmax )
   {
@@ -474,10 +481,13 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
   
   const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
+  G4double rad = std::sqrt(rad2);
 
-  if( rad2 <= Rmax_plus*Rmax_plus )
+  // if( rad2 <= Rmax_plus*Rmax_plus )
+  if( rad <= Rmax_plus )
   {
-    c = rad2-fRmax*fRmax ;
+    // c = rad2-fRmax*fRmax ;
+    c = (rad - fRmax)*(rad + fRmax);
 
     if ( c < fRmaxTolerance*fRmax) 
     {
