@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2009-03-05 09:20:53 gbarrand Exp $
+$Id: History,v 1.17 2009-05-13 08:39:24 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 May 2009 Guy Barrand
+- update the README.
+- remove the content of the analysis/[Falsetto,jas,Lab] directories.
+  In fact the analysis directory should not be distributed anymore.
+- have a run.mac in the main example directory.
+- AnaEx01AnalysisManager : arrange to have histo and tuple name
+  as interger in case of hbook file format. 
 
 5 March 2009 Guy Barrand
 - GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since
