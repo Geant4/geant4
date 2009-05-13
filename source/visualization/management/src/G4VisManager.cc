@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.118 2009-03-09 12:42:00 allison Exp $
+// $Id: G4VisManager.cc,v 1.119 2009-05-13 18:16:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1294,9 +1294,10 @@ void G4VisManager::EndOfEvent ()
       if (!warned) {
 	if (fVerbosity >= warnings) {
 	  G4cout <<
-	    "WARNING: G4VisManager::EndOfEvent: Event keeping suspended."
-	    "\n  The number of events exceeds the maximum that may be kept, "
-		 << maxNumberOfKeptEvents << '.'
+ "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
+ "\n  The number of events exceeds the maximum, "
+		 << maxNumberOfKeptEvents <<
+ ", that can be kept by the vis manager."
 		 << G4endl;
 	}
 	warned = true;
@@ -1325,12 +1326,13 @@ void G4VisManager::EndOfRun ()
 
     if (fEventKeepingSuspended && fVerbosity >= warnings) {
       G4cout <<
-	"WARNING: G4VisManager::EndOfRun: Event keeping was suspended."
-	"\n  The number of events in the run exceeded the maximum to be kept, "
-	     << fpScene->GetMaxNumberOfKeptEvents() << '.' <<
-	"\n  The number of events to be kept can be changed with"
-	"\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
-	"\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
+ "WARNING: G4VisManager::EndOfRun: Automatic event keeping has been suspended."
+ "\n  The number of events in the run exceeded the maximum, "
+	     << fpScene->GetMaxNumberOfKeptEvents() <<
+ ", that can be kept by the vis manager." <<
+ "\n  The number of events kept by the vis manager can be changed with"
+ "\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
+ "\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
 	     << G4endl;
     }
   }
