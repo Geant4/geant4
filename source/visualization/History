@@ -1,4 +1,4 @@
-$Id: History,v 1.439 2009-05-13 10:47:29 lgarnier Exp $
+$Id: History,v 1.440 2009-05-13 18:21:03 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+13th May 2009  John Allison
+- visman-V09-02-02: Added /vis/viewer/set/targetPoint and minor
+  wording improvements.
 
 6 May 2009, Laurent Garnier
  - G4OpenGLQtViewer.cc: Fix compilation warning and error with gcc4.4
