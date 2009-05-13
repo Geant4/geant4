@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.13 2009-03-31 17:14:42 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.14 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 #else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
 #endif
-  hasToRepaint =false;
+  fHasToRepaint =false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -68,11 +68,11 @@ void G4OpenGLImmediateQtViewer::Initialise() {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
-  readyToPaint = false;
+  fReadyToPaint = false;
   CreateMainWindow (this,QString(fName));
   CreateFontLists ();
 
-  readyToPaint = true;
+  fReadyToPaint = true;
 }
 
 void G4OpenGLImmediateQtViewer::initializeGL () {
@@ -91,9 +91,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   glDepthMask (GL_TRUE);
 
   if (fSceneHandler.GetScene() == 0) {
-    hasToRepaint =false;
+    fHasToRepaint =false;
   } else {
-    hasToRepaint =true;
+    fHasToRepaint =true;
   }
 
 }
@@ -118,7 +118,7 @@ void  G4OpenGLImmediateQtViewer::DrawView() {
 void G4OpenGLImmediateQtViewer::ComputeView () {
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",getWinWidth(), getWinHeight());
 #endif
   makeCurrent();
   // If a double buffer context has been forced upon us, ignore the
@@ -149,9 +149,9 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
   }
    
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
+  printf("G4OpenGLImmediateQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",getWinWidth(), getWinHeight());
 #endif
-  hasToRepaint = true;
+  fHasToRepaint = true;
 }
 
 void G4OpenGLImmediateQtViewer::FinishView()
@@ -174,9 +174,8 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int aWidth
 ,int aHeight)
 {  
-  fWinSize_x = aWidth;
-  fWinSize_y = aHeight;
-  hasToRepaint = true;
+  ResizeWindow(aWidth,aHeight);
+  fHasToRepaint = sizeHasChanged();
 }
 
 
@@ -185,18 +184,18 @@ void G4OpenGLImmediateQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("\n\nG4OpenGLImmediateQtViewer::paintGL ??\n");
 #endif
-  if (!readyToPaint) {
-    readyToPaint= true;
+  if (!fReadyToPaint) {
+    fReadyToPaint= true;
     return;
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
-  if ( !hasToRepaint) {
-    if (((fWinSize_x == (unsigned int)width())) &&(fWinSize_y == (unsigned int) height())) {
+  if ( !fHasToRepaint) {
+    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) {
       return;
     }
   }
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
+  printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
 #endif
 
   SetView();
@@ -204,10 +203,10 @@ void G4OpenGLImmediateQtViewer::paintGL()
   ClearView (); //ok, put the background correct
   ComputeView();
 
-  hasToRepaint = false; // could be set to false by ComputeView
+  fHasToRepaint = false; // could be set to false by ComputeView
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",readyToPaint);
+  printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",fReadyToPaint);
 #endif
 }
 
@@ -252,9 +251,9 @@ void G4OpenGLImmediateQtViewer::contextMenuEvent(QContextMenuEvent *e)
 }
 
 void G4OpenGLImmediateQtViewer::updateQWidget() {
-  hasToRepaint= true;
+  fHasToRepaint= true;
   updateGL();
-  hasToRepaint= false;
+  fHasToRepaint= false;
 }
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2009-05-06 13:51:21 lgarnier Exp $
+$Id: History,v 1.140 2009-05-13 10:28:00 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+13 May 2009, Laurent Garnier
+ - G4OpenGLStoredQtViewer.cc: Fix a second view redraw at ShowView() call
+ - G4OpenGLQtViewer : Remove unuseful variables, renaming others
+ - G4OpenGLViewer : Add method for resizing properly windows. Add methods
+   to get window width, height and to know if size has changed
+ - G4OpenGLQtViewer, G4OpenGLStoredQtViewer, G4OpenGLImmediateQtViewer,
+   G4OpenGLXmViewer, G4XmWindowsHandlingCallback, G4OpenGLXViewer :
+     Apply the previous changes.
+
 6 May 2009, Laurent Garnier
  - G4OpenGLQtViewer.cc: Fix compilation warning and error with gcc4.4
 

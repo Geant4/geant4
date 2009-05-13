@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.54 2009-04-28 14:33:04 lgarnier Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.55 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,16 +230,16 @@ void G4OpenGLXViewer::CreateMainWindow () {
   // Window size and position...
   size_hints = XAllocSizeHints();
     
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
 
   // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
   // size on MAC. L.Garnier 01/2009
   G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
 
-  size_hints->base_width = fWinSize_x;
-  size_hints->base_height = fWinSize_y;
+  size_hints->base_width = getWinWidth();
+  size_hints->base_height = getWinHeight();
   size_hints->x = x_origin;
   size_hints->y = y_origin;
   if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
@@ -269,7 +269,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   class_hints -> res_class = NewString("G4OpenGL");
 
    win = XCreateWindow (dpy, XRootWindow (dpy, vi -> screen), x_origin, 
-                        y_origin, fWinSize_x, fWinSize_y, 0, vi -> depth,
+                        y_origin, getWinWidth(), getWinHeight(), 0, vi -> depth,
                         InputOutput, vi -> visual,  
                         CWBorderPixel | CWColormap | 
                         CWEventMask | CWBackingStore,

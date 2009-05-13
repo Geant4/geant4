@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.54 2009-04-28 14:33:04 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.55 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,8 @@ fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
-fPointSize (0)
+fPointSize (0),
+fSizeHasChanged(0)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
@@ -133,6 +134,16 @@ void G4OpenGLViewer::ClearView () {
   glFlush ();
 }
 
+
+void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
+  if ((fWinSize_x != aWidth) || (fWinSize_y != aHeight)) {
+    fWinSize_x = aWidth;
+    fWinSize_y = aHeight;
+    fSizeHasChanged = true;
+  } else {
+    fSizeHasChanged = false;
+  }
+}
 
 /**
  * Set the viewport of the scene
@@ -644,6 +655,18 @@ bool G4OpenGLViewer::printGl2PS() {
   fPrintSizeY = 0;
 
   return true;
+}
+
+unsigned int G4OpenGLViewer::getWinWidth() {
+  return fWinSize_x;
+}
+
+unsigned int G4OpenGLViewer::getWinHeight() {
+  return fWinSize_y;
+}
+
+G4bool G4OpenGLViewer::sizeHasChanged() {
+  return fSizeHasChanged;
 }
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()

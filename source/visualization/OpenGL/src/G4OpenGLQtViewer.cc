@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.40 2009-05-06 13:51:21 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.41 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,7 +129,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     while ( (widget=it.current()) != 0 ) {  // for each widget...
       ++it;
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-        GLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+        fGLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
         found = true;
       }
     }
@@ -137,43 +137,42 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #else
     foreach (QWidget *widget, QApplication::allWidgets()) {
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-        GLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        fGLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
     }
 #endif
 
 #if QT_VERSION < 0x040000
-    glWidget->reparent(GLWindow,0,QPoint(0,0));  
+    glWidget->reparent(fGLWindow,0,QPoint(0,0));  
 #else
-    glWidget->setParent(GLWindow);  
+    glWidget->setParent(fGLWindow);  
 #endif
 
     if (found==false) {
 #ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
-      GLWindow = new QDialog();
+      fGLWindow = new QDialog();
     }
   } else {
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
-    GLWindow = new QDialog();
+    fGLWindow = new QDialog();
   }
 
-  QHBoxLayout *mainLayout = new QHBoxLayout(GLWindow);
+  QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
 
   mainLayout->addWidget(fWindow);
 
 #if QT_VERSION < 0x040000
-  GLWindow->setCaption(name );
+  fGLWindow->setCaption(name );
 #else
-  GLWindow->setLayout(mainLayout);
-  GLWindow->setWindowTitle( name);
+  fGLWindow->setLayout(mainLayout);
+  fGLWindow->setWindowTitle( name);
 #endif
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
   //useful for MACOSX, we have to compt the menuBar height
   int offset = QApplication::desktop()->height() 
@@ -183,9 +182,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
   if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
     YPos = offset;
   }
-  GLWindow->resize(fWinSize_x, fWinSize_y);
-  GLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
-  GLWindow->show();
+  fGLWindow->resize(getWinWidth(), getWinHeight());
+  fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+  fGLWindow->show();
   
   if(!fWindow) return;
 #ifdef G4DEBUG_VIS_OGL
@@ -201,7 +200,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 /**  Close the dialog and set the pointer to NULL
  */
 // void G4OpenGLQtViewer::dialogClosed() {
-//   //  GLWindow = NULL;
+//   //  fGLWindow = NULL;
 // }
 #endif
 
@@ -275,7 +274,7 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 void G4OpenGLQtViewer::createPopupMenu()    {
 
 #if QT_VERSION < 0x040000
-  fContextMenu = new QPopupMenu( GLWindow,"All" );
+  fContextMenu = new QPopupMenu( fGLWindow,"All" );
 #else
   fContextMenu = new QMenu("All");
 #endif
@@ -775,7 +774,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
 void G4OpenGLQtViewer::G4manageContextMenuEvent(QContextMenuEvent *e)
 {
-  if (!GLWindow) {
+  if (!fGLWindow) {
     G4cerr << "Visualization window not defined, please choose one before" << G4endl;
   } else {
   
@@ -1234,9 +1233,9 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
    SLOT Activate by a click on the full screen menu
 */
 void G4OpenGLQtViewer::toggleFullScreen(bool check) {
-  if (check != GLWindow->isFullScreen()) { //toggle
+  if (check != fGLWindow->isFullScreen()) { //toggle
 #if QT_VERSION >= 0x030200
-    GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
+    fGLWindow->setWindowState(fGLWindow->windowState() ^ Qt::WindowFullScreen);
 #else
     G4cerr << "This version of Qt could not do fullScreen. Resizing the widget is the only solution available." << G4endl;
 #endif
@@ -1294,12 +1293,12 @@ void G4OpenGLQtViewer::actionSaveImage() {
 #if QT_VERSION < 0x040000
   fPrintFilename =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
-                                                    GLWindow,
+                                                    fGLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
                                                     selectedFormat ).ascii(); 
 #else
-  fPrintFilename =  QFileDialog::getSaveFileName ( GLWindow,
+  fPrintFilename =  QFileDialog::getSaveFileName ( fGLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
@@ -1316,7 +1315,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
   fPrintFilename += "." + selectedFormat->toStdString();
   QString format = selectedFormat->toLower();
 #endif
-  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,format,fWindow->height(),fWindow->width());
+  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
     QImage image;
@@ -1398,7 +1397,7 @@ void G4OpenGLQtViewer::actionMovieParameters() {
 
 void G4OpenGLQtViewer::showMovieParametersDialog() {
   if (!fMovieParametersDialog) {
-    fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,GLWindow);
+    fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,fGLWindow);
     displayRecordingStatus();
     fMovieParametersDialog->checkEncoderSwParameters();
     fMovieParametersDialog->checkSaveFileNameParameters();
@@ -1562,9 +1561,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
   G4double coefTrans = 0;
   GLdouble coefDepth = 0;
   if(mouseMove) {
-    coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_x);
-    if (fWinSize_y <fWinSize_x) {
-      coefTrans = ((G4double)getSceneNearWidth())/((G4double)fWinSize_y);
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)getWinWidth());
+    if (getWinHeight() <getWinWidth()) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)getWinHeight());
     }
   } else {
     coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.30 2009-04-08 16:55:44 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.31 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@ protected:
   void HLRThirdPass ();
   void InitializeGLView ();
   void ResizeGLView();
+  void ResizeWindow(unsigned int, unsigned int);
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy,G4double delta);
@@ -72,6 +73,10 @@ protected:
   void printEPS();
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
   
+  unsigned int getWinWidth();
+  unsigned int getWinHeight();
+  G4bool sizeHasChanged();
+  // return true if size has change since last redraw
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
@@ -83,8 +88,6 @@ protected:
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
-  unsigned int fWinSize_x, fWinSize_y;
-  // size of the OpenGL frame
   G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
@@ -102,7 +105,10 @@ protected:
   G4OpenGL2PSAction* fGL2PSAction;
 
 private :
+  unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
+  G4bool fSizeHasChanged;
+  // size of the OpenGL frame
   bool printGl2PS();
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,

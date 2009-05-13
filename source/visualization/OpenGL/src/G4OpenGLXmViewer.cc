@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.30 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.31 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,8 +129,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   bgnd = XWhitePixelOfScreen (XtScreen(shell));
   borcol = XBlackPixelOfScreen (XtScreen(shell));
   
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
 
   // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
@@ -142,8 +142,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
                    XtNvisual, vi -> visual, 
                    XtNdepth, vi -> depth,
                    XtNcolormap, cmap, 
-                   XtNwidth, fWinSize_x,
-                   XtNheight, fWinSize_y,
+                   XtNwidth, getWinWidth(),
+                   XtNheight, getWinHeight(),
                    XtNx, x_origin,
                    XtNy, y_origin,
                    XtNborderColor, &borcol,
@@ -155,8 +155,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
                    XtNvisual, vi -> visual, 
                    XtNdepth, vi -> depth,
                    XtNcolormap, cmap, 
-                   XtNwidth, fWinSize_x,
-                   XtNheight, fWinSize_y,
+                   XtNwidth, getWinWidth(),
+                   XtNheight, getWinHeight(),
                    XtNborderColor, &borcol,
                    XtNbackground, &bgnd,
                    XmNtitle, fName.data(),

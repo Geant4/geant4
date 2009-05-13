@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.16 2009-03-05 16:36:13 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.17 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,7 +119,7 @@ protected:
 
 protected:
   QGLWidget* fWindow;
-  QDialog* GLWindow;
+  QDialog* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
@@ -130,11 +130,8 @@ protected:
   float fDeltaRotationAngleY;
   float fDeltaRotationAngleZ;
 
-  bool hasToRepaint;
-  bool readyToPaint;
-  bool zoomAction;
-  QPoint beginZoom;
-  QPoint endZoom;
+  bool fHasToRepaint;
+  bool fReadyToPaint;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 

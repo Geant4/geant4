@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.24 2009-03-31 17:14:42 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.25 2009-05-13 10:28:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 #else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
 #endif
-  hasToRepaint =false;
+  fHasToRepaint =false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -72,11 +72,11 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
-  readyToPaint = false;
+  fReadyToPaint = false;
   CreateMainWindow (this,QString(fName));
   CreateFontLists ();
   
-  readyToPaint = true;
+  fReadyToPaint = true;
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {
@@ -95,9 +95,9 @@ void G4OpenGLStoredQtViewer::initializeGL () {
   glDepthMask (GL_TRUE);
 
   if (fSceneHandler.GetScene() == 0) {
-    hasToRepaint =false;
+    fHasToRepaint =false;
   } else {
-    hasToRepaint =true;
+    fHasToRepaint =true;
   }
 
 #ifdef G4DEBUG_VIS_OGL
@@ -125,7 +125,7 @@ void G4OpenGLStoredQtViewer::DrawView () {
 void G4OpenGLStoredQtViewer::ComputeView () {
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",fWinSize_x, fWinSize_y);
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",getWinWidth(), getWinHeight());
 #endif
   makeCurrent();
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
@@ -194,9 +194,9 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   }
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",fWinSize_x, fWinSize_y);
+  printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",getWinWidth(), getWinHeight());
 #endif
-  hasToRepaint =true;
+  fHasToRepaint =true;
 }
 
 
@@ -208,31 +208,30 @@ void G4OpenGLStoredQtViewer::resizeGL(
                                       ,int aHeight)
 {  
   // Set new size, it will be update when next Repaint()->SetView() called
-  fWinSize_x = aWidth;
-  fWinSize_y = aHeight;
-  hasToRepaint = true;
+  ResizeWindow(aWidth,aHeight);
+  fHasToRepaint = sizeHasChanged();
 }
 
 
 void G4OpenGLStoredQtViewer::paintGL()
 {
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::paintGL ??\n");
+  printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif
-  if (!readyToPaint) {
-    readyToPaint= true;
+  if (!fReadyToPaint) {
+    fReadyToPaint= true;
     return;
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
-  if ( !hasToRepaint) {
-    if (((fWinSize_x == (unsigned int)width())) &&(fWinSize_y == (unsigned int) height())) {
+  if ( !fHasToRepaint) {
+    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) {
       return;
     }
   }
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",readyToPaint);
+  printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
 #endif
 
   SetView();
@@ -240,10 +239,10 @@ void G4OpenGLStoredQtViewer::paintGL()
   ClearView (); //ok, put the background correct
   ComputeView();
      
-  hasToRepaint =false;
+  fHasToRepaint =false;
      
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",readyToPaint);
+  printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
 }
 
@@ -288,9 +287,9 @@ void G4OpenGLStoredQtViewer::contextMenuEvent(QContextMenuEvent *e)
 }
 
 void G4OpenGLStoredQtViewer::updateQWidget() {
-  hasToRepaint= true;
+  fHasToRepaint= true;
   updateGL();
-  hasToRepaint= false;
+  fHasToRepaint= false;
 }
 
 void G4OpenGLStoredQtViewer::ShowView (
@@ -303,7 +302,6 @@ void G4OpenGLStoredQtViewer::ShowView (
 #else
   activateWindow();
 #endif
-  updateQWidget();
 }
 
 #endif
