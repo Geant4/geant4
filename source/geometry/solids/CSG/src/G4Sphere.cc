@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.75 2009-05-13 11:23:00 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.76 2009-05-13 15:58:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -1814,8 +1814,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
   const G4double halfRminTolerance = fRminTolerance*0.5;
   const G4double Rmax_plus  = fRmax + halfRmaxTolerance;
-  const G4double Rmin_minus = (fRmin-halfRminTolerance > 0)
-                            ? fRmin-halfRminTolerance : 0;
+  const G4double Rmin_minus = (fRmin) ? fRmin-halfRminTolerance : 0;
   G4double t1,t2;
   G4double b,c,d;
 
