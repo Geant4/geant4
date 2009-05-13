@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006-06-29 16:57:09 gunter Exp $
+// $Id: PhysicsList.cc,v 1.13 2009-05-13 17:25:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,10 +189,10 @@ void PhysicsList::ConstructEM()
       //positron
       // to make the process of e+e- annihilation more visible,
       // do not enable the other standard processes:
-      // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      // pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       
       theAnnihiToMuPairProcess = new G4AnnihiToMuPair();
       eehadProcess             = new G4eeToHadrons();
@@ -229,6 +229,10 @@ void PhysicsList::ConstructEM()
   
   G4EmProcessOptions opt;
   opt.SetVerbose(1);
+  opt.SetMinEnergy(100*eV);       
+  opt.SetMaxEnergy(1000*TeV);      
+  opt.SetDEDXBinning(13*7);      
+  opt.SetLambdaBinning(13*7);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
