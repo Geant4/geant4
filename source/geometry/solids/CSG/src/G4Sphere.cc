@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.76 2009-05-13 15:58:27 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.77 2009-05-14 09:35:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -866,12 +866,13 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
   c = rad2 - fRmax*fRmax ;
-  d2 = pDotV3d*pDotV3d - c ;
 
   if (c > fRmaxTolerance*fRmax)
   {
     // If outside tolerant boundary of outer G4Sphere
     // [should be std::sqrt(rad2)-fRmax > halfRmaxTolerance]
+
+    d2 = pDotV3d*pDotV3d - c ;
 
     if ( d2 >= 0 )
     {
@@ -940,6 +941,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     // Inside outer radius
     // check not inside, and heading through G4Sphere (-> 0 to in)
 
+    d2 = pDotV3d*pDotV3d - c ;
+
     if ( (rad2 > tolIRMax2)
       && ( (d2 >= fRmaxTolerance*fRmax) && (pDotV3d < 0) ) )
     {
@@ -994,6 +997,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   if (fRmin)
   {
     c  = rad2 - fRmin*fRmin ;
+    d2 = pDotV3d*pDotV3d - c ;
 
     // Within tolerance inner radius of inner G4Sphere
     // Check for immediate entry/already inside and travelling outwards
