@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-02-00  14 May 2009 V.Ivanchenko
+- improved scripts, added comments to the main
+
 test35-V09-01-02  10 December 2008 V.Ivanchenko
 - improved cout
 
