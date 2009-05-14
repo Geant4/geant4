@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.cc,v 1.3 2007-06-05 13:04:30 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.cc,v 1.4 2009-05-14 13:46:40 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,11 @@ G4int G4ErrorPropagatorData::theVerbosity = 0;
 
 //-------------------------------------------------------------------
 
-G4ErrorPropagatorData::G4ErrorPropagatorData(){}
+G4ErrorPropagatorData::G4ErrorPropagatorData()
+{
+  theStage =G4ErrorStage_Inflation;
+}
+
 G4ErrorPropagatorData::~G4ErrorPropagatorData(){}
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()

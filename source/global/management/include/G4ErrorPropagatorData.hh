@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.hh,v 1.3 2007-06-08 10:33:47 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.hh,v 1.4 2009-05-14 13:46:40 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 
 // History:
 // - Created. P.Arce, 2004.
+// - Added G4ErrorStage to account for error deflation
 // --------------------------------------------------------------------
 
 #ifndef G4ErrorPropagatorData_HH
@@ -55,6 +56,10 @@ enum G4ErrorState { G4ErrorState_PreInit = 1,
                     G4ErrorState_Propagating,
                     G4ErrorState_TargetCloserThanBoundary,
                     G4ErrorState_StoppedAtTarget };
+
+enum G4ErrorStage  { G4ErrorStage_Inflation = 1,
+		     G4ErrorStage_Deflation };
+
 class G4ErrorTarget;
 
 class G4ErrorPropagatorData 
@@ -71,6 +76,9 @@ public:  // with description
 
   G4ErrorState GetState() const;
   void SetState( G4ErrorState sta );
+
+  G4ErrorStage GetStage() const;
+  void SetStage( G4ErrorStage sta );
 
   const G4ErrorTarget* GetTarget( G4bool mustExist = 0) const;
   void SetTarget( const G4ErrorTarget* target );
@@ -92,6 +100,8 @@ private:
   G4ErrorMode theMode;
 
   G4ErrorState theState;
+
+  G4ErrorStage theStage;
 
   G4ErrorTarget* theTarget;
 

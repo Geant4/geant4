@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.icc,v 1.4 2007-06-08 10:33:47 gcosmo Exp $
+// $Id: G4ErrorPropagatorData.icc,v 1.5 2009-05-14 13:46:40 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,6 +55,18 @@ inline
 G4ErrorState G4ErrorPropagatorData::GetState() const
 {
   return theState;
+}
+
+inline 
+void G4ErrorPropagatorData::SetStage( G4ErrorStage sta )
+{
+  theStage = sta;
+}
+
+inline 
+G4ErrorStage G4ErrorPropagatorData::GetStage() const
+{
+  return theStage;
 }
 
 inline 
