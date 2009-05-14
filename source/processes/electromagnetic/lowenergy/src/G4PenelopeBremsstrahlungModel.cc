@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.4 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4PenelopeBremsstrahlungModel.cc,v 1.5 2009-05-14 10:56:09 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -35,6 +35,8 @@
 //                  - do not apply low-energy limit (default is 0)
 //                  - added MinEnergyCut method
 //                  - do not change track status
+// 14 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they are checked later on
 //
 #include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PenelopeBremsstrahlungContinuous.hh"
@@ -155,14 +157,20 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* parti
     {
       crossSectionHandler->Clear();
       delete crossSectionHandler;
+      crossSectionHandler = 0;
     }
 
   if (stoppingPowerData)
     {
       std::map <std::pair<G4int,G4double>,G4PenelopeBremsstrahlungContinuous*>::iterator j;
       for (j=stoppingPowerData->begin();j != stoppingPowerData->end();j++)
-	if (j->second) delete j->second;
+	if (j->second) 
+	  { 
+	    delete j->second;
+	    j->second = 0;
+	  }
       delete stoppingPowerData;
+      stoppingPowerData = 0;
     }
   
   crossSectionHandler = new G4CrossSectionHandler();
