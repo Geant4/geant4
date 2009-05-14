@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2009-05-13 10:28:00 lgarnier Exp $
+$Id: History,v 1.141 2009-05-14 16:42:27 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+14 May 2009, Laurent Garnier (opengl-V09-02-04)
+ - G4OpenGLViewer : Add methods to manage print size and filename
+ - G4OpenGLViewerMessenger : Added /vis/ogl/set/printSize
+ - G4OpenGLViewerMessenger : Added /vis/ogl/set/printFilename
+ - G4OpenGLQtViewer.cc,G4OpenGLXmMainMenuBarCallback.cc, renaming
+   according to first point.
 
 13 May 2009, Laurent Garnier
  - G4OpenGLStoredQtViewer.cc: Fix a second view redraw at ShowView() call
