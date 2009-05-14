@@ -1,4 +1,4 @@
-$Id: README,v 1.27 2009-05-04 10:16:05 sincerti Exp $
+$Id: README,v 1.28 2009-05-14 13:44:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -65,6 +65,7 @@ test41 ## MUSCAT experiment for multiple-scattering validation (not for stt).
 test44 ## Bragg peak distribution validation (not for stt).
 test45 ## Validation of thick target data for low-energy proton and ion beams
        ## stopped in different targets (not for stt).
+test46 ## Validation of CMS-type combined calorimeter (not for stt).
 test47 ## CMS combined calorimeter (not for stt).
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
