@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.77 2009-05-14 09:35:15 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.78 2009-05-14 13:20:49 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -33,6 +33,7 @@
 //
 // History:
 //
+// 14.09.09 T.Nikitina: fix for phi section in DistanceToOut(p,v,..),as for G4Tubs,G4Cons 
 // 26.03.09 G.Cosmo   : optimisations and uniform use of local radial tolerance
 // 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
 // 22.07.05 O.Link    : Added check for intersection with double cone
@@ -2271,8 +2272,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
           // Check intersecting with correct half-plane
           // (if not -> no intersect)
-
-          if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+          if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+          { vphi = std::atan2(v.y(),v.x()) ;
+            sidephi = kSPhi;
+            if (((fSPhi-halfAngTolerance)<=vphi)
+                 &&((ePhi+halfAngTolerance)>=vphi))
+            {
+              sphi = kInfinity;
+            }
+          }
+	  else if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
           {
             sphi=kInfinity;
           }
@@ -2293,8 +2302,21 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             yi = p.y()+sphi2*v.y() ;
 
             // Check intersecting with correct half-plane
- 
-            if ((yi*cosCPhi-xi*sinCPhi)>=0) // Leaving via ending phi
+             if ((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
+              {
+                // Leaving via ending phi
+                //
+                vphi = std::atan2(v.y(),v.x()) ;
+               
+                if( !((fSPhi-halfAngTolerance <= vphi)
+                     &&(fSPhi+fDPhi+halfAngTolerance >= vphi)) )
+                { 
+                  sidephi = kEPhi ;
+                  if ( pDistE <= -halfCarTolerance )  { sphi = sphi2 ; }
+                  else                                { sphi = 0.0 ;   }
+                }
+              }
+            else if ((yi*cosCPhi-xi*sinCPhi)>=0) // Leaving via ending phi
             {
               sidephi = kEPhi ;
               if ( pDistE <= -halfCarTolerance )
@@ -2348,7 +2370,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if ( ( yi*cosCPhi - xi*sinCPhi ) <= 0 )
+            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+            { vphi = std::atan2(v.y(),v.x()) ;
+              sidephi = kSPhi;
+              if (((fSPhi-halfAngTolerance)<=vphi)
+                 &&((ePhi+halfAngTolerance)>=vphi))
+              {
+              sphi = kInfinity;
+              }
+            }
+	    else if ( ( yi*cosCPhi - xi*sinCPhi ) <= 0 )
             {
               sphi = kInfinity ;
             }
@@ -2376,7 +2407,16 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if ( ( yi*cosCPhi - xi*sinCPhi) <= 0 )
+             if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+             { vphi = std::atan2(v.y(),v.x()) ;
+               sidephi = kSPhi;
+               if (((fSPhi-halfAngTolerance)<=vphi)
+                 &&((ePhi+halfAngTolerance)>=vphi))
+               {
+                sphi = kInfinity;
+               }
+             }
+	     else if ( ( yi*cosCPhi - xi*sinCPhi) <= 0 )
               {
                 sphi=kInfinity;
               }
@@ -2406,11 +2446,20 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             sphi=pDistS/compS;
             xi=p.x()+sphi*v.x();
             yi=p.y()+sphi*v.y();
-
+            
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+             { vphi = std::atan2(v.y(),v.x()) ;
+               sidephi = kSPhi;
+               if (((fSPhi-halfAngTolerance)<=vphi)
+                 &&((ePhi+halfAngTolerance)>=vphi))
+              {
+              sphi = kInfinity;
+              }
+             }
+	    else if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
             {
               sphi = kInfinity ;
             }
@@ -2434,11 +2483,20 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               sphi = pDistS/compS ;
               xi   = p.x()+sphi*v.x() ;
               yi   = p.y()+sphi*v.y() ;
-
+              
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+             if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+             { vphi = std::atan2(v.y(),v.x()) ;
+               sidephi = kSPhi;
+               if (((fSPhi-halfAngTolerance)<=vphi)
+                 &&((ePhi+halfAngTolerance)>=vphi))
+              {
+              sphi = kInfinity;
+              }
+             }
+	     else if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
               {
                 sphi = kInfinity ;
               }
@@ -2468,7 +2526,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       if ( v.x() || v.y() )
       {
         vphi = std::atan2(v.y(),v.x()) ;
-        if ( (fSPhi < vphi) && (vphi < ePhi) )
+        if ( (fSPhi-  halfAngTolerance < vphi) && (vphi < ePhi+ halfAngTolerance) )
         {
           sphi = kInfinity;
         }
