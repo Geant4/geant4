@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.28 2009-01-29 16:54:51 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.29 2009-05-14 13:22:44 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -159,6 +159,7 @@ int main(void)
 
     G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
     G4Sphere sn2("sn2",45,50,halfpi,halfpi,0,pi);
+    G4Sphere sn22("sn22",0,50,halfpi,halfpi,0,pi);
 
 
 
@@ -494,8 +495,17 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vxy) = "<<Dist<<G4endl;
     //    Dist=s2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
     //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
+    //Test Distance for phi section
+     Dist=sn22.DistanceToOut(G4ThreeVector(0.,49.,0.),vmy,calcNorm,pgoodNorm,pNorm);
+     assert(ApproxEqual(Dist,49.));
+     Dist=sn22.DistanceToOut(G4ThreeVector(-45.,0.,0.),vx,calcNorm,pgoodNorm,pNorm);
+     assert(ApproxEqual(Dist,45.));
+     G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(0.,49.,0),G4ThreeVector(0,-1,0))<<G4endl;
+     G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(-45.,0.,0),G4ThreeVector(1,0,0))<<G4endl;
 
+     //
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
+    
     // G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
 
     // call from outside
@@ -756,6 +766,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     assert(ApproxEqual(Dist,50));
 
     Dist=s2.DistanceToIn(pzero,vy);
+     G4cout<<"s2.DistanceToIn(pzero,vx) = "<<Dist<<G4endl;
     assert(ApproxEqual(Dist,45));
     Dist=s2.DistanceToIn(pzero,vmy);
     assert(ApproxEqual(Dist,45));
