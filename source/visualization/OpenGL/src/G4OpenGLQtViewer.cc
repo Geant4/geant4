@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.41 2009-05-13 10:28:00 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.42 2009-05-14 16:38:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1290,31 +1290,33 @@ void G4OpenGLQtViewer::actionSaveImage() {
   filters += "ps;;";
   filters += "pdf";
   QString* selectedFormat = new QString();
+  std::string name;
 #if QT_VERSION < 0x040000
-  fPrintFilename =  QFileDialog::getSaveFileName ( ".",
+  name =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
                                                     fGLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
                                                     selectedFormat ).ascii(); 
 #else
-  fPrintFilename =  QFileDialog::getSaveFileName ( fGLWindow,
+  name =  QFileDialog::getSaveFileName ( fGLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
                                                     selectedFormat ).toStdString().c_str(); 
 #endif
   // bmp jpg jpeg png ppm xbm xpm
-  if (fPrintFilename.empty()) {
+  if (name.empty()) {
     return;
   }
 #if QT_VERSION < 0x040000
-  fPrintFilename += "." + std::string(selectedFormat->ascii());
+  name += "." + std::string(selectedFormat->ascii());
   QString format = selectedFormat->lower();
 #else
-  fPrintFilename += "." + selectedFormat->toStdString();
+  name += "." + selectedFormat->toStdString();
   QString format = selectedFormat->toLower();
 #endif
+  setPrintFilename(name.c_str(),-1);
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
@@ -1322,8 +1324,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
     bool res = false;
     if ((exportDialog->getWidth() !=fWindow->width()) ||
         (exportDialog->getHeight() !=fWindow->height())) {
-      fPrintSizeX = exportDialog->getWidth();
-      fPrintSizeY = exportDialog->getHeight();
+      setPrintSize(exportDialog->getWidth(),exportDialog->getHeight());
       if ((format != QString("eps")) && (format != QString("ps"))) {
       G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
       
@@ -1354,7 +1355,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
       printEPS();
     } else if (format == "pdf") {
 
-      res = printPDF(fPrintFilename,exportDialog->getNbColor(),image);
+      res = printPDF(name,exportDialog->getNbColor(),image);
 
     } else if ((format == "tif") ||
                (format == "tiff") ||
@@ -1368,18 +1369,18 @@ void G4OpenGLQtViewer::actionSaveImage() {
                (format == "xbm") ||
                (format == "xpm")) {
 #if QT_VERSION < 0x040000
-      res = image.save(QString(fPrintFilename.c_str()),selectedFormat->ascii(),exportDialog->getSliderValue());
+      res = image.save(QString(name.c_str()),selectedFormat->ascii(),exportDialog->getSliderValue());
 #else
-      res = image.save(QString(fPrintFilename.c_str()),0,exportDialog->getSliderValue());
+      res = image.save(QString(name.c_str()),0,exportDialog->getSliderValue());
 #endif
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
     if ((format == QString("eps")) && (format == QString("ps"))) {
       if (res == false) {
-        G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
+        G4cerr << "Error while saving file... "<<name.c_str()<< G4endl;
       } else {
-        G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
+        G4cout << "File "<<name.c_str()<<" has been saved " << G4endl;
       }
     }
     

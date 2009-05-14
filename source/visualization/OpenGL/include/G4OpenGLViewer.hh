@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.31 2009-05-13 10:28:00 lgarnier Exp $
+// $Id: G4OpenGLViewer.hh,v 1.32 2009-05-14 16:38:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,15 @@ protected:
 //////////////////////////////Vectored PostScript production functions///
   void printEPS();
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
-  
+  void setPrintSize(G4int,G4int);
+  // set the new print size. 
+  // -1 means 'print size' = 'window size'
+  // Setting size greater than max OpenGL viewport size will set the size to
+  // maximum
+  void setPrintFilename(G4String name,G4bool inc);
+  // set print filename. 
+  // if inc, then the filename will be increment by one each time
+  std::string getRealPrintFilename();
   unsigned int getWinWidth();
   unsigned int getWinHeight();
   G4bool sizeHasChanged();
@@ -80,11 +88,8 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
-  std::string                       fPrintFilename;
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
-  G4int                             fPrintSizeX;
-  G4int                             fPrintSizeY;
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
@@ -105,11 +110,17 @@ protected:
   G4OpenGL2PSAction* fGL2PSAction;
 
 private :
+  G4int                             fPrintSizeX;
+  G4int                             fPrintSizeY;
+  G4String                          fPrintFilename;
+  int                               fPrintFilenameIndex;
   unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;
   // size of the OpenGL frame
   bool printGl2PS();
+  G4int getRealPrintSizeX();
+  G4int getRealPrintSizeY();
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);

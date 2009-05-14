@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.55 2009-05-13 10:28:00 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.56 2009-05-14 16:38:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,11 +56,8 @@
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-fPrintFilename ("G4OpenGL.eps"),
 fPrintColour (true),
 fVectoredPs (true),
-fPrintSizeX(0),
-fPrintSizeY(0),
 fOpenGLSceneHandler(scene),
 background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
@@ -84,6 +81,10 @@ fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
+fPrintSizeX(-1),
+fPrintSizeY(-1),
+fPrintFilename ("G4OpenGL"),
+fPrintFilenameIndex(0),
 fPointSize (0),
 fSizeHasChanged(0)
 {
@@ -491,7 +492,7 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
 void G4OpenGLViewer::printEPS() {
   bool res;
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printEPS file:%s Vec:%d\n",fPrintFilename.c_str(),fVectoredPs);
+  printf("G4OpenGLViewer::printEPS file:%s Vec:%d\n",getRealPrintFilename().c_str(),fVectoredPs);
 #endif
   if (fVectoredPs) {
     res = printVectoredEPS();
@@ -499,10 +500,16 @@ void G4OpenGLViewer::printEPS() {
     res = printNonVectoredEPS();
   }
   if (res == false) {
-    G4cerr << "Error while saving file... "<<fPrintFilename.c_str()<< G4endl;
+    G4cerr << "Error while saving file... "<<getRealPrintFilename().c_str()<< G4endl;
   } else {
-    G4cout << "File "<<fPrintFilename.c_str()<<" has been saved " << G4endl;
+    G4cout << "File "<<getRealPrintFilename().c_str()<<" has been saved " << G4endl;
   }
+
+  // increment index if necessary
+  if ( fPrintFilenameIndex != -1) {
+    fPrintFilenameIndex++;
+  }
+
 }
 
 bool G4OpenGLViewer::printVectoredEPS() {
@@ -511,22 +518,11 @@ bool G4OpenGLViewer::printVectoredEPS() {
 
 bool G4OpenGLViewer::printNonVectoredEPS () {
 
-  int width = 0;
-  int height = 0;
-
-  if (fPrintSizeX == 0) {
-    width = fWinSize_x;
-  } else {
-    width = fPrintSizeX;
-  }
-  if (fPrintSizeY == 0) {
-    height = fWinSize_y;
-  } else {
-    height = fPrintSizeY;
-  }
+  int width = getRealPrintSizeX();
+  int height = getRealPrintSizeY();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d\n",fPrintFilename.c_str(),fVectoredPs,width,height,fPrintColour);
+  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour);
 #endif
   FILE* fp;
   GLubyte* pixels;
@@ -544,15 +540,15 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   } else {
     components = 1;
   }
-  
-  fp = fopen (fPrintFilename.c_str(), "w");
+  std::string name = getRealPrintFilename();
+  fp = fopen (name.c_str(), "w");
   if (fp == NULL) {
-    G4cerr << "Can't open filename " << fPrintFilename.c_str() << G4endl;
+    G4cerr << "Can't open filename " << name.c_str() << G4endl;
     return false;
   }
   
   fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-  fprintf (fp, "%%%%Title: %s\n", fPrintFilename.c_str());
+  fprintf (fp, "%%%%Title: %s\n", name.c_str());
   fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
   fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", width, height);
   fprintf (fp, "%%%%EndComments\n");
@@ -602,8 +598,8 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   fclose (fp);
 
   // Reset for next time (useful is size change)
-  fPrintSizeX = 0;
-  fPrintSizeY = 0;
+  //  fPrintSizeX = -1;
+  //  fPrintSizeY = -1;
 
   return true;
 }
@@ -611,23 +607,12 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
 
 bool G4OpenGLViewer::printGl2PS() {
 
-  int width = 0;
-  int height = 0;
-
-  if (fPrintSizeX == 0) {
-    width = fWinSize_x;
-  } else {
-    width = fPrintSizeX;
-  }
-  if (fPrintSizeY == 0) {
-    height = fWinSize_y;
-  } else {
-    height = fPrintSizeY;
-  }
+  int width = getRealPrintSizeX();
+  int height = getRealPrintSizeY();
 
   if (!fGL2PSAction) return false;
 
-  fGL2PSAction->setFileName(fPrintFilename.c_str());
+  fGL2PSAction->setFileName(getRealPrintFilename().c_str());
   // try to resize
   int X = fWinSize_x;
   int Y = fWinSize_y;
@@ -651,8 +636,8 @@ bool G4OpenGLViewer::printGl2PS() {
   ResizeGLView();
 
   // Reset for next time (useful is size change)
-  fPrintSizeX = 0;
-  fPrintSizeY = 0;
+  //  fPrintSizeX = 0;
+  //  fPrintSizeY = 0;
 
   return true;
 }
@@ -667,6 +652,67 @@ unsigned int G4OpenGLViewer::getWinHeight() {
 
 G4bool G4OpenGLViewer::sizeHasChanged() {
   return fSizeHasChanged;
+}
+
+G4int G4OpenGLViewer::getRealPrintSizeX() {
+  if (fPrintSizeX == -1) {
+    return fWinSize_x;
+  }
+  GLint dims[2];
+  glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
+  if (fPrintSizeX > dims[0]){
+    return dims[0];
+  }
+  if (fPrintSizeX < -1){
+    return 0;
+  }
+  return fPrintSizeX;
+}
+
+G4int G4OpenGLViewer::getRealPrintSizeY() {
+  if (fPrintSizeY == -1) {
+    return fWinSize_y;
+  }
+  GLint dims[2];
+  glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
+  if (fPrintSizeY > dims[1]){
+    return dims[1];
+  }
+  if (fPrintSizeY < -1){
+    return 0;
+  }
+  return fPrintSizeY;
+}
+
+void G4OpenGLViewer::setPrintSize(G4int X, G4int Y) {
+  fPrintSizeX = X;
+  fPrintSizeY = Y;
+}
+
+void G4OpenGLViewer::setPrintFilename(G4String name,G4bool inc) {
+  if (name != "") {
+    fPrintFilename = name;
+  } else {
+    fPrintFilename = "G4OpenGL";  // by default
+  }
+  if (inc) {
+    fPrintFilenameIndex=0;
+  } else {
+    fPrintFilenameIndex=-1;
+  }
+}
+
+std::string G4OpenGLViewer::getRealPrintFilename() {
+  std::string temp = fPrintFilename;
+  if (fPrintFilenameIndex != -1) {
+    temp += std::string("_");
+    std::ostringstream os;
+    os << fPrintFilenameIndex;
+    std::string nb_str = os.str();
+    temp += nb_str;
+  }
+  temp += ".eps";
+  return temp;
 }
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()

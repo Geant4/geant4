@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.16 2009-02-16 15:31:05 lgarnier Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.17 2009-05-14 16:38:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -485,7 +485,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpprint_style_box->AddChild (pView->fpprint_style_radio2);
 	
 	pView->fpprint_text = new G4OpenGLXmTextField ("Name of .eps file to save",
-						       (pView->fPrintFilename.c_str()));
+						       (pView->getRealPrintFilename().c_str()));
 	pView->fpprint_box->AddChild (pView->fpprint_text);	
 	
 	pView->fpprint_line = new G4OpenGLXmSeparator ();

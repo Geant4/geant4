@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.17 2009-04-28 15:05:22 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.18 2009-05-14 16:38:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -67,6 +67,31 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
      "\nnumber, starting at 0."
      "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
+
+  fpCommandPrintSize =
+    new G4UIcommand("/vis/ogl/set/printSize", this);
+  fpCommandPrintSize->SetGuidance ("Set print size");
+  fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
+  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
+  G4UIparameter* parameterPrintSize;
+  parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
+  parameterPrintSize = new G4UIparameter ("height", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
+
+  fpCommandPrintFilename =
+    new G4UIcommand("/vis/ogl/set/printFilename", this);
+  fpCommandPrintFilename->SetGuidance ("Set print filename");
+  fpCommandPrintFilename->SetGuidance ("Setting 'incremental' will increment filename by one at each new print, starting at 0");
+  G4UIparameter* parameterPrintFilename;
+  parameterPrintFilename = new G4UIparameter ("name", 's', omitable = true);
+  parameterPrintFilename->SetDefaultValue("G4OpenGL");
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
+  parameterPrintFilename = new G4UIparameter ("incremental", 'b', omitable = true);
+  parameterPrintFilename->SetDefaultValue(1);
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -251,19 +276,27 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandPrintEPS) 
     {
-      // Keep copy of fPrintFilename to preserve Xm behaviour...
-      std::string tmp_string = pOGLViewer->fPrintFilename;
-
-      // Make new print string...
-      static G4int file_count = 0;
-      std::ostringstream oss;
-      oss << "G4OpenGL_" << file_count++ << ".eps";
-      pOGLViewer->fPrintFilename = std::string(oss.str().c_str());
-      // Print eps file...
       pOGLViewer->printEPS();
-      // Restore fPrintFilename for Xm...
-      pOGLViewer->fPrintFilename = tmp_string;
       return;
+    }
+
+  if (command == fpCommandPrintSize) 
+    {
+      G4int width,height;
+      std::istringstream iss(newValue);
+      iss >> width
+	  >> height;
+      pOGLViewer->setPrintSize(width,height);
+    }
+
+  if (command == fpCommandPrintFilename) 
+    {
+      G4String name;
+      G4bool inc;
+      std::istringstream iss(newValue);
+      iss >> name
+	  >> inc;
+      pOGLViewer->setPrintFilename(name,inc);
     }
 
   if (command == fpCommandPrintMode)
