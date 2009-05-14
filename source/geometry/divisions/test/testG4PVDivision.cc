@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PVDivision.cc,v 1.4 2006-06-29 18:18:59 gunter Exp $
+// $Id: testG4PVDivision.cc,v 1.5 2009-05-14 14:19:32 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // test for G4PVDivision classes
@@ -53,6 +53,7 @@
 #include "G4Cons.hh"
 #include "G4Para.hh"
 #include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 
 #include "G4GeometryManager.hh"
 
@@ -390,7 +391,8 @@ G4VPhysicalVolume* BuildGeometry( SolidType solType, PVType pvType )
 			 theNReplicas, 
 			 theWidths[ii], 
 			 theOffset );
-	G4cout << "division NDIVandWIDTH " << theNReplicas << " " << theWidths[ii]<< " " << theOffset << G4endl;
+	G4cout << "division NDIVandWIDTH axis  " 
+               << theNReplicas << " " << theWidths[ii]<< " " << theOffset << " " << theAxis[ii] << G4endl;
       } else if( theDivType == 1 ) {
 	new G4PVDivision("child", theChildLogs[ii], theParentLogs[ii], 
 			 theAxis[ii],
@@ -509,14 +511,24 @@ void calculateParentSolid( SolidType solType )
     theParentSolid = new G4Cons("parent", 1.E-6*mm, theWorldDim/2., 1.E-6*mm, theWorldDim, theWorldDim, theExtraPars[0]*deg, theExtraPars[1]*deg);
   }else if( solType == g4polycone ) {
 
-    G4double* zPlane = new G4double(4);
+    G4double* zPlane = new G4double[4];
     zPlane[0] = -theWorldDim; zPlane[1] = -theWorldDim/2.; zPlane[2] = theWorldDim/2; zPlane[3] = theWorldDim;
-    G4double* rInner = new G4double(4);
+    G4double* rInner = new G4double[4];
     rInner[0] = theWorldDim/10.; rInner[1] = 0.; rInner[2] = 0.; rInner[3] = theWorldDim/10.;
-    G4double* rOuter = new G4double(4);
+    G4double* rOuter = new G4double[4];
     rOuter[0] = theWorldDim; rOuter[1] = theWorldDim*0.9; rOuter[2] = theWorldDim*0.9; rOuter[3] = theWorldDim;
 
     theParentSolid = new G4Polycone("parent", 0., 360.*deg, 4, zPlane, rInner, rOuter);
+  }else if( solType == g4polyhedra ) {
+
+    G4double* zPlane = new G4double[4];
+    zPlane[0] = -theWorldDim; zPlane[1] = -theWorldDim/2.; zPlane[2] = theWorldDim/2; zPlane[3] = theWorldDim;
+    G4double* rInner = new G4double[4];
+    rInner[0] = theWorldDim/10.; rInner[1] = 0.; rInner[2] = 0.; rInner[3] = theWorldDim/10.;
+    G4double* rOuter = new G4double[4];
+    rOuter[0] = theWorldDim; rOuter[1] = theWorldDim*0.9; rOuter[2] = theWorldDim*0.9; rOuter[3] = theWorldDim;
+
+    theParentSolid = new G4Polyhedra("parent", 0., 360.*deg, theNReplicas, 4, zPlane, rInner, rOuter);
   }
 }
 
@@ -567,22 +579,41 @@ void calculateChildSolids( SolidType solType, G4VSolid* pSolid )
   }else if( solType == g4polycone ) {
     G4Polycone* pPCone = reinterpret_cast<G4Polycone*>( pSolid );
     G4PolyconeHistorical* origparam = pPCone->GetOriginalParameters() ;
+    G4int nz = origparam->Num_z_planes;
     theWidths.push_back( (origparam->Rmax[0] - origparam->Rmin[0] ) / theNReplicas );
-    theWidths.push_back( (origparam->Rmax[0] - origparam->Rmin[0] ) / theNReplicas );
-    theWidths.push_back( (origparam->Rmax[0] - origparam->Rmin[0] ) / theNReplicas );
-    //    theWidths.push_back( pTubs->GetDeltaPhiAngle() / theNReplicas );
-    //  theWidths.push_back( 2*pTubs->GetZHalfLength() / theNReplicas );
+    theWidths.push_back( (pPCone->GetEndPhi() - pPCone->GetStartPhi() ) / theNReplicas );
+    theWidths.push_back( (origparam->Z_values[1] - origparam->Z_values[0] ) / theNReplicas );
 
-    G4double* zPlane = new G4double(4);
+    G4double* zPlane = new G4double[4];
     zPlane[0] = -theWorldDim; zPlane[1] = -theWorldDim/2.; zPlane[2] = theWorldDim/2; zPlane[3] = theWorldDim;
-    G4double* rInner = new G4double(4);
+    G4double* rInner = new G4double[4];
     rInner[0] = theWorldDim/10.; rInner[1] = 0.; rInner[2] = 0.; rInner[3] = theWorldDim/10.;
-    G4double* rOuter = new G4double(4);
+    G4double* rOuter = new G4double[4];
     rOuter[0] = theWorldDim; rOuter[1] = theWorldDim*0.9; rOuter[2] = theWorldDim*0.9; rOuter[3] = theWorldDim;
 
-    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, 4, zPlane, rInner, rOuter) );
-    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, 4, zPlane, rInner, rOuter) );
-    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, 4, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polycone("child", 0., 360.*deg, nz, zPlane, rInner, rOuter) );
+
+  }else if( solType == g4polyhedra ) {
+    G4Polyhedra* pPhedra = reinterpret_cast<G4Polyhedra*>( pSolid );
+    G4PolyhedraHistorical* origparam = pPhedra->GetOriginalParameters() ;
+    G4int ns = origparam->numSide;
+    G4int nz = origparam->Num_z_planes;
+    theWidths.push_back( (origparam->Rmax[0] - origparam->Rmin[0] ) / theNReplicas );
+    theWidths.push_back( (pPhedra->GetEndPhi() - pPhedra->GetStartPhi() ) / theNReplicas );
+    theWidths.push_back( (origparam->Z_values[1] - origparam->Z_values[0] ) / theNReplicas );
+
+    G4double* zPlane = new G4double[4];
+    zPlane[0] = -theWorldDim; zPlane[1] = -theWorldDim/2.; zPlane[2] = theWorldDim/2; zPlane[3] = theWorldDim;
+    G4double* rInner = new G4double[4];
+    rInner[0] = theWorldDim/10.; rInner[1] = 0.; rInner[2] = 0.; rInner[3] = theWorldDim/10.;
+    G4double* rOuter = new G4double[4];
+    rOuter[0] = theWorldDim; rOuter[1] = theWorldDim*0.9; rOuter[2] = theWorldDim*0.9; rOuter[3] = theWorldDim;
+
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
 
   }
   for( size_t ii = 0; ii < theChildSolids.size(); ii++) {
@@ -607,7 +638,7 @@ void calculateAxis( SolidType solType )
     theAxis.push_back( kRho );
     theAxis.push_back( kPhi );
     theAxis.push_back( kZAxis );
-  }else if( solType == g4cone || solType == g4cons || solType == g4polycone ) {
+  }else if( solType == g4cone || solType == g4cons || solType == g4polycone || solType == g4polyhedra ) {
     theAxis.push_back( kRho );
     theAxis.push_back( kPhi );
     theAxis.push_back( kZAxis );

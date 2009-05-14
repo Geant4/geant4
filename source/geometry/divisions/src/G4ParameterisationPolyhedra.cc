@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.16 2007-05-18 07:27:23 gcosmo Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.17 2009-05-14 14:19:32 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -432,25 +432,24 @@ G4ParameterisationPolyhedraZ::
 G4ParameterisationPolyhedraZ( EAxis axis, G4int nDiv,
                              G4double width, G4double offset,
                              G4VSolid* msolid, DivisionType divType )
-  :  G4VParameterisationPolyhedra( axis, nDiv, width, offset, msolid, divType )
+  :  G4VParameterisationPolyhedra( axis, nDiv, width, offset, msolid, divType ),
+     fNSegment(0),
+     fOrigParamMother(((G4Polyhedra*)msolid)->GetOriginalParameters())
 { 
   CheckParametersValidity();
   SetType( "DivisionPolyhedraZ" );
 
-  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
-  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  
   if( divType == DivWIDTH )
     {
     fnDiv =
-      CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-                     - origparamMother->Z_values[0] , width, offset );
+      CalculateNDiv( fOrigParamMother->Z_values[fOrigParamMother->Num_z_planes-1]
+                     - fOrigParamMother->Z_values[0] , width, offset );
   }
   else if( divType == DivNDIV )
     {
     fwidth =
-      CalculateNDiv( origparamMother->Z_values[origparamMother->Num_z_planes-1]
-                     - origparamMother->Z_values[0] , nDiv, offset );
+      CalculateNDiv( fOrigParamMother->Z_values[fOrigParamMother->Num_z_planes-1]
+                     - fOrigParamMother->Z_values[0] , nDiv, offset );
   }
   
 #ifdef G4DIVDEBUG
@@ -470,12 +469,47 @@ G4ParameterisationPolyhedraZ::~G4ParameterisationPolyhedraZ()
 }
 
 //------------------------------------------------------------------------
+G4double G4ParameterisationPolyhedraZ::GetR(G4double z, 
+                                           G4double z1, G4double r1,  
+                                           G4double z2, G4double r2) const
+{
+  // Linear parameterisation: 
+  // r = az + b
+  // a = (r1 - r2)/(z1-z2)
+  // b = r1 - a*z1
+
+  return (r1-r2)/(z1-z2)*z + ( r1 - (r1-r2)/(z1-z2)*z1 ) ;
+}  
+                                           
+//------------------------------------------------------------------------
+G4double G4ParameterisationPolyhedraZ::GetRmin(G4double z, G4int nseg) const
+{
+// Get Rmin in the given z position for the given polyhedra segment 
+
+  return GetR(z, 
+              fOrigParamMother->Z_values[nseg], 
+              fOrigParamMother->Rmin[nseg],
+              fOrigParamMother->Z_values[nseg+1], 
+              fOrigParamMother->Rmin[nseg+1]);
+}  
+                                           
+//------------------------------------------------------------------------
+G4double G4ParameterisationPolyhedraZ::GetRmax(G4double z, G4int nseg) const
+{
+// Get Rmax in the given z position for the given polyhedra segment 
+
+  return GetR(z, 
+              fOrigParamMother->Z_values[nseg], 
+              fOrigParamMother->Rmax[nseg],
+              fOrigParamMother->Z_values[nseg+1], 
+              fOrigParamMother->Rmax[nseg+1]);
+}  
+                                           
+//------------------------------------------------------------------------
 G4double G4ParameterisationPolyhedraZ::GetMaxParameter() const
 {
-  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
-  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  return std::abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
-             -origparamMother->Z_values[0]);
+  return std::abs (fOrigParamMother->Z_values[fOrigParamMother->Num_z_planes-1]
+             -fOrigParamMother->Z_values[0]);
 }
 
 //---------------------------------------------------------------------
@@ -483,47 +517,69 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
 {
   G4VDivisionParameterisation::CheckParametersValidity();
 
-  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
+  // Division will be following the mother polyhedra segments
+  if( fDivisionType == DivNDIV ) {
+    if( fOrigParamMother->Num_z_planes-1 != fnDiv ) { 
+      G4cerr << "ERROR - "
+             << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
+             << G4endl
+             << "        Division along Z will be done splitting in the defined"
+             << G4endl
+             << "        z_planes, i.e, the number of division would be :"
+             << "        " << fOrigParamMother->Num_z_planes-1
+             << " instead of " << fnDiv << " !"
+             << G4endl; 
+      G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
+                  "IllegalConstruct", FatalException,
+                  "Not supported configuration.");
+    }
+  }  
 
-  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
-  {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along Z will be done splitting "
-           << "in the defined z_planes." << G4endl
-           << "          WIDTH will not be used !" << G4endl;
-  }
-
-  if( foffset != 0. )
-  {
-    G4cerr << "WARNING - "
-           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
-           << G4endl
-           << "          Solid " << msol->GetName() << G4endl
-           << "          Division along Z will be done splitting "
-           << "in the defined z_planes." << G4endl
-           << "          OFFSET will not be used !" << G4endl;
-  }
-
-  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-
-  if( origparamMother->Num_z_planes-1 != fnDiv )
-  { 
-    G4cerr << "ERROR - "
-           << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
-           << G4endl
-           << "        Division along Z will be done splitting in the defined"
-           << G4endl
-           << "        z_planes, i.e, the number of division would be :"
-           << "        " << origparamMother->Num_z_planes-1
-           << " instead of " << fnDiv << " !"
-           << G4endl; 
-    G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
-                "IllegalConstruct", FatalException,
-                "Not supported configuration.");
-  }
+  // Division will be done within one polyhedra segment
+  // with applying given width and offset
+  if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ) {
+    // Check if divided region does not span over more
+    // than one z segment
+  
+    // The start/end position of the divided region
+    G4double zstart 
+      = fOrigParamMother->Z_values[0] + foffset;
+    G4double zend 
+      = fOrigParamMother->Z_values[0] + foffset + fnDiv* fwidth;
+   
+    G4int isegstart = -1;  // number of the segment containing start position
+    G4int isegend = -1;    // number of the segment containing end position
+    G4int counter = 0;
+    while ( isegend < 0 && counter < fOrigParamMother->Num_z_planes-1 ) {
+      // first segment
+      if ( zstart >= fOrigParamMother->Z_values[counter]  &&
+           zstart  < fOrigParamMother->Z_values[counter+1] ) {
+         isegstart = counter;
+      }     
+      // last segment
+      if ( zend  > fOrigParamMother->Z_values[counter] &&
+           zend <= fOrigParamMother->Z_values[counter+1] ) {
+         isegend = counter;
+      }   
+      ++counter;   
+    }
+  
+    if ( isegstart != isegend ) {
+      G4cerr << "WARNING - "
+             << "G4ParameterisationPolyhedraZ::CheckParametersValidity()"
+             << G4endl
+             << "          Division with user defined width." << G4endl
+             << "          Solid " << fmotherSolid->GetName() << G4endl
+             << "          Divided region is not between two z planes." 
+             << G4endl;
+ 
+      G4Exception("G4ParameterisationPolyhedraZ::CheckParametersValidity()",
+                  "IllegalConstruct", FatalException,
+                  "Not supported configuration.");
+    }
+  
+    fNSegment = isegstart;
+  }  
 }
 
 //---------------------------------------------------------------------
@@ -531,14 +587,20 @@ void
 G4ParameterisationPolyhedraZ::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-  G4Polyhedra* msol = (G4Polyhedra*)(GetMotherSolid());
-
-  //----- set translation: along Z axis
-  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  G4double posi = (origparamMother->Z_values[copyNo]
-                   + origparamMother->Z_values[copyNo+1])/2;
-  G4ThreeVector origin(0.,0.,posi); 
-  physVol->SetTranslation( origin );
+  if ( fDivisionType == DivNDIV ) {
+    // The position of the centre of copyNo-th mother polycone segment
+    G4double posi = ( fOrigParamMother->Z_values[copyNo]
+                    + fOrigParamMother->Z_values[copyNo+1])/2;
+    physVol->SetTranslation( G4ThreeVector(0, 0, posi) );
+  }
+  
+  if ( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ) {
+    // The position of the centre of copyNo-th division
+    G4double posi 
+      = fOrigParamMother->Z_values[0] + foffset + (2*copyNo + 1) * fwidth/2.;
+    
+    physVol->SetTranslation( G4ThreeVector(0, 0, posi) );
+  }   
 
   //----- calculate rotation matrix: unit
 
@@ -570,23 +632,54 @@ G4ParameterisationPolyhedraZ::
 ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
-  // only for mother number of planes = 2!!
-  //
-  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
+  // Define division solid
+  G4PolyhedraHistorical origparam;
+  G4int nz = 2; 
+  origparam.Num_z_planes = nz;
+  origparam.numSide = fOrigParamMother->numSide;
+  origparam.Start_angle = fOrigParamMother->Start_angle;
+  origparam.Opening_angle = fOrigParamMother->Opening_angle;
 
-  G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  G4PolyhedraHistorical origparam( *origparamMother );
+  // Define division solid z sections
+  origparam.Z_values = new G4double[nz];
+  origparam.Rmin = new G4double[nz];
+  origparam.Rmax = new G4double[nz];
+  origparam.Z_values[0] = - fwidth/2.;
+  origparam.Z_values[1] = fwidth/2.;
 
-  G4double posi = (origparamMother->Z_values[copyNo]
-                   + origparamMother->Z_values[copyNo+1])/2;
+  if ( fDivisionType == DivNDIV ) {
+    // The position of the centre of copyNo-th mother polycone segment
+    G4double posi = ( fOrigParamMother->Z_values[copyNo]
+                    + fOrigParamMother->Z_values[copyNo+1])/2;
 
-  origparam.Num_z_planes = 2;
-  origparam.Z_values[0] = origparamMother->Z_values[copyNo] - posi;
-  origparam.Z_values[1] = origparamMother->Z_values[copyNo+1] - posi;
-  origparam.Rmin[0] = origparamMother->Rmin[copyNo];
-  origparam.Rmin[1] = origparamMother->Rmin[copyNo+1];
-  origparam.Rmax[0] = origparamMother->Rmax[copyNo];
-  origparam.Rmax[1] = origparamMother->Rmax[copyNo+1];
+    origparam.Z_values[0] = fOrigParamMother->Z_values[copyNo] - posi;
+    origparam.Z_values[1] = fOrigParamMother->Z_values[copyNo+1] - posi;
+    origparam.Rmin[0] = fOrigParamMother->Rmin[copyNo];
+    origparam.Rmin[1] = fOrigParamMother->Rmin[copyNo+1];
+    origparam.Rmax[0] = fOrigParamMother->Rmax[copyNo];
+    origparam.Rmax[1] = fOrigParamMother->Rmax[copyNo+1];
+  }  
+
+  if ( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ) {
+    origparam.Z_values[0] = - fwidth/2.;
+    origparam.Z_values[1] = fwidth/2.;
+
+    // The position of the centre of copyNo-th division
+    G4double posi 
+      = fOrigParamMother->Z_values[0] + foffset + (2*copyNo + 1) * fwidth/2.;
+    
+    // The first and last z sides z values
+    G4double zstart = posi - fwidth/2.;
+    G4double zend = posi + fwidth/2.;
+    origparam.Rmin[0] = GetRmin(zstart, fNSegment); 
+    origparam.Rmax[0] = GetRmax(zstart, fNSegment);  
+    origparam.Rmin[1] = GetRmin(zend, fNSegment); 
+    origparam.Rmax[1] = GetRmax(zend, fNSegment);  
+
+    // It can happen due to rounding errors
+    if ( origparam.Rmin[0]    < 0.0 ) origparam.Rmin[0] = 0.0;
+    if ( origparam.Rmin[nz-1] < 0.0 ) origparam.Rmin[1] = 0.0;
+  }  
 
   phedra.SetOriginalParameters(&origparam);  // copy values & transfer pointers
   phedra.Reset();                            // reset to new solid parameters

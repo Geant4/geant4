@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.hh,v 1.8 2006-06-29 18:18:20 gunter Exp $
+// $Id: G4ParameterisationPolyhedra.hh,v 1.9 2009-05-14 14:19:32 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // classes G4ParameterisationPolyhedraRho,
@@ -199,8 +199,15 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                             const G4VPhysicalVolume* physVol ) const;
 
-  private:  // Dummy declarations to get rid of warnings ...
+  private: 
+    G4double GetR(G4double z, G4double z1, G4double r1, G4double z2, G4double r2) const;
+    G4double GetRmin(G4double z, G4int nsegment) const;
+    G4double GetRmax(G4double z, G4int nsegment) const;
 
+    G4int fNSegment;
+    G4PolyhedraHistorical* fOrigParamMother;
+
+    // Dummy declarations to get rid of warnings ...
     void ComputeDimensions (G4Trd&,const G4int,
                             const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Trap&,const G4int,
