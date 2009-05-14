@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.19 2009-05-11 17:33:53 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.20 2009-05-14 08:04:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,7 +124,7 @@ class G4PhysicsVector
          // Get the toal length (bin number) of the vector. 
 
     void ComputeSecondDerivatives(G4double firstPointDerivative, 
-				  G4double endPointDerivative);
+                                  G4double endPointDerivative);
          // Initialise second derivatives for spline using 
          // user defined 1st derivatives at edge points
          // Warning: this method should be called when the vector 

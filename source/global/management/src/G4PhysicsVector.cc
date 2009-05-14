@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.29 2009-05-12 08:53:35 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.30 2009-05-14 08:04:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -251,7 +251,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
 void 
 G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative, 
-					  G4double endPointDerivative)
+                                          G4double endPointDerivative)
   //  A standard method of computation of second derivatives 
   //  First derivatives at the first and the last point should be provided
   //  See for example W.H. Press et al. "Numerical reciptes and C"
@@ -335,7 +335,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   G4double p, sig;
 
   u[1] = ((dataVector[2]-dataVector[1])/(binVector[2]-binVector[1]) -
-	  (dataVector[1]-dataVector[0])/(binVector[1]-binVector[0]));
+          (dataVector[1]-dataVector[0])/(binVector[1]-binVector[0]));
   u[1] = 6.0*u[1]*(binVector[2]-binVector[1])
     / ((binVector[2]-binVector[0])*(binVector[2]-binVector[0]));
  
