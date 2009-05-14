@@ -1,4 +1,4 @@
-$Id: History,v 1.369 2009-05-12 17:30:04 alechner Exp $
+$Id: History,v 1.370 2009-05-14 10:58:57 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14.05.2009, L. Pandola, tag emlowen-V09-02-37
+            Correct G4PenelopeBremsstrahlungModel to get rid of a crash 
+            for re-inizialitation
 
 12.05.2009, A.Lechner, tag emlowen-V09-02-36
             Added new scaling algorithm, to obtain heavy ion stopping powers
