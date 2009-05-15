@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc,v 1.1 2009-05-15 12:10:17 schaelic Exp $
+// $Id: G4PairProductionRelModel.cc,v 1.2 2009-05-15 12:58:38 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -422,12 +422,24 @@ void G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
 	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333);
 	screenvar = screenfac/(epsil*(1-epsil));
-	greject = (ScreenFunction1(screenvar) - FZ)/F10;
+	if (fLPMflag && GammaEnergy>100.*GeV) {
+	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);
+	  greject = xiLPM*((gLPM+2.*phiLPM)*Phi1(screenvar) - gLPM*Phi2(screenvar) - phiLPM*FZ)/F10;
+	}
+	else {
+	  greject = (ScreenFunction1(screenvar) - FZ)/F10;
+	}
               
       } else { 
 	epsil = epsilmin + epsilrange*G4UniformRand();
 	screenvar = screenfac/(epsil*(1-epsil));
-	greject = (ScreenFunction2(screenvar) - FZ)/F20;
+	if (fLPMflag && GammaEnergy>100.*GeV) {
+	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);
+	  greject = xiLPM*((0.5*gLPM+phiLPM)*Phi1(screenvar) + 0.5*gLPM*Phi2(screenvar) - 0.5*(gLPM+phiLPM)*FZ)/F20;
+	}
+	else {
+	  greject = (ScreenFunction2(screenvar) - FZ)/F20;
+	}
       }
 
     } while( greject < G4UniformRand() );

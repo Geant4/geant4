@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.1 2009-05-15 12:10:17 schaelic Exp $
+// $Id: G4PairProductionRelModel.hh,v 1.2 2009-05-15 12:58:38 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -240,7 +240,7 @@ inline G4double G4PairProductionRelModel::Phi2(G4double delta) const
    if (delta > 1.)
      screenVal = 21.12 - 4.184*std::log(delta+0.952);
    else
-     screenVal = 20.209 - delta*(1.930 - 0.086*delta);
+     screenVal = 20.209 - delta*(1.930 + 0.086*delta);
 
    return screenVal;
 }
@@ -264,7 +264,7 @@ inline G4double G4PairProductionRelModel::ScreenFunction1(G4double ScreenVariabl
 
 inline G4double G4PairProductionRelModel::ScreenFunction2(G4double ScreenVariable)
 
-// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
+// compute the value of the screening function 1.5*PHI1 + 0.5*PHI2
 
 {
    G4double screenVal;
