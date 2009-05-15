@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2008-12-09 17:55:01 arce Exp $
+$Id: History,v 1.6 2009-05-15 17:12:05 arce Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+15 May 2009  P.Arce (exampleP03-V09-02-00)
+--------------------------
+- Added example of parallel world
+- Added example of circle parameterisation
+- Added example of phantom parameterisation
+- textGeom.cc renamed to exTextGeom.cc
+
 9 December 2008 - P Arce (exampleP03-V09-01-04)
 --------------------------
 - SUBS -> SUBTRACTION, INTERS -> INTERSECTION
