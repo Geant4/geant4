@@ -118,7 +118,7 @@
 
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
-
+#include "G4EmProcessOptions.hh"
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 {
@@ -144,6 +144,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 
   // Deacy physics and all particles
   decPhysicsList = new G4DecayPhysics();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -206,18 +207,20 @@ void HadrontherapyPhysicsList::ConstructProcess()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
+
+ 
+
   if (verboseLevel>1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
-
   if (name == emName) return;
 
-  if (name == "emstandard_opt3") {
-
+  if (name == "standard_opt3") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();    
-
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
+    
   } else if (name == "local_standardICRU73") {
     emName = name;
     delete emPhysicsList;
@@ -232,6 +235,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new LocalLivermoreEmPhysic();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
 
   } else if (name == "local_penelope") {
     emName = name;
@@ -239,6 +243,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new LocalPenelopeEmPhysic();
 
   } else if (name == "elastic" && !helIsRegisted) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
     hadronPhys.push_back( new G4HadronElasticPhysics());
     helIsRegisted = true;
 
@@ -257,6 +262,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "binary" && !bicIsRegisted) {
     hadronPhys.push_back(new G4HadronInelasticQBBC());
     bicIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
 
   } else if (name == "binary_ion" && !biciIsRegisted) {
     hadronPhys.push_back(new G4IonBinaryCascadePhysics());

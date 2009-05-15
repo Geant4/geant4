@@ -12,7 +12,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
                       Category History file
 
 
-14.05.2009  G.A.P.Cirrone; Tag hadrontherapy-V09-02-09
+15.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-10
+           - Corrected a but in the call of a physic list
+           - Corrected a bug in the proton_therapy.mac file
+
+14.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-09
            - Definitively added the StepMax class to change the max step lenght
 
 14.05.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-08
