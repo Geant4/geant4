@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2009-05-13 09:06:55 kmura Exp $
+$Id: History,v 1.110 2009-05-15 07:17:52 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 May, 2009 K. Murakami (interfaces-V09-02-01)
+ - G4UIExecutive : Remove batch mode handling
 
 13 May, 2009 K. Murakami (interfaces-V09-02-00)
  - G4UIExecutive : Add new class for automatic instantiation of user session
