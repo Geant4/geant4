@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstruction.hh,v 1.3 2009-05-15 16:34:19 arce Exp $
+// $Id: ExTGDetectorConstructionWithParallel.hh,v 1.1 2009-05-15 16:34:42 arce Exp $
 //
 // ---------------------------------------------------------------------------
 
-#ifndef ExTGDetectorConstruction_HH
-#define ExTGDetectorConstruction_HH
+#ifndef ExTGDetectorConstructionWithParallel_HH
+#define ExTGDetectorConstructionWithParallel_HH
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
@@ -36,12 +36,12 @@
 class G4tgrMessenger;
 class G4tgrVolume;
 
-class ExTGDetectorConstruction : public G4VUserDetectorConstruction
+class ExTGDetectorConstructionWithParallel : public G4VUserDetectorConstruction
 {
   public:
 
-    ExTGDetectorConstruction();
-   ~ExTGDetectorConstruction();
+    ExTGDetectorConstructionWithParallel();
+   ~ExTGDetectorConstructionWithParallel();
 
     G4VPhysicalVolume* Construct();
 

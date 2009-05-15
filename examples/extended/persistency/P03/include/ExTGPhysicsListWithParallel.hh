@@ -23,34 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstruction.hh,v 1.3 2009-05-15 16:34:19 arce Exp $
+//
+// $Id: ExTGPhysicsListWithParallel.hh,v 1.1 2009-05-15 16:34:42 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------
 
-#ifndef ExTGDetectorConstruction_HH
-#define ExTGDetectorConstruction_HH
+#ifndef ExTGPhysicsListWithParallel_h
+#define ExTGPhysicsListWithParallel_h 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserPhysicsList.hh"
 
-class G4tgrMessenger;
-class G4tgrVolume;
+// ---------------------------------------------------------------------------
 
-class ExTGDetectorConstruction : public G4VUserDetectorConstruction
+class ExTGPhysicsListWithParallel : public G4VUserPhysicsList
 {
   public:
 
-    ExTGDetectorConstruction();
-   ~ExTGDetectorConstruction();
+    ExTGPhysicsListWithParallel();
+   ~ExTGPhysicsListWithParallel();
 
-    G4VPhysicalVolume* Construct();
+  protected:
 
-  private:
-    void ConstructParallelWorlds();
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
 
-    G4tgrMessenger* messenger;
-    const G4tgrVolume* theTgrVoltop;
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
 
+    // Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
 };
 
+// ---------------------------------------------------------------------------
+
 #endif
+

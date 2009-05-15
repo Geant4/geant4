@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGPhysicsList.cc,v 1.2 2009-05-15 16:39:04 arce Exp $
+// $Id: ExTGPhysicsListWithParallel.cc,v 1.1 2009-05-15 16:39:14 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------
 
 #include "globals.hh"
-#include "ExTGPhysicsList.hh"
+#include "ExTGPhysicsListWithParallel.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 
 // ---------------------------------------------------------------------------
 
-ExTGPhysicsList::ExTGPhysicsList():  G4VUserPhysicsList()
+ExTGPhysicsListWithParallel::ExTGPhysicsListWithParallel():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*cm;
    SetVerboseLevel(1);
@@ -45,13 +45,13 @@ ExTGPhysicsList::ExTGPhysicsList():  G4VUserPhysicsList()
 
 // ---------------------------------------------------------------------------
 
-ExTGPhysicsList::~ExTGPhysicsList()
+ExTGPhysicsListWithParallel::~ExTGPhysicsListWithParallel()
 {
 }
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructParticle()
+void ExTGPhysicsListWithParallel::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -66,7 +66,7 @@ void ExTGPhysicsList::ConstructParticle()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructBosons()
+void ExTGPhysicsListWithParallel::ConstructBosons()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
@@ -78,7 +78,7 @@ void ExTGPhysicsList::ConstructBosons()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructLeptons()
+void ExTGPhysicsListWithParallel::ConstructLeptons()
 {
   // leptons
   //  e+/-
@@ -97,7 +97,7 @@ void ExTGPhysicsList::ConstructLeptons()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructMesons()
+void ExTGPhysicsListWithParallel::ConstructMesons()
 {
   //  mesons
   //    light mesons
@@ -116,7 +116,7 @@ void ExTGPhysicsList::ConstructMesons()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructBaryons()
+void ExTGPhysicsListWithParallel::ConstructBaryons()
 {
   //  barions
   G4Proton::ProtonDefinition();
@@ -128,7 +128,7 @@ void ExTGPhysicsList::ConstructBaryons()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructProcess()
+void ExTGPhysicsListWithParallel::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
@@ -158,7 +158,7 @@ void ExTGPhysicsList::ConstructProcess()
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::ConstructEM()
+void ExTGPhysicsListWithParallel::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -210,8 +210,11 @@ void ExTGPhysicsList::ConstructEM()
 
 #include "G4Decay.hh"
 #include "G4ParallelWorldScoringProcess.hh"
+#include "G4tgbParallelGeomMgr.hh"
+#include "G4VUserParallelWorld.hh"
+#include "G4UIcommand.hh"
 
-void ExTGPhysicsList::ConstructGeneral()
+void ExTGPhysicsListWithParallel::ConstructGeneral()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
@@ -225,21 +228,32 @@ void ExTGPhysicsList::ConstructGeneral()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
-      pmanager->AddProcess(theParallelWorldScoringProcess);
-      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
-      pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAlongStep, 1);
-      pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
-      // set ordering for PostStepDoIt and AtRestDoIt
+    // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+    pmanager->AddProcess(theParallelWorldScoringProcess);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+    pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAlongStep, 1);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+
+  }
+
+  std::vector<G4VUserParallelWorld*> parallelWorlds = G4tgbParallelGeomMgr::GetInstance()->GetParallelWorlds();
+  for( size_t ii = 0; ii < parallelWorlds.size(); ii++ ) {
+    G4String pwName = parallelWorlds[ii]->GetName();
+    G4int index = G4UIcommand::ConvertToInt( pwName.substr(
+		   pwName.rfind("_", pwName.length())+1, pwName.length() ).c_str() );
+    G4cout << " RegisterParallelWorld " << pwName << " index " << index << " " << G4endl;
+    G4tgbParallelGeomMgr::GetInstance()->BuildPhysicsProcess(parallelWorlds[ii]->GetName(), index );
+    
   }
 
 }
 
 // ---------------------------------------------------------------------------
 
-void ExTGPhysicsList::SetCuts()
+void ExTGPhysicsListWithParallel::SetCuts()
 {
   //G4VUserPhysicsList::SetCutsWithDefault method sets 
   //the default cut value for all particle types 

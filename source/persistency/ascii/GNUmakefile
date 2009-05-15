@@ -1,31 +1,26 @@
-# $Id: GNUmakefile,v 1.3 2008-11-21 16:27:42 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2009-05-15 16:31:22 arce Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
 
-name := G4geomtext
+name := G4persistency
 
-ifndef G4INSTALL
-  G4INSTALL = ../../..
+SUBDIRS := mctruth ascii
+SUBLIBS = G4mctruth G4geomtext
+
+ifdef G4LIB_BUILD_GDML
+  SUBDIRS += gdml
+  SUBLIBS += G4gdml
 endif
 
-include $(G4INSTALL)/config/architecture.gmk
+GLOBLIBS  = libG4run.lib libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4digits_hits.lib libG4track.lib
+GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
+GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 
-CPPFLAGS += \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/global/HEPNumerics/include \
-            -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/geometry/solids/BREPS/include \
-            -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/geometry/solids/Boolean/include \
-            -I$(G4BASE)/geometry/divisions/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/management/include
 
-include $(G4INSTALL)/config/common.gmk
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+include $(G4INSTALL)/config/globlib.gmk
