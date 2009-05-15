@@ -1,4 +1,4 @@
-$Id: History,v 1.442 2009-05-14 16:58:54 lgarnier Exp $
+$Id: History,v 1.443 2009-05-15 22:22:30 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+15 May 2009, Joseph Perl (vis-V09-02-04)
+- opengl-V09-02-04: Improvements to GL and Qt, printing, redraw logic,
+  debug messages and fixes for compiler warnings
+- visman-V09-02-02:Added /vis/viewer/set/targetPoint,
+  improved end of run event keeping information
+- vis-HepRep-V09-02-00:resolve compilation errors reported by gcc-4.4.0
 
 14th May 2009  Laurent Garnier
  - opengl-V09-02-04 Added /vis/ogl/set/printSize and /vis/ogl/set/printFilename
