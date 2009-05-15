@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.9 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.10 2009-05-15 17:12:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,10 +78,7 @@ G4KleinNishinaCompton::~G4KleinNishinaCompton()
 void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition*,
                                        const G4DataVector&)
 {
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

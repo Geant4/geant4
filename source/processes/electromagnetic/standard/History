@@ -1,4 +1,4 @@
-$Id: History,v 1.448 2009-05-15 12:58:38 schaelic Exp $
+$Id: History,v 1.449 2009-05-15 17:12:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 May 09: A.Schaelicke
-- G4PairProductionRelModel- new relativistic model for gamma conversion
-
-15 May 09:
+15 May 09:  V.Ivant (emstand-V09-02-11)
+- G4PairProductionRelModel - (A.Schaelicke) new relativistic model for 
+                              gamma conversion
 - G4UrbanMscModel2  - (L.Urban) new version of theta0 and tail tuning
 
 10 May 09: V.Ivant (emstand-V09-02-10)

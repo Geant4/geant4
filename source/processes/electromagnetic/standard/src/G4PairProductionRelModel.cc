@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc,v 1.2 2009-05-15 12:58:38 schaelic Exp $
+// $Id: G4PairProductionRelModel.cc,v 1.3 2009-05-15 17:12:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -113,15 +113,9 @@ G4PairProductionRelModel::~G4PairProductionRelModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PairProductionRelModel::Initialise(const G4ParticleDefinition*,
-				     const G4DataVector&)
+					  const G4DataVector&)
 {
-  if(!fParticleChange) {
-    if(pParticleChange) {
-      fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    } else {
-      fParticleChange = new G4ParticleChangeForGamma();
-    }
-  }
+  fParticleChange = GetParticleChangeForGamma();
 
   if(theCrossSectionTable) {
     theCrossSectionTable->clearAndDestroy();
@@ -187,7 +181,7 @@ G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double totalEnergy, 
 
 
   G4double vmax = 0.5;
-  G4int n = 1.;  // needs optimisation
+  G4int n = 1;  // needs optimisation
 
   G4double delta = (vmax - vcut)*totalEnergy/G4double(n);
 
@@ -215,7 +209,10 @@ G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double totalEnergy, 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PairProductionRelModel::ComputeDXSectionPerAtom(G4double eplusEnergy, G4double totalEnergy, G4double Z)
+G4double 
+G4PairProductionRelModel::ComputeDXSectionPerAtom(G4double eplusEnergy, 
+						  G4double totalEnergy, 
+						  G4double /*Z*/)
 {
   // most simple case - complete screening:
 
@@ -238,7 +235,10 @@ G4double G4PairProductionRelModel::ComputeDXSectionPerAtom(G4double eplusEnergy,
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PairProductionRelModel::ComputeRelDXSectionPerAtom(G4double eplusEnergy, G4double totalEnergy, G4double Z)
+G4double 
+G4PairProductionRelModel::ComputeRelDXSectionPerAtom(G4double eplusEnergy, 
+						     G4double totalEnergy, 
+						     G4double /*Z*/)
 {
   // most simple case - complete screening:
 
@@ -265,6 +265,7 @@ G4double G4PairProductionRelModel::ComputeRelDXSectionPerAtom(G4double eplusEner
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void  G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplus)
 {
   // *** calculate lpm variable s & sprime ***
@@ -331,10 +332,10 @@ void  G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplus)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PairProductionRelModel::ComputeCrossSectionPerAtom(
-                                                   const G4ParticleDefinition*,
-                                              G4double gammaEnergy, G4double Z,
-					      G4double, G4double, G4double)
+G4double 
+G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+						     G4double gammaEnergy, G4double Z,
+						     G4double, G4double, G4double)
 {
   //  static const G4double gammaEnergyLimit = 1.5*MeV;
   G4double crossSection = 0.0 ;
@@ -354,7 +355,8 @@ G4double G4PairProductionRelModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+void 
+G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 					    const G4MaterialCutsCouple* couple,
 					    const G4DynamicParticle* aDynamicGamma,
 					    G4double,
@@ -520,7 +522,7 @@ void G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 
 void G4PairProductionRelModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, G4double kineticEnergy)
+						const G4Material* mat, G4double)
 {
   lpmEnergy = mat->GetRadlen()*fLPMconstant;
   //  G4cout<<" lpmEnergy="<<lpmEnergy<<G4endl;
