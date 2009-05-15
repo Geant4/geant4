@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.25 2009-02-16 11:40:26 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.26 2009-05-15 09:36:17 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -993,7 +993,7 @@ QString G4UIQt::GetCommandList (
 /**  Implement G4VBasicShell vurtual function
  */
 G4bool G4UIQt::GetHelpChoice(
- G4int& aInt
+ G4int&
 )
 {
 #ifdef G4DEBUG
