@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.109 2009-03-23 14:14:35 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.110 2009-05-15 17:29:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3986,7 +3986,9 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     else if (fragMas<GSMass)
     {
       G4cerr<<"***G4Q::FillHV:M="<<fragMas<<">GSM="<<GSMass<<",d="<<fragMas-GSMass<<G4endl;
-      throw G4QException("***G4Quasmon::FillHadronVector:Mass is below theGroundStateVal");
+      //throw G4QException("*G4Quasmon::FillHadronVector:Mass is below theGroundStateVal");
+      G4cout<<"***>>>G4Quasm::FillHadrVect: Leave as it is Instead of Exception"<<G4endl;
+      theQHadrons.push_back(qH);              // Fill As Is  (delete equivalent)
     }
     else if (bA==1&&fragMas>GSMass)
     {

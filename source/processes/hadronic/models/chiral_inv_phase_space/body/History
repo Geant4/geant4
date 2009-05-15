@@ -17,6 +17,12 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
 
 
+15-May-2009 M.Kosov                              (hadr-chips-body-V09-02-04)
+----------------------------------------------------------------------------
+For rare cases of the output hadron mass below the GS mass instead of Exception
+in the G4QEnvironment class a fill As Is for the hadron is used with appropriate
+warning. If this case can be reproduced, it should be debugged in future.
+
 29-Apr-2009 M.Kosov                              (hadr-chips-body-V09-02-03)
 ----------------------------------------------------------------------------
 The rare situation was Found by Alberto. It is improved in G4QEnvironment.

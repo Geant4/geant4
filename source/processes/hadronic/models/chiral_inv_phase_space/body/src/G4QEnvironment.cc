@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.142 2009-04-29 10:52:33 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.143 2009-05-15 17:29:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7151,9 +7151,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     }
     //unsigned nHd=theQHadrons.size()-1;
     //if(hd==nHd && !fOK)
- //{
+    //{
     //  G4cout<<"---Warning---G4QE::FSI: The Last #"<<hd<<" hadron must be filled"<<G4endl;
- //  fOK=true;
+    //  fOK=true;
     //  curHadr = new G4QHadron(theQHadrons[hd]);
     //}
     //if(fOK) theFragments->push_back(curHadr);  //(del eq. - user is responsible for del)
