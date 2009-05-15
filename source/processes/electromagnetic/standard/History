@@ -1,4 +1,4 @@
-$Id: History,v 1.446 2009-05-15 10:19:42 urban Exp $
+$Id: History,v 1.447 2009-05-15 12:10:17 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 May 09: A.Schaelicke
+- G4PairProductionRelModel- new relativistic model for gamma conversion
+  (sofar total cross section only)
 
 15 May 09:
 - G4UrbanMscModel2  - (L.Urban) new version of theta0 and tail tuning
