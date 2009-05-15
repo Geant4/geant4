@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.7 2009-02-26 10:21:55 gcosmo Exp $
+// $Id: G4BrentLocator.cc,v 1.8 2009-05-15 12:55:48 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4BrentLocator implementation
@@ -167,7 +167,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   //  until 'max_depth'.
   //--------------------------------------------------------------------------
 
-  const G4int param_substeps=100; // Test value for the maximum number
+  const G4int param_substeps=50; // Test value for the maximum number
                                   // of substeps
   const G4double fraction_done=0.3;
 
@@ -374,11 +374,12 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             //   A    <- F 
             //   E    <- H
             //
-            CurrentA_PointVelocity = ApproxIntersecPointV;
+            G4FieldTrack InterMed=ApproxIntersecPointV;
             ApproxIntersecPointV = GetChordFinderFor()->ApproxCurvePointS(
                           CurrentA_PointVelocity,CurrentB_PointVelocity,
-                          CurrentA_PointVelocity,CurrentE_Point,Point_A,PointH,
+                          InterMed,CurrentE_Point,CurrentF_Point,PointH,
                           false,GetEpsilonStepFor());
+            CurrentA_PointVelocity = InterMed;
             CurrentE_Point = PointH;
           }
           else  // not Intersects_FB
