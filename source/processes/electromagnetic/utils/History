@@ -1,4 +1,4 @@
-$Id: History,v 1.378 2009-05-10 19:36:19 vnivanch Exp $
+$Id: History,v 1.379 2009-05-15 16:57:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 May 09: V.Ivant (emutils-V09-02-08)
+- Added new testG4EnergyLossTables and fixed GNUmakefile for tests
 
 10 May 09: V.Ivant (emutils-V09-02-07)
 G4EmElementSelector - added protection for zero cross section at first and last
