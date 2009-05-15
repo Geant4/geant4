@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.51 2008-10-29 14:17:42 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.52 2009-05-15 12:52:07 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -431,9 +431,13 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
   // While advancing towards S utilise 'eps_step' as a measure of the
   // relative accuracy of each Step.
 
-  G4FieldTrack EndPoint( CurveA_PointVelocity);
-  G4ThreeVector Point_A=CurveA_PointVelocity.GetPosition();
-  G4ThreeVector Point_B=CurveB_PointVelocity.GetPosition();
+  G4FieldTrack EndPoint(CurveA_PointVelocity);
+  if(!first){EndPoint= ApproxCurveV;}
+
+  G4ThreeVector Point_A,Point_B;
+  Point_A=CurveA_PointVelocity.GetPosition();
+  Point_B=CurveB_PointVelocity.GetPosition();
+
   G4double xa,xb,xc,ya,yb,yc;
  
   // InverseParabolic. AF Intersects (First Part of Curve) 
@@ -450,15 +454,21 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
   else
   {
      xa=0.;
-     ya=(Point_A-PointG).mag();
-     xb=(Point_B-Point_A).mag();
-     yb=-(PointG-Point_B).mag();
-     xc=-(Point_A-CurrentF_Point).mag();
-     yc=-(Point_A-CurrentE_Point).mag();
+     ya=(Point_A-CurrentE_Point).mag();
+     xb=(Point_A-CurrentF_Point).mag();
+     yb=(PointG-CurrentF_Point).mag();
+     xc=(Point_A-Point_B).mag();
+     yc=-(Point_B-PointG).mag();
+     if(xb==0.){
+      EndPoint=
+      ApproxCurvePointV(CurveA_PointVelocity,CurveB_PointVelocity,
+                        CurrentE_Point,eps_step);
+      return EndPoint;
+      }
     
   }
   const G4double tolerance= 1.e-12;
-  if(ya<=tolerance||std::abs(yc)<=tolerance)
+  if(std::abs(ya)<=tolerance||std::abs(yc)<=tolerance)
   {
     ; // What to do for the moment: return the same point as at start
       // then PropagatorInField will take care
@@ -474,8 +484,10 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
     }
     else
     {
+      test_step=(test_step-xb);
       curve=std::abs(EndPoint.GetCurveLength()
                     -CurveB_PointVelocity.GetCurveLength());
+      xb=(CurrentF_Point-Point_B).mag();
     }
       
     if(test_step<=0)    { test_step=0.1*xb; }
