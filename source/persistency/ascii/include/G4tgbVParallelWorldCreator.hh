@@ -24,47 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.hh,v 1.3 2009-05-15 16:19:48 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4tgbDetectorBuilder
+// class G4tgbVParallelWorldCreator
 //
 // Class description:
 //
-// Builder of transient detector.
-
+// Abstract class to tell G4tgbParallelGeomMgr which G4VUserParallelWorld's are instantiated
 // History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
+// - Created.                                 P.Arce, CIEMAT (March 2009)
 // -------------------------------------------------------------------------
 
-#ifndef G4tgbDetectorBuilder_hh
-#define G4tgbDetectorBuilder_hh
+#ifndef G4tgbVParallelWorldCreator_h
+#define G4tgbVParallelWorldCreator_h
 
 #include "globals.hh"
-
-#include <string>
+class G4VUserParallelWorld;
+#include <set>
 #include <vector>
-#include <map>
 
-#include "G4VSolid.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
+//----------------------------------------------------------------------------  
+class G4tgbVParallelWorldCreator 
+{
+  public: 
+    G4tgbVParallelWorldCreator(){};
 
-class G4tgbVolume;
-class G4tgrVolume;
- 
-//-------------------------------------------------------------------------- 
-class G4tgbDetectorBuilder 
-{ 
- public:  // with description
+    ~G4tgbVParallelWorldCreator(){};
 
-  G4tgbDetectorBuilder();
-  ~G4tgbDetectorBuilder();
+    virtual G4VUserParallelWorld* CreateParallelWorld( const G4String& parallelWorldName, const G4int index ) = 0;
 
-  virtual const G4tgrVolume* ReadDetector();
-  virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop, G4int parallelID = -1 );
-
+  private:
 };
 
 #endif

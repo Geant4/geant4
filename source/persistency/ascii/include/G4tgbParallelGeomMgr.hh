@@ -24,47 +24,62 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.hh,v 1.3 2009-05-15 16:19:48 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4tgbDetectorBuilder
+// class G4tgbParallelGeomMgr
 //
 // Class description:
 //
-// Builder of transient detector.
+// Class to manage the building of parallel worlds. It is a singleton.
 
 // History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
+// - Created.                                 P.Arce, CIEMAT (February 2009)
 // -------------------------------------------------------------------------
 
-#ifndef G4tgbDetectorBuilder_hh
-#define G4tgbDetectorBuilder_hh
+#ifndef G4tgbParallelGeomMgr_h
+#define G4tgbParallelGeomMgr_h
 
 #include "globals.hh"
-
-#include <string>
+class G4VUserParallelWorld;
+#include <set>
 #include <vector>
-#include <map>
+class G4tgbVParallelWorldCreator;
 
-#include "G4VSolid.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
+//----------------------------------------------------------------------------  
+class G4tgbParallelGeomMgr 
+{
+  protected:
+    G4tgbParallelGeomMgr();
 
-class G4tgbVolume;
-class G4tgrVolume;
- 
-//-------------------------------------------------------------------------- 
-class G4tgbDetectorBuilder 
-{ 
- public:  // with description
+  public:  // with description  
+    ~G4tgbParallelGeomMgr();
 
-  G4tgbDetectorBuilder();
-  ~G4tgbDetectorBuilder();
+    static G4tgbParallelGeomMgr* GetInstance();  
+      // Get the only instance 
 
-  virtual const G4tgrVolume* ReadDetector();
-  virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop, G4int parallelID = -1 );
+    void AddParallelWorldIndex( G4int index );
 
+    std::vector<G4VUserParallelWorld*> CreateParalleWorlds();
+
+    void BuildPhysicsProcess( const G4String& volName, const G4int index );
+
+    std::vector<G4VUserParallelWorld*> GetParallelWorlds() const { 
+      return theParallelWorlds; 
+    }
+
+  G4tgbVParallelWorldCreator* GetWorldCreator() const {
+    return theWorldCreator; 
+  }
+
+  void SetWorldCreator(G4tgbVParallelWorldCreator* wc ){
+    theWorldCreator = wc;
+  }
+
+  private:
+
+    static G4tgbParallelGeomMgr* theInstance;
+    std::set<G4int> theIndices;
+    std::vector<G4VUserParallelWorld*> theParallelWorlds;
+
+    G4tgbVParallelWorldCreator* theWorldCreator;
 };
 
 #endif

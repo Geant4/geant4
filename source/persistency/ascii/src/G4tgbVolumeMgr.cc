@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.5 2008-12-18 12:59:44 gunter Exp $
+// $Id: G4tgbVolumeMgr.cc,v 1.6 2009-05-15 16:25:31 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,6 +84,13 @@ G4tgbVolumeMgr* G4tgbVolumeMgr::GetInstance()
 void G4tgbVolumeMgr::AddTextFile( const G4String& fname ) 
 {
   G4tgrFileReader::GetInstance()->AddTextFile( fname );
+}
+
+
+//---------------------------------------------------------------------
+void G4tgbVolumeMgr::AddTextFileParallel( const G4String& fname, G4int parallelID ) 
+{
+  G4tgrFileReader::GetInstance()->AddTextFileParallel( fname, parallelID );
 }
 
 
@@ -153,6 +160,7 @@ void G4tgbVolumeMgr::CopyVolumes()
   for(cite = vollist.begin(); cite != vollist.end(); cite++)
   {
     G4tgrVolume* tgrvol = const_cast<G4tgrVolume*>( (*cite).second );
+    if( FindVolume( tgrvol->GetName(), 0 )!= 0 ) continue;
     G4tgbVolume* svol = new G4tgbVolume( tgrvol );
     RegisterMe( svol );
   }
@@ -160,14 +168,19 @@ void G4tgbVolumeMgr::CopyVolumes()
 
 
 //---------------------------------------------------------------------
-G4tgbVolume* G4tgbVolumeMgr::FindVolume( const G4String& volname)
+G4tgbVolume* G4tgbVolumeMgr::FindVolume( const G4String& volname, G4bool bMustExist)
 {
   G4mssvol::const_iterator cite = theVolumeList.find( volname );
   if( cite == theVolumeList.end() )
   {
-    G4String ErrMessage = "G4tgbVolume not found: " + volname + " !";
-    G4Exception("G4tgbVolumeMgr::FindVolume()", "InvalidSetup",
-                FatalException, ErrMessage);
+    if( bMustExist ) 
+    {
+      G4String ErrMessage = "G4tgbVolume not found: " + volname + " !";
+      G4Exception("G4tgbVolumeMgr::FindVolume()", "InvalidSetup",
+		  FatalException, ErrMessage);
+    } else {
+      return 0;
+    }
   }
   return (*cite).second;
 }
@@ -277,9 +290,9 @@ G4tgbVolumeMgr::FindG4PhysVol( const G4String& name, const G4bool exists )
 
 
 //---------------------------------------------------------------------
-G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol()
+G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol(G4int parallelID)
 {
-  G4LogicalVolume* lv = GetTopLogVol(); 
+  G4LogicalVolume* lv = GetTopLogVol(parallelID); 
   G4VPhysicalVolume* pv = ( *(thePVs.find( lv->GetName() )) ).second;
 
 #ifdef G4VERBOSE
@@ -295,7 +308,7 @@ G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol()
 
 
 //---------------------------------------------------------------------
-G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol()
+G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol(G4int parallelID)
 {
   //----------- Start from any G4LogicalVolume, because if you go upwards
   //            you will always end at the top  
@@ -312,7 +325,12 @@ G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol()
                 FatalException, "theLVInvTree has no elements.");
   }
   G4LogicalVolume* lv = (*(theLVInvTree.begin())).second;
-
+  /*  G4mlvlv::const_iterator ite;
+  for( ite = theLVInvTree.begin(); ite != theLVInvTree.end(); ite++ ){
+    lv = (*(theLVInvTree.begin())).second;
+     
+    if( lv->Get
+  */
   //------- if first element is the top LV, its parent is 0
   if( lv == 0 ) 
   {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.7 2008-12-18 12:59:08 gunter Exp $
+// $Id: G4tgrVolume.hh,v 1.8 2009-05-15 16:19:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,6 +64,7 @@ class G4tgrVolume
 
     G4tgrVolume();
     G4tgrVolume( const std::vector<G4String>& wl );
+    G4tgrVolume( const G4tgrVolume& vol );
     virtual ~G4tgrVolume();
 
     virtual G4tgrPlace* AddPlace( const std::vector<G4String>& wl );
@@ -87,8 +88,9 @@ class G4tgrVolume
     // Accessors
 
     const G4String& GetName() const {return theName;}
+   void SetName(const G4String& name ){theName = name;}
     const G4String& GetType() const {return theType;}
-    const G4tgrSolid* GetSolid() const {return theSolid;}
+    G4tgrSolid* GetSolid() const {return theSolid;}
     const G4String& GetMaterialName() const {return theMaterialName;}
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
@@ -98,10 +100,14 @@ class G4tgrVolume
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;
 
+    G4double*  GetRGBColour() const {
+      return theRGBColour;
+    }
+
+
     friend std::ostream& operator<<(std::ostream& os, const G4tgrVolume& obj);
 
   protected:   
-
     G4String theName;   
       // Name of the volume
     G4String theType;   

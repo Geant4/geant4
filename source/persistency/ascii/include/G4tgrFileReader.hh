@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.hh,v 1.2 2008-11-12 08:41:19 arce Exp $
+// $Id: G4tgrFileReader.hh,v 1.3 2009-05-15 16:19:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,7 @@
 #include "globals.hh"
 
 #include <vector>
+#include <map>
 
 class G4tgrVolume;
 class G4tgrVolumeMgr;
@@ -61,8 +62,12 @@ class G4tgrFileReader
     G4bool ReadFiles();
 
     void AddTextFile(const G4String& fname) { theTextFiles.push_back( fname ); }
+    void AddTextFileParallel(const G4String& fname, G4int parallelID);
     void SetLineProcessor( G4tgrLineProcessor* lp ) { theLineProcessor = lp; }
     G4tgrLineProcessor* GetLineProcessor() const { return theLineProcessor; }
+
+  public:
+    static G4int ReadingParallelFile;
 
   protected:
 
@@ -74,6 +79,8 @@ class G4tgrFileReader
 
     std::vector<G4String> theTextFiles;
     G4tgrLineProcessor* theLineProcessor;
+
+    std::map<G4int,G4int> theParallelFiles;
 
 };
 

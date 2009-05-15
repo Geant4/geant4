@@ -24,47 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.hh,v 1.3 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgbParallelWorldCreator.cc,v 1.1 2009-05-15 16:25:47 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4tgbDetectorBuilder
-//
-// Class description:
-//
-// Builder of transient detector.
+// class G4tgbParallelWorldCreator
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
 // -------------------------------------------------------------------------
 
-#ifndef G4tgbDetectorBuilder_hh
-#define G4tgbDetectorBuilder_hh
+#include "G4tgbParallelWorldCreator.hh"
+#include "G4tgbParallelWorld.hh"
 
-#include "globals.hh"
-
-#include <string>
-#include <vector>
-#include <map>
-
-#include "G4VSolid.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-
-class G4tgbVolume;
-class G4tgrVolume;
- 
-//-------------------------------------------------------------------------- 
-class G4tgbDetectorBuilder 
-{ 
- public:  // with description
-
-  G4tgbDetectorBuilder();
-  ~G4tgbDetectorBuilder();
-
-  virtual const G4tgrVolume* ReadDetector();
-  virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop, G4int parallelID = -1 );
-
-};
-
-#endif
+//--------------------------------------------------------------------
+G4VUserParallelWorld* G4tgbParallelWorldCreator::CreateParallelWorld( const G4String& parallelWorldName, const G4int index )
+{
+  return new G4tgbParallelWorld( parallelWorldName, index );
+}

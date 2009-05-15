@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.7 2008-12-18 13:00:16 gunter Exp $
+// $Id: G4tgrVolume.cc,v 1.8 2009-05-15 16:25:31 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -104,6 +104,19 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 #endif
     }
 
+}
+
+
+G4tgrVolume::G4tgrVolume( const G4tgrVolume& vol )
+{
+  theName = vol.GetName();   
+  theType = vol.GetType();
+  theMaterialName = vol.GetMaterialName();   
+  theSolid = vol.GetSolid();
+  thePlacements  = vol.GetPlacements();
+  theVisibility   = vol.GetVisibility();
+  theRGBColour   = vol.GetRGBColour();
+  theCheckOverlaps = vol.GetCheckOverlaps();
 }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.hh,v 1.3 2008-12-18 12:58:28 gunter Exp $
+// $Id: G4tgbVolumeMgr.hh,v 1.4 2009-05-15 16:19:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,12 +75,14 @@ class G4tgbVolumeMgr
       // Get the only instance 
 
     void AddTextFile( const G4String& fname );
+    void AddTextFileParallel(const G4String& fname, G4int parallelID);
+
     G4VPhysicalVolume* ReadAndConstructDetector();
 
     void CopyVolumes();
       // Build a G4tgbVolume per each G4tgbVolume
 
-    G4tgbVolume* FindVolume( const G4String& volname);
+    G4tgbVolume* FindVolume( const G4String& volname, G4bool bMustExist = true);
       // Find a G4tgbVolume by name
 
     void RegisterMe( const G4tgbVolume* vol );
@@ -109,11 +111,11 @@ class G4tgbVolumeMgr
                                    const G4bool bExists = 0 );
       // Find a G4VPhysicalVolume if it already exists
 
-    G4VPhysicalVolume* GetTopPhysVol();
+    G4VPhysicalVolume* GetTopPhysVol(G4int parallelID = -1);
       // Get the top PV in the hierarchy tree: calls topLV, because
       // physicalvolumes are not placed until geometry is initialized
 
-    G4LogicalVolume* GetTopLogVol();
+    G4LogicalVolume* GetTopLogVol(G4int parallelID = -1);
       // Get the top LV in the hierarchy tree
 
     void BuildPhysVolTree();
@@ -135,6 +137,10 @@ class G4tgbVolumeMgr
       { theDetectorBuilder = db; }
     G4tgbDetectorBuilder* GetDetectorBuilder() const
       { return theDetectorBuilder; }
+
+  G4mssvol GetVolumeList() const {
+    return theVolumeList;
+  }
 
   private:
 

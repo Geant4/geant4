@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.hh,v 1.5 2008-12-18 12:59:14 gunter Exp $
+// $Id: G4tgrVolumeMgr.hh,v 1.6 2009-05-15 16:19:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,7 +84,7 @@ class G4tgrVolumeMgr
       // name to mean 'any character' or 'any substring'. If it is not found:
       // if exists is true, exit; if exists is false, return 0
 
-    const G4tgrVolume* GetTopVolume();  
+    const G4tgrVolume* GetTopVolume(G4int parallelID = -1);  
       // Find the top of the volume tree
 
     std::pair<G4mmapspl::iterator, G4mmapspl::iterator>

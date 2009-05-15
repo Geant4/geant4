@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.hh,v 1.4 2008-12-18 12:58:26 gunter Exp $
+// $Id: G4tgbVolume.hh,v 1.5 2009-05-15 16:19:48 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,8 @@ class G4tgbVolume
     G4tgbVolume( G4tgrVolume* vol);
 
     void ConstructG4Volumes( const G4tgrPlace* place,
-                             const G4LogicalVolume* parentLV );
+                             const G4LogicalVolume* parentLV,
+			     const G4int parallelID = -1);
       // Construct the G4VSolid, G4LogicalVolume and the G4VPhysicalVolume
       // of copy 'copyNo'
 
@@ -88,7 +89,8 @@ class G4tgbVolume
 
     G4VPhysicalVolume* ConstructG4PhysVol( const G4tgrPlace* place,
                                            const G4LogicalVolume* currentLV,
-                                           const G4LogicalVolume* parentLV );
+                                           const G4LogicalVolume* parentLV,
+					   const G4int parallelID = -1);
       // Construct the G4VPhysicalVolume placing 'curentLV' with position
       // given by the G4tgrPlace 'copyNo' inside 'parentLV'
 
