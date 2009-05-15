@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2009-05-15 07:17:52 kmura Exp $
+$Id: History,v 1.111 2009-05-15 09:34:36 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+=======
 15 May, 2009 K. Murakami (interfaces-V09-02-01)
  - G4UIExecutive : Remove batch mode handling
 
 13 May, 2009 K. Murakami (interfaces-V09-02-00)
  - G4UIExecutive : Add new class for automatic instantiation of user session
  - G4VUIshell : Add SetLsColor()
+
+7, May, 2009 L. Garnier
+ - G4UIQt.cc : Fix Compilation warning 
+ - G4VBasicShell.cc : Better command completion in command Line 
+   (need intercoms-V09-02-00)
 
 31, March, 2009 L.Garnier
  - Fix a compilation warning in G4Qt.cc
