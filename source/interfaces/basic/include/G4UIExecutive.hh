@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIExecutive.hh,v 1.1 2009-05-13 09:01:36 kmura Exp $
+// $Id: G4UIExecutive.hh,v 1.2 2009-05-15 07:15:16 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -50,36 +50,14 @@
 #ifndef G4UI_EXECUTIVE_H
 #define G4UI_EXECUTIVE_H 1
 
-#include "G4UImanager.hh"
-#include "G4UIsession.hh"
+#include "G4VUIshell.hh"
 
-#if defined(G4UI_USE_TCSH)
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#elif defined(G4UI_USE_XM)
-#include "G4UIXm.hh"
-
-#elif defined(G4UI_USE_WIN32)
-#include "G4UIWin32.hh"
-
-#elif defined(G4UI_USE_QT)
-#include "G4UIQt.hh"
-#include "G4Qt.hh"
-
-#else
-#include "G4UIterminal.hh"
-#include "G4UIcsh.hh"
-
-#endif
+class G4UIsession;
 
 class G4UIExecutive {
 private:
   G4UIsession* session;
   G4VUIshell* shell;
-
-  G4String batchname;
-  G4bool qbatch;
 
 public:
   G4UIExecutive(G4int argc=1, char** argv=0);
