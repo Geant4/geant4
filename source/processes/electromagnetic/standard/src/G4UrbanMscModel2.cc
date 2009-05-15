@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.23 2009-04-29 13:30:22 vnivanch Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.24 2009-05-15 09:26:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -932,12 +932,12 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
       if(xmean1 <= 0.999*xmeanth)
         return SimpleScattering(xmeanth,x2meanth);
 
-      // for  e- scattering
-      G4double c = coeffc1+coeffc2*y;
+      // from e- and muon scattering data                    
+      G4double c = coeffc1+coeffc2*y; ;                         
 
-      if(abs(c-3.) < 0.001)  c = 3.001;
-      if(abs(c-2.) < 0.001)  c = 2.001;
-      if(abs(c-1.) < 0.001)  c = 1.001;
+      if(abs(c-3.) < 0.001)  c = 3.001;      
+      if(abs(c-2.) < 0.001)  c = 2.001;      
+      if(abs(c-1.) < 0.001)  c = 1.001;      
 
       G4double c1 = c-1.;
 
