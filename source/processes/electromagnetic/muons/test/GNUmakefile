@@ -1,26 +1,31 @@
-# $Id: GNUmakefile,v 1.4 2004-02-10 18:07:27 vnivanch Exp $
+# $Id: GNUmakefile,v 1.5 2009-05-16 11:07:24 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 ifndef G4TARGET
-  G4TARGET := CrossSectionTest
+  G4TARGET := $(TESTTARGET)
 endif
 
 G4EXEC_BUILD := true
 
-
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += -DG4ANALYSIS_USE
+ifndef G4INSTALL
+  G4INSTALL = ../../../../../
 endif
+
+
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += -DG4ANALYSIS_USE_ROOT
+endif
+
 
 include $(G4INSTALL)/config/architecture.gmk
 
-ifdef G4ANALYSIS_USE
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
+ifdef G4ANALYSIS_USE_ROOT
+  CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+  LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
-
+#
