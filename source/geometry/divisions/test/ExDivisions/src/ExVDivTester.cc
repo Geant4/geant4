@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.6 2006-06-29 18:20:34 gunter Exp $
+// $Id: ExVDivTester.cc,v 1.7 2009-05-16 09:15:33 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExVDivTester Implementation file
@@ -260,7 +260,7 @@ void ExVDivTester::BuildParentVolumes( G4LogicalVolume* worldLog )
   {
     G4String parentstr = "parent-";
     std::ostringstream os;
-    os << ii << '\0';
+    os << ii;
     G4String buf = os.str();
     parentstr += buf;
     if ( thePosType == pvReflected )
@@ -313,7 +313,7 @@ void ExVDivTester::BuildChildrenVolumes()
   {
     G4String childlogstr = "childLog-";
     std::ostringstream os;
-    os << ii << '\0';
+    os << ii;
     G4String buf = os.str();
     childlogstr += buf;
     G4LogicalVolume* childLog = new G4LogicalVolume(theChildSolids[ii],
@@ -331,7 +331,7 @@ void ExVDivTester::BuildChildrenVolumes()
         G4cout << " @@@@ Building Child volume " << ii << G4endl;
       G4String childstr = "child-";
       std::ostringstream os;
-      os << ii << '\0';
+      os << ii;
       G4String buf = os.str();
       childstr += buf;
 
@@ -426,7 +426,7 @@ void ExVDivTester::BuildChildrenVolumes()
     {
       G4String childstr = "child-";
       std::ostringstream os;
-      os << ii << '\0';
+      os << ii;
       G4String buf = os.str();
       childstr += buf;
       if ( thePosType == pvReflected )
