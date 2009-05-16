@@ -35,6 +35,8 @@
 // 080801 protect negative avalable energy by T. Koi
 //        introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+// 090514 Fix bug in IC electron emission case 
+//        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -68,6 +70,7 @@ void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 
 void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
 {
+
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -459,7 +462,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
          p = std::sqrt ( p2 ); 
 
       aHadron.SetMomentum( Vector*p ); 
-                                      
+
     }
 
 // fill the result
@@ -576,7 +579,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       for(i=0; i<nPhotons; i++)
       {
         theSec = new G4DynamicParticle;    
-        theSec->SetDefinition(G4Gamma::Gamma());
+        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+        //theSec->SetDefinition(G4Gamma::Gamma());
+        theSec->SetDefinition( thePhotons->operator[](i)->GetDefinition() );
+        //But never cause real effect at least with G4NDL3.13 TK
         theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
         theResult.AddSecondary(theSec); 
         delete thePhotons->operator[](i);
