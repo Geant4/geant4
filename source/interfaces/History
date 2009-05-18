@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2009-05-15 09:34:36 lgarnier Exp $
+$Id: History,v 1.112 2009-05-18 05:03:10 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 =======
+18 May, 2009 K. Murakami (interfaces-V09-02-02)
+ - G4UIExecutive : fixed wrong #ifdef condition
+ - include changes by Laurent (7/May)
+
 15 May, 2009 K. Murakami (interfaces-V09-02-01)
  - G4UIExecutive : Remove batch mode handling
 
@@ -28,7 +32,6 @@ committal in the CVS repository !
 7, May, 2009 L. Garnier
  - G4UIQt.cc : Fix Compilation warning 
  - G4VBasicShell.cc : Better command completion in command Line 
-   (need intercoms-V09-02-00)
 
 31, March, 2009 L.Garnier
  - Fix a compilation warning in G4Qt.cc
