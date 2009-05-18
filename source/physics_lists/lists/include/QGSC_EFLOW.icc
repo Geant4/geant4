@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EFLOW.icc,v 1.4 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: QGSC_EFLOW.icc,v 1.5 2009-05-18 08:54:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Created as copy of QGSC
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
 // 26.04.2007 G.Folger  Use QCaptureAtRest for muon
 // 16.05.2007 V.Ivanchenko: rename EM builders
@@ -64,6 +65,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_EFLOW.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -73,6 +76,10 @@ template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSC_EFLOW","QGSC_CHIPS");
+  G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

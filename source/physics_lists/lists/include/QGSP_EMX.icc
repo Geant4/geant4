@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_EMX.icc,v 1.5 2007-05-16 11:35:36 vnivanch Exp $
+// $Id: QGSP_EMX.icc,v 1.6 2009-05-18 08:54:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2006  V.Ivanchenko
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 // 20.11.2006 G.Folger: add Tracking Cut for neutrons
 // 21.06.2006 V.Ivanchenko crerate from QGSP_EMV
 // 26.04.2007 G.Folger 
@@ -67,6 +68,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_EMX<T>::TQGSP_EMX(G4int ver):  T()
 {
   G4DataQuestionaire it(photon);
@@ -74,6 +77,10 @@ template<class T> TQGSP_EMX<T>::TQGSP_EMX(G4int ver):  T()
   G4cout <<G4endl;
   this->defaultCutValue = 7.*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP_EMV","QGSP_BERT_EMV");
+  G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics_option2(ver));
