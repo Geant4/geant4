@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2009-03-25 15:29:15 gcosmo Exp $
+$Id: History,v 1.139 2009-05-18 14:23:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18th, 2009 T.Nikitina - field-V09-02-02
+-------------------------
+- Enhanced algorithm G4ChordFinder::ApproxCurvePointS() in order to speedup
+  BrentLocator.
 
 March 25th, 2009 G.Cosmo - field-V09-02-01
 ------------------------
