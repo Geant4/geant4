@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIExecutive.icc,v 1.2 2009-05-15 07:15:16 kmura Exp $
+// $Id: G4UIExecutive.icc,v 1.3 2009-05-18 04:52:17 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -56,7 +56,7 @@
 
 
 /////////////////////////////////////////////////////
-#if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32) || defined(G4UI_USE_QT)
+#if defined(G4UI_USE_XM) || defined(G4UI_USE_QT)
 G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
 #else
 G4UIExecutive::G4UIExecutive(G4int, char**)
