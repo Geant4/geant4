@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.52 2009-05-15 12:52:07 tnikitin Exp $
+// $Id: G4ChordFinder.cc,v 1.53 2009-05-18 14:22:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -444,29 +444,30 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
 
   if(first)
   {
-      xa=0.;
-      ya=(PointG-Point_A).mag();
-      xb=(Point_A-CurrentF_Point).mag();
-      yb=-(PointG-CurrentF_Point).mag();
-      xc=(Point_A-Point_B).mag();
-      yc=-(CurrentE_Point-Point_B).mag();
+    xa=0.;
+    ya=(PointG-Point_A).mag();
+    xb=(Point_A-CurrentF_Point).mag();
+    yb=-(PointG-CurrentF_Point).mag();
+    xc=(Point_A-Point_B).mag();
+    yc=-(CurrentE_Point-Point_B).mag();
   }    
   else
   {
-     xa=0.;
-     ya=(Point_A-CurrentE_Point).mag();
-     xb=(Point_A-CurrentF_Point).mag();
-     yb=(PointG-CurrentF_Point).mag();
-     xc=(Point_A-Point_B).mag();
-     yc=-(Point_B-PointG).mag();
-     if(xb==0.){
+    xa=0.;
+    ya=(Point_A-CurrentE_Point).mag();
+    xb=(Point_A-CurrentF_Point).mag();
+    yb=(PointG-CurrentF_Point).mag();
+    xc=(Point_A-Point_B).mag();
+    yc=-(Point_B-PointG).mag();
+    if(xb==0.)
+    {
       EndPoint=
-      ApproxCurvePointV(CurveA_PointVelocity,CurveB_PointVelocity,
-                        CurrentE_Point,eps_step);
+      ApproxCurvePointV(CurveA_PointVelocity, CurveB_PointVelocity,
+                        CurrentE_Point, eps_step);
       return EndPoint;
-      }
-    
+    }
   }
+
   const G4double tolerance= 1.e-12;
   if(std::abs(ya)<=tolerance||std::abs(yc)<=tolerance)
   {
