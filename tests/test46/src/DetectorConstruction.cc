@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.12 2009-04-20 08:43:03 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.13 2009-05-18 11:14:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction()
+DetectorConstruction::DetectorConstruction():
+  logicWorld(0),physiWorld(0),logicECal(0),logicCrystal(0)
 {
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
