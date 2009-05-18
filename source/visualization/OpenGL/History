@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2009-05-14 16:42:27 lgarnier Exp $
+$Id: History,v 1.142 2009-05-18 20:16:58 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+18 May 2009, Joseph Perl (opengl-V09-02-05)
+ - Correct G4OpenGLViewerMessenger.hh
 
 14 May 2009, Laurent Garnier (opengl-V09-02-04)
  - G4OpenGLViewer : Add methods to manage print size and filename
