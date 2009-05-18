@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.6 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLViewerMessenger.hh,v 1.7 2009-05-18 09:07:12 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
@@ -52,6 +52,8 @@ private:
   static G4OpenGLViewerMessenger* fpInstance;
   G4UIdirectory* fpDirectory;
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
+  G4UIcommand* fpCommandPrintSize;
+  G4UIcommand* fpCommandPrintFilename;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
   G4UIcommand* fpCommandDisplayLightFront;
