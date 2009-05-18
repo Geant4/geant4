@@ -1,26 +1,37 @@
-# $Id: GNUmakefile,v 1.4 2009-05-15 16:31:22 arce Exp $
+# $Id: GNUmakefile,v 1.5 2009-05-18 15:46:06 arce Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
 
-name := G4persistency
-
-SUBDIRS := mctruth ascii
-SUBLIBS = G4mctruth G4geomtext
-
-ifdef G4LIB_BUILD_GDML
-  SUBDIRS += gdml
-  SUBLIBS += G4gdml
-endif
-
-GLOBLIBS  = libG4run.lib libG4event.lib
-GLOBLIBS += libG4tracking.lib libG4digits_hits.lib libG4track.lib
-GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
-GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
-
+name := G4geomtext
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL = ../../..
 endif
 
-include $(G4INSTALL)/config/globlib.gmk
+include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += \
+            -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
+            -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/particles/management/include \
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/geometry/solids/CSG/include \
+            -I$(G4BASE)/geometry/solids/BREPS/include \
+            -I$(G4BASE)/geometry/solids/specific/include \
+            -I$(G4BASE)/geometry/solids/Boolean/include \
+            -I$(G4BASE)/geometry/divisions/include \
+            -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/run/include \
+            -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/scoring/include \
+            -I$(G4BASE)/geometry/magneticfield/include \
+            -I$(G4BASE)/geometry/navigation/include \
+	    -I$(G4BASE)/track/include
+
+include $(G4INSTALL)/config/common.gmk
