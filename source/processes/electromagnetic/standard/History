@@ -1,4 +1,4 @@
-$Id: History,v 1.451 2009-05-18 12:23:52 urban Exp $
+$Id: History,v 1.452 2009-05-18 12:31:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-18 May 09:
-- G4UrbanMscModel2  - (L.Urban) a 'last' correction in tail tuning.
+
+18 May 09:  V.Ivant (emstand-V09-02-12)
+- G4UrbanMscModel2  - (L.Urban) correction in tail tuning using MuScat data
 
 15 May 09:  V.Ivant (emstand-V09-02-11)
 - G4WaterStopping  - fixed Ar data
