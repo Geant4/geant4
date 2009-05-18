@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.16 2009-05-14 14:19:32 ivana Exp $
+// $Id: G4ParameterisationPolycone.cc,v 1.17 2009-05-18 19:30:29 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolycone Implementation file
@@ -356,7 +356,7 @@ G4ParameterisationPolyconeZ( EAxis axis, G4int nDiv,
                              G4VSolid* msolid, DivisionType divType)
   : G4VParameterisationPolycone( axis, nDiv, width, offset, msolid, divType ),
     fNSegment(0),
-    fOrigParamMother(((G4Polycone*)msolid)->GetOriginalParameters())
+    fOrigParamMother(((G4Polycone*)fmotherSolid)->GetOriginalParameters())
 {
 
   CheckParametersValidity();
@@ -464,28 +464,54 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
     // Check if divided region does not span over more
     // than one z segment
   
-    // The start/end position of the divided region
-    G4double zstart 
-      = fOrigParamMother->Z_values[0] + foffset;
-    G4double zend 
-      = fOrigParamMother->Z_values[0] + foffset + fnDiv* fwidth;
-   
     G4int isegstart = -1;  // number of the segment containing start position
     G4int isegend = -1;    // number of the segment containing end position
-    G4int counter = 0;
-    while ( isegend < 0 && counter < fOrigParamMother->Num_z_planes-1 ) {
-      // first segment
-      if ( zstart >= fOrigParamMother->Z_values[counter]  &&
-           zstart  < fOrigParamMother->Z_values[counter+1] ) {
-         isegstart = counter;
-      }     
-      // last segment
-      if ( zend  > fOrigParamMother->Z_values[counter] &&
-           zend <= fOrigParamMother->Z_values[counter+1] ) {
-         isegend = counter;
-      }   
-      ++counter;   
+
+    if ( ! fReflectedSolid ) {
+      // The start/end position of the divided region
+      G4double zstart 
+        = fOrigParamMother->Z_values[0] + foffset;
+      G4double zend 
+        = fOrigParamMother->Z_values[0] + foffset + fnDiv* fwidth;
+   
+      G4int counter = 0;
+      while ( isegend < 0 && counter < fOrigParamMother->Num_z_planes-1 ) {
+        // first segment
+        if ( zstart >= fOrigParamMother->Z_values[counter]  &&
+             zstart  < fOrigParamMother->Z_values[counter+1] ) {
+           isegstart = counter;
+        }     
+        // last segment
+        if ( zend  > fOrigParamMother->Z_values[counter] &&
+             zend <= fOrigParamMother->Z_values[counter+1] ) {
+          isegend = counter;
+        }   
+        ++counter;   
+      }
     }
+    else  {
+      // The start/end position of the divided region
+      G4double zstart 
+        = fOrigParamMother->Z_values[0] - foffset;
+      G4double zend 
+        = fOrigParamMother->Z_values[0] - ( foffset + fnDiv* fwidth);
+   
+      G4int counter = 0;
+      while ( isegend < 0 && counter < fOrigParamMother->Num_z_planes-1 ) {
+        // first segment
+        if ( zstart <= fOrigParamMother->Z_values[counter]  &&
+             zstart  > fOrigParamMother->Z_values[counter+1] ) {
+           isegstart = counter;
+        }     
+        // last segment
+        if ( zend  < fOrigParamMother->Z_values[counter] &&
+             zend >= fOrigParamMother->Z_values[counter+1] ) {
+           isegend = counter;
+        }   
+        ++counter;   
+      }
+    }
+      
   
     if ( isegstart != isegend ) {
       G4cerr << "WARNING - "
@@ -520,8 +546,12 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   
   if ( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ) {
     // The position of the centre of copyNo-th division
-    G4double posi 
-      = fOrigParamMother->Z_values[0] + foffset + (2*copyNo + 1) * fwidth/2.;
+    G4double posi = fOrigParamMother->Z_values[0];
+      
+    if ( ! fReflectedSolid )  
+      posi += foffset + (2*copyNo + 1) * fwidth/2.;
+    else
+      posi -= foffset + (2*copyNo + 1) * fwidth/2.;
     
     physVol->SetTranslation( G4ThreeVector(0, 0, posi) );
   }   
@@ -583,20 +613,38 @@ ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
   }
   
   if ( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH ) {
-    origparam.Z_values[0] = - fwidth/2.;
-    origparam.Z_values[1] = fwidth/2.;
+    if ( ! fReflectedSolid ) {
+      origparam.Z_values[0] = - fwidth/2.;
+      origparam.Z_values[1] = fwidth/2.;
 
-    // The position of the centre of copyNo-th division
-    G4double posi 
-      = fOrigParamMother->Z_values[0] + foffset + (2*copyNo + 1) * fwidth/2.;
+      // The position of the centre of copyNo-th division
+      G4double posi 
+        = fOrigParamMother->Z_values[0] + foffset + (2*copyNo + 1) * fwidth/2.;
     
-    // The first and last z sides z values
-    G4double zstart = posi - fwidth/2.;
-    G4double zend = posi + fwidth/2.;
-    origparam.Rmin[0] = GetRmin(zstart, fNSegment); 
-    origparam.Rmax[0] = GetRmax(zstart, fNSegment);  
-    origparam.Rmin[1] = GetRmin(zend, fNSegment); 
-    origparam.Rmax[1] = GetRmax(zend, fNSegment);  
+      // The first and last z sides z values
+      G4double zstart = posi - fwidth/2.;
+      G4double zend = posi + fwidth/2.;
+      origparam.Rmin[0] = GetRmin(zstart, fNSegment); 
+      origparam.Rmax[0] = GetRmax(zstart, fNSegment);  
+      origparam.Rmin[1] = GetRmin(zend, fNSegment); 
+      origparam.Rmax[1] = GetRmax(zend, fNSegment);  
+    }
+    else {
+      origparam.Z_values[0] = fwidth/2.;
+      origparam.Z_values[1] = - fwidth/2.;
+
+      // The position of the centre of copyNo-th division
+      G4double posi 
+        = fOrigParamMother->Z_values[0] - ( foffset + (2*copyNo + 1) * fwidth/2.);
+    
+      // The first and last z sides z values
+      G4double zstart = posi + fwidth/2.;
+      G4double zend = posi - fwidth/2.;
+      origparam.Rmin[0] = GetRmin(zstart, fNSegment); 
+      origparam.Rmax[0] = GetRmax(zstart, fNSegment);  
+      origparam.Rmin[1] = GetRmin(zend, fNSegment); 
+      origparam.Rmax[1] = GetRmax(zend, fNSegment);  
+    }
 
     // It can happen due to rounding errors
     if ( origparam.Rmin[0]    < 0.0 ) origparam.Rmin[0] = 0.0;
