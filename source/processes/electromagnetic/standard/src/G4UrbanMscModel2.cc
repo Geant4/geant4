@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.24 2009-05-15 09:26:42 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.25 2009-05-18 12:21:40 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -901,7 +901,8 @@ G4double G4UrbanMscModel2::SampleCosineTheta(G4double trueStepLength,
     if (tau >= taubig) cth = -1.+2.*G4UniformRand();
     else if (tau >= tausmall)
     {
-      G4double xsi = 3.0;  
+      // Z dependent xsi
+      G4double xsi = 3.-1.60e-4*Z2;
       G4double x0 = 1.;
       G4double a = 1., ea = 0., eaa = 1.;
       G4double b=2.,b1=3.,bx=1.,eb1=3.,ebx=1.;
