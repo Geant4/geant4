@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleDiv.cc,v 1.3 2006-06-29 18:19:03 gunter Exp $
+// $Id: exampleDiv.cc,v 1.4 2009-05-18 13:49:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-#include "ExDivVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "ExDivTesterBox.hh"
@@ -127,7 +127,7 @@ int main(int argc,char** argv)
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
-  G4VisManager* visManager = new ExDivVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    
