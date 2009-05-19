@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.hh,v 1.4 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgbVolumeMgr.hh,v 1.5 2009-05-19 20:24:32 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -111,11 +111,11 @@ class G4tgbVolumeMgr
                                    const G4bool bExists = 0 );
       // Find a G4VPhysicalVolume if it already exists
 
-    G4VPhysicalVolume* GetTopPhysVol(G4int parallelID = -1);
+    G4VPhysicalVolume* GetTopPhysVol();
       // Get the top PV in the hierarchy tree: calls topLV, because
       // physicalvolumes are not placed until geometry is initialized
 
-    G4LogicalVolume* GetTopLogVol(G4int parallelID = -1);
+    G4LogicalVolume* GetTopLogVol();
       // Get the top LV in the hierarchy tree
 
     void BuildPhysVolTree();

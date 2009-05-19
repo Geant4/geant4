@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.6 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgbVolumeMgr.cc,v 1.7 2009-05-19 20:23:58 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -290,9 +290,9 @@ G4tgbVolumeMgr::FindG4PhysVol( const G4String& name, const G4bool exists )
 
 
 //---------------------------------------------------------------------
-G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol(G4int parallelID)
+G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol()
 {
-  G4LogicalVolume* lv = GetTopLogVol(parallelID); 
+  G4LogicalVolume* lv = GetTopLogVol();
   G4VPhysicalVolume* pv = ( *(thePVs.find( lv->GetName() )) ).second;
 
 #ifdef G4VERBOSE
@@ -308,7 +308,7 @@ G4VPhysicalVolume* G4tgbVolumeMgr::GetTopPhysVol(G4int parallelID)
 
 
 //---------------------------------------------------------------------
-G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol(G4int parallelID)
+G4LogicalVolume* G4tgbVolumeMgr::GetTopLogVol()
 {
   //----------- Start from any G4LogicalVolume, because if you go upwards
   //            you will always end at the top  
