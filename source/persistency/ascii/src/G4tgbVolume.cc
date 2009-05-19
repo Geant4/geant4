@@ -965,15 +965,6 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 	  std::vector<G4Material*> thePatientMaterials;
 	  thePatientMaterials.push_back( currentLV->GetMaterial() );
 	  param->SetMaterials( thePatientMaterials );
-	  uint32_t* mateIDs = new uint32_t(nCopies);
-	  G4cout << " ncopies " << nCopies << G4endl;
-	  /*param->SetMaterialIndices( mateIDs ); 
-	  for( size_t ij = 0; ij < nCopies; ij++) {
-	    mateIDs[ij] = 0;
-	    }*/
-	  /*	
-	    mateIDs[ii] = 0;
-	    }*/
 	  param->BuildContainerSolid(parentLV->GetSolid());
 	  if( parentLV->GetSolid()->GetEntityType() != "G4Box" ) {
 	    G4String ErrMessage = "Container is " +
