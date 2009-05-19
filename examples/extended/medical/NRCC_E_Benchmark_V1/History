@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009-05-19 16:08:44 maire Exp $
+$Id: History,v 1.2 2009-05-19 16:17:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     
+17-05-09 mma
+- first commit and tag eBenchmarkV1-V09-02-00
 
 01-03-09 mma
 - TestBruce renamed NRCC_E_Benchmark_V1
