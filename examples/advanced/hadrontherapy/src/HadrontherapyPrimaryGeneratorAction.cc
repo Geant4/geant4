@@ -76,12 +76,12 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   particleGun -> SetParticleDefinition(particle); 
 
   // Define the energy of primary particles:
-  // gaussian distribution with mean energy = 64.00 *MeV
-  // and sigma = 300.0 *keV
-  G4double defaultMeanKineticEnergy = 64.00 *MeV;
+  // gaussian distribution with mean energy = 62.0 *MeV
+  // and sigma = 400.0 *keV
+  G4double defaultMeanKineticEnergy = 62.0 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 300.0 *keV;
+  G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
 
   // Define the parameters of the initial position: 

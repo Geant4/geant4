@@ -58,9 +58,17 @@
 #/vis/specify RODetectorLog 1
 /vis/viewer/update
 
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
+
 # SETTING FOR THE RANGE SHIFTER 
 #/beamLine/RangeShifter/thickness 0.01 mm
 #/beamLine/RangeShifter/RSMat Air
 #/tracking/verbose 1
 /vis/viewer/flush
-/run/beamOn 10000
+/run/beamOn 100

@@ -44,10 +44,12 @@
 #/vis/viewer/update
 
 ##########################
-# Set here the cut and the step max for the tracking 
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
 #
 /physic/setCuts 0.01 mm
-/Step/waterPhantomStepMax 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
 
 ###  IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 ###  THE FOLLOWIG PARAMETERS
@@ -63,8 +65,8 @@
 #
 /gun/particle proton
 /beam/energy/meanEnergy 62 MeV
-/beam/energy/sigmaEnergy 300 keV
+/beam/energy/sigmaEnergy 400 keV
 /beam/position/Xposition -2700 mm
 
 
-/run/beamOn 10000
+/run/beamOn 20000

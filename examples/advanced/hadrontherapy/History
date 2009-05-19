@@ -11,6 +11,10 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+19.05.2009 F.Romano; Tag hadrontherapy-V09-02-11
+           - Corrected the stepMax value in each macro in order to avoid 
+	     a wrong dose deposition in the first slice.
+	   - Modified and revised the README and macro files.
 
 15.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-10
            - Corrected a but in the call of a physic list
