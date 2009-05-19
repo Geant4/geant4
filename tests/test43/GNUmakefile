@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2008-01-21 10:57:28 gunter Exp $
+# $Id: GNUmakefile,v 1.3 2009-05-19 09:14:48 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -15,13 +15,13 @@ endif
 
 all: lib bin
 
-ifdef G4ANALYSIS_USE
+ifdef G4ANALYSIS_USE_ROOT
   CPPFLAGS += -DG4ANALYSIS_USE
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-ifdef G4ANALYSIS_USE
+ifdef G4ANALYSIS_USE_ROOT
   CPPFLAGS += `root-config --cflags`
   LOADLIBS += `root-config --ldflags --libs`
 endif
