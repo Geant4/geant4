@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.5 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.6 2009-05-19 14:57:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -41,6 +41,8 @@
 //                  - apply internal high-energy limit only in constructor 
 //                  - do not apply low-energy limit (default is 0)
 //                  - do not apply production threshold on secondaries
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they might be checked later on
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -99,11 +101,13 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
     {
       crossSectionHandler->Clear();
       delete crossSectionHandler;
+      crossSectionHandler = 0;
     }
   if (shellCrossSectionHandler)
     {
       shellCrossSectionHandler->Clear();
       delete shellCrossSectionHandler;
+      shellCrossSectionHandler =0;
     }
 
   //Re-initialize cross section handlers

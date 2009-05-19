@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.4 2009-05-19 14:57:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -38,6 +38,8 @@
 //                  - simplify sampling of deexcitation by using cut in energy
 //                  - set activation of Auger "false"
 //                  - remove initialisation of element selectors
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they might be checked later on
 //
 
 #include "G4LivermoreIonisationModel.hh"
@@ -113,13 +115,22 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
     }
 
   //Read energy spectrum
-  if (energySpectrum) delete energySpectrum;
+  if (energySpectrum) 
+    {
+      delete energySpectrum;
+      energySpectrum = 0;
+    }
   energySpectrum = new G4eIonisationSpectrum();
   if (verboseLevel > 0)
     G4cout << "G4VEnergySpectrum is initialized" << G4endl;
 
   //Initialize cross section handler
-  if (crossSectionHandler) delete crossSectionHandler;
+  if (crossSectionHandler) 
+    {
+      delete crossSectionHandler;
+      crossSectionHandler = 0;
+    }
+
   G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
   crossSectionHandler = new G4eIonisationCrossSectionHandler(energySpectrum,interpolation,
 							     LowEnergyLimit(),HighEnergyLimit(),

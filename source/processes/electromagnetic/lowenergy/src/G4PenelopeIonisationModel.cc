@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.4 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.5 2009-05-19 14:57:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -36,6 +36,8 @@
 //                  - do not apply low-energy limit (default is 0)
 //                  - added MinEnergyCut method
 //                  - do not change track status
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they might be checked later on
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -144,13 +146,18 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
     {
       crossSectionHandler->Clear();
       delete crossSectionHandler;
+      crossSectionHandler = 0;
     }
 
    if (theXSTable)
     {
       for (size_t i=0; i<theXSTable->size(); i++)
-	delete (*theXSTable)[i];
+	{
+	  delete (*theXSTable)[i];
+	  (*theXSTable)[i] = 0;
+	}
       delete theXSTable;
+      theXSTable = 0;
      }
 
   crossSectionHandler = new G4CrossSectionHandler();

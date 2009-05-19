@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.4 2009-05-19 14:57:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -39,6 +39,9 @@
 //                  - do not initialize element selectors
 //                  - use cut value from the interface 
 //                  - fixed bug in sampling of angles between keV and MeV
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they might be checked later on
+//
 
 #include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -108,7 +111,12 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
       G4Exception();
     }
   //Prepare energy spectrum
-  if (energySpectrum) delete energySpectrum;
+  if (energySpectrum) 
+    {
+      delete energySpectrum;
+      energySpectrum = 0;
+    }
+
   energyBins.clear();
   for(size_t i=0; i<15; i++) 
     {
@@ -128,7 +136,11 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
     G4cout << "G4eBremsstrahlungSpectrum is initialized" << G4endl;
 
   //Initialize cross section handler
-  if (crossSectionHandler) delete crossSectionHandler;
+  if (crossSectionHandler) 
+    {
+      delete crossSectionHandler;
+      crossSectionHandler = 0;
+    }
   G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
   crossSectionHandler = new G4BremsstrahlungCrossSectionHandler(energySpectrum,interpolation);
   crossSectionHandler->Initialise(0,LowEnergyLimit(),HighEnergyLimit(),

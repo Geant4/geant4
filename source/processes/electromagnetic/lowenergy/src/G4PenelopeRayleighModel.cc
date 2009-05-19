@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4PenelopeRayleighModel.cc,v 1.4 2009-05-19 14:57:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -34,6 +34,8 @@
 // 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
 //                  - apply internal high-energy limit only in constructor 
 //                  - do not apply low-energy limit (default is 0)
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            PrepareConstants(), since they might be checked later on
 //
 
 #include "G4PenelopeRayleighModel.hh"
@@ -523,10 +525,16 @@ void G4PenelopeRayleighModel::PrepareConstants()
   Xlow=1e-04;
   Xhigh=1e06;
   if (samplingFunction_x)
-    delete samplingFunction_x;
+    {
+      delete samplingFunction_x;
+      samplingFunction_x = 0;
+    }
   if (samplingFunction_xNoLog)
-    delete samplingFunction_xNoLog;
- 
+    {
+      delete samplingFunction_xNoLog;
+      samplingFunction_xNoLog = 0;
+    }
+
   samplingFunction_x = new G4DataVector();
   samplingFunction_xNoLog = new G4DataVector();
  
