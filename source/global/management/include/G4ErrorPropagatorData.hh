@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.hh,v 1.4 2009-05-14 13:46:40 arce Exp $
+// $Id: G4ErrorPropagatorData.hh,v 1.5 2009-05-19 13:31:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,9 +37,7 @@
 //   Utility class to provide access to mode, state, target 
 //   and manager verbosity for the error propagation classes.
 
-// History:
 // - Created. P.Arce, 2004.
-// - Added G4ErrorStage to account for error deflation
 // --------------------------------------------------------------------
 
 #ifndef G4ErrorPropagatorData_HH
@@ -58,7 +56,7 @@ enum G4ErrorState { G4ErrorState_PreInit = 1,
                     G4ErrorState_StoppedAtTarget };
 
 enum G4ErrorStage  { G4ErrorStage_Inflation = 1,
-		     G4ErrorStage_Deflation };
+                     G4ErrorStage_Deflation };
 
 class G4ErrorTarget;
 
