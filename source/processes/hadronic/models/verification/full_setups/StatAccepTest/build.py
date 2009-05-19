@@ -277,9 +277,9 @@ setupFile.write( "  export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
 setupFile.write( "else \n")
 setupFile.write( "  export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation2.0 \n" )
 setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadioactiveDecay3.2 \n" )
-setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW5.1 \n" )
-setupFile.write( "  export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.12 \n")
-setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.12 \n")
+setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW6.5 \n" )
+setupFile.write( "  export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
+setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
 setupFile.write( "fi \n")
 #
 setupFile.write( "echo --- Data libraries --- \n")
@@ -290,10 +290,7 @@ setupFile.write( "echo NeutronHPCrossSections=$NeutronHPCrossSections \n")
 setupFile.write( "echo G4NEUTRONHPDATA=$G4NEUTRONHPDATA \n")
 setupFile.write( "echo ---------------------- \n")
 #
-if ( REFERENCE.find( "9.2") >= 0 ) :
-    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP-2.0.3.3 \n" )
-else :
-    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
+setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
 #
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
 setupFile.write( "export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib \n" )
@@ -321,6 +318,9 @@ setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
 setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
 
 setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
+
+setupFile.write( "export EXPAT_DIR=$DIR_INSTALLATIONS/dirExtra/dirExpat \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$EXPAT_DIR/lib:$LD_LIBRARY_PATH \n" )
 
 setupFile.close()
 
