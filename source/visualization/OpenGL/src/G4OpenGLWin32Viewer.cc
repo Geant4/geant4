@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.19 2009-05-20 10:20:08 lgarnier Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.20 2009-05-20 13:19:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,8 +119,8 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
     done = true;
   }  
   
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   int x_res=GetSystemMetrics(SM_CXSCREEN);
   int y_res=GetSystemMetrics(SM_CYSCREEN);
   
@@ -131,7 +131,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
                            //			   0,0,
                            fVP.GetWindowAbsoluteLocationHintX(x_res),
                            fVP.GetWindowAbsoluteLocationHintY(y_res),
-			   fWinSize_x,fWinSize_y,
+			   getWinWidth(), getWinHeight(),
 			   NULL, NULL, 
 			   ::GetModuleHandle(NULL),
 			   NULL);
