@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ls g4ge*.txt | grep -v cutsPerRegion | grep -v _SD | grep -v parallel | 
+ls sg4ge*.txt | grep -v cutsPerRegion | grep -v _SD | grep -v parallel | 
 while read filename ; do
   type1="`echo "$filename" | cut -d "_" -f2`"
   type="`echo "$type1" | cut -d "." -f1`"
