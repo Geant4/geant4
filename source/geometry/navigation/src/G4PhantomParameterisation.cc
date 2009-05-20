@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.5 2009-05-19 18:27:13 arce Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.6 2009-05-20 08:27:10 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -145,7 +145,7 @@ GetMaterialIndex( size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  if( ! fMaterialIndices ) return 0;
+  if( !fMaterialIndices ) { return 0; }
   return *(fMaterialIndices+copyNo);
 }
 
