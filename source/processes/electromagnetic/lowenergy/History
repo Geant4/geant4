@@ -1,4 +1,4 @@
-$Id: History,v 1.370 2009-05-14 10:58:57 pandola Exp $
+$Id: History,v 1.371 2009-05-20 09:27:46 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.05.2009, L. Pandola, tag emlowen-V09-02-38
+            Update Penelope models, G4LivermoreIonisationModel and 
+            G4LivermoreBremsstrahlungModel; pointers deleted in the 
+            Initialise() method are explicitely zeroed 
+            (see tag emlowen-V09-02-37)
+
 14.05.2009, L. Pandola, tag emlowen-V09-02-37
             Correct G4PenelopeBremsstrahlungModel to get rid of a crash 
             for re-inizialitation
