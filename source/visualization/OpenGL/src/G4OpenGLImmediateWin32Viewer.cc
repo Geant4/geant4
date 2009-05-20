@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.17 2009-01-13 09:47:05 lgarnier Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.18 2009-05-20 10:15:37 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
 
 #include "G4OpenGLImmediateWin32Viewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
 
