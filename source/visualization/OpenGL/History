@@ -1,12 +1,12 @@
-$Id: History,v 1.142 2009-05-18 20:16:58 perl Exp $
+$Id: History,v 1.143 2009-05-20 13:33:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                      Category History file
-                      ---------------------
+           Category History file for visualization/OpenGL
+           ----------------------------------------------
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-History file for visualization/OpenGL
--------------------------------------
+20 May 2009, Laurent Garnier (opengl-V09-02-06)
+ - Fixed compilation errors on WIN32-VC for WIN32 specific drivers.
+
 18 May 2009, Joseph Perl (opengl-V09-02-05)
  - Correct G4OpenGLViewerMessenger.hh
 
