@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.18 2009-05-20 10:15:37 lgarnier Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.19 2009-05-20 10:19:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, fWinSize_x, fWinSize_y);
+  glViewport (0, 0, getWinWidth(), getWinHeight());
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
