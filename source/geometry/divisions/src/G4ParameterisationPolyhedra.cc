@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.18 2009-05-18 19:30:29 ivana Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.19 2009-05-20 08:35:52 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -287,12 +287,10 @@ G4ParameterisationPolyhedraPhi( EAxis axis, G4int nDiv,
 
   if( divType == DivWIDTH )
   {
-    fnDiv = CalculateNDiv( deltaPhi, width, offset );
+    fnDiv = msol->GetNumSide();
   }
-  else if( divType == DivNDIV )
-  {
-    fwidth = CalculateWidth( deltaPhi, nDiv, offset );
-  }
+
+  fwidth = CalculateWidth( deltaPhi, fnDiv, 0.0 );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )
@@ -347,7 +345,7 @@ void G4ParameterisationPolyhedraPhi::CheckParametersValidity()
 
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
 
-  if( origparamMother->numSide != fnDiv )
+  if( origparamMother->numSide != fnDiv &&  fDivisionType != DivWIDTH)
   { 
     G4cerr << "ERROR - "
            << "G4ParameterisationPolyhedraPhi::CheckParametersValidity()"
