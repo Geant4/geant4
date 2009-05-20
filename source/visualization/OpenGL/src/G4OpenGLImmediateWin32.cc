@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.12 2009-01-19 16:53:42 lgarnier Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.13 2009-05-20 09:58:10 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4OpenGLImmediateWin32.hh"
 #include "G4OpenGLImmediateWin32Viewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
   G4VGraphicsSystem ("OpenGLImmediateWin32",
