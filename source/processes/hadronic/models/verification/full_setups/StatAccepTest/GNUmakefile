@@ -2,13 +2,7 @@ name := mainStatAccepTest
 G4TARGET := $(name)
 G4EXLIB := true
 
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
-
 include $(G4INSTALL)/config/architecture.gmk
-
-#include hadronic_lists.gmk
 
 .PHONY: all
  
@@ -22,3 +16,6 @@ ifdef G4ANALYSIS_USE
   LOADLIBS += `aida-config --lib`
 endif
 
+ifdef FULLY_STATIC_EXECUTABLE
+  LDFLAGS  += -static
+endif 

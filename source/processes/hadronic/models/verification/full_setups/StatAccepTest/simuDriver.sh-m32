@@ -15,11 +15,10 @@
 #   10) Number of Events; e.g. 5k
 #   10) Bfield; e.g. 4.0tesla
 #
-# This script invokes the Python  build.py  that writes the setup,
-# builds the executable, and writes the Geant4 command file.
-# After that, this script eventually (if the flag is on) builds the
-# executable  pvalue  and then calls the Python script  dirStat/driver.py  
-# that does the Statistical tests.
+# This script invokes the Python  build.py  that writes the setup
+# and the Geant4 command file, and then run the simulation(s).
+# After that, this script eventually (if the flag is on) calls the 
+# Python script  dirStat/driver.py  that does the Statistical tests.
 #
 # Notice that the "LABEL" which specifies all the input parameters
 # does not contain the Bfield in the default case of zero magnetic field.
@@ -52,6 +51,9 @@ echo ' ENERGY      =' $ENERGY
 echo ' EVENTS      =' $EVENTS
 echo ' BFIELD      =' $BFIELD
 #
+export UNAMEI=`uname -i`
+echo ' UNAMEI      =' $UNAMEI
+
 #--- Run the first reference ---
 #
 ( if [ X$SIM_REF1 == XYes ] ; then
@@ -69,7 +71,7 @@ echo ' BFIELD      =' $BFIELD
       fi
     fi
     ###echo ' 1) LABEL=' $LABEL
-    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD $UNAMEI ;
     if [ $? != 0 ] ; then
 	echo ' ***ERROR*** from: python build.py ... ! exitCode = 11' ;
 	exit 11 ;
@@ -99,16 +101,9 @@ echo ' BFIELD      =' $BFIELD
     echo '  ' ;
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
-    rm -rf tmp/ ;
-    ln -sfn GNUmakefile-2 GNUmakefile ; #***LOOKHERE*** Use GNUmakefile-1 before G4 8.2
-    linux32 gmake ;
-    if [ $? != 0 ] ; then
-	echo ' ***ERROR*** from: gmake ! exitCode = 13' ;  
-	exit 13 ;	
-    fi    
-    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
-    linux32 mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
-###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+
+    linux32 mainStatAccepTest-$REF-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
+
     EXITCODE=$? ;
     if [ $EXITCODE != 0 ] ; then
 	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 14' ;  
@@ -147,7 +142,7 @@ fi
       fi
     fi
     ###echo ' 2) LABEL=' $LABEL ;
-    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD ;
+    python build.py $REF $PHYSICS $CALORIMETER $PARTICLE $ENERGY $EVENTS $BFIELD $UNAMEI ;
     if [ $? != 0 ] ; then
 	echo ' ***ERROR*** from: python build.py ... ! exitCode = 21' ;
 	exit 21	;
@@ -160,16 +155,9 @@ fi
 	exit 22 ;	
     fi
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
-    rm -rf tmp/ ;
-    ln -sfn GNUmakefile-2 GNUmakefile ; #***LOOKHERE*** Use GNUmakefile-1 before G4 8.2
-    linux32 gmake ;
-    if [ $? != 0 ] ; then
-	echo ' ***ERROR*** from: gmake ! exitCode = 23' ; 
-	exit 23 ;	
-    fi    
-    mv bin/$G4SYSTEM/mainStatAccepTest bin/$G4SYSTEM/mainStatAccepTest-$REF-$PHYSICS ;
-    linux32 mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL > output.log-$LABEL 2>&1 ;
-###    mainStatAccepTest-$REF-$PHYSICS run.g4-$LABEL ;
+
+    linux32 mainStatAccepTest-$REF-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
+
     EXITCODE=$? ;
     if [ $EXITCODE != 0 ] ; then
 	echo ' ***ERROR*** from: mainStatAccepTest-... run.g4-... ! exitCode = 24' ;   
@@ -215,12 +203,7 @@ fi
 	    exit 31 ;	
 	fi
 	cd dirStat/ ;
-	rm -f pvalue.o pvalue ;
-	linux32 gmake ;
-	if [ $? != 0 ] ; then
-	    echo ' ***ERROR*** from: gmake ! exitCode = 32' ; 
-	    exit 32 ;	
-	fi    
+
 	python driver.py $REF1 $REF2 $LABEL ; 
 	if [ $? != 0 ] ; then
 	    echo ' ***ERROR*** from: python driver.py ... ! exitCode = 33' ;   

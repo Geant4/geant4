@@ -1,8 +1,11 @@
+#!/bin/sh
 #
 #***LOOKHERE***
-export VO_GEANT4_SW_DIR=/data/dirGrid/dirDec07
+export VO_GEANT4_SW_DIR=$PWD/..
 #
 export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
+#
+###export FULLY_STATIC_EXECUTABLE=1
 #
 # ===========
 # === GCC ===
@@ -23,7 +26,7 @@ export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 #
 export G4SYSTEM=Linux-g++
 #
-export G4_RELEASE=dirGeant4-9.0.p01
+export G4_RELEASE=dirGeant4-9.2.p01
 #
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib
@@ -71,3 +74,4 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib
 # --- PAW
 export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW
 #
+export QGSP=1

@@ -45,7 +45,7 @@ fileLog = "outputPvalues.log" + "-" + generalCase   # Log file for pvalues.
 print "    fileLog = ", fileLog
 
 # Execute the  pvalue  executable that does the Statistical tests.
-resultCode = os.system( "./pvalue > " + fileLog + " 2>&1 " )
+resultCode = os.system( "./pvalue-`uname -i` > " + fileLog + " 2>&1 " )
 if ( resultCode != 0 ) :
     print ' ***ERROR*** from: os.system( ./pvalue ... ) ! code=', resultCode
     sys.exit( 53 )

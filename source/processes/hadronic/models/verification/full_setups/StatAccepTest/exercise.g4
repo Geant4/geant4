@@ -4,19 +4,24 @@
 # statistical acceptance suite, based on a Calorimeter setup.
 # The user has to make the following choices (in practice, 
 # commenting/uncommeting few lines below):
-#  1) Choice of the  * Particle Type * :
+#  1) Production range cut :
+#     by default the range cut is set to 0.7 mm ; 
+#     to set it explicitly, e.g. to 1 cm, you need the following
+#     macro command:
+#       /run/setCut 1.0 cm
+#  2) Choice of the  * Particle Type * :
 #       mu-, mu+, e-, e+, gamma, 
 #       pi-, pi+, kaon-, kaon+, kaon0L, 
 #       neutron, proton,
 #       anti_neutron, anti_proton,
 #       deuteron, triton, alpha.
-#  2) Choice of the  * Beam Energy * :
+#  3) Choice of the  * Beam Energy * :
 #       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 80,
 #       100, 120, 150, 180, 200, 250, 300, 1000    GeV.
-#  3) Choice is of the uniform magnetic field along the Y-direction.
+#  4) Choice is of the uniform magnetic field along the Y-direction.
 #     By default, it is 0.0 . 
 #     Explicit unit (e.g. tesla) should be used to express the B value.
-#  4) Choice of the  * Calorimeter Type * :
+#  5) Choice of the  * Calorimeter Type * :
 #       I) Absorber and Active materials (and whether it is
 #          an homogeneous calorimeter or a sampling one):
 #            Fe-Sci, Cu-Sci, Pb-Sci, Cu-LAr, Pb-LAr, W-LAr  (Sampling) 
@@ -53,6 +58,10 @@
 /run/verbose 1 
 /event/verbose 0 
 /tracking/verbose 0 
+#
+#=======================  PRODUCTION RANGE CUT ==============
+#
+#/run/setCut 1.0 cm
 #
 #=======================  PARTICLE TYPE  ====================
 #

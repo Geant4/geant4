@@ -1,6 +1,16 @@
                  History file
                  ------------
 
+21-May-2009 - A.Ribon (statAccepTest-V09-02-02)
+- Ready for June 2009 release testing (G4 9.3.beta)
+  with the new approach: building a single executable
+  for all Physics Lists, avoiding compilation on
+  the Grid site. 
+  Treat 32-bit and 64-bit architectures together,
+  simply with two executables, with the same root
+  name, but different final part: -`uname -i` .
+
+
 20-May-2009 - A.Ribon (statAccepTest-V09-02-01)
 - Ready for June 2009 release testing (G4 9.3.beta)
   with the old approach (i.e. building the

@@ -1,5 +1,5 @@
 
- Last update: 24-Feb-2009
+ Last update: 21-May-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -22,12 +22,39 @@
  If you want to run on your computer, then you need to modify
  the setup script: look at  exerciseSetup.sh  and  build.py .
 
- In the main program  * mainStatAccepTest.cc *  you can select 
- the Physics List (LHEP, QGSP, QGSP_BERT, QGSP_BIC), in the macro
- command file  * exercise.g4 *  you can choose which particle to shoot,
- the beam energy, the number of events, and the kind of calorimeter
- you are interested in, and also, eventually, a transverse magnetic 
- field (see that command file to look at the various options available).
+ If you want to run a simulation with a Geant4 version before 9.2,
+ then you need to specify the Physics List inside the main
+ program, mainStatAccepTest.cc  (see "***LOOKHERE***").
+ Starting with Geant4 version 9.2, you can build only a single 
+ executable (for a given platform), and then you can select the 
+ Physics List at run time, by setting the environmental variable
+ PHYSLIST . For instance:
+                               export PHYSLIST=FTFP
+ sets the FTFP Physics List.
+ If $PHYSLIST is undefined, then by default the Physics List 
+ QGSP_BERT will be automatically selected. 
+
+ If you want to build a fully static executable (this can be
+ convenient if you want to avoid to build it on the remote
+ Grid site, and not depending on the compiler installed there),
+ you need to define the environmental variable
+       export FULLY_STATIC_EXECUTABLE=1
+ before building the executable.
+ The same is true for the  dirStat/pvalue  executable.
+ Notice that at run time the variable $FULLY_STATIC_EXECUTABLE
+ is not used at all.
+ It could be that you are not allowed to build a fully static
+ executable because of iAIDA (this seems the case in 32-bits
+ platforms).
+
+ In the macro command file  * exercise.g4 *  you can choose: 
+   -  the production range cut;
+   -  the beam particle type;
+   -  the beam energy;
+   -  the number of events;
+   -  the calorimeter type;
+   -  the eventual transverse magnetic field. 
+ See the command file to look at the various options available.
 
  The calorimeter is a cylinder, with the axis (length of the 
  cylinder) along the beam direction, which is along the Z-axis.
@@ -104,9 +131,10 @@
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
  presence of a bug.
- Colours in the plot: the first Geant4 version, i.e. "REF1" in
- in the main script mainScript.py, is plotted in RED; the second
- Geant4 version, i.e. "REF2" in mainScript.py, is plotted in BLUE. 
+ Colours convention used in the plots: the first Geant4 version,
+ i.e. "REF1" in the main script mainScript.py, is plotted in RED; 
+ the second Geant4 version, i.e. "REF2" in mainScript.py, is 
+ plotted in BLUE. 
 
  The program is also printing, at the end, some useful information
  (with statistical errors):

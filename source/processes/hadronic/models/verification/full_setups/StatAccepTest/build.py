@@ -3,13 +3,14 @@
 #----------------------------------------------------------------
 # This Python script has the following input parameters:
 #
-#   1) the Geant4 reference tag ; example:  6.2.p02
+#   1) the Geant4 reference tag ; example:  9.2.p01
 #   2) the Geant4 Physics List ;  example:  QGSP
 #   3) the Calorimeter type ;     example:  PbLAr
 #   4) the Particle type ;        example:  p
 #   5) the beam Energy ;          example:  20GeV
 #   6) the Number of Events ;     example:  5k
 #   7) the B field ;              example:  4T
+#   8) the string `uname -i`;     example:  i386 (or x86_64)
 #
 # This script produces in output two files:
 #
@@ -19,10 +20,14 @@
 #   ii) setup.sh
 #               which is the setup script that sets the needed
 #               environmental variables.
-#  iii) mainStatAccepTest.cc
-#                             which is the main program.
 #
 # This program is called by the shell script : mainScript.sh
+#
+# 19-Mar-2009: this script does not write the main source file
+#              (mainStatAccepTest.cc) anymore, because the
+# executables are pre-built and distributed with the application,
+# avoiding complication with the local environment.
+#
 #----------------------------------------------------------------
 
 import os
@@ -45,6 +50,7 @@ PARTICLE     = sys.argv[4]
 ENERGY       = sys.argv[5]
 EVENTS       = sys.argv[6]
 BFIELD       = sys.argv[7]
+UNAMEI       = sys.argv[8]
 
 print '  REFERENCE   = ', REFERENCE
 print '  PHYSICS     = ', PHYSICS
@@ -53,23 +59,31 @@ print '  PARTICLE    = ', PARTICLE
 print '  ENERGY      = ', ENERGY
 print '  EVENTS      = ', EVENTS
 print '  BFIELD      = ', BFIELD
+print '  UNAMEI      = ', UNAMEI
 
 # ---------------- Release ---------------------
 Release = "dirGeant4-" + REFERENCE
 print '  Release = ', Release                 
-                 
+
+ReleaseUnameI = Release + "_" + UNAMEI
+print '  ReleaseUnameI = ', ReleaseUnameI
+
 # ---------------- Physics ---------------------
 if ( PHYSICS != "LHEP"          and
      PHYSICS != "LHEP_GN"       and
      PHYSICS != "QGSP"          and
      PHYSICS != "QGSP_GN"       and
+     PHYSICS != "QGSP_EMV"      and
      PHYSICS != "QGSP_BERT"     and
+     PHYSICS != "QGSP_BERT_EMV" and
      PHYSICS != "QGSP_BIC"      and
      PHYSICS != "QGSP_BERT_HP"  and
      PHYSICS != "QGSP_BIC_HP"   and
      PHYSICS != "QGSC"          and
+     PHYSICS != "QGSC_EFLOW"    and
      PHYSICS != "QGSC_BERT"     and
-     PHYSICS != "QGSP_EMV"      and
+     PHYSICS != "QGSC_CHIPS"    and
+     PHYSICS != "QGSC_QGSC"     and
      PHYSICS != "FTFP"          and 
      PHYSICS != "FTFC"          and
      PHYSICS != "FTFP_BERT"     and 
@@ -190,6 +204,8 @@ g4file.write( "/run/verbose 1 \n" )
 g4file.write( "/event/verbose 0 \n" ) 			
 g4file.write( "/tracking/verbose 0 \n" )
 
+###g4file.write( "/run/setCut 1.0 cm \n" ) #***LOOKHERE***
+
 g4file.write( "/gun/particle " + ParticleType + " \n" )
 
 g4file.write( "/gun/energy " + EnergyValue + " \n" )			
@@ -223,24 +239,26 @@ g4file.close()
 
 setupFile = open( "setup.sh", "w" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirJun08 \n" )   #***LOOKHERE***
+setupFile.write( "#!/bin/sh \n" )
+
+###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirJun09 \n" )   #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
 setupFile.write( "if [ -d $VO_GEANT4_SW_DIR/dirInstallations ] ; then \n" )
 setupFile.write( "  echo VO_GEANT4_SW_DIR=$VO_GEANT4_SW_DIR \n" )
+setupFile.write( "  export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 setupFile.write( "else \n")
 setupFile.write( "  if [ -d $OSG_APP/geant4 ] ; then \n" )
 setupFile.write( "    echo OSG_APP=$OSG_APP \n" )
 setupFile.write( "    echo set VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
 setupFile.write( "    export VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
+setupFile.write( "    export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations_`uname -i` \n" )
 setupFile.write( "  else \n")
 setupFile.write( "    echo ***ERROR*** : VO_GEANT4_SW_DIR and OSG_APP are undefined or unaccessible! \n" )
 setupFile.write( "    exit 1 \n")
 setupFile.write( "  fi \n")
 setupFile.write( "fi \n")
-
-setupFile.write( "export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations \n" )
 
 #***LOOKHERE***
 ###setupFile.write( "export PATH=$DIR_INSTALLATIONS/dirGCC/bin:$PATH \n" )
@@ -253,16 +271,28 @@ setupFile.write( "export G4_RELEASE=" + Release + " \n" )
 # directory (i.e. StatAccepTest/.. ): if you find it there, use this,
 # otherwise point to the installation directory.
 isLocalGeant4 = 0
+isReleaseUnameI = 0
 parentDir = os.getcwd() + "/.."
 #print ' parentDir = ', parentDir
 for iFile in os.listdir( parentDir ) :
-    if ( iFile == Release  ) :
+    if ( iFile == Release  or  iFile == ReleaseUnameI ) :
+        #print ' iFile=' , iFile
         isLocalGeant4 = 1
-        #print ' FOUND ', Release
+        if ( iFile == ReleaseUnameI ) :
+            isReleaseUnameI = 1
+            print ' FOUND local ', ReleaseUnameI
+        else :
+            print ' FOUND local ', Release
         break
 if isLocalGeant4 :
-    setupFile.write( "export G4INSTALL=" + parentDir + "/$G4_RELEASE \n" )
-    setupFile.write( "export G4LIB=" + parentDir + "/$G4_RELEASE/lib \n" )
+    if ( isReleaseUnameI ) :
+        setupFile.write( "export G4INSTALL=" + parentDir + "/${G4_RELEASE}_" +
+                         UNAMEI + " \n" )
+        setupFile.write( "export G4LIB=" + parentDir + "/${G4_RELEASE}_" +
+                         UNAMEI + "/lib \n" )
+    else :
+        setupFile.write( "export G4INSTALL=" + parentDir + "/$G4_RELEASE \n" )
+        setupFile.write( "export G4LIB=" + parentDir + "/$G4_RELEASE/lib \n" )
 else :
     setupFile.write( "export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE \n" )
     setupFile.write( "export G4LIB=$DIR_INSTALLATIONS/$G4_RELEASE/lib \n" )
@@ -322,137 +352,19 @@ setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
 setupFile.write( "export EXPAT_DIR=$DIR_INSTALLATIONS/dirExtra/dirExpat \n" )
 setupFile.write( "export LD_LIBRARY_PATH=$EXPAT_DIR/lib:$LD_LIBRARY_PATH \n" )
 
-setupFile.close()
-
-# ----------------- Write mainStatAccepTest.cc file -------------------
-
-mainProgram = open( "mainStatAccepTest.cc", "w" )
-
-mainProgram.write( "#include \"G4RunManager.hh\" \n" )
-mainProgram.write( "#include \"G4UImanager.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestDetectorConstruction.hh\" \n" )
-mainProgram.write( "#include \"LHEP.hh\" \n" )
-mainProgram.write( "#include \"QGSP.hh\" \n" )
-mainProgram.write( "#include \"QGSP_BERT.hh\" \n" )
-###mainProgram.write( "#include \"QGSP_BERT_HP.hh\" \n" )
-###mainProgram.write( "#include \"QGSP_BIC_HP.hh\" \n" )
-mainProgram.write( "#include \"QGSP_BIC.hh\" \n" )
-mainProgram.write( "#include \"QGSC.hh\" \n" )
-mainProgram.write( "#include \"QGSP_EMV.hh\" \n" )
-mainProgram.write( "#include \"FTFP.hh\" \n" )
-mainProgram.write( "#include \"FTFC.hh\" \n" )
-###mainProgram.write( "#include \"QGS_BIC.hh\" \n" )
-###mainProgram.write( "#include \"FTF_BIC.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestPrimaryGeneratorAction.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestEventAction.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestRunAction.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestTrackingAction.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestStackingAction.hh\" \n" )
-mainProgram.write( "#include \"StatAccepTestAnalysis.hh\" \n" )
-mainProgram.write( "#include \"G4UIterminal.hh\" \n" )
-mainProgram.write( "#ifdef G4UI_USE_TCSH \n" )
-mainProgram.write( "  #include \"G4UItcsh.hh\" \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#ifdef G4VIS_USE \n" )
-mainProgram.write( "  #include \"StatAccepTestVisManager.hh\" \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#ifdef G4UI_USE_XM \n" )
-mainProgram.write( "#include \"G4UIXm.hh\" \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#include \"CLHEP/Random/RanluxEngine.h\" \n" )
-mainProgram.write( "int main(int argc,char** argv) { \n" )
-mainProgram.write( "  CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); \n" ) 
-mainProgram.write( "  CLHEP::HepRandom::setTheEngine( &defaultEngine ); \n" )
-mainProgram.write( "  G4int seed = time( NULL ); \n" )
-mainProgram.write( "  CLHEP::HepRandom::setTheSeed( seed ); \n" )
-mainProgram.write( "  G4cout << G4endl \n" )
-mainProgram.write( "         << \" ===================================================== \" << G4endl \n" )
-mainProgram.write( "         << \" Initial seed = \" << seed << G4endl \n" )
-mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" ) 
-mainProgram.write( "	 << G4endl; \n" )
-mainProgram.write( "  G4RunManager* runManager = new G4RunManager; \n" )
-mainProgram.write( "  runManager->SetUserInitialization( new StatAccepTestDetectorConstruction ); \n" )
-mainProgram.write( "  " + PHYSICS + "  *thePL = new " + PHYSICS + "; \n" )
-mainProgram.write( "  //thePL->SetDefaultCutValue( 1.0*cm ); \n" ) #***LOOKHERE***
-mainProgram.write( "  runManager->SetUserInitialization( thePL ); \n" )
-
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestPrimaryGeneratorAction ); \n" )
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestRunAction ); \n" )  
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestEventAction ); \n" )
-mainProgram.write( "  runManager->SetUserAction( new StatAccepTestTrackingAction ); \n" )
-
 # If the beam energy is below a given threshold (in GeV) then
 # no biasing is used (i.e. the StackingAction is not used).
 if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
-    mainProgram.write( "  //runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+    setupFile.write( "unset BIAS_MODE \n" )
 else :
-    mainProgram.write( "  runManager->SetUserAction( new StatAccepTestStackingAction ); \n" )
+    setupFile.write( "export BIAS_MODE=1 \n" )
 
 #***LOOKHERE*** Switch off the histograms (leave only the ntuple).
-mainProgram.write( "  StatAccepTestAnalysis::getInstance()->setIsHistogramOn( false ); \n" )
+setupFile.write( "export HISTOGRAMS_OFF=1 \n" )
 
-mainProgram.write( "#ifdef G4VIS_USE \n" )
-mainProgram.write( "  StatAccepTestVisManager *visManager = new StatAccepTestVisManager; \n" )
-mainProgram.write( "  visManager->Initialize(); \n" )
-mainProgram.write( "#endif \n" )        
-mainProgram.write( "  runManager->Initialize(); \n" )
-mainProgram.write( "  G4UImanager* UI = G4UImanager::GetUIpointer(); \n" )   
-mainProgram.write( "  if ( argc==1 ) {   // Define UI session for interactive mode. \n" )
-mainProgram.write( "    G4UIsession* session = 0; \n" )
-mainProgram.write( "#ifdef G4UI_USE_XM \n" )
-mainProgram.write( "    session = new G4UIXm(argc,argv); \n" )
-mainProgram.write( "#else \n" )
-mainProgram.write( "#ifdef G4UI_USE_TCSH \n" )
-mainProgram.write( "    session = new G4UIterminal(new G4UItcsh); \n" )      
-mainProgram.write( "#else \n" )
-mainProgram.write( "    session = new G4UIterminal(); \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#ifdef G4VIS_USE \n" )
-mainProgram.write( "    // Create empty scene \n" )
-mainProgram.write( "    G4String visCommand = \"/vis/scene/create\"; \n" )
-mainProgram.write( "    UI->ApplyCommand(visCommand); \n" )
-mainProgram.write( "    // Choose one default viewer (you can always change it later on) \n" ) 
-mainProgram.write( "#ifdef WIN32 \n" )
-mainProgram.write( "    visCommand = \"/vis/open VRML2FILE\"; \n" )
-mainProgram.write( "#else \n" )
-mainProgram.write( "    // visCommand = \"/vis/open VRML2\"; \n" )
-mainProgram.write( "    visCommand = \"/vis/open OGLIX\"; \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "    UI->ApplyCommand(visCommand); \n" )
-mainProgram.write( "    visCommand = \"/vis/viewer/flush\"; \n" )
-mainProgram.write( "    UI->ApplyCommand(visCommand); \n" )
-mainProgram.write( "    visCommand = \"/tracking/storeTrajectory 1\"; \n" )
-mainProgram.write( "    UI->ApplyCommand(visCommand); \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "#ifdef G4UI_USE_XM \n" )
-mainProgram.write( "    // Customize the G4UIXm menubar with a macro file : \n" )
-mainProgram.write( "    UI->ApplyCommand(\"/control/execute gui.g4\"); \n" )
-mainProgram.write( "#else \n" )
-mainProgram.write( "    G4cout << \"Now, please, apply beamOn command...\" << G4endl; \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "    session->SessionStart(); \n" )
-mainProgram.write( "    delete session; \n" )
-mainProgram.write( "  } else {   // Batch mode \n" )
-mainProgram.write( "    G4String command = \"/control/execute \"; \n" )
-mainProgram.write( "    G4String fileName = argv[1]; \n" )
-mainProgram.write( "    UI->ApplyCommand(command+fileName); \n" )
-mainProgram.write( "  } \n" )
-mainProgram.write( "  G4cout << G4endl \n" ) 
-mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" )
-mainProgram.write( "         << \" Final random number = \" " )
-mainProgram.write( "         << CLHEP::HepRandom::getTheEngine()->flat() << G4endl \n" )
-mainProgram.write( "	 << \" ===================================================== \" << G4endl \n" ) 
-mainProgram.write( "         << G4endl; \n" )
-mainProgram.write( "  // job termination \n" )
-mainProgram.write( "#ifdef G4VIS_USE \n" )
-mainProgram.write( "  delete visManager; \n" )
-mainProgram.write( "#endif \n" )
-mainProgram.write( "  delete runManager; \n" )
-mainProgram.write( "  return 0; \n" )
-mainProgram.write( "} \n" )
+setupFile.write( "export PHYSLIST=" + PHYSICS + "\n" )
 
-mainProgram.close()
+setupFile.close()
 
 # ==============================================================
 

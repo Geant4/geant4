@@ -19,6 +19,10 @@ ifdef DEBUG_PRINT
 C_FLAGS += -DDEBUG_PRINT
 endif
 
+ifdef FULLY_STATIC_EXECUTABLE
+  LDFLAGS  += -static
+endif 
+
 all: examples
 
 examples: ${OBJ_DIR} ${OBJS} ${EXES}
@@ -40,5 +44,5 @@ ${OBJ_DIR}/%.o: %.cpp
 
 ${OBJ_DIR}/%: ${OBJ_DIR}/%.o
 	@echo linking $*
-	g++ ${C_FLAGS} ${C_INCLUDES} $< ${LIBS} -o $@
+	g++ ${LDFLAGS} ${C_FLAGS} ${C_INCLUDES} $< ${LIBS} -o $@
 
