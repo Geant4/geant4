@@ -34,6 +34,19 @@
  If $PHYSLIST is undefined, then by default the Physics List 
  QGSP_BERT will be automatically selected. 
 
+ If you run on the Grid, for each OS (e.g. SLC4, SLC5) you
+ do not need a separate tar-ball for 32-bits and 64-bits
+ architectures. Instead, you can prepare a single tar-ball
+ containing the following 6 executables:
+   1) 32-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-i386 
+   2) 32-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-i386 
+   3) 64-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-x86_64
+   4) 64-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-x86_64
+   5) 32-bits pvalue :     pvalue-i386
+   6) 64-bits pvalue :     pvalue-x86_64
+ Notice that you can get "i386" or "x86_64" with the command
+ `uname -i` .
+
  If you want to build a fully static executable (this can be
  convenient if you want to avoid to build it on the remote
  Grid site, and not depending on the compiler installed there),
