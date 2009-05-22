@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.9 2009-05-18 09:43:40 gunter Exp $
+// $Id: G4HadronBuilder.cc,v 1.10 2009-05-22 16:34:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -146,13 +146,6 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	   G4bool IsAnti = id1 < 0; 		// quark 1 is antiquark?
 	   if( (IsUp && IsAnti ) || (!IsUp && !IsAnti ) ) 
 	      PDGEncoding = - PDGEncoding;
-
-	   // Temporary WORKAROUND for the true neutral mesons, wrongly created
-	   //   by QGS for incident antiproton,... 
-	   if( PDGEncoding == -111 || PDGEncoding == -113 || 
-	       PDGEncoding == -223 || PDGEncoding == -221 || 
-	       PDGEncoding == -331 || PDGEncoding == -333 )
-              {PDGEncoding = - PDGEncoding;}
  	}
 	   
 	   
