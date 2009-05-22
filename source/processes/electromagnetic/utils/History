@@ -1,4 +1,4 @@
-$Id: History,v 1.379 2009-05-15 16:57:02 vnivanch Exp $
+$Id: History,v 1.380 2009-05-22 10:37:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 May 09: V.Ivant (emutils-V09-02-09)
+- Added protection into G4VEmModel for zero input energy
 
 15 May 09: V.Ivant (emutils-V09-02-08)
 - Added new testG4EnergyLossTables and fixed GNUmakefile for tests

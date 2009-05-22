@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.67 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.68 2009-05-22 10:37:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -341,7 +341,7 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
 					G4double cutEnergy)
 {
   currentCouple = c;
-  return ComputeDEDXPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy);
+  return ComputeDEDXPerVolume(c->GetMaterial(),p,std::max(lowLimit,kinEnergy),cutEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -353,7 +353,7 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 					 G4double maxEnergy)
 {
   currentCouple = c;
-  return CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
+  return CrossSectionPerVolume(c->GetMaterial(),p,std::max(lowLimit,kinEnergy),cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
