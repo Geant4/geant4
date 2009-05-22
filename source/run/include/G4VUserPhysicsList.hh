@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.35 2007-05-30 10:16:27 ahoward Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.36 2009-05-22 00:47:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,6 +257,12 @@ class G4VUserPhysicsList
     void AddProcessManager(G4ParticleDefinition* newParticle,
 			   G4ProcessManager*    newManager = 0 );
  
+   /////////////////////////////////////////////////////////////////
+  protected: 
+    // check consistencies of list of particles 
+
+    void CheckParticleList();
+
  
   ////////////////////////////////////////////////////////////////////////
   protected:
@@ -325,6 +331,8 @@ inline void G4VUserPhysicsList::Construct()
 #ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
 #endif
+
+  CheckParticleList();
 
   InitializeProcessManager();
 

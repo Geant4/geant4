@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.65 2009-05-21 10:59:23 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.66 2009-05-22 00:47:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,13 +154,13 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 	  // no process manager has been registered yet
 	  newManager = new G4ProcessManager(newParticle);
 	  G4Exception("G4VUserPhysicsList::AddProcessManager","Error in GenericIon",
-		JustWarning,"GenericIon has no ProcessMamanger"); 	
+		RunMustBeAborted,"GenericIon has no ProcessMamanger"); 	
 	}
       } else {
 	// "GenericIon" does not exist
 	newManager = new G4ProcessManager(newParticle);
 	G4Exception("G4VUserPhysicsList::AddProcessManager","No GenericIon",
-		    JustWarning,"GenericIon does not exist"); 	
+		    RunMustBeAborted,"GenericIon does not exist"); 	
       }
 
     } else {
@@ -191,6 +191,93 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 
 
 ////////////////////////////////////////////////////////
+void G4VUserPhysicsList::CheckParticleList()
+{
+  bool isElectron = false;
+  bool isPositron = false;
+  bool isGamma    = false;
+  bool isProton   = false;
+  bool isGenericIon = false;
+  bool isAnyIon   = false;
+  bool isAnyChargedBaryon   = false;
+  // loop over all particles in G4ParticleTable
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String name = particle->GetParticleName();
+    if      ( name == "e-") isElectron = true; 
+    else if ( name == "e+") isPositron = true; 
+    else if ( name == "gamma") isGamma = true; 
+    else if ( name == "GenericIon") isGenericIon = true; 
+    else if ( name == "proton") isProton = true; 
+    else if ( particle->GetParticleType() == "nucleus") isAnyIon = true;
+    else if ( particle->GetParticleType() == "baryon") {
+       if ( particle->GetPDGCharge() != 0.0 ) isAnyChargedBaryon = true;
+    }
+  }
+
+  // RULE 1
+  //  e+, e- and gamma should exist 
+  //   if one of them exist
+  bool isEmBasic =  isElectron || isPositron || isGamma;
+  bool isMissingEmBasic =  !isElectron || !isPositron || !isGamma;
+  if (isEmBasic && isMissingEmBasic) {
+    G4String missingName="";
+    if (!isElectron) missingName += "e- ";
+    if (!isPositron) missingName += "e+ ";
+    if (!isGamma) missingName += "gamma ";
+
+#ifdef G4VERBOSE
+    if (verboseLevel >0){
+      G4cout << "G4VUserPhysicsList::CheckParticleList: ";
+      G4cout << missingName << " do not exist " << G4endl; 
+      G4cout << " These particle are necessary for basic EM processes" << G4endl;
+    }
+#endif
+    missingName += " should be created ";
+    G4Exception("G4VUserPhysicsList::CheckParticleList","Missing EM basic particle",
+		FatalException, missingName); 	
+  }
+
+  // RULE 2
+  //  proton should exist 
+  //   if any other charged baryon  exist
+  if (!isProton && isAnyChargedBaryon) {
+    G4String missingName="proton ";
+
+#ifdef G4VERBOSE
+    if (verboseLevel >0){
+      G4cout << "G4VUserPhysicsList::CheckParticleList: ";
+      G4cout << missingName << " does not exist "<< G4endl; 
+      G4cout << " Proton is necessary for EM baryon processes" << G4endl;
+    }
+#endif
+    missingName += " should be created ";
+    G4Exception("G4VUserPhysicsList::CheckParticleList","Missing Proton",
+		FatalException, missingName); 	
+  }
+   
+  // RULE 3
+  //  GenericIonn should exist 
+  //   if any other ion  exist
+  if (!isGenericIon && isAnyIon) {
+    G4String missingName="GenericIon ";
+
+#ifdef G4VERBOSE
+    if (verboseLevel >0){
+      G4cout << "G4VUserPhysicsList::CheckParticleList: ";
+      G4cout << missingName << " does not exist "<< G4endl; 
+      G4cout << " GenericIon should be created if any ion is necessary" << G4endl;
+    }
+#endif
+    missingName += " should be created ";
+    G4Exception("G4VUserPhysicsList::CheckParticleList","Missing GenericIon",
+		FatalException, missingName); 	
+  }
+      
+}
+
+////////////////////////////////////////////////////////
 void G4VUserPhysicsList::InitializeProcessManager()
 {
   // loop over all particles in G4ParticleTable
@@ -206,7 +293,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
   }
 }
 
-////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 void G4VUserPhysicsList::RemoveProcessManager()
 {
   // loop over all particles in G4ParticleTable
@@ -266,7 +353,7 @@ void G4VUserPhysicsList::AddTransportation()
 	// Error !! no process manager
 	G4String particleName = particle->GetParticleName();
 	G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
-		    RunMustBeAborted, particleName );
+		    FatalException, particleName );
       } else {
 	// add transportation with ordering = ( -1, "first", "first" )
 	pmanager ->AddProcess(theTransportationProcess);
@@ -280,7 +367,7 @@ void G4VUserPhysicsList::AddTransportation()
         // Error !! no process manager
         G4String particleName = particle->GetParticleName();
         G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
-                    RunMustBeAborted, particleName );
+                    FatalException, particleName );
       } else {
         // add transportation with ordering = ( -1, "first", "first" )
         pmanager ->AddProcess(theTransportationProcess);
@@ -496,7 +583,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
              << particle->GetParticleName() <<G4endl;
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable","No process manager",
-                    RunMustBeAborted,  particle->GetParticleName() );
+                    FatalException,  particle->GetParticleName() );
     }
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
@@ -504,7 +591,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
              << particle->GetParticleName() <<G4endl;
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable","No process Vector",
-                    RunMustBeAborted,  particle->GetParticleName() );
+                    FatalException,  particle->GetParticleName() );
     }
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*particle);
@@ -524,7 +611,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
              << particle->GetParticleName() <<G4endl;
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable","No process manager",
-                    RunMustBeAborted,  particle->GetParticleName() );
+                    FatalException,  particle->GetParticleName() );
     }
 
     G4ProcessVector* pVector = pManager->GetProcessList();
@@ -533,7 +620,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
              << particle->GetParticleName() <<G4endl;
       G4cerr << particle->GetParticleName() << " should be created in your PhysicsList" <<G4endl;
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable","No process Vector",
-                    RunMustBeAborted,  particle->GetParticleName() );
+                    FatalException,  particle->GetParticleName() );
     }
     for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->PreparePhysicsTable(*particle);
