@@ -1,0 +1,22 @@
+$Id: History,v 1.1 2009-05-25 10:34:06 sincerti Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 60 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+25 May 2009 - S. Incerti, tag tag test60-V09-02-01
+              Added History and README files.
+
+04 May 2009 - S. Incerti, tag test60-V09-02-00
+              First version.

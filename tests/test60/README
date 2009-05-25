@@ -1,0 +1,15 @@
+$Id: README,v 1.1 2009-05-25 10:34:06 sincerti Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test60
+                            ------
+
+This test will check all Geant4-DNA processes migrated to the standard EM design.
+
+It shoots 1 or 10 e-, proton, hydrogen, alpha, alpha+ and helium of 10 keV in liquid water.
+
+
