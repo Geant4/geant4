@@ -28,15 +28,15 @@
 //
 //
 // GEANT4 physics class: G4QNeutronNuclearCrossSection -- header file
-// Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-May-02
+// Created: M.V. Kossov, CERN/ITEP(Moscow), 17-May-2009
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 21-May-2009
 //
-// ****************************************************************************************
-// ********* This HEADER is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
-// ****************************************************************************************
-// Short description: CHIPS cross-sections for proton-nuclear interactions
-// -----------------------------------------------------------------------
+// **********************************************************************
+// ****** This HEADER is property of the CHIPS model (M. Kosov) *********
+// ******************** DO NOT MAKE ANY CHANGE! (M.K.) ******************
+//=========================================================================
+// Short description: CHIPS cross-sections for neutron-nuclear interactions
+// ------------------------------------------------------------------------
 
 #ifndef G4QNeutronNuclearCrossSection_h
 #define G4QNeutronNuclearCrossSection_h 1
@@ -86,6 +86,7 @@ private:
   static G4double  lastTH;  // Last value of the Momentum Threshold
   static G4double  lastCS;  // Last value of the Cross Section
   static G4int     lastI;   // The last position in the DAMDB
+  static G4double  HEthresh;  // High energy threshold parameter for the CS calculation
 };
 
 #endif

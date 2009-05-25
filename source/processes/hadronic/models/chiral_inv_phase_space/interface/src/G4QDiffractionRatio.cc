@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.10 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.11 2009-05-25 07:30:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -266,6 +266,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   if(s<=0. || A<=1) return 0.;
   if(A!=mA && A!=1)
   {
+    S=s;
     mA=A;
     G4double a=mA;
     G4double sa=std::sqrt(a);
@@ -289,6 +290,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
   }
   else if(A==1 && mA!=1)
   {
+    S=s;
     p1=.0315;
     p2=.73417;
     p4=.01109;
