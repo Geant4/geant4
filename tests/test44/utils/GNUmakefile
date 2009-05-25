@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2008-05-09 10:33:46 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2009-05-25 16:32:41 bagoulia Exp $
 # --------------------------------------------------------------
 
 ifndef G4TARGET
@@ -11,9 +11,8 @@ G4EXEC_BUILD  = true
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(ROOTSYS)/include
-
-EXTRALIBS += `root-config --glibs`
+CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 
 include $(G4INSTALL)/config/binmake.gmk
 
