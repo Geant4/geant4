@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2009-05-15 18:19:14 vnivanch Exp $
+$Id: History,v 1.10 2009-05-25 17:03:28 bagoulia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,12 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+<<<<<<< History
+25-11-08 A.Bagulya ()
+- modified run.csh: set REFERENCE variable automatic
+- added scripts: run_py.csh, reader_test44.py 
+
+=======
 15-05-09  V.Ivant (test44-V09-02-01)
 - fixed script run.csh
 
 16-12-08  V.Ivant (test44-V09-02-00)
 - fixed plots
 
+>>>>>>> 1.9
 19-11-08  V.Ivant (test44-V09-01-03)
 - fixed plot size
 
