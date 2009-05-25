@@ -1,5 +1,9 @@
 #/bin/csh
 
+if ( $?REFERENCE == 0 ) then
+setenv REFERENCE `date '+%m_%d_%Y-%H:%M:%S'`
+endif
+
 cd $VFEM/test44
 
 mkdir -p $REFERENCE
