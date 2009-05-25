@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.hh,v 1.3 2008-02-22 22:17:25 dennis Exp $
+// $Id: G4RPGInelastic.hh,v 1.4 2009-05-25 19:06:59 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -54,9 +54,7 @@ class G4RPGInelastic : public G4HadronicInteraction
  {
  public:  // with description
     
-   G4RPGInelastic(const G4String& modelName = "RPGInelastic") 
-    : G4HadronicInteraction(modelName)
-   { cache = 0.0;}
+   G4RPGInelastic(const G4String& modelName = "RPGInelastic"); 
     
    virtual ~G4RPGInelastic()
    { }
@@ -123,7 +121,9 @@ class G4RPGInelastic : public G4HadronicInteraction
    enum {pi0, pip, pim, kp, km, k0, k0b, pro, neu, 
          lam, sp, s0, sm, xi0, xim, om, ap, an};
 
-   static G4ParticleDefinition* particleDef[18];
+ protected:
+
+   G4ParticleDefinition* particleDef[18];
 
  private:
    
