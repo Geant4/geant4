@@ -23,37 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.8 2009-05-25 17:32:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
 //                 by Mikhail Kossov, December 2003.
 // Header of G4QCaptureAtRest class of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
-// This is a unique CHIPS class for the Nuclear Capture At Rest Prosesses.
-// -------------------------------------------------------------------------------
-// At present (Dec.03) only pi-, K- and antiNucleon capture is implemented, which
+// At present (May 2009) only pi-, K- and antiNucleon capture are tested, which
 // are the most crucial for the in matter simulation. The hyperon capture (Sigma-,
 // Xi-, Omega-, antiSigma+) is implemented, but not tested and it is not clear how
 // frequently this kind of interaction takes place in the simulation of the hadronic
 // showers. The antiNeutron Capture At Rest is implemented by this G4QCaptureAtRest
 // class, but it is not clear how the anti-neutrons are stopped in Geant4 tracking.
-// It can be stopped only by interactions with electrons, as the annihilation
-// cross section is huge and any interaction with nucleus results in annihilation.
-// --> The mu-&tau- Capture At Rest (mu-,nu)&(mu-,nu) are weak processes, which must
+// It can be stopped only by interactions with electrons, as the annihilation cross
+// section is huge and any interaction with nucleus results in annihilation. The
+// mu- & tau- Capture At Rest (mu-,nu) & (mu-,nu) are weak processes, which must
 // be simulated together with the reversed Betha decay (e-,nu). While mu- capture is
 // similar to the pi- capture from the nuclear fragmentation point of view (the energy
-// scale is shrinked mecause m_mu<m_pi and a part of energy is lost because of the
-// neutrino radiation), the time scale of the mu- capture process is not clear,
-// but it is clear, that it is well delayed. By this reason the mu- capture is not
-// included in the G4QCaptureAtRest and must be implemented in the "LongLivingDecay"
+// scale is shrinked because m_mu < m_pi and a part of the energy is lost because of
+// the neutrino radiation), the time scale of the mu- capture process is not exact,
+// but it is clear, that it is well delayed. By this reason the mu- capture can be
+// excluded from the G4QCaptureAtRest and can be implemented in the "LongLivingDecay"
 // branch of simulation, which includes excited states of nuclei and short living
-// isotopes. On the "Fast Simulation" Level all radioactiv isotopes, long living
+// isotopes. On the "Fast Simulation" Level all radioactive isotopes, long living
 // nuclear excitations, mu-atoms etc, which can be important for the background
 // signals, must be collected in the continuous database and simulated separately.
-// --> CHIPS is SU(3) event generator, so it does not include reactions with the
-// heavy (c,b,t) quarks involved such as tau- or antiDs-, which can be simulated
-// only by SU(6) QUIPS (QUark Invariant Phase Space) model.-December 2003.M.Kossov.-
+// CHIPS is SU(3) event generator, so it does not include reactions with the heavy
+// (c,b,t) quarks involved such as antiDs-, which can be simulated only by SU(6)
+// QUIPS (QUark Invariant Phase Space) model. - May 2009, M.Kossov.-
 // -------------------------------------------------------------------------------
 // All algorithms are similar: the captured particle is absorbed by a nuclear cluster
 // with the subsequent Quark Exchange nuclear fragmentation. The Anti-Proton (antiSigma+)
@@ -69,20 +67,20 @@
 // the CHIPS Head Class (as previously the G4Quasmon class lost it) and G4QCollision
 // class is going to be the CHIPS Head Class, where a few Nuclear Environments can
 // exist (e.g. the Nuclear Environment of the Projectile Nucleus and the Nuclear
-// Environment of the Target Nucleus). By the way the antiProton-H1 interaction At
+// Environment of the Target Nucleus). By the way, the antiProton-H1 interaction At
 // Rest (CHIPSI) can be still simulated with only the G4Quasmon class, as this
-// reaction does not have any nuclear environment.- December 2003.Mikhail Kossov.-
+// reaction does not have any nuclear environment.- May 2009, Mikhail Kossov.-
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// ********* This HEADER is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
+// *********** This HEADER is a property of the CHIPS physics package (M. Kosov) **********
+// ******* DO NOT MAKE ANY CHANGE YOURSELF! Send proposals to Mikhail.Kossov@cern.ch ******
 // ****************************************************************************************
 // Short Description: This is a universal process for nuclear capture
-// (including annihilation) of all negative particles (negative hadrons,
-// negative leptons: mu- & tau-). It can be used for the cold neutron
+// (including annihilation) of all negative particles (cold neutrons, negative
+// hadrons, negative leptons: mu- & tau-). It can be used for the cold neutron
 // capture, but somebody should decide what is the probability (defined
 // by the capture cross-section and atomic material properties) to switch
-// the cold neutron to the at-rest neutron. - M.K.2009.
+// the cold neutron to the at-rest neutron. - M.K. 2009.
 // ----------------------------------------------------------------------
 
 #ifndef G4QCaptureAtRest_hh

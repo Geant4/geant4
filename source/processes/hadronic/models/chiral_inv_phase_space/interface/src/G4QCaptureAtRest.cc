@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.20 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.21 2009-05-25 17:32:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -31,8 +31,8 @@
 // G4QCaptureAtRest class of the CHIPS Simulation Branch in GEANT4
 // ---------------------------------------------------------------
 // ****************************************************************************************
-// ********** This CLASS is temporary moved from the photolepton_hadron directory *********
-// ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
+// *********** This HEADER is a property of the CHIPS physics package (M. Kosov) **********
+// ******* DO NOT MAKE ANY CHANGE YOURSELF! Send proposals to Mikhail.Kossov@cern.ch ******
 // ****************************************************************************************
 // Short Description: This is a universal process for nuclear capture
 // (including annihilation) of all negative particles (negative hadrons,

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.1 2009-05-25 07:30:25 mkossov Exp $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.2 2009-05-25 17:32:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1239,6 +1239,7 @@ G4double G4QNeutronCaptureRatio::CalcCap2In_Ratio(G4double p, G4int Z, G4int N)
         G4double dp=p-p3;
         R+=p2*std::exp(-dp*dp/p4);
       }
+      if(R>1.) R=1.;
     }
     else G4cerr<<"-Warning-G4QNeutronCaptureRatio::CalcR:*Bad A* Z="<<Z<<", N="<<N<<G4endl;
   }

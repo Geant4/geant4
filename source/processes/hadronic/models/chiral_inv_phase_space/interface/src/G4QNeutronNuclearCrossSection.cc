@@ -219,7 +219,7 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
 G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
+  static const G4double THmin=1.;      // default minimum Momentum (MeV/c) Threshold
   static const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
   static const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
   static const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
@@ -255,7 +255,6 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
       lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
     }
-    else if(Momentum<ThresholdMomentum(targZ,targN)) return 0.; // BelowThreshold -> NotIni
     else                               // This isotope wasn't calculated before => CREATE
     {
       lastLEN = new G4double[nL];      // Allocate memory for the new LEN cross sections
@@ -265,12 +264,18 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       for(G4int m=0; m<nL; m++)
       {
         lastLEN[m] = CrossSectionLin(targZ, targN, P);
+#ifdef debug
+        G4cout<<"-Li->G4QNeutNucCS::CalcCS: P="<<P<<", S="<<lastLEN[m]<<G4endl;
+#endif
         P+=dPG;
       }
       G4double lP=milPG;
       for(G4int n=0; n<nH; n++)
       {
         lastHEN[n] = CrossSectionLog(targZ, targN, lP);
+#ifdef debug
+        G4cout<<"-Li->G4QNeutNucCS::CalcCS: lP="<<lP<<", S="<<lastHEN[n]<<G4endl;
+#endif
         lP+=dlP;
       }
 #ifdef debug
@@ -324,20 +329,6 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
 #endif
   if(sigma<0.) return 0.;
   return sigma;
-}
-
-// Electromagnetic momentum-threshold (in MeV/c) 
-G4double G4QNeutronNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
-{
-  static const G4double third=1./3.;
-  static const G4double pM = G4QPDGCode(2112).GetMass(); // Proton mass in MeV
-  static const G4double tpM= pM+pM;       // Doubled proton mass (MeV)
-  G4double tA=tZ+tN;
-  if(tZ<.99 || tN<0.) return 0.;
-  else if(tZ==1 && tN==0) return 800.;    // A threshold on the free proton
-  //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
-  G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
-  return std::sqrt(dE*(tpM+dE));
 }
 
 // Calculation formula for proton-nuclear inelastic cross-section (mb) (P in GeV/c)
@@ -1286,7 +1277,6 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4do
   //G4double par=Pars[1][0].second[1];
   //G4cout<<"-Warning-G4QNeutronNuclearCrossSection::CSLin: N="<<curN<<", P="<<par<<G4endl;
   G4double sigma=0.;
-  if(P<ThresholdMomentum(tZ,tN)*.001) return sigma; // XS below threshold
   G4double lP=std::log(P);
   if( (tZ==1 && !tN) || (!tZ && tN==1)){if(P>.35) sigma=CrossSectionFormula(tZ,tN,P,lP);}
   else if(tZ<97 && tN<248)                // General solution (*** Z/A limits ***)
@@ -1362,7 +1352,7 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double d=lP-4.2;        //
     G4double p2=P*P;          //
     G4double p4=p2*p2;        //
-    G4double a=tN+tZ;                       // A of the target
+    G4double a=tN+tZ;                     // A of the target
     G4double al=std::log(a);  //
     G4double sa=std::sqrt(a); //
     G4double a2=a*a;          //
