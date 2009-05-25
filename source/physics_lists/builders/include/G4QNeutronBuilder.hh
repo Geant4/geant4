@@ -43,26 +43,32 @@
 #include "globals.hh"
 
 #include "G4NeutronInelasticProcess.hh"
+#include "G4QCollision.hh"
+#include "G4QDiscProcessMixer.hh"
 #include "G4VNeutronBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
 #include <vector>
 
 class G4QNeutronBuilder
 {
-  public: 
-    G4QNeutronBuilder();
-    virtual ~G4QNeutronBuilder();
+public: 
+  G4QNeutronBuilder();
+  virtual ~G4QNeutronBuilder();
 
-  public: 
-    void Build();
-    void RegisterMe(G4VNeutronBuilder * aB) {theModelCollections.push_back(aB);}
+public: 
+  void Build();
+  void RegisterMe(G4VNeutronBuilder * aB) {theModelCollections.push_back(aB);}
 
-  private:
-    G4NeutronInelasticProcess * theNeutronInelastic;
-    
-    std::vector<G4VNeutronBuilder *> theModelCollections;
-
-    G4bool wasActivated;
+private:
+  G4QDiscProcessMixer*             theProcessMixer;
+  std::vector<G4VNeutronBuilder *> theModelCollections;
+  G4NeutronInelasticProcess*       theNeutronInelastic;
+  G4QCollision*                    theCHIPSInelastic;    
+  
+  G4bool wasActivated;
 
 };
 

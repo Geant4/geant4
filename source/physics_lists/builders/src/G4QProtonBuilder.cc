@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QProtonBuilder.cc,v 1.2 2009-04-17 15:24:20 mkossov Exp $
+// $Id: G4QProtonBuilder.cc,v 1.3 2009-05-25 18:24:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void G4QProtonBuilder::Build()
     (*i)->Build(theProtonInelastic);
   }
   G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-  theProcessMixer->AddDiscreteProcess(theProtonInelastic, 1.E8); // the second par is fake
+  theProcessMixer->AddDiscreteProcess(theProtonInelastic, 1.E8); // the second part is fake
   theProcessMixer->AddDiscreteProcess(theCHIPSInelastic, 290*megaelectronvolt);
   theProcMan->AddDiscreteProcess(theProcessMixer);
 }

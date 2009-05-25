@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QNeutronBuilder.cc,v 1.3 2009-05-25 18:24:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,24 +39,24 @@
 //-----------------------------------------------------------------------------
 //
 #include "G4QNeutronBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
 
-G4QNeutronBuilder::
-G4QNeutronBuilder(): wasActivated(false) 
+G4QNeutronBuilder::G4QNeutronBuilder(): wasActivated(false) 
 {
   theNeutronInelastic = new G4NeutronInelasticProcess;
+  theCHIPSInelastic  = new G4QCollision;
+  const G4String& processName = "MixedNeutronInelasticProcess";
+  const G4ParticleDefinition* proj = G4Neutron::Neutron();
+  theProcessMixer= new G4QDiscProcessMixer(processName, proj);
 }
 
-G4QNeutronBuilder::
-~G4QNeutronBuilder() 
+G4QNeutronBuilder::~G4QNeutronBuilder() 
 {
+  delete theProcessMixer;
+  delete theCHIPSInelastic;
   delete theNeutronInelastic;
 }
 
-void G4QNeutronBuilder::
-Build()
+void G4QNeutronBuilder::Build()
 {
   wasActivated = true;
   std::vector<G4VNeutronBuilder *>::iterator i;
@@ -64,6 +65,8 @@ Build()
     (*i)->Build(theNeutronInelastic);
   }
   G4ProcessManager * theProcMan = G4Neutron::Neutron()->GetProcessManager();
+  theProcessMixer->AddDiscreteProcess(theNeutronInelastic, 1.E8);// the second part is fake
+  theProcessMixer->AddDiscreteProcess(theCHIPSInelastic, 290*megaelectronvolt);
   theProcMan->AddDiscreteProcess(theNeutronInelastic);
 }
 // 2009 by M. Kosov

@@ -43,6 +43,8 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 
+#include "G4NeutronInelasticCrossSection.hh"
+
 class G4QGSC_CHIPSNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
@@ -58,13 +60,14 @@ class G4QGSC_CHIPSNeutronBuilder : public G4VNeutronBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4StringChipsParticleLevelInterface * theCascade;
+    G4NeutronInelasticCrossSection theXSec;
     G4TheoFSGenerator * theModel;
+    G4StringChipsParticleLevelInterface * theCascade;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4NeutronInelasticCrossSection theXSec;
+
     G4double theMin;
 
 };

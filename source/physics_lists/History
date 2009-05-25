@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2009-05-18 08:54:22 gunter Exp $
+$Id: History,v 1.90 2009-05-25 18:24:23 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-05-2009, M.Kosov phys-lists-V09-02-19
+- Two new low energy (<290 MeV) nA CHIPS reactions are implemented in the QGSC_CHIPS
+  physics list (works together with the hadr-chips-inter-V09-02-07 CHIPS tag
 
 18-05-2009, G.Folger                       (phys-lists-V09-02-18)
 - Declare several leist obsolete, partially disabling use.
