@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNucleonInelastic.hh,v 1.1 2008-01-04 23:27:45 dennis Exp $
+// $Id: G4RPGNucleonInelastic.hh,v 1.2 2009-05-25 19:05:19 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -47,6 +47,8 @@
    G4RPGNucleonInelastic(const G4String& modelName = "RPGNucleonInelastic");
     
    ~G4RPGNucleonInelastic() { }
+
+   //   void printCrossSections() const;
     
  protected:
 
