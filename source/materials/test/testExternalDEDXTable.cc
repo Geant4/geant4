@@ -29,7 +29,7 @@
 // Environment variable TESTTARGET must be specified (see GNUmakefile)
 //
 //
-// The following functions of the class G4ExternalDEDXTable are tested:
+// The following functions of the class G4ExtDEDXTable are tested:
 //       IsApplicable()
 //       AddPhysicsVector()
 //       RemovePhysicsVector()
@@ -41,7 +41,7 @@
 //       after running the test.
 
 #include "globals.hh"
-#include "G4ExternalDEDXTable.hh"
+#include "G4ExtDEDXTable.hh"
 #include "G4LPhysicsFreeVector.hh"
 
 
@@ -88,7 +88,7 @@ void Test(const G4String& fileName) {
   // # Test 1:
   // ########################################################################
 
-  G4ExternalDEDXTable* tableA = new G4ExternalDEDXTable();
+  G4ExtDEDXTable* tableA = new G4ExtDEDXTable();
 
   G4cout << G4endl << "##### Testing AddPhysicsVector() #####" 
          << G4endl;
@@ -217,7 +217,7 @@ void Test(const G4String& fileName) {
   // # Test 5:
   // ########################################################################
 
-  G4ExternalDEDXTable* tableB = new G4ExternalDEDXTable();
+  G4ExtDEDXTable* tableB = new G4ExtDEDXTable();
 
   G4cout << G4endl << "##### Testing RetrievePhysicsTable() #####" 
          << G4endl;
