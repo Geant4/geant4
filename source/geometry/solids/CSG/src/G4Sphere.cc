@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.79 2009-05-14 14:49:15 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.80 2009-05-25 14:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -91,7 +91,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
 {
   fEpsilon = 2.0e-11;  // relative radial tolerance constant
 
