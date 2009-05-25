@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst12PhysicsList.cc,v 1.12 2006-06-29 21:39:34 gunter Exp $
+// $Id: Tst12PhysicsList.cc,v 1.13 2009-05-25 11:31:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -270,7 +270,7 @@ void Tst12PhysicsList::ConstructEM()
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4FTFModel.hh"
-#include "G4QGSMFragmentation.hh"
+#include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
 
@@ -321,7 +321,7 @@ void Tst12PhysicsList::ConstructHad()
     theTheoModel->SetMinEnergy(19*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
 
-      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
+      G4VLongitudinalStringDecay * theFragmentation = new G4LundStringFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
       theStringModel->SetFragmentationModel(theStringDecay);
 
