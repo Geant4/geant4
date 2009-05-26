@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.28 2009-05-08 11:42:03 bmorgan Exp $
+# $Id: Configure,v 1.29 2009-05-26 13:18:26 bmorgan Exp $
 #
-# Generated on Fri May  8 12:45:04 BST 2009 [metaconfig 3.0 PL70]
+# Generated on Tue May 26 14:17:33 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1266,15 +1266,18 @@ echo)
 		'-n') n='' c='\c';;
 		*) n='-n' c='';;
 		esac
-		cat <<FOO
-They are not compatible!  You are probably running ksh on a non-USG system.
-I'll have to use $echo instead of the builtin, since Bourne shell doesn't
-have echo built in and we may have to run some Bourne shell scripts.  That
-means I'll have to use '$n$c' to suppress newlines now.
-
-FOO
-		$echo $n "The star should be here-->$c"
-		$echo "*"
+#We suppress the following message to avoid problems where the system points
+#sh to dash (Ubuntu). If you have problems with echo, uncomment the cat and
+#two $echo s to see if you're warned!!
+#		cat <<FOO
+#They are not compatible!  You are probably running ksh on a non-USG system.
+#I'll have to use $echo instead of the builtin, since Bourne shell doesn't
+#have echo built in and we may have to run some Bourne shell scripts.  That
+#means I'll have to use '$n$c' to suppress newlines now.
+#
+#FOO
+#		$echo $n "The star should be here-->$c"
+#		$echo "*"
 	fi
 	$rm -f foo1 foo2
 	;;
