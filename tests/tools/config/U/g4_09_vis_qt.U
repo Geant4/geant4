@@ -22,7 +22,7 @@
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
 if test "x$g4ui_build_qt_session" = "xy" ; then
-    # Query the user to see if build of Qt UI module is needed
+    # Query the user to see if build of Qt GL module is needed
     g4message=`cat <<EOM
 
     G4UI_BUILD_OPENGLQT_DRIVER
@@ -106,5 +106,10 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+else # TEST g4ui_build_qt_session
+    # Because we can 'drop through' this test on repeat
+    # running Configure, force build and use to n
+    g4vis_build_openglqt_driver=n
+    g4vis_use_openglqt=n
 fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
