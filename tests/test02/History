@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2008-07-18 09:31:51 vnivanch Exp $
+$Id: History,v 1.21 2009-05-26 14:25:23 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 2009, Gunter Folger   (test02-V09-02-00)
+- rename hadronic exerciser files; use "_" instead of "." in filename; 
+   ("." in fileanme confuses Windows, resulting in warnings)
 
 July 18, 2008 V.Ivanchenko (test02-V09-01-00)
 - Use LHEP Physics List and remove old style Physics List
