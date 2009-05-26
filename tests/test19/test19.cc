@@ -144,7 +144,6 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
-#include "G4RunManager.hh" 
 #include "G4UImanager.hh" 
 
 #include "Test19Physics.hh"
@@ -221,6 +220,8 @@ int main()
   G4int nHst1=nHst-1;
   G4int dQnM=nHst/2;
   G4int dQnM1=dQnM-1;
+  G4int dQnE=nHst/2;
+  //G4int dQnE1=dQnE-1;
   G4int rEnH[nHst];
   G4int rPzH[nHst];
   G4int rPrH[nHst];
@@ -247,8 +248,8 @@ int main()
   G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
   G4String tsy[nTg]={"1H","He","14N","59Co","238U"}; // Target symbols for the Target Loop
   G4Material* mat[nTg]={0,0,0,0,0}; // Material pointers for the Target Loop
-  const G4int nPr=4;  // Length of the projectile list for the Performance test
-  G4int pli[nPr] = {11, 13, 15, 22}; // PDG Codes of the projectile particles
+  const G4int nPr=6;  // Length of the projectile list for the Performance test
+  G4int pli[nPr] = {11, 13, 15, 22, 2212, 2112}; // PDG Codes of the projectile particles
   const G4int nEn=3;  // Length of the kin. energy list for the Performance test
   G4double eli[nEn] = {27., 227., 999.}; // Kinetic energy values for the Loop
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
@@ -518,7 +519,7 @@ int main()
   if     (pPDG==2212) aModel = new G4HEProtonInelastic;
   else if(pPDG==2112) aModel = new G4HEProtonInelastic;
   else if(pPDG==-211) aModel = new G4HEPionMinusInelastic;
-  else if(pPDG== 211) aModel = new G4HEPionMinusInelastic;
+  else if(pPDG== 211) aModel = new G4HEPionPlusInelastic;
   else if(pPDG==-321) aModel = new G4HEKaonPlusInelastic;
   else if(pPDG== 321) aModel = new G4HEKaonPlusInelastic;
   else if(pPDG==-2112)aModel = new G4HEAntiProtonInelastic;
@@ -620,7 +621,7 @@ int main()
    //else if(pPDG==-16) part=G4AntiNeutrinoTau::AntiNeutrinoTau(); // anti-tau_neutrino
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG==-211) part=G4PionMinus::PionMinus();// Definition of Pi- projectile
-   else if(pPDG==211)  part=G4PionMinus::PionMinus();// Definition of Pi+ projectile
+   else if(pPDG==211)  part=G4PionPlus::PionPlus();  // Definition of Pi+ projectile
    else if(pPDG==321)  part=G4KaonPlus::KaonPlus();  // Definition of K+ projectile
    else if(pPDG==-321) part=G4KaonMinus::KaonMinus();// Definition of K- projectile
    else if(pPDG==130)part=G4KaonZeroLong::KaonZeroLong();//Definition of K0_L projectile
@@ -1225,6 +1226,7 @@ int main()
         pE+=energy+mp;
 #endif
 #ifdef histdbg
+       
         if(nGamma>=nHst) nGamma=nHst-1;
         nGaH[nGamma]++;
         G4int nESG=static_cast<G4int>(EGamma+.00001);
@@ -1238,13 +1240,19 @@ int main()
         dBnH[totBaryN+dQnM]++;
         G4double dE=totSum.t();
         G4int rdE=static_cast<G4int>(dQnM*20.*dE/e0-17+dQnM);
-        G4int dEn=static_cast<G4int>(dE*10.+dQnM);
+        //G4int dEn=static_cast<G4int>(dE*10.+dQnM);
+        G4int dEn=static_cast<G4int>(dE/10.+dQnE);
         if(rdE>=nHst) rdE=nHst1;
         if(rdE<0) rdE=0;
-        if(dEn>=nHst) dEn=nHst1;
+        if(dEn>=nHst)
+        {
+          //G4cout<<"Test19: Too big energy nonconservation dE="<<dE<<G4endl;
+          dEn=nHst1;
+        }
         if(dEn<0) dEn=0;
         rEnH[rdE]++;
         dEnH[dEn]++;
+        //if(nPN || nP0 || nPP) dEnH[dEn]++;
         G4double dZ=totSum.z();
         G4int rdZ=static_cast<G4int>(dQnM*20.*dZ/pmax-17+dQnM);
         G4int dZn=static_cast<G4int>(dZ*10.+dQnM);
@@ -1399,7 +1407,8 @@ int main()
 #ifdef histdbg
   G4cout<<std::setw(2)<<"#"<<" : "<<std::setw(9)<<"#gamma"<<std::setw(9)<<"SumEGam"
         <<std::setw(9)<<"dBrN+20"<<std::setw(9)<<"dChg+20" <<std::setw(9)<<"rE(5%)"
-        <<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(.1)"
+    //<<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(.1)"
+        <<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(10.)"
         <<std::setw(9)<<"dPz(.1)"<<std::setw(9)<<"dPr(.01)"<<G4endl;
   for(G4int jh=0; jh<nHst; jh++)
   {
