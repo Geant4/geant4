@@ -1,9 +1,9 @@
-# $Id: GNUmakefile.hadronic.exerciser,v 1.2 1999-11-19 15:39:28 stesting Exp $
+# $Id: GNUmakefile_hadronic_exerciser,v 1.1 2009-05-26 14:36:27 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
-name := test15.hadronic.exerciser
+name := test16_hadronic_exerciser
 G4TARGET := $(name)
 
 ifndef G4INSTALL

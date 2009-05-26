@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.13 2006-06-29 21:43:02 gunter Exp $
+// $Id: test15_hadronic_exerciser.cc,v 1.1 2009-05-26 14:34:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
   G4int N = 10;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
-      N = 100;
+      N = 200;
     }
   }
 
@@ -79,7 +79,7 @@ int main (int argc, char** argv) {
 
   G4cout <<
     "#"
-    "\n# Auto-generated test input file for test16 hadronics."
+    "\n# Auto-generated test input file for test15 hadronics."
     "\n#"
     "\n/control/verbose 2"
     "\n# /run/verbose 2"
@@ -89,17 +89,15 @@ int main (int argc, char** argv) {
 
   std::vector <G4String> particleNameList;
   particleNameList.push_back ("proton");
-  particleNameList.push_back ("neutron");
 
   std::vector <G4double> energyList;
-  energyList.push_back (1 * GeV);
   energyList.push_back (10 * GeV);
-  energyList.push_back (20 * GeV);
 
   std::vector <G4String> materialNameList;
   materialNameList.push_back ("Pb");
   materialNameList.push_back ("Al");
   materialNameList.push_back ("Air");
+  materialNameList.push_back ("U");
 
   OutputCases (N, particleNameList, energyList, materialNameList);
 

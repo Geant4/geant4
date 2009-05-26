@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.20 2008-09-04 22:31:30 tkoi Exp $
+// $Id: test11_hadronic_exerciser.cc,v 1.1 2009-05-26 14:30:40 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 080901 Add Thermal materials and hydogen from 1H isotope in test.

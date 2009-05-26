@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test02.hadronic.exerciser.cc,v 1.12 2006-06-29 21:35:16 gunter Exp $
+// $Id: test16_hadronic_exerciser.cc,v 1.1 2009-05-26 14:36:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,10 +68,10 @@ static void OutputCases
 
 int main (int argc, char** argv) {
 
-  G4int N = 1;
+  G4int N = 10;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
-      N = 20;
+      N = 100;
     }
   }
 
@@ -79,57 +79,24 @@ int main (int argc, char** argv) {
 
   G4cout <<
     "#"
-    "\n# Auto-generated test input file for test02 hadronics."
+    "\n# Auto-generated test input file for test16 hadronics."
     "\n#"
     "\n/control/verbose 2"
     "\n# /run/verbose 2"
     "\n/run/particle/setCut 1 m"
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
-  
+
   std::vector <G4String> particleNameList;
   particleNameList.push_back ("proton");
-  particleNameList.push_back ("pi+");
-  particleNameList.push_back ("pi-");
-  particleNameList.push_back ("kaon+");
-  particleNameList.push_back ("kaon-");
-  particleNameList.push_back ("kaon0S");
-  particleNameList.push_back ("kaon0L");
+  particleNameList.push_back ("neutron");
 
   std::vector <G4double> energyList;
-  energyList.push_back (100 * GeV);
+  energyList.push_back (1 * GeV);
+  energyList.push_back (10 * GeV);
+  energyList.push_back (20 * GeV);
 
   std::vector <G4String> materialNameList;
-  materialNameList.push_back ("Pb");
-  materialNameList.push_back ("Al");
-  materialNameList.push_back ("Air");
-
-  OutputCases (N, particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.push_back ("proton");
-  particleNameList.push_back ("neutron");
-
-  energyList.clear ();
-  energyList.push_back (500 * MeV);
-
-  materialNameList.clear ();
-  materialNameList.push_back ("Pb");
-  materialNameList.push_back ("Al");
-  materialNameList.push_back ("Air");
-
-  OutputCases (N, particleNameList, energyList, materialNameList);
-
-  particleNameList.clear ();
-  particleNameList.push_back ("neutron");
-  particleNameList.push_back ("triton");
-  particleNameList.push_back ("deuteron");
-  particleNameList.push_back ("alpha");
-
-  energyList.clear ();
-  energyList.push_back (100 * MeV);
-
-  materialNameList.clear ();
   materialNameList.push_back ("Pb");
   materialNameList.push_back ("Al");
   materialNameList.push_back ("Air");
