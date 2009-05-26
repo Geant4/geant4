@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.20 2008-01-11 19:57:12 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.21 2009-05-26 13:19:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,6 +124,9 @@ private:
 
   G4double proposedKinEnergy;
   //  The final kinetic energy of the current particle.
+
+  G4double lowEnergyLimit;
+  //  The limit kinetic energy below which particle is stopped
 
   G4double currentCharge;
   //  The final charge of the current particle.
@@ -262,7 +265,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
 
   // update kinetic energy and charge
-  if (kinEnergy < DBL_MIN) {
+  if (kinEnergy < lowEnergyLimit) {
     theLocalEnergyDeposit += kinEnergy;
     kinEnergy = 0.0;
   } else {

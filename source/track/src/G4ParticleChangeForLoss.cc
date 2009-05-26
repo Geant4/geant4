@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.16 2006-08-28 16:10:29 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.17 2009-05-26 13:19:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,7 +48,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
 
-G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
+G4ParticleChangeForLoss::G4ParticleChangeForLoss()
+  :G4VParticleChange(), lowEnergyLimit(1.0*eV)
 {
   theSteppingControlFlag = NormalCondition;
   debugFlag = false;
