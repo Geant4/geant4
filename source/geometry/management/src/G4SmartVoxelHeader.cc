@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.32 2009-05-25 15:00:33 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.33 2009-05-26 08:39:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -365,12 +365,12 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
       {
         // Sanity check on extent
         //
-        G4double min=+kInfinity, max=-kInfinity;
+        G4double emin = kInfinity, emax = -kInfinity;
         G4VoxelLimits limits;
         G4AffineTransform origin;
-        pVolume->GetSolid()->CalculateExtent(axis, limits, origin, min, max);
-        if ( (std::fabs((min-fminExtent)/fminExtent) +
-              std::fabs((max-fmaxExtent)/fmaxExtent)) > 0.05)
+        pVolume->GetSolid()->CalculateExtent(axis, limits, origin, emin, emax);
+        if ( (std::fabs((emin-fminExtent)/fminExtent) +
+              std::fabs((emax-fmaxExtent)/fmaxExtent)) > 0.05)
         {
           G4cerr << "ERROR - G4SmartVoxelHeader::BuildReplicaVoxels()"
                  << G4endl
