@@ -437,7 +437,6 @@ int main()
   //G4ParticleDefinition* part=G4GenericIon::GenericIonDefinition();
   //G4ProcessManager* man = new G4ProcessManager(part);
   //part->SetProcessManager(man);
-  //if(!man) G4cout<<"***Tst29: ProcessManager is not defined"<<G4endl;
   //
   //G4VRestProcess* proc = new G4QCaptureAtRest;
   G4QCaptureAtRest* proc = new G4QCaptureAtRest;   // CHIPS
