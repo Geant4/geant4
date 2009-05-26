@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.8 2009-05-26 16:24:03 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.9 2009-05-26 16:26:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 					 G4int bins, 
 					 G4double emin, 
 					 G4double emax,
-					 G4bool spline):
+					 G4bool /*spline*/):
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {

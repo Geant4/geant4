@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.32 2009-05-26 16:20:13 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.33 2009-05-26 16:21:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -261,7 +261,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
 
   // cannot compute derivatives for less than 4 bins
   if(4 > numberOfBin) {
-    for(G4int i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
+    for(size_t i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
     return;
   }
 
@@ -322,7 +322,7 @@ void G4PhysicsVector::FillSecondDerivatives()
 
   // cannot compute derivatives for less than 5 bins
   if(5 > numberOfBin) {
-    for(G4int i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
+    for(size_t i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
     return;
   }
 
