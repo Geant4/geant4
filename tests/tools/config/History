@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2009-05-26 13:18:00 bmorgan Exp $
+$Id: History,v 1.24 2009-05-26 17:36:05 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
 26th May 2009 Ben Morgan
 - Configure: Regenerated following changes below.
+- U/g4_09_vis_qt.U: Added forced setting of 'build' and 'use'
+variables to 'n' if Qt UI options not set. Safety against reruns
+of Configure where Qt UI de-selected.
+- U/Qt.U: Changed order of moc detection so that searches for moc-qt*
+and qt*-moc are prioritized. Detection of plain 'moc' triggers cross
+check against detected Qt version, with user prompted if moc version
+does not match.
 - U/Loc.U: Comment out warning about $echo/builtin echo compatibility to
 resolve bug1067. May not help debugging, but has no side effects.
 
