@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.9 2009-05-26 16:26:19 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.10 2009-05-26 16:59:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,7 +154,7 @@ void G4EmElementSelector::Dump(const G4ParticleDefinition* part)
       G4cout << *(xSections[i]) << G4endl;
     }
   }  
-  G4cout << "Last Element in element vector" 
+  G4cout << "Last Element in element vector " 
 	 << (*theElementVector)[nElmMinusOne]->GetName() 
 	 << G4endl;
 }
