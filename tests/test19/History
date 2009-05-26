@@ -1,0 +1,25 @@
+$Id: History,v 1.1 2009-05-26 13:27:10 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     Test 19 History file
+                     --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May 26th, 2006  Mikhail Kossov (test19-V09-02-00)
+- Update according to new restrictions for light ions implemented
+  in G4VUserPhysicsList (run category).
+- Picked up some old changes lying on the HEAD.
+
+May 25th, 2009  Mikhail Kossov
+- Created.
+
