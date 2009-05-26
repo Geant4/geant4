@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.26 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.27 2009-05-26 15:00:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -127,10 +127,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
   G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // prepare vector
-  if(numOfCouples > nSelectors) {
-    elmSelectors.resize(numOfCouples);
-    nSelectors = numOfCouples;
-  }
+  if(numOfCouples > nSelectors) elmSelectors.reserve(numOfCouples);
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; i++) {
@@ -141,9 +138,14 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
     // selector already exist check if should be deleted
     G4bool create = true;
-    if(elmSelectors[i]) {
-      if(material == elmSelectors[i]->GetMaterial()) create = false;
-      else delete elmSelectors[i];
+    if(i < nSelectors) { 
+      if(elmSelectors[i]) {
+	if(material == elmSelectors[i]->GetMaterial()) create = false;
+	else delete elmSelectors[i];
+      }
+    } else {
+      nSelectors++;
+      elmSelectors.push_back(0); 
     }
     if(create) {
       elmSelectors[i] = new G4EmElementSelector(this,material,nbins,
