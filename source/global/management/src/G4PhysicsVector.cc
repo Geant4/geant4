@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.30 2009-05-14 08:04:34 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.31 2009-05-26 14:28:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,16 +257,15 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   //  See for example W.H. Press et al. "Numerical reciptes and C"
   //  Cambridge University Press, 1997.
 {
+  // cannot compute derivatives for less than 4 bins
+  if(4 > numberOfBin) {
+    useSpline = false;
+    return;
+  }
+
   secDerivative = new G4double [numberOfBin]; 
 
   G4int n = numberOfBin-1;
-
-  // cannot compute derivatives for less than 3 points
-  if(3 > numberOfBin) {
-    secDerivative[0] = 0.0;
-    secDerivative[n] = 0.0;
-    return;
-  }
 
   G4double* u = new G4double [n];
   
@@ -319,16 +318,15 @@ void G4PhysicsVector::FillSecondDerivatives()
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
 {  
+  // cannot compute derivatives for less than 5 bins
+  if(5 > numberOfBin) {
+    useSpline = false;
+    return;
+  }
+
   secDerivative = new G4double [numberOfBin]; 
 
   G4int n = numberOfBin-1;
-
-  // cannot compute derivatives for less than 3 points
-  if(3 > numberOfBin) {
-    secDerivative[0] = 0.0;
-    secDerivative[n] = 0.0;
-    return;
-  }
 
   G4double* u = new G4double [n];
   
@@ -359,7 +357,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   p = sig*secDerivative[n-3] + 2.0;
   u[n-1] = (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])
     - (dataVector[n-1]-dataVector[n-2])/(binVector[n-1]-binVector[n-2]);
-  u[n-1] = (6.0*sig*u[n-1]/(binVector[n]-binVector[n-2]))
+  u[n-1] = 6.0*sig*u[n-1]/(binVector[n]-binVector[n-2])
     - (2.0*sig - 1.0)*u[n-2]/p;  
 
   p = (1.0+sig) + (2.0*sig-1.0)*secDerivative[n-2];
