@@ -377,101 +377,8 @@ int main()
   G4OpticalPhoton::OpticalPhotonDefinition();
 
   // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4TauPlus::TauPlusDefinition();
-  G4TauMinus::TauMinusDefinition();
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
-  G4NeutrinoTau::NeutrinoTauDefinition();
-  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();  
 
-  // mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-
-  G4DMesonPlus::DMesonPlusDefinition();
-  G4DMesonMinus::DMesonMinusDefinition();
-  G4DMesonZero::DMesonZeroDefinition();
-  G4AntiDMesonZero::AntiDMesonZeroDefinition();
-  G4DsMesonPlus::DsMesonPlusDefinition();
-  G4DsMesonMinus::DsMesonMinusDefinition();
-  G4JPsi::JPsiDefinition();
-
-  G4BMesonPlus::BMesonPlusDefinition();
-  G4BMesonMinus::BMesonMinusDefinition();
-  G4BMesonZero::BMesonZeroDefinition();
-  G4AntiBMesonZero::AntiBMesonZeroDefinition();
-  G4BsMesonZero::BsMesonZeroDefinition();
-  G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
-
-  // barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-
-  G4Lambda::LambdaDefinition();
-  G4SigmaPlus::SigmaPlusDefinition();
-  G4SigmaZero::SigmaZeroDefinition();
-  G4SigmaMinus::SigmaMinusDefinition();
-  G4XiMinus::XiMinusDefinition();
-  G4XiZero::XiZeroDefinition();
-  G4OmegaMinus::OmegaMinusDefinition();
-
-  G4AntiLambda::AntiLambdaDefinition();
-  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
-  G4AntiSigmaZero::AntiSigmaZeroDefinition();
-  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
-  G4AntiXiMinus::AntiXiMinusDefinition();
-  G4AntiXiZero::AntiXiZeroDefinition();
-  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
-
-  G4LambdacPlus::LambdacPlusDefinition();
-  G4SigmacPlusPlus::SigmacPlusPlusDefinition();
-  G4SigmacPlus::SigmacPlusDefinition();
-  G4SigmacZero::SigmacZeroDefinition();
-  G4XicPlus::XicPlusDefinition();
-  G4XicZero::XicZeroDefinition();
-  G4OmegacZero::OmegacZeroDefinition();
-
-  G4AntiLambdacPlus::AntiLambdacPlusDefinition();
-  G4AntiSigmacPlusPlus::AntiSigmacPlusPlusDefinition();
-  G4AntiSigmacPlus::AntiSigmacPlusDefinition();
-  G4AntiSigmacZero::AntiSigmacZeroDefinition();
-  G4AntiXicPlus::AntiXicPlusDefinition();
-  G4AntiXicZero::AntiXicZeroDefinition();
-  G4AntiOmegacZero::AntiOmegacZeroDefinition();
-
-  // ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
-  //////////  IonC12::IonDefinition();
-  //  Construct light ions @@ Is that the same as above?
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();
-  //  Construct shortlived particles
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
   // --------------------------------------- End of the Particle definition ---***---
   // *********** Find tgZ and tgN from tPDG *************
   G4int tgZ=(tPDG-90000000)/1000;
@@ -527,7 +434,11 @@ int main()
   G4int npart=1;                                      // By default only one particle
   if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
   // Different Process Managers are used for the atRest and onFlight processes
+  //G4ParticleDefinition* part=G4GenericIon::GenericIonDefinition();
   //G4ProcessManager* man = new G4ProcessManager(part);
+  //part->SetProcessManager(man);
+  //if(!man) G4cout<<"***Tst29: ProcessManager is not defined"<<G4endl;
+  //
   //G4VRestProcess* proc = new G4QCaptureAtRest;
   G4QCaptureAtRest* proc = new G4QCaptureAtRest;   // CHIPS
   ///G4MuonMinusCaptureAtRest* proc = new G4MuonMinusCaptureAtRest; // GHAD
