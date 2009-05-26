@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.33 2009-05-25 17:32:08 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.34 2009-05-26 15:49:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1187,11 +1187,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   {
     G4bool ncap = true; // As a prototype: the capture process have not happened
     // @@ in the same way the fission reaction can be added for heavy nuclei
-    if(projPDG == 2112) // @@ In future it is reasonable to add the proton capture too
+    if(momentum<500. && projPDG == 2112) // @@ It is reasonable to add the proton capture
     {
       G4QNeutronCaptureRatio* capMan=G4QNeutronCaptureRatio::GetPointer();
       if(G4UniformRand() <= capMan->GetRatio(momentum, Z, N)) ncap = false; // Make capture
-      else if(momentum<.5) // Try the production threshold
+      else if(momentum<100.) // Try the production threshold
       {
         G4int tZ=Z;
         G4int tN=N;
@@ -1299,10 +1299,10 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
        G4double base=1.;  // Base for randomization (can be reduced by totZ & totN)
        G4int max=lCl;     // Number of boundaries (can be reduced by totZ & totN)
        // Take into account that at least one nucleon must be left !
-       if (Z<2 || N<2 || A<5) base = clProb[--max]; // Alpha cluster is impossible
+       if (Z<2 || N<2 || A < 6) base = clProb[--max]; // Alpha cluster is impossible
        if ( (Z > 1 && N < 2) || (Z < 2 && N > 1) ) 
          base=(clProb[max]+clProb[max-1])/2; // t or He3 is impossible
-       if ( (Z < 2 && N < 2) || A < 4) base=clProb[--max];// He3&t clusters are impossible
+       if ( (Z < 2 && N < 2) || A < 5) base=clProb[--max];// He3&t clusters are impossible
        if(A<3)           base=clProb[--max]; // Deuteron cluster is impossible
        G4int cln=0;                         // Cluster#0 (Default for the selectedNucleon)
        if(max)                              // Not only nucleons are possible
@@ -1450,7 +1450,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef qedebug
         G4cout<<"G4QCol::PStDoIt:***Enter***,cmM2="<<cmM2<<" > minM2="<<minM*minM<<G4endl;
 #endif
-        // Estimate and randomize charge-exchange with quasi-free cluster
+        // Estimate and randomize charge-exchange with a quasi-free cluster
         G4bool chex=false;                        // Flag of the charge exchange scattering
         G4ParticleDefinition* projpt=G4Proton::Proton(); // Prototype, only for chex=true
         // This is reserved for the charge-exchange scattering (to help neutron spectras)
@@ -1560,7 +1560,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
        G4bool pin=false;         // Flag of picking up 1 n + 1 p to create He3/t      (p/n)
        G4bool hin=false;         // Flag of PickUp creation of alpha (He4)            (p/n)
        G4double frn=G4UniformRand();
-       if(N>2 && frn > 0.95)     // .95 is a parameter to pickup 2n (cteate t or +1p=alph)
+       if(N>2 && frn > 0.95)     // .95 is a parameter to pickup 2N (to cteate t or He3)
        {
          if(projPDG==2212)
          {
@@ -1587,6 +1587,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
              theDefinition = G4He3::He3();
              mPUF=mHel3;         // The mass of the created pickup fragment is Helium3
              restPDG-=1000;      // Res. nucleus PDG is two neutrons less than target PDG
+             rZ--;               // Reduce the charge of the residual nucleus
              dip=true;
            }
            else

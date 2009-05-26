@@ -13,6 +13,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+25-May-2009 M.Kosov (hadr-chips-inter-V09-02-07)
+------------------------------------------------------
+- G4QNeutronCrossSection class is implemented
+
+- G4QNeutronCaptureRatio class is implemented
+
+- neutron-nuclear interactions are implemented in the G4QCollision class
+
 23-Jan-2009 M.Kosov (hadr-chips-inter-V09-02-06)
 ------------------------------------------------------
 - Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)

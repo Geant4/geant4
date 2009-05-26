@@ -346,7 +346,7 @@ G4double G4QProtonNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4dou
   if(P<ThresholdMomentum(tZ,tN)*.001) return sigma;
   G4double lP=std::log(P);
   if(tZ==1&&!tN){if(P>.35) sigma=CrossSectionFormula(tZ,tN,P,lP);}// s(pp)=0 below 350Mev/c
-  else if(tZ<93 && tN<239)                // General solution
+  else if(tZ<97 && tN<152)                // General solution
   {
     G4double pex=0.;
     G4double pos=0.;
@@ -425,7 +425,7 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double d3=dp*dp*dp;
     sigma=(33.+.2*ds*ds)/(1.+.4/sp)/(1.+.5/d3/d3);
   }
-  else if(tZ<93 && tN<146)                // General solution
+  else if(tZ<97 && tN<152)                // General solution
   {
     //G4double lP=std::log(P);            // Already calculated
     G4double d=lP-4.2;
