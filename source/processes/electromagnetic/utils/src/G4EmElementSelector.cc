@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.7 2009-05-10 18:26:43 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.8 2009-05-26 16:24:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
     xSections.reserve(n);
     for(G4int i=0; i<n; i++) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
-      v->SetSpline(spline);
+      //v->SetSpline(spline);
       xSections.push_back(v);
     }
   }
