@@ -83,6 +83,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -144,7 +145,7 @@ int main()
   const G4int nTg=8;   // Length of the target list for the Performance test
   G4int tli[nTg]={90001000,90002002,90003004,90007007,90013014,90027032,90047060,90092146};
   G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Nitrogen","Aluminum","Cobalt","Silver"
-																					,"Uranium"};
+                     ,"Uranium"};
   G4String tsy[nTg]={"1H","He","7Li","14N","27Al","59Co","107Ag","238U"};
   G4Material* mat[nTg]={0,0,0,0,0,0,0,0};
   const G4int nPr=11;  // Length of the projectile list for the Performance test
@@ -278,11 +279,11 @@ int main()
   // Run manager
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test29PhysicsList);
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
   G4ParticleDefinition* ionDefinition=0;
   ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
-		if(!ionDefinition)
-		{
+  if(!ionDefinition)
+  {
     G4cerr<<"*** Error! *** Test29:(6,6) ion can not be defined"<<G4endl;
     return 0;
   }
@@ -296,14 +297,14 @@ int main()
     G4int z3=thrdZ[a]; // Third table
     G4int z4=quadZ[a]; // Fourth table
     if(z2)
-	   {
+    {
       if(z1==z2)G4cout<<"#"<<a<<": z1="<<z1<<" = z2="<<z2<<", z3="<<z3<<",z4="<<z4<<G4endl;
       if(z3)
-	     {
+      {
         if(z1==z3)G4cout<<"#"<<a<<",z1="<<z1<<" = z3="<<z3<<",z2="<<z2<<",z4="<<z4<<G4endl;
         if(z2==z3)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<" = z3="<<z3<<",z4="<<z4<<G4endl;
         if(z4)
-	       {
+        {
           if(z1==z4)G4cout<<"#"<<a<<",z1="<<z1<<"=z4="<<z4<<",z2="<<z2<<",z3="<<z3<<G4endl;
           if(z2==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<"=z4="<<z4<<",z3="<<z3<<G4endl;
           if(z3==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<",z3="<<z3<<"=z4="<<z4<<G4endl;
@@ -357,6 +358,121 @@ int main()
         <<G4QPDGCode(90000000+vZ*1000+vN).GetMass()<<G4endl;
   // @@ Temporary mass test -- End
 #endif
+  // Not necessary for CHIPS, only for GHAD: fake force condition
+  G4ForceCondition* cond = new G4ForceCondition;
+  *cond=NotForced;
+//#endif
+  // Construct all particles of G4 instead of sraight forward one by one
+  ///G4ParticlePhysics* allParticles = new G4ParticlePhysics(); // Short cut from IntPhysL
+  ///allParticles->ConstructParticle();
+  //
+  // pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+  
+  // gamma
+  G4Gamma::GammaDefinition();
+  
+  // optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
+
+  // leptons
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+  G4TauPlus::TauPlusDefinition();
+  G4TauMinus::TauMinusDefinition();
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+  G4NeutrinoTau::NeutrinoTauDefinition();
+  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();  
+
+  // mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
+
+  G4DMesonPlus::DMesonPlusDefinition();
+  G4DMesonMinus::DMesonMinusDefinition();
+  G4DMesonZero::DMesonZeroDefinition();
+  G4AntiDMesonZero::AntiDMesonZeroDefinition();
+  G4DsMesonPlus::DsMesonPlusDefinition();
+  G4DsMesonMinus::DsMesonMinusDefinition();
+  G4JPsi::JPsiDefinition();
+
+  G4BMesonPlus::BMesonPlusDefinition();
+  G4BMesonMinus::BMesonMinusDefinition();
+  G4BMesonZero::BMesonZeroDefinition();
+  G4AntiBMesonZero::AntiBMesonZeroDefinition();
+  G4BsMesonZero::BsMesonZeroDefinition();
+  G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
+
+  // barions
+  G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+  G4Neutron::NeutronDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
+
+  G4Lambda::LambdaDefinition();
+  G4SigmaPlus::SigmaPlusDefinition();
+  G4SigmaZero::SigmaZeroDefinition();
+  G4SigmaMinus::SigmaMinusDefinition();
+  G4XiMinus::XiMinusDefinition();
+  G4XiZero::XiZeroDefinition();
+  G4OmegaMinus::OmegaMinusDefinition();
+
+  G4AntiLambda::AntiLambdaDefinition();
+  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
+  G4AntiSigmaZero::AntiSigmaZeroDefinition();
+  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
+  G4AntiXiMinus::AntiXiMinusDefinition();
+  G4AntiXiZero::AntiXiZeroDefinition();
+  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
+
+  G4LambdacPlus::LambdacPlusDefinition();
+  G4SigmacPlusPlus::SigmacPlusPlusDefinition();
+  G4SigmacPlus::SigmacPlusDefinition();
+  G4SigmacZero::SigmacZeroDefinition();
+  G4XicPlus::XicPlusDefinition();
+  G4XicZero::XicZeroDefinition();
+  G4OmegacZero::OmegacZeroDefinition();
+
+  G4AntiLambdacPlus::AntiLambdacPlusDefinition();
+  G4AntiSigmacPlusPlus::AntiSigmacPlusPlusDefinition();
+  G4AntiSigmacPlus::AntiSigmacPlusDefinition();
+  G4AntiSigmacZero::AntiSigmacZeroDefinition();
+  G4AntiXicPlus::AntiXicPlusDefinition();
+  G4AntiXicZero::AntiXicZeroDefinition();
+  G4AntiOmegacZero::AntiOmegacZeroDefinition();
+
+  // ions
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
+  //////////  IonC12::IonDefinition();
+  //  Construct light ions @@ Is that the same as above?
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+  //  Construct shortlived particles
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();  
+  // --------------------------------------- End of the Particle definition ---***---
   // *********** Find tgZ and tgN from tPDG *************
   G4int tgZ=(tPDG-90000000)/1000;
   G4int tgN=tPDG-90000000-tgZ*1000;
@@ -374,7 +490,7 @@ int main()
   {
     tgm=nTg;
     for(G4int tgi=0; tgi<tgm; tgi++)
-				{
+    {
       tPDG=tli[tgi];
       tgZ = (tPDG-90000000)/1000;
       tgN = tPDG-90000000-tgZ*1000;
@@ -403,7 +519,7 @@ int main()
   if(!material)
   {
     G4cout<<"Test29: Last Material "<<material->GetName()<<" is not defined."<<G4endl;
-	   exit(1);
+    exit(1);
   }
   G4double nx = 0.;
   G4double ny = 0.;
@@ -411,14 +527,14 @@ int main()
   G4int npart=1;                                      // By default only one particle
   if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
   // Different Process Managers are used for the atRest and onFlight processes
-		//G4ProcessManager* man = new G4ProcessManager(part);
+  //G4ProcessManager* man = new G4ProcessManager(part);
   //G4VRestProcess* proc = new G4QCaptureAtRest;
   G4QCaptureAtRest* proc = new G4QCaptureAtRest;   // CHIPS
   ///G4MuonMinusCaptureAtRest* proc = new G4MuonMinusCaptureAtRest; // GHAD
   if(!proc)
   {
     G4cout<<"Tst29: there is no G4QCaptureAtRest process"<<G4endl;
-	   exit(1);
+    exit(1);
   }
 #ifdef debug
   G4cout<<"Test29:--***-- process is created --***--" << G4endl; // only one run
@@ -447,7 +563,7 @@ int main()
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG==-2112) part=G4AntiNeutron::AntiNeutron();// Define AntiNeutron projectile
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
-		 {
+   {
      G4cerr<<"***Test29: pPDG="<<pPDG<<" is a PDG code of not negative particle"<<G4endl;
      G4Exception("***Test29: At Rest Process is called for not negative particle");
    }
@@ -463,7 +579,7 @@ int main()
 
    for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
    {
-				nCur++;
+    nCur++;
     if (tgm>1)
     {
       tPDG=tli[tgi];
@@ -472,9 +588,9 @@ int main()
       material=mat[tgi];
       G4Element* curEl=(*(material->GetElementVector()))[0];
       G4cout<<"Test29: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
-												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
+            <<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
     }
- 			G4cout<<"Test29:NewRun: Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
+    G4cout<<"Test29:NewRun: Targ="<<tPDG<<",Proj="<<pPDG<<", "<<nCur<<" of "<<nTot<<G4endl;
     G4int    bnp=pQC.GetBaryonNumber();
     G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
     G4int    ct=tQC.GetCharge();
@@ -669,47 +785,47 @@ int main()
 #ifdef rdebug
         G4int ac=std::abs(c);
         if(ac<10000 && ac>100)
-								{
+        {
           G4int dc=0;
-								  if(ac<1000)                  // Mesons
-										{
+          if(ac<1000)                  // Mesons
+          {
             dc=ac%100;
             dc=ac-dc*100;
           }
           else                         // Baryons
-										{
+          {
             dc=ac%1000;
             dc=ac-dc*1000;
           }
           if(dc>2) G4cout<<"Test29: Resonance PDG="<<c<<", m="<<m<<G4endl;
-								}
+        }
 #endif
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
-	       if (e < -0.0)
+        if (e < -0.0)
         {
-	         G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
+          G4cerr<<"**Test29:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
           e = 0.0;
         }
-	       // for exclusive reaction 2 particles in final state
-	       p = std::sqrt(e*(e + m + m));
-	       mom *= p;
+        // for exclusive reaction 2 particles in final state
+        p = std::sqrt(e*(e + m + m));
+        mom *= p;
         lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
         totSum -= lorV;
 #ifdef debug
         G4cout<<"Test29: PDG="<<c<<", 4M="<<lorV<<", resid4M="<<totSum<<", m="<<m<<G4endl;
 #endif
         if(std::fabs(m-lorV.m())>.005)
-	       {
-		        G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
+        {
+          G4cerr<<"***Test29: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
           alarm=true;
-	       }
+        }
         if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
            !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
-	       {
-		        G4cerr<<"***Test29: NAN in LorentzVector="<<lorV<<G4endl;
+        {
+          G4cerr<<"***Test29: NAN in LorentzVector="<<lorV<<G4endl;
           alarm=true;
-	       }
+        }
         if(c==90000002||c==90002000||c==92000000)
         {
           G4cout<<"***Test29:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
@@ -750,11 +866,11 @@ int main()
               <<lorV.e()-m<<G4endl;
 #endif
         //delete aChange->GetSecondary(i);
-	     } // End of the LOOP over secondaries
-	     //	delete secondaries in the end of the event       	 
+      } // End of the LOOP over secondaries
+      // delete secondaries in the end of the event         
       if(std::abs(pPDG)<99&&totCharge==totC&&totBaryN==totBN)//In lepton decay targetMass=0
-				  {
-						  totCharge=0;
+      {
+        totCharge=0;
         totBaryN=0;
         totSum-=G4LorentzVector(0., 0., 0., curM);
       }
@@ -766,11 +882,11 @@ int main()
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
       // Only for CHIPS
-	     if (totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
-						///////////////if (totCharge ||totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
-						// for others no conservation checks
-	     //if (1>2)
-						//
+      if (totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+      ///////////////if (totCharge ||totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+      // for others no conservation checks
+      //if (1>2)
+      //
       {
         G4cerr<<"**Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
               <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
@@ -792,13 +908,13 @@ int main()
           G4QPDGCode cQPDG(c);
           sm   = cQPDG.GetMass();
           e    = sec->GetKineticEnergy();
-	         if (e < -0.0)
+          if (e < -0.0)
           {
-	           G4cerr<<"**Test29:Ev#"<<iter<<",Hadr#"<<indx<<": E="<<e<<" <0 (Set 0)"<<G4endl;
+            G4cerr<<"**Test29:Ev#"<<iter<<",Hadr#"<<indx<<": E="<<e<<" <0 (Set 0)"<<G4endl;
             e = 0.0;
           }
-	         p    = std::sqrt(e*(e + m + m));
-	         mom *= p;
+          p    = std::sqrt(e*(e + m + m));
+          mom *= p;
           lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
           totSum -= lorV;
           G4cerr<<"Test29:#"<<indx<<",PDG="<<c<<",m="<<m<<"("<<sm<<"),4M="<<lorV<<",T="<<e
@@ -808,7 +924,7 @@ int main()
           G4Exception("***Test29: ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
-	     if(npart==1) ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
+      if(npart==1) ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
 #endif
       for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
       aChange->Clear();
@@ -832,7 +948,7 @@ int main()
   } // End of the projectile LOOP
   delete proc;
 #ifndef nout
-	 delete ntp; // Delete the class to fill the#of events
+  delete ntp; // Delete the class to fill the#of events
 #endif
   //delete phys;
   delete runManager;
