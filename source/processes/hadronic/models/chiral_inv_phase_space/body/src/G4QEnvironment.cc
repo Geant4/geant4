@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.143 2009-05-15 17:29:49 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.144 2009-05-26 14:40:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4484,7 +4484,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4Quasmon* quasH = new G4Quasmon(curHadr->GetQC(),lh4M); // Fake Quasmon ctreation
       if(!CheckGroundState(quasH,true))// Try to correct with other hadrons
       {
+#ifdef pdebug
+        // M.K. Fake complain in the low energy nHe/pHe reactions, while everything is OK
         G4cout<<"---Warning---G4QEnv::FSI:Correction error LeaveAsItIs h4m="<<lh4M<<G4endl;
+#endif
         theQHadrons.push_back(curHadr);// Fill theResidualNucleus asItIs(delete equivalent)
         //throw G4QException("G4QEnv::FSI: STOP at Correction Error");
       }

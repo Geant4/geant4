@@ -17,6 +17,12 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
 
 
+26-May-2009 M.Kosov                              (hadr-chips-body-V09-02-05)
+----------------------------------------------------------------------------
+In low energy nHe and pHe reactions, when only elastic scattering is possible,
+the inelastic application makes a complain, while it is making the elastic
+scattering (with very low cross-section). *** The complain is closed ***
+
 15-May-2009 M.Kosov                              (hadr-chips-body-V09-02-04)
 ----------------------------------------------------------------------------
 For rare cases of the output hadron mass below the GS mass instead of Exception
