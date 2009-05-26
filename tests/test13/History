@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2007-08-24 13:54:37 gcosmo Exp $
+$Id: History,v 1.11 2009-05-26 14:02:47 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 2009, Gunter Folger	 (test13-V09-02-00)
+- Use correct QGSMFragmentation, not G4LundStringFrag..,  in Tst13PhysicsList
+- Rename hadronic exerciser files using "_" instead of "."
 
 24th August 2007  Gabriele Cosmo (test13-V09-00-00)
 - Delete allocated memory in Tst13DetectorMessenger
