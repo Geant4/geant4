@@ -293,7 +293,7 @@ void Tst13PhysicsList::ConstructEM()
 #include "G4PreCompoundModel.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
-#include "G4LundStringFragmentation.hh"
+#include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
 
@@ -343,7 +343,7 @@ void Tst13PhysicsList::ConstructHad()
     theTheoModel->SetMinEnergy(19*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
 
-      G4VLongitudinalStringDecay * theFragmentation = new G4LundStringFragmentation;
+      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
       theStringModel->SetFragmentationModel(theStringDecay);
 
