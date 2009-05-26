@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.31 2009-05-26 14:28:28 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.32 2009-05-26 16:20:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,13 +257,13 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   //  See for example W.H. Press et al. "Numerical reciptes and C"
   //  Cambridge University Press, 1997.
 {
+  secDerivative = new G4double [numberOfBin]; 
+
   // cannot compute derivatives for less than 4 bins
   if(4 > numberOfBin) {
-    useSpline = false;
+    for(G4int i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
     return;
   }
-
-  secDerivative = new G4double [numberOfBin]; 
 
   G4int n = numberOfBin-1;
 
@@ -318,13 +318,13 @@ void G4PhysicsVector::FillSecondDerivatives()
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
 {  
+  secDerivative = new G4double [numberOfBin]; 
+
   // cannot compute derivatives for less than 5 bins
   if(5 > numberOfBin) {
-    useSpline = false;
+    for(G4int i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
     return;
   }
-
-  secDerivative = new G4double [numberOfBin]; 
 
   G4int n = numberOfBin-1;
 
