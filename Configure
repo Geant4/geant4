@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.115 2009-05-26 13:19:21 bmorgan Exp $
+# $Id: Configure,v 1.116 2009-05-26 17:37:44 bmorgan Exp $
 #
-# Generated on Tue May 26 14:17:33 BST 2009 [metaconfig 3.0 PL70]
+# Generated on Tue May 26 18:39:05 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2537,19 +2537,96 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
         #
         # Finally, we need to search for moc
+	# We use prior knowledge of the detected Qt version to
+	# try and grab the correct moc straight off.
         #
         g4_qt_bin_dir=\$g4_qt_dir/bin
         g4_qtmoc=no
-        if test -x "\$g4_qt_bin_dir/moc" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/moc"
-        elif test -x "\$g4_qt_bin_dir/moc-qt4" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
-        elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
-        else
-            g4_havegoodqt=no
+	g4_qt_cross_check_moc=no
+
+	if test "x\$g4_is_qt4" = "xyes" ; then
+	    # Try the qt4 variants first...
+	    if test -x "\$g4_qt_bin_dir/moc-qt4" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
+	    elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
+	    elif test -x "\$g4_qt_bin_dir/moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc"
+		g4_qt_cross_check_moc=yes
+	    else
+		g4_havegoodqt=no
+	    fi
+	else
+	    # We've probably got Qt3, so check for
+	    # the qt3 variants first
+	    if test -x "\$g4_qt_bin_dir/moc-qt3" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc-qt3"
+	    elif test -x "\$g4_qt_bin_dir/qt3-moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/qt3-moc"
+	    elif test -x "\$g4_qt_bin_dir/moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc"
+		g4_qt_cross_check_moc=yes
+	    else
+		g4_havegoodqt=no
+	    fi
         fi
         echo "checking for moc... \$g4_qtmoc"
+
+	#
+	# If pure 'moc' was found, cross check its version
+	# against previously detected Qt major version
+	#
+	if test "x\$g4_qt_cross_check_moc" = "xyes" ; then
+	    $echo $n "Checking \$g4_qtmoc major version is \$g4_qt_major_ver... $c"
+	    # Grab version of found moc
+	    g4_qt_found_moc_major_version=\`\$g4_qtmoc -v 2>&1 | sed -s 's/^.*(Qt \([0-9]\)\..*/\1/'\`
+	    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
+		# We need to ask the user where correct moc is
+		$echo "no"
+		promptend="no"
+		user_moc="\$g4_qtmoc"
+
+		while test "x\$promptend" = "xno" ; do
+		    echo " "
+		    g4message=\`cat << EOM
+Qt moc was found as \$user_moc and has major version \$g4_qt_found_moc_major_version. 
+This does not match the version of the detected Qt install 
+which is \$g4_qt_major_ver.
+Please enter the full path to the moc program which matches this Qt
+version, or type '-' to CANCEL the Qt checks.
+EOM\`
+		    dflt="\$user_moc"
+		    rp=\$g4message
+                    . ./myread
+
+		    # Check for user cancellation
+                    if test "x\$ans" = "x-" ; then
+			g4_havegoodqt="no"
+			g4_qtmoc=""
+			promptend="yes"
+                    else
+                        user_moc="\$ans"
+			if test -x "\$user_moc" ; then
+			    g4_qt_found_moc_major_version=\`\$user_moc -v 2>&1 | sed -s 's/^.*(Qt \([0-9]\)\..*/\1/'\`
+			    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
+			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... no"
+			    else
+			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... yes"
+				g4_qtmoc=\$user_moc
+				promptend=yes
+                            fi
+			else
+			    echo "warning: \$user_moc is not executable."
+			    user_moc="<null>"
+                            g4_qt_found_moc_major_version="<null>"
+			fi
+                    fi
+		# We need to ask the user where correct moc is
+		done
+            else
+                $echo "yes"
+            fi
+	fi
 
         ## THIS IS POINT AT WHICH TO DO FALLBACK TESTS I.E DOES
         ## COMPILATION OF SMALL TEST PROGRAM WORK - THEN HEADERS AND
@@ -6173,7 +6250,7 @@ fi # if platform (Unix vs Win)
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
 if test "x$g4ui_build_qt_session" = "xy" ; then
-    # Query the user to see if build of Qt UI module is needed
+    # Query the user to see if build of Qt GL module is needed
     g4message=`cat <<EOM
 
     G4UI_BUILD_OPENGLQT_DRIVER
@@ -6257,6 +6334,11 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+else # TEST g4ui_build_qt_session
+    # Because we can 'drop through' this test on repeat
+    # running Configure, force build and use to n
+    g4vis_build_openglqt_driver=n
+    g4vis_use_openglqt=n
 fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
 
