@@ -26,6 +26,8 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4RunManager.hh" 
+
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -232,7 +234,6 @@ void DetectorConstruction::SetAbsorber1Thickness(G4double val)
   Absorber1Thickness = val;
 }  
 
-
 void DetectorConstruction::SetAbsorber2Thickness(G4double val)
 {
   Absorber2Thickness = val;
@@ -257,8 +258,6 @@ void DetectorConstruction::SetNbOfLayersOfMedium3(G4int val)
 {
   NbOfLayersOfMedium3 = val;
 }
-
-#include "G4RunManager.hh" 
  
 void DetectorConstruction::UpdateGeometry()
 {

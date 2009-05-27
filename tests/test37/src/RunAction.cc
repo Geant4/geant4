@@ -70,6 +70,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   MFP2 = 1.e+10;
   MFP3 = 1.e+10;
 
+  density1 = 0.0;
+  density2 = 0.0;
+  density3 = 0.0;
+
   // Medium 1
   if (matName1=="G4_Ta") // Tantalum 
     { 
@@ -199,19 +203,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     }
 
   //initialize EnergyDeposit per Layer
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium1(); k++) {
+  for (G4int k=0; k<110; k++) {
     energyDeposit1[k] = 0.0;
-  }   
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium2(); k++) {
     energyDeposit2[k] = 0.0;
-  }   
-  for (G4int k=0; k<=detector->GetNbOfLayersOfMedium3(); k++) {
     energyDeposit3[k] = 0.0;   
-  }
+  }   
+
   //initialize EnergyDeposit per Medium
   energyDepositRun1 = 0.;
   energyDepositRun2 = 0.;
   energyDepositRun3 = 0.;
+
 
   // counters
   n_steps = 0;
@@ -231,18 +233,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double thick12 = G4double (n12);
   G4double LayerTh1= thick11/thick12;
   G4double deltaX1 = LayerTh1*density1/MFP1;
-
+  //G4cout << "#1 n= " << n12 << " density= " << density1 << " MFP= " << MFP1 << G4endl;
+ 
   G4int    n22     = detector->GetNbOfLayersOfMedium2();
   G4double thick21 = detector->GetAbsorber2Thickness();
   G4double thick22 = G4double (n22);
   G4double LayerTh2= thick21/thick22;
   G4double deltaX2 = LayerTh2*density2/MFP2;
+  //G4cout << "#2 n= " << n22 << " density= " << density2 << " MFP= " << MFP2 << G4endl;
 
   G4int    n32     = detector->GetNbOfLayersOfMedium3();
   G4double thick31 = detector->GetAbsorber3Thickness();
   G4double thick32 = G4double (n32);
   G4double LayerTh3= thick31/thick32;
   G4double deltaX3 = LayerTh3*density3/MFP3;
+  //G4cout << "#3 n= " << n32 << " density= " << density3 << " MFP= " << MFP3 << G4endl;
+
+
   G4cout<<"Thicknesses(mm)= " << thick21/mm<<"  "<<thick22/mm
 	<<"  "<<thick32/mm<<"  "<<G4endl;
   G4cout<<"Bins(R/R0)=      " << deltaX1<<"  "<<deltaX2<<"  "
