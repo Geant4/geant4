@@ -1,0 +1,134 @@
+<html>
+<head>
+<title>System Testing report on tests</title>
+</head>
+ 
+<body>
+
+<div align="center"> 
+<h2>Outstanding Problems in latest development tag</h2>
+<h2>geant4-09-01-ref-09</h2>
+</div>
+
+Report on Errors and Warnings arising from system testing on the
+<blink><b>geant4-09-01-ref-09</b></blink> development tag.
+Note that there is a new problem, absent from previous reference tag,
+for novice example N07.
+
+The use of floating point checking has been extended to all debug builds and, 
+by accident also to 32 bit optimised. As consequence crashes due to floating 
+point exceptions are now detected on more platforms.   
+
+<h3>Test11 - Neutron transport</h3>
+This test crashes for a FloatingPoint exception, which is fixed by latest G4NDL3.13, which was not yet used in testing.
+
+
+<h3>Test21 - Chips as intra nuclear transport</h3>
+On Linux/debug/64 bit, CHIPS runs into a exception:
+<pre>
+	G4QE::FSI:R=17755.2,S+=0,S-=0,L=1,d=14.7889
+	***G4QE::FSI: HypN=91005014, M=18856.1<18858.9,d=2.83232
+	*G4QEnv::Fragment:Exception.Target=90009012. Projectiles:
+	G4QE::F:#0,PDG/4M=90996005(822.476,389.976,4925.25;7408.83)
+	terminate called after throwing an instance of 'G4QException'
+	  what():  12G4QException
+	Command terminated by signal 6
+</pre>
+
+On Linux/debug/32 bit, the following CHIPS warning appears:
+<pre>
+	*!*G4QE::FSI:NoCor 130302+939.565=131242>130309
+	*!*G4QE::FSI:NoCor 148947+939.565=149887>148963
+</pre>
+
+On Linux/optimsed/ 32bit, the following CHIPS exception occurs:
+<pre>
+	***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-1114
+	***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=-1114
+	***G4QNucleus::InitByPDG:Initialized by not nuclear PDGCode=8999999
+	G4QE::FSI:R=20542.4,S+=0,S-=0,L=1,d=15.8371
+	***G4QE::FSI: HypN=91006016, M=21642.2<21647.5,d=5.2809
+	*G4QEnv::Fragment:Exception.Target=90009011. Projectiles:
+	G4QE::F:#0,PDG/4M=90997006(82.9034,-1354.61,6449.35;9870.17)
+	terminate called after throwing an instance of 'G4QException'
+	  what():  12G4QException
+	Command terminated by signal 6
+</pre>
+
+
+<h3>test28 - Abrasion/Ablation</h3>  
+On Linux/optimized/32 bit
+<pre>
+	ERROR: 8 - Subscript out of range.
+	Command terminated by signal 6
+</pre>
+
+
+<h3>test34 - Shower parameterisation with gflash</h3>
+There is a warning on all systems:
+<pre>
+    Warning : Region <crystals> does not have specific production cuts,
+    even though it appears in the current tracking world.
+    Default cuts are used for this region.
+</pre>
+
+In addition, in in Linux/(32+64) bit/debug, there is a floating point exception:
+<pre>
+    ERROR: 8 - Subscript out of range.
+    Command terminated by signal 6
+</pre>
+  
+<h3>Examples/novice/N07</h3> 
+On linux, 64 bit both debug and optimised :
+<pre>
+	WARNING - G4PathFinder::ReportMove()
+        	  Endpoint moved between value returned by ComputeStep() and call to Loc
+	ate(). 
+        	  Change of Position is 8.07318694628e-06 mm long
+        	  and its vector is (-3.46152120301e-08,3.59381147064e-08,8.07303274541e
+	-06) mm 
+        	  Endpoint of ComputeStep() was (3.06341896444,995.713614303,750)
+        	  and current position to locate is (3.06341892982,995.713614339,750.000
+	008073)
+
+	*** G4Exception : 201-LocateUnexpectedPoint
+	      issued by : G4PathFinder::Locate
+	Location is not where last ComputeStep() ended.
+	*** This is just a warning message.
+
+	WARNING - G4PathFinder::ReportMove()
+        	  Endpoint moved between value returned by ComputeStep() and call to Loc
+	ate(). 
+        	  Change of Position is 1.66239378111e-06 mm long
+        	  and its vector is (1.60096647051e-09,4.99880741245e-08,1.6616412708e-0
+	6) mm 
+        	  Endpoint of ComputeStep() was (-19.6015803046,36.7007336609,-49.999999
+	9992)
+        	  and current position to locate is (-19.601580303,36.7007337109,-49.999
+	9983376)
+
+	*** G4Exception : 201-LocateUnexpectedPoint
+	      issued by : G4PathFinder::Locate
+	Location is not where last ComputeStep() ended.
+	*** This is just a warning message.
+</pre>
+
+On Linux/32bit/optimised there is the same problem, but different numbers.
+
+<h3>examples/advanced/microbeam</h3>
+On Linux/optimized/32 bit
+<pre>
+	WARNING - G4MagIntegratorDriver::AccurateAdvance()
+        	  Proposed step is zero; hstep = 0 !
+</pre>
+
+<h3>examples/advanced/nanobeam</h3>
+On Linux/debug/32 bit, there is a problem most likely due to the way STT runs the test.
+<pre>
+	Try to read more than 32 lines in matrix file !
+
+	*** G4Exception: Aborting execution ***
+</pre>
+
+</body>
+</html>
