@@ -22,6 +22,16 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+config                                           config-V09-02-06
+------
+- Configure script (Configure-V09-02-02):
+  o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+    with cygwin and Matlab.
+  o Added check to build Qt driver only when Qt UI module is built;
+    reordered moc checks and added cross-check on moc version.
+    Added safety reset of OpenGL QT build and use variables.
+  o Commented out echo compatibility warning to address problem report #1067.
+
 digits_hits                                      digits_hits-V09-02-01
 -----------
 - Replaced usage of non-Standard calls to sprintf() with ostringstream,
@@ -49,6 +59,11 @@ geometry/magnetic_field                          field-V09-02-02
 - Enhanced algorithm G4ChordFinder::ApproxCurvePointS() in order to speedup
   Brent locator.
 
+geometry/management                              geommng-V09-02-01
+-------------------
+- Fixed initialisation of min/max extent in method BuildReplicaVoxels() in
+  G4SmartVoxelHeader.
+
 geometry/navigation                              geomnav-V09-02-05
 -------------------
 - Fix in G4Navigator::ComputeStep() for the computation of rotation of the
@@ -63,7 +78,7 @@ geometry/navigation                              geomnav-V09-02-05
   G4PhantomParameterisation. Added protection to GetMaterialIndex()
   for zero index.
 
-geometry/solids/CSG                              geom-csg-V09-02-01
+geometry/solids/CSG                              geom-csg-V09-02-02
 -------------------
 - G4Sphere:
   o Implemented speed improvements and corrections from joint code review.
@@ -83,7 +98,7 @@ geometry/solids/specific                         geom-specific-V09-02-02
   which was erroneously returning cubic volume estimation.
   Addresses problem report #1062.
 
-global                                           global-V09-02-03
+global                                           global-V09-02-05
 ------
 - G4PhysicsVector: added method ComputeSecondDerivatives() for the case when
   user provides first derivative at end-points; use "Not-a-Knot" algorithm for
@@ -207,18 +222,22 @@ processes/electromagnetic/standard               emstand-V09-02-13
     section table.
 - G4WaterStopping: fix to Ar data.
 
-processes/electromagnetic/utils                  emutils-V09-02-08
+processes/electromagnetic/utils                  emutils-V09-02-10
 -------------------------------
 - G4EmElementSelector: added protection for zero cross section at first
-  and last bins of physics vector.
+  and last bins of physics vector; do not use Spline interpolation.
 - G4VMscModel, G4VMultipleScattering: set default Range Factor to 0.04.
+  Added a protection against zero kinetic energy.
 
 processes/hadronic
 ------------------
-- models/chiral_inv_phase_space/body (hadr-chips-body-V09-02-04)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-02-06)
   o For rare cases of the output hadron mass below the GS mass avoid
     exception in the G4QEnvironment class; use 'As-Is' filling for the hadron
     with appropriate warning. To be debugged if this case is reproduced.
+  o Cleared warning in elastic scattering for low energy nHe and pHe reactions.
+  o Added safety check of 'nDelta' in the hadronization probability
+    calculations in G4Quasmon.
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-06)
   o Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)
     to be consistent with latest changes in particles. Changes are made for
@@ -236,17 +255,19 @@ processes/hadronic
     anti-diquark & antiquark; note the reverse order, too. 
     Fixes problems with incident anti-baryons, e.g. anti-proton, manifesting
     in problems with forming hadrons.
+- models/rpg (hadr-rpg-V09-02-00)
+  o Removed global variables (pointers to static particle definitions) in
+    G4RPGInelastic and replaced with local array. Fixing issues of wrong
+    order for static initialization.
 
 processes/optical                    op-V09-02-02
 -----------------
 - Added exception for cases where invalid normal is returned; following
   problem report #1060.
 
-run                                  run-V09-02-01
----
-- Added check of process manager in G4VUserPhysicsList::BuildPhysicsTable()
-  and additional method G4VUserPhysicsList::CheckParticleList() to check
-  consistencies of list of particles before constructing processes.
+track                                track-V09-02-02
+-----
+- Set 'lowEnergyLimit' to 1 eV in G4ParticleChangeForLoss.
 
 visualization
 -------------
@@ -302,6 +323,10 @@ tests                                            tests-V09-02-05
 - Updated reference outputs and tools.
 - test10 (test10-V09-02-00)
   o Added few cases of non-zero rotation matrices for tested solids.
+- test19 (test19-V09-02-00)
+- test29 (test29-V09-02-00)
+- test39 (test39-V09-02-00)
+  o Corrected initialisation for generic ions.
 - test35 (test35-V09-02-00)
   o Improved scripts; added comments to the main().
 - test41 (test41-V09-02-00)
@@ -313,7 +338,7 @@ tests                                            tests-V09-02-05
 - test46 (test46-V09-02-00)
   o New test for validation of thick target data for low-energy proton and
     ion beams stopped in different targets.
-- test60 (test60-V09-02-00)
+- test60 (test60-V09-02-01)
   o New test for low-energy DNA processes.
     Shooting 1 or 10 e-, proton, hydrogen, alpha, alpha+ and helium of
     10 KeV in liquid water.

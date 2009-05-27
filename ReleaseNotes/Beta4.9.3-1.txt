@@ -8,6 +8,14 @@ List of main features and fixes included in this Beta release since 9.2.p01:
 
   o Configuration:
     -------------
+    + Configure script:
+      o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+        with cygwin and Matlab.
+      o Added check to build Qt driver only when Qt UI module is built;
+        reordered moc checks and added cross-check on moc version.
+        Added safety reset of OpenGL QT build and use variables.
+      o Commented out echo compatibility warning to address problem
+        report #1067.
     + Corrections in analysis.gmk for AIDA setup on Windows.
     + Improved non-standard setup for Qt on Linux, Mac and Windows.
     + Removed "-lcxa -lunwind" LOADLIBS addition in Linux-icc.gmk,
@@ -48,6 +56,8 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         up Brent locator.
       o Some code cleanup and formatting.
     + management:
+      o Fixed initialisation of min/max extent in method BuildReplicaVoxels()
+        in G4SmartVoxelHeader.
       o Adopt 'const' references for strings as arguments/return-values in
         G4LogicalSurface. Some minor cleanup...
     + navigation:
@@ -333,6 +343,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o G4VMscModel: added methods InitialiseSafetyHelper(), ComputeSafety(),
         ComputeGeomLimit() and ComputeDisplacement().
       o G4VMscModel, G4VMultipleScattering: set default Range Factor to 0.04.
+        Added a protection against zero kinetic energy.
       o G4VEmProcess: added possibility to set more than one model.
       o G4VEnergyLossProcess, G4VEmProcess: added calls to de-excitation
         PostStep. Added ActivateDeexcitation() method in G4EmProcessOptions
@@ -353,7 +364,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         energy regions of standard and low-energy models.
         Reduced internal vectors if no model per region are initialized.
       o G4EmElementSelector: added protection for zero cross section at first
-        and last bins of physics vector.
+        and last bins of physics vector; do not use Spline interpolation.
       o Some code cleanup.
 
   o Hadronic Processes:
@@ -379,6 +390,10 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o For rare cases of the output hadron mass below the GS mass avoid
         exception in the G4QEnvironment class; use 'As-Is' filling for the
         hadron with appropriate warning.
+      o Cleared warning in elastic scattering for low energy nHe and pHe
+        reactions.
+      o Added safety check of 'nDelta' in the hadronization probability
+        calculations in G4Quasmon.
       o Change of GetNuclearMass(A-1.,Z-1.) (and similar) to
         GetNuclearMass(A-1,Z-1) to be consistent with latest changes in
         particles module.
@@ -410,6 +425,10 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + models/qmd
       o Fixed bug in gamma (mass zero) participants in G4QMDCollision.
       o Changed object data member to pointer in G4QMDReaction.
+    + models/rpg
+      o Removed global variables (pointers to static particle definitions) in
+        G4RPGInelastic and replaced with local array. Fixing issues of wrong
+        order for static initialization.
     + models/theo_high_energy
       o Quasi Elastic part is made more used in QGSC at low energies to improve
         the performance of QGSC at low energies.
@@ -432,16 +451,11 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Added exception for cases where invalid normal is returned; following
         problem report #1060.
 
-  o Run:
-    ---
-    + Added check of process manager in G4VUserPhysicsList::BuildPhysicsTable()
-      and additional method G4VUserPhysicsList::CheckParticleList() to check
-      consistencies of list of particles before constructing processes.
-
   o Track:
     -----
     + Modified implementation of GetVelocity() for particle-change for
       performance improvement.
+    + Set 'lowEnergyLimit' to 1 eV in G4ParticleChangeForLoss.
 
   o Visualization:
     -------------
