@@ -8,6 +8,7 @@
     <set>
       <text>test23-build</text>
       <text>test23-run</text>
+      <text>test23-run-had</text>
     </set>
   </argument>
 </extension>
