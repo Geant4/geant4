@@ -97,9 +97,10 @@ List of main features and fixes included in this Beta release since 9.2.p01:
   o Global:
     ------
     + G4PhysicsVector: added method ComputeSecondDerivatives() for the case
-      when user provides first derivative at end-points; use "Not-a-Knot"
-      algorithm for the computation of second derivatives in default method
-      FillSecondDerivatives().
+      when user provides first derivative at end-points (4 bins minimum); 
+      use "Not-a-Knot" algorithm for the computation of second derivatives 
+      in default method FillSecondDerivatives() (5 bins minnimum);
+      for smaller number of bins the linear interpolation is used.
     + Added G4ErrorStage enum to G4ErrorPropagatorData class.
     + Changed date for release 9.3-beta.
 
@@ -138,16 +139,14 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         are included in the classes anymore).
       o Stopping power vectors are now only built on request and not anymore
         in the constructor.
-      o G4IronStoppingICRU73: extended upper limit of the data vector from
-        10 MeV to 1 GeV; using 53 bins; added G4WATER data and fixed GetDEDX()
-        methods in these classes for E=10 MeV (upper limit).
+    + G4IronStoppingICRU73: extended upper limit of the data vector from
+      10 MeV to 1 GeV; using 53 bins; added G4WATER data and fixed GetDEDX()
+      methods in these classes for E=10 MeV (upper limit).
     + G4NistMaterialBuilder: mean ionisation potential for G4_WATER is set
       to 78 eV according to GSI Annual Report (2008) p.373, in order to be
       consistent with ICRU'73 tables.
-      Fixed ICRU'73 data: G4WATER, G4WATER_VAPOR, G4NYLON-6/6 (in
+    + Fixed ICRU'73 data: G4WATER, G4WATER_VAPOR, G4NYLON-6/6 (in
       G4MaterialStoppingICRU73); G4_Cu (in G4SimpleMaterialStoppingICRU73).
-    + G4VIonDEDXTable: added interface class for electronic stopping power
-      tables for ions.
     + New utility class G4ExtDEDXTable to handle external electronic
       stopping power tables for ions.
     + Use 'const' references for strings as arguments/return-values in material
@@ -169,7 +168,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + Make use of new experimental class G4NucleiPropertiesTableAME03
       including data updated to the Ame-2003 atomic mass evaluation (II) by
       G.Audi, A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.
-    + Fixed use of std::fabs() in place of of abs().
+    + Fixed use of std::fabs() in place of std::abs().
 
   o Persistency (GDML):
     ------------------
@@ -242,8 +241,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + High Energy:
       o Simplified initialisation in G4mplIonisationModel and
         G4eeToHadronsMultiModel.
-      o Some code cleanup: improved comments, avoid inlined virtual methods,
-        ecc...
+      o Some code cleanup: improved comments, avoid inlined virtual methods.
     + Low Energy:
       o Added G4PenelopeBremsstrahlungModel, namely Bremsstrahlung according
         to Penelope model, migrated to the 'Standard' design, inheriting from
@@ -296,7 +294,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         external model of fluctuations.
       o Simplified initialisation in G4MuBetheBlochModel,
         G4MuBremsstrahlungModel and G4MuPairProductionModel.
-      o Some code cleanup.
+      o Some code cleanup: improved comments, avoid inlined virtual methods.
     + Polarisation:
       o Simplified initialisation in G4PolarizedAnnihilationModel.
     + Standard:
@@ -313,11 +311,12 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         particles; use EGSnrc form of screening parameter (second order
         correction). Use generic methods of G4VMscModel to access safety and
         other geometrical information.
-      o Simplified initialisation of all models and some code cleanup.
+      o Simplified initialisation of all models and some code cleanup: improved
+        comments, avoid inlined virtual methods.
       o G4UniversalFluctuation: modification in width correction, the
         dependence of the correction on energy deposition at previous steps
         is now fixed. Addresses report from T2K setup.
-      o Added new alternative multiple-scattering G4GoudsmitSaundersonMscModel.
+      o Added new multiple-scattering model for e+- G4GoudsmitSaundersonMscModel.
       o Added new class G4HeatedKleinNishinaCompton, prototype model for plasma.
       o G4PairProductionRelModel: new relativistic model for gamma conversion.
       o G4PEEffectModel: substitute ComputeMeanFreePath() by
@@ -329,22 +328,19 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         for the new G4IonParametrisedLossModel of low-energy package.
       o G4IonFluctuations: removed extra phenomenological factor in fluctuation
         width.
-      o Cleanup in G4GoudsmitSaundersonMscModel: discarded no scattering and
-        single scattering Theta sampling from SampleCosineTheta() which means
-        the splitting step into two sub-steps occurs only for
-        multiple-scattering regime.
-      o G4WaterStopping: fix to Ar data.
+      o G4WaterStopping: use updated ICRU'73 data.
     + Utils:
       o G4VEmModel: moved to protected methods to access geometrical
-        information.
-        Added new method SetSampleZ() and SampleDeexcitationAlongStep();
-        multiple-scattering methods are moved to G4VMscModel; added
-        protected methods for initialisation of ParticleChange.
+        information; added new method SetSampleZ() and
+        SampleDeexcitationAlongStep(); multiple-scattering methods are moved
+        to G4VMscModel; added protected methods for initialisation of
+        ParticleChange.
       o G4VMscModel: added methods InitialiseSafetyHelper(), ComputeSafety(),
         ComputeGeomLimit() and ComputeDisplacement().
       o G4VMscModel, G4VMultipleScattering: set default Range Factor to 0.04.
         Added a protection against zero kinetic energy.
-      o G4VEmProcess: added possibility to set more than one model.
+      o G4VEmProcess: added possibility for more than one model in SetEmModel()
+        method.
       o G4VEnergyLossProcess, G4VEmProcess: added calls to de-excitation
         PostStep. Added ActivateDeexcitation() method in G4EmProcessOptions
         and '/process/em/deexcitation' UI command to messenger.
@@ -365,7 +361,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         Reduced internal vectors if no model per region are initialized.
       o G4EmElementSelector: added protection for zero cross section at first
         and last bins of physics vector; do not use Spline interpolation.
-      o Some code cleanup.
+      o Some code cleanup: improved comments, avoid inlined virtual methods.
 
   o Hadronic Processes:
     ------------------
