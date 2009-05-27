@@ -23,7 +23,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/tests/test13;make&amp;&amp; make -f GNUmakefile.hadronic.exerciser</text>
+    <text>cd $G4INSTALL/tests/test13;make&amp;&amp; make -f GNUmakefile_hadronic_exerciser</text>
   </argument>
   <argument name="stderr">
     <text/>

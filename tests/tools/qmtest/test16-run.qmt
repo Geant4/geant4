@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/tests/test16;$G4BIN/$G4SYSTEM/test16.hadronic.exerciser | $G4BIN/$G4SYSTEM/test16</text>
+    <text>cd $G4INSTALL/tests/test16;$G4BIN/$G4SYSTEM/test16_hadronic_exerciser | $G4BIN/$G4SYSTEM/test16</text>
   </argument>
   <argument name="stderr">
     <text/>
