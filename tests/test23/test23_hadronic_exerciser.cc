@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test23.hadronic.exerciser.cc,v 1.3 2006-06-29 21:49:29 gunter Exp $
+// $Id: test23_hadronic_exerciser.cc,v 1.1 2009-05-27 15:02:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
