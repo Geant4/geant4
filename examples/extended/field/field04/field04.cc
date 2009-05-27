@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.8 2008-07-03 20:31:30 gum Exp $
+// $Id: field04.cc,v 1.9 2009-05-27 16:02:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,9 +75,9 @@ int main(int argc,char** argv)
 
   G4String physicsList = "QGSP_BERT";
 
-  G4int seed = 0;
+  G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
-  if (seed == 0) seed = time(0);
+  // if (seed == 123) seed = time(0);
 
   // Choose the Random engine
 
