@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: History,v 1.5 2005-12-06 16:12:15 gcosmo Exp $
+// $Id: History,v 1.6 2009-05-27 15:01:30 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -38,6 +38,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 2009, Gunter Folger
+- rename hadronic exerciser files; use "_" instead of "." in filename; 
+   ("." in fileanme confuses Windows, resulting in warnings)
 
 Dec 6, 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
