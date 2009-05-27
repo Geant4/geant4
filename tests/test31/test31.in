@@ -8,27 +8,31 @@
 /event/verbose 0
 /test31/verbose 0
 #
-/testem/phys/setCuts         1 km
 /testem/phys/addPhysics      emstandard_opt2
 /testem/phys/addPhysics      step_limit
+/testem/phys/stepMax         0.1 mm
+/testem/phys/setCuts         1 km
+#
 /test31/AbsorberMaterial     G4_WATER
 /test31/AbsorberThick        10 mm
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
 /test31/WorldMaterial        G4_AIR
 /test31/HistoNumber          5
-/test31/gun/beamE            1000.0 MeV
-/testem/phys/stepMax         0.1 mm
-#/process/eLoss/preciseRange  true
-/run/initialize
 #
-#/testem/histo/fileName            t_e_st.paw
+/run/initialize
+/gun/energy                  1000.0 MeV
+#
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 1
+#
 /testem/phys/setCuts         1 mm
 /testem/phys/stepMax         1 km
+#
 /test31/AbsorberMaterial     G4_Si
+#
+#/testem/histo/fileName      t_e_st.paw
 /gun/particle e-
 /run/beamOn 100
 #
