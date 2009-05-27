@@ -507,6 +507,9 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Increased upper limit of energy in the tables to 1000 TeV.
     + extended/electromagnetic/TestEm18
       o Changes to PhysicsList.
+    + extended/field/field04
+      o Commented out timing on initial seed to allow for reproducibility of
+        results.
     + extended/hadronic/Hadr01
       o Updated physics-list.
     + extended/medical/fanoCavity

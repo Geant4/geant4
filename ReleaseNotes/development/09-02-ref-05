@@ -308,6 +308,9 @@ examples                                         examples-V09-02-05
   o Corrected GNUmakefile and some cleanup.
 - extended/electromagnetic/TestEm6 (testem6-V09-02-00)
   o Increased upper limit of energy in the tables to 1000 TeV.
+- extended/field/field04 (field04-V09-02-00)
+  o Commented out timing on initial seed to allow for reproducibility of
+    results.
 - extended/hadronic/Hadr01 (exhadr01-V09-02-00)
   o Updated physics-list.
 - extended/persistency/gdml/G01 (G01-V09-02-03)
