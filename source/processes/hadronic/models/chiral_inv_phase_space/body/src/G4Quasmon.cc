@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.110 2009-05-15 17:29:49 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.111 2009-05-27 08:53:15 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4710,7 +4710,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                       if (resPDG==10)minM=G4QChipolino(resQC).GetMass();//ResidQuasmonChipo
                       else if(resPDG)minM=G4QPDGCode(resPDG).GetMass();//ResidQuasmonHadron
                       G4double bNM2=nucBM*nucBM;
-                      G4double nDelta=(frM2-bNM2)/(nucBM+nucBM);
+                      G4double nDelta=0.;
+                      if(nucBM)nDelta=(frM2-bNM2)/(nucBM+nucBM);    // Safety check
 #ifdef pdebug
                       G4int    iniPDG =valQ.GetSPDGCode();
                       G4double iniQM = G4QPDGCode(iniPDG).GetMass();//Not boundedQuasmonGSM
