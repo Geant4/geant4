@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.355 2009-04-27 07:44:07 gcosmo Exp $
+cvs log $Id: History,v 1.356 2009-05-27 08:43:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th May 2009  Ben Morgan (config-V09-02-06)
+- Configure script:
+  o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+    with cygwin and Matlab.
+  o Added check to build Qt driver only when Qt UI module is built;
+    reordered moc checks and added cross-check on moc version.
+    Added safety reset of OpenGL QT build and use variables.
+  o Commented out echo compatibility warning to address problem report #1067.
 
 27th April 2009  Gabriele Cosmo (config-V09-02-05)
 - Linux-icc.gmk: removed "-lcxa -lunwind" LOADLIBS addition, no longer
