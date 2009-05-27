@@ -19,6 +19,11 @@ Summarize all code modifications & keep track of all tags in this file.
 
 26-May-2009 M.Kosov                              (hadr-chips-body-V09-02-05)
 ----------------------------------------------------------------------------
+Safety check of nDelta in the hadronization probability calculations (G4Quasmon)
+to avoid /zero
+
+26-May-2009 M.Kosov                              (hadr-chips-body-V09-02-05)
+----------------------------------------------------------------------------
 In low energy nHe and pHe reactions, when only elastic scattering is possible,
 the inelastic application makes a complain, while it is making the elastic
 scattering (with very low cross-section). *** The complain is closed ***
