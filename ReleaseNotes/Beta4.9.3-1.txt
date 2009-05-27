@@ -338,7 +338,6 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o G4VMscModel: added methods InitialiseSafetyHelper(), ComputeSafety(),
         ComputeGeomLimit() and ComputeDisplacement().
       o G4VMscModel, G4VMultipleScattering: set default Range Factor to 0.04.
-        Added a protection against zero kinetic energy.
       o G4VEmProcess: added possibility for more than one model in SetEmModel()
         method.
       o G4VEnergyLossProcess, G4VEmProcess: added calls to de-excitation

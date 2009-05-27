@@ -222,12 +222,11 @@ processes/electromagnetic/standard               emstand-V09-02-13
     section table.
 - G4WaterStopping: fix to Ar data.
 
-processes/electromagnetic/utils                  emutils-V09-02-10
+processes/electromagnetic/utils                  emutils-V09-02-11
 -------------------------------
 - G4EmElementSelector: added protection for zero cross section at first
   and last bins of physics vector; do not use Spline interpolation.
 - G4VMscModel, G4VMultipleScattering: set default Range Factor to 0.04.
-  Added a protection against zero kinetic energy.
 
 processes/hadronic
 ------------------
