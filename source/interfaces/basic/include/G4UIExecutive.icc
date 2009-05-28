@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIExecutive.icc,v 1.3 2009-05-18 04:52:17 kmura Exp $
+// $Id: G4UIExecutive.icc,v 1.4 2009-05-28 06:13:03 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -54,14 +54,13 @@
 
 #endif
 
-
 /////////////////////////////////////////////////////
 #if defined(G4UI_USE_XM) || defined(G4UI_USE_QT)
 G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
 #else
 G4UIExecutive::G4UIExecutive(G4int, char**)
 #endif
-  : session(0), shell(0)
+  : session(0), shell(0),isGUI(false)
 /////////////////////////////////////////////////////
 {
 #if defined(G4UI_USE_TCSH)
@@ -70,12 +69,14 @@ G4UIExecutive::G4UIExecutive(G4int, char**)
 
 #elif defined(G4UI_USE_XM)
   session = new G4UIXm(argc, argv);
+  isGUI = true;
 
 #elif defined(G4UI_USE_WIN32)
   session = new G4UIWin32();
 
 #elif defined(G4UI_USE_QT)
   session = new G4UIQt(argc, argv);
+  isGUI = true;
     
 #else
   shell = new G4UIcsh;
@@ -88,6 +89,20 @@ G4UIExecutive::G4UIExecutive(G4int, char**)
 G4UIExecutive::~G4UIExecutive()
 ///////////////////////////////
 {
+}
+
+//////////////////////////////////////////
+inline G4bool G4UIExecutive::IsGUI() const
+//////////////////////////////////////////
+{
+  return isGUI;
+}
+
+/////////////////////////////////////////////////////
+inline G4UIsession* G4UIExecutive::GetSession() const
+/////////////////////////////////////////////////////
+{
+  return session;
 }
 
 ////////////////////////////////////////////////////////////

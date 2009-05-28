@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIExecutive.hh,v 1.2 2009-05-15 07:15:16 kmura Exp $
+// $Id: G4UIExecutive.hh,v 1.3 2009-05-28 06:13:03 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -41,6 +41,9 @@
 //   {
 //     ...
 //     G4UIExecutive* myapp = new G4UIExecutive(argc, argv);
+//     if (session->IsGUI())
+//       // Do any extra for a GUI session
+//
 //     myapp-> SessionStart();
 //     ...
 //     delete myapp;
@@ -58,10 +61,14 @@ class G4UIExecutive {
 private:
   G4UIsession* session;
   G4VUIshell* shell;
+  G4bool isGUI;
 
 public:
   G4UIExecutive(G4int argc=1, char** argv=0);
   ~G4UIExecutive();
+
+  G4bool IsGUI() const;
+  G4UIsession* GetSession() const;
 
   void SetPrompt(const G4String& prompt);
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);

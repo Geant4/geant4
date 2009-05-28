@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2009-05-18 05:03:10 kmura Exp $
+$Id: History,v 1.113 2009-05-28 06:13:21 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 =======
+28 May, 2009 K. Murakami (interfaces-V09-02-03)
+ - G4UIExecutive: add  IsGUI() method / add GetSession() method
+
 18 May, 2009 K. Murakami (interfaces-V09-02-02)
  - G4UIExecutive : fixed wrong #ifdef condition
  - include changes by Laurent (7/May)
