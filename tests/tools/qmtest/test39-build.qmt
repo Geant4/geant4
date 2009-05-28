@@ -23,7 +23,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>unset G4LIB_BUILD_SHARED; cd $G4INSTALL/tests/test39;make</text>
+    <text>cd $G4INSTALL/tests/test39;make</text>
   </argument>
   <argument name="stderr">
     <text/>
