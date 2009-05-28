@@ -254,17 +254,18 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         G4LivermoreIonisationModel.
       o Added G4LivermoreIonisationModel, first implementation of
         LowEnergyIonisation in the new design.
-      o Added new scaling algorithm, to obtain heavy ion stopping powers for
-        ions not covered by ICRU 73 report (scaled from existing ICRU 73 data).
-        Included algorithm in ion model, G4IonParametrisedLossModel, extending
-        therefore the applicability of the model to very heavy ions.
+      o Replaced old version of G4IonParametrisedLossModel with newer one.
+        Added G4IonDEDXHandler, which is a handler class used by the new
+        G4IonParametrisedLossModel class, and removed old handler class
+        G4IonParametrisedLossTable.
+      o Added G4VIonDEDXScalingAlgorithm, which is used by G4IonDEDXHandler.
+      o Added new scaling algorithm, G4IonDEDXScalingICRU73, to obtain heavy
+        ion stopping powers for ions not covered by ICRU 73 report (scaled
+        from existing ICRU 73 data). Included algorithm in ion model,
+        G4IonParametrisedLossModel, extending therefore the applicability of
+        the model to very heavy ions.
       o Added protections in G4eIonisationSpectrum and G4eIonisationParameters,
         addressing problem report #1042.
-      o Replaced old version of G4IonParametrisedLossModel with newer one
-        Added G4IonDEDXHandler, which is a handler class used by the new
-        G4IonParametrisedLossModel class
-      o Added G4VIonDEDXScalingAlgorithm, which is used by G4IonDEDXHandler
-        Removed G4IonParametrisedLossTable, replaced by G4IonDEDXHandler.
       o First fully tested version of G4LivermoreBremsstrahlungModel
         All Livermore models are migrated.
       o Updated Livermore photon processes classes for handling of compound
