@@ -425,8 +425,6 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
  G4Material* mylarNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_MYLAR", isotopes);
 
- G4double z; // Atomic numebr
- G4double a; // Atomic mass
  G4double d; // Density
  G4int nComponents;// Number of components 
  G4double fractionmass; // Fraction in mass of an element in a material

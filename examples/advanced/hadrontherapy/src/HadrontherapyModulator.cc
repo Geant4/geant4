@@ -148,7 +148,6 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 {
   G4bool isotopes = false;
   G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
-  G4Material* PMMANist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_PMMA", isotopes);
 
   G4Material* Mod0Mater = airNist;
   G4Material* ModMater = airNist;

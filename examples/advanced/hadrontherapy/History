@@ -1,15 +1,20 @@
--------------------------------------------------------------------------------
+ -------------------------------------------------------------------------------
 $Id: History, 2004/02/27  G.A.P. Cirrone, 
 	                  cirrone@lns.infn.it
 			  http://workgroup.lngs.infn.it/geant4lns
 -------------------------------------------------------------------------------
-
-
          ====================================================
                           Geant4 - Hadrontherapy
          ====================================================
 
                       Category History file
+
+29.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-09-12
+           - Implemented the new Low energy models (Livermore and Penelope)
+             now migrated to the new interface (common to the Standard models)
+	     Livermore and Penelope models can be implemented:
+             Activating the buit-in physics lists (G4EmLivermorePhysics and G4EmPenelopePhysics)
+             Activation can be done via macro commands in the usual way
 
 19.05.2009 F.Romano; Tag hadrontherapy-V09-02-11
            - Corrected the stepMax value in each macro in order to avoid 
@@ -32,7 +37,6 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
              In the README we give some suggestion in the physic models to use.
              All models can be activated via macro command.
            - Improved HadrontherapyModulator.cc file;
-
 
 29.03.2009  G.A.P.Cirrone; Tag: hadrontehrapy-V09-02-06
 	   - Extended limits of Binary Cascade in HIProtonNeutronBinary.cc

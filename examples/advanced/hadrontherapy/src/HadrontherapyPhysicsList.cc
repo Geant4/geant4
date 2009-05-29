@@ -71,14 +71,14 @@
 //    Example of the use of physics lists can be found in the macro files included in the
 //    'macro' folder .   
 //
-// 3. Use of *local* physics. In this case the models are implemented in local files
+// 3. Use of a *local* physics. In this case the models are implemented in local files
 //    contained in the Hadrontherapy folder. The use of local physic is recommended 
-//    to more expert Users. Actually we provide a local physic wih the implementation of the 
-//    Low Energy Livermore electromagnetic models, Low Energy Penelope electromagnetic models, 
-//    a local electromagnetic physic for User want the test the first implementation of 
-//    ICRU73 data table in Geant4 and an class specific with the implementation of 
-//    ion-ion inelastic models.
-//    The *local* physic can be activated with the same /physic/addPhysic <nameOfPhysic> command;
+//    to more expert Users.
+//    We provide as local, only the LocalStandardICRU73EmPhysic.cc (an Elecromagnetic
+//    implementation containing the new ICRU73 data table for ions stopping powers)
+//    and the LocalIonIonInelasticPhysic.cc (physic list to use for the ion-ion interaction
+//    case)
+//    The *local* physics can be activated with the same /physic/addPhysic <nameOfPhysic> command;
 //
 //    While Packages approch must be used exclusively, Physics List and Local physics can 
 //    be activated, if necessary, contemporaneously in the same simulation run.
@@ -92,17 +92,16 @@
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyStepMax.hh"
 #include "G4PhysListFactory.hh"
-//#include "G4VModularPhyisicsList.hh"
 #include "G4VPhysicsConstructor.hh"
 
 // Local physic directly implemented in the Hadronthrapy directory
-#include "LocalLivermoreEmPhysic.hh"                 // Electromagnetic "Livermore" models (from the Lowenergy physic)
-#include "LocalPenelopeEmPhysic.hh"                  // Electromagnetic "Penelope"  models (from the Lowenergy physic)
 #include "LocalStandardICRU73EmPhysic.hh"            // This permits the use of the ICRU73 tables for stopping powers of ions
 #include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
 
 // Physic lists (contained inside the Geant4 distribution)
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
@@ -119,11 +118,12 @@
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 0.01 *mm;
+  defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -144,7 +144,6 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 
   // Deacy physics and all particles
   decPhysicsList = new G4DecayPhysics();
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -208,12 +207,14 @@ void HadrontherapyPhysicsList::ConstructProcess()
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
 
- 
-
   if (verboseLevel>1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   if (name == emName) return;
+
+  /////////////////////////////////////////////////////////////////////////////
+  //   ELECTROMAGNETIC MODELS
+  /////////////////////////////////////////////////////////////////////////////
 
   if (name == "standard_opt3") {
     emName = name;
@@ -231,17 +232,22 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 			      new G4IonFluctuations());
     G4cout << "standardICRU73" << G4endl;
     
-  } else if (name == "local_livermore") {
+ 
+ } else if (name == "LowE_Livermore") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new LocalLivermoreEmPhysic();
-    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
+    emPhysicsList = new G4EmLivermorePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
-  } else if (name == "local_penelope") {
+ } else if (name == "LowE_Penelope") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new LocalPenelopeEmPhysic();
+    emPhysicsList = new G4EmPenelopePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
+    /////////////////////////////////////////////////////////////////////////////
+    //   HADRONIC MODELS
+    /////////////////////////////////////////////////////////////////////////////
   } else if (name == "elastic" && !helIsRegisted) {
     G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
     hadronPhys.push_back( new G4HadronElasticPhysics());
