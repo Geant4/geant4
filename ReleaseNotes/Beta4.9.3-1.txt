@@ -481,7 +481,8 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Corrected a bug in the call of a physics-list and in proton_therapy.mac.
       o Modified and revised the README and macro files.
     + advanced/microbeam
-      o Updated physics-list to migrated Livermore processes.
+      o Updated physics-list to combination of migrated Livermore processes
+        and standard EM processes.
       o Corrected plotting fuctions and switching field value.
     + advanced/microdosimetry
       o Updated physics-list to migrated Geant4-DNA processes.
