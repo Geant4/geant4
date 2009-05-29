@@ -13,6 +13,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+29-May-2009 M.Kosov (hadr-chips-inter-V09-02-09)
+------------------------------------------------------
+- Synchronization bug fix in pA and nA SC_in + fake piA SC is added for testing only
+
+26-May-2009 M.Kosov (hadr-chips-inter-V09-02-08)
+------------------------------------------------------
+- Correction in G4QCollision for (n,He3) pickUp (Bug fix, charge conservation)
+
 25-May-2009 M.Kosov (hadr-chips-inter-V09-02-07)
 ------------------------------------------------------
 - G4QNeutronCrossSection class is implemented

@@ -156,8 +156,8 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,2112,lastZ,lastN,pMom); //calculate & create
-      if(lastCS>0.)                   // It means that the AMBD was initialized
-      {
+      //if(lastCS>0.)                   // It means that the AMBD was initialized
+      //{
 
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef debug
@@ -171,7 +171,7 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
 #ifdef debug
         G4cout<<"G4QNCS::GetCrosSec: recCS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
 #endif
-      }
+	//} // M.K. Presence of H1 with high threshold breaks the syncronization
 #ifdef pdebug
       G4cout<<"G4QNCS::GetCS:1st, P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
@@ -278,15 +278,15 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
 #endif
         lP+=dlP;
       }
-#ifdef debug
-      G4cout<<"-*->G4QNeutNucCS::CalcCS:Tab for Z="<<targZ<<",N="<<targN<<",I="<<I<<G4endl;
-#endif
       // --- End of possible separate function
       // *** The synchronization check ***
       G4int sync=LEN.size();
+#ifdef debug
+      G4cout<<"-*->G4QNeutNCS::CCS:Z="<<targZ<<",N="<<targN<<",I="<<I<<",S="<<sync<<G4endl;
+#endif
       if(sync!=I)
       {
-        G4cerr<<"***G4QNetronNuclearCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
+        G4cerr<<"***G4QNetronNuclearCS::CalcCrossSect: Sync="<<sync<<"#"<<I<<", Z=" <<targZ
               <<", N="<<targN<<", F="<<F<<G4endl;
         //G4Exception("G4ProtonNuclearCS::CalculateCS:","39",FatalException,"overflow DB");
       }

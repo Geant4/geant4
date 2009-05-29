@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.34 2009-05-26 15:49:17 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.35 2009-05-29 08:42:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -177,6 +177,11 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   {
     CSmanager=G4QProtonNuclearCrossSection::GetPointer();
     pPDG=2212;
+  }
+  else if(incidentParticleDefinition == G4PionMinus::PionMinus())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer();
+    pPDG=-211;
   }
   else if(incidentParticleDefinition == G4Gamma::Gamma())
   {
@@ -359,7 +364,7 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(     G4NeutrinoE::NeutrinoE()     )) return true;
   else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
   else if (particle == *(    G4NeutrinoMu::NeutrinoMu()    )) return true;
-  //else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
+  else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
   //else if (particle == *(      G4PionPlus::PionPlus()      )) return true;
   //else if (particle == *(      G4KaonPlus::KaonPlus()      )) return true;
   //else if (particle == *(     G4KaonMinus::KaonMinus()     )) return true;
@@ -1182,6 +1187,110 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   // quasi-elastic (& pickup process) for p+A(Z,N)
   //
   }
+  else if (aProjPDG == 211 && Z > 0 && N > 0)// Made for both pi+ and pi- (experimental)
+  //else if(2>3) 
+  {
+    // Only deep-inelastic interactions are experimentally included (for debuggin purposes)
+    G4QFragmentation DINR;                   // Define the deep-inelastic nuclear reaction
+    const G4QNucleus targNuc(Z,N);           // Define the target nucleus
+    const G4QHadron projPi(projPDG,proj4M);  // Define the projectile pion
+    output=DINR.Scatter(targNuc, projPi);    // Make the reaction
+    G4int nOut=output->size();               // Length of the output
+    if(nOut) for(G4int i=0; i<nOut; i++)     // Loop over the output
+    {
+      // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)
+      // Hypernucleus mass calculation and ion-table interface upgrade => work for Hisaya
+      // The decau process for hypernuclei must be developed in GEANT4 (change CHIPS body)
+      G4QHadron* hadr=(*output)[i];          // Pointer to the output hadron    
+      G4int PDGCode = hadr->GetPDGCode();
+      G4int nFrag   = hadr->GetNFragments();
+#ifdef pdebug
+      G4cout<<"G4QCollision::PostStepDoIt: *QS* H#"<<i<<",PDG="<<PDGCode<<",nF="<<nFrag
+            <<", 4Mom="<<hadr->Get4Momentum()<<G4endl;
+#endif
+      if(nFrag)                              // Skip intermediate (decayed) hadrons
+      {
+#ifdef debug
+        G4cout<<"G4QCollision::PostStepDoIt: *QS* Intermediate particle # "<<i<<G4endl;
+#endif
+        delete hadr;
+        continue;
+      }
+      G4DynamicParticle* theSec = new G4DynamicParticle;
+      G4ParticleDefinition* theDefinition;
+      if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
+      else if(PDGCode==90001000) theDefinition = G4Proton::Proton(); // While it can be ion
+      else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
+      else if(PDGCode==311 || PDGCode==-311)
+      {
+        if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
+        else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
+      }
+      else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
+      else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
+      else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
+      else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
+      else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
+      else if(PDGCode >80000000) // Define hypernuclei as normal nuclei (N=N+S Correction!)
+      {
+        G4int aZ = hadr->GetCharge();
+        G4int aA = hadr->GetBaryonNumber();
+#ifdef pdebug
+        G4cout<<"G4QCollision::PostStepDoIt: *QS* Ion Z="<<aZ<<", A="<<aA<<G4endl;
+#endif
+        theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
+      }
+      //else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
+      else
+      {
+#ifdef pdebug
+        G4cout<<"G4QCollision::PostStepDoIt: *QS* Particle with PDG = "<<PDGCode<<G4endl;
+#endif
+        theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
+#ifdef pdebug
+        G4cout<<"G4QCollision::PostStepDoIt: *QS* AfterPartDef PDG="<<PDGCode<<G4endl;
+#endif
+      } // End of the long if for the different particle kinds
+      if(!theDefinition)
+      {
+#ifdef debug
+        G4cout<<"---Warning---G4QCollision::PostStepDoIt: *QS* drop PDG="<<PDGCode<<G4endl;
+#endif
+        delete hadr;
+        continue;
+      }
+#ifdef pdebug
+      G4cout<<"G4QCollision::PostStepDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
+#endif
+      theSec->SetDefinition(theDefinition);
+      G4LorentzVector h4M=hadr->Get4Momentum();
+      EnMomConservation-=h4M;
+#ifdef tdebug
+      G4cout<<"G4QCollis::PSDI:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
+#endif
+#ifdef debug
+      G4cout<<"G4QCollision::PostStepDoIt:*QS*#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
+#endif
+      theSec->Set4Momentum(h4M); //                                                       ^
+      delete hadr; // <-----<-----------<-------------<-------------------<---------<-----+
+#ifdef debug
+      G4ThreeVector curD=theSec->GetMomentumDirection();              //                  ^
+      G4double curM=theSec->GetMass();                                //                  |
+      G4double curE=theSec->GetKineticEnergy()+curM;                  //                  ^
+      G4cout<<"G4QCollis::PSDI:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
+#endif
+      G4Track* aNewTrack = new G4Track(theSec, localtime, position ); //                  ^
+      aNewTrack->SetWeight(weight);                                   //    weighted      |
+      aNewTrack->SetTouchableHandle(trTouchable);                     //                  |
+      aParticleChange.AddSecondary( aNewTrack );                      //                  |
+#ifdef debug
+      G4cout<<"G4QCollision::PostStepDoIt:#"<<i<<" is done."<<G4endl; //                  |
+#endif
+    } // End of the conversion LOOP                                                       |
+    delete output;//Instances of the G4QHadrons from the output are already deleted above +
+    aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
+    return G4VDiscreteProcess::PostStepDoIt(track, step);    // *** Very temporary ! ***
+  }
   else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0)
   //else if(2>3) 
   {
@@ -1929,7 +2038,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   if(aProjPDG!=11 && aProjPDG!=13 && aProjPDG!=15)
     aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
-  //return &aParticleChange;                               // This is not enough (ClearILL)
 #ifdef pdebug
     G4cout<<"G4QCollision::PostStepDoIt: E="<<aParticleChange.GetEnergy()
           <<", d="<<*aParticleChange.GetMomentumDirection()<<G4endl;

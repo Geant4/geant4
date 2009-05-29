@@ -28,7 +28,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QProtonNuclearCrossSection for gamma+A cross sections
+// G4 Physics class: G4QPionMinusNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 20-Dec-03
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Feb-04
 // --------------------------------------------------------------------------------
@@ -36,8 +36,9 @@
 // ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
 // *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
-// Short description: CHIPS cross-sections for proton-nuclear interactions
-// -----------------------------------------------------------------------
+// Short description: CHIPS cross-sections for pi(minus)-nuclear interactions
+// It is purely fake now (just a copy of the proton-nuclear XS) !!! only for testing !!!
+// -------------------------------------------------------------------------------------
 //
 //#define debug
 //#define pdebug
@@ -45,28 +46,28 @@
 //#define debugn
 //#define debugs
 
-#include "G4QProtonNuclearCrossSection.hh"
+#include "G4QPionMinusNuclearCrossSection.hh"
 
 // Initialization of the
-G4double* G4QProtonNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
-G4double* G4QProtonNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighEn CS
-G4int     G4QProtonNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4QProtonNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QProtonNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
-G4double  G4QProtonNuclearCrossSection::lastTH=0.; // Last threshold momentum
-G4double  G4QProtonNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
-G4int     G4QProtonNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+G4double* G4QPionMinusNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
+G4double* G4QPionMinusNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighEn CS
+G4int     G4QPionMinusNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
+G4int     G4QPionMinusNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
+G4double  G4QPionMinusNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double  G4QPionMinusNuclearCrossSection::lastTH=0.; // Last threshold momentum
+G4double  G4QPionMinusNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
+G4int     G4QPionMinusNuclearCrossSection::lastI=0;   // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
-G4VQCrossSection* G4QProtonNuclearCrossSection::GetPointer()
+G4VQCrossSection* G4QPionMinusNuclearCrossSection::GetPointer()
 {
-  static G4QProtonNuclearCrossSection theCrossSection; //**Static body of Cross Section**
+  static G4QPionMinusNuclearCrossSection theCrossSection; //**Static body of Cross Section**
   return &theCrossSection;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
-G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
+G4double G4QPionMinusNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int)
 {
   static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
@@ -155,8 +156,8 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,2212,lastZ,lastN,pMom); //calculate & create
-      //if(lastCS>0.)                   // It means that the AMBD was initialized
-      //{
+      if(lastCS>0.)                   // It means that the AMBD was initialized
+      {
 
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef debug
@@ -170,7 +171,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #ifdef debug
         G4cout<<"G4QPrCS::GetCrosSec:recCS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
 #endif
-	//} // M.K. Presence of H1 with high threshold breaks the syncronization
+      }
 #ifdef pdebug
       G4cout<<"G4QPrCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
@@ -215,7 +216,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 }
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
+G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
@@ -233,8 +234,8 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   //
   // Associative memory for acceleration
   //static std::vector <G4double>  spA;  // shadowing coefficients (A-dependent)
-  static std::vector <G4double*> LEN;  // Vector of pointers to LowEnProtonCrossSection
-  static std::vector <G4double*> HEN;  // Vector of pointers to HighEnProtonCrossSection
+  static std::vector <G4double*> LEN;  // Vector of pointers to LowEnPiMinusCrossSection
+  static std::vector <G4double*> HEN;  // Vector of pointers to HighEnPiMinusCrossSection
 #ifdef debug
   G4cout<<"G4QProtNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
@@ -250,7 +251,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
     if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
     {
       G4int sync=LEN.size();
-      if(sync<=I) G4cerr<<"*!*G4QProtonNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
+      if(sync<=I) G4cerr<<"*!*G4QPiMinusNuclCS::CalcCrosSect:Sync="<<sync<<"<="<<I<<G4endl;
       lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
       lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
     }
@@ -280,9 +281,9 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
       G4int sync=LEN.size();
       if(sync!=I)
       {
-        G4cerr<<"***G4QProtonNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
+        G4cerr<<"***G4QPiMinusNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
               <<", N="<<targN<<", F="<<F<<G4endl;
-        //G4Exception("G4ProtonNuclearCS::CalculateCS:","39",FatalException,"overflow DB");
+        //G4Exception("G4PiMinusNuclearCS::CalculateCS:","39",FatalException,"DBoverflow");
       }
       LEN.push_back(lastLEN);          // remember the Low Energy Table
       HEN.push_back(lastHEN);          // remember the High Energy Table
@@ -319,28 +320,30 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
     sigma=CrossSectionFormula(targZ, targN, P, std::log(P));
   }
 #ifdef debug
-  G4cout<<"G4QProtonNuclearCrossSection::CalcCS: CS="<<sigma<<G4endl;
+  G4cout<<"G4QPionMinusNuclearCrossSection::CalcCS: CS="<<sigma<<G4endl;
 #endif
   if(sigma<0.) return 0.;
   return sigma;
 }
 
 // Electromagnetic momentum-threshold (in MeV/c) 
-G4double G4QProtonNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
+G4double G4QPionMinusNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
 {
-  static const G4double third=1./3.;
-  static const G4double pM = G4QPDGCode(2212).GetMass(); // Proton mass in MeV
-  static const G4double tpM= pM+pM;       // Doubled proton mass (MeV)
-  G4double tA=tZ+tN;
+  //static const G4double third=1./3.;     // The following three lines are only for piPlus
+  //static const G4double pM = G4QPDGCode(211).GetMass(); // Pion mass in MeV
+  //static const G4double tpM= pM+pM;       // Doubled pion mass (MeV)
+  //G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
-  else if(tZ==1 && tN==0) return 800.;    // A threshold on the free proton
+  else if(tZ==1 && tN==0) return 260.;    // A threshold on the free proton sq(3)m*(1+2m/M)
   //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
-  G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
-  return std::sqrt(dE*(tpM+dE));
+  // The following is for Pi+
+  //G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
+  //return std::sqrt(dE*(tpM+dE));
+  return 0.;
 }
 
-// Calculation formula for proton-nuclear inelastic cross-section (mb) (P in GeV/c)
-G4double G4QProtonNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4double P)
+// Calculation formula for piMinus-nuclear inelastic cross-section (mb) (P in GeV/c)
+G4double G4QPionMinusNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4double P)
 {
   G4double sigma=0.;
   if(P<ThresholdMomentum(tZ,tN)*.001) return sigma;
@@ -399,22 +402,22 @@ G4double G4QProtonNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4dou
   }
   else
   {
-    G4cerr<<"-Warning-G4QProtonNuclearCroSect::CSLin:*Bad A* Z="<<tZ<<", N="<<tN<<G4endl;
+    G4cerr<<"-Warning-G4QPiMinusNuclearCroSect::CSLin:*Bad A* Z="<<tZ<<", N="<<tN<<G4endl;
     sigma=0.;
   }
   if(sigma<0.) return 0.;
   return sigma;  
 }
 
-// Calculation formula for proton-nuclear inelastic cross-section (mb) log(P in GeV/c)
-G4double G4QProtonNuclearCrossSection::CrossSectionLog(G4int tZ, G4int tN, G4double lP)
+// Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
+G4double G4QPionMinusNuclearCrossSection::CrossSectionLog(G4int tZ, G4int tN, G4double lP)
 {
   G4double P=std::exp(lP);
   return CrossSectionFormula(tZ, tN, P, lP);
 }
-// Calculation formula for proton-nuclear inelastic cross-section (mb) log(P in GeV/c)
-G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
-                                                           G4double P, G4double lP)
+// Calculation formula for piMinus-nuclear inelastic cross-section (mb) log(P in GeV/c)
+G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
+                                                              G4double P, G4double lP)
 {
   G4double sigma=0.;
   if(tZ==1 && !tN)                        // pp interaction
@@ -454,7 +457,7 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
   }
   else
   {
-    G4cerr<<"-Warning-G4QProtonNuclearCroSect::CSForm:*Bad A* Z="<<tZ<<", N="<<tN<<G4endl;
+    G4cerr<<"-Warning-G4QPiMinusNuclearCroSect::CSForm:*Bad A* Z="<<tZ<<", N="<<tN<<G4endl;
     sigma=0.;
   }
   if(sigma<0.) return 0.;
