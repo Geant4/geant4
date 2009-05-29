@@ -323,14 +323,34 @@ examples                                         examples-V09-02-05
 tests                                            tests-V09-02-05
 -----
 - Updated reference outputs and tools.
+- test02 (test02-V09-02-00)
+  o Renamed hadronic_exerciser file.
 - test10 (test10-V09-02-00)
   o Added few cases of non-zero rotation matrices for tested solids.
+- test11 (test11-V09-02-00)
+  o Renamed hadronic_exerciser file.
+- test12 (test12-V09-02-01)
+  o Renamed hadronic_exerciser file.
+  o Use G4LundStringFragmentation for FTF not G4QGSM.
+- test13 (test13-V09-02-00)
+- test15 (test15-V09-02-00)
+- test16 (test16-V09-02-00)
+  o Renamed hadronic_exerciser file.
 - test19 (test19-V09-02-00)
-- test29 (test29-V09-02-00)
-- test39 (test39-V09-02-00)
   o Corrected initialisation for generic ions.
+- test21 (test21-V09-02-00)
+- test23 (test23-V09-02-00)
+  o Renamed hadronic_exerciser file.
+- test29 (test29-V09-02-00)
+  o Corrected initialisation for generic ions.
+- test31 (test31-V09-02-00)
+  o Updated test31.in input macro. Fixed Valgrind warnings.
 - test35 (test35-V09-02-00)
   o Improved scripts; added comments to the main().
+- test37 (test37-V09-02-00)
+  o Fixed non-initialised variable in RunAction.
+- test39 (test39-V09-02-00)
+  o Corrected initialisation for generic ions.
 - test41 (test41-V09-02-00)
   o Updated scripts.
 - test44 (test44-V09-02-01)
