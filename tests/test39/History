@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-05-29 10:10:04 mkossov Exp $
+$Id: History,v 1.4 2009-05-29 10:11:10 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 29th, 2009  Mikhail  Kosov (test39-V09-02-01)
-- Paranthesis around && to avoid warning...
+May 29th, 2009  Mikhail  Kosov (test39-V09-02-02)
+- Paranthesis around && to avoid warnings...
 
 May 28th, 2009  Gabriele Cosmo (test39-V09-02-01)
 - Removed unnecessary inclusion of architecture.gmk from GNUmakefile.
