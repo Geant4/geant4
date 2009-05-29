@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.96 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.97 2009-05-29 15:43:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -36,7 +36,7 @@
 // ---------------------------------------------------------------------
 
 
-//#define debug
+#define debug
 //#define pdebug 
 //#define cldebug
 //#define qdebug
@@ -56,13 +56,11 @@ G4double G4QNucleus::freeNuc=0.1;       // probability to find quasiFreeBaryon o
 G4double G4QNucleus::freeDib=.05;       // probability to find quasiFreeDiBaryon on Surface
 G4double G4QNucleus::clustProb=4.;      // clusterization probability in dense region
 G4double G4QNucleus::mediRatio=1.;      // relative vacuum hadronization probability
-G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8 fm)
+G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8 fm) (Body)
 
-G4QNucleus::G4QNucleus(): G4QHadron(),Z(0),N(0),S(0),dZ(0),dN(0),dS(0),maxClust(0),
-     currentNucleon(-1),rho0(0),radius(0)
-   //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), maxClust(0),
+  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(),radius(),Tb()
 {
-  //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
 #ifdef pardeb
@@ -71,12 +69,10 @@ G4QNucleus::G4QNucleus(): G4QHadron(),Z(0),N(0),S(0),dZ(0),dN(0),dS(0),maxClust(
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000+z*1000+n),
-  Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)
-  //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
+  G4QHadron(90000000+s*1000000+z*1000+n), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
+  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(),radius(),Tb()
 {
-  //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
 #ifdef debug
@@ -104,11 +100,9 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)
-  //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0), probVect(),
+  theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(), radius(), Tb()
 {
-  //Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(3) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
@@ -116,11 +110,10 @@ G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG),maxClust(0),
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)
-  //probVect(),theImpactParameter(),theNucleons(), currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
+  G4QHadron(nucPDG, p), maxClust(0), probVect(), theImpactParameter(),
+  theNucleons(), currentNucleon(-1), rho0(0.), radius(0.), Tb()
 {
-  //Tb = new std::vector<G4double>;
   InitByPDG(nucPDG);
   Set4Momentum(p);
 #ifdef pardeb
@@ -130,11 +123,9 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),max
 }
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
-  G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)
-  //  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
+  G4QHadron(90000000+s*1000000+z*1000+n,p), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
+  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(0.),radius(0.),Tb()
 {
-  //Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
   Set4Momentum(p);
@@ -150,12 +141,11 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)
-  //  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4QContent nucQC):
+  G4QHadron(nucQC), dZ(0),dN(0),dS(0), maxClust(0), probVect(), theImpactParameter(),
+  theNucleons(), currentNucleon(-1), rho0(0), radius(0), Tb()
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
-  //Tb = new std::vector<G4double>;
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
 #endif
@@ -199,12 +189,10 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),max
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p),dZ(0),dN(0),
-  dS(0),maxClust(0),
-  currentNucleon(-1),rho0(0),radius(0)                     
-  //probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(),radius(),Tb()
+G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
+  G4QHadron(nucQC,p), dZ(0),dN(0),dS(0),maxClust(0),probVect(),
+  theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(0.), radius(0.), Tb()
 {
-  //Tb = new std::vector<G4double>;
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
 #endif
@@ -231,38 +219,8 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):G4QHadron(nucQC,p),d
 #endif
 }
 
-//G4QNucleus::G4QNucleus(const G4QNucleus& right) : G4QHadron(&right), currentNucleon(-1)
-//{
-//  //Tb = new std::vector<G4double>;
-//  //G4int lTb=right.GetBThickness()->size();
-//  //if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
-//  //if(lTb) for(G4int j=0; j<=lTb; j++) Tb.push_back((*right.GetBThickness())[j]);
-//  Set4Momentum   (right.Get4Momentum());
-//  SetQPDG        (right.GetQPDG());
-//  SetQC          (right.GetQC());
-//  SetNFragments  (right.GetNFragments());
-//  Z             = right.Z;
-//  N             = right.N;
-//  S             = right.S;
-//  dZ            = right.dZ;
-//  dN            = right.dN;
-//  dS            = right.dS;
-//  maxClust      = right.maxClust;
-//  for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
-//  probVect[254] = right.probVect[254];
-//  probVect[255] = right.probVect[255];
-//#ifdef pardeb
-//  G4cout<<"G4QNucleus::Constructor:(8) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
-//        <<", R="<<mediRatio<<G4endl;
-//#endif
-//}
-
 G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
 {
-  //Tb = new std::vector<G4double>;
-  //G4int lTb=right->GetBThickness()->size();
-  //if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right->GetBThickness())[j]);
-  //if(lTb) for(G4int j=0; j<=lTb; j++) Tb.push_back((*right->GetBThickness())[j]);
   Tb = right->Tb;
   Set4Momentum   (right->Get4Momentum());
   SetQPDG        (right->GetQPDG());
@@ -290,10 +248,6 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
   if(this != &right)                          // Beware of self assignment
   {
     Tb = right.Tb;
-    //Tb->clear();
-    //G4int lTb=right.GetBThickness()->size();
-    //if(lTb) for(G4int j=0; j<=lTb; j++) Tb->push_back((*right.GetBThickness())[j]);
-    //if(lTb) for(G4int j=0; j<=lTb; j++) Tb.push_back((*right.GetBThickness())[j]);
     Set4Momentum   (right.Get4Momentum());
     SetQPDG        (right.GetQPDG());
     SetQC          (right.GetQC());
@@ -314,9 +268,6 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 
 G4QNucleus::~G4QNucleus()
 {
-  //if(theNucleons.size()) for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
-  //Tb->clear();
-  //delete Tb;
   for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
 }
 
@@ -3236,6 +3187,9 @@ pair<G4double, G4double> G4QNucleus::ChooseImpactXandY(G4double maxImpact)
 // Initializes 3D Nucleons in the nucleus using random sequence
 void G4QNucleus::ChooseNucleons()
 {
+#ifdef debug
+  G4cout<<"G4QNucleus::ChooseNucleons: Nucleons search is started"<<rho0<<G4endl;
+#endif
   G4int protons =0;
   G4int nucleons=0;
   G4int myA=GetA();
@@ -3264,6 +3218,9 @@ void G4QNucleus::ChoosePositions()
 {
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mProt2= mProt*mProt;
+#ifdef debug
+  G4cout<<"G4QNucl::ChoosePositions: is called"<<G4endl;
+#endif
   G4int i=0;                                  // general index
   G4int myA=GetA();                           // cashed value of A
   G4ThreeVector aPos;                         // Prototype of nucleon position
@@ -3275,8 +3232,11 @@ void G4QNucleus::ChoosePositions()
   G4double maxR=GetRadius(0.01);              // there are no nucleons at this density
   while(i<myA)                                // LOOP over all nucleons
   {
-    aPos = maxR*RandomUnitSphere();           // Get random position of nucleon iside maxR
+    aPos = maxR*RandomUnitSphere();           // Get random position of nucleon inside maxR
     G4double density=GetRelativeDensity(aPos);
+#ifdef debug
+    G4cout<<"G4QNucl::ChoosePositions: i="<<i<<", pos="<<aPos<<", dens="<<density<<G4endl;
+#endif
     if(G4UniformRand()<density)               // Try this position with frequency ~Density
     {
       freeplace = true;                       // Imply that there is a free space
@@ -3302,12 +3262,18 @@ void G4QNucleus::ChoosePositions()
       }
     }
   }
+#ifdef debug
+  G4cout<<"G4QNucl::ChoosePositions: Out of the positioning LOOP"<<G4endl;
+#endif
   ReduceSum(places,placeM);                    // Reduce center of mass shift (equalWeight)
+#ifdef debug
+  G4cout<<"G4QNucl::ChoosePositions: The reduced summ is made"<<G4endl;
+#endif
   for(i=0; i<myA; i++) theNucleons[i]->SetPosition(places[i]);
   delete [] places;
   delete [] placeM;
 #ifdef debug
-  G4cout << "G4QNucleus::ChoosePositions: A="<<myA<<G4endl;
+  G4cout << "G4QNucleus::ChoosePositions: The positions are defined for A="<<myA<<G4endl;
 #endif
 } // End of ChoosePositions
 
@@ -3321,6 +3287,9 @@ void G4QNucleus::InitDensity()
   G4double rA = iA;
   G4double At = pow(rA,third);
   G4double At2= At*At;
+#ifdef debug
+  G4cout<<"G4QNucleus::InitDensity: rA=iA=A="<<iA<<", A^1/3="<<At<<", A^2/3="<<At2<<G4endl;
+#endif
   if(iA<17)                                         // Gaussian density distribution
   {
     radius = r0sq*At2;                              // Mean Squared Radius (fm^2)
@@ -3424,11 +3393,11 @@ void G4QNucleus::ChooseFermiMomenta()
   delete [] fermiM;
 } // End of ChooseFermiMomenta
 
-// Reduce momentum nonconservation (reenterable attempts
+// Reduce momentum nonconservation or center of mass shift (reenterable attempts)
 G4bool G4QNucleus::ReduceSum(G4ThreeVector* momentum, G4double* pFermiM)
 {
   G4int myA=GetA();
-  if(myA<2)                                           // Can not reduce only one nucleon
+  if(myA<2)                                           // Can not reduce: only one nucleon
   {
     G4cout<<"-W-G4QNucleus::ReduceSum: *Failed* A="<<myA<<" < 2"<<G4endl;
     return false;
@@ -3497,13 +3466,17 @@ void G4QNucleus::Init3D()
 #ifdef debug
   G4cout<<"G4QNucleus::Init3D: is called currentNucleon="<<currentNucleon<<G4endl;
 #endif
-  if(currentNucleon>-1) return;                       // This is a global parameter in Body
+  for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
+  theNucleons.clear();
   G4int myA = GetA();
+  ChooseNucleons();
 #ifdef debug
-  G4cout<<"G4QNucleus::Init3D: A="<<myA<<", Z="<<Z<<G4endl;
+  G4cout<<"G4QNucleus::Init3D: Nucleons are initialized, nN="<<theNucleons.size()<<G4endl;
 #endif
   InitDensity();
-  ChooseNucleons();  
+#ifdef debug
+  G4cout<<"G4QNucl::Init3D: DensityPars for A="<<myA<<":R="<<radius <<",r0="<<rho0<<G4endl;
+#endif
   ChoosePositions();
   ChooseFermiMomenta();
   G4double Ebind= BindingEnergy()/myA;

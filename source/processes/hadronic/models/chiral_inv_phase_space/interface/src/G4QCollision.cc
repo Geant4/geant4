@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.35 2009-05-29 08:42:58 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.36 2009-05-29 15:44:47 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -37,8 +37,8 @@
 // Short description: This is a universal class for the incoherent (inelastic)
 // nuclear interactions in the CHIPS model.
 // ---------------------------------------------------------------------------
-//#define debug
-//#define pdebug
+#define debug
+#define pdebug
 //#define pickupd
 //#define ldebug
 //#define ppdebug
@@ -1191,11 +1191,20 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //else if(2>3) 
   {
     // Only deep-inelastic interactions are experimentally included (for debuggin purposes)
+#ifdef debug
+    G4cout<<"G4QCollision::PostStepDoIt:*QS* piA nteraction, Z = "<<Z<<", N = "<<N<<G4endl;
+#endif
     G4QFragmentation DINR;                   // Define the deep-inelastic nuclear reaction
     const G4QNucleus targNuc(Z,N);           // Define the target nucleus
     const G4QHadron projPi(projPDG,proj4M);  // Define the projectile pion
+#ifdef debug
+    G4cout<<"G4QCollision::PostStepDoIt: ==>>> Before QS interaction"<<G4endl;
+#endif
     output=DINR.Scatter(targNuc, projPi);    // Make the reaction
     G4int nOut=output->size();               // Length of the output
+#ifdef debug
+    G4cout<<"G4QCollision::PostStepDoIt: <<<== After QS interaction nOut = "<<nOut<<G4endl;
+#endif
     if(nOut) for(G4int i=0; i<nOut; i++)     // Loop over the output
     {
       // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)

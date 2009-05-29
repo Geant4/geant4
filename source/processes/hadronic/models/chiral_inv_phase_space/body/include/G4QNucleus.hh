@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.34 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.35 2009-05-29 15:43:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -194,7 +194,6 @@ private:
   G4int currentNucleon;         // Current nucleon for the NextNucleon (? M.K.)
   G4double rho0;                // Normalazation density
   G4double radius;              // Nuclear radius
-  //std::vector<G4double>* Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
   std::vector<G4double> Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
 };
 

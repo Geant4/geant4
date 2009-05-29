@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonString.hh,v 1.5 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QuasmonString.hh,v 1.6 2009-05-29 15:43:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonString ----------------
@@ -84,8 +84,8 @@ private:
   //static G4double    StParName;    // Example of static parameter (see SetParameters)
 
   // Body
-  G4bool             theProjEnvFlag; // Projectile Environment Flag
-  G4bool             theTargEnvFlag; // Target Environment Flag
+  G4bool             theProjEnvFlag; // Projectile Environment Flag ("true": theEnv exists)
+  G4bool             theTargEnvFlag; // Target Environment Flag ("true": theEnv exists)
   G4QContent         theProjQC;      // Projectile Quark Content
   G4QContent         theTargQC;      // Target Quark Content
   G4LorentzVector    theProj4Mom;    // Projectile 4-momentum

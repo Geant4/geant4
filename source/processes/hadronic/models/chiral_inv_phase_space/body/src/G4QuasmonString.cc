@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QuasmonString.cc,v 1.8 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QuasmonString.cc,v 1.9 2009-05-29 15:43:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonString ----------------
@@ -66,8 +66,8 @@ G4QuasmonString::G4QuasmonString(G4QHadron projHadron, const G4bool projEnvFlag,
 {
   //static const G4double mPi0 = G4QPDGCode(111).GetMass(); // Pi0 mass
   //static const G4double mPi0 = (1232.-938.272)/2; // between p&Delta (147.365) shift
-  static const G4double mPi0 = sqrt((1232.*1232+938.272*938.272)/2)-938.272; // Pi0 mass
-  //static const G4double mPi0 = 170.; // Pi0 mass
+  static const G4double mPi0 = sqrt((1232.*1232+938.272*938.272)/2)-938.272; // "Pi0 mass"
+  //static const G4double mPi0 = 170.; // effective Pi0 mass
   static const G4double FreeFra = 1.; // @@ Free fraction for n-n scattering
   static const G4double interc = -1.; // @@ Pomeron intercept
   //static const G4double Temperature = 180.; // Temperature as a parameter
@@ -673,7 +673,7 @@ G4QuasmonString::~G4QuasmonString()
 //}
 
 
-//The public Hadronisation function with the Exception treatment (del respons. of User !)
+//The public Hadronisation function with the Exception treatment (del is respons. of User!)
 G4QHadronVector* G4QuasmonString::Fragment()
 {//              ========================== -- @@ Must be changed @@ --
   // Make the final check before filling the output -- @@ Must be changed @@ --

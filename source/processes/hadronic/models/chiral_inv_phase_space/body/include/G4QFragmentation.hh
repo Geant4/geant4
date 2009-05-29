@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.4 2009-05-29 15:43:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -67,21 +67,15 @@ class G4QFragmentation
 
   G4QHadronVector* Scatter(const G4QNucleus& theNucleus, const G4QHadron& thePrimary);
 
-  void InitModel(const G4QNucleus& Nucleus, const G4QHadron& Projectile);
+  void CreateAndDecayStrings(const G4QNucleus& Nucleus, const G4QHadron& Projectile);
 
-  void Init(G4double theZ, G4double theA)
-  {
-    if(!theNucleus) theNucleus = new G4QNucleus(G4int(theZ),G4int(theA-theZ+.0001));
-    theNucleus->InitByPDG(90000000+G4int(theZ)*1000+G4int(theA-theZ+.0001));
-  }
-     
-  void SetNucleus(G4QNucleus* aNucleus) {theNucleus=aNucleus;}
+  void SetNucleus(G4QNucleus* aNucleus) {theNucleus = aNucleus;}
   G4QNucleus* GetWoundedNucleus() const {return theNucleus;}
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
   G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
 
   G4QString* BuildString(G4QPartonPair* aPair)
-    {return new G4QString(aPair->GetParton1(),aPair->GetParton2(), aPair->GetDirection());}
+   {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
 
   G4QStringVector* GetStrings();
   G4QHadronVector* FragmentStrings(const G4QStringVector* theStrings);
@@ -93,7 +87,6 @@ class G4QFragmentation
 
   G4QPartonPair* GetNextPartonPair();
   void BuildInteractions(const G4QHadron& thePrimary);
-  void StartPartonPairLoop() {;} // @@ (? M.K.) Function which is doing nothing
 
   // Static functions
   static void SetParameters(G4int nCM, G4double thresh, G4double QGSMth, G4double radNuc,
@@ -113,7 +106,7 @@ class G4QFragmentation
  private:
   // static model parameters
   static G4int    nCutMax; 
-  static G4double ThersholdParameter; 
+  static G4double ThresholdParameter; 
   static G4double QGSMThershold; 
   static G4double theNucleonRadius;
   // Parameters of diffractional fragmentation
