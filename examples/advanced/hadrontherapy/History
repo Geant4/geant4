@@ -9,7 +9,10 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-29.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-09-12
+30.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02.13
+           - README_Hadrontherapy.pdf file updated and improved
+
+29.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-12
            - Implemented the new Low energy models (Livermore and Penelope)
              now migrated to the new interface (common to the Standard models)
 	     Livermore and Penelope models can be implemented:
