@@ -55,11 +55,15 @@ class F04RunAction : public G4UserRunAction
     void  SetRndmFreq(G4int val) {saveRndm = val;}
     G4int GetRndmFreq()          {return saveRndm;}
 
+    inline void SetAutoSeed (const G4bool val) {autoSeed = val;}
+
   private:
  
     F04RunActionMessenger* runMessenger;
 
     G4int saveRndm;
+    G4bool autoSeed;
+
 };
 
 #endif
