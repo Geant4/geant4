@@ -61,6 +61,9 @@
 #
 #/control/execute vis.mac
 #
+#
+#/rndm/autoSeed 1
+#
 #/rndm/save 2
 #/rndm/read random/run0evt8268.rndm
 #/random/resetEngineFrom random/run0evt40.rndm

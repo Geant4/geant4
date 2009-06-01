@@ -32,6 +32,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 
 #include "F04RunAction.hh"
 #include "F04RunActionMessenger.hh"
@@ -56,22 +57,33 @@ F04RunActionMessenger::F04RunActionMessenger(F04RunAction* RA)
   RndmReadCmd->SetGuidance("get rndm status from an external file.");
   RndmReadCmd->SetParameterName("fileName",true);
   RndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
-  RndmReadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  RndmReadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  SetAutoSeedCmd = new G4UIcmdWithABool("/rndm/autoSeed",this);
+  SetAutoSeedCmd->SetGuidance("Switch on/off time-based random seeds");
+  SetAutoSeedCmd->SetGuidance(" true: run seeds determined by system time");
+  SetAutoSeedCmd->SetGuidance("false: use command 'random/resetEngineFrom'");
+  SetAutoSeedCmd->SetGuidance("Default = false");
+  SetAutoSeedCmd->SetParameterName("autoSeed", false);
+  SetAutoSeedCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 F04RunActionMessenger::~F04RunActionMessenger()
 { 
-  delete RndmDir; delete RndmSaveCmd; delete RndmReadCmd;
+  delete RndmDir; delete RndmSaveCmd; delete RndmReadCmd; delete SetAutoSeedCmd;
 }
 
-void F04RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void F04RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
   if (command == RndmSaveCmd)
-      runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValues));
+      runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
 		 
   if (command == RndmReadCmd)
-  {  G4cout << "\n---> rndm status restored from file: " << newValues << G4endl;
-     CLHEP::HepRandom::restoreEngineStatus(newValues);
+  {  G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
+     CLHEP::HepRandom::restoreEngineStatus(newValue);
      CLHEP::HepRandom::showEngineStatus();
-  }   
+  }
+
+  if(command == SetAutoSeedCmd)
+      runAction->SetAutoSeed(SetAutoSeedCmd->GetNewBoolValue(newValue));
 }

@@ -42,6 +42,7 @@ class F04RunAction;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
 class F04RunActionMessenger : public G4UImessenger
 {
@@ -58,7 +59,8 @@ class F04RunActionMessenger : public G4UImessenger
    
     G4UIdirectory*             RndmDir;
     G4UIcmdWithAnInteger*      RndmSaveCmd;    
-    G4UIcmdWithAString*        RndmReadCmd;    
+    G4UIcmdWithAString*        RndmReadCmd;
+    G4UIcmdWithABool*          SetAutoSeedCmd;
  
 };
 
