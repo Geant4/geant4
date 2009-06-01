@@ -1,4 +1,4 @@
-// $Id: History,v 1.13 2009-05-27 16:02:18 gcosmo Exp $
+// $Id: History,v 1.14 2009-06-01 22:07:24 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1st, 2009 Peter Gumplinger - fieldex04-V09-02-01
+- Introduce '/rndm/autoSeed' command and changed the seeding of the
+  RanecuEngine from time(NULL). Default is autoSeed(false).
 
 May 27th, 2009 Gabriele Cosmo - fieldex04-V09-02-00
 -----------------------------
