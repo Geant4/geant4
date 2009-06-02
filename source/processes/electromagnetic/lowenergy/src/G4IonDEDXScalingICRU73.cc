@@ -90,7 +90,7 @@ void G4IonDEDXScalingICRU73::CreateReferenceParticle() {
   massRef = reference -> GetPDGMass();
   chargeRef = reference -> GetPDGCharge();
 
-  atomicNumberRefPow23 = std::pow(atomicNumberRef, 2./3.);
+  atomicNumberRefPow23 = std::pow(G4double(atomicNumberRef), 2./3.);
 }
 
 

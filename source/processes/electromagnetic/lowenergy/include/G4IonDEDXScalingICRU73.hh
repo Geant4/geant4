@@ -139,7 +139,7 @@ inline void G4IonDEDXScalingICRU73::UpdateCache (
      cacheCharge = particle -> GetPDGCharge();
      cacheMass = particle -> GetPDGMass();
 
-     cacheAtomicNumberPow23 = std::pow(cacheAtomicNumber, 2./3.);
+     cacheAtomicNumberPow23 = std::pow(G4double(cacheAtomicNumber), 2./3.);
 
      excludedIon = false;
      size_t nmb = excludedAtomicNumbers.size();
