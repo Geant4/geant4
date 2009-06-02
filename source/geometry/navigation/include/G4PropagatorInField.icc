@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.13 2008-10-29 14:31:55 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.14 2009-06-02 14:14:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -258,7 +258,12 @@ inline
 void G4PropagatorInField::
 SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator )
 {
-  if(SimpleOrMultiNavigator)  { fNavigator= SimpleOrMultiNavigator; }
+  if(SimpleOrMultiNavigator)  { 
+     fNavigator= SimpleOrMultiNavigator; 
+     if( fIntersectionLocator ) {
+	 fIntersectionLocator->SetNavigatorFor( SimpleOrMultiNavigator );
+     }
+  }
 }
 
 inline
