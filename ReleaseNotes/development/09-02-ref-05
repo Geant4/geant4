@@ -64,7 +64,7 @@ geometry/management                              geommng-V09-02-01
 - Fixed initialisation of min/max extent in method BuildReplicaVoxels() in
   G4SmartVoxelHeader.
 
-geometry/navigation                              geomnav-V09-02-05
+geometry/navigation                              geomnav-V09-02-06
 -------------------
 - Fix in G4Navigator::ComputeStep() for the computation of rotation of the
   'LocalExitNormal' in cases when DistanceToOut() returns non-valid normal
@@ -74,6 +74,8 @@ geometry/navigation                              geomnav-V09-02-05
 - Enhanced algorithm for 'FB_intersects' in order to speedup Brent locator.
 - Fix in the usage of the geometrical tolerance in G4VIntersectionLocator
   in method AdjustementOfFoundIntersection().
+- Fix in G4PropagatorInField::SetNavigator() to forward new navigator to
+  G4VIntersectionLocator.
 - Added method BuildContainerSolid() taking a solid as argument to
   G4PhantomParameterisation. Added protection to GetMaterialIndex()
   for zero index.
@@ -161,7 +163,7 @@ persistency/gdml                                 gdml-V09-02-15
   handling most common use-case of multiple copies of the same volume/solid
   through loop statement. Addressing problem report #1063.
 
-physics_lists                                    phys-lists-V09-02-18
+physics_lists                                    phys-lists-V09-02-19
 -------------
 - Added new physics-lists with special EM options: FTFP_BERT_EMV,
   FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY (opt3 EM physics).
@@ -175,6 +177,8 @@ physics_lists                                    phys-lists-V09-02-18
       QGSP_BERT_DIF, QGSP_BERT_NQE, QGSP_DIF, QGSP_EMV, QGSP_EMV_NQE,
       QGSP_NQE, QGSP_QEL  
 - Renamed list FB68 to FTFP_BERT_TRV.
+- Added two new low energy (<290 MeV) nA CHIPS reactions in QGSC_CHIPS
+  physics list.
 - G4PhysicsListFactory: updated list of supported PhysLists.
 - G4EmStandardPhysics, G4EmStandardPhysics_option1: use 9.2 msc model for e+-.
 - G4EmStandardPhysics_option2: use G4WentzelVIModel for e+-.
@@ -243,7 +247,9 @@ processes/hadronic
   o Cleared warning in elastic scattering for low energy nHe and pHe reactions.
   o Added safety check of 'nDelta' in the hadronization probability
     calculations in G4Quasmon.
-- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-06)
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-02-09)
+  o Implemented neutron-nuclear interactions in G4QCollision and added
+    new classes G4QNeutronCrossSection and G4QNeutronCaptureRatio.
   o Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)
     to be consistent with latest changes in particles. Changes are made for
     G4Q[Photon,Electron,Muon,Tau]NuclearCrossSection classes.
