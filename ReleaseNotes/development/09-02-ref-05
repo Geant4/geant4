@@ -355,7 +355,7 @@ tests                                            tests-V09-02-05
   o Improved scripts; added comments to the main().
 - test37 (test37-V09-02-00)
   o Fixed non-initialised variable in RunAction.
-- test39 (test39-V09-02-00)
+- test39 (test39-V09-02-02)
   o Corrected initialisation for generic ions.
 - test41 (test41-V09-02-00)
   o Updated scripts.
