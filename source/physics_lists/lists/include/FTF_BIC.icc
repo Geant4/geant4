@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.icc,v 1.3 2009-05-18 08:54:22 gunter Exp $
+// $Id: FTF_BIC.icc,v 1.4 2009-06-02 16:51:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus exp;
-  exp.Experimental("FTFC");
+  exp.Experimental("FTF_BIC");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));
