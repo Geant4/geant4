@@ -1,4 +1,4 @@
-$Id: History,v 1.371 2009-05-20 09:27:46 pandola Exp $
+$Id: History,v 1.372 2009-06-02 15:38:13 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.06.2009, A.Lechner, tag emlowen-V09-02-39
+            Bug fix in class G4IonDEDXScalingICRU73: Compilation
+            error on Windows due to std::pow function was fixed. 
 
 20.05.2009, L. Pandola, tag emlowen-V09-02-38
             Update Penelope models, G4LivermoreIonisationModel and 
