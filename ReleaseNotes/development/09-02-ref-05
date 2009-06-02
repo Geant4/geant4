@@ -205,6 +205,12 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-38
 - Fixed handling of compounds in G4LivermoreGammaConversionModel.
 - Cleared annoying printout from G4AugerData AugerTransitionTable.
 
+processes/electromagnetic/muons                  emmuons-V09-02-03
+-------------------------------
+- G4MuPairProductionModel: added protection for the case when
+  'maxPairEnergy' is less than 'minPairEnergy' (empty interval for energy
+  transfer observed for rare case with kaons).
+
 processes/electromagnetic/standard               emstand-V09-02-13
 ----------------------------------
 - G4PairProductionRelModel: new relativistic model for gamma conversion.

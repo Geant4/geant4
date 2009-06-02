@@ -295,6 +295,9 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         external model of fluctuations.
       o Simplified initialisation in G4MuBetheBlochModel,
         G4MuBremsstrahlungModel and G4MuPairProductionModel.
+      o G4MuPairProductionModel: added protection for the case when
+        'maxPairEnergy' is less than 'minPairEnergy' (empty interval for
+        energy transfer observed for rare case with kaons).
       o Some code cleanup: improved comments, avoid inlined virtual methods.
     + Polarisation:
       o Simplified initialisation in G4PolarizedAnnihilationModel.
