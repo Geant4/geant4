@@ -3,6 +3,8 @@
 #include "FTFC.hh"
 #include "FTFP.hh"
 #include "FTFP_BERT.hh"
+#include "FTFP_BERT_TRV.hh"
+
 #include "LBE.hh"
 #include "LHEP_BERT_HP.hh"
 #include "LHEP_BERT.hh"
@@ -43,6 +45,7 @@ int main(int argc,char** argv) {
   G4VModularPhysicsList * theFTF1 = new FTFC; 
   G4VModularPhysicsList * theFTF2 = new FTFP;
   G4VModularPhysicsList * theFTF3 = new FTFP_BERT;
+  G4VModularPhysicsList * theFTF3a = new FTFP_BERT_TRV;
 
   G4VModularPhysicsList *theLBE = new LBE; 
 
