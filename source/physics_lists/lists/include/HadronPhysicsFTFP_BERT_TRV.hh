@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFB68.hh,v 1.1 2009-04-23 19:04:18 japost Exp $
+// $Id: HadronPhysicsFTFP_BERT_TRV.hh,v 1.1 2009-06-02 16:51:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -39,8 +39,8 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef HadronPhysicsFB68_h
-#define HadronPhysicsFB68_h 1
+#ifndef HadronPhysicsFTFP_BERT_TRV_h
+#define HadronPhysicsFTFP_BERT_TRV_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -62,11 +62,11 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
 
-class HadronPhysicsFB68 : public G4VPhysicsConstructor
+class HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFB68(const G4String& name ="hadron",G4bool quasiElastic=false);
-    virtual ~HadronPhysicsFB68();
+    HadronPhysicsFTFP_BERT_TRV(const G4String& name ="hadron",G4bool quasiElastic=false);
+    virtual ~HadronPhysicsFTFP_BERT_TRV();
 
   public: 
     virtual void ConstructParticle();

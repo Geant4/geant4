@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFB68.cc,v 1.1 2009-04-23 19:04:18 japost Exp $
+// $Id: HadronPhysicsFTFP_BERT_TRV.cc,v 1.1 2009-06-02 16:51:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -37,7 +37,7 @@
 //
 //----------------------------------------------------------------------------
 //
-#include "HadronPhysicsFB68.hh"
+#include "HadronPhysicsFTFP_BERT_TRV.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -49,16 +49,16 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsFB68::HadronPhysicsFB68(const G4String& name, G4bool quasiElastic)
+HadronPhysicsFTFP_BERT_TRV::HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
 {}
 
-void HadronPhysicsFB68::CreateModels()
+void HadronPhysicsFTFP_BERT_TRV::CreateModels()
 {
   G4double minFTFP= 6.0 * GeV;
   G4double maxBERT= 8.0 * GeV;
   // G4double minFTFP= 5.0 * GeV; G4double maxBERT= 7.0 * GeV;
-  G4cout << " Revised FB68 - new threshold between BERT and FTFP " 
+  G4cout << " Revised FTFTP_BERT_TRV - new threshold between BERT and FTFP " 
 	 << " is over the interval " << minFTFP/GeV << " to " << maxBERT/GeV 
 	 << " GeV. " << G4endl;
   G4cout << "  -- quasiElastic was asked to be " << QuasiElastic 
@@ -94,7 +94,7 @@ void HadronPhysicsFB68::CreateModels()
   theMiscLHEP=new G4MiscLHEPBuilder;
 }
 
-HadronPhysicsFB68::~HadronPhysicsFB68()
+HadronPhysicsFTFP_BERT_TRV::~HadronPhysicsFTFP_BERT_TRV()
 {
   delete theNeutrons;
   delete theBertiniNeutron;
@@ -111,7 +111,7 @@ HadronPhysicsFB68::~HadronPhysicsFB68()
   delete theMiscLHEP;
 }
 
-void HadronPhysicsFB68::ConstructParticle()
+void HadronPhysicsFTFP_BERT_TRV::ConstructParticle()
 {
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
@@ -124,7 +124,7 @@ void HadronPhysicsFB68::ConstructParticle()
 }
 
 #include "G4ProcessManager.hh"
-void HadronPhysicsFB68::ConstructProcess()
+void HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
 {
   CreateModels();
   theNeutrons->Build();
