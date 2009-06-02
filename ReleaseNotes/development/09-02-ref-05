@@ -355,11 +355,11 @@ tests                                            tests-V09-02-05
   o Renamed hadronic_exerciser file.
 - test29 (test29-V09-02-00)
   o Corrected initialisation for generic ions.
-- test31 (test31-V09-02-00)
+- test31 (test31-V09-02-01)
   o Updated test31.in input macro. Fixed Valgrind warnings.
 - test35 (test35-V09-02-00)
   o Improved scripts; added comments to the main().
-- test37 (test37-V09-02-00)
+- test37 (test37-V09-02-01)
   o Fixed non-initialised variable in RunAction.
 - test39 (test39-V09-02-02)
   o Corrected initialisation for generic ions.
