@@ -123,7 +123,7 @@ intercoms                                        intercoms-V09-02-00
   maximum characters guess; FindCommandTree() will now return current tree
   when command path is "/".
 
-interfaces                                       interfaces-V09-02-02
+interfaces                                       interfaces-V09-02-03
 ----------
 - G4UIExecutive: new class for automatic instantiation of user interactive
   sessions.
