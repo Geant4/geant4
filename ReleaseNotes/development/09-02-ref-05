@@ -163,7 +163,7 @@ persistency/gdml                                 gdml-V09-02-15
   handling most common use-case of multiple copies of the same volume/solid
   through loop statement. Addressing problem report #1063.
 
-physics_lists                                    phys-lists-V09-02-19
+physics_lists                                    phys-lists-V09-02-20
 -------------
 - Added new physics-lists with special EM options: FTFP_BERT_EMV,
   FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY (opt3 EM physics).
@@ -190,7 +190,7 @@ processes/cuts                                   procuts-V09-02-00
 --------------
 - Replaced usage of std::abs() with std::fabs() where appropriate.
 
-processes/electromagnetic/lowenergy              emlowen-V09-02-38
+processes/electromagnetic/lowenergy              emlowen-V09-02-39
 -----------------------------------
 - Updated Penelope models G4LivermoreIonisationModel,
   G4PenelopeBremsstrahlungModel and G4LivermoreBremsstrahlungModel: pointers
@@ -207,6 +207,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-38
 - Added message to obsolete non-migrated Geant4-DNA cross section and final
   state classes, and non-migrated Livermore and Penelope classes.
 - Fixed handling of compounds in G4LivermoreGammaConversionModel.
+- Fixes for compilation errors on VC++7 Windows compiler.
 - Cleared annoying printout from G4AugerData AugerTransitionTable.
 
 processes/electromagnetic/muons                  emmuons-V09-02-03
