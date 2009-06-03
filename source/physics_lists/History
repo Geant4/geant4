@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2009-06-02 16:50:51 gunter Exp $
+$Id: History,v 1.92 2009-06-03 09:15:29 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-06-2009, G.Folger                       (phys-lists-V09-02-21)
+- no code change
+- use versions of phys-lists-V09-02-18 for 
+   builders/include/G4QGSC_CHIPSNeutronBuilder.hh
+   builders/*/G4QNeutronBuilder.{hh,cc}
+   
 
 02-06-2009, G.Folger                       (phys-lists-V09-02-20)
 - Rename HadronPhysicsFB68.{hh,cc} to HadronPhysicsFTFP_BERT_TRV.{hh,cc};
