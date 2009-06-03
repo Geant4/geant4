@@ -482,11 +482,12 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Reviewed physics implementation. Now Hadrontherapy can be launched 
         with physics-lists, packages and built-in physic models.
         All models can be activated via macro command.
+      o Implemented new low-energy models Livermore and Penelope
       o Improved HadrontherapyModulator.
       o Corrected stepMax value in each macro in order to avoid wrong dose
         deposition in the first slice.
       o Corrected a bug in the call of a physics-list and in proton_therapy.mac.
-      o Modified and revised the README and macro files.
+      o Modified and revised the README (now in PDF format) and macro files.
     + advanced/microbeam
       o Updated physics-list to combination of migrated Livermore processes
         and standard EM processes.
