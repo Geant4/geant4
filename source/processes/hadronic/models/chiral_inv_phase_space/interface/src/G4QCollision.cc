@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.36 2009-05-29 15:44:47 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.37 2009-06-03 07:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1385,7 +1385,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
      else qepart/=clProb[0];     // Add corresponding number of 2N, 3N, & 4N clusters
      G4double pickup=1.-qepart;  // Estimate the rest of the cross-section
      G4double thresh=100.;
-     if(momentum > thresh) pickup*=50./momentum/std::pow(Z+N,third); // 50. is a par(!)
+     if(momentum > thresh) pickup*=50./momentum/std::pow(G4double(Z+N),third); // 50. is a par(!)
      // pickup = 0.;               // To exclude the pickup process
      if (N) pickup+=qepart;
      else   pickup =qepart;
