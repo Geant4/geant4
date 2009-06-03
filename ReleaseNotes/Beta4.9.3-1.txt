@@ -388,8 +388,6 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         improvement for the case when the Hypernucleus cannot decay in the
         residual nucleus and pion; now it is decayed in the residual nucleus
         and gamma.
-      o Implemented neutron-nuclear interactions in G4QCollision and added
-        new classes G4QNeutronCrossSection and G4QNeutronCaptureRatio.
       o For rare cases of the output hadron mass below the GS mass avoid
         exception in the G4QEnvironment class; use 'As-Is' filling for the
         hadron with appropriate warning.
