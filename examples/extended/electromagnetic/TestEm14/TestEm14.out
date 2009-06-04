@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -292,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.9s Real=0.9s Sys=0s
+  User=0.96s Real=0.97s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -363,23 +363,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.1s Real=1.1s Sys=0s
+  User=1.1s Real=1.2s Sys=0s
 
  The run consists of 100000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 60247	eIoni = 39753
+ Process calls frequency --->	eBrem = 60242	eIoni = 39758
 
- MeanFreePath:	1.6205 cm  +- 1.614 cm 	massic: 1.6205 g/cm2 
- CrossSection:	0.61708 cm^-1 			massic: 0.61708 cm2/g
+ MeanFreePath:	1.6207 cm  +- 1.6144 cm 	massic: 1.6207 g/cm2 
+ CrossSection:	0.617 cm^-1 			massic: 0.617 cm2/g
 
- mean energy of charged secondaries: 737.55 keV	mass_energy_transfer coef: 0.0045512 cm2/g
+ mean energy of charged secondaries: 737.63 keV	mass_energy_transfer coef: 0.0045512 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	eBrem= 0.37243 cm2/g	eIoni= 0.24497 cm2/g	total= 0.6174 cm2/g
+	eBrem= 0.37231 cm2/g	eIoni= 0.24497 cm2/g	total= 0.61728 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 945015313, 1551945421
+ Current couple of seeds = 217534387, 1863082931
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

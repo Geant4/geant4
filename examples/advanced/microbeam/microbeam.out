@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -132,122 +132,54 @@ Registered filter factories:
 
 MicrobeamPhysicsList::SetCuts:CutLength : 10 nm 
 
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :     Emin=          0 eV         Emax=   100 GeV
+       PhotoElectric :     Emin=        100 GeV        Emax=   10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :     Emin=          0 eV         Emax=   100 GeV
+       Klein-Nishina :     Emin=        100 GeV        Emax=   10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :     Emin=          0 eV         Emax=   100 GeV
+       Bethe-Heitler :     Emin=        100 GeV        Emax=   10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :     Emin=          0 eV         Emax=   100 GeV
+
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
+        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
 
-IONI:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parametrised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyBremsstrahlung.
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :     Emin=          0 eV         Emax=   100 GeV
+        MollerBhabha :     Emin=        100 GeV        Emax=   10 TeV
 
-LowEnBrem:  Total cross sections from EEDL database.
-      Gamma energy sampled from a parameterised formula.
-      Implementation of the continuous dE/dx part.
-      At present it can be used for electrons in the energy range [250eV,100GeV].
-      The process must work with G4LowEnergyIonisation.
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :     Emin=          0 eV         Emax=   100 GeV
+            eBremRel :     Emin=        100 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
@@ -264,49 +196,21 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
-msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
-
-hLowEIoni:    Knock-on electron cross sections . 
-        Good description above the mean excitation energy.
-        Delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 0.1 TeV  in 360 bins.
-        Electronic stopping power model is  ICRU_R49He
-        from 1 keV  to 2.5 MeV .
-
-        Parametrisation model for antiprotons is  ICRU_R49p
-        from 25 keV  to 2 MeV .
-        Parametrization of the Barkas effect is switched on.
-        Nuclear stopping power model is ICRU_R49
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 ============================================================================================
-
-hLowEIoni:    Knock-on electron cross sections . 
-        Good description above the mean excitation energy.
-        Delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 0.1 TeV  in 360 bins.
-        Electronic stopping power model is  ICRU_R49p
-        from 1 keV  to 2 MeV .
-
-        Parametrisation model for antiprotons is  ICRU_R49He
-        from 25 keV  to 2 MeV .
-        Parametrization of the Barkas effect is switched on.
-        Nuclear stopping power model is ICRU_R49
-
-msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
 ========= Table of registered couples ==============================
 
@@ -404,9 +308,7 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 -> Event # 1 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.36015313863754
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0051442570984364
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -419,39 +321,45 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   is non-zero.
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.38248890638351
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.076472550630569
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.35510078072548
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.058106813579798
 
 -> Event # 3 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.21155473589897
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.043906062841415
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.31065982580185
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.051930233836174
 
 -> Event # 5 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.34682843089104
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.074599929153919
 
 -> Event # 6 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.34815555810928
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.080737881362438
 
 -> Event # 7 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.65323799848557
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.013283146545291
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32901468873024
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.068093255162239
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.35558521747589
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.070238947868347
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 4
+-> Total number of particles detected by the gas detector : 6
 
 Idle> Graphics systems deleted.
 Visualization Manager deleting...

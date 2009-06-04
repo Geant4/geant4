@@ -1,6 +1,15 @@
 
+--------- Ranecu engine status ---------
+ Initial seed (index) = 123
+ Current couple of seeds = 960416608, 2004255418
+----------------------------------------
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,8 +33,6 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -189,9 +196,6 @@ F04PhysicsList::SetCuts:CutLength : 1 mm
 #
 #/control/execute vis.mac
 #
-#
-#/rndm/autoSeed 1
-#
 #/rndm/save 2
 #/rndm/read random/run0evt8268.rndm
 #/random/resetEngineFrom random/run0evt40.rndm
@@ -300,11 +304,6 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 123
- Current couple of seeds = 960416608, 2004255418
-----------------------------------------
 
 ---> Begin of Event: 0
 
@@ -508,3 +507,4 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+

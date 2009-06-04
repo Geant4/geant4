@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -55,7 +55,7 @@ eIoni:   for  e-    SubType= 2
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -95,7 +95,7 @@ hIoni:   for  proton    SubType= 2
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -154,7 +154,7 @@ muPairProd:   for  mu+    SubType= 4
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -199,7 +199,7 @@ hIoni:   for  pi-    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 ============================================================================================
@@ -267,6 +267,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=1461(0.31208735), e-=7937(3.0886694), e+=7(5.2427312), p=199(5.3529594), n=1206(3.8346961), d=26(1.7471077), t=8(0.72864406), He3=0(0), alph=115(2.4675493), nu=1000(48.868028), anu=656(31.678041), others=12573*0.12254613
+Test23_Result: gam=1337(0.32630849), e-=7315(3.564085), e+=10(3.5773282), p=160(4.8162844), n=1048(3.8416493), d=25(2.6498577), t=6(1.5013858), He3=0(0), alph=104(2.3549712), nu=1000(47.478382), anu=690(32.06774), others=11648*0.12763387
 Test23 is done
 

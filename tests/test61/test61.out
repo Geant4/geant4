@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,7 +51,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -92,7 +92,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -139,7 +139,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -196,7 +196,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -235,7 +235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=68s Real=68s Sys=0.04s
+  User=33s Real=33s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -262,7 +262,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   1e+02 TeV
 
@@ -303,7 +303,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   1e+02 TeV
 
@@ -350,7 +350,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   1e+02 TeV
 
@@ -407,7 +407,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   1e+02 TeV
 
@@ -446,7 +446,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -473,7 +473,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -514,7 +514,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -561,7 +561,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -618,7 +618,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -662,7 +662,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=7.18s Real=7.19s Sys=0.01s
+  User=7.17s Real=7.18s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -689,7 +689,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -730,7 +730,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -777,7 +777,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -834,7 +834,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -880,12 +880,10 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-GroundStateNucleus state cannot be created. Try again with another parameters.
-GroundStateNucleus state cannot be created. Try again with another parameters.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.66s Real=4.67s Sys=0.01s
+  User=3.58s Real=3.59s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -933,7 +931,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -980,7 +978,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1027,7 +1025,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.05s Real=1.05s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1057,7 +1055,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1098,7 +1096,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1145,7 +1143,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1202,7 +1200,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1256,7 +1254,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=61.89s Real=62.06s Sys=0.15s
+  User=23.02s Real=23.2s Sys=0.02s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

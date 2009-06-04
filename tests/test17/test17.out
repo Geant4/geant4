@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,7 +116,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -157,103 +157,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -301,7 +207,7 @@ G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -349,7 +255,7 @@ muPairProd:   for  mu-    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -376,18 +282,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.22s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18366 +- 0.00529312  microns 
-    CSDA  Range  in absorber = 9.05312 +- 0.00568066  microns 
+    Track Length in absorber = 9.18596 +- 0.00535119  microns 
+    CSDA  Range  in absorber = 9.03766 +- 0.00626145  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.124661 +- 0.00529312 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.184116 +- 0.00568066 microns 
+    Track Length (G4 - ICRU49) = 0.126957 +- 0.00535119 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.168655 +- 0.00626145 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -423,8 +329,8 @@ Run Summary
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18396 +- 0.006023  microns 
-    CSDA  Range  in absorber = 9.04681 +- 0.00613386  microns 
+    Track Length in absorber = 9.18275 +- 0.00570939  microns 
+    CSDA  Range  in absorber = 9.0312 +- 0.00604811  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -457,16 +363,15 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
-EvtNo= 485  length= 0.00861611  xend= 0.00423263
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.42s Real=0.42s Sys=0s
+  User=0.44s Real=0.47s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56934 +- 0.00121963  microns 
-    CSDA  Range  in absorber = 6.94478 +- 0.01165  microns 
+ end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 8.56864 +- 0.00119923  microns 
+    CSDA  Range  in absorber = 6.95593 +- 0.011486  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -503,21 +408,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.74s Real=0.75s Sys=0s
+  User=0.77s Real=0.78s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18778 +- 0.0172737  microns 
-    CSDA  Range  in absorber = 9.0607 +- 0.0168997  microns 
+    Track Length in absorber = 9.21699 +- 0.0188501  microns 
+    CSDA  Range  in absorber = 9.0734 +- 0.0191019  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.128784 +- 0.0172737 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.191703 +- 0.0168997 microns 
+    Track Length (G4 - ICRU49) = 0.157989 +- 0.0188501 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.204402 +- 0.0191019 microns 
 
-Average Number electrons per event = 21.93
-Average Number photons per event   = 21.93
+Average Number electrons per event = 22.01
+Average Number photons per event   = 22.01
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -547,21 +452,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.5s Real=1.49s Sys=0s
+  User=1.47s Real=1.48s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.16245 +- 0.0168552  microns 
-    CSDA  Range  in absorber = 9.03987 +- 0.0161575  microns 
+    Track Length in absorber = 9.19162 +- 0.0171124  microns 
+    CSDA  Range  in absorber = 9.044 +- 0.0191293  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.103446 +- 0.0168552 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.170872 +- 0.0161575 microns 
+    Track Length (G4 - ICRU49) = 0.132621 +- 0.0171124 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.175003 +- 0.0191293 microns 
 
-Average Number electrons per event = 521.14
-Average Number photons per event   = 2.99
+Average Number electrons per event = 522.74
+Average Number photons per event   = 3.11
 
 G4 kernel has come to Quit state.
 

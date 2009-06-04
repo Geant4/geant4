@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -89,7 +89,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -185,6 +185,18 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -193,6 +205,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -321,24 +345,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.07s Real=7.08s Sys=0.01s
+  User=7.09s Real=7.15s Sys=0.01s
 
  SUMMARY 
 
- energy deposit :   94.74 % E0 +-    0.88 % E0
- charged traklen:  479.42 radl +-    4.66 radl
- neutral traklen: 4451.53 radl +-  120.11 radl
+ energy deposit :   94.69 % E0 +-    0.94 % E0
+ charged traklen:  478.70 radl +-    4.93 radl
+ neutral traklen: 4454.96 radl +-  124.77 radl
 
- 90.00 % confinement: radius = 3.03 radl  (2.70 cm )
+ 90.00 % confinement: radius = 3.08 radl  (2.75 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1516987276, 76746462
+ Current couple of seeds = 182973422, 418521671
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94743705  delEdep= -0.0015629451 nrms= -1.9060306
-Erms: 0.0087551392  delErms= 0.00055513919 nrms= 0.67699901
+Edep: 0.94689989  delEdep= -0.0021001058 nrms= -2.5611047
+Erms: 0.0094459365  delErms= 0.0012459365 nrms= 1.5194348
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

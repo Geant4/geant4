@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,7 +34,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -130,6 +130,18 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -138,6 +150,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -301,22 +325,23 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     102 hits are stored in ExN04TrackerHitsCollection.
-     9 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.9163612216849 (GeV)
+     72 hits are stored in ExN04TrackerHitsCollection.
+     6 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.38858369267615 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     35 hits are stored in ExN04TrackerHitsCollection.
-     16 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.6061003592078 (GeV)
+     27 hits are stored in ExN04TrackerHitsCollection.
+     27 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.5717199 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     36 hits are stored in ExN04TrackerHitsCollection.
-     25 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.9467224777312 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     36 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.2043092375593 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
+

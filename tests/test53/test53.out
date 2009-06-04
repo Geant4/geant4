@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -193,20 +193,44 @@ hIoni:   for  anti_proton    SubType= 2
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -361,112 +385,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin Of Event: 0
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
 
 ---> Begin Of Event: 50
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.49s Real=10.51s Sys=0.01s
+  User=10.51s Real=10.53s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 769.96 MeV :  22.68 MeV     2.945 +- 0.2945 %      55.1 cm  +- 1.72 cm 
-   liquidArgon: 206.55 MeV :  15.34 MeV     7.425 +- 0.7425 %      1.02 m   +- 7.65 cm 
+          Lead: 764.71 MeV :  24.31 MeV     3.179 +- 0.3179 %      54.7 cm  +- 1.77 cm 
+   liquidArgon: 207.13 MeV :  16.59 MeV     8.012 +- 0.8012 %      1.03 m   +-  8.4 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -474,15 +404,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 769.957 MeV
-liquidArgon:	 206.549 MeV
+      Lead:	 764.715 MeV
+liquidArgon:	 207.127 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1891305773, 868348681
+ Current couple of seeds = 692466331, 2083935204
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

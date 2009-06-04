@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -59,7 +59,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -155,6 +155,18 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -163,6 +175,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :     Emin=          0 eV         Emax=   100 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -326,37 +350,37 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.49s Real=2.49s Sys=0s
+  User=2.47s Real=2.51s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1317
-Average number of gamma      695.1
-Average number of e+         48.6
-Average number of steps      3986
-Edep 1x1 =                   0.8242 +- 0.002931  res=  3.521 %
-Edep 3x3 =                   0.9567 +- 0.001287  res=  1.276 %
-Edep 5x5 =                   0.9782 +- 0.0009782  res=  0.9591 %
+Average number of e-         1323
+Average number of gamma      699.8
+Average number of e+         49.23
+Average number of steps      3989
+Edep 1x1 =                   0.83 +- 0.002882  res=  3.472 %
+Edep 3x3 =                   0.9584 +- 0.001284  res=  1.313 %
+Edep 5x5 =                   0.9806 +- 0.0008177  res=  0.8127 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8227 +- 0.003058  res=  3.718 %
-Edep 3x3 =                   0.9525 +- 0.001749  res=  1.837 %
-Edep 5x5 =                   0.9757 +- 0.00126  res=  1.292 %
+Edep 1x1 =                   0.83 +- 0.002882  res=  3.472 %
+Edep 3x3 =                   0.9564 +- 0.001588  res=  1.66 %
+Edep 5x5 =                   0.9784 +- 0.00131  res=  1.339 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8637 +- 0.002548
-  E1/E25 =                   0.8431 +- 0.002832
-  E9/E25 =                   0.9762 +- 0.001026
+  E1/E9  =                   0.8678 +- 0.002494
+  E1/E25 =                   0.8483 +- 0.002643
+  E9/E25 =                   0.9775 +- 0.0009716
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8242  delEdep1x1= -0.002899 nrms= -0.9747
-Erms1x1: 0.02902  delErms1x1= -0.0007203 nrms= -0.2422
-Edep3x3: 0.9567  delEdep3x3= -0.00029 nrms= -0.2255
-Erms3x3: 0.01221  delErms3x3= -0.0006539 nrms= -0.5085
-Edep5x5: 0.9782  delEdep5x5= -0.001104 nrms= -1.249
-Erms5x5: 0.009382  delErms5x5= 0.0005423 nrms= 0.6134
+Edep1x1: 0.83  delEdep1x1= 0.002906 nrms= 0.9771
+Erms1x1: 0.02882  delErms1x1= -0.0009241 nrms= -0.3107
+Edep3x3: 0.9584  delEdep3x3= 0.001368 nrms= 1.064
+Erms3x3: 0.01258  delErms3x3= -0.0002774 nrms= -0.2157
+Edep5x5: 0.9806  delEdep5x5= 0.001305 nrms= 1.476
+Erms5x5: 0.00797  delErms5x5= -0.0008702 nrms= -0.9844
 <<<<<END>>>>>   IS ACCEPTED
 
 #

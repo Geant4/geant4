@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -84,11 +84,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   cross section per atom   : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
 
  
-  cross section per volume : 	     0.075796 cm^-1	     0.489815 cm^-1	            0 cm^-1	     0.565611 cm^-1
-  cross section per mass   : 	    0.0142393 cm2/g	    0.0920186 cm2/g	            0 cm2/g	     0.106258 cm2/g
+  cross section per volume : 	     0.075796 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.565733 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0920415 cm2/g	            0 cm2/g	     0.106281 cm2/g
  
-  mean free path           : 	      13.1933 cm 	      2.04159 cm 	 5.82593e+288 pc 	        1.768 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	      10.8674 g/cm2 	 2.88022e+285 kg/cm2	      9.41106 g/cm2 
+  mean free path           : 	      13.1933 cm 	      2.04108 cm 	 5.82593e+288 pc 	      1.76762 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      9.40904 g/cm2 
 
 -------------------------------------------------------------
 
@@ -98,22 +98,22 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.10224 keV	 e-  85.4196 keV
 
- Max_energy _transferable : 10 MeV (4.90502 cm )
+ Max_energy _transferable : 10 MeV (4.9049 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  cross section per volume : 	     0.991178 cm^-1	     0.343991 cm^-1	      1.33517 cm^-1
-  cross section per mass   : 	     0.991178 cm2/g	     0.343991 cm2/g	      1.33517 cm2/g
+  cross section per volume : 	     0.991171 cm^-1	     0.344038 cm^-1	      1.33521 cm^-1
+  cross section per mass   : 	     0.991171 cm2/g	     0.344038 cm2/g	      1.33521 cm2/g
  
-  mean free path           : 	       1.0089 cm 	      2.90705 cm 	      7.48969 mm 
-        (g/cm2)            : 	       1.0089 g/cm2 	      2.90705 g/cm2 	      748.969 mg/cm2
+  mean free path           : 	      1.00891 cm 	      2.90666 cm 	      7.48946 mm 
+        (g/cm2)            : 	      1.00891 g/cm2 	      2.90666 g/cm2 	      748.946 mg/cm2
 
  
   restricted dE/dx         : 	      1.61567 MeV/cm	      12.3265 eV/cm 	      1.61568 MeV/cm
       (MeV/g/cm2)          : 	      1.61567 MeV*cm2/g	      12.3265  eV*cm2/g	      1.61568 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05763 cm  ( 6.05763 g/cm2 )
-  range from full dE/dx    : 	 4.90502 cm  ( 4.90502 g/cm2 )
+  range from restrict dE/dx: 	 6.05738 cm  ( 6.05738 g/cm2 )
+  range from full dE/dx    : 	  4.9049 cm  (  4.9049 g/cm2 )
  
   transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  

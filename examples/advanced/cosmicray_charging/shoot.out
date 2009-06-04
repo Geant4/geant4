@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -43,6 +43,60 @@ Registered filter factories:
   attributeFilter
 
 Electromagnetic Physics
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyPhotoElectric is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyIonisation is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyBremsstrahlung is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyRayleigh is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyCompton is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
+
+*******************************************************************************
+*******************************************************************************
+   The class G4LowEnergyGammaConversion is NOT SUPPORTED ANYMORE. 
+   It will be REMOVED with the next major release of Geant4. 
+   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses
+*******************************************************************************
+*******************************************************************************
+
 Hadronic Physics
 ElectroNuclear Physics
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -75,103 +129,9 @@ RandomNumberEngineStatus restored from file: ./seeds.rndm
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
-AugerTransitionTable complete
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -207,7 +167,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -263,7 +223,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -325,7 +285,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
@@ -530,7 +490,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

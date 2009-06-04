@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-03    (13-March-2009)
+ Geant4 version Name: global-V09-02-02    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -30,7 +30,7 @@
    --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
    --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  75.000 eV 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
    --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
    --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
@@ -181,22 +181,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.22s Real=8.22s Sys=0s
+  User=8.14s Real=8.14s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         12.12
-Average number of gamma                      21.13
-Average number of e+                         0.7899
+Average number of e-                         12.05
+Average number of gamma                      21.06
+Average number of e+                         0.7941
 Average number of neutrons                   0
-Average number of steps in absorber          31.33
-Average number of e- steps in target         18.66
-Average number of g  produced in the target  20.31
-Average number of e- produced in the target  7.189
-Average number of g produced in the phantom  0.507
-Average number of e- produced in the phantom 2.748
-Total gamma fluence in front of phantom      8.586 MeV 
+Average number of steps in absorber          31.52
+Average number of e- steps in target         18.56
+Average number of g  produced in the target  20.24
+Average number of e- produced in the target  7.191
+Average number of g produced in the phantom  0.5284
+Average number of e- produced in the phantom 2.754
+Total gamma fluence in front of phantom      8.718 MeV 
 ========================================================
 
 
