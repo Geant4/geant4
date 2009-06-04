@@ -539,7 +539,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
                              --------------- 
 
   o Official platforms:
-    + Linux, gcc-4.1.2, gcc-4.3.0.
+    + Linux, gcc-4.1.2, gcc-4.3.2.
       Tested on 32 bits architectures and 64 bits architectures
       (Intel or AMD) with the Scientific Linux CERN 5 (SLC5) distribution
       (based on RedHat Linux Enterprise 5).
