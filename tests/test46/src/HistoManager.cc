@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.11 2009-04-19 17:13:04 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.12 2009-06-04 13:46:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -180,22 +180,22 @@ void HistoManager::EndOfRun()
     if(y > 0.0) r = std::sqrt(y);
     erms[j] = r;
     G4cout << "  " << nam[j] << " = " << std::setw(10) << e*f
-           << " +- " << std::setw(10) << f*r*sqrt(xx) 
+           << " +- " << std::setw(10) << f*r*std::sqrt(xx) 
 	   << "    RMS= " << f*r << G4endl;
   }
   G4cout<<"==============  HCAL  ===================================="<<G4endl;
 
   G4double sum = edepSum*x;
   G4double y = edepSum2*x - sum*sum;
-  if(y > 0.) y = sqrt(y);
+  if(y > 0.) y = std::sqrt(y);
   else       y = 0.0;
-  G4double r = y*sqrt(x);
+  G4double r = y*std::sqrt(x);
 
   G4double sum1 = etotSum*x;
   G4double y1 = etotSum2*x - sum1*sum1;
-  if(y1 > 0.) y1 = sqrt(y1);
+  if(y1 > 0.) y1 = std::sqrt(y1);
   else        y1 = 0.0;
-  G4double r1 = y1*sqrt(x);
+  G4double r1 = y1*std::sqrt(x);
 
   G4cout << std::setprecision(4) << "Visible HCAL Edep(GeV)     =   " 
 	 << x*hcal/GeV << G4endl;

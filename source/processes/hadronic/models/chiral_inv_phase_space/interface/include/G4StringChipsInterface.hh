@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // !!! Was used in QBBC PL, NOW it is not. Must be absolete !!!
 // ============================================================
 //

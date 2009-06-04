@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // HadrontherapyStepMaxMessenger.hh
 //
 // See more at: http://workgroup.lngs.infn.it/geant4lns/

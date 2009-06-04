@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // (Why only antiproton-proton, when the antiproton-nucleus is made? - M.K.)
 // 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
 #ifndef G4ProtonAntiProtonReaction_h

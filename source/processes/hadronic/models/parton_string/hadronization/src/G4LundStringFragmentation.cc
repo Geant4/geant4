@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.14 2009-05-22 16:36:46 gunter Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.15 2009-06-04 13:46:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -518,7 +518,7 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
 //	 G4cout << " termD, ab, N " << termD << "  " << termab << "  " << termN 
 //	        <<  "   pt2max= " << pt2max ;
 	 	                                                                          
-         Pt=SampleQuarkPt(sqrt(pt2max)); Pt.setZ(0); G4double Pt2=Pt.mag2();
+         Pt=SampleQuarkPt(std::sqrt(pt2max)); Pt.setZ(0); G4double Pt2=Pt.mag2();
 
 	 
 //	 G4cout << " sampled Pt2 = " << Pt2 << "  " << pt2max-Pt2 << G4endl;              

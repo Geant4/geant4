@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.2 2009-05-15 12:58:38 schaelic Exp $
+// $Id: G4PairProductionRelModel.hh,v 1.3 2009-06-04 13:45:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -284,7 +284,7 @@ inline G4double G4PairProductionRelModel::DeltaMax() const
 {
   // k > 50 MeV
   G4double FZ = 8.*(lnZ/3. + fCoulomb);
-  return exp( (42.24-FZ)/8.368 ) + 0.952;
+  return std::exp( (42.24-FZ)/8.368 ) + 0.952;
 }
 
 inline G4double G4PairProductionRelModel::DeltaMin(G4double k) const
