@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2009-04-30 14:42:57 gcosmo Exp $
+$Id: History,v 1.147 2009-06-04 14:19:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th June 2009  Gabriele Cosmo (examples-V09-02-05)
+- Updated reference outputs according to reference tag geant4-09-02-ref-05.
+- Includes tags: air_shower-V09-02-00, amsEcal-V09-02-02, microbeam-V09-02-01,
+                 hadrontherapy-V09-02-13, microdosimetry-V09-02-01,
+                 AnaEx01-V09-02-00, testem6-V09-02-00, fieldex04-V09-02-00,
+                 exhadr01-V09-02-00, G01-V09-02-03.
 
 30th April 2009  Gabriele Cosmo (examples-V09-02-04)
 - Updated reference outputs according to reference tag geant4-09-02-ref-04.
