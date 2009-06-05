@@ -265,11 +265,11 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         All Livermore models are migrated.
       o Updated Livermore photon processes classes for handling of compound
         materials.
-      o Changed energy range display for migrated Livermore photon processes
-        Set default angular generator in G4LivermorePhotoElectric as
+     o Set default angular generator in G4LivermorePhotoElectric to
         Sauter-Gavrila.
-      o Added gamma particle and energy range test in cross section computation
-        to all Livermore photon processes.
+      o Added check of particle type and energy range in cross section
+        computation of Livermore photon processes.
+      o Changed energy range display for migrated Livermore photon processes
       o New migrated Geant4-DNA processes and models.
       o Added ability for DNA charge change processes to kill particle without
         total energy deposit.
@@ -278,7 +278,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Added several corrections to migrated Geant4-DNA processes and allow
         for compatibility with general EM utility classes.
       o Improved energy limit display in Geant4-DNA model classes.
-      o Fixed cross section computation bug in
+      o Fixed cross section computation problem in
         G4DNAScreenedRutherfordElasticModel and G4DNAChampionElasticModel.
       o Increased energy range validity of e- elastic Champion model up to
         10 MeV. From this tag, G4LEDATA data set version 6.5 is needed.
@@ -286,7 +286,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         final state classes, and non-migrated Livermore and Penelope classes.
       o Cleared annoying printout from G4AugerData AugerTransitionTable.
     + Muons:
-      o G4MuIonisation: fixed initialisation for allowing to configure
+      o G4MuIonisation: fixed initialisation to allow for configuring
         external model of fluctuations.
       o Simplified initialisation in G4MuBetheBlochModel,
         G4MuBremsstrahlungModel and G4MuPairProductionModel.
@@ -301,9 +301,9 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         the angular distribution using the old e- scattering data only
         (Phys. Rev. 84 (1951) 634; Phys. Rev. 61 (1942) 254); new version of
         theta0 and correction in tail tuning using MuScat data.
-      o G4UrbanMscModel: frozen version of G4UrbanMscModel2 of version 9.2.
+      o G4UrbanMscModel: frozen version of G4UrbanMscModel2 from release 9.2.
       o G4WentzelVIModel, G4eCoulombScattering, G4CoulombScattering: added
-        relativistic factor to Reserford cross section; set default limit
+        relativistic factor to Rutherford cross section; set default limit
         on kinetic energy of the recoil 100 KeV. Reduced low-limit from 1 KeV
         to 0.1 KeV to provide smooth transport cross section table.
         Substituted scaling of low-energy limit by setting 1 keV for all
@@ -329,8 +329,8 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         width.
       o G4WaterStopping: use updated ICRU'73 data.
     + Utils:
-      o G4VEmModel: moved to protected methods to access geometrical
-        information; added new method SetSampleZ() and
+      o G4VEmModel: changed to protected the methods to access geometrical
+        information ; added new method SetSampleZ() and
         SampleDeexcitationAlongStep(); multiple-scattering methods are moved
         to G4VMscModel; added protected methods for initialisation of
         ParticleChange.
@@ -348,14 +348,13 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         of G4EmConfigurator.
       o G4LossTableBuilder: added protection in BuildRangeTable() against
         zero dEdx.
-      o G4EmCalculator: added possibility to be used by DNA low-energy
-        processes; take into account special DNA particles.
+      o G4EmCalculator: extended use to DNA low-energy processes; take into 
+        account special DNA particles.
       o Added G4EmConfigurator in G4LossTableManager providing easier addition
         of models per region
       o G4EmModelManager: fixed energy range selection algorithm for the case
-        of a small intersection of model energy intervals. Fixed energy range
-        selection algorithm for the case when there is an intersection of
-        energy regions of standard and low-energy models.
+        of a small intersection of model energy intervals. Used for potential
+        intersection of energy regions of standard and low-energy models.
         Reduced internal vectors if no model per region are initialized.
       o G4EmElementSelector: added protection for zero cross section at first
         and last bins of physics vector; do not use Spline interpolation.
@@ -370,16 +369,14 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         G4TripathiLightCrossSection: added protections against numerical FPE
         exceptions.
     + models/chiral_inv_phase_space
-      o Better readability of the CHIPS code (get rid of tab's) and code
-        improvements.
       o Tuning of the G4QCollision for better description of the pA
         interactions (E<290 MeV).
-      o Improvement of the G4QuasiFreeRatios for application in QGSC from E=0.
+      o Improvement of G4QuasiFreeRatios for application in QGSC from E=0.
       o Order of models is changed in G4QDiscProcessMixer (was from L to H,
         now from H to L).
-      o Bug fix in 'body' module against division by zero in G4QEnvironment;
-        improvement for the case when the Hypernucleus cannot decay in the
-        residual nucleus and pion; now it is decayed in the residual nucleus
+      o Bug fix in 'body' module against division by zero in G4QEnvironment.
+      o Improvement for case when the Hypernucleus cannot decay into
+        residual nucleus and pion; now it is decayed into residual nucleus
         and gamma.
       o For rare cases of the output hadron mass below the GS mass avoid
         exception in the G4QEnvironment class; use 'As-Is' filling for the
@@ -388,9 +385,10 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         reactions.
       o Added safety check of 'nDelta' in the hadronization probability
         calculations in G4Quasmon.
-      o Change of GetNuclearMass(A-1.,Z-1.) (and similar) to
-        GetNuclearMass(A-1,Z-1) to be consistent with latest changes in
-        particles module.
+      o Adapted to new signature of GetNuclearMass(A,Z) with integer 
+        arguments.
+      o Improved readability of the CHIPS code (get rid of tab's) and
+        code improvements.
     + models/coherent_elastic
       o Model precise sampling and 'on the fly' table preparation in
         G4DiffuseElastic.
@@ -421,10 +419,10 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Changed object data member to pointer in G4QMDReaction.
     + models/rpg
       o Removed global variables (pointers to static particle definitions) in
-        G4RPGInelastic and replaced with local array. Fixing issues of wrong
+        G4RPGInelastic and replaced with local array. Fixed issues of wrong
         order for static initialization.
     + models/theo_high_energy
-      o Quasi Elastic part is made more used in QGSC at low energies to improve
+      o Quasi Elastic part is used in QGSC at low energies to improve
         the performance of QGSC at low energies.
     + processes
       o Fix to address problem report #1056: cross section data set now are
