@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th  May 2009 Peter Gumplinger (op-V09-02-02)
+              G4OpBoundary::PostStepDoIt now throws an G4Exception
+              EventMustBeAborted when an invalid surface normal is returnd;
+              addresses bug report #1060
+
 23th Mar 2009 Peter Gumplinger (op-V09-02-01)
               for complex index of refraction: (1)resample the reflectivity
               every time in the do-while of DielectricMetal, but don't
