@@ -12,7 +12,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
         with cygwin and Matlab.
       o Added check to build Qt driver only when Qt UI module is built;
-        reordered ?moc? checks and added cross-check on moc version.
+        reordered 'moc' checks and added cross-check on moc version.
         Added safety reset of OpenGL QT build and use variables.
       o Commented out echo compatibility warning to address problem
         report #1067.
@@ -100,7 +100,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     ------
     + G4PhysicsVector: added method ComputeSecondDerivatives() for the case
       when user provides first derivative at end-points (4 bins minimum); 
-      ?added? "Not-a-Knot" algorithm for computing second derivatives 
+      use "Not-a-Knot" algorithm for computing second derivatives 
       in default method FillSecondDerivatives() (5 bins minimum);
       for smaller number of bins the linear interpolation is used.
     + Added G4ErrorStage enum to G4ErrorPropagatorData class.
@@ -164,7 +164,8 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.
     + Ensure that the boost beta value is less than 1 in
       G4MuonRadiativeDecayChannelWithSpin.
-    + Added CalculateAnomaly() method for magnetic moment in G4ParticleDefinition.
+    + Added CalculateAnomaly() method for magnetic moment in
+      G4ParticleDefinition.
     + Fixed use of std::fabs() in place of std::abs().
 
   o Persistency (GDML):
@@ -212,7 +213,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + Added new physics-lists with special EM options: FTFP_BERT_EMV,
       FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY (opt3 EM physics).
     + Declared obsolete several unused lists, partially disabling their use:
-      o Obsolete and disabled  (ie remove)
+      o Obsolete and disabled:
           FTF_EMV,   replacement FTFP_BERT_EMV
           QGSC_EFLOW, replacement QGSC_CHIPS
           QGSP_EMX, replacement QGSP_BERT_EMX
