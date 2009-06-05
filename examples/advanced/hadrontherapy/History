@@ -9,7 +9,10 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-30.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02.13
+05.06.2009: G.A.P.Cirrone and S.Mazzaglia; Tag: hadrontherapy-V09-02-14
+           - Added a preliminary version of classes for LET calculation.
+
+30.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-13
            - README_Hadrontherapy.pdf file updated and improved
 
 29.05.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-12
