@@ -12,7 +12,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
         with cygwin and Matlab.
       o Added check to build Qt driver only when Qt UI module is built;
-        reordered moc checks and added cross-check on moc version.
+        reordered ?moc? checks and added cross-check on moc version.
         Added safety reset of OpenGL QT build and use variables.
       o Commented out echo compatibility warning to address problem
         report #1067.
@@ -42,7 +42,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o Allow for generic divisions along Z for polyhedras and polycones; now
         divisions can happen along z-axis with width and offset, which fulfils
         the condition that division does not span over more than one segment.
-      o Fixed initialization of division in Phi for polyhedras to not take
+      o Fixed initialization of division in Phi for polyhedras to avoid taking
         into account user defined width.
     + magnetic field:
       o Added 3rd term of BMT equation (Spin x Beta x Efield) to
@@ -67,12 +67,12 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         Addresses problem report #1059.
       o Fix in G4PathFinder: a geometry is at a boundary if its step is within 
         tolerance of the minimum step for any defined geometry.
-      o Enhanced algorithm for 'FB_intersects' in order to speed up Brent
-        locator for transportation in field.
+      o Fix in G4PropagatorInField::SetNavigator() to forward new navigator to
+        G4VIntersectionLocator. Corrects handling of parallel geometries.
+      o Enhanced algorithm to speed up Brent intersection locator for propagation 
+        in field.
       o Fix in the usage of the geometrical tolerance in G4VIntersectionLocator
         in method AdjustementOfFoundIntersection().
-      o Fix in G4PropagatorInField::SetNavigator() to forward new navigator to
-        G4VIntersectionLocator.
       o Added method BuildContainerSolid() taking a solid as argument to
         G4PhantomParameterisation. Added protection to GetMaterialIndex()
         for zero index.
@@ -88,9 +88,9 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       o G4Tubs, G4Cons: rationalised usage of modifiers for Phi angles and
         simplified constructors.
     + solids/specific:
-      o Corrected typo in base implementation of GetSurfaceArea() in base
-        class G4VCSGFaceted, which was erroneously returning cubic volume
-        estimation. Addresses problem report #1062.
+      o Corrected implementation of GetSurfaceArea() in base class G4VCSGFaceted, 
+        which was erroneously returning cubic volume estimation. Addresses 
+        problem report #1062.
       o Relaxed error condition in G4TessellatedSolid::Inside(p) to warning,
         for excess of max trials and anomalous conditions in distance
         calculation. Added more printout information when error condition is
@@ -100,8 +100,8 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     ------
     + G4PhysicsVector: added method ComputeSecondDerivatives() for the case
       when user provides first derivative at end-points (4 bins minimum); 
-      use "Not-a-Knot" algorithm for the computation of second derivatives 
-      in default method FillSecondDerivatives() (5 bins minnimum);
+      ?added? "Not-a-Knot" algorithm for computing second derivatives 
+      in default method FillSecondDerivatives() (5 bins minimum);
       for smaller number of bins the linear interpolation is used.
     + Added G4ErrorStage enum to G4ErrorPropagatorData class.
     + Changed date for release 9.3-beta.
@@ -109,16 +109,15 @@ List of main features and fixes included in this Beta release since 9.2.p01:
   o Graphical Representations:
     -------------------------
     + G4VVisManager: added notify scene handlers (G4VGraphicsScene objects)
-      taking care to notify that the scene has changed so that they may
-      rebuild their graphics database, if any, and redraw all views.
+      which inform that the scene has changed, so that handlers can
+      rebuild their graphics database (if it exists) and redraw all views.
     + G4VMarker: added enum 'SizeType' {none, world, screen};
       added GetSizeType() and SetSize/Diameter/Radius() methods.
 
   o Intercoms:
     ---------
-    + G4UIcommandTree: added a new function to complete a command path with
-      maximum characters guess; FindCommandTree() will now return current tree
-      when command path is "/".
+    + G4UIcommandTree: improved completion of commands for GUIs by sharing 
+      code of X and Xm drivers with the Qt driver.  
 
   o Interfaces:
     ----------
@@ -126,7 +125,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       sessions.
     + G4VBasicShell.cc: better command completion in command line.
     + G4VUIshell: added SetLsColor() method.
-    + G4UIQt: added interactor to be able to add button on file and help menu;
+    + G4UIQt: new interactor for adding button on file and help menu;
       added public method to get the MainWindow. Fixed compilation warnings.
 
   o Materials:
@@ -137,23 +136,21 @@ List of main features and fixes included in this Beta release since 9.2.p01:
         identified via atomic number of material if material is pure);
       o Classes now deliver mass stopping powers instead of stopping powers
         per unit length
-      o Any dependency on ICRU 73 material densities was removed (no densities
+      o Dependency on ICRU 73 material densities was removed (no densities
         are included in the classes anymore).
-      o Stopping power vectors are now only built on request and not anymore
-        in the constructor.
-    + G4IronStoppingICRU73: extended upper limit of the data vector from
-      10 MeV to 1 GeV; using 53 bins; added G4WATER data and fixed GetDEDX()
+      o Stopping power vectors are now built on request.
+    + G4IonStoppingICRU73: extended upper limit of the data vector from
+      10 MeV to 1 GeV, using 53 bins; added G4WATER data and fixed GetDEDX()
       methods in these classes for E=10 MeV (upper limit).
-    + G4NistMaterialBuilder: mean ionisation potential for G4_WATER is set
+    + G4NistMaterialBuilder: mean ionisation potential for G4_WATER is changed
       to 78 eV according to GSI Annual Report (2008) p.373, in order to be
       consistent with ICRU'73 tables.
-    + Fixed ICRU'73 data: G4WATER, G4WATER_VAPOR, G4NYLON-6/6 (in
-      G4MaterialStoppingICRU73); G4_Cu (in G4SimpleMaterialStoppingICRU73).
+    + Fixed ICRU'73 data for G4WATER, G4WATER_VAPOR, G4NYLON-6/6 (in
+      G4MaterialStoppingICRU73) and G4_Cu (in G4SimpleMaterialStoppingICRU73).
     + New utility class G4ExtDEDXTable to handle external electronic
       stopping power tables for ions.
     + Use 'const' references for strings as arguments/return-values in material
-      properties tables and related classes. Inlined some methods and some minor
-      cleanup.
+      properties tables and related classes. Inlined methods and minor cleanup.
     + Added Entries() method to G4MaterialPropertyVector and accessors for maps
       in G4MaterialPropertiesTable, required for internal use in persistency of
       material properties. Make visible GetEntry() accessor in
@@ -162,24 +159,22 @@ List of main features and fixes included in this Beta release since 9.2.p01:
   o Particles:
     ---------
     + Added method GetNuclearMass(A,Z) in G4NuclearProperty.
-    + Fixed bugs in electron mass calculation and moved it to
-      G4NucleiPropertiesTableAME03. Cleanup of comments.
-    + Ascertain that the absolute of the argument to boost is less than 1 in
+    + Use new class G4NucleiPropertiesTableAME03 for atomic masses. Including 
+      data updated to the Ame-2003 atomic mass evaluation (II) by G.Audi, 
+      A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.
+    + Ensure that the boost beta value is less than 1 in
       G4MuonRadiativeDecayChannelWithSpin.
-    + Added CalculateAnomaly() method to G4ParticleDefinition.
-    + Make use of new experimental class G4NucleiPropertiesTableAME03
-      including data updated to the Ame-2003 atomic mass evaluation (II) by
-      G.Audi, A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.
+    + Added CalculateAnomaly() method for magnetic moment in G4ParticleDefinition.
     + Fixed use of std::fabs() in place of std::abs().
 
   o Persistency (GDML):
     ------------------
-    + Correction in materials and solids tags for allowing parsing of
+    + Correction in materials and solids tags to allow parsing of
       definitions within the tag scope; possibility foreseen by the schema.
     + Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
       cases of nested displaced solids given to both operands in a Boolean
       operation (ATLAS use case).
-    + Implemented virtual layer for allowing customisation of the writer for
+    + Implemented virtual layer to allow customisation of the writer for
       user-extended schemas.
     + Implemented ability to write surface properties associated to volumes
       and material properties.
@@ -188,12 +183,12 @@ List of main features and fixes included in this Beta release since 9.2.p01:
       internal class, to avoid cases of memory corruption when handling
       matrices.
     + Restricted usage of loops only for placement of volumes. Now correctly
-      handling most common use-case of multiple copies of the same volume/solid
+      handles most common use-case of multiple copies of the same volume/solid
       through loop statement. Addressing problem report #1063.
     + Renamed flag for maximum number of transformations applied to a solid
       and moved to G4GDMLWriteSolids base class.
-    + Some code cleanup: rationalised inclusion of headers, replacing them
-      with forward declarations where possible.
+    + Code cleanup: rationalised inclusion of headers, replacing them with
+      forward declarations where possible.
     + Added empty default constructor and virtual destructor to classes in the
       inheritance chain.
 
@@ -208,7 +203,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + Added two new physics lists QGSC_QGSC and QGSC_CHIPS.
       QGSC_QGSC physics list uses the QGS model with the MultiSoft
       interface to CHIPS at all energies, starting from E=0. For neutrons
-      it still uses LHEP models for the radioactive capture and fission.
+      it still uses LEP (LHEP) models for the radioactive capture and fission.
       QGSC_CHIPS physics list uses the QGS model with the EnergyFlow
       interface to CHIPS at all energies. For the pA interactions the
       native CHIPS process G4QCollision is used below 290 MeV. The QGSC and
@@ -217,7 +212,7 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + Added new physics-lists with special EM options: FTFP_BERT_EMV,
       FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY (opt3 EM physics).
     + Declared obsolete several unused lists, partially disabling their use:
-      o Obsolete + disabled  (= remove)
+      o Obsolete and disabled  (ie remove)
           FTF_EMV,   replacement FTFP_BERT_EMV
           QGSC_EFLOW, replacement QGSC_CHIPS
           QGSP_EMX, replacement QGSP_BERT_EMX
@@ -228,9 +223,9 @@ List of main features and fixes included in this Beta release since 9.2.p01:
     + G4PhysicsListFactory: updated list of supported PhysLists.
     + G4EmStandardPhysics, G4EmStandardPhysics_option1: use 9.2 msc model
       for e+-.
-    + G4EmStandardPhysics_option2: use G4WentzelVIModel for e+-.
-    + G4EmStandardPhysics_option3: use updated G4UrbanMscModel2 and use
-      G4RayleighScattering process.
+    + G4EmStandardPhysics_option2: use G4WentzelVIModel for e+/e-.
+    + G4EmStandardPhysics_option3: use updated multiple scattering model
+      G4UrbanMscModel2 and G4RayleighScattering process.
     + Fix in G4HadronInelasticQBBC: cross sections are created dynamically
       not by value, fission only instantiated for HP.
     + Fix to address problem report #1056: all cross section data sets are
@@ -241,31 +236,29 @@ List of main features and fixes included in this Beta release since 9.2.p01:
   o Electromagnetic Processes:
     -------------------------
     + High Energy:
-      o Simplified initialisation in G4mplIonisationModel and
+      o Simplified initialisation in G4mplIonisationModel for monopole and
         G4eeToHadronsMultiModel.
       o Some code cleanup: improved comments, avoid inlined virtual methods.
     + Low Energy:
       o Added G4PenelopeBremsstrahlungModel, namely Bremsstrahlung according
-        to Penelope model, migrated to the 'Standard' design, inheriting from
-        G4VEmModel. Completed migration to 'Standard' package design for all
-        Penelope processes.
+        to Penelope model, inheriting from G4VEmModel. Completes migration 
+        to common 'Standard' design for all Penelope processes.
       o Added G4RayleighScattering process to describe Rayleigh scattering
         and removed G4Rayleigh class to avoid duplication.
+      o Added G4LivermoreIonisationModel, first implementation of
+        LowEnergyIonisation in the common design.
       o Updated public interface of G4eIonisationCrossSectionHandler in order
         to facilitate migration from G4LowEnergyIonisation to
         G4LivermoreIonisationModel.
-      o Added G4LivermoreIonisationModel, first implementation of
-        LowEnergyIonisation in the new design.
       o Replaced old version of G4IonParametrisedLossModel with newer one.
-        Added G4IonDEDXHandler, which is a handler class used by the new
-        G4IonParametrisedLossModel class, and removed old handler class
-        G4IonParametrisedLossTable.
+        Added G4IonDEDXHandler, for use by the new G4IonParametrisedLossModel
+        class. removed old handler class G4IonParametrisedLossTable.
       o Added G4VIonDEDXScalingAlgorithm, which is used by G4IonDEDXHandler.
       o Added new scaling algorithm, G4IonDEDXScalingICRU73, to obtain heavy
         ion stopping powers for ions not covered by ICRU 73 report (scaled
         from existing ICRU 73 data). Included algorithm in ion model,
-        G4IonParametrisedLossModel, extending therefore the applicability of
-        the model to very heavy ions.
+        G4IonParametrisedLossModel, extending its applicability to very heavy 
+        ions.
       o Added protections in G4eIonisationSpectrum and G4eIonisationParameters,
         addressing problem report #1042.
       o First fully tested version of G4LivermoreBremsstrahlungModel
