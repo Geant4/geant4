@@ -23,70 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorAction.hh; May 2005
+// $Id: HadrontherapyLet.hh,v 1.0, May 2007;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), M. Sallemi, A. Salvia
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifndef HadrontherapyPrimaryGeneratorAction_h
-#define HadrontherapyPrimaryGeneratorAction_h 1
+#ifndef HadrontherapyLet_h
+#define HadrontherapyLet_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include <fstream>
+#include <vector>
+#include <string>
+using namespace std;
 
-class G4ParticleGun;
-class G4Event;
+class HadrontherapyLetMessenger;
+class HadrontherapyPrimaryGeneratorAction;
 
-class HadrontherapyPrimaryGeneratorMessenger;
-class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class HadrontherapyLet
 {
 public:
-  HadrontherapyPrimaryGeneratorAction();    
-  ~HadrontherapyPrimaryGeneratorAction();
-  
+  HadrontherapyLet(HadrontherapyPrimaryGeneratorAction*);
+  ~HadrontherapyLet();
+
 public:
-  // Methods to change the parameters of primary particle generation 
-  // interactively
-  void SetsigmaEnergy(G4double);
-  void SetmeanKineticEnergy(G4double);
-  void GeneratePrimaries(G4Event*);
-  void SetXposition(G4double);
-  void SetYposition(G4double);
-  void SetZposition(G4double);
-  void SetsigmaY(G4double);
-  void SetsigmaZ(G4double);
-  void SetsigmaMomentumY(G4double);
-  void SetsigmaMomentumZ(G4double);
-  G4double GetmeanKineticEnergy(void);
-    
-private:
-  void SetDefaultPrimaryParticle();
-  G4double meanKineticEnergy;
-  G4double sigmaEnergy;
-  G4double X0;
-  G4double Y0;
-  G4double Z0;
-  G4double sigmaY;
-  G4double sigmaZ;
-  G4double sigmaMomentumY;
-  G4double sigmaMomentumZ;
+  void Fluence_Let(G4int,G4double);
+  void LetOutput(); 
+  void SetValue(G4String);
+
+  HadrontherapyLetMessenger* letMessenger;
 
 private:
-  G4ParticleGun*                particleGun;
-  HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
-  G4double sigmaX;
+  ofstream flet,ffluence,*fspectrum;  
+  ifstream fstop; 
+ 
+  G4int **spectrum, i, j, size, bins;
+  G4double energy, *stop, n1, d1, n2, d2, lett, letd;
+  G4String nome_file;
+
+  vector<double> vetdepth;  //vector containing the points where the energy spectrum and the let will be calculated (depth in mm)
+
+  HadrontherapyPrimaryGeneratorAction* pga; 
+ 
 };
-
 #endif
-
-

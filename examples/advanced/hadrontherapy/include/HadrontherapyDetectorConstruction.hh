@@ -123,7 +123,7 @@ private:
                                      // geometry component
 
   G4VPhysicalVolume* physicalTreatmentRoom;
-  G4VPhysicalVolume* patientPhysicalVolume;
+  G4VPhysicalVolume* phantomPhysicalVolume;
   G4LogicalVolume* detectorLogicalVolume;
   G4VPhysicalVolume* detectorPhysicalVolume;
   

@@ -65,7 +65,7 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   : detectorSD(0), detectorROGeometry(0), 
     passiveProtonBeamLine(0), modulator(0),
     physicalTreatmentRoom(0),
-    patientPhysicalVolume(0), 
+    phantomPhysicalVolume(0), 
     detectorLogicalVolume(0), 
     detectorPhysicalVolume(0)
 {
@@ -81,7 +81,6 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   numberOfVoxelsAlongX = 200;
   numberOfVoxelsAlongY = 1;
   numberOfVoxelsAlongZ = 1;
-  
  }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -157,28 +156,27 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
   modulator -> BuildModulator(physicalTreatmentRoom);
 
   //----------------------------------------
-  // Water phantom:
-  // a water box used to approximate tissues
-  // Here is called 'Patient'
+  // The *phantom*:
+  // a box used to approximate patient tissues
   //----------------------------------------
   G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
-  G4Box* patient = new G4Box("patient",20 *cm, 20 *cm, 20 *cm);
-  G4LogicalVolume* patientLogicalVolume = new G4LogicalVolume(patient,	
+  G4Box* phantom = new G4Box("phantom",20 *cm, 20 *cm, 20 *cm);
+  G4LogicalVolume* phantomLogicalVolume = new G4LogicalVolume(0 ,	
 							      waterNist, 
-							      "patientLog", 0, 0, 0);
+							      "phantomLog", 0, 0, 0);
   
-  patientPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(200.*mm, 0.*mm, 0.*mm),
-					    "patientPhys",
-					    patientLogicalVolume,
+  phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(200.*mm, 0.*mm, 0.*mm),
+					    "phantom",
+					    phantomLogicalVolume,
 					    physicalTreatmentRoom,
 					    false,0);
 
-  // Visualisation attributes of the patient
+  // Visualisation attributes of the phantom
   red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
   red -> SetVisibility(true);
   red -> SetForceSolid(true);
   //red -> SetForceWireframe(true);
-  patientLogicalVolume -> SetVisAttributes(red);
+  phantomLogicalVolume -> SetVisAttributes(red);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -200,7 +198,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					     G4ThreeVector(detectorXtranslation, 0.0 *mm, 0.0 *mm),
 					     "DetectorPhys",
 					     detectorLogicalVolume,
-					     patientPhysicalVolume,
+					     phantomPhysicalVolume,
 					     false,0);
   
   // Visualisation attributes of the phantom
@@ -247,6 +245,11 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
       detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//(void HadrontherapyDetectorConstruction::SetPhantomDimensions(G4double value)
+
+
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 {  

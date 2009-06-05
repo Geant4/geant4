@@ -23,70 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorAction.hh; May 2005
+// $Id: HadrontherapyLetMessenger.hh; May 2007
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), M. Sallemi, A. Salvia
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifndef HadrontherapyPrimaryGeneratorAction_h
-#define HadrontherapyPrimaryGeneratorAction_h 1
+#ifndef HadrontherapyLetMessenger_h
+#define HadrontherapyLetMessenger_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4ParticleGun;
-class G4Event;
+class HadrontherapyLet;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+//class G4UIcmdWithADouble;
 
-class HadrontherapyPrimaryGeneratorMessenger;
-class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class HadrontherapyLetMessenger: public G4UImessenger
 {
-public:
-  HadrontherapyPrimaryGeneratorAction();    
-  ~HadrontherapyPrimaryGeneratorAction();
-  
-public:
-  // Methods to change the parameters of primary particle generation 
-  // interactively
-  void SetsigmaEnergy(G4double);
-  void SetmeanKineticEnergy(G4double);
-  void GeneratePrimaries(G4Event*);
-  void SetXposition(G4double);
-  void SetYposition(G4double);
-  void SetZposition(G4double);
-  void SetsigmaY(G4double);
-  void SetsigmaZ(G4double);
-  void SetsigmaMomentumY(G4double);
-  void SetsigmaMomentumZ(G4double);
-  G4double GetmeanKineticEnergy(void);
+  public:
+  HadrontherapyLetMessenger(HadrontherapyLet* );
+  ~HadrontherapyLetMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  void SetDefaultPrimaryParticle();
-  G4double meanKineticEnergy;
-  G4double sigmaEnergy;
-  G4double X0;
-  G4double Y0;
-  G4double Z0;
-  G4double sigmaY;
-  G4double sigmaZ;
-  G4double sigmaMomentumY;
-  G4double sigmaMomentumZ;
 
-private:
-  G4ParticleGun*                particleGun;
-  HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
-  G4double sigmaX;
+  // Pointer to the let component
+  HadrontherapyLet* hadrontherapyletp;
+
+  G4UIdirectory* letDir;
+  G4UIcmdWithAString* letDepthCmd;
+
 };
-
 #endif
-
-

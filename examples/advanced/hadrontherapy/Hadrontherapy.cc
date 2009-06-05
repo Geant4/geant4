@@ -87,21 +87,25 @@ int main(int argc ,char ** argv)
   // Initialize the physics 
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
 
-  // Initialize the primary particles  
-  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction());
+  // Initialize the primary particles
+  HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
+  runManager -> SetUserAction(pPrimaryGenerator);
+
+  // Initialize Let 
+  HadrontherapyLet* let = new HadrontherapyLet(pPrimaryGenerator);
 
   // Initialize matrix 
   HadrontherapyMatrix* matrix = new HadrontherapyMatrix();
   matrix -> Initialize();
 
   // Optional UserActions: run, event, stepping
-  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
+  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction(let);
   runManager -> SetUserAction(pRunAction);
 
   HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction(matrix);
   runManager -> SetUserAction(pEventAction);
 
-  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
+  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction, let); 
   runManager -> SetUserAction(steppingAction);    
 
 #ifdef G4ANALYSIS_USE

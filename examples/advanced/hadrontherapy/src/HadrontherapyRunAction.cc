@@ -29,7 +29,7 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), S.E.Mazzaglia(a), G. Russo(a)
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
@@ -48,8 +48,9 @@
 #include "G4SDManager.hh"
 #include "G4Timer.hh"
 #include "HadrontherapyRunAction.hh"
+#include "HadrontherapyLet.hh"
 
-HadrontherapyRunAction::HadrontherapyRunAction()
+HadrontherapyRunAction::HadrontherapyRunAction(HadrontherapyLet*)
 {
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonSteppingAction.hh; May 2005
+// $Id: HadrontherapyProtonSteppingAction.hh;
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -46,9 +46,11 @@
 #include "G4EventManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "HadrontherapyLet.hh"
 
 class HadrontherapyRunAction;
 class HadrontherapySteppingMessenger;
+class HadronthearpyLet;
 
 
 #ifndef G4NOHIST
@@ -59,7 +61,7 @@ class HadrontherapySteppingMessenger;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-  HadrontherapySteppingAction(HadrontherapyRunAction*);
+  HadrontherapySteppingAction(HadrontherapyRunAction*, HadrontherapyLet*);
   ~HadrontherapySteppingAction();
   
   void UserSteppingAction(const G4Step*);
