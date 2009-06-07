@@ -12,13 +12,13 @@
 #/testCalorim/ecalMaterial G4_AIR
 /testCalorim/nbins 100
 /testCalorim/maxE 200. GeV
-/testCalorim/factEcal 1.05  
-/testCalorim/factHcal 105.0
+/testCalorim/factEcal 1.03  
+/testCalorim/factHcal 100.0
 #######
 /testhadr/PrintModulo 100
 /run/initialize
-#/process/em/applyCuts true
-/run/setCutForRegion HcalRegion 0.7 mm
+/run/setCut 1 mm
+/run/setCutForRegion HcalRegion 1 mm
 /gun/energy 100. GeV
 /run/beamOn 10000
 
