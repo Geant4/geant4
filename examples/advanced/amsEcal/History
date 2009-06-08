@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2009-05-06 18:39:32 maire Exp $
+$Id: History,v 1.6 2009-06-08 12:58:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08-06-09 mma (amsEcal-V09-02-03) 
+- back to distanceInterLayers = 1.68 mm (ie nominal)
+  Put in superLayer 2 extra plates of absorber, 0.5 mm each
+      
+07-06-09 mma 
+- distanceInterLayers = 1.78 mm (was 1.85 mm) --> - 1.5X0 
+       
+04-06-09 mma 
+- add histo 5 for geantino scan
+- distanceInterLayers = 1.85 mm (was 1.68 mm) --> + 3X0  
+     
+29-05-09 mma 
+- do not use GeometryReadOut.
+- Compute pixel numbering directly in SteppingAction.
+  Modify DetectorConstruction, RunAction, EventAction
+     
+26-05-09 mma 
+- add GeometryReadOut class for pixels
      
 06-05-09 mma (amsEcal-V09-02-02)
 - scan nb of radL with geantino.

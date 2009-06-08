@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.3 2009-05-06 18:39:32 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.4 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +65,7 @@ public:
   G4double           GetWorldSizeX()        {return worldSizeX;};
   G4double           GetCalorThickness()    {return calorThickness;};  
   G4double           GetCalorSizeYZ()       {return fiberLength;};
+  G4double           GetSuperLayerThick()   {return superLayerThick;};    
 	
   G4LogicalVolume*   GetLvolFiber()         {return lvol_fiber;};
   G4LogicalVolume*   GetLvolLayer()         {return lvol_layer;};  	
@@ -75,9 +76,14 @@ public:
   G4int              GetNbFibers()          {return nbOfFibers;};  
   G4int              GetNbLayers()          {return nbOfLayers;};    
   G4int              GetNbSuperLayers()     {return nbOfSuperLayers;};
-  
-  G4int              GetNbLayersPerPixel()  {return nbOfLayersPerPixel;};
-  G4int              GetNbPixels()          {return nbOfPixels;};
+
+  G4int              GetNxPixels()          {return nxPixels;};
+  G4int              GetNyPixels()          {return nyPixels;};
+  G4double           GetDxPixel()           {return dxPixel;};
+  G4double           GetDyPixel()           {return dyPixel;};
+  G4int              GetNyPixelsMax()       {return nyPixelsMax;};
+  G4int              GetNxPixelsTot()       {return nxPixelsTot;};
+  G4int              GetSizeVectorPixels()  {return sizeVectorPixels;};
       			 
 private:
 
@@ -97,7 +103,8 @@ private:
   //superLayers
   //
   G4Material*      superLayerMat;  
-  G4int            nbOfLayers;    
+  G4int            nbOfLayers;
+  G4double         superLayerThick;    
   G4LogicalVolume* lvol_superlayer;  
            
   //calorimeter
@@ -118,8 +125,10 @@ private:
 
   //pixel readout
   //
-  G4int  nbOfLayersPerPixel;
-  G4int  nbOfPixels;
+  G4int            nxPixels, nyPixels;
+  G4double         dxPixel , dyPixel;
+  G4int            nxPixelsTot;
+  G4int            nyPixelsMax, sizeVectorPixels;    
         
   G4UniformMagField* magField;
   DetectorMessenger* detectorMessenger;

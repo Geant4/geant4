@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "ecal";
   fileType    = "root";  
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "--noErrors;export=root;uncompress";
     
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 
@@ -185,13 +185,14 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   	 
-  const G4String id[] = { "0", "1", "2", "3", "4" };
+  const G4String id[] = { "0", "1", "2", "3", "4", "5" };
   const G4String title[] = 
                 { "dummy",			//0
                   "total Evis in Ecal",		//1
                   "total Edep in Ecal",		//2
                   "Evis profile",		//3
-		  "Edep profile"		//4
+		  "Edep profile",		//4
+		  "Nb of Radiation Length"	//5
                  };
 		 			 
   G4String titl = title[ih];

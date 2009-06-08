@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.2 2009-05-06 18:39:32 maire Exp $
+// $Id: SteppingAction.hh,v 1.3 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,10 @@ class SteppingAction : public G4UserSteppingAction
     G4LogicalVolume* lvol_slayer;
     G4LogicalVolume* lvol_layer;
     G4LogicalVolume* lvol_fiber;
-    G4int  nbOfSuperLayers, nbOfLayers, nbOfLayersPerPixel;
+
+    G4double calorThickness, calorSizeYZ, superLayerThick;
+    G4double dxPixel, dyPixel;
+    G4int    nyPixelsMax;  
     
     G4bool trigger;
     G4double rmax, seuil;            

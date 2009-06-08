@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.2 2009-05-06 18:39:32 maire Exp $
+// $Id: EventAction.cc,v 1.3 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
   //initialize Energy per event
   //
-  G4int nbOfPixels = detector->GetNbPixels();
+  G4int nbOfPixels = detector->GetSizeVectorPixels();
   visibleEnergy.resize(nbOfPixels);  visibleEnergy.clear();  
     totalEnergy.resize(nbOfPixels);    totalEnergy.clear();
    
@@ -87,30 +87,43 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   
   //pass informations to RunAction and HistoManager
   //
-  G4double calorEvis = 0.;
-  G4double calorEtot = 0.;
-  G4int nbOfPixels = detector->GetNbPixels();  
+  G4int nbOfLayers  = detector->GetNxPixelsTot();
+  G4int nyPixels    = detector->GetNyPixels();
+  G4int nyPixelsMax = detector->GetNyPixelsMax();    
   //
-  for (G4int k=0; k<nbOfPixels; k++) {
-   runAct->fillPerEvent_1(k,visibleEnergy[k],totalEnergy[k]);
-   if (visibleEnergy[k] > 0.) histoManager->FillNtuple(1, k, visibleEnergy[k]);
-   if (totalEnergy[k] > 0.)
-          histoManager->FillNtuple(1, nbOfPixels+k, totalEnergy[k]);    
-   calorEvis += visibleEnergy[k];
-   calorEtot += totalEnergy[k];		       
+  G4double calorEvis = 0.;
+  G4double calorEtot = 0.;  
+  for (G4int ix=0; ix<nbOfLayers; ix++) {
+    //sum energy per readout layer  
+    G4double layerEvis = 0.;
+    G4double layerEtot = 0.;  
+    for (G4int iy=0; iy<nyPixels; iy++) {
+      G4int k = ix*nyPixelsMax + iy;
+      runAct->fillPerEvent_1(k,visibleEnergy[k],totalEnergy[k]);      
+      layerEvis += visibleEnergy[k];
+      layerEtot += totalEnergy[k];
+      calorEvis += visibleEnergy[k];
+      calorEtot += totalEnergy[k];		      
+    }      
+    runAct->fillPerEvent_2(ix,layerEvis,layerEtot);
+    if (layerEvis > 0.) histoManager->FillNtuple(1, ix, layerEvis);
+    if (layerEtot > 0.) histoManager->FillNtuple(1, nbOfLayers+ix, layerEtot);
   }
   
   histoManager->AddRowNtuple(1);
   
-  if (calorEvis >0.) histoManager->FillHisto(1,calorEvis);
-  if (calorEtot >0.) histoManager->FillHisto(2,calorEtot);
-    
+  if (calorEvis > 0.) histoManager->FillHisto(1,calorEvis);
+  if (calorEtot > 0.) histoManager->FillHisto(2,calorEtot);
+  
   G4double Ebeam = primary->GetParticleGun()->GetParticleEnergy();
   G4double Eleak = Ebeam - calorEtot;
-  runAct->fillPerEvent_2(calorEvis,calorEtot,Eleak);
+  runAct->fillPerEvent_3(calorEvis,calorEtot,Eleak);
   
+  //nb of radiation lenght
+  //
   runAct->fillNbRadLen(nbRadLen);  
-         
+  if (nbRadLen > 0.) histoManager->FillHisto(5,nbRadLen);
+                 
   //parameters for trajectory visualisation
   //
   if (G4VVisManager::GetConcreteInstance())

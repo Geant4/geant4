@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.3 2009-05-06 18:39:32 maire Exp $
+// $Id: RunAction.hh,v 1.4 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,8 @@ public:
   void   EndOfRunAction(const G4Run*);
 
   void fillPerEvent_1(G4int,G4double,G4double);
-  void fillPerEvent_2(G4double,G4double,G4double);
+  void fillPerEvent_2(G4int,G4double,G4double);  
+  void fillPerEvent_3(G4double,G4double,G4double);
   void fillDetailedLeakage(G4int,G4double);
   void fillNbRadLen(G4double);    
 
@@ -71,7 +72,10 @@ private:
   
   std::vector<G4double> visibleEnergy, visibleEnergy2;
   std::vector<G4double>   totalEnergy,   totalEnergy2;
-
+  
+  std::vector<G4double> layerEvis, layerEvis2;
+  std::vector<G4double> layerEtot, layerEtot2;
+  
   G4int    nbEvents;  
   G4double calorEvis, calorEvis2;
   G4double calorEtot, calorEtot2;

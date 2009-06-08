@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.4 2009-05-06 18:39:32 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@
 DetectorConstruction::DetectorConstruction()
 :fiberMat(0),lvol_fiber(0), absorberMat(0),lvol_layer(0),
  superLayerMat(0),lvol_superlayer(0), calorimeterMat(0),lvol_calorimeter(0),
- worldMat(0),lvol_world(0),pvol_world(0), defaultMat(0), magField(0)
+ worldMat(0),pvol_world(0), defaultMat(0), magField(0)
 {
   // materials
   DefineMaterials();
@@ -70,11 +70,15 @@ DetectorConstruction::DetectorConstruction()
   distanceInterLayers = 1.68*mm;	//1.68*mm
   nbOfLayers          = 10;		//10
   nbOfSuperLayers     = 9;		//9 
+
+  nxPixels            = 2;		//2
+  nyPixels            = 72;		//72    
+  nyPixelsMax         = 100;		//100
   
-  nbOfLayersPerPixel  = 5;              //5 (must divide nbOfLayers)
+  nxPixelsTot         = nxPixels*nbOfSuperLayers;  //18  
+  sizeVectorPixels    = nxPixelsTot*nyPixelsMax;   //1800 
   
   fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm    
-  nbOfPixels          = (nbOfLayers*nbOfSuperLayers)/nbOfLayersPerPixel;  //18
   
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);   
@@ -210,7 +214,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 				   
   // super layer
   //
-  G4double superLayerThick = layerThick*nbOfLayers;
+  // take care of extra border absorber
+  G4double meanThickAbsor 
+       = layerThick - 0.25*(pi*fiberDiameter*fiberDiameter)/distanceInterFibers;
+       
+  superLayerThick = layerThick*nbOfLayers + meanThickAbsor;       
   sizeX = superLayerThick;
   sizeY = fiberLength;
   sizeZ = fiberLength;
@@ -225,7 +233,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // put layers within superlayer
   //
-  Xcenter = -0.5*(superLayerThick + layerThick);
+  Xcenter = -0.5*(nbOfLayers+1)*layerThick;
   Ycenter =  0.25*distanceInterFibers;
   
   for (G4int k=0; k<nbOfLayers; k++) {
@@ -320,6 +328,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   lvol_fiber->SetVisAttributes (G4VisAttributes::Invisible);  
   lvol_layer->SetVisAttributes (G4VisAttributes::Invisible);
   lvol_world->SetVisAttributes (G4VisAttributes::Invisible);
+  
+  // Pixels readout
+  //
+  dxPixel = superLayerThick/nxPixels;
+  dyPixel = fiberLength/nyPixels;
   
   //always return the physical World
   //

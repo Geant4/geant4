@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2009-05-06 18:39:32 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 #include "G4Step.hh"
 #include "G4RunManager.hh"
+
 #include "G4Geantino.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +52,6 @@ SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
 {
   first = true;
   lvol_world = lvol_slayer = lvol_layer = lvol_fiber = 0;
-  nbOfSuperLayers = nbOfLayers = nbOfLayersPerPixel = 0;
   
   trigger = false;
   rmax = 5*mm;
@@ -75,9 +75,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    lvol_layer  = detector->GetLvolLayer();
    lvol_fiber  = detector->GetLvolFiber();
    
-   nbOfSuperLayers    = detector->GetNbSuperLayers();   
-   nbOfLayers         = detector->GetNbLayers();
-   nbOfLayersPerPixel = detector->GetNbLayersPerPixel();
+   calorThickness  = detector->GetCalorThickness();
+   calorSizeYZ     = detector->GetCalorSizeYZ();
+   superLayerThick = detector->GetSuperLayerThick();
+   dxPixel = detector->GetDxPixel();
+   dyPixel = detector->GetDyPixel();
+   nyPixelsMax = detector->GetNyPixelsMax();
    
    first = false;   
  }
@@ -91,7 +94,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //
  if (lvol == lvol_world) return;
  
- //sum nb of radiation length with geantino
+ //sum nb of radiation length of calorimeter with geantino
  //
  G4ParticleDefinition* particle = step->GetTrack()->GetDefinition();
  if (particle == G4Geantino::Geantino()) {
@@ -104,35 +107,34 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //
  G4double edep = step->GetTotalEnergyDeposit();
  if (edep == 0.) return;
-
- G4int ilayer, islayer, indexPixel;
-  
- //in absorber (layer) ?
+ 
+ //locate position and compute pixel number
  //
- if (lvol == lvol_layer) {
-   ilayer  = touch1->GetCopyNumber(0);
-   islayer = touch1->GetCopyNumber(1);
-   indexPixel = (islayer*nbOfLayers + ilayer)/nbOfLayersPerPixel;
-   eventAct->SumTotalEnergy(indexPixel, edep);      
- }
+ G4ThreeVector point1 = step->GetPreStepPoint()->GetPosition();
+ G4int ixLayer = (int) ((point1.x() + 0.5*calorThickness)/superLayerThick); 
+ G4int ixPixel = (int) ((point1.x() + 0.5*calorThickness)/dxPixel);
+ G4double point1yz = point1.y();
+ if (ixLayer%2 != 0) point1yz = point1.z();
+ G4int iyPixel = (int) ((point1yz + 0.5*calorSizeYZ)/dyPixel);
+ G4int  iPixel = ixPixel*nyPixelsMax + iyPixel;
+  
+ // sum total energy deposit
+ //
+ eventAct->SumTotalEnergy(iPixel, edep);         
  
  //in fiber ?
  // 
- else if (lvol == lvol_fiber) { 
+ if (lvol == lvol_fiber) {
+   //visible energy
+   eventAct->SumVisibleEnergy(iPixel, edep);                     
    //trigger condition
    if (trigger) {
      G4ThreeVector beam = primary->GetParticleGun()->GetParticlePosition();
-     G4ThreeVector point = step->GetPostStepPoint()->GetPosition();
-     G4ThreeVector dif = point - beam;
+     G4ThreeVector point2 = step->GetPostStepPoint()->GetPosition();
+     G4ThreeVector dif = point2 - beam;
      G4double r = std::sqrt(dif.y()*dif.y() + dif.z()*dif.z());
      if ((r>rmax)&&(edep>seuil)) G4RunManager::GetRunManager()->AbortEvent();  
    }
-   
-   ilayer  = touch1->GetCopyNumber(1);
-   islayer = touch1->GetCopyNumber(2);
-   indexPixel = (islayer*nbOfLayers + ilayer)/nbOfLayersPerPixel;   
-   eventAct->SumTotalEnergy(indexPixel, edep);
-   eventAct->SumVisibleEnergy(indexPixel, edep);                
  }
 }
 

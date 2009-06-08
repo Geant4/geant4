@@ -1,6 +1,6 @@
 macro plotHisto.kumac
 *
-h/file 1 250gev.run1.hbook
+h/file 1 10gev.run1.hbook
 *
 h/list
 *

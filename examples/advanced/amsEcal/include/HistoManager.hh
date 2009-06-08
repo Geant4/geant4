@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2009-06-08 12:58:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-  const G4int MaxHisto = 5; const G4int MaxNtupl = 2;
+  const G4int MaxHisto = 6; const G4int MaxNtupl = 2;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
