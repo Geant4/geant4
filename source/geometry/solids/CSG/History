@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2009-05-25 14:58:08 gcosmo Exp $
+$Id: History,v 1.113 2009-06-09 16:08:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 09, 2009  G.Cosmo                    geom-csg-V09-02-03
+- Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
+  problem introduced following modifications in tag "geom-csg-V09-02-00".
+
 May 14, 2009  T.Nikitina                 geom-csg-V09-02-02
-- G4Sphere: inlitialise flags for full sphere in constructor.
+- G4Sphere: initialise flags for full sphere in constructor.
 
 May 14, 2009  T.Nikitina                 geom-csg-V09-02-01
 - G4Sphere: correction di DistanceToOut(p,v, ...) for phi sections for
