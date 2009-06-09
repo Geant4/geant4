@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.76 2009-06-09 15:47:31 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.77 2009-06-09 16:08:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pRMin, G4double pRMax,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi )
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fSPhi(0), fDPhi(0)
 {
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();

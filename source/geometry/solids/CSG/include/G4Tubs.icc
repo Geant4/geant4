@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.13 2009-06-09 15:47:31 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.14 2009-06-09 16:08:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -126,7 +126,7 @@ inline void G4Tubs::CheckDPhiAngle(G4double dPhi)
     else
     {
       G4cerr << "ERROR - G4Tubs()::CheckDPhiAngle()" << G4endl
-             << "        Negative delta-Phi (" << dPhi << ") in solid: "
+             << "        Negative or zero delta-Phi (" << dPhi << ") in solid: "
              << GetName() << G4endl;
       G4Exception("G4Tubs::CheckDPhiAngle()", "InvalidSetup",
                   FatalException, "Invalid dphi.");
@@ -137,7 +137,7 @@ inline void G4Tubs::CheckDPhiAngle(G4double dPhi)
 inline void G4Tubs::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if ( fDPhi<twopi ) { CheckSPhiAngle(sPhi); }
+  if ( (fDPhi<twopi) && (sPhi) ) { CheckSPhiAngle(sPhi); }
   InitializeTrigonometry();
 }
 

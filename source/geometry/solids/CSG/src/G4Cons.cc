@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.61 2009-03-31 09:56:24 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.62 2009-06-09 16:08:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,7 +78,7 @@ G4Cons::G4Cons( const G4String& pName,
                       G4double  pRmin2, G4double pRmax2,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi)
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fSPhi(0), fDPhi(0)
 {
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
