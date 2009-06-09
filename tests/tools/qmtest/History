@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2009-05-28 16:23:20 gunter Exp $
+$Id: History,v 1.33 2009-06-09 13:00:21 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.32 2009-05-28 16:23:20 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9-June 09 G.Folger		     (testtools-QMtest-V09-02-24)
+- do not run test for gdml-g02 and g03
 
 28-May-09 G.Folger		     (testtools-QMtest-V09-02-23)
 - test39-build.qmt reverted to build in shared library mode
