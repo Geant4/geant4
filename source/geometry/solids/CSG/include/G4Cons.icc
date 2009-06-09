@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.9 2009-03-31 09:56:24 gcosmo Exp $
+// $Id: G4Cons.icc,v 1.10 2009-06-09 15:47:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -149,7 +149,7 @@ inline void G4Cons::CheckDPhiAngle(G4double dPhi)
 inline void G4Cons::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if ((fDPhi<twopi) && sPhi) { CheckSPhiAngle(sPhi); }
+  if ( fDPhi<twopi ) { CheckSPhiAngle(sPhi); }
   InitializeTrigonometry();
 }
 

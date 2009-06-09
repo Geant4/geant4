@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.12 2009-03-26 16:25:44 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.13 2009-06-09 15:47:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -137,7 +137,7 @@ inline void G4Tubs::CheckDPhiAngle(G4double dPhi)
 inline void G4Tubs::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if ((fDPhi<twopi) && sPhi) { CheckSPhiAngle(sPhi); }
+  if ( fDPhi<twopi ) { CheckSPhiAngle(sPhi); }
   InitializeTrigonometry();
 }
 

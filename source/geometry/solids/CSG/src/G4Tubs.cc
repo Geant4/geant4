@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.75 2009-03-26 16:25:44 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.76 2009-06-09 15:47:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,23 +168,23 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
                                       G4double&          pMax    ) const
 {
 
-  if ( !pTransform.IsRotated() && fDPhi == twopi && fRMin == 0 )
+  if ( (!pTransform.IsRotated()) && (fDPhi == twopi) && (fRMin == 0) )
   {
     // Special case handling for unrotated solid tubes
     // Compute x/y/z mins and maxs fro bounding box respecting limits,
     // with early returns if outside limits. Then switch() on pAxis,
     // and compute exact x and y limit for x/y case
       
-    G4double xoffset, xMin, xMax ;
-    G4double yoffset, yMin, yMax ;
-    G4double zoffset, zMin, zMax ;
+    G4double xoffset, xMin, xMax;
+    G4double yoffset, yMin, yMax;
+    G4double zoffset, zMin, zMax;
 
-    G4double diff1, diff2, maxDiff, newMin, newMax ;
-    G4double xoff1, xoff2, yoff1, yoff2, delta ;
+    G4double diff1, diff2, maxDiff, newMin, newMax;
+    G4double xoff1, xoff2, yoff1, yoff2, delta;
 
-    xoffset = pTransform.NetTranslation().x() ;
-    xMin = xoffset - fRMax ;
-    xMax = xoffset + fRMax ;
+    xoffset = pTransform.NetTranslation().x();
+    xMin = xoffset - fRMax;
+    xMax = xoffset + fRMax;
 
     if (pVoxelLimit.IsXLimited())
     {
@@ -195,57 +195,57 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       }
       else
       {
-        if ( xMin < pVoxelLimit.GetMinXExtent() )
+        if (xMin < pVoxelLimit.GetMinXExtent())
         {
-          xMin = pVoxelLimit.GetMinXExtent() ;
+          xMin = pVoxelLimit.GetMinXExtent();
         }
-        if (xMax > pVoxelLimit.GetMaxXExtent() )
+        if (xMax > pVoxelLimit.GetMaxXExtent())
         {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
+          xMax = pVoxelLimit.GetMaxXExtent();
         }
       }
     }
-    yoffset = pTransform.NetTranslation().y() ;
-    yMin    = yoffset - fRMax ;
-    yMax    = yoffset + fRMax ;
+    yoffset = pTransform.NetTranslation().y();
+    yMin    = yoffset - fRMax;
+    yMax    = yoffset + fRMax;
 
     if ( pVoxelLimit.IsYLimited() )
     {
       if ( (yMin > pVoxelLimit.GetMaxYExtent())
         || (yMax < pVoxelLimit.GetMinYExtent()) )
       {
-        return false ;
+        return false;
       }
       else
       {
-        if ( yMin < pVoxelLimit.GetMinYExtent() )
+        if (yMin < pVoxelLimit.GetMinYExtent())
         {
-          yMin = pVoxelLimit.GetMinYExtent() ;
+          yMin = pVoxelLimit.GetMinYExtent();
         }
-        if ( yMax > pVoxelLimit.GetMaxYExtent() )
+        if (yMax > pVoxelLimit.GetMaxYExtent())
         {
           yMax=pVoxelLimit.GetMaxYExtent();
         }
       }
     }
-    zoffset = pTransform.NetTranslation().z() ;
-    zMin    = zoffset - fDz ;
-    zMax    = zoffset + fDz ;
+    zoffset = pTransform.NetTranslation().z();
+    zMin    = zoffset - fDz;
+    zMax    = zoffset + fDz;
 
     if ( pVoxelLimit.IsZLimited() )
     {
       if ( (zMin > pVoxelLimit.GetMaxZExtent())
         || (zMax < pVoxelLimit.GetMinZExtent()) )
       {
-        return false ;
+        return false;
       }
       else
       {
-        if ( zMin < pVoxelLimit.GetMinZExtent() )
+        if (zMin < pVoxelLimit.GetMinZExtent())
         {
-          zMin = pVoxelLimit.GetMinZExtent() ;
+          zMin = pVoxelLimit.GetMinZExtent();
         }
-        if ( zMax > pVoxelLimit.GetMaxZExtent() )
+        if (zMax > pVoxelLimit.GetMaxZExtent())
         {
           zMax = pVoxelLimit.GetMaxZExtent();
         }
@@ -255,13 +255,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     {
       case kXAxis :
       {
-        yoff1 = yoffset - yMin ;
-        yoff2 = yMax    - yoffset ;
+        yoff1 = yoffset - yMin;
+        yoff2 = yMax    - yoffset;
 
         if ( (yoff1 >= 0) && (yoff2 >= 0) ) // Y limits cross max/min x
         {                                   // => no change
-          pMin = xMin ;
-          pMax = xMax ;
+          pMin = xMin;
+          pMax = xMax;
         }
         else
         {
@@ -282,13 +282,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       }
       case kYAxis :
       {
-        xoff1 = xoffset - xMin ;
-        xoff2 = xMax - xoffset ;
+        xoff1 = xoffset - xMin;
+        xoff2 = xMax - xoffset;
 
         if ( (xoff1 >= 0) && (xoff2 >= 0) ) // X limits cross max/min y
         {                                   // => no change
-          pMin = yMin ;
-          pMax = yMax ;
+          pMin = yMin;
+          pMax = yMax;
         }
         else
         {
@@ -299,52 +299,52 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
           delta   = fRMax*fRMax - xoff2*xoff2;
           diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
-          newMin  = yoffset - maxDiff ;
-          newMax  = yoffset + maxDiff ;
-          pMin    = (newMin < yMin) ? yMin : newMin ;
-          pMax     =(newMax > yMax) ? yMax : newMax ;
+          maxDiff = (diff1 > diff2) ? diff1 : diff2;
+          newMin  = yoffset - maxDiff;
+          newMax  = yoffset + maxDiff;
+          pMin    = (newMin < yMin) ? yMin : newMin;
+          pMax    = (newMax > yMax) ? yMax : newMax;
         }
-        break ;
+        break;
       }
       case kZAxis:
       {
-        pMin = zMin ;
-        pMax = zMax ;
-        break ;
+        pMin = zMin;
+        pMax = zMax;
+        break;
       }
       default:
         break;
     }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
-    return true;    
+    pMin -= kCarTolerance;
+    pMax += kCarTolerance;
+    return true;
   }
   else // Calculate rotated vertex coordinates
   {
-    G4int i, noEntries, noBetweenSections4 ;
-    G4bool existsAfterClip = false ;
-    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform) ;
-    
-    pMin = +kInfinity ;
-    pMax = -kInfinity ;
+    G4int i, noEntries, noBetweenSections4;
+    G4bool existsAfterClip = false;
+    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform);
 
-    noEntries = vertices->size() ;
-    noBetweenSections4 = noEntries - 4 ;
+    pMin =  kInfinity;
+    pMax = -kInfinity;
+
+    noEntries = vertices->size();
+    noBetweenSections4 = noEntries - 4;
     
-    for (i = 0 ; i < noEntries ; i += 4 )
+    for ( i = 0 ; i < noEntries ; i += 4 )
     {
-      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
+      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
     }
-    for (i = 0 ; i < noBetweenSections4 ; i += 4 )
+    for ( i = 0 ; i < noBetweenSections4 ; i += 4 )
     {
-      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
+      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
     }
-    if ((pMin != kInfinity) || (pMax != -kInfinity) )
+    if ( (pMin != kInfinity) || (pMax != -kInfinity) )
     {
-      existsAfterClip = true ;
-      pMin -= kCarTolerance ; // Add 2*tolerance to avoid precision troubles
-      pMax += kCarTolerance ;
+      existsAfterClip = true;
+      pMin -= kCarTolerance; // Add 2*tolerance to avoid precision troubles
+      pMax += kCarTolerance;
     }
     else
     {
@@ -356,13 +356,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       G4ThreeVector clipCentre(
              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-             (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 ) ;
+             (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 );
         
       if ( Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside )
       {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+        existsAfterClip = true;
+        pMin            = pVoxelLimit.GetMinExtent(pAxis);
+        pMax            = pVoxelLimit.GetMaxExtent(pAxis);
       }
     }
     delete vertices;
