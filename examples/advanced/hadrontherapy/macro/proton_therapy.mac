@@ -56,4 +56,4 @@
 /Step/waterPhantomStepMax 0.01 mm 
 
 
-/run/beamOn 20000
+/run/beamOn 5000

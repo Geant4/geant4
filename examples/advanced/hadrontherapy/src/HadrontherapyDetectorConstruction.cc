@@ -81,6 +81,7 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
   numberOfVoxelsAlongX = 200;
   numberOfVoxelsAlongY = 1;
   numberOfVoxelsAlongZ = 1;
+  
  }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -156,22 +157,23 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
   modulator -> BuildModulator(physicalTreatmentRoom);
 
   //----------------------------------------
-  // The *phantom*:
-  // a box used to approximate patient tissues
+  // Phantom:
+  // A box used to approximate tissues
   //----------------------------------------
+
   G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
-  G4Box* phantom = new G4Box("phantom",20 *cm, 20 *cm, 20 *cm);
-  G4LogicalVolume* phantomLogicalVolume = new G4LogicalVolume(0 ,	
+  G4Box* phantom = new G4Box("Phantom",20 *cm, 20 *cm, 20 *cm);
+  G4LogicalVolume* phantomLogicalVolume = new G4LogicalVolume(phantom,	
 							      waterNist, 
 							      "phantomLog", 0, 0, 0);
   
   phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(200.*mm, 0.*mm, 0.*mm),
-					    "phantom",
+					    "phantomPhys",
 					    phantomLogicalVolume,
 					    physicalTreatmentRoom,
 					    false,0);
 
-  // Visualisation attributes of the phantom
+  // Visualisation attributes of the patient
   red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
   red -> SetVisibility(true);
   red -> SetForceSolid(true);
@@ -245,11 +247,6 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
       detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
     }
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//(void HadrontherapyDetectorConstruction::SetPhantomDimensions(G4double value)
-
-
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
 {  
