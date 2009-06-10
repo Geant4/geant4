@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.5 2009-05-19 14:57:01 pandola Exp $
+<<<<<<< G4PenelopeIonisationModel.cc
+// $Id: G4PenelopeIonisationModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4PenelopeIonisationModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.5
 //
 // Author: Luciano Pandola
 //

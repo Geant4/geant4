@@ -23,11 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.5 2009-06-04 13:45:47 gunter Exp $
+<<<<<<< G4DNARuddIonisationModel.cc
+// $Id: G4DNARuddIonisationModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4DNARuddIonisationModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.5
 //
 
 #include "G4DNARuddIonisationModel.hh"
+//#include "G4DynamicMolecule.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -561,6 +567,28 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
       G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
       fvect->push_back(dp);
+
+    // creating neutral water molechule...
+
+    G4DNAGenericMoleculeManager *instance;
+    instance = G4DNAGenericMoleculeManager::Instance();
+    G4ParticleDefinition* waterDef = NULL;
+    G4Molecule* water = instance->GetMolecule("H2O");
+    waterDef = (G4ParticleDefinition*)water;
+
+    direction.set(0.,0.,0.);
+
+    //G4DynamicParticle* dynamicWater = new G4DynamicParticle(waterDef, direction, bindingEnergy);
+    G4DynamicMolecule* dynamicWater = new G4DynamicMolecule(water, direction, bindingEnergy);
+    //dynamicWater->RemoveElectron(ionizationShell, 1);
+
+    G4DynamicMolecule* dynamicWater2 = new G4DynamicMolecule(water, direction, bindingEnergy);
+    G4DynamicMolecule* dynamicWater3 = new G4DynamicMolecule(water, direction, bindingEnergy);
+    // insertion inside secondaries
+
+    fvect->push_back(dynamicWater);
+    fvect->push_back(dynamicWater2);
+    fvect->push_back(dynamicWater3);
 
   }
 

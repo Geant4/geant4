@@ -32,7 +32,7 @@
 // 22 Apr 2004  First committed to cvs
 //
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExpData.cc,v 1.3 2006-06-29 19:42:42 gunter Exp $
+// $Id: G4hShellCrossSectionExpData.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4hShellCrossSectionExpData.hh"

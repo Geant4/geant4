@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.104 2009-05-02 09:59:16 sincerti Exp $
+<<<<<<< G4LowEnergyIonisation.cc
+// $Id: G4LowEnergyIonisation.cc,v 1.105 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4LowEnergyIonisation.cc,v 1.105 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.104
 // 
 // --------------------------------------------------------------
 //

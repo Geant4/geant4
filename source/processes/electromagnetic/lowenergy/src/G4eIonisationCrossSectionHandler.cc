@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.12 2009-01-29 08:13:34 pandola Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.13 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

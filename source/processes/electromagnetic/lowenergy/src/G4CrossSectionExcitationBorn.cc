@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionExcitationBorn.cc,v 1.5 2009-05-02 15:07:47 sincerti Exp $
+<<<<<<< G4CrossSectionExcitationBorn.cc
+// $Id: G4CrossSectionExcitationBorn.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4CrossSectionExcitationBorn.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.5
 
 #include "G4CrossSectionExcitationBorn.hh"
 

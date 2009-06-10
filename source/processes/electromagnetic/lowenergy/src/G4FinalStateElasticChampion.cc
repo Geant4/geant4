@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateElasticChampion.cc,v 1.8 2009-05-02 15:07:47 sincerti Exp $
+<<<<<<< G4FinalStateElasticChampion.cc
+// $Id: G4FinalStateElasticChampion.cc,v 1.9 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4FinalStateElasticChampion.cc,v 1.9 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.8
 // -------------------------------------------------------------------
 
 

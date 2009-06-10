@@ -131,6 +131,8 @@
 #include "G4SemiLogInterpolation.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ecpssrKCrossSection.hh"
+#include "G4teoCrossSection.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -184,7 +186,8 @@ void G4hLowEnergyIonisation::InitializeMe()
 
   //shellCS = new G4hShellCrossSection();
   //shellCS = new G4hShellCrossSectionExp();
-  shellCS = new G4hShellCrossSectionDoubleExp();
+  //shellCS = new G4hShellCrossSectionDoubleExp();
+  shellCS = new G4teoCrossSection();
   expFlag=true;
 }
 

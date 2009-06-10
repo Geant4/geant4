@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.11 2008-12-15 09:23:06 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.12 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------

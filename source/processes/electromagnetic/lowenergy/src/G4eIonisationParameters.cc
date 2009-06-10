@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.24 2009-03-23 09:13:44 pandola Exp $
+// $Id: G4eIonisationParameters.cc,v 1.25 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

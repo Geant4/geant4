@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.25 2006-06-29 19:41:50 gunter Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.26 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

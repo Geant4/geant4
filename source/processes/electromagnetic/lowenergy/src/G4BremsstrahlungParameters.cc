@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.19 2006-06-29 19:38:44 gunter Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.20 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.57 2009-05-02 09:59:16 sincerti Exp $
+<<<<<<< G4LowEnergyPhotoElectric.cc
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.58 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.58 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.57
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

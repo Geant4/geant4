@@ -25,8 +25,13 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.17 2009-05-02 09:59:17 sincerti Exp $
+<<<<<<< G4PenelopeRayleigh.cc
+// $Id: G4PenelopeRayleigh.cc,v 1.18 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4PenelopeRayleigh.cc,v 1.18 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.17
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //

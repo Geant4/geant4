@@ -365,6 +365,10 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}
       
+      if (totalRadTransProb > 1) {
+      G4Exception( "Wrong Total Probability");
+      return 0;
+}
       G4double totalNonRadTransProb= (1 - totalRadTransProb);
       
       return totalNonRadTransProb;    }

@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.6 2009-05-02 15:07:47 sincerti Exp $
+<<<<<<< G4FinalStateExcitationEmfietzoglou.cc
+// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.7 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4FinalStateExcitationEmfietzoglou.cc,v 1.7 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.6
 
 #include "G4FinalStateExcitationEmfietzoglou.hh"
 

@@ -24,8 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.26 2009-05-02 09:59:16 sincerti Exp $
+<<<<<<< G4LowEnergyPolarizedCompton.cc
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.27 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.27 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.26
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionChargeDecreasePartial.cc,v 1.2 2008-07-14 20:47:34 sincerti Exp $
+// $Id: G4CrossSectionChargeDecreasePartial.cc,v 1.3 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4CrossSectionChargeDecreasePartial.hh"

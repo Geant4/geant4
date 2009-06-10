@@ -25,8 +25,13 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.37 2009-05-02 09:59:16 sincerti Exp $
+<<<<<<< G4LowEnergyGammaConversion.cc
+// $Id: G4LowEnergyGammaConversion.cc,v 1.38 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4LowEnergyGammaConversion.cc,v 1.38 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.37
 //
 // 
 // --------------------------------------------------------------

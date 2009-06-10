@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.3 2009-02-16 11:00:11 sincerti Exp $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

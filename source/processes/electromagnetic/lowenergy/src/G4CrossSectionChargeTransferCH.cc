@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferCH.cc,v 1.3 2008-03-25 16:00:20 pia Exp $
+// $Id: G4CrossSectionChargeTransferCH.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

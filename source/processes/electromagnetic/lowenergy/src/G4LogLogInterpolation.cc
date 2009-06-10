@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.14 2008-12-12 08:50:59 sincerti Exp $
+// $Id: G4LogLogInterpolation.cc,v 1.15 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

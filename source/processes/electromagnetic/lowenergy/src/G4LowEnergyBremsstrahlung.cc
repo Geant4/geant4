@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.72 2009-05-02 09:59:16 sincerti Exp $
+<<<<<<< G4LowEnergyBremsstrahlung.cc
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.73 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+=======
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.73 2009-06-10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+>>>>>>> 1.72
 // 
 // --------------------------------------------------------------
 //

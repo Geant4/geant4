@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SemiLogInterpolation.cc,v 1.6 2006-06-29 19:41:18 gunter Exp $
+// $Id: G4SemiLogInterpolation.cc,v 1.7 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

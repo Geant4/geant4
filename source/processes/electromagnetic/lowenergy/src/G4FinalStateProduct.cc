@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateProduct.cc,v 1.6 2009-01-20 07:50:28 sincerti Exp $
+// $Id: G4FinalStateProduct.cc,v 1.7 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

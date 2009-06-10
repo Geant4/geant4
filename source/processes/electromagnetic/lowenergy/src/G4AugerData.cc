@@ -507,7 +507,7 @@ void G4AugerData::PrintData(G4int Z)
 	  
 	  for (size_t a = 0; a <= NumberOfAuger(Z,i,id); a++) {
 	    
-	    G4double e = StartShellEnergy(Z,i,id,a) /MeV;
+	    G4double e = StartShellEnergy(Z,i,id,a)/MeV;
 	    G4double p = StartShellProb(Z,i,id,a);
 	    G4int augerId = AugerShellId(Z, i, id, a);
 	    G4cout << k <<") Shell id: " << id <<G4endl;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh,v 1.3 2006-06-29 19:34:16 gunter Exp $
+// $Id: G4DNAGenericIonsManager.hh,v 1.4 2009-06-10 13:32:58 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
@@ -42,7 +42,7 @@
   public:
    static G4DNAGenericIonsManager *      Instance(void);
    G4ParticleDefinition *                GetIon(const G4String & name);
-   
+
   private:
                                          G4DNAGenericIonsManager();
                                         ~G4DNAGenericIonsManager();

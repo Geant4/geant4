@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.cc,v 1.8 2006-06-29 19:41:03 gunter Exp $
+// $Id: G4RangeTest.cc,v 1.9 2009-06-10 13:32:36 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
