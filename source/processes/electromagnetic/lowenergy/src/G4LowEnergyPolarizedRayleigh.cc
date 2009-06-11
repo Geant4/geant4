@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< G4LowEnergyPolarizedRayleigh.cc
-// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.9 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.10 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4LowEnergyPolarizedRayleigh.cc,v 1.9 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.8
 //
 // --------------------------------------------------------------
 //

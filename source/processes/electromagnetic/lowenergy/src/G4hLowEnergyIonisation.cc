@@ -187,7 +187,7 @@ void G4hLowEnergyIonisation::InitializeMe()
   //shellCS = new G4hShellCrossSection();
   //shellCS = new G4hShellCrossSectionExp();
   //shellCS = new G4hShellCrossSectionDoubleExp();
-  shellCS = new G4teoCrossSection();
+  shellCS = new G4teoCrossSection("ecpssr");
   expFlag=true;
 }
 

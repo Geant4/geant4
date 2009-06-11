@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< G4FinalStateIonisationRudd.cc
-// $Id: G4FinalStateIonisationRudd.cc,v 1.10 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4FinalStateIonisationRudd.cc,v 1.11 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4FinalStateIonisationRudd.cc,v 1.10 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.9
 
 #include "G4FinalStateIonisationRudd.hh"
 

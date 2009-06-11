@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-<<<<<<< G4DNAScreenedRutherfordElasticModel.cc
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.7 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.5
 //
 
 #include "G4DNAScreenedRutherfordElasticModel.hh"

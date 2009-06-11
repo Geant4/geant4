@@ -41,7 +41,7 @@ public:
 
   virtual ~G4PaulKCrossSection();
 			     
-  G4double CalculateKCrossSection(G4int zTarget,G4int zIncident, G4double energyIncident);
+  G4double CalculateKCrossSection(G4int zTarget,G4int massIncident, G4double energyIncident);
 				    
  
 

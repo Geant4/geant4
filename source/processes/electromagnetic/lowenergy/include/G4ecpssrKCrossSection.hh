@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ecpssrKCrossSection.hh,v 1.1 2009-06-10 13:43:15 mantero Exp $
+// $Id: G4ecpssrKCrossSection.hh,v 1.2 2009-06-11 15:46:18 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -49,6 +49,10 @@
 #define G4ECPSSRKCROSSSECTION_HH 1
 
 #include "globals.hh"
+#include <map>
+#include <vector>
+
+#include "G4DNACrossSectionDataSet.hh"
 
 
 class G4ecpssrKCrossSection
@@ -62,7 +66,7 @@ public:
   
   G4double CalculateCrossSection(G4int, G4double, G4double);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
   
-  G4double CalculateVelocity(G4int zTarget,G4double massIncident, G4double energyIncident); 
+  //  G4double CalculateVelocity(G4int zTarget,G4double massIncident, G4double energyIncident); 
   
   G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
   
@@ -72,7 +76,39 @@ private:
   
   G4ecpssrKCrossSection(const G4ecpssrKCrossSection&);
   G4ecpssrKCrossSection & operator = (const G4ecpssrKCrossSection &right);
-  
-};
 
+  G4double FunctionFK(G4double k, G4double theta);
+
+  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double QuadInterpolator(G4double e11, 
+ 		            G4double e12, 
+			    G4double e21, 
+			    G4double e22, 
+			    G4double x11,
+			    G4double x12, 
+			    G4double x21, 
+			    G4double x22, 
+			    G4double t1, 
+			    G4double t2, 
+			    G4double t, 
+			    G4double e);
+
+  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+
+  TriDimensionMap FKData;
+  std::vector<double> dummyVec;
+
+  typedef std::map<double, std::vector<double> > VecMap;
+  VecMap aVecMap;
+
+  G4int verboseLevel;
+
+  G4DNACrossSectionDataSet* tableC1;
+  G4DNACrossSectionDataSet* tableC2;
+  G4DNACrossSectionDataSet* tableC3;
+};
+  
 #endif

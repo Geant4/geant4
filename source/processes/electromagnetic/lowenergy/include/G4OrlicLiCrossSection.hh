@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OrlicLiCrossSection.hh,v 1.1 2009-06-10 13:43:15 mantero Exp $
+// $Id: G4OrlicLiCrossSection.hh,v 1.2 2009-06-11 15:46:18 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -49,7 +49,7 @@
 #define G4ORLICLICROSSSECTION_HH 1
 
 #include "globals.hh"
-
+#include "G4AtomicTransitionManager.hh"
 
 class G4OrlicLiCrossSection 
 
@@ -74,6 +74,8 @@ private:
 
   G4OrlicLiCrossSection(const G4OrlicLiCrossSection&);
   G4OrlicLiCrossSection & operator = (const G4OrlicLiCrossSection &right);
+
+  G4AtomicTransitionManager*  transitionManager;
 
 };
 

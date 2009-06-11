@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrKCrossSection.cc,v 1.1 2009-06-10 13:41:46 mantero Exp $
+//$Id: G4ecpssrKCrossSection.cc,v 1.2 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -50,12 +50,84 @@
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
 #include <math.h>
+#include <iostream>
+
+#include "G4LinLogInterpolation.hh"
+
 
 G4ecpssrKCrossSection::G4ecpssrKCrossSection()
-{ }
+{ 
+
+    // Storing FK data needed for medium velocities region
+
+    char *path = getenv("G4LEDATA");
+ 
+    if (!path)
+    G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: G4LEDATA environment variable not set");
+
+    std::ostringstream fileName;
+    fileName << path << "/FK.dat";
+    std::ifstream FK(fileName.str().c_str());
+
+    if (!FK) G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: error opening FK data file");
+      
+    dummyVec.push_back(0.);
+
+    while(!FK.eof())
+    {
+	double x;
+	double y;
+	
+	FK>>x>>y;
+
+	//  Mandatory vector initialization
+        if (x != dummyVec.back()) 
+        { 
+          dummyVec.push_back(x); 
+          aVecMap[x].push_back(-1.);
+        }
+	  
+        FK>>FKData[x][y];
+
+        if (y != aVecMap[x].back()) aVecMap[x].push_back(y);
+          
+    }
+
+  // Storing C coefficients for high velocity formula
+
+  G4String fileC1("c1");
+  tableC1 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC1->LoadData(fileC1);
+
+  G4String fileC2("c2");
+  tableC2 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC2->LoadData(fileC2);
+
+  G4String fileC3("c3");
+  tableC3 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC3->LoadData(fileC3);
+
+  //
+
+  verboseLevel=0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void print (double elem)
+{
+  G4cout << elem << " ";
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ecpssrKCrossSection::~G4ecpssrKCrossSection()
-{ }
+{ 
+
+  delete tableC1;
+  delete tableC2;
+  delete tableC3;
+
+}
 
 //---------------------------------this "ExpIntFunction" function allows fast evaluation of the n order exponential integral function En(x)------
 
@@ -166,35 +238,48 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
 	}
     }
   
+  ///////////////////////////////////////////
+  //from here I will substitute this version with Seb's one. 
+  ///////////////////////////////////////////
+
+
+  if (verboseLevel>0) G4cout << "  massIncident=" << massIncident<< G4endl;
 
   G4double kBindingEnergy = transitionManager->Shell(zTarget,0)->BindingEnergy();
-         
+  if (verboseLevel>0) G4cout << "  kBindingEnergy=" << kBindingEnergy/eV<< G4endl;
+
   G4double massTarget = (massManager->GetAtomicMassAmu(zTarget))*amu_c2;
+  if (verboseLevel>0) G4cout << "  massTarget=" <<  massTarget<< G4endl;
  
-  G4double systemMass =((massIncident*massTarget)/(massIncident+massTarget))/electron_mass_c2;//the mass of the system (projectile, target) 
+  G4double systemMass =((massIncident*massTarget)/(massIncident+massTarget))/electron_mass_c2; //the mass of the system (projectile, target) 
+  if (verboseLevel>0) G4cout << "  systemMass=" <<  systemMass<< G4endl;
 
- const G4double zkshell= 0.3;
+  const G4double zkshell= 0.3;
 
-  G4double screenedzTarget = zTarget-zkshell;                                 // screenedzTarget is the screened nuclear charge of the target
+  G4double screenedzTarget = zTarget-zkshell; // screenedzTarget is the screened nuclear charge of the target
 
   const G4double rydbergMeV= 13.6e-6;
-     
+ 
   G4double tetaK = kBindingEnergy/((screenedzTarget*screenedzTarget)*rydbergMeV);  //tetaK denotes the reduced binding energy of the electron
+  if (verboseLevel>0) G4cout << "  tetaK=" <<  tetaK<< G4endl;
+
+  G4double velocity =(2./(tetaK*screenedzTarget))*std::pow(((energyIncident*electron_mass_c2)/(massIncident*rydbergMeV)),0.5);
+  if (verboseLevel>0) G4cout << "  velocity=" << velocity<< G4endl;
 
   const G4double bohrPow2Barn=(Bohr_radius*Bohr_radius)/barn ;        
-  
+  if (verboseLevel>0) G4cout << "  bohrPow2Barn=" <<  bohrPow2Barn<< G4endl;
+
   G4double sigma0 = 8.*pi*(zIncident*zIncident)*bohrPow2Barn*std::pow(screenedzTarget,-4.);     //sigma0 is the initial cross section of K shell at stable state
+  if (verboseLevel>0) G4cout << "  sigma0=" <<  sigma0<< G4endl;
 
-  //---------------------------------------------------------------------------------------------------------------------
-
- G4double velocity = CalculateVelocity( zTarget, massIncident, energyIncident);   //is the scaled velocity parameter of the system  
-
-  //---------------------------------------------------------------------------------------------------------------------
-  
- const G4double kAnalyticalApproximation= 1.5; 
+  const G4double kAnalyticalApproximation= 1.5; 
  
   G4double x = kAnalyticalApproximation/velocity;
- 
+  if (verboseLevel>0) G4cout << "  x=" << x<< G4endl;
+
+
+
+
   G4double electrIonizationEnergy;                                         
                                        
   if ( x<0.035)  
@@ -213,38 +298,150 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
 	 electrIonizationEnergy =2.*std::exp(-2.*x)/std::pow(x,1.6); }
     }
 
+  if (verboseLevel>0) G4cout << "  electrIonizationEnergy=" << electrIonizationEnergy<< G4endl;
+
   G4double hFunction =(electrIonizationEnergy*2.)/(tetaK*std::pow(velocity,3)); //hFunction represents the correction for polarization effet
+  
+  if (verboseLevel>0) G4cout << "  hFunction=" << hFunction<< G4endl;
     
   G4double gFunction = (1.+(9.*velocity)+(31.*velocity*velocity)+(98.*std::pow(velocity,3.))+(12.*std::pow(velocity,4.))+(25.*std::pow(velocity,5.))
 			+(4.2*std::pow(velocity,6.))+(0.515*std::pow(velocity,7.)))/std::pow(1.+velocity,9.); //gFunction represents the correction for binding effet
+  if (verboseLevel>0) G4cout << "  gFunction=" << gFunction<< G4endl;
  
   //-----------------------------------------------------------------------------------------------------------------------------
 
   G4double sigmaPSS = 1.+(((2.*zIncident)/(screenedzTarget*tetaK))*(gFunction-hFunction)); //describes the perturbed stationnairy state of the affected atomic electon
- 
- //----------------------------------------------------------------------------------------------------------------------------
+  if (verboseLevel>0) G4cout << "  sigmaPSS=" << sigmaPSS<< G4endl;
+  if (verboseLevel>0) G4cout << "  sigmaPSS*tetaK=" << sigmaPSS*tetaK<< G4endl;
+
+  //----------------------------------------------------------------------------------------------------------------------------
   
   const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
+  if (verboseLevel>0) G4cout << "  cNaturalUnit=" << cNaturalUnit<< G4endl;
   
   G4double ykFormula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocity/sigmaPSS);
+  if (verboseLevel>0) G4cout << "  ykFormula=" << ykFormula<< G4endl;
  
   G4double relativityCorrection = std::pow((1.+(1.1*ykFormula*ykFormula)),0.5)+ykFormula;// the relativistic correction parameter
+  if (verboseLevel>0) G4cout << "  relativityCorrection=" << relativityCorrection<< G4endl;
 
   G4double reducedVelocity = velocity*std::pow(relativityCorrection,0.5);  // presents the reduced collision velocity parameter 
+  if (verboseLevel>0) G4cout << "  reducedVelocity=" << reducedVelocity<< G4endl;
 
+  G4double etaOverTheta2 = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget)
+                           /(sigmaPSS*tetaK)/(sigmaPSS*tetaK);
+  if (verboseLevel>0) G4cout << "  etaOverTheta2=" << etaOverTheta2<< G4endl;
+
+  // low velocity formula
+  
   G4double universalFunction = (std::pow(2.,9.)/45.)*std::pow(reducedVelocity/sigmaPSS,8.)*std::pow((1.+(1.72*(reducedVelocity/sigmaPSS)*(reducedVelocity/sigmaPSS))),-4.);// is the reduced universal cross section
+  if (verboseLevel>0) G4cout << "  universalFunction by Brandt 1981 =" << universalFunction<< G4endl;
 
+  // Alternative formula by Rice 1977, closer to tabulated data than the above function from Brandt 1981
+     
+     G4double x_ = etaOverTheta2;
+     if (verboseLevel>0) G4cout << "  x_=" << x_ << G4endl;
+
+     G4double b0 = pow(2.,17)/45.;
+     if (verboseLevel>0) G4cout << "  b0=" << b0 << G4endl;
+
+     G4double b1 = 19*(sigmaPSS*tetaK) - 480./11.;
+     if (verboseLevel>0) G4cout << "  b1=" << b1 << G4endl;
+
+     G4double b2 = (720./7.)*(23*(sigmaPSS*tetaK)*(sigmaPSS*tetaK)/11 - 97*(sigmaPSS*tetaK)/9. + 160./13);
+     if (verboseLevel>0) G4cout << "  b2=" << b2 << G4endl;
+
+     universalFunction = b0*x_*x_*x_*x_*(1+b1*x_+b2*x_*x_);
+
+     if (verboseLevel>0) G4cout << "  universalFunction by Rice 1977 =" << universalFunction<< G4endl;
+
+  
+  if ( etaOverTheta2 < 0.01 )
+  {
+     if (verboseLevel>0) G4cout << "  Notice : FK is computed from low velocity formula" << G4endl;
+     
+  }
+
+  else
+  
+  {
+    
+    if ( etaOverTheta2 > 95 && (sigmaPSS*tetaK) > 0.4 && (sigmaPSS*tetaK) < 1.7 )
+    {
+      // From Rice 1977
+      
+      if (verboseLevel>0) G4cout << "  Notice : FK is computed from high velocity formula" << G4endl;
+
+      if (verboseLevel>0) G4cout << "  sigmaPSS*tetaK=" << sigmaPSS*tetaK << G4endl;
+    
+      G4double C1= tableC1->FindValue(sigmaPSS*tetaK);
+      G4double C2= tableC2->FindValue(sigmaPSS*tetaK);
+      G4double C3= tableC3->FindValue(sigmaPSS*tetaK);
+      if (verboseLevel>0) G4cout << "  C1=" << C1 << G4endl;
+      if (verboseLevel>0) G4cout << "  C2=" << C2 << G4endl;
+      if (verboseLevel>0) G4cout << "  C3=" << C3 << G4endl;
+   
+      G4double etaK = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget);
+      if (verboseLevel>0) G4cout << "  etaK=" << etaK << G4endl;
+
+      G4double etaT = (sigmaPSS*tetaK)*(sigmaPSS*tetaK)*(95.); // at any theta, the largest tabulated etaOverTheta2 is 95
+      if (verboseLevel>0) G4cout << "  etaT=" << etaT << G4endl;
+    
+      G4double fKT = FunctionFK((sigmaPSS*tetaK),95.)*(etaT/(sigmaPSS*tetaK));
+      if (FunctionFK((sigmaPSS*tetaK),95.)<=0.) G4cout << 
+      "*** WARNING : G4ecpssrCrossSection::CalculateCrossSection is unable to interpolate FK function in high velocity region ! ***" << G4endl;
+      if (verboseLevel>0) G4cout << "  FunctionFK=" << FunctionFK((sigmaPSS*tetaK),95.) << G4endl;
+      if (verboseLevel>0) G4cout << "  fKT=" << fKT << G4endl;
+    
+      G4double GK = C2/(4*etaK) + C3/(32*etaK*etaK);
+      if (verboseLevel>0) G4cout << "  GK=" << GK << G4endl;
+      G4double GT = C2/(4*etaT) + C3/(32*etaT*etaT);
+      if (verboseLevel>0) G4cout << "  GT=" << GT << G4endl;
+    
+      G4double DT = fKT - C1*std::log(etaT) + GT;
+      if (verboseLevel>0) G4cout << "  DT=" << DT << G4endl;
+
+      G4double fKK = C1*std::log(etaK) + DT - GK;
+      if (verboseLevel>0) G4cout << "  fKK=" << fKK << G4endl;
+    
+      G4double universalFunction3= fKK/(etaK/tetaK);
+      if (verboseLevel>0) G4cout << "  universalFunction3=" << universalFunction3 << G4endl;
+
+      universalFunction=universalFunction3;
+    
+    }
+    else
+    {
+      // From Rice 1977
+      
+      if (verboseLevel>0) G4cout << "  Notice : FK is computed from INTERPOLATED data" << G4endl;
+     
+      G4double universalFunction2 = FunctionFK((sigmaPSS*tetaK),etaOverTheta2);
+      if (universalFunction2<=0) G4cout << 
+      "*** WARNING : G4ecpssrCrossSection::CalculateCrossSection is unable to interpolate FK function in medium velocity region ! ***" << G4endl;
+      
+      if (verboseLevel>0) G4cout << "  universalFunction2=" << universalFunction2 << " for theta=" << sigmaPSS*tetaK << " and etaOverTheta2=" << etaOverTheta2 << G4endl;
+      
+      universalFunction=universalFunction2;
+    }
+        
+  }
+  
   //----------------------------------------------------------------------------------------------------------------------
 
   G4double sigmaPSSR = (sigma0/(sigmaPSS*tetaK))*universalFunction; //sigmaPSSR is the straight-line K-shell ionization cross section
+  if (verboseLevel>0) G4cout << "  sigmaPSSR=" << sigmaPSSR<< G4endl;
   
   //-----------------------------------------------------------------------------------------------------------------------
 
   G4double pssDeltaK = (4./(systemMass*sigmaPSS*tetaK))*(sigmaPSS/velocity)*(sigmaPSS/velocity);
+  if (verboseLevel>0) G4cout << "  pssDeltaK=" << pssDeltaK<< G4endl;
 
   G4double energyLoss = std::pow(1-pssDeltaK,0.5); //energyLoss incorporates the straight-line energy-loss 
+  if (verboseLevel>0) G4cout << "  energyLoss=" << energyLoss<< G4endl;
 
   G4double energyLossFunction = (std::pow(2.,-9)/8.)*((((9.*energyLoss)-1.)*std::pow(1.+energyLoss,9.))+(((9.*energyLoss)+1.)*std::pow(1.-energyLoss,9.)));//energy loss function 
+  if (verboseLevel>0) G4cout << "  energyLossFunction=" <<  energyLossFunction<< G4endl;
 
   //----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -252,71 +449,184 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
  
   G4double cParameter = 2.*coulombDeflection/(energyLoss*(energyLoss+1.));
   
+  if (verboseLevel>0) G4cout << "  cParameter=" << cParameter<< G4endl;
 
   G4double coulombDeflectionFunction = 9.*ExpIntFunction(10,cParameter);                         //this function describes Coulomb-deflection effect
+  if (verboseLevel>0) G4cout << "  ExpIntFunction(10,cParameter) =" << ExpIntFunction(10,cParameter) << G4endl;
+  if (verboseLevel>0) G4cout << "  coulombDeflectionFunction =" << coulombDeflectionFunction << G4endl;
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------
  
-
-  G4double crossSection =  energyLossFunction* coulombDeflectionFunction*sigmaPSSR;  //this ECPSSR cross section is estimated at perturbed-stationnairy-state(PSS)
-                                                                                    //and it's reduced by the energy-loss(E),the Coulomb deflection(C),
-                                                                                   //and the relativity(R) effects
+  G4double crossSection =  0;
+  
+  crossSection = energyLossFunction* coulombDeflectionFunction*sigmaPSSR;  //this ECPSSR cross section is estimated at perturbed-stationnairy-state(PSS)
+                                                                           //and it's reduced by the energy-loss(E),the Coulomb deflection(C),
+                                                                           //and the relativity(R) effects
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------   
 
   return crossSection;
 }
 
-G4double G4ecpssrKCrossSection::CalculateVelocity(G4int zTarget, G4double massIncident,  G4double energyIncident) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  // this is a lowenergy approximation for the calulation of "normalized velocity", for values < 1.
+G4double G4ecpssrKCrossSection::FunctionFK(G4double k, G4double theta) 							  
+{
 
-			                     
-{  
+  G4double sigma = 0.;
+  G4double valueT1 = 0;
+  G4double valueT2 = 0;
+  G4double valueE21 = 0;
+  G4double valueE22 = 0;
+  G4double valueE12 = 0;
+  G4double valueE11 = 0;
+  G4double xs11 = 0;   
+  G4double xs12 = 0; 
+  G4double xs21 = 0; 
+  G4double xs22 = 0; 
 
-  G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
+  // PROTECTION TO ALLOW INTERPOLATION AT MINIMUM AND MAXIMUM EtaK/Theta2 values 
+  // (in particular for FK computation at 95 for high velocity formula)
+  
+  if (
+  theta==9.5e-2 ||
+  theta==9.5e-1 ||
+  theta==9.5e+00 ||
+  theta==9.5e+01
+  ) theta=theta-1e-12;
 
-  G4double kBindingEnergy = (transitionManager->Shell(zTarget,0)->BindingEnergy())/MeV;
+  if (
+  theta==1.e-2 ||
+  theta==1.e-1 ||
+  theta==1.e+00 ||
+  theta==1.e+01
+  ) theta=theta+1e-12;
+
+  // END PROTECTION
+  
+  {
+    std::vector<double>::iterator t2 = std::upper_bound(dummyVec.begin(),dummyVec.end(), k);
+    std::vector<double>::iterator t1 = t2-1;
  
-  /*
- G4double  massIncident; 
-
- 
- if (zIncident == 1)
-    {
-    G4Proton* aProtone = G4Proton::Proton();
-    
-   massIncident = aProtone->GetPDGMass(); 
-    }
-  else
-    {
-      if (zIncident == 2)
-	{
-	  G4Alpha* aAlpha = G4Alpha::Alpha();
+    std::vector<double>::iterator e12 = std::upper_bound(aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), theta);
+    std::vector<double>::iterator e11 = e12-1; 
 	  
-	   massIncident  = aAlpha->GetPDGMass(); 
-	}
-      else
-	{ 
-	  G4cout << "we can treat only Proton or Alpha incident particles " << G4endl;
-	  massIncident =0.;
-	}
-    }
+    std::vector<double>::iterator e22 = std::upper_bound(aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), theta);
+    std::vector<double>::iterator e21 = e22-1;
+	  	
+    valueT1  =*t1;
+    valueT2  =*t2;
+    valueE21 =*e21;
+    valueE22 =*e22;
+    valueE12 =*e12;
+    valueE11 =*e11;
 
- */
- const G4double zkshell= 0.3;      
+    xs11 = FKData[valueT1][valueE11];
+    xs12 = FKData[valueT1][valueE12];
+    xs21 = FKData[valueT2][valueE21];
+    xs22 = FKData[valueT2][valueE22];
+
+/*
+verboseLevel=1;
+
+if (verboseLevel>0) G4cout << "x1= " << valueT1 << G4endl;
+if (verboseLevel>0) G4cout << " vector of y for x1" << G4endl;
+for_each (aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), print);
+
+if (verboseLevel>0) G4cout << G4endl;
+
+if (verboseLevel>0) G4cout << "x2= " << valueT2 << G4endl;
+if (verboseLevel>0) G4cout << " vector of y for x2" << G4endl;
+for_each (aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), print);
+
+if (verboseLevel>0) G4cout << G4endl;
+
+if (verboseLevel>0) G4cout 
+<< "  " 
+<< valueT1 << " "
+<< valueT2 << " "
+<< valueE11 << " "
+<< valueE12 << " "
+<< valueE21<< " "
+<< valueE22 << " " 
+<< xs11 << " " 
+<< xs12 << " " 
+<< xs21 << " " 
+<< xs22 << " " 
+<< G4endl;
+//verboseLevel=0;
+*/
+
+}
+     
+  G4double xsProduct = xs11 * xs12 * xs21 * xs22;
   
- G4double screenedzTarget = zTarget- zkshell;                                  
+  if (xs11==0 || xs12==0 ||xs21==0 ||xs22==0) return (0.);
+     
+  if (xsProduct != 0.)
+  {
+    sigma = QuadInterpolator(  valueE11, valueE12, 
+    			       valueE21, valueE22, 
+			       xs11, xs12, 
+			       xs21, xs22, 
+			       valueT1, valueT2, 
+			       k, theta );
+  }
 
- const G4double rydbergMeV= 13.6e-6;
- 
-G4double tetaK = kBindingEnergy/(screenedzTarget*screenedzTarget*rydbergMeV);            
-  
-G4double velocity =(2./(tetaK*screenedzTarget))*std::pow(((energyIncident*electron_mass_c2)/(massIncident*rydbergMeV)),0.5);
-
-  return velocity;
+  return sigma;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ecpssrKCrossSection::LinLogInterpolate(G4double e1, 
+						        G4double e2, 
+						        G4double e, 
+						        G4double xs1, 
+						        G4double xs2)
+{
+  G4double d1 = std::log(xs1);
+  G4double d2 = std::log(xs2);
+  G4double value = std::exp(d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ecpssrKCrossSection::LogLogInterpolate(G4double e1, 
+						        G4double e2, 
+						        G4double e, 
+						        G4double xs1, 
+						        G4double xs2)
+{
+  G4double a = (std::log10(xs2)-std::log10(xs1)) / (std::log10(e2)-std::log10(e1));
+  G4double b = std::log10(xs2) - a*std::log10(e2);
+  G4double sigma = a*std::log10(e) + b;
+  G4double value = (std::pow(10.,sigma));
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ecpssrKCrossSection::QuadInterpolator(G4double e11, G4double e12, 
+						       G4double e21, G4double e22, 
+						       G4double xs11, G4double xs12, 
+						       G4double xs21, G4double xs22, 
+						       G4double t1, G4double t2, 
+						       G4double t, G4double e)
+{
+// Log-Log
+/*
+  G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
+  G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+*/
+
+// Lin-Log
+  G4double interpolatedvalue1 = LinLogInterpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = LinLogInterpolate(e21, e22, e, xs21, xs22);
+  G4double value = LinLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+  return value;
+}
 
 
 

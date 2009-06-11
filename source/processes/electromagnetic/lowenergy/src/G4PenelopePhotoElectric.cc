@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-<<<<<<< G4PenelopePhotoElectric.cc
-// $Id: G4PenelopePhotoElectric.cc,v 1.15 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.16 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4PenelopePhotoElectric.cc,v 1.15 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.14
 //
 // Author: L. Pandola
 //

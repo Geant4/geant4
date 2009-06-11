@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4teoCrossSection.cc,v 1.1 2009-06-10 13:41:46 mantero Exp $
+//$Id: G4teoCrossSection.cc,v 1.2 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -48,11 +48,15 @@
 //#include "G4Alpha.hh"
 //#include <math.h>
 
-G4teoCrossSection::G4teoCrossSection()
+G4teoCrossSection::G4teoCrossSection(G4String shellModel)
   :totalCS(0)
 { 
 
+  if (shellModel == "ecpssr") {
+
   ecpssrShellK = new G4ecpssrKCrossSection();
+
+  }
   orlicShellLi = new G4OrlicLiCrossSection();
 }
 

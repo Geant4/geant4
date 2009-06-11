@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLiCrossSection.cc,v 1.1 2009-06-10 13:41:46 mantero Exp $
+//$Id: G4OrlicLiCrossSection.cc,v 1.2 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -45,15 +45,20 @@
 
 #include "globals.hh"
 #include "G4OrlicLiCrossSection.hh"
-#include "G4AtomicTransitionManager.hh"
 #include "G4Proton.hh"
 
 
 G4OrlicLiCrossSection::G4OrlicLiCrossSection()
-{ }
+{ 
+
+  transitionManager =  G4AtomicTransitionManager::Instance();
+
+}
 
 G4OrlicLiCrossSection::~G4OrlicLiCrossSection()
-{ }
+{ 
+
+}
 
 //this L-CrossSection calculation method is done according to 
 //I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230	
@@ -65,7 +70,11 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
   			       
 {
 
-  G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
+  if ( (energyIncident < 0.1*MeV) || energyIncident > 10*MeV )
+
+    {return 0;}
+
+
 
   G4double  massIncident; 
 
@@ -95,6 +104,8 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
                                        
    if ( zTarget>=14 && zTarget<=40)  
     {
+      /*
+      // parameters used for calculating total L cross section
       a0=12.5081;
       a1=0.2177;
       a2=-0.3758;
@@ -104,7 +115,7 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
       a6=0.;
       a7=0.;
       a8=0.;
-      a9=0.;
+      a9=0.; */
     }
   else 
     { 
@@ -212,10 +223,13 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
   			       
 {
 
-  G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
+
+  if ( (energyIncident < 0.1*MeV) || energyIncident > 10*MeV )
+
+    {return 0;}
+
 
   G4double  massIncident; 
-
 
   G4Proton* aProtone = G4Proton::Proton();
     
@@ -329,10 +343,13 @@ G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double 
   			       
 {
 
-  G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
+  if ( (energyIncident < 0.1*MeV) || energyIncident > 10*MeV )
+
+    {return 0;}
+
+
 
   G4double  massIncident; 
-
 
   G4Proton* aProtone = G4Proton::Proton();
     

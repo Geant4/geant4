@@ -25,13 +25,8 @@
 //
 // --------------------------------------------------------------------
 //
-<<<<<<< G4LowEnergyRayleigh.cc
-// $Id: G4LowEnergyRayleigh.cc,v 1.39 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.40 2009-06-11 15:47:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-=======
-// $Id: G4LowEnergyRayleigh.cc,v 1.39 2009-06-10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
->>>>>>> 1.38
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

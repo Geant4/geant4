@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4teoCrossSection.hh,v 1.1 2009-06-10 13:43:15 mantero Exp $
+// $Id: G4teoCrossSection.hh,v 1.2 2009-06-11 15:46:18 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -55,7 +55,7 @@ class G4teoCrossSection : public G4VhShellCrossSection
 {
 public:
 
-  G4teoCrossSection();
+  G4teoCrossSection(G4String);
 
   ~G4teoCrossSection();
 			     
