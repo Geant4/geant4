@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2009-06-08 12:58:13 maire Exp $
+// $Id: HistoManager.cc,v 1.3 2009-06-11 13:39:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "ecal";
   fileType    = "root";  
-  fileOption  = "--noErrors;export=root;uncompress";
+  fileOption  = "--noErrors export=root uncompress";
     
   // histograms
   for (G4int k=0; k<MaxHisto; k++) { 

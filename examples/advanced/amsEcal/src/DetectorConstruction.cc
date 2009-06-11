@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.5 2009-06-08 12:58:13 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.6 2009-06-11 13:39:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +67,7 @@ DetectorConstruction::DetectorConstruction()
   fiberDiameter       = 1.08*mm;	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  distanceInterLayers = 1.68*mm;	//1.68*mm
+  distanceInterLayers = 1.78*mm;	//1.68*mm
   nbOfLayers          = 10;		//10
   nbOfSuperLayers     = 9;		//9 
 
@@ -217,7 +217,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   // take care of extra border absorber
   G4double meanThickAbsor 
        = layerThick - 0.25*(pi*fiberDiameter*fiberDiameter)/distanceInterFibers;
-       
+  meanThickAbsor = 0.;     
   superLayerThick = layerThick*nbOfLayers + meanThickAbsor;       
   sizeX = superLayerThick;
   sizeY = fiberLength;

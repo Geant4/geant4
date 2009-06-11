@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.2 2009-05-06 18:39:32 maire Exp $
+// $Id: EventAction.hh,v 1.3 2009-06-11 13:39:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,10 @@ class EventAction : public G4UserEventAction
           
     std::vector<G4double>   visibleEnergy;
     std::vector<G4double>     totalEnergy;
-    G4double                nbRadLen;   
+    G4double                nbRadLen;
+    
+    G4bool                trigger;
+    G4double              Eseuil;   
             
     G4String              drawFlag; 
     G4int                 printModulo;         

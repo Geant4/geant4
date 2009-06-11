@@ -1,4 +1,4 @@
-# $Id: run0.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+# $Id: run0.mac,v 1.2 2009-06-11 13:39:20 maire Exp $
 #
 # Macro file for "amsEcal.cc" 
 #
@@ -12,7 +12,7 @@
 /ams/gun/setDefault
 /gun/particle geantino
 /gun/energy 1 GeV
-/ams/gun/beam 2 mm
+/ams/gun/beam 3 mm
 #
 /control/execute vis.mac
 #

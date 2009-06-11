@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2009-06-08 12:58:13 maire Exp $
+// $Id: SteppingAction.cc,v 1.4 2009-06-11 13:39:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "HistoManager.hh"
 
 #include "G4Step.hh"
-#include "G4RunManager.hh"
 
 #include "G4Geantino.hh"
 
@@ -52,10 +51,6 @@ SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
 {
   first = true;
   lvol_world = lvol_slayer = lvol_layer = lvol_fiber = 0;
-  
-  trigger = false;
-  rmax = 5*mm;
-  seuil = 10*keV;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,16 +120,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //in fiber ?
  // 
  if (lvol == lvol_fiber) {
-   //visible energy
    eventAct->SumVisibleEnergy(iPixel, edep);                     
-   //trigger condition
-   if (trigger) {
-     G4ThreeVector beam = primary->GetParticleGun()->GetParticlePosition();
-     G4ThreeVector point2 = step->GetPostStepPoint()->GetPosition();
-     G4ThreeVector dif = point2 - beam;
-     G4double r = std::sqrt(dif.y()*dif.y() + dif.z()*dif.z());
-     if ((r>rmax)&&(edep>seuil)) G4RunManager::GetRunManager()->AbortEvent();  
-   }
  }
 }
 

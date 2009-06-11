@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2009-06-08 12:58:13 maire Exp $
+$Id: History,v 1.7 2009-06-11 13:39:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10-06-09 mma
+- move trigger conditions from SteppingAction to EventAction 
      
+09-06-09 mma
+- problems with extra plates. Suppress them and put back 
+  distanceInterLayers = 1.78 mm 
+      
 08-06-09 mma (amsEcal-V09-02-03) 
 - back to distanceInterLayers = 1.68 mm (ie nominal)
   Put in superLayer 2 extra plates of absorber, 0.5 mm each

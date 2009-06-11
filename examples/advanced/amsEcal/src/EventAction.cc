@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.3 2009-06-08 12:58:13 maire Exp $
+// $Id: EventAction.cc,v 1.4 2009-06-11 13:39:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,10 @@
 EventAction::EventAction(DetectorConstruction* det, RunAction* run,
                          PrimaryGeneratorAction* prim, HistoManager* hist)
 :detector(det), runAct(run), primary(prim), histoManager(hist)
-{
+{ 
+  trigger = false;
+  Eseuil  = 10*keV;
+    
   drawFlag = "none";
   printModulo = 1000;
   eventMessenger = new EventActionMessenger(this);
@@ -75,21 +78,34 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   visibleEnergy.resize(nbOfPixels);  visibleEnergy.clear();  
     totalEnergy.resize(nbOfPixels);    totalEnergy.clear();
    
-  nbRadLen = 0.;  
+  nbRadLen = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  //if event killed --> skip EndOfEventAction
-  if (evt->IsAborted()) return;
-  
-  //pass informations to RunAction and HistoManager
-  //
   G4int nbOfLayers  = detector->GetNxPixelsTot();
   G4int nyPixels    = detector->GetNyPixels();
-  G4int nyPixelsMax = detector->GetNyPixelsMax();    
+  G4int nyPixelsMax = detector->GetNyPixelsMax();
+      
+  // code for trigger conditions :
+  // 1 and only 1 pixel fired per layer
+  //
+  if (trigger) {
+    for (G4int ix=0; ix<nbOfLayers; ix++) {
+      //count number of pixels fired
+      G4int count = 0;  
+      for (G4int iy=0; iy<nyPixels; iy++) {
+        G4int k = ix*nyPixelsMax + iy;
+        if (visibleEnergy[k] > Eseuil) count++;	      
+      }
+      //if event killed --> skip EndOfEventAction          
+      if (count > 1) return;
+    }  
+  }
+  
+  //pass informations to RunAction and HistoManager
   //
   G4double calorEvis = 0.;
   G4double calorEtot = 0.;  

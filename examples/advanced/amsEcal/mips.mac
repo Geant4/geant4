@@ -1,4 +1,4 @@
-# $Id: mips.mac,v 1.1 2009-04-16 11:05:40 maire Exp $
+# $Id: mips.mac,v 1.2 2009-06-11 13:39:20 maire Exp $
 #
 # Macro file for "amsEcal.cc" 
 # (can be run in batch, without graphic)
@@ -16,15 +16,14 @@
 /gun/energy 6 GeV
 /ams/gun/beam 20 mm
 #
-/ams/histo/setFileName mips/6gev
-/ams/histo/setFileType root
+/ams/histo/setFileName mips/6gev.s0kev
+/ams/histo/setFileType hbook
 /ams/histo/setFileOption export=root
 #
-/ams/histo/setHisto 1 100  0.  50. MeV		#evis in ecal
-/ams/histo/setHisto 2 100  0. 500. MeV		#edep in ecal
+/ams/histo/setHisto 1 100  0. 50. MeV		#evis in ecal
 /ams/histo/setHisto 3 20  0. 20. none
 /ams/histo/setHisto 4 20  0. 20. none
 #
-/ams/event/printModulo 100000
+/ams/event/printModulo 1000
 #
-/run/beamOn 1000000
+/run/beamOn 10000
