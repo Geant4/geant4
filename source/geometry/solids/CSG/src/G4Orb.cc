@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.26 2009-06-11 09:25:51 tnikitin Exp $
+// $Id: G4Orb.cc,v 1.27 2009-06-11 13:26:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -363,6 +363,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   G4double rad2, pDotV3d, tolORMax2, tolIRMax2 ;
   G4double c, d2, s = kInfinity ;
 
+  const G4double dRmax = 100.*fRmax;
+
   // General Precalcs
 
   rad2    = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
@@ -402,17 +404,14 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     if ( d2 >= 0 )
     {
       s = -pDotV3d - std::sqrt(d2) ;
-
-      if (s >= 0 ) {
-        if(s>100.*fRmax){
-          G4ThreeVector test(p+s*v);
-	  if(Inside(test)==kOutside){
-	    G4double correction;
-	    correction=DistanceToIn(test,v);
-            s=s+correction;
-	  }
+      if ( s >= 0 )
+      {
+        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+        {              // 64 bits systems. Split long distances and recompute
+          G4double fTerm = s-std::fmod(s,dRmax);
+          s = fTerm + DistanceToIn(p+fTerm*v,v);
         } 
-       return snxt = s;
+        return snxt = s;
       }
     }
     else    // No intersection with G4Orb
@@ -425,9 +424,14 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     if ( c > -fRmaxTolerance*fRmax )  // on surface  
     {
       d2 = pDotV3d*pDotV3d - c ;             
-      //  if ( pDotV3d >= 0 ) return snxt = kInfinity;
-      if ( d2 < fRmaxTolerance*fRmax || pDotV3d >= 0 ) return snxt = kInfinity;
-      else                return snxt = 0.;
+      if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+      {
+        return snxt = kInfinity;
+      }
+      else
+      {
+        return snxt = 0.;
+      }
     }
     else // inside ???
     {
