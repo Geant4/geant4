@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.25 2009-05-13 15:48:11 grichine Exp $
+// $Id: G4Orb.cc,v 1.26 2009-06-11 09:25:51 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -403,8 +403,17 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     {
       s = -pDotV3d - std::sqrt(d2) ;
 
-      if (s >= 0 ) return snxt = s;
-           
+      if (s >= 0 ) {
+        if(s>100.*fRmax){
+          G4ThreeVector test(p+s*v);
+	  if(Inside(test)==kOutside){
+	    G4double correction;
+	    correction=DistanceToIn(test,v);
+            s=s+correction;
+	  }
+        } 
+       return snxt = s;
+      }
     }
     else    // No intersection with G4Orb
     {
