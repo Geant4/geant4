@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
   G4int startId;
   G4int vacancyId;
   G4int numberOfRun;
-  G4int batch;
+  G4int batch=0;
   G4int element;
   if (argv[1]) {batch = atoi(argv[1]);}
   G4String fileName;
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]){
   G4AtomicDeexcitation* deexcitation = new G4AtomicDeexcitation;
   std::map<G4int,G4int> shellNumberTable;
   
-  deexcitation->ActivateAugerElectronProduction(true);
+    deexcitation->ActivateAugerElectronProduction(true);
   
   for (Z = a; Z<=b; Z++) {    
   G4cout << "******** Z = "<< Z << "*********" << G4endl;
@@ -125,7 +125,9 @@ int main(int argc, char* argv[]){
   std::vector<G4DynamicParticle*>* vectorOfParticles;
 
     for(G4int i = 0; i<numberOfRun;i++){ 
+      G4cout<<"**************"<<G4endl;
       G4cout<<"begin of run "<< i <<G4endl;
+      G4cout<<"**************"<<G4endl;
       vectorOfParticles = 0;
       // if shellID = -1 the test runs on every shell of the atom
       if (startId == -1){

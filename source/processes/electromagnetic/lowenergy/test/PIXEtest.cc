@@ -41,7 +41,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: testDoubleExp.cc,v 1.5 2009-06-12 10:43:45 mantero Exp $
+// $Id: PIXEtest.cc,v 1.1 2009-06-12 10:43:45 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -56,7 +56,7 @@
 #include "G4teoCrossSection.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4Proton.hh"
-#include "AIDA/AIDA.h"
+//#include "AIDA/AIDA.h"
 
 int main()
 { 
@@ -65,10 +65,13 @@ int main()
    G4double mass;
    G4double deltaEnergy;
    size_t shellNumber;
+   G4String fileName;
 
    //    G4VhShellCrossSection* shellExp = new G4hShellCrossSectionDoubleExp();
- 
-   G4VhShellCrossSection* shellExp = new G4teoCrossSection();
+   //  here you deciude the implementation: G4teoCrossSection is ECPSSR for K + Orlic for L shells
+   //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli
+
+   G4VhShellCrossSection* shellCS = new G4teoCrossSection("ecpssr");
 
    //proton mass in Kg
    //mass = 1.67262158e-27 * kg;   
@@ -85,11 +88,10 @@ int main()
    G4cout << "Enter shell number: " << G4endl;
    G4cin >> shellNumber;
 
-   // Creating the analysis factory and  the tree factory
-   AIDA::IAnalysisFactory* analysisFactory = AIDA_createAnalysisFactory();
-   AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+   G4cout << "Enter filename: " << G4endl;
+   G4cin >> fileName;
 
-   G4String fileName = "teoCorssSection";           
+   if (fileName == "" ) {fileName = "PIXECrossSection";}           
 
    G4String fileNameTxt = fileName;
    char buffer[3];
@@ -101,20 +103,6 @@ int main()
        G4cout << "Z = " << Z << G4endl;
        snprintf(buffer, 3, "%d", Z);
 
-       fileName = fileName+ buffer + ".xml";
-
-
-
-
-       // Creating a tree in uncompress XML
-       AIDA::ITree* tree = treeFactory->create(fileName,"xml",0,1,"uncompress"); // output file
-       // Creating a data point set  factory, which will be handled by the tree
-       AIDA::IDataPointSetFactory* dataPointSetFactory = analysisFactory->createDataPointSetFactory(*tree);
-       // Creating a 2 D data point set
-       AIDA::IDataPointSet* dataPointSetElement = dataPointSetFactory->create("CS","Cross section", 2); 
-       fileName = "teoCrossSection";
-       
-       
        
        fileNameTxt = fileName + buffer + ".dat";
        
@@ -126,23 +114,11 @@ int main()
 	 {
 	   incidentEnergy = energies[k]*MeV;
 	   deltaEnergy = 0.0;
+	   	   
+	   std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
 	   
-	   // *************************************************************** //
-	   // From Empiric Model                                              //
-	   // *************************************************************** //
 	   
-	   std::vector<G4double> CS = shellExp->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
-	   
-	   //Write in a file.xml
-	   // Fill the two dimensional IDataPointSet
-	   dataPointSetElement->addPoint();
-	   AIDA::IDataPoint & point = *(dataPointSetElement->point(k));
-	   AIDA::IMeasurement& xPoint = *(point.coordinate(0));
-	   xPoint.setValue(incidentEnergy);
-	   AIDA::IMeasurement& yPoint = *(point.coordinate(1));
-	   yPoint.setValue(CS[shellNumber]); //barn);	     //error in ecpssr class: correct units management!
-	   
-	   myfile << incidentEnergy << "\t" << CS[shellNumber] << G4endl;
+	   myfile << incidentEnergy << "\t" << CS[shellNumber] << G4endl;  //barn  //error in ecpssr/orlic class: correct units management!
 	   
 	   
 	 }
@@ -150,14 +126,8 @@ int main()
        myfile.close();
        fileNameTxt = fileName;     
        
-       
-
-       // Flushing the histograms into the file
-       tree->commit();
-       // Explicitly closing the tree
-       tree->close();
      } 
-   delete shellExp;
+   delete shellCS;
    
    G4cout<<"END OF THE MAIN PROGRAM"<<G4endl;
 }
