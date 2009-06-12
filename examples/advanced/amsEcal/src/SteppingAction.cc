@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2009-06-11 13:39:20 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2009-06-12 16:07:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,7 +80,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    first = false;   
  }
 
- //local point in geometry
+ //locate point in geometry
  //  
  G4TouchableHandle touch1 = step->GetPreStepPoint()->GetTouchableHandle(); 
  G4LogicalVolume* lvol = touch1->GetVolume()->GetLogicalVolume();
