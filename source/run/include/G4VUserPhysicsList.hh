@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.36 2009-05-22 00:47:45 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.37 2009-06-13 01:35:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 // Class Description:
-//      This class is an abstruct class for
+//      This class is an abstract class for
 //      constructing particles and processes.
-//      User must implement following four virtual methods
-//      in his own concrete class derived from this class. 
+//      User must implement following three virtual methods
+//      in his/her own concrete class derived from this class. 
 //        G4VUserPhysicsList::ConstructParticle() 
 //           Construct particles
-//        G4VUserPhysicsList::constructPhysics() 
+//        G4VUserPhysicsList::ConstructProcess() 
 //           Construct procesess and register them to particles
 //        G4VUserPhysicsList::SetCuts()
 //           set cut values in range to all particles
