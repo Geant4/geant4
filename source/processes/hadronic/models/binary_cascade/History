@@ -13,7 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11-Jun-2009 Gunter Folger                had-binary-V09-02-00
+15-Jun-2009, Gunter Folger               had-binary-V09-02-01
+- Commit files supposedly in  had-binary-V09-02-00
+
+11-Jun-2009 Gunter Folger                had-binary-V09-02-00 <-- does not contain mods, only committed to ...-01
 - Add interface to set deexcitation handler in  G4BinaryLightIonReaction used to
   deexcite lighter initial nucleus;
    precompound handling low energy interactions can be set, too.
