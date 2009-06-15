@@ -154,6 +154,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
   //if(eventcounter == 100*(eventcounter/100) )
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
+
   G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
   G4ParticleDefinition * definition = const_cast<G4ParticleDefinition *>(aTrack.GetDefinition());
 
@@ -237,11 +238,6 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 // Fill the G4ParticleChange * with products
   theParticleChange.SetStatusChange(stopAndKill);
   G4ReactionProductVector::iterator iter;
-  G4double Efinal=0;
-  	if (std::abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
-	{
-	   G4cout <<" BIC-weight change " << theParticleChange.GetWeightChange()<< G4endl;
-	}
 
   for(iter = products->begin(); iter != products->end(); ++iter)
   {
@@ -252,18 +248,10 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     // FixMe: should I use "position" or "time" specifyed AddSecondary() methods?
     theParticleChange.AddSecondary(aNew);
 
-//   G4cout << " Secondary E - Ekin / p " <<
-//      (*iter)->GetDefinition()->GetParticleName() << " " <<
-//      (*iter)->GetTotalEnergy() << " - " <<
-//      (*iter)->GetKineticEnergy()<< " / " <<
-//      (*iter)->GetMomentum().x() << " " <<
-//      (*iter)->GetMomentum().y() << " " <<
-//      (*iter)->GetMomentum().z() << G4endl;
-      Efinal += (*iter)->GetTotalEnergy();
   }
 
-//  G4cout << "e outgoing/ total : " << Efinal << " " << Efinal+GetFinal4Momentum().e()<< G4endl;
-
+  // DebugEpConservation(track, products);
+              
   ClearAndDestroy(products);
   delete products;
 
@@ -542,21 +530,27 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 // find a fragment and call the precompound model.
   G4Fragment * fragment = 0;
   G4ReactionProductVector * precompoundProducts = 0;
- 
+  G4LorentzVector pFragment(0);
+
    if ( ExcitationEnergy >= 0 ) 
    {
+        // G4cout << " final4mon " << GetFinal4Momentum() /MeV << G4endl; 
        fragment = FindFragments();
 
     //  theDeExcitation =0;
        if(fragment && fragment->GetA() >1.5) // hpw @@@@ still to add the nucleon, if one exists.
        {
-	 if (theDeExcitation)
+	 if (theDeExcitation)                // pre-compound
 	 {
+	      // G4cout << " going to preco with fragment 4 mom " << fragment->GetMomentum() << G4endl;
+             pFragment=fragment->GetMomentum();
              precompoundProducts= theDeExcitation->DeExcite(*fragment);
              delete fragment;
              fragment=0;
-	 } else if (theExcitationHandler)
+	 } else if (theExcitationHandler)    // de-excitation
 	 {
+	      // G4cout << " going to de-excit with fragment 4 mom " << fragment->GetMomentum() << G4endl;
+             pFragment=fragment->GetMomentum();
 	     precompoundProducts=theExcitationHandler->BreakItUp(*fragment);
              delete fragment;
              fragment=0;
@@ -615,6 +609,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   {
 // fill in products the outgoing particles
      G4double Ekinout=0;
+     G4LorentzVector pSumBic(0);
      size_t i(0);
      for(i = 0; i< theFinalState.size(); i++)
      {
@@ -635,6 +630,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	 aNew->SetMomentum(kt->Get4Momentum().vect());
 	 aNew->SetTotalEnergy(kt->Get4Momentum().e());
 	 Ekinout += aNew->GetKineticEnergy();
+	 pSumBic += kt->Get4Momentum();
 	 if(kt->IsParticipant()) 
 	 {
 	   aNew->SetNewlyAdded(true);
@@ -665,6 +661,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
      //G4cout << " Total Ekin " << Ekinout << G4endl;
   }
 // add precompound products to products
+  G4LorentzVector pSumPreco(0), pPreco(0);
   if ( precompoundProducts )
   {
        std::vector<G4ReactionProduct *>::iterator j;
@@ -672,6 +669,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
        {
 // boost back to system of moving nucleus
          G4LorentzVector pProduct((*j)->GetMomentum(),(*j)->GetTotalEnergy());
+	 pPreco+= pProduct;
 #ifdef debug_BIC_Propagate_finals
 	 G4cout << " pProduct be4 boost " <<pProduct << G4endl;
 #endif
@@ -679,12 +677,14 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #ifdef debug_BIC_Propagate_finals
 	 G4cout << " pProduct aft boost " <<pProduct << G4endl;
 #endif
+         pSumPreco += pProduct;
          (*j)->SetTotalEnergy(pProduct.e());
          (*j)->SetMomentum(pProduct.vect());
 	 (*j)->SetNewlyAdded(true);
 	 products->push_back(*j);
        }
-
+	 // G4cout << " unboosted preco result mom " << pPreco / MeV << "  ..- fragmentMom " << (pPreco - pFragment)/MeV<< G4endl;
+	 // G4cout << " preco result mom " << pSumPreco / MeV << "  ..-file4Mom " << (pSumPreco - GetFinal4Momentum())/MeV<< G4endl;
        precompoundProducts->clear();
        delete precompoundProducts;
   }
@@ -1230,98 +1230,6 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   return true;
 }
 
-//----------------------------------------------------------------------------
-void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision, 
-                                          G4KineticTrackVector * products)
-{
-//**-------------------------begin debug Block---------------------------
-
-  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
-
-  G4KineticTrackVector debug1;
-  debug1.push_back(collision->GetPrimary());
-  PrintKTVector(&debug1,std::string(" Primary particle"));
-  PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
-  PrintKTVector(products,std::string(" Scatterer products"));
-  
-  G4double thisExcitation(0);
-//  excitation energy from this collision
-//  initial state:
-  G4double initial(0);
-  G4KineticTrack * kt=collision->GetPrimary();
-  initial +=  kt->Get4Momentum().e();
-  
-  initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
-  initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
-  G4cout << "prim. E/field/Barr/Sum " << kt->Get4Momentum().e()
-          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
-          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
-	  << " " << initial << G4endl;;
-  
-  G4KineticTrackVector ktv=collision->GetTargetCollection();
-  for ( unsigned int it=0; it < ktv.size(); it++)
-  {
-     kt=ktv[it];
-     initial +=  kt->Get4Momentum().e();
-     thisExcitation += kt->GetDefinition()->GetPDGMass() 
-     		     - kt->Get4Momentum().e() 
-		     - RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
-//     initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
-//     initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
-  G4cout << "Targ. def/E/field/Barr/Sum " <<  kt->GetDefinition()->GetPDGEncoding()
-  	  << " " << kt->Get4Momentum().e()
-          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
-          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
-	  << " " << initial <<" Excit " << thisExcitation << G4endl;;
-  }
-  
-  G4double final(0);
-  G4double mass_out(0);
-  G4int product_barions(0);
-  if ( products ) 
-  {
-     for ( unsigned int it=0; it < products->size(); it++)
-     {
-	kt=(*products)[it];
-	final +=  kt->Get4Momentum().e();
-	final +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
-	final +=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
-	if ( kt->GetDefinition()->GetBaryonNumber()==1 ) product_barions++;
-	mass_out += kt->GetDefinition()->GetPDGMass();
-     G4cout << "sec. def/E/field/Barr/Sum " << kt->GetDefinition()->GetPDGEncoding()
-  	     << " " << kt->Get4Momentum().e()
-             << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
-             << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
-	     << " " << final << G4endl;;
-     }
-  }
-
-
-  G4int finalA = currentA;
-  G4int finalZ = currentZ;
-  if ( products )
-  {
-     finalA -= product_barions;
-     finalZ -= GetTotalCharge(*products);
-  }
-  G4double delta = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA) 
-                   - (G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA) 
-		       + mass_out); 
-  G4cout << " current/final a,z " << currentA << " " << currentZ << " "<< finalA<< " "<< finalZ 
-        <<  " delta-mass " << delta<<G4endl;
-  final+=delta;
-    mass_out  = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA);
-  G4cout << " initE/ E_out/ Mfinal/ Excit " << currentInitialEnergy
-         << " " <<   final << " "
-	 <<  mass_out<<" " 
-	 <<  currentInitialEnergy - final - mass_out
-	 << G4endl;
-   currentInitialEnergy-=final;	 
-
-//**-------------------------end debug Block---------------------------
-
-}
-//----------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------
 G4bool G4BinaryCascade::Absorb()
@@ -2705,10 +2613,125 @@ void G4BinaryCascade::PrintWelcomeMessage()
   G4cout <<"Thank you for using G4BinaryCascade. "<<G4endl;
 }
 
+//----------------------------------------------------------------------------
+void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision, 
+                                          G4KineticTrackVector * products)
+{
+  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
+
+  G4KineticTrackVector debug1;
+  debug1.push_back(collision->GetPrimary());
+  PrintKTVector(&debug1,std::string(" Primary particle"));
+  PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
+  PrintKTVector(products,std::string(" Scatterer products"));
+  
+  G4double thisExcitation(0);
+//  excitation energy from this collision
+//  initial state:
+  G4double initial(0);
+  G4KineticTrack * kt=collision->GetPrimary();
+  initial +=  kt->Get4Momentum().e();
+  
+  initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+  initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+  G4cout << "prim. E/field/Barr/Sum " << kt->Get4Momentum().e()
+          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	  << " " << initial << G4endl;;
+  
+  G4KineticTrackVector ktv=collision->GetTargetCollection();
+  for ( unsigned int it=0; it < ktv.size(); it++)
+  {
+     kt=ktv[it];
+     initial +=  kt->Get4Momentum().e();
+     thisExcitation += kt->GetDefinition()->GetPDGMass() 
+     		     - kt->Get4Momentum().e() 
+		     - RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+//     initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+//     initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+  G4cout << "Targ. def/E/field/Barr/Sum " <<  kt->GetDefinition()->GetPDGEncoding()
+  	  << " " << kt->Get4Momentum().e()
+          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	  << " " << initial <<" Excit " << thisExcitation << G4endl;;
+  }
+  
+  G4double final(0);
+  G4double mass_out(0);
+  G4int product_barions(0);
+  if ( products ) 
+  {
+     for ( unsigned int it=0; it < products->size(); it++)
+     {
+	kt=(*products)[it];
+	final +=  kt->Get4Momentum().e();
+	final +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+	final +=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+	if ( kt->GetDefinition()->GetBaryonNumber()==1 ) product_barions++;
+	mass_out += kt->GetDefinition()->GetPDGMass();
+     G4cout << "sec. def/E/field/Barr/Sum " << kt->GetDefinition()->GetPDGEncoding()
+  	     << " " << kt->Get4Momentum().e()
+             << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+             << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	     << " " << final << G4endl;;
+     }
+  }
 
 
+  G4int finalA = currentA;
+  G4int finalZ = currentZ;
+  if ( products )
+  {
+     finalA -= product_barions;
+     finalZ -= GetTotalCharge(*products);
+  }
+  G4double delta = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA) 
+                   - (G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA) 
+		       + mass_out); 
+  G4cout << " current/final a,z " << currentA << " " << currentZ << " "<< finalA<< " "<< finalZ 
+        <<  " delta-mass " << delta<<G4endl;
+  final+=delta;
+    mass_out  = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA);
+  G4cout << " initE/ E_out/ Mfinal/ Excit " << currentInitialEnergy
+         << " " <<   final << " "
+	 <<  mass_out<<" " 
+	 <<  currentInitialEnergy - final - mass_out
+	 << G4endl;
+   currentInitialEnergy-=final;	 
 
+}
 
+//----------------------------------------------------------------------------
+void G4BinaryCascade::DebugEpConservation(const G4HadProjectile & aTrack,
+					  G4ReactionProductVector* products)			   
+{  
+  G4ReactionProductVector::iterator iter;
+  G4double Efinal(0);
+  G4ThreeVector pFinal(0);
+  	if (std::abs(theParticleChange.GetWeightChange() -1 ) > 1e-5 )
+	{
+	   G4cout <<" BIC-weight change " << theParticleChange.GetWeightChange()<< G4endl;
+	}
 
+  for(iter = products->begin(); iter != products->end(); ++iter)
+  {
 
+//   G4cout << " Secondary E - Ekin / p " <<
+//      (*iter)->GetDefinition()->GetParticleName() << " " <<
+//      (*iter)->GetTotalEnergy() << " - " <<
+//      (*iter)->GetKineticEnergy()<< " / " <<
+//      (*iter)->GetMomentum().x() << " " <<
+//      (*iter)->GetMomentum().y() << " " <<
+//      (*iter)->GetMomentum().z() << G4endl;
+      Efinal += (*iter)->GetTotalEnergy();
+      pFinal += (*iter)->GetMomentum();
+  }
 
+//  G4cout << "e outgoing/ total : " << Efinal << " " << Efinal+GetFinal4Momentum().e()<< G4endl;
+    G4cout << "BIC E/p delta " << 
+    (aTrack.Get4Momentum().e()+ the3DNucleus->GetMass() - Efinal)/MeV <<
+    " MeV / mom " << (aTrack.Get4Momentum()  - pFinal ) /MeV << G4endl;
+
+}
+
+//----------------------------------------------------------------------------

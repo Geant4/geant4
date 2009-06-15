@@ -1,4 +1,4 @@
-//
+
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -128,6 +128,8 @@ private:
   void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
   void DebugApplyCollision(G4CollisionInitialState * collision, 
                            G4KineticTrackVector *products);
+  void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
+			   
 private:
   G4KineticTrackVector theProjectileList;
   G4KineticTrackVector theTargetList;

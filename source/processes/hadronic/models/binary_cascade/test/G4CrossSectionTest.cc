@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4CrossSectionTest.cc,v 1.2 2003-06-19 14:39:21 gunter Exp $
+// $Id: G4CrossSectionTest.cc,v 1.3 2009-06-15 10:35:12 gunter Exp $
 // -------------------------------------------------------------------
 //
 // -------------------------------------------------------------------
@@ -34,7 +34,9 @@
 // 
 //      Creation date: 15 April 1999
 //
-//      Modifications: 
+//      Modifications:
+//
+//  Dec- 2008 GF : migrate to root 
 //
 // -------------------------------------------------------------------
 
@@ -45,11 +47,6 @@
 #include <iomanip>
 #include <iostream>
 #include <assert.h>
-
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
 
 #include "Randomize.hh"
 
@@ -85,7 +82,8 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4ParticleTable.hh"
 #include "G4ShortLivedTable.hh"
-
+#include "G4LeptonConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4VCrossSectionSource.hh"
 #include "G4XAqmTotal.hh"
 #include "G4XAqmElastic.hh"
@@ -98,26 +96,47 @@
 #include "G4XnpElastic.hh"
 #include "G4XResonance.hh"
 
+#include "TFile.h"
+#include "TH1F.h"
+#include "TH1D.h"
+#include "TTree.h"
+
+#define G4FPE_DEBUG=1
+
+#ifdef G4FPE_DEBUG
+  #include "G4FPEDetection.hh"
+#endif
+
+G4ParticleDefinition* SelectTrackDef(int i);
 
 int main()
 {
-  // MGP ---- HBOOK initialization
-  HepTupleManager* hbookManager;
-  hbookManager = new HBookFile("crosssection.hbook", 58);
-  assert (hbookManager != 0);
 
-  // MGP ---- Book histograms
+#ifdef G4FPE_DEBUG
+  InvalidOperationDetection();
+#endif
+    std::string hFile="xsec.root"; 
+    TFile * rootFile = new TFile(hFile.c_str(),"CREATE");
+    if ( ! rootFile ) 
+    {
+       std::cout << " Fail to create root file " << std::endl;
+       exit(1);
+    }   
+
+        TTree * Txs = new TTree("SEC","Secondary info");
+
+        struct xs_info {
+             float cmsE;
+             float sigma;
+        };
+        xs_info xsec;     
+        Txs->Branch("secondaries",&xsec.cmsE,"cmsE/F:sigma/F");
+
  
-  HepHistogram* hSigma;
-  hSigma = hbookManager->histogram("CrossSection", 100,0.,10.);
-  assert (hSigma != 0);  
+  TH1 * hSigma = new TH1F("1","CrossSection", 100,0.,10.);
 
-  // MGP ---- Book a ntuple
-  HepTuple* ntuple;
-  ntuple = hbookManager->ntuple("CrossSection ntuple");
-  assert (ntuple != 0); 
 
-  G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
+/*  G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
 
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
   G4ParticleDefinition* antiProton = G4AntiProton::AntiProtonDefinition();
@@ -138,48 +157,15 @@ int main()
 
   G4ParticleDefinition* theNeutrinoMu = G4NeutrinoMu::NeutrinoMuDefinition();
   G4ParticleDefinition* theAntiNeutrinoMu = G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-
+*/
+  G4BaryonConstructor Baryons;
+  Baryons.ConstructParticle();
+  G4LeptonConstructor Leptons;
+  Leptons.ConstructParticle();
   G4ShortLivedConstructor ShortLived;
   ShortLived.ConstructParticle();
 
-  // Select track 1
-  
-  G4cout << "---- Set KineticTrack 1 ----" << G4endl;
-  G4int id1 = 0;
-  G4cout << "1 p   2 ap   3 n   4 an   5 pi+   6 pi-   7 K+   8 K- " << G4endl;
-  G4cin >> id1;
-
-  G4ParticleDefinition* definition1;
-  switch (id1)
-    {
-    case 1:
-      definition1 = proton;
-      break;
-    case 2:
-      definition1 = antiProton;
-      break;
-    case 3:
-      definition1 = neutron;
-      break;
-    case 4:
-      definition1 = antiNeutron;
-      break;
-    case 5:
-      definition1 = pionPlus;
-      break;
-    case 6:
-      definition1 = pionMinus;
-      break;
-    case 7:
-      definition1 = kaonPlus;
-      break;
-    case 8:
-      definition1 = kaonMinus;
-      break;
-    default:
-      definition1 = proton;
-      break;
-    }
+  G4ParticleDefinition* definition1= SelectTrackDef(1);
   G4double mass1 = definition1->GetPDGMass();
 
   // Formation time
@@ -199,8 +185,7 @@ int main()
   G4ThreeVector position1(x1*cm, y1*cm, z1*cm);
 
   // Momentum
-  G4double pzMin1;
-  G4double pzMax1;
+  G4double pzMin1, pzMax1;
   G4cout << "Pz min and max (GeV)" << G4endl;
   G4cin >> pzMin1 >> pzMax1;
   pzMin1 = pzMin1 * GeV;
@@ -213,38 +198,7 @@ int main()
   G4cout << "1 p   2 ap   3 n   4 an   5 pi+   6 pi-   7 K+   8 K- " << G4endl;
   G4cin >> id2;
 
-  G4ParticleDefinition* definition2;
-  G4KineticTrack trk2;
-  switch (id2)
-    {
-    case 1:
-      definition2 = proton;
-      break;
-    case 2:
-      definition2 = antiProton;
-      break;
-    case 3:
-      definition2 = neutron;
-      break;
-    case 4:
-      definition2 = antiNeutron;
-      break;
-    case 5:
-      definition2 = pionPlus;
-      break;
-    case 6:
-      definition2 = pionMinus;
-      break;
-    case 7:
-      definition2 = kaonPlus;
-      break;
-    case 8:
-      definition2 = kaonMinus;
-      break;
-    default:
-      definition2 = proton;
-      break;
-    }
+  G4ParticleDefinition* definition2= SelectTrackDef(2);
   G4double mass2 = definition2->GetPDGMass();
 
   // Formation time
@@ -282,7 +236,7 @@ int main()
 	 <<  "7) PDGElastic " 
 	 <<  "8) PDGTotal "
 	 <<  "9) Resonance "
-	 <<  "10)  XnpElastic "	 
+	 <<  "10) XnpElastic "
 	 << G4endl;
 
   G4int ids;
@@ -380,14 +334,57 @@ int main()
       //	     << " ---- CrossSection = " << sigma / millibarn 
       //	     << G4endl;
 
-      ntuple->column("ecm",sqrts/GeV);
-      ntuple->column("sigma",sigma/millibarn);
-      ntuple->dumpData();
+      xsec.cmsE=sqrts/GeV;
+      xsec.sigma=sigma/millibarn;
+      Txs->Fill();
     }
-  
-  hbookManager->write();
+
+  std::cout << "Committing..." << std::endl;
+  rootFile->Write();
+
 
   delete source;
 
   return EXIT_SUCCESS;
+}
+
+G4ParticleDefinition* SelectTrackDef(int i)
+{  
+  G4cout << "---- Set KineticTrack " << i <<  " ----" << G4endl;
+  G4int id = 0;
+  G4cout << "1 p   2 ap   3 n   4 an   5 pi+   6 pi-   7 K+   8 K- " << G4endl;
+  G4cin >> id;
+
+  G4ParticleDefinition* pDef;
+  switch (id)
+    {
+    case 1:
+      pDef = G4Proton::Proton();
+      break;
+    case 2:
+      pDef = G4AntiProton::AntiProton();
+      break;
+    case 3:
+      pDef = G4Neutron::Neutron();
+      break;
+    case 4:
+      pDef = G4AntiNeutron::AntiNeutron();
+      break;
+    case 5:
+      pDef = G4PionPlus::PionPlus();
+      break;
+    case 6:
+      pDef = G4PionMinus::PionMinus();
+      break;
+    case 7:
+      pDef = G4KaonPlus::KaonPlus();
+      break;
+    case 8:
+      pDef = G4KaonMinus::KaonMinus();
+      break;
+    default:
+      pDef = G4Proton::Proton();
+      break;
+    }
+   return pDef;
 }

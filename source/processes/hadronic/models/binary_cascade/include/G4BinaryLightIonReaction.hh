@@ -38,14 +38,26 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
     virtual ~G4BinaryLightIonReaction(){}
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus);
-  
+    void SetPrecompound(G4VPreCompoundModel* const  value);
+    void SetDeExcitation(G4ExcitationHandler* const  value);
+
   private:
     G4BinaryCascade theModel;
-    G4ExcitationHandler theHandler;
-    G4PreCompoundModel theProjectileFragmentation;
+    G4ExcitationHandler* theHandler;
+    G4VPreCompoundModel* theProjectileFragmentation;
     G4HadFinalState theResult;
     G4bool EnergyAndMomentumCorrector(G4ReactionProductVector* products,
     				G4LorentzVector& TotalCollisionMom);
 };
+inline void G4BinaryLightIonReaction::SetPrecompound(G4VPreCompoundModel* const  value)
+{
+   if (theProjectileFragmentation) delete theProjectileFragmentation; 
+   theProjectileFragmentation = value;
+}
+inline void G4BinaryLightIonReaction::SetDeExcitation(G4ExcitationHandler* const  value)
+{
+   if (theHandler) delete theHandler; 
+   theHandler = value;
+}
 
 #endif
