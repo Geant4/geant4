@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.356 2009-05-27 08:43:38 gcosmo Exp $
+cvs log $Id: History,v 1.357 2009-06-17 14:02:23 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th June 2009 Gunter Folger  (config-V09-02-07)
+- binmake.gmk: Move definition of TARGOBJEXT to place not dependant
+   on G4EXLIB 
 
 27th May 2009  Ben Morgan (config-V09-02-06)
 - Configure script:
