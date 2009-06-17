@@ -33,6 +33,8 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4EmLivermorePhysics.hh"
 
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
@@ -40,7 +42,9 @@
 #include "StepMax.hh"
 #include "G4DecayPhysics.hh"
 
+#include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmConfigurator.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ProcessManager.hh"
@@ -89,6 +93,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   decayPhysics->ConstructProcess();
   AddMaxStep();
 }
@@ -139,13 +144,32 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardIG(name);
 
-  } else if (name == "livermore") {
+  } else if (name == "standardGS") {
+
+    AddPhysicsList("emstandard");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("e-","msc",msce);
+    G4GoudsmitSaundersonMscModel* mscp = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("e+","msc",mscp);
+
+  } else if (name == "empenelope"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "emlivermore"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+
+  } else if (name == "livermore_opld") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore(name);
     
-  } else if (name == "penelope") {
+  } else if (name == "penelope_old") {
 
     emName = name;
     delete emPhysicsList;
