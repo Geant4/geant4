@@ -23,107 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4teoCrossSection.cc,v 1.3 2009-06-17 16:37:44 mantero Exp $
+// $Id: G4empCrossSection.hh,v 1.1 2009-06-17 16:39:55 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         
 //
 // History:
 // -----------
-//  21 Apr 2009   ALF   1st implementation
-//  29 Apr 2009   ALF Updated Desing for Integration
+//  21 Apr 2009   ALF  1st implementation
 //
 // -------------------------------------------------------------------
+
 // Class description:
 // Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 
 
+#ifndef G4EMPCROSSSECTION_HH
+#define G4EMPCROSSSECTION_HH 1
+
 #include "globals.hh"
-#include "G4teoCrossSection.hh"
-//#include "G4AtomicTransitionManager.hh"
-//#include "G4NistManager.hh"
-#include "G4Proton.hh"
-//#include "G4Alpha.hh"
-//#include <math.h>
+#include "G4VhShellCrossSection.hh"
+#include "G4PaulKCrossSection.hh"
+#include "G4OrlicLiCrossSection.hh"
 
-G4teoCrossSection::G4teoCrossSection(G4String shellModel)
-  :totalCS(0)
-{ 
-
-  if (shellModel == "ecpssr") {
-
-  ecpssrShellK = new G4ecpssrKCrossSection();
-
-  }
-  ecpssrShellLi = new G4ecpssrLiCrossSection();
-}
-
-G4teoCrossSection::~G4teoCrossSection()
-{ 
-
-  delete ecpssrShellK;
-  delete ecpssrShellLi;
-
-}
-
-std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
-							     G4double incidentEnergy,
-							     G4double mass,
-							     G4double deltaEnergy,
-							     G4bool testFlag) const
+class G4empCrossSection : public G4VhShellCrossSection 
 {
+public:
 
-  std::vector<G4double> crossSections;
+  G4empCrossSection();
 
-  crossSections.push_back( ecpssrShellK->CalculateCrossSection(Z, mass, incidentEnergy) );
+  ~G4empCrossSection();
+			     
+
+  std::vector<G4double> GetCrossSection(G4int Z,
+					G4double incidentEnergy,
+					G4double mass,
+					G4double deltaEnergy,
+					G4bool testFlag = false) const;
+
+  std::vector<G4double> Probabilities(G4int Z,
+				      G4double incidentEnergy,
+				      G4double mass,
+				      G4double deltaEnergy) const;
   
-  //  G4Proton* aProtone = G4Proton::Proton();
   
-  //  if (mass == aProtone->GetPDGMass() ) {
-    
-
-  //  }
+  void SetTotalCS(G4double);
   
-    crossSections.push_back( ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy) );
-    crossSections.push_back( ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy) );
-    crossSections.push_back( ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy) );
-
-
-  return crossSections;
-
-}
-
-
-
-
-std::vector<G4double> G4teoCrossSection::Probabilities(G4int Z,
-							   G4double incidentEnergy,
-							   G4double mass,
-							   G4double deltaEnergy) const
-{
   
-std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
+  
+private:
+  
+  G4double totalCS;
+              
+  G4PaulKCrossSection*  paulShellK;
+  G4OrlicLiCrossSection* orlicShellLi;  
+			
+			
+  G4empCrossSection(const G4empCrossSection&);
+  G4empCrossSection & operator = (const G4empCrossSection &right);
+  
+};
 
-  for (G4int i=0; i<crossSections.size(); i++ ) {
-    
-    if (totalCS) {
-      crossSections[i] = crossSections[i]/totalCS;
-    }
-    
-  }
-
-  return crossSections;
-
-}
-
-
-void G4teoCrossSection::SetTotalCS(G4double val){
-
-  totalCS = val;
-
-}
-
-
-
+#endif
