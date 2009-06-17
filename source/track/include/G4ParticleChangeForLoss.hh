@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.21 2009-05-26 13:19:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.22 2009-06-17 17:25:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,8 @@
 //   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
 //                         and ProposeWeight for PostStep
 //   07.06.06 V.Ivanchenko RemoveProposedMomentumDirection from AlongStep
-//   28.08.06 V.Ivanchenko Add access to current track and polarizaion
+//   28.08.06 V.Ivanchenko Added access to current track and polarizaion
+//   17.06.09 V.Ivanchenko Added SetLowEnergyLimit method 
 //
 // ------------------------------------------------------------
 //
@@ -106,6 +107,8 @@ public:
   void ProposePolarization(G4double Px, G4double Py, G4double Pz);
 
   const G4Track* GetCurrentTrack() const;
+
+  void SetLowEnergyLimit(G4double elimit);
 
   virtual void DumpInfo() const;
 
@@ -311,6 +314,11 @@ inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
+}
+
+inline void G4ParticleChangeForLoss::SetLowEnergyLimit(G4double elimit)
+{
+  lowEnergyLimit = elimit;
 }
 
 #endif
