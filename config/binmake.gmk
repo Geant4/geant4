@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.140 2009-06-17 14:02:48 gunter Exp $
+# $Id: binmake.gmk,v 1.141 2009-06-17 16:37:41 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -356,7 +356,7 @@ ifdef CPPVERBOSE
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 else
-	@echo Linking $(G4TARGET) ... from object= $(objects) and ext=$(TARGOBJEXT)
+	@echo Linking $(G4TARGET)
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
