@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.357 2009-06-17 14:02:23 gunter Exp $
+cvs log $Id: History,v 1.358 2009-06-17 14:04:32 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
 
 17th June 2009 Gunter Folger  (config-V09-02-07)
 - binmake.gmk: Move definition of TARGOBJEXT to place not dependant
-   on G4EXLIB 
+   on G4EXLIB such that the extension is defined when no lib is present
+   (e.g. for test_hadronic_exerciser.cc)
 
 27th May 2009  Ben Morgan (config-V09-02-06)
 - Configure script:
