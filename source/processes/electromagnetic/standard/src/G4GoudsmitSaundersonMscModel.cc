@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.9 2009-06-18 16:02:33 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.10 2009-06-18 16:12:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,9 +43,10 @@
 //                     sampling from SampleCosineTheta() which means the splitting 
 //                     step into two sub-steps occur only for msc regime
 //
-// 12.06.2009 O.Kadri:- linear log-log extrapolation of lambda0 & lambda1 between 1 GeV - 100 TeV
-//                    - adding a theta min limit due to screening effect of the atomic nucleus
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 12.06.2009 O.Kadri: linear log-log extrapolation of lambda0 & lambda1 between 1 GeV - 100 TeV
+//                     adding a theta min limit due to screening effect of the atomic nucleus
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //REFERENCES:
 //Ref.1:E. Benedito et al.,"Mixed simulation ... cross-sections", NIMB 174 (2001) pp 91-110;
 //Ref.2:I. Kawrakow et al.,"On the condensed ... transport",NIMB 142 (1998) pp 253-280;
