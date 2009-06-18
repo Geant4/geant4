@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.4 2009-06-08 12:58:13 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.5 2009-06-18 12:43:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,17 +65,17 @@ public:
   G4double           GetWorldSizeX()        {return worldSizeX;};
   G4double           GetCalorThickness()    {return calorThickness;};  
   G4double           GetCalorSizeYZ()       {return fiberLength;};
-  G4double           GetSuperLayerThick()   {return superLayerThick;};    
+  G4double           GetModuleThickness()   {return moduleThickness;};
 	
   G4LogicalVolume*   GetLvolFiber()         {return lvol_fiber;};
   G4LogicalVolume*   GetLvolLayer()         {return lvol_layer;};  	
-  G4LogicalVolume*   GetLvolSuperLayer()    {return lvol_superlayer;};
+  G4LogicalVolume*   GetLvolModule()        {return lvol_module;};
   G4LogicalVolume*   GetLvolCalorimeter()   {return lvol_calorimeter;};
   G4LogicalVolume*   GetLvolWorld()         {return lvol_world;};  
   
   G4int              GetNbFibers()          {return nbOfFibers;};  
   G4int              GetNbLayers()          {return nbOfLayers;};    
-  G4int              GetNbSuperLayers()     {return nbOfSuperLayers;};
+  G4int              GetNbModules()         {return nbOfModules;};
 
   G4int              GetNxPixels()          {return nxPixels;};
   G4int              GetNyPixels()          {return nyPixels;};
@@ -97,20 +97,21 @@ private:
   //
   G4Material*      absorberMat;
   G4int            nbOfFibers;
-  G4double         distanceInterFibers, distanceInterLayers;
+  G4double         distanceInterFibers;
+  G4double         layerThickness;
   G4LogicalVolume* lvol_layer;
     
-  //superLayers
+  //modules
   //
-  G4Material*      superLayerMat;  
+  G4Material*      moduleMat;  
   G4int            nbOfLayers;
-  G4double         superLayerThick;    
-  G4LogicalVolume* lvol_superlayer;  
+  G4double         moduleThickness;    
+  G4LogicalVolume* lvol_module;  
            
   //calorimeter
   //
   G4Material*      calorimeterMat;  
-  G4int            nbOfSuperLayers;
+  G4int            nbOfModules;
   G4double         calorThickness;
   G4LogicalVolume* lvol_calorimeter;            
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.5 2009-06-12 16:07:07 maire Exp $
+// $Id: SteppingAction.cc,v 1.6 2009-06-18 12:43:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@ SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
  histoManager(hist) 
 {
   first = true;
-  lvol_world = lvol_slayer = lvol_layer = lvol_fiber = 0;
+  lvol_world = lvol_module = lvol_layer = lvol_fiber = 0;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,13 +66,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  // 
  if (first) {
    lvol_world  = detector->GetLvolWorld();
-   lvol_slayer = detector->GetLvolSuperLayer();
+   lvol_module = detector->GetLvolModule();   
    lvol_layer  = detector->GetLvolLayer();
    lvol_fiber  = detector->GetLvolFiber();
    
    calorThickness  = detector->GetCalorThickness();
    calorSizeYZ     = detector->GetCalorSizeYZ();
-   superLayerThick = detector->GetSuperLayerThick();
+   moduleThickness = detector->GetModuleThickness();   
    dxPixel = detector->GetDxPixel();
    dyPixel = detector->GetDyPixel();
    nyPixelsMax = detector->GetNyPixelsMax();
@@ -106,7 +106,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //locate position and compute pixel number
  //
  G4ThreeVector point1 = step->GetPreStepPoint()->GetPosition();
- G4int ixLayer = (int) ((point1.x() + 0.5*calorThickness)/superLayerThick); 
+ G4int ixLayer = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
  G4int ixPixel = (int) ((point1.x() + 0.5*calorThickness)/dxPixel);
  G4double point1yz = point1.y();
  if (ixLayer%2 != 0) point1yz = point1.z();

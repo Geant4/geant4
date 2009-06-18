@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.6 2009-06-11 13:39:20 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2009-06-18 12:43:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@
 
 DetectorConstruction::DetectorConstruction()
 :fiberMat(0),lvol_fiber(0), absorberMat(0),lvol_layer(0),
- superLayerMat(0),lvol_superlayer(0), calorimeterMat(0),lvol_calorimeter(0),
+ moduleMat(0),lvol_module(0), calorimeterMat(0),lvol_calorimeter(0),
  worldMat(0),pvol_world(0), defaultMat(0), magField(0)
 {
   // materials
@@ -67,15 +67,15 @@ DetectorConstruction::DetectorConstruction()
   fiberDiameter       = 1.08*mm;	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  distanceInterLayers = 1.78*mm;	//1.68*mm
+  layerThickness      = 1.78*mm;	//1.68*mm  
   nbOfLayers          = 10;		//10
-  nbOfSuperLayers     = 9;		//9 
-
+  nbOfModules         = 9;		//9
+   
   nxPixels            = 2;		//2
   nyPixels            = 72;		//72    
   nyPixelsMax         = 100;		//100
   
-  nxPixelsTot         = nxPixels*nbOfSuperLayers;  //18  
+  nxPixelsTot         = nxPixels*nbOfModules;      //18  
   sizeVectorPixels    = nxPixelsTot*nyPixelsMax;   //1800 
   
   fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm    
@@ -147,7 +147,7 @@ void DetectorConstruction::DefineMaterials()
   defaultMat     = Vacuum;  
   fiberMat       = Sci;
   absorberMat    = Pb;
-  superLayerMat  = defaultMat;
+  moduleMat      = defaultMat;
   calorimeterMat = defaultMat;
   worldMat       = defaultMat;
 
@@ -181,8 +181,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 				   
   // layer
   //
-  G4double layerThick = distanceInterLayers;
-  G4double sizeX = layerThick;
+  G4double sizeX = layerThickness;
   G4double sizeY = distanceInterFibers*nbOfFibers;
   G4double sizeZ = fiberLength;
   
@@ -212,38 +211,38 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   }
 				   
-  // super layer
+  // modules
   //
-  // take care of extra border absorber
+  // take care of one extra border absorber
   G4double meanThickAbsor 
-       = layerThick - 0.25*(pi*fiberDiameter*fiberDiameter)/distanceInterFibers;
+   = layerThickness - 0.25*(pi*fiberDiameter*fiberDiameter)/distanceInterFibers;
   meanThickAbsor = 0.;     
-  superLayerThick = layerThick*nbOfLayers + meanThickAbsor;       
-  sizeX = superLayerThick;
+  moduleThickness = layerThickness*nbOfLayers + meanThickAbsor;       
+  sizeX = moduleThickness;
   sizeY = fiberLength;
   sizeZ = fiberLength;
   
   G4Box*      
-  svol_superlayer = new G4Box("superLayer",		//name
+  svol_module = new G4Box("module",			//name
                   0.5*sizeX, 0.5*sizeY, 0.5*sizeZ);	//size
 
-  lvol_superlayer = new G4LogicalVolume(svol_superlayer,	//solid
-                                   absorberMat,			//material
-                                   "superLayer");		//name
+  lvol_module = new G4LogicalVolume(svol_module,	//solid
+                                   absorberMat,		//material
+                                   "module");		//name
 
-  // put layers within superlayer
+  // put layers within module
   //
-  Xcenter = -0.5*(nbOfLayers+1)*layerThick;
+  Xcenter = -0.5*(nbOfLayers+1)*layerThickness;
   Ycenter =  0.25*distanceInterFibers;
   
   for (G4int k=0; k<nbOfLayers; k++) {
-    Xcenter += layerThick;
+    Xcenter += layerThickness;
     Ycenter  = - Ycenter;
     new G4PVPlacement(0,		   		//no rotation
       		  G4ThreeVector(Xcenter,Ycenter,0.),    //position
                       lvol_layer,     		   	//logical volume	
                       "layer",	   			//name
-                      lvol_superlayer,        		//mother
+                      lvol_module,        		//mother
                       false,             		//no boulean operat
                       k);               		//copy number
 
@@ -251,7 +250,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // calorimeter
   //
-  calorThickness = superLayerThick*nbOfSuperLayers;
+  calorThickness = moduleThickness*nbOfModules;
   sizeX = calorThickness;
   sizeY = fiberLength;
   sizeZ = fiberLength;
@@ -265,23 +264,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                    calorimeterMat,		//material
                                    "calorimeter");		//name  
 
-  // put superLayers inside calorimeter
+  // put modules inside calorimeter
   //  
-  Xcenter = -0.5*(calorThickness + superLayerThick);
+  Xcenter = -0.5*(calorThickness + moduleThickness);
   
-  //rotation matrix to place superLayers
+  //rotation matrix to place modules
   G4RotationMatrix* rotm = 0;  
   G4RotationMatrix* rotmX = new G4RotationMatrix();
   rotmX->rotateX(90*deg);
     
-  for (G4int k=0; k<nbOfSuperLayers; k++) {
+  for (G4int k=0; k<nbOfModules; k++) {
     rotm = 0;
     if ((k+1)%2 == 0) rotm = rotmX;
-    Xcenter += superLayerThick;    
+    Xcenter += moduleThickness;    
     new G4PVPlacement(rotm,		   		//rotation
       		  G4ThreeVector(Xcenter,0.,0.),		//position
-                      lvol_superlayer,     		//logical volume	
-                      "superLayer",	   		//name
+                      lvol_module,	     		//logical volume	
+                      "module", 	   		//name
                       lvol_calorimeter,        		//mother
                       false,             		//no boulean operat
                       k);               		//copy number
@@ -331,7 +330,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   // Pixels readout
   //
-  dxPixel = superLayerThick/nxPixels;
+  dxPixel = moduleThickness/nxPixels;
   dyPixel = fiberLength/nyPixels;
   
   //always return the physical World
@@ -344,15 +343,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n-------------------------------------------------------------"
-     << "\n ---> The calorimeter is " << nbOfSuperLayers << " superLayers"
-     << "\n ---> A superLayer is " << nbOfLayers << " Layers";
+     << "\n ---> The calorimeter is " << nbOfModules << " Modules"
+     << "\n ---> A Module is " << nbOfLayers << " Layers";
      
   G4cout  
-     << "\n ---> A Layer is " << G4BestUnit(distanceInterLayers,"Length")  
+     << "\n ---> A Layer is " << G4BestUnit(layerThickness,"Length")  
      << " thickness of " << absorberMat->GetName();    
      
   G4cout 
-     << "\n ---> A Layer include " << nbOfFibers << " fibers of " 
+     << "\n ---> A Layer includes " << nbOfFibers << " fibers of " 
      << fiberMat->GetName();
      
   G4cout 
