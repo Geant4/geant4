@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.8 2009-06-04 13:45:55 gunter Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.9 2009-06-18 16:02:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,7 +43,8 @@
 //                     sampling from SampleCosineTheta() which means the splitting 
 //                     step into two sub-steps occur only for msc regime
 //
-
+// 12.06.2009 O.Kadri:- linear log-log extrapolation of lambda0 & lambda1 between 1 GeV - 100 TeV
+//                    - adding a theta min limit due to screening effect of the atomic nucleus
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //REFERENCES:
 //Ref.1:E. Benedito et al.,"Mixed simulation ... cross-sections", NIMB 174 (2001) pp 91-110;
@@ -81,7 +82,7 @@ G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
-  : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(GeV),isInitialized(false)
+  : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(100.*TeV),isInitialized(false)
 { 
   fr=0.02,rangeinit=0.,masslimite=0.6*MeV;
   particle=0;tausmall=1.e-16;taulim=1.e-6;tlimit=1.e10*mm;
@@ -110,9 +111,13 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
   skindepth=skin*stepmin;
   SetParticle(p);
   if(isInitialized) return;
-  fParticleChange = GetParticleChangeForMSC();
+  if (pParticleChange) fParticleChange = 
+			 reinterpret_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  else   fParticleChange = new G4ParticleChangeForMSC();
+
   InitialiseSafetyHelper();
   isInitialized=true;
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -141,9 +146,10 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)) return ;
 
+  G4double scrA,llambda0,llambda1;
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
   G4double phi1,phi2,cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
-  G4double q1,Gamma,Eta,delta,nu,nu0,nu1,nu2,nu_interm;
+  G4double q1,Gamma,Eta,delta,nu,nu0,nu1,nu2;
 
   ///////////////////////////////////////////
   // Effective energy and path-length from Eq. 4.7.15+16 of Ref.4
@@ -151,6 +157,7 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   if(eloss>0.5*kineticEnergy)return;
   G4double ee       = kineticEnergy - 0.5*eloss;
   G4double ttau     = ee/electron_mass_c2;
+
   G4double ttau2    = ttau*ttau;
   G4double epsilonpp= eloss/ee;
   G4double temp2  = 0.166666*(4+ttau*(6+ttau*(7+ttau*(4+ttau))))*(epsilonpp/(ttau+1)/(ttau+2))*(epsilonpp/(ttau+1)/(ttau+2));
@@ -159,14 +166,13 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   kineticEnergy *= (1 - cst1);
   tPathLength *= (1 - temp2);
   ///////////////////////////////////////////
-  // additivity rule for mixture xsection calculation
+  // additivity rule for mixture and compound xsection calculation
   const G4Material* mat = currentCouple->GetMaterial();
   G4int nelm = mat->GetNumberOfElements();
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theFraction = mat->GetFractionVector();
   G4double atomPerVolume = mat->GetTotNbOfAtomsPerVolume();
-  G4double scrA,llambda0,llambda1;
-  scrA=0.0;llambda0 =0.;llambda1=0.;
+  llambda0 =0.;llambda1=0.;
   for(G4int i=0;i<nelm;i++)
     {
       G4double l0,l1;
@@ -174,15 +180,15 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
       llambda0 += (theFraction[i]/l0);
       llambda1 += (theFraction[i]/l1);
     } 
-  if(llambda0>DBL_MIN)llambda0 =1./llambda0;
-  if(llambda1>DBL_MIN)llambda1 =1./llambda1;
+  llambda0 =1./llambda0;
+  llambda1 =1./llambda1;
   G4double g1=llambda0/llambda1;
   G4double x1,x0;
 
   x0=g1/2.;
   do
     {  
-      x1 = x0-(x0*((1.+x0)*std::log(1.+1./x0)-1.0)-g1/2.)/( (1.+2.*x0)*std::log(1.+1./x0)-2.0);// x1=x0-f(x0)/f'(x0)
+      x1 = x0-(x0*((1.+x0)*log(1.+1./x0)-1.0)-g1/2.)/( (1.+2.*x0)*log(1.+1./x0)-2.0);// x1=x0-f(x0)/f'(x0)
       delta = std::abs( x1 - x0 );    
       x0 = x1;  // new approximation becomes the old approximation for the next iteration
     } while (delta > 1e-10);
@@ -190,16 +196,15 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
 
   G4double us=0.0,vs=0.0,ws=1.0,x_coord=0.0,y_coord=0.0,z_coord=1.0;
   G4double lambdan=0.;
+  G4bool mscatt=false;
   if(llambda0>0.)lambdan=atomPerVolume*tPathLength/llambda0;
   if((lambdan<=1.0e-12)||(lambdan>1.0e+5))return;
-  G4bool noscatt=false;
-  G4bool singlescatt=false;
-  G4bool mscatt=false;
 
   G4double epsilon1=G4UniformRand();
-  if(epsilon1<(exp(-lambdan)))noscatt=true;// no scattering     
-  else if(epsilon1<((1.+lambdan)*exp(-lambdan)))//single scattering
-    {singlescatt=true;
+  if((epsilon1<(exp(-lambdan)))||insideskin)// no scattering 
+    {mscatt=false;}
+  else if(epsilon1<((1.+lambdan)*exp(-lambdan)))
+    {mscatt=false;
      ws=G4UniformRand();
      ws= 1.-2.*scrA*ws/(1.-ws + scrA);
      G4double phi0=twopi*G4UniformRand(); 
@@ -208,13 +213,15 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
      G4double rr=G4UniformRand();
      x_coord=(rr*us);
      y_coord=(rr*vs);
-     z_coord=((1.-rr)+rr*ws);     
+     z_coord=((1.-rr)+rr*ws);
+     
     }
   else
   {mscatt=true;
   // Ref.2 subsection 4.4 "The best solution found"
   // Sample first substep scattering angle
   SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
+
   phi1  = twopi*G4UniformRand();
   cosPhi1 = cos(phi1);
   sinPhi1 = sin(phi1);
@@ -230,6 +237,14 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   vs = sinTheta2*(cosTheta1*sinPhi1*cosPhi2 + cosPhi1*sinPhi2) + cosTheta2*sinTheta1*sinPhi1;
   ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2; 
   }
+  // Theta min limit due to screening effect of the atomic nucleus
+  if((!insideskin)&&(acos(ws)<sqrt(scrA)))
+  {
+     G4double phi0=twopi*G4UniformRand(); 
+     ws=cos(sqrt(scrA)); 
+     us=sqrt(1.-ws*ws)*cos(phi0);
+     vs=sqrt(1.-ws*ws)*sin(phi0);
+  }
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
@@ -237,10 +252,11 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
   
   if((safety > tlimitminfix)&&(latDisplasment))
     {  
-      // Scattering coordinates
+
       if(mscatt)
       {
       if(scrA<DBL_MIN)scrA=DBL_MIN;
+      if(llambda1<DBL_MIN)llambda1=DBL_MIN;
       q1       = 2.*scrA*((1. + scrA)*log(1. + 1./scrA) - 1.);
       if(q1<DBL_MIN)q1=DBL_MIN;
       Gamma    = 6.*scrA*(1. + scrA)*((1. + 2.*scrA)*log(1. + 1./scrA) - 2.)/q1;
@@ -252,22 +268,19 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
       nu0 = (1.0 - nu)/2.;
       nu1 = nu*delta;
       nu2 = nu*(1.0-delta);
-      nu_interm = 1.0 - nu0 - nu1 - nu2; 
-      x_coord=(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu_interm*us);
-      y_coord=(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu_interm*vs);
-      z_coord=(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu_interm*ws)  ;
+      x_coord=tPathLength*(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu0*us);
+      y_coord=tPathLength*(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu0*vs);
+      z_coord=tPathLength*(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu0*ws)  ;
       }
+      
       G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
 
       G4double check= 1.- tPathLength/zPathLength;
       if(check<=0.)    return;
-      else if(r>check) {r=check;x_coord /=r;y_coord /=r;z_coord /=r;}
-
-      r *=tPathLength;
-      
+    
       if(r > tlimitminfix) {
 
-	G4ThreeVector latDirection = G4ThreeVector(x_coord*tPathLength,y_coord*tPathLength,z_coord*tPathLength);
+	G4ThreeVector latDirection = G4ThreeVector(x_coord,y_coord,z_coord);
 	latDirection.rotateUz(oldDirection);
  
 	ComputeDisplacement(fParticleChange, latDirection, r, safety);
@@ -276,6 +289,7 @@ void G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dyn
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						     G4double &cost, G4double &sint)
 {
@@ -283,17 +297,17 @@ void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double 
   G4double xi=0.;
   Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
 
-  if((lambdan<1.)||(Qn1<0.001))//plural scatt. or small angle scatt.
+  if((lambdan<1.)||(Qn1<0.001))//plural or small angle scatt.
 	    {
 	      G4double xi1,lambdai=0.;
 	      G4int i=0;
 	      do {xi1=G4UniformRand();
-	      lambdai -=std::log(xi1);
+	      lambdai -=log(xi1);
 	      xi +=2.*scrA*xi1/(1.-xi1 + scrA);
 	      i++;
 	      }while((lambdai<lambdan)&&(i<30));
-	    
 	    }
+
 	  else {
 	    if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
 	    else{// procedure described by Benedito in Ref.1
@@ -305,64 +319,95 @@ void G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double 
 	       } 
 	      }
 
-
   if(xi<0.)xi=0.;
   if(xi>2.)xi=2.;
+
   cost=(1. - xi);
   sint=sqrt(xi*(2.-xi));
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-// Cubic spline log-log interpolation of Lambda0 and Lambda1
-// Screening parameter calculated according to Eq. 37 of Ref.1 
+// Cubic spline log-log interpolation of Lambda0 and Lambda1 between 100 eV - 1 GeV
+// linear log-log extrapolation between 1 GeV - 100 TeV
+
 void G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G4double Z, 
 						      G4double kinEnergy,G4double &Lam0,
 						      G4double &Lam1)
 { 
-  //////// BEGIN OF: LAMBDA CALCULATION ////////////////////////////////
   G4double TCSEForThisAtom[106],FTCSEForThisAtom[106],TCSPForThisAtom[106],FTCSPForThisAtom[106];
   G4double summ00=0.0;
   G4double summ10=0.0;
   G4double InterpolatedValue=0.0;
-  
-  
+  G4double x1,x2,y1,y2;
+  G4double kineticE = kinEnergy;
+  if(kineticE<lowKEnergy)kineticE=lowKEnergy;
+  if(kineticE>highKEnergy)kineticE=highKEnergy;
+  kineticE /= eV;
   G4int  iZ = G4int(Z);
   if(iZ > 103) iZ = 103;
+
   for(G4int i=0;i<106;i++)
     {
       TCSEForThisAtom[i]=TCSE[iZ-1][i];FTCSEForThisAtom[i]=FTCSE[iZ-1][i];
       TCSPForThisAtom[i]=TCSP[iZ-1][i];FTCSPForThisAtom[i]=FTCSP[iZ-1][i];
     }
-
-  G4double kineticE = kinEnergy;
-  if(kineticE<lowKEnergy)kineticE=lowKEnergy;
-  if(kineticE>highKEnergy)kineticE=highKEnergy;
-  kineticE /= eV;
     
   if(p==G4Electron::Electron())        
     {
+    if(kineticE<=1.0e+9)
+      {
       MyValue= new G4DataInterpolation(ener,TCSEForThisAtom,106,0.0,0);  
-      InterpolatedValue = MyValue ->CubicSplineInterpolation(std::log(kineticE));
+      InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
       delete  MyValue;
-      summ00 = std::exp(InterpolatedValue);  
+      summ00 = exp(InterpolatedValue);  
       MyValue= new G4DataInterpolation(ener,FTCSEForThisAtom,106,0.0,0);  
-      InterpolatedValue = MyValue ->CubicSplineInterpolation(std::log(kineticE));
+      InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
       delete  MyValue;
-      summ10 = std::exp(InterpolatedValue);
+      summ10 = exp(InterpolatedValue);
+      }
+    else
+      {  
+       x1=ener[104];
+       x2=ener[105];       
+       y1=TCSEForThisAtom[104];
+       y2=TCSEForThisAtom[105];
+       summ00=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+       summ00 =exp(summ00);
+       y1=FTCSEForThisAtom[104];
+       y2=FTCSEForThisAtom[105];
+       summ10=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+       summ10 =exp(summ10);
+      }
     }
   if(p==G4Positron::Positron())        
     {
+    if(kinEnergy<=1.0e+9)
+      {
       MyValue= new G4DataInterpolation(ener,TCSPForThisAtom,106,0.0,0);  
-      InterpolatedValue = MyValue ->CubicSplineInterpolation(std::log(kineticE));
+      InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
       delete  MyValue;
-      summ00 = std::exp(InterpolatedValue);  
+      summ00 = exp(InterpolatedValue);  
       MyValue= new G4DataInterpolation(ener,FTCSPForThisAtom,106,0.0,0);  
-      InterpolatedValue = MyValue ->CubicSplineInterpolation(std::log(kineticE));
+      InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
       delete  MyValue;
-      summ10 = std::exp(InterpolatedValue);
+      summ10 = exp(InterpolatedValue);
+      }
+    else
+      {  
+       x1=log(ener[104]);
+       x2=log(ener[105]);       
+       y1=TCSPForThisAtom[104];
+       y2=TCSPForThisAtom[105];
+       summ00=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+       summ00 =exp(summ00);
+       y1=FTCSPForThisAtom[104];
+       y2=FTCSPForThisAtom[105];
+       summ10=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+       summ10 =exp(summ10);
+      }
     }
-
+    
   summ00 *=barn;
   summ10 *=barn;
 
@@ -373,6 +418,7 @@ void G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //t->g->t step transformations taken from Ref.6 
+
 G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 								  G4PhysicsTable* theTable,
 								  G4double currentMinimalStep)
@@ -564,6 +610,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track&
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
 {
   par1 = -1. ;  
@@ -677,16 +724,16 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTrueStepLength(G4double geomStepLe
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//Total & first transport x sections for e-/e+ generated from ELSEPA code
+
 void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
 { 
-  ///////////////////////////////////////
-  //Total & first transport x sections of e-/e+ from ELSEPA code
   G4String filename = "XSECTIONS.dat";
 
     char* path = getenv("G4LEDATA");
     if (!path)
       {
-        G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
+        G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set properly";
         G4Exception(excep);
       }
 
@@ -704,14 +751,14 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     G4float aRead;
     for(G4int i=0 ; i<106 ;i++){
 	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
+          if(aRead > 0.0) aRead = log(aRead);
           else  aRead = 0.0;
           ener[i]=aRead;
     }        
     for(G4int j=0;j<103;j++){
       for(G4int i=0;i<106;i++){
 	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
+          if(aRead > 0.0) aRead = log(aRead);
           else  aRead = 0.0;
 	  TCSE[j][i]=aRead;
 	}        
@@ -719,7 +766,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     for(G4int j=0;j<103;j++){
       for(G4int i=0;i<106;i++){
 	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
+          if(aRead > 0.0) aRead = log(aRead);
           else  aRead = 0.0;
 	  FTCSE[j][i]=aRead;      
 	}        
@@ -727,7 +774,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     for(G4int j=0;j<103;j++){
       for(G4int i=0;i<106;i++){
 	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
+          if(aRead > 0.0) aRead = log(aRead);
           else  aRead = 0.0;
 	  TCSP[j][i]=aRead;      
 	}        
@@ -735,14 +782,13 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     for(G4int j=0;j<103;j++){
       for(G4int i=0;i<106;i++){
 	  fscanf(infile,"%f\t",&aRead);
-          if(aRead > 0.0) aRead = std::log(aRead);
+          if(aRead > 0.0) aRead = log(aRead);
           else  aRead = 0.0;
 	  FTCSP[j][i]=aRead;      
 	}        
      }
 
     fclose(infile);
-   //End loading XSections and Energies
 
 }
 
