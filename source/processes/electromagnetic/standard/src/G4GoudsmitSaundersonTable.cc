@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.2 2009-06-04 13:45:57 gunter Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.3 2009-06-18 18:42:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,21 +166,31 @@ static const G4double uvalues[320]={0,7.61544e-09,3.04617e-08,6.85389e-08,1.2184
   0.975528,0.978152,0.980631,0.982963,0.985148,0.987185,0.989074,0.990814,0.992404,0.993844,0.995134,
   0.996273,0.997261,0.998097,0.998782,0.999315,0.999695,0.999924,1.0};
 
-G4double G4GoudsmitSaundersonTable::PDF[]  = {-1.};
-G4double G4GoudsmitSaundersonTable::CPDF[] = {-1.};
+G4double* G4GoudsmitSaundersonTable::PDF  = 0;
+G4double* G4GoudsmitSaundersonTable::CPDF = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonTable::G4GoudsmitSaundersonTable()
 {
-  if(PDF[0] < 0.0){ 
+  if(PDF == 0){ 
     G4cout << "### G4GoudsmitSaundersonTable loading PDF data" << G4endl;
+
+    PDF = new G4double [76*11*320];
+    CPDF= new G4double [76*11*320];
+
     LoadPDFandCPDFdata();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable()
-{}
+{
+  if(PDF) {
+    delete [] PDF;
+    delete [] CPDF;
+    PDF = 0;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2, G4double rndm)

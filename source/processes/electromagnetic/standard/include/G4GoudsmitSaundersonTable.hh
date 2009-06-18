@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.hh,v 1.2 2009-06-04 13:45:51 gunter Exp $
+// $Id: G4GoudsmitSaundersonTable.hh,v 1.3 2009-06-18 18:43:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,10 +64,11 @@ private:
 
   void LoadPDFandCPDFdata();
 
-  static G4double PDF[76*11*320];
-  static G4double CPDF[76*11*320];
+  static G4double* PDF;
+  static G4double* CPDF;
 
 };
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif
 
