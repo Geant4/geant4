@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.32 2009-03-06 18:04:23 maire Exp $
+// $Id: PhysicsList.cc,v 1.33 2009-06-18 19:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,15 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4EmLivermorePhysics.hh"
+
+#include "G4Decay.hh"
+#include "StepMax.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4EmConfigurator.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -102,17 +109,14 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
   
-// gamma
+  // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-
-// leptons
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -123,15 +127,15 @@ void PhysicsList::ConstructParticle()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
-// mesons
+  // mesons
   G4MesonConstructor mConstructor;
   mConstructor.ConstructParticle();
 
-// barions
+  // barions
   G4BaryonConstructor bConstructor;
   bConstructor.ConstructParticle();
 
-// ions
+  // ions
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 }
@@ -142,14 +146,12 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-
+  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   AddDecay();  
   AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
 {
@@ -175,8 +177,6 @@ void PhysicsList::AddDecay()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {
@@ -240,14 +240,33 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
+
+  } else if (name == "standardGS") {
+
+    AddPhysicsList("emstandard");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("e-","msc",msce);
+    G4GoudsmitSaundersonMscModel* mscp = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("e+","msc",mscp);
+
+  } else if (name == "empenelope"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "emlivermore"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
                 
-  } else if (name == "livermore") {
+  } else if (name == "livermore_old") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmLivermore(name);
     
-  } else if (name == "penelope") {
+  } else if (name == "penelope_old") {
 
     emName = name;
     delete emPhysicsList;

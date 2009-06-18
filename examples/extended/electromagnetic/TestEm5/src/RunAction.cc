@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.28 2009-01-22 17:41:43 vnivanch Exp $
+// $Id: RunAction.cc,v 1.29 2009-06-18 19:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,18 +251,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // compute width of the Gaussian central part of the MultipleScattering
   //
-  if (histoManager->HistoExist(13)) {
-    G4cout << "\n MultipleScattering:" 
-           << "\n  rms proj angle of transmit primary particle = "
-           << rmsMsc/mrad << " mrad (central part only)" << G4endl;
+  G4cout << "\n MultipleScattering:" 
+	 << "\n  rms proj angle of transmit primary particle = "
+	 << rmsMsc/mrad << " mrad (central part only)" << G4endl;
 
-    G4cout << "  computed theta0 (Highland formula)          = "
- 	   << ComputeMscHighland()/mrad << " mrad" << G4endl;
+  G4cout << "  computed theta0 (Highland formula)          = "
+	 << ComputeMscHighland()/mrad << " mrad" << G4endl;
 	   
-    G4cout << "  central part defined as +- "
- 	   << MscThetaCentral/mrad << " mrad; " 
-	   << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
-  }
+  G4cout << "  central part defined as +- "
+	 << MscThetaCentral/mrad << " mrad; " 
+	 << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
 
   G4cout.precision(prec);
   
