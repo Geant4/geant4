@@ -27,21 +27,22 @@
 //
 // GEANT4     Test file
 //
-// File name: testExp.cc
+// File name: PIXEtest
 //
 // Author:    Simona Saliceti (simona.saliceti@ge.infn.it)
 // 
 // History:
 // --------
 // 
-// 13/04/2004 Simona Saliceti 1st implementation
+// 22 Apr 2009 ALF 1st implementation based on work of Simona Saliceti
+// 24 Apr 2009 ALF revision
 // --------------------------------------------------------------------
 //
 // Test Description: 
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: PIXEtest.cc,v 1.1 2009-06-12 10:43:45 mantero Exp $
+// $Id: PIXEtest.cc,v 1.2 2009-06-18 16:18:42 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -54,6 +55,7 @@
 #include "G4hShellCrossSection.hh"
 #include "G4hShellCrossSectionDoubleExp.hh"
 #include "G4teoCrossSection.hh"
+#include "G4empCrossSection.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4Proton.hh"
 //#include "AIDA/AIDA.h"
@@ -69,9 +71,10 @@ int main()
 
    //    G4VhShellCrossSection* shellExp = new G4hShellCrossSectionDoubleExp();
    //  here you deciude the implementation: G4teoCrossSection is ECPSSR for K + Orlic for L shells
-   //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli
+   //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli for Alpha.
 
    G4VhShellCrossSection* shellCS = new G4teoCrossSection("ecpssr");
+   //G4VhShellCrossSection* shellCS = new G4empCrossSection();
 
    //proton mass in Kg
    //mass = 1.67262158e-27 * kg;   

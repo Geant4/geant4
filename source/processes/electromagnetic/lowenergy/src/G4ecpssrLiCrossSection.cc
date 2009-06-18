@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrLiCrossSection.cc,v 1.1 2009-06-17 16:37:44 mantero Exp $
+//$Id: G4ecpssrLiCrossSection.cc,v 1.2 2009-06-18 16:18:42 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -136,7 +136,7 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
 
 
-  G4double  zIncident; 
+  G4int zIncident; 
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
 
@@ -265,8 +265,11 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
                                                                                    //and the relativity(R) effects
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------   
-
-  return crossSection;
+ 
+ if (crossSection >= 0) {
+    return crossSection;
+  }
+  else {return 0;}
 }
 
 G4double G4ecpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)

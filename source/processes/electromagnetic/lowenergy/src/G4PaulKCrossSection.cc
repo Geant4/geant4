@@ -58,19 +58,22 @@ G4PaulKCrossSection::G4PaulKCrossSection()
   
   interpolation = new G4LogLogInterpolation();
 
-
+  /*
     G4String path = getenv("G4LEDATA");
  
     if (!path)
     G4Exception("G4paulKCrossSection::G4paulKCrossSection: G4LEDATA environment variable not set");
+    G4cout << path + "/kcsPaul/kcs-" << G4endl;
+  */
+
 
     for (G4int i=4; i<93; i++) {
       protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonDataSetMap[i]->LoadData(path + "/kcsPaul/kcs-");
+      protonDataSetMap[i]->LoadData("kcsPaul/kcs-");
     }
     for (G4int i=6; i<93; i++) {
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaDataSetMap[i]->LoadData(path + "/kacsPaul/kacs-");
+      alphaDataSetMap[i]->LoadData("kacsPaul/kacs-");
     }
 
 
@@ -86,7 +89,7 @@ G4PaulKCrossSection::~G4PaulKCrossSection()
 
 }
 
-G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4int massIncident, G4double energyIncident)
+G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
   
   G4Proton* aProtone = G4Proton::Proton();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrKCrossSection.cc,v 1.3 2009-06-17 16:37:44 mantero Exp $
+//$Id: G4ecpssrKCrossSection.cc,v 1.4 2009-06-18 16:18:42 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -205,11 +205,13 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
 
 {
 
+  //if (energyIncident < 150 *keV) {return 0;}
+
   G4NistManager* massManager = G4NistManager::Instance();   
 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
 
-  G4double  zIncident; 
+  G4double  zIncident = 0; 
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
 
@@ -232,7 +234,7 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
       else
 	{ 
 	  G4cout << "we can treat only Proton or Alpha incident particles " << G4endl;
-	  massIncident =0.;
+	  return 0;
 	}
     }
   
@@ -463,7 +465,10 @@ G4double G4ecpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double mas
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------   
 
-  return crossSection;
+  if (crossSection >= 0) {
+    return crossSection;
+  }
+  else {return 0;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

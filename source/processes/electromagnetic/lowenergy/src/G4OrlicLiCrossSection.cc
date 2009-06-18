@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLiCrossSection.cc,v 1.2 2009-06-11 15:47:08 mantero Exp $
+//$Id: G4OrlicLiCrossSection.cc,v 1.3 2009-06-18 16:18:42 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -104,6 +104,8 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
                                        
    if ( zTarget>=14 && zTarget<=40)  
     {
+
+      return 0;
       /*
       // parameters used for calculating total L cross section
       a0=12.5081;
@@ -213,7 +215,12 @@ G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::p
 
   G4double L1crossSection =  std::exp(analyticalFunction)/(l1BindingEnergy*l1BindingEnergy);  
 
-  return L1crossSection;
+
+  if (L1crossSection >= 0) {
+    return L1crossSection;
+  }
+  else {return 0;}
+
 }
 
 //*****************************************************************************************************************************************
@@ -333,7 +340,11 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
                                                                             
    } 
 
- return L2crossSection;   
+  if (L2crossSection >= 0) {
+    return L2crossSection;
+  }
+  else {return 0;}
+   
 }
 
 //*****************************************************************************************************************************************
@@ -448,6 +459,10 @@ G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double 
    L3crossSection =  std::exp(analyticalFunction)/(l3BindingEnergy*l3BindingEnergy); 
                                                                             
    } 
+  if (L3crossSection >= 0) {
+    return L3crossSection;
+  }
+  else {return 0;}
 
- return L3crossSection;   
+
 }
