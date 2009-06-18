@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.39 2009-05-10 16:09:29 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.40 2009-06-18 17:01:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,12 +38,15 @@
 // Creation date: 22.08.2005
 //
 // Modifications:
+//
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 // 19.10.06 V.Ivanchenko use inheritance from G4eCoulombScatteringModel
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko SelectIsotope is moved to the base class
+// 16.06.09 Consolandi rows 109, 111-112, 183, 185-186
+//
 //
 // Class Description:
 //
@@ -102,7 +105,11 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   mom2 = momCM*momCM;
   tkin = sqrt(mom2 + m12) - mass;
-  invbeta2 = 1.0 +  m12/mom2;
+
+  //invbeta2 = 1.0 +  m12/mom2;
+ 
+  G4double fm = m2/(mass + m2);
+  invbeta2 = 1.0 +  m12*fm*fm/mom2;
 
   SetupTarget(Z, tkin);
 
@@ -159,7 +166,6 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
   if(z1 < 0.0) return;
-
   G4double sint = sqrt(z1*(1.0 + cost));
   G4double phi  = twopi * G4UniformRand();
 
@@ -174,7 +180,12 @@ void G4CoulombScatteringModel::SampleSecondaries(
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
 
-  G4double elab = gam*(eCM + bet*pzCM);
+  //  G4double elab = gam*(eCM + bet*pzCM);
+
+  G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
+  G4double elab = etot - m2*(ptot/Ecm)*(ptot/Ecm)*(1.-cost) ;
+
+ 
   ekin = elab - mass;
   if(ekin < 0.0) ekin = 0.0;
   fParticleChange->SetProposedKineticEnergy(ekin);

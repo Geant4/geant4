@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.43 2009-05-10 16:09:29 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.44 2009-06-18 17:01:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,8 @@
 //                       make some members protected
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
+// 17.06.09 C.Consoalndi modified SetupTarget method - remove kinFactor
+//				       
 //
 // Class Description:
 //
@@ -158,7 +160,7 @@ protected:
   G4double                  tkin;
   G4double                  mom2;
   G4double                  invbeta2;
-  G4double                  kinFactor;
+  //G4double                  kinFactor;
   G4double                  etag;
   G4double                  lowEnergyLimit;
 
@@ -237,16 +239,17 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     iz= G4int(Z);
     if(iz > 99) iz = 99;
     targetMass   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    G4double m12 = mass*mass;
-    G4double x   = 1.0 + mass/targetMass;
-    kinFactor    = (1.0 +  m12/mom2)/mom2;
+    //  G4double m12 = mass*mass;
+    //  G4double x   = 1.0 + mass/targetMass;
+    //  kinFactor    = (1.0 +  m12/mom2)/mom2;
 
     screenZ = ScreenRSquare[iz]/mom2;
-    if(iz > 1) {
-      screenZ *=(1.13 + 3.76*Z*Z*alpha2);
-      kinFactor /= (x*x);
-    }
-    // if(iz > 1) screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
+    //  if(iz > 1) {
+    //    screenZ *=(1.13 + 3.76*Z*Z*invbeta2*alpha2);
+    //    kinFactor /= (x*x);
+    // }
+    if(iz > 1) screenZ *= (1.13 + 3.76*Z*Z*invbeta2*alpha2);
+      //    screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
     formfactA = FormFactor[iz]*mom2;
     cosTetMaxNuc2 = cosTetMaxNuc;
     if(1 == iz && particle == theProton && cosTetMaxNuc2 < 0.0) {

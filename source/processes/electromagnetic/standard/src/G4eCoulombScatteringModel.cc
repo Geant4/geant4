@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.69 2009-05-10 16:09:29 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.70 2009-06-18 17:01:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,12 +38,15 @@
 // Creation date: 22.08.2005
 //
 // Modifications:
+//
 // 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
 //          logic of building - only elements from G4ElementTable
 // 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 // 19.08.06 V.Ivanchenko add inline function ScreeningParameter 
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
+// 16.06.09 C.Consolandi fixed computation of effective mass
+//
 //
 // Class Description:
 //
@@ -136,7 +139,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
-  }
+ }
   if(mass < GeV && particle->GetParticleType() != "nucleus") {
     InitialiseElementSelectors(p,cuts);
   }
@@ -206,7 +209,12 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
   // This method needs initialisation before be called
-  G4double fac = coeff*targetZ*chargeSquare*kinFactor;
+  //  G4double fac = coeff*targetZ*chargeSquare*kinFactor;
+
+  G4double gamma2=1./(1.-1./invbeta2);
+  G4double mu_c2 =(mass*targetMass)/(mass+targetMass);
+  G4double fac = coeff*targetZ*chargeSquare*invbeta2*invbeta2/(gamma2*mu_c2*mu_c2);
+
   elecXSection = 0.0;
   nucXSection  = 0.0;
 

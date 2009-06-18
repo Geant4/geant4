@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.32 2009-05-10 16:09:29 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.33 2009-06-18 17:01:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -490,7 +490,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     x1 *= 2.0;
   }
 
-  // sample Reserford scattering for large angle
+  // sample Rutherford scattering for large angle
   if(xsec > DBL_MIN) {
     G4double t = tPathLength;
     G4int nelm = currentMaterial->GetNumberOfElements();
@@ -535,7 +535,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	}
         if(zz1 < 1.0) {
 	  isscat = true;
-	  //G4cout << "Reserford zz1= " << zz1 << " t= " << t << G4endl;
+	  //G4cout << "Rutherford zz1= " << zz1 << " t= " << t << G4endl;
 	  sint = sqrt((1.0 - zz1)*(1.0 + zz1));
 	  //G4cout << "sint= " << sint << G4endl;
 	  phi  = twopi*G4UniformRand();
@@ -636,7 +636,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     // scattering off nucleaus
     if(cosThetaMin > cosnm) {
 
-      // Reserford part
+      // Rutherford part
       G4double s  = screenZ*formfactA;
       G4double z1 = 1.0 - cosnm + screenZ;
       G4double s1 = 1.0 - s;
@@ -710,7 +710,7 @@ G4double G4MuMscModel::ComputeXSectionPerVolume()
       xsece1 += s;
       zcorr  += 0.5*x*s;
 
-      // Reserford part
+      // Rutherford part
       G4double z1 = 1.0 - cosTetMaxElec + screenZ;
       G4double z2 = (cosThetaMin - cosTetMaxElec)/x1; 
       if(z2 < 0.2) s = z2*(x - 0.5*z2*(x - screenZ))/x1;
@@ -729,7 +729,7 @@ G4double G4MuMscModel::ComputeXSectionPerVolume()
       xsece1 += s;
       zcorr  += 0.5*x*s;
 
-      // Reserford part
+      // Rutherford part
       s  = screenZ*formfactA;
       G4double w  = 1.0 + 2.0*s;
       G4double z1 = 1.0 - cosTetMaxNuc + screenZ;
