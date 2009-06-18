@@ -14,10 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27-05-08  V.Ivanchenko (test37-V09-02-01)
+18-06-09  V.Ivanchenko (test37-V09-02-02)
+- Substitute "emstandard_opt1" physics by "standardGS", which
+  uses Goudsmit-Sounderson msc model for e+,e-
+
+27-05-09  V.Ivanchenko (test37-V09-02-01)
 - RunAction - fixed non-initialised variable
 
-25-02-08  V.Ivanchenko (test37-V09-02-00)
+25-02-09  V.Ivanchenko (test37-V09-02-00)
 - Cleanup user actions, add output on number of steps
 
 19-11-08  V.Ivanchenko (test37-V09-01-02)
