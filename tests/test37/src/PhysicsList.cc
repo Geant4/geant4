@@ -68,7 +68,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics();
+  emPhysicsList = new G4EmStandardPhysics(1);
   decayPhysics  = new G4DecayPhysics();
 }
 
@@ -112,7 +112,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    emPhysicsList = new G4EmStandardPhysics(1);
 
   } else if (name == "emstandard_opt1") {
 
@@ -163,7 +163,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
 
-  } else if (name == "livermore_opld") {
+  } else if (name == "livermore_old") {
 
     emName = name;
     delete emPhysicsList;
