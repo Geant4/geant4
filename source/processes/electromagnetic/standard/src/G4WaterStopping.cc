@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.17 2009-05-16 18:14:14 antoni Exp $
+// $Id: G4WaterStopping.cc,v 1.18 2009-06-19 10:39:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4WaterStopping::~G4WaterStopping()
 G4double G4WaterStopping::GetElectronicDEDX(G4int iz, G4double energy)
 {
   G4double res = 0.0;
-  if(iz < 3 || iz > 26) return res; 
+  if((iz > 26) || (iz < 3) || (iz > 18 && iz < 26)) return res; 
   G4bool b;
   G4int idx = iz - 3;
   G4double scaledEnergy = energy/A[idx];
