@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Version.hh,v 1.20 2009-06-19 14:18:18 vnivanch Exp $
+// $Id: G4Version.hh,v 1.21 2009-06-19 14:19:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Version information
