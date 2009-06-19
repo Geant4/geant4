@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.149 2009-04-17 10:35:32 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.150 2009-06-19 12:50:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -555,6 +555,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       safetyHelper->InitialiseHelper();
     }
   }
+
+  // Added tracking cut to avoid tracking artifacts
+  if(isIonisation) fParticleChange.SetLowEnergyLimit(lowestKinEnergy);
 
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "

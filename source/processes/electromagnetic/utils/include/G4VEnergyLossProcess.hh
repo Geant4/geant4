@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.87 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.88 2009-06-19 12:50:23 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -354,6 +354,7 @@ public:
   inline void SetMinSubRange(G4double val);
   inline void SetLambdaFactor(G4double val);
   inline void SetStepFunction(G4double v1, G4double v2);
+  inline void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
   inline G4int NumberOfDERegions() const;
@@ -712,6 +713,13 @@ void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
   if (dRoverRange > 0.999) dRoverRange = 1.0;
   currentCouple = 0;
   mfpKinEnergy  = DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::SetLowestEnergyLimit(G4double val)
+{
+  lowestKinEnergy = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
