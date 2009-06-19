@@ -23,41 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Version.hh,v 1.20 2009-06-19 14:18:18 vnivanch Exp $
+// $Id: G4pow.cc,v 1.1 2009-06-19 14:18:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Version information
+// -------------------------------------------------------------------
 //
-// History:
-// 26.09.05 K.Murakami  - Created
+// GEANT4 Class file
 //
-
-#ifndef G4VERSION_HH
-#define G4VERSION_HH
-
-// Numbering rule for "G4VERSION_NUMBER":
-// - The number is consecutive (i.e. 711) as an integer.
-// - The meaning of each digit is as follows;
 //
-//   711
-//   |--> major version number 
-//    |--> minor version number
-//     |--> patch number
+// File name:     G4pow
+//
+// Author:        Vladimir Ivanchenko
+//
+// Creation date: 23.05.2009
+//
+// Modifications:
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  930
-#endif
+#include "G4pow.hh"
 
-#ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: not supported by cvs2svn $"
-#endif
+G4pow* G4pow::instance = 0;
 
-// as variables
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-#include "G4String.hh"
+G4pow* G4pow::pow()
+{
+  if (instance == 0) {
+    static G4pow manager;
+    instance = &manager;
+  }
+  return instance;
+}
 
-static const G4String G4Version = "$Name: not supported by cvs2svn $";
-static const G4String G4Date    = "(5-June-2009)";
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+G4pow::G4pow()
+{
+  POWERZ13 = new G4double [ZMAXNUM];
+  LOGZ     = new G4double [ZMAXNUM];
+  onethird = 1.0/3.0;
+  for(G4int i=1; i<ZMAXNUM; i++) {
+    G4double x  = G4double(i);
+    POWERZ13[i] = std::pow(x,onethird);
+    LOGZ[i]     = std::log(x);
+  }
+  POWERZ13[0] = 0.0;
+  LOGZ[0 ]    = 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4pow::~G4pow()
+{
+  delete [] POWERZ13;
+  delete [] LOGZ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
