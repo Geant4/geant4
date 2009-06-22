@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.7 2009-06-18 12:43:04 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.8 2009-06-22 13:34:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +64,10 @@ DetectorConstruction::DetectorConstruction()
   
   // default parameter values of calorimeter
   //
-  fiberDiameter       = 1.08*mm;	//1.08*mm
+  fiberDiameter       = 1.08*mm; 	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  layerThickness      = 1.78*mm;	//1.68*mm  
+  layerThickness      = 1.82*mm;	//1.68*mm  
   nbOfLayers          = 10;		//10
   nbOfModules         = 9;		//9
    
