@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ecpssrLiCrossSection.hh,v 1.1 2009-06-17 16:39:55 mantero Exp $
+// $Id: G4ecpssrLiCrossSection.hh,v 1.2 2009-06-22 13:54:00 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -48,7 +49,8 @@
 #define G4ECPSSRLICROSSSECTION_HH 1
 
 #include "globals.hh"
-
+#include <map>
+#include <vector>
 
 class G4ecpssrLiCrossSection 
 
@@ -65,7 +67,7 @@ public:
 
   G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 				    
-  G4double CalculateVelocity(G4int zTarget,G4double massIncident, G4double energyIncident); 
+  G4double CalculateVelocity(G4int subShell, G4int zTarget,G4double massIncident, G4double energyIncident); 
 			      
   G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
 
@@ -76,6 +78,39 @@ private:
 
   G4ecpssrLiCrossSection(const G4ecpssrLiCrossSection&);
   G4ecpssrLiCrossSection & operator = (const G4ecpssrLiCrossSection &right);
+
+  G4double FunctionFL1(G4double k, G4double theta);
+  
+  G4double FunctionFL2(G4double k, G4double theta);
+
+
+  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double QuadInterpolator(G4double e11, 
+ 		            G4double e12, 
+			    G4double e21, 
+			    G4double e22, 
+			    G4double x11,
+			    G4double x12, 
+			    G4double x21, 
+			    G4double x22, 
+			    G4double t1, 
+			    G4double t2, 
+			    G4double t, 
+			    G4double e);
+
+  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+
+  TriDimensionMap FL1Data;
+  
+  TriDimensionMap FL2Data;
+
+std::vector<double> dummyVec;
+
+  typedef std::map<double, std::vector<double> > VecMap;
+  VecMap aVecMap;
 
 };
 
