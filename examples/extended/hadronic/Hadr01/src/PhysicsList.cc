@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.29 2008-11-20 12:32:16 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.30 2009-06-23 11:51:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics.hh"
@@ -60,23 +61,24 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
 
-#include "HadronPhysicsFTFC.hh"
+#include "HadronPhysicsFTFP_BERT_TRV.hh"
 #include "HadronPhysicsFTFP.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
 #include "HadronPhysicsFTF_BIC.hh"
 #include "HadronPhysicsLHEP.hh"
-#include "HadronPhysicsLHEP_BERT.hh"
 #include "HadronPhysicsLHEP_EMV.hh"
-#include "HadronPhysicsLHEP_PRECO_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "HadronPhysicsQGSC.hh"
 #include "HadronPhysicsQGSC_BERT.hh"
-#include "HadronPhysicsQGSC_EFLOW.hh"
+#include "HadronPhysicsQGSC_CHIPS.hh"
+#include "HadronPhysicsQGSC_QGSC.hh"
 #include "HadronPhysicsQGSP.hh"
 #include "HadronPhysicsQGSP_BERT.hh"
 #include "HadronPhysicsQGSP_BERT_HP.hh"
 #include "HadronPhysicsQGSP_BIC.hh"
 #include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "HadronPhysicsQGSP_FTFP_BERT.hh"
+#include "HadronPhysicsQGS_BIC.hh"
 
 #include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
@@ -154,16 +156,25 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
 
+  } else if (name == "emstandard_opt3") {
+
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
   } else if (name == "emstandard_opt1") {
 
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option1();
 
-  } else if (name == "FTFC") {
+  } else if (name == "FTFP_BERT_EMV") {
 
-    SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsFTFC("hadron",true));
-    dump = true;
+    AddPhysicsList("emstandard_opt1");
+    AddPhysicsList("FTFP_BERT");
+
+  } else if (name == "FTFP_BERT_EMX") {
+
+    AddPhysicsList("emstandard_opt2");
+    AddPhysicsList("FTFP_BERT");
 
   } else if (name == "FTFP") {
 
@@ -177,10 +188,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsFTFP_BERT("hadron",true));
     dump = true;
 
-  } else if (name == "FTFP_EMV") {
+  } else if (name == "FTFP_BERT_TRV") {
 
-    AddPhysicsList("emstandard_opt1");
-    AddPhysicsList("FTFP");
+    SetBuilderList1();
+    hadronPhys.push_back( new HadronPhysicsFTFP_BERT_TRV("hadron",true));
+    dump = true;
 
   } else if (name == "FTF_BIC") {
 
@@ -194,23 +206,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsLHEP("hadron"));
     dump = true;
 
-  } else if (name == "LHEP_BERT") {
-
-    SetBuilderList3();
-    hadronPhys.push_back( new HadronPhysicsLHEP_BERT("hadron"));
-    dump = true;
-
   } else if (name == "LHEP_EMV") {
 
     AddPhysicsList("emstandard_opt1");
     SetBuilderList3();
     hadronPhys.push_back( new HadronPhysicsLHEP_EMV("hadron"));
-    dump = true;
-
-  } else if (name == "LHEP_PRECO_HP") {
-
-    SetBuilderList3(true);
-    hadronPhys.push_back( new HadronPhysicsLHEP_PRECO_HP("hadron"));
     dump = true;
 
   } else if (name == "QBBC") {
@@ -261,10 +261,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSC_BERT("hadron",true));
     dump = true;
 
-  } else if (name == "QGSC_EFLOW") {
+  } else if (name == "QGSC_CHIPS") {
 
     SetBuilderList4();
-    hadronPhys.push_back( new HadronPhysicsQGSC_EFLOW("hadron",true));
+    hadronPhys.push_back( new HadronPhysicsQGSC_CHIPS("hadron",true));
+    dump = true;
+
+  } else if (name == "QGSC_QGSC") {
+
+    SetBuilderList4();
+    hadronPhys.push_back( new HadronPhysicsQGSC_QGSC("hadron",true));
     dump = true;
 
   } else if (name == "QGSC_EMV") {
@@ -284,9 +290,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BERT("hadron",true));
     dump = true;
 
+  } else if (name == "QGSP_FTFP_BERT") {
+
+    SetBuilderList1();
+    hadronPhys.push_back( new HadronPhysicsQGSP_FTFP_BERT("hadron",true));
+    dump = true;
+
   } else if (name == "QGSP_BERT_EMV") {
 
     AddPhysicsList("emstandard_opt1");
+    AddPhysicsList("QGSP_BERT");
+
+  } else if (name == "QGSP_BERT_EMX") {
+
+    AddPhysicsList("emstandard_opt2");
     AddPhysicsList("QGSP_BERT");
 
   } else if (name == "QGSP_BERT_HP") {
@@ -300,44 +317,22 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC("hadron",true));
     dump = true;
 
+  } else if (name == "QGS_BIC") {
+
+    SetBuilderList0();
+    hadronPhys.push_back( new HadronPhysicsQGS_BIC("hadron",true));
+    dump = true;
+
   } else if (name == "QGSP_BIC_HP") {
 
     SetBuilderList0(true);
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC_HP("hadron",true));
     dump = true;
 
-  } else if (name == "QGSP_DIF") {
+  } else if (name == "QGSP_BIC_EMY") {
 
-    SetBuilderList1();
-    HadronPhysicsQGSP * hp = new HadronPhysicsQGSP("hadron");
-    hp->SetQuasiElastic(true);
-    hp->SetProjectileDiffraction(true);
-    hadronPhys.push_back(hp);
-    dump = true;
-
-  } else if (name == "QGSP_EMV") {
-
-    AddPhysicsList("emstandard_opt1");
-    AddPhysicsList("QGSP");
-    dump = true;
-
-  } else if (name == "QGSP_EMX") {
-
-    AddPhysicsList("emstandard_opt2");
-    AddPhysicsList("QGSP");
-    dump = true;
-
-  } else if (name == "QGSP_NQE") {
-
-    SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP("hadron",false));
-    dump = true;
-
-  } else if (name == "QGSP_QEL") {
-
-    SetBuilderList4();
-    hadronPhys.push_back( new HadronPhysicsQGSP("hadron",true));
-    dump = true;
+    AddPhysicsList("emstandard_opt3");
+    AddPhysicsList("QGSP_BIC");
 
   } else {
 
@@ -470,15 +465,13 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::List()
 {
-  G4cout << "### PhysicsLists available: FTFC FTFP FTFP_BERT FTFP_EMV FTF_BIC LHEP LHEP_BERT LHEP_EMV"
+  G4cout << "### PhysicsLists available: FTFP FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTFP_BERT_TRV FTF_BIC LHEP LHEP_EMV"
 	 << G4endl;
-  G4cout << "                            LHEP_PRECO_HP QBBC QBBC_DEL QBBC_HEL QBBC_HP QGSC "
+  G4cout << "                            QBBC QBBC_DEL QBBC_HEL QBBC_HP QGSC "
 	 << G4endl; 
-  G4cout << "                            QGSC_BERT QGSC_EFLOW QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV "
+  G4cout << "                            QGSC_BERT QGSC_CHIPS QGSC_QGSC QGSC_EMV QGSP QGSP_BERT QGSP_BER_EMV "
 	 << G4endl; 
-  G4cout << "                            QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP QGSP_DIF " 
-	 << G4endl; 
-  G4cout << "                            QGSP_EMV QGSP_EMX QGSP_NQE QGSP_QEL  "
+  G4cout << "                            QGSP_BERT_EMX QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP QGSP_FTFP_BERT " 
 	 << G4endl; 
 }
 
