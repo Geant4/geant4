@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.4 2009-06-11 13:39:20 maire Exp $
+// $Id: EventAction.cc,v 1.5 2009-06-24 21:04:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,9 +75,15 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   //initialize Energy per event
   //
   G4int nbOfPixels = detector->GetSizeVectorPixels();
-  visibleEnergy.resize(nbOfPixels);  visibleEnergy.clear();  
-    totalEnergy.resize(nbOfPixels);    totalEnergy.clear();
-   
+  G4int size = totalEnergy.size();
+  if (size < nbOfPixels) {
+    visibleEnergy.resize(nbOfPixels);
+      totalEnergy.resize(nbOfPixels);
+  }
+  
+  for (G4int k=0; k<nbOfPixels; k++) {
+    visibleEnergy[k] = totalEnergy[k] = 0.0;
+  }   
   nbRadLen = 0.;
 }
 

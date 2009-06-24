@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2009-06-22 13:34:26 maire Exp $
+$Id: History,v 1.11 2009-06-24 21:04:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+24-06-09 mma 
+- RunAction, EventAction : modify initialisation of std::vector
+- SteppingAction : put protection on index computation
      
 22-06-09 mma (amsEcal-V09-02-06) 
 - DetectorConstruction : layerThickness = 1.82 mm

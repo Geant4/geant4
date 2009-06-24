@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2009-06-08 12:58:13 maire Exp $
+// $Id: RunAction.cc,v 1.5 2009-06-24 21:04:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,19 +67,33 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //initialize cumulative quantities
   //
   G4int nbPixels = detector->GetSizeVectorPixels();
-  visibleEnergy.resize(nbPixels);  visibleEnergy.clear();  
-    totalEnergy.resize(nbPixels);    totalEnergy.clear();     
+  G4int size = totalEnergy.size();
+  if (size < nbPixels) {
+    visibleEnergy.resize(nbPixels);  
+      totalEnergy.resize(nbPixels);     
 
-  visibleEnergy2.resize(nbPixels);  visibleEnergy2.clear();   
-    totalEnergy2.resize(nbPixels);    totalEnergy2.clear(); 
+    visibleEnergy2.resize(nbPixels);
+      totalEnergy2.resize(nbPixels);
+  }
   
+  for (G4int k=0; k<nbPixels; k++) {
+   visibleEnergy[k] = visibleEnergy2[k] = totalEnergy[k]= totalEnergy2[k] = 0.0;
+  }
+        
   G4int nbLayers = detector->GetNxPixelsTot();
-  layerEvis.resize(nbLayers);  layerEvis.clear();  
-  layerEtot.resize(nbLayers);  layerEtot.clear();     
+  size = layerEtot.size();
+  if (size < nbLayers) {  
+    layerEvis.resize(nbLayers);  layerEvis.clear();  
+    layerEtot.resize(nbLayers);  layerEtot.clear();     
 
-  layerEvis2.resize(nbLayers);  layerEvis2.clear();   
-  layerEtot2.resize(nbLayers);  layerEtot2.clear();
-   
+    layerEvis2.resize(nbLayers);  layerEvis2.clear();   
+    layerEtot2.resize(nbLayers);  layerEtot2.clear();
+  }
+  
+  for (G4int k=0; k<nbLayers; k++) {
+   layerEvis[k] = layerEvis2[k] = layerEtot[k]= layerEtot2[k] = 0.0;
+  }
+     
   nbEvents = 0;  
   calorEvis = calorEvis2 = calorEtot = calorEtot2 = Eleak = Eleak2 = 0.;
   EdLeak[0] = EdLeak[1] = EdLeak[2] = 0.;

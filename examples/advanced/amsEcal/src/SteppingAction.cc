@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2009-06-18 12:43:04 maire Exp $
+// $Id: SteppingAction.cc,v 1.7 2009-06-24 21:04:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +75,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    moduleThickness = detector->GetModuleThickness();   
    dxPixel = detector->GetDxPixel();
    dyPixel = detector->GetDyPixel();
+   nxPixelsTot = detector->GetNxPixelsTot();   
    nyPixelsMax = detector->GetNyPixelsMax();
    
    first = false;   
@@ -106,11 +107,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //locate position and compute pixel number
  //
  G4ThreeVector point1 = step->GetPreStepPoint()->GetPosition();
- G4int ixLayer = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
- G4int ixPixel = (int) ((point1.x() + 0.5*calorThickness)/dxPixel);
+ G4int ixModule = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
+ G4int ixPixel  = (int) ((point1.x() + 0.5*calorThickness)/dxPixel);
+ if (ixPixel < 0 ) ixPixel = 0;
+ if (ixPixel >= nxPixelsTot) ixPixel = nxPixelsTot - 1;
  G4double point1yz = point1.y();
- if (ixLayer%2 != 0) point1yz = point1.z();
+ if (ixModule%2 != 0) point1yz = point1.z();
  G4int iyPixel = (int) ((point1yz + 0.5*calorSizeYZ)/dyPixel);
+ if (iyPixel < 0 ) iyPixel = 0;
+ if (iyPixel >= nyPixelsMax) iyPixel = nyPixelsMax - 1;
+  
  G4int  iPixel = ixPixel*nyPixelsMax + iyPixel;
   
  // sum total energy deposit

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh,v 1.5 2009-06-18 12:43:04 maire Exp $
+// $Id: SteppingAction.hh,v 1.6 2009-06-24 21:04:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ class SteppingAction : public G4UserSteppingAction
 
     G4double calorThickness, calorSizeYZ, moduleThickness;
     G4double dxPixel, dyPixel;
-    G4int    nyPixelsMax;  
+    G4int    nxPixelsTot, nyPixelsMax;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
