@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.66 2009-05-27 11:55:02 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.67 2009-06-25 14:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 11-03-08 Set skin value does not effect step limit type (V.Ivanchenko)
+// 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -169,6 +170,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
           G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
 
+    G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+
     for (size_t i=0; i<numOfCouples; i++) {
 
       if (theLambdaTable->GetFlag(i)) {
@@ -176,7 +179,9 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);
         G4PhysicsVector* aVector = PhysicsVector(couple);
+	aVector->SetSpline(splineFlag);
         modelManager->FillLambdaVector(aVector, couple, false);
+	if(splineFlag) aVector->FillSecondDerivatives();
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
       }
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.51 2008-12-18 13:01:44 gunter Exp $
+// $Id: G4EmCorrections.cc,v 1.52 2009-06-25 14:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -789,7 +789,7 @@ void G4EmCorrections::BuildCorrectionVector()
   //G4cout << "Escal(MeV)= "<<escal<<" dedxt0= " <<dedxt 
   //	 << " dedxt1= " << dedx1t << G4endl;   
 
-  for(G4int i=0; i<nbinCorr; i++) {
+  for(G4int i=0; i<=nbinCorr; i++) {
     e = vv->GetLowEdgeEnergy(i);
     escal = e/massRatio;
     eion  = escal/A;

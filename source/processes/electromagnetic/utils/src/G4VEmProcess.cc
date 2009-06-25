@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.66 2009-04-17 10:35:32 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.67 2009-06-25 14:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 12-09-06 add SetModel() (mma)
 // 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -300,6 +301,9 @@ void G4VEmProcess::BuildLambdaTable()
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+
   for(size_t i=0; i<numOfCouples; i++) {
 
     if (theLambdaTable->GetFlag(i)) {
@@ -307,7 +311,9 @@ void G4VEmProcess::BuildLambdaTable()
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
+      aVector->SetSpline(splineFlag);
       modelManager->FillLambdaVector(aVector, couple, startFromNull);
+      if(splineFlag) aVector->FillSecondDerivatives();
       G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
     }
   }
@@ -649,7 +655,6 @@ void G4VEmProcess::FindLambdaMax()
   G4double e, s, emax, smax;
   theEnergyOfCrossSectionMax = new G4double [n];
   theCrossSectionMax = new G4double [n];
-  G4bool b;
 
   for (size_t i=0; i<n; i++) {
     pv = (*theLambdaTable)[i];
@@ -657,14 +662,16 @@ void G4VEmProcess::FindLambdaMax()
     smax = 0.0;
     if(pv) {
       size_t nb = pv->GetVectorLength();
-      emax = pv->GetLowEdgeEnergy(nb);
+      emax = DBL_MAX;
       smax = 0.0;
-      for (size_t j=0; j<nb; j++) {
-	e = pv->GetLowEdgeEnergy(j);
-	s = pv->GetValue(e,b);
-	if(s > smax) {
-	  smax = s;
-	  emax = e;
+      if(nb > 0) {
+	for (size_t j=0; j<nb; j++) {
+	  e = pv->Energy(j);
+	  s = (*pv)(j);
+	  if(s > smax) {
+	    smax = s;
+	    emax = e;
+	  }
 	}
       }
     }

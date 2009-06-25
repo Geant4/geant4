@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.49 2009-04-17 10:35:32 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.50 2009-06-25 14:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -548,8 +548,6 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   }
 
   // calculate factors to provide continuity of energy loss
-
-
   factor[0] = 1.0;
   G4int j;
 
@@ -684,7 +682,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   const G4RegionModels* regModels = setOfRegionModels[reg];
   G4int nmod = regModels->NumberOfModels();
 
-  // vectors to provide continues dE/dx
+  // vectors to provide continues cross section
   G4DataVector factor(nmod);
   G4DataVector eLow(nmod+1);
   G4DataVector sigmaLow(nmod);

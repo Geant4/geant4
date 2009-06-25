@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.150 2009-06-19 12:50:23 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.151 2009-06-25 14:46:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -106,6 +106,7 @@
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 // 25-04-07 move initialisation of safety helper to BuildPhysicsTable (VI)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
+// 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -615,6 +616,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   }
   if(!table) return table;
 
+  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+
   for(size_t i=0; i<numOfCouples; i++) {
 
     if(1 < verboseLevel) {
@@ -627,9 +630,10 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       G4PhysicsVector* aVector = new G4PhysicsLogVector(emin, emax, bin);
-      aVector->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+      aVector->SetSpline(splineFlag);
 
       modelManager->FillDEDXVector(aVector, couple, tType);
+      if(splineFlag) aVector->FillSecondDerivatives();
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -678,6 +682,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
+  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+
   for(size_t i=0; i<numOfCouples; i++) {
 
     if (table->GetFlag(i)) {
@@ -688,7 +694,10 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       G4double cut = (*theCuts)[i];
       if(fSubRestricted == tType) cut = (*theSubCuts)[i]; 
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple, cut);
+      aVector->SetSpline(splineFlag);
+
       modelManager->FillLambdaVector(aVector, couple, true, tType);
+      if(splineFlag) aVector->FillSecondDerivatives();
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -1407,14 +1416,14 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
   }
   if(particle == part) {
 
-    //    G4bool yes = true;
     if ( !baseParticle ) {
 
       G4bool fpi = true;
       if(!RetrieveTable(part,theDEDXTable,ascii,directory,"DEDX",fpi)) 
 	{fpi = false;}
 
-      if(!RetrieveTable(part,theIonisationTable,ascii,directory,"Ionisation",false)) 
+      // ionisation table keeps individual dEdx and not sum of sub-processes
+      if(!RetrieveTable(part,theDEDXTable,ascii,directory,"Ionisation",false)) 
 	{fpi = false;}
 
       if(!RetrieveTable(part,theRangeTableForLoss,ascii,directory,"Range",fpi)) 
@@ -1477,7 +1486,9 @@ G4bool G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
   G4String filename = GetPhysicsTableFileName(part,directory,tname,ascii);
   G4bool yes = aTable->ExistPhysicsTable(filename);
   if(yes) {
+    if(!aTable) aTable = G4PhysicsTableHelper::PreparePhysicsTable(0);
     yes = G4PhysicsTableHelper::RetrievePhysicsTable(aTable,filename,ascii);
+
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = aTable->length();
       for(size_t i=0; i<n; i++) {(*aTable)[i]->SetSpline(true);}
@@ -1589,15 +1600,12 @@ G4double G4VEnergyLossProcess::GetContinuousStepLimit(
 G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(
                  const G4MaterialCutsCouple* couple, G4double cut)
 {
-  //  G4double cut  = (*theCuts)[couple->GetIndex()];
-  //  G4int nbins = nLambdaBins;
   G4double tmin = 
     std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
 	     minKinEnergy);
   if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
   G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nBins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
-
   return v;
 }
 
@@ -1746,7 +1754,6 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
     G4double e, s, smax, emax;
     theEnergyOfCrossSectionMax = new G4double [n];
     theCrossSectionMax = new G4double [n];
-    G4bool b;
 
     for (size_t i=0; i<n; i++) {
       pv = (*p)[i];
@@ -1754,13 +1761,14 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       smax = 0.0;
       if(pv) {
         size_t nb = pv->GetVectorLength();
-        emax = pv->GetLowEdgeEnergy(nb);
-	for (size_t j=0; j<nb; j++) {
-	  e = pv->GetLowEdgeEnergy(j);
-	  s = pv->GetValue(e,b);
-	  if(s > smax) {
-	    smax = s;
-	    emax = e;
+        if(nb > 0) {
+	  for (size_t j=0; j<nb; j++) {
+	    e = pv->Energy(j);
+	    s = (*pv)(j);
+	    if(s > smax) {
+	      smax = s;
+	      emax = e;
+	    }
 	  }
 	}
       }
