@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/persistency/gdml/G01;$G4BIN/$G4SYSTEM/load_gdml solids.gdml g01.gdml g01.in</text>
+    <text>rm -f g01.gdml;cd $G4INSTALL/examples/extended/persistency/gdml/G01;$G4BIN/$G4SYSTEM/load_gdml solids.gdml g01.gdml g01.in</text>
   </argument>
   <argument name="stderr">
     <text/>
