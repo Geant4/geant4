@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.35 2009-06-25 15:30:56 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.36 2009-06-25 15:32:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,13 +34,13 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
 #include "G4Decay.hh"
 #include "StepMax.hh"
