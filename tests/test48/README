@@ -1,0 +1,35 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test48
+                            ------
+                   Responsible: J.Yarba (Fermilab)
+
+
+NOTE: at this point, it's not even a draft but more like work notes...
+
+This package is intended for comparison of results of the G4 code/models
+for stopping particle vs one another, as well as vs experimental data.
+
+
+For stopping particles, we have "traditional" processes/hadronic/stopping
+code and the newer code that's a part of the CHIPS model.
+The "traditional" code actually includes two "alternative" models for pi-,
+that we would also like to compare vs each other.
+
+We currently use edxperimental data (table) for stopped pi- from this paper:
+R.Madey et al., Phys.Rev.C25, 2050 (1982)
+
+For stopped pbar, there's a large volume of materials, incl. from LEAR
+(Crystal Barrel), as well as much earlier data from 70's and 80's.
+As a starting point we use these 2 reviews:
+C. Amsler, Rev. Mod. Phys. 70, 1293 (1998)
+C. Amsler and F. Myher, Ann. Rev. Nucl. Part. Sci. 41, 219 (1991)
+
+We also have G4 models for stopped antineutrons and K-, yet we continue
+searching for suitable publications and experimental sets for comparison.
+At presernt, for antineutrons and K- we will compare only G4 results (CHIPS
+or "traditional") vs each other.
+

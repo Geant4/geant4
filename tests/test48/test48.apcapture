@@ -1,0 +1,22 @@
+#verbose
+0
+#rad
+#events
+10000
+//--------Proton_processes
+#particle
+anti_proton
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+H
+#momentum(MeV/c)
+0.0
+// ---
+#generator
+CHIPS
+#run
+#exit
