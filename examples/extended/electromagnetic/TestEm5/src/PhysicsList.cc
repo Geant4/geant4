@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.34 2009-06-19 12:42:04 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.35 2009-06-25 15:30:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,6 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
-#include "G4EmPenelopePhysics.hh"
-#include "G4EmLivermorePhysics.hh"
 
 #include "G4Decay.hh"
 #include "StepMax.hh"
@@ -146,7 +144,6 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   AddDecay();  
   AddStepMax();
 }
@@ -259,19 +256,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
-                
-  } else if (name == "livermore_old") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
-    
-  } else if (name == "penelope_old") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
-        
+                        
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

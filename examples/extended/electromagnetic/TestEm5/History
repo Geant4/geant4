@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2009-06-19 12:42:04 vnivanch Exp $
+$Id: History,v 1.120 2009-06-25 15:30:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-06-09 V.Ivant (testem5-V09-02-04)
+- PhysicsList - removed obsolete low-energy EM builders
 
 18-06-09 V.Ivant (testem5-V09-02-03)
 - RunAction - fixed output of mean scattering angle
