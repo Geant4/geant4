@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.37 2009-06-25 15:44:08 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.38 2009-06-25 16:07:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -241,7 +241,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "standardGS") {
 
-    AddPhysicsList("emstandard");
+    AddPhysicsList("emstandard_opt3");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
     conf->SetExtraEmModel("e-","msc",msce);
