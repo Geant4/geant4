@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.17 2008-09-22 08:26:33 gcosmo Exp $
+// $Id: G4PhysicsVector.icc,v 1.18 2009-06-25 10:05:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,10 +58,18 @@ inline
 
 //---------------------------------------------------------------
 
+inline
+ G4double G4PhysicsVector::Energy(const size_t binNumber) const
+{
+  return binVector[binNumber];
+}
+
+//---------------------------------------------------------------
+
 inline 
  size_t G4PhysicsVector::GetVectorLength() const
 {
-  return numberOfBin;
+  return numberOfNodes;
 }
 
 //---------------------------------------------------------------
@@ -117,6 +125,14 @@ inline
 inline
  G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
 {
+  return Value(theEnergy);
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::Value(G4double theEnergy) 
+{
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the
   // value 'theEnergy' lies between the last energy and low edge of of the 
@@ -139,7 +155,7 @@ inline
      Interpolation();
 
   } else if( theEnergy >= edgeMax ){
-     lastBin = numberOfBin-1;
+     lastBin = numberOfNodes-1;
      lastEnergy = edgeMax;
      lastValue  = dataVector[lastBin];
 
@@ -166,11 +182,6 @@ inline
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
   dataVector[binNumber] = theValue;
-
-  // Fill the bin which is hidden to user with theValue. This is to 
-  // handle correctly when Energy=theEmax in getValue.
-
-  if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
 }
 
 //---------------------------------------------------------------
@@ -180,7 +191,7 @@ inline
 {
   G4bool status=false;
 
-  if(numberOfBin > 0) { status=true; }
+  if(numberOfNodes > 0) { status=true; }
   return status;
 }
 

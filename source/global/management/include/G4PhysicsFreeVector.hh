@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.12 2008-09-22 14:49:57 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.13 2009-06-25 10:05:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,7 @@ size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
   size_t lowerBound = 0;
-  size_t upperBound = numberOfBin-1;
+  size_t upperBound = numberOfNodes-2;
 
   while (lowerBound <= upperBound)
   {

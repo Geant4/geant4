@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.33 2009-05-26 16:21:43 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.34 2009-06-25 10:05:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,11 +42,12 @@
 //    18 Jan. 2001, H.Kurashige : removed ptrNextTable
 //    09 Mar. 2001, H.Kurashige : added G4PhysicsVector type 
 //    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
-//    11 may  2009, A.Bagulya : added new implementation of methods 
+//    11 May  2009, A.Bagulya : added new implementation of methods 
 //            ComputeSecondDerivatives - first derivatives at edge points 
 //                                       should be provided by a user
 //            FillSecondDerivatives - default computation base on "not-a-knot"
 //                                    algorithm
+//    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
@@ -56,7 +57,7 @@
 
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
-   edgeMin(0.), edgeMax(0.), numberOfBin(0),
+   edgeMin(0.), edgeMax(0.), numberOfNodes(0),
    lastEnergy(0.), lastValue(0.), lastBin(0), 
    secDerivative(0), useSpline(spline)
 {}
@@ -117,7 +118,7 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   type = vec.type;
   edgeMin = vec.edgeMin;
   edgeMax = vec.edgeMax;
-  numberOfBin = vec.numberOfBin;
+  numberOfNodes = vec.numberOfNodes;
   lastEnergy = vec.lastEnergy;
   lastValue = vec.lastValue;
   lastBin = vec.lastBin;
@@ -127,8 +128,8 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   comment = vec.comment;
   if (vec.secDerivative)
   {
-    secDerivative = new G4double [numberOfBin];
-    for (size_t i=0; i<numberOfBin; i++)
+    secDerivative = new G4double [numberOfNodes];
+    for (size_t i=0; i<numberOfNodes; i++)
     {
        secDerivative[i] = vec.secDerivative[i];
     }
@@ -161,7 +162,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
   // binning
   fOut.write((char*)(&edgeMin), sizeof edgeMin);
   fOut.write((char*)(&edgeMax), sizeof edgeMax);
-  fOut.write((char*)(&numberOfBin), sizeof numberOfBin);
+  fOut.write((char*)(&numberOfNodes), sizeof numberOfNodes);
 
   // contents
   size_t size = dataVector.size(); 
@@ -189,13 +190,14 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   lastBin   =0;
   dataVector.clear();
   binVector.clear();
+  DeleteData();
   comment = "";
 
   // retrieve in ascii mode
   if (ascii)
   {
     // binning
-    fIn >> edgeMin >> edgeMax >> numberOfBin; 
+    fIn >> edgeMin >> edgeMax >> numberOfNodes; 
     if (fIn.fail())  { return false; }
     // contents
     size_t size=0;
@@ -222,7 +224,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   // binning
   fIn.read((char*)(&edgeMin), sizeof edgeMin);
   fIn.read((char*)(&edgeMax), sizeof edgeMax);
-  fIn.read((char*)(&numberOfBin), sizeof numberOfBin ); 
+  fIn.read((char*)(&numberOfNodes), sizeof numberOfNodes ); 
  
   // contents
   size_t size;
@@ -257,15 +259,15 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   //  See for example W.H. Press et al. "Numerical reciptes and C"
   //  Cambridge University Press, 1997.
 {
-  secDerivative = new G4double [numberOfBin]; 
-
   // cannot compute derivatives for less than 4 bins
-  if(4 > numberOfBin) {
-    for(size_t i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
+  if(4 > numberOfNodes) {
+    ComputeSecDerivatives();
     return;
   }
 
-  G4int n = numberOfBin-1;
+  if(!SplinePossible()) return;
+
+  G4int n = numberOfNodes-1;
 
   G4double* u = new G4double [n];
   
@@ -318,15 +320,18 @@ void G4PhysicsVector::FillSecondDerivatives()
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
 {  
-  secDerivative = new G4double [numberOfBin]; 
-
-  // cannot compute derivatives for less than 5 bins
-  if(5 > numberOfBin) {
-    for(size_t i=0; i<numberOfBin; i++) {secDerivative[i] = 0.0;}
+  // cannot compute derivatives for less than 4 points
+  if(5 > numberOfNodes) {
+    ComputeSecDerivatives();
     return;
   }
 
-  G4int n = numberOfBin-1;
+  if(!SplinePossible()) return;
+ 
+  G4int n = numberOfNodes-1;
+
+  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n << G4endl;
+  // G4cout << *this << G4endl;
 
   G4double* u = new G4double [n];
   
@@ -379,6 +384,50 @@ void G4PhysicsVector::FillSecondDerivatives()
 
   delete [] u;
 }
+
+// --------------------------------------------------------------
+
+void 
+G4PhysicsVector::ComputeSecDerivatives()
+  //  A simplified method of computation of second derivatives 
+{
+  if(!SplinePossible()) return;
+
+  // cannot compute derivatives for less than 4 bins
+  if(3 > numberOfNodes) {
+    useSpline = false;
+    return;
+  }
+
+  size_t n = numberOfNodes-1;
+
+  for(size_t i=1; i<n; i++)
+  {
+    secDerivative[i] =
+      3.0*((dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
+           (dataVector[i]-dataVector[i-1])/(binVector[i]-binVector[i-1]))
+      /(binVector[i+1]-binVector[i-1]);
+  }
+  secDerivative[n] = secDerivative[n-1];
+  secDerivative[0] = secDerivative[1];
+}
+
+// --------------------------------------------------------------
+
+G4bool G4PhysicsVector::SplinePossible()
+  // Initialise second derivative array. If neighbor energy coincide 
+  // or not ordered than spline cannot be applied
+{
+  if(secDerivative) DeleteData();
+  secDerivative = new G4double [numberOfNodes]; 
+  for(size_t j=0; j<numberOfNodes; j++) {
+    secDerivative[j] = 0.0;
+    if(j > 0) {
+      if(binVector[j]-binVector[j-1] <= 0.) useSpline = false;
+    }
+  }  
+  return useSpline;
+}
    
 // --------------------------------------------------------------
 
@@ -386,7 +435,7 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning
   out << std::setprecision(12) << pv.edgeMin;
-  out <<" " << pv.edgeMax <<" "  << pv.numberOfBin << G4endl; 
+  out <<" " << pv.edgeMax <<" "  << pv.numberOfNodes << G4endl; 
 
   // contents
   out << pv.dataVector.size() << G4endl; 
