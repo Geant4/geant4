@@ -1,4 +1,4 @@
-$Id: History,v 1.223 2009-05-26 16:20:13 vnivanch Exp $
+$Id: History,v 1.224 2009-06-25 10:16:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 25, 2009  V.Ivanchenko (global-V09-02-06)
+- G4pow - a new singleton for fast computation of log and pow for 
+          integer and double arguments in the interval 1-256
+- G4PhysicsVector - added ComputeSecDerivative and SplinePossible methods 
+                    as a computation of spline coefficients for small
+                    number of bins;
+                  - removed old obsolete hidden bin approach 
 
 May 26, 2009  A.Bagulya (global-V09-02-05)
 - G4PhysicsVector: do not change flag "useSpline" during initialisation
