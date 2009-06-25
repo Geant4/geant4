@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4empCrossSection.cc,v 1.1 2009-06-17 16:37:44 mantero Exp $
+//$Id: G4empCrossSection.cc,v 1.2 2009-06-25 15:52:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         
@@ -69,6 +69,9 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
 							     G4bool testFlag) const
 {
 
+  deltaEnergy = 0;
+  testFlag = 0;
+
   std::vector<G4double> crossSections;
 
   crossSections.push_back( paulShellK->CalculateKCrossSection(Z, mass, incidentEnergy) );
@@ -97,7 +100,7 @@ std::vector<G4double> G4empCrossSection::Probabilities(G4int Z,
   
 std::vector<G4double> crossSections = GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);
 
-  for (G4int i=0; i<crossSections.size(); i++ ) {
+  for (size_t i=0; i<crossSections.size(); i++ ) {
     
     if (totalCS) {
       crossSections[i] = crossSections[i]/totalCS;

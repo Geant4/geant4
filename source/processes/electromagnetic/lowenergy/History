@@ -1,4 +1,4 @@
-$Id: History,v 1.372 2009-06-02 15:38:13 alechner Exp $
+$Id: History,v 1.373 2009-06-25 15:52:08 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.06.2009, A. Mantero, tag emlowen-V09-02-40
+            Design update, Bug Fixes and models update for 
+            atomic shell hadronic CS calulation.
 
 02.06.2009, A.Lechner, tag emlowen-V09-02-39
             Bug fix in class G4IonDEDXScalingICRU73: Compilation

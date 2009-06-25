@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrLiCrossSection.cc,v 1.3 2009-06-22 13:54:00 mantero Exp $
+//$Id: G4ecpssrLiCrossSection.cc,v 1.4 2009-06-25 15:52:08 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -135,7 +135,7 @@ G4double G4ecpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
   G4double fact;
   G4double h;
   G4double psi;
-  G4double ans;
+  G4double ans = 0;
   const G4double euler= 0.5772156649;
   const G4int maxit= 100;
   const G4double fpmin = 1.0e-30;
@@ -199,14 +199,14 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
 
 
-  G4int zIncident; 
+  G4int zIncident = 0; 
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
 
   if (massIncident == aProtone->GetPDGMass() )
   {
 
-   zIncident = (aProtone->GetPDGCharge())/eplus; 
+   zIncident = (G4int)((aProtone->GetPDGCharge())/eplus); 
 
    G4cout << "zincident:" << zIncident << G4endl;
   }
@@ -215,7 +215,7 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
       if (massIncident == aAlpha->GetPDGMass())
 	{
 	  
-	  zIncident  = (aAlpha->GetPDGCharge())/eplus; 
+	  zIncident  =(G4int) ((aAlpha->GetPDGCharge())/eplus); 
 	  
 	  G4cout << "zincident:" << zIncident << G4endl;
 	}
@@ -330,17 +330,17 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
 
 
  //----------------------------------------------------------------------------------------------------------------------------
-  const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
+  //const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
   //--------------------------------------------------------------------------------------------------------------
 
-  G4double yl1Formula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(nl*(velocityl1/sigmaPSS_l1));
+  //G4double yl1Formula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(nl*(velocityl1/sigmaPSS_l1));
 
  
 
   //-----------------------------------------------Relativity effect correction L1 -------------------------------------------------------------
 
-  G4double relativityCorrectionl1 = pow((1.+(1.1*yl1Formula*yl1Formula)),0.5)+yl1Formula;// the relativistic correction parameter
-  G4double reducedVelocityl1 = velocityl1*pow(relativityCorrectionl1,0.5);  // presents the reduced collision velocity parameter 
+  //G4double relativityCorrectionl1 = pow((1.+(1.1*yl1Formula*yl1Formula)),0.5)+yl1Formula;// the relativistic correction parameter
+  //G4double reducedVelocityl1 = velocityl1*pow(relativityCorrectionl1,0.5);  // presents the reduced collision velocity parameter 
 
 
 
@@ -452,14 +452,14 @@ G4double G4ecpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
 
 
-  G4int zIncident; 
+  G4int zIncident = 0; 
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
 
   if (massIncident == aProtone->GetPDGMass() )
   {
 
-   zIncident = (aProtone->GetPDGCharge())/eplus; 
+   zIncident =(G4int) ((aProtone->GetPDGCharge())/eplus); 
 
    //   G4cout << "zincident:" << zIncident << G4endl;
     }
@@ -468,7 +468,7 @@ G4double G4ecpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double 
       if (massIncident == aAlpha->GetPDGMass())
 	{
 	  
-	  zIncident  = (aAlpha->GetPDGCharge())/eplus; 
+	  zIncident  = (G4int) ((aAlpha->GetPDGCharge())/eplus); 
 	  
 	  //	  G4cout << "zincident:" << zIncident << G4endl;
 	}
@@ -540,15 +540,15 @@ G4double electrIonizationEnergyl2;
   G4double sigmaPSS_l2 = 1.+(((2.*zIncident)/(screenedzTarget*tetal2))*(gFunctionl2-hFunctionl2)); 
   
   //----------------------------------------------------------------------------------------------------------------------------
-  const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
+  //const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
   //--------------------------------------------------------------------------------------------------------------
   
-  G4double yl2Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl2/sigmaPSS_l2);
+  //G4double yl2Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl2/sigmaPSS_l2);
   
   //-----------------------------------------------Relativity effect correction L2 --------------------------------------------------------------
   
-  G4double relativityCorrectionl2 = pow((1.+(1.1*yl2Formula*yl2Formula)),0.5)+yl2Formula;// the relativistic correction parameter
-  G4double reducedVelocityl2 = velocityl2*pow(relativityCorrectionl2,0.5);  // presents the reduced collision velocity parameter 
+  //G4double relativityCorrectionl2 = pow((1.+(1.1*yl2Formula*yl2Formula)),0.5)+yl2Formula;// the relativistic correction parameter
+  //  G4double reducedVelocityl2 = velocityl2*pow(relativityCorrectionl2,0.5);  // presents the reduced collision velocity parameter 
   
   G4double L2etaOverTheta2 = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget)/(sigmaPSS_l2*tetal2)/(sigmaPSS_l2*tetal2);
   
@@ -590,14 +590,14 @@ G4double G4ecpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double 
   G4AtomicTransitionManager*  transitionManager =  G4AtomicTransitionManager::Instance();
 
 
-  G4int zIncident; 
+  G4int zIncident = 0; 
   G4Proton* aProtone = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();
 
   if (massIncident == aProtone->GetPDGMass() )
   {
 
-   zIncident = (aProtone->GetPDGCharge())/eplus; 
+   zIncident = (G4int) ((aProtone->GetPDGCharge())/eplus); 
 
    //   G4cout << "zincident:" << zIncident << G4endl;
     }
@@ -606,7 +606,7 @@ G4double G4ecpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double 
       if (massIncident == aAlpha->GetPDGMass())
 	{
 	  
-	  zIncident  = (aAlpha->GetPDGCharge())/eplus; 
+	  zIncident  =(G4int) ((aAlpha->GetPDGCharge())/eplus); 
 	  
 	  //	  G4cout << "zincident:" << zIncident << G4endl;
 	}
@@ -691,15 +691,15 @@ G4double G4ecpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double 
 
 
   //----------------------------------------------------------------------------------------------------------------------------
-  const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
+  //const G4double cNaturalUnit= 1/fine_structure_const;  // it's the speed of light according to Atomic-Unit-System
   //--------------------------------------------------------------------------------------------------------------
 
-  G4double yl3Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl3/sigmaPSS_l3);
+  //G4double yl3Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl3/sigmaPSS_l3);
 
  //-----------------------------------------------Relativity effect correction L3 --------------------------------------------------------------
 
- G4double relativityCorrectionl3 = pow((1.+(1.1*yl3Formula*yl3Formula)),0.5)+yl3Formula;// the relativistic correction parameter
- G4double reducedVelocityl3 = velocityl3*pow(relativityCorrectionl3,0.5);  // presents the reduced collision velocity parameter 
+ //G4double relativityCorrectionl3 = pow((1.+(1.1*yl3Formula*yl3Formula)),0.5)+yl3Formula;// the relativistic correction parameter
+ //G4double reducedVelocityl3 = velocityl3*pow(relativityCorrectionl3,0.5);  // presents the reduced collision velocity parameter 
 
   G4double universalFunction_l3 ;
 
