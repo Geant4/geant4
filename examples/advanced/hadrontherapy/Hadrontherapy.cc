@@ -91,21 +91,18 @@ int main(int argc ,char ** argv)
   HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
   runManager -> SetUserAction(pPrimaryGenerator);
 
-  // Initialize Let 
-  HadrontherapyLet* let = new HadrontherapyLet(pPrimaryGenerator);
-
   // Initialize matrix 
   HadrontherapyMatrix* matrix = new HadrontherapyMatrix();
   matrix -> Initialize();
 
   // Optional UserActions: run, event, stepping
-  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction(let);
+  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
   runManager -> SetUserAction(pRunAction);
 
   HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction(matrix);
   runManager -> SetUserAction(pEventAction);
 
-  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction, let); 
+  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
 #ifdef G4ANALYSIS_USE

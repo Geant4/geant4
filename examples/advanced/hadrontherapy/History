@@ -9,7 +9,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-26.062009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-16
+26.06.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-17
+           - Corrected the definition of total inelastic cross section for light ions in the 
+             LocalIonIonInelasticPhysic.cc file
+
+26.06.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-16
            - Momentarely removed the class for LET calculation 
              for a conflict with the general structure of Hadrontherapy
 

@@ -46,11 +46,9 @@
 #include "G4EventManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "HadrontherapyLet.hh"
 
 class HadrontherapyRunAction;
 class HadrontherapySteppingMessenger;
-class HadronthearpyLet;
 
 
 #ifndef G4NOHIST
@@ -61,7 +59,7 @@ class HadronthearpyLet;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-  HadrontherapySteppingAction(HadrontherapyRunAction*, HadrontherapyLet*);
+  HadrontherapySteppingAction(HadrontherapyRunAction*);
   ~HadrontherapySteppingAction();
   
   void UserSteppingAction(const G4Step*);

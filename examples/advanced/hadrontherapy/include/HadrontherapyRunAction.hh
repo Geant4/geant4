@@ -44,19 +44,17 @@
 #include "G4UserRunAction.hh"
 #include "G4RunManager.hh"
 #include "globals.hh"
-#include "HadrontherapyLet.hh"
 
 class G4Run;
 class HadrontherapyAnalysisManager;
 class HadrontherapyDetectorConstruction;
 class HadrontherapyRunMessenger;
 class HadrontherapyFactory;
-class HadrontherapyLet;
 
 class HadrontherapyRunAction : public G4UserRunAction
 {
 public:
-  HadrontherapyRunAction(HadrontherapyLet*);
+  HadrontherapyRunAction();
   ~HadrontherapyRunAction();
 
 public:

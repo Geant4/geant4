@@ -109,7 +109,7 @@ void LocalIonIonInelasticPhysic::ConstructProcess()
   WilsonModel -> SetMaxEnergy(10 *GeV);
 
   G4TripathiCrossSection* TripatiCrossSections = new G4TripathiCrossSection;
-  G4TripathiCrossSection* TripatiLightCrossSections = new G4TripathiCrossSection;
+  G4TripathiLightCrossSection* TripatiLightCrossSections = new G4TripathiLightCrossSection;
   G4IonsShenCrossSection* ShenCrossSections = new G4IonsShenCrossSection;
 
   // ****************

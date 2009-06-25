@@ -48,9 +48,8 @@
 #include "G4SDManager.hh"
 #include "G4Timer.hh"
 #include "HadrontherapyRunAction.hh"
-#include "HadrontherapyLet.hh"
 
-HadrontherapyRunAction::HadrontherapyRunAction(HadrontherapyLet*)
+HadrontherapyRunAction::HadrontherapyRunAction()
 {
 }
 
