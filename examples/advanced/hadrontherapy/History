@@ -9,7 +9,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
-10.06.2009 G.A.P.Cirrone; tag: hadrontherapy-V09-02-15
+26.062009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-16
+           - Momentarely removed the class for LET calculation 
+             for a conflict with the general structure of Hadrontherapy
+
+10.06.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-15
            - Corrected a bug in the detector construction
 
 05.06.2009 G.A.P.Cirrone and S.Mazzaglia; Tag: hadrontherapy-V09-02-14
