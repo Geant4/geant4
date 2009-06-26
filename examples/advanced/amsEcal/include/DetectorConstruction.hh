@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.5 2009-06-18 12:43:04 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.6 2009-06-26 14:21:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,6 +105,7 @@ private:
   //
   G4Material*      moduleMat;  
   G4int            nbOfLayers;
+  G4double         milledLayer;
   G4double         moduleThickness;    
   G4LogicalVolume* lvol_module;  
            
