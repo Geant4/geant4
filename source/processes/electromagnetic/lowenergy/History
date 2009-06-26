@@ -1,4 +1,4 @@
-$Id: History,v 1.373 2009-06-25 15:52:08 mantero Exp $
+$Id: History,v 1.374 2009-06-26 10:17:12 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+26.06.2009, A. Mantero, tag emlowen-V09-02-41
+            Compilation errors removal.
 
 25.06.2009, A. Mantero, tag emlowen-V09-02-40
             Design update, Bug Fixes and models update for 
