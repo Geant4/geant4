@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.11 2009-06-18 17:01:46 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.12 2009-06-26 18:33:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -273,7 +273,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       
       G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
 
-      if(tPathLength <= zPathLength) return;
+      // if(tPathLength <= zPathLength) return;
 
       if(r > tlimitminfix) {
 
