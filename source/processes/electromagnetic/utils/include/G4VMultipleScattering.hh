@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.56 2009-04-07 18:39:47 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.57 2009-06-26 19:13:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -499,8 +499,9 @@ G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p,
 {
   G4double x;
   if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    //    G4bool b;
+    //    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
   } else {
     x = currentModel->CrossSection(currentCouple,p,e);
   }
