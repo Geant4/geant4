@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.7 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.8 2009-06-26 10:15:19 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4DNABornIonisationModel.hh"
-#include "G4DynamicMolecule.hh"
+//#include "G4DynamicMolecule.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -430,7 +430,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
     G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
     fvect->push_back(dp);
-
+    /*
     // creating neutral water molechule...
 
     G4DNAGenericMoleculeManager *instance;
@@ -453,7 +453,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     fvect->push_back(dynamicWater);
     fvect->push_back(dynamicWater2);
     fvect->push_back(dynamicWater3);
-
+    */
   }
 
 }

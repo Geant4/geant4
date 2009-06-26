@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.hh,v 1.2 2009-06-10 13:32:58 mantero Exp $
+// $Id: G4DNABornIonisationModel.hh,v 1.3 2009-06-26 10:15:19 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,7 +37,7 @@
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4DNAGenericMoleculeManager.hh"
+//#include "G4DNAGenericMoleculeManager.hh"
 #include "G4DNAGenericIonsManager.hh"
 
 #include "G4LogLogInterpolation.hh"
