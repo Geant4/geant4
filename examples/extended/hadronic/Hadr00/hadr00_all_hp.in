@@ -1,23 +1,21 @@
 #================================================
 #     Macro file for hadr00
-#     06.06.2008 V.Ivanchneko
+#     26.06.2009 V.Ivanchneko
 #================================================
 /control/verbose 1
 /run/verbose 1
 /tracking/verbose 0
 #
-/testhadr/TargetMat        G4_Al 
-/testhadr/TargetRadius     2  cm
+/testhadr/TargetMat        G4_Pb 
+/testhadr/TargetRadius     10 cm
 /testhadr/TargetLength     50 cm
 /testhadr/PrintModulo      10
 #
 /run/initialize
 #
 /run/setCut           1 km
-/gun/particle proton
-/gun/energy 20. GeV
-#/testhadr/HistoType  root
-#/testhadr/HistoName  p_al
-/testhadr/verbose 1
+/gun/particle neutron
+/gun/energy 40. MeV
+/testhadr/verbose 0
 /run/beamOn 10
 #
