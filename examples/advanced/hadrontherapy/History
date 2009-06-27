@@ -9,6 +9,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+27.06.2009 P. Kaitaniemi; Tag hadrontherapy-V09-02-19
+	   - Added ability to change the name of the output file between runs
+
 26.06.2009 P. Kaitaniemi; Tag hadrontherapy-V09-02-18
 	   - Fixed a bug in the physics list. Local ion-ion hadronic physics was not loaded due
 	     to an uninitialized variable (locIonIonInelasticIsRegistered)

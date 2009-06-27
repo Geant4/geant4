@@ -151,6 +151,8 @@ public:
   void finish();
   ///< Close the .hbk file with the histograms and the ntuples
 
+void flush();
+
 #ifdef G4ROOTANALYSIS_USE
 private:
   TH1F *createHistogram1D(const TString name, const TString title, int bins, double xmin, double xmax) {

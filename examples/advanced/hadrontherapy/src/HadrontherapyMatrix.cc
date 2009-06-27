@@ -50,7 +50,12 @@
 #include "HadrontherapyAnalysisManager.hh"
 #include "globals.hh"
 #include <fstream>
-
+HadrontherapyMatrix* HadrontherapyMatrix::instance = 0;
+HadrontherapyMatrix* HadrontherapyMatrix::getInstance()
+{
+  if (instance == 0) instance = new HadrontherapyMatrix;
+  return instance;
+}
 HadrontherapyMatrix::HadrontherapyMatrix()
 {  
 // Number of the voxels of the phantom
@@ -68,6 +73,14 @@ HadrontherapyMatrix::~HadrontherapyMatrix()
 {
   delete[] matrix;
 }
+
+void HadrontherapyMatrix::flush(){
+	if(matrix)
+		for(int i=0;i<numberVoxelX*numberVoxelY*numberVoxelZ;i++){
+		matrix[i] = 0;
+		}
+	}
+
 void HadrontherapyMatrix::Initialize()
 { 
   // Initialise the elemnts of the matrix to zero

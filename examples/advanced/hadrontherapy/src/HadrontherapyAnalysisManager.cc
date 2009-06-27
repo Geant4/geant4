@@ -41,8 +41,9 @@
 // ----------------------------------------------------------------------------
 
 #include "HadrontherapyAnalysisManager.hh"
+#include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisFileMessenger.hh"
-
+#include <time.h>
 #ifdef ANALYSIS_USE
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
@@ -493,14 +494,32 @@ void HadrontherapyAnalysisManager::genericIonInformation(G4int a,
    }
 #endif
 }
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyAnalysisManager::flush()
+{
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
 
+  matrix->TotalEnergyDeposit();
+#ifdef G4ANALYSIS_USE
+  theTree -> commit();
+  theTree ->close();
+#endif
+#ifdef G4ROOTANALYSIS_USE
+  theROOTNtuple->Write();
+  theROOTIonTuple->Write();
+  theTFile->Write();
+  theTFile->Clear();
+  theTFile->Close();
+#endif
+  matrix->flush();
+  //this->book();
+}
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::finish()
 {
 #ifdef G4ANALYSIS_USE
   // Write all histograms to file
   theTree -> commit();
-
   // Close (will again commit)
   theTree ->close();
 #endif

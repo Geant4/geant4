@@ -90,7 +90,7 @@ int main(int argc ,char ** argv)
   runManager -> SetUserAction(pPrimaryGenerator);
 
   // Initialize matrix 
-  HadrontherapyMatrix* matrix = new HadrontherapyMatrix();
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
   matrix -> Initialize();
 
   // Optional UserActions: run, event, stepping
