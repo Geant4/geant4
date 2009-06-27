@@ -9,6 +9,14 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+27.06.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-20
+           - Eliminated not necessary dependences in the SteppingAction class
+           - Added folders containing experimental data (its name is 'experimentalData') and 
+             ROOT scripts ('RootScripts') where Root scripts are stored to
+             perform a fast comparison with experimental data.
+             A folder where simulation results are stored is also created. Its
+             name is 'simulationResults'. 
+
 27.06.2009 P. Kaitaniemi; Tag hadrontherapy-V09-02-19
 	   - Added ability to change the name of the output file between runs
 

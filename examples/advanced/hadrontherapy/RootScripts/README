@@ -1,0 +1,6 @@
+The Root scripts (files with extension .C) contained in this directory, when executed with ROOT program
+(with the command .x scriptName.C) perform a comparison beetween the experimental data files and simulation output.
+Each subdirectory (proton, etc) contains a specific ROOT script.
+
+--> proton/BraggPeak
+comparison.C performs a comparison beetwen non modulated Bragg peaks
