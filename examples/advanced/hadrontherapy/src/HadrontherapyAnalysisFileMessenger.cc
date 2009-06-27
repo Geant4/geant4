@@ -23,78 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
 //
-// HadrontherapyPhysicsList.hh
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
+#include "HadrontherapyAnalysisFileMessenger.hh"
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIdirectory.hh"
+
+#ifdef ANALYSIS_USE
 //
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager* amgr)
+:AnalysisManager(amgr)
+{ 
+  FileNameCmd = new G4UIcmdWithAString("/analysis/setAnalysisFile",this);
+  FileNameCmd->SetGuidance("Set the .root filename for the root-output");
+  FileNameCmd->SetDefaultValue("default.root");
+  FileNameCmd->SetParameterName("choice",true); ///<doc did not say what second boolean really does
+  FileNameCmd->AvailableForStates(G4State_PreInit);
+}
 
-#ifndef HadrontherapyPhysicsList_h
-#define HadrontherapyPhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
-#include "globals.hh"
-
-class G4VPhysicsConstructor;
-class HadrontherapyStepMax;
-class HadrontherapyPhysicsListMessenger;
-
-class HadrontherapyPhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 {
-public:
+  delete FileNameCmd;
+}
 
-  HadrontherapyPhysicsList();
-  virtual ~HadrontherapyPhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  HadrontherapyStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  HadrontherapyStepMax* stepMaxProcess;
-
-  HadrontherapyPhysicsListMessenger* pMessenger;
-};
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == FileNameCmd)
+    {
+	AnalysisManager->SetAnalysisFileName(newValue);
+	AnalysisManager->book(); //<books the histograms etc. again in new file, doesen't remove old one
+    }
+}
 
 #endif
-

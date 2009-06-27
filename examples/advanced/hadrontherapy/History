@@ -9,6 +9,15 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+26.06.2009 P. Kaitaniemi; Tag hadrontherapy-V09-02-18
+	   - Fixed a bug in the physics list. Local ion-ion hadronic physics was not loaded due
+	     to an uninitialized variable (locIonIonInelasticIsRegistered)
+	   - Ability to use /analysis/setAnalysisFile <filename> to set the name of the output file
+	   - Added Doxygen documentation tags to the source code and Doxyfile for
+	     documentation settings
+	   - Support for direct use of ROOT for analysis in addition to the default AIDA one
+	   - Local INCL/ABLA physics list for deuterons, tritons and alphas
+
 26.06.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-17
            - Corrected the definition of total inelastic cross section for light ions in the 
              LocalIonIonInelasticPhysic.cc file

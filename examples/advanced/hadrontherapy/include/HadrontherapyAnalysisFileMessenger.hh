@@ -22,79 +22,71 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// HadrontherapyStepMaxMessenger.hh
 //
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
 //
-// HadrontherapyPhysicsList.hh
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
-//
+/**
+* @file HadrontherapyAnalysisFileMessenger.hh. 
+* @author Gillis Danielsen, HIP 
+* @date 6-10-09  
+*/ 
 
-#ifndef HadrontherapyPhysicsList_h
-#define HadrontherapyPhysicsList_h 1
+#ifndef HadrontherapyAnalysisFileMessenger_h
+#define HadrontherapyAnalysisFileMessenger_h 1
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
+#ifdef ANALYSIS_USE
+
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
-class HadrontherapyStepMax;
-class HadrontherapyPhysicsListMessenger;
+class HadrontherapyAnalysisManager; ///< Provides SetAnalysisFileName()
+class G4UIcmdWithAString; ///< Provides possibility to add commands
 
-class HadrontherapyPhysicsList: public G4VModularPhysicsList
+/**
+* A messenger object of this class is created by the AnalysisManager.
+* The point of a messenger is to connect the G4UI with the simulation
+* functionality.
+* The messenger needs to contain a command object and to have SetValue
+* method that is called once a command is set.
+* 
+* @see HadrontherapyAnalysisManager
+*/
+class HadrontherapyAnalysisFileMessenger: public G4UImessenger
 {
-public:
+  public:
+    HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
+   ~HadrontherapyAnalysisFileMessenger();
 
-  HadrontherapyPhysicsList();
-  virtual ~HadrontherapyPhysicsList();
+	/**   
+	* Called when new command given.
+	* @param command is a pointer to the given command object
+	* @param newValue holds the argument given as a G4String
+	* @return is void   
+	*/     
+    void SetNewValue(G4UIcommand* command, G4String newValue);
+    
+  private:
+    HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
 
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  HadrontherapyStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  HadrontherapyStepMax* stepMaxProcess;
-
-  HadrontherapyPhysicsListMessenger* pMessenger;
+	/**   
+	* G4 user interface command (that takes a string argument) object
+	* Constructor requires command name and messenger class(this).
+	*/ 
+    G4UIcmdWithAString* FileNameCmd;
 };
 
 #endif
-
+#endif

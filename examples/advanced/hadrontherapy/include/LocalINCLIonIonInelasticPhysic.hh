@@ -24,77 +24,44 @@
 // ********************************************************************
 //
 //
-// HadrontherapyPhysicsList.hh
+// LocalINCLIonIonInelasticPhysic.cc
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// G.A.P. Cirrone(a)*, F.Romano(a)
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
 //
 // See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
-//
 
-#ifndef HadrontherapyPhysicsList_h
-#define HadrontherapyPhysicsList_h 1
+#ifndef LOCALINCLIONINELASTICPHYSIC_H
+#define LOCALINCLIONIONINELASTICPHYSIC_H 1
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
-#include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh" 
 
-class G4VPhysicsConstructor;
-class HadrontherapyStepMax;
-class HadrontherapyPhysicsListMessenger;
-
-class HadrontherapyPhysicsList: public G4VModularPhysicsList
+class LocalINCLIonIonInelasticPhysic: public G4VPhysicsConstructor 
 {
-public:
+ public:
+  LocalINCLIonIonInelasticPhysic (const G4String& name = "local_ion_ion_inelastic");
+   virtual ~LocalINCLIonIonInelasticPhysic();
 
-  HadrontherapyPhysicsList();
-  virtual ~HadrontherapyPhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  HadrontherapyStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  HadrontherapyStepMax* stepMaxProcess;
-
-  HadrontherapyPhysicsListMessenger* pMessenger;
+ protected:
+   void ConstructParticle(){};
+   void ConstructProcess();
 };
+#endif 
 
-#endif
+
+
+
+
+
+
 

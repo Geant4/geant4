@@ -136,6 +136,16 @@ simulations.
 Also the QGSP_BIC package can be used if the *Approach 3* is preferred.
 
 
+-------> INCL/ABLA physics lists
+
+The application includes INCL/ABLA inelastic process setup for
+deuteron, triton and alpha particles.
+
+In order to start using generic ion support (up to Carbon) you must
+first install an INCL/ABLA development version into your Geant4
+setup. The code for this version can be found on GitHub
+(github.com/kaitanie/incl).
+
 ------->2. EXPERIMENTAL SET-UP.      
                                       
 The application simulates the proton therapy beam line
@@ -217,7 +227,7 @@ necessary for the run of Hadrontherapy.
  - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
                           hadronic processes;
 
- - G4ABLADATA             points to the library of the INCL/ABLA hadronic model;
+ - G4ABLADATA             points to the data files needed by the INCL/ABLA hadronic model;
  
  - G4LEDATA               points to the low energy electromagnetic libraries
 
@@ -275,6 +285,12 @@ Note that the same information can be stored in different format,
 like .root or .xml using the same AIDA interface.
 Output is also stored in ASCII .out file. The file contains four columns; the first four columns represent the voxel indexs (that univocally identify the voxel volume) while the last column represent the energy deposited in the given voxel.
 
+
+------->6.1  ROOT ANALYSIS
+
+The application also supports using ROOT (http://root.cern.ch) directly without using AIDA.
+This feature can be enabled by setting environment variable G4ROOTANALYSIS_USE to 1 and
+unsetting G4ANALYSIS_USE.
 
 Please contact cirrone@lns.infn.it for more details.
 

@@ -123,7 +123,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 			ofs<< n <<'\t'<< m <<'\t'<<
 			  k<<'\t'<<matrix[i]<<G4endl;
 		       	
-#ifdef G4ANALYSIS_USE 	
+#ifdef ANALYSIS_USE
 			HadrontherapyAnalysisManager* analysis = 
 			  HadrontherapyAnalysisManager::getInstance();
 			analysis -> FillEnergyDeposit(n, m, k, matrix[i]);

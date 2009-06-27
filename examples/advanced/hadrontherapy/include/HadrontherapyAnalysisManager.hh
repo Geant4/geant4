@@ -31,95 +31,142 @@
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
+//
+// (a) Laboratori Nazionali del Sud
 //     of the INFN, Catania, Italy
 // (b) INFN Section of Genova, Genova, Italy
-// 
+//
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
-#ifdef G4ANALYSIS_USE
 #ifndef HADRONTHERAPYANALYSISMANAGER_HH
 #define HADRONTHERAPYANALYSISMANAGER_HH 1
 
 #include "globals.hh"
-# include <AIDA/AIDA.h>
+
+#ifdef ANALYSIS_USE ///< If we use analysis
+
+#ifdef G4ANALYSIS_USE ///< If analysis is done via AIDA
+#include <AIDA/AIDA.h>
 
 namespace AIDA{
-  class ITree; 
+  class ITree;
   class IAnalysisFactory;
   class ITreeFactory;
 }
+#endif
 
+#ifdef G4ROOTANALYSIS_USE ///< If analysis is done directly with ROOT
+#include "TROOT.h"
+#include "TFile.h"
+#include "TNtuple.h"
+#include "TH1F.h"
+#endif
+
+/**
+ * Messenger class for analysis-settings for HadronTherapyAnalysisManager 
+ */
+class HadrontherapyAnalysisFileMessenger;
+
+/**
+ * A class for connecting the simulation to an analysis package.
+ */
 class HadrontherapyAnalysisManager
 {
 private:
+	/**
+	 * Analysis manager is a singleton object (there is only one instance).
+	 * The pointer to this object is available through the use of the method getInstance();
+	 *
+	 * @see getInstance
+	 */
   HadrontherapyAnalysisManager();
-
+  
 public:
   ~HadrontherapyAnalysisManager();
-  
-  static HadrontherapyAnalysisManager* getInstance();
-  
-  void book();
-  // Book the histograms and ntuples in a .hbk file
-  
-  void FillEnergyDeposit(G4int voxelXId, G4int voxelYId, G4int voxelZId, 
-                         G4double energyDeposit);
-  // Fill the ntuple with the energy deposit in the phantom 
 
-  void BraggPeak(G4int, G4double);
-  // Fill 1D histogram with the Bragg peak in the phantom
+  /**
+   * Get the pointer to the analysis manager.
+   */
+  static HadrontherapyAnalysisManager* getInstance();
+
+  /**
+  * Book the histograms and ntuples in an AIDA or ROOT file.
+  */
+  void book();
+  /**
+   * Set name for the analysis file .root (used by macro)
+   */
+  void SetAnalysisFileName(G4String);
+  
+  /**
+  * Fill the ntuple with the energy deposit in the phantom
+  */
+  void FillEnergyDeposit(G4int voxelXId, G4int voxelYId, G4int voxelZId,
+                         G4double energyDeposit);
+
+  void BraggPeak(G4int, G4double); ///< Fill 1D histogram with the Bragg peak in the phantom
 
   void SecondaryProtonEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary protons
+  ///< Fill 1D histogram with the energy deposit of secondary protons
 
    void SecondaryNeutronEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary neutrons
+  ///< Fill 1D histogram with the energy deposit of secondary neutrons
 
   void SecondaryAlphaEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary alpha particles
+  ///< Fill 1D histogram with the energy deposit of secondary alpha particles
 
   void SecondaryGammaEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary gamma
+  ///< Fill 1D histogram with the energy deposit of secondary gamma
 
   void SecondaryElectronEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary electrons
+  ///< Fill 1D histogram with the energy deposit of secondary electrons
 
   void SecondaryTritonEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary tritons
+  ///< Fill 1D histogram with the energy deposit of secondary tritons
 
   void SecondaryDeuteronEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary deuterons
+  ///< Fill 1D histogram with the energy deposit of secondary deuterons
 
   void SecondaryPionEnergyDeposit(G4int slice, G4double energy);
-  // Fill 1D histogram with the energy deposit of secondary pions
+  ///< Fill 1D histogram with the energy deposit of secondary pions
 
   void electronEnergyDistribution(G4double secondaryParticleKineticEnergy);
-  // Energy distribution of secondary electrons originated in the phantom
+  ///< Energy distribution of secondary electrons originated in the phantom
 
   void gammaEnergyDistribution(G4double secondaryParticleKineticEnergy);
-  // Energy distribution of secondary gamma originated in the phantom
+  ///< Energy distribution of secondary gamma originated in the phantom
 
   void deuteronEnergyDistribution(G4double secondaryParticleKineticEnergy);
-  // Energy distribution of secondary deuterons originated in the phantom
+  ///< Energy distribution of secondary deuterons originated in the phantom
 
   void tritonEnergyDistribution(G4double secondaryParticleKineticEnergy);
-  // Energy distribution of secondary tritons originated in the phantom
+  ///< Energy distribution of secondary tritons originated in the phantom
 
   void alphaEnergyDistribution(G4double secondaryParticleKineticEnergy);
-  // Energy distribution of secondary alpha originated in the phantom
+  ///< Energy distribution of secondary alpha originated in the phantom
 
   void genericIonInformation(G4int, G4double, G4int, G4double);
- 
+
   void finish();
-  // Close the .hbk file with the histograms and the ntuples
+  ///< Close the .hbk file with the histograms and the ntuples
+
+#ifdef G4ROOTANALYSIS_USE
+private:
+  TH1F *createHistogram1D(const TString name, const TString title, int bins, double xmin, double xmax) {
+    TH1F *histo = new TH1F(name, title, bins, xmin, xmax);
+    histo->SetLineWidth(2);
+    return histo;
+  }
+#endif
 
 private:
   static HadrontherapyAnalysisManager* instance;
+  HadrontherapyAnalysisFileMessenger* fMess;
+  G4String AnalysisFileName;
+#ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory* aFact;
-  AIDA::ITree* theTree; 
+  AIDA::ITree* theTree;
   AIDA::IHistogramFactory *histFact;
   AIDA::ITupleFactory *tupFact;
   AIDA::IHistogram1D *h1;
@@ -128,17 +175,38 @@ private:
   AIDA::IHistogram1D *h4;
   AIDA::IHistogram1D *h5;
   AIDA::IHistogram1D *h6;
-  AIDA::IHistogram1D *h7; 
-  AIDA::IHistogram1D *h8; 
+  AIDA::IHistogram1D *h7;
+  AIDA::IHistogram1D *h8;
   AIDA::IHistogram1D *h9;
   AIDA::IHistogram1D *h10;
   AIDA::IHistogram1D *h11;
-  AIDA::IHistogram1D *h12; 
-  AIDA::IHistogram1D *h13; 
+  AIDA::IHistogram1D *h12;
+  AIDA::IHistogram1D *h13;
   AIDA::IHistogram1D *h14;
   AIDA::ITuple *ntuple;
   AIDA::ITuple *ionTuple;
+#endif
+#ifdef G4ROOTANALYSIS_USE
+  TFile *theTFile;
+  TH1F *th1;
+  TH1F *th2;
+  TH1F *th3;
+  TH1F *th4;
+  TH1F *th5;
+  TH1F *th6;
+  TH1F *th7;
+  TH1F *th8;
+  TH1F *th9;
+  TH1F *th10;
+  TH1F *th11;
+  TH1F *th12;
+  TH1F *th13;
+  TH1F *th14;
+  TNtuple *theROOTNtuple;
+  TNtuple *theROOTIonTuple;
+#endif
 };
 #endif
+
 #endif
 
