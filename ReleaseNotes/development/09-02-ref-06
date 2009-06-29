@@ -1,0 +1,85 @@
+
+                       geant4-09-02-ref-06
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Added interface to set deexcitation handler in Binary cascade.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-07
+------
+- binmake.gmk: move definition of TARGOBJEXT to place not dependent
+  on G4EXLIB such that the extension is defined when no lib is present
+  (change required for upgrading exercisers in testing).
+
+geometry/solids/CSG                              geom-csg-V09-02-03
+-------------------
+- Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
+  introduced in previous tag.
+
+processes/electromagnetic/standard               emstand-V09-02-14
+----------------------------------
+- G4WaterStopping: added Fe ion data.
+- G4GoudsmitSaundersonMscModel: fixed unphysical peak at very small angles;
+  extended model to 100 TeV.
+- G4GoudsmitSaundersonTable: reduced size of generated object code.
+- G4eCoulombScatteringModel, G4CoulombScatteringModel, G4WentzelVIModel:
+  fixed kinematic for ion/ion scattering.
+
+processes/hadronic
+------------------
+- models/binary_cascade (had-binary-V09-02-01)
+  o Added interface to set deexcitation handler in G4BinaryLightIonReaction
+    used to deexcite lighter initial nucleus; precompound handling low energy
+    interactions can be set too.
+
+track                                track-V09-02-03
+-----
+- Added method SetLowEnergyLimit() in G4ParticleChangeForLoss.
+
+examples                                         examples-V09-02-05
+--------
+- Updated reference outputs.
+- advanced/amsEcal (amsEcal-V09-02-07)
+  o Updated DetectorConstruction for layers setup.
+  o RunAction, EventAction: fixed initialisation of vectors.
+  o SteppingAction: added protection on index computation.
+  o Moved trigger conditions from SteppingAction to EventAction.
+  o Added histo 5 for geantino scan.
+  o Compute pixel numbering directly in SteppingAction.
+- extended/electromagnetic/TestEm5 (testem5-V09-02-05)
+  o PhysicsList: removed obsolete low-energy EM builders, substituted by
+    builders from physics_list module; added "standardGS" option: use
+    GoudsmitSaunderson multiple-scattering model.
+  o RunAction: fixed output of mean scattering angle.
+- extended/field/field04 (fieldex04-V09-02-01)
+  o Introduced '/rndm/autoSeed' command and changed default seeding of
+    random generator.
+- extended/hadronic/Hadr00 (exhadr00-V09-02-00)
+  o Added possibility to define physics-list as a job parameter.
+  o Added script for the test run of all physics-lists.
+- extended/hadronic/Hadr01 (exhadr01-V09-02-01)
+  o Substituted obsolete FB68 by FTFP_BERT_TRV.
+
+tests                                            tests-V09-02-05
+-----
+- Updated reference outputs and tools.
+- test34 (test34-V09-02-00)
+  o Fixed warning message on error output about no cuts defined for
+    region crystals.
+- test37 (test37-V09-02-03)
+  o Substituted "emstandard_opt1" physics by "standardGS", which uses
+    Goudsmit-Sounderson multiple-scattering model for e+,e-.
+  o Fixed typo in builder physics-list name.
+- test47 (test47-V09-02-00)
+  o New test for validation, simulating:
+    + ITEP experiment for the measurement of Lorentz invariant cross section
+      as a function of kinetic energy of the final state particle at certain
+      fixed angles.
+    + BNL experiment for the measurement of Lorentz invariant cross section as
+      a function of reduced transverse mass in fixed rapidity bins.
