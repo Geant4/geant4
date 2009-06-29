@@ -26,7 +26,7 @@
 #ifndef G4QPomeron_h
 #define G4QPomeron_h 1
 //
-// $Id: G4QPomeron.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QPomeron.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -63,13 +63,13 @@ class G4QPomeron
   void Pomeron_Alpha_Hard(G4double apom_Alpha_Hard){pomeron_Alpha_Hard = apom_Alpha_Hard;}
   G4double GetTotalCrossSection(const G4double s) {return SigP(s) * Expand(Z(s)/2);}
   G4double GetDiffractiveCrossSection(const G4double s)
-                                  {return SigP(s)/pomeron_C*(Expand(Z(s)/2)-Expand(Z(s)));}
+                                         {return (pomeron_C-1.)*GetElasticCrossSection(s);}
   G4double GetElasticCrossSection(const G4double s)
-                                          {return (pomeron_C-1)*GetElasticCrossSection(s);}
+                                  {return SigP(s)/pomeron_C*(Expand(Z(s)/2)-Expand(Z(s)));}
   G4double GetInelasticCrossSection(const G4double s)
                                 {return GetTotalCrossSection(s)-GetElasticCrossSection(s);}
   G4double GetTotalProbability(const G4double s, const G4double imp2)
-        {return 2*(1-std::exp(-Eikonal(s,imp2)))/pomeron_C*(1-std::exp(-Eikonal(s,imp2)));}
+                                      {return 2*(1.-std::exp(-Eikonal(s,imp2)))/pomeron_C;}
   G4double GetDiffractiveProbability(const G4double s, const G4double imp2)
                   {return (pomeron_C-1.)/pomeron_C*(GetTotalProbability(s,imp2) -
                                                     GetNondiffractiveProbability(s,imp2));}
@@ -97,6 +97,8 @@ class G4QPomeron
   G4double Zhard(const G4double s)   {return 2*pomeron_C*PowerHard(s)/LambdaHard(s);}
   
   void InitForNucleon();
+  void InitForHyperon();
+  void InitForAntiBaryon();
   void InitForPion();
   void InitForKaon();
   void InitForGamma();

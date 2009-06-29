@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.4 2009-05-29 15:43:55 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.5 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -67,8 +67,6 @@ class G4QFragmentation
 
   G4QHadronVector* Scatter(const G4QNucleus& theNucleus, const G4QHadron& thePrimary);
 
-  void CreateAndDecayStrings(const G4QNucleus& Nucleus, const G4QHadron& Projectile);
-
   void SetNucleus(G4QNucleus* aNucleus) {theNucleus = aNucleus;}
   G4QNucleus* GetWoundedNucleus() const {return theNucleus;}
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
@@ -78,7 +76,6 @@ class G4QFragmentation
    {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
 
   G4QStringVector* GetStrings();
-  G4QHadronVector* FragmentStrings(const G4QStringVector* theStrings);
   void DoLorentzBoost(G4ThreeVector aBoost) 
   {
     if(theNucleus) theNucleus->DoLorentzBoost(aBoost);
@@ -86,17 +83,11 @@ class G4QFragmentation
   }
 
   G4QPartonPair* GetNextPartonPair();
-  void BuildInteractions(const G4QHadron& thePrimary);
 
   // Static functions
   static void SetParameters(G4int nCM, G4double thresh, G4double QGSMth, G4double radNuc,
                             G4double SigPt, G4double extraM, G4double minM);
  protected:
-  G4QHadron* SelectInteractions(const G4QHadron &thePrimary);
-  void SplitHadrons()
-     {for(unsigned i=0; i<theInteractions.size(); i++) theInteractions[i]->SplitHadrons();}
-  void PerformSoftCollisions();
-  void PerformDiffractiveCollisions();
   G4bool IsSingleDiffractive()
                   {G4bool result=false; if(G4UniformRand()<1.) result=true; return result;}
   G4bool EnergyAndMomentumCorrector(G4QHadronVector* Output, G4LorentzVector& TotaMom);   
@@ -121,7 +112,7 @@ class G4QFragmentation
 
   G4int         ModelMode;
   G4ThreeVector theBoost;                                // init as zero 3-vector (@@ M.K.)
-  G4QNucleus*   theNucleus;                              // init as zero (0)
+  G4QNucleus*   theNucleus;                              // In constructer it is inited as 0
   G4ThreeVector theCurrentVelocity;                      // init as zero 3-vector (@@ M.K.)
 
   enum {SOFT, DIFFRACTIVE};

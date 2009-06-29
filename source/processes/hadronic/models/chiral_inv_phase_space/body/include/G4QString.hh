@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QString.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -72,8 +72,10 @@ class G4QString
 
   G4QString(); // formal creation of the string with future excitation
   G4QString(G4QParton* Color,G4QParton* Gluon, G4QParton* AntiColor, G4int Dir=PROJECTILE);
-  G4QString(G4QParton* Col,G4QParton* AntiCol, G4int Dir=PROJECTILE);
+  G4QString(G4QParton* Col, G4QParton* AntiCol, G4int Dir=PROJECTILE);
   G4QString(const G4QString &right);
+  G4QString(const G4QString &old, G4QParton* newdecay, const G4LorentzVector *momentum);
+  G4QString(const G4QString &old, G4QParton* newdecay);
 
   ~G4QString();
 
@@ -96,7 +98,6 @@ class G4QString
   G4QParton* GetStableParton() const{ return theStableParton;} // stable at the moment
   G4QParton* GetDecayParton() const{return theDecayParton;}// now involved in fragmentation
   G4int GetDecayDirection() const;
-  G4bool FourQuarkString() const; // Checks that the string is qq-(qq)bar string
   G4bool DecayIsQuark() const {return theDecayParton->GetParticleSubType()=="quark";}
   G4bool StableIsQuark() const {return theStableParton->GetParticleSubType()=="quark";}
   G4ThreeVector StablePt(); // Get Pt of the stable quark
@@ -105,13 +106,18 @@ class G4QString
   G4double LightConeMinus() {return Pminus;}
   G4double LightConeDecay();
   G4LorentzVector GetFragmentation4Mom() const; //!! Instead of Get$Momentum in FragmString
-  G4double Mass2() const {return Pplus*Pminus-(Ptleft+Ptright).mag2();}
-  G4double Mass() const{return std::sqrt(Mass2());}
+  G4double Mass2() const { return Pplus*Pminus-(Ptleft+Ptright).mag2();}
+  G4double Mass() const
+  {
+    G4double  m2=Mass2();
+    if(m2>0) return std::sqrt(Mass2());
+    else     return 0.; // @@ Make Warning
+  }
   G4bool StopFragmentation() {return FragmentationMass(&G4QHadronBuilder::BuildHighSpin)
                                                  + MassCut > GetFragmentation4Mom().mag();}
   G4bool IsFragmentable() {return FragmentationMass() + MassCut < Mass();}
   G4ThreeVector SampleQuarkPt();
-  G4bool SplitLast(G4QString* string, G4QHadronVector* LeftHV, G4QHadronVector* RightHV);
+  G4bool SplitLast(G4QHadronVector* LeftHV, G4QHadronVector* RightHV);
 
   void Sample4Momentum(G4LorentzVector* Mom, G4double M, G4LorentzVector* aMom,
                        G4double aM, G4double InitialMass);
@@ -126,7 +132,8 @@ class G4QString
   void DiffString(G4QHadron* aHadron, G4bool isProjectile);
   void ExciteString(G4QParton* Col,G4QParton* AntiCol, G4int Dir);
   G4QHadronVector* FragmentString(G4bool QL); // Fragment String using QGSM=true/LUND=false
-  G4QString* CPExcited(); // Creates a string, using only CMS end-partons of the string
+  G4QString* CopyString(); // Creates a string, using only CMS end-partons of the string
+  void RecoverString(G4QString* string);
   G4QHadronVector* LightFragmentationTest();
   G4double FragmentationMass(G4QHcreate build=0, G4QHadronPair* pdefs=0);
   void CalculateHadronTimePosition(G4double theInitialStringMass, G4QHadronVector*);
@@ -134,7 +141,7 @@ class G4QString
   void SetRightPartonStable();
   void UpdateString(G4QParton* decay, const G4LorentzVector* mom);
   G4QString(G4QParton* newdecay, const G4LorentzVector* momentum);
-  G4QHadron* Splitup(G4bool QL);  // Split Hadron & update the string, QGSM:true,Lund:false
+  G4QHadron* Splitup(G4bool QL);
   G4LorentzVector* SplitEandP(G4QHadron* pHadron, G4bool QL); // QGSM:QL=true,Lund:QL=false
   G4QParton* CreateParton(G4int PDGcode)                   {return new G4QParton(PDGcode);}
   G4QPartonPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);

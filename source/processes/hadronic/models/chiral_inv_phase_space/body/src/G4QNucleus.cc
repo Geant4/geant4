@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.97 2009-05-29 15:43:55 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.98 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -36,7 +36,7 @@
 // ---------------------------------------------------------------------
 
 
-#define debug
+//#define debug
 //#define pdebug 
 //#define cldebug
 //#define qdebug
@@ -57,6 +57,7 @@ G4double G4QNucleus::freeDib=.05;       // probability to find quasiFreeDiBaryon
 G4double G4QNucleus::clustProb=4.;      // clusterization probability in dense region
 G4double G4QNucleus::mediRatio=1.;      // relative vacuum hadronization probability
 G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8 fm) (Body)
+G4double G4QNucleus::WoodSaxonSurf=.545*fermi; // WoodSaxon Surface Param (0.545 fm) (Body)
 
 G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), maxClust(0),
   probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(),radius(),Tb()
@@ -3039,7 +3040,7 @@ G4double G4QNucleus::BindingEnergy(const G4double& cZ, const G4double& cA, G4dou
 {//                  ====================================================================
   static const G4double mNeut= G4QPDGCode(2112).GetMass(); // Mass of neutron
   static const G4double mProt= G4QPDGCode(2212).GetMass(); // Mass of proton
-  if(!cZ && !cA) return Z*mProt+N*mNeut-G4QNucleus(Z,N,0).GetGSMass(); // For QGSM
+  if(!cZ && !cA) return Z*mProt+N*mNeut-GetGSMass();       // Total binding energy far all
   G4double GSM=GetGSMass();
   G4int iZ=static_cast<int>(cZ);
   G4int cN=static_cast<int>(cA-cZ);
@@ -3192,17 +3193,17 @@ void G4QNucleus::ChooseNucleons()
 #endif
   G4int protons =0;
   G4int nucleons=0;
-  G4int myA=GetA();
-  while (nucleons < myA)
+  G4int theA=GetA();
+  while (nucleons < theA)
   {
-    if(protons<Z && G4UniformRand() < G4double(Z-protons)/G4double(myA-nucleons) )
+    if(protons<Z && G4UniformRand() < G4double(Z-protons)/G4double(theA-nucleons) )
     {
       protons++;
       nucleons++;
       G4QHadron* proton = new G4QHadron(2212);
       theNucleons.push_back(proton);
     }
-    else if ( (nucleons-protons) < (myA-Z) )
+    else if ( (nucleons-protons) < N )
     {
       nucleons++;
       G4QHadron* neutron = new G4QHadron(2112);
@@ -3218,46 +3219,63 @@ void G4QNucleus::ChoosePositions()
 {
   static const G4double mProt= G4QPDGCode(2212).GetMass();
   static const G4double mProt2= mProt*mProt;
+  static const G4double third= 1./3.;
 #ifdef debug
   G4cout<<"G4QNucl::ChoosePositions: is called"<<G4endl;
 #endif
-  G4int i=0;                                  // general index
-  G4int myA=GetA();                           // cashed value of A
-  G4ThreeVector aPos;                         // Prototype of nucleon position
-  G4ThreeVector delta;                        // Prototype of distance between nucleons
-  G4ThreeVector* places = new G4ThreeVector[myA]; // Vector of 3D positions
-  G4double*      placeM = new G4double[myA];  // Vector of radii
-  G4bool  freeplace;                          // flag of free space available
-  G4double nucDist2 = nucleonDistance*nucleonDistance; // @@ can be a common static
-  G4double maxR=GetRadius(0.01);              // there are no nucleons at this density
-  while(i<myA)                                // LOOP over all nucleons
+  G4int          i=0;                         // nucleon index
+  G4int          theA=GetA();                 // cashed value of A
+  G4int          lastN=theA-1;                // cashed value of A-1 (theLastNucleon index)
+  G4ThreeVector  aPos(0.,0.,0.);              // Prototype of the nucleon position
+  G4double       rPos=0.;                     // Radius of the nucleon position
+  G4ThreeVector  delta(0.,0.,0.);             // Prototype of the distance between nucleons
+  G4ThreeVector* places= new G4ThreeVector[theA]; // Vector of 3D positions
+  G4bool      freeplace= false;               // flag of free space available
+  G4double nucDist2= nucleonDistance*nucleonDistance; // @@ can be a common static
+  G4double maxR= GetRadius(0.01);             // there are cond no nucleons at this density
+  G4ThreeVector sumPos(0.,0.,0.);             // Vector of the current 3D sum
+  while(i<theA)                               // LOOP over all nucleons
   {
-    aPos = maxR*RandomUnitSphere();           // Get random position of nucleon inside maxR
-    G4double density=GetRelativeDensity(aPos);
+    rPos = maxR*pow(G4UniformRand(),third);   // Get random radius of the nucleon position
+    G4double density=rPos*rPos;               // Density at R (temporary squared radius)
+    if(theA<17) density=GetRelOMDensity(density); // Oscilator model (M.K.?)
+    else        density=GetRelWSDensity(rPos);    // Wood-Saxon model
 #ifdef debug
     G4cout<<"G4QNucl::ChoosePositions: i="<<i<<", pos="<<aPos<<", dens="<<density<<G4endl;
 #endif
     if(G4UniformRand()<density)               // Try this position with frequency ~Density
     {
+      // @@ Gaussian oscilator distribution is good only up to He4 (s-wave). Above: p-wave
+      // (1+k*(r^2/R^2)]*exp[-r^2/R^2]. A=s+p=4+3*4=16 (M.K.) So Li,Be,C,N,O are wrong
+      if(i==lastN) aPos=-rPos*sumPos.unit();  // TheLast tries to compensate CenterOfGravity
+      else     aPos=rPos*G4RandomDirection(); // It uses the standard G4 function
       freeplace = true;                       // Imply that there is a free space
       for(G4int j=0; j<i && freeplace; j++)   // Check that there is no overlap with others
       {
         delta = places[j] - aPos;             // Distance to nucleon j
-        freeplace= delta.mag2()>nucDist2;     // If false break the LOOP (M.K.)
-        if(!freeplace) break;                 // M.K. acceleration
+        freeplace= delta.mag2()>nucDist2;     // If false break the LOOP
       }
       //  protons must at least have binding energy of CoulombBarrier (@@ ? M.K.), so
       //  assuming Fermi Energy corresponds to Potential, we must place protons such
       //  that the Fermi Energy > CoulombBarrier (?)
-      if(freeplace && theNucleons[i]->GetPDGCode() == 2212) // Free Space Protons
+      //  @@ M.K.: 1. CoulBar depends on aPos; 2. Makes Isotopic assymetry (!); 3. Perform.
+      G4int nucPDG= theNucleons[i]->GetPDGCode();
+#ifdef debug
+    G4cout<<"G4QNucl::ChoosePositions: frpl="<<freeplace<<", nucPDG="<<nucPDG<<G4endl;
+#endif      
+      if(freeplace && nucPDG == 2212) // Free Space Protons
       {
         G4double pFermi=GetFermiMomentum(GetDensity(aPos));
-        G4double eFermi= sqrt(pFermi*pFermi+mProt2)-mProt; // Kinetic energy
+        G4double eFermi= sqrt(pFermi*pFermi+mProt2)-mProt;  // Kinetic energy
         if (eFermi <= CoulombBarrier()) freeplace=false;
       }
       if(freeplace)
       {
+#ifdef debug
+        G4cout<<"G4QNucl::ChoosePositions: fill nucleon i="<<i<<", V="<<aPos<<G4endl;
+#endif      
         places[i]=aPos;
+        sumPos+=aPos;
         ++i;
       }
     }
@@ -3265,23 +3283,21 @@ void G4QNucleus::ChoosePositions()
 #ifdef debug
   G4cout<<"G4QNucl::ChoosePositions: Out of the positioning LOOP"<<G4endl;
 #endif
-  ReduceSum(places,placeM);                    // Reduce center of mass shift (equalWeight)
+  if(theA > 2) ReduceSum(places,sumPos);              // Reduce the CM shift (equal weights)
 #ifdef debug
   G4cout<<"G4QNucl::ChoosePositions: The reduced summ is made"<<G4endl;
 #endif
-  for(i=0; i<myA; i++) theNucleons[i]->SetPosition(places[i]);
+  for(i=0; i<theA; i++) theNucleons[i]->SetPosition(places[i]);
   delete [] places;
-  delete [] placeM;
 #ifdef debug
-  G4cout << "G4QNucleus::ChoosePositions: The positions are defined for A="<<myA<<G4endl;
+  G4cout << "G4QNucleus::ChoosePositions: The positions are defined for A="<<theA<<G4endl;
 #endif
 } // End of ChoosePositions
 
 // Initializes density of 3D nucleons in the 3D nucleus
 void G4QNucleus::InitDensity()
 {
-  static const G4double deld=0.545*fermi;           // Surface thickness
-  static const G4double r0sq=0.8133*fermi*fermi;    // Base for A-dep of rel.mean.radius
+  static const G4double r0sq=0.8133*fermi*fermi;      // Base for A-dep of rel.mean.radius
   static const G4double third=1./3.;
   G4int    iA = GetA();
   G4double rA = iA;
@@ -3290,52 +3306,48 @@ void G4QNucleus::InitDensity()
 #ifdef debug
   G4cout<<"G4QNucleus::InitDensity: rA=iA=A="<<iA<<", A^1/3="<<At<<", A^2/3="<<At2<<G4endl;
 #endif
-  if(iA<17)                                         // Gaussian density distribution
+  if(iA<17)                                           // Gaussian density distribution
   {
-    radius = r0sq*At2;                              // Mean Squared Radius (fm^2)
-    rho0   = pow(pi*radius, -1.5);                  // Central Density
+    radius = r0sq*At2;                                // Mean Squared Radius (fm^2)
+    rho0   = pow(pi*radius, -1.5);                    // Central Density
   }
-  else                                              // Wood-Saxon density distribution
+  else                                                // Wood-Saxon density distribution
   {
-    G4double r0=1.16*(1.-1.16/At2)*fermi;           // Base for A-dependent radius
-    G4double rd=deld/r0;                            // Relative thickness of the surface
-    radius = r0*At;                                 // Half Density Radius (fm)
-    rho0=0.75/(pi*pow(r0,3.)*iA*(1.+rd*rd*pi2));    // Central Density
+    G4double r0=1.16*(1.-1.16/At2)*fermi;             // Base for A-dependent radius
+    G4double rd=WoodSaxonSurf/r0;                     // Relative thickness of the surface
+    radius = r0*At;                                   // Half Density Radius (fm)
+    rho0=0.75/(pi*pow(r0,3.)*iA*(1.+rd*rd*pi2));      // Central Density
   }
 } // End of InitDensity
 
-// Calculates Derivity of the nuclear density (for Binary Cascade, can be absolete)
+// Calculates Derivity of the nuclear density
 G4double G4QNucleus::GetDeriv(const G4ThreeVector& aPosition)
 {
-  static const G4double deld=0.545*fermi;           // Surface thickness
   if(radius==0.) InitDensity();
   G4double rPos=aPosition.mag();
   if(GetA()<17) return -GetDensity(aPosition)*(rPos+rPos)/radius; // Gaussian density
   // Wood-Saxon density distribution
   G4double dens=GetRelativeDensity(aPosition);
-  return -exp((rPos-radius)/deld)*dens*dens*rho0/deld;
+  return -exp((rPos-radius)/WoodSaxonSurf)*dens*dens*rho0/WoodSaxonSurf;
 } // End of GetDeriv
 
-// Radius of the deffinit % of nuclear density
+// Radius of the deffinit % of nuclear density (very strange solution ?? @@ M.K.)
 G4double G4QNucleus::GetRadius(const G4double maxRelDens)
 {
-  static const G4double deld=0.545*fermi;           // Surface thickness
   if(radius==0.) InitDensity();
   if(GetA()<17)                                     // Gaussian density distribution
-    return (maxRelDens>0 && maxRelDens <= 1. ) ? sqrt(-radius*log(maxRelDens)) : DBL_MAX;
+    return (maxRelDens>0 && maxRelDens <= 1. ) ? sqrt(-radius*log(maxRelDens) ) : DBL_MAX;
   // Wood-Saxon density distribution
-  return (maxRelDens>0 && maxRelDens <= 1. ) ?
-         (radius + deld*log((1.-maxRelDens+exp(-radius/deld))/maxRelDens)) : DBL_MAX;
-} // End of GetRadius
+  return (maxRelDens>0 && maxRelDens <= 1. ) ? (radius + WoodSaxonSurf*
+         log((1.-maxRelDens+exp(-radius/WoodSaxonSurf))/maxRelDens) ) : DBL_MAX;
+} // End of GetRadius (check @@ radius=sqr0 (fm^2) for A<17,  r0 (fm) for A>16 (units)
 
 // Calculates Densyty/rho0
 G4double G4QNucleus::GetRelativeDensity(const G4ThreeVector& aPosition)
 {
-  static const G4double deld=0.545*fermi;           // Surface thickness
   if(radius==0.) InitDensity();
-  if(GetA()<17)return exp(-aPosition.mag2()/radius);// Gaussian distribution
-  // Wood-Saxon density distribution
-  return 1./(1.+exp((aPosition.mag()-radius)/deld));
+  if(GetA()<17) return GetRelOMDensity(aPosition.mag2());// Gaussian distribution (OscMod?)
+  return GetRelWSDensity(aPosition.mag());               // Wood-Saxon density distribution
 } // End of GetRelativeDensity
 
 // Calculates modul of Fermy Momentum  depending on density
@@ -3351,112 +3363,118 @@ void G4QNucleus::ChooseFermiMomenta()
 {
   static const G4double mProt= G4QPDGCode(2212).GetMass(); // Mass of proton
   static const G4double mProt2= mProt*mProt;
-  static const G4double mNeut= G4QPDGCode(2112).GetMass(); // Mass of neutron
+  //static const G4double mNeut= G4QPDGCode(2112).GetMass(); // Mass of neutron
+  static const G4double third= 1./3.;
   G4int i=0;
-  G4double density=0;
-  G4int myA=GetA();
-  G4ThreeVector* momentum = new G4ThreeVector[myA];
-  G4double*      fermiM   = new G4double[myA];
-  for(i=0; i<myA; i++) // momenta for all, including the last, in case we swap nucleons
+  G4double density=0.;                                // Prototype of density for Loop calc
+  G4int theA=GetA();                                  // Atomic weight of the nucleus
+  G4int am1=theA-1;                                   // The last index in the Loop
+  G4ThreeVector* momentum = new G4ThreeVector[theA];  // Temporary array for nucleon's moms
+  G4ThreeVector  sumMom(0.,0.,0.);                    // Sum of all momenta for mom-conserv
+#ifdef debug
+  G4cout<<"G4QNucleus::ChooseFermiMomentum is called for Z="<<Z<<", N="<<N<<G4endl;
+#endif
+  for(i=0; i<theA; i++) // momenta for all, including the last, in case we swap nucleons
   {
     density=GetDensity(theNucleons[i]->GetPosition());// density around nucleon i
-    G4double ferm = GetFermiMomentum(density);        // module of momentun for nucleon i
-    fermiM[i] = ferm;                                 // module of momentun for nucleon i
-    G4ThreeVector mom=ferm*RandomUnitSphere();        // 3-vector for nucleon mpomentum
-    if(theNucleons[i]->GetPDGCode() == 2212)           // the nucleon is proton
+    G4double ferm = GetFermiMomentum(density);        // module of momentum for nucleon i
+    G4ThreeVector mom(0.,0.,0.);                      // proto 3-vector for nucleon momentum
+    G4double rn3=pow(G4UniformRand(),third);          // Spherical randomization
+    G4ThreeVector dir(0.,0.,0.);                      // proto 3-vector for the momDirection
+    if( i == am1) dir=-sumMom.unit();                 // try to compensate the mom noncons.
+    else          dir=G4RandomDirection();            // free randomization for i < A-1
+    if(theNucleons[i]->GetPDGCode() == 2212)          // the nucleon is a proton
     {
       G4double eMax = sqrt(ferm*ferm+mProt2)-CoulombBarrier();
-      if(eMax>mProt)
-      {
-        G4double pmax2= eMax*eMax - mProt2;
-        fermiM[i] = sqrt(pmax2);                      // modify proton momentum
-        while(mom.mag2() > pmax2) mom=Get3DFermiMomentum(density, fermiM[i]);
-      }
-      else
-      {
-        G4cerr<<"G4QNucleus: difficulty finding proton momentum -> mom=0"<<G4endl;
-        mom=0;
-      }
+      if(eMax>mProt) mom=sqrt(eMax*eMax - mProt2)*rn3*dir; // 3D proton momentum
+      else G4cerr<<"G4QNucleus::ChooseFermMom: fail to get protonMomentum -> mom=0"<<G4endl;
     }
+    else mom=ferm*rn3*dir;                            // 3-vector for the neutron momentum
     momentum[i]= mom;
+    sumMom+= mom;
+#ifdef debug
+    G4cout<<"G4QNucleus::ChooseFermiMomentum: for i="<<i<<", candidate mom="<<mom<<G4endl;
+#endif
   }
-  ReduceSum(momentum,fermiM);                    // Reduse momentum nonconservation
-  for(i=0; i< myA ; i++ )
+  if(theA > 2) ReduceSum(momentum, sumMom);           // Reduse momentum nonconservation
+  //G4double bindEn=BindingEnergy()/theA;
+  G4int thisPDG=GetPDG();
+  G4double rMp=G4QPDGCode(thisPDG-1000).GetMass();
+  G4double rMn=G4QPDGCode(thisPDG-1).GetMass();
+  G4double rMp2=rMp*rMp;
+  G4double rMn2=rMn*rMn;
+  G4double rM=rMn;
+  G4double rM2=rMn2;
+  G4double thisM=GetGSMass();
+  for(i=0; i< theA ; i++ )
   {
-    G4double mN=mNeut;
-    if(theNucleons[i]->GetPDGCode() == 2212) mN=mProt;
-    G4double energy = mN - BindingEnergy()/myA;
-    G4LorentzVector tempV(momentum[i],energy);
+    if(theNucleons[i]->GetPDGCode() == 2212)
+    {
+      rM=rMp;
+      rM2=rMp2;
+    }
+    else
+    {
+      rM=rMp;
+      rM2=rMp2;
+    }
+    G4ThreeVector curMom = momentum[i];
+    G4double energy = thisM-std::sqrt(rM2+curMom.mag2()); // @@ update after splitting
+    G4LorentzVector tempV(curMom,energy);
+#ifdef debug
+    G4cout<<"G4QNucleus::ChooseFermiMomentum: for i="<<i<<", mom="<<momentum[i]<<G4endl;
+#endif
     theNucleons[i]->Set4Momentum(tempV);
   }
   delete [] momentum;
-  delete [] fermiM;
 } // End of ChooseFermiMomenta
 
 // Reduce momentum nonconservation or center of mass shift (reenterable attempts)
-G4bool G4QNucleus::ReduceSum(G4ThreeVector* momentum, G4double* pFermiM)
+G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
 {
-  G4int myA=GetA();
-  if(myA<2)                                           // Can not reduce: only one nucleon
+  G4int theA=GetA();                                // A#of nucleons
+  if(theA<3)                                        // Can not reduce for 1 or 2 nucleons
   {
-    G4cout<<"-W-G4QNucleus::ReduceSum: *Failed* A="<<myA<<" < 2"<<G4endl;
+    G4cout<<"-Warning-G4QNucleus::ReduceSum: *Failed* A="<<theA<<" < 3"<<G4endl;
     return false;
   }
-  G4int i=0;                                          // To avoid declaration in j-LOOP
-  G4ThreeVector sum(0.,0.,0.);                        // The sum which must be reduced
-  G4double minV=DBL_MAX;                              // Min value of Fermi Momentum
-  G4double maxV=0.;                                   // Max value of Fermi Momentum
-  G4int    maxI=-1;                                   // Index of maximum Fermi Momentum
-  for(i=0; i<myA; i++)
+  // The last vector must have the same direction as the SUM (do not take into account
+  G4int am1=theA-1;                                 // A-1 elements, which canBeCorrected
+  G4double  sum2=sum.mag2();                        // Initial squared sum
+  G4double  hsum2=sum2/2;                           // Half squared sum
+  G4double* dp = new G4double[am1];                 // Displacements
+  G4int     m=am1;                                  // #0fVectors contributing to correction
+  G4double  minS=DBL_MAX;                           // Min value of Fermi Momentum
+  G4int     minI=0;                                 // Index of maximum Fermi Momentum
+  for(G4int i=0; i<am1; i++) dp[i]=sum.dot(vect[i]);// Calculation of dot-products
+  while(m)
   {
-    sum+=momentum[i];                                 // Make sum of 3D Momenta
-    G4double pfi=pFermiM[i];                          // To avoid multiple call by index
-    if(pfi<minV) minV=pfi;                            // Find the minimum Fermi Momentum
-    if(pfi>maxV)                                      // Better maximum is found
+    m=0;
+    for(G4int i=0; i<am1; i++) if(dp[i]>0 && dp[i]<sum2) // can be used for the reduction
     {
-      maxV=pfi;                                       // Find the maximum Fermi Momentum
-      maxI=i;                                         // Index of maximum Fermi Momentum
-    }
-  }
-  minV*=0.01;                                         // Value to estimate residual (@@par)
-  if(sum.mag()<minV)                                  // Probably reduction is not needed
-  {
-    momentum[maxI]-=sum;                              // add residual to maximum momentum
-    pFermiM[maxI]=momentum[maxI].mag();               // udate only one Fermi Momentum
-    return true;
-  }
-  G4double* fm2   = new G4double[myA];                // collect temporary squared FermiMom
-  for(i=0; i<myA; i++) fm2[i]=pFermiM[i]*pFermiM[i];  // calculate squared Fermi Momenta
-  G4int myA1=myA-1;                                   // to avoid calculation in the j-LOOP
-  for(G4int j=0; j<myA; j++)                          // Not more than myA attempts
-  {
-    G4double minP=DBL_MAX;                            // Minimal progection value
-    G4int    minI=-1;                                 // Minimal projection index
-    for(i=0; i<myA; i++)                              // Sirch for minimum projection
-    {
-      G4double proj=fabs(sum.dot(momentum[i])/fm2[i]);// abs value of |sum|*cos(theta)
-      if(proj<minP)
+      m++;
+      G4double shift=fabs(dp[i]-hsum2);
+      if(shift < minS)
       {
-        minP=proj;
+        minS=shift;
         minI=i;
       }
     }
-    G4ThreeVector cand=momentum[minI]-sum;
-    G4double      canV=cand.mag();                    // what we've got
-    if(canV<0.000001)                                 // Never should come in
+    if(m)                                            // There is a vector reducing the sum
     {
-      G4cout<<"-W-G4QNucleus::ReduceSumm: *Failed* A="<<myA<<",C="<<canV<<",j="<<j<<G4endl;
-      return false;
-    }
-    cand = cand*pFermiM[minI]/canV;                   // pFermiM is unchanged !
-    sum += cand-momentum[minI];                       // sum is updated
-    momentum[minI] = cand;                            // Update direction of the momentum
-    if(sum.mag()<minV || j == myA1)                   // Two resons to finish reduction
-    {
-      momentum[maxI]-=sum;                            // add residual to maximum momentum
-      pFermiM[maxI]=momentum[maxI].mag();             // update the biggest momentum
+      G4ThreeVector x=(dp[minI]/hsum2)*sum;          // turn-reduction of the sum-vector
+      vect[minI]-=x;                                 // turn the minI-th vector
+      sum-=x;                                        // reduce the sum
+      sum2=sum.mag2();                               // Current squared sum
+      hsum2=sum2/2;                                  // Current half squared sum
     }
   }
+  if(sum2 > 0.)
+  {
+    sum/=theA;
+    for(G4int i=0; i<theA; i++) vect[i]-=sum;        // Final reduction
+  }
+  delete [] dp;
   return true;
 } // End of ReduceSum
 
@@ -3468,19 +3486,25 @@ void G4QNucleus::Init3D()
 #endif
   for_each(theNucleons.begin(),theNucleons.end(),DeleteQHadron());
   theNucleons.clear();
-  G4int myA = GetA();
+  G4int theA = GetA();
   ChooseNucleons();
 #ifdef debug
   G4cout<<"G4QNucleus::Init3D: Nucleons are initialized, nN="<<theNucleons.size()<<G4endl;
 #endif
   InitDensity();
 #ifdef debug
-  G4cout<<"G4QNucl::Init3D: DensityPars for A="<<myA<<":R="<<radius <<",r0="<<rho0<<G4endl;
+  G4cout<<"G4QNucl::Init3D: DensityPars for A="<<theA<<":R="<<radius <<",r0="<<rho0<<G4endl;
 #endif
   ChoosePositions();
+#ifdef debug
+  G4cout<<"G4QNucleus::Init3D: Nucleons are positioned in the coordinate space"<<G4endl;
+#endif
   ChooseFermiMomenta();
-  G4double Ebind= BindingEnergy()/myA;
-  for (G4int i=0; i<myA; i++) theNucleons[i]->SetBindingEnergy(Ebind); // @@ ? M.K.
+#ifdef debug
+  G4cout<<"G4QNucleus::Init3D: Nucleons are positioned in the momentum space"<<G4endl;
+#endif
+  G4double Ebind= BindingEnergy()/theA;
+  for (G4int i=0; i<theA; i++) theNucleons[i]->SetBindingEnergy(Ebind); // @@ ? M.K.
   currentNucleon=0;                                   // Automatically starts the LOOP
   return;  
 } // End of Init3D
@@ -3489,8 +3513,8 @@ void G4QNucleus::Init3D()
 G4double G4QNucleus::GetOuterRadius()
 {
   G4double maxradius2=0;
-  G4int myA=theNucleons.size();
-  if(myA) for(G4int i=0; i<myA; i++)
+  G4int theA=theNucleons.size();
+  if(theA) for(G4int i=0; i<theA; i++)
   {
     G4double nucr2=theNucleons[i]->GetPosition().mag2();
     if(nucr2 > maxradius2) maxradius2=nucr2;
@@ -3501,15 +3525,15 @@ G4double G4QNucleus::GetOuterRadius()
 //
 void G4QNucleus::DoLorentzBoost(const G4LorentzVector& theBoost)
 {
-  G4int myA=theNucleons.size();
-  if(myA) for(G4int i=0; i<myA; i++) theNucleons[i]->Boost(theBoost);
+  G4int theA=theNucleons.size();
+  if(theA) for(G4int i=0; i<theA; i++) theNucleons[i]->Boost(theBoost);
 } // End of DoLorentzBoost(G4LorentzVector)
 
 //
 void G4QNucleus::DoLorentzBoost(const G4ThreeVector& theBoost)
 {
-  G4int myA=theNucleons.size();
-  if(myA) for(G4int i=0; i<myA; i++) theNucleons[i]->Boost(theBoost);
+  G4int theA=theNucleons.size();
+  if(theA) for(G4int i=0; i<theA; i++) theNucleons[i]->Boost(theBoost);
 } // End of DoLorentzBoost(G4ThreeVector)
 
 //
@@ -3517,8 +3541,8 @@ void G4QNucleus::DoLorentzContraction(const G4ThreeVector& theBeta)
 {
   G4double bet2=theBeta.mag2();
   G4double factor=(1.-sqrt(1.-bet2))/bet2;         // 1./(beta2*gamma2)
-  G4int myA=theNucleons.size();
-  if(myA) for (G4int i=0; i< myA; i++)
+  G4int theA=theNucleons.size();
+  if(theA) for (G4int i=0; i< theA; i++)
   {
     G4ThreeVector pos=theNucleons[i]->GetPosition(); 
     pos -= factor*(theBeta*pos)*theBeta;  
@@ -3529,18 +3553,18 @@ void G4QNucleus::DoLorentzContraction(const G4ThreeVector& theBeta)
 // Shift all nucleons of the 3D Nucleus (Used in GHAD-TFT)
 void G4QNucleus::DoTranslation(const G4ThreeVector& theShift)
 {
-  G4int myA=theNucleons.size();
-  if(myA) for(G4int i=0; i<myA; i++)
+  G4int theA=theNucleons.size();
+  if(theA) for(G4int i=0; i<theA; i++)
     theNucleons[i]->SetPosition(theNucleons[i]->GetPosition() + theShift);
 } // End of DoTranslation
 
 // Initializes currentNucleon=0 returns size of theNucleons vector
 G4bool G4QNucleus::StartLoop()
 {
-  G4int myA=theNucleons.size();
-  if(myA) currentNucleon=0;
+  G4int theA=theNucleons.size();
+  if(theA) currentNucleon=0;
   else G4cout<<"-Warning-G4QNucleus::StartLoop: LOOP starts for uninited nucleons"<<G4endl;
-  return myA;
+  return theA;
 } // End of StartLoop
 
 //Calculate T(b) with step .1 fm
@@ -3569,22 +3593,9 @@ void G4QNucleus::ActivateBThickness()
   }
 } // End of "ActivateBThickness"
 
-// Randomize position inside 3D UnitRadius Sphere
-G4ThreeVector G4QNucleus::RandomUnitSphere()
-{ //                      ==================
-  G4double x=G4UniformRand(), y=G4UniformRand(), z=G4UniformRand();
-  G4double r2= x*x+y*y+z*z;
-  while(r2>1.)
-  {
-    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
-    r2=x*x+y*y+z*z;
-  }
-  return G4ThreeVector(x, y, z);
-} // End of RandomUnitSphere
-
 // Add Cluster
 G4QNucleus G4QNucleus::operator+=(const G4QNucleus& rhs)
-//====================================================
+//======================================================
 {
   Z+=rhs.Z;
   N+=rhs.N;

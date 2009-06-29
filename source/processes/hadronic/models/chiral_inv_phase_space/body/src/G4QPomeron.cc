@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPomeron.cc,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QPomeron.cc,v 1.4 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -53,12 +53,12 @@ G4QPomeron::G4QPomeron(G4int PDG)
   pomeron_Gamma_Hard = 0.0002/GeV/GeV;
   pomeron_Alpha_Hard = 1.47;
   G4int aP = std::abs(PDG);
-  if     (aP==2212||aP==2112)                   InitForNucleon();
-  else if(PDG==111||aP==211)                    InitForPion();
-  else if(PDG==130||PDG==310||aP==311||aP==321) InitForKaon();
-  else if(PDG==22)                              InitForGamma();
-  else if(aP==3122||aP==3222||aP==3212||aP==3112||aP==3322||aP==3312||aP==3334)
-                                                InitForNucleon();
+  if     (PDG==2212 || PDG==2112)                     InitForNucleon();
+  else if(PDG==111 || aP==211)                        InitForPion();
+  else if(PDG==130 || PDG==310 || aP==311 || aP==321) InitForKaon();
+  else if(PDG==22)                                    InitForGamma();
+  else if(PDG > 3000)                                 InitForHyperon();
+  else if(PDG <-2000)                                 InitForAntiBaryon();
   else
   {
     G4cout<<"-Warning-G4QPomeron is initialised for PDGCode="<<PDG<<" as a pion"<<G4endl;
@@ -76,21 +76,43 @@ G4double G4QPomeron::GetCutPomeronProbability(const G4double s,const G4double im
 
 void G4QPomeron::InitForNucleon()
 {
-  // pomeron_S=  3.0*GeV*GeV;  
-  pomeron_S=  2.7*GeV*GeV;
-  // pomeron_Gamma=  2.16/GeV/GeV;      // ? M.K.
-  // pomeron_Gamma=  3.96/GeV/GeV;      // ? M.K.
-  pomeron_Gamma   = (2.6+3.96)/GeV/GeV; // ? M.K.
+  //pomeron_S       =  3.0*GeV*GeV;  
+  pomeron_S       = 2.7*GeV*GeV;
+  //pomeron_Gamma   =  2.16/GeV/GeV;      // ? M.K.
+  //pomeron_Gamma   =  3.96/GeV/GeV;      // ? M.K.
+  pomeron_Gamma   = (2.6+3.96)/GeV/GeV; // ??? M.K.
   pomeron_C       = 1.4;
   pomeron_Rsquare = 3.56/GeV/GeV;
-  /////pomeron_Alpha=  0.9808;          // This is very strange M.K. (was in GHAD QGSM)
+  // If pomeron_Gamma_Hard!=0 to fit total pp XS use pomeron_Gamma_Soft=2.35/GeV/GeV ? M.K.
+}
+
+void G4QPomeron::InitForHyperon()
+{
+  pomeron_S      =  3.0*GeV*GeV;  
+  //pomeron_S       = 2.7*GeV*GeV;
+  // pomeron_Gamma  =  2.16/GeV/GeV;      // ? M.K.
+  pomeron_Gamma   = 3.96/GeV/GeV;       // ? M.K.
+  //pomeron_Gamma   = (2.6+3.96)/GeV/GeV; // ??? M.K.
+  pomeron_C       = 1.4;
+  pomeron_Rsquare = 3.56/GeV/GeV;
+  // If pomeron_Gamma_Hard!=0 to fit total pp XS use pomeron_Gamma_Soft=2.35/GeV/GeV ? M.K.
+}
+void G4QPomeron::InitForAntiBaryon()
+{
+  //pomeron_S       = 3.0*GeV*GeV;  
+  pomeron_S       = 2.7*GeV*GeV;
+  pomeron_Gamma   = 2.16/GeV/GeV;       // ? M.K.
+  //pomeron_Gamma   =  3.96/GeV/GeV;      // ? M.K.
+  //pomeron_Gamma   = (2.6+3.96)/GeV/GeV; // ? M.K.
+  pomeron_C       = 1.4;
+  pomeron_Rsquare = 3.56/GeV/GeV;
   // If pomeron_Gamma_Hard!=0 to fit total pp XS use pomeron_Gamma_Soft=2.35/GeV/GeV ? M.K.
 }
 
 void G4QPomeron::InitForPion()
 {
   pomeron_S       = 1.5*GeV*GeV;
-  //pomeron_Gamma = 1.46/GeV/GeV;  // ? M.K.
+  //pomeron_Gamma   = 1.46/GeV/GeV;  // ? M.K.
   pomeron_Gamma   = 2.17/GeV/GeV;  // ? M.K.
   pomeron_C       = 1.6;
   pomeron_Rsquare = 2.36/GeV/GeV;
@@ -99,7 +121,7 @@ void G4QPomeron::InitForPion()
 void G4QPomeron::InitForKaon()
 {
   pomeron_S       = 2.3*GeV*GeV;
-  //pomeron_Gamma = 1.31/GeV/GeV;  // ? M.K.
+  //pomeron_Gamma   = 1.31/GeV/GeV;  // ? M.K.
   pomeron_Gamma   = 1.92/GeV/GeV;  // ? M.K.
   pomeron_C       = 1.8;
   pomeron_Rsquare = 1.96/GeV/GeV;
@@ -107,33 +129,21 @@ void G4QPomeron::InitForKaon()
 
 void G4QPomeron::InitForGamma()
 {
-  pomeron_S       = 1.7*GeV*GeV;
-  //pomeron_Gamma =  1.42/GeV/GeV; // ? M.K.
-  pomeron_Gamma   = 2.07/GeV/GeV;  // ? M.K.
+  pomeron_S       = 1.7*GeV*GeV;   // ??? M.K.
+  //pomeron_Gamma   =  1.42/GeV/GeV; // ? M.K.
+  pomeron_Gamma   = 2.07/GeV/GeV;  // ??? M.K.
   pomeron_C       = 1.7;
-  pomeron_Rsquare = 2.16/GeV/GeV;
+  pomeron_Rsquare = 2.16/GeV/GeV;  // ??? M.K.
 }
 
 G4double G4QPomeron::Expand(G4double z)
 {
-
- G4double sum=1.;
- G4double current=1.;
- for(G4int j=2; j<21; j++)
- {
-   current *= -z*(j-1)/j/j;
-   sum+=current;
- }
- return sum;
+  G4double sum=1.;
+  G4double current=1.;
+  for(G4int j=2; j<21; j++)
+  {
+    current *= -z*(j-1)/j/j;
+    sum+=current;
+  }
+  return sum;
 }
-
-
-
-
-
-
-
-
-    
-
-

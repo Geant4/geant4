@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QHadronBuilder.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -55,7 +55,7 @@
 class G4QHadronBuilder
 {
 public:
-  G4QHadronBuilder(); 
+  G4QHadronBuilder();                                 // Only initialises parameters
   G4QHadron* Build(G4QParton* black, G4QParton* white);
   G4QHadron* BuildLowSpin(G4QParton* black, G4QParton* white);
   G4QHadron* BuildHighSpin(G4QParton* black, G4QParton* white);

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.144 2009-05-26 14:40:20 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.145 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -850,7 +850,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       //G4int trgPDG = theEnvironment.GetPDG();// New PDG Code for the Residual Nucleus ^ ^
       G4LorentzVector trg4M(0.,0.,0.,resMass); // New 4-momentum for the ResidualNucleus^ ^
       G4int tNH = output->size();              // For the selection LOOP                ^ ^
-      G4ThreeVector dir = RndmDir();           // For the selection in LOOP (@@ at rest)^ ^
+      G4ThreeVector dir = G4RandomDirection(); // For the selection in LOOP (@@ at rest)^ ^
       G4double ra=std::pow(G4double(totBaryoN),third);  //                              ^ ^
 #ifdef pdebug
       G4cout<<"G4QE::CQ:N="<<tNH<<",T="<<totCharge<<","<<totBaryoN<<",A="<<ra<<G4endl;//^ ^
@@ -8856,38 +8856,38 @@ void G4QEnvironment::AddQuasmon(G4Quasmon* Q)
   G4cout<<"G4QEnv::AddQuasmon:t4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
 #endif
 }
-//General function makes Random Unit 3D-Vector
-G4ThreeVector RndmDir()
-{//  -------- =========
-  G4double x = G4UniformRand(), y = G4UniformRand(), z = G4UniformRand();
-  G4double r2= x*x+y*y+z*z;
-  while(r2>1.||r2<.000001)
-  {
-    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
-    r2=x*x+y*y+z*z;
-  }
-  G4double r=sqrt(r2), quad=G4UniformRand();
-  if(quad>0.5)
-  {
-    if(quad>0.75)
-    {
-      if(quad>0.875)    return G4ThreeVector(-x/r,-y/r,-z/r);
-      else              return G4ThreeVector(-x/r,-y/r, z/r);
-    }
-    else
-    {
-      if(quad>0.625)    return G4ThreeVector(-x/r, y/r,-z/r);
-      else              return G4ThreeVector(-x/r, y/r, z/r);
-    }
-  }
-  else
-  {
-    if(quad>0.25)
-    {
-      if(quad>0.375)    return G4ThreeVector( x/r,-y/r,-z/r);
-      else              return G4ThreeVector( x/r,-y/r, z/r);
-    }
-    else if(quad>0.125) return G4ThreeVector( x/r, y/r,-z/r);
-  }
-  return                       G4ThreeVector( x/r, y/r, z/r);
-} // End of RndmDir
+//General function makes Random Unit 3D-Vector -> now G4RandomDirection() is used
+//G4ThreeVector RndmDir()
+//{//  -------- =========
+//  G4double x = G4UniformRand(), y = G4UniformRand(), z = G4UniformRand();
+//  G4double r2= x*x+y*y+z*z;
+//  while(r2>1.||r2<.000001)
+//  {
+//    x = G4UniformRand(); y = G4UniformRand(); z = G4UniformRand();
+//    r2=x*x+y*y+z*z;
+//  }
+//  G4double r=sqrt(r2), quad=G4UniformRand();
+//  if(quad>0.5)
+//  {
+//    if(quad>0.75)
+//    {
+//      if(quad>0.875)    return G4ThreeVector(-x/r,-y/r,-z/r);
+//      else              return G4ThreeVector(-x/r,-y/r, z/r);
+//    }
+//    else
+//    {
+//      if(quad>0.625)    return G4ThreeVector(-x/r, y/r,-z/r);
+//      else              return G4ThreeVector(-x/r, y/r, z/r);
+//    }
+//  }
+//  else
+//  {
+//    if(quad>0.25)
+//    {
+//      if(quad>0.375)    return G4ThreeVector( x/r,-y/r,-z/r);
+//      else              return G4ThreeVector( x/r,-y/r, z/r);
+//    }
+//    else if(quad>0.125) return G4ThreeVector( x/r, y/r,-z/r);
+//  }
+//  return                       G4ThreeVector( x/r, y/r, z/r);
+//} // End of RndmDir

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronBuilder.cc,v 1.4 2009-04-29 07:53:18 mkossov Exp $
+// $Id: G4QHadronBuilder.cc,v 1.5 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // -----------------------------------------------------------------------------
 
 
+//#define debug
 //#define debug
 
 #include "G4QHadronBuilder.hh"
@@ -67,6 +68,9 @@ G4QHadronBuilder::G4QHadronBuilder()
   vectorMesonMixings[3] = 0.0;
   vectorMesonMixings[4] = 1.0;
   vectorMesonMixings[5] = 1.0; 
+#ifdef debug
+  G4cout<<"G4QHadronBuilder::Constructor: *** Done ***"<<G4endl;
+#endif
 }
 
 G4QHadron* G4QHadronBuilder::Build(G4QParton* black, G4QParton* white)
@@ -87,22 +91,47 @@ G4QHadron* G4QHadronBuilder::Build(G4QParton* black, G4QParton* white)
 
 G4QHadron* G4QHadronBuilder::BuildLowSpin(G4QParton* black, G4QParton* white)
 {
+#ifdef debug
+  G4cout<<"G4QHadronBuilder::BuildLowSpin: ***Called***, b="<<black->GetParticleSubType()
+        <<", w="<<white->GetParticleSubType()<<G4endl;
+#endif 
   if(black->GetParticleSubType() == "quark" && white->GetParticleSubType() == "quark")
-        return Meson(black,white, SpinZero);
-  // returns a SpinThreeHalf Baryon if all quarks are the same
-  else  return Baryon(black,white, SpinHalf);
+  {
+#ifdef debug
+    G4cout<<"G4QHadronBuilder::BuildLowSpin: Meson is built"<<G4endl;
+#endif 
+    return Meson(black,white, SpinZero);
+  }
+  else                  // returns a SpinThreeHalf Baryon if all quarks are the same
+  {
+#ifdef debug
+    G4cout<<"G4QHadronBuilder::BuildLowSpin: Baryon is built"<<G4endl;
+#endif 
+    return Baryon(black,white, SpinHalf);
+  }
 }
 
 G4QHadron* G4QHadronBuilder::BuildHighSpin(G4QParton* black, G4QParton* white)
 {
   if(black->GetParticleSubType() == "quark" && white->GetParticleSubType() == "quark")
-       return Meson(black,white, SpinOne);
-  else return Baryon(black,white,SpinThreeHalf);
+  {
+#ifdef debug
+    G4cout<<"G4QHadronBuilder::BuildHighSpin: Meson is built"<<G4endl;
+#endif 
+    return Meson(black,white, SpinOne);
+  }
+  else
+  {
+#ifdef debug
+    G4cout<<"G4QHadronBuilder::BuildHighSpin: Meson is built"<<G4endl;
+#endif 
+    return Baryon(black,white,SpinThreeHalf);
+  }
 }
 
 G4QHadron* G4QHadronBuilder::Meson(G4QParton* black, G4QParton* white, Spin theSpin)
 {
-#ifdef debug
+#ifdef pdebug
   //  Verify Input Charge
   G4double charge =  black->GetPDGCharge() + white->GetPDGCharge();  
   if (std::abs(charge)>2 || std::abs(3*(charge-G4int(charge*1.001))) > perCent)
@@ -148,7 +177,7 @@ G4QHadron* G4QHadronBuilder::Meson(G4QParton* black, G4QParton* white, Spin theS
                                                                PDGEncoding = - PDGEncoding;
   }
   G4QHadron* Meson= new G4QHadron(PDGEncoding);
-#ifdef debug
+#ifdef pdebug
   if(std::abs(black->GetPDGCharge() + white->GetPDGCharge() - Meson->GetCharge()) > .001)
     G4cout<<"-Warning-G4QHadronBuilder::Meson:wrongCharge, q1="<<black->GetPDGCharge()<<"("
           <<black->->GetParticleName()<<"), q2="<<white->GetPDGCharge()<<"("
@@ -160,7 +189,7 @@ G4QHadron* G4QHadronBuilder::Meson(G4QParton* black, G4QParton* white, Spin theS
 
 G4QHadron* G4QHadronBuilder::Baryon(G4QParton* black, G4QParton* white, Spin theSpin)
 {
-#ifdef debug
+#ifdef pdebug
   //  Verify Input Charge
   G4double charge =  black->GetPDGCharge() + white->GetPDGCharge();  
   if(std::abs(charge) > 2 || std::abs(3*(charge - G4int(charge*1.001))) > perCent )
@@ -217,7 +246,7 @@ G4QHadron* G4QHadronBuilder::Baryon(G4QParton* black, G4QParton* white, Spin the
   else           PDGEncoding = 1000 * kfld + 100 * kfle + 10 * kflf + theSpin;
   if (id1 < 0) PDGEncoding = -PDGEncoding;
   G4QHadron* Baryon= new G4QHadron(PDGEncoding);
-#ifdef debug
+#ifdef pdebug
   if(std::abs(black->GetPDGCharge() + white->GetPDGCharge()- Baryon->GetCharge()) > .001)
     G4cout<<"-Warning-G4QHadronBuilder::Baryon:wrongCharge,dq="<<black->GetPDGCharge()<<"("
           <<black->->GetParticleName()<<"), q="<<white->GetPDGCharge()<<"("

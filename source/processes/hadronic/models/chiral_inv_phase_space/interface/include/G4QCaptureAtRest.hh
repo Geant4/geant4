@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.8 2009-05-25 17:32:08 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.9 2009-06-29 16:03:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -99,6 +99,7 @@
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4RandomDirection.hh"
 
 // CHIPS Headers
 #include "G4QEnvironment.hh"

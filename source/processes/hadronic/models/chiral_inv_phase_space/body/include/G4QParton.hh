@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QParton.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -54,18 +54,7 @@ class G4QParton
 {
  public:
   // Constructors
-  G4QParton()
-  {
-    // CHIPS is working only with u, d, and s quarks (SU(3)xSU(3)) (no gluons! M.K.)
-    // Random Flavor/Colour/Spin definition for default constructor (with .3 s-suppresion)
-    PDGencoding=(G4int)(2.3*G4UniformRand())+1; //@@ What about antiquarks? (M.K.)
-    theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
-    // random colour (1,2,3)=(R,G,B) for quarks and (-1,-2,-3)=(aR,aG,aB) for anti-quarks
-    theColour = (G4int)(3*G4UniformRand())+1;
-    if(theColour>3) theColour = 3;
-    theIsoSpinZ = theDefinition->GetPDGIsospin3();
-    theSpinZ = (G4int)(2*G4UniformRand()) - 0.5;
-  }
+  G4QParton();                                             // Default fullRandom constructor
   G4QParton(G4int PDGencoding);                            // Collor/Spin are still random
   G4QParton(const G4QParton &right);
   G4QParton(const G4QParton* right);

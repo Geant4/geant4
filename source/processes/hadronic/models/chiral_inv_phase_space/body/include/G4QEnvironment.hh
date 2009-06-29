@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.33 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.34 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -43,6 +43,7 @@
 #ifndef G4QEnvironment_h
 #define G4QEnvironment_h 1
 
+#include "G4RandomDirection.hh"
 #include "G4QuasmonVector.hh"
 
 class G4QEnvironment 
@@ -121,7 +122,7 @@ private:
 };
 
 //General function makes Random Unit 3D-Vector
-G4ThreeVector RndmDir();
+//G4ThreeVector RndmDir();
 
 // Inline functions
 inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const

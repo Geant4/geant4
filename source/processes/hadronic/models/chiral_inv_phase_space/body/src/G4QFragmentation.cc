@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.6 2009-05-29 15:43:55 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.7 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -33,16 +33,17 @@
 //                 History: 
 //     Created by Mikhail Kossov, October 2006
 //     CHIPS QGS fragmentation class 
-//     For comparison mirror member functions are taken from G4 classes:
+//     For comparison similar member functions can be found in the G4 classes:
 //     G4QGSParticipants
 //     G4QGSModels
 //     G4ExcitedStringDecay
 // -----------------------------------------------------------------------------
-// Short description: CHIPS string fragmentation class
+// Short description: CHIPS QG string fragmentation class
+// Rhe key member function is Scatter, making the interaction (see G4QCollision)
 // -----------------------------------------------------------------------------
 
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 //#define ppdebug
 
 #include "globals.hh"
@@ -54,10 +55,10 @@
 
 // Definition of static parameters
 G4int    G4QFragmentation::nCutMax=7; 
-G4double G4QFragmentation::ThresholdParameter = 0.*MeV;     // Make it applied from E=0. 
+G4double G4QFragmentation::ThresholdParameter = 0.*MeV;// Make it appliedFrom E=0.
 G4double G4QFragmentation::QGSMThershold=0.*GeV;            // for E=0, (was 3.*GeV) (?)
 G4double G4QFragmentation::theNucleonRadius=1.5*fermi;      // M.K.?
- // Parameters of diffractional fragmentation
+// Parameters of diffractional fragmentation
 G4double G4QFragmentation::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
 G4double G4QFragmentation::minExtraMass=250.*MeV;// minimum excitation mass 
 G4double G4QFragmentation::minmass=250.*MeV;     // mean pion transverse mass for Xmin 
@@ -74,18 +75,17 @@ G4QFragmentation::~G4QFragmentation() {if(theNucleus) delete theNucleus;}
 G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
                                            const G4QHadron  &aPrimary)
 { // This is the main member function, which returns the resulting vector of hadrons
+  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
   G4QStringVector* strings=0;
-
-  G4QHadron thePrimary = aPrimary;
-
-  G4LorentzRotation toZ;              // Lorentz Transformation to the projectile System
-  G4LorentzVector proj4M=thePrimary.Get4Momentum(); // Projectile 4-momentum in LS
+  G4QHadron aProjectile = aPrimary;       // As a primary is const
+  G4LorentzRotation toZ;                  // Lorentz Transformation to the projectileSystem
+  G4LorentzVector proj4M=aProjectile.Get4Momentum(); // Projectile 4-momentum in LS
   toZ.rotateZ(-1*proj4M.phi());
   toZ.rotateY(-1*proj4M.theta());
-  thePrimary.Set4Momentum(toZ*proj4M);
-  G4LorentzRotation toLab(toZ.inverse()); // Lorentz Transfornation back to LS
-
-  G4int attempts = 0, maxAttempts=20;
+  aProjectile.Set4Momentum(toZ*proj4M);   // Now the projectile moves along Z exis !!
+  G4LorentzRotation toLab(toZ.inverse()); // Lorentz Transfornation back to LS (at the end)
+  G4int attempts = 0;
+  G4int maxAttempts=20;                   // @@ A parameter !!
   while(!strings)
   {
     if (attempts++ > maxAttempts ) 
@@ -98,20 +98,291 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
     G4cout<<"G4QFragmentation::Scatter: The attempt # "<<attempts<<" starts. The primary: "
           <<proj4M<<", the nucleus: "<<aNucleus<<G4endl;
 #endif
-    CreateAndDecayStrings(aNucleus,thePrimary);  // Here the strings are created
-    strings = GetStrings();          // If strings were created, it is not zero
+    //CreateStrings(aNucleus,aProjectile);  // Here the strings are created @@ Called once
+    G4int tZ=aNucleus.GetZ();
+    G4int tN=aNucleus.GetN();
+    G4int tPDG=90000000+tZ*1000+tN;
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Scatter: --> Initializing Z= "<<tZ<<", N="<<tN<<G4endl;
+#endif
+    if(!theNucleus) theNucleus = new G4QNucleus(tZ,tN); // Create if it is not created
+    else            theNucleus->InitByPDG(tPDG);     // Reinit if it is created (newAttempt)
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Scatter: Nucl4Mom="<<theNucleus->Get4Momentum()<<G4endl;
+#endif
+    theNucleus->Init3D();
+    theCurrentVelocity.setX(0);    
+    theCurrentVelocity.setY(0); 
+    // @@ "target Nucleon" == "Proton at rest" (M.K. ?)
+    G4double nCons = 1;                                 // 1 or baryonNum of the Projectile
+    G4int projAbsB=std::abs(aProjectile.GetBaryonNumber()); // Fragment/Baryon (Meson/AntiB)
+    if(projAbsB>1) nCons = projAbsB;                    // @@ what if this is a meson ?
+    G4LorentzVector proj4M = aProjectile.Get4Momentum();// 4-mom of the projectile hadron
+    G4double pz_per_projectile = proj4M.pz()/nCons;     // Momentum per nucleon (hadron?)
+    // @@ use M_A/A instead of mProt ------------ M.K.
+    G4double e_per_projectile = proj4M.e()/nCons+mProt; // @@ Add mass of TargetProtonAtRest
+    G4double vz = pz_per_projectile/e_per_projectile;   // Speed of the projectile
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Scatter: Projectile4M="<<proj4M<<", Vz="<<vz<<", nC="
+          <<nCons<<", pE="<<e_per_projectile<<G4endl;
+#endif
+    theCurrentVelocity.setZ(vz);                        // CM (w/r to one nucleon) velosity
+    DoLorentzBoost(-theCurrentVelocity);                // Make a boost vector of theCurVec
+    G4LorentzVector cmProjMom = proj4M;                 // Copy the orijinal proj4M in LS
+    cmProjMom.boost(-theCurrentVelocity);               // Bring the proj4Mom in LS to CM
+    G4int pPDG=aProjectile.GetPDGCode();                // The PDG code of the projectile
+    G4double projM=aProjectile.GetMass();               // Mass of the projectile
+    G4double eKin = cmProjMom.e()-projM;                // Primary kinetic energy (MeV!)
+    G4double maxCuts=1.5*eKin;                          // Important only for LowEnergies
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Scatter: Proj4MomentumInCM = "<<cmProjMom<<G4endl;
+#endif
+    //
+    // >>>>>>>>>> Find collisions meeting collision conditions
+    //
+    G4QHadron* cmProjectile = new G4QHadron(pPDG,cmProjMom); // Hip-copy of the CMProjectile
+    G4QPomeron theProbability(pPDG);                    // the PDG must be a data member
+    G4double outerRadius = theNucleus->GetOuterRadius();// Get the nucleus frontiers
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: OuterRadius = "<<outerRadius<<G4endl;
+#endif
+    // Check the reaction threshold 
+    theNucleus->StartLoop();                            // Prepare Loop ovdefr nucleons
+    G4QHadron* pNucleon = theNucleus->GetNextNucleon(); // Get the next nucleon to try
+    G4double s = (cmProjMom + pNucleon->Get4Momentum()).mag2(); // Squaed CM Energy
+    G4double ThresholdMass = projM + pNucleon->GetMass(); // @@ Nucleon can be virtual...?
+    ModelMode = SOFT;                                   // NOT-Diffractive hadronization
+    if (s < sqr(ThresholdMass + ThresholdParameter))    // At ThP=0 is impossible (virtNucl)
+    {
+      G4cerr<<"***G4QFragmentation::Scatter: ThrM="<<ThresholdMass<<" + ThrPa="
+            <<ThresholdParameter<<" = "<<ThresholdMass+ThresholdParameter<<" > sqrt(s)="
+            <<std::sqrt(s)<<G4endl;
+      G4Exception("G4QFragmentation::Scatter:","72",FatalException,"LowEnergy");
+    }
+    if (s < sqr(ThresholdMass + QGSMThershold))         // --> Only diffractive interaction
+    {
+#ifdef debug
+      G4cout<<"G4QFragmentation::Scatter: *OnlyDiffraction* ThrM="<<ThresholdMass
+            <<" + ThrQGS="<<QGSMThershold<<" = "<<ThresholdMass+QGSMThershold<<" > sqrt(s)="
+            <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif to Quasmon
+#endif
+      ModelMode = DIFFRACTIVE;
+    }
+    // Clean up all previous interactions and reset the counters
+    std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
+    theInteractions.clear();
+    G4int totalCuts = 0;
+    G4double impactUsed = 0.;
+
+    while(!theInteractions.size()) // Till the interaction is created
+    {
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: *** Enter the interaction LOOP ***"<<G4endl;
+#endif
+      // choose random impact parameter
+      std::pair<G4double, G4double> theImpactParameter;
+      theImpactParameter = theNucleus->ChooseImpactXandY(outerRadius+theNucleonRadius);
+      G4double impactX = theImpactParameter.first; 
+      G4double impactY = theImpactParameter.second;
+    
+      // LOOP over nuclei of the target nucleus to select collisions
+      theNucleus->StartLoop();
+      G4int nucleonCount = 0;                           // debug
+      //G4QFragmentation_NPart = 0;                       // ? M.K.
+      // @@ Get Next nucleon should update the energies of the nucleons to conserv Energy !!
+      while( (pNucleon = theNucleus->GetNextNucleon()) && totalCuts < maxCuts)
+      {
+        nucleonCount++; // for debug only (?)
+#ifdef debug
+        G4cout<<"G4QFragmentation::Scatter: LOOP overNucleons, totCuts="<<totalCuts<<G4endl;
+#endif
+        // Needs to be moved to Probability class @@@
+        G4double s = (cmProjMom + pNucleon->Get4Momentum()).mag2();
+        G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x()) +
+                             sqr(impactY - pNucleon->GetPosition().y());
+        G4double Probability = theProbability.GetInelasticProbability(s, Distance2); // INEL
+        // test for inelastic collision
+        G4double rndNumber = G4UniformRand();           // For the printing purpose
+        // ModelMode = DIFFRACTIVE;
+#ifdef debug
+          G4cout<<"G4QFragmentation::Scatter: NLOOP p="<<Probability<<", r="<<rndNumber
+                <<", d="<<std::sqrt(Distance2)<<G4endl;
+#endif
+        if (Probability > rndNumber) // Diffractive interaction
+        {
+          G4QHadron* aTarget = new G4QHadron(*pNucleon);// Copy of the selected nucleon  
+          //G4QFragmentation_NPart ++;                  // ? M.K.
+          theTargets.push_back(aTarget);
+          pNucleon=aTarget;                             // @@ switch the pNuc to temporary
+          if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
+              G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
+          { 
+            // ---------------->>>> diffractive interaction
+            if(IsSingleDiffractive()) ExciteSingDiffParticipants(cmProjectile, aTarget);
+            else                          ExciteDiffParticipants(cmProjectile, aTarget);
+            G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
+            anInteraction->SetTarget(aTarget); 
+            theInteractions.push_back(anInteraction);   // --> now theInteractions not empty
+            anInteraction->SetNumberOfDiffractiveCollisions(1); // Why not increment? M.K.?
+            // @@ Why not breake the NLOOP, if only one diffractive can happend?
+            totalCuts += 1;                             // UpdateOfNucleons in't necessary
+#ifdef debug
+            G4cout<<"G4QFragmentation::Scatter: NLOOP DiffInteract, tC="<<totalCuts<<G4endl;
+#endif
+          }
+          else
+          {
+            // -------------->>>>> nondiffractive = soft interaction
+            // sample nCut+1 (cut Pomerons) pairs of strings can be produced
+            G4int nCut;
+            G4double* running = new G4double[nCutMax]; // @@ This limits the cuts
+            running[0] = 0;
+            for(nCut = 0; nCut < nCutMax; nCut++)      // @@ Calcs a Lot Of 0-probabilities
+            {
+              running[nCut] = theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
+              if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
+            }
+            G4double random = running[nCutMax-1]*G4UniformRand();
+            for(nCut = 0; nCut < nCutMax; nCut++) if(running[nCut] > random) break;
+            delete [] running;
+            // @@ nCut is found with big efforts and now nCut=0 ?? M.K. ?? !!
+            //nCut = 0; // @@ in original code ?? @@
+            aTarget->IncrementCollisionCount(nCut+1);
+            cmProjectile->IncrementCollisionCount(nCut+1);
+            G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
+            anInteraction->SetTarget(aTarget);
+            anInteraction->SetNumberOfSoftCollisions(nCut+1);
+            theInteractions.push_back(anInteraction);
+            totalCuts += nCut+1;
+#ifdef debug
+            G4cout<<"G4QFragmentation::Scatter: NLOOP SoftInteract, tC="<<totalCuts<<G4endl;
+#endif
+            impactUsed=Distance2;
+          }
+        }
+      }
+#ifdef debug
+      G4cout<<"G4QFragmentation::Scatter: NUCLEONCOUNT="<<nucleonCount<<G4endl;
+#endif
+    }
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: CUTDEBUG="<<totalCuts<<", ImpactParam="
+          <<impactUsed<<", #ofInter="<<theInteractions.size()<<G4endl;
+#endif
+    //
+    // ------------------ now build the parton pairs for the strings ------------------
+    //
+    for(unsigned i=0; i<theInteractions.size(); i++) theInteractions[i]->SplitHadrons();
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: Parton pairs are builded"<<G4endl;
+#endif  
+    // 
+    // >>>>>>>> make soft collisions (ordering is vital)
+    //
+    G4QInteractionVector::iterator i;
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: Creation of SoftCollisionPartonPair STARTS"<<G4endl;
+#endif
+    for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
+    {
+      G4QInteraction* anIniteraction = *i;
+      G4QPartonPair*  aPair=0;
+      G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
+      if (nSoftCollisions)
+      { 
+        G4QHadron* pProjectile = anIniteraction->GetProjectile();
+        G4QHadron* pTarget     = anIniteraction->GetTarget();
+        for (G4int j = 0; j < nSoftCollisions; j++)
+        {
+          aPair=new G4QPartonPair(pTarget->GetNextParton(),pProjectile->GetNextAntiParton(),
+                                  G4QPartonPair::SOFT, G4QPartonPair::TARGET);
+          thePartonPairs.push_back(aPair);
+          aPair=new G4QPartonPair(pProjectile->GetNextParton(),pTarget->GetNextAntiParton(),
+                                G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
+          thePartonPairs.push_back(aPair);
+#ifdef debug
+          G4cout<<"G4QFragmentation::Scatter: SOFT, 2 parton pairs're filled"<<G4endl;
+#endif
+        }  
+        delete *i;
+        i=theInteractions.erase(i);
+        i--;
+      }
+    }
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: Strings are hadronized"<<G4endl;
+#endif  
+		  //
+    // >>>>>>>>>>>>>>> make the rest as the diffractive fragmentation
+    //
+    for(unsigned i = 0; i < theInteractions.size(); i++) // Interactions are reduced by Soft
+    {
+      G4QInteraction* anIniteraction = theInteractions[i];
+      G4QHadron* aProjectile = anIniteraction->GetProjectile();
+      G4QParton* aParton = aProjectile->GetNextParton();
+      G4QPartonPair* aPartonPair;
+#ifdef debug
+      G4cout<<"G4QFragmentation::Scatter: Creation of DiffractivePartonPair STARTS"<<G4endl;
+#endif
+      // the projectile diffraction first
+      if (aParton)
+      {
+        aPartonPair=new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
+                                      G4QPartonPair::DIFFRACTIVE,G4QPartonPair::PROJECTILE);
+        thePartonPairs.push_back(aPartonPair);
+#ifdef debug
+        G4cout<<"G4QFragmentation::Scatter: proj Diffractive Parton Pair is filled"<<G4endl;
+#endif
+      }
+      // then the target diffraction
+      G4QHadron* aTarget = anIniteraction->GetTarget();
+      aParton = aTarget->GetNextParton();
+      if (aParton)
+      {
+        aPartonPair = new G4QPartonPair(aParton, aTarget->GetNextAntiParton(), 
+                                        G4QPartonPair::DIFFRACTIVE, G4QPartonPair::TARGET);
+        thePartonPairs.push_back(aPartonPair);
+#ifdef debug
+        G4cout<<"G4QFragmentation::Scatter: proj Diffractive Parton Pair is filled"<<G4endl;
+#endif
+      }
+    }
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter:DiffractiveExcitations are made"<<G4endl;
+#endif  
+    //
+    // >>>>>>>>>>>>>> clean-up , if necessary
+    //
+    std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
+    theInteractions.clear();
+    std::for_each(theTargets.begin(), theTargets.end(), DeleteQHadron());
+    theTargets.clear();
+    delete cmProjectile;
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: Temporary objects are cleaned up"<<G4endl;
+#endif  
+    // This function prepares theBoost for transformation of secondaries to LS (-ProjRot!)
+    GetWoundedNucleus()->DoLorentzBoost(theCurrentVelocity);// Boost theResidualNucleus toLS
+    // @@ Nucleus isn't completely in LS, it needs the toZ (-ProjRot) rotation to consE/M
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Scatter: >>> >>> Strings are created "<<G4endl;
+#endif
+    strings = GetStrings(); // If strings were created, it is not zero -> out of While-LOOP
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: The # of strings = "<<strings->size()<<G4endl;
+#endif
   }
   //
   // ------------------ At this point the strings must be created -----------------
   //
-  G4QHadronVector* theResult= 0;
-  G4double stringEnergy=0.;
+  G4double stringEnergy=0.;                    // To sum up the total string energy
   for( unsigned astring=0; astring < strings->size(); astring++)
   {
     // Make energy sum and bring strings to LS, models generate them along z
-    stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
-    stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
-    (*strings)[astring]->LorentzRotate(toLab);
+    G4QString* curString=(*strings)[astring];
+    stringEnergy += curString->GetLeftParton()->Get4Momentum().t();
+    stringEnergy += curString->GetRightParton()->Get4Momentum().t();
+    curString->LorentzRotate(toLab); // @@ Remnber about the projectile Rotation
   }
 #ifdef debug
   G4cout<<"G4QFragmentation::Scatter: Total energy of strings = "<<stringEnergy<<G4endl;
@@ -119,51 +390,64 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
   //
   // ------------ At this point the strings are fragmenting to hadrons -------------
   //
-  theResult = FragmentStrings(strings);
+  G4QHadronVector* theResult = new G4QHadronVector;
+  G4LorentzVector KTsum(0.,0.,0.);
+  G4bool NeedEnergyCorrector=false;            // @@ M.K.?
+#ifdef debug
+  G4cout<<"G4QFragmentation::Scatter: BefFragmentation, nStrings="<<strings->size()<<G4endl;
+#endif
+  for( unsigned astring=0; astring < strings->size(); astring++)
+  {
+    G4QString* curString=(*strings)[astring];
+    G4LorentzVector curString4M = curString->Get4Momentum();
+    KTsum+= curString4M;
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: String#"<<astring<<",sum4M="<<KTsum<<G4endl;
+#endif
+    if(!(KTsum.e()<1.) && !(KTsum.e()>-1.))    // NAN check
+    {
+      G4cerr<<"***G4QFragmentation::Scatter: KTsum="<<KTsum<<G4endl;
+      G4Exception("G4QFragmentation::Scatter:","72",FatalException,"NANin3Vector");
+    }
+    G4QHadronVector* theHadrons = 0;           // A prototype of the string frag. output
+    if( curString->IsExcited() ) theHadrons=curString->FragmentString(true); // Fragment St.
+    else
+    {
+      //theHadrons = new G4QHadronVector;
+      //theHadrons->push_back(curString->GetAsQHadron()); //@@ NotImplem
+    }    
+    if (!theHadrons)
+    {
+      G4cerr<<"-Warning-G4QFragmentation::Scatter: No Hadrons produced"<<G4endl;
+      continue;
+    }
+    G4LorentzVector KTsum1(0.,0.,0.,0.);
+    for(unsigned aTrack=0; aTrack<theHadrons->size(); aTrack++)
+    {
+      G4QHadron* curHadron=(*theHadrons)[aTrack];
+      theResult->push_back(curHadron);
+      KTsum1+= curHadron->Get4Momentum();
+    }
+ 
+    if(std::abs(1.-curString4M.e()/KTsum1.e()) > perMillion) NeedEnergyCorrector=true;
+
+    //      clean up (the issues are filled to theResult)
+#ifdef debug
+    G4cout<<"G4QFragmentation::Scatter: Done, EnCor="<<NeedEnergyCorrector<<G4endl;
+#endif
+    delete theHadrons;
+  }
+#ifdef debug
+  G4cout<<"G4QFragmentation::Scatter: String4mom="<<KTsum<<G4endl; 
+#endif
+  if(NeedEnergyCorrector) EnergyAndMomentumCorrector(theResult, KTsum);
+#ifdef debug
+  G4cout<<"G4QFragmentation::Scatter: ***Done***, after Fragm NS="<<strings->size()<<G4endl;
+#endif
   std::for_each(strings->begin(), strings->end(), DeleteQString() );
   delete strings;
 
   return theResult; // This is the resulting hadron vector (the answer)
-}
-
-void G4QFragmentation::CreateAndDecayStrings(const G4QNucleus& aNucleus,
-                                             const G4QHadron& aProjectile)
-{
-  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
-  G4int tZ=aNucleus.GetZ();
-  G4int tN=aNucleus.GetN();
-  G4int tPDG=90000000+tZ*1000+tN;
-#ifdef debug
-  G4cout<<"G4QFragmentation::Cr&DecStrings: Initializing Z= "<<tZ<<", N="<<tN<<G4endl;
-#endif
-  if(!theNucleus) theNucleus = new G4QNucleus(tZ,tN); // Create if it is not created
-  else            theNucleus->InitByPDG(tPDG);        // Reinitialize if it is created
-  theNucleus->Init3D();
-  theCurrentVelocity.setX(0);    
-  theCurrentVelocity.setY(0); 
-  // @@ "target Nucleon" == "Proton at rest" (M.K. ?)
-  G4double nCons = 1;                         // 1 or baryon number of the projectile
-  G4int projAbsB=std::abs(aProjectile.GetBaryonNumber()); // Fragment/Baryon (Meson/AntiB)
-  if(projAbsB>1) nCons = projAbsB;            // @@ what if this is a meson ?
-  G4LorentzVector proj4M = aProjectile.Get4Momentum();
-  G4double pz_per_projectile = proj4M.pz()/nCons;     // Momentum per nucleon (hadron?)
-  // @@ use M_A/A instead of mProt ------------ M.K.
-  G4double e_per_projectile = proj4M.e()/nCons+mProt; // @@ Add mass of TargetProtonAtRest
-  G4double vz = pz_per_projectile/e_per_projectile;   // Speed of the projectile
-#ifdef debug
-  G4cout<<"G4QFragmentation::Cr&DecStrings: Projectile4M="<<proj4M<<", Vz="<<vz<<", nC="
-        <<nCons<<", pE="<<e_per_projectile<<G4endl;
-#endif
-  theCurrentVelocity.setZ(vz);                        // CM (w/r to one proton) velosity
-  DoLorentzBoost(-theCurrentVelocity);                // Make a boost vector of theCurVec
-  G4LorentzVector Mom = proj4M;                       // Remember the orijinal proj4M
-  Mom.boost(-theCurrentVelocity);                     // Gring the proj. to the Rest Frame
-  G4QHadron theProjectile(aProjectile.GetQPDG(),Mom); // theProj is in CM
-#ifdef debug
-  G4cout<<"G4QFragmentation::Cr&DecStrings: PreInteraction4Momentum = "<<Mom<<G4endl;
-#endif
-  BuildInteractions(theProjectile); // --->>>--- This is where the interaction happenns ---
-  GetWoundedNucleus()->DoLorentzBoost(theCurrentVelocity); // Boost residual to LabSys
 }
 
 G4QStringVector* G4QFragmentation::GetStrings()
@@ -171,10 +455,19 @@ G4QStringVector* G4QFragmentation::GetStrings()
   G4QPartonPair* aPair;
   G4QStringVector* theStrings = new G4QStringVector;
   G4QString* aString=0;
+#ifdef debug
+  G4cout<<"G4QFragmentation::GetStrings ***IsCalled***"<<G4endl;
+#endif
   while((aPair = GetNextPartonPair())) // @@ At present no difference in stringBuild ? M.K.
   {
+#ifdef debug
+    G4cout<<"G4QFragmentation::GetStrings: String type="<<aPair->GetCollisionType()<<G4endl;
+#endif
     if (aPair->GetCollisionType() == G4QPartonPair::DIFFRACTIVE)
     {
+#ifdef debug
+      G4cout<<"G4QFragmentation::GetStrings:Prepared for creationOf DiffExcitation"<<G4endl;
+#endif
       aString = BuildString(aPair);           // @@ ?
 #ifdef debug
       G4cout<<"G4QFragmentation::GetStrings:DifString4M="<<aString->Get4Momentum()<<G4endl;
@@ -182,6 +475,9 @@ G4QStringVector* G4QFragmentation::GetStrings()
     }
     else
     {
+#ifdef debug
+      G4cout<<"G4QFragmentation::GetStrings: Prepared for creationOf theSoftString"<<G4endl;
+#endif
       aString = BuildString(aPair);           // @@ ?
 #ifdef debug
       G4cout<<"G4QFragmentation::GetStrings:SftString4M="<<aString->Get4Momentum()<<G4endl;
@@ -199,271 +495,24 @@ G4QStringVector* G4QFragmentation::GetStrings()
   return theStrings;
 }
 
-void G4QFragmentation::BuildInteractions(const G4QHadron &thePrimary) 
-{
-#ifdef debug
-  G4cout<<"G4QFragmentation::BuildInteractions: *Called* "<<G4endl;
-#endif  
-  // Find the collisions and collition conditions
-  G4QHadron* aProjectile = SelectInteractions(thePrimary);
-
-  // now build the parton pairs
-  SplitHadrons();
-  
-  // soft collisions, ordering is vital
-  PerformSoftCollisions();
-   
-  // the rest is diffractive
-  PerformDiffractiveCollisions();
-  
-  // clean-up, if necessary
-  std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
-  theInteractions.clear();
-  std::for_each(theTargets.begin(), theTargets.end(), DeleteQHadron());
-  theTargets.clear();
-  delete aProjectile;
-}
-
-//
-G4QHadron* G4QFragmentation::SelectInteractions(const G4QHadron &thePrimary)
-{
-  G4QHadron* aProjectile = new G4QHadron(thePrimary); // @@ One more copy of theProjectile?
-  G4int pPDG=thePrimary.GetPDGCode();                 // The PDG code of the projectile
-  G4QPomeron theProbability(pPDG);                    // the PDG must be a data member
-  G4double outerRadius = theNucleus->GetOuterRadius();// Get the nucleus frontiers
-#ifdef debug
-  G4cout<<"G4QFragmentation::SelectInteractions: OuterRadius = "<<outerRadius<<G4endl;
-#endif
-  // Check the reaction threshold 
-  theNucleus->StartLoop();                            // Prepare nucleons to be used inLoop
-  G4QHadron* pNucleon = theNucleus->GetNextNucleon(); // Get the next nucleon to try
-  G4LorentzVector aPrimaryMomentum=thePrimary.Get4Momentum(); // @@ proj4M
-  G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2(); // Squaed CM Energy
-  G4double primaryMass=thePrimary.GetMass();          // Mass of the projectile
-  G4double ThresholdMass = primaryMass + pNucleon->GetMass(); // @@ What if proj is pi?
-  ModelMode = SOFT;                                   // StringHadronization,NOTDiffractive
-  if (sqr(ThresholdMass + ThresholdParameter) > s)    // At ThP=0 is impossible (virtNucl)
-  {
-    G4cerr<<"***G4QFragmentation::SelectInteractions: ThrM="<<ThresholdMass<<" + ThrPa="
-          <<ThresholdParameter<<" = "<<ThresholdMass+ThresholdParameter<<" > std::sqrt(s)="
-          <<std::sqrt(s)<<G4endl;
-    G4Exception("G4QFragmentation::SelectInteractions:","72",FatalException,"LowEnergy");
-  }
-  if (sqr(ThresholdMass + QGSMThershold) > s) // Only diffractive interaction (NowNotPosib)
-  {
-#ifdef debug
-    G4cout<<"G4QFragmentation::SelectInteractions: *OnlyDiffraction* ThrM="<<ThresholdMass
-          <<" + ThrQGS="<<QGSMThershold<<" = "<<ThresholdMass+QGSMThershold<<" > sqrt(s)="
-          <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif to Quasmon
-#endif
-    ModelMode = DIFFRACTIVE;
-  }
- 
-  // Clean up all previous interactions and reset the counters
-  std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
-  theInteractions.clear();
-  G4int totalCuts = 0;
-  G4double impactUsed = 0;
-
-  G4double eKin = aPrimaryMomentum.e()-primaryMass; // Primary kinetic energy
-
-  while(theInteractions.size() == 0)
-  {
-    // choose random impact parameter
-    std::pair<G4double, G4double> theImpactParameter;
-    theImpactParameter = theNucleus->ChooseImpactXandY(outerRadius+theNucleonRadius);
-    G4double impactX = theImpactParameter.first; 
-    G4double impactY = theImpactParameter.second;
-    
-    // loop over nuclei to find collissions HPW
-    theNucleus->StartLoop();
-    G4int nucleonCount = 0; // debug
-    //G4QFragmentation_NPart = 0;                        // ? M.K.
-    while( (pNucleon = theNucleus->GetNextNucleon()) )
-    {
-      if(totalCuts>1.5*eKin) break;
-      nucleonCount++; // debug
-      // Needs to be moved to Probability class @@@
-      G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
-      G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x()) +
-                           sqr(impactY - pNucleon->GetPosition().y());
-      G4double Probability = theProbability.GetInelasticProbability(s, Distance2);  
-      // test for inelastic collision
-      G4double rndNumber = G4UniformRand();
-      // ModelMode = DIFFRACTIVE;
-      if (Probability > rndNumber)
-      {
-#ifdef debug
-        G4cout<<"G4QFragmentation::SelectInteractions: p="<<Probability<<", r="<<rndNumber
-              <<", d="<<std::sqrt(Distance2)<<G4endl;
-#endif
-        G4QHadron* aTarget = new G4QHadron(*pNucleon);
-        //G4QFragmentation_NPart ++;                       // ? M.K.
-        theTargets.push_back(aTarget);
-        pNucleon=aTarget;
-        if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
-            G4UniformRand() && (ModelMode==SOFT)) || ModelMode==DIFFRACTIVE)
-        { 
-          // diffractive interaction occurs
-          if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
-          else                          ExciteDiffParticipants(aProjectile, aTarget);
-          G4QInteraction* aInteraction = new G4QInteraction(aProjectile);
-          aInteraction->SetTarget(aTarget); 
-          theInteractions.push_back(aInteraction);
-          aInteraction->SetNumberOfDiffractiveCollisions(1);
-          totalCuts += 1;
-        }
-        else
-        {
-          // nondiffractive soft interaction occurs
-          // sample nCut+1 (cut Pomerons) pairs of strings can be produced
-          G4int nCut;
-          G4double* running = new G4double[nCutMax];
-          running[0] = 0;
-          for(nCut = 0; nCut < nCutMax; nCut++)
-          {
-            running[nCut] = theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
-            if(nCut!=0) running[nCut] += running[nCut-1];
-          }
-          G4double random = running[nCutMax-1]*G4UniformRand();
-          for(nCut = 0; nCut < nCutMax; nCut++) {if(running[nCut] > random) break;}
-          delete [] running;
-          nCut = 0;
-          aTarget->IncrementCollisionCount(nCut+1);
-          aProjectile->IncrementCollisionCount(nCut+1);
-          G4QInteraction* aInteraction = new G4QInteraction(aProjectile);
-          aInteraction->SetTarget(aTarget);
-          aInteraction->SetNumberOfSoftCollisions(nCut+1);
-          theInteractions.push_back(aInteraction);
-          totalCuts += nCut+1;
-          impactUsed=Distance2;
-        }
-      }
-    }
-#ifdef debug
-    G4cout<<"G4QFragmentation::SelectInteractions: NUCLEONCOUNT="<<nucleonCount<<G4endl;
-#endif
-  }
-#ifdef debug
-  G4cout<<"G4QFragmentation::SelectInteractions: CUTDEBUG="<<totalCuts
-        <<", ImpactParameter="<<impactUsed<<G4endl;
-#endif
-  return aProjectile;
-}
-
-void G4QFragmentation::PerformDiffractiveCollisions()
-{
-  for(unsigned i = 0; i < theInteractions.size(); i++) 
-  {
-    G4QInteraction* anIniteraction = theInteractions[i];
-    G4QHadron* aProjectile = anIniteraction->GetProjectile();
-    G4QParton* aParton = aProjectile->GetNextParton();
-    G4QPartonPair* aPartonPair;
-    // projectile first
-    if (aParton)
-    {
-      aPartonPair = new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
-                                      G4QPartonPair::DIFFRACTIVE, 
-                                      G4QPartonPair::PROJECTILE);
-      thePartonPairs.push_back(aPartonPair);
-    }
-    // then target
-    G4QHadron* aTarget = anIniteraction->GetTarget();
-    aParton = aTarget->GetNextParton();
-    if (aParton)
-    {
-      aPartonPair = new G4QPartonPair(aParton, aTarget->GetNextAntiParton(), 
-                                      G4QPartonPair::DIFFRACTIVE, 
-                                      G4QPartonPair::TARGET);
-      thePartonPairs.push_back(aPartonPair);
-    }
-  }
-}
-
-void G4QFragmentation::PerformSoftCollisions()
-{
-  G4QInteractionVector::iterator i;
-  for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
-  {
-    G4QInteraction* anIniteraction = *i;
-    G4QPartonPair* aPair=0;
-    if (anIniteraction->GetNumberOfSoftCollisions())
-    { 
-      G4QHadron* pProjectile = anIniteraction->GetProjectile();
-      G4QHadron* pTarget     = anIniteraction->GetTarget();
-      for (G4int j = 0; j < anIniteraction->GetNumberOfSoftCollisions(); j++)
-      {
-        aPair= new G4QPartonPair(pTarget->GetNextParton(),pProjectile->GetNextAntiParton(),
-                                 G4QPartonPair::SOFT, G4QPartonPair::TARGET);
-        thePartonPairs.push_back(aPair);
-        aPair= new G4QPartonPair(pProjectile->GetNextParton(),pTarget->GetNextAntiParton(),
-                                G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
-        thePartonPairs.push_back(aPair);
-      }  
-      delete *i;
-      i=theInteractions.erase(i);
-      i--;
-    }
-  }
-}
-
 G4QPartonPair* G4QFragmentation::GetNextPartonPair()
 {
+#ifdef debug
+  G4cout<<"G4QFragmentation::GetNextPartonPair IsCalled, n="<<thePartonPairs.size()<<G4endl;
+#endif
   if(thePartonPairs.empty()) return 0;
   G4QPartonPair* result = thePartonPairs.back();
+#ifdef debug
+  G4cout<<"G4QFragmentation::GetNextPartonPair: result is defined"<<G4endl;
+#endif
   thePartonPairs.pop_back();
+#ifdef debug
+  G4cout<<"G4QFragmentation::GetNextPartonPair: Reduced, n="<<thePartonPairs.size()<<G4endl;
+#endif
   return result;
 }
 
-G4QHadronVector* G4QFragmentation::FragmentStrings(const G4QStringVector* theStrings)
-{
-  G4QHadronVector* theResult = new G4QHadronVector;
-
-  G4LorentzVector KTsum(0.,0.,0.);
-  G4bool NeedEnergyCorrector=false;
-  
-  for( unsigned astring=0; astring < theStrings->size(); astring++)
-  {
-    KTsum+= (*theStrings)[astring]->Get4Momentum();
-    if(!(KTsum.e()<1.) && !(KTsum.e()>-1.))
-    {
-      G4cerr<<"***G4QFragmentation::FragmentStrings: KTsum="<<KTsum<<G4endl;
-      G4Exception("G4QFragmentation::FragmentStrings:","72",FatalException,"NANin3Vector");
-    }
-    G4QHadronVector* generatedHadrons = 0;     // A prototype of the string output
-    if( (*theStrings)[astring]->IsExcited() )
-    {
-      generatedHadrons=(*theStrings)[astring]->FragmentString(true);// Fragment QGSM String
-    }
-    else
-    {
-      //generatedHadrons = new G4QHadronVector;
-      //generatedHadrons->push_back((*theStrings)[astring]->GetAsQHadron()); //@@ NotImplem
-    }    
-    if (!generatedHadrons) 
-    {
-      G4cerr<<"G4QFragmentation::FragmentStrings: No Hadrons produced" << G4endl;
-      continue;
-    }
-    G4LorentzVector KTsum1(0.,0.,0.,0.);
-    for(unsigned aTrack=0; aTrack<generatedHadrons->size(); aTrack++)
-    {
-      theResult->push_back((*generatedHadrons)[aTrack]);
-      KTsum1+= (*generatedHadrons)[aTrack]->Get4Momentum();
-    }
- 
-    if(std::abs((KTsum1.e()-(*theStrings)[astring]->Get4Momentum().e())/KTsum1.e())
-       > perMillion) NeedEnergyCorrector=true;
-    //      clean up
-    delete generatedHadrons;
-  }
-#ifdef debug
-  G4cout<<"G4QFragmentation::FragmentStrings: String4mom="<<KTsum<<G4endl; 
-#endif
-  if(NeedEnergyCorrector) EnergyAndMomentumCorrector(theResult, KTsum);
-  return theResult;
-}
-
+// @@ Shoul be updated or deleted, if the energy-momentum nonconsertvation does not exist
 G4bool G4QFragmentation::EnergyAndMomentumCorrector(G4QHadronVector* Output,
                                                     G4LorentzVector& TotalCollisionMom)   
 {

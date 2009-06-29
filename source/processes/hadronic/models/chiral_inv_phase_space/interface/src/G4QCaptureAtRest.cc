@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.21 2009-05-25 17:32:08 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.22 2009-06-29 16:03:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -518,8 +518,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       for(G4int is=0; is<nsec; is++)
       {
         G4double ener=cascE->operator[](is);
-        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
-        else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
+        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),
+                                                  G4RandomDirection(),ener);
+        else    theSec = new G4DynamicParticle(G4Gamma::Gamma(),G4RandomDirection(),-ener);
         totLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
         aNewTrack->SetWeight(weight);                                   //    weighted
@@ -719,8 +720,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       for(G4int is=0; is<nsec; is++)
       {
         G4double ener=cascE->operator[](is);
-        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),RndmDir(),ener);
-        else       theSec = new G4DynamicParticle(G4Gamma::Gamma(),RndmDir(),-ener);
+        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),
+                                                  G4RandomDirection(),ener);
+        else    theSec = new G4DynamicParticle(G4Gamma::Gamma(),G4RandomDirection(),-ener);
         projLV-=theSec->Get4Momentum();
         G4Track* aNewTrack = new G4Track(theSec, localtime, position );
         aNewTrack->SetWeight(weight);                                   //    weighted
@@ -1028,7 +1030,7 @@ void G4QCaptureAtRest::MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double
   // Capture on 14-th level
   G4double energy=EnergyLevel[13];
   //G4double ptot = sqrt(energy*(energy + dElM));
-  //G4ThreeVector moment = ptot * RndmDir();
+  //G4ThreeVector moment = ptot * G4RandomDirection();
 #ifdef debug
   G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: first electron E="<<energy<<G4endl;
 #endif

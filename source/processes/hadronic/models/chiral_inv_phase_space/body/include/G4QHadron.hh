@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.37 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.38 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -155,8 +155,8 @@ private:
   G4int                  theCollisionCount; // ?
   G4bool                 isSplit;           // Flag, that splitting was done
   G4bool                 Direction;         // FALSE=target, TRUE=projectile
-  std::list<G4QParton*> Color;              // container for quarks & anti-diquarks
-  std::list<G4QParton*> AntiColor;          // container for anti-quarks & diquarks
+  std::list<G4QParton*>  Color;             // container for quarks & anti-diquarks
+  std::list<G4QParton*>  AntiColor;         // container for anti-quarks & diquarks
   G4double               bindE;             // Binding energy in nuclear matter
   G4double               formTime;          // Formation time for the hadron
 };
@@ -193,19 +193,4 @@ inline void   G4QHadron::SetCollisionCount(G4int aCount)       {theCollisionCoun
 inline void   G4QHadron::NegPDGCode()                  {theQPDG.NegPDGCode(); valQ.Anti();}
 inline G4bool G4QHadron::TestRealNeutral()             { return theQPDG.TestRealNeutral();}
 
-inline G4QParton* G4QHadron::GetNextParton()
-{
-   if(Color.size()==0) return 0;
-   G4QParton* result = Color.back();
-   Color.pop_back();
-   return result;
-}
-
-inline G4QParton* G4QHadron::GetNextAntiParton()
-{
-   if(AntiColor.size() == 0) return 0;
-   G4QParton* result = AntiColor.front();
-   AntiColor.pop_front();
-   return result;
-}
 #endif

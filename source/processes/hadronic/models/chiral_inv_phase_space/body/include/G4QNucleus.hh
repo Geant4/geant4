@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.35 2009-05-29 15:43:55 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.36 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -44,6 +44,7 @@
 #include <utility>
 #include <vector>
 #include "globals.hh"
+#include "G4RandomDirection.hh"
 
 class G4QNucleus : public G4QHadron
 {
@@ -76,7 +77,7 @@ public:
   G4double   GetProbability(G4int bn=0) const {return probVect[bn];} // clust(BarN)probabil
   G4double   GetMZNS()     const {return GetQPDG().GetNuclMass(Z,N,S);} // not H or Q
   G4double   GetGSMass()   const {return GetQPDG().GetMass();}//Nucleus GSMass (not Hadron)
-  G4QContent GetQCZNS()    const                   // Get ZNS quark content of Nucleus
+  G4QContent GetQCZNS()    const                    // Get ZNS quark content of Nucleus
   {
     if(S>=0) return G4QContent(Z+N+N+S,Z+Z+N+S,S,0,0,0);
     else     return G4QContent(Z+N+N+S,Z+Z+N+S,0,0,0,-S);
@@ -86,15 +87,13 @@ public:
   std::pair<G4double, G4double> RefetchImpactXandY() const {return theImpactParameter;}
   G4double GetDensity(const G4ThreeVector&aPos) {return rho0*GetRelativeDensity(aPos);}
   G4double GetRelativeDensity(const G4ThreeVector& aPosition); // Densyty/rho0
+  G4double GetRelWSDensity(const G4double& r)       // Wood-Saxon rho/rho0(r)
+                                        {return 1./(1.+exp((r-radius)/WoodSaxonSurf));}    
+  G4double GetRelOMDensity(const G4double& r2){return exp(-r2/radius);} // OscModelRelDens
   G4double GetRadius(const G4double maxRelativeDenisty=0.5); // Radius of %ofDensity
   G4double GetOuterRadius();                        // Get radius of the most far nucleon
   G4double GetDeriv(const G4ThreeVector& point);    // Derivitive of density
   G4double GetFermiMomentum(G4double density);      // Returns modul of FermyMomentum(dens)
-  G4ThreeVector Get3DFermiMomentum(G4double density, G4double maxMom=-1.)
-  {
-    if(maxMom<0) maxMom=GetFermiMomentum(density);
-    return maxMom*RandomUnitSphere();
-  }
   G4QHadron* GetNextNucleon()
     {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
   //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
@@ -134,7 +133,7 @@ public:
   G4QNucleus operator-=(const G4QNucleus& rhs);     // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   G4bool StartLoop();                               // returns size of theNucleons (cN=0)
-  G4bool ReduceSum(G4ThreeVector* momentum, G4double*); // Reduce momentum nonconservation
+  G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum); // Reduce zero-sum of vectors
   void DoLorentzBoost(const G4LorentzVector& theBoost); // Boost nucleons by 4-vector
   void DoLorentzBoost(const G4ThreeVector& theBeta);// Boost nucleons by v/c
   void DoLorentzContraction(const G4LorentzVector&B){DoLorentzContraction(B.vect()/B.e());}
@@ -146,7 +145,6 @@ public:
                             G4double nD=.8*fermi);
 
   // Specific General Functions
-  G4ThreeVector RandomUnitSphere();                 // Randomize position inside UnitSphere
   G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law
   G4double CoulombBarrier(const G4double& cZ=1, const G4double& cA=1, G4double dZ=0.,
                           G4double dA=0.);          // CoulombBarrier in MeV
@@ -178,6 +176,7 @@ private:
   static G4double clustProb;      // clusterization probability in dense region
   static G4double mediRatio;      // relative vacuum hadronization probability
   static G4double nucleonDistance;// Distance between nucleons (0.8 fm)
+  static G4double WoodSaxonSurf;  // Surface parameter of Wood-Saxon density (0.545 fm)
   // The basic  
   G4int Z;                        // Z of the Nucleus
   G4int N;                        // N of the Nucleus

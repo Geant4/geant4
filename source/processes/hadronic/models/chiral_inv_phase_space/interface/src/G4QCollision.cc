@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.37 2009-06-03 07:52:34 gcosmo Exp $
+// $Id: G4QCollision.cc,v 1.38 2009-06-29 16:03:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -37,8 +37,8 @@
 // Short description: This is a universal class for the incoherent (inelastic)
 // nuclear interactions in the CHIPS model.
 // ---------------------------------------------------------------------------
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 //#define pickupd
 //#define ldebug
 //#define ppdebug

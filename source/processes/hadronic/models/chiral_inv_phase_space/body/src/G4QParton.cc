@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParton.cc,v 1.4 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QParton.cc,v 1.5 2009-06-29 16:04:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -39,14 +39,35 @@
 // Short description: The Quark-Gluon String consists of the partons, which
 // are quarks and some times gluons.
 // ------------------------------------------------------------------------
+
+//#define debug
+
 #include "G4QParton.hh"
 
+G4QParton::G4QParton()
+{
+  // CHIPS is working only with u, d, and s quarks (SU(3)xSU(3)) (no gluons! M.K.)
+  // Random Flavor/Colour/Spin definition for default constructor (with .3 s-suppresion)
+  PDGencoding=(G4int)(2.3*G4UniformRand())+1; //@@ What about antiquarks? (M.K.)
+  theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
+#ifdef debug
+  G4cout<<"G4QParton::DefConstructer: Type = "<<theDefinition->GetParticleSubType()<<G4endl;
+#endif
+  // random colour (1,2,3)=(R,G,B) for quarks and (-1,-2,-3)=(aR,aG,aB) for anti-quarks
+  theColour = (G4int)(3*G4UniformRand())+1;
+  if(theColour>3) theColour = 3;
+  theIsoSpinZ = theDefinition->GetPDGIsospin3();
+  theSpinZ = (G4int)(2*G4UniformRand()) - 0.5;
+}
 G4QParton::G4QParton(G4int PDGcode)
 {
   PDGencoding=PDGcode;
   theX = 0;
   theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
-       G4int aPDG=std::abs(PDGcode);
+#ifdef debug
+  G4cout<<"G4QParton::PDGConstructer: Type = "<<theDefinition->GetParticleSubType()<<G4endl;
+#endif
+  G4int aPDG=std::abs(PDGcode);
   //___________quarks__ 2 possible codes for gluons _ Condition for di-quarks
   if(!aPDG || (aPDG>3 && PDGcode!=9 && PDGcode!=21 &&
           (aPDG>3303||aPDG<1103||aPDG%100>3)) || theDefinition==0)
@@ -105,6 +126,9 @@ G4QParton::G4QParton(const G4QParton &right)
   thePosition = right.thePosition;
   theX = right.theX;
   theDefinition = right.theDefinition;
+#ifdef debug
+  G4cout<<"G4QParton::RCopyConstructer: Type="<<theDefinition->GetParticleSubType()<<G4endl;
+#endif
   theColour = right.theColour;
   theIsoSpinZ = right.theIsoSpinZ;
   theSpinZ = right.theSpinZ;
@@ -117,6 +141,9 @@ G4QParton::G4QParton(const G4QParton* right)
   thePosition   = right->thePosition;
   theX          = right->theX;
   theDefinition = right->theDefinition;
+#ifdef debug
+  G4cout<<"G4QParton::PCopyConstructer: Type="<<theDefinition->GetParticleSubType()<<G4endl;
+#endif
   theColour     = right->theColour;
   theIsoSpinZ   = right->theIsoSpinZ;
   theSpinZ      = right->theSpinZ;
@@ -131,6 +158,9 @@ const G4QParton& G4QParton::operator=(const G4QParton &right)
     thePosition=right.GetPosition();
     theX = right.theX;
     theDefinition = right.theDefinition;
+#ifdef debug
+    G4cout<<"G4QParton::=Constructer: Type = "<<theDefinition->GetParticleSubType()<<G4endl;
+#endif
     theColour = right.theColour;
     theIsoSpinZ = right.theIsoSpinZ;
     theSpinZ = right.theSpinZ; 
