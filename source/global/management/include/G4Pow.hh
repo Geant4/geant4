@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4pow.hh,v 1.2 2009-06-29 09:59:36 gcosmo Exp $
+// $Id: G4Pow.hh,v 1.1 2009-06-29 09:59:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

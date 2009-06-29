@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.34 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.35 2009-06-29 09:59:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -259,13 +259,13 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   //  See for example W.H. Press et al. "Numerical reciptes and C"
   //  Cambridge University Press, 1997.
 {
-  // cannot compute derivatives for less than 4 bins
-  if(4 > numberOfNodes) {
+  if(4 > numberOfNodes)   // cannot compute derivatives for less than 4 bins
+  {
     ComputeSecDerivatives();
     return;
   }
 
-  if(!SplinePossible()) return;
+  if(!SplinePossible()) { return; }
 
   G4int n = numberOfNodes-1;
 
@@ -296,7 +296,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   p = sig*secDerivative[n-2] + 2.0;
   un = (6.0/(binVector[n]-binVector[n-1]))
     *(endPointDerivative - 
-      (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])) - u[n-1]/p;  
+      (dataVector[n]-dataVector[n-1])/(binVector[n]-binVector[n-1])) - u[n-1]/p;
   secDerivative[n] = un/(secDerivative[n-1] + 2.0);
 
   // The back-substitution loop for the triagonal algorithm of solving
@@ -320,13 +320,13 @@ void G4PhysicsVector::FillSecondDerivatives()
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
 {  
-  // cannot compute derivatives for less than 4 points
-  if(5 > numberOfNodes) {
+  if(5 > numberOfNodes)  // cannot compute derivatives for less than 4 points
+  {
     ComputeSecDerivatives();
     return;
   }
 
-  if(!SplinePossible()) return;
+  if(!SplinePossible()) { return; }
  
   G4int n = numberOfNodes-1;
 
@@ -391,10 +391,10 @@ void
 G4PhysicsVector::ComputeSecDerivatives()
   //  A simplified method of computation of second derivatives 
 {
-  if(!SplinePossible()) return;
+  if(!SplinePossible())  { return; }
 
-  // cannot compute derivatives for less than 4 bins
-  if(3 > numberOfNodes) {
+  if(3 > numberOfNodes)  // cannot compute derivatives for less than 4 bins
+  {
     useSpline = false;
     return;
   }
@@ -418,12 +418,14 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(secDerivative) DeleteData();
+  if(secDerivative)  { DeleteData(); }
   secDerivative = new G4double [numberOfNodes]; 
-  for(size_t j=0; j<numberOfNodes; j++) {
+  for(size_t j=0; j<numberOfNodes; j++)
+  {
     secDerivative[j] = 0.0;
-    if(j > 0) {
-      if(binVector[j]-binVector[j-1] <= 0.) useSpline = false;
+    if(j > 0)
+    {
+      if(binVector[j]-binVector[j-1] <= 0.)  { useSpline = false; }
     }
   }  
   return useSpline;
