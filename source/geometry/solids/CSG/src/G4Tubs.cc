@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.77 2009-06-09 16:08:23 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.78 2009-06-30 09:43:11 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -773,6 +773,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   G4double snxt = kInfinity ;      // snxt = default return value
   G4double tolORMin2, tolIRMax2 ;  // 'generous' radii squared
   G4double tolORMax2, tolIRMin2, tolODz, tolIDz ;
+  const G4double dRmax = 100.*fRMax;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
   static const G4double halfRadTolerance = 0.5*kRadTolerance;
@@ -873,6 +874,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         s = -b - std::sqrt(d) ;
         if (s >= 0)  // If 'forwards'
         {
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+          {              // 64 bits systems. Split long distances and recompute
+           G4double fTerm = s-std::fmod(s,dRmax);
+           s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           // Check z intersection
           //
           zi = p.z() + s*v.z() ;
@@ -987,6 +993,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           // Check z intersection
           //
           if(s < 0.0)  { s = 0.0; }
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+          {              // 64 bits systems. Split long distances and recompute
+           G4double fTerm = s-std::fmod(s,dRmax);
+           s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           zi = p.z() + s*v.z() ;
           if (std::fabs(zi) <= tolODz)
           {

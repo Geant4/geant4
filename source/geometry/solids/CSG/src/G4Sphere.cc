@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.80 2009-05-25 14:57:06 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.81 2009-06-30 09:43:50 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -804,6 +804,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   G4double snxt = kInfinity ;      // snxt = default return value
   G4double rho2, rad2, pDotV2d, pDotV3d, pTheta ;
   G4double tolSTheta=0., tolETheta=0. ;
+  const G4double dRmax = 100.*fRmax;
 
   static const G4double halfCarTolerance = kCarTolerance*0.5;
   static const G4double halfAngTolerance = kAngTolerance*0.5;
@@ -881,6 +882,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       if (s >= 0 )
       {
+        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+        {              // 64 bits systems. Split long distances and recompute
+         G4double fTerm = s-std::fmod(s,dRmax);
+         s = fTerm + DistanceToIn(p+fTerm*v,v);
+        } 
         xi   = p.x() + s*v.x() ;
         yi   = p.y() + s*v.y() ;
         rhoi = std::sqrt(xi*xi + yi*yi) ;
@@ -1291,7 +1297,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-        
+      if(t1){   
       b  = t2/t1 ;
       c  = dist2STheta/t1 ;
       d2 = b*b - c ;
@@ -1331,6 +1337,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }
 
       // Possible intersection with ETheta cone. 
@@ -1340,7 +1347,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
         t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-        
+        if(t1){ 
         b  = t2/t1 ;
         c  = dist2ETheta/t1 ;
         d2 = b*b - c ;
@@ -1377,6 +1384,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }
     }  
     else if ( pTheta > tolETheta ) 
@@ -1387,7 +1395,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-        
+      if(t1){  
       b  = t2/t1 ;
       c  = dist2ETheta/t1 ;
       d2 = b*b - c ;
@@ -1428,6 +1436,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }
 
       // Possible intersection with STheta cone. 
@@ -1437,7 +1446,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
         t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-
+        if(t1){ 
         b  = t2/t1 ;
         c  = dist2STheta/t1 ;
         d2 = b*b - c ;
@@ -1474,6 +1483,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }  
     }     
     else if ( (pTheta < tolSTheta + kAngTolerance)
@@ -1505,6 +1515,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
+      if(t1){ 
       b  = t2/t1 ;
       c  = dist2STheta/t1 ;
       d2 = b*b - c ;
@@ -1540,6 +1551,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
           }
         }
       }
+     }
     }   
     else if ((pTheta > tolETheta-kAngTolerance) && (eTheta < pi-kAngTolerance))
     {
@@ -1574,6 +1586,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
+      if(t1){ 
       b  = t2/t1 ;
       c  = dist2ETheta/t1 ;
       d2 = b*b - c ;
@@ -1610,7 +1623,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
-      }    
+      } 
+     }   
     }  
     else
     {
@@ -1619,7 +1633,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-
+      if(t1){ 
       b  = t2/t1;
       c  = dist2STheta/t1 ;
       d2 = b*b - c ;
@@ -1655,10 +1669,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }        
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-        
+      if(t1){   
       b  = t2/t1 ;
       c  = dist2ETheta/t1 ;
       d2 = b*b - c ;
@@ -1694,6 +1709,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
+       }
       }
     }  
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.14 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.15 2009-06-30 09:41:37 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -460,7 +460,8 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
                                     const G4ThreeVector& v  ) const
 {
   G4double distMin;
-  
+  distMin= std::min(xSemiAxis,ySemiAxis);
+  const G4double dRmax = 100.*std::min(distMin,zSemiAxis);
   distMin= kInfinity;
 
   // check to see if Z plane is relevant
@@ -516,8 +517,13 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
               distMin = distR;
             }
         }
-    }
+      if ( distMin>dRmax ) // Avoid rounding errors due to precision issues seen on
+        {              // 64 bits systems. Split long distances and recompute
+          G4double fTerm = distMin-std::fmod(distMin,dRmax);
+          distMin = fTerm + DistanceToIn(p+fTerm*v,v);
+        } 
 
+  }
   return distMin;
 } 
 
