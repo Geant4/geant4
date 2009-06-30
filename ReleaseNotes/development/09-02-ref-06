@@ -17,6 +17,13 @@ config                                           config-V09-02-07
   on G4EXLIB such that the extension is defined when no lib is present
   (change required for upgrading exercisers in testing).
 
+event                                            event-V09-02-01
+-----
+- Minor chnages to G4GeneralParticleSourceMessenger: now using full range
+  of predefined units for length, energy and angle.
+- Fixed gcc-4.4.0 compilation warning message for non-initialised variable
+  in G4SPSEneDistribution.
+
 geometry/solids/CSG                              geom-csg-V09-02-03
 -------------------
 - Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
