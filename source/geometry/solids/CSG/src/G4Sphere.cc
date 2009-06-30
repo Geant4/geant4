@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.81 2009-06-30 09:43:50 tnikitin Exp $
+// $Id: G4Sphere.cc,v 1.82 2009-06-30 10:10:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -884,8 +884,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
         {              // 64 bits systems. Split long distances and recompute
-         G4double fTerm = s-std::fmod(s,dRmax);
-         s = fTerm + DistanceToIn(p+fTerm*v,v);
+          G4double fTerm = s-std::fmod(s,dRmax);
+          s = fTerm + DistanceToIn(p+fTerm*v,v);
         } 
         xi   = p.x() + s*v.x() ;
         yi   = p.y() + s*v.y() ;
@@ -1297,79 +1297,34 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-      if(t1){   
-      b  = t2/t1 ;
-      c  = dist2STheta/t1 ;
-      d2 = b*b - c ;
-
-      if ( d2 >= 0 )
-      {
-        d = std::sqrt(d2) ;
-        s = -b - d ;    // First root
-        zi    = p.z() + s*v.z();
-
-        if ( (s < 0) || (zi*(fSTheta - halfpi) > 0) )
-        {
-          s = -b+d;    // Second root
-        }
-        if ((s >= 0) && (s < snxt))
-        {
-          xi    = p.x() + s*v.x();
-          yi    = p.y() + s*v.y();
-          zi    = p.z() + s*v.z();
-          rhoi2 = xi*xi + yi*yi;
-          radi2 = rhoi2 + zi*zi;
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2)
-            && (zi*(fSTheta - halfpi) <= 0) )
-          {
-            if ( !fFullPhiSphere && rhoi2 )  // Check phi intersection
-            {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if (cosPsi >= cosHDPhiOT)
-              {
-                snxt = s ;
-              }
-            }
-            else
-            {
-              snxt = s ;
-            }
-          }
-        }
-       }
-      }
-
-      // Possible intersection with ETheta cone. 
-      // Second >= 0 root should be considered
-        
-      if ( eTheta < pi )
-      {
-        t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
-        t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-        if(t1){ 
+      if (t1)
+      {   
         b  = t2/t1 ;
-        c  = dist2ETheta/t1 ;
+        c  = dist2STheta/t1 ;
         d2 = b*b - c ;
 
-        if (d2 >= 0)
+        if ( d2 >= 0 )
         {
           d = std::sqrt(d2) ;
-          s = -b + d ;    // Second root
+          s = -b - d ;    // First root
+          zi    = p.z() + s*v.z();
 
-          if ( (s >= 0) && (s < snxt) )
+          if ( (s < 0) || (zi*(fSTheta - halfpi) > 0) )
           {
-            xi    = p.x() + s*v.x() ;
-            yi    = p.y() + s*v.y() ;
-            zi    = p.z() + s*v.z() ;
-            rhoi2 = xi*xi + yi*yi   ;
-            radi2 = rhoi2 + zi*zi   ;
-
+            s = -b+d;    // Second root
+          }
+          if ((s >= 0) && (s < snxt))
+          {
+            xi    = p.x() + s*v.x();
+            yi    = p.y() + s*v.y();
+            zi    = p.z() + s*v.z();
+            rhoi2 = xi*xi + yi*yi;
+            radi2 = rhoi2 + zi*zi;
             if ( (radi2 <= tolORMax2)
               && (radi2 >= tolORMin2)
-              && (zi*(eTheta - halfpi) <= 0) )
+              && (zi*(fSTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              if ( !fFullPhiSphere && rhoi2 )  // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1384,7 +1339,54 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
-       }
+      }
+
+      // Possible intersection with ETheta cone. 
+      // Second >= 0 root should be considered
+        
+      if ( eTheta < pi )
+      {
+        t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
+        t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
+        if (t1)
+        { 
+          b  = t2/t1 ;
+          c  = dist2ETheta/t1 ;
+          d2 = b*b - c ;
+
+          if (d2 >= 0)
+          {
+            d = std::sqrt(d2) ;
+            s = -b + d ;    // Second root
+
+            if ( (s >= 0) && (s < snxt) )
+            {
+              xi    = p.x() + s*v.x() ;
+              yi    = p.y() + s*v.y() ;
+              zi    = p.z() + s*v.z() ;
+              rhoi2 = xi*xi + yi*yi   ;
+              radi2 = rhoi2 + zi*zi   ;
+
+              if ( (radi2 <= tolORMax2)
+                && (radi2 >= tolORMin2)
+                && (zi*(eTheta - halfpi) <= 0) )
+              {
+                if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+                {
+                  cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                  if (cosPsi >= cosHDPhiOT)
+                  {
+                    snxt = s ;
+                  }
+                }
+                else
+                {
+                  snxt = s ;
+                }
+              }
+            }
+          }
+        }
       }
     }  
     else if ( pTheta > tolETheta ) 
@@ -1395,67 +1397,22 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-      if(t1){  
-      b  = t2/t1 ;
-      c  = dist2ETheta/t1 ;
-      d2 = b*b - c ;
-
-      if (d2 >= 0)
-      {
-        d = std::sqrt(d2) ;
-        s = -b - d ;    // First root
-        zi    = p.z() + s*v.z();
-
-        if ( (s < 0) || (zi*(eTheta - halfpi) > 0) )
-        {
-          s = -b + d ;           // second root
-        }
-        if ( (s >= 0) && (s < snxt) )
-        {
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
-
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2) 
-            && (zi*(eTheta - halfpi) <= 0) )
-          {
-            if (!fFullPhiSphere && rhoi2)  // Check phi intersection
-            {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if (cosPsi >= cosHDPhiOT)
-              {
-                snxt = s ;
-              }
-            }
-            else
-            {
-              snxt = s ;
-            }
-          }
-        }
-       }
-      }
-
-      // Possible intersection with STheta cone. 
-      // Second >= 0 root should be considered
-        
-      if ( fSTheta )
-      {
-        t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
-        t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-        if(t1){ 
+      if (t1)
+      {  
         b  = t2/t1 ;
-        c  = dist2STheta/t1 ;
+        c  = dist2ETheta/t1 ;
         d2 = b*b - c ;
 
         if (d2 >= 0)
         {
           d = std::sqrt(d2) ;
-          s = -b + d ;    // Second root
+          s = -b - d ;    // First root
+          zi    = p.z() + s*v.z();
 
+          if ( (s < 0) || (zi*(eTheta - halfpi) > 0) )
+          {
+            s = -b + d ;           // second root
+          }
           if ( (s >= 0) && (s < snxt) )
           {
             xi    = p.x() + s*v.x() ;
@@ -1465,10 +1422,10 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             radi2 = rhoi2 + zi*zi   ;
 
             if ( (radi2 <= tolORMax2)
-              && (radi2 >= tolORMin2)
-              && (zi*(fSTheta - halfpi) <= 0) )
+              && (radi2 >= tolORMin2) 
+              && (zi*(eTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              if (!fFullPhiSphere && rhoi2)  // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1483,7 +1440,54 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
             }
           }
         }
-       }
+      }
+
+      // Possible intersection with STheta cone. 
+      // Second >= 0 root should be considered
+        
+      if ( fSTheta )
+      {
+        t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
+        t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
+        if (t1)
+        { 
+          b  = t2/t1 ;
+          c  = dist2STheta/t1 ;
+          d2 = b*b - c ;
+
+          if (d2 >= 0)
+          {
+            d = std::sqrt(d2) ;
+            s = -b + d ;    // Second root
+
+            if ( (s >= 0) && (s < snxt) )
+            {
+              xi    = p.x() + s*v.x() ;
+              yi    = p.y() + s*v.y() ;
+              zi    = p.z() + s*v.z() ;
+              rhoi2 = xi*xi + yi*yi   ;
+              radi2 = rhoi2 + zi*zi   ;
+
+              if ( (radi2 <= tolORMax2)
+                && (radi2 >= tolORMin2)
+                && (zi*(fSTheta - halfpi) <= 0) )
+              {
+                if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+                {
+                  cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                  if (cosPsi >= cosHDPhiOT)
+                  {
+                    snxt = s ;
+                  }
+                }
+                else
+                {
+                  snxt = s ;
+                }
+              }
+            }
+          }
+        }
       }  
     }     
     else if ( (pTheta < tolSTheta + kAngTolerance)
@@ -1515,43 +1519,44 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
-      if(t1){ 
-      b  = t2/t1 ;
-      c  = dist2STheta/t1 ;
-      d2 = b*b - c ;
+      if (t1)
+      { 
+        b  = t2/t1 ;
+        c  = dist2STheta/t1 ;
+        d2 = b*b - c ;
 
-      if (d2 >= 0)
-      {
-        d = std::sqrt(d2) ;
-        s = -b + d ;
-        if ( (s >= halfCarTolerance) && (s < snxt) && (fSTheta < halfpi) )
-        {  // ^^^^^^^^^^^^^^^^^^^^^  shouldn't it be >=0 instead ?
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
+        if (d2 >= 0)
+        {
+          d = std::sqrt(d2) ;
+          s = -b + d ;
+          if ( (s >= halfCarTolerance) && (s < snxt) && (fSTheta < halfpi) )
+          {  // ^^^^^^^^^^^^^^^^^^^^^  shouldn't it be >=0 instead ?
+            xi    = p.x() + s*v.x() ;
+            yi    = p.y() + s*v.y() ;
+            zi    = p.z() + s*v.z() ;
+            rhoi2 = xi*xi + yi*yi   ;
+            radi2 = rhoi2 + zi*zi   ;
 
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2)
-            && (zi*(fSTheta - halfpi) <= 0) )
-          {
-            if ( !fFullPhiSphere && rhoi2 )    // Check phi intersection
+            if ( (radi2 <= tolORMax2)
+              && (radi2 >= tolORMin2)
+              && (zi*(fSTheta - halfpi) <= 0) )
             {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if ( cosPsi >= cosHDPhiOT )
+              if ( !fFullPhiSphere && rhoi2 )    // Check phi intersection
+              {
+                cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                if ( cosPsi >= cosHDPhiOT )
+                {
+                  snxt = s ;
+                }
+              }
+              else
               {
                 snxt = s ;
               }
             }
-            else
-            {
-              snxt = s ;
-            }
           }
         }
       }
-     }
     }   
     else if ((pTheta > tolETheta-kAngTolerance) && (eTheta < pi-kAngTolerance))
     {
@@ -1586,45 +1591,46 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
-      if(t1){ 
-      b  = t2/t1 ;
-      c  = dist2ETheta/t1 ;
-      d2 = b*b - c ;
+      if (t1)
+      { 
+        b  = t2/t1 ;
+        c  = dist2ETheta/t1 ;
+        d2 = b*b - c ;
 
-      if (d2 >= 0)
-      {
-        d = std::sqrt(d2) ;
-        s = -b + d ;
-        
-        if ( (s >= halfCarTolerance)
-          && (s < snxt) && (eTheta > halfpi) )
+        if (d2 >= 0)
         {
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
-
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2)
-            && (zi*(eTheta - halfpi) <= 0) )
+          d = std::sqrt(d2) ;
+          s = -b + d ;
+        
+          if ( (s >= halfCarTolerance)
+            && (s < snxt) && (eTheta > halfpi) )
           {
-            if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+            xi    = p.x() + s*v.x() ;
+            yi    = p.y() + s*v.y() ;
+            zi    = p.z() + s*v.z() ;
+            rhoi2 = xi*xi + yi*yi   ;
+            radi2 = rhoi2 + zi*zi   ;
+
+            if ( (radi2 <= tolORMax2)
+              && (radi2 >= tolORMin2)
+              && (zi*(eTheta - halfpi) <= 0) )
             {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if (cosPsi >= cosHDPhiOT)
+              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              {
+                cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                if (cosPsi >= cosHDPhiOT)
+                {
+                  snxt = s ;
+                }
+              }
+              else
               {
                 snxt = s ;
               }
             }
-            else
-            {
-              snxt = s ;
-            }
           }
-        }
-      } 
-     }   
+        } 
+      }   
     }  
     else
     {
@@ -1633,83 +1639,85 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-      if(t1){ 
-      b  = t2/t1;
-      c  = dist2STheta/t1 ;
-      d2 = b*b - c ;
+      if (t1)
+      { 
+        b  = t2/t1;
+        c  = dist2STheta/t1 ;
+        d2 = b*b - c ;
 
-      if (d2 >= 0)
-      {
-        d = std::sqrt(d2) ;
-        s = -b + d ;    // second root
-
-        if ((s >= 0) && (s < snxt))
+        if (d2 >= 0)
         {
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
+          d = std::sqrt(d2) ;
+          s = -b + d ;    // second root
 
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2)
-            && (zi*(fSTheta - halfpi) <= 0) )
+          if ((s >= 0) && (s < snxt))
           {
-            if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+            xi    = p.x() + s*v.x() ;
+            yi    = p.y() + s*v.y() ;
+            zi    = p.z() + s*v.z() ;
+            rhoi2 = xi*xi + yi*yi   ;
+            radi2 = rhoi2 + zi*zi   ;
+
+            if ( (radi2 <= tolORMax2)
+              && (radi2 >= tolORMin2)
+              && (zi*(fSTheta - halfpi) <= 0) )
             {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if (cosPsi >= cosHDPhiOT)
+              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              {
+                cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                if (cosPsi >= cosHDPhiOT)
+                {
+                  snxt = s ;
+                }
+              }
+              else
               {
                 snxt = s ;
               }
             }
-            else
-            {
-              snxt = s ;
-            }
           }
         }
-       }
       }        
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-      if(t1){   
-      b  = t2/t1 ;
-      c  = dist2ETheta/t1 ;
-      d2 = b*b - c ;
+      if (t1)
+      {   
+        b  = t2/t1 ;
+        c  = dist2ETheta/t1 ;
+        d2 = b*b - c ;
 
-      if (d2 >= 0)
-      {
-        d = std::sqrt(d2) ;
-        s = -b + d;    // second root
-
-        if ((s >= 0) && (s < snxt))
+        if (d2 >= 0)
         {
-          xi    = p.x() + s*v.x() ;
-          yi    = p.y() + s*v.y() ;
-          zi    = p.z() + s*v.z() ;
-          rhoi2 = xi*xi + yi*yi   ;
-          radi2 = rhoi2 + zi*zi   ;
+          d = std::sqrt(d2) ;
+          s = -b + d;    // second root
 
-          if ( (radi2 <= tolORMax2)
-            && (radi2 >= tolORMin2)
-            && (zi*(eTheta - halfpi) <= 0) )
+          if ((s >= 0) && (s < snxt))
           {
-            if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+            xi    = p.x() + s*v.x() ;
+            yi    = p.y() + s*v.y() ;
+            zi    = p.z() + s*v.z() ;
+            rhoi2 = xi*xi + yi*yi   ;
+            radi2 = rhoi2 + zi*zi   ;
+
+            if ( (radi2 <= tolORMax2)
+              && (radi2 >= tolORMin2)
+              && (zi*(eTheta - halfpi) <= 0) )
             {
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
-              if ( cosPsi >= cosHDPhiOT )
+              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
               {
-                snxt=s;
+                cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
+                if ( cosPsi >= cosHDPhiOT )
+                {
+                  snxt=s;
+                }
               }
-            }
-            else
-            {
-              snxt = s ;
+              else
+              {
+                snxt = s ;
+              }
             }
           }
         }
-       }
       }
     }  
   }

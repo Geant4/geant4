@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.27 2009-06-11 13:26:14 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.28 2009-06-30 10:10:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -305,14 +305,12 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   
   tolRMax = fRmax - fRmaxTolerance*0.5 ;
     
-  // if ( rad2 <= tolRMax*tolRMax )  in = kInside ;
-  if ( rad <= tolRMax )  in = kInside ;
+  if ( rad <= tolRMax )  { in = kInside ; }
   else
   {
     tolRMax = fRmax + fRmaxTolerance*0.5 ;       
-    // if ( rad2 <= tolRMax*tolRMax ) in = kSurface ;
-    if ( rad <= tolRMax ) in = kSurface ;
-    else                           in = kOutside ;
+    if ( rad <= tolRMax )  { in = kSurface ; }
+    else                   { in = kOutside ; }
   }
   return in;
 }
@@ -390,7 +388,6 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
 
-  // c = rad2 - fRmax*fRmax;
   G4double rad = std::sqrt(rad2);
   c = (rad - fRmax)*(rad + fRmax);
 
@@ -450,9 +447,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe=0.0, rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
-                 safe = rad - fRmax;
-  if( safe < 0 ) safe = 0. ;
+  G4double safe = 0.0,
+           rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  safe = rad - fRmax;
+  if( safe < 0 ) { safe = 0.; }
   return safe;
 }
 
@@ -496,13 +494,11 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
   G4double rad = std::sqrt(rad2);
 
-  // if( rad2 <= Rmax_plus*Rmax_plus )
-  if( rad <= Rmax_plus )
+  if ( rad <= Rmax_plus )
   {
-    // c = rad2-fRmax*fRmax ;
     c = (rad - fRmax)*(rad + fRmax);
 
-    if ( c < fRmaxTolerance*fRmax) 
+    if ( c < fRmaxTolerance*fRmax ) 
     {
       // Within tolerant Outer radius 
       // 
