@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.9 2009-06-26 14:21:17 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.10 2009-06-30 15:33:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -341,7 +341,7 @@ void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n-------------------------------------------------------------"
      << "\n ---> The calorimeter is " << nbOfModules << " Modules"
-     << "\n ---> A Module is " << nbOfLayers << " Layers";
+     << "\n ---> A Module is " << nbOfLayers << " Layers + 1 milled Layer";
      
   G4cout  
      << "\n ---> A Layer is " << G4BestUnit(layerThickness,"Length")  
@@ -356,9 +356,16 @@ void DetectorConstruction::PrintCalorParameters()
      << "\n      ---> length   : " << G4BestUnit(fiberLength,"Length")
      << "\n      ---> distance : " << G4BestUnit(distanceInterFibers,"Length");
      
+  G4cout  
+     << "\n ---> The milled Layer is " << G4BestUnit(milledLayer,"Length")  
+     << " thickness of " << absorberMat->GetName();
+     
+  G4cout 
+   << "\n\n ---> Module thickness " << G4BestUnit(moduleThickness,"Length");
+  
   G4cout 
    << "\n\n ---> Total calor thickness " << G4BestUnit(calorThickness,"Length")
-   <<   "\n      Tranverse size        " << G4BestUnit(fiberLength,"Length");        
+   <<   "\n      Tranverse size        " << G4BestUnit(fiberLength,"Length");
 
   G4cout << "\n-------------------------------------------------------------\n";
   G4cout << G4endl;
