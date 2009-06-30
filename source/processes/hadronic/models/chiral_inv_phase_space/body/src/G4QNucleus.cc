@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.98 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.99 2009-06-30 09:00:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -1649,7 +1649,9 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           }
           else G4cerr<<"***G4QNucleus::EvaporateBaryon: PDG="<<PDG<<G4endl;
           G4double rEn=totMass-tk;
-          rMass=sqrt(rEn*rEn-p2);                  // Mass of Residual Nucleus
+          G4double rEn2=rEn*rEn;
+          if (rEn2 > p2) rMass=sqrt(rEn2-p2);      // Mass of Residual Nucleus
+          else           rMass=0.0;
           // Find out if the ResidualNucleus is below of the SecondBaryonDecayLimit
           //@@ Calculate it depending on PDG !!!!!!!
           G4bool nnCond = !nnFlag || (nnFlag && GSResNN+mNeut > rMass);
