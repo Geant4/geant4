@@ -38,6 +38,12 @@ geometry/solids/CSG                              geom-csg-V09-02-04
 - Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
   introduced in previous tag.
 
+geometry/solids/specific                         geom-specific-V09-02-03
+------------------------
+- G4Ellipsoid: introduced to DistanceToIn(p,v) splitting of the distance for
+  point very far from intersection area and big difference between solid
+  dimensions and distance to it; resolves issue observed on 64 bits problem.
+
 processes/electromagnetic/standard               emstand-V09-02-14
 ----------------------------------
 - G4WaterStopping: added Fe ion data.
