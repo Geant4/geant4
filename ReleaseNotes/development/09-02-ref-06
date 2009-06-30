@@ -67,8 +67,8 @@ track                                track-V09-02-03
 examples                                         examples-V09-02-05
 --------
 - Updated reference outputs.
-- advanced/amsEcal (amsEcal-V09-02-07)
-  o Updated DetectorConstruction for layers setup.
+- advanced/amsEcal (amsEcal-V09-02-08)
+  o Updated DetectorConstruction for layers setup and PrintParameters().
   o RunAction, EventAction: fixed initialisation of vectors.
   o SteppingAction: added protection on index computation.
   o Moved trigger conditions from SteppingAction to EventAction.
