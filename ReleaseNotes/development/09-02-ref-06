@@ -4,6 +4,10 @@
 
 Some of the development/fixes included since the last development tag are:
 
+ o Follow-up of code-review for solids, implemented correction for solids
+   with curved surfaces in DistanceToIn(p,v,...) to resolve precision issues
+   detected on 64 bits systems for points very far from intersection (hundreds
+   meters) and relatively small target solids.
  o Added interface to set deexcitation handler in Binary cascade.
 
 ---------- Reference-tag 'Release Notes' -----------
@@ -24,8 +28,13 @@ event                                            event-V09-02-01
 - Fixed gcc-4.4.0 compilation warning message for non-initialised variable
   in G4SPSEneDistribution.
 
-geometry/solids/CSG                              geom-csg-V09-02-03
+geometry/solids/CSG                              geom-csg-V09-02-04
 -------------------
+- Introduced to DistanceToIn(p,v) splitting of the distance for point very far
+  from intersection area and big difference between solid dimensions and
+  distance to it; resolves issue observed on 64 bits problem. Affected solids:
+  G4Tubs, G4Cons, G4Sphere, G4Orb. Addresses problem report #1022.
+- Fixed rare cases of NaN on G4Sphere.
 - Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
   introduced in previous tag.
 
