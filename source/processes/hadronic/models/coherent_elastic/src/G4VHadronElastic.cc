@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronElastic.cc,v 1.1 2009-07-02 09:49:30 vnivanch Exp $
+// $Id: G4VHadronElastic.cc,v 1.2 2009-07-02 11:09:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -43,7 +43,7 @@
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
-#include "G4pow.hh"
+#include "G4Pow.hh"
 
 G4VHadronElastic::G4VHadronElastic(const G4String& name) 
   : G4HadronicInteraction(name)
@@ -210,7 +210,7 @@ G4double G4VHadronElastic::SampleT(const G4ParticleDefinition* /*p*/,
   G4double tmax = 4.0*momentumCMS*momentumCMS/GeV2;
   G4double aa, bb, cc;
   G4double dd = 10.;
-  G4pow* p = G4pow::pow();
+  G4Pow* p = G4Pow::GetInstance();
   if (A <= 62) {
     bb = 14.5*p->Z23(A);
     aa = p->powZ(A, 1.63)/bb;
