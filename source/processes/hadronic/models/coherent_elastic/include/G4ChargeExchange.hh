@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.hh,v 1.4 2008-11-19 18:28:36 vnivanch Exp $
+// $Id: G4ChargeExchange.hh,v 1.5 2009-07-02 11:09:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@ public:
 
   void SetRecoilKinEnergyLimit(G4double value);
 
-  G4double SampleT(G4double p, G4double A);
+  G4double SampleTEx(G4double p, G4double A);
 
 private:
 
