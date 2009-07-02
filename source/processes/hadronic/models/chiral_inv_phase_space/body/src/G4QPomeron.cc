@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPomeron.cc,v 1.4 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QPomeron.cc,v 1.5 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -123,7 +123,7 @@ void G4QPomeron::InitForKaon()
   pomeron_S       = 2.3*GeV*GeV;
   //pomeron_Gamma   = 1.31/GeV/GeV;  // ? M.K.
   pomeron_Gamma   = 1.92/GeV/GeV;  // ? M.K.
-  pomeron_C       = 1.8;
+  pomeron_C       = 1.8;           // 1.7 (?)
   pomeron_Rsquare = 1.96/GeV/GeV;
 }
 

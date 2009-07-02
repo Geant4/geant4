@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QInteraction.hh,v 1.4 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,8 @@
 //   G4InteractionContent
 // -------------------------------------------------------------------
 //  Short description: Classify the interaction in soft/hard/diffractive
-//  parts for firther treatment by the QGS algorithm.
+//  parts for firther treatment by the QGS algorithm. Pure data class...
+//  Except for the SplitHadrons, which can be done elsewhere (@@ M.K.)
 // ---------------------------------------------------------------------
 
 #include "globals.hh"

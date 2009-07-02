@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.5 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.6 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -65,24 +65,13 @@ class G4QFragmentation
   int operator==(const G4QFragmentation &right) const;
   int operator!=(const G4QFragmentation &right) const;
 
-  G4QHadronVector* Scatter(const G4QNucleus& theNucleus, const G4QHadron& thePrimary);
+  G4QHadronVector* Scatter(const G4QNucleus& aNucleus, const G4QHadron& aPrimary);
 
-  void SetNucleus(G4QNucleus* aNucleus) {theNucleus = aNucleus;}
-  G4QNucleus* GetWoundedNucleus() const {return theNucleus;}
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
   G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
 
   G4QString* BuildString(G4QPartonPair* aPair)
    {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
-
-  G4QStringVector* GetStrings();
-  void DoLorentzBoost(G4ThreeVector aBoost) 
-  {
-    if(theNucleus) theNucleus->DoLorentzBoost(aBoost);
-    theBoost = aBoost;
-  }
-
-  G4QPartonPair* GetNextPartonPair();
 
   // Static functions
   static void SetParameters(G4int nCM, G4double thresh, G4double QGSMth, G4double radNuc,
@@ -101,20 +90,11 @@ class G4QFragmentation
   static G4double QGSMThershold; 
   static G4double theNucleonRadius;
   // Parameters of diffractional fragmentation
-  static G4double widthOfPtSquare;   // width^2 of pt for string excitation
-  static G4double minExtraMass;      // minimum excitation mass 
-  static G4double minmass;           // mean pion transverse mass; used for Xmin 
+  static G4double widthOfPtSquare;                       // width^2 of pt(StringExcitation)
+  static G4double minExtraMass;                          // minimum excitation mass 
+  static G4double minmass;                               // mean pion pt-mass for Xmin
 
   // Body
-  G4QInteractionVector theInteractions;
-  G4QHadronVector      theTargets; 
-  G4QPartonPairVector  thePartonPairs;
-
-  G4int         ModelMode;
-  G4ThreeVector theBoost;                                // init as zero 3-vector (@@ M.K.)
-  G4QNucleus*   theNucleus;                              // In constructer it is inited as 0
-  G4ThreeVector theCurrentVelocity;                      // init as zero 3-vector (@@ M.K.)
-
   enum {SOFT, DIFFRACTIVE};
 };
 

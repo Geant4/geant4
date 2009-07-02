@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QParton.hh,v 1.5 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -68,6 +68,7 @@ class G4QParton
   G4int operator!=(const G4QParton &right) const      {return this!=&right;} 
 
   // Modifiers
+  void DefineEPz(G4LorentzVector hadr4Mom){theMomentum+=hadr4Mom*theX;} // CHIPS solution
   void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);
   void SetColour(G4int aColour)                       {theColour = aColour;}
   void SetX(G4double anX)                             {theX = anX;}

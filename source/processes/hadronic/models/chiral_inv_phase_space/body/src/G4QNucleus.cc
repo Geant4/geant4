@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.100 2009-06-30 09:05:42 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.101 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3263,7 +3263,7 @@ void G4QNucleus::ChoosePositions()
       //  @@ M.K.: 1. CoulBar depends on aPos; 2. Makes Isotopic assymetry (!); 3. Perform.
       G4int nucPDG= theNucleons[i]->GetPDGCode();
 #ifdef debug
-    G4cout<<"G4QNucl::ChoosePositions: frpl="<<freeplace<<", nucPDG="<<nucPDG<<G4endl;
+      G4cout<<"G4QNucl::ChoosePositions: frpl="<<freeplace<<", nucPDG="<<nucPDG<<G4endl;
 #endif      
       if(freeplace && nucPDG == 2212) // Free Space Protons
       {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParton.cc,v 1.5 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QParton.cc,v 1.6 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -173,10 +173,10 @@ G4QParton::~G4QParton()
   //G4cout << "G4QParton::~G4QParton(): this = "<<this <<G4endl;
   //G4cout << "break here"<<this <<G4endl;
 }
-
+// QGS x+/x- logic of the Energy and Pz calculation
 void G4QParton::DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection)
 {
-  G4double Mass = GetMass();
+  G4double Mass = GetMass();                       // Should be zero for u,d
   G4LorentzVector a4Momentum = Get4Momentum();
   aLightConeMomentum*=theX;
   G4double TransverseMass2 = sqr(a4Momentum.px()) + sqr(a4Momentum.py()) + sqr(Mass);

@@ -16,7 +16,7 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-30-Jun-2009 M.Kosov                              (hadr-chips-body-V09-02-06)
+30-Jun-2009 M.Kosov                              (hadr-chips-body-V09-02-07)
 ----------------------------------------------------------------------------
 Safety correction of the sqrt(neg.val.) in G4QNucleus + internal development
 of the pion production in CHIPS (preliminary, do not influence the other

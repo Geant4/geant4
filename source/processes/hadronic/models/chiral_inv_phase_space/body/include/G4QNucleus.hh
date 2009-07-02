@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.36 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.37 2009-07-02 07:17:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -97,6 +97,12 @@ public:
   G4QHadron* GetNextNucleon()
     {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
   //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  G4LorentzVector GetNucleons4Momentum()
+  {
+    G4LorentzVector sum(0.,0.,0.,0.);
+    for(unsigned i=0; i<theNucleons.size(); i++) sum += theNucleons[i]->Get4Momentum();
+    return sum;
+  }
   std::vector<G4double> const* GetBThickness() {return &Tb;} // T(b) function, step .1 fm
 
   // Specific Modifiers
@@ -133,12 +139,12 @@ public:
   G4QNucleus operator-=(const G4QNucleus& rhs);     // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   G4bool StartLoop();                               // returns size of theNucleons (cN=0)
-  G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum); // Reduce zero-sum of vectors
+  G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum);// Reduce zero-sum of vectors
   void DoLorentzBoost(const G4LorentzVector& theBoost); // Boost nucleons by 4-vector
   void DoLorentzBoost(const G4ThreeVector& theBeta);// Boost nucleons by v/c
   void DoLorentzContraction(const G4LorentzVector&B){DoLorentzContraction(B.vect()/B.e());}
   void DoLorentzContraction(const G4ThreeVector& theBeta); // Lorentz Contraction by v/c
-  void DoTranslation(const G4ThreeVector& theShift); // Used only in GHAD-TFT
+  void DoTranslation(const G4ThreeVector& theShift); // Used only in G4QFragmentation
 
   // Static functions
   static void SetParameters(G4double fN=.1,G4double fD=.05, G4double cP=4., G4double mR=1.,
@@ -189,11 +195,11 @@ private:
   G4double probVect[256];         // Cluster probability ("a#of issues" can be real) Vector
   // 3D
   std::pair<G4double, G4double> theImpactParameter; // 2D impact parameter vector bbar
-  G4QHadronVector theNucleons;  // Vector of nucleons of which Nucleus consists of
-  G4int currentNucleon;         // Current nucleon for the NextNucleon (? M.K.)
-  G4double rho0;                // Normalazation density
-  G4double radius;              // Nuclear radius
-  std::vector<G4double> Tb;    // T(b) function with step .1 fm (@@ make .1 a parameter)
+  G4QHadronVector theNucleons;    // Vector of nucleons of which the Nucleus consists of
+  G4int currentNucleon;           // Current nucleon for the NextNucleon (? M.K.)
+  G4double rho0;                  // Normalazation density
+  G4double radius;                // Nuclear radius
+  std::vector<G4double> Tb;       // T(b) function with step .1 fm (@@ make .1 a parameter)
 };
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
