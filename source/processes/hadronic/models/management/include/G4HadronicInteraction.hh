@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.9 2009-01-24 11:56:27 vnivanch Exp $
+// $Id: G4HadronicInteraction.hh,v 1.10 2009-07-02 09:39:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  abstract base class
@@ -40,6 +40,7 @@
 // Adding a registry for memory management of hadronic models, HPW 22-Mar-99
 // 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
 //                          and reorder methods in the header 
+// 29-Jun-2009 V.Ivanchenko add SampleT method
 
 // Class Description
 // This is the base class for all hadronic interaction models in geant4.
@@ -69,6 +70,10 @@ public: // With description
   virtual G4HadFinalState *ApplyYourself(const G4HadProjectile &aTrack, 
 					 G4Nucleus & targetNucleus ) = 0;
   // This is the interface to implement for final state production code.
+
+  virtual G4double SampleT(const G4ParticleDefinition* p, G4double plab,
+			   G4int Z, G4int A);
+  // This is the interface to implement sampling of scattering
    
   virtual G4bool IsApplicable(const G4HadProjectile &/*aTrack*/, 
 			      G4Nucleus & /*targetNucleus*/)

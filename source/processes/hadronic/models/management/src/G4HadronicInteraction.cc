@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc,v 1.4 2009-01-24 11:56:27 vnivanch Exp $
+// $Id: G4HadronicInteraction.cc,v 1.5 2009-07-02 09:39:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  base class
@@ -47,6 +47,12 @@ G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
 G4HadronicInteraction::~G4HadronicInteraction()
 {
   G4HadronicInteractionRegistry::Instance()->RemoveMe(this);
+}
+
+G4double G4HadronicInteraction::SampleT(const G4ParticleDefinition*, 
+					G4double, G4int, G4int)
+{
+  return 0.0;
 }
  
 G4double G4HadronicInteraction::GetMinEnergy(
