@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.23 2009-03-02 09:17:43 grichine Exp $
+// $Id: G4DiffuseElastic.cc,v 1.24 2009-07-02 09:52:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,11 +63,13 @@
 
 
 G4DiffuseElastic::G4DiffuseElastic() 
-  : G4HadronicInteraction(), fParticle(0)
+  : G4VHadronElastic("hElasticDiffused"), fParticle(0)
+  //  : G4HadronicInteraction(), fParticle(0)
 {
   SetMinEnergy( 0.01*GeV );
   SetMaxEnergy( 1.*TeV );
   verboseLevel = 0;
+  /*
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
   lowEnergyLimitHE = 0.0*GeV;  
@@ -80,7 +82,7 @@ G4DiffuseElastic::G4DiffuseElastic()
   theAlpha    = G4Alpha::Alpha();
   thePionPlus = G4PionPlus::PionPlus();
   thePionMinus= G4PionMinus::PionMinus();
-
+  */
   fEnergyBin = 200;
   fAngleBin  = 200;
 
@@ -103,24 +105,26 @@ G4DiffuseElastic::G4DiffuseElastic()
 // Constructor with initialisation
 
 G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle) 
-  : G4HadronicInteraction(), fParticle(aParticle)
+ : G4VHadronElastic("hElasticDiffused"), fParticle(aParticle)
+  //  : G4HadronicInteraction(), fParticle(aParticle)
 {
   SetMinEnergy( 0.01*GeV );
   SetMaxEnergy( 1.*TeV );
   verboseLevel = 0;
+  /*
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
   lowEnergyLimitHE = 0.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
-
+  
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
   thePionPlus = G4PionPlus::PionPlus();
   thePionMinus= G4PionMinus::PionMinus();
-
+  */
   fEnergyBin = 200; // 200; // 100;
   fAngleBin  = 400; // 200; // 100;
 
@@ -191,7 +195,7 @@ void G4DiffuseElastic::Initialise()
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Model analog of DoIt function
-
+/*
 G4HadFinalState* 
 G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack, 
                                        G4Nucleus& targetNucleus )
@@ -361,7 +365,7 @@ G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack,
 
   return &theParticleChange;
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -883,14 +887,14 @@ G4DiffuseElastic::IntegralElasticProb(  const G4ParticleDefinition* particle,
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return inv momentum transfer -t > 0
-
+/*
 G4double G4DiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, G4double p, G4double A)
 {
   G4double theta = SampleThetaCMS( aParticle,  p, A); // sample theta in cms
   G4double t     = 2*p*p*( 1 - std::cos(theta) ); // -t !!!
   return t;
 }
-
+*/
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return scattering angle sampled in cms
@@ -950,12 +954,19 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
 //
 // Return inv momentum transfer -t > 0 from initialisation table
 
-G4double G4DiffuseElastic::SampleTableT( const G4ParticleDefinition* aParticle, G4double p, 
-                                               G4double Z, G4double A)
+//G4double 
+//G4DiffuseElastic::SampleTableT( const G4ParticleDefinition* aParticle, G4double p,
+//G4double Z, G4double A)
+
+G4double 
+G4DiffuseElastic::SampleT( const G4ParticleDefinition* aParticle, G4double /*plab*/, 
+			   G4int Z, G4int A)
 {
-  G4double alpha = SampleTableThetaCMS( aParticle,  p, Z, A); // sample theta2 in cms
+  // sample theta2 in cms
+  G4double alpha = SampleTableThetaCMS( aParticle, momentumCMS, 
+					(G4double)Z, (G4double)A); 
   // G4double t     = 2*p*p*( 1 - std::cos(std::sqrt(alpha)) );             // -t !!!
-  G4double t     = p*p*alpha;             // -t !!!
+  G4double t = momentumCMS*momentumCMS*alpha;             // -t !!!
   return t;
 }
 
@@ -1234,7 +1245,7 @@ G4DiffuseElastic:: GetScatteringAngle( G4int iMomentum, G4int iAngle, G4double p
 //
 // Return scattering angle sampled in lab system (target at rest)
 
-
+/*
 
 G4double 
 G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle, 
@@ -1317,7 +1328,7 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
 
   return theta;
 }
-
+*/
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return scattering angle in lab system (target at rest) knowing theta in CMS

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.79 2008-01-14 10:39:13 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.80 2009-07-02 09:52:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -219,7 +219,8 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 //
 
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
-  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
+  : G4VHadronElastic("hElasticGlauber")
+  //  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
 {
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
@@ -298,7 +299,7 @@ G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
 ////////////////////////////////////////////////////////////////////
 //
 //
-
+/*
 G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
                           const  G4HadProjectile  &aTrack,
                                  G4Nucleus        &targetNucleus)
@@ -456,7 +457,7 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   return &theParticleChange;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////
 //
 //
