@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.35 2009-06-29 09:59:36 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.36 2009-07-03 11:34:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,8 +58,7 @@
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   lastEnergy(0.), lastValue(0.), lastBin(0), 
-   secDerivative(0), useSpline(spline)
+   lastEnergy(0.), lastValue(0.), lastBin(0), useSpline(spline)
 {}
 
 // --------------------------------------------------------------
@@ -107,8 +106,7 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 void G4PhysicsVector::DeleteData()
 {
-  delete [] secDerivative;
-  secDerivative = 0;
+  secDerivative.clear();
 }
 
 // --------------------------------------------------------------
@@ -126,18 +124,7 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   binVector = vec.binVector;
   useSpline = vec.useSpline;
   comment = vec.comment;
-  if (vec.secDerivative)
-  {
-    secDerivative = new G4double [numberOfNodes];
-    for (size_t i=0; i<numberOfNodes; i++)
-    {
-       secDerivative[i] = vec.secDerivative[i];
-    }
-  }
-  else
-  {
-    secDerivative = 0;
-  }
+  secDerivative = vec.secDerivative;
 }
 
 // --------------------------------------------------------------
@@ -418,11 +405,11 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(secDerivative)  { DeleteData(); }
-  secDerivative = new G4double [numberOfNodes]; 
+  if(secDerivative.size() > 0)  { DeleteData(); }
+  secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; j++)
   {
-    secDerivative[j] = 0.0;
+    secDerivative.push_back(0.0);
     if(j > 0)
     {
       if(binVector[j]-binVector[j-1] <= 0.)  { useSpline = false; }

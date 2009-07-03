@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.21 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.22 2009-07-03 11:34:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,6 +193,7 @@ class G4PhysicsVector
 
     G4PVDataVector dataVector;    // Vector to keep the crossection/energyloss
     G4PVDataVector binVector;     // Vector to keep energy
+    G4PVDataVector secDerivative; // Vector to keep second derivatives 
 
   private:
 
@@ -204,8 +205,6 @@ class G4PhysicsVector
          // Spline interpolation function
 
     inline void Interpolation();
-
-    G4double*  secDerivative;
 
     G4String   comment;
     G4bool     useSpline;

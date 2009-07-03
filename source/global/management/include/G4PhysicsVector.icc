@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.18 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.19 2009-07-03 11:34:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,21 +101,23 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  if( !secDerivative ) { FillSecondDerivatives(); }
+  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
 
   // check bin value
-  G4double delta = binVector[lastBin+1] - binVector[lastBin];
+  G4double x1 = binVector[lastBin];
+  G4double x2 = binVector[lastBin+1];
+  G4double delta = x2 - x1;
 
-  G4double a = (binVector[lastBin+1] - lastEnergy)/delta;
-  G4double b = (lastEnergy - binVector[lastBin])/delta;
+  G4double a = (x2 - lastEnergy)/delta;
+  G4double b = (lastEnergy - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
   G4double y1 = dataVector[lastBin];
   G4double y2 = dataVector[lastBin+1];
 
   G4double res = a*y1 + b*y2 + 
-        ((a*a*a - a)*secDerivative[lastBin] +
-         (b*b*b - b)*secDerivative[lastBin+1])*delta*delta/6.0  ;
+        ( (a*a*a - a)*secDerivative[lastBin] +
+          (b*b*b - b)*secDerivative[lastBin+1] )*delta*delta/6.0;
 
   return res;
 }
