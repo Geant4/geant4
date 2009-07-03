@@ -24,77 +24,111 @@
 // ********************************************************************
 //
 
-#include <fstream>
-#include <iostream>
+#include "globals.hh"
+#include "G4ios.hh"
 #include "G4Timer.hh"
-#include "G4Power.hh"
-#include "G4String.hh"
+#include "G4Pow.hh"
+
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
- // Control on input
-
   if(argc < 2) {
-    G4cout << "Input parameters are not specified! Exit" << G4endl;
+    G4cout << "Name is not specified! Exit" << G4endl;
     exit(1);
   }
-
-  G4Timer* timer1 = new G4Timer();
-
-  G4String fname = argv[1];
-  fname += "_time_comparison_double.out";
-
-  std::ofstream asciiFile;
-  asciiFile.open(fname.c_str(), std::ios::out);
-  if(asciiFile.is_open()) {
-    asciiFile << "Time comparison of " << argv[1] << " calculation" <<G4endl;
-    asciiFile << "(loop  Z = 1-256 over 1000000 bins)" <<G4endl;
-  } else {
-    G4cout << "ERROR file <" << fname << "> is not opened" << G4endl;
-    exit(1);
-  }
-
-  G4int zmax = 256;
-
-  G4double d;
-  G4double zm = 256.;
-  G4double nx = (zm - 1.)/1000000.;
-  G4Power* power = G4Power::Power();
-
-  timer1->Start();
-  for (G4double x = 1.; x < zm; ) {
-    //d = power->Z13(x);
-    d = power->LogZ(x);
-    //    asciiFile << "d[" << x << "] = " << d << G4endl;
-    x += nx; 
-  } 
-
-  timer1->Stop();
-  G4String s1 = "spline: ";
-  asciiFile << s1 << " " << *timer1 << G4endl;
-
-  delete timer1;
-
-  G4Timer* timer2 = new G4Timer();
 
   G4double onethird = 1.0/3.0;
+  G4int zmax = 255;
+  const G4int n = 2551;
+  G4int nn = 10000;
 
-  timer2->Start();
-  for (G4double x = 1.; x < zm; ) {
-    //d = std::pow((x),onethird);
-    d = std::log(x);
-    //    asciiFile << "d[" << x << "] = " << d << G4endl;
-    x += nx; 
-  } 
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
 
-  timer2->Stop();
-  G4String s2 = "formula: ";
-  asciiFile << s2 << " " << *timer2 << G4endl;
+  G4cout << "Loop  Z = 1-256 over " << n << " points in " << nn << " seria " << G4endl;
+  G4cout << "Time comparison of G4Pow calculation of " << argv[1] << G4endl;
 
-  delete timer2;
-  asciiFile.close();
+  G4int i, j;
+  G4double x[n];
+  G4double y[n];
+  G4double z[n];
+
+  G4double del = G4double(zmax)/G4double(n-1);
+  G4double t   = 0.5;
+  for (i=0; i<n; i++) {
+    x[i] = t;
+    t += del;
+  }
+
+  G4Pow* power = G4Pow::GetInstance();
+  G4Timer* timer1 = new G4Timer();
+
+  timer1->Start();
+  for(j=0; j<nn; j++) {
+    for (i=0; i<n; i++) {
+      t = x[i];
+      //y[i] = power->A13(t);
+      // y[i] = power->A23(t);
+      y[i] = power->logA(t);
+    } 
+  }
+
+  timer1->Stop();
+  G4cout << "======= G4pow   ";
+  G4cout << *timer1 << std::endl;
+
+  timer1->Start();
+  for(j=0; j<nn; j++) {
+    for (i=0; i<n; i++) {
+      t = x[i];
+      //z[i] = std::pow(t,onethird);
+      z[i] = std::log(t);
+      //    G4cout << "d[" << x << "] = " << d << G4endl;
+    } 
+  }
+
+  timer1->Stop();
+  G4cout << std::endl;
+  G4cout << "======= std:   ";
+  G4cout << *timer1 << std::endl;
+  
+  nn *= 10;
+
+  timer1->Start();
+  for(j=0; j<nn; j++) {
+    for (i=1; i<256; i++) {
+      //y[i] = power->Z13(i);
+      // y[i] = power->Z23(i);
+      y[i] = power->logZ(i);
+    } 
+  }
+
+  timer1->Stop();
+  G4cout << std::endl;
+  G4cout << "======= G4pow  Z ";
+  G4cout << *timer1 << std::endl;
+
+  timer1->Start();
+  for(j=0; j<nn; j++) {
+    for (i=1; i<256; i++) {
+      //z[i] = std::pow(G4double(i),onethird);
+      z[i] = std::log(G4double(i));
+      //    G4cout << "d[" << x << "] = " << d << G4endl;
+    } 
+  }
+
+  timer1->Stop();
+  G4cout << std::endl;
+  G4cout << "======= std:   ";
+  G4cout << *timer1 << std::endl;
+
+  delete timer1;
   return 0;
 }
 
