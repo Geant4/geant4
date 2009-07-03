@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh,v 1.1 2009-06-29 09:59:36 gcosmo Exp $
+// $Id: G4Pow.hh,v 1.2 2009-07-03 11:35:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 #define G4Pow_h 1
 
 #include "globals.hh"
+#include "G4DataVector.hh"
 
 class G4Pow
 {
@@ -78,6 +79,10 @@ class G4Pow
     inline G4double powZ(G4int Z, G4double y);
     inline G4double powA(G4double A, G4double y);
 
+    // Fast factorial
+    //
+    inline G4double factorial(G4int Z);
+
   private:
 
     G4Pow();
@@ -88,8 +93,10 @@ class G4Pow
     static G4Pow* fInstance;
 
     G4double onethird;
-    G4double* pz13;
-    G4double* lz;
+
+    G4DataVector pz13;
+    G4DataVector lz;
+    G4DataVector fact;
 };
 
 // -------------------------------------------------------------------
@@ -170,6 +177,11 @@ inline G4double G4Pow::powZ(G4int Z, G4double y)
 inline G4double G4Pow::powA(G4double A, G4double y)
 {
   return std::exp(y*logA(A));
+}
+
+inline G4double G4Pow::factorial(G4int Z)
+{
+  return fact[Z];
 }
 
 // -------------------------------------------------------------------
