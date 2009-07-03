@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.88 2009-06-19 12:50:23 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.89 2009-07-03 14:39:17 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -965,8 +965,7 @@ inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable()
 inline G4double G4VEnergyLossProcess::SampleRange()
 {
   G4double e = amu_c2*preStepKinEnergy/particle->GetPDGMass();
-  G4bool b;
-  G4double s = fRange*std::pow(10.,vstrag->GetValue(e,b));
+  G4double s = fRange*std::pow(10.,vstrag->Value(e));
   G4double x = fRange + G4RandGauss::shoot(0.0,s);
   if(x > 0.0) fRange = x;
   return fRange;
@@ -999,9 +998,7 @@ inline void G4VEnergyLossProcess::DefineMaterial(
 
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
-  G4bool b;
-  G4double x = 
-    ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  G4double x = ((*theDEDXTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
@@ -1010,9 +1007,7 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 {
-  G4bool b;
-  G4double x = 
-    ((*theDEDXSubTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  G4double x = ((*theDEDXSubTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
@@ -1021,11 +1016,9 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 {
-  G4bool b;
-  G4double x = 0.0;
+  //G4double x = 0.0;
   //  if(theIonisationTable) {
-  x = ((*theIonisationTable)[currentMaterialIndex]->GetValue(e, b))
-    *chargeSqRatio;
+  G4double x = ((*theIonisationTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   //}
   return x;
@@ -1036,11 +1029,9 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 inline 
 G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 {
-  G4bool b;
-  G4double x = 0.0;
+  //  G4double x = 0.0;
   //if(theIonisationSubTable) {
-  x = ((*theIonisationSubTable)[currentMaterialIndex]->GetValue(e, b))
-    *chargeSqRatio;
+  G4double x = ((*theIonisationSubTable)[currentMaterialIndex]->Value(e))*chargeSqRatio;
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   //}
   return x;
@@ -1050,8 +1041,7 @@ G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
-  G4bool b;
-  G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
+  G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->Value(e);
   if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
@@ -1061,11 +1051,10 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 inline G4double G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(
 		G4double e)
 {
-  G4bool b;
   G4double x;
 
   if (e < maxKinEnergyCSDA) {
-    x = ((*theCSDARangeTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theCSDARangeTable)[currentMaterialIndex])->Value(e);
     if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
@@ -1079,12 +1068,10 @@ inline G4double G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(
 inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 {
   G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
-  G4double rmin = v->GetLowEdgeEnergy(0);
+  G4double rmin = v->Energy(0);
   G4double e = 0.0; 
-  if(r >= rmin) {
-    G4bool b;
-    e = v->GetValue(r, b);
-  } else if(r > 0.0) {
+  if(r >= rmin) { e = v->Value(r); }
+  else if(r > 0.0) {
     G4double x = r/rmin;
     e = minKinEnergy*x*x;
   }
@@ -1095,9 +1082,7 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 
 inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 {
-  G4bool b;
-  return 
-    chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
+  return chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->Value(e));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.151 2009-06-25 14:46:54 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.152 2009-07-03 14:39:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1193,8 +1193,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
   const G4Track* track = step.GetTrack();
   const G4DynamicParticle* dp = track->GetDynamicParticle();
   G4double e = dp->GetKineticEnergy()*massRatio;
-  G4bool b;
-  G4double cross = chargeSqRatio*(((*theSubLambdaTable)[idx])->GetValue(e,b));
+  G4double cross = chargeSqRatio*(((*theSubLambdaTable)[idx])->Value(e));
   G4double length = step.GetStepLength();
 
   // negligible probability to get any interaction
@@ -1237,9 +1236,8 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
       /*
       // do not track very low-energy delta-electrons
       if(theSecondaryRangeTable && (*it)->GetDefinition() == theElectron) {
-	G4bool b;
 	G4double ekin = (*it)->GetKineticEnergy();
-	G4double rg = ((*theSecondaryRangeTable)[idx]->GetValue(ekin, b));
+	G4double rg = ((*theSecondaryRangeTable)[idx]->Value(ekin));
 	//          if(rg < currentMinSafety) {
 	if(rg < safetyHelper->ComputeSafety(r)) {
 	  extraEdep += ekin;
@@ -1538,16 +1536,13 @@ G4double G4VEnergyLossProcess::CrossSectionPerVolume(
   // Cross section per volume is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
-  G4bool b;
   if(theLambdaTable) {
-    cross = 
-      ((*theLambdaTable)[currentMaterialIndex])->GetValue(kineticEnergy, b);
+    cross = ((*theLambdaTable)[currentMaterialIndex])->Value(kineticEnergy);
   } else {
     SelectModel(kineticEnergy);
-    cross = 
-      currentModel->CrossSectionPerVolume(currentMaterial,
-					  particle, kineticEnergy,
-					  (*theCuts)[currentMaterialIndex]);
+    cross = currentModel->CrossSectionPerVolume(currentMaterial,
+						particle, kineticEnergy,
+						(*theCuts)[currentMaterialIndex]);
   }
 
   return cross;
@@ -1646,12 +1641,11 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
       size_t n = p->length();
       G4PhysicsVector* pv = (*p)[0];
       G4double emax = maxKinEnergyCSDA;
-      G4bool b;
       theDEDXAtMaxEnergy = new G4double [n];
 
       for (size_t i=0; i<n; i++) {
 	pv = (*p)[i];
-	G4double dedx = pv->GetValue(emax, b);
+	G4double dedx = pv->Value(emax);
 	theDEDXAtMaxEnergy[i] = dedx;
 	//G4cout << "i= " << i << " emax(MeV)= " << emax/MeV<< " dedx= " 
 	//<< dedx << G4endl;
@@ -1681,12 +1675,11 @@ void G4VEnergyLossProcess::SetCSDARangeTable(G4PhysicsTable* p)
     size_t n = p->length();
     G4PhysicsVector* pv = (*p)[0];
     G4double emax = maxKinEnergyCSDA;
-    G4bool b;
     theRangeAtMaxEnergy = new G4double [n];
 
     for (size_t i=0; i<n; i++) {
       pv = (*p)[i];
-      G4double r2 = pv->GetValue(emax, b);
+      G4double r2 = pv->Value(emax);
       theRangeAtMaxEnergy[i] = r2;
       //G4cout << "i= " << i << " e2(MeV)= " << emax/MeV << " r2= " 
       //<< r2<< G4endl;

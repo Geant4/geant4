@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.52 2009-06-26 19:13:33 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.53 2009-07-03 14:39:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -624,8 +624,6 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  //G4bool b;
-  //  return (((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
   return (((*theLambdaTable)[currentMaterialIndex])->Value(e));
 }
 
@@ -634,8 +632,8 @@ inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 {
   G4double x = 0.0;
-  if(theLambdaTable) x = GetLambdaFromTable(e);
-  else               x = ComputeCurrentLambda(e);
+  if(theLambdaTable) { x = GetLambdaFromTable(e); }
+  else               { x = ComputeCurrentLambda(e); }
   return x;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.46 2009-02-24 09:56:03 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.47 2009-07-03 14:39:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -306,9 +306,8 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
     G4int idx = couple->GetIndex();
     FindLambdaTable(p, processName);
     if(currentLambda) {
-      G4bool b;
       G4double e = kinEnergy*massRatio;
-      res = (((*currentLambda)[idx])->GetValue(e,b))*chargeSquare;
+      res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
       if(verbose>0) {
 	G4cout << "E(MeV)= " << kinEnergy/MeV
 	       << " cross(cm-1)= " << res*cm

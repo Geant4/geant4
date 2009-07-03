@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.52 2009-06-25 14:46:54 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.53 2009-07-03 14:39:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -706,8 +706,7 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     }
   }
   if(curVector) {
-    G4bool b;
-    factor = curVector->GetValue(ekin*massFactor,b);
+    factor = curVector->Value(ekin*massFactor);
     if(verbose > 1) {
       G4cout << "E= " << ekin << " factor= " << factor << " massfactor= " 
 	     << massFactor << G4endl;
@@ -770,13 +769,12 @@ void G4EmCorrections::BuildCorrectionVector()
 	   << materialName[idx] << " Ion Z= " << Z << " A= " << A
 	   << " massRatio= " << massRatio << G4endl;
   }
-  G4bool b;
 
   G4PhysicsLogVector* vv = 
     new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr);
   vv->SetSpline(true);
   G4double e, eion, dedx, dedx1;
-  G4double eth0 = v->GetLowEdgeEnergy(0);
+  G4double eth0 = v->Energy(0);
   G4double escal = eth/massRatio;
   G4double qe = 
     effCharge.EffectiveChargeSquareRatio(ion, curMaterial, escal); 
@@ -790,13 +788,13 @@ void G4EmCorrections::BuildCorrectionVector()
   //	 << " dedxt1= " << dedx1t << G4endl;   
 
   for(G4int i=0; i<=nbinCorr; i++) {
-    e = vv->GetLowEdgeEnergy(i);
+    e = vv->Energy(i);
     escal = e/massRatio;
     eion  = escal/A;
     if(eion <= eth0) {
-      dedx = v->GetValue(eth0, b)*std::sqrt(eion/eth0);
+      dedx = v->Value(eth0)*std::sqrt(eion/eth0);
     } else {
-      dedx = v->GetValue(eion, b);
+      dedx = v->Value(eion);
     }
     qe = effCharge.EffectiveChargeSquareRatio(curParticle,curMaterial,escal); 
     if(e <= eth) {
