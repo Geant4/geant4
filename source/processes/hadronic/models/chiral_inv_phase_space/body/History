@@ -16,6 +16,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+2-Jul-2009 M.Kosov                              (hadr-chips-body-V09-02-08)
+----------------------------------------------------------------------------
+Everywhere in the CHIPS the internal RndmDir() is replaced by the general
+G4RandomDirection().
+
 30-Jun-2009 M.Kosov                              (hadr-chips-body-V09-02-07)
 ----------------------------------------------------------------------------
 Safety correction of the sqrt(neg.val.) in G4QNucleus + internal development

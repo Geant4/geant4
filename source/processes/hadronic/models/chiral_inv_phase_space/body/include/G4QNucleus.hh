@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.37 2009-07-02 07:17:09 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.38 2009-07-03 14:49:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -101,6 +101,7 @@ public:
   {
     G4LorentzVector sum(0.,0.,0.,0.);
     for(unsigned i=0; i<theNucleons.size(); i++) sum += theNucleons[i]->Get4Momentum();
+    sum.setE(std::sqrt(sqr(GetGSMass())+sum.v().mag2())); // Energy is corrected !
     return sum;
   }
   std::vector<G4double> const* GetBThickness() {return &Tb;} // T(b) function, step .1 fm

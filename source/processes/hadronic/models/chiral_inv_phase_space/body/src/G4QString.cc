@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.6 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QString.cc,v 1.7 2009-07-03 14:49:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -49,6 +49,7 @@
 // ---------------------------------------------------------------------
 
 //#define debug
+//#define edebug
 
 #include "G4QString.hh"
 #include <algorithm>
@@ -88,9 +89,9 @@ G4QString::G4QString(G4QParton* QCol,G4QParton* Gluon,G4QParton* QAntiCol,G4int 
   sum+=Gluon->Get4Momentum();
   thePartons.push_back(QAntiCol);
   sum+=QAntiCol->Get4Momentum();
-	 Pplus =sum.e() + sum.pz();
-	 Pminus=sum.e() - sum.pz();
-	 decaying=None;
+  Pplus =sum.e() + sum.pz();
+  Pminus=sum.e() - sum.pz();
+  decaying=None;
 }
 
 G4QString::G4QString(const G4QString &right) : theDirection(right.GetDirection()),
@@ -98,15 +99,15 @@ thePosition(right.GetPosition()), hadronizer(new G4QHadronBuilder)
 {
   //LeftParton=right.LeftParton;
   //RightParton=right.RightParton;
-	 Ptleft=right.Ptleft;
-	 Ptright=right.Ptright;
-	 Pplus=right.Pplus;
-	 Pminus=right.Pminus;
-	 decaying=right.decaying;
+  Ptleft=right.Ptleft;
+  Ptright=right.Ptright;
+  Pplus=right.Pplus;
+  Pminus=right.Pminus;
+  decaying=right.decaying;
 }
 
 G4QString::~G4QString()
- {if(thePartons.size()) std::for_each(thePartons.begin(),thePartons.end(),DeleteQParton());}
+{if(thePartons.size()) std::for_each(thePartons.begin(),thePartons.end(),DeleteQParton());}
 
 G4LorentzVector G4QString::Get4Momentum() const
 {
@@ -124,27 +125,19 @@ void G4QString::LorentzRotate(const G4LorentzRotation & rotation)
 void G4QString::InsertParton(G4QParton* aParton, const G4QParton* addafter)
 {
   G4QPartonVector::iterator insert_index;   // Begin by default (? M.K.)
- 
   if(addafter != NULL) 
   {
     insert_index=std::find(thePartons.begin(), thePartons.end(), addafter);
     if (insert_index == thePartons.end())  // No object addafter in thePartons
     {
-      G4cerr<<"***G4QString::InsertParton: Address Parton is not found"<<G4endl;
+      G4cerr<<"***G4QString::InsertParton: Addressed Parton is not found"<<G4endl;
       G4Exception("G4QString::InsertParton:","72",FatalException,"NoAddressParton");
     }
   }
   thePartons.insert(insert_index+1, aParton);
 } 
 
-G4LorentzRotation G4QString::TransformToCenterOfMass()
-{
-  G4LorentzRotation toCms(-1*Get4Momentum().boostVector());
-  for(unsigned i=0; i<thePartons.size(); i++)
-                      thePartons[i]->Set4Momentum(toCms*thePartons[i]->Get4Momentum());
-  return toCms;
-}
-// Transfer all partons to the CMS of the string and return the rotation matrix of the trans
+// Transfer all partons to CMS of the string and return the rotation matrix of the transfer
 G4LorentzRotation G4QString::TransformToAlignedCms()
 {
   G4LorentzVector momentum=Get4Momentum();
@@ -362,23 +355,38 @@ G4double G4QString::GetQGSMLightConeZ(G4double zmin, G4double zmax, G4int Parton
 G4QHadronVector* G4QString::FragmentString(G4bool QL)
 {
   // Can no longer modify Parameters for Fragmentation.
-  // PastInitPhase=true;                                     // Now static
+#ifdef edebug
+  G4LorentzVector string4M=Get4Momentum();         // Just for Energy-Momentum ConservCheck
+#endif 
 #ifdef debug
-  G4cout<<"G4QString::FragmentString: QL = "<<QL<<G4endl;
+  G4cout<<"G4QString::FragmentString:-->Called,QL="<<QL<<",M="<<Get4Momentum().m()<<G4endl;
 #endif 
   //  check if string has enough mass to fragment. If not, convert to one or two hadrons
-  G4QHadronVector* LeftVector = LightFragmentationTest(); // @@ Called only once
-  if(LeftVector) return LeftVector; //@@ Just decay in two or one hadron, if below the Cut
+  G4QHadronVector* LeftVector = LightFragmentationTest();
+  if(LeftVector)
+  {
+#ifdef edebug
+    G4LorentzVector sL=string4M;
+    for(unsigned L = 0; L < LeftVector->size(); L++)
+    {
+      G4QHadron* LH = (*LeftVector)[L];
+      G4LorentzVector L4M=LH->Get4Momentum();
+      sL-=L4M;
+      G4cout<<"-EMC-G4QStr::FragStr:L#"<<L<<",PDG="<<LH->GetPDGCode()<<",4M="<<L4M<<G4endl;
+    }
+    G4cout<<"-EMC-G4QString::FragmentString:---LightFragmentation---> Res4M="<<sL<<G4endl;
+#endif 
+
+    return LeftVector; //@@ Just decay in 2 or 1 (?) hadron, if below theCut
+  }
 #ifdef debug
-  G4cout<<"G4QString::FragmentString: Left is not defined, define Left/Right"<<G4endl;
+  G4cout<<"G4QString::FragmentString:OUTPUT is not yet defined, define Left/Right"<<G4endl;
 #endif  
   LeftVector = new G4QHadronVector;
   G4QHadronVector* RightVector = new G4QHadronVector;
 
-  // this should work but it's only a semi deep copy.
-  // %GF G4ExcitedString theStringInCMS(theString);
   G4LorentzRotation toCms=TransformToAlignedCms(); // Bring partons to CMS and remember Rot
-  G4QString* theStringInCMS=CopyString(); // this is just a copy of this string for attempts
+  G4QString* theStringInCMS=CopyString();// this is just a copy of this string for attempts
 #ifdef debug
   G4cout<<"G4QString::FragmentString: Copy with nP="<<theStringInCMS->thePartons.size()
         <<", beg="<<(*(theStringInCMS->thePartons.begin()))->GetPDGCode()
@@ -388,15 +396,23 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   G4bool inner_sucess=true;
   G4int attempt=0;
 #ifdef debug
-  G4cout<<"G4QString::FragmentString: BeforeWhileLOOP, max = "<<StringLoopInterrupt<<", nP="
-          <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
-          <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
-#endif 
-  while (!success && attempt++<StringLoopInterrupt) // Fragment till success
+  G4cout<<"G4QString::FragmentString: BeforeWhileLOOP, max = "<<StringLoopInterrupt
+        <<", nP="<<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
+        <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
+#endif
+#ifdef edebug
+  G4LorentzVector cmS4M=theStringInCMS->Get4Momentum();
+  G4cout<<"-EMC-G4QString::FragmentString:c4M="<<cmS4M<<",I="<<StringLoopInterrupt<<G4endl;
+#endif
+  while (!success && attempt++ < StringLoopInterrupt) // Fragment till success
   {
     RecoverString(theStringInCMS); // Recover initial CMS state of string for new attempt
+#ifdef edebug
+    G4LorentzVector cm4M=cmS4M;    // Copy the full momentum for the reduction and check
+    G4cout<<"-EMC-G4QString::FragmentString: CHEK "<<cm4M<<" ?= "<<Get4Momentum()<<G4endl;
+#endif 
 #ifdef debug
-    G4cout<<"G4QString::FragmentString:LOOP, attempt = "<<attempt<<", nP="
+    G4cout<<"G4QString::FragmentString:===>LOOP, attempt = "<<attempt<<", nP="
           <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
           <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
 #endif 
@@ -412,38 +428,54 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       RightVector->clear();
     }
     inner_sucess=true;                                           // set false on failure
-#ifdef debug
-				G4cout<<"G4QString::FragmentString: Before LOOP/LOOP, decaying="<<decaying<<G4endl;
-#endif 
+
     while (!StopFragmentation())                                 // LOOP with break
     {  // Split current string into hadron + new string
 #ifdef debug
-      G4cout<<"G4QString::FragmentString: Begin LOOP/LOOP, decaying="<<decaying<<G4endl;
+      G4cout<<"G4QString::FragmentString:-->Begin LOOP/LOOP, decaying="<<decaying<<G4endl;
 #endif 
-      //G4QString* newString=0;           // Prototype for outputFromSplitUp - Absolete
-      G4QHadron* Hadron=Splitup(QL);      // This is where the hadron is split from string
+      G4QHadron* Hadron=Splitup(QL); // MAIN: where the hadron is split from the string
+#ifdef edebug
+      cm4M-=Hadron->Get4Momentum();
+      G4cout<<"-EMC-G4QString::FragmentString:LOOP/LOOP,d4M="<<cm4M-Get4Momentum()<<G4endl;
+#endif 
 #ifdef debug
-      G4cout<<"G4QString::FragmentString: LOOP/LOOP, IsFrag = "<<IsFragmentable()
-            <<", decaying="<<decaying<<", PHadron="<<Hadron<<G4endl;
+      G4cout<<"G4QString::FragmentString: LOOP/LOOP, IsFrag="<<IsFragmentable()<<", decay="
+            <<decaying<<", H="<<Hadron<<", newStringMass="<<Get4Momentum().m()<<G4endl;
 #endif 
       if(Hadron && IsFragmentable())
       {
 #ifdef debug
-        G4cout<<">>G4QString::FragmentString: LOOP/LOOP fragm, decaying="<<decaying<<G4endl;
+        G4cout<<">>G4QString::FragmentString: LOOP/LOOP-NO FRAGM-, dec="<<decaying<<G4endl;
 #endif 
         if(GetDecayDirection()>0) LeftVector->push_back(Hadron);
         else RightVector->push_back(Hadron);
       }
       else
       {
-        // abandon ... start from the beginning
+        // @@ Try to convert to the resonance and decay, abandon if M<mGS+mPI0
+        G4QHadronVector* tmpH = LightFragmentationTest();
+        if(tmpH)
+        {
+          G4int nth=tmpH->size();
+	    for(G4int i=0; i<nth; i++) LeftVector->push_back((*tmpH)[i]);
+          tmpH->clear();
+          delete tmpH; 
 #ifdef debug
-        G4cout<<"G4QString::FragmentString: LOOP/LOOP, Start from scratch"<<G4endl;
+          G4cout<<"G4QString::FragmentString:**>LOOP/LOOP, FinalFilling, nH="<<nth<<G4endl;
 #endif 
-        //if (newString) delete newString;  // absolete
-        if (Hadron)    delete Hadron;
-        inner_sucess=false;
-        break;
+        }
+        else
+        {     
+          // abandon ... start from the beginning
+#ifdef debug
+          G4cout<<"G4QString::FragmentString: LOOP/LOOP, Start from scratch"<<G4endl;
+#endif 
+          //if (newString) delete newString;  // absolete
+          if (Hadron)    delete Hadron;
+          inner_sucess=false;
+          break;
+        }
       }
 #ifdef debug
       G4cout<<"G4QString::FragmentString: LOOP/LOOP End, nP="
@@ -477,10 +509,29 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
     }
 #ifdef debug
     G4cout<<"G4QString::FragmentString: Improve! The string was not fragmented"<<G4endl;
-    G4Exception("G4QString::UpdateString","72",FatalException,"StringNotFragmented");
+    G4Exception("G4QString::FragmentString","72",FatalException,"String isn't fragmented");
 #endif 
     return LeftVector;
-  }  
+  }
+  // @@@@@ Print collected Left and Right Hadrons (decay resonances!)
+#ifdef edebug
+  G4LorentzVector sLR=string4M;
+  for(unsigned L = 0; L < LeftVector->size(); L++)
+  {
+    G4QHadron* LH = (*LeftVector)[L];
+    G4LorentzVector L4M=LH->Get4Momentum();
+    sLR-=L4M;
+    G4cout<<"-EMC-G4QStr::FragmStri:L#"<<L<<",PDG="<<LH->GetPDGCode()<<",4M="<<L4M<<G4endl;
+  }
+  for(unsigned R = 0; R < RightVector->size(); R++)
+  {
+    G4QHadron* RH = (*RightVector)[R];
+    G4LorentzVector R4M=RH->Get4Momentum();
+    sLR-=R4M;
+    G4cout<<"-EMC-G4QStr::FragmStri:R#"<<R<<",PDG="<<RH->GetPDGCode()<<",4M="<<R4M<<G4endl;
+  }
+  G4cout<<"-EMC-G4QString::FragmentString:---L/R_BeforeMerge---> Res4M="<<sLR<<G4endl;
+#endif 
   // Join Left and Right Vectors into LeftVector in correct order.
   while(!RightVector->empty())
   {
@@ -488,10 +539,22 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
      RightVector->erase(RightVector->end()-1);
   }
   delete RightVector;
+  // @@@@@ Check that all of them are in the Left vector
   CalculateHadronTimePosition(Get4Momentum().mag(), LeftVector);
   G4LorentzRotation toObserverFrame(toCms.inverse());
 #ifdef debug
   G4cout<<"G4QString::FragmentString: beforeLoop LVsize = "<<LeftVector->size()<<G4endl;
+#endif 
+#ifdef edebug
+  G4LorentzVector sLA=string4M;
+  for(unsigned L = 0; L < LeftVector->size(); L++)
+  {
+    G4QHadron* LH = (*LeftVector)[L];
+    G4LorentzVector L4M=LH->Get4Momentum();
+    sLA-=L4M;
+    G4cout<<"-EMC-G4QStr::FragmStri:L#"<<L<<",PDG="<<LH->GetPDGCode()<<",4M="<<L4M<<G4endl;
+  }
+  G4cout<<"-EMC-G4QString::FragmentString:---LeftAfterMerge---> Res4M="<<sLA<<G4endl;
 #endif 
   for(unsigned C1 = 0; C1 < LeftVector->size(); C1++)
   {
@@ -527,64 +590,65 @@ void G4QString::RecoverString(G4QString* string)
 } // End of CPExcited
 
 // Simple decay of the string if the excitation mass is too small for HE fragmentation
-// !! If the mass is below the single hadron threshold, make warhing (improve) and convert
+// !! If the mass is below the single hadron threshold, make warning (improve) and convert
 // the string to the single S-hadron breaking energy conservation (temporary) and improve,
 // taking the threshold into account on the level of the String creation (merge strings) !!
 G4QHadronVector* G4QString::LightFragmentationTest()
 {
   // Check string decay threshold
 #ifdef debug
-  G4cout<<"G4QString::LightFragmentationTest: *** Called ***"<<G4endl;
+  G4cout<<"G4QString::LightFragmentationTest: ***Called***,str4M="<<Get4Momentum()<<G4endl;
 #endif 
   G4QHadronVector* result=0;  // return 0 when string exceeds the mass cut
  
   G4QHadronPair hadrons((G4QHadron*)0, (G4QHadron*)0); // pair of hadrons for output of FrM
-  G4double fragMass = FragmentationMass(0,&hadrons);   // Minimum mass of the string
+  G4double fragMass = FragmentationMass(0,&hadrons);   // Minimum mass to decay the string
 #ifdef debug
   G4cout<<"G4QString::LightFragTest: before check nP="<<thePartons.size()<<", MS2="
         <<Mass2()<<", MCut="<<MassCut<<", beg="<<(*thePartons.begin())->GetPDGCode()
         <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<", fM="<<fragMass<<G4endl;
 #endif  
-  if(Mass2() > sqr(fragMass+MassCut)) // Big enough to fragment in a lader (avoid the decay)
+  if(Mass2() > sqr(fragMass+MassCut))// Big enough to fragment in a lader (avoid the decay)
   {
     if(hadrons.first) delete hadrons.first;
     if(hadrons.second) delete hadrons.second;
 #ifdef debug
-    G4cout<<"G4QString::LightFragTest:*NO* "<<Mass2()<<" > "<<sqr(fragMass+MassCut)<<G4endl;
+    G4cout<<"G4QString::LightFragTest:NO,M2="<<Mass2()<<">"<<sqr(fragMass+MassCut)<<G4endl;
 #endif  
-    return 0; //Par MassCut
+    return result;                          // =0. Depends on the parameter of the Mass Cut
   }
 #ifdef debug
-  G4cout<<"G4QString::LeftFragTest: after check MassCut="<<MassCut<<",M2="<<Mass2()<<G4endl;
-#endif  
-  result = new G4QHadronVector;
-        
-  if(!hadrons.second && hadrons.first)                   // Second hadron does not exist
-  {
-    // Substitute string by a light hadron, Note that Energy is not conserved here! @@
-    // @@ Better try to decay in H+Pi (check the H+Pi threshold at the creation time !!
-    G4ThreeVector Mom3 = Get4Momentum().vect();
-    G4LorentzVector Mom(Mom3, std::sqrt(Mom3.mag2() + hadrons.first->GetMass2()) );
-    result->push_back(new G4QHadron(hadrons.first, 0, GetPosition(), Mom));
-    delete hadrons.first;
-  }
-  else if(hadrons.second && hadrons.first)                   // Two hadrons exist
-  {
-    //... string was qq--qqbar type: Build two stable hadrons (@@ better decay in two)
+  G4cout<<"G4QString::LightFragTest:afterCheck MassCut="<<MassCut<<",M2="<<Mass2()<<G4endl;
+#endif
+  G4LorentzVector tot4M= Get4Momentum();    // For the firther E/M ConsCheck
+  G4double totM= tot4M.m();
+  G4double h1M = hadrons.first->GetMass();
+  G4double h2M = hadrons.second->GetMass();
+  if(h1M + h2M > totM)                      // The string can decay in these two hadrons
+  {  
+    result = new G4QHadronVector;        
+    // Build two stable hadrons (@@ better decay in two)
     // Energy can be not conserved, if the string is below the baryon-antibarion threshold
     // It is better in this case switch to the 2 mesons decay 
     G4LorentzVector  Mom1, Mom2;
-    // This is decay in CM with following back transformation to LS -> use decay in two
-    Sample4Momentum(&Mom1, hadrons.first->GetMass(), &Mom2, hadrons.second->GetMass(),
-                                                             Get4Momentum().mag());
+    // @@ Another example of the DecayIn2 (can be substituted by CHIPS DecayIn2 ?)
+    // This is decay in CM with following back transformation to LS
+    Sample4Momentum(&Mom1, h1M, &Mom2, h2M, totM);
     result->push_back(new G4QHadron(hadrons.first, 0, GetPosition(), Mom1));
     result->push_back(new G4QHadron(hadrons.second,0, GetPosition(), Mom2));
     G4ThreeVector Velocity = Get4Momentum().boostVector();
-    G4int L=result->size(); if(L) for(G4int i=0; i<L; i++) (*result)[i]->Boost(Velocity);
-    delete hadrons.first;
-    delete hadrons.second;
+    G4int L=result->size(); if(L) for(G4int i=0; i<L; i++) 
+    {
+      (*result)[i]->Boost(Velocity);
+#ifdef edebug
+      tot4M-=(*result)[i]->Get4Momentum();
+      G4cout<<"-EMC-G4QString::LightFragTest: i="<<i<<", residual4M="<<tot4M<<G4endl;
+#endif
+    }
   }
-  else G4cout<<"-Warning-G4QString::LeftFragmentatioTest: No hadrons are created "<<G4endl;
+  else G4cout<<"-Warning-G4QString::LightFragmentationTest: No hadrons're created"<<G4endl;
+  delete hadrons.first;
+  delete hadrons.second;
   return result;
 } // End of LightFragmentationTest
 
@@ -593,35 +657,34 @@ G4double G4QString::FragmentationMass(G4QHcreate build, G4QHadronPair* pdefs)
 {
   G4double mass=0.;
 #ifdef debug
-  G4cout<<"G4QString::FragmentationMass: *** Called ***, build="<<build<<G4endl;
+  G4cout<<"G4QString::FragmMass:**Called**,build="<<build<<",s4M="<<Get4Momentum()<<G4endl;
 #endif 
   // Example how to use an interface to different member functions
-  if(build==0) build=&G4QHadronBuilder::BuildLowSpin; // @@ Build S Hadrons?
+  if(build==0) build=&G4QHadronBuilder::BuildLowSpin; // Build S-Hadrons
   G4QHadron* Hadron1 = 0;
   G4QHadron* Hadron2 = 0;
-  if( !(   GetLeftParton()->GetParticleSubType() == "di_quark"
-								&& GetRightParton()->GetParticleSubType()== "di_quark") ) // not 4q-string 
-  {
+  //if(!(   GetLeftParton()->GetParticleSubType() == "di_quark"
+  //     && GetRightParton()->GetParticleSubType()== "di_quark")) // not DiQ/antiDiQ-string
+  //{
 #ifdef debug
-    G4cout<<"G4QString::FragmentationMass: Build spin-0 or spin-1/2 hadron: nP="
-          <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
-          <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
+  G4cout<<"G4QString::FragmentationMass: Build spin-0 or spin-1/2 hadron: nP="
+        <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
+        <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
 #endif 
-    Hadron1 = (hadronizer->*build)(GetLeftParton(), GetRightParton());
-    mass    = Hadron1->GetMass(); // Create only one hadron
-  }
-  else                            // 4q string
-  {
+  //  Hadron1 = (hadronizer->*build)(GetLeftParton(), GetRightParton());
+  //  mass    = Hadron1->GetMass(); // Create only one hadron
+  //}
+  //else                            // 4q string - Now for any parton pairs
+  //{
 #ifdef debug
-    G4cout<<"G4QString::FragmentationMass: Build hadron+meson (4 quarks)"<<G4endl;
+  //  G4cout<<"G4QString::FragmentationMass: Build hadron+meson (4 quarks)"<<G4endl;
 #endif 
-    G4int iflc = (G4UniformRand() < 0.5)? 1 : 2; // Create additional Q-antiQ pair
-    if (GetLeftParton()->GetPDGCode() < 0) iflc = -iflc; // anti-quarks
-    //... theSpin = 4; spin 3/2 baryons will be built
-    Hadron1 = (hadronizer->*build)(GetLeftParton(),CreateParton(iflc));
-    Hadron2 = (hadronizer->*build)(GetRightParton(),CreateParton(-iflc));
-    mass    = Hadron1->GetMass() + Hadron2->GetMass();
-  }
+  G4int iflc = (G4UniformRand() < 0.5)? 1 : 2; // Create additional Q-antiQ pair
+  if (GetLeftParton()->GetPDGCode() < 0) iflc = -iflc; // anti-quarks
+  Hadron1 = (hadronizer->*build)(GetLeftParton(),CreateParton(iflc));
+  Hadron2 = (hadronizer->*build)(GetRightParton(),CreateParton(-iflc));
+  mass    = Hadron1->GetMass() + Hadron2->GetMass();
+  //}
   if(pdefs) // need to return hadrons as well as the mass estimate 
   {
     pdefs->first  = Hadron1;  // To be deleted by the calling program if not zero
@@ -740,34 +803,37 @@ G4QHadron* G4QString::Splitup(G4bool QL)
 {
   SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
 #ifdef debug
-  G4cout<<"G4QString::Splitup: ***Called*** side="<<SideOfDecay<<G4endl;
+  G4cout<<"G4QString::Splitup:**Called**,s="<<SideOfDecay<<",s4M="<<Get4Momentum()<<G4endl;
 #endif
   if(SideOfDecay<0) SetLeftPartonStable();  // Decay Right parton
   else              SetRightPartonStable(); // Decay Left parton
   G4QParton* newStringEnd;
   G4QHadron* Hadron;
-  if(DecayIsQuark()) Hadron= QuarkSplitup(GetDecayParton(), newStringEnd);   // MF1
-  else               Hadron= DiQuarkSplitup(GetDecayParton(), newStringEnd); // MF2
+  if(DecayIsQuark()) Hadron= QuarkSplitup(theDecayParton, newStringEnd);   // Split Quark
+  else               Hadron= DiQuarkSplitup(theDecayParton, newStringEnd); // Split DiQuark
 #ifdef debug
   G4cout<<"G4QString::Splitup: newStringEndPDG="<<newStringEnd->GetPDGCode()<<", nP="
           <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
           <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
 #endif
-  // create new String from old, ie. keep Left and Right order, but replace decay
-  G4LorentzVector* HadronMomentum=SplitEandP(Hadron, QL);         // MF3
+  // create new String from the old one: keep Left and Right order, but replace decay
+  G4LorentzVector* HadronMomentum=SplitEandP(Hadron, QL);//The decayed parton isn't changed
 #ifdef debug
   G4cout<<"G4QString::Splitup: HM="<<HadronMomentum<<", nP="
           <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
           <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
 #endif
-  if(HadronMomentum)
+  if(HadronMomentum) // The decay succeeded, now the new 4-mon can be set to NewStringEnd
   {    
 #ifdef debug
-    G4cout<<">>>G4QString::Splitup: HadronFilled 4M="<<*HadronMomentum<<G4endl;
+    G4cout<<">>>>>G4QString::Splitup: HFilled 4M="<<*HadronMomentum<<",PDG="
+          <<Hadron->GetPDGCode()<<",s4M-h4M="<<Get4Momentum()-*HadronMomentum<<G4endl;
 #endif 
+    newStringEnd->Set4Momentum(theDecayParton->Get4Momentum()-*HadronMomentum);
     Hadron->Set4Momentum(*HadronMomentum);
     Hadron->SetPosition(GetPosition());
     UpdateString(newStringEnd, HadronMomentum);
+    G4cout<<">...>G4QString::Splitup: NewString4M="<<Get4Momentum()<<G4endl;
     delete HadronMomentum;
   }      
 #ifdef debug
@@ -781,45 +847,41 @@ G4QHadron* G4QString::Splitup(G4bool QL)
 void G4QString::UpdateString(G4QParton* decay, const G4LorentzVector* mom)
 {
 #ifdef debug
-  G4cout<<"G4QString::UpdateString: ***Called*** decaying = "<<decaying<<",decPDG="
-        <<decay->GetPDGCode()<<", Pdec="<<decay<<G4endl;
-#endif 
+  G4cout<<"G4QString::UpdateString: ***Called*** decaying = "<<decaying<<", prtPDG="
+        <<decay->GetPDGCode()<<", prtM="<<decay->Get4Momentum().m()<<", h4M="<<mom<<G4endl;
+#endif
   if(decaying == Left)
   {
     G4QParton* theFirst = thePartons[0];
     delete theFirst;
-    //theFirst = decay;
     thePartons[0] = decay;
 #ifdef debug
-  G4cout<<"G4QString::UpdateString:  theFirstPDG="<<theFirst->GetPDGCode()<<G4endl;
+    G4cout<<"G4QString::UpdateString:  theFirstPDG="<<theFirst->GetPDGCode()<<G4endl;
 #endif 
     Ptleft  -= mom->vect();
-    Ptleft.setZ(0.);
+    Ptleft.setZ(0.);                         // @@ (Z is anyway ignored) M.K. (?)
   }
   else if (decaying == Right)
   {
     G4QParton* theLast = thePartons[thePartons.size()-1];
-    //thePartons.pop_back();         // The last parton is excuded from the Partons
-    delete theLast;                // The instance of the parton is deleted
-    //theLast  = decay;              // The last is redefined
-    //thePartons.push_back(theLast); // The new pointer is filled
+    delete theLast;                          // The instance of the parton is deleted
     thePartons[thePartons.size()-1] = decay;
 #ifdef debug
     G4cout<<"G4QString::UpdateString:  theLastPDG="<<theLast->GetPDGCode()<<", nP="
-          <<thePartons.size()<<", beg="<<thePartons[0]->GetPDGCode()
-				  				<<",end="<<thePartons[thePartons.size()-1]->GetPDGCode()<<",P="<<theLast
+          <<thePartons.size()<<", beg="<<thePartons[0]->GetPDGCode()<<",end="
+          <<thePartons[thePartons.size()-1]->GetPDGCode()<<",P="<<theLast
           <<"="<<thePartons[thePartons.size()-1]<<G4endl;
 #endif 
     Ptright -= mom->vect();
-    Ptright.setZ(0.);
+    Ptright.setZ(0.);                        // @@ (Z is anyway ignored) M.K. (?)
   }
   else
   {
     G4cerr<<"***G4QString::UpdateString: wrong oldDecay="<<decaying<<G4endl;
     G4Exception("G4QString::UpdateString","72",FatalException,"WrongDecayDirection");
   }
-  Pplus  -= mom->e() + mom->pz();
-  Pminus -= mom->e() - mom->pz();
+  Pplus  -= mom->e() + mom->pz();            // Reduce Pplus of the string (Left)
+  Pminus -= mom->e() - mom->pz();            // Reduce Pminus of the string (Right)
 #ifdef debug
   G4cout<<"G4QString::UpdateString:  P+="<<Pplus<<",P-="<<Pminus<<", nP="
           <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
@@ -839,7 +901,7 @@ G4LorentzVector* G4QString::SplitEandP(G4QHadron* pHadron, G4bool QL)
   HadronPt.setZ(0.);
   //...  sample z to define hadron longitudinal momentum and energy
   //... but first check the available phase space
-  G4double DecayQuarkMass2  = sqr(GetDecayParton()->GetMass()); // Mass of quark? M.K.
+  G4double DecayQuarkMass2  = sqr(theDecayParton->GetMass()); // Mass of quark? M.K.
   G4double HadronMass2T = HadronMass*HadronMass + HadronPt.mag2();
   if (DecayQuarkMass2 + HadronMass2T >= SmoothParam*Mass2() )  return 0;  // restart!
   //... then compute allowed z region  z_min <= z <= z_max 
@@ -850,9 +912,9 @@ G4LorentzVector* G4QString::SplitEandP(G4QHadron* pHadron, G4bool QL)
 #endif 
   if (zMin >= zMax) return 0;  // have to start all over!  
   G4double z=0;
-  if(QL) z = GetQGSMLightConeZ(zMin, zMax, GetDecayParton()->GetPDGCode(), pHadron,
+  if(QL) z = GetQGSMLightConeZ(zMin, zMax, theDecayParton->GetPDGCode(), pHadron,
                                HadronPt.x(), HadronPt.y());      
-  else   z = GetLundLightConeZ(zMin, zMax, GetDecayParton()->GetPDGCode(), pHadron,
+  else   z = GetLundLightConeZ(zMin, zMax, theDecayParton->GetPDGCode(), pHadron,
                                HadronPt.x(), HadronPt.y());      
   //... now compute hadron longitudinal momentum and energy
   // longitudinal hadron momentum component HadronPz
@@ -860,7 +922,6 @@ G4LorentzVector* G4QString::SplitEandP(G4QHadron* pHadron, G4bool QL)
   G4double HadronE = (zl + HadronMass2T/zl)/2;
   HadronPt.setZ( GetDecayDirection() * (zl - HadronE) );
   G4LorentzVector* a4Momentum= new G4LorentzVector(HadronPt,HadronE);
-
   return a4Momentum;
 }
 

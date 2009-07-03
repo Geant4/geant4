@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.38 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.39 2009-07-03 14:49:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -46,6 +46,7 @@
 #include "Randomize.hh"
 #include "G4QParticle.hh"
 #include "G4QPartonVector.hh"
+#include "G4LorentzRotation.hh"
 #include <list>
 
 class G4QHadron
@@ -89,7 +90,8 @@ public:
   G4bool                IsSplit() {return isSplit;} // Check that hadron has been split
   G4double              GetBindingEnergy() {return bindE;}// Returns binding E in NucMatter
   G4double              GetFormationTime() {return formTime;} // Returns formation time
-
+  std::list<G4QParton*> GetColor() {return Color;}  // pointer to quarks/anti-diquarks
+  std::list<G4QParton*> GetAntiColor() {return AntiColor;}//pointer to anti-quarks/diquarks
   // Modifiers
   void SetQPDG(const G4QPDGCode& QPDG);             // Set QPDG of the Hadron
   void Set4Momentum(const G4LorentzVector& aMom);   // Set 4-mom of the Hadron
@@ -107,6 +109,7 @@ public:
   void SetBindingEnergy(G4double aBindE){bindE=aBindE;}// Set Binding E in Nuclear Matter
   void Boost(const G4LorentzVector& theBoost);      // Boosts hadron's 4-Momentum using 4M
   void Boost(const G4ThreeVector& B){theMomentum.boost(B);} // Boosts 4-Momentum using v/c
+  void LorentzRotate(const G4LorentzRotation& rotation){theMomentum=rotation*theMomentum;}
   void SetFormationTime(G4double fT){formTime=fT;}  // Defines formationTime for the Hadron
 
   // General

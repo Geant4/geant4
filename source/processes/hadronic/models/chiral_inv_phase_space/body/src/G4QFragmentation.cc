@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.9 2009-07-02 07:17:09 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.10 2009-07-03 14:49:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -227,7 +227,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
         G4cout<<"G4QFragmentation::Scatter: NLOOP prob="<<Probability<<", rndm="<<rndNumber
               <<", d="<<std::sqrt(Distance2)<<G4endl;
 #endif
-        if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction
+        if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction (JOB)
         {
           G4QHadron* aTarget = new G4QHadron(*pNucleon);// Copy selected nucleon for String
           // @@ Instead of theTargets update theNucleus (M.K.)
@@ -297,10 +297,37 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
     //
     // ------------------ now build the parton pairs for the strings ------------------
     //
-    for(unsigned i=0; i<theInteractions.size(); i++) theInteractions[i]->SplitHadrons();
-#ifdef debug
-    G4cout<<"G4QFragmentation::Scatter: Parton pairs are builded"<<G4endl;
-#endif  
+    for(unsigned i=0; i<theInteractions.size(); i++)
+    {
+      theInteractions[i]->SplitHadrons();
+#ifdef edebug
+      G4QHadron* projH=theInteractions[i]->GetProjectile(); // Projectile of theInteraction
+      G4QHadron* targH=theInteractions[i]->GetTarget();     // Target of the Interaction
+      G4LorentzVector pSP(0.,0.,0.,0.);                // Sum of parton's 4mom's for proj
+      G4LorentzVector tSP(0.,0.,0.,0.);                // Sum of parton's 4mom's for proj
+      std::list<G4QParton*> projCP=projH->GetColor();  // Pointers to proj Color-partons
+      std::list<G4QParton*> projAC=projH->GetAntiColor();// PointersTo projAntiColorPartons
+      std::list<G4QParton*> targCP=targH->GetColor();  // Pointers to targ Color-partons
+      std::list<G4QParton*> targAC=targH->GetAntiColor();// PointersTo targAntiColorPartons
+      std::list<G4QParton*>::iterator picp = projCP.begin();
+      std::list<G4QParton*>::iterator pecp = projCP.end();
+      std::list<G4QParton*>::iterator piac = projAC.begin();
+      std::list<G4QParton*>::iterator peac = projAC.end();
+      std::list<G4QParton*>::iterator ticp = targCP.begin();
+      std::list<G4QParton*>::iterator tecp = targCP.end();
+      std::list<G4QParton*>::iterator tiac = targAC.begin();
+      std::list<G4QParton*>::iterator teac = targAC.end();
+      for(; picp!=pecp&& piac!=peac&& ticp!=tecp&& tiac!=teac; ++picp,++piac,++ticp,++tiac)
+      {
+        pSP+=(*picp)->Get4Momentum();
+        pSP+=(*piac)->Get4Momentum();
+        tSP+=(*ticp)->Get4Momentum();
+        tSP+=(*tiac)->Get4Momentum();
+      }
+      G4cout<<"-EMC-G4QFragmentation::Scatter: Interaction#"<<i<<",dP4M="
+            <<projH->Get4Momentum()-pSP<<",dT4M="<<targH->Get4Momentum()-tSP<<G4endl;
+#endif
+    }  
     // 
     // >>>>>>>> make soft collisions (ordering is vital)
     //
@@ -325,25 +352,25 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
           aPair = new G4QPartonPair(pTarget->GetNextParton(),
                                     pProjectile->GetNextAntiParton(),
                                     G4QPartonPair::SOFT, G4QPartonPair::TARGET);
-          thePartonPairs.push_back(aPair); // A target pair (@@Chrck 4M)
+          thePartonPairs.push_back(aPair); // A target pair (Why TAGRET?)
           aPair = new G4QPartonPair(pProjectile->GetNextParton(),
                                     pTarget->GetNextAntiParton(),
                                     G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
-          thePartonPairs.push_back(aPair); // A projectile pair (@@Chrck 4M)
+          thePartonPairs.push_back(aPair); // A projectile pair (Why Projectile?)
 #ifdef debug
           G4cout<<"G4QFragmentation::Scatter: SOFT, 2 parton pairs're filled"<<G4endl;
 #endif
         }  
         delete *i;
-        i=theInteractions.erase(i);
+        i=theInteractions.erase(i);       // Soft interactions are converted & erased
         i--;
       }
     }
 #ifdef debug
-    G4cout<<"G4QFragmentation::Scatter: Strings are hadronized"<<G4endl;
+    G4cout<<"G4QFragmentation::Scatter: -> Parton pairs for SOFT strings are made"<<G4endl;
 #endif  
 		  //
-    // >>>>>>>>>>>>>>> make the rest as the diffractive fragmentation
+    // >>>>>>>>>>>>>>> make the rest as the diffractive interactions
     //
     for(unsigned i = 0; i < theInteractions.size(); i++) // Interactions are reduced bySoft
     {
@@ -352,9 +379,10 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
       G4QParton* aParton = aProjectile->GetNextParton();
       G4QPartonPair* aPartonPair;
 #ifdef debug
-      G4cout<<"G4QFragmentation::Scatter: Creation ofDiffractivePartonPair STARTS"<<G4endl;
+      G4cout<<"G4QFragmentation::Scatter: CreationOfDiffractivePartonPairs, i="<<i<<G4endl;
 #endif
-      // the projectile diffraction first
+      // @@ M.K. What about Single diffraction? Does it exist?
+      // the projectile diffraction parton pair is created first
       if (aParton)
       {
         aPartonPair=new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
@@ -365,7 +393,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
         G4cout<<"G4QFragmentation::Scatter: proj Diffractive PartonPair is filled"<<G4endl;
 #endif
       }
-      // then the target diffraction
+      // then the target diffraction parton pair is created
       G4QHadron* aTarget = anIniteraction->GetTarget();
       aParton = aTarget->GetNextParton();
       if (aParton)
@@ -379,7 +407,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
       }
     }
 #ifdef debug
-    G4cout<<"G4QFragmentation::Scatter:DiffractiveExcitations are made"<<G4endl;
+    G4cout<<"G4QFragmentation::Scatter:DiffractivePartonPairs are created"<<G4endl;
 #endif  
     //
     // >>>>>>>>>>>>>> clean-up  Interactions and cmProjectile, if necessary
@@ -391,8 +419,12 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
     G4cout<<"G4QFragmentation::Scatter: Temporary objects are cleaned up"<<G4endl;
 #endif  
     // This function prepares theBoost for transformation of secondaries to LS (-ProjRot!)
-    theNucleus->DoLorentzBoost(theCurrentVelocity);// Boost theResidualNucleusToLS
+    theNucleus->DoLorentzBoost(theCurrentVelocity);// Boost theResidualNucleus to RotatedLS
     // @@ Nucleus isn't completely in LS, it needs the toZ (-ProjRot) rotation to consE/M
+#ifdef edebug
+    // Make the same for the selected nucleons theTargets (for Energy-MomentumConservCheck)
+    for(unsigned i=0; i<theTargets.size(); i++) theTargets[i]->Boost(theCurrentVelocity);
+#endif
 #ifdef pdebug
     G4cout<<"G4QFragmentation::Scatter: >>> >>> Strings are created "<<G4endl;
 #endif
@@ -433,7 +465,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 #ifdef edebug
     G4LorentzVector sum=theNucleus->GetNucleons4Momentum(); // Sum of N4Mom's in rotated LS
     G4int nStrings=strings->size();
-    G4cout<<"-EMC-G4QFragmentation::Scatter:#ofS="<<nStrings<<", tgNuc4M="<<sum<<G4endl;
+    G4cout<<"-EMC-G4QFragmentation::Scatter:#ofS="<<nStrings<<",tNuc4M(E=M)="<<sum<<G4endl;
     for(G4int i=0; i<nStrings; i++)
     {
       G4LorentzVector strI4M=(*strings)[i]->Get4Momentum();
@@ -456,23 +488,44 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
   G4double stringEnergy=0.;                    // To sum up the total string energy
   for( unsigned astring=0; astring < strings->size(); astring++)
   {
-    // Make energy sum and bring strings to LS, models generate them along z
+    // Make energy sum and bring strings to LS, models generate them along z (?MK)
     G4QString* curString=(*strings)[astring];
     stringEnergy += curString->GetLeftParton()->Get4Momentum().t();
     stringEnergy += curString->GetRightParton()->Get4Momentum().t();
-    curString->LorentzRotate(toLab); // @@ Remnber about the projectile Rotation
+    curString->LorentzRotate(toLab); // The projectile Rotation is taken into account
   }
 #ifdef debug
-  G4cout<<"G4QFragmentation::Scatter: Total energy of strings = "<<stringEnergy<<G4endl;
+  G4cout<<"G4QFragmentation::Scatter:#0fS="<<strings->size()<<",tE="<<stringEnergy<<G4endl;
+#endif
+#ifdef edebug
+  // @@ Should be tested for the primary projectile not along Z !
+  G4LorentzVector sum=theNucleus->GetNucleons4Momentum(); // Sum of N4Mom's in rotatedLS=LS
+  G4int nStrings=strings->size();
+  G4cout<<"-EMCLS-G4QFragmentation::Scatter:#ofS="<<nStrings<<",tNuc4M(E=M)="<<sum<<G4endl;
+  for(G4int i=0; i<nStrings; i++)
+  {
+    G4LorentzVector strI4M=(*strings)[i]->Get4Momentum();
+    sum+=strI4M;
+    G4cout<<"-EMCLS-G4QFragmentation::Scatter:Str#"<<i<<",4M="<<strI4M<<",S="<<sum<<G4endl;
+  }
+  G4int nTgNuc = theTargets.size();
+  for(G4int i=0; i<nTgNuc; i++)
+  {
+    theTargets[i]->LorentzRotate(toLab);                  // Now theTargets're inLSfor edeb
+    G4LorentzVector tgI4M=theTargets[i]->Get4Momentum();
+    sum-=tgI4M;
+    G4cout<<"-EMCLS-G4QFragmentation::Scatter:Tg#"<<i<<", 4M="<<tgI4M<<", S="<<sum<<G4endl;
+  }
+  G4cout<<"-EMC-G4QFragmentation::Scatter:#ofN="<<nTgNuc<<", R4M="<<sum-totZLS4M<<G4endl;
 #endif
   //
-  // ------------ At this point the strings are fragmenting to hadrons -------------
+  // ------------ At this point the strings are fragmenting to hadrons in LS -------------
   //
   G4QHadronVector* theResult = new G4QHadronVector;
   G4LorentzVector KTsum(0.,0.,0.);
   G4bool NeedEnergyCorrector=false;            // @@ M.K.?
 #ifdef debug
-  G4cout<<"G4QFragmentation::Scatter: BefFragmentation, nString="<<strings->size()<<G4endl;
+  G4cout<<"G4QFragmentation::Scatter:BeforeFragmentation,#OfStr="<<strings->size()<<G4endl;
 #endif
   for( unsigned astring=0; astring < strings->size(); astring++)
   {
@@ -480,14 +533,14 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
     G4LorentzVector curString4M = curString->Get4Momentum();
     KTsum+= curString4M;
 #ifdef debug
-    G4cout<<"G4QFragmentation::Scatter: String#"<<astring<<",sum4M="<<KTsum<<G4endl;
+    G4cout<<"G4QFragmentation::Scatter: String#"<<astring<<", sum4M="<<KTsum<<G4endl;
 #endif
     if(!(KTsum.e()<1.) && !(KTsum.e()>-1.))    // NAN check
     {
       G4cerr<<"***G4QFragmentation::Scatter: KTsum="<<KTsum<<G4endl;
       G4Exception("G4QFragmentation::Scatter:","72",FatalException,"NANin3Vector");
     }
-    G4QHadronVector* theHadrons = 0;           // A prototype of the string frag. output
+    G4QHadronVector* theHadrons = 0;           // Prototype of theStringFragmentationOUTPUT
     if( curString->IsExcited() ) theHadrons=curString->FragmentString(true); // FragmString
     else
     {
@@ -518,7 +571,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 #ifdef debug
   G4cout<<"G4QFragmentation::Scatter: String4mom="<<KTsum<<G4endl; 
 #endif
-  if(NeedEnergyCorrector) EnergyAndMomentumCorrector(theResult, KTsum);
+  ///////if(NeedEnergyCorrector) EnergyAndMomentumCorrector(theResult, KTsum);
 #ifdef debug
   G4cout<<"G4QFragmentation::Scatter:***Done***, after Fragm NS="<<strings->size()<<G4endl;
 #endif

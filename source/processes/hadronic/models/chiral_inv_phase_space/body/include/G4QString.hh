@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QString.hh,v 1.5 2009-07-03 14:49:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -96,7 +96,6 @@ class G4QString
   G4QParton* GetColorParton() const;
   G4QParton* GetAntiColorParton() const;
   G4QParton* GetStableParton() const{ return theStableParton;} // stable at the moment
-  G4QParton* GetDecayParton() const{return theDecayParton;}// now involved in fragmentation
   G4int GetDecayDirection() const;
   G4bool DecayIsQuark() const {return theDecayParton->GetParticleSubType()=="quark";}
   G4bool StableIsQuark() const {return theStableParton->GetParticleSubType()=="quark";}
@@ -127,7 +126,6 @@ class G4QString
   void LorentzRotate(const G4LorentzRotation& rotation);
   void InsertParton(G4QParton* aParton, const G4QParton* addafter = NULL);
   void Boost(G4ThreeVector& Velocity);
-  G4LorentzRotation TransformToCenterOfMass();
   G4LorentzRotation TransformToAlignedCms();
   void DiffString(G4QHadron* aHadron, G4bool isProjectile);
   void ExciteString(G4QParton* Col,G4QParton* AntiCol, G4int Dir);
@@ -177,7 +175,7 @@ class G4QString
   // Body
   G4int         theDirection;        // must be 1 or -1 (PROJECTILE or TARGET)
   G4ThreeVector thePosition;         // Defined by the first quark position
-  G4QPartonVector thePartons;        // would like initial capacity for 3 Partons (? M.K.)
+  G4QPartonVector thePartons;        // Partons on the ends of the string
   G4QHadronBuilder* hadronizer;      // Hadronizer of hodrons out of partons
   G4ThreeVector Ptleft,Ptright;      // Pt (px,py) for partons (pz ignored!)
   G4double Pplus, Pminus;            // p-, p+ of string, Plus is assigned to Left!
