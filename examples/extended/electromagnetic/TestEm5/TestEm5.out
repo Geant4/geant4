@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -146,7 +146,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
@@ -333,7 +333,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.34s Real=6.8s Sys=2.34s
+  User=4.34s Real=6.77s Sys=2.4s
 
  ======================== run summary ======================
 
@@ -491,7 +491,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
           BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
@@ -673,7 +673,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=4.54s Real=5.72s Sys=1.16s
+  User=4.36s Real=5.68s Sys=1.31s
 
  ======================== run summary ======================
 
@@ -838,7 +838,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
           BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
@@ -1025,7 +1025,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=6.72s Real=8s Sys=1.24s
+  User=6.65s Real=7.84s Sys=1.17s
 
  ======================== run summary ======================
 
@@ -1186,7 +1186,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
           BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
@@ -1378,7 +1378,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.18s Real=3.41s Sys=1.2s
+  User=2.29s Real=3.41s Sys=1.1s
 
  ======================== run summary ======================
 
@@ -1535,7 +1535,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2.0000006 MeV
           BetheBloch :     Emin=  2.0000006 MeV        Emax=   10 TeV
@@ -1732,7 +1732,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=26.1s Real=31.89s Sys=1.36s
+  User=25.25s Real=29.38s Sys=1.19s
 
  ======================== run summary ======================
 

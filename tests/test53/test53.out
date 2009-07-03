@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,7 +177,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -390,7 +390,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.51s Real=10.53s Sys=0.01s
+  User=10.34s Real=10.36s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 

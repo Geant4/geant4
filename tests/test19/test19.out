@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,28 +40,28 @@ Test19:NewRun: Targ=90002002, Proj=11, E=2.270000e+02 MeV, Run #7 of 60
 Test19:Time/Ev=1.200000e-03 s, DN=0.000000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=11, E=2.270000e+02 MeV, Run #8 of 60
-Test19:Time/Ev=2.050000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=2.000000e-03 s, DN=1.500000e+00 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=11, E=2.270000e+02 MeV, Run #9 of 60
-Test19:Time/Ev=1.900000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=1.950000e-03 s, DN=0.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=11, E=2.270000e+02 MeV, Run #10 of 60
-Test19:Time/Ev=2.100000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=2.050000e-03 s, DN=1.000000e+00 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=11, E=9.990000e+02 MeV, Run #11 of 60
-Test19:Time/Ev=2.000000e-04 s, DN=6.200000e+01 %
+Test19:Time/Ev=2.500000e-04 s, DN=5.450000e+01 %
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=11, E=9.990000e+02 MeV, Run #12 of 60
 Test19:Time/Ev=1.200000e-03 s, DN=1.000000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=11, E=9.990000e+02 MeV, Run #13 of 60
-Test19:Time/Ev=2.450000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=2.600000e-03 s, DN=5.000000e-01 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=11, E=9.990000e+02 MeV, Run #14 of 60
-Test19:Time/Ev=2.450000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=2.350000e-03 s, DN=0.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=11, E=9.990000e+02 MeV, Run #15 of 60
-Test19:Time/Ev=2.500000e-03 s, DN=5.000000e-01 %
+Test19:Time/Ev=2.600000e-03 s, DN=5.000000e-01 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=13, E=2.700000e+01 MeV, Run #16 of 60
 Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
@@ -83,31 +83,31 @@ Test19:NewRun: Targ=90001000, Proj=13, E=2.270000e+02 MeV, Run #21 of 60
 Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=13, E=2.270000e+02 MeV, Run #22 of 60
-Test19:Time/Ev=1.150000e-03 s, DN=8.000000e+00 %
+Test19:Time/Ev=1.100000e-03 s, DN=8.000000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=13, E=2.270000e+02 MeV, Run #23 of 60
-Test19:Time/Ev=1.600000e-03 s, DN=1.700000e+01 %
+Test19:Time/Ev=1.550000e-03 s, DN=2.150000e+01 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=13, E=2.270000e+02 MeV, Run #24 of 60
-Test19:Time/Ev=1.650000e-03 s, DN=1.050000e+01 %
+Test19:Time/Ev=1.650000e-03 s, DN=1.000000e+01 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=13, E=2.270000e+02 MeV, Run #25 of 60
-Test19:Time/Ev=1.800000e-03 s, DN=8.000000e+00 %
+Test19:Time/Ev=1.800000e-03 s, DN=8.500000e+00 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=13, E=9.990000e+02 MeV, Run #26 of 60
-Test19:Time/Ev=1.500000e-04 s, DN=7.050000e+01 %
+Test19:Time/Ev=1.500000e-04 s, DN=7.150000e+01 %
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=13, E=9.990000e+02 MeV, Run #27 of 60
-Test19:Time/Ev=1.200000e-03 s, DN=3.000000e+00 %
+Test19:Time/Ev=1.150000e-03 s, DN=4.500000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=13, E=9.990000e+02 MeV, Run #28 of 60
-Test19:Time/Ev=2.400000e-03 s, DN=4.000000e+00 %
+Test19:Time/Ev=2.400000e-03 s, DN=4.500000e+00 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=13, E=9.990000e+02 MeV, Run #29 of 60
-Test19:Time/Ev=2.450000e-03 s, DN=2.000000e+00 %
+Test19:Time/Ev=2.300000e-03 s, DN=3.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=13, E=9.990000e+02 MeV, Run #30 of 60
-Test19:Time/Ev=2.550000e-03 s, DN=1.500000e+00 %
+Test19:Time/Ev=2.450000e-03 s, DN=2.500000e+00 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=15, E=2.700000e+01 MeV, Run #31 of 60
 Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
@@ -150,10 +150,10 @@ Test19:NewRun: Targ=90007007, Proj=15, E=9.990000e+02 MeV, Run #43 of 60
 Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=15, E=9.990000e+02 MeV, Run #44 of 60
-Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
+Test19:Time/Ev=5.000000e-05 s, DN=1.000000e+02 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=15, E=9.990000e+02 MeV, Run #45 of 60
-Test19:Time/Ev=5.000000e-05 s, DN=1.000000e+02 %
+Test19:Time/Ev=0.000000e+00 s, DN=1.000000e+02 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=2.700000e+01 MeV, Run #46 of 60
 Test19:Time/Ev=0.000000e+00 s, DN=0.000000e+00 %
@@ -168,22 +168,22 @@ Test19:NewRun: Targ=90027032, Proj=22, E=2.700000e+01 MeV, Run #49 of 60
 Test19:Time/Ev=1.950000e-03 s, DN=0.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=2.700000e+01 MeV, Run #50 of 60
-Test19:Time/Ev=2.300000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=2.350000e-03 s, DN=0.000000e+00 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=2.270000e+02 MeV, Run #51 of 60
-Test19:Time/Ev=4.500000e-04 s, DN=0.000000e+00 %
+Test19:Time/Ev=5.000000e-04 s, DN=0.000000e+00 %
 Test19: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test19:NewRun: Targ=90002002, Proj=22, E=2.270000e+02 MeV, Run #52 of 60
-Test19:Time/Ev=1.250000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=1.200000e-03 s, DN=0.000000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=22, E=2.270000e+02 MeV, Run #53 of 60
-Test19:Time/Ev=3.500000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=3.450000e-03 s, DN=0.000000e+00 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=22, E=2.270000e+02 MeV, Run #54 of 60
-Test19:Time/Ev=3.700000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=3.650000e-03 s, DN=0.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=2.270000e+02 MeV, Run #55 of 60
-Test19:Time/Ev=4.450000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=4.150000e-03 s, DN=0.000000e+00 %
 Test19: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test19:NewRun: Targ=90001000, Proj=22, E=9.990000e+02 MeV, Run #56 of 60
 Test19:Time/Ev=6.000000e-04 s, DN=0.000000e+00 %
@@ -192,11 +192,11 @@ Test19:NewRun: Targ=90002002, Proj=22, E=9.990000e+02 MeV, Run #57 of 60
 Test19:Time/Ev=1.250000e-03 s, DN=0.000000e+00 %
 Test19: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test19:NewRun: Targ=90007007, Proj=22, E=9.990000e+02 MeV, Run #58 of 60
-Test19:Time/Ev=5.300000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=5.250000e-03 s, DN=0.000000e+00 %
 Test19: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test19:NewRun: Targ=90027032, Proj=22, E=9.990000e+02 MeV, Run #59 of 60
-Test19:Time/Ev=5.600000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=5.400000e-03 s, DN=0.000000e+00 %
 Test19: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test19:NewRun: Targ=90092146, Proj=22, E=9.990000e+02 MeV, Run #60 of 60
-Test19:Time/Ev=6.100000e-03 s, DN=0.000000e+00 %
+Test19:Time/Ev=5.800000e-03 s, DN=0.000000e+00 %
 

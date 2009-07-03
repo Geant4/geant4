@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -186,7 +186,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -367,7 +367,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.13s Real=3.15s Sys=0.02s
+  User=3.19s Real=3.22s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -523,7 +523,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -709,7 +709,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.9s Real=3.92s Sys=0.01s
+  User=3.98s Real=4.01s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
@@ -870,7 +870,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1061,7 +1061,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.41s Real=3.43s Sys=0.02s
+  User=3.48s Real=3.51s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
@@ -1238,7 +1238,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1434,7 +1434,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1s Real=1.03s Sys=0.03s
+  User=1.02s Real=1.04s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -1623,7 +1623,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -1824,7 +1824,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.46s Sys=0.02s
+  User=0.45s Real=0.47s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -2025,7 +2025,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -2231,7 +2231,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.37s Real=0.39s Sys=0.03s
+  User=0.38s Real=0.4s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -2432,7 +2432,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -2638,7 +2638,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1s Real=1.04s Sys=0.02s
+  User=1.03s Real=1.06s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -2839,7 +2839,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -3045,7 +3045,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.46s Sys=0.03s
+  User=0.46s Real=0.47s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -3246,7 +3246,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -3452,7 +3452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.37s Real=0.39s Sys=0.02s
+  User=0.38s Real=0.4s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -3653,7 +3653,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -3859,7 +3859,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.69s Real=0.72s Sys=0.02s
+  User=0.7s Real=0.73s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -4060,7 +4060,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -4266,7 +4266,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.47s Sys=0.02s
+  User=0.44s Real=0.47s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -4467,7 +4467,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -4673,7 +4673,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.39s Sys=0.03s
+  User=0.37s Real=0.4s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 

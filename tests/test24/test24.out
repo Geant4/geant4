@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -280,7 +280,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.3s Real=2.3s Sys=0.01s
+  User=2.2s Real=2.3s Sys=0.01s
 #
 # neutron at 10 GeV in U
 #
@@ -311,7 +311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.5s Real=1.5s Sys=0s
+  User=1.5s Real=1.6s Sys=0s
 #
 # pi+ at 10 GeV in U
 #
@@ -342,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.1s Real=2.2s Sys=0s
+  User=2.1s Real=2.2s Sys=0.01s
 #
 # pi- at 10 GeV in U
 #
@@ -373,7 +373,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.4s Real=1.4s Sys=0.01s
+  User=1.4s Real=1.4s Sys=0s
 #
 # proton at 10 GeV in Cu
 #
@@ -583,7 +583,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.99s Real=1s Sys=0s
+  User=1s Real=1s Sys=0.01s
 #
 # neutron at 10 GeV in Cu
 #
@@ -619,7 +619,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.63s Real=0.63s Sys=0.01s
+  User=0.63s Real=0.63s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -691,7 +691,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.76s Real=0.78s Sys=0s
+  User=0.76s Real=0.76s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -988,7 +988,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.41s Real=0.42s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1295,7 +1295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # pi+ at 10 GeV in H
 #

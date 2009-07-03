@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: global-V09-02-02    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,15 +37,18 @@
 userDetector->Construct() start.
 
 -------------------------------------------------------------
- ---> The calorimeter is 9 superLayers
- ---> A superLayer is 10 Layers
+ ---> The calorimeter is 9 Modules
+ ---> A Module is 10 Layers + 1 milled Layer
  ---> A Layer is 1.68 mm  thickness of Lead
- ---> A Layer include 490 fibers of Scintillator
+ ---> A Layer includes 490 fibers of Scintillator
       ---> diameter : 1.08 mm 
       ---> length   : 66.285 cm 
       ---> distance : 1.35 mm 
+ ---> The milled Layer is 1.4 mm  thickness of Lead
 
- ---> Total calor thickness 15.12 cm 
+ ---> Module thickness 1.82 cm 
+
+ ---> Total calor thickness 16.38 cm 
       Tranverse size        66.285 cm 
 -------------------------------------------------------------
 
@@ -99,21 +102,21 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   32 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00            1k calorimeter
        0.00         0.00         0.00           31k layer
-       0.00         0.00         0.00            1k superLayer
-       0.00         0.00         0.00            1k calorimeter
+       0.00         0.00         0.00            1k module
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      95.57         30k         1      490        980         0.00    layer
-       2.31          0k         1       11         20         0.00    superLayer
-       2.12          0k         1       10         18         0.00    calorimeter
+      94.74         30k         1      490        980         0.00    layer
+       3.16          1k         1       17         20         0.00    module
+       2.10          0k         1       10         18         0.01    calorimeter
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -144,18 +147,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=25.27s Real=25.68s Sys=0.29s
+  User=27.09s Real=27.37s Sys=0.27s
 
 -------------------------------------------------------------
- ---> The calorimeter is 9 superLayers
- ---> A superLayer is 10 Layers
+ ---> The calorimeter is 9 Modules
+ ---> A Module is 10 Layers + 1 milled Layer
  ---> A Layer is 1.68 mm  thickness of Lead
- ---> A Layer include 490 fibers of Scintillator
+ ---> A Layer includes 490 fibers of Scintillator
       ---> diameter : 1.08 mm 
       ---> length   : 66.285 cm 
       ---> distance : 1.35 mm 
+ ---> The milled Layer is 1.4 mm  thickness of Lead
 
- ---> Total calor thickness 15.12 cm 
+ ---> Module thickness 1.82 cm 
+
+ ---> Total calor thickness 16.38 cm 
       Tranverse size        66.285 cm 
 -------------------------------------------------------------
 
@@ -164,34 +170,34 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   pixel 0: 746.81 keV +- 2.214 MeV  (3e+02 %)     8.0925 MeV +- 6.157 MeV  ( 76 %)
-   pixel 1: 732.82 keV +- 1.723 MeV  (2.4e+02 %)     8.0081 MeV +- 5.738 MeV  ( 72 %)
-   pixel 2: 715.19 keV +- 1.281 MeV  (1.8e+02 %)     8.0484 MeV +- 5.782 MeV  ( 72 %)
-   pixel 3: 736.81 keV +- 1.614 MeV  (2.2e+02 %)     8.1093 MeV +- 5.962 MeV  ( 74 %)
-   pixel 4: 741.49 keV +- 1.662 MeV  (2.2e+02 %)     7.9561 MeV +- 5.407 MeV  ( 68 %)
-   pixel 5: 728.76 keV +- 1.966 MeV  (2.7e+02 %)     7.9248 MeV +- 5.091 MeV  ( 64 %)
-   pixel 6: 722.37 keV +- 1.743 MeV  (2.4e+02 %)     7.9243 MeV +- 5.079 MeV  ( 64 %)
-   pixel 7: 720.22 keV +- 1.571 MeV  (2.2e+02 %)     7.9148 MeV +- 5.171 MeV  ( 65 %)
-   pixel 8: 732.94 keV +- 1.673 MeV  (2.3e+02 %)      7.975 MeV +- 5.281 MeV  ( 66 %)
-   pixel 9: 740.28 keV +- 1.693 MeV  (2.3e+02 %)     8.0718 MeV +- 5.967 MeV  ( 74 %)
-   pixel 10: 751.19 keV +- 2.142 MeV  (2.9e+02 %)     8.0414 MeV +- 5.606 MeV  ( 70 %)
-   pixel 11: 706.21 keV +- 1.335 MeV  (1.9e+02 %)     7.8537 MeV +- 4.789 MeV  ( 61 %)
-   pixel 12: 751.05 keV +- 1.814 MeV  (2.4e+02 %)     7.9032 MeV +- 4.901 MeV  ( 62 %)
-   pixel 13:  719.4 keV +- 1.594 MeV  (2.2e+02 %)     7.9013 MeV +- 4.736 MeV  ( 60 %)
-   pixel 14: 698.15 keV +- 982.9 keV  (1.4e+02 %)     7.8862 MeV +- 4.877 MeV  ( 62 %)
-   pixel 15: 729.26 keV +- 1.462 MeV  (2e+02 %)     8.0183 MeV +- 5.214 MeV  ( 65 %)
-   pixel 16: 702.66 keV +- 1.324 MeV  (1.9e+02 %)     7.9267 MeV +- 4.815 MeV  ( 61 %)
-   pixel 17: 713.77 keV +- 1.468 MeV  (2.1e+02 %)     7.9344 MeV +- 5.191 MeV  ( 65 %)
+   layer 0: 726.33 keV +- 1.937 MeV  (2.7e+02 %)     9.0074 MeV +- 5.753 MeV  ( 64 %)
+   layer 1: 737.21 keV +- 1.887 MeV  (2.6e+02 %)     8.8754 MeV +- 5.264 MeV  ( 59 %)
+   layer 2: 740.53 keV +- 1.689 MeV  (2.3e+02 %)     9.1039 MeV +- 6.071 MeV  ( 67 %)
+   layer 3: 721.91 keV +- 1.696 MeV  (2.3e+02 %)      8.924 MeV +- 5.485 MeV  ( 61 %)
+   layer 4: 736.37 keV +- 1.687 MeV  (2.3e+02 %)       8.95 MeV +- 5.511 MeV  ( 62 %)
+   layer 5: 738.16 keV +- 1.657 MeV  (2.2e+02 %)     9.0558 MeV +- 5.817 MeV  ( 64 %)
+   layer 6: 702.28 keV +-  1.29 MeV  (1.8e+02 %)       8.88 MeV +- 5.067 MeV  ( 57 %)
+   layer 7: 710.05 keV +- 1.244 MeV  (1.8e+02 %)     8.9396 MeV +- 5.503 MeV  ( 62 %)
+   layer 8: 728.06 keV +- 1.591 MeV  (2.2e+02 %)     8.9517 MeV +- 5.337 MeV  ( 60 %)
+   layer 9: 703.95 keV +- 1.291 MeV  (1.8e+02 %)     8.9041 MeV +-  5.44 MeV  ( 61 %)
+   layer 10: 727.03 keV +- 1.752 MeV  (2.4e+02 %)     9.0172 MeV +- 5.726 MeV  ( 63 %)
+   layer 11: 742.42 keV +- 1.652 MeV  (2.2e+02 %)     9.0572 MeV +- 5.583 MeV  ( 62 %)
+   layer 12: 720.81 keV +- 1.613 MeV  (2.2e+02 %)     8.9286 MeV +- 5.013 MeV  ( 56 %)
+   layer 13: 741.03 keV +- 1.808 MeV  (2.4e+02 %)     9.0764 MeV +- 5.875 MeV  ( 65 %)
+   layer 14: 710.59 keV +- 1.362 MeV  (1.9e+02 %)     8.9328 MeV +- 5.143 MeV  ( 58 %)
+   layer 15: 746.66 keV +- 1.771 MeV  (2.4e+02 %)     9.0907 MeV +- 6.263 MeV  ( 69 %)
+   layer 16: 728.25 keV +- 1.432 MeV  (2e+02 %)     8.9371 MeV +- 5.622 MeV  ( 63 %)
+   layer 17: 698.13 keV +- 988.3 keV  (1.4e+02 %)     8.9045 MeV +- 5.044 MeV  ( 57 %)
 
-   total calor : 13.089 MeV +- 6.949 MeV  ( 53 %)     143.49 MeV +- 22.76 MeV  ( 16 %)
+   total calor :  13.06 MeV +- 6.733 MeV  ( 52 %)     161.54 MeV +- 23.98 MeV  ( 15 %)
 ------------------------------------------------------------
 
-   Leakage : 856.51 MeV +- 22.76 MeV
-   Eleak/Ebeam =85.7 %  ( forward =85.6 %;   backward =0.0088 %;   lateral =0.00624 %)
+   Leakage : 838.46 MeV +- 23.98 MeV
+   Eleak/Ebeam =83.8 %  ( forward =83.8 %;   backward =0.0182 %;   lateral =0.0209 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 903239099, 1127513079
+ Current couple of seeds = 35330679, 1520140844
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
