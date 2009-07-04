@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.67 2009-06-25 14:46:54 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.68 2009-07-04 15:49:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   facrange(0.04),
   facgeom(2.5),
   latDisplasment(true),
+  isIon(false),
   currentParticle(0),
   currentCouple(0)
 {
@@ -147,7 +148,8 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver)
+G4VEmModel* 
+G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 {
   return modelManager->GetModel(idx, ver);
 }
@@ -216,8 +218,11 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     if(part.GetParticleType() == "nucleus" && 
        part.GetParticleSubType() == "generic") {
       firstParticle = G4GenericIon::GenericIon();
+      isIon = true;
     } else {
       firstParticle = &part;
+      if(part.GetParticleType() == "nucleus" || 
+	 part.GetPDGMass() > GeV) {isIon = true;} 
     } 
 
     currentParticle = &part;
@@ -281,19 +286,26 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double,
                              G4double currentMinimalStep,
-                             G4double& currentSafety,
+                             G4double&,
                              G4GPILSelection* selection)
 {
   // get Step limit proposed by the process
-  valueGPILSelectionMSC = NotCandidateForSelection;
-  G4double steplength = GetMscContinuousStepLimit(track,
-						  track.GetKineticEnergy(),
-						  currentMinimalStep,
-						  currentSafety);
-  // G4cout << "StepLimit= " << steplength << G4endl;
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelectionMSC;
-  return  steplength;
+  *selection = NotCandidateForSelection;
+  G4double x = currentMinimalStep;
+  DefineMaterial(track.GetMaterialCutsCouple());
+  G4double ekin = track.GetKineticEnergy();
+  if(isIon) { ekin *= proton_mass_c2/track.GetDefinition()->GetPDGMass(); }
+  currentModel = static_cast<G4VMscModel*>(SelectModel(ekin));
+  if(x > 0.0 && ekin > 0.0) {
+    G4double tPathLength = 
+      currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
+    if (tPathLength < x) *selection = CandidateForSelection;
+    x = currentModel->ComputeGeomPathLength(tPathLength);
+    //  G4cout << "tPathLength= " << tPathLength
+    //         << " stepLimit= " << x
+    //        << " currentMinimalStep= " << currentMinimalStep<< G4endl;
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -313,8 +325,9 @@ G4double G4VMultipleScattering::GetContinuousStepLimit(
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
 {
-  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
-				   currentSafety);
+  G4GPILSelection* selection = 0;
+  return AlongStepGetPhysicalInteractionLength(track,previousStepSize,currentMinimalStep,
+					       currentSafety, selection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -393,7 +406,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
 			  	                         G4bool ascii)
 {
   if(0 < verboseLevel) {
-//    G4cout << "========================================================" << G4endl;
+    //    G4cout << "========================================================" << G4endl;
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
