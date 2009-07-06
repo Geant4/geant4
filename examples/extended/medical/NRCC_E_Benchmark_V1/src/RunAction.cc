@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2009-05-19 16:13:10 maire Exp $
+// $Id: RunAction.cc,v 1.2 2009-07-06 09:36:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -158,8 +158,10 @@ void RunAction::ComputeFluenceError()
      rmean += dr;  
      ds = twopi*rmean*dr;
      fluence[bin] /= ds;
-     fluence2[bin] /= (ds*ds);     
-     variance = fluence2[bin] - (fluence[bin]*fluence[bin])/nbEntries[bin];
+     fluence2[bin] /= (ds*ds);
+     variance = 0.;
+     if (nbEntries[bin] > 0)     
+       variance = fluence2[bin] - (fluence[bin]*fluence[bin])/nbEntries[bin];
      rms = 0.;
      if(variance > 0.) rms = std::sqrt(variance);
      fluence2[bin] = rms;

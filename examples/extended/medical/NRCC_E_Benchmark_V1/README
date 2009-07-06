@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2009-05-19 16:08:44 maire Exp $
+$Id: README,v 1.2 2009-07-06 09:36:30 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -103,12 +103,12 @@ $Id: README,v 1.1 2009-05-19 16:08:44 maire Exp $
  The histograms can be viewed using ROOT or PAW. See below the note on AIDA.
  
  One can control the name and format of the histograms file with the command:
- /testem/histo/setFileName  name  (default testbruce)
+ /testem/histo/setFileName  name  (default nrccBenchmark)
  /testem/histo/setFileType  type  (choice: hbook, root(default), XML)  
    
  It is also possible to print selected histograms on an ascii file:
  /testem/histo/printHisto id
- All selected histos will be written on a file name.ascii (default testbruce) 
+ All selected histos will be written on a file name.ascii (default nrccBenchmark)
  	
  Note that, by default, histograms are disabled. To activate them, uncomment 
  the flag G4ANALYSIS_USE in GNUmakefile. 	

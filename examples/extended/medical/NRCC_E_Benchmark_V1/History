@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009-05-19 16:17:38 maire Exp $
+$Id: History,v 1.3 2009-07-06 09:36:30 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     
+06-07-09 mma (eBenchmarkV1-V09-02-01)
+- add a protection in RunAction::ComputeFluenceError()
      
 17-05-09 mma
 - first commit and tag eBenchmarkV1-V09-02-00
