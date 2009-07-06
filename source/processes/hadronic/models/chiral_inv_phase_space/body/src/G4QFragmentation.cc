@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.10 2009-07-03 14:49:42 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.11 2009-07-06 10:14:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -238,7 +238,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
           if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
               G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
           { 
-            // ---------------->>>> diffractive interaction
+            // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
             if(IsSingleDiffractive()) ExciteSingDiffParticipants(cmProjectile, aTarget);
             else                          ExciteDiffParticipants(cmProjectile, aTarget);
             G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
@@ -443,7 +443,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 #ifdef debug
         G4cout<<"G4QFragmentation::Scatter:Prepared for creationOfDiffExcitation"<<G4endl;
 #endif
-        aString = BuildString(aPair);           // @@ ?
+        aString = BuildString(aPair);           // Just to shorten the new
 #ifdef debug
         G4cout<<"G4QFragmentation::Scatter:DifString4M="<<aString->Get4Momentum()<<G4endl;
 #endif
@@ -453,7 +453,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 #ifdef debug
         G4cout<<"G4QFragmentation::Scatter: Prepared for creationOfTheSoftString"<<G4endl;
 #endif
-        aString = BuildString(aPair);           // @@ ?
+        aString = BuildString(aPair);           // Just to shorten the new
 #ifdef debug
         G4cout<<"G4QFragmentation::Scatter:SoftString4M="<<aString->Get4Momentum()<<G4endl;
 #endif
@@ -541,12 +541,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
       G4Exception("G4QFragmentation::Scatter:","72",FatalException,"NANin3Vector");
     }
     G4QHadronVector* theHadrons = 0;           // Prototype of theStringFragmentationOUTPUT
-    if( curString->IsExcited() ) theHadrons=curString->FragmentString(true); // FragmString
-    else
-    {
-      //theHadrons = new G4QHadronVector;
-      //theHadrons->push_back(curString->GetAsQHadron()); //@@ NotImplem
-    }    
+    theHadrons=curString->FragmentString(true);// FragmString
     if (!theHadrons)
     {
       G4cerr<<"-Warning-G4QFragmentation::Scatter: No Hadrons produced"<<G4endl;
@@ -571,10 +566,6 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
 #ifdef debug
   G4cout<<"G4QFragmentation::Scatter: String4mom="<<KTsum<<G4endl; 
 #endif
-  ///////if(NeedEnergyCorrector) EnergyAndMomentumCorrector(theResult, KTsum);
-#ifdef debug
-  G4cout<<"G4QFragmentation::Scatter:***Done***, after Fragm NS="<<strings->size()<<G4endl;
-#endif
   //
   // >>>>>>>>>>>>>> clean-up used Nucleons, Strings. and theNucleus
   //
@@ -585,93 +576,6 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
   delete strings;
 
   return theResult; // This is the resulting hadron vector (the answer)
-}
-
-// @@ Shoul be updated or deleted, if the energy-momentum nonconsertvation does not exist
-G4bool G4QFragmentation::EnergyAndMomentumCorrector(G4QHadronVector* Output,
-                                                    G4LorentzVector& TotalCollisionMom)   
-{
-  const int    nAttemptScale = 500;
-  const double ErrLimit = 1.E-5;
-  if (Output->empty()) return TRUE;
-  G4LorentzVector SumMom;
-  G4double        SumMass = 0;     
-  G4double        TotalCollisionMass = TotalCollisionMom.m();
-  if( !(TotalCollisionMass<1) && !(TotalCollisionMass>-1) )
-  {
-    G4cerr<<"***G4QFragmentation::EnergyAndMomentumCorrect:M="<<TotalCollisionMass<<G4endl;
-    G4Exception("G4QFragmentation::EnergyAndMomentumCorr:","72",FatalException,"NAN_totM");
-  }
-  // Calculate sum hadron 4-momenta and summing hadron mass
-  unsigned int cHadron;
-  for(cHadron = 0; cHadron < Output->size(); cHadron++)
-  {
-    SumMom  += Output->operator[](cHadron)->Get4Momentum();
-    if( !(SumMom<1) && !(SumMom>-1) )
-    {
-      G4cerr<<"***G4QFragmentation::EnergyAndMomentumCorrector: SumMom="<<SumMom<<G4endl;
-      G4Exception("G4QFragmentation::EnergyAndMomentumCorr:","72",FatalException,"NANMom");
-    }
-    SumMass += (*Output)[cHadron]->GetMass();
-    if(!(SumMass<1) && !(SumMass>-1))
-    {
-      G4cerr<<"***G4QFragmentation::EnergyAndMomentumCorrector: SumMass="<<SumMass<<G4endl;
-      G4Exception("G4QFragmentation::EnergyAndMomentumCor:","72",FatalException,"NANMass");
-    }
-  }
-  // Cannot correct a single particle
-  if(Output->size() < 2) return FALSE;
-  if (SumMass > TotalCollisionMass) return FALSE;
-  SumMass = SumMom.m2();
-  if (SumMass < 0) return FALSE;
-  SumMass = std::sqrt(SumMass);
-  // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
-  G4ThreeVector Beta = -SumMom.boostVector();
-  G4int nOut=Output->size();
-  if(nOut) for(G4int o=0; o<nOut; o++) (*Output)[o]->Boost(Beta);
-  // Scale total c.m.s. hadron energy (hadron system mass).
-  // It should be equal interaction mass
-  G4double Scale = 1;
-  G4int cAttempt = 0;
-  G4double Sum = 0;
-  G4bool success = false;
-  for(cAttempt = 0; cAttempt < nAttemptScale; cAttempt++)
-  {
-    Sum = 0;
-    for(cHadron = 0; cHadron < Output->size(); cHadron++)
-    {
-      G4LorentzVector HadronMom = Output->operator[](cHadron)->Get4Momentum();
-      HadronMom.setVect(Scale*HadronMom.vect());
-      G4double E = std::sqrt(HadronMom.vect().mag2() + sqr((*Output)[cHadron]->GetMass()));
-      HadronMom.setE(E);
-      Output->operator[](cHadron)->Set4Momentum(HadronMom);
-      Sum += E;
-    }   
-    Scale = TotalCollisionMass/Sum;    
-    if (Scale - 1 <= ErrLimit) 
-    {
-      success = true;
-      break;
-    }
-#ifdef debug
-    G4cout<<"G4QFragmentation::EnergyAndMomentumCorrector: Scale-1="<<Scale-1<<", TotM="
-          <<TotalCollisionMass<<", Sum="<<Sum<<G4endl;
-#endif
-  }
-#ifdef debug
-  if(!success)
-  {
-    G4cout<<"***G4QFragmentation::EnergyAndMomentumCorrector: Scale #1 at end of loop M="
-          <<TotalCollisionMass<<", S"<<Sum<<", Sc="<<Scale
-          <<" Increase number of attempts or increase the ErrLimit parameter"<<G4endl;
-    //G4Exception("G4QFragmentation::EnergyAndMomCor:","72",FatalException,"NoCorrection");
-  }
-#endif
-  // Compute c.m.s. interaction velocity and KTV back boost
-  Beta = TotalCollisionMom.boostVector(); 
-  nOut=Output->size();
-  if(nOut) for(G4int o=0; o<nOut; o++) (*Output)[o]->Boost(Beta);
-  return TRUE;
 }
 
 // Excite double diffractive string
@@ -897,11 +801,11 @@ G4bool G4QFragmentation::ExciteSingDiffParticipants(G4QHadron* projectile,
   Pprojectile.transform(toLab);
   Ptarget.transform(toLab);
 #ifdef debug
-  G4cout<< "G4QFragm::ExciteSingDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
+  G4cout<< "G4QFragm::ExciteSingleDiffParticipants: TargetMass="<<Ptarget.mag()<<G4endl;
 #endif
   target->Set4Momentum(Ptarget);  
 #ifdef debug
-  G4cout<<"G4QFragm::ExciteDiffParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
+  G4cout<<"G4QFragm::ExciteSingleParticipants:ProjectileMass="<<Pprojectile.mag()<<G4endl;
 #endif
   projectile->Set4Momentum(Pprojectile);
   return true;

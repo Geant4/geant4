@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.41 2009-03-23 14:14:35 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.42 2009-07-06 10:14:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -97,7 +97,7 @@ public:
   // Public wrapper for HadronizeQuasmon(,)
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ = 1);
   G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it's Res or Chipo
-  G4QHadronVector*  DecayQHadron(G4QHadron* hadron);  // Decay Quasmon if it's Res or Chipo
+  G4QHadronVector*  DecayQHadron(G4QHadron* hadron);  // Decay QHadron if it's Res or Chipo
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer

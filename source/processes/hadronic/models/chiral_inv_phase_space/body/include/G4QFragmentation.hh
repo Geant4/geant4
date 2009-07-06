@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.6 2009-07-02 07:17:09 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.7 2009-07-06 10:14:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -67,8 +67,8 @@ class G4QFragmentation
 
   G4QHadronVector* Scatter(const G4QNucleus& aNucleus, const G4QHadron& aPrimary);
 
-  G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
-  G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;
+  G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const; //@@Once
+  G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;//@@Onc
 
   G4QString* BuildString(G4QPartonPair* aPair)
    {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
@@ -79,7 +79,6 @@ class G4QFragmentation
  protected:
   G4bool IsSingleDiffractive()
                   {G4bool result=false; if(G4UniformRand()<1.) result=true; return result;}
-  G4bool EnergyAndMomentumCorrector(G4QHadronVector* Output, G4LorentzVector& TotaMom);   
   G4double ChooseX(G4double Xmin, G4double Xmax) const;
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
 

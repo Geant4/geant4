@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.111 2009-05-27 08:53:15 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.112 2009-07-06 10:14:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3688,7 +3688,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   G4int thePDG      = qH->GetPDGCode();        // Get PDG code of the Hadron to switch
   G4LorentzVector t = qH->Get4Momentum();      // 4-Mom of Chipolino
 #ifdef psdebug
-  if(thePDG==113&&fabs(t.m()-770.)<.001)
+  if(thePDG==113 && fabs(t.m()-770.)<.001)
   {
     G4cerr<<"G4Q::FillHadronVector: PDG="<<thePDG<<",M="<<t.m()<<G4endl;
     throw G4QException("G4Quasmon::FillHadronVector: Zero rho");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.39 2009-07-03 14:49:42 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.40 2009-07-06 10:14:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -128,7 +128,6 @@ public:
   G4bool CopDecayIn3(G4LorentzVector& fh4M, G4LorentzVector& sh4M, G4LorentzVector& th4Mom,
                      G4LorentzVector& dir, G4double cosp);
   void   Init3D();                         // Initializes 3D nucleus with (Pos,4M)nucleons
-
 private:
   // Private methods
   void DefineQC(G4int PDGCode);
