@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.1 2009-03-25 20:54:32 sincerti Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.2 2009-07-08 09:26:43 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -168,22 +168,19 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 	     << particleName << G4endl;
 
     //Applicability range for Livermore models
-    G4double LivermoreLowEnergyLimit = 250*eV;
-    G4double LivermoreHighEnergyLimit = 100*GeV;
     //for higher energies, the Standard models are used   
+    G4double LivermoreHighEnergyLimit = GeV;
 
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
       theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermorePolarizedComptonModel* theLivermoreComptonModel = new G4LivermorePolarizedComptonModel();
-      theLivermoreComptonModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
       theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       pmanager->AddDiscreteProcess(theComptonScattering);
@@ -196,7 +193,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermorePolarizedRayleighModel* theRayleighModel = new G4LivermorePolarizedRayleighModel();
-      theRayleighModel->SetLowEnergyLimit(LivermoreLowEnergyLimit);
       theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theRayleigh->AddEmModel(0, theRayleighModel);
       pmanager->AddDiscreteProcess(theRayleigh);
@@ -215,7 +211,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       
       // Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
-      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel(), new G4UniversalFluctuation() );
+      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
       pmanager->AddProcess(eBrem, -1,-3, 3);
 
     } else if (particleName == "e+") {
