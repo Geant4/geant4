@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.15 2009-06-04 13:46:27 gunter Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.16 2009-07-09 18:48:11 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -70,7 +70,6 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    ClusterLoopInterrupt   =  500;
 
 // Changable Parameters below.
-   
    SigmaQT = 0.5 * GeV;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
@@ -520,9 +519,25 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
          } 
       G4double HadronE  = Hadrons->operator[](c1)->Get4Momentum().e();
       G4double HadronPz = Hadrons->operator[](c1)->Get4Momentum().pz();
-      Hadrons->operator[](c1)->SetFormationTime((theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa));
-      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
+      Hadrons->operator[](c1)->SetFormationTime(
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)/c_light); //Uzhi1.07.09c_light
+
+      G4ThreeVector aPosition(0, 0,     
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
       Hadrons->operator[](c1)->SetPosition(aPosition);
+/*
+G4cout<<"kappa "<<kappa<<G4endl;
+G4cout<<c1<<" Partic time, position Old "<<
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)<<' '<<
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa)<<G4endl;
+
+G4cout<<c1<<" Partic time, position New "<<
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)/c_light<<' '<<
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa)<<G4endl;
+
+G4cout<<"fermi "<<fermi<<" 1/fermi "<<1./fermi<<' '<<"1*fermi/c "<<1.*fermi/c_light<<G4endl;
+G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
+*/
       } 
    }
 

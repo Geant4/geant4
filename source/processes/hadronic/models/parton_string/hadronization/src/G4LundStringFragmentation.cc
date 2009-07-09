@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.15 2009-06-04 13:46:25 gunter Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.16 2009-07-09 18:48:11 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -57,7 +57,8 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 // ------ smearinr sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
 
-    SetStringTensionParameter(0.25);                           // Uzhi 20 June 08
+//    SetStringTensionParameter(0.25);                           // Uzhi 20 June 08
+    SetStringTensionParameter(1.);                           // Uzhi 20 June 09
    }
 
 // --------------------------------------------------------------
