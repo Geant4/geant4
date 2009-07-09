@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2009-05-22 16:36:52 gunter Exp $
+$Id: History,v 1.8 2009-07-09 18:57:13 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -22,6 +22,12 @@ code and to keep track of all tags.
   Affected G4VLongitudinalStringDecay, where SampleQuarkPt() is 
   implemented; affected .hh and .cc for new optional argument of max Pt 
   to SampleQuarkPt()
+9-July-2009 V. Uzhinsky                 (had-hadronization-V09-02-01)
+---------------------------------------------------------------------
+- Bug was fixed in G4VLongitudinalStringDecay.cc at calculation of
+  formation/creation time, c_light was inserted.
+- String tension parameter was set to the usual value (1 GeV/fm) in
+  G4LundStringFragmentation.cc
 
 18-May-2009   Gunter Folger             (had-hadronization-V09-02-00)
 ---------------------------------------------------------------------
