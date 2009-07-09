@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.14 2008-12-19 12:25:26 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.15 2009-07-09 15:14:09 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,7 @@ G4FTFModel::~G4FTFModel()
    if( theParameters != 0 ) delete theParameters;             // Uzhi 5.12.08
 // Because FTF model can be called for various particles
 // theParameters must be erased at the end of each call.
-// Thus the delete is olso in G4FTFModel::GetStrings() method
+// Thus the delete is also in G4FTFModel::GetStrings() method
    if( theExcitation != 0 ) delete theExcitation;             // Uzhi 5.12.08
    if( theElastic    != 0 ) delete theElastic;                // Uzhi 5.12.08
 }
@@ -156,7 +156,11 @@ G4int counter=0;
 */   // Uzhi 29.03.08
 
 
+//G4int InterNumber=0; // Vova
 
+        G4bool Successfull;
+
+//	while (theParticipants.Next()&& (InterNumber < 3)) // Vova
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
@@ -168,48 +172,51 @@ G4cout<<" Inter # "<<counter<<G4endl;
 	   G4VSplitableHadron * target=collision.GetTarget();
 
 //   // Uzhi 29.03.08
-           G4bool Successfull;
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            {
 //G4cout<<"Elastic"<<G4endl;
-            Successfull=theElastic->ElasticScattering(projectile, target, theParameters);
+            Successfull*=theElastic->ElasticScattering(projectile, target, theParameters);
            }
            else
            {
 //G4cout<<"Inelastic"<<G4endl;
-            Successfull=theExcitation->ExciteParticipants(projectile, target, theParameters);
+            Successfull*=theExcitation->ExciteParticipants(projectile, target, theParameters);
+//InterNumber++; // Vova
            }
+        }       // end of the loop Uzhi 9.07.09
+
 //G4cout<<"Successfull ? "<<Successfull<<G4endl;
 //           if(!Successfull)
 // // Uzhi 29.03.08
 
 //	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
-           if(!Successfull)
-	   {
+        if(!Successfull)
+	{
 //           give up, clean up
-		std::vector<G4VSplitableHadron *> primaries;
-		std::vector<G4VSplitableHadron *> targets;
-		theParticipants.StartLoop();    // restart a loop 
-		while ( theParticipants.Next() ) 
-		{
-		    const G4InteractionContent & interaction=theParticipants.GetInteraction();
+	  std::vector<G4VSplitableHadron *> primaries;
+	  std::vector<G4VSplitableHadron *> targets;
+	  theParticipants.StartLoop();    // restart a loop 
+	  while ( theParticipants.Next() ) 
+	  {
+	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                 	 //  do not allow for duplicates ...
-		    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
-                                                      interaction.GetProjectile()) )
-	    		primaries.push_back(interaction.GetProjectile());
+	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
+                                                   interaction.GetProjectile()) )
+	    	primaries.push_back(interaction.GetProjectile());
 
-		    if ( targets.end()   == std::find(targets.begin(), targets.end(),
+	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
                                                       interaction.GetTarget()) ) 
-	    		targets.push_back(interaction.GetTarget());
-		}
-		std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
-		primaries.clear();
-		std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
-		targets.clear();
+	    	targets.push_back(interaction.GetTarget());
+	  }
+	  std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
+	  primaries.clear();
+	
+          std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
+	  targets.clear();
 
-	   	return false;
-	   }  // End of the loop Uzhi
-        }
+	  return false;
+	}  // End of if(!Successfull)
+
 	return true;
 }
 // ------------------------------------------------------------
@@ -248,7 +255,10 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	{
 //G4ThreeVector aPosition=primaries[ahadron]->GetPosition();
 //G4cout<<"Proj Build "<<aPosition<<" "<<primaries[ahadron]->GetTimeOfCreation()<<G4endl;
-	    G4bool isProjectile=true;
+            G4bool isProjectile;
+            if(primaries[ahadron]->GetActivation())   // Uzhi 7.07.09
+	         {isProjectile=true; }
+            else {isProjectile=false;};
 	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
 	}
 
@@ -256,8 +266,11 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	{
 //G4ThreeVector aPosition=targets[ahadron]->GetPosition();
 //G4cout<<"Targ Build "<<aPosition<<" "<<targets[ahadron]->GetTimeOfCreation()<<G4endl;
-	    G4bool isProjectile=false;
-	    strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
+            if(targets[ahadron]->GetActivation())   // Uzhi 7.07.09
+            {
+	     G4bool isProjectile=false;
+	     strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
+            }
 	}
 
 	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());

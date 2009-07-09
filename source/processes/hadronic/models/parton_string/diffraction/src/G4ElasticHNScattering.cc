@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.4 2008-12-19 12:25:26 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.5 2009-07-09 15:14:09 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -58,10 +58,14 @@ G4bool G4ElasticHNScattering::
                               G4FTFParameters    *theParameters) const
 {
 //G4cout<<"G4ElasticHNScattering::ElasticScattering"<<G4endl;
+     G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding(); // Uzhi 24.06.09
+     G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition(); //Uzhi 24.06.09
+//   G4int    absProjectilePDGcode=std::abs(ProjectilePDGcode);
 
 	   G4LorentzVector Pprojectile=projectile->Get4Momentum();
+           G4double ProjectileRapidity = Pprojectile.rapidity();            // Uzhi 24.06.09
 
-           if(Pprojectile.z() < 0.){ return true;}
+           if(Pprojectile.z() < 0.){ return false;}  // Uzhi 9.07.09  true;}
 
 // -------------------- Projectile parameters -----------------------------------
            G4bool PutOnMassShell=0;
@@ -82,8 +86,11 @@ G4bool G4ElasticHNScattering::
            G4double AveragePt2=theParameters->GetAvaragePt2ofElasticScattering();
 
 // -------------------- Target parameters ----------------------------------------------
-  	   G4LorentzVector Ptarget=target->Get4Momentum();
+     G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding(); // Uzhi 24.06.09
+//   G4int    absTargetPDGcode=std::abs(TargetPDGcode);
 
+  	   G4LorentzVector Ptarget=target->Get4Momentum();
+           G4double TargetRapidity = Ptarget.rapidity();            // Uzhi 24.06.09
 	   G4double M0target = Ptarget.mag();
 //G4cout<<" Mp Mt Pt2 "<<M0projectile<<" "<<M0target<<" "<<AveragePt2/GeV/GeV<<G4endl;
 
@@ -95,6 +102,17 @@ G4bool G4ElasticHNScattering::
      
    	   G4double Mtarget2 = M0target * M0target;                      //Ptarget.mag2(); 
                                                                          // for AA-inter.
+//        (G4UniformRand() < 0.5))
+//        (G4UniformRand() < 0.5*std::exp(-0.5*(ProjectileRapidity - TargetRapidity))))
+//
+     if((ProjectilePDGcode != TargetPDGcode) && 
+        ((ProjectilePDGcode > 1000) && (TargetPDGcode > 1000)) &&  // Uzhi 6.07.09
+        (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
+       {
+        projectile->SetDefinition(target->GetDefinition());
+        target->SetDefinition(ProjectileDefinition);                   // Uzhi 24.06.09
+       }
+//
 // Transform momenta to cms and then rotate parallel to z axis;
 
 	   G4LorentzVector Psum;
@@ -130,8 +148,6 @@ G4bool G4ElasticHNScattering::
 
 	   PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
                                  2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
-           if(PZcms2 < 0) 
-             {return false;}   // It can be in an interaction with off-shell nuclear nucleon
 
            if(PZcms2 < 0.)
            {  // It can be in an interaction with off-shell nuclear nucleon
@@ -144,7 +160,7 @@ G4bool G4ElasticHNScattering::
                     /4./S;
              if(PZcms2 < 0.){ return true;} // Non succesful attempt
             }
-            else
+            else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
             {
              return true;                  // We can do only one - skip the interaction!
             }
@@ -153,27 +169,27 @@ G4bool G4ElasticHNScattering::
            PZcms = std::sqrt(PZcms2);
 
            if(PutOnMassShell)
-             {
+           {
               if(Pprojectile.z() > 0.)
-                {
+              {
                  Pprojectile.setPz( PZcms);
                  Ptarget.setPz(    -PZcms);
-                }
-              else
-                 {
+              }
+              else  // if(Pprojectile.z() > 0.)
+              {
                  Pprojectile.setPz(-PZcms);
                  Ptarget.setPz(     PZcms);
-                };
+              };
 
-               Pprojectile.setE(std::sqrt(Mprojectile2+
-                                                       Pprojectile.x()*Pprojectile.x()+
-                                                       Pprojectile.y()*Pprojectile.y()+
-                                                       PZcms2));
-               Ptarget.setE(std::sqrt(    Mtarget2    +
-                                                       Ptarget.x()*Ptarget.x()+
-                                                       Ptarget.y()*Ptarget.y()+
-                                                       PZcms2));
-             }
+              Pprojectile.setE(std::sqrt(Mprojectile2+
+                                                      Pprojectile.x()*Pprojectile.x()+
+                                                      Pprojectile.y()*Pprojectile.y()+
+                                                      PZcms2));
+              Ptarget.setE(std::sqrt(    Mtarget2    +
+                                                      Ptarget.x()*Ptarget.x()+
+                                                      Ptarget.y()*Ptarget.y()+
+                                                      PZcms2));
+           }
 
            G4double maxPtSquare = PZcms2;
 	   G4LorentzVector Qmomentum;

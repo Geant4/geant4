@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.4 2008-12-18 13:02:00 gunter Exp $
+// $Id: G4FTFParameters.cc,v 1.5 2009-07-09 15:14:09 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -143,7 +143,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
       }
-    else if( PDGcode == 311 )                      //------Projectile is KaonZero ------
+    else if((PDGcode == 311) || (PDGcode == 130) || (PDGcode == 310))//Projectile is KaonZero
       {
        G4double XtotKP =( 18.1 +  0. *std::pow(Plab, 0.  ) + 0.26 *sqrLogPlab - 1.0 *LogPlab +   //K+
                           32.1 +  0. *std::pow(Plab, 0.  ) + 0.66 *sqrLogPlab - 5.6 *LogPlab)/2; //K-
@@ -235,7 +235,8 @@ SetProbabilityOfTarDiff(0.05);
 */
               SetAveragePt2(0.3);                         // GeV^2
              }
-           else if( absPDGcode == 321 || PDGcode == -311) //------Projectile is Kaon -----------
+           else if( (absPDGcode == 321) || (PDGcode == 311) || 
+                       (PDGcode == 130) || (PDGcode == 310))  //Projectile is Kaon
              {
               SetProjMinDiffMass(0.7);                    // GeV 1.1
               SetProjMinNonDiffMass(0.7);                 // GeV

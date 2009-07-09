@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.8 2008-12-19 12:25:26 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.9 2009-07-09 15:14:09 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -49,10 +49,11 @@
 #include "G4DiffractiveExcitation.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ThreeVector.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4ParticleDefinition.hh" 
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
 #include "G4FTFParameters.hh"                            // Uzhi 19.04.08
+#include "G4ParticleTable.hh"                            // Uzhi  7.07.09
 //#include "G4ios.hh"
 //#include "UZHI_diffraction.hh"
 
@@ -64,36 +65,24 @@ G4DiffractiveExcitation::G4DiffractiveExcitation()
 G4bool G4DiffractiveExcitation::
   ExciteParticipants(G4VSplitableHadron *projectile, 
                      G4VSplitableHadron *target,
-<<<<<<< G4DiffractiveExcitation.cc
                      G4FTFParameters    *theParameters) const
 {
      G4bool PutOnMassShell=0;
 
 // -------------------- Projectile parameters -----------------------
-
-     G4LorentzVector Pprojectile=projectile->Get4Momentum();
-
-     if(Pprojectile.z() < 0.){ return true;}
-
-//   G4double M0projectile=projectile->GetDefinition()->GetPDGMass(); // With de-excitation
-     G4double M0projectile = Pprojectile.mag();                       // Without de-excitation
-/*
-=======
-                     G4FTFParameters    *theParameters) const
-{
-     G4bool PutOnMassShell=0;
-
-// -------------------- Projectile parameters -----------------------
+     G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding(); // Uzhi 24.06.09
+     G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition(); //Uzhi 24.06.09
+     G4int    absProjectilePDGcode=std::abs(ProjectilePDGcode);
 
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
 //   G4double M0projectile=projectile->GetDefinition()->GetPDGMass(); // With de-excitation
      G4double M0projectile = Pprojectile.mag();                       // Without de-excitation
+     G4double ProjectileRapidity = Pprojectile.rapidity();            // Uzhi 24.06.09
 /*
->>>>>>> 1.7
 G4cout<<"ExciteParticipants-------------------"<<G4endl;
-G4cout<<"PrMom "<<Pprojectile<<" mass "<<M0projectile<<G4endl;
+G4cout<<"Proj PDG "<<ProjectilePDGcode<<" Activ? "<<projectile->GetActivation()<<G4endl;
+G4cout<<"Mom "<<Pprojectile<<" mass "<<M0projectile<<G4endl;
 */
-<<<<<<< G4DiffractiveExcitation.cc
      if(M0projectile < projectile->GetDefinition()->GetPDGMass())
      {
       PutOnMassShell=1;
@@ -102,72 +91,49 @@ G4cout<<"PrMom "<<Pprojectile<<" mass "<<M0projectile<<G4endl;
 
      G4double M0projectile2 = M0projectile * M0projectile;
 
-     G4int    PDGcode=projectile->GetDefinition()->GetPDGEncoding();
-     G4int    absPDGcode=std::abs(PDGcode);
-
      G4double ProjectileDiffStateMinMass=theParameters->GetProjMinDiffMass();
      G4double ProjectileNonDiffStateMinMass=theParameters->GetProjMinNonDiffMass();
-=======
-     if(M0projectile < projectile->GetDefinition()->GetPDGMass())
-     {
-      PutOnMassShell=1;
-      M0projectile=projectile->GetDefinition()->GetPDGMass();
-     }
-
-     G4double M0projectile2 = M0projectile * M0projectile;
-
-     G4int    PDGcode=projectile->GetDefinition()->GetPDGEncoding();
-     G4int    absPDGcode=std::abs(PDGcode);
-
-     G4double ProjectileDiffStateMinMass=theParameters->GetProjMinDiffMass();
-     G4double ProjectileNonDiffStateMinMass=theParameters->GetProjMinNonDiffMass();
->>>>>>> 1.7
      G4double ProbProjectileDiffraction=theParameters->GetProbabilityOfProjDiff();
 /*
 G4cout<<ProjectileDiffStateMinMass<<" "<<ProjectileNonDiffStateMinMass<<" "<<ProbProjectileDiffraction<<G4endl;
 */
-// -------------------- Target paraExciteParticipantsmeters -------------------------
+// -------------------- Target parameters -------------------------
+     G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding(); // Uzhi 24.06.09
+//   G4int    absTargetPDGcode=std::abs(TargetPDGcode);
+
      G4LorentzVector Ptarget=target->Get4Momentum();
-<<<<<<< G4DiffractiveExcitation.cc
      G4double M0target = Ptarget.mag();
-
-//G4cout<<"TrMom "<<Ptarget<<" mass "<<M0target<<G4endl;
-=======
-     G4double M0target = Ptarget.mag();
-
-//G4cout<<"Mom "<<Ptarget<<" mass "<<M0target<<G4endl;
->>>>>>> 1.7
-
-<<<<<<< G4DiffractiveExcitation.cc
+     G4double TargetRapidity = Ptarget.rapidity();            // Uzhi 24.06.09
+/*
+G4cout<<"Targ PDG "<<TargetPDGcode<<" Activ? "<<target->GetActivation()<<G4endl;
+G4cout<<"Mom "<<Ptarget<<" mass "<<M0target<<G4endl;
+*/
      if(M0target < target->GetDefinition()->GetPDGMass())
      {
       PutOnMassShell=1;
       M0target=target->GetDefinition()->GetPDGMass();
      }
 
+//        (G4UniformRand() < 0.5))
+//        (G4UniformRand() < 0.5*std::exp(-0.5*(ProjectileRapidity - TargetRapidity))))
+//
+     if((ProjectilePDGcode != TargetPDGcode) &&
+        ((ProjectilePDGcode > 1000) && (TargetPDGcode > 1000)) &&  // Uzhi 6.07.09
+        (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity))))
+       {
+        projectile->SetDefinition(target->GetDefinition());
+        target->SetDefinition(ProjectileDefinition);                   // Uzhi 24.06.09
+       }
+//
      G4double M0target2 = M0target * M0target;             //Ptarget.mag2();
                                                            // for AA-inter.
      G4double TargetDiffStateMinMass=theParameters->GetTarMinDiffMass();    
-=======
-     if(M0target < target->GetDefinition()->GetPDGMass())
-     {
-      PutOnMassShell=1;
-      M0target=target->GetDefinition()->GetPDGMass();
-     }
-
-     G4double M0target2 = M0target * M0target;             //Ptarget.mag2();
-                                                           // for AA-inter.
-     G4double TargetDiffStateMinMass=theParameters->GetTarMinDiffMass();    
->>>>>>> 1.7
      G4double TargetNonDiffStateMinMass=theParameters->GetTarMinNonDiffMass();    
      G4double ProbTargetDiffraction=theParameters->GetProbabilityOfTarDiff();
 /*
 G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetDiffraction<<G4endl;
 */
      G4double AveragePt2=theParameters->GetAveragePt2();
-<<<<<<< G4DiffractiveExcitation.cc
-// ------------------------------------------------------------------
-=======
 
 // Kinematical properties of the interactions --------------
      G4LorentzVector Psum;      // 4-momentum in CMS
@@ -177,9 +143,160 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
 //G4cout<<" sqrt(s) "<<std::sqrt(S)<<G4endl;
 
 // ------------------------------------------------------------------
->>>>>>> 1.7
+     if((absProjectilePDGcode < 1000) &&       // Absorption  Uzhi 7.07.09
+        (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
+     {
+      G4int ProjQ1=  absProjectilePDGcode/ 100;
+      G4int ProjQ2= (absProjectilePDGcode %100)/10;
+	   
+      G4int anti= 1 -2 * ( std::max( ProjQ1, ProjQ2 ) % 2 );
+      if (ProjectilePDGcode < 0 ) anti *=-1;
+	    
+      ProjQ1 *= anti;
+      ProjQ2 *= -1 * anti;
 
-//ProbProjectileDiffraction=0.; //1.;
+//G4cout<<" Proj Qs "<<ProjQ1<<" "<<ProjQ2<<G4endl;
+	    
+      G4int TargQ1 = TargetPDGcode           / 1000;
+      G4int TargQ2 = (TargetPDGcode % 1000)  / 100;
+      G4int TargQ3 = (TargetPDGcode % 100)   / 10;	    
+
+//G4cout<<" Targ Qs "<<TargQ1<<" "<<TargQ2<<" "<<TargQ3<<G4endl;
+
+      G4int CombinedSystemQ1, CombinedSystemQ2, CombinedSystemQ3;
+
+      if(ProjQ1 < 0)        // Q1 of the projectile is anti-quark
+      {
+       CombinedSystemQ1 = ProjQ2; 
+       if(ProjQ1 + TargQ1 == 0)          // Pr Q1 annihilates with Tr Q1
+       {
+        CombinedSystemQ2 = TargQ2;
+        CombinedSystemQ3 = TargQ3;
+       } else 
+       {
+         if(ProjQ1 + TargQ2 == 0)        // Pr Q1 annihilates with Tr Q2
+         {
+          CombinedSystemQ2 = TargQ1;
+          CombinedSystemQ3 = TargQ3;
+         } else
+         {
+          if(ProjQ1 + TargQ3 == 0)       // Pr Q1 annihilates with Tr Q3
+          {
+           CombinedSystemQ2 = TargQ1;
+           CombinedSystemQ3 = TargQ2;
+          }
+         }
+       }
+      } else                // Q2 of the projectile is anti-quark
+      {
+       CombinedSystemQ1 = ProjQ1; 
+       if(ProjQ2 + TargQ1 == 0)          // Pr Q2 annihilates with Tr Q1
+       {
+        CombinedSystemQ2 = TargQ2;
+        CombinedSystemQ3 = TargQ3;
+       } else 
+       {
+         if(ProjQ2 + TargQ2 == 0)        // Pr Q2 annihilates with Tr Q2
+         {
+          CombinedSystemQ2 = TargQ1;
+          CombinedSystemQ3 = TargQ3;
+         } else
+         {
+          if(ProjQ2 + TargQ3 == 0)       // Pr Q2 annihilates with Tr Q3
+          {
+           CombinedSystemQ2 = TargQ1;
+           CombinedSystemQ3 = TargQ2;
+          }
+         }
+       }     
+      };
+// Odering of the quarks
+
+//G4cout<<"Comb Qs "<<CombinedSystemQ1<<" "<<CombinedSystemQ2<<" "<<CombinedSystemQ3<<G4endl;
+
+      G4int TmpQ;
+      if( CombinedSystemQ3 > CombinedSystemQ2 ) 
+      {
+       TmpQ = CombinedSystemQ2;
+       CombinedSystemQ2 = CombinedSystemQ3;
+       CombinedSystemQ3 = TmpQ;
+      } else
+      {
+       if( CombinedSystemQ3 > CombinedSystemQ1 )
+       {
+        TmpQ = CombinedSystemQ1;
+        CombinedSystemQ1 = CombinedSystemQ3;
+        CombinedSystemQ3 = TmpQ;
+       }
+      };
+
+      if( CombinedSystemQ2 > CombinedSystemQ1 ) 
+      {
+       TmpQ = CombinedSystemQ1;
+       CombinedSystemQ1 = CombinedSystemQ2;
+       CombinedSystemQ2 = TmpQ;
+      }; 
+//===========================
+
+//G4cout<<"Comb Qs "<<CombinedSystemQ1<<" "<<CombinedSystemQ2<<" "<<CombinedSystemQ3<<G4endl;
+
+      G4int CombinedCode = CombinedSystemQ1*1000 + 
+                           CombinedSystemQ2* 100 +
+                           CombinedSystemQ3*  10 + 2; 
+      if( (CombinedSystemQ1 == CombinedSystemQ2) && 
+          (CombinedSystemQ1 == CombinedSystemQ3) ) CombinedCode +=2; // For Delta isobar
+
+//G4cout<<" New code "<<CombinedCode<<G4endl;
+      projectile->SetDefinition(
+       G4ParticleTable::GetParticleTable()->FindParticle(CombinedCode)); 
+
+// Calculation of the creation time ---------------------
+
+      G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
+// It is assumed that nucleon z-coordinates are ordered on increasing -----------
+
+      G4double betta_z=projectile->Get4Momentum().pz()/projectile->Get4Momentum().e();
+
+      G4double ZcoordinateOfPreviousCollision=projectile->GetPosition().z();
+      if(projectile->GetSoftCollisionCount()==0) {
+        projectile->SetTimeOfCreation(0.);
+        target->SetTimeOfCreation(0.);
+        ZcoordinateOfPreviousCollision=ZcoordinateOfCurrentInteraction;
+      }
+           
+      G4ThreeVector thePosition(projectile->GetPosition().x(),
+                                projectile->GetPosition().y(),
+                                ZcoordinateOfCurrentInteraction);
+      projectile->SetPosition(thePosition);
+
+      G4double TimeOfPreviousCollision=projectile->GetTimeOfCreation();
+      G4double TimeOfCurrentCollision=TimeOfPreviousCollision+ 
+               (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
+
+      projectile->SetTimeOfCreation(TimeOfCurrentCollision);
+      target->SetTimeOfCreation(TimeOfCurrentCollision);
+// ---------------------------------------------
+
+      projectile->Set4Momentum(Psum);
+
+      theParameters->SetProjMinDiffMass(theParameters->GetTarMinDiffMass()/GeV);
+      theParameters->SetProjMinNonDiffMass(theParameters->GetTarMinNonDiffMass()/GeV);
+      theParameters->SetProbabilityOfProjDiff(theParameters->GetProbabilityOfTarDiff());      
+
+      projectile->SetActivation(false);
+//
+      target->SetActivation(false);
+
+      projectile->IncrementCollisionCount(1);
+      target->IncrementCollisionCount(1);
+
+
+
+//G4int Uzhi; G4cin>>Uzhi;
+      return true;
+     };        // End Absorption =============================
+
+//ProbProjectileDiffraction=1.;
 //ProbTargetDiffraction    =1.;
      G4double ProbOfDiffraction=ProbProjectileDiffraction +
                                 ProbTargetDiffraction;
@@ -205,121 +322,6 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
                                                TargetDiffStateMinMass;
      G4double TargetNonDiffStateMinMass2     = TargetNonDiffStateMinMass     *
                                                TargetNonDiffStateMinMass;
-<<<<<<< G4DiffractiveExcitation.cc
-//------------------------------------------------------------------
-// Kinematical properties of the interactions --------------
-     G4LorentzVector Psum;      // 4-momentum in CMS
-     Psum=Pprojectile+Ptarget;
-     G4double S=Psum.mag2(); 
-
-//G4cout<<" sqrt(s) "<<std::sqrt(S)<<G4endl;
-
-// Transform momenta to cms and then rotate parallel to z axis;
-
-//	   G4LorentzVector Psum;
-//	   Psum=Pprojectile+Ptarget;
-
-     G4LorentzRotation toCms(-1*Psum.boostVector());
-
-     G4LorentzVector Ptmp=toCms*Pprojectile;
-     if ( Ptmp.pz() <= 0. )
-        {
-	   // "String" moving backwards in  CMS, abort collision !!
-           //G4cout << " abort Collision!! " << G4endl;
-//G4cout<<"Transf Mom Ptmp.pz() <= 0. "<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-          return true;    // false; It can be if the projectile is very slow below Fermi-mom
-	 }
-
-     toCms.rotateZ(-1*Ptmp.phi());
-     toCms.rotateY(-1*Ptmp.theta());
-
-     G4LorentzRotation toLab(toCms.inverse());
-
-     Pprojectile.transform(toCms);
-     Ptarget.transform(toCms);
-
-     G4double PZcms2, PZcms;
-
-//   G4double S=Psum.mag2();
-     G4double SqrtS=std::sqrt(S);
-
-     PZcms2=(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
-             2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
-             /4./S;
-
-     if(PZcms2 < 0.)
-     {  // It can be in an interaction with off-shell nuclear nucleon
-      if(M0projectile > projectile->GetDefinition()->GetPDGMass()) 
-      {  // An attempt to de-excite the projectile
-       M0projectile = projectile->GetDefinition()->GetPDGMass();
-       M0projectile2=M0projectile*M0projectile;
-       PZcms2=(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
-               2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
-              /4./S;
-       if(PZcms2 < 0.){ return true;}   // Non succesful attempt
-      }
-      else
-      {
-       return true;                     // We can do only one - skip the interaction!
-      }
-     }
-
-     PZcms = std::sqrt(PZcms2);
-
-     if(PutOnMassShell)
-     {
-//G4cout<<"Put on mass shell"<<G4endl;
-      if(Pprojectile.z() > 0.)
-      {
-       Pprojectile.setPz( PZcms);
-       Ptarget.setPz(    -PZcms);
-      }
-      else
-      {
-       Pprojectile.setPz(-PZcms);
-       Ptarget.setPz(     PZcms);
-      };
-
-      Pprojectile.setE(std::sqrt(M0projectile2                  +
-                                 Pprojectile.x()*Pprojectile.x()+
-                                 Pprojectile.y()*Pprojectile.y()+
-                                 PZcms2));
-      Ptarget.setE(std::sqrt(M0target2              +
-                             Ptarget.x()*Ptarget.x()+
-                             Ptarget.y()*Ptarget.y()+
-                             PZcms2));
-     }
-
-     if(absPDGcode > 1000 && SqrtS < 2200*MeV)
-     {
-//G4cout<<"absPDGcode > 1000 && SqrtS < 2200*MeV"<<G4endl;
-      Pprojectile.transform(toLab);
-      Ptarget.transform(toLab);
-return true;} //false;}                         // The model cannot work for
-                                             // p+p-interactions
-                                             // at Plab < 1.3 GeV/c.
-
-     if(( absPDGcode == 211 || PDGcode ==  111) && SqrtS < 1600*MeV)
-     {return true; } //false;}                         // The model cannot work for
-                                             // Pi+p-interactions
-                                             // at Plab < 1. GeV/c.
-
-     if(( absPDGcode == 321 || PDGcode == -311) && SqrtS < 1600*MeV)
-     {return false;}                         // The model cannot work for
-                                             // K+p-interactions
-                                             // at Plab < ??? GeV/c.  ???
-
-
-     G4double maxPtSquare; // = PZcms2;
-/*
-G4cout << "Pprojectile aft boost : " << Pprojectile <<" "<<Pprojectile.mag()<< G4endl;
-G4cout << "Ptarget aft boost : " << Ptarget <<" "<<Ptarget.mag()<< G4endl;
-G4cout << "cms aft boost : " << (Pprojectile+ Ptarget) << G4endl;
-G4cout << " Projectile Xplus / Xminus : " <<
-            Pprojectile.plus() << " / " << Pprojectile.minus() << G4endl;
-G4cout << " Target Xplus / Xminus : " <<           Ptarget.plus() << " / " << Ptarget.minus() << G4endl;
-=======
 
 // Transform momenta to cms and then rotate parallel to z axis;
 
@@ -356,18 +358,18 @@ G4cout << " Target Xplus / Xminus : " <<           Ptarget.plus() << " / " << P
 //   G4double S=Psum.mag2();
      G4double SqrtS=std::sqrt(S);
 
-     if(absPDGcode > 1000 && SqrtS < 2200*MeV)
-     {return false;}                         // The model cannot work for
+     if(absProjectilePDGcode > 1000 && SqrtS < 2200*MeV)
+     {return true;} // Uzhi 9.07.09 false;}                         // The model cannot work for
                                              // p+p-interactions
                                              // at Plab < 1.3 GeV/c.
 
-     if(( absPDGcode == 211 || PDGcode ==  111) && SqrtS < 1600*MeV)
-     {return false;}                         // The model cannot work for
+     if(( absProjectilePDGcode == 211 || ProjectilePDGcode ==  111) && SqrtS < 1600*MeV)
+     {return true;} // Uzhi 9.07.09 false;}                         // The model cannot work for
                                              // Pi+p-interactions
                                              // at Plab < 1. GeV/c.
 
-     if(( absPDGcode == 321 || PDGcode == -311) && SqrtS < 1600*MeV)
-     {return false;}                         // The model cannot work for
+     if(( absProjectilePDGcode == 321 || ProjectilePDGcode == -311) && SqrtS < 1600*MeV)
+     {return true;} // Uzhi 9.07.09 false;}                         // The model cannot work for
                                              // K+p-interactions
                                              // at Plab < ??? GeV/c.  ???
 
@@ -411,80 +413,13 @@ G4cout << "cms aft boost : " << (Pprojectile+ Ptarget) << G4endl;
 G4cout << " Projectile Xplus / Xminus : " <<
             Pprojectile.plus() << " / " << Pprojectile.minus() << G4endl;
 G4cout << " Target Xplus / Xminus : " <<           Ptarget.plus() << " / " << Ptarget.minus() << G4endl;
->>>>>>> 1.7
 G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
-<<<<<<< G4DiffractiveExcitation.cc
-*/
-     G4LorentzVector Qmomentum;
-     G4double Qminus, Qplus;
-
-     G4double Pt2=0.;
-     G4double ProjMassT2, ProjMassT;
-     G4double TargMassT2, TargMassT;
-//     G4double PZcms2, PZcms;
-     G4double PMinusMin, PMinusMax;
-//     G4double PPlusMin , PPlusMax;
-     G4double TPlusMin , TPlusMax;
-     G4double PMinusNew, PPlusNew, TPlusNew, TMinusNew;
-
-     G4int whilecount=0;
-=======
 */
      G4LorentzVector Qmomentum;
      G4double Qminus, Qplus;
 
      G4int whilecount=0;
->>>>>>> 1.7
 //  Choose a process
-<<<<<<< G4DiffractiveExcitation.cc
-
-     if(G4UniformRand() < ProbOfDiffraction)
-       {
-        if(G4UniformRand() < ProbProjectileDiffraction)
-        { //-------- projectile diffraction ---------------
-//G4cout<<"   Projectile diffraction"<<G4endl;
-//Uzhi_projectilediffraction++;
-// --------------- Check that the interaction is possible -----------
-         if( ProjectileDiffStateMinMass + M0target > SqrtS ||
-             M0projectile > projectile->GetDefinition()->GetPDGMass())    // De-excite projectile
-         {
-//G4cout<<"Cor Pr Dif Ss Mp Mt  "<<SqrtS<<" "<<M0projectile<<" "<<M0target<<G4endl;
-          ProjectileDiffStateMinMass=projectile->GetDefinition()->GetPDGMass();
-          ProjectileDiffStateMinMass2=ProjectileDiffStateMinMass*
-                                      ProjectileDiffStateMinMass;
-         }
-
-         ProjMassT2=ProjectileDiffStateMinMass2;
-         ProjMassT =ProjectileDiffStateMinMass;
-
-         TargMassT2=M0target2;
-         TargMassT =M0target;
-
-         PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                 2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                 /4./S;
-//G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-
-if(PZcms2 < 0 ) 
-{
-/*
-G4cout<<"Pr Dif whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
-*/
-return false;
-};
-         do {
-//             Generate pt
-//             if (whilecount++ >= 500 && (whilecount%100)==0)
-//	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
-//	   	 << ", loop count/ maxPtSquare : "
-//           	 << whilecount << " / " << maxPtSquare << G4endl;
-             if (whilecount > 1000 )
-             {
-              Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              return false;    //  Ignore this interaction
-             };
-=======
 
      if(G4UniformRand() < ProbOfDiffraction)
        {
@@ -514,24 +449,16 @@ return false;
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
 //G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
->>>>>>> 1.7
 
+if(PZcms2 < 0 ) 
+{
+/*
+G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
+G4int Uzhi; G4cin>>Uzhi;
+*/
+return false;
+};
              maxPtSquare=PZcms2;
-<<<<<<< G4DiffractiveExcitation.cc
-
-             Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
-             Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-
-             ProjMassT2=ProjectileDiffStateMinMass2+Pt2;
-             ProjMassT =std::sqrt(ProjMassT2);
-
-             TargMassT2=M0target2+Pt2;
-             TargMassT =std::sqrt(TargMassT2);
-
-             G4double PZcms2pt=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                                2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                                /4./S;
-=======
 
              Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
              Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
@@ -545,46 +472,15 @@ return false;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
->>>>>>> 1.7
 //G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 
-<<<<<<< G4DiffractiveExcitation.cc
-//             if(PZcms2 < 0 ) {PZcms2=0;};
-             if(PZcms2pt < 0 ) continue;
-             G4double PZcmspt =std::sqrt(PZcms2pt);
-
-             PMinusMin=std::sqrt(ProjMassT2+PZcms2pt)-PZcmspt;
-             PMinusMax=SqrtS-TargMassT;
-=======
 //             if(PZcms2 < 0 ) {PZcms2=0;};
              if(PZcms2 < 0 ) continue;
              PZcms =std::sqrt(PZcms2);
 
              PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
              PMinusMax=SqrtS-TargMassT;
->>>>>>> 1.7
 //G4cout<<" SqrtS P+mim max "<<SqrtS<<" "<<PMinusMin<<" "<<PMinusMax<<G4endl;
-<<<<<<< G4DiffractiveExcitation.cc
-
-             PMinusNew=ChooseP(PMinusMin, PMinusMax);
-// PMinusNew=1./sqrt(1./PMinusMin-G4UniformRand()*(1./PMinusMin-1./PMinusMax));
-
-             TMinusNew=SqrtS-PMinusNew;
-             Qminus=Ptarget.minus()-TMinusNew;
-             TPlusNew=TargMassT2/TMinusNew;
-             Qplus=Ptarget.plus()-TPlusNew;
-
-             Qmomentum.setPz( (Qplus-Qminus)/2 );
-             Qmomentum.setE(  (Qplus+Qminus)/2 );
-          } while (
-((Pprojectile+Qmomentum).mag2() <  ProjectileDiffStateMinMass2) ||  //No without excitation
-((Ptarget    -Qmomentum).mag2() <  M0target2                  ));
-        }
-        else
-        { // -------------- Target diffraction ----------------
-//G4cout<<"   Target difraction"<<G4endl;
-//Uzhi_targetdiffraction++;
-=======
 
              PMinusNew=ChooseP(PMinusMin, PMinusMax);
 // PMinusNew=1./sqrt(1./PMinusMin-G4UniformRand()*(1./PMinusMin-1./PMinusMax));
@@ -615,30 +511,7 @@ return false;
               Qmomentum=G4LorentzVector(0.,0.,0.,0.);
               return false;    //  Ignore this interaction
              };
->>>>>>> 1.7
 // --------------- Check that the interaction is possible -----------
-<<<<<<< G4DiffractiveExcitation.cc
-//G4cout<<" Pr M Tr M "<<M0projectile<<" "<<M0target<<G4endl;
-
-// Uzhi 9.12.08 start
-         if( M0projectile + TargetDiffStateMinMass > SqrtS)    // De-excite projectile
-         {
-//G4cout<<"Cor Tr Dif Ss Mp Mt  "<<SqrtS<<" "<<M0projectile<<" "<<M0target<<G4endl;
-          if(M0projectile > projectile->GetDefinition()->GetPDGMass())
-          {
-           M0projectile=projectile->GetDefinition()->GetPDGMass();
-           M0projectile2 = M0projectile * M0projectile;
-// -----------------
-           ProjMassT2=M0projectile2;
-           ProjMassT =M0projectile;
-
-           TargMassT2=TargetDiffStateMinMass2;
-           TargMassT =TargetDiffStateMinMass;
-
-           PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                   2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                   /4./S;
-=======
              ProjMassT2=M0projectile2;
              ProjMassT =M0projectile;
 
@@ -648,95 +521,17 @@ return false;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
->>>>>>> 1.7
 //G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 
 if(PZcms2 < 0 ) 
 {
 /*
-G4cout<<"Tr dif whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
+G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 G4int Uzhi; G4cin>>Uzhi;
 */
 return false;
 };
-           PZcms=std::sqrt(PZcms2);
-           if(Pprojectile.z() > 0.)
-           {
-            Pprojectile.setPz( PZcms);
-            Ptarget.setPz(    -PZcms);
-           }
-           else
-           {
-            Pprojectile.setPz(-PZcms);
-            Ptarget.setPz(     PZcms);
-           };
-
-           Pprojectile.setE(std::sqrt(M0projectile2          +
-                              Pprojectile.x()*Pprojectile.x()+
-                              Pprojectile.y()*Pprojectile.y()+
-                              PZcms2));
-           Ptarget.setE(std::sqrt(M0target2          +
-                              Ptarget.x()*Ptarget.x()+
-                              Ptarget.y()*Ptarget.y()+
-                              PZcms2));
-// Uzhi --------------
-// ----------------
-          } 
-          else
-          {
-           TargetDiffStateMinMass=target->GetDefinition()->GetPDGMass();
-           TargetDiffStateMinMass2=TargetDiffStateMinMass*TargetDiffStateMinMass;
-          }
-         }
-// Uzhi 9.12.08 end
-
-         ProjMassT2=M0projectile2;
-         ProjMassT =M0projectile;
-
-         TargMassT2=TargetDiffStateMinMass2;
-         TargMassT =TargetDiffStateMinMass;
-
-         PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                 2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                 /4./S;
-//G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-
-if(PZcms2 < 0 ) 
-{
-/*
-G4cout<<"Tr dif whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
-*/
-return false;
-};
-
-         do {
-//             Generate pt//             if (whilecount++ >= 500 && (whilecount%100)==0)
-//	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
-//	   	 << ", loop count/ maxPtSquare : "
-//           	 << whilecount << " / " << maxPtSquare << G4endl;
-             if (whilecount > 1000 )
-             {
-              Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              return false;    //  Ignore this interaction
-             };
-
              maxPtSquare=PZcms2;
-<<<<<<< G4DiffractiveExcitation.cc
-
-             Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
-             Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-
-             ProjMassT2=M0projectile2+Pt2;
-             ProjMassT =std::sqrt(ProjMassT2);
-
-             TargMassT2=TargetDiffStateMinMass2+Pt2;
-             TargMassT =std::sqrt(TargMassT2);
-
-             G4double PZcms2pt=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                                2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                                /4./S;
-=======
 
              Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
              Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
@@ -750,7 +545,6 @@ return false;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
->>>>>>> 1.7
 /*
 if(PZcms2 < 0 ) 
 {
@@ -759,19 +553,11 @@ G4int Uzhi; G4cin>>Uzhi;
 return false;
 };
 */
-<<<<<<< G4DiffractiveExcitation.cc
-             if(PZcms2pt < 0 ) continue;
-             G4double PZcmspt =std::sqrt(PZcms2pt);
-
-             TPlusMin=std::sqrt(TargMassT2+PZcms2pt)-PZcmspt;
-             TPlusMax=SqrtS-ProjMassT;
-=======
              if(PZcms2 < 0 ) continue;
              PZcms =std::sqrt(PZcms2);
 
              TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
              TPlusMax=SqrtS-ProjMassT;
->>>>>>> 1.7
 
 //G4cout<<" Tmin max "<<TPlusMin<<" "<<TPlusMax<<G4endl;
 
@@ -796,90 +582,6 @@ return false;
         else  //----------- Non-diffraction process ------------
         {
 //G4cout<<"   Non-difraction"<<G4endl;
-<<<<<<< G4DiffractiveExcitation.cc
-
-// --------------- Check that the interaction is possible -----------
-//
-         if( ProjectileNonDiffStateMinMass + TargetNonDiffStateMinMass > SqrtS)
-         {
-          M0projectile=projectile->GetDefinition()->GetPDGMass();
-          M0projectile2 = M0projectile * M0projectile;
-          M0target=target->GetDefinition()->GetPDGMass();
-          M0target2= M0target * M0target;
-
-          ProjMassT2=M0projectile2;
-          ProjMassT =M0projectile;
-
-          TargMassT2=M0target2;
-          TargMassT =M0target;
-
-          PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                  2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                  /4./S;
-//G4cout<<" Cor NDMpt Mtt Pz2 "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-
-if(PZcms2 < 0 ) 
-{
-/*
-G4cout<<"Tr ND whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
-*/
-return false;
-};
-
-          PZcms=std::sqrt(PZcms2);
-          if(Pprojectile.z() > 0.)
-          {
-           Pprojectile.setPz( PZcms);
-           Ptarget.setPz(    -PZcms);
-          }
-          else
-          {
-           Pprojectile.setPz(-PZcms);
-           Ptarget.setPz(     PZcms);
-          };
-
-          Pprojectile.setE(std::sqrt(M0projectile2          +
-                             Pprojectile.x()*Pprojectile.x()+
-                             Pprojectile.y()*Pprojectile.y()+
-                             PZcms2));
-          Ptarget.setE(std::sqrt(M0target2          +
-                             Ptarget.x()*Ptarget.x()+
-                             Ptarget.y()*Ptarget.y()+
-                             PZcms2));
-         }
-//
-         ProjMassT2=ProjectileNonDiffStateMinMass2;
-         ProjMassT =ProjectileNonDiffStateMinMass;
-
-         TargMassT2=TargetNonDiffStateMinMass2;
-         TargMassT =TargetNonDiffStateMinMass;
-
-         PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                 2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                 /4./S;
-//G4cout<<" Mpt Mtt Pz2 "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-
-if(PZcms2 < 0 ) 
-{
-/*
-G4cout<<"ND whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
-*/
-return false;
-};
-         do {
-//             Generate pt
-//             if (whilecount++ >= 500 && (whilecount%100)==0)
-//	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
-//	   	 << ", loop count/ maxPtSquare : "
-//           	 << whilecount << " / " << maxPtSquare << G4endl;
-             if (whilecount > 1000 )
-             {
-              Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              return false;    //  Ignore this interaction
-             };
-=======
          do {
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
@@ -902,23 +604,18 @@ return false;
                     2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                    /4./S;
 //G4cout<<" Pt2 Mpt Mtt Pz2 "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
->>>>>>> 1.7
 
+if(PZcms2 < 0 ) 
+{
+/*
+G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
+G4int Uzhi; G4cin>>Uzhi;
+*/
+return false;
+};
              maxPtSquare=PZcms2;
              Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
              Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-<<<<<<< G4DiffractiveExcitation.cc
-
-             ProjMassT2=ProjectileNonDiffStateMinMass2+Pt2;
-             ProjMassT =std::sqrt(ProjMassT2);
-
-             TargMassT2=TargetNonDiffStateMinMass2+Pt2;
-             TargMassT =std::sqrt(TargMassT2);
-
-             G4double PZcms2pt=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
-                                2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
-                                /4./S;
-=======
 
              ProjMassT2=ProjectileNonDiffStateMinMass2+Pt2;
              ProjMassT =std::sqrt(ProjMassT2);
@@ -929,24 +626,11 @@ return false;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                     2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                    /4./S;
->>>>>>> 1.7
 /*
 G4cout<<"ProjectileNonDiffStateMinMass2 "<<ProjectileNonDiffStateMinMass2<<G4endl;
 G4cout<<"TargetNonDiffStateMinMass2     "<<TargetNonDiffStateMinMass2<<G4endl;
 G4cout<<"Mt "<<ProjMassT<<" "<<TargMassT<<" "<<Pt2<<" "<<PZcms2<<G4endl<<G4endl;
 */
-<<<<<<< G4DiffractiveExcitation.cc
-//             if(PZcms2 < 0 ) {PZcms2=0;};
-             if(PZcms2pt < 0 ) continue;
-             G4double PZcmspt =std::sqrt(PZcms2pt);
-
-             PMinusMin=std::sqrt(ProjMassT2+PZcms2pt)-PZcmspt;
-             PMinusMax=SqrtS-TargMassT;
-
-             PMinusNew=ChooseP(PMinusMin, PMinusMax);
-// PMinusNew=1./sqrt(1./PMinusMin-G4UniformRand()*(1./PMinusMin-1./PMinusMax));
-
-=======
 //             if(PZcms2 < 0 ) {PZcms2=0;};
              if(PZcms2 < 0 ) continue;
              PZcms =std::sqrt(PZcms2);
@@ -957,22 +641,14 @@ G4cout<<"Mt "<<ProjMassT<<" "<<TargMassT<<" "<<Pt2<<" "<<PZcms2<<G4endl<<G4endl;
              PMinusNew=ChooseP(PMinusMin, PMinusMax);
 // PMinusNew=1./sqrt(1./PMinusMin-G4UniformRand()*(1./PMinusMin-1./PMinusMax));
 
->>>>>>> 1.7
 //G4cout<<"Proj "<<PMinusMin<<" "<<PMinusMax<<" "<<PMinusNew<<G4endl;
 
 //PMinusNew=PMinusMax; //+++++++++++++++++++++++++++++++++++ Vova
 
-<<<<<<< G4DiffractiveExcitation.cc
-             Qminus=PMinusNew-Pprojectile.minus();
-
-             TPlusMin=std::sqrt(TargMassT2+PZcms2pt)-PZcmspt;
-//             TPlusMax=SqrtS-PMinusNew;                      // Vova
-=======
              Qminus=PMinusNew-Pprojectile.minus();
 
              TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
 //             TPlusMax=SqrtS-PMinusNew;                      // Vova
->>>>>>> 1.7
              TPlusMax=SqrtS-ProjMassT;                        // Vova
 
              TPlusNew=ChooseP(TPlusMin, TPlusMax);
@@ -1009,17 +685,10 @@ G4cout << "Pprojectile with Q : " << Pprojectile << G4endl;
 G4cout << "Ptarget with Q : " << Ptarget << G4endl;
 G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
 G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
-<<<<<<< G4DiffractiveExcitation.cc
-*/
-//G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
-//G4cout << "Target back: " << toLab * Ptarget << G4endl;
-//
-=======
 //
 //G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
 //G4cout << "Target back: " << toLab * Ptarget << G4endl;
 */
->>>>>>> 1.7
 //-------------- Flip if projectale moves in backward direction ------------
 //G4bool Flip=Pprojectile.pz()< 0.;
 
@@ -1046,7 +715,7 @@ else     {
            target->Set4Momentum(Pprojectile);
           }
 */
-//  
+//
 /*
 if(G4UniformRand() < 1.) {
            G4ParticleDefinition * t_Definition=projectile->GetDefinition();
