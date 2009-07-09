@@ -1,4 +1,4 @@
-$Id: History,v 1.455 2009-06-19 17:23:05 vnivanch Exp $
+$Id: History,v 1.456 2009-07-09 16:34:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9 July 09:  V.Ivant (emstand-V09-02-15)
+- G4GoudsmitSaundersonMscModel - (O.Kadri) removed extra correcting factor
+                                 for sampling in high-Z media
+- G4hMultipleScattering - removed obsolete methods
 
 19 June 09:  V.Ivant (emstand-V09-02-14)
 - G4WaterStopping - (A.Ivantchenko) added Fe ion data

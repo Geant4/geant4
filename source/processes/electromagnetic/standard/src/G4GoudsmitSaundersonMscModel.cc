@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.12 2009-06-26 18:33:20 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.13 2009-07-09 16:34:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,11 +156,9 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   G4double ttau     = ee/electron_mass_c2;
   G4double ttau2    = ttau*ttau;
   G4double epsilonpp= eloss/ee;
-  G4double temp2  = 0.166666*(4+ttau*(6+ttau*(7+ttau*(4+ttau))))*(epsilonpp/(ttau+1)/(ttau+2))*(epsilonpp/(ttau+1)/(ttau+2));
   G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
 
   kineticEnergy *= (1 - cst1);
-  tPathLength *= (1 - temp2);
   ///////////////////////////////////////////
   // additivity rule for mixture and compound xsection calculation
   const G4Material* mat = currentCouple->GetMaterial();
@@ -272,13 +270,17 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	}
       
       G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
+      //      if(r!=0.){x_coord *=tPathLength/r;y_coord *=tPathLength/r;z_coord *=tPathLength/r;
+      // r=tPathLength;
+      // }
 
       // if(tPathLength <= zPathLength) return;
 
       if(r > tlimitminfix) {
 
-	G4ThreeVector latDirection = G4ThreeVector(x_coord/r,y_coord/r,z_coord/r);
-	latDirection.rotateUz(oldDirection);
+        G4ThreeVector latDirection(x_coord/r,y_coord/r,z_coord/r);
+        latDirection.rotateUz(oldDirection);
+
 	ComputeDisplacement(fParticleChange, latDirection, r, safety);
       }     
     }
