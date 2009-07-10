@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.38 2009-07-03 14:49:42 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.39 2009-07-10 16:42:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -141,8 +141,10 @@ public:
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   G4bool StartLoop();                               // returns size of theNucleons (cN=0)
   G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum);// Reduce zero-sum of vectors
-  void DoLorentzBoost(const G4LorentzVector& theBoost); // Boost nucleons by 4-vector
-  void DoLorentzBoost(const G4ThreeVector& theBeta);// Boost nucleons by v/c
+  void DoLorentzBoost(const G4LorentzVector& theBoost) // Boost nucleons by 4-vector
+            {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBoost);}
+  void DoLorentzBoost(const G4ThreeVector& theBeta)// Boost nucleons by v/c
+             {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBeta);}
   void DoLorentzContraction(const G4LorentzVector&B){DoLorentzContraction(B.vect()/B.e());}
   void DoLorentzContraction(const G4ThreeVector& theBeta); // Lorentz Contraction by v/c
   void DoTranslation(const G4ThreeVector& theShift); // Used only in G4QFragmentation

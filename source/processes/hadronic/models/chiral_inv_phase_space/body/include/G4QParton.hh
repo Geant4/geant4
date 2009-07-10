@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.5 2009-07-02 07:17:09 mkossov Exp $
+// $Id: G4QParton.hh,v 1.6 2009-07-10 16:42:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -47,15 +47,14 @@
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include <iostream>
-#include "G4ParticleTable.hh"
 #include "Randomize.hh"
 
 class G4QParton
 {
  public:
   // Constructors
-  G4QParton();                                             // Default fullRandom constructor
-  G4QParton(G4int PDGencoding);                            // Collor/Spin are still random
+  G4QParton();                                            // Default fullRandom constructor
+  G4QParton(G4int PDGencoding);                           // Collor/Spin are still random
   G4QParton(const G4QParton &right);
   G4QParton(const G4QParton* right);
 
@@ -70,34 +69,30 @@ class G4QParton
   // Modifiers
   void DefineEPz(G4LorentzVector hadr4Mom){theMomentum+=hadr4Mom*theX;} // CHIPS solution
   void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);
+  void SetPDGCode(G4int aPDG);
   void SetColour(G4int aColour)                       {theColour = aColour;}
   void SetX(G4double anX)                             {theX = anX;}
   void Set4Momentum(const G4LorentzVector& aMomentum) {theMomentum=aMomentum;}
   void SetPosition(const G4ThreeVector& aPosition)    {thePosition=aPosition;}
-  void SetIsoSpinZ(G4double anIsoSpinZ)               {theIsoSpinZ = anIsoSpinZ;}
   void SetSpinZ(G4double aSpinZ)                      {theSpinZ = aSpinZ;}
 
   // Selectors
   G4int GetPDGCode() const                            {return PDGencoding;}
-  G4ParticleDefinition* GetDefinition()               {return theDefinition;}    
-  const G4ThreeVector& GetPosition()const             {return thePosition;}
+  const G4ThreeVector& GetPosition() const            {return thePosition;}
   const G4LorentzVector& Get4Momentum() const         {return theMomentum;} 
   G4double GetX()                                     {return theX;}    
   G4int GetColour()                                   {return theColour;}    
   G4double GetSpinZ()                                 {return theSpinZ;}
-  G4double GetIsoSpinZ()                              {return theIsoSpinZ;}
-  G4double GetMass()                                  {return theDefinition->GetPDGMass();}
-  G4String GetParticleSubType()               {return theDefinition->GetParticleSubType();}
+  const G4int GetType() const                         {return theType;}
  private: 
   // Body 
   G4int                 PDGencoding;
-  G4ParticleDefinition* theDefinition;
-  G4LorentzVector       theMomentum;
-  G4ThreeVector         thePosition;
+  G4int                 theType; // 0 = gluon, 1 = quark-antiquark, 2 = diquark/antidiquark
   G4int                 theColour;
-  G4double              theIsoSpinZ;
   G4double              theSpinZ;
-  G4double              theX;   
+  G4double              theX;
+  G4ThreeVector         thePosition;
+  G4LorentzVector       theMomentum;
 };
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.101 2009-07-02 07:17:09 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.102 2009-07-10 16:42:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3380,16 +3380,16 @@ void G4QNucleus::ChooseFermiMomenta()
   {
     density=GetDensity(theNucleons[i]->GetPosition());// density around nucleon i
     G4double ferm = GetFermiMomentum(density);        // module of momentum for nucleon i
-    G4ThreeVector mom(0.,0.,0.);                      // proto 3-vector for nucleon momentum
+    G4ThreeVector mom(0.,0.,0.);                      // proto 3vector for nucleon momentum
     G4double rn3=pow(G4UniformRand(),third);          // Spherical randomization
-    G4ThreeVector dir(0.,0.,0.);                      // proto 3-vector for the momDirection
+    G4ThreeVector dir(0.,0.,0.);                      // proto 3vector for the momDirection
     if( i == am1) dir=-sumMom.unit();                 // try to compensate the mom noncons.
     else          dir=G4RandomDirection();            // free randomization for i < A-1
     if(theNucleons[i]->GetPDGCode() == 2212)          // the nucleon is a proton
     {
       G4double eMax = sqrt(ferm*ferm+mProt2)-CoulombBarrier();
       if(eMax>mProt) mom=sqrt(eMax*eMax - mProt2)*rn3*dir; // 3D proton momentum
-      else G4cerr<<"G4QNucleus::ChooseFermMom: fail to get protonMomentum -> mom=0"<<G4endl;
+      else G4cerr<<"G4QNucleus::ChooseFermMom:Fail to get protonMomentum -> mom=0"<<G4endl;
     }
     else mom=ferm*rn3*dir;                            // 3-vector for the neutron momentum
     momentum[i]= mom;
@@ -3401,8 +3401,8 @@ void G4QNucleus::ChooseFermiMomenta()
   if(theA > 2) ReduceSum(momentum, sumMom);           // Reduse momentum nonconservation
   //G4double bindEn=BindingEnergy()/theA;
   G4int thisPDG=GetPDG();
-  G4double rMp=G4QPDGCode(thisPDG-1000).GetMass();
-  G4double rMn=G4QPDGCode(thisPDG-1).GetMass();
+  G4double rMp=G4QPDGCode(thisPDG-1000).GetMass();    // Residual for the proton
+  G4double rMn=G4QPDGCode(thisPDG-1).GetMass();       // Residual for the neutron
   G4double rMp2=rMp*rMp;
   G4double rMn2=rMn*rMn;
   G4double rM=rMn;
@@ -3417,8 +3417,8 @@ void G4QNucleus::ChooseFermiMomenta()
     }
     else
     {
-      rM=rMp;
-      rM2=rMp2;
+      rM=rMn;
+      rM2=rMn2;
     }
     G4ThreeVector curMom = momentum[i];
     G4double energy = thisM-std::sqrt(rM2+curMom.mag2()); // @@ update after splitting
@@ -3523,20 +3523,6 @@ G4double G4QNucleus::GetOuterRadius()
   }
   return sqrt(maxradius2)+nucleonDistance;
 } // End of GetOuterRadius
-
-//
-void G4QNucleus::DoLorentzBoost(const G4LorentzVector& theBoost)
-{
-  G4int theA=theNucleons.size();
-  if(theA) for(G4int i=0; i<theA; i++) theNucleons[i]->Boost(theBoost);
-} // End of DoLorentzBoost(G4LorentzVector)
-
-//
-void G4QNucleus::DoLorentzBoost(const G4ThreeVector& theBoost)
-{
-  G4int theA=theNucleons.size();
-  if(theA) for(G4int i=0; i<theA; i++) theNucleons[i]->Boost(theBoost);
-} // End of DoLorentzBoost(G4ThreeVector)
 
 //
 void G4QNucleus::DoLorentzContraction(const G4ThreeVector& theBeta)

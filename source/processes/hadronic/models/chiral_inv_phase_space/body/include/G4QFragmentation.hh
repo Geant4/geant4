@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.7 2009-07-06 10:14:38 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.8 2009-07-10 16:42:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -45,10 +45,11 @@
 #define G4QFragmentation_h 1
 
 #include "globals.hh"
-#include "G4QNucleus.hh"
+#include "G4LorentzVector.hh"
 #include "Randomize.hh"
+#include "G4QNucleus.hh"
+#include "G4Quasmon.hh"
 #include "G4QHadronVector.hh"
-#include "G4ShortLivedConstructor.hh"
 #include "G4QInteractionVector.hh"
 #include "G4QPomeron.hh"
 #include "G4QPartonPairVector.hh" 
@@ -79,6 +80,7 @@ class G4QFragmentation
  protected:
   G4bool IsSingleDiffractive()
                   {G4bool result=false; if(G4UniformRand()<1.) result=true; return result;}
+  G4int SumPartonPDG(G4int PDG1, G4int PFG2) const;
   G4double ChooseX(G4double Xmin, G4double Xmax) const;
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
 

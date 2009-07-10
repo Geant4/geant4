@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.6 2009-07-06 10:14:38 mkossov Exp $
+// $Id: G4QString.hh,v 1.7 2009-07-10 16:42:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -59,7 +59,6 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 #include "G4QHadronVector.hh"
-#include "G4QHadronBuilder.hh"
 #include "G4QPartonPair.hh"
 #include "G4QPartonVector.hh"
 #include <algorithm>
@@ -96,8 +95,8 @@ class G4QString
   //G4QParton* GetAntiColorParton() const;
   //G4QParton* GetStableParton() const{ return theStableParton;} // stable at the moment
   G4int GetDecayDirection() const;
-  G4bool DecayIsQuark() const {return theDecayParton->GetParticleSubType()=="quark";} // @@
-  G4bool StableIsQuark() const {return theStableParton->GetParticleSubType()=="quark";}
+  G4bool DecayIsQuark() const {return theDecayParton->GetType()==1;}
+  G4bool StableIsQuark() const {return theStableParton->GetType()==1;}
   //G4ThreeVector StablePt(); // Get Pt of the stable quark
   G4ThreeVector DecayPt();  // Get Pt of the decaying quark @@ Called once
   //G4double LightConePlus(){return Pplus;}
@@ -113,14 +112,18 @@ class G4QString
   {
     G4LorentzVector mom(Ptleft+Ptright, 0.5*(Pplus+Pminus));
     mom.setPz(0.5*(Pplus-Pminus));
-    return FragmentationMass(&G4QHadronBuilder::BuildHighSpin) + MassCut > mom.mag();
+    return FragmentationMass(1) + MassCut > mom.mag();
   }
   G4bool IsFragmentable() {return FragmentationMass() + MassCut < Mass();} // @@ Mass() ?
   G4ThreeVector SampleQuarkPt(); // @@ Called once
+  G4QHadron* CreateHadron(G4QParton* black, G4QParton* white);
+  G4QHadron* CreateLowSpinHadron(G4QParton* black, G4QParton* white);
+  G4QHadron* CreateHighSpinHadron(G4QParton* black, G4QParton* white);
 
   // Modifiers
-  void SetPosition(const G4ThreeVector& aPosition) {thePosition= aPosition;}
-  void SetDirection(G4int dir)                     {theDirection=dir;}
+  void SetPosition(const G4ThreeVector& aPosition){thePosition= aPosition;}
+  void SetDirection(G4int dir)                    {if(dir==1 || dir==-1) theDirection=dir;}
+  void KillString()                               {theDirection=0;} // @@ Can be absolete
   void LorentzRotate(const G4LorentzRotation& rotation);
   //void InsertParton(G4QParton* aParton, const G4QParton* addafter = NULL);
   void Boost(G4ThreeVector& Velocity);
@@ -129,7 +132,7 @@ class G4QString
   void ExciteString(G4QParton* Col,G4QParton* AntiCol, G4int Dir);
   G4QHadronVector* FragmentString(G4bool QL); // Fragment String using QGSM=true/LUND=false
   G4QHadronVector* LightFragmentationTest();
-  G4double FragmentationMass(G4QHcreate build=0, G4QHadronPair* pdefs=0);
+  G4double FragmentationMass(G4int HighSpin = 0, G4QHadronPair* pdefs = 0);
   void SetLeftPartonStable();
   void SetRightPartonStable();
   G4QHadron* Splitup(G4bool QL);
@@ -141,11 +144,14 @@ class G4QString
   G4int SampleQuarkFlavor() {return (1+G4int(G4UniformRand()/StrangeSuppress));} // ? M.K.
 
   // Static functions
-  static void SetParameters(G4double mCut, G4double clustM, G4double sigQT, G4double DQSup,
-   G4double DQBU, G4double smPar, G4double SSup, G4double SigPt, G4int SLmax, G4int CLmax);
+  static void SetParameters(G4double mCut, G4double sigQT, G4double DQSup, G4double DQBU,
+                            G4double smPar, G4double SSup, G4double SigPt, G4int SLmax);
 
  private:
+  enum Spin {SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4};
   // Private functions
+  G4QHadron* CreateMeson(G4QParton* black, G4QParton* white, Spin spin);
+  G4QHadron* CreateBaryon(G4QParton* black,G4QParton* white, Spin spin);
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
   G4double GetLundLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,
                              G4QHadron* pHadron, G4double Px, G4double Py);
@@ -155,7 +161,6 @@ class G4QString
   // Static parameters
   // Parameters of Longitudinal String Fragmentation
   static G4double MassCut;           // minimum mass cut for the string
-  static G4double ClusterMass;       // minimum cluster mass for the fragmentation
   static G4double SigmaQT;           // quark transverse momentum distribution parameter 
   static G4double DiquarkSuppress;   // is Diquark suppression parameter  
   static G4double DiquarkBreakProb;  // is Diquark breaking probability 
@@ -163,13 +168,11 @@ class G4QString
   static G4double StrangeSuppress;   // Strangeness suppression parameter
   static G4double widthOfPtSquare;   // width^2 of pt for string excitation
   static G4int StringLoopInterrupt;  // String fragmentation LOOP limit 
-  static G4int ClusterLoopInterrupt; // Cluster fragmentation LOOP limit 
 
   // Body
-  G4int         theDirection;        // must be 1 or -1 (PROJECTILE or TARGET)
+  G4int         theDirection;        // must be 1 (PROJECTILE) or -1 (TARGET), 0 - DEAD
   G4ThreeVector thePosition;         // Defined by the first quark position
   G4QPartonVector thePartons;        // Partons on the ends of the string
-  G4QHadronBuilder* hadronizer;      // Hadronizer of hodrons out of partons
   G4ThreeVector Ptleft,Ptright;      // Pt (px,py) for partons (pz ignored!)
   G4double Pplus, Pminus;            // p-, p+ of string, Plus is assigned to Left!
   G4QParton* theStableParton;        // Parton on the stable side of the string
