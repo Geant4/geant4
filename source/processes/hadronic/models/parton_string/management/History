@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2009-07-09 19:11:48 vuzhinsk Exp $
+$Id: History,v 1.6 2009-07-10 11:20:02 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+10-July-2009 V. Uzhinsky  (had-partonstring-mgt-V09-02-00)
+  Introduction the right tag number.
+
 9-July-2009 V. Uzhinsky     (had-partonstring-mgt-V08-02-02)
 - New field was added in G4VSplitableHadron class (G4 bool Activation) and 
   corresponding methods to operatite with it. It was needed for an 
