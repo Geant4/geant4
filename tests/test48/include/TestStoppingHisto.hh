@@ -28,8 +28,8 @@ class TestStoppingHisto
    private:
       
       void Init();
+      void InitHistoGeneral();
       void InitPionMinus();
-      void InitAntiProton();
       
       // void FillEvtAntiProton( const G4DynamicParticle* );
       
@@ -38,6 +38,7 @@ class TestStoppingHisto
       std::string        fBeam;
       std::string        fTarget;
       std::string        fModel;
+      std::string        fHistoTitle;
       std::vector<TH1F*> fHisto; 
 
 };

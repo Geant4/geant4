@@ -59,56 +59,20 @@
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
 
-/*
-#include "G4LEPionPlusInelastic.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4LEProtonInelastic.hh"
-#include "G4LENeutronInelastic.hh"
-#include "G4RPGPiPlusInelastic.hh"
-#include "G4RPGPiMinusInelastic.hh"
-#include "G4RPGProtonInelastic.hh"
-#include "G4RPGNeutronInelastic.hh"
-
-#include "G4StringChipsParticleLevelInterface.hh"
-#include "G4PreCompoundModel.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4BinaryCascade.hh"
-#include "G4BinaryLightIonReaction.hh"
-#include "G4CascadeInterface.hh"
-#include "G4InclAblaCascadeInterface.hh"
-#include "G4InclLightIonInterface.hh"
-#include "G4WilsonAbrasionModel.hh"
-#include "G4QMDReaction.hh"
-
-#include "G4TheoFSGenerator.hh"
-#include "G4FTFModel.hh"
-#include "G4ExcitedStringDecay.hh"
-#include "G4LundStringFragmentation.hh"
-
-#include "G4ElasticHadrNucleusHE.hh"
-#include "G4LElastic.hh"
-#include "G4HadronElastic.hh"
-#include "G4ChargeExchange.hh"
-#include "G4CascadeElasticInterface.hh"
-#include "G4QuasiElasticChannel.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4QStringChipsParticleLevelInterface.hh"
-
-#include "HsQGSPInterface.hh"
-#include "HsQGSCInterface.hh"
-#include "HsQGSBInterface.hh"
-#include "G4DiffuseElastic.hh"
-*/
-
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 
 #include "G4MuonMinusCaptureAtRest.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+// there're 2 alternative implementations of the pi- absorbtion at rest
+// the former was widely used in a variety of physics lists until replaced
+// by the chips-bound code, while the later has not been used/test at all
 #include "G4PionMinusAbsorptionAtRest.hh"
+#include "G4PiMinusAbsorptionAtRest.hh"
 #include "G4KaonMinusAbsorption.hh"
 
+// chips code
 #include "G4QCaptureAtRest.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -179,7 +143,7 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 
   // Choose generator
   //
-  if(gen_name == "stopping") 
+  if(gen_name == "stopping" || gen_name == "stopping-alt" ) 
   {
     if(part_name == "anti_proton")   
     {
@@ -191,7 +155,15 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
     }
     else if(part_name == "pi-") 
     {  
-      theProcess = new G4PionMinusAbsorptionAtRest();
+      if ( gen_name == "stopping" )
+      {
+         theProcess = new G4PionMinusAbsorptionAtRest();
+      }
+      else
+      {
+         theProcess = new G4PiMinusAbsorptionAtRest(); // alternative (old) code
+	                                               // by M.G.Pia 
+      }
     }
     else if ( part_name == "kaon-")
     {

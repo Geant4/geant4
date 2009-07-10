@@ -17,13 +17,13 @@ TestStoppingHisto::~TestStoppingHisto()
 void TestStoppingHisto::Init()
 {
    
+   fHistoTitle = fBeam + " on " + fTarget;
+   
+   InitHistoGeneral();
+   
    if ( fBeam == "pi-" )
    {
       InitPionMinus();
-   }
-   else if ( fBeam == "anti_proton" )
-   {
-      InitAntiProton();
    }
    
    return;
@@ -33,8 +33,8 @@ void TestStoppingHisto::Init()
 void TestStoppingHisto::InitPionMinus()
 {
 
-   std::string title = fBeam + " on " + fTarget;
-   title += "; Neutron Yield vs Kinetic Energy";
+   std::string title;
+   title = fHistoTitle + "; Neutron Yield vs Kinetic Energy (MeV)";
    
    fHisto.push_back(new TH1F( "NvsT", title.c_str(), 600, 1., 151.));
 
@@ -42,18 +42,23 @@ void TestStoppingHisto::InitPionMinus()
 
 }
 
-void TestStoppingHisto::InitAntiProton()
+void TestStoppingHisto::InitHistoGeneral()
 {
-
-   std::string title = fBeam + " on " + fTarget;
    
-   fHisto.push_back( new TH1F( "ChargedPionMomentum", title.c_str(), 50, 0., 1.) );
-   fHisto.push_back( new TH1F( "PionMultiplicity", title.c_str(), 10, 0., 10. ) );
-
+   fHisto.push_back( new TH1F( "NSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NChargedSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 25, 0., 25. ) ) ;
+   fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NKaons", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NNeutrons", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "ChargedSecondaryMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
+   fHisto.push_back( new TH1F( "ChargedPionMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
+   fHisto.push_back( new TH1F( "ChargedKaonMomentum", fHistoTitle.c_str(), 50, 0., 1. ) ); 
+   
    return;
-
+   
 }
-
 
 void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 {
@@ -61,61 +66,66 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
    G4int NSec = aChange->GetNumberOfSecondaries();
    
    const G4DynamicParticle* sec = 0;
-   G4ParticleDefinition* pd = 0;
+   // G4ParticleDefinition* pd = 0;
    
-   int NPions = 0;
+   int NChSec    = 0;
+   int NPions    = 0;
+   int NChPions  = 0;
+   int NKaons    = 0;
+   int NNeutrons = 0;
       
+   fHisto[0]->Fill( (double)NSec );
+   
    for (G4int i=0; i<NSec; i++) 
    {
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
+	
+	if ( sec->GetCharge() != 0 ) 
+	{
+	   NChSec++;
+	   fHisto[7]->Fill( (sec->GetTotalMomentum()/GeV) );
+	}
+	
 	const G4String& pname = sec->GetDefinition()->GetParticleName();
-	if ( fBeam == "pi-" )
+	
+	if ( pname == "pi-" || pname == "pi+" || pname == "pi0" )
 	{
-	   if ( pname == "neutron" )
+	   NPions++;
+	   if ( pname != "pi0" )
 	   {
-	      fHisto[0]->Fill( (sec->GetKineticEnergy()/MeV) );
+	      fHisto[8]->Fill( (sec->GetTotalMomentum()/GeV) );
 	   }
 	}
-	else if ( fBeam == "anti_proton" )
+	
+	if ( pname == "neutron" )
 	{
-	   if ( pname == "pi-" || pname == "pi+" )
+	   NNeutrons++;
+	   if ( fBeam == "pi-" )
 	   {
-	   // FillEvtAntiProton( sec );
-	      fHisto[0]->Fill( (sec->GetTotalMomentum()/GeV) );
-	      NPions++;
-	   }
-	   else if ( pname == "pi0" )
-	   {
-	      NPions++;
+	      fHisto[10]->Fill( (sec->GetKineticEnergy()/MeV) );
 	   }
 	}
+	
+	if ( pname == "kaon+" || pname == "kaon-" || pname == "kaon0S" || pname == "kaon0L" )
+	{
+	   NKaons++;
+	   if ( pname == "kaon+" || pname == "kaon-" )
+	   {
+	      fHisto[9]->Fill( (sec->GetTotalMomentum()/GeV) );
+	   }
+	}	
    }
    
-   if ( fBeam == "anti_proton" )
-   {
-      fHisto[1]->Fill( (double)NPions );
-   }
+   fHisto[1]->Fill( (double)NChSec );
+   fHisto[2]->Fill( (double)NPions );
+   fHisto[3]->Fill( (double)NChPions );
+   fHisto[4]->Fill( (double)(NPions-NChPions) );
+   fHisto[5]->Fill( (double)NKaons );
+   fHisto[6]->Fill( (double)NNeutrons );
    
    return;
    
 }
-
-/*
-void TestStoppingHisto::FillEvtAntiProton( const G4DynamicParticle* sec )
-//void TestStoppingHisto::FillEvtAntiProton( G4VParticleChange* aChange )
-{
-   
-   const G4String& pname = sec->GetDefinition()->GetParticleName();
-   if ( pname == "pi-" || pname == "pi+" )
-   {
-      // G4ThreeVector pmom = sec->GetMomentum();
-      double ptot = sec->GetTotalMomentum()/GeV;
-      fHisto[0]->Fill(ptot);
-   }
-
-   return;
-}
-*/
 
 void TestStoppingHisto::Write( int stat )
 {

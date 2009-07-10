@@ -17,19 +17,71 @@ for stopping particle vs one another, as well as vs experimental data.
 For stopping particles, we have "traditional" processes/hadronic/stopping
 code and the newer code that's a part of the CHIPS model.
 The "traditional" code actually includes two "alternative" models for pi-,
-that we would also like to compare vs each other.
+that we also include in comparison.
 
-We currently use edxperimental data (table) for stopped pi- from this paper:
+We currently use experimental data (table) for stopped pi- from this paper:
 R.Madey et al., Phys.Rev.C25, 2050 (1982)
 
 For stopped pbar, there's a large volume of materials, incl. from LEAR
 (Crystal Barrel), as well as much earlier data from 70's and 80's.
-As a starting point we use these 2 reviews:
+As a starting point we use these 3 reviews:
 C. Amsler, Rev. Mod. Phys. 70, 1293 (1998)
 C. Amsler and F. Myher, Ann. Rev. Nucl. Part. Sci. 41, 219 (1991)
+C.B. Dover et al., Prog. Part. Nucl. Phys., Vol.29, pp.87-173 (1992)
 
 We also have G4 models for stopped antineutrons and K-, yet we continue
 searching for suitable publications and experimental sets for comparison.
 At presernt, for antineutrons and K- we will compare only G4 results (CHIPS
 or "traditional") vs each other.
+
+At present, for each type of incoming particles, we look at the quantities 
+of general interest, such as overal multiplicity of the secondary paricles or 
+multiplicities of secondary particles of specific type (pions, kaons,...), 
+momentum spectra, etc.
+
+Where experimental data are available, we look for specific distributions. 
+For example, for pi- absorptions we look at the number of outcoming neutrons
+as a function of the kinetic energy of the final state particle.
+
+In order to compile the application one needs to setup Geant4 version (CLHEP
+will be set automatically), and the desired version of Root, for histograms.
+One also needs to set several Geant4 related products, update LD_LIBRARY_PATH,
+and specify work directory.
+Example settings are here: g4setup.csh
+
+Once settings are done, the code can be build via supplied GNUmakefile (by issuing 
+gmake at the system propmt), and results in test48 executable in the G4EXE area.
+
+The application can be configured at run time, with beam, target, and Geant4 model.
+Example application configurations are these:
+test48.picapture - pi- case
+test48.apcapture - antiproton case
+
+Please note that the pi- configuration runs sequentially all 3 Geant4 models in test
+(CHIPS, stopping, and stopping-alt, where the later stands for "alternative" pi- 
+absorption code). 
+The target in this example is Cu (other targets are: C, N, O, Al, Ta, Pb).
+
+
+Example usage:
+> $G4EXE/test48 test48.picature
+
+The output will be in a form of a Root histogram file. For each beam/target/model
+combination there will be a separate output.
+For example, the output of the above example will result in 3 Root histogram files:
+piminusCuCHIPS.root
+piminusCustopping.root
+piminusCustopping-alt.root
+
+Additional analysis and comparion vs available experimental data can be done with
+a collection of Root macro's supplied in: PlotStopping.C
+
+For example, to plot number of neutrons coming of pi- on Cu as a function of kinetic
+energy of the final state neutron, one can do the following in a interactive Root
+session:
+root [0] gROOT->LoadMacro("PlotStopping.C")
+root [1] plotPiminus("Cu")
+
+At present, the tests are executed manually (interactively) but in the future some
+level of automation maybe added.
 

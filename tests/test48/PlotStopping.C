@@ -21,12 +21,14 @@
 #include "TGraph.h"
 
 const int NModels=2;
+const int NModelsPiMinus=3;
 
 //
-std::string Models[2]  = { "CHIPS", "stopping" };
+// std::string Models[2]  = { "CHIPS", "stopping" };
+std::string Models[3] = { "CHIPS", "stopping", "stopping-alt" };
 
-int         ColorModel[2]    = {1, 2};
-int         SymbModel[2]     = {24, 29};
+int         ColorModel[3]    = {1, 2, 3};
+int         SymbModel[3]     = {24, 29, 25};
 
 const int   NPointsMadey = 30;
 const int   NTargetsMadey = 7; 
@@ -116,7 +118,7 @@ void plotPiminus( std::string target )
       return;
    }
    
-   TH1F* hi[NModels];
+   TH1F* hi[NModelsPiMinus];
    
    TCanvas *myc = new TCanvas("myc","",800,600);
    myc->SetLogx(1);
@@ -124,7 +126,7 @@ void plotPiminus( std::string target )
    
    double ymin = 10000.; // something big... don't know if I can use FLT_MAX
    double ymax = -1. ;
-   for ( int m=0; m<NModels; m++ )
+   for ( int m=0; m<NModelsPiMinus; m++ )
    {
       std::string histofile = "piminus" + TargetsMadey[TargetID] + Models[m];
       histofile += ".root";
@@ -143,7 +145,7 @@ void plotPiminus( std::string target )
    
    std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
    
-   for ( int m=0; m<NModels; m++ )
+   for ( int m=0; m<NModelsPiMinus; m++ )
    {
       hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*5.);
    }

@@ -22,4 +22,7 @@ CHIPS
 #generator
 stopping
 #run
+#generator
+stopping-alt
+#run
 #exit
