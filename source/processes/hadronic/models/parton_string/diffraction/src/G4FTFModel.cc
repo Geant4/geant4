@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.15 2009-07-09 15:14:09 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.16 2009-07-10 11:08:08 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -158,7 +158,7 @@ G4int counter=0;
 
 //G4int InterNumber=0; // Vova
 
-        G4bool Successfull;
+        G4bool Successfull=true;
 
 //	while (theParticipants.Next()&& (InterNumber < 3)) // Vova
 	while (theParticipants.Next())
@@ -175,12 +175,16 @@ G4cout<<" Inter # "<<counter<<G4endl;
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            {
 //G4cout<<"Elastic"<<G4endl;
-            Successfull*=theElastic->ElasticScattering(projectile, target, theParameters);
+            G4bool Successfull_try=
+                   theElastic->ElasticScattering(projectile, target, theParameters);
+            Successfull = Successfull || Successfull_try;
            }
            else
            {
 //G4cout<<"Inelastic"<<G4endl;
-            Successfull*=theExcitation->ExciteParticipants(projectile, target, theParameters);
+            G4bool Successfull_try=
+                   theExcitation->ExciteParticipants(projectile, target, theParameters);
+            Successfull = Successfull || Successfull_try;
 //InterNumber++; // Vova
            }
         }       // end of the loop Uzhi 9.07.09
