@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.14 2008-04-04 17:26:57 maire Exp $
+// $Id: PhysicsList.cc,v 1.15 2009-07-11 16:27:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,53 +33,30 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+
+#include "G4Decay.hh"
+#include "StepMax.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4ProcessManager.hh"
+
 #include "G4UnitsTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
-{
-  G4LossTableManager::Instance();
-  defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
-
-  pMessenger = new PhysicsListMessenger(this);
-
-  SetVerboseLevel(1);
-
-  // EM physics
-  emPhysicsList = new PhysListEmStandard(emName = "standard");
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{
-  delete pMessenger;
-  delete emPhysicsList;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Bosons
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
-#include "G4OpticalPhoton.hh"
 
 // leptons
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4NeutrinoMu.hh"
@@ -119,19 +96,43 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
+{
+  G4LossTableManager::Instance();
+  defaultCutValue = 1.*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
+
+  pMessenger = new PhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
+  // EM physics
+  emPhysicsList = new G4EmStandardPhysics();
+  emName = "emstandard";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::~PhysicsList()
+{
+  delete pMessenger;
+  delete emPhysicsList;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
   
-// gamma
+  // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-
-// leptons
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -142,7 +143,7 @@ void PhysicsList::ConstructParticle()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
-// mesons
+  // mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -155,13 +156,13 @@ void PhysicsList::ConstructParticle()
   G4KaonZeroLong::KaonZeroLongDefinition();
   G4KaonZeroShort::KaonZeroShortDefinition();
 
-// barions
+  // barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 
-// ions
+  // ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4He3::He3Definition();
@@ -170,8 +171,6 @@ void PhysicsList::ConstructParticle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -202,7 +201,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "standard_local") {
 
     emName = name;
     delete emPhysicsList;
@@ -232,18 +231,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
     
-  } else if (name == "livermore") {
-
+  } else if (name == "empenelope"){
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
-    
-  } else if (name == "penelope") {
+    emPhysicsList = new G4EmPenelopePhysics();
 
+  } else if (name == "emlivermore"){
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
-        
+    emPhysicsList = new G4EmLivermorePhysics();
+
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -253,8 +250,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
 {
@@ -281,8 +276,6 @@ void PhysicsList::AddDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
-
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
@@ -301,10 +294,6 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {

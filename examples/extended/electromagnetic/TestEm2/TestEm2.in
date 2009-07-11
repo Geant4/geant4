@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.24 2007-06-22 16:35:07 vnivanch Exp $
+# $Id: TestEm2.in,v 1.25 2009-07-11 16:27:38 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 1
 /run/verbose 1
 #
-/testem/det/setMat PbWO4
+/testem/det/setMat G4_PbWO4
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 #
