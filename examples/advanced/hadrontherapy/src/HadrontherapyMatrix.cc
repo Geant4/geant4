@@ -143,7 +143,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 			analysis -> BraggPeak(n, matrix[i]);
 #endif
 		      }
-		  }       
+}       
 	      }
 	  }
     }

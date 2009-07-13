@@ -52,7 +52,7 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class HadrontherapyAnalysisManager; ///< Provides SetAnalysisFileName()
+class HadrontherapyAnalysisManager; ///< Provides SetanalysisFileName()
 class G4UIcmdWithAString; ///< Provides possibility to add commands
 
 /**

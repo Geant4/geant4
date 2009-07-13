@@ -68,7 +68,7 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
     {
 	AnalysisManager->SetAnalysisFileName(newValue);
 	AnalysisManager->flush(); //< fills matrix, writes it into file and books a new file and histograms etc.
-    //AnalysisManager->book();
+	AnalysisManager->book();
 	}
 }
 

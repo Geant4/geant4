@@ -72,8 +72,61 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  
+#ifdef MEASUREBEAM
+	//Very cludgy, is supposed to record just positions of the beams hitting the water phantom
+	if(aStep->GetTrack()->GetVolume()->GetName() == "phantomPhys"){
+		//std::cout << aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() << "\n"; //humm why does this also give phantomPhys?
+		HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance(); 
+		analysis->ThintargetBeamDisp(aStep->GetTrack()->GetPosition().x(),aStep->GetTrack()->GetPosition().y());
+		aStep->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+		}
+#endif
+
+    if( aStep->GetTrack()->GetVolume()->GetName() == "NewDetectorPhys"){
+      //G4cout <<"Now in NewDetectorPhys" << G4endl;
+      G4ParticleDefinition *def = aStep->GetTrack()->GetDefinition();
+      G4double secondaryParticleKineticEnergy =  aStep->GetTrack()->GetKineticEnergy();     
+      G4String particle = def->GetParticleType();
+      if(particle =="nucleus" || particle=="deuteron" || particle=="triton" || 
+	 particle=="He3" || particle=="alpha") {
+	G4int A = def->GetBaryonNumber();
+	G4int Z = def->GetPDGCharge();
+	G4double energy = secondaryParticleKineticEnergy / A / MeV;
+#ifdef G4ROOTANALYSIS_USE
+	HadrontherapyAnalysisManager* analysisMgr =  HadrontherapyAnalysisManager::getInstance();   
+//	G4cout <<" A = " << A << "  Z = " << Z << " energy = " << energy << G4endl;
+	analysisMgr->fillFragmentTuple(A, Z, energy);
+#endif
+      }
+
+      G4String secondaryParticleName =  def -> GetParticleName();  
+      //G4cout <<"Particle: " << secondaryParticleName << G4endl;
+      //G4cout <<"Energy: " << secondaryParticleKineticEnergy << G4endl;
+#ifdef ANALYSIS_USE
+	HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance();   
+	//There is a bunch of stuff recorded with the energy 0, something should perhaps be done about this.
+	if(secondaryParticleName == "proton") {
+	  analysis->hydrogenEnergy(secondaryParticleKineticEnergy / MeV);
+	}
+	if(secondaryParticleName == "deuteron") {
+	  analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / MeV);
+	}
+	if(secondaryParticleName == "triton") {
+	  analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / MeV);
+	}
+	if(secondaryParticleName == "alpha") {
+	  analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / MeV);
+	}
+	if(secondaryParticleName == "He3"){
+	  analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / MeV);		
+	}
+#endif
+
+	aStep->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+      }
+
   // Electromagnetic and hadronic processes of primary particles in the phantom
+  //setting phantomPhys correctly will break something here fix
   if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
     (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys") &&
     (aStep -> GetPostStepPoint() -> GetProcessDefinedStep() != NULL))
@@ -111,7 +164,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
     { 
       G4String volumeName = (*fSecondary)[lp1] -> GetVolume() -> GetName(); 
  
-      if (volumeName == "PhantomPhys")
+      if (volumeName == "phantomPhys")
 	{
 #ifdef ANALYSIS_USE   
 	  G4String secondaryParticleName =  (*fSecondary)[lp1]->GetDefinition() -> GetParticleName();  

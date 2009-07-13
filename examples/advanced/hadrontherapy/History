@@ -9,6 +9,13 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+13.07.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-22
+            - Added the first version of the IAEA benchmark geometry based on
+              E. Haettner's thesis
+            - Collect fragment energy distributions
+            - Added fragment energy distribution data
+            - ROOT script preparing an IAEA benchmark figure with data
+
 08.07.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-21
            - Removed the README file in ASCII format 
 

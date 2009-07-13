@@ -1,0 +1,74 @@
+# G. Andersen, A. Heikkinen, P. Kaitaniemi
+#
+# Default macro file. It is called if no argument is provided at run
+# 
+# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
+#
+# This macro can be used for a proton beam in water. Both electrmagnetic and
+# hadronic models are swiched on
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+/analysis/setAnalysisFile IAEA.root
+
+##########################
+# Set of the physic models
+#
+/physic/addPhysics emstandard_opt3                     # Electromagnetic model
+/physic/addPhysics elastic                             # Hadronic elastic model
+/physic/addPhysics binary                              # Hadronic inelastic model
+/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+##########################
+# Visualisation 
+#
+#/vis/scene/create
+#/vis/open DAWNFILE
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/zoom 0
+#/vis/viewer/pan 0  0 cm
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+#/vis/viewer/update
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step is 0.01 mm:
+#
+/physic/setCuts 1 cm
+#/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 1 cm
+#/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle ion
+/gun/ion 6 12 6     # Carbon-12
+
+/beam/energy/meanEnergy 4800 MeV
+/beam/energy/sigmaEnergy 24 MeV # dE/E = 5e-3
+
+#########################
+# Start of the run
+#
+#/run/beamOn 1
+
+/beam/position/Xposition -90 cm
+/beam/position/Yposition 0 cm
+/beam/position/Zposition 0 cm
+
+/run/beamOn 10000

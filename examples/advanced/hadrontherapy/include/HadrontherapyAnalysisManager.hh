@@ -146,7 +146,18 @@ public:
   void alphaEnergyDistribution(G4double secondaryParticleKineticEnergy);
   ///< Energy distribution of secondary alpha originated in the phantom
 
+  void heliumEnergy(G4double secondaryParticleKineticEnergy);
+  ///< Energy distribution of the helium (He3 and alpha) particles after the phantom
+
+  void hydrogenEnergy(G4double secondaryParticleKineticEnergy);
+  ///< Energy distribution of the hydrogen (proton, d, t) particles after the phantom
+
+  void fillFragmentTuple(G4int A, G4int Z, G4double energy);
+  ///< Energy ntuple
+
   void genericIonInformation(G4int, G4double, G4int, G4double);
+
+  void ThintargetBeamDisp(G4double,G4double);
 
   void finish();
   ///< Close the .hbk file with the histograms and the ntuples
@@ -160,12 +171,13 @@ private:
     histo->SetLineWidth(2);
     return histo;
   }
+  G4int debugi;
 #endif
 
 private:
   static HadrontherapyAnalysisManager* instance;
   HadrontherapyAnalysisFileMessenger* fMess;
-  G4String AnalysisFileName;
+  G4String analysisFileName;
 #ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory* aFact;
   AIDA::ITree* theTree;
@@ -190,22 +202,26 @@ private:
 #endif
 #ifdef G4ROOTANALYSIS_USE
   TFile *theTFile;
-  TH1F *th1;
-  TH1F *th2;
-  TH1F *th3;
-  TH1F *th4;
-  TH1F *th5;
-  TH1F *th6;
-  TH1F *th7;
-  TH1F *th8;
-  TH1F *th9;
-  TH1F *th10;
-  TH1F *th11;
-  TH1F *th12;
-  TH1F *th13;
-  TH1F *th14;
+  TH1F *histo1;
+  TH1F *histo2;
+  TH1F *histo3;
+  TH1F *histo4;
+  TH1F *histo5;
+  TH1F *histo6;
+  TH1F *histo7;
+  TH1F *histo8;
+  TH1F *histo9;
+  TH1F *histo10;
+  TH1F *histo11;
+  TH1F *histo12;
+  TH1F *histo13;
+  TH1F *histo14;
+  TH1F *histo15;
+  TH1F *histo16;
   TNtuple *theROOTNtuple;
   TNtuple *theROOTIonTuple;
+  TNtuple *fragmentNtuple; // fragments
+  TNtuple *metaData;
 #endif
 };
 #endif

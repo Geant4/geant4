@@ -62,6 +62,8 @@
 
 #include "HadrontherapyAnalysisManager.hh"
 
+#include "IAEADetectorConstruction.hh"
+
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
@@ -80,7 +82,17 @@ int main(int argc ,char ** argv)
   G4RunManager* runManager = new G4RunManager;
 
   // Initialize the geometry
-  runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
+  if(argc > 1) {
+    G4String iaeaFlag = argv[1];
+    if(iaeaFlag == "macro/iaea.mac" || iaeaFlag == "iaea.mac") {
+      G4cout <<"Geometry for IAEA Benchmark" << G4endl;
+      runManager -> SetUserInitialization(new IAEADetectorConstruction());
+    } else {
+      runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
+    }
+  } else {
+    runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
+  }
 
   // Initialize the physics 
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
