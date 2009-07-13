@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.39 2009-07-10 16:42:57 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.40 2009-07-13 08:59:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -97,6 +97,7 @@ public:
   G4QHadron* GetNextNucleon()
     {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
   //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  void SubtractNucleon(G4QHadron* pNucleon); // Subtract the nucleon from the 3D Nucleus
   G4LorentzVector GetNucleons4Momentum()
   {
     G4LorentzVector sum(0.,0.,0.,0.);
@@ -142,7 +143,10 @@ public:
   G4bool StartLoop();                               // returns size of theNucleons (cN=0)
   G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum);// Reduce zero-sum of vectors
   void DoLorentzBoost(const G4LorentzVector& theBoost) // Boost nucleons by 4-vector
-            {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBoost);}
+  {
+    theMomentum.boost(theBoost);
+    for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBoost);
+  }
   void DoLorentzBoost(const G4ThreeVector& theBeta)// Boost nucleons by v/c
              {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBeta);}
   void DoLorentzContraction(const G4LorentzVector&B){DoLorentzContraction(B.vect()/B.e());}
@@ -207,6 +211,5 @@ private:
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
 std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs);
-
 
 #endif

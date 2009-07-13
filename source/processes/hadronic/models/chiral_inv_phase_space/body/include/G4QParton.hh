@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.6 2009-07-10 16:42:57 mkossov Exp $
+// $Id: G4QParton.hh,v 1.7 2009-07-13 08:59:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -44,8 +44,9 @@
 // ------------------------------------------------------------------------
 
 #include "globals.hh"
-#include "G4ThreeVector.hh"
+#include "G4QContent.hh"
 #include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include <iostream>
 #include "Randomize.hh"
 
@@ -54,7 +55,7 @@ class G4QParton
  public:
   // Constructors
   G4QParton();                                            // Default fullRandom constructor
-  G4QParton(G4int PDGencoding);                           // Collor/Spin are still random
+  G4QParton(G4int aPGG);                                  // Collor/Spin are still random
   G4QParton(const G4QParton &right);
   G4QParton(const G4QParton* right);
 
@@ -77,16 +78,18 @@ class G4QParton
   void SetSpinZ(G4double aSpinZ)                      {theSpinZ = aSpinZ;}
 
   // Selectors
-  G4int GetPDGCode() const                            {return PDGencoding;}
+  G4int GetPDGCode() const                            {return PGGCode;}
+  G4QContent GetQC() const                            {return QCont;}
   const G4ThreeVector& GetPosition() const            {return thePosition;}
   const G4LorentzVector& Get4Momentum() const         {return theMomentum;} 
   G4double GetX()                                     {return theX;}    
   G4int GetColour()                                   {return theColour;}    
   G4double GetSpinZ()                                 {return theSpinZ;}
-  const G4int GetType() const                         {return theType;}
+  const G4int& GetType() const                        {return theType;}
  private: 
   // Body 
-  G4int                 PDGencoding;
+  G4int                 PGGCode;
+  G4QContent            QCont;   // Quark Content of the parton
   G4int                 theType; // 0 = gluon, 1 = quark-antiquark, 2 = diquark/antidiquark
   G4int                 theColour;
   G4double              theSpinZ;

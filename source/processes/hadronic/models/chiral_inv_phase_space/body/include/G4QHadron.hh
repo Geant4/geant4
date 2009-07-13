@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.40 2009-07-06 10:14:38 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.41 2009-07-13 08:59:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -138,6 +138,9 @@ private:
   G4bool SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd);
   G4bool SplitBaryon(G4int PDGcode, G4int* aEnd, G4int* bEnd);
 
+protected:
+  G4LorentzVector        theMomentum;       // The 4-mom of Hadron
+
 private:
   // Static Parameters of QGSM Splitting
   static G4double alpha;            // changing rapidity distribution for all
@@ -149,7 +152,6 @@ private:
   static G4double minTransverseMass;// ? M.K.
   // Body 
   G4QPDGCode             theQPDG;           // Instance of QPDG for the Hadron
-  G4LorentzVector        theMomentum;       // The 4-mom of Hadron
   G4QContent             valQ;              // QC (@@ for Quasmon and Chipolino?)
   G4int                  nFragm;            // 0 - stable, N - decayed in N part's
   // Body of Splitable Hadron and Nuclear Nucleon

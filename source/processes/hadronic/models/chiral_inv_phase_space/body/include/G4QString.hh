@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.7 2009-07-10 16:42:57 mkossov Exp $
+// $Id: G4QString.hh,v 1.8 2009-07-13 08:59:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -84,23 +84,18 @@ class G4QString
   G4int operator!=(const G4QString &right) const {return this != &right;}
   const G4ThreeVector& GetPosition() const       {return thePosition;}
   const G4QPartonVector* GetPartonList() const   {return &thePartons;}
-  //G4QParton* GetGluon() const                    {return thePartons[1];}
-  //G4QParton* GetGluon(G4int GluonPos) const      {return thePartons[1 + GluonPos];}
   G4QParton* GetLeftParton() const               {return *thePartons.begin();}
   G4QParton* GetRightParton() const              {return *(thePartons.end()-1);}
-  //G4bool     IsItKinkyString() const             {return (thePartons.size() > 2);}
   G4int      GetDirection() const                {return theDirection;}
   G4LorentzVector Get4Momentum() const;
-  //G4QParton* GetColorParton() const;
-  //G4QParton* GetAntiColorParton() const;
-  //G4QParton* GetStableParton() const{ return theStableParton;} // stable at the moment
+  G4QContent GetQC() const {return GetLeftParton()->GetQC()+GetRightParton()->GetQC();}
+  G4int      GetCharge() const {return GetQC().GetCharge();}
+  G4int      GetBaryonNumber() const {return GetQC().GetBaryonNumber();}
+  G4int      GetStrangeness() const {return GetQC().GetStrangeness();}
   G4int GetDecayDirection() const;
   G4bool DecayIsQuark() const {return theDecayParton->GetType()==1;}
   G4bool StableIsQuark() const {return theStableParton->GetType()==1;}
-  //G4ThreeVector StablePt(); // Get Pt of the stable quark
   G4ThreeVector DecayPt();  // Get Pt of the decaying quark @@ Called once
-  //G4double LightConePlus(){return Pplus;}
-  //G4double LightConeMinus() {return Pminus;}
   G4double Mass2() const { return Pplus*Pminus-(Ptleft+Ptright).mag2();}
   G4double Mass() const  // @@ Very dangerous! USE ONLY FORE THE LIGHT CONE ALGORITHM !!
   {
@@ -172,7 +167,7 @@ class G4QString
   // Body
   G4int         theDirection;        // must be 1 (PROJECTILE) or -1 (TARGET), 0 - DEAD
   G4ThreeVector thePosition;         // Defined by the first quark position
-  G4QPartonVector thePartons;        // Partons on the ends of the string
+  G4QPartonVector thePartons;        // Partons on the ends of the string @@ Use PartonPair
   G4ThreeVector Ptleft,Ptright;      // Pt (px,py) for partons (pz ignored!)
   G4double Pplus, Pminus;            // p-, p+ of string, Plus is assigned to Left!
   G4QParton* theStableParton;        // Parton on the stable side of the string
