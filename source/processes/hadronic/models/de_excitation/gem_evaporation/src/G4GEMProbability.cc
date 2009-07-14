@@ -28,11 +28,13 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept 2001)
 //
-
+// Modifications
+// 14/07/2009 J. M. Quesada  bug fixed in total emission width NuclearMass is 
+//                           in MeV => hbarc instead of hbar_planck must be used
+//
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
-
 
 
 G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
@@ -107,13 +109,18 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
     G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
 						      static_cast<G4int>(fragment.GetZ()),U);
-//090115
-//G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
-//								       static_cast<G4int>(fragment.GetZ()));
-    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection( static_cast<G4int>( ResidualA ) , static_cast<G4int>( ResidualZ ) );
-//090115
     
+    //090115
+    //G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(
+    //			    static_cast<G4int>(fragment.GetA()),
+    //		    static_cast<G4int>(fragment.GetZ()));
+ 
+    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection( 
+                            static_cast<G4int>( ResidualA ), 
+                            static_cast<G4int>( ResidualZ ) );
+    //090115
+
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);
     
@@ -142,8 +149,9 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
         InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(a*(U-delta0)))/std::pow(a*std::pow(U-delta0,5.0),1.0/4.0);
     }
     
-
-    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
+    //JMQ 14/07/2009 BIG BUG : NuclearMass is in MeV => hbarc instead of hbar_planck must be used
+    //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
+    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbarc*hbarc);
 
     G4double RN = 0.0;
     if (theA > 4) 
