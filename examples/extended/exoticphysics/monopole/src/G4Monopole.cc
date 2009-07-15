@@ -102,6 +102,7 @@ G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4int mCharge, G4int e
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4Monopole* G4Monopole::Monopole()
 {    
   if(!theMonopole) theMonopole = MonopoleDefinition();

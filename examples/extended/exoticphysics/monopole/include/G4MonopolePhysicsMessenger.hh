@@ -23,71 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2009-07-15 10:19:47 vnivanch Exp $
+// $Id: G4MonopolePhysicsMessenger.hh,v 1.1 2009-07-15 10:20:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PrimaryGeneratorAction.hh"
+#ifndef G4MonopolePhysicsMessenger_h
+#define G4MonopolePhysicsMessenger_h 1
 
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorMessenger.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "Randomize.hh"
+class G4MonopolePhysics;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  :detector(det)
+class G4MonopolePhysicsMessenger: public G4UImessenger
 {
-  particleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle = 
-    G4ParticleTable::GetParticleTable()->FindParticle("monopole");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(100 * GeV);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
-    
-  rndmBeam   = 0.;
-  EbeamCumul = 0.;
-    
-  //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);  
-}
+public:
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
-  delete particleGun;
-  delete gunMessenger;  
-}
+  G4MonopolePhysicsMessenger(G4MonopolePhysics*);
+  ~G4MonopolePhysicsMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+
+  G4MonopolePhysics*    phys;
+    
+  G4UIdirectory*             mPhysicsDir;    
+  G4UIcommand*               mPhysicsCmd;
+  G4UIcmdWithAnInteger*      mCmd;
+  G4UIcmdWithAnInteger*      zCmd;
+  G4UIcmdWithADoubleAndUnit* massCmd;
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  //this function is called at the begining of event
-  G4double x0 = -0.5*(detector->GetWorldSizeX());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
-    
-  //randomize the beam, if requested.
-  if (rndmBeam > 0.) 
-    {
-      if (rndmBeam > detector->GetAbsorSizeYZ())
-        rndmBeam = detector->GetAbsorSizeYZ(); 
-      G4double rbeam = 0.5*rndmBeam;
-      y0 = (2*G4UniformRand()-1.)*rbeam;
-      z0 = (2*G4UniformRand()-1.)*rbeam;
-    }
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
-  particleGun->GeneratePrimaryVertex(anEvent);
-  
-  EbeamCumul += particleGun->GetParticleEnergy(); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif
