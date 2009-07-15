@@ -38,7 +38,7 @@
 StatAccepTestDetectorConstruction::StatAccepTestDetectorConstruction() :  
   Vacuum( 0 ), Iron( 0 ), Copper( 0 ), Tungsten( 0 ), Lead( 0 ), Uranium( 0 ), 
   PbWO4( 0 ), Polystyrene( 0 ), LiquidArgon( 0 ), Silicon( 0 ), 
-  Quartz( 0 ), Brass( 0 ),
+  Quartz( 0 ), Brass( 0 ), Aluminium( 0 ), Graphite( 0 ),
   theAbsorberMaterial( 0 ), theActiveMaterial( 0 ),
   experimentalHall_log( 0 ), experimentalHall_phys( 0 ),
   logicCalo( 0 ), physiCalo( 0 ),
@@ -163,10 +163,6 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
 
   //--- simple materials
 
-  density = 2.7*g/cm3;
-  a = 26.98*g/mole;
-  //G4Material* Aluminium = new G4Material( name="Aluminium", z=13., a, density );
-  
   // Iron has a  X0 = 1.7585 cm  and  lambda_I = 16.760 cm.   
   density = 7.87*g/cm3;
   a = 55.85*g/mole;
@@ -201,10 +197,21 @@ void StatAccepTestDetectorConstruction::DefineMaterials() {
   a = 39.95*g/mole;
   //G4Material* ArgonGas = new G4Material( name="ArgonGas", z=18., a, density );
 
+  // Silicon has a  X0 = 9.3688 cm  and  lambda_I = 46.5436 cm 
   density = 2.33*g/cm3;
   a = 28.085*g/mole;
   Silicon = new G4Material( name="Silicon", z=14., a, density );
   
+  // Aluminium has a  X0 = 8.8959 cm  and  lambda_I = 39.7184 cm
+  density = 2.7*g/cm3;
+  a = 26.98*g/mole;
+  Aluminium = new G4Material( name="Aluminium", z=13., a, density );
+  
+  // Graphite has a  X0 = 19.3213 cm  and  lambda_I = 38.8235 cm
+  density = 2.210*g/cm3;
+  a = 12.0107*g/mole;
+  Graphite = new G4Material( name="Graphite", z=6., a, density );
+
   density = 8.96*g/cm3;
   a = 58.69*g/mole;
   //G4Material* Nickel = new G4Material( name="Nickel", z=28., a, density );
@@ -293,6 +300,9 @@ G4VPhysicalVolume* StatAccepTestDetectorConstruction::ConstructCalorimeter() {
     } else if ( theAbsorberMaterial == Uranium ) {
       lambda = 10.501*cm;
       X0     = 0.31662*cm; 
+    } else if ( theAbsorberMaterial == Graphite ) {
+      lambda = 38.82*cm;
+      X0     = 19.32*cm; 
     } else {
       std::cout << "ERROR: absorber material not recognized" << std::endl;
     }
@@ -636,6 +646,9 @@ void StatAccepTestDetectorConstruction::SetAbsorberMaterial( const G4String name
   } else if ( name == "U" ||
  	      name == "Uranium" || name == "uranium" ) { 
     theAbsorberMaterial = Uranium;
+  } else if ( name == "C" ||
+ 	      name == "Graphite" || name == "graphite" ) { 
+    theAbsorberMaterial = Graphite;
   } else {
     G4cout << G4endl << G4endl
 	   << "WARNING: the name of the material has not been recognized!" << G4endl
@@ -666,6 +679,8 @@ void StatAccepTestDetectorConstruction::SetActiveMaterial( const G4String name )
     theActiveMaterial = Silicon;
   } else if ( name == "Quartz" || name == "quartz" ) { 
     theActiveMaterial = Quartz;
+  } else if ( name == "C" || name == "Graphite" || name == "graphite" ) { 
+    theActiveMaterial = Graphite;
   } else {
     G4cout << G4endl << G4endl
 	   << "WARNING: the name of the material has not been recognized!" << G4endl

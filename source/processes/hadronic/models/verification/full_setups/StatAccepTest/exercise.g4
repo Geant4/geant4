@@ -14,7 +14,7 @@
 #       pi-, pi+, kaon-, kaon+, kaon0L, 
 #       neutron, proton,
 #       anti_neutron, anti_proton,
-#       deuteron, triton, alpha.
+#       deuteron, triton, alpha. 
 #  3) Choice of the  * Beam Energy * :
 #       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 80,
 #       100, 120, 150, 180, 200, 250, 300, 1000    GeV.
@@ -25,7 +25,7 @@
 #       I) Absorber and Active materials (and whether it is
 #          an homogeneous calorimeter or a sampling one):
 #            Fe-Sci, Cu-Sci, Pb-Sci, Cu-LAr, Pb-LAr, W-LAr  (Sampling) 
-#            PbWO4  (Homogeneous)
+#            PbWO4, Graphite (Homogeneous)
 #      II) Dimension and Segmentation:
 #          - Is the unit with which to express the dimension of
 #            the absorber in lambdas (interaction lengths), or
@@ -153,6 +153,11 @@
 #/mydet/activeMaterial PbWO4
 #/mydet/isCalHomogeneous 1
 #
+#--- Block of Graphite ---
+#/mydet/absorberMaterial Graphite
+#/mydet/activeMaterial Graphite
+#/mydet/isCalHomogeneous 1
+#
 #=== II) DIMENSION and SEGMENTATION ===
 #
 /mydet/isUnitInLambda 1
@@ -171,7 +176,7 @@
 #
 #=======================  NUMBER OF EVENTS  ====================
 #
-/run/beamOn    10
+/run/beamOn    10 
 #/run/beamOn   100
 #/run/beamOn  1000
 #/run/beamOn  5000

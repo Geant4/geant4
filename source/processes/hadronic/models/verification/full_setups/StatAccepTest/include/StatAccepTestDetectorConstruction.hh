@@ -73,6 +73,8 @@ private:
   G4Material* Silicon;
   G4Material* Quartz;
   G4Material* Brass;
+  G4Material* Aluminium;
+  G4Material* Graphite;
   G4Material* theAbsorberMaterial;
   G4Material* theActiveMaterial;
   
