@@ -88,8 +88,6 @@ print '  ========== START reproducibilityAll.py ========== '
 
 #***LOOKHERE***
 
-PHYSICS_LIST = 'LHEP'
-
 listParticleTypes = [
     "pi-" ,
     "pi+" ,

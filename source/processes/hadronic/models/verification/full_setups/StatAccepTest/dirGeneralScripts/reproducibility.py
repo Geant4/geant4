@@ -63,8 +63,6 @@ print '  ========== START reproducibility.py ========== '
 
 #***LOOKHERE***
 
-PHYSICS_LIST = 'LHEP'
-
 ParticleType = "pi-"
 ###ParticleType = "pi+"
 ###ParticleType = "kaon-"
