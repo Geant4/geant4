@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 13-Mar-2009
+# Last update: 16-Jul-2009
 #
 # This python script, which has no input parameters, makes 3
 # tests for checking the reproducibility of the sequence of
@@ -38,13 +38,10 @@
 #
 # This script assumes that the environmental variables needed
 # to run the application have been already properly defined;
-# in particular, the executable:
-#    $G4BIN/$G4SYSTEM/mainStatAccepTest-PHYSICS_LIST
-# should exist
-# (the Physics List can be selected in the main program:
-#    mainStatAccepTest.cc
-#  and then you should set "PHYSICS_LIST" in this script,
-#  see "***LOOKHERE***" below).
+# in particular, the environmental variable
+#             PHYSLIST
+# specifies the Physics List. If this variable is undefined,
+# then the Physics List QGSP_BERT will be used by default.
 # Furthermore, the script assumes that in the same directory
 # where the script is run the following file exists:
 #    start.rndm
@@ -69,7 +66,7 @@
 #     To do so, you have to do the following:
 #       -  uncomment the following line in the main program
 #          (mainStatAccepTest.cc):
-#          //runManager->SetUserAction(new StatAccepTestStackingAction);
+#          //runManager->SetUserAction( new StatAccepTestStackingAction );
 #       -  check whether the default biasing parameters
 #          (see "***LOOKHERE***" in src/StatAccepTestStackingAction.cc)
 #          are ok for you.
@@ -211,8 +208,8 @@ for iAbsorber in listAbsorbers :
 
                     print ' nameMacro=', nameMacro, ' nameOut=', nameOut
                     
-                    os.system( " mainStatAccepTest-" + PHYSICS_LIST +
-                               " " + nameMacro + " > " + nameOut + " 2>&1" )
+                    os.system( "mainStatAccepTest " + nameMacro + " > " + nameOut + \
+                               " 2>&1" )
 
                     logfile = open( nameOut, "r" )
                     for line in logfile :
