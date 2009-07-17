@@ -13,6 +13,18 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+17 July 2009 V. Uzhinsky (hadr-prtn-V09-02-01)
+   Improvement of FTF model:
+   A Status of nuclear nucleon involved in an interaction is introdused.
+   Status: 0 - spectator, 1 - involved nucleon, 2 - absorbed nucleon
+   (G4VSplitableHadron)
+
+   A connection between a participant nucleon and a nuclear nucleon was
+   introsuced in G4InteractionContent.
+
+   All of these allow to improve FTF model for pion obsorption on nuclei.
+   These required a lot of changes in FTF.
+-------------------------------------------------
 10 July 2009 V. Uzhinsky (hadr-prtn-V09-02-00)
    Introduction the right tag number.
 -------------------------------------------------
