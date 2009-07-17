@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2009-05-25 08:34:15 gcosmo Exp $
+$Id: History,v 1.143 2009-07-17 18:45:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-07-09 V.Ivanchenko (materials-V09-02-08)
+- G4NistManager, G4NistMessenger, G4NistElementBuilder - improved 
+         implementation of UI commands
 
 25-05-09 V.Ivanchenko (materials-V09-02-07)
 - Renamed G4ExternalDEDXTable class to G4ExtDEDXTable to allow for generation

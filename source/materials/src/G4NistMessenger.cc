@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.4 2007-05-02 10:48:52 vnivanch Exp $
+// $Id: G4NistMessenger.cc,v 1.5 2009-07-17 18:45:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,20 +69,21 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   prtElmCmd->SetGuidance("print element(s) in dataBase.");
   prtElmCmd->SetGuidance("symbol = element.");
   prtElmCmd->SetGuidance("all    = all elements.");
-  prtElmCmd->SetGuidance("verbose>1 : list associated isotopes.");  
   prtElmCmd->SetParameterName("symbol", true);
   prtElmCmd->SetDefaultValue("all");
   
   przElmCmd = new G4UIcmdWithAnInteger("/material/nist/printElementZ",this);
   przElmCmd->SetGuidance("print element Z in dataBase.");
-  przElmCmd->SetGuidance("verbose>1 : list associated isotopes.");
+  przElmCmd->SetGuidance("0 = all elements.");
+  przElmCmd->SetParameterName("Z", true);
+  przElmCmd->SetDefaultValue(0);
    
   lisMatCmd = new G4UIcmdWithAString("/material/nist/listMaterials",this);
-  lisMatCmd->SetGuidance("list materials in dataBase.");
-  lisMatCmd->SetGuidance("simple = simple nist materials.");
-  lisMatCmd->SetGuidance("compound = compound nist materials.");
-  lisMatCmd->SetGuidance("hep = hep materials.");
-  lisMatCmd->SetGuidance("all = all materials.");
+  lisMatCmd->SetGuidance("list materials in Geant4 dataBase.");
+  lisMatCmd->SetGuidance("simple - simple NIST materials.");
+  lisMatCmd->SetGuidance("compound - compound NIST materials.");
+  lisMatCmd->SetGuidance("hep - HEP materials.");
+  lisMatCmd->SetGuidance("all - list of all Geant4 materials.");
   lisMatCmd->SetParameterName("list", true);
   lisMatCmd->SetCandidates("simple compound hep all");
   lisMatCmd->SetDefaultValue("all");
@@ -91,10 +92,16 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   g4Dir->SetGuidance("Commands for G4MaterialTable");
   
   g4ElmCmd = new G4UIcmdWithAString("/material/g4/printElement",this);
-  g4ElmCmd->SetGuidance("print Element in G4ElementTable.");
+  g4ElmCmd->SetGuidance("print Element from G4ElementTable.");
+  g4ElmCmd->SetGuidance("all - all elements.");
+  g4ElmCmd->SetParameterName("elm", true);
+  g4ElmCmd->SetDefaultValue("all");
     
   g4MatCmd = new G4UIcmdWithAString("/material/g4/printMaterial",this);
-  g4MatCmd->SetGuidance("print Material in G4MaterialTable.");
+  g4MatCmd->SetGuidance("print Material from G4MaterialTable.");
+  g4MatCmd->SetGuidance("all - all materials");
+  g4MatCmd->SetParameterName("mat", true);
+  g4MatCmd->SetDefaultValue("all");
 
 }
 
