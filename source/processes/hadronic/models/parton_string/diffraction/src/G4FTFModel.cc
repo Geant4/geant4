@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.16 2009-07-10 11:08:08 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.17 2009-07-17 12:47:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -101,7 +101,6 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
-//G4cout<<"G4FTFModel::Init "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
 	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); 
 // Uzhi N-mass number Z-charge ------------------------- Uzhi 29.03.08
 
@@ -113,6 +112,8 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
 /*
 G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4endl;
 G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
+G4cout << " primary 3Mom           " << theProjectile.GetMomentum() << G4endl;
+G4cout << " primary space position " << theProjectile.GetPositionInNucleus() << G4endl;
 G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 */
 
@@ -121,18 +122,18 @@ G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
                                           aNucleus.GetN(),aNucleus.GetZ(),
                                           s);// ------------------------- Uzhi 19.04.08
 //theParameters->SetProbabilityOfElasticScatt(0.); // To turn on/off (1/0) elastic scattering
+
 }
 
 // ------------------------------------------------------------
 G4ExcitedStringVector * G4FTFModel::GetStrings()
 {
-//G4cout<<"theParticipants.GetList"<<G4endl;
 	theParticipants.GetList(theProjectile,theParameters);
-//G4cout<<"ExciteParticipants()"<<G4endl;
+
 	if (! ExciteParticipants()) return NULL;;
-//G4cout<<"theStrings = BuildStrings()"<<G4endl;
+
 	G4ExcitedStringVector * theStrings = BuildStrings();
-//G4cout<<"Return to theStrings "<<G4endl;
+
         if( theParameters != 0 )                              // Uzhi 9.12.08 
         {                                                     // Uzhi 9.12.08
           delete theParameters;                               // Uzhi 9.12.08
@@ -143,7 +144,6 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 
 // ------------------------------------------------------------
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){delete aH;} };
-
 // ------------------------------------------------------------
 G4bool G4FTFModel::ExciteParticipants()
 {
@@ -158,42 +158,52 @@ G4int counter=0;
 
 //G4int InterNumber=0; // Vova
 
-        G4bool Successfull=true;
+        G4bool Successfull=false;
 
 //	while (theParticipants.Next()&& (InterNumber < 3)) // Vova
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
-/*
-counter++;
-G4cout<<" Inter # "<<counter<<G4endl;
-*/
+//
+//counter++;
+//
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
-
-//   // Uzhi 29.03.08
+           G4Nucleon * TargetNucleon=collision.GetTargetNucleon(); // Uzhi 16.07.09
+// Uzhi 16.07.09 ----------------------------
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
-           {
-//G4cout<<"Elastic"<<G4endl;
-            G4bool Successfull_try=
-                   theElastic->ElasticScattering(projectile, target, theParameters);
-            Successfull = Successfull || Successfull_try;
+           { //   Elastic scattering -------------------------
+            if(theElastic->ElasticScattering(projectile, target, theParameters))
+            {
+             Successfull = Successfull || true;
+            } else
+            {
+             Successfull = Successfull || false;
+             if(target->GetStatus() == 0)                         // Uzhi 17.07.09
+             {
+              G4VSplitableHadron * aHit=0;                        // Uzhi 16.07.09
+              TargetNucleon->Hit(aHit);                           // Uzhi 16.07.09
+             };
+            };
            }
            else
-           {
-//G4cout<<"Inelastic"<<G4endl;
-            G4bool Successfull_try=
-                   theExcitation->ExciteParticipants(projectile, target, theParameters);
-            Successfull = Successfull || Successfull_try;
-//InterNumber++; // Vova
+           { //   Inelastic scattering ---------------------- 
+            if(theExcitation->ExciteParticipants(projectile, target, theParameters))
+            {
+             Successfull = Successfull || true; 
+            } else
+            {
+             Successfull = Successfull || false;
+             if(target->GetStatus() == 0)                         // Uzhi 16.06.09
+             {
+              G4VSplitableHadron * aHit=0;                        // Uzhi 16.07.09
+              TargetNucleon->Hit(aHit);                           // Uzhi 16.07.09
+             };
+            };
            }
         }       // end of the loop Uzhi 9.07.09
+// Uzhi 16.07.09 ----------------------------
 
-//G4cout<<"Successfull ? "<<Successfull<<G4endl;
-//           if(!Successfull)
-// // Uzhi 29.03.08
-
-//	   if ( ! theExcitation->ExciteParticipants(projectile, target) ) 
         if(!Successfull)
 	{
 //           give up, clean up
@@ -234,12 +244,15 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	
 	std::vector<G4VSplitableHadron *> primaries;
 	std::vector<G4VSplitableHadron *> targets;
+	std::vector<G4Nucleon          *> TargetNucleons;     // Uzhi 16.07.09
 	
 	theParticipants.StartLoop();    // restart a loop 
+//G4int InterCount(0); // Uzhi
 	while ( theParticipants.Next() ) 
 	{
 	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                  //  do not allow for duplicates ...
+
 	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
                                                 interaction.GetProjectile()) )
 	    	primaries.push_back(interaction.GetProjectile());
@@ -247,6 +260,12 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
                                                 interaction.GetTarget()) ) 
 	    	targets.push_back(interaction.GetTarget());
+
+	    if ( TargetNucleons.end()   == std::find(TargetNucleons.begin(),     // Uzhi16.07.09
+                                                     TargetNucleons.end(),       // Uzhi16.07.09
+                                                interaction.GetTargetNucleon()) )// Uzhi16.07.09
+	    	TargetNucleons.push_back(interaction.GetTargetNucleon());        // Uzhi16.07.09
+//InterCount++;
 	}
 	    
 	
@@ -257,31 +276,34 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 // Only for hA-interactions Uzhi -------------------------------------
 	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
 	{
-//G4ThreeVector aPosition=primaries[ahadron]->GetPosition();
-//G4cout<<"Proj Build "<<aPosition<<" "<<primaries[ahadron]->GetTimeOfCreation()<<G4endl;
             G4bool isProjectile;
-            if(primaries[ahadron]->GetActivation())   // Uzhi 7.07.09
-	         {isProjectile=true; }
-            else {isProjectile=false;};
+            if(primaries[ahadron]->GetStatus() == 1) {isProjectile=true; }  // Uzhi 17.07.09
+            if(primaries[ahadron]->GetStatus() == 2) {isProjectile=false;}  // Uzhi 17.07.09
 	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
 	}
 
 	for ( ahadron=0; ahadron < targets.size() ; ahadron++)
 	{
-//G4ThreeVector aPosition=targets[ahadron]->GetPosition();
-//G4cout<<"Targ Build "<<aPosition<<" "<<targets[ahadron]->GetTimeOfCreation()<<G4endl;
-            if(targets[ahadron]->GetActivation())   // Uzhi 7.07.09
+            if(targets[ahadron]->GetStatus() == 1)   // Uzhi 17.07.09
             {
 	     G4bool isProjectile=false;
 	     strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
+            } else
+            {
+             if(targets[ahadron]->GetStatus() == 0)// Uzhi 17.07.09 Nucleon was rejected
+             {
+              G4VSplitableHadron * aHit=0;          // Uzhi 16.07.09
+              TargetNucleons[ahadron]->Hit(aHit);   // Uzhi 16.07.09
+             }
             }
 	}
 
 	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
 	primaries.clear();
+
 	std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
 	targets.clear();
-	
+
 	return strings;
 }
 // ------------------------------------------------------------

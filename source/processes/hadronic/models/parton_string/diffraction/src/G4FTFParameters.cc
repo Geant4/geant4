@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.5 2009-07-09 15:14:09 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.6 2009-07-17 12:47:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,13 +45,15 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     {
     G4int PDGcode = particle->GetPDGEncoding();
     G4int absPDGcode = std::abs(PDGcode);
-    G4double Elab = (s - 2*0.88*GeV*GeV)/(2*0.939*GeV)/GeV;
-    G4double Plab = std::sqrt(Elab * Elab - 0.88);
+    G4double ProjectileMass = particle->GetPDGMass();
+    G4double TargetMass     = G4Proton::Proton()->GetPDGMass();
+
+    G4double Elab = (s - ProjectileMass*ProjectileMass - TargetMass*TargetMass)/
+                     (2*TargetMass);
+    G4double Plab = std::sqrt(Elab * Elab - ProjectileMass*ProjectileMass);
 
     G4double LogPlab = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
-
-//G4cout<<"G4FTFParameters Plab "<<Plab<<G4endl;
 
     G4int NumberOfTargetProtons  = (G4int) theZ; 
     G4int NumberOfTargetNeutrons = (G4int) theA- (G4int) theZ;
@@ -189,13 +191,9 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
 */ //=======================================================
 
-//G4cout<<" Rnn "<<Xtotal/pi/10.<<" "<<Xtotal/pi/10.*fermi*fermi<<G4endl;
-//G4cout<<"G4FTFParameters Xt Xel MeV "<<Xtotal<<" "<<Xelastic<<" "<<GeV<<G4endl;
-
 //-----------------------------------------------------------------------------------  
       SetSlope( Xtotal*Xtotal/16./pi/Xelastic/0.3894 ); // Slope parameter of elastic scattering
                                                         //      (GeV/c)^(-2))
-//G4cout<<"G4FTFParameters Slope "<<GetSlope()<<G4endl;
 //-----------------------------------------------------------------------------------
       SetGamma0( GetSlope()*Xtotal/10./2./pi );
 
@@ -261,9 +259,6 @@ SetProbabilityOfTarDiff(0.05);
 
               SetAveragePt2(0.3);                         // GeV^2
              };
-
-
-//G4cout<<"G4FTFParameters Out"<<G4endl;
 
     } 
 //**********************************************************************************************

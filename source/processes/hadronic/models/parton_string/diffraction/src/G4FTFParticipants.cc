@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.11 2009-07-09 15:14:09 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.12 2009-07-17 12:47:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -98,6 +98,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
 //G4int InterNumber=0;           // Uzhi
+//G4int NucleonNumber(0);        // Uzhi
 //while ( (nucleon=theNucleus->GetNextNucleon())&& (InterNumber < 1) ) // Uzhi
 	while ( (nucleon=theNucleus->GetNextNucleon()) ) // Uzhi
 	{
@@ -116,24 +117,29 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	   	     impactX=0;
 	   	     impactY=0;
 	   	}
+
+                primarySplitable->SetStatus(1);        // It takes part in the interaction
+
 		G4VSplitableHadron * targetSplitable=0;
-//	   	if ( (targetSplitable=nucleon->GetSplitableHadron()) == NULL )
 	   	if ( ! nucleon->AreYouHit() )
 	   	{
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
+                    targetSplitable->SetStatus(1);     // It takes part in the interaction
 	   	}
 	   	G4InteractionContent * aInteraction = 
                                        new G4InteractionContent(primarySplitable);
 		aInteraction->SetTarget(targetSplitable);
+                aInteraction->SetTargetNucleon(nucleon);     // Uzhi 16.07.09
 		theInteractions.push_back(aInteraction);
 	   }
+//NucleonNumber++; // Uzhi
 	}    
-
-//	G4cout << "Number of Hit nucleons " << theInteractions.size() //  entries() 
+// // Uzhi
+//	G4cout << "Number of Hit nucleons " << theInteractions.size()<<G4endl; //  entries() 
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
 //		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-
+// // Uzhi
     }
    
 }

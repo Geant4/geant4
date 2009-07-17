@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.2 2008-06-13 12:49:23 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.3 2009-07-17 12:47:14 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -68,7 +68,6 @@ class G4FTFParameters
         void SetProbabilityOfTarDiff(const G4double aValue);
 
         void SetAveragePt2(const G4double aValue);
-
    // Perevod mass*GeV Pt2*GeV*GeV
 
 // --------- Get geometrical parameteres -----------------------------
@@ -96,6 +95,7 @@ class G4FTFParameters
 
 
         G4double GetAveragePt2();
+
 //  private: 
 
 	G4FTFParameters();
