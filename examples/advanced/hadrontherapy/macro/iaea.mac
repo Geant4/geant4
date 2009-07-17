@@ -7,6 +7,8 @@
 # This macro can be used for a proton beam in water. Both electrmagnetic and
 # hadronic models are swiched on
 
+/control/getEnv G4SYSTEM
+ 
 #########################
 # Set of the verboses 
 #
@@ -25,6 +27,12 @@
 /physic/addPhysics binary                              # Hadronic inelastic model
 /physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
 
+
+##########################
+# Geomtery
+#
+/iaea/waterPhantomThickness 27.9 cm #default is 27.9
+
 ##########################
 # Initialisation procedure
 #
@@ -33,22 +41,57 @@
 ##########################
 # Visualisation 
 #
+
+####### DAWNFILE ###### 
 #/vis/scene/create
 #/vis/open DAWNFILE
 #/vis/viewer/flush
-#/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/set/viewpointThetaPhi 45 45	 deg
 #/vis/viewer/zoom 0
-#/vis/viewer/pan 0  0 cm
-#/tracking/storeTrajectory 1
+#/vis/viewer/pan 0 0 cm
+#/vis/scene/add/trajectories
 #/vis/scene/endOfEventAction accumulate
+#/tracking/storeTrajectory 1
+
 #/vis/viewer/update
+#/vis/scene/add/trajectories
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/scene/endOfEventAction accumulate
+
+####### OGLIX #######
+#/vis/scene/create
+#/vis/open OGLSX
+#/vis/open OGLIX
+#/vis/open OGLIX 600x600-100+0
+#/vis/drawVolume
+#/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/set/viewpointThetaPhi 80 170 deg
+#/vis/viewer/zoom 1.0
+#/vis/scene/add/trajectories
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+
+# Draw only certain particles
+#/vis/filtering/trajectories/create/particleFilter
+#    Now select filtered particles
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#/vis/filtering/trajectories/particleFilter-0/add electron
+#/vis/filtering/trajectories/particleFilter-0/add neutron
+#/vis/filtering/trajectories/particleFilter-0/add proton
+#/vis/filtering/trajectories/particleFilter-0/invert true # charged particles only
+
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
 
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step is 0.01 mm:
 #
 /physic/setCuts 1 cm
-#/physic/setCuts 0.01 mm
 /Step/waterPhantomStepMax 1 cm
 #/Step/waterPhantomStepMax 0.01 mm 
 
@@ -59,16 +102,26 @@
 /gun/particle ion
 /gun/ion 6 12 6     # Carbon-12
 
-/beam/energy/meanEnergy 4800 MeV
+/beam/energy/meanEnergy 4800 MeV # 400MeV/u * C12 = 4800
 /beam/energy/sigmaEnergy 24 MeV # dE/E = 5e-3
 
 #########################
 # Start of the run
 #
-#/run/beamOn 1
 
-/beam/position/Xposition -90 cm
+/beam/position/Xposition 0 cm
 /beam/position/Yposition 0 cm
 /beam/position/Zposition 0 cm
 
-/run/beamOn 10000
+#/run/beamOn 100    # For test/visualization
+ /run/beamOn 1000   # Default value in release
+#/run/beamOn 10000  # Good for basic physics run (takes few min)
+#/run/beamOn 100000 # Accurate results with good statistics 
+
+
+# Example of running in loop 
+/control/alias initialValue 0
+/control/alias   finalValue 3
+/control/alias     stepSize 1
+#/control/loop macro/iaea.loop counterName {initialValue} {finalValue} {stepSize}
+#/control/unalias initialValue 

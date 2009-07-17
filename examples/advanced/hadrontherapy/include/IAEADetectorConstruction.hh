@@ -48,7 +48,7 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class HadrontherapyDetectorROGeometry;
 class PassiveProtonBeamLine;
-class HadrontherapyDetectorMessenger;
+class IAEADetectorMessenger;
 class HadrontherapyModulator;
 class HadrontherapyDetectorSD;
 
@@ -79,7 +79,7 @@ private:
   //  G4VisAttributes* redWire;
   
 public: 
-
+  void setWaterThickness(G4double);
   G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
   // Returns the size of the voxel along the X axis
  
@@ -100,12 +100,26 @@ private:
 
   G4VPhysicalVolume* physicalTreatmentRoom;
   G4VPhysicalVolume* phantomPhysicalVolume;
+  G4VPhysicalVolume* phantomEdge1PhysicalVolume;
+  G4VPhysicalVolume* phantomEdge2PhysicalVolume;
+  
   G4LogicalVolume* detectorLogicalVolume;
-  G4LogicalVolume* NewDetectorLogicalVolume; ///<Logical volume for end-detector
+  G4LogicalVolume* beamWindowLogicalVolume; //<Logical volume for beam source window
+  G4LogicalVolume* NewDetectorLogicalVolume; //<Logical volume for end-detector
+  
   G4VPhysicalVolume* detectorPhysicalVolume;
+  G4VPhysicalVolume* beamWindowPhysicalVolume; ///<Logical volume for end-detector
   G4VPhysicalVolume* NewDetectorPhysicalVolume; ///<Physical volume for end-detector
-    
-  HadrontherapyDetectorMessenger* detectorMessenger; 
+
+  G4double startDetectorThickness;
+  G4double phantomCenter;
+  G4double phantomDepth;
+  G4double plexiThickness;
+  G4double aluWindowThickness;
+  G4double endDetectorThickness;
+  G4double endDetectorPosition;
+
+  IAEADetectorMessenger* detectorMessenger; 
 
   G4double detectorSizeX; 
   G4double detectorSizeY; 

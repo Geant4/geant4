@@ -56,7 +56,7 @@ namespace AIDA{
 }
 #endif
 
-#ifdef G4ROOTANALYSIS_USE ///< If analysis is done directly with ROOT
+#ifdef G4ANALYSIS_USE_ROOT ///< If analysis is done directly with ROOT
 #include "TROOT.h"
 #include "TFile.h"
 #include "TNtuple.h"
@@ -152,26 +152,28 @@ public:
   void hydrogenEnergy(G4double secondaryParticleKineticEnergy);
   ///< Energy distribution of the hydrogen (proton, d, t) particles after the phantom
 
-  void fillFragmentTuple(G4int A, G4int Z, G4double energy);
+  void fillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ);
   ///< Energy ntuple
 
   void genericIonInformation(G4int, G4double, G4int, G4double);
 
   void ThintargetBeamDisp(G4double,G4double);
 
+  void startNewEvent();
+  ///< Tell the analysis manager that a new event is starting
+
   void finish();
   ///< Close the .hbk file with the histograms and the ntuples
 
 void flush();
 
-#ifdef G4ROOTANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
 private:
   TH1F *createHistogram1D(const TString name, const TString title, int bins, double xmin, double xmax) {
     TH1F *histo = new TH1F(name, title, bins, xmin, xmax);
     histo->SetLineWidth(2);
     return histo;
   }
-  G4int debugi;
 #endif
 
 private:
@@ -197,10 +199,13 @@ private:
   AIDA::IHistogram1D *h12;
   AIDA::IHistogram1D *h13;
   AIDA::IHistogram1D *h14;
+  AIDA::IHistogram1D *h15;
+  AIDA::IHistogram1D *h16;
   AIDA::ITuple *ntuple;
   AIDA::ITuple *ionTuple;
+  AIDA::ITuple *fragmentTuple;
 #endif
-#ifdef G4ROOTANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   TFile *theTFile;
   TH1F *histo1;
   TH1F *histo2;
@@ -223,6 +228,7 @@ private:
   TNtuple *fragmentNtuple; // fragments
   TNtuple *metaData;
 #endif
+  G4long eventCounter;
 };
 #endif
 
