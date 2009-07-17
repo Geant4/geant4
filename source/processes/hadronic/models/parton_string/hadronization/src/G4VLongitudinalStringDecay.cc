@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.16 2009-07-09 18:48:11 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.17 2009-07-17 12:25:33 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -503,11 +503,12 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
 void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
    {
 
-   // `yo-yo` formation time
+//   `yo-yo` formation time
 //   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
      G4double kappa = GetStringTensionParameter();
 //G4cout<<"Kappa "<<kappa<<G4endl;                   // Uzhi 20.06.08
 //G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
+
    for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 
@@ -525,6 +526,7 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
       G4ThreeVector aPosition(0, 0,     
 (theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
       Hadrons->operator[](c1)->SetPosition(aPosition);
+
 /*
 G4cout<<"kappa "<<kappa<<G4endl;
 G4cout<<c1<<" Partic time, position Old "<<

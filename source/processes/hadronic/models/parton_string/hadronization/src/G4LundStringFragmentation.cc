@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.16 2009-07-09 18:48:11 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.17 2009-07-17 12:25:33 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -293,7 +293,8 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation();
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
-
+// Uzhi 11.07.09
+//G4cout<<" String T Pos"<<TimeOftheStringCreation<<' '<<PositionOftheStringCreation<<G4endl;
 /*  // For large formation time open *
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation()+100*fermi;
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition().x(),
@@ -313,6 +314,8 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
           PositionOftheStringCreation=aPosition;
         }
 */
+
+//G4cout<<"Lund Frag #"<<LeftVector->size()<<G4endl;       // Uzhi 11.07.09
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);
@@ -322,11 +325,20 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
 	   G4LorentzVector Coordinate(Hadron->GetPosition(), Hadron->GetFormationTime());
 	   Momentum = toObserverFrame*Coordinate;
-	   Hadron->SetFormationTime(TimeOftheStringCreation+Momentum.e());
+	   Hadron->SetFormationTime(TimeOftheStringCreation+Momentum.e()    // Uzhi 11.07.09
+                                                           -fermi/c_light); // Uzhi 11.07.09
 	   G4ThreeVector aPosition(Momentum.vect());
 //	   Hadron->SetPosition(theString.GetPosition()+aPosition);
 	   Hadron->SetPosition(PositionOftheStringCreation+aPosition);
 //G4cout<<"Hadron "<<C1<<" "<<Hadron->GetPosition()/fermi<<" "<<Hadron->GetFormationTime()/fermi<<G4endl;
+/* // Uzhi 11.07.09
+G4cout<<C1<<' '<<Hadron->GetDefinition()->GetParticleName()<<G4endl;
+G4cout<<Hadron->GetDefinition()->GetPDGMass()<<' '
+<<Hadron->Get4Momentum()<<G4endl;
+G4cout<<Hadron->GetFormationTime()<<' '
+<<Hadron->GetPosition()<<' '
+<<Hadron->GetPosition().z()/fermi<<G4endl;
+*/  // Uzhi
 	};
 
 //G4cout<<"Out FragmentString"<<G4endl;

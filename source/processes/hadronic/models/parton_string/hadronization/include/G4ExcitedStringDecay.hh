@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.7 2007-05-03 22:06:17 gunter Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.8 2009-07-17 12:25:33 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
