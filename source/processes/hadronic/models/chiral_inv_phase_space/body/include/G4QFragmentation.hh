@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.8 2009-07-10 16:42:57 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.9 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class G4QFragmentation
 
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const; //@@Once
   G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;//@@Onc
-
+  std::pair<G4int,G4int> ReducePair(G4int P1, G4int P2) const; // Reduce Q-pairs to singles
   G4QString* BuildString(G4QPartonPair* aPair)
    {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
 

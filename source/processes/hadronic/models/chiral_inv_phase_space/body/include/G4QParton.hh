@@ -27,7 +27,7 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.7 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QParton.hh,v 1.8 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -76,6 +76,7 @@ class G4QParton
   void Set4Momentum(const G4LorentzVector& aMomentum) {theMomentum=aMomentum;}
   void SetPosition(const G4ThreeVector& aPosition)    {thePosition=aPosition;}
   void SetSpinZ(G4double aSpinZ)                      {theSpinZ = aSpinZ;}
+  G4bool ReduceDiQADiQ(G4QParton* d1, G4QParton* d2); // Reduce DiQ-aDiQ to Q-aQ (general)
 
   // Selectors
   G4int GetPDGCode() const                            {return PGGCode;}

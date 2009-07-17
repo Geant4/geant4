@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.40 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.41 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -40,6 +40,7 @@
 
 #include "G4QCandidateVector.hh"
 #include "G4QHadronVector.hh"
+#include "G4LorentzRotation.hh"
 #include "G4QChipolino.hh"
 #include <utility>
 #include <vector>
@@ -146,6 +147,11 @@ public:
   {
     theMomentum.boost(theBoost);
     for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBoost);
+  }
+  void DoLorentzRotation(const G4LorentzRotation& theLoRot) // Lorentz Rotate nucleons
+  {
+    theMomentum=theLoRot*theMomentum;
+    for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->LorentzRotate(theLoRot);
   }
   void DoLorentzBoost(const G4ThreeVector& theBeta)// Boost nucleons by v/c
              {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBeta);}

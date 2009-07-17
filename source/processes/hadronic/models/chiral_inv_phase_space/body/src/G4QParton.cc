@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParton.cc,v 1.8 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QParton.cc,v 1.9 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -211,14 +211,14 @@ void G4QParton::SetPDGCode(G4int PDG)
   if(theType==1)
   {
     if(PDG>0) theColour = RGB;
-    else          theColour =-RGB;
+    else      theColour =-RGB;
   }
   // colour by random in (-1,-2,-3)=(Rbar,Gbar,Bbar)=(GB,RB,RG) for di-quarks and
   //                  in (1,2,3)=(R,G,B)=(GB,RB,RG) for anti-di-quarks:
   else if(theType==2)
   {
     if(PDG>0) theColour =-RGB;
-    else          theColour = RGB;
+    else      theColour = RGB;
   }
   // ColourByRandom (-11,-12,-13,-21,...,-33)=(RRbar,RGbar,RBbar,...,BBbar) for gluons
   else theColour = -(RGB*10 + (G4int)(3*G4UniformRand())+1);
@@ -242,3 +242,77 @@ void G4QParton::DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection
   a4Momentum.setE( 0.5*(aLightConeMomentum + TransverseMass2/aLightConeMomentum));
   Set4Momentum(a4Momentum);
 }  
+
+// Reduce DiQ-aDiQ to Q-aQ (true if succeeded). General function of the QPartons operations
+G4bool G4QParton::ReduceDiQADiQ(G4QParton* d1, G4QParton* d2)
+{
+  G4bool result=false;
+  G4int sPDG=d1->GetPDGCode();
+  G4int nPDG=d2->GetPDGCode();
+#ifdef debug
+  G4cout<<"G4QParton::ReduceDiQADiQ: **Called** LPDG="<<sPDG<<", RPDG="<<nPDG<<G4endl;
+#endif
+  G4int        qPDG=sPDG;
+  if(qPDG<-99) qPDG=(-qPDG)/100;
+  else         qPDG/=100;
+  G4int        dPDG=nPDG;
+  if(dPDG<-99) dPDG=(-dPDG)/100;
+  else         dPDG/=100;
+  G4int L1=qPDG/10;
+  G4int L2=qPDG%10;
+  G4int R1=dPDG/10;
+  G4int R2=dPDG%10;
+  if(L1==R1 || L1==R2 || L2==R1 || L2==R2) // Annihilation condition
+  {
+    if     (L1==R1)
+    {
+      if(sPDG>0) sPDG=L2;
+      else       sPDG=-L2;
+      if(nPDG>0) nPDG=R2;
+      else       nPDG=-R2;
+#ifdef debug
+      G4cout<<"G4QParton::ReDiQADiQ:L2="<<L2<<",R2="<<R2<<",L="<<sPDG<<",R="<<nPDG<<G4endl;
+#endif
+    }
+    else if(L1==R2)
+    {
+      if(sPDG>0) sPDG=L2;
+      else       sPDG=-L2;
+      if(nPDG>0) nPDG=R1;
+      else       nPDG=-R1;
+#ifdef debug
+      G4cout<<"G4QParton::ReDiQADiQ:L2="<<L2<<",R1="<<R1<<",L="<<sPDG<<",R="<<nPDG<<G4endl;
+#endif
+    }
+    else if(L2==R1)
+    {
+      if(sPDG>0) sPDG=L1;
+      else       sPDG=-L1;
+      if(nPDG>0) nPDG=R2;
+      else       nPDG=-R2;
+#ifdef debug
+      G4cout<<"G4QParton::ReDiQADiQ:L1="<<L1<<",R2="<<R2<<",L="<<sPDG<<",R="<<nPDG<<G4endl;
+#endif
+    }
+    else //(L2==R2)
+    {
+      if(sPDG>0) sPDG=L1;
+      else       sPDG=-L1;
+      if(nPDG>0) nPDG=R1;
+      else       nPDG=-R1;
+#ifdef debug
+      G4cout<<"G4QParton::ReDiQADiQ:L1="<<L1<<",R1="<<R1<<",L="<<sPDG<<",R="<<nPDG<<G4endl;
+#endif
+    }
+    d1->SetPDGCode(sPDG);             // Reset the left quark
+    d2->SetPDGCode(nPDG);            // Reset the right quark
+    result=true;
+#ifdef debug
+    G4cout<<"G4QParton::ReduceDiQADiQ:AfterReduction,L="<<sPDG<<",R="<<nPDG<<G4endl;
+#endif
+  }
+#ifdef debug
+  else G4cout<<"-Warning-G4QParton::ReduceDiQADiQ:DQ-aDQ reduction to Q-aQ Failed"<<G4endl;
+#endif
+  return result;
+}

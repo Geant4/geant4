@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.cc,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QInteraction.cc,v 1.4 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------
@@ -33,8 +33,7 @@
 //      ---------------- G4QInteraction----------------
 //            Created by Mikhail Kossov Oct, 2006
 //   class for colliding particles (hadrons) in Parton String Models
-//   For comparison mirror member functions are taken from G4 class:
-//   G4InteractionContent
+//   For comparison mirror member function is G4InteractionContent
 // ---------------------------------------------------------------------
 //  Short description: Classify the interaction in soft/hard/diffractive
 //  parts for firther treatment by the QGS algorithm.

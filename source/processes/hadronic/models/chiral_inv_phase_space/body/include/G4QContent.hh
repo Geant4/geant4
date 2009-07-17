@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.29 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QContent.hh,v 1.30 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -115,6 +115,9 @@ public:
   G4int GetAUAD() const;    // A#of anti-ud-di-quarks
   G4int GetADAS() const;    // A#of anti-ds-di-quarks
   G4int GetAUAS() const;    // A#of anti-us-di-quarks
+
+  std::pair<G4int,G4int> MakePartonPair() const;// Make PDG's of PartonPairs for Mes&Baryon
+  G4int AddParton(G4int pPDG) const; // Add parton with pPDG to the hadron with this QC
 
   // Modifiers
   void              Anti();

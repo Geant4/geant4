@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.41 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.42 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -46,6 +46,7 @@
 #include "Randomize.hh"
 #include "G4QParticle.hh"
 #include "G4QPartonVector.hh"
+#include "G4QPartonPair.hh"
 #include "G4LorentzRotation.hh"
 #include <list>
 
@@ -86,8 +87,6 @@ public:
   G4int                 GetStrangeness()  const;    // Get Strangeness of the Hadron
   G4int                 GetBaryonNumber() const;    // Get Baryon Number of the Hadron
   const G4ThreeVector&  GetPosition()     const;    // Get hadron coordinates
-  G4int                 GetSoftCollisionCount();    // Get QGS Counter of collisions
-  G4bool                IsSplit() {return isSplit;} // Check that hadron has been split
   G4double              GetBindingEnergy() {return bindE;}// Returns binding E in NucMatter
   G4double              GetFormationTime() {return formTime;} // Returns formation time
   std::list<G4QParton*> GetColor() {return Color;}  // pointer to quarks/anti-diquarks
@@ -100,10 +99,9 @@ public:
   void NegPDGCode();                                // Change a sign of the PDG code
   void MakeAntiHadron();                            // Make AntiHadron of this Hadron
   void SetPosition(const G4ThreeVector& aPosition); // Set coordinates of hadron position
-  void IncrementCollisionCount(G4int aCount);       // Increnment counter of collisions
-  void SetCollisionCount(G4int aCount);             // Set counter of QGSM collisions
-  void Splitting() {isSplit = true;}                // Put Up a flag that splitting is done
+  void IncrementCollisionCount(G4int aCount) {theCollisionCount+=aCount;}// IncrTheCCounter
   void SplitUp();                                   // Make QGSM String Splitting of Hadron
+  G4QPartonPair* SplitInTwoPartons();               // RandomSplit ofTheHadron in 2 partons
   G4QParton* GetNextParton();                       // Next Parton in a string
   G4QParton* GetNextAntiParton();                   // Next Anti-Parton in a string
   void SetBindingEnergy(G4double aBindE){bindE=aBindE;}// Set Binding E in Nuclear Matter
@@ -184,15 +182,13 @@ inline G4int           G4QHadron::GetCharge()       const  {return valQ.GetCharg
 inline G4int           G4QHadron::GetStrangeness()  const  {return valQ.GetStrangeness();}
 inline G4int           G4QHadron::GetBaryonNumber() const  {return valQ.GetBaryonNumber();}
 inline const G4ThreeVector& G4QHadron::GetPosition() const {return thePosition;}
-inline G4int           G4QHadron::GetSoftCollisionCount()  {return theCollisionCount;}
+//inline G4int           G4QHadron::GetSoftCollisionCount()  {return theCollisionCount;}
 
 inline void            G4QHadron::MakeAntiHadron()    {if(TestRealNeutral()) NegPDGCode();}
 inline void   G4QHadron::SetQC(const G4QContent& newQC)             {valQ=newQC;}
 inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)  {theMomentum=aMom;}
 inline void   G4QHadron::SetNFragments(const G4int& nf)             {nFragm=nf;}
 inline void   G4QHadron::SetPosition(const G4ThreeVector& position) {thePosition=position;}
-inline void   G4QHadron::IncrementCollisionCount(G4int aCount) {theCollisionCount+=aCount;}
-inline void   G4QHadron::SetCollisionCount(G4int aCount)       {theCollisionCount =aCount;}
 
 inline void   G4QHadron::NegPDGCode()                  {theQPDG.NegPDGCode(); valQ.Anti();}
 inline G4bool G4QHadron::TestRealNeutral()             { return theQPDG.TestRealNeutral();}

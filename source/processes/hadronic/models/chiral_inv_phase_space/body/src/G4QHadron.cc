@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.57 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.58 2009-07-17 16:54:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -49,7 +49,7 @@ using namespace std;
 
 G4double G4QHadron::alpha = -0.5;   // (alpha_s(0) changing rapidity distribution for all
 G4double G4QHadron::beta  = 2.5;    // changing rapidity distribution for projectile region
-G4double G4QHadron::theMinPz = 70.*MeV;             // Can be from 14 to 140 MeV
+G4double G4QHadron::theMinPz = 14.*MeV; // @@GetRidOfIt@@ Can be 14-140 MeV @@ used once
 G4double G4QHadron::StrangeSuppress = 0.48;         // ? M.K.
 G4double G4QHadron::sigmaPt = 1.7*GeV;              // Can be 0 ?
 G4double G4QHadron::widthOfPtSquare = 0.01*GeV*GeV; // ? M.K.
@@ -564,7 +564,7 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   }
   else if (iM+.001<fM+sM || iM==0.)
   {
-#ifdef pdebug
+#ifdef debug
     G4cerr<<"***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<"="<<fM+sM<<" > iM="<<iM
           <<", d="<<iM-fM-sM<<G4endl;
 #endif
@@ -615,14 +615,14 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     }
   }
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lor.Trans.
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QHadron::DecIn2:LorTrans v="<<ltb<<",f4Mom="<<f4Mom<<",s4Mom="<<s4Mom<<G4endl;
 #endif
   if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::DecIn2:*Boost* f4M="<<f4Mom<<G4endl;
   f4Mom.boost(ltb);                        // Lor.Trans. of 1st hadron back to LS
   if(s4Mom.e()+.001<s4Mom.rho())G4cerr<<"*G4QH::DecIn2:*Boost* s4M="<<s4Mom<<G4endl; 
   s4Mom.boost(ltb);                        // Lor.Trans. of 2nd hadron back to LS
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QHadron::DecayIn2: ROOT OUTPUT f4Mom="<<f4Mom<<", s4Mom="<<s4Mom<<G4endl;
 #endif
   return true;
@@ -634,7 +634,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   G4double fM  = fr4Mom.m();                // Mass of the Fragment
   G4LorentzVector comp=theMomentum+fr4Mom;  // 4Mom of the decaying compound system
   G4double iM  = comp.m();                  // mass of the decaying compound system
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QH::CMDIn2: iM="<<iM<<comp<<"=>fM="<<fM<<"+corM="<<corM<<"="<<fM+corM<<G4endl;
 #endif
   G4double dE=iM-fM-corM;
@@ -659,7 +659,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   G4double p2 = (d2*d2/4.-fM2*corM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
   if (p2<0.)
   {
-#ifdef pdebug
+#ifdef debug
     G4cerr<<"**G4QH::CMDI2:p2="<<p2<<"<0,d="<<d2*d2/4.<<"<4*fM2*hM2="<<4*fM2*corM2<<G4endl;
 #endif
     p2=0.;
@@ -715,7 +715,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   fr4Mom.setE(sqrt(fM2+p2));
   theMomentum.setVect((-1)*pVect);
   theMomentum.setE(sqrt(corM2+p2));
-#ifdef pdebug
+#ifdef debug
   G4LorentzVector dif2=comp-fr4Mom-theMomentum;
   G4cout<<"G4QH::CorMDIn2:c="<<comp<<"-f="<<fr4Mom<<"-4M="<<theMomentum<<"="<<dif2<<G4endl;
 #endif
@@ -727,7 +727,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
     theMomentum.setE(1.0000001*theMomentum.rho());
   }
   theMomentum.boost(ltb);                  // Lor.Trans. of the Hadron back to LS
-#ifdef pdebug
+#ifdef debug
   G4LorentzVector dif3=comp-fr4Mom-theMomentum;
   G4cout<<"G4QH::CorMDecIn2:OUTPUT:f4M="<<fr4Mom<<",h4M="<<theMomentum<<"d="<<dif3<<G4endl;
 #endif
@@ -739,12 +739,12 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
 G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
 {//    ===============================================================
   G4double fE  = fr4Mom.m();                // Energy of the Fragment
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QH::CorEDecIn2:fE="<<fE<<fr4Mom<<">corE="<<corE<<",h4M="<<theMomentum<<G4endl;
 #endif
   if (fE+.001<=corE)
   {
-#ifdef pdebug
+#ifdef debug
     G4cerr<<"***G4QHadron::CorEDecIn2*** fE="<<fE<<"<corE="<<corE<<", d="<<corE-fE<<G4endl;
 #endif
     return false;
@@ -767,7 +767,7 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
   G4double mE=theMomentum.e();
   ///////////G4double mM2=theMomentum.m2();
   theMomentum= G4LorentzVector(Px,Py,Pz,mE+corE);
-#ifdef pdebug
+#ifdef debug
   G4double difF=fr4Mom.m2()-fM2;
   G4cout<<"G4QH::CorEDecIn2: dF="<<difF<<",out:"<<theMomentum<<fr4Mom<<G4endl;
 #endif
@@ -1079,14 +1079,14 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
 // Split the hadron in two partons ( quark = anti-diquark v.s. anti-quark = diquark)
 void G4QHadron::SplitUp()
 {  
-  if (IsSplit()) return;
-#ifdef debug
+  if (isSplit) return;
+#ifdef pdebug
   G4cout<<"G4QHadron::SplitUp ***IsCalled***, before Splitting nC="<<Color.size()
-        <<", SoftColCount="<<GetSoftCollisionCount()<<G4endl;
+        <<", SoftColCount="<<theCollisionCount<<G4endl;
 #endif
-  Splitting();                                      // Just put up the isSplit flag ??
+  isSplit=true;                                     // PutUp isSplit flag to avoid remake
   if (!Color.empty()) return;                       // Do not split if it is already split
-  if (!GetSoftCollisionCount())                     // Diffractive splitting from particDef
+  if (!theCollisionCount)                           // Diffractive splitting from particDef
   {
     G4QParton* Left = 0;
     G4QParton* Right = 0;
@@ -1097,7 +1097,7 @@ void G4QHadron::SplitUp()
   
     G4double theMomPlus  = theMomentum.plus();      // E+pz
     G4double theMomMinus = theMomentum.minus();     // E-pz
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* possition="<<Pos<<", 4M="<<theMomentum<<G4endl;
 #endif
 
@@ -1108,32 +1108,32 @@ void G4QHadron::SplitUp()
     G4ThreeVector pt(minTransverseMass, minTransverseMass, 0); // default value
     if(maxAvailMomentum2/widthOfPtSquare > 0.01)
                                          pt=GaussianPt(widthOfPtSquare, maxAvailMomentum2);
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* maxMom2="<<maxAvailMomentum2<<", pt="<<pt<<G4endl;
 #endif
     G4LorentzVector LeftMom(pt, 0.);
     G4LorentzVector RightMom;
     RightMom.setPx(theMomentum.px() - pt.x());
     RightMom.setPy(theMomentum.py() - pt.y());
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* right4m="<<RightMom<<", left4M="<<LeftMom<<G4endl;
 #endif
     G4double Local1 = theMomMinus + (RightMom.perp2() - LeftMom.perp2()) / theMomPlus;
     G4double Local2 = std::sqrt(std::max(0., Local1*Local1 -
                                              4*RightMom.perp2()*theMomMinus / theMomPlus));
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp:Dif,L1="<<Local1<<",L2="<<Local2<<",D="<<Direction<<G4endl;
 #endif
     if (Direction) Local2 = -Local2;
     G4double RightMinus   = 0.5*(Local1 + Local2);
     G4double LeftMinus = theMomentum.minus() - RightMinus;
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* Rminus="<<RightMinus<<",Lminus="<<LeftMinus<<",hmm="
           <<theMomentum.minus()<<G4endl;
 #endif
     G4double LeftPlus  = LeftMom.perp2()/LeftMinus;
     G4double RightPlus = theMomentum.plus() - LeftPlus;
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* Rplus="<<RightPlus<<", Lplus="<<LeftPlus<<G4endl;
 #endif
     LeftMom.setPz(0.5*(LeftPlus - LeftMinus));
@@ -1141,7 +1141,7 @@ void G4QHadron::SplitUp()
     RightMom.setPz(0.5*(RightPlus - RightMinus));
     RightMom.setE (0.5*(RightPlus + RightMinus));
     //G4cout<<"DSU 6: Left4M="<<LeftMom<<", Right4M="<<RightMom<<G4endl;
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* -final- R4m="<<RightMom<<", L4M="<<LeftMom<<", L+R="
           <<RightMom+LeftMom<<", D4M="<<theMomentum-RightMom+LeftMom<<G4endl;
 #endif
@@ -1156,8 +1156,8 @@ void G4QHadron::SplitUp()
     //G4double phi, pts;
     G4ThreeVector SumP(0.,0.,0.);                         // Remember the hadron position
     G4ThreeVector Pos = GetPosition();                    // Remember the hadron position
-    G4int nSeaPair = GetSoftCollisionCount()-1;           // a#of sea-pairs
-#ifdef debug
+    G4int nSeaPair = theCollisionCount-1;                 // a#of sea-pairs
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp:*Soft* Pos="<<Pos<<", nSeaPair="<<nSeaPair<<G4endl;
 #endif   
     // here the condition,to ensure viability of splitting, also in cases
@@ -1174,7 +1174,7 @@ void G4QHadron::SplitUp()
       // save colour a spin-3 for anti-quark
       G4int firstPartonColour = aParton->GetColour();
       G4double firstPartonSpinZ = aParton->GetSpinZ();
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplitUp:*Soft* Part1 PDG="<<aPDGCode<<", Col="<<firstPartonColour
             <<", SpinZ="<<firstPartonSpinZ<<", 4M="<<aParton->Get4Momentum()<<G4endl;
 #endif
@@ -1185,13 +1185,13 @@ void G4QHadron::SplitUp()
       aParton = BuildSeaQuark(true, aPDGCode); // Redefine "aParton" (working pointer)
       aParton->SetSpinZ(-firstPartonSpinZ);
       aParton->SetColour(-firstPartonColour);
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplUp:Sft,P2="<<aParton->Get4Momentum()<<",i="<<aSeaPair<<G4endl;
 #endif
 
       SumP+=aParton->Get4Momentum();
       AntiColor.push_back(aParton);                       // Anti-quark/diquark is filled
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplUp:*Sft* Antiquark is filled, i="<<aSeaPair<<G4endl;
 #endif
     }
@@ -1200,13 +1200,13 @@ void G4QHadron::SplitUp()
     G4QParton* pAntiColorParton = 0;
     GetValenceQuarkFlavors(pColorParton, pAntiColorParton);
     G4int ColorEncoding = pColorParton->GetPDGCode();
-#ifdef debug
+#ifdef pdebug
     G4int AntiColorEncoding = pAntiColorParton->GetPDGCode();
     G4cout<<"G4QHadron::SplUp:*Sft*,C="<<ColorEncoding<<", AC="<<AntiColorEncoding<<G4endl;
 #endif
     G4ThreeVector ptr = GaussianPt(sigmaPt, DBL_MAX);
     SumP += ptr;
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Sft*, ptr="<<ptr<<G4endl;
 #endif
 
@@ -1226,13 +1226,12 @@ void G4QHadron::SplitUp()
     }
     Color.push_back(pColorParton);
     AntiColor.push_back(pAntiColorParton);
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Soft* Col&Anticol are filled PDG="<<GetPDGCode()<<G4endl;
 #endif
     // Sample X
-    //G4double LightConeMomentum=(Direction)? Get4Momentum().plus():Get4Momentum().minus();
-    //G4double Xmin = theMinPz/LightConeMomentum;
-    G4double Xmin = std::min( theMinPz/(theMomentum.e() - GetMass()), 0.5/(nSeaPair+1) );
+    G4double Xmin = std::min( theMinPz/(theMomentum.e() - GetMass()), 0.5/(nSeaPair+2) );
+    //G4double Xmin = 0.;                                      // Can be absolete... ? 
     G4int    nAttempt = 0;
     G4double SumX = 0;
     G4double aBeta = beta;                                   // default for all baryons
@@ -1255,19 +1254,19 @@ void G4QHadron::SplitUp()
     {
       SumX=0.;
       nAttempt++;
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplitUp: *Soft* ------->LOOP. Attempt#"<<nAttempt<<G4endl;
 #endif
       G4int NumberOfUnsampledSeaQuarks = dnSeaPair;
       //G4double beta1 = beta; // !! beta1 is not used !!
       ////For mesons (what about Kaons, for which aBeta=0? M.K.?) 
       //if(std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000)beta1=1.;
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplitUp:*Sft* Loop Before Xmin="<<Xmin<<",aB="<<aBeta
             <<",nUnsampledSea="<<NumberOfUnsampledSeaQuarks<<G4endl;
 #endif
       ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
-#ifdef debug
+#ifdef pdebug
       G4cout<<"G4QHadron::SplitUp:*Sft* Loop ColorX="<<ColorX<<G4endl;
 #endif
       Color.back()->SetX(SumX = ColorX);             // this is the valence quark.
@@ -1284,39 +1283,37 @@ void G4QHadron::SplitUp()
         ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
         (*icolor)->SetX(ColorX);
         SumX += ColorX; 
-#ifdef debug
+#ifdef pdebug
         G4cout<<"G4QHadron::SplitUp:*Sft* Loop/loopC sumX="<<SumX<<",Xmin="<<Xmin<<G4endl;
 #endif
         NumberOfUnsampledSeaQuarks--;
         AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
         (*ianticolor)->SetX(AntiColorX); // the 'sea' partons
         SumX += AntiColorX;
-#ifdef debug
+#ifdef pdebug
         G4cout<<"G4QHadron::SplitUp:*Sft* Loop/loopAC sumX="<<SumX<<",Xmin="<<Xmin<<G4endl;
 #endif
         if (1. - SumX <= Xmin)  break;
+#ifdef pdebug
+        G4cout<<"G4QHadron::SplitUp:*Sft* LOOP nUnSea="<<NumberOfUnsampledSeaQuarks
+              <<", 1-SumX="<<1.- SumX<<", Xmin="<<Xmin<<G4endl;
+#endif
       }
     } while (1. - SumX <= Xmin); 
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Sfot* After LOOP SumX="<<SumX<<",1-Xm="<<1.-Xmin<<G4endl;
 #endif
     AntiColor.back()->SetX(1.0 - SumX); // the di-quark takes the rest, then go to momentum
-    //G4double lightCone = ((!Direction) ? theMomentum.minus() : theMomentum.plus());
-#ifdef debug
-    //G4cout<<"G4QHadron::SplitUp:*Soft*E="<<theMomentum.t()<<",LCone="<<lightCone<<G4endl;
-#endif
     std::list<G4QParton*>::iterator icolor = Color.begin();
     std::list<G4QParton*>::iterator ecolor = Color.end();
     std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
     std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
     for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
     {
-      //(*icolor)->DefineMomentumInZ(lightCone, Direction);
-      //(*ianticolor)->DefineMomentumInZ(lightCone, Direction);
       (*icolor)->DefineEPz(theMomentum);
       (*ianticolor)->DefineEPz(theMomentum);
     }
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Soft* ===> End, ColSize="<<Color.size()<<G4endl;
 #endif
     return;
@@ -1647,16 +1644,28 @@ G4ThreeVector G4QHadron::GaussianPt(G4double widthSquare, G4double maxPtSquare)
 
 G4QParton* G4QHadron::GetNextParton()
 {
-   if(Color.size()==0) return 0;
-   G4QParton* result = Color.back();
-   Color.pop_back();
-   return result;
+  if(Color.size()==0) return 0;
+  G4QParton* result = Color.back();
+  Color.pop_back();
+  return result;
 }
 
 G4QParton* G4QHadron::GetNextAntiParton()
 {
-   if(AntiColor.size() == 0) return 0;
-   G4QParton* result = AntiColor.front();
-   AntiColor.pop_front();
-   return result;
+  if(AntiColor.size() == 0) return 0;
+  G4QParton* result = AntiColor.front();
+  AntiColor.pop_front();
+  return result;
+}
+
+// Random Split of the Hadron in 2 Partons (caller is responsible for G4QPartonPair delete)
+G4QPartonPair* G4QHadron::SplitInTwoPartons() // If result=0: impossible to split (?)
+{
+  if(std::abs(GetBaryonNumber())>1) // Not Baryons or Mesons or Anti-Baryons
+  {
+    G4cerr<<"***G4QHadron::SplitInTwoPartons: Can not split QC="<<valQ<< G4endl;
+    G4Exception("G4QFragmentation::ChooseX:","72",FatalException,"NeitherMesonNorBaryon");
+  }
+  std::pair<G4int,G4int> PP = valQ.MakePartonPair();
+  return new G4QPartonPair(new G4QParton(PP.first), new G4QParton(PP.second));
 }
