@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.13 2009-07-09 16:34:31 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.14 2009-07-20 18:41:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(100.*TeV),isInitialized(false)
 { 
-  fr=0.02,rangeinit=0.,masslimite=0.6*MeV;
+  fr=0.02,rangeinit=0.,masslimite=0.6*MeV,
   particle=0;tausmall=1.e-16;taulim=1.e-6;tlimit=1.e10*mm;
   tlimitmin=10.e-6*mm;geombig=1.e50*mm;geommin=1.e-3*mm,tgeom=geombig;
   tlimitminfix=1.e-6*mm;stepmin=tlimitminfix;lambdalimit=1.*mm;smallstep=1.e10;
@@ -264,21 +264,25 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	  nu0 = (1.0 - nu)/2.;
 	  nu1 = nu*delta;
 	  nu2 = nu*(1.0-delta);
-	  x_coord=tPathLength*(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu0*us);
-	  y_coord=tPathLength*(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu0*vs);
-	  z_coord=tPathLength*(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu0*ws)  ;
+	  x_coord=(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu0*us);
+	  y_coord=(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu0*vs);
+	  z_coord=(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu0*ws)  ;
 	}
-      
-      G4double r=sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
-      //      if(r!=0.){x_coord *=tPathLength/r;y_coord *=tPathLength/r;z_coord *=tPathLength/r;
-      // r=tPathLength;
-      // }
 
-      // if(tPathLength <= zPathLength) return;
-
+      // displacement is computed relatively to the end point
+      z_coord -= 1.0;
+      G4double rr = sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
+      G4double r  = rr*zPathLength;
+      /*
+      G4cout << "G4GS::SampleSecondaries: e(MeV)= " << kineticEnergy
+	     << " sinTheta= " << sqrt(1.0 - ws*ws) << " r(mm)= " << r
+	     << " trueStep(mm)= " << tPathLength
+	     << " geomStep(mm)= " << zPathLength
+	     << G4endl;
+      */
       if(r > tlimitminfix) {
 
-        G4ThreeVector latDirection(x_coord/r,y_coord/r,z_coord/r);
+        G4ThreeVector latDirection(x_coord/rr,y_coord/rr,z_coord/rr);
         latDirection.rotateUz(oldDirection);
 
 	ComputeDisplacement(fParticleChange, latDirection, r, safety);
@@ -457,6 +461,11 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 
   G4double presafety = sp->GetSafety();
 
+  //G4cout << "G4GS::StepLimit tPathLength= " 
+  //	 <<tPathLength<<" safety= " << presafety
+  //       << " range= " <<currentRange<< " lambda= "<<lambda1
+  //	 << " Alg: " << steppingAlgorithm <<G4endl;
+
   // far from geometry boundary
   if(currentRange < presafety)
     {
@@ -487,6 +496,19 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
           if(stepStatus == fUndefined) smallstep = 1.e10;
           else  smallstep = 1.;
 
+          //define stepmin here (it depends on lambda!)
+          //rough estimation of lambda_elastic/lambda_transport
+          G4double rat = currentKinEnergy/MeV ;
+          rat = 1.e-3/(rat*(10.+rat)) ;
+          //stepmin ~ lambda_elastic
+          stepmin = rat*lambda1;
+          skindepth = skin*stepmin;
+          //define tlimitmin
+          tlimitmin = 10.*stepmin;
+          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+
+	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
+	  //	 << " tlimitmin= " << tlimitmin << " geomlimit= " << geomlimit <<G4endl;
 	  // constraint from the geometry 
 	  if((geomlimit < geombig) && (geomlimit > geommin))
 	    {
@@ -497,18 +519,6 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 	    }
             else
               tgeom = geombig;
-
-          //define stepmin here (it depends on lambda!)
-          //rough estimation of lambda_elastic/lambda_transport
-          G4double rat = currentKinEnergy/MeV ;
-          rat = 1.e-3/(rat*(10.+rat)) ;
-          //stepmin ~ lambda_elastic
-          stepmin = rat*lambda1;
-          skindepth = skin*stepmin;
-
-          //define tlimitmin
-          tlimitmin = 10.*stepmin;
-          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
 
         }
 
@@ -521,6 +531,9 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
       if(tlimit < tlimitmin) tlimit = tlimitmin;
 
       if(tlimit > tgeom) tlimit = tgeom;
+
+      //G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
+      //      << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
 
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
@@ -549,7 +562,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 
       if(tlimit < stepmin) tlimit = stepmin;
 
-      if(tPathLength > tlimit) tPathLength = tlimit  ; 
+      if(tPathLength > tlimit) tPathLength = tlimit; 
 
     }
     // for 'normal' simulation with or without magnetic field 
@@ -611,6 +624,8 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 	  if(tPathLength > tlimit) tPathLength = tlimit;
 	}
     }
+  //G4cout << "tPathLength= " << tPathLength  
+  // << " currentMinimalStep= " << currentMinimalStep << G4endl;
   return tPathLength ;
 }
 
@@ -693,6 +708,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
     }
   }
   if(zPathLength > lambda1) zPathLength = lambda1;
+  //G4cout << "zPathLength= " << zPathLength << " lambda1= " << lambda1 << G4endl;
 
   return zPathLength;
 }
@@ -725,6 +741,7 @@ G4GoudsmitSaundersonMscModel::ComputeTrueStepLength(G4double geomStepLength)
 	}  
     }
   if(tPathLength < geomStepLength) tPathLength = geomStepLength;
+  //G4cout << "tPathLength= " << tPathLength << " step= " << geomStepLength << G4endl;
 
   return tPathLength;
 }
