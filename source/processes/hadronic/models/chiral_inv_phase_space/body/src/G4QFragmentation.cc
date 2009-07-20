@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.14 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.15 2009-07-20 07:52:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -42,9 +42,9 @@
 // Rhe key member function is Scatter, making the interaction (see G4QCollision)
 // -----------------------------------------------------------------------------
 
-//#define debug
-//#define edebug
-//#define pdebug
+#define debug
+#define edebug
+#define pdebug
 //#define sdebug
 //#define ppdebug
 
@@ -59,8 +59,8 @@ G4double G4QFragmentation::QGSMThershold=0.*GeV;            // for E=0, (was 3.*
 G4double G4QFragmentation::theNucleonRadius=1.5*fermi;      // M.K.?
 // Parameters of diffractional fragmentation
 G4double G4QFragmentation::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
-G4double G4QFragmentation::minExtraMass=250.*MeV;// minimum excitation mass 
-G4double G4QFragmentation::minmass=250.*MeV;     // mean pion transverse mass for Xmin 
+G4double G4QFragmentation::minExtraMass=0.*MeV;// minimum excitation mass (250 MeV)
+G4double G4QFragmentation::minmass=0.*MeV;     // mean transverse mass for Xmin (250 MeV) 
 
 G4QFragmentation::G4QFragmentation(){}
 
@@ -570,6 +570,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
       G4int nPDG=cRight->GetPDGCode();
       G4int LT=cLeft->GetType();
       G4int RT=cRight->GetType();
+      G4int LS=LT+RT;
       if(LT==2 && RT==2)
       {
 #ifdef debug
@@ -580,6 +581,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
         {
           LT=1;
           RT=1;
+          LS=2;
           sPDG=cLeft->GetPDGCode();
           nPDG=cRight->GetPDGCode();
 #ifdef debug
@@ -625,6 +627,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
           G4ThreeVector curV=curString4M.vect()/curString4M.e();
           G4int reduce=0;                      // a#of reduced Q-aQ pairs
           G4int restr=0;                       // To use beyon the LOOP for printing
+          G4int MPS=0;                         // PLS for the selected string
           for (restr=next; restr < nOfStr; restr++)
           {
             G4QString* reString=(*strings)[restr];
@@ -742,15 +745,39 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
                 }
               } // End of IF(possible reduction)
             }
-            // Check that the strings can fuse
+            // Check StringsCanBeFused: all QaQ+QaQ(22), single QaQ+QDiQ/aQaDtQ(23/32),
+            //                          double QaQ+DiQaDiQ(24/42), QDiQ+aDiQaQ(34/43)
 #ifdef debug
             G4cout<<"G4QFragm::Scat: TryFuse/w #"<<restr<<",q="<<rPDG<<",a="<<aPDG<<G4endl;
 #endif
-            if( (LT==1 && RT==1 && PLT==1 && PRT==1)           || // "Mesons" always merge
-                (aPDG>0 && (-dPDG==aPDG/10 || -dPDG==aPDG%10)) || // cAQ annihilate with DQ
-                (dPDG>0 && (-aPDG==dPDG/10 || -aPDG==dPDG%10)) || // AQ annihilate with cDQ
-                (rPDG<0 && (qPDG==(-rPDG)/10 || qPDG==(-rPDG)%10)) ||// cQ annihilate w ADQ
-                (qPDG<0 && (rPDG==(-qPDG)/10 || rPDG==(-qPDG)%10)) ) // Q annihilate w cADQ
+            G4int PLS=PLT+PRT;
+            if( (LS==2 && PLS==2) ||                           // QaQ+QaQ always to DiQaDiQ
+                ( ( (LS==2 && PLS==3) || (LS==3 && PLS==2) ) &&// QaQ w QDiQ/aQaDiQ(single)
+                  ( (aPDG>0 && (-dPDG==aPDG/10   || -dPDG==aPDG%10) )   || // cAQ w DQ
+                    (dPDG>0 && (-aPDG==dPDG/10   || -aPDG==dPDG%10) )   || // AQ w cDQ
+                    (rPDG<0 && (qPDG==(-rPDG)/10 || qPDG==(-rPDG)%10) ) || // cQ w ADQ
+                    (qPDG<0 && (rPDG==(-qPDG)/10 || rPDG==(-qPDG)%10) )    // Q w cADQ
+                  )
+                )                 ||                           // -----------------------
+                ( ( LS==2 && PLS==4                          &&// QaQ w DiQaDiQ (double)
+                    (aPDG> 7 && (-dPDG == aPDG/10 || -dPDG == aPDG%10) ) &&
+                    (rPDG<-7 && (qPDG==(-rPDG)/10 || qPDG==(-rPDG)%10) )
+                  )       ||
+                  ( LS==4 && PLS==2                          &&// DiQaDiQ w QaQ (double)
+                    (dPDG> 7 && (-aPDG == dPDG/10 || -aPDG == dPDG%10) ) &&
+                    (qPDG<-7 && (rPDG==(-qPDG)/10 || rPDG==(-qPDG)%10) )
+                  )
+                )                 ||                           // -----------------------
+                ( LS==3 && PLS==3                            &&// QDiQ w aDiQaQ (double)
+                  ( (aPDG> 7 && (-dPDG == aPDG/10 || -dPDG == aPDG%10) &&
+                     qPDG<-7 && (rPDG==(-qPDG)/10 || rPDG==(-qPDG)%10)
+                    )       ||
+                    (dPDG> 7 && (-aPDG == dPDG/10 || -aPDG == dPDG%10) &&
+                     rPDG<-7 && (dPDG==(-rPDG)/10 || dPDG==(-rPDG)%10) 
+                    )
+                  )
+                )
+              )
             {
               G4LorentzVector reString4M = reString->Get4Momentum();
               G4ThreeVector reV = reString4M.vect()/reString4M.e();
@@ -763,6 +790,7 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
               {
                 Vmin=dV;
                 fustr=restr;
+                MPS=PLS;
               }
             }
           }
@@ -784,8 +812,6 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
             G4QParton* Right=fuString->GetRightParton();
             G4int uPDG=Left->GetPDGCode();
             G4int mPDG=Right->GetPDGCode();
-            G4int PLT =Left->GetType();
-            G4int PRT =Right->GetType();
             G4int rPDG=uPDG;
             G4int aPDG=mPDG;
             if(aPDG<-99 || (aPDG>0 && aPDG<7) || rPDG>99 || (rPDG<0 && rPDG>-7))
@@ -802,11 +828,12 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
             G4LorentzVector L4M=cLeft->Get4Momentum();
             G4LorentzVector R4M=cRight->Get4Momentum();
 #ifdef debug
-            G4cout<<"G4QFragmentation::Scatter:BeforeFusDir, L="<<L4M<<", R="<<R4M<<G4endl;
+            G4cout<<"G4QFragmentation::Scatter:BeforeFusDir,sL="<<sPDG<<",nR="<<nPDG<<",uL="
+                  <<uPDG<<",mR="<<mPDG<<",L4M="<<L4M<<",R4M="<<R4M<<G4endl;
 #endif
             G4LorentzVector PL4M=Left->Get4Momentum();
             G4LorentzVector PR4M=Right->Get4Momentum();
-            if      (LT==1 && RT==1 && PLT==1 && PRT==1) // Fuse 2 Q-aQ strings to DiQ-aDiQ
+            if      (LS==2 && MPS==1 )                 // Fuse 2 Q-aQ strings to DiQ-aDiQ
             {
 #ifdef debug
               G4cout<<"G4QFragmentation::Scatter:QaQ/QaQ, uPDG="<<uPDG<<G4endl;
@@ -818,59 +845,174 @@ G4QHadronVector* G4QFragmentation::Scatter(const G4QNucleus &aNucleus,
               else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong QQ-fusion, L="<<uPDG
                          <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
             }
-            else if (aPDG > 7 && (dPDG == -aPDG/10 || dPDG == -aPDG%10))  // Fuse cAQ+pDiQ
+            else if ( (LS==2 && MPS==3) || (LS==3 && MPS==2) )
             {
+              if     (aPDG > 7 && (dPDG == -aPDG/10 || dPDG == -aPDG%10))  // Fuse cAQ+pDiQ
+              {
 #ifdef debug
-              G4cout<<"G4QFragmentation::Scatter:aQDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+                G4cout<<"G4QFragmentation::Scatt:aQDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
 #endif
-              if     ( (uPDG>7 && sPDG>-7 && sPDG<0) ||
-                       (mPDG>7 && nPDG>-7 && nPDG<0) ) fusionDONE=1; // LL/RR
-              else if( (uPDG>7 && nPDG>-7 && nPDG<0) ||
-                       (mPDG>7 && sPDG>-7 && sPDG<0) ) fusionDONE=-1; // LR/RL
-              else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cAQ+pDiQ, L="<<uPDG
-                         <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+                if     ( (uPDG>7 && sPDG>-7 && sPDG<0) ||
+                         (mPDG>7 && nPDG>-7 && nPDG<0) ) fusionDONE=1; // LL/RR
+                else if( (uPDG>7 && nPDG>-7 && nPDG<0) ||
+                         (mPDG>7 && sPDG>-7 && sPDG<0) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cAQ+pDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (dPDG > 7 && (aPDG == -dPDG/10 || aPDG == -dPDG%10)) // Fuse cDiQ+pAQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:DiQaQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
+#endif
+                if     ( (sPDG>7 && uPDG>-7 && uPDG<0) ||
+                         (nPDG>7 && mPDG>-7 && mPDG<0) ) fusionDONE=1; // LL/RR
+                else if( (sPDG>7 && mPDG>-7 && mPDG<0) ||
+                         (nPDG>7 && uPDG>-7 && uPDG<0) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cDiQ+pAQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (rPDG > 7 && (qPDG == rPDG/10 || qPDG == rPDG%10))   // Fuse cQ+pADiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:QaDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+#endif
+                if     ( (uPDG<-7 && sPDG<7 && sPDG>0) ||
+                         (mPDG>-7 && nPDG<7 && nPDG>0) ) fusionDONE=1; // LL/RR
+                else if( (uPDG<-7 && nPDG<7 && nPDG>0) ||
+                         (mPDG<-7 && sPDG<7 && sPDG>0) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cQ+pADiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (qPDG > 7 && (rPDG == qPDG/10 || rPDG == qPDG%10))   // Fuse cADiQ+pQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:aDiQQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
+#endif
+                if     ( (sPDG<-7 && uPDG<7 && uPDG>0) ||
+                         (nPDG>-7 && mPDG<7 && mPDG>0) ) fusionDONE=1; // LL/RR
+                else if( (sPDG<-7 && mPDG<7 && mPDG>0) ||
+                         (nPDG<-7 && uPDG<7 && uPDG>0) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cADiQ+pQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+#ifdef debug
+              else G4cout<<"-Warning-G4QFragmentation::Scatt:Wrong 23StringFusion"<<G4endl;
+              G4cout<<"G4QFragmentation::Scatter: fusionDONE="<<fusionDONE<<",sPDG="<<sPDG
+                    <<",nPDG="<<nPDG<<", uPDG="<<uPDG<<",mPDG="<<mPDG<<G4endl;
+#endif
             }
-            else if (dPDG > 7 && (aPDG == -dPDG/10 || aPDG == -dPDG%10))  // Fuse cDiQ+pAQ
+            else if ( (LS==2 && MPS==4) || (LS==4 && MPS==2) )
             {
+              if     (uPDG > 7)  // Annihilate pLDiQ
+              {
 #ifdef debug
-              G4cout<<"G4QFragmentation::Scatter:DiQaQ,sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
+                G4cout<<"G4QFragmentation::Scatt:pLDiQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
 #endif
-              if     ( (sPDG>7 && uPDG>-7 && uPDG<0) ||
-                       (nPDG>7 && mPDG>-7 && mPDG<0) ) fusionDONE=1; // LL/RR
-              else if( (sPDG>7 && mPDG>-7 && mPDG<0) ||
-                       (nPDG>7 && uPDG>-7 && uPDG<0) ) fusionDONE=-1; // LR/RL
-              else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cDiQ+pAQ, L="<<uPDG
-                         <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+                if     ( sPDG<0 && (-sPDG==uPDG/10 || -sPDG==uPDG%10) &&
+                         (nPDG==(-mPDG)/10 || nPDG==(-mPDG)%10) ) fusionDONE= 1; // LL/RR
+                else if( nPDG<0 && (-nPDG==uPDG/10 || -nPDG==uPDG%10) &&
+                         (sPDG==(-mPDG)/10 || sPDG==(-mPDG)%10) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 24 pLDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (mPDG >7) // Annihilate pRDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:PRDiQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
+#endif
+                if     ( sPDG<0 && (-sPDG==mPDG/10 || -sPDG==mPDG%10) &&
+                         (nPDG==(-uPDG)/10 || nPDG==(-uPDG)%10) ) fusionDONE=-1; // LR/RL
+                else if( nPDG<0 && (-nPDG==mPDG/10 || -nPDG==mPDG%10) &&
+                         (sPDG==(-uPDG)/10 || sPDG==(-uPDG)%10) ) fusionDONE= 1; // LL/RR
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 24 pLDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (sPDG > 7)   // Annihilate cLDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:cLDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+#endif
+                if     ( uPDG<0 && (-uPDG==sPDG/10 || -uPDG==sPDG%10) &&
+                         (mPDG==(-nPDG)/10 || mPDG==(-nPDG)%10) ) fusionDONE= 1; // LL/RR
+                else if( mPDG<0 && (-mPDG==sPDG/10 || -mPDG==sPDG%10) &&
+                         (uPDG==(-nPDG)/10 || uPDG==(-nPDG)%10) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 24 cLDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if (nPDG > 7)   // Annihilate cRDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:cRDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+#endif
+                if     ( uPDG<0 && (-uPDG==nPDG/10 || -uPDG==nPDG%10) &&
+                         (mPDG==(-sPDG)/10 || mPDG==(-sPDG)%10) ) fusionDONE=-1; // LR/RL
+                else if( mPDG<0 && (-mPDG==nPDG/10 || -mPDG==nPDG%10) &&
+                         (uPDG==(-sPDG)/10 || uPDG==(-sPDG)%10) ) fusionDONE= 1; // LL/RR
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 24 cRDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+#ifdef debug
+              else G4cout<<"-Warning-G4QFragmentation::Scatt:Wrong 24StringFusion"<<G4endl;
+              G4cout<<"G4QFragmentation::Scatter: fusionDONE="<<fusionDONE<<",sPDG="<<sPDG
+                    <<",nPDG="<<nPDG<<", uPDG="<<uPDG<<",mPDG="<<mPDG<<G4endl;
+#endif
             }
-            else if (rPDG > 7 && (qPDG == rPDG/10 || qPDG == rPDG%10))    // Fuse cQ+pADiQ
+            else if ( LS==3 && MPS==3 )
             {
+              if     (uPDG > 7)  // Annihilate pLDiQ
+              {
 #ifdef debug
-              G4cout<<"G4QFragmentation::Scatter:QaDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+                G4cout<<"G4QFragmentation::Scatt:pLDiQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
 #endif
-              if     ( (uPDG<-7 && sPDG<7 && sPDG>0) ||
-                       (mPDG>-7 && nPDG<7 && nPDG>0) ) fusionDONE=1; // LL/RR
-              else if( (uPDG<-7 && nPDG<7 && nPDG>0) ||
-                       (mPDG<-7 && sPDG<7 && sPDG>0) ) fusionDONE=-1; // LR/RL
-              else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cQ+pADiQ, L="<<uPDG
-                         <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+                if     ( sPDG<-7 && (-nPDG==uPDG/10 || -nPDG==uPDG%10) &&
+                         (mPDG==(-sPDG)/10 || mPDG==(-sPDG)%10) ) fusionDONE=-1; // LR/RL
+                else if( nPDG<-7 && (-sPDG==uPDG/10 || -sPDG==uPDG%10) &&
+                         (mPDG==(-nPDG)/10 || mPDG==(-nPDG)%10) ) fusionDONE= 1; // LL/RR
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 33 pLDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if(mPDG > 7)  // Annihilate pRDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:pRDiQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
+#endif
+                if     ( sPDG<-7 && (-nPDG==mPDG/10 || -nPDG==mPDG%10) &&
+                         (uPDG==(-sPDG)/10 || uPDG==(-sPDG)%10) ) fusionDONE= 1; // LL/RR
+                else if( nPDG<-7 && (-sPDG==mPDG/10 || -sPDG==mPDG%10) &&
+                         (uPDG==(-nPDG)/10 || uPDG==(-nPDG)%10) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 33 pRDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if(sPDG > 7)  // Annihilate cLDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:cLDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+#endif
+                if     ( uPDG<-7 && (-mPDG==sPDG/10 || -mPDG==sPDG%10) &&
+                         (nPDG==(-uPDG)/10 || nPDG==(-uPDG)%10) ) fusionDONE=-1; // LR/RL
+                else if( mPDG<-7 && (-uPDG==sPDG/10 || -uPDG==sPDG%10) &&
+                         (nPDG==(-mPDG)/10 || nPDG==(-mPDG)%10) ) fusionDONE= 1; // LL/RR
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 33 cLDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+              else if(nPDG > 7)  // Annihilate cRDiQ
+              {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Scatt:cRDiQ, uPD="<<uPDG<<",mPD="<<mPDG<<G4endl;
+#endif
+                if     ( uPDG<-7 && (-mPDG==nPDG/10 || -mPDG==nPDG%10) &&
+                         (nPDG==(-uPDG)/10 || nPDG==(-uPDG)%10) ) fusionDONE= 1; // LL/RR
+                else if( mPDG<-7 && (-uPDG==nPDG/10 || -sPDG==nPDG%10) &&
+                         (sPDG==(-mPDG)/10 || sPDG==(-mPDG)%10) ) fusionDONE=-1; // LR/RL
+                else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong 33 cRDiQ, L="<<uPDG
+                           <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
+              }
+#ifdef debug
+              else G4cout<<"-Warning-G4QFragmentation::Scatt:Wrong 33StringFusion"<<G4endl;
+              G4cout<<"G4QFragmentation::Scatter: fusionDONE="<<fusionDONE<<",sPDG="<<sPDG
+                    <<",nPDG="<<nPDG<<", uPDG="<<uPDG<<",mPDG="<<mPDG<<G4endl;
+#endif
             }
-            else if (qPDG > 7 && (rPDG == qPDG/10 || rPDG == qPDG%10))    // Fuse cADiQ+pQ
-            {
-#ifdef debug
-              G4cout<<"G4QFragmentation::Scatter:aDiQQ, sPD="<<sPDG<<",nPD="<<nPDG<<G4endl;
-#endif
-              if     ( (sPDG<-7 && uPDG<7 && uPDG>0) ||
-                       (nPDG>-7 && mPDG<7 && mPDG>0) ) fusionDONE=1; // LL/RR
-              else if( (sPDG<-7 && mPDG<7 && mPDG>0) ||
-                       (nPDG<-7 && uPDG<7 && uPDG>0) ) fusionDONE=-1; // LR/RL
-              else G4cerr<<"-Warning-G4QFragmentation::Scatter: Wrong cADiQ+pQ, L="<<uPDG
-                         <<",R="<<mPDG<<",cL="<<sPDG<<",cR="<<nPDG<<G4endl;
-            }
-#ifdef debug
-            else G4cout<<"-Warning-G4QFragmentation::Scatter: WrongStringFusion"<<G4endl;
-            G4cout<<"G4QFragmentation::Scatter: fusionDONE="<<fusionDONE<<",sPDG="<<sPDG
-                  <<",nPDG="<<nPDG<<", uPDG="<<uPDG<<",mPDG="<<mPDG<<G4endl;
-#endif
             if     (fusionDONE>0)
             {
               Left->SetPDGCode(SumPartonPDG(uPDG, sPDG));
@@ -1370,7 +1512,7 @@ G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
 #ifdef debug
     G4cout<<"G4QFragment::ExciteDiffParticip: X-plus="<<Xplus<<",X-minus="<<Xminus<<G4endl;
 #endif
-    G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
+    G4double pt2=Qmomentum.vect().mag2();
     G4double Qplus =-pt2/Xminus/Ptarget.minus();
     G4double Qminus= pt2/Xplus /Pprojectile.plus();
     Qmomentum.setPz((Qplus-Qminus)/2);
@@ -1546,16 +1688,18 @@ void G4QFragmentation::SetParameters(G4int nCM, G4double thresh, G4double QGSMth
 
 G4double G4QFragmentation::ChooseX(G4double Xmin, G4double Xmax) const
 {
-// choose an x between Xmin and Xmax with P(x) ~ 1/x
-//  to be improved...
-  G4double range=Xmax-Xmin;
-  if( Xmin<= 0. || range <=0.) 
+  // choose an x between Xmin and Xmax with P(x) ~ 1/x @@ M.K. -> 1/sqrt(x)
+  //G4double range=Xmax-Xmin;
+  if(Xmax == Xmin) return Xmin;
+  if( Xmin < 0. || Xmax < Xmin) 
   {
     G4cerr<<"***G4QFragmentation::ChooseX: Xmin="<<Xmin<<", Xmax="<<Xmax<< G4endl;
-    G4Exception("G4QFragmentation::ChooseX:","72",FatalException,"BadXRange");
+    G4Exception("G4QFragmentation::ChooseX:","72",FatalException,"Bad X or X-Range");
   }
-  G4double x;
-  do {x=Xmin+G4UniformRand()*range;} while ( Xmin/x < G4UniformRand() );
+  //G4double x;
+  //do {x=Xmin+G4UniformRand()*range;} while ( Xmin/x < G4UniformRand() );
+  G4double sxi=std::sqrt(Xmin);
+  G4double x=sqr(sxi+G4UniformRand()*(std::sqrt(Xmax)-sxi));
 #ifdef debug
   G4cout<<"G4QFragmentation::ChooseX: DiffractiveX="<<x<<G4endl;
 #endif
