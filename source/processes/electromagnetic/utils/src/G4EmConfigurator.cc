@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.4 2009-02-26 11:33:33 vnivanch Exp $
+// $Id: G4EmConfigurator.cc,v 1.5 2009-07-20 17:06:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -222,7 +222,7 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 
 	  // set fluctuation model for ionisation processes
           if(fluc && ptype == eloss) {
-	    G4VEnergyLossProcess* p = reinterpret_cast<G4VEnergyLossProcess*>(proc);
+	    G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
 	    p->SetFluctModel(fluc);
 	 
 	  } else {
@@ -261,15 +261,15 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 
 	  // added model
 	  if(ptype == eloss) {
-	    G4VEnergyLossProcess* p = reinterpret_cast<G4VEnergyLossProcess*>(proc);
+	    G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
 	    p->AddEmModel(index,mod,fluc,reg);
 	    //G4cout << "### Added eloss model order= " << index << " for " 
 	    //	   << particleName << " and " << processName << "  " << mod << G4endl;
 	  } else if(ptype == discrete) {
-	    G4VEmProcess* p = reinterpret_cast<G4VEmProcess*>(proc);
+	    G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  } else if(ptype == msc) {
-	    G4VMultipleScattering* p = reinterpret_cast<G4VMultipleScattering*>(proc);
+	    G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  }
 	}

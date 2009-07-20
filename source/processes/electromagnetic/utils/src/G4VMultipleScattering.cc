@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.68 2009-07-04 15:49:44 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.69 2009-07-20 17:06:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -224,7 +224,12 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
       if(part.GetParticleType() == "nucleus" || 
 	 part.GetPDGMass() > GeV) {isIon = true;} 
     } 
-
+    // limitations for ions
+    if(isIon) {
+      SetStepLimitType(fMinimal);
+      SetLateralDisplasmentFlag(false);
+      SetBuildLambdaTable(false);
+    }
     currentParticle = &part;
   }
 
@@ -241,8 +246,26 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
   if(firstParticle == &part) {
 
     InitialiseProcess(firstParticle);
-    if(buildLambdaTable)
+
+    // initialisation of models
+    G4int nmod = modelManager->NumberOfModels();
+    for(G4int i=0; i<nmod; i++) {
+      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+      if(isIon) {
+	msc->SetStepLimitType(fMinimal);
+	msc->SetLateralDisplasmentFlag(false);
+	msc->SetRangeFactor(0.2);
+      } else {
+	msc->SetStepLimitType(StepLimitType());
+	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+	msc->SetSkin(Skin());
+	msc->SetRangeFactor(RangeFactor());
+	msc->SetGeomFactor(GeomFactor());
+      }
+    }
+    if(buildLambdaTable) {
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+    }
     const G4DataVector* theCuts = 
       modelManager->Initialise(firstParticle, 
 			       G4Electron::Electron(), 
