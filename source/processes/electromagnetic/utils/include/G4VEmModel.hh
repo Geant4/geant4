@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.69 2009-05-26 15:00:49 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.70 2009-07-20 17:19:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,7 +136,7 @@ public:
 					 G4double cutEnergy = 0.0,
 					 G4double maxEnergy = DBL_MAX);
 
-  // main method to compute cross section depending on atom
+  // main method to compute cross section per atom
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double kinEnergy, 
 					      G4double Z, 
@@ -158,7 +158,7 @@ public:
 				     const G4Material*,
 				     G4double kineticEnergy);
 
-  // add correction to energy loss and ompute non-ionizing energy loss
+  // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,
 				    G4double& eloss,
@@ -170,10 +170,10 @@ public:
 					   const G4Track&,
                                            G4double& eloss);
 
-  // add region for the model
+  // add a region for the model
   virtual void DefineForRegion(const G4Region*);
 
-  // initilisation at run time for given material
+  // initilisation at run time for a given material
   virtual void SetupForMaterial(const G4ParticleDefinition*,
 				const G4Material*,
                                 G4double kineticEnergy);
@@ -208,10 +208,10 @@ public:
 
   // cross section per volume
   inline G4double CrossSection(const G4MaterialCutsCouple*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy = 0.0,
-				G4double maxEnergy = DBL_MAX);
+			       const G4ParticleDefinition*,
+			       G4double kineticEnergy,
+			       G4double cutEnergy = 0.0,
+			       G4double maxEnergy = DBL_MAX);
 
   // compute mean free path via cross section per volume
   inline G4double ComputeMeanFreePath(const G4ParticleDefinition*,
