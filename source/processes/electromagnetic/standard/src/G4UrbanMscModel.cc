@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel.cc,v 1.90 2009-04-29 13:30:22 vnivanch Exp $
+// $Id: G4UrbanMscModel.cc,v 1.91 2009-07-20 18:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -121,7 +121,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   masslimite    = 0.6*MeV;
   lambdalimit   = 1.*mm;
   fr            = 0.02;
-  facsafety     = 0.3;
+  //  facsafety     = 0.3;
   taubig        = 8.0;
   tausmall      = 1.e-16;
   taulim        = 1.e-6;

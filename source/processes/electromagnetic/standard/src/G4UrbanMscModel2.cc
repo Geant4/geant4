@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel2.cc,v 1.26 2009-05-19 06:26:10 urban Exp $
+// $Id: G4UrbanMscModel2.cc,v 1.27 2009-07-20 18:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -118,7 +118,7 @@ G4UrbanMscModel2::G4UrbanMscModel2(const G4String& nam)
   masslimite    = 0.6*MeV;
   lambdalimit   = 1.*mm;
   fr            = 0.02;
-  facsafety     = 0.3;
+  //facsafety     = 0.3;
   taubig        = 8.0;
   tausmall      = 1.e-16;
   taulim        = 1.e-6;
@@ -461,9 +461,10 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 
   presafety = sp->GetSafety();
 
-  //    G4cout << "G4UrbanMscModel2::ComputeTruePathLengthLimit tPathLength= " 
-  //	   <<tPathLength<<" safety= " << presafety
-  //	   << " range= " <<currentRange<<G4endl;
+  //G4cout << "G4Urban2::StepLimit tPathLength= " 
+  //	 <<tPathLength<<" safety= " << presafety
+  //       << " range= " <<currentRange<< " lambda= "<<lambda0
+  //	 << " Alg: " << steppingAlgorithm <<G4endl;
 
   // far from geometry boundary
   if(currentRange < presafety)
@@ -505,7 +506,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
           //define tlimitmin
           tlimitmin = 10.*stepmin;
           if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
-
+	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
+	  //	 << " tlimitmin= " << tlimitmin << " geomlimit= " << geomlimit <<G4endl;
           // constraint from the geometry
           if((geomlimit < geombig) && (geomlimit > geommin))
             {
@@ -534,8 +536,8 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 
       if(tlimit > tgeom) tlimit = tgeom;
 
-      //  G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
-      //     << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
+      //G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
+      //      << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
 
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
@@ -626,7 +628,7 @@ G4double G4UrbanMscModel2::ComputeTruePathLengthLimit(
 	  if(tPathLength > tlimit) tPathLength = tlimit;
 	}
     }
-  // G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
+  //G4cout << "tPathLength= " << tPathLength 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
   return tPathLength ;
 }
@@ -712,7 +714,7 @@ G4double G4UrbanMscModel2::ComputeGeomPathLength(G4double)
   }
 
   if(zPathLength > lambda0) zPathLength = lambda0;
-
+  //G4cout << "zPathLength= " << zPathLength << " lambda1= " << lambda0 << G4endl;
   return zPathLength;
 }
 
@@ -743,6 +745,7 @@ G4double G4UrbanMscModel2::ComputeTrueStepLength(G4double geomStepLength)
     }  
   }
   if(tPathLength < geomStepLength) tPathLength = geomStepLength;
+  //G4cout << "tPathLength= " << tPathLength << " step= " << geomStepLength << G4endl;
 
   return tPathLength;
 }
@@ -798,7 +801,7 @@ void G4UrbanMscModel2::SampleScattering(const G4DynamicParticle* dynParticle,
   if (latDisplasment && safety > tlimitminfix) {
 
     G4double r = SampleDisplacement();
-    /*
+    /*    
     G4cout << "G4UrbanMscModel2::SampleSecondaries: e(MeV)= " << kineticEnergy
 	   << " sinTheta= " << sth << " r(mm)= " << r
            << " trueStep(mm)= " << tPathLength
