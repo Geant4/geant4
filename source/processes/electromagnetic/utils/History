@@ -1,4 +1,4 @@
-$Id: History,v 1.385 2009-07-20 17:22:04 vnivanch Exp $
+$Id: History,v 1.386 2009-07-20 17:32:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,6 +22,7 @@ committal in the CVS repository !
                           parameters in this base class (allowing
                           to overwrite default models)
 - G4EmConfigurator - cleanup
+- G4VMscModel - set facsafety=0.3 as it is defined in Urban models 
 
 9 July 09: V.Ivant (emutils-V09-02-12)
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,

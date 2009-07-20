@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.12 2009-05-10 19:36:19 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.13 2009-07-20 17:32:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   safetyHelper(0),
   facrange(0.04),
   facgeom(2.5),
-  facsafety(0.25),
+  facsafety(0.3),
   skin(3.0),
   dtrl(0.05),
   lambdalimit(mm),
