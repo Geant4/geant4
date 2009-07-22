@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.47 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.48 2009-07-22 09:57:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -462,7 +462,6 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
 					  G4double cutEnergy)
 {
   G4int iTkin,iPlace;
-  size_t jMat;
   
   //G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
   G4double cut = cutEnergy;
@@ -473,11 +472,12 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
   G4double charge2    = charge*charge;
   const G4MaterialCutsCouple* matCC = CurrentCouple();
 
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  size_t jMat = 0;
+  for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
-  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+  if(jMat == fMaterialCutsCoupleVector.size()) return 0.0;
 
   fPAIdEdxTable = fPAIdEdxBank[jMat];
   fdEdxVector = fdEdxTable[jMat];
@@ -501,7 +501,6 @@ G4double G4PAIModel::CrossSectionPerVolume( const G4Material*,
 					    G4double maxEnergy  ) 
 {
   G4int iTkin,iPlace;
-  size_t jMat;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(tmax <= cutEnergy) return 0.0;
   G4double massRatio  = fMass/p->GetPDGMass();
@@ -510,11 +509,12 @@ G4double G4PAIModel::CrossSectionPerVolume( const G4Material*,
   G4double charge2    = charge*charge, cross, cross1, cross2;
   const G4MaterialCutsCouple* matCC = CurrentCouple();
 
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  size_t jMat = 0;
+  for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
-  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+  if(jMat == fMaterialCutsCoupleVector.size()) return 0.0;
 
   fPAItransferTable = fPAIxscBank[jMat];
 
@@ -551,12 +551,12 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 				   G4double tmin,
 				   G4double maxEnergy)
 {
-  size_t jMat;
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  size_t jMat = 0;
+  for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
-  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+  if(jMat == fMaterialCutsCoupleVector.size()) return;
 
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector    = fdNdxCutTable[jMat];
@@ -757,12 +757,12 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
 					       G4double& step,
                                                G4double&)
 {
-  size_t jMat;
-  for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
+  size_t jMat = 0;
+  for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
     if( material == fMaterialCutsCoupleVector[jMat]->GetMaterial() ) break;
   }
-  if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
+  if(jMat == fMaterialCutsCoupleVector.size()) return 0.0;
 
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector   = fdNdxCutTable[jMat];
