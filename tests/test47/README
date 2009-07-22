@@ -5,7 +5,7 @@
 
                             test47
                             ------
-                   Responsible: S.Banerjee, J.Yarba (Fermilab)
+             Responsible: S.Banerjee, J.Yarba (Fermilab)
 
 
 NOTE: this is a draft, still work-in-progress !!! 
@@ -52,7 +52,7 @@ Monte Carlo predictions are obtained by running Geant4-based application, that
 can be configured at run time, to simulate a given number of events (1,000,000 
 in this case) for a given beam-target combination at a given energy, and to 
 employ one or another Geant4 hadronic model, or to execute sequentially 
-several hadronis models.
+several hadronic models.
 
 Example input/configuration applications are provided as part of the package:
 
@@ -114,3 +114,15 @@ and delivers comparison plots in the encapsulated postscript format (eps).
    tests, and the 3 jobs of the BNL test
 
 
+Creation of the executable:
+---------------------------
+
+The makefile in the directory will create the executable in the bin area.
+However one need to setup the environment for Geant4 as well as ROOT. It 
+is important to setup the compiler to the same one by which the Geant4 
+and ROOT library are created. 
+
+For usage in the cmslpc cluster and using Geant4 and ROOT libraries already
+created for CMS application, a directory "misc" is created which provides
+"g4setup.csh" for defining the environment variable. One need to comment and
+uncomment a few lines in GNUmakefile to create the executable. 

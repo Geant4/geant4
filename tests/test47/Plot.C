@@ -20,179 +20,182 @@
 #include "TStyle.h"
 #include "TGraph.h"
 
-const int modelsITEP=5, modelsBNL=5;
+const int modelsITEP=8, modelsBNL=5;
 
-/*
-std::string ModelsITEP[5]  = {"lepar", "ftfp", "bertini", "binary", "qgsc"};
-std::string ModelNamesI[5] = {"LEP",   "FTFP", "Bertini", "Binary", "QGSC"};
+std::string ModelsITEP[8]  = {"lepar", "ftfb",    "bertini", "binary", 
+			      "qgsc",      "qgsp",      "qgsb",   "ftfp"};
+std::string ModelNamesI[8] = {"LEP",   "FTF-Bin", "Bertini", "Binary", 
+			      "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco"};
 
-std::string ModelsBNL[5]   = {"lepar", "ftfp", "bertini", "qgsp",   "qgsc"};
-std::string ModelNamesB[5] = {"LEP",   "FTFP", "Bertini", "QGSP",   "QGSC"};
-*/
+std::string ModelsBNL[8]   = {"lepar", "ftfb",    "bertini", "binary", 
+			      "qgsc",      "qgsp",      "qgsb",   "ftfp"};
+std::string ModelNamesB[8] = {"LEP",   "FTF-Bin", "Bertini", "Binary", 
+			      "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco"};
 
-// re-order list of models, because it's simpler this way to cut off ftfp & qgsc
-// at the low-energy end, where they may lead to a crash
-//
-std::string ModelsITEP[5]  = {"lepar", "bertini", "binary",  "ftfp", "qgsc"};
-std::string ModelNamesI[5] = {"LEP",   "Bertini", "Binary", "FTFP", "QGSC"};
 
-std::string ModelsBNL[5]   = {"lepar", "bertini", "qgsp", "ftfp",  "qgsc"};
-std::string ModelNamesB[5] = {"LEP",   "Bertini", "QGSP",  "FTFP", "QGSC"};
-
-int         colModel[6]    = {1, 2, 6, 3, 7, 9};
-int         symbModel[6]   = {24, 29, 25, 27, 26, 23};
+int         colModel[8]    = {8, 2, 6, 3, 7, 9, 1, 4};
+int         symbModel[8]   = {24, 29, 25, 27, 26, 23, 21, 20};
+int         stylModel[8]   = {1, 2, 3, 4, 5, 6, 7, 8};
 double      keproton[4]    = {0.09, 0.15, 0.19, 0.23};
 double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
- 
 
-void Plot( int index, char test[5]="ITEP" )
-{
+void Plot( int index, char test[5]="ITEP" ) {
 
-   if ( test == "BNL" )
-   {
-      switch(index) {
-         case 1:
-	    plotMT4("Be","14.6", 0,1,1,-1., "piplus",  "proton");
-	    plotMT4("Be","14.6", 0,1,1,-1., "piminus", "proton");
-	    break;
-	 case 2:
-	    plotMT4("Cu","14.6", 0,1,1,-1., "proton", "proton");
-	    plotMT4("Cu","14.6", 0,1,1,-1., "kplus",  "proton");
-	    plotMT4("Cu","14.6", 0,1,1,-1., "kminus", "proton");
-	    break;
-	 case 3:
-	    plotMT4("Au","14.6", 0,1,1,-1., "piplus",  "proton");
-	    plotMT4("Au","14.6", 0,1,1,-1., "piminus", "proton");
-	    break;
-      }
-   }
-   else if ( test == "ITEP" )
-   {
-      TCanvas* cnv = new TCanvas("cnv","",400,300);
-      cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
-      switch(index){
-         case 1:
-            plotKE4("C","1.40",0,1,1,-1.,"proton","piplus");
-	    cnv->cd();
-	    plotKE("C","1.40","119.0",0,1,-1.,"neutron", "piplus");
-	    cnv->SaveAs("piplusCtoneutronat1.40GeV_1.eps");
-	    break;
-         case 2:
-            plotKE4("U","1.40",0,1,1,-1.,"proton","piplus");
-	    cnv->cd();
-	    plotKE("U","1.40","119.0",0,1,-1.,"neutron","piplus");
-	    cnv->SaveAs("piplusUtoneutronat1.40GeV_1.eps");
-	    break;
-         case 3:
-            plotKE4("C","5.00",0,1,1,-1.,"proton","piplus");
-            cnv->cd();
-	    plotKE("C","5.00","119.0",0,1,-1.,"neutron","piplus");
-	    cnv->SaveAs("piplusCtoneutronat5.00GeV_1.eps");
-	    break;
-         case 4:
-            plotKE4("U","5.00",0,1,1,-1.,"proton","piplus");
-	    cnv->cd();
-	    plotKE("U","5.00","119.0",0,1,-1.,"neutron","piplus");
-	    cnv->SaveAs("piplusUtoneutronat5.00GeV_1.eps");
-	 break;
-         case 5:
-            plotKE4("C","5.00",0,1,1,-1.,"proton","piminus");
-	    cnv->cd();
-	    plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
-	    cnv->SaveAs("piminusCtoneutronat5.00GeV_1.eps");
-	    break;
-         case 6:
-            plotKE4("Cu","5.00",0,1,1,-1.,"proton","piminus");
-	    cnv->cd();
-	    plotKE("Cu","5.00","119.0",0,1,-1.,"neutron","piminus");
-	    cnv->SaveAs("piminusCutoneutronat5.00GeV_1.eps");
-	    break;
-         case 7:
-            plotKE4("Pb","5.00",0,1,1,-1.,"proton","piminus");
-	    cnv->cd();
-	    plotKE("Pb","5.00","119.0",0,1,-1.,"neutron","piminus");
-	    cnv->SaveAs("piminusPbtoneutronat5.00GeV_1.eps");
-	    break;
-         case 8:
-            plotKE4("U","5.00",0,1,1,-1.,"proton","piminus");
-	    cnv->cd();
-	    plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
-	    cnv->SaveAs("piminusUtoneutronat5.00GeV_1.eps");
-	    break;
-         case 9:
-            plotKE4("C","1.40",0,1,1);
-	    cnv->cd();
-	    plotKE("C","1.40","119.0",0,1,-1.,"neutron");
-	    cnv->SaveAs("protonCtoneutronat1.40GeV_1.eps");
-	    break;
-         case 10:
-            plotKE4("U","1.40",0,1,1);
-	    cnv->cd();
-	    plotKE("U","1.40","119.0",0,1,-1.,"neutron");
-	    cnv->SaveAs("protonUtoneutronat1.40GeV_1.eps");
-	    break;
-         case 11:
-            plotKE4("C","7.50",0,1,1);
-	    cnv->cd();
-	    plotKE("C","7.50","119.0",0,1,-1.,"neutron");
-	    cnv->SaveAs("protonCtoneutronat7.50GeV_1.eps");
-	    break;
-         case 12:
-            plotKE4("U","7.50",0,1,1);
-	    cnv->cd();
-	    plotKE("U","7.50","119.0",0,1,-1.,"neutron");
-	    cnv->SaveAs("protonUtoneutronat7.50GeV_1.eps");
-	    break;
-      }
-   }
+  if ( test == "BNL" ) {
+    switch(index) {
+    case 1:
+      plotMT4("Be","14.6", 0,1,1,-1., "piplus",  "proton");
+      plotMT4("Be","14.6", 0,1,1,-1., "piminus", "proton");
+      break;
+    case 2:
+      plotMT4("Cu","14.6", 0,1,1,-1., "proton", "proton");
+      plotMT4("Cu","14.6", 0,1,1,-1., "kplus",  "proton");
+      plotMT4("Cu","14.6", 0,1,1,-1., "kminus", "proton");
+      break;
+    case 3:
+      plotMT4("Au","14.6", 0,1,1,-1., "piplus",  "proton");
+      plotMT4("Au","14.6", 0,1,1,-1., "piminus", "proton");
+      break;
+    }
+  } else if ( test == "ITEP" ) {
+    TCanvas* cnv = new TCanvas("cnv","",400,300);
+    cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
+    switch(index) {
+    case 1:
+      plotKE4("C","1.40",0,1,1,-1.,"proton","piplus");
+      cnv->cd();
+      plotKE("C","1.40","119.0",0,1,-1.,"neutron", "piplus");
+      cnv->SaveAs("piplusCtoneutronat1.40GeV_1.eps");
+      break;
+    case 2:
+      plotKE4("U","1.40",0,1,1,-1.,"proton","piplus");
+      cnv->cd();
+      plotKE("U","1.40","119.0",0,1,-1.,"neutron","piplus");
+      cnv->SaveAs("piplusUtoneutronat1.40GeV_1.eps");
+      break;
+    case 3:
+      plotKE4("C","5.00",0,1,1,-1.,"proton","piplus");
+      cnv->cd();
+      plotKE("C","5.00","119.0",0,1,-1.,"neutron","piplus");
+      cnv->SaveAs("piplusCtoneutronat5.00GeV_1.eps");
+      break;
+    case 4:
+      plotKE4("U","5.00",0,1,1,-1.,"proton","piplus");
+      cnv->cd();
+      plotKE("U","5.00","119.0",0,1,-1.,"neutron","piplus");
+      cnv->SaveAs("piplusUtoneutronat5.00GeV_1.eps");
+      break;
+    case 5:
+      plotKE4("C","5.00",0,1,1,-1.,"proton","piminus");
+      cnv->cd();
+      plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
+      cnv->SaveAs("piminusCtoneutronat5.00GeV_1.eps");
+      break;
+    case 6:
+      plotKE4("Cu","5.00",0,1,1,-1.,"proton","piminus");
+      cnv->cd();
+      plotKE("Cu","5.00","119.0",0,1,-1.,"neutron","piminus");
+      cnv->SaveAs("piminusCutoneutronat5.00GeV_1.eps");
+      break;
+    case 7:
+      plotKE4("Pb","5.00",0,1,1,-1.,"proton","piminus");
+      cnv->cd();
+      plotKE("Pb","5.00","119.0",0,1,-1.,"neutron","piminus");
+      cnv->SaveAs("piminusPbtoneutronat5.00GeV_1.eps");
+      break;
+    case 8:
+      plotKE4("U","5.00",0,1,1,-1.,"proton","piminus");
+      cnv->cd();
+      plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
+      cnv->SaveAs("piminusUtoneutronat5.00GeV_1.eps");
+      break;
+    case 9:
+      plotKE4("C","1.40",0,1,1);
+      cnv->cd();
+      plotKE("C","1.40","119.0",0,1,-1.,"neutron");
+      cnv->SaveAs("protonCtoneutronat1.40GeV_1.eps");
+      break;
+    case 10:
+      plotKE4("U","1.40",0,1,1);
+      cnv->cd();
+      plotKE("U","1.40","119.0",0,1,-1.,"neutron");
+      cnv->SaveAs("protonUtoneutronat1.40GeV_1.eps");
+      break;
+    case 11:
+      plotKE4("C","7.50",0,1,1);
+      cnv->cd();
+      plotKE("C","7.50","119.0",0,1,-1.,"neutron");
+      cnv->SaveAs("protonCtoneutronat7.50GeV_1.eps");
+      break;
+    case 12:
+      plotKE4("U","7.50",0,1,1);
+      cnv->cd();
+      plotKE("U","7.50","119.0",0,1,-1.,"neutron");
+      cnv->SaveAs("protonUtoneutronat7.50GeV_1.eps");
+      break;
+    }
+  }
   
-   return;
-
+  return;
 }
 
-void plotStandard(char dir[20]=".", char dird[40]=".", int leg1=1, 
-		  int leg2=1, char mark=' ') {
 
-  plotKEp("C", "5.00", 0, 1, 1, 1.0, "piplus", leg1, leg2, dir, dird, mark);
-  plotKEp("U", "5.00", 0, 1, 1, 10., "piplus", leg1, leg2, dir, dird, mark);
-  plotKEp("C", "7.50", 0, 1, 1, 1.0, "proton", leg1, leg2, dir, dird, mark);
-  plotKEp("U", "7.50", 0, 1, 1, 10., "proton", leg1, leg2, dir, dird, mark);
-  plotKEx("5.00", " 59.1", 0, 1, 1, -1., "proton", "piminus",  leg1, leg2, dir,
-	  dird, mark);
-  plotKEx("5.00", "119.0", 0, 1, 1,100., "neutron", "piminus", leg1, leg2, dir,
-	  dird, mark);
-  plotKEn("5.00", 0, 1, 1, 10., "piplus", leg1, leg2, dir, dird, mark);
-  plotKEn("7.50", 0, 1, 1, 10., "proton", leg1, leg2, dir, dird, mark);
-  plotMT4(     "14.6", 0,1,1,-1., "piplus", "proton", leg1,leg2,dir,dird,mark);
-  plotMT4(     "14.6", 0,1,1,-1., "piminus","proton", leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1., "kplus",  "proton", leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1., "kminus", "proton", leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1., "proton", "proton", leg1,leg2,dir,dird,mark);
+void plotStandard(bool ratio=false, char dir[20]=".", char dird[40]=".", 
+		  int leg1=1, int leg2=1, char mark=' ') {
+
+  plotKEp("C", "5.00", 0,1,1, -1., "piplus", ratio, leg1,leg2, dir,dird, mark);
+  plotKEp("U", "5.00", 0,1,1, 10., "piplus", ratio, leg1,leg2, dir,dird, mark);
+  plotKEp("C", "7.50", 0,1,1, 1.0, "proton", ratio, leg1,leg2, dir,dird, mark);
+  plotKEp("U", "7.50", 0,1,1, 10., "proton", ratio, leg1,leg2, dir,dird, mark);
+  plotKEx("5.00", " 59.1", 0,1,1, -1., "proton",  "piminus", ratio, leg1,leg2,
+	  dir,dird, mark);
+  plotKEx("5.00", "119.0", 0,1,1,100., "neutron", "piminus", ratio,leg1,leg2,
+	  dir,dird, mark);
+  plotKEn("5.00", 0,1,1, 10., "piplus", ratio, leg1,leg2, dir,dird, mark);
+  plotKEn("7.50", 0,1,1, 10., "proton", ratio, leg1,leg2, dir,dird, mark);
+  plotMT4(     "14.6", 0,1,1,-1.,"piplus", "proton",ratio,leg1,leg2,dir,dird,mark);
+  plotMT4(     "14.6", 0,1,1,-1.,"piminus","proton",ratio,leg1,leg2,dir,dird,mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,"kplus",  "proton",ratio,leg1,leg2,dir,dird,mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,"kminus", "proton",ratio,leg1,leg2,dir,dird,mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,"proton", "proton",ratio,leg1,leg2,dir,dird,mark);
 }
 
 
 void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0, 
 	     double ymin=-1., char particle[8]="proton", char beam[8]="proton",
-	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".",
-	     char mark=' ') {
+	     bool ratio='false', int leg1=1, int leg2=1, char dir[20]=".", 
+	     char dird[40]=".", char mark=' ') {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
 
+  int leg=leg1; if (leg2 < leg) leg=leg2;
   char markf[4]=" ";
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
-  plotKE("C", ene,angle, first,logy,ymin, particle,beam, leg1, dir,dird,markf);
+  if (ratio)
+    plotKERatio("C", ene,angle,first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  else
+    plotKE("C", ene,angle,first,logy,ymin,particle,beam, leg1, dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
-  plotKE("Cu",ene,angle, first,logy,ymin, particle,beam, leg2, dir,dird,markf);
+  if (ratio)
+    plotKERatio("Cu",ene,angle,first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotKE("Cu",ene,angle,first,logy,ymin,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
-  plotKE("Pb",ene,angle, first,logy,ymin, particle,beam, leg2, dir,dird,markf);
+  if (ratio)
+    plotKERatio("Pb",ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+  else
+    plotKE("Pb",ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
-  plotKE("U", ene,angle, first,logy,ymin, particle,beam, leg2, dir,dird,markf);
+  if (ratio)
+    plotKERatio("U", ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+  else
+    plotKE("U", ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
 
   char anglx[6], fname[60];
   int nx = 0;
@@ -200,67 +203,112 @@ void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0,
     if (angle[i] != ' ') { anglx[nx] = angle[i]; nx++;}
   }
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%sCCuPbUto%sat%sGeV%sdeg.eps", beam, particle, ene, anglx);
-    else          sprintf (fname, "%sCCuPbUto%sat%sGeV%sdeg.gif", beam, particle, ene, anglx);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sCCuPbUto%sat%sGeV%sdeg%s", beam, particle, ene, anglx, tag.c_str());
     myc->SaveAs(fname);
   }
 }
 
 void plotKEn(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1.,
-	     char beam[8]="proton", int leg1=1, int leg2=1,
+	     char beam[8]="proton", bool ratio=false, int leg1=1, int leg2=1,
 	     char dir[20]=".", char dird[40]=".", char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
 
+  int leg=leg1; if (leg2 < leg) leg=leg2;
   char markf[4]=" ";
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
-  plotKE("C","1.40","119.0",first,logy,ymin,"neutron",beam,leg1,dir,dird,markf);
+  if (ratio)
+    plotKERatio("C","1.40","119.0",first,logy,ymin,"neutron",beam,leg1,dir,dird,markf);
+  else
+    plotKE("C","1.40","119.0",first,logy,ymin,"neutron",beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
-  plotKE("C",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio("C",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
+  else
+    plotKE("C",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
-  plotKE("U","1.40","119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio("U","1.40","119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+  else
+    plotKE("U","1.40","119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
-  plotKE("U",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
-
+  if (ratio)
+    plotKERatio("U",ene,   "119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+  else
+    plotKE("U",ene,   "119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+  
   char fname[40];
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%sCUtoneutron_1.eps", beam);
-    else          sprintf (fname, "%sCUtoneutron_1.gif", beam);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sCUtoneutron_1%s", beam, tag.c_str());
     myc->SaveAs(fname);
   }
 
 }
 
 void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
-	     double ymin=-1., char beam[8]="proton", int leg1=1, int leg2=1, 
-	     char dir[20]=".", char dird[40]=".", char mark=' ') {
+	     double ymin=-1., char beam[8]="proton", bool ratio=false, 
+	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
+	     char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
 
+  int leg=leg1; if (leg2 < leg) leg=leg2;
   char markf[4]=" ";
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
-  plotKE(element,"1.40"," 59.1",first,logy,ymin,"proton",beam,leg1,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,"1.40"," 59.1",first,logy,ymin,"proton",beam,leg1,dir,dird,markf);
+  else
+    plotKE(element,"1.40"," 59.1",first,logy,ymin,"proton",beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
-  plotKE(element,ene,   " 59.1",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene,   " 59.1",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+  else
+    plotKE(element,ene,   " 59.1",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
-  plotKE(element,"1.40","119.0",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,"1.40","119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+  else
+    plotKE(element,"1.40","119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
-  plotKE(element,ene,   "119.0",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene,   "119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+  else
+    plotKE(element,ene,   "119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%s%stoproton_1.eps", beam, element);
-    else          sprintf (fname, "%s%stoproton_1.gif", beam, element);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%s%stoproton_1%s", beam, element, tag.c_str());
     myc->SaveAs(fname);
   }
 
@@ -268,30 +316,49 @@ void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 
 void plotKE4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 	     double ymin=-1., char particle[8]="proton", char beam[8]="proton",
-	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".",
-	     char mark=' ') {
+	     bool ratio=false, int leg1=1, int leg2=1, char dir[20]=".", 
+	     char dird[40]=".", char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
 
+  int leg=leg1; if (leg2 < leg) leg=leg2;
   char markf[4]=" ";
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
-  plotKE(element,ene," 59.1",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene," 59.1",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  else
+    plotKE(element,ene," 59.1",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
-  plotKE(element,ene," 89.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene," 89.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotKE(element,ene," 89.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
-  plotKE(element,ene,"119.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene,"119.0",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+  else
+    plotKE(element,ene,"119.0",first,logy,ymin,particle,beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
-  plotKE(element,ene,"159.6",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotKERatio(element,ene,"159.6",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+  else
+    plotKE(element,ene,"159.6",first,logy,ymin,particle,beam,leg,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%s%sto%sat%sGeV_1.eps", beam, element, particle, ene);
-    else          sprintf (fname, "%s%sto%sat%sGeV_1.gif", beam, element, particle, ene);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%s%sto%sat%sGeV_1%s", beam, element, particle, ene, tag.c_str());
     myc->SaveAs(fname);
   }
 
@@ -299,13 +366,16 @@ void plotKE4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 
 void plotKE1(char element[2], char ene[6], char angle[6], int first=0, 
 	     int logy=0, int save=0, double ymin=-1, char particle[8]="proton",
-	     char beam[8]="proton", int legend=1, char dir[20]=".", 
-	     char dird[40]=".", char markf[4]=" ") {
+	     char beam[8]="proton", bool ratio=false, int legend=1, 
+	     char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   setStyle();
-  TCanvas *myc = new TCanvas("myc","",800,600); myc->SetLeftMargin(0.15);
+  TCanvas *myc = new TCanvas("myc","",500,600); myc->SetLeftMargin(0.15);
   if (logy != 0) gPad->SetLogy(1);
-  plotKE(element,ene,angle,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+  if (ratio) 
+    plotKERatio(element,ene,angle,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+  else
+    plotKE(element,ene,angle,first,logy,ymin,particle,beam,legend,dir,dird,markf);
 
   char anglx[6], fname[100];
   int nx = 0;
@@ -313,8 +383,14 @@ void plotKE1(char element[2], char ene[6], char angle[6], int first=0,
     if (angle[i] != ' ') { anglx[nx] = angle[i]; nx++;}
   }
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%s%sto%sat%sGeV%sdeg.eps", beam, element, particle, ene, anglx);
-    else          sprintf (fname, "%s%sto%sat%sGeV%sdeg.gif", beam, element, particle, ene, anglx);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%s%sto%sat%sGeV%sdeg%s", beam, element, particle, ene, anglx, tag.c_str());
     myc->SaveAs(fname);
   }
 }
@@ -324,16 +400,13 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
             char beam[8]="proton", int legend=1, char dir[20]=".", 
 	    char dird[40]=".", char markf[4]=" ") {
 
-  int nMods = modelsITEP;
-  if ( ene == "1.40" ) nMods = 3;
-
   char fname[120], list[40], hname[60], titlx[50];
-  TH1F *hi[6];
+  TH1F *hi[8];
   int i=0, icol=1;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=1, ymi0=100., xlow=0.06, xhigh=0.26;
   if (particle == "neutron") {xlow= 0.0; xhigh=0.20;}
-  for (i=0; i<nMods; i++) {
+  for (i=0; i<modelsITEP; i++) {
     sprintf (list, "%s", ModelsITEP[i].c_str());  icol = colModel[i]; 
     sprintf (fname, "%s/%s%s%s%sGeV.root", dir, beam, element, list, ene);
     sprintf (hname, "KE%s0%s%s%s%sGeV%s", particle, beam, element, list, ene, angle);
@@ -341,7 +414,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
     TFile *file = new TFile(fname);
     hi[i] = (TH1F*) file->Get(hname);
     
-    std::cout << "Get " << hname << " from " << fname <<" as " << hi[i] <<"\n";
+    if (debug) std::cout << "Get " << hname << " from " << fname <<" as " << hi[i] <<"\n";
             
     if (hi[i] != 0) {
       int nx = hi[i]->GetNbinsX();
@@ -366,7 +439,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
     if (angle[i] != ' ') { anglx[nx] = angle[i]; nx++;}
   }
   sprintf (fname, "%s/itep/%s/%s/%s%sGeV%sdeg.dat", dird, beam, particle, element, ene, anglx);
-  std::cout << "Reads data from file " << fname << "\n";
+  if (debug) std::cout << "Reads data from file " << fname << "\n";
   ifstream infile;
   infile.open(fname);
   
@@ -382,24 +455,27 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
     if (y1[i]-stater1[i] < ymi0 && y1[i]-stater1[i] > 0) ymi0=y1[i]-stater1[i];
     if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << stater1[i] << "\n";
   }
-  TGraph*  gr1 = new TGraphErrors(q1,x1,y1,0,stater1);
-  gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
-  gr1->SetMarkerSize(1.6);
+  TGraph*  gr1=0;
+  if (q1 > 0) {
+    gr1 = new TGraphErrors(q1,x1,y1,0,stater1);
+    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+    gr1->SetMarkerSize(1.6);
+  }
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0) ymi0 = ymin;
-  for (i = 0; i<nMods; i++) {
+  for (i = 0; i<modelsITEP; i++) {
     if (debug) std::cout << "Model " << i << " " << hi[i] << " " << ymi0 << " " << ymx0 << "\n";
     if (hi[i] != 0) hi[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
   }
 
   hi[first]->GetYaxis()->SetTitleOffset(1.6);
   hi[first]->Draw();
-  for (i=0; i<nMods; i++) {
+  for (i=0; i<modelsITEP; i++) {
     if (i != first && hi[i] != 0) hi[i]->Draw("same");
   }
-  gr1->Draw("p");
+  if (gr1) gr1->Draw("p");
 
   TLegend *leg1;
   if (legend < 0) {
@@ -408,7 +484,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
     if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.90);
     else              leg1 = new TLegend(0.38,0.70,0.90,0.90);
   }
-  for (i=0; i<nMods; i++) {
+  for (i=0; i<modelsITEP; i++) {
     if (hi[i] != 0) {
       sprintf (list, "%s", ModelNamesI[i].c_str()); 
       leg1->AddEntry(hi[i],list,"F");
@@ -432,6 +508,141 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
   leg1->SetTextSize(0.04);
   if (legend != 0) leg1->Draw("same");
   if (debug) std::cout << "End\n";
+}
+
+void plotKERatio(char element[2], char ene[6], char angle[6], int first=0, 
+		 int logy=0, double ymin=-1, char particle[8]="proton",
+		 char beam[8]="proton", int legend=1, char dir[20]=".", 
+		 char dird[40]=".", char markf[4]=" ") {
+
+  // First open the data file
+  char anglx[6], fname[120];
+  int nx = 0;
+  for (int i=0; i<6; i++) {
+    if (angle[i] != ' ') { anglx[nx] = angle[i]; nx++;}
+  }
+  sprintf (fname, "%s/itep/%s/%s/%s%sGeV%sdeg.dat", dird, beam, particle, element, ene, anglx);
+  if (debug) std::cout << "Reads data from file " << fname << "\n";
+  ifstream infile;
+  infile.open(fname);
+
+  // Read contents of the data file
+  int     q1;
+  float   m1, r1, x1[30], y1[30], er1[30], staterr, syserr;
+  infile >> m1 >> r1 >> q1;
+  for (i=0; i<q1; i++) {
+    infile >> x1[i] >> y1[i] >> staterr >> syserr;
+    syserr *= y1[i];
+    er1[i]  = sqrt(syserr*syserr+staterr*staterr);
+    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << "\n";
+  }
+
+  char list[40], hname[60], titlx[50];
+  TGraphErrors *gr[8];
+  int icol=1, ityp=20;
+  sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
+  double  ymx0=0.1, ymi0=100., xlow=0.06, xhigh=0.26;
+  if (particle == "neutron") {xlow= 0.0; xhigh=0.20;}
+  for (int i=0; i<modelsITEP; i++) {
+    icol = colModel[i]; ityp = symbModel[i];
+    sprintf (list, "%s", ModelsITEP[i].c_str()); 
+    sprintf (fname, "%s/%s%s%s%sGeV.root", dir, beam, element, list, ene);
+    sprintf (hname, "KE%s0%s%s%s%sGeV%s", particle, beam, element, list, ene, angle);
+
+    TFile *file = new TFile(fname);
+    TH1F *hi = (TH1F*) file->Get(hname);
+    if (debug) std::cout << "Get " << hname << " from " << fname <<" as " << hi <<"\n";
+            
+    if (hi != 0 && q1 > 0) {
+      float xx[30], dx[30], rat[30], drt[30];
+      int   nx = hi->GetNbinsX();
+      int   np = 0;
+      if (debug) std::cout << "Start with " << nx << " bins\n";
+      for (int k=1; k <= nx; k++) {
+	double xx1 = hi->GetBinLowEdge(k);
+	double xx2 = hi->GetBinWidth(k);
+	for (int j=0; j<q1; j++) {
+	  if (xx1 < x1[j] && xx1+xx2 > x1[j]) {
+	    double yy = hi->GetBinContent(k);
+	    xx[np]    = x1[j];
+	    dx[np]    = 0;
+	    rat[np]   = yy/y1[j];
+	    drt[np]   = er1[j]*rat[j]/y1[j];
+	    if (xx[np] > xlow && xx[np] < xhigh) {
+	      if (rat[np]+drt[np] > ymx0) ymx0 = rat[np]+drt[np];
+	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
+	    }
+	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
+	    np++;
+	    break;
+	  }
+	}
+      }
+      gr[i] = new TGraphErrors(np, xx, rat, dx, drt);
+      gr[i]->GetXaxis()->SetRangeUser(xlow, xhigh); gr[i]->SetTitle("");
+      gr[i]->GetXaxis()->SetTitle(titlx);
+      gr[i]->GetYaxis()->SetTitle("MC/Data");
+      gr[i]->SetLineStyle(stylModel[i]); gr[i]->SetLineWidth(2); 
+      gr[i]->SetLineColor(icol);         gr[i]->SetMarkerColor(icol); 
+      gr[i]->SetMarkerStyle(ityp);       gr[i]->SetMarkerSize(1.0); 
+    } else {
+      gr[i] = 0;
+    }
+    file->Close();
+  }
+
+  if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
+  else           {ymx0 *=10.0; ymi0 *= 0.2; }
+  if (ymin > 0)   ymi0 = ymin;
+  for (i = 0; i<modelsITEP; i++) {
+    if (debug) std::cout << "Model " << i << " " << gr[i] << " " << ymi0 << " " << ymx0 << "\n";
+    if (gr[i] != 0) gr[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
+  }
+
+  gr[first]->GetYaxis()->SetTitleOffset(1.6);
+  gr[first]->Draw("APl");
+  for (i=0; i<modelsITEP; i++) {
+    if (i != first && gr[i] != 0) gr[i]->Draw("Pl");
+  }
+
+  TLegend *leg1;
+  if (legend < 0) {
+    leg1 = new TLegend(0.60,0.55,0.90,0.90);
+  } else {
+    if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.90);
+    else              leg1 = new TLegend(0.38,0.70,0.90,0.90);
+  }
+  for (i=0; i<modelsITEP; i++) {
+    if (gr[i] != 0) {
+      sprintf (list, "%s", ModelNamesI[i].c_str()); 
+      leg1->AddEntry(gr[i],list,"lP");
+    }
+  }
+  char header[120], beamx[8], partx[2];
+  if      (beam == "piplus")  sprintf (beamx, "#pi^{+}");
+  else if (beam == "piminus") sprintf (beamx, "#pi^{-}");
+  else                        sprintf (beamx, "p");
+  if      (particle == "neutron") sprintf (partx, "n");
+  else                            sprintf (partx, "p");
+  if (legend < 0) {
+    sprintf (header,"%s+A #rightarrow %s+X", beamx, partx);
+  } else {
+    if (markf == " ") 
+      sprintf (header,"%s+%s #rightarrow %s+X at %s GeV (#theta = %s^{o})", beamx, element, partx, ene, angle);
+    else 
+      sprintf (header,"%s %s+%s #rightarrow %s+X at %s GeV (#theta = %s^{o})", markf, beamx, element, partx, ene, angle);
+  }
+  leg1->SetHeader(header); leg1->SetFillColor(0);
+  leg1->SetTextSize(0.04);
+  if (legend != 0) leg1->Draw("same");
+
+  xx[0]=xlow; xx[1]=xhigh; rat[0]=rat[1]=1.0;
+  TGraph *gr0 = new TGraph(2, xx, rat);
+  gr0->GetXaxis()->SetRangeUser(xlow, xhigh); gr0->SetTitle("");
+  gr0->SetLineStyle(1);   gr0->SetLineWidth(1.4); 
+  gr0->SetLineColor(1);   gr0->SetMarkerColor(1); 
+  gr0->SetMarkerStyle(20);gr0->SetMarkerSize(1.6);
+  gr0->Draw("l");
 }
 
 void plotCT4(char element[2], char ene[6], int first=0, int scan=1, int logy=0,
@@ -489,7 +700,7 @@ void plotCT(char element[2], char ene[6], double ke, int first=0, int scan=1,
   if (debug) std::cout << " gives " << nn << " angles\n";
 
   char fname[120], list[40], hname[60];
-  TH1F *hi[6];
+  TH1F *hi[8];
   int i=0, icol=1;
   double  ymx0=1, ymi0=100., xlow=-1.0, xhigh=1.0;
   for (i=0; i<modelsITEP; i++) {
@@ -550,9 +761,12 @@ void plotCT(char element[2], char ene[6], double ke, int first=0, int scan=1,
     if (debug) std::cout << kk << " File " << fname << " X " << x1[kk] << " Y " << y1[kk] << " DY " << stater1[kk] << "\n";
   }
 
-  TGraph*  gr1 = new TGraphErrors(kk0,x1,y1,0,stater1);
-  gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
-  gr1->SetMarkerSize(1.6);
+  TGraph*  gr1 = 0;
+  if (kk0 > 0) {
+    gr1 = new TGraphErrors(kk0,x1,y1,0,stater1);
+    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+    gr1->SetMarkerSize(1.6);
+  }
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -564,7 +778,7 @@ void plotCT(char element[2], char ene[6], double ke, int first=0, int scan=1,
   for (i=0; i<modelsITEP; i++) {
     if (i != first && hi[i] != 0)  hi[i]->Draw("same");
   }
-  gr1->Draw("p");
+  if (gr1) gr1->Draw("p");
 
   TLegend *leg1;
   if (legend == 1) leg1 = new TLegend(0.15,0.70,0.62,0.90);
@@ -736,9 +950,12 @@ void plotBE(char element[2], char angle[6], double ke, int logy=0, int scan=1,
     std::cout << "Graph Data with " << nene << " points\n";
     for (j=0; j<nene; j++) std::cout << j << " x " << ene[j] << " y " << ye[j] << " +- " << dy[j] << "\n";
   }
-  TGraph*  gr1 = new TGraphErrors(nene,ene,ye,0,dy);
-  gr1->SetMarkerColor(1);  gr1->SetMarkerStyle(22);
-  gr1->SetMarkerSize(1.6);
+  TGraph*  gr1=0;
+  if (nene > 0) {
+    gr1 = new TGraphErrors(nene,ene,ye,0,dy);
+    gr1->SetMarkerColor(1);  gr1->SetMarkerStyle(22);
+    gr1->SetMarkerSize(1.6);
+  }
 
   if (logy == 0) {
     ymx0 *= 1.8; ymi0 *= 0.8;
@@ -750,65 +967,38 @@ void plotBE(char element[2], char angle[6], double ke, int logy=0, int scan=1,
     gr[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
     gr[i]->GetXaxis()->SetRangeUser(xmi,xmx);
   }
-  gr1->GetXaxis()->SetRangeUser(xmi,xmx);
-  gr1->GetYaxis()->SetRangeUser(ymi0,ymx0);
-  gr1->GetXaxis()->SetTitle("Energy (GeV)"); 
-  gr1->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})"); 
+  if (gr1) {
+    gr1->GetXaxis()->SetRangeUser(xmi,xmx);
+    gr1->GetYaxis()->SetRangeUser(ymi0,ymx0);
+    gr1->GetXaxis()->SetTitle("Energy (GeV)"); 
+    gr1->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})"); 
 
-  gr1->GetYaxis()->SetTitleOffset(1.6); gr1->SetTitle("");
-  gr1->Draw("ap");
-  for (i=0; i<modelsITEP; i++)
-    gr[i]->Draw("lp");
+    gr1->GetYaxis()->SetTitleOffset(1.6); gr1->SetTitle("");
+    gr1->Draw("ap");
+    for (i=0; i<modelsITEP; i++)
+      gr[i]->Draw("lp");
   
-  TLegend *leg1 = new TLegend(0.35,0.60,0.90,0.90);
-  for (i=0; i<modelsITEP; i++) {
-    sprintf (list, "%s", ModelNamesI[i].c_str());
-    leg1->AddEntry(gr[i],list,"LP");
+    TLegend *leg1 = new TLegend(0.35,0.60,0.90,0.90);
+    for (i=0; i<modelsITEP; i++) {
+      sprintf (list, "%s", ModelNamesI[i].c_str());
+      leg1->AddEntry(gr[i],list,"LP");
+    }
+    char header[80], beamx[8], partx[2];
+    if      (beam == "piplus")  sprintf (beamx, "#pi^{+}");
+    else if (beam == "piminus") sprintf (beamx, "#pi^{-}");
+    else                        sprintf (beamx, "p");
+    if      (particle == "neutron") sprintf (partx, "n");
+    else                            sprintf (partx, "p");
+    sprintf (header, "%s+%s #rightarrow %s+X at (KE = %3.1f GeV, #theta = %s^{o})", beamx, element, partx, ke, angle);
+    leg1->SetHeader(header); leg1->SetFillColor(0);
+    leg1->SetTextSize(0.04);
+    leg1->Draw();
   }
-  char header[80], beamx[8], partx[2];
-  if      (beam == "piplus")  sprintf (beamx, "#pi^{+}");
-  else if (beam == "piminus") sprintf (beamx, "#pi^{-}");
-  else                        sprintf (beamx, "p");
-  if      (particle == "neutron") sprintf (partx, "n");
-  else                            sprintf (partx, "p");
-  sprintf (header, "%s+%s #rightarrow %s+X at (KE = %3.1f GeV, #theta = %s^{o})", beamx, element, partx, ke, angle);
-  leg1->SetHeader(header); leg1->SetFillColor(0);
-  leg1->SetTextSize(0.04);
-  leg1->Draw();
 }
  
 void plotMT4(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
-	     char particle[8]="piplus", char beam[8]="proton", int leg1=1,
-	     int leg2=1, char dir[20]=".", char dird[40]=".", char mark=' ') {
-
-  setStyle();
-  TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
-
-  char markf[4]=" ";
-  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
-  if (mark == 'y') sprintf(markf, "(a)");
-  plotMT("Be",ene,"1.10", first,logy,ymin,particle,beam,leg1,dir,dird,markf);
-  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
-  if (mark == 'y') sprintf(markf, "(b)");
-  plotMT("Be",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
-  myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
-  if (mark == 'y') sprintf(markf, "(c)");
-  plotMT("Au",ene,"1.10", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
-  myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
-  if (mark == 'y') sprintf(markf, "(d)");
-  plotMT("Au",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
-
-  char fname[40];
-  if (save != 0) {
-    if (save > 0) sprintf (fname, "%sBeAuto%sat%sGeV.eps", beam, particle, ene);
-    else          sprintf (fname, "%sBeAuto%sat%sGeV.gif", beam, particle, ene);
-    myc->SaveAs(fname);
-  }
-}
- 
-void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
-	     double ymin=-1, char particle[8]="piplus", char beam[8]="proton", 
-	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".",
+	     char particle[8]="piplus", char beam[8]="proton",bool ratio=false,
+	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
 	     char mark=' ') {
 
   setStyle();
@@ -817,39 +1007,114 @@ void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
   char markf[4]=" ";
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
-  plotMT(element,ene,"1.10",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  if (ratio)
+    plotMTRatio("Be",ene,"1.10", first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  else
+    plotMT("Be",ene,"1.10", first,logy,ymin,particle,beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
-  plotMT(element,ene,"1.50",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotMTRatio("Be",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT("Be",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
-  plotMT(element,ene,"1.90",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotMTRatio("Au",ene,"1.10", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT("Au",ene,"1.10", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
-  plotMT(element,ene,"2.30",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  if (ratio)
+    plotMTRatio("Au",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT("Au",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%s%sto%sat%sGeV.eps", beam, element, particle, ene);
-    else          sprintf (fname, "%s%sto%sat%sGeV.gif", beam, element, particle, ene);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sBeAuto%sat%sGeV%s", beam, particle, ene, tag.c_str());
+    myc->SaveAs(fname);
+  }
+}
+ 
+void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
+	     double ymin=-1, char particle[8]="piplus", char beam[8]="proton", 
+	     bool ratio=false, int leg1=1, int leg2=1, char dir[20]=".", 
+	     char dird[40]=".", char mark=' ') {
+
+  setStyle();
+  TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
+
+  char markf[4]=" ";
+  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(a)");
+  if (ratio)
+    plotMTRatio(element,ene,"1.10",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  else
+    plotMT(element,ene,"1.10",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(b)");
+  if (ratio)
+    plotMTRatio(element,ene,"1.50",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT(element,ene,"1.50",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(c)");
+  if (ratio)
+    plotMTRatio(element,ene,"1.90",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT(element,ene,"1.90",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(d)");
+  if (ratio)
+    plotMTRatio(element,ene,"2.30",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+  else
+    plotMT(element,ene,"2.30",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+
+  char fname[40];
+  if (save != 0) {
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%s%sto%sat%sGeV%s", beam, element, particle, ene, tag.c_str());
     myc->SaveAs(fname);
   }
 }
  
 void plotMT1(char element[2], char ene[6], char rapid[6], int first=0, 
 	     int logy=0, int save=0, double ymin=-1, char particle[8]="piplus",
-	     char beam[8]="proton", int legend=1, char dir[20]=".",
-	     char dird[40]=".", char markf[4]=" ") {
+	     char beam[8]="proton", bool ratio=false, int legend=1, 
+	     char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->SetLeftMargin(0.15);
   if (logy != 0) gPad->SetLogy(1);
-  plotMT(element,ene,rapid,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+  if (ratio)
+    plotMTRatio(element,ene,rapid,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+  else
+    plotMT(element,ene,rapid,first,logy,ymin,particle,beam,legend,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
-    if (save > 0) sprintf (fname, "%s%sto%sat%sGeVY%s.eps", beam, element, particle, ene, rapid);
-    else          sprintf (fname, "%s%sto%sat%sGeVY%s.gif", beam, element, particle, ene, rapid);
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%s%sto%sat%sGeVY%s%s", beam, element, particle, ene, rapid, tag.c_str());
     myc->SaveAs(fname);
   }
 }
@@ -859,8 +1124,8 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
 	    char beam[8]="proton", int legend=0, char dir[20]=".",
 	    char dird[40]=".", char markf[4]=" ") {
 
-  char fname[120], list[40], hname[60], titlx[50], sym[6];
-  TH1F *hi[6];
+  char fname[120], list[40], hname[60], titlx[50], sym[8];
+  TH1F *hi[8];
   int i=0, icol=1;
   if      (particle=="piminus") sprintf(sym, "#pi^{-}");
   else if (particle=="piplus")  sprintf(sym, "#pi^{+}");
@@ -876,7 +1141,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
 
     TFile *file = new TFile(fname);
     hi[i] = (TH1F*) file->Get(hname);
-    std::cout << "Get " << hname << " from " << fname <<" as " << hi[i] <<"\n";
+    if (debug) std::cout << "Get " << hname << " from " << fname <<" as " << hi[i] <<"\n";
 
     if (hi[i] != 0) {
       int nx = hi[i]->GetNbinsX();
@@ -897,7 +1162,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
   }
 
   sprintf (fname, "%s/bnl802/%s/%s/%s%sGeVRap%s.dat", dird, beam, particle, element, ene, rapid);
-  std::cout << "Reads data from file " << fname << "\n";
+  if (debug) std::cout << "Reads data from file " << fname << "\n";
   ifstream infile;
   infile.open(fname);
   int     q1;
@@ -912,9 +1177,12 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
     if (y1[i]-stater1[i] < ymi0 && y1[i]-stater1[i] > 0) ymi0=y1[i]-stater1[i];
     if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << stater1[i] << "\n";
   }
-  TGraph*  gr1 = new TGraphErrors(q1,x1,y1,0,stater1);
-  gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
-  gr1->SetMarkerSize(1.6);
+  TGraph*  gr1=0;
+  if (q1 > 0) {
+    gr1 = new TGraphErrors(q1,x1,y1,0,stater1);
+    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+    gr1->SetMarkerSize(1.6);
+  }
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -931,7 +1199,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
   for (i=0; i<modelsBNL; i++) {
     if (i != first && hi[i] != 0) hi[i]->Draw("same");
   }
-  gr1->Draw("p");
+  if (gr1) gr1->Draw("p");
 
   TLegend *leg1;
   if (legend < 0) {
@@ -963,6 +1231,143 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
   if (legend != 0) leg1->Draw("same");
 
   if (debug) std::cout << "End\n";
+}
+
+void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0, 
+		 int logy=0, double ymin=-1, char particle[8]="piplus", 
+		 char beam[8]="proton", int legend=0, char dir[20]=".",
+		 char dird[40]=".", char markf[4]=" ") {
+
+  char titlx[50], sym[8];
+  int  i=0, icol=1, ityp=20;
+  if      (particle=="piminus") sprintf(sym, "#pi^{-}");
+  else if (particle=="piplus")  sprintf(sym, "#pi^{+}");
+  else if (particle=="kminus")  sprintf(sym, "K^{-}");
+  else if (particle=="kplus")   sprintf(sym, "K^{+}");
+  else                          sprintf(sym, "p");
+  sprintf (titlx, "Reduced m_{T} (GeV)");
+
+  //Read in the data files
+  char fname[120];
+  sprintf (fname, "%s/bnl802/%s/%s/%s%sGeVRap%s.dat", dird, beam, particle, element, ene, rapid);
+  if (debug) std::cout << "Reads data from file " << fname << "\n";
+  ifstream infile;
+  infile.open(fname);
+  int     q1;
+  float   ym1, ym2, sys, x1[50], y1[50], er1[50], staterr, syserr;
+  infile >> q1 >> ym1 >> ym2 >> sys;
+  for (i=0; i<q1; i++) {
+    infile >> x1[i] >> y1[i] >> staterr;
+    syserr = sys*y1[i];
+    er1[i] = sqrt(syserr*syserr+staterr*staterr);
+    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << "\n";
+  }
+
+  char          list[40], hname[60];
+  TGraphErrors *gr[8];
+  double        ymx0=1, ymi0=100., xlow=0.1, xhigh=1.6;
+  for (i=0; i<modelsBNL; i++) {
+    icol = colModel[i]; ityp = symbModel[i];
+    sprintf (list, "%s", ModelsBNL[i].c_str());
+    sprintf (fname, "%s/%s%s%s%sGeV.root", dir, beam, element, list, ene);
+    sprintf (hname, "MT%s0%s%s%s%sGeV%s", particle, beam, element, list, ene, rapid);
+
+    TFile *file = new TFile(fname);
+    TH1F  *hi   = (TH1F*) file->Get(hname);
+    if (debug) std::cout << "Get " << hname << " from " << fname <<" as " << hi <<"\n";
+
+    if (hi != 0 && q1 > 0) {
+      float xx[50], dx[50], rat[50], drt[50];
+      int   nx = hi->GetNbinsX();
+      int   np = 0;
+      if (debug) std::cout << "Start with " << nx << " bins\n";
+      for (int k=1; k <= nx; k++) {
+	double xx1 = hi->GetBinLowEdge(k);
+	double xx2 = hi->GetBinWidth(k);
+	for (int j=0; j<q1; j++) {
+	  if (xx1 < x1[j] && xx1+xx2 > x1[j]) {
+	    double yy = hi->GetBinContent(k);
+	    xx[np]    = x1[j];
+	    dx[np]    = 0;
+	    rat[np]   = yy/y1[j];
+	    drt[np]   = er1[j]*rat[j]/y1[j];
+	    if (xx[np] > xlow && xx[np] < xhigh) {
+	      if (rat[np]+drt[np] > ymx0) ymx0 = rat[np]+drt[np];
+	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
+	    }
+	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
+	    np++;
+	    break;
+	  }
+	}
+      }
+      gr[i] = new TGraphErrors(np, xx, rat, dx, drt);
+      gr[i]->GetXaxis()->SetRangeUser(xlow, xhigh); gr[i]->SetTitle("");
+      gr[i]->GetXaxis()->SetTitle(titlx);
+      gr[i]->GetYaxis()->SetTitle("MC/Data");
+      gr[i]->SetLineStyle(stylModel[i]); gr[i]->SetLineWidth(2); 
+      gr[i]->SetLineColor(icol);         gr[i]->SetMarkerColor(icol); 
+      gr[i]->SetMarkerStyle(ityp);       gr[i]->SetMarkerSize(1.0); 
+    } else {
+      gr[i] = 0;
+    }
+    file->Close();
+  }
+
+  if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
+  else           {ymx0 *=10.0; ymi0 *= 0.2; }
+  if (ymin > 0) ymi0 = ymin;
+  for (i = 0; i<modelsBNL; i++) {
+    if (gr[i] != 0) {
+      if (debug) std::cout << "Model " << i << " " << gr[i] << " " << ymi0 << " " << ymx0 << "\n";
+      gr[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
+    }
+  }
+
+  if (gr[first] > 0) {
+    gr[first]->GetYaxis()->SetTitleOffset(1.1);
+    gr[first]->Draw("APl");
+    for (i=0; i<modelsBNL; i++) {
+      if (i != first && gr[i] != 0) gr[i]->Draw("Pl");
+    }
+
+    TLegend *leg1;
+    if (legend < 0) {
+      leg1 = new TLegend(0.50,0.55,0.90,0.90);
+    } else {
+      if (markf == " " ) leg1 = new TLegend(0.42,0.70,0.90,0.90);
+      else               leg1 = new TLegend(0.38,0.70,0.90,0.90);
+    }
+    for (i=0; i<modelsBNL; i++) {
+      if (gr[i] != 0) {
+	sprintf (list, "%s", ModelNamesB[i].c_str()); 
+	leg1->AddEntry(gr[i],list,"lP");
+      }
+    }
+    char header[120], beamx[8], partx[2];
+    if      (beam == "piplus")  sprintf (beamx, "#pi^{+}");
+    else if (beam == "piminus") sprintf (beamx, "#pi^{-}");
+    else                        sprintf (beamx, "p");
+    if (legend < 0) {
+      sprintf (header,"%s+%s #rightarrow %s+X at %s GeV", beamx, element, sym, ene);
+    } else {
+      if (markf == " ")
+	sprintf (header,"%s+%s #rightarrow %s+X at %s GeV (y = %s)", beamx, element, sym, ene, rapid);
+      else
+	sprintf (header,"%s %s+%s #rightarrow %s+X at %s GeV (y = %s)", markf, beamx, element, sym, ene, rapid);
+    }
+    leg1->SetHeader(header); leg1->SetFillColor(0);
+    leg1->SetTextSize(0.04);
+    if (legend != 0) leg1->Draw("same");
+
+    xx[0]=xlow; xx[1]=xhigh; rat[0]=rat[1]=1.0;
+    TGraph *gr0 = new TGraph(2, xx, rat);
+    gr0->GetXaxis()->SetRangeUser(xlow, xhigh); gr0->SetTitle("");
+    gr0->SetLineStyle(1);   gr0->SetLineWidth(1.4); 
+    gr0->SetLineColor(1);   gr0->SetMarkerColor(1); 
+    gr0->SetMarkerStyle(20);gr0->SetMarkerSize(1.6);
+    gr0->Draw("l");
+  }
 }
 
 void setStyle() {
