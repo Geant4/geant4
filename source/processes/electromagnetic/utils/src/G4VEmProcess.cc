@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.69 2009-07-03 14:39:17 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.70 2009-07-22 10:05:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -449,9 +449,9 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     }
   }
 
-  SelectModel(finalT);
+  SelectModel(finalT, currentCoupleIndex);
   if(useDeexcitation) {
-    currentModel->SetDeexcitationFlag(idxDERegions[currentMaterialIndex]);
+    currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
   }
   /*  
   if(0 < verboseLevel) {
@@ -469,7 +469,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   currentModel->SampleSecondaries(&secParticles, 
 				  currentCouple, 
 				  track.GetDynamicParticle(),
-				  (*theCuts)[currentMaterialIndex]);
+				  (*theCuts)[currentCoupleIndex]);
 
   // save secondaries
   G4int num = secParticles.size();
@@ -485,14 +485,14 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
       G4bool good = true;
       if(applyCuts) {
 	if (p == theGamma) {
-	  if (e < (*theCutsGamma)[currentMaterialIndex]) good = false;
+	  if (e < (*theCutsGamma)[currentCoupleIndex]) good = false;
 
 	} else if (p == theElectron) {
-	  if (e < (*theCutsElectron)[currentMaterialIndex]) good = false;
+	  if (e < (*theCutsElectron)[currentCoupleIndex]) good = false;
 
 	} else if (p == thePositron) {
-	  if (electron_mass_c2 < (*theCutsGamma)[currentMaterialIndex] &&
-	      e < (*theCutsPositron)[currentMaterialIndex]) {
+	  if (electron_mass_c2 < (*theCutsGamma)[currentCoupleIndex] &&
+	      e < (*theCutsPositron)[currentCoupleIndex]) {
 	    good = false;
 	    e += 2.0*electron_mass_c2;
 	  }
@@ -619,9 +619,9 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
   DefineMaterial(couple);
   G4double cross = 0.0;
   if(theLambdaTable) {
-    cross = (((*theLambdaTable)[currentMaterialIndex])->Value(kineticEnergy));
+    cross = (((*theLambdaTable)[currentCoupleIndex])->Value(kineticEnergy));
   } else {
-    SelectModel(kineticEnergy);
+    SelectModel(kineticEnergy, currentCoupleIndex);
     cross = currentModel->CrossSectionPerVolume(currentMaterial,
 						particle,kineticEnergy);
   }

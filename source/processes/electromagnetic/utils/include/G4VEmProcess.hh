@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.53 2009-07-03 14:39:17 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.54 2009-07-22 10:05:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -201,7 +201,7 @@ public:
 
 protected:
   // Select model in run time
-  inline void SelectModel(G4double& kinEnergy);
+  inline G4VEmModel* SelectModel(G4double& kinEnergy, size_t index); 
 
 public:
   // Select model by energy and region index
@@ -343,7 +343,7 @@ private:
   // cash
   const G4Material*            currentMaterial;
   const G4MaterialCutsCouple*  currentCouple;
-  size_t                       currentMaterialIndex;
+  size_t                       currentCoupleIndex;
 
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
@@ -357,7 +357,7 @@ private:
 inline G4double G4VEmProcess::ComputeCrossSectionPerAtom(
 		 G4double kineticEnergy, G4double Z, G4double A, G4double cut)
 {
-  SelectModel(kineticEnergy);
+  SelectModel(kineticEnergy, currentCoupleIndex);
   G4double x = 0.0;
   if(currentModel) {
    x = currentModel->ComputeCrossSectionPerAtom(particle,kineticEnergy,
@@ -467,16 +467,19 @@ inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SelectModel(G4double& kinEnergy)
+inline 
+G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  currentModel = modelManager->SelectModel(kinEnergy, index);
   currentModel->SetCurrentCouple(currentCouple);
+  return currentModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEmProcess::SelectModelForMaterial(
-                                   G4double kinEnergy, size_t& idxRegion) const
+inline 
+G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy, 
+						 size_t& idxRegion) const
 {
   return modelManager->SelectModel(kinEnergy, idxRegion);
 }
@@ -544,21 +547,21 @@ inline void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 
 inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
 {
-  return currentMaterialIndex;
+  return currentCoupleIndex;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetGammaEnergyCut()
 {
-  return (*theCutsGamma)[currentMaterialIndex];
+  return (*theCutsGamma)[currentCoupleIndex];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetElectronEnergyCut()
 {
-  return (*theCutsElectron)[currentMaterialIndex];
+  return (*theCutsElectron)[currentCoupleIndex];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -592,7 +595,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
-    currentMaterialIndex = couple->GetIndex();
+    currentCoupleIndex = couple->GetIndex();
     mfpKinEnergy = DBL_MAX;
   }
 }
@@ -601,7 +604,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 
 inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 {
-  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
   if (e <= mfpKinEnergy) {
     preStepLambda = GetLambdaFromTable(e);
 
@@ -615,7 +618,7 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
         preStepLambda = preStepLambda1;
       }
     } else {
-      preStepLambda = theCrossSectionMax[currentMaterialIndex];
+      preStepLambda = theCrossSectionMax[currentCoupleIndex];
     }
   }
 }
@@ -624,7 +627,7 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return (((*theLambdaTable)[currentMaterialIndex])->Value(e));
+  return (((*theLambdaTable)[currentCoupleIndex])->Value(e));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -641,11 +644,11 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  SelectModel(e);
+  SelectModel(e, currentCoupleIndex);
   G4double x = 0.0;
   if(currentModel) {
     x = currentModel->CrossSectionPerVolume(currentMaterial,particle,
-					    e,(*theCuts)[currentMaterialIndex]);
+					    e,(*theCuts)[currentCoupleIndex]);
   }
   return x;
 }
