@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrLiCrossSection.cc,v 1.5 2009-07-23 07:53:04 vnivanch Exp $
+//$Id: G4ecpssrLiCrossSection.cc,v 1.6 2009-07-23 09:14:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -208,7 +208,7 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
 
    zIncident = (G4int)((aProtone->GetPDGCharge())/eplus); 
 
-   G4cout << "zincident:" << zIncident << G4endl;
+   //G4cout << "zincident:" << zIncident << G4endl;
   }
   else
     {
@@ -217,7 +217,7 @@ G4double G4ecpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double 
 	  
 	  zIncident  =(G4int) ((aAlpha->GetPDGCharge())/eplus); 
 	  
-	  G4cout << "zincident:" << zIncident << G4endl;
+	  //G4cout << "zincident:" << zIncident << G4endl;
 	}
       else
 	{ 
