@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.17 2009-07-22 13:30:27 tnikitin Exp $
+// $Id: G4Ellipsoid.cc,v 1.18 2009-07-23 09:54:03 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -496,8 +496,8 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     
       G4double distR= (-B - std::sqrt(C) ) / (2.0*A);
       G4double intZ= p.z()+distR*v.z();
-      if (
-       intZ >= zBottomCut-kRadTolerance/2.0
+      if (distR >- kRadTolerance/2.0
+      && intZ >= zBottomCut-kRadTolerance/2.0
       && intZ <= zTopCut+kRadTolerance/2.0)
         {
           distMin = distR;
@@ -506,7 +506,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
         {
           distR= (-B + std::sqrt(C) ) / (2.0*A);
           intZ= p.z()+distR*v.z();
-          if (distR > kRadTolerance/2.0
+          if (distR >- kRadTolerance/2.0
               && intZ >= zBottomCut-kRadTolerance/2.0
               && intZ <= zTopCut+kRadTolerance/2.0)
             {
