@@ -1,6 +1,15 @@
                  History file
                  ------------
 
+23-Jul-2009 - A.Ribon (statAccepTest-V09-02-03)
+- Fixed the problem that caused a low Grid efficiency
+  in the June 2009 release testing, namely the absence
+  of biasing for beam energies >= 10 GeV.
+  There is still a unique executable, with the choice
+  of biasing that can be activated via the environmental
+  variable:  IS_BIASING_ACTIVE 
+
+
 21-May-2009 - A.Ribon (statAccepTest-V09-02-02)
 - Ready for June 2009 release testing (G4 9.3.beta)
   with the new approach: building a single executable

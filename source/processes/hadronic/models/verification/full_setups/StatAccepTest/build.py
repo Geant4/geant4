@@ -355,9 +355,9 @@ setupFile.write( "export LD_LIBRARY_PATH=$EXPAT_DIR/lib:$LD_LIBRARY_PATH \n" )
 # If the beam energy is below a given threshold (in GeV) then
 # no biasing is used (i.e. the StackingAction is not used).
 if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
-    setupFile.write( "unset BIAS_MODE \n" )
+    setupFile.write( "unset IS_BIASING_ACTIVE \n" )
 else :
-    setupFile.write( "export BIAS_MODE=1 \n" )
+    setupFile.write( "export IS_BIASING_ACTIVE=1 \n" )
 
 #***LOOKHERE*** Switch off the histograms (leave only the ntuple).
 setupFile.write( "export HISTOGRAMS_OFF=1 \n" )

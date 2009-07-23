@@ -9,6 +9,7 @@
 #include "StatAccepTestStackingAction.hh" 
 #include "StatAccepTestAnalysis.hh" 
 #include "G4UIterminal.hh" 
+#include <cstdlib>
 
 //***LOOKHERE***
 // Uncomment these includes files only if you use a Geant4 version before 9.2 .
@@ -78,10 +79,13 @@ int main(int argc,char** argv) {
   runManager->SetUserAction( new StatAccepTestEventAction ); 
   runManager->SetUserAction( new StatAccepTestTrackingAction ); 
 
-#ifdef flagBIAS_MODE
-  runManager->SetUserAction( new StatAccepTestStackingAction ); 
-#endif
-  
+  char* nameEnvironmentalForBiasing = getenv( "IS_BIASING_ACTIVE" );
+  if ( nameEnvironmentalForBiasing ) {
+  G4cout << " *** nameEnvironmentalForBiasing=" << nameEnvironmentalForBiasing 
+	 << " ***" << G4endl << G4endl;
+    runManager->SetUserAction( new StatAccepTestStackingAction ); 
+  }
+
 #ifdef flagHISTOGRAMS_ON
   StatAccepTestAnalysis::getInstance()->setIsHistogramOn( true ); 
 #else

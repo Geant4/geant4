@@ -1,5 +1,5 @@
 
- Last update: 21-May-2009
+ Last update: 23-Jul-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -59,6 +59,14 @@
  It could be that you are not allowed to build a fully static
  executable because of iAIDA (this seems the case in 32-bits
  platforms).
+
+ If you want to activate the Stacking Action, in order to run
+ in biasing mode, then you need to define the environmental
+ variable IS_BIASING_ACTIVE, e.g.
+       export IS_BIASING_ACTIVE=1
+ Furthermore, look at the biasing parameters in the file
+  src/StatAccepTestStackingAction.cc
+ (search for the string "***LOOKHERE***").
 
  In the macro command file  * exercise.g4 *  you can choose: 
    -  the production range cut;
