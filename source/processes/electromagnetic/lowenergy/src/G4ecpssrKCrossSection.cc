@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrKCrossSection.cc,v 1.4 2009-06-18 16:18:42 mantero Exp $
+//$Id: G4ecpssrKCrossSection.cc,v 1.5 2009-07-23 07:53:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -66,7 +66,7 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
     G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: G4LEDATA environment variable not set");
 
     std::ostringstream fileName;
-    fileName << path << "/FK.dat";
+    fileName << path << "/pixe/FK.dat";
     std::ifstream FK(fileName.str().c_str());
 
     if (!FK) G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: error opening FK data file");
@@ -95,15 +95,15 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
 
   // Storing C coefficients for high velocity formula
 
-  G4String fileC1("c1");
+  G4String fileC1("pixe/c1");
   tableC1 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
   tableC1->LoadData(fileC1);
 
-  G4String fileC2("c2");
+  G4String fileC2("pixe/c2");
   tableC2 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
   tableC2->LoadData(fileC2);
 
-  G4String fileC3("c3");
+  G4String fileC3("pixe/c3");
   tableC3 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
   tableC3->LoadData(fileC3);
 
@@ -114,7 +114,7 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void print (double elem)
+void print (G4double elem)
 {
   G4cout << elem << " ";
 }

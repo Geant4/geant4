@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.7 2007-11-09 18:06:26 pia Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.8 2009-07-23 07:53:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
@@ -287,7 +287,7 @@ G4String G4DNACrossSectionDataSet::FullFileName(const G4String& argFileName) con
   
   std::ostringstream fullFileName;
  
-  fullFileName << path << '/' << argFileName << ".dat";
+  fullFileName << path << "/" << argFileName << ".dat";
                       
   return G4String(fullFileName.str().c_str());
 }
