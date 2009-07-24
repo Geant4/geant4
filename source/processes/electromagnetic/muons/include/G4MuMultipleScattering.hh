@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh,v 1.2 2008-04-13 17:19:13 vnivanch Exp $
+// $Id: G4MuMultipleScattering.hh,v 1.3 2009-07-24 18:03:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -59,8 +59,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4VMscModel;
-
 class G4MuMultipleScattering : public G4VMultipleScattering
 
 {
@@ -77,15 +75,6 @@ public:    // with description
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
-  // geom. step length distribution should be sampled or not
-  void Setsamplez(G4bool value) { samplez = value;};
-
-  // to reduce the energy/step dependence
-  void Setdtrl(G4double value) { dtrl = value;};
-
-  // 'soften' step limitation above lambdalimit
-  void SetLimitTheta(G4double value) { thetaLimit = value;};
-
 protected:
 
   // This function initialise models
@@ -93,12 +82,10 @@ protected:
 
 private:        // data members
 
-  G4VMscModel* mscModel;
+  //  hide assignment operator
+  G4MuMultipleScattering & operator=(const  G4MuMultipleScattering &right);
+  G4MuMultipleScattering(const  G4MuMultipleScattering&);
 
-  G4double thetaLimit;
-  G4double dtrl;
-
-  G4bool   samplez;
   G4bool   isInitialized;
 
 };

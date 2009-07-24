@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.12 2008-10-16 13:37:04 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.13 2009-07-24 18:03:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -53,15 +53,12 @@
 
 using namespace std;
 
-G4MuMultipleScattering::G4MuMultipleScattering(G4double tet,
-					       const G4String& processName)
-  : G4VMultipleScattering(processName), thetaLimit(tet)
+G4MuMultipleScattering::G4MuMultipleScattering(G4double tet, const G4String& pnam)
+  : G4VMultipleScattering(pnam)
 {
-  dtrl              = 0.05;
-  samplez           = false ; 
-  isInitialized     = false;  
+  isInitialized = false;  
+  SetPolarAngleLimit(tet);
   SetRangeFactor(0.2);
-  SetLateralDisplasmentFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,36 +75,11 @@ G4bool G4MuMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
+void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
-  if(isInitialized) {
-
-    if (p->GetParticleType() != "nucleus" && p->GetPDGMass() < GeV) {
-      mscModel->SetStepLimitType(StepLimitType());
-      mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-      mscModel->SetRangeFactor(RangeFactor());
-    }
-    mscModel->SetPolarAngleLimit(PolarAngleLimit());
-    return;
-  }
-
-  if (p->GetParticleType() == "nucleus" || p->GetPDGMass() > GeV) {
-    SetLateralDisplasmentFlag(false);
-    SetBuildLambdaTable(false);
-  }
-
-  // initialisation of the model
-
-  mscModel = new G4WentzelVIModel();
-  mscModel->SetStepLimitType(StepLimitType());
-  mscModel->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscModel->SetRangeFactor(RangeFactor());
-  mscModel->SetPolarAngleLimit(PolarAngleLimit());
-  mscModel->SetLowEnergyLimit(MinKinEnergy());
-  mscModel->SetHighEnergyLimit(MaxKinEnergy());
-
-  AddEmModel(1,mscModel);
+  if(isInitialized) return;
+  AddEmModel(1, new G4WentzelVIModel());
   isInitialized = true;
 }
 
@@ -118,6 +90,7 @@ void G4MuMultipleScattering::PrintInfo()
   G4cout << "      RangeFactor= " << RangeFactor()
          << ", step limit type: " << StepLimitType()
          << ", lateralDisplacement: " << LateralDisplasmentFlag()
+	 << ", polarAngleLimit(deg)= " << PolarAngleLimit()/degree
          << G4endl;
 }
 
