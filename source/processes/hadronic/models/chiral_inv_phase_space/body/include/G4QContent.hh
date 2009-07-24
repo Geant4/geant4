@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.30 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QContent.hh,v 1.31 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -54,6 +54,7 @@ class G4QContent
 {
 public:
   G4QContent(G4int d=0, G4int u=0, G4int s=0, G4int ad=0, G4int au=0, G4int as=0);
+  G4QContent(std::pair<G4int,G4int> PP); // Create HadronQC from two partons
   G4QContent(const G4QContent& rhs);     // Copy constructor by value
   G4QContent(G4QContent* rhs);           // Copy constructor by pointer
 

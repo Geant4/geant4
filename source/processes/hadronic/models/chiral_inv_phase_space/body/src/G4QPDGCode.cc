@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.57 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.58 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -2342,4 +2342,26 @@ void G4QPDGCode::ConvertPDGToZNS(G4int nucPDG, G4int& z, G4int& n, G4int& s)
     }
   }
   return;
+}
+
+// Only for irreducable DiQaDiQ! L1!=R1 && L1!=R2 && L2!=R1 && L2!=R2
+std::pair<G4int,G4int> G4QPDGCode::MakeTwoBaryons(G4int L1, G4int L2, G4int R1, G4int R2)
+{//  ====================================================================================
+  G4int dl=0;
+  G4int ul=0;
+  if     (L1==1) ++dl;
+  else if(L1==2) ++ul;
+  if     (L2==1) ++dl;
+  else if(L2==2) ++ul;
+  if     (R1==1) ++dl;
+  else if(R1==2) ++ul;
+  if     (R2==1) ++dl;
+  else if(R2==2) ++ul;
+  if     (dl==2 && ul==2) return make_pair(1114,2212); // @@ can be (2112,2224)
+  else if(dl==1 && ul==2) return make_pair(3112,2212);
+  else if(dl==2 && ul==1) return make_pair(3222,2112);
+  else if(dl==1 && ul==1) return make_pair(3312,2112); // @@ can be (3322,2212)
+  else G4cout<<"-Warning-G4QPDGCode::MakeTwoBaryons: Irreduceble? L1="<<L1<<",L2="<<L2
+             <<",R1="<<R1<<",R2="<<R2<<G4endl;
+  return make_pair(2212,2112);                         // @@ Just theMinimum, makeException
 }

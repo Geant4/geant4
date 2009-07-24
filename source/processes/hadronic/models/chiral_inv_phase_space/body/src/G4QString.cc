@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.11 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QString.cc,v 1.12 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -62,7 +62,7 @@ G4double G4QString::DiquarkBreakProb=0.1; // is Diquark breaking probability
 G4double G4QString::SmoothParam=0.9;      // QGS model parameter
 G4double G4QString::StrangeSuppress=0.435;// Strangeness suppression (u:d:s=1:1:0.3 ?M.K.)
 G4double G4QString::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
-G4int G4QString::StringLoopInterrupt=227; // String fragmentation LOOP limit 
+G4int G4QString::StringLoopInterrupt=227;  // String fragmentation LOOP limit (was 227) 
 
 G4QString::G4QString() : theDirection(0), thePosition(G4ThreeVector(0.,0.,0.)) {}
 

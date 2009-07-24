@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.46 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QContent.cc,v 1.47 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -52,6 +52,8 @@
 using namespace std;
 
 // Constructors
+
+// Initialize by  the full quark content
 G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as)
 {
@@ -70,6 +72,129 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   }
 }
 
+// Initialize by a pair of partons
+G4QContent::G4QContent(std::pair<G4int,G4int> PP)
+{
+  G4int P1=PP.first;
+  G4int P2=PP.second;
+  if(!P1 || !P2)
+  {
+    G4cerr<<"***G4QContent::Constr(pair): Zero parton P1="<<P1<<", P2="<<P2<<G4endl;
+    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"WrongPartonPair");
+  }
+  G4bool suc=true;
+  G4int A1=P1;
+  if     (P1 > 7) A1=  P1/100;
+  else if(P1 <-7) A1=(-P1)/100;
+  else if(P1 < 0) A1= -P1;
+  G4int P11=0;
+  G4int P12=0;
+  if(A1>7)
+  {
+    P11=A1/10;
+    P12=A1%10;
+  }
+  if(P1>0)
+  {
+    if(!P11)
+    {
+      if     (A1==1) ++nD; 
+      else if(A1==2) ++nU; 
+      else if(A1==3) ++nS;
+      else           suc=false;
+    }
+    else
+    {
+      if     (P11==1) ++nD; 
+      else if(P11==2) ++nU; 
+      else if(P11==3) ++nS;
+      else            suc=false;
+      if     (P12==1) ++nD; 
+      else if(P12==2) ++nU; 
+      else if(P12==3) ++nS;
+      else            suc=false;
+    }
+  }
+  else // negative parton
+  {
+    if(!P11)
+    {
+      if     (A1==1) ++nAD; 
+      else if(A1==2) ++nAU; 
+      else if(A1==3) ++nAS;
+      else           suc=false;
+    }
+    else
+    {
+      if     (P11==1) ++nAD; 
+      else if(P11==2) ++nAU; 
+      else if(P11==3) ++nAS;
+      else            suc=false;
+      if     (P12==1) ++nAD; 
+      else if(P12==2) ++nAU; 
+      else if(P12==3) ++nAS;
+      else            suc=false;
+    }
+  }
+  G4int A2=P2;
+  if     (P2 > 7) A2=  P2/100;
+  else if(P2 <-7) A2=(-P2)/100;
+  else if(P2 < 0) A2= -P2;
+  G4int P21=0;
+  G4int P22=0;
+  if(A2>7)
+  {
+    P21=A2/10;
+    P22=A2%10;
+  }
+  if(P2>0)
+  {
+    if(!P21)
+    {
+      if     (A2==1) ++nD; 
+      else if(A2==2) ++nU; 
+      else if(A2==3) ++nS;
+      else           suc=false;
+    }
+    else
+    {
+      if     (P21==1) ++nD; 
+      else if(P21==2) ++nU; 
+      else if(P21==3) ++nS;
+      else            suc=false;
+      if     (P22==1) ++nD; 
+      else if(P22==2) ++nU; 
+      else if(P22==3) ++nS;
+      else            suc=false;
+    }
+  }
+  else // negative parton
+  {
+    if(!P11)
+    {
+      if     (A1==1) ++nAD; 
+      else if(A1==2) ++nAU; 
+      else if(A1==3) ++nAS;
+      else           suc=false;
+    }
+    else
+    {
+      if     (P11==1) ++nAD; 
+      else if(P11==2) ++nAU; 
+      else if(P11==3) ++nAS;
+      else            suc=false;
+      if     (P12==1) ++nAD; 
+      else if(P12==2) ++nAU; 
+      else if(P12==3) ++nAS;
+      else            suc=false;
+    }
+  }
+  if(!suc)
+  {
+    G4cerr<<"***G4QContent::Constr(pair): Impossible partonsP1="<<P1<<", P2="<<P2<<G4endl;
+    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
+  }
+}
 G4QContent::G4QContent(const G4QContent& right)
 {
   nU  = right.nU;
@@ -1041,7 +1166,11 @@ G4int G4QContent::GetBaryonNumber() const
 {//   ===================================
   G4int b=nU+nD+nS-nAU-nAD-nAS;
   //#ifdef erdebug
-  if(b%3) G4cerr<<"-Warn-G4QContent:BaryonNumber="<<b<<"/3 isn't an integer value"<<G4endl;
+  if(b%3)
+  {
+     G4cerr<<"-Warning-G4QContent::GetBaryonNumber="<<b<<"/3 isn't anIntegerValue"<<G4endl;
+     G4Exception("G4QContent::GetBaryonNumber:","72",FatalException,"Wrong Baryon Number");
+  }
   //#endif
   return b/3;
 }
@@ -1502,19 +1631,25 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
   if(!pPDG || pPDG==9 || pPDG==21)
   {
+#ifdef pdebug
     G4cout<<"-Warning-G4QContent::AddParton: ImpossibleToAdd PartonWithPDG="<<pPDG<<G4endl;
+#endif
     return 0;
   }
   G4int aPDG = std::abs(pPDG);
-  if( (aPDG>3 && aPDG<1103) || pPDG>3303)
+  if( (aPDG>3 && aPDG<1101) || pPDG>3303) // @@ 1101 does not exist
   {
+#ifdef pdebug
     G4cout<<"-Warning-G4QContent::AddParton: Impossible Parton with PDG="<<pPDG<<G4endl;
+#endif
     return 0;
   }
   G4int HBN = GetBaryonNumber();
   if( HBN > 1 || HBN <-1)
   {
+#ifdef pdebug
     G4cout<<"-Warning-G4QContent::AddParton: Impossible Hadron with BaryonN="<<HBN<<G4endl;
+#endif
     return 0;
   }
   G4int AD=nAD;
@@ -1539,14 +1674,32 @@ G4int G4QContent::AddParton(G4int pPDG) const
       if     (P1==3 && P2==3)             // ----> ss DiQuark
       {
         if(HBN<0 && AS>1) AS-=2;          // >> Annihilation of ss-DiQuark with anti-Baryon
+        else if(!HBN && AS==1)
+        {
+          AS=0;
+          ++QS;
+        }
         else if(HBN || (!HBN && !AS)) return 0;
       }
       else if(P1==3 && P2==2)             // ----> su DiQuark
       {
         if(HBN<0 && AS && AU)             // >> Annihilation of su-DiQuark with anti-Baryon
         {
-          AS--;
-          AU--;
+          --AS;
+          --AU;
+        }
+        else if(!HBN && (AS || AU))
+        {
+          if(AS)
+          {
+            --AS;
+            ++QU;
+          }
+          else
+          {
+            --AU;
+            ++QS;
+          }
         }
         else if(HBN || (!HBN && !AS && !AU)) return 0;
       }
@@ -1554,33 +1707,69 @@ G4int G4QContent::AddParton(G4int pPDG) const
       {
         if(HBN<0 && AS && AD)             // >> Annihilation of sd-DiQuark with anti-Baryon
         {
-          AS--;
-          AD--;
+          --AS;
+          --AD;
+        }
+        else if(!HBN && (AS || AD))
+        {
+          if(AS)
+          {
+            --AS;
+            ++QD;
+          }
+          else
+          {
+            --AD;
+            ++QS;
+          }
         }
         else if(HBN || (!HBN && !AS && !AD)) return 0;
       }
       else if(P1==2 && P2==2)             // ----> uu DiQuark
       {
         if(HBN<0 && AU>1) AU-=2;          // >> Annihilation of uu-DiQuark with anti-Baryon
+        else if(!HBN && AU==1)
+        {
+          AU=0;
+          ++QU;
+        }
         else if(HBN || (!HBN && !AU)) return 0;
       }
       else if(P1==2 && P2==1)             // ----> ud DiQuark
       {
-        if(HBN<0 && AU && AD)             // >> Annihilation of ud-DiQuark with anti-Baryon
+        if(HBN<0 && AD && AU)             // >> Annihilation of ud-DiQuark with anti-Baryon
         {
-          AU--;
-          AD--;
+          --AD;
+          --AU;
+        }
+        else if(!HBN && (AD || AU))
+        {
+          if(AD)
+          {
+            --AD;
+            ++QU;
+          }
+          else
+          {
+            --AU;
+            ++QD;
+          }
         }
         else if(HBN || (!HBN && !AU && !AD)) return 0;
       }
       else                                // ----> dd DiQuark
       {
         if(HBN<0 && AD>1) AD-=2;          // >> Annihilation of dd-DiQuark with anti-Baryon
+        else if(!HBN && AD==1)
+        {
+          AD=0;
+          ++QD;
+        }
         else if(HBN || (!HBN && !AD)) return 0;
       }
 #ifdef pdebug
-      G4cout<<"G4QContent::AddParton: DQ, QC="<<QD<<","<<QU<<","<<QS<<","<<QD<<","<<QU<<","
-            <<QS<<G4endl;
+      G4cout<<"G4QContent::AddParton: DQ, QC="<<QD<<","<<QU<<","<<QS<<","<<AD<<","<<AU<<","
+            <<AS<<G4endl;
 #endif
       if     (HBN<0)                      // ....... Hadron is an Anti-Baryon
       {
@@ -1588,15 +1777,9 @@ G4int G4QContent::AddParton(G4int pPDG) const
         else if(AU) return -2;            // >>>>>>> Answer is anti-u
         else        return -3;            // >>>>>>> Answer is anti-s
       }
-      else                                // ....... Hadron is aMeson with annihilatedQuark
+      else                                // ... Hadron is aMeson with annihilatedAntiQuark
       {					      
-        if     (P1==1 && !AD) QD++;
-        else if(P1==2 && !AU) QU++;
-        else if(P1==3 && !AS) QS++;
-        else if(P2==1 && !AD) QD++;
-        else if(P2==2 && !AU) QU++;
-        else if(P2==3 && !AS) QS++;
-        if    (QS)                       // --------- There is an s quark
+        if    (QS)                       // --------- There is an s-quark
         {					      
           if  (QS==2) return 3303;       // >>>>>>> Answer is ss (3301 does not exist)
           else if(QU) return 3201;       // >>>>>>> Answer is su (@@ only lightest)
@@ -1618,14 +1801,32 @@ G4int G4QContent::AddParton(G4int pPDG) const
       if     (P1==3 && P2==3)             // ----> anti-s-anti-s DiQuark
       {
         if(HBN>0 && QS>1) QS-=2;          // >> Annihilation of anti-ss-DiQuark with Baryon
+        else if(!HBN && QS==1)
+        {
+          QS=0;
+          ++AS;
+        }
         else if(HBN || (!HBN && !QS)) return 0;
       }
       else if(P1==3 && P2==2)             // ----> anti-s-anti-u DiQuark
       {
         if(HBN>0 && QS && QU)             // >> Annihilation of anti-su-DiQuark with Baryon
         {
-          QS--;
-          QU--;
+          --QS;
+          --QU;
+        }
+        else if(!HBN && (QS || QU))
+        {
+          if(QS)
+          {
+            --QS;
+            ++AU;
+          }
+          else
+          {
+            --QU;
+            ++AS;
+          }
         }
         else if(HBN || (!HBN && !QS && !QU)) return 0;
       }
@@ -1633,33 +1834,69 @@ G4int G4QContent::AddParton(G4int pPDG) const
       {
         if(HBN>0 && QS && QD)             // >> Annihilation of anti-sd-DiQuark with Baryon
         {
-          QS--;
-          QD--;
+          --QS;
+          --QD;
+        }
+        else if(!HBN && (QS || QD))
+        {
+          if(QS)
+          {
+            --QS;
+            ++AD;
+          }
+          else
+          {
+            --QD;
+            ++AS;
+          }
         }
         else if(HBN || (!HBN && !QS && !QD)) return 0;
       }
       else if(P1==2 && P2==2)             // ----> anti-u-anti-u DiQuark
       {
         if(HBN>0 && QU>1) QU-=2;          // >> Annihilation of anti-uu-DiQuark with Baryon
+        else if(!HBN && QU==1)
+        {
+          QU=0;
+          ++AU;
+        }
         else if(HBN || (!HBN && !QU)) return 0;
       }
       else if(P1==2 && P2==1)             // ----> anti-u-anti-d DiQuark
       {
         if(HBN>0 && QU && QD)             // >> Annihilation of anti-ud-DiQuark with Baryon
         {
-          QU--;
-          QD--;
+          --QU;
+          --QD;
+        }
+        else if(!HBN && (QU || QD))
+        {
+          if(QU)
+          {
+            --QU;
+            ++AD;
+          }
+          else
+          {
+            --QD;
+            ++AU;
+          }
         }
         else if(HBN || (!HBN && !QU && !QD)) return 0;
       }
       else                                // ----> anti-d=anti-d DiQuark
       {
         if(HBN>0 && QD>1) QD-=2;          // >> Annihilation of anti-dd-DiQuark with Baryon
+        else if(!HBN && QD==1)
+        {
+          QD=0;
+          ++AD;
+        }
         else if(HBN || (!HBN && !QD)) return 0;
       }
 #ifdef pdebug
-      G4cout<<"G4QContent::AddParton:ADQ, QC="<<QD<<","<<QU<<","<<QS<<","<<QD<<","<<QU<<","
-            <<QS<<G4endl;
+      G4cout<<"G4QContent::AddParton:ADQ, QC="<<QD<<","<<QU<<","<<QS<<","<<AD<<","<<AU<<","
+            <<AS<<G4endl;
 #endif
       if     (HBN>0)                      // ....... Hadron is an Baryon
       {
@@ -1669,12 +1906,6 @@ G4int G4QContent::AddParton(G4int pPDG) const
       }
       else                                // ....... Meson with annihilated Anti-Quark
       {					      
-        if     (P1==1 && !QD) AD++;
-        else if(P1==2 && !QU) AU++;
-        else if(P1==3 && !QS) AS++;
-        else if(P2==1 && !QD) AD++;
-        else if(P2==2 && !QU) AU++;
-        else if(P2==3 && !QS) AS++;
         if    (AS)                       // --------- There is an anti-s quark
         {					      
           if  (AS==2) return -3303;      // >>>>>>> Answer is anti-ss (3301 does not exist)
@@ -1764,9 +1995,9 @@ G4int G4QContent::AddParton(G4int pPDG) const
 #endif
       if     (!HBN)                       // ....... Hadron is a Meson (passingThrougAbove)
       {					      
-        if     (QD) return 1;             // >>>>>>> Answer is anti-d
-        else if(QU) return 2;             // >>>>>>> Answer is anti-u
-        else        return 3;             // >>>>>>> Answer is anti-s
+        if     (AD) return -1;            // >>>>>>> Answer is anti-d
+        else if(AU) return -2;            // >>>>>>> Answer is anti-u
+        else        return -3;            // >>>>>>> Answer is anti-s
       }					      
       else                                // ....... Baryon with annihilated Quark
       {					      

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.27 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.28 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -101,8 +101,10 @@ public:
 
   // General
   G4bool     TestRealNeutral();
+
   void       NegPDGCode();
   void       ConvertPDGToZNS(G4int PDG, G4int& z, G4int& n, G4int& s);
+  std::pair<G4int,G4int> MakeTwoBaryons(G4int L1, G4int L2, G4int R1, G4int R2);
 
 private:
   // Encapsulated functions

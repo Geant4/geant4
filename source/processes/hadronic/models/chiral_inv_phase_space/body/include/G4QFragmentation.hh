@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.9 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.10 2009-07-24 16:37:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ class G4QFragmentation
   int operator==(const G4QFragmentation &right) const;
   int operator!=(const G4QFragmentation &right) const;
 
-  G4QHadronVector* Scatter(const G4QNucleus& aNucleus, const G4QHadron& aPrimary);
+  G4QHadronVector* Breeder(const G4QNucleus& aNucleus, const G4QHadron& aPrimary);
 
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const; //@@Once
   G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;//@@Onc
@@ -75,25 +75,20 @@ class G4QFragmentation
    {return new G4QString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());}
 
   // Static functions
-  static void SetParameters(G4int nCM, G4double thresh, G4double QGSMth, G4double radNuc,
-                            G4double SigPt, G4double extraM, G4double minM);
+  static void SetParameters(G4int nCM, G4double radNuc, G4double SigPt);
  protected:
   G4bool IsSingleDiffractive()
                   {G4bool result=false; if(G4UniformRand()<1.) result=true; return result;}
   G4int SumPartonPDG(G4int PDG1, G4int PFG2) const;
   G4double ChooseX(G4double Xmin, G4double Xmax) const;
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
+  G4int AnnihilationOrder(G4int LS, G4int MS, G4int uP, G4int mP, G4int sP, G4int nP);
 
  private:
   // static model parameters
-  static G4int    nCutMax; 
-  static G4double ThresholdParameter; 
-  static G4double QGSMThershold; 
-  static G4double theNucleonRadius;
-  // Parameters of diffractional fragmentation
+  static G4int    nCutMax;                               // Maximum number of Soft Cuts 
+  static G4double theNucleonRadius;                      // @@ ? Is that necessary? (M.K.)
   static G4double widthOfPtSquare;                       // width^2 of pt(StringExcitation)
-  static G4double minExtraMass;                          // minimum excitation mass 
-  static G4double minmass;                               // mean pion pt-mass for Xmin
 
   // Body
   enum {SOFT, DIFFRACTIVE};
