@@ -1,4 +1,4 @@
-$Id: History,v 1.388 2009-07-24 17:22:32 vnivanch Exp $
+$Id: History,v 1.389 2009-07-24 18:00:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
 
 24 July 09: V.Ivant (emutils-V09-02-15)
 - G4AtomicShell class moved from lowenergy
+- G4VEmProcess, G4VMultipleScattering - added initialisation of
+         polarAngleLimit parameter of models
 
 22 July 09: V.Ivant (emutils-V09-02-14)
 - G4VEmProcess - modified method SelectModel required for the
