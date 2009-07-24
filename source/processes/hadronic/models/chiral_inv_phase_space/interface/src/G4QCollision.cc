@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.38 2009-06-29 16:03:33 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.39 2009-07-24 16:37:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1200,7 +1200,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt: ==>>> Before QS interaction"<<G4endl;
 #endif
-    output=DINR.Scatter(targNuc, projPi);    // Make the reaction
+    output=DINR.Breeder(targNuc, projPi);    // Make the reaction
     G4int nOut=output->size();               // Length of the output
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt: <<<== After QS interaction nOut = "<<nOut<<G4endl;
