@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.70 2009-07-22 10:05:04 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.71 2009-07-24 17:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,12 +218,22 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if(particle == &part) {
     Clear();
     InitialiseProcess(particle);
+
+    // initialisation of models
+    G4int nmod = modelManager->NumberOfModels();
+    for(G4int i=0; i<nmod; i++) {
+      G4VEmModel* mod = modelManager->GetModel(i);
+      mod->SetPolarAngleLimit(polarAngleLimit);
+    }
+
     theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
     theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
     theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
+
+    // prepare tables
     if(buildLambdaTable){
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.69 2009-07-20 17:06:48 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.70 2009-07-24 17:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -262,17 +262,16 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 	msc->SetRangeFactor(RangeFactor());
 	msc->SetGeomFactor(GeomFactor());
       }
+      msc->SetPolarAngleLimit(polarAngleLimit);
     }
+
+    modelManager->Initialise(firstParticle, G4Electron::Electron(), 
+			     10.0, verboseLevel);
+
+    // prepare tables
     if(buildLambdaTable) {
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     }
-    const G4DataVector* theCuts = 
-      modelManager->Initialise(firstParticle, 
-			       G4Electron::Electron(), 
-			       10.0, verboseLevel);
-
-    if(2 < verboseLevel) G4cout << theCuts << G4endl;
-
   }
 }
 
