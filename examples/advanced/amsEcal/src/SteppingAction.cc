@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.7 2009-06-24 21:04:00 maire Exp $
+// $Id: SteppingAction.cc,v 1.8 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,11 +73,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    calorThickness  = detector->GetCalorThickness();
    calorSizeYZ     = detector->GetCalorSizeYZ();
    moduleThickness = detector->GetModuleThickness();   
-   dxPixel = detector->GetDxPixel();
-   dyPixel = detector->GetDyPixel();
-   nxPixelsTot = detector->GetNxPixelsTot();   
-   nyPixelsMax = detector->GetNyPixelsMax();
-   
+   d1Pixel = detector->GetD1Pixel();
+   d2Pixel = detector->GetD2Pixel();
+   n1shift = detector->GetN1Shift();   
+   n2pxl   = detector->GetN2Pixels();
+      
    first = false;   
  }
 
@@ -107,17 +107,17 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  //locate position and compute pixel number
  //
  G4ThreeVector point1 = step->GetPreStepPoint()->GetPosition();
- G4int ixModule = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
- G4int ixPixel  = (int) ((point1.x() + 0.5*calorThickness)/dxPixel);
- if (ixPixel < 0 ) ixPixel = 0;
- if (ixPixel >= nxPixelsTot) ixPixel = nxPixelsTot - 1;
+ G4int i1Module = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
+ G4int i1Pixel  = (int) ((point1.x() + 0.5*calorThickness)/d1Pixel);
+ if (i1Pixel < 0 ) i1Pixel = 0;
+ if (i1Pixel >= n1shift) i1Pixel = n1shift - 1;
  G4double point1yz = point1.y();
- if (ixModule%2 != 0) point1yz = point1.z();
- G4int iyPixel = (int) ((point1yz + 0.5*calorSizeYZ)/dyPixel);
- if (iyPixel < 0 ) iyPixel = 0;
- if (iyPixel >= nyPixelsMax) iyPixel = nyPixelsMax - 1;
+ if (i1Module%2 != 0) point1yz = point1.z();
+ G4int i2Pixel = (int) ((point1yz + 0.5*calorSizeYZ)/d2Pixel);
+ if (i2Pixel < 0 ) i2Pixel = 0;
+ if (i2Pixel >= n2pxl) i2Pixel = n2pxl - 1;
   
- G4int  iPixel = ixPixel*nyPixelsMax + iyPixel;
+ G4int  iPixel = i1Pixel*n1shift + i2Pixel;
   
  // sum total energy deposit
  //

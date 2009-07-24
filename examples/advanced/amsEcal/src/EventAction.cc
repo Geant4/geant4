@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.5 2009-06-24 21:04:00 maire Exp $
+// $Id: EventAction.cc,v 1.6 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,8 @@ EventAction::EventAction(DetectorConstruction* det, RunAction* run,
 { 
   trigger = false;
   Eseuil  = 10*keV;
+  
+  writeFile = false;
     
   drawFlag = "none";
   printModulo = 1000;
@@ -90,20 +92,20 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{
-  G4int nbOfLayers  = detector->GetNxPixelsTot();
-  G4int nyPixels    = detector->GetNyPixels();
-  G4int nyPixelsMax = detector->GetNyPixelsMax();
-      
+{  
+  G4int n1pxl   = detector->GetN1Pixels();
+  G4int n2pxl   = detector->GetN2Pixels();
+  G4int n1shift = detector->GetN1Shift();
+        
   // code for trigger conditions :
   // 1 and only 1 pixel fired per layer
   //
   if (trigger) {
-    for (G4int ix=0; ix<nbOfLayers; ix++) {
+    for (G4int i1=0; i1<n1pxl; i1++) {
       //count number of pixels fired
       G4int count = 0;  
-      for (G4int iy=0; iy<nyPixels; iy++) {
-        G4int k = ix*nyPixelsMax + iy;
+      for (G4int i2=0; i2<n2pxl; i2++) {
+        G4int k = i1*n1shift + i2;
         if (visibleEnergy[k] > Eseuil) count++;	      
       }
       //if event killed --> skip EndOfEventAction          
@@ -115,21 +117,21 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //
   G4double calorEvis = 0.;
   G4double calorEtot = 0.;  
-  for (G4int ix=0; ix<nbOfLayers; ix++) {
+  for (G4int i1=0; i1<n1pxl; i1++) {
     //sum energy per readout layer  
     G4double layerEvis = 0.;
     G4double layerEtot = 0.;  
-    for (G4int iy=0; iy<nyPixels; iy++) {
-      G4int k = ix*nyPixelsMax + iy;
+    for (G4int i2=0; i2<n2pxl; i2++) {
+      G4int k = i1*n1shift + i2;
       runAct->fillPerEvent_1(k,visibleEnergy[k],totalEnergy[k]);      
       layerEvis += visibleEnergy[k];
       layerEtot += totalEnergy[k];
       calorEvis += visibleEnergy[k];
       calorEtot += totalEnergy[k];		      
     }      
-    runAct->fillPerEvent_2(ix,layerEvis,layerEtot);
-    if (layerEvis > 0.) histoManager->FillNtuple(1, ix, layerEvis);
-    if (layerEtot > 0.) histoManager->FillNtuple(1, nbOfLayers+ix, layerEtot);
+    runAct->fillPerEvent_2(i1,layerEvis,layerEtot);
+    if (layerEvis > 0.) histoManager->FillNtuple(1, i1, layerEvis);
+    if (layerEtot > 0.) histoManager->FillNtuple(1, n1pxl+i1, layerEtot);
   }
   
   histoManager->AddRowNtuple(1);
@@ -145,6 +147,10 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //
   runAct->fillNbRadLen(nbRadLen);  
   if (nbRadLen > 0.) histoManager->FillHisto(5,nbRadLen);
+  
+  //write file of pixels
+  //
+  if (writeFile) WritePixels(evt);
                  
   //parameters for trajectory visualisation
   //
@@ -161,6 +167,71 @@ void EventAction::EndOfEventAction(const G4Event* evt)
                                   trj->DrawTrajectory(100); 
         }
     }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include <fstream>
+#include "G4RunManager.hh"
+#include "G4Run.hh"
+
+void EventAction::WritePixels(const G4Event* evt)
+{
+  G4int evtNb = evt->GetEventID();
+  
+  //create file and write run header
+  //
+////  if (evtNb == 0) {
+    G4String name = histoManager->GetFileName(); 
+    G4String fileName = name + ".ascii";
+    std::ofstream File(fileName, std::ios::out);
+    std::ios::fmtflags mode = File.flags();  
+    File.setf( std::ios::scientific, std::ios::floatfield );
+    
+    //run header
+    //
+    G4int n1pxl   = detector->GetN1Pixels();
+    G4int n2pxl   = detector->GetN2Pixels();
+    G4int n1shift = detector->GetN1Shift();    
+    G4int nbEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
+                       ->GetNumberOfEventToBeProcessed();
+    File << nbEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
+         << G4endl;
+////  }
+  G4int prec = File.precision(3);
+    
+  //write event number
+  //
+  File << evtNb << G4endl;
+  
+  //initial particle informations
+  //
+  G4ParticleGun* gun = primary->GetParticleGun();
+  G4double ekin = gun->GetParticleEnergy();
+  G4ThreeVector direction = gun->GetParticleMomentumDirection();
+  G4ThreeVector position  = gun->GetParticlePosition();
+  File << ekin << " " << direction << " " << position << G4endl;  
+    
+  //count nb of fired pixels
+  //
+  G4int firedPixels = 0;
+  G4int nbOfPixels = detector->GetSizeVectorPixels();  
+  for (G4int k=0; k<nbOfPixels; k++) {
+    if (totalEnergy[k] > 0.0) firedPixels++;
+  }         
+  File << firedPixels << G4endl;
+  
+  //write pixels
+  //
+  for (G4int k=0; k<nbOfPixels; k++) {
+    if (totalEnergy[k] > 0.0) 
+    File << k << " " << visibleEnergy[k] << " " << totalEnergy[k] << " "; 
+  }            
+
+    
+  // restaure default formats
+  File.setf(mode,std::ios::floatfield);
+  File.precision(prec);         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

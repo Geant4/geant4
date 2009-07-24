@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.6 2009-06-26 14:21:17 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.7 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,14 +77,13 @@ public:
   G4int              GetNbLayers()          {return nbOfLayers;};    
   G4int              GetNbModules()         {return nbOfModules;};
 
-  G4int              GetNxPixels()          {return nxPixels;};
-  G4int              GetNyPixels()          {return nyPixels;};
-  G4double           GetDxPixel()           {return dxPixel;};
-  G4double           GetDyPixel()           {return dyPixel;};
-  G4int              GetNyPixelsMax()       {return nyPixelsMax;};
-  G4int              GetNxPixelsTot()       {return nxPixelsTot;};
-  G4int              GetSizeVectorPixels()  {return sizeVectorPixels;};
-      			 
+  G4int              GetN1Pixels()          {return n1pxl;};
+  G4int              GetN2Pixels()          {return n2pxl;};
+  G4double           GetD1Pixel()           {return d1pxl;};
+  G4double           GetD2Pixel()           {return d2pxl;};
+  G4int              GetN1Shift()           {return n1shift;};
+  G4int              GetSizeVectorPixels()  {return sizeVectorPxl;};
+        			 
 private:
 
   //fibers
@@ -125,13 +124,13 @@ private:
   
   G4Material*        defaultMat;
 
-  //pixel readout
+  //pixels readout
   //
-  G4int            nxPixels, nyPixels;
-  G4double         dxPixel , dyPixel;
-  G4int            nxPixelsTot;
-  G4int            nyPixelsMax, sizeVectorPixels;    
-        
+  G4int            n1pxl, n2pxl;
+  G4double         d1pxl, d2pxl;
+  G4int            n1shift;
+  G4int            sizeVectorPxl;
+              
   G4UniformMagField* magField;
   DetectorMessenger* detectorMessenger;
       

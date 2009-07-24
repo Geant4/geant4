@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.2 2009-06-08 12:58:13 maire Exp $
+// $Id: HistoManager.hh,v 1.3 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,8 +73,9 @@ class HistoManager
                 
     G4bool    HistoExist  (G4int id) {return exist[id];}    
     G4double  GetHistoUnit(G4int id) {return Unit[id];}
-    G4double  GetBinWidth (G4int id) {return Width[id];}
-    
+    G4double  GetBinWidth (G4int id) {return Width[id];}    
+    G4String  GetFileName ()         {return fileName[0];}
+        
   private:
   
     G4String                 fileName[2];

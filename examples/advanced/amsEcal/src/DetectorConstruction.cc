@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.10 2009-06-30 15:33:05 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.11 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,15 +71,21 @@ DetectorConstruction::DetectorConstruction()
   milledLayer         = 1.40*mm;        // ?
   nbOfLayers          = 10;		//10
   nbOfModules         = 9;		//9
-   
-  nxPixels            = 2;		//2
-  nyPixels            = 72;		//72    
-  nyPixelsMax         = 100;		//100
+     
+  fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm
+      
+  //pixels readout
+  //
+  G4int nSubModul     = 2;			//2   
+  n1pxl               = nbOfModules*nSubModul;	//18
+  n2pxl	              = 72;			//72
   
-  nxPixelsTot         = nxPixels*nbOfModules;      //18  
-  sizeVectorPixels    = nxPixelsTot*nyPixelsMax;   //1800 
+  n1shift = 1;
+  if (n1pxl > 1)   n1shift = 10;
+  if (n1pxl > 10)  n1shift = 100;
+  if (n1pxl > 100) n1shift = 1000;        
   
-  fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm    
+  sizeVectorPxl    = n1pxl*n1shift;		//1800
   
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);   
@@ -327,8 +333,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   // Pixels readout
   //
-  dxPixel = moduleThickness/nxPixels;
-  dyPixel = fiberLength/nyPixels;
+  d1pxl = calorThickness/n1pxl;
+  d2pxl = fiberLength/n2pxl;
   
   //always return the physical World
   //

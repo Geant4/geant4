@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.5 2009-06-24 21:04:00 maire Exp $
+// $Id: RunAction.cc,v 1.6 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,17 +80,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
    visibleEnergy[k] = visibleEnergy2[k] = totalEnergy[k]= totalEnergy2[k] = 0.0;
   }
         
-  G4int nbLayers = detector->GetNxPixelsTot();
+  G4int n1pxl = detector->GetN1Pixels();
   size = layerEtot.size();
-  if (size < nbLayers) {  
-    layerEvis.resize(nbLayers);  layerEvis.clear();  
-    layerEtot.resize(nbLayers);  layerEtot.clear();     
+  if (size < n1pxl) {  
+    layerEvis.resize(n1pxl);  layerEvis.clear();  
+    layerEtot.resize(n1pxl);  layerEtot.clear();     
 
-    layerEvis2.resize(nbLayers);  layerEvis2.clear();   
-    layerEtot2.resize(nbLayers);  layerEtot2.clear();
+    layerEvis2.resize(n1pxl);  layerEvis2.clear();   
+    layerEtot2.resize(n1pxl);  layerEtot2.clear();
   }
   
-  for (G4int k=0; k<nbLayers; k++) {
+  for (G4int k=0; k<n1pxl; k++) {
    layerEvis[k] = layerEvis2[k] = layerEtot[k]= layerEtot2[k] = 0.0;
   }
      
@@ -108,7 +108,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::fillPerEvent_1(G4int pixel, G4double Evis, G4double Etot)
 {
-  //accumulate statistic
+  //accumulate statistic per pixel
   //
   visibleEnergy[pixel] += Evis;  visibleEnergy2[pixel] += Evis*Evis;
     totalEnergy[pixel] += Etot;    totalEnergy2[pixel] += Etot*Etot;
@@ -118,7 +118,7 @@ void RunAction::fillPerEvent_1(G4int pixel, G4double Evis, G4double Etot)
 
 void RunAction::fillPerEvent_2(G4int layer, G4double Evis, G4double Etot)
 {
-  //accumulate statistic
+  //accumulate statistic per layer
   //
   layerEvis[layer] += Evis;  layerEvis2[layer] += Evis*Evis;
   layerEtot[layer] += Etot;  layerEtot2[layer] += Etot*Etot;
@@ -215,31 +215,31 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4double meanEvis,meanEvis2,varianceEvis,rmsEvis,resEvis;
   G4double meanEtot,meanEtot2,varianceEtot,rmsEtot,resEtot;
   
-  G4int nxPixelsTot = detector->GetNxPixelsTot();
+  G4int n1pxl = detector->GetN1Pixels();
     
-  for (G4int ix=0; ix<nxPixelsTot; ix++) {
+  for (G4int i1=0; i1<n1pxl; i1++) {
     //visible energy
-    meanEvis  = layerEvis[ix] /nbEvents;
-    meanEvis2 = layerEvis2[ix]/nbEvents;    
+    meanEvis  = layerEvis[i1] /nbEvents;
+    meanEvis2 = layerEvis2[i1]/nbEvents;    
     varianceEvis = meanEvis2 - meanEvis*meanEvis;
     rmsEvis = 0.;
     if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
     resEvis = 100*rmsEvis/meanEvis;
-    histoManager->FillHisto(3, ix+0.5, meanEvis);
+    histoManager->FillHisto(3, i1+0.5, meanEvis);
          
     //total energy
-    meanEtot  = layerEtot[ix] /nbEvents;
-    meanEtot2 = layerEtot2[ix]/nbEvents;    
+    meanEtot  = layerEtot[i1] /nbEvents;
+    meanEtot2 = layerEtot2[i1]/nbEvents;    
     varianceEtot = meanEtot2 - meanEtot*meanEtot;
     rmsEtot = 0.;
     if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
     resEtot = 100*rmsEtot/meanEtot;
-    histoManager->FillHisto(4, ix+0.5, meanEtot);    
+    histoManager->FillHisto(4, i1+0.5, meanEtot);    
 
     //print
     //
     G4cout
-      << "\n   layer " << ix << ": "
+      << "\n   layer " << i1 << ": "
       << std::setprecision(5)
       << std::setw(6) << G4BestUnit(meanEvis,"Energy") << " +- "
       << std::setprecision(4)

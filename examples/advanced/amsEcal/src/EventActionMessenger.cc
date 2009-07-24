@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.cc,v 1.1 2009-04-16 11:05:40 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithABool.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +58,12 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
+  PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  WriteCmd = new G4UIcmdWithABool("/ams/event/writePixels",this);
+  WriteCmd->SetGuidance("write ascii file of fired pixels");
+  WriteCmd->SetParameterName("writeF", true);
+  WriteCmd->SetDefaultValue(true); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +72,7 @@ EventActionMessenger::~EventActionMessenger()
 {
   delete  DrawCmd;
   delete PrintCmd;
+  delete WriteCmd;  
   delete eventDir;             
 }
 
@@ -78,7 +85,10 @@ void EventActionMessenger::SetNewValue(G4UIcommand* command,
     {eventAction->SetDrawFlag(newValue);}
     
   if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+    
+  if(command == WriteCmd)
+    {eventAction->SetWriteFile(WriteCmd->GetNewBoolValue(newValue));}           
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

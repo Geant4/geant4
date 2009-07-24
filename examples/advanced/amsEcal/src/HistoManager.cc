@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2009-06-11 13:39:20 maire Exp $
+// $Id: HistoManager.cc,v 1.4 2009-07-24 13:02:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -301,7 +301,7 @@ void HistoManager::SetNtuple(G4int nt)
   const G4String id[] = { "100", "101" };
   const G4String title[] = 
                 { "dummy",			//0
-                  "Energy deposit in pixels"	//1
+                  "Energy deposit in subModule"	//1
                  };
 		 
   G4String column[MaxNtupl];
