@@ -1,4 +1,4 @@
-$Id: History,v 1.377 2009-07-23 09:15:37 vnivanch Exp $
+$Id: History,v 1.378 2009-07-24 17:10:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.07.2009, V. Ivanchenko, tag emlowen-V09-02-45
+            G4AtomicShell class is moved to utils subdirectory
 
 23.07.2009, V. Ivanchenko, tag emlowen-V09-02-44
             G4VeLowEnergyLoss, G4eLowEnergyLoss, G4hLowEnergyLoss
