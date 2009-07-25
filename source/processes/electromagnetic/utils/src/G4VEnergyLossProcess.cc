@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.152 2009-07-03 14:39:17 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.153 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -467,6 +467,15 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
     if(chargeSqRatio > 0.0) reduceFactor = 1.0/(chargeSqRatio*massRatio);
+  }
+
+  // initialisation of models
+  G4int nmod = modelManager->NumberOfModels();
+  for(G4int i=0; i<nmod; i++) {
+    G4VEmModel* mod = modelManager->GetModel(i);
+    if(mod->HighEnergyLimit() > maxKinEnergy) {
+      mod->SetHighEnergyLimit(maxKinEnergy);
+    }
   }
 
   theCuts = modelManager->Initialise(particle, secondaryParticle, 

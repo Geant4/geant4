@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.27 2009-05-26 15:00:49 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.28 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -201,6 +201,11 @@ G4double G4VEmModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4VEmModel::DefineForRegion(const G4Region*) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 				  const G4MaterialCutsCouple*)
 {
@@ -245,11 +250,6 @@ G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 {
   return kineticEnergy;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VEmModel::DefineForRegion(const G4Region*) 
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

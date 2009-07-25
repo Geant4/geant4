@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.59 2009-07-04 15:49:44 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.60 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,10 +126,6 @@ public:
   // Print out of generic class parameters
   void PrintInfoDefinition();
 
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
-
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
@@ -157,10 +153,16 @@ public:
 
   // The function overloads the corresponding function of the base
   // class.
-  G4double PostStepGetPhysicalInteractionLength(
+  inline G4double PostStepGetPhysicalInteractionLength(
                                             const G4Track&,
 					    G4double  previousStepSize,
 					    G4ForceCondition* condition);
+
+  // Along step actions
+  inline G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+
+  // Post step actions
+  inline G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // This method does not used for tracking, it is intended only for tests
   inline G4double ContinuousStepLimit(const G4Track& track,
@@ -521,6 +523,41 @@ G4VMultipleScattering::CurrentMaterialCutsCouple() const
 {
   return currentCouple;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// Follwoing methods are virtual, they are inlined because they applied at
+// each simulation step and some compilers may inline these methods
+
+inline G4double 
+G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* 
+G4VMultipleScattering::AlongStepDoIt(const G4Track&, const G4Step& step)
+{
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* 
+G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  currentModel->SampleScattering(track.GetDynamicParticle(),
+				 step.GetPostStepPoint()->GetSafety());
+  return &fParticleChange;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

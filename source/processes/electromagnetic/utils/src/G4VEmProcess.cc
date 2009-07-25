@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.71 2009-07-24 17:59:22 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.72 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -224,6 +224,9 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     for(G4int i=0; i<nmod; i++) {
       G4VEmModel* mod = modelManager->GetModel(i);
       mod->SetPolarAngleLimit(polarAngleLimit);
+      if(mod->HighEnergyLimit() > maxKinEnergy) {
+	mod->SetHighEnergyLimit(maxKinEnergy);
+      }
     }
 
     theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);

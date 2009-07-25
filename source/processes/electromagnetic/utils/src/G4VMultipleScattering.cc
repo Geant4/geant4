@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.70 2009-07-24 17:59:22 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.71 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -263,6 +263,9 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 	msc->SetGeomFactor(GeomFactor());
       }
       msc->SetPolarAngleLimit(polarAngleLimit);
+      if(msc->HighEnergyLimit() > maxKinEnergy) {
+	msc->SetHighEnergyLimit(maxKinEnergy);
+      }
     }
 
     modelManager->Initialise(firstParticle, G4Electron::Electron(), 
@@ -332,15 +335,6 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
-              const G4Track&, G4double, G4ForceCondition* condition)
-{
-  *condition = Forced;
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4VMultipleScattering::GetContinuousStepLimit(
                                        const G4Track& track,
                                        G4double previousStepSize,
@@ -359,27 +353,6 @@ G4double G4VMultipleScattering::GetMeanFreePath(
 {
   *condition = Forced;
   return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(const G4Track&,
-                                                        const G4Step& step)
-{
-  fParticleChange.ProposeTrueStepLength(
-    currentModel->ComputeTrueStepLength(step.GetStepLength()));
-  return &fParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
-						       const G4Step& step)
-{
-  fParticleChange.Initialize(track);
-  currentModel->SampleScattering(track.GetDynamicParticle(),
-				 step.GetPostStepPoint()->GetSafety());
-  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

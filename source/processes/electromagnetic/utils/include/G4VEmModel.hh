@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.70 2009-07-20 17:19:27 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.71 2009-07-25 15:21:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -170,13 +170,13 @@ public:
 					   const G4Track&,
                                            G4double& eloss);
 
-  // add a region for the model
-  virtual void DefineForRegion(const G4Region*);
-
   // initilisation at run time for a given material
   virtual void SetupForMaterial(const G4ParticleDefinition*,
 				const G4Material*,
                                 G4double kineticEnergy);
+
+  // add a region for the model
+  virtual void DefineForRegion(const G4Region*);
 
 protected:
 
