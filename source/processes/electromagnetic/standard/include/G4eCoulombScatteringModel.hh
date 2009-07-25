@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.44 2009-06-18 17:01:46 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.45 2009-07-25 15:23:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -239,15 +239,8 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     iz= G4int(Z);
     if(iz > 99) iz = 99;
     targetMass   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    //  G4double m12 = mass*mass;
-    //  G4double x   = 1.0 + mass/targetMass;
-    //  kinFactor    = (1.0 +  m12/mom2)/mom2;
 
     screenZ = ScreenRSquare[iz]/mom2;
-    //  if(iz > 1) {
-    //    screenZ *=(1.13 + 3.76*Z*Z*invbeta2*alpha2);
-    //    kinFactor /= (x*x);
-    // }
     if(iz > 1) screenZ *= (1.13 + 3.76*Z*Z*invbeta2*alpha2);
       //    screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
     formfactA = FormFactor[iz]*mom2;

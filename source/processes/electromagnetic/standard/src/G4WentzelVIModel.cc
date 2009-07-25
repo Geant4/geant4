@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.33 2009-06-18 17:01:46 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.34 2009-07-25 15:23:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,7 +134,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 {
   // reset parameters
   SetupParticle(p);
-  tkin = targetZ = mom2 = DBL_MIN;
+  tkin = targetZ = mom2 = 0.0;
   ecut = etag = DBL_MAX;
   currentRange = 0.0;
   cosThetaMax = cos(PolarAngleLimit());
@@ -161,7 +161,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   SetupKinematic(ekin, cutEnergy);
   SetupTarget(Z, ekin);
   G4double xsec = ComputeTransportXSectionPerAtom();
-  /*  
+  /*   
   G4cout << "CS: e= " << tkin << " cosEl= " << cosTetMaxElec2 
 	 << " cosN= " << cosTetMaxNuc2 << " xsec(bn)= " << xsec/barn
 	 << " " << particle->GetParticleName() << G4endl;

@@ -1,4 +1,4 @@
-$Id: History,v 1.458 2009-07-22 10:02:03 vnivanch Exp $
+$Id: History,v 1.459 2009-07-25 15:23:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 July 09:  V.Ivant (emstand-V09-02-18)
+- G4WentzelVIModel and G4eCoulombScxatteringModel - fixed numerical
+   problem at very high energy
 
 22 July 09:  V.Ivant (emstand-V09-02-17)
 - G4NuclearStopping and G4ICRU49NuclearStoppingModel are added
