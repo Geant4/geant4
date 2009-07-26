@@ -146,7 +146,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "standardGS") {
 
-    AddPhysicsList("emstandard");
+    AddPhysicsList("emstandard_opt3");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
     conf->SetExtraEmModel("e-","msc",msce);
