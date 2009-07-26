@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.22 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4PAIPhotonModel.cc,v 1.23 2009-07-26 15:51:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -309,7 +309,7 @@ G4PAIPhotonModel::BuildPAIonisationTable()
   Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
   deltaLow = 100.*eV; // 0.5*eV ;
 
-  for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
+  for (G4int i = 0 ; i <= fTotBin ; i++)  //The loop for the kinetic energy
   {
     LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
     tau = LowEdgeEnergy/proton_mass_c2 ;
@@ -440,7 +440,7 @@ G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
     G4cout<<"PAIPhotonModel photonCutInKineticEnergyNow = "
 	  <<photonCutInKineticEnergyNow/keV<<" keV"<<G4endl;
   }
-  for ( i = 0 ; i < fTotBin ; i++ )
+  for ( i = 0 ; i <= fTotBin ; i++ )
   {
     dNdxPhotonCut  = GetdNdxPhotonCut(i,photonCutInKineticEnergyNow);
     dNdxPlasmonCut = GetdNdxPlasmonCut(i,deltaCutInKineticEnergyNow);
@@ -663,7 +663,7 @@ G4double G4PAIPhotonModel::ComputeDEDXPerVolume(const G4Material*,
 
   fPAIdEdxTable = fPAIdEdxBank[jMat];
   fdEdxVector = fdEdxTable[jMat];
-  for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
+  for(iTkin = 0 ; iTkin <= fTotBin ; iTkin++)
   {
     if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
   }
@@ -721,7 +721,7 @@ G4double G4PAIPhotonModel::CrossSectionPerVolume( const G4Material*,
   fPAIphotonTable   = fPAIphotonBank[jMat];
   fPAIplasmonTable  = fPAIplasmonBank[jMat];
 
-  for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
+  for(iTkin = 0 ; iTkin <= fTotBin ; iTkin++)
   {
     if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
   }
@@ -788,7 +788,7 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
 
   G4int iTkin;
-  for(iTkin=0;iTkin<fTotBin;iTkin++)
+  for(iTkin=0;iTkin<=fTotBin;iTkin++)
   {
     if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
   }
@@ -1051,7 +1051,7 @@ G4double G4PAIPhotonModel::SampleFluctuations( const G4Material* material,
   G4double scaledTkin = Tkin*MassRatio ;
   G4double cof        = step*charge2;
 
-  for( iTkin = 0; iTkin < fTotBin; iTkin++)
+  for( iTkin = 0; iTkin <= fTotBin; iTkin++)
   {
     if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))   break ;
   }
