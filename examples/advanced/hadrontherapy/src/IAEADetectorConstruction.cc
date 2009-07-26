@@ -53,6 +53,7 @@
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"
 #include "G4NistManager.hh"
+#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorROGeometry.hh"
 #include "IAEADetectorMessenger.hh"
 #include "HadrontherapyDetectorSD.hh"
@@ -89,6 +90,8 @@ IAEADetectorConstruction::IAEADetectorConstruction()
   endDetectorThickness = 3.7 *cm;
   endDetectorPosition =  startDetectorThickness + 358 *cm + endDetectorThickness / 2;
   
+  noPhantom = false;
+  
  }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -112,7 +115,10 @@ G4VPhysicalVolume* IAEADetectorConstruction::Construct()
 
   ConstructPassiveProtonBeamLine();
   ConstructDetector();
-
+#ifdef ANALYSIS_USE
+  //write the metadata for analysis
+  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData(endDetectorPosition/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
+#endif
   // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
   return physicalTreatmentRoom;
@@ -168,23 +174,24 @@ void IAEADetectorConstruction::ConstructPassiveProtonBeamLine()
 							      "phantomEdgeLog", 0, 0, 0);
 					//5.5cm for veto and start detector, see fig 5.1 and 4.1 ref Haettner 2006 
 
-    
-  phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter, 0.*cm, 0.*cm),
-					    "phantomPhys",
-					    phantomLogicalVolume,
-					    physicalTreatmentRoom,
-					    false,0);
+  if(!noPhantom){  
+		  phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter, 0.*cm, 0.*cm),
+								"phantomPhys",
+								phantomLogicalVolume,
+								physicalTreatmentRoom,
+								false,0);
 
-  phantomEdge1PhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter - phantomDepth/2 - plexiThickness/2, 0.*cm, 0.*cm),
-					    "phantomEdgePhys",
-					    phantomEdgeLogicalVolume,
-					    physicalTreatmentRoom,
-					    false,0);
-  phantomEdge2PhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter + phantomDepth/2 + plexiThickness/2, 0.*cm, 0.*cm),
-					    "phantomEdgePhys",
-					    phantomEdgeLogicalVolume,
-					    physicalTreatmentRoom,
-					    false,0);
+		  phantomEdge1PhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter - phantomDepth/2 - plexiThickness/2, 0.*cm, 0.*cm),
+								"phantomEdgePhys",
+								phantomEdgeLogicalVolume,
+								physicalTreatmentRoom,
+								false,0);
+		  phantomEdge2PhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter + phantomDepth/2 + plexiThickness/2, 0.*cm, 0.*cm),
+								"phantomEdgePhys",
+								phantomEdgeLogicalVolume,
+								physicalTreatmentRoom,
+								false,0);
+	}
   //----------------------------------------
   // Beamwindow:
   // The aluminium-window of the beam-source
@@ -216,7 +223,11 @@ void IAEADetectorConstruction::ConstructPassiveProtonBeamLine()
 
 void IAEADetectorConstruction::setWaterThickness(G4double newWaterThickness){
 	//This has to be run before the elements are made.
-	this->phantomDepth = newWaterThickness;	
+	if(newWaterThickness > 0){
+	this->phantomDepth = newWaterThickness;
+	}else{
+	this->noPhantom = true;
+	}	
 	}
 
 

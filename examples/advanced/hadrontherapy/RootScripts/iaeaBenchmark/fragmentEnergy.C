@@ -9,6 +9,7 @@
 #include "TH1F.h"
 #include "TCut.h"
 #include "TString.h"
+#include "TMath.h"
 
 /**
  * Macro for plotting the fragment energy distributions.
@@ -60,6 +61,23 @@ void fragmentEnergy() {
 		//scale and plot
    TNtuple *fragments = (TNtuple*) MCData->Get("fragmentNtuple");
 
+   //Block bellow pulls out the simulation's metadata from the metadata ntuple.
+   TNtuple *metadata = (TNtuple*) MCData->Get("metaData");
+   Float_t events, detectorDistance,waterThickness,beamEnergy,energyError,phantomCenterDistance;
+   metadata->SetBranchAddress("events",&events);
+   metadata->SetBranchAddress("waterThickness",&waterThickness);
+   metadata->SetBranchAddress("detectorDistance",&detectorDistance);
+   metadata->SetBranchAddress("beamEnergy",&beamEnergy);
+   metadata->SetBranchAddress("energyError",&energyError);
+   metadata->SetBranchAddress("phantomCenterDistance",&phantomCenterDistance);
+   metadata->GetEntry(0); //there is just one row to consider.
+
+	//analysis numbers based on metadata
+	Double_t scatteringDistance = detectorDistance - phantomCenterDistance;
+   Double_t detectorSideLength = 4; //hardcoded, we have a zero angle square detector
+	//good to keep for ref. G4 might give weird units due to change.
+	metadata->Scan();
+
    //fragments->Scan();
 
    Double_t ScaleHelium = 1/(MC_helium->Integral());
@@ -68,12 +86,12 @@ void fragmentEnergy() {
    
    MC_helium->Scale(ScaleHelium);
 //   MC_helium->Draw("");
-   printf("Scaled helium by %.9f\n",ScaleHelium);
+   //printf("Scaled helium by %.9f\n",ScaleHelium);
 
    MC_hydrogen->Scale(ScaleHydrogen);
    MC_hydrogen->SetLineColor(kRed);
 //   MC_hydrogen->Draw("Same");
-   printf("Scaled hydrogen by %.9f\n",ScaleHydrogen);
+  // printf("Scaled hydrogen by %.9f\n",ScaleHydrogen);
    
    TH1F *histH = new TH1F("histH", "Hydrogen", 60, 0.0, 450.0);
    TH1F *histHe = new TH1F("histHe", "Helium", 60, 0.0, 450.0);
@@ -86,18 +104,17 @@ void fragmentEnergy() {
    histB->SetLineColor(kYellow);
    TH1F *histC = new TH1F("histC", "Carbon", 60, 0.0, 450.0);
 
-	//TH2F
-
 	TH1F* histPos = new TH1F("histPos", "check position",100,-2000,2000);
-
-   TString normalization("/(350.0)");
+	//The steradian calculation is a bit of an approx as we have a square detector and the covering area is approximated to be the are of the square which it isn't
+	Double_t steradians = (detectorSideLength * detectorSideLength) / (4*TMath::Pi()*scatteringDistance);
+   TString normalization(Form("/%f", steradians*events));
 
    fragments->SetLineColor(kRed);
    fragments->SetMarkerStyle(22);
    
-   fragments->Draw("posY:posZ", "abs(posZ) < 2000 && abs(posY) < 2000");
+   fragments->Draw("posY:posZ", "abs(posZ) < 20 && abs(posY) < 20");
 
-   fragments->Draw("energy >> histHe", "(Z == 2 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization);
+   fragments->Draw("energy >> histHe", "(Z == 2 && energy > 45 && abs(posY) < 2 && abs(posZ) < 2)" + normalization);
    
    fragments->SetLineColor(kGreen);
 
@@ -110,7 +127,7 @@ void fragmentEnergy() {
 
 
    TCanvas *c3 = new TCanvas("histograms", "Histograms");
-   Int_t nEve = 10000; //temporarily hardcoded
+   Int_t nEve = events; //redundant
 
 
 

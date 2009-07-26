@@ -84,6 +84,11 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
   G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
+  
+#ifdef ANALYSIS_USE
+  // Write these values into the analysis if needed. Have to be written separately on change.
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
 
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
@@ -170,10 +175,23 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 } 
 
 void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
-{ meanKineticEnergy = val;} 
+{
+	meanKineticEnergy = val;
+#ifdef ANALYSIS_USE
+  // Update the beam-data in the analysis manager
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
+
+} 
 
 void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
-{ sigmaEnergy = val;}
+{ 
+	sigmaEnergy = val;
+#ifdef ANALYSIS_USE
+  // Update the sigmaenergy in the metadata.
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
+}
 
 void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double val )  
 { X0 = val;}

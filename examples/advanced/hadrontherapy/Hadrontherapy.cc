@@ -80,6 +80,12 @@ int main(int argc ,char ** argv)
 
 
   G4RunManager* runManager = new G4RunManager;
+  //Initialize possible analysis needs, needs to come early in order to pick up metadata
+#ifdef ANALYSIS_USE
+  HadrontherapyAnalysisManager* analysis = 
+    HadrontherapyAnalysisManager::getInstance();
+  analysis -> book();
+#endif
 
   // Initialize the geometry
   if(argc > 1) {
@@ -115,11 +121,7 @@ int main(int argc ,char ** argv)
   HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
-#ifdef ANALYSIS_USE
-  HadrontherapyAnalysisManager* analysis = 
-    HadrontherapyAnalysisManager::getInstance();
-  analysis -> book();
-#endif
+
 
 #ifdef G4VIS_USE
   // Visualization manager

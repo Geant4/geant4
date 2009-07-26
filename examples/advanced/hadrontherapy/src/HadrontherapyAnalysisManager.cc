@@ -325,7 +325,7 @@ void HadrontherapyAnalysisManager::book()
   theROOTNtuple = new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
   theROOTIonTuple = new TNtuple("theROOTIonTuple", "Generic ion information", "a:z:occupancy:energy");
   fragmentNtuple = new TNtuple("fragmentNtuple", "Fragments", "A:Z:energy:posX:posY:posZ");
-  metaData = new TNtuple("metaData", "Metadata", "events");
+  metaData = new TNtuple("metaData", "Metadata", "events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
 #endif
 }
 
@@ -591,7 +591,18 @@ void HadrontherapyAnalysisManager::startNewEvent()
 {
   eventCounter++;
 }
-
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyAnalysisManager::setGeometryMetaData(G4double endDetectorPosition, G4double waterThickness, G4double phantomCenter)
+{
+  this->detectorDistance = endDetectorPosition;
+  this->phantomDepth = waterThickness;
+  this->phantomCenterDistance = phantomCenter;
+}
+void HadrontherapyAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4double sigmaEnergy)
+{
+  this->beamEnergy = meanKineticEnergy;
+  this->energyError = sigmaEnergy;
+}
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::flush()
 {
@@ -603,7 +614,7 @@ void HadrontherapyAnalysisManager::flush()
   theTree ->close();
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-  metaData->Fill((Float_t) eventCounter);
+  metaData->Fill((Float_t) eventCounter,(Float_t) detectorDistance, (Float_t) phantomDepth, (Float_t) beamEnergy,(Float_t) energyError, (Float_t) phantomCenterDistance);
   metaData->Write();
   theROOTNtuple->Write();
   theROOTIonTuple->Write();
@@ -625,7 +636,7 @@ void HadrontherapyAnalysisManager::finish()
   theTree ->close();
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-  metaData->Fill((Float_t) eventCounter);
+  metaData->Fill((Float_t) eventCounter,(Float_t) detectorDistance, (Float_t) phantomDepth, (Float_t) beamEnergy,(Float_t) energyError, (Float_t) phantomCenterDistance);
   metaData->Write();
   theROOTNtuple->Write();
   theROOTIonTuple->Write();

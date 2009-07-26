@@ -29,9 +29,9 @@
 
 
 ##########################
-# Geomtery
+# Geometry
 #
-/iaea/waterPhantomThickness 27.9 cm #default is 27.9
+/iaea/waterPhantomThickness 27.9 cm #default is 27.9, zero will remove phantom
 
 ##########################
 # Initialisation procedure
@@ -67,7 +67,7 @@
 #/vis/open OGLIX 600x600-100+0
 #/vis/drawVolume
 #/vis/viewer/set/viewpointThetaPhi 0 0 deg
-#/vis/viewer/set/viewpointThetaPhi 80 170 deg
+#/vis/viewer/set/viewpointThetaPhi 45 45 deg
 #/vis/viewer/zoom 1.0
 #/vis/scene/add/trajectories
 #/vis/modeling/trajectories/create/drawByCharge
@@ -83,16 +83,15 @@
 #/vis/filtering/trajectories/particleFilter-0/add neutron
 #/vis/filtering/trajectories/particleFilter-0/add proton
 #/vis/filtering/trajectories/particleFilter-0/invert true # charged particles only
-
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
 
 ##########################
 # Set here the cut and the step max for the tracking. 
-# Suggested values of cut and step is 0.01 mm:
+# Fixme, recommenadtions needed
 #
-/physic/setCuts 1 cm
-/Step/waterPhantomStepMax 1 cm
+/physic/setCuts 0.8 cm
+/Step/waterPhantomStepMax 0.5 cm
 #/Step/waterPhantomStepMax 0.01 mm 
 
 #########################
@@ -114,9 +113,9 @@
 /beam/position/Zposition 0 cm
 
 #/run/beamOn 100    # For test/visualization
- /run/beamOn 1000   # Default value in release
+#/run/beamOn 1000   # Default value in release
 #/run/beamOn 10000  # Good for basic physics run (takes few min)
-#/run/beamOn 100000 # Accurate results with good statistics 
+/run/beamOn 100000 # Accurate results with good statistics 
 
 
 # Example of running in loop 

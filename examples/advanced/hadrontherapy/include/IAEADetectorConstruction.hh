@@ -79,20 +79,20 @@ private:
   //  G4VisAttributes* redWire;
   
 public: 
-  void setWaterThickness(G4double);
+  void setWaterThickness(G4double); //< sets thickness of water phantom, zero or negative value removes phantom and plexiedges from the simulation.
   G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
-  // Returns the size of the voxel along the X axis
+  //<Returns the size of the voxel along the X axis
  
 private:
   G4VisAttributes* skyBlue;
   G4VisAttributes* red;
 
   G4String emName;
-  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
+  HadrontherapyDetectorSD* detectorSD; //<Pointer to sensitive detector
 
-  HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
+  HadrontherapyDetectorROGeometry* detectorROGeometry; //<Pointer to ROGeometry 
 
-  PassiveProtonBeamLine* passiveProtonBeamLine; // Pointer to the beam line 
+  PassiveProtonBeamLine* passiveProtonBeamLine; //<Pointer to the beam line 
                                    // geometry component
 
   HadrontherapyModulator* modulator; // Pointer to the modulator 
@@ -127,6 +127,8 @@ private:
    
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;
-  G4int numberOfVoxelsAlongZ;  
+  G4int numberOfVoxelsAlongZ; 
+ 
+  G4bool noPhantom; //<If true no water-phantom is constructed
 };
 #endif
