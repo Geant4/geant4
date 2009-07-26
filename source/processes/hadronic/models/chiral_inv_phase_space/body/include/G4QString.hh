@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.8 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QString.hh,v 1.9 2009-07-26 21:14:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -72,6 +72,7 @@ class G4QString
   G4QString(); // formal creation of the string with future excitation
   G4QString(G4QParton* Color,G4QParton* Gluon, G4QParton* AntiColor, G4int Dir=PROJECTILE);
   G4QString(G4QParton* Col, G4QParton* AntiCol, G4int Dir=PROJECTILE);
+  G4QString(G4QPartonPair* ColAntiCol);
   G4QString(const G4QString &right);
   G4QString(const G4QString &old, G4QParton* newdecay, const G4LorentzVector *momentum);
   G4QString(const G4QString &old, G4QParton* newdecay);

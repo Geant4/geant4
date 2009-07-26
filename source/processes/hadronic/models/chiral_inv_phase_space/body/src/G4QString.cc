@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.12 2009-07-24 16:37:03 mkossov Exp $
+// $Id: G4QString.cc,v 1.13 2009-07-26 21:14:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -74,6 +74,17 @@ G4QString::G4QString(G4QParton* Color, G4QParton* AntiColor, G4int Direction)
   ExciteString(Color, AntiColor, Direction);
 #ifdef debug
   G4cout<<"G4QString::PPD-Constructor: >>> String is excited"<<G4endl;
+#endif
+}
+
+G4QString::G4QString(G4QPartonPair* CAC)
+{
+#ifdef debug
+  G4cout<<"G4QString::PartonPair-Constructor: Is CALLED"<<G4endl;
+#endif
+  ExciteString(CAC->GetParton1(), CAC->GetParton2(), CAC->GetDirection());
+#ifdef debug
+  G4cout<<"G4QString::PartonPair-Constructor: >>> String is excited"<<G4endl;
 #endif
 }
 
