@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.6 2009-07-27 10:20:13 vnivanch Exp $
+// $Id: G4Evaporation.hh,v 1.7 2009-07-27 10:32:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -55,7 +55,7 @@ public:
     theChannels(aChannelsVector), theChannelFactory(0)
   {};
 	 
-  ~G4Evaporation();
+  virtual ~G4Evaporation();
 
 private:
   G4Evaporation(const G4Evaporation &right);
