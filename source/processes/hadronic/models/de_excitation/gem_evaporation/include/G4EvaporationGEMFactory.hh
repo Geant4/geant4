@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.hh,v 1.5 2006-06-29 20:15:37 gunter Exp $
+// $Id: G4EvaporationGEMFactory.hh,v 1.6 2009-07-27 10:22:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 
-#ifndef G4EvaporationGEMFactory_hh
-#define G4EvaporationGEMFactory_hh
+#ifndef G4EvaporationGEMFactory_h
+#define G4EvaporationGEMFactory_h 1
 
 
 #include "G4VEvaporationFactory.hh"
@@ -40,16 +40,16 @@
 class G4EvaporationGEMFactory : public G4VEvaporationFactory
 {
 public:
-  G4EvaporationGEMFactory() {}
-  virtual ~G4EvaporationGEMFactory() {}
+
+  G4EvaporationGEMFactory();
+  virtual ~G4EvaporationGEMFactory();
 
 private:
-  G4EvaporationGEMFactory(const G4EvaporationGEMFactory & ) : G4VEvaporationFactory() {}
+  G4EvaporationGEMFactory(const G4EvaporationGEMFactory & );
   const G4EvaporationGEMFactory & operator=(const G4EvaporationGEMFactory & val);
   G4bool operator==(const G4EvaporationGEMFactory & val) const;
   G4bool operator!=(const G4EvaporationGEMFactory & val) const;
 
-private:
   std::vector<G4VEvaporationChannel*> * CreateChannel();
 
 };

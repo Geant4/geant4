@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationGEMFactory.cc,v 1.7 2006-06-29 20:21:53 gunter Exp $
+// $Id: G4EvaporationGEMFactory.cc,v 1.8 2009-07-27 10:22:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -102,26 +102,11 @@
 #include "G4CompetitiveFission.hh"
 #include "G4PhotonEvaporation.hh"
 
-const G4EvaporationGEMFactory & 
-G4EvaporationGEMFactory::operator=(const G4EvaporationGEMFactory & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator= meant to not be accessable.");
-  return *this;
-}
+G4EvaporationGEMFactory::G4EvaporationGEMFactory()
+{}
 
-G4bool 
-G4EvaporationGEMFactory::operator==(const G4EvaporationGEMFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator== meant to not be accessable.");
-  return false;
-}
-
-G4bool 
-G4EvaporationGEMFactory::operator!=(const G4EvaporationGEMFactory & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationGEMFactory::operator!= meant to not be accessable.");
-  return true;
-}
+G4EvaporationGEMFactory::~G4EvaporationGEMFactory()
+{}
                  
 std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::CreateChannel()
 {
