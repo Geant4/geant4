@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc,v 1.4 2006-06-29 20:13:37 gunter Exp $
+// $Id: G4FissionLevelDensityParameter.cc,v 1.5 2009-07-27 10:21:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+// J.M.Quesada (July 2009): fission level density parameter tuned for spallation data.
+// V.Ivanchenko (July 2009): fixed logic and remove wrong usage of MeV
 
 #include "G4FissionLevelDensityParameter.hh"
 #include "G4HadronicException.hh"
@@ -67,9 +68,12 @@ operator!=(const G4FissionLevelDensityParameter &) const
 G4double G4FissionLevelDensityParameter::
 LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const 
 {
-    G4double EvapLDP = theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
+  G4double EvapLDP = 
+    theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
+  if(Z >= 89)      EvapLDP *= 1.04;
+  else if(Z >= 85) EvapLDP *= (1.04 + 0.01*(89 - Z));
+  else             EvapLDP *= 1.08;
 
-    if (Z >= 89) return 1.04*EvapLDP;
-    else if (Z >= 85) return (1.04*(1./MeV) + 0.01*(89-Z))*EvapLDP;
-    else return 1.08*EvapLDP;
+  //JMQ 310509 
+  return 1.07*EvapLDP;
 }
