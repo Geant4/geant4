@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2009-05-20 13:33:27 gcosmo Exp $
+$Id: History,v 1.144 2009-07-27 14:01:13 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 July 2009, Laurent Garnier
+ - G4OpenGLStoredQtViewer : Remove picking to true at initialisation 
 
 20 May 2009, Laurent Garnier (opengl-V09-02-06)
  - Fixed compilation errors on WIN32-VC for WIN32 specific drivers.

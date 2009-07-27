@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.25 2009-05-13 10:28:00 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.26 2009-07-27 14:01:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,8 +49,6 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
 {
 
-  //set true to picking
-  fVP.SetPicking(true);
 #if QT_VERSION < 0x040000
   setFocusPolicy(QWidget::StrongFocus); // enable keybord events
 #else
