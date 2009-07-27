@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-12)
+---------------------------------------------------------
+- G4EvaporationGEMFactory - cleanup
+- G4Evaporation - added method SetCombinedCannels to define new evaporation
+                  factory G4EvaporationDefaultGEMFactory
+- G4EvaporationDefaultGEMFactory - new class proposed by J.M.Quesada in
+                    which light mesons probabilities are computed from
+                    default classes and other fragments from GEM
+- G4FissionLevelDensityParameter, G4FissionParameters - J.M.Quesada tuning
+                    to IAEA benchmak data
+
 15 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-11)
 ---------------------------------------------------------
 - G4GEMProbability - J.M.Quesada fixed units (hbar_Plank -> hbarc)
