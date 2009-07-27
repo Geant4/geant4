@@ -24,86 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.6 2009-07-27 10:20:13 vnivanch Exp $
+// $Id: G4EvaporationDefaultGEMFactory.hh,v 1.1 2009-07-27 10:20:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara
+// by J. M. Quesada (July 2009) on base of V. Lara code
+// V.Ivanchenko cleanup
 //
-//
-// Alex Howard - added protection for negative probabilities in the sum, 14/2/07
-// V.Ivanchenko - added Combined decay channels (default + GEM) 27/07/09
+// new hybrid Default-GEM evaoration model:
+//      - default evaporation for n,p,d,t and alpha particles
+//      - GEM evaporation for light nuclei evaporation (2<Z<13,4<A<29) 
 
-#ifndef G4Evaporation_h
-#define G4Evaporation_h 1
 
-#include "globals.hh"
+#ifndef G4EvaporationDefaultGEMFactory_h
+#define G4EvaporationDefaultGEMFactory_h 1
 
-#include "G4VEvaporation.hh"
-#include "G4VEvaporationChannel.hh"
-#include "G4Fragment.hh"
+#include "G4VEvaporationFactory.hh"
 
-class G4VEvaporationFactory;
-
-//#define debug
-
-class G4Evaporation : public G4VEvaporation
+class G4EvaporationDefaultGEMFactory : public G4VEvaporationFactory
 {
 public:
-  G4Evaporation();
-  G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector) :
-    theChannels(aChannelsVector), theChannelFactory(0)
-  {};
-	 
-  ~G4Evaporation();
+
+  G4EvaporationDefaultGEMFactory();
+  virtual ~G4EvaporationDefaultGEMFactory();
 
 private:
-  G4Evaporation(const G4Evaporation &right);
 
-  const G4Evaporation & operator=(const G4Evaporation &right);
-  G4bool operator==(const G4Evaporation &right) const;
-  G4bool operator!=(const G4Evaporation &right) const;
+  G4EvaporationDefaultGEMFactory(const G4EvaporationDefaultGEMFactory & );
+  const G4EvaporationDefaultGEMFactory & operator=(const G4EvaporationDefaultGEMFactory & val);
+  G4bool operator==(const G4EvaporationDefaultGEMFactory & val) const;
+  G4bool operator!=(const G4EvaporationDefaultGEMFactory & val) const;
 
-public:
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-
-  void SetDefaultChannel();
-  void SetGEMChannel();
-  void SetCombinedChannel();
-
-#ifdef debug
-  void CheckConservation(const G4Fragment & theInitialState,
-			 G4FragmentVector * Result) const;
-#endif
-
-
-  std::vector<G4VEvaporationChannel*> * theChannels;
-  G4VEvaporationFactory * theChannelFactory;
-  
-  
-  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
-  {
-  public:
-    SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
-    { 
-      G4double temp_prob = frag->GetEmissionProbability();
-      if(temp_prob >= 0.0) total += temp_prob;
-      //      total += frag->GetEmissionProbability();
-      return total;
-    }
-    
-    G4double GetTotal() { return total; }
-  public:
-    G4double total;
-    
-  };
+  std::vector<G4VEvaporationChannel*> * CreateChannel();
 
 };
 
 #endif
-
-
-
-
-

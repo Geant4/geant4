@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.12 2008-12-09 17:57:36 ahoward Exp $
+// $Id: G4Evaporation.cc,v 1.13 2009-07-27 10:20:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -36,10 +36,13 @@
 // cross section option
 // JMQ (06 September 2008) Also external choices have been added for 
 // superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+//
+// V.Ivanchenko added G4EvaporationDefaultGEMFactory option, 27/07/09
 
 #include "G4Evaporation.hh"
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
+#include "G4EvaporationDefaultGEMFactory.hh"
 #include "G4HadronicException.hh"
 #include <numeric>
 
@@ -49,35 +52,11 @@ G4Evaporation::G4Evaporation()
   theChannels = theChannelFactory->GetChannel();
 }
 
-G4Evaporation::G4Evaporation(const G4Evaporation &) : G4VEvaporation()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4Evaporation::copy_constructor meant to not be accessable.");
-}
-
-
 G4Evaporation::~G4Evaporation()
 {
   if (theChannels != 0) theChannels = 0;
   if (theChannelFactory != 0) delete theChannelFactory;
 }
-
-const G4Evaporation & G4Evaporation::operator=(const G4Evaporation &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4Evaporation::operator= meant to not be accessable.");
-    return *this;
-}
-
-
-G4bool G4Evaporation::operator==(const G4Evaporation &) const
-{
-    return false;
-}
-
-G4bool G4Evaporation::operator!=(const G4Evaporation &) const
-{
-    return true;
-}
-
 
 void G4Evaporation::SetDefaultChannel()
 {
@@ -92,6 +71,14 @@ void G4Evaporation::SetGEMChannel()
   theChannelFactory = new G4EvaporationGEMFactory();
   theChannels = theChannelFactory->GetChannel();
 }
+
+void G4Evaporation::SetCombinedChannel()
+{
+  if (theChannelFactory != 0) delete theChannelFactory;
+  theChannelFactory = new G4EvaporationDefaultGEMFactory();
+  theChannels = theChannelFactory->GetChannel();
+}
+
 
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
