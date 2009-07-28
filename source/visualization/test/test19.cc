@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.29 2007-01-05 16:00:48 allison Exp $
+// $Id: test19.cc,v 1.30 2009-07-28 12:50:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,21 +48,20 @@
 #include "MySteppingAction.hh"
 
 #include "G4UIterminal.hh"
-#ifdef G4UI_USE_TCSH
-#include "G4UItcsh.hh"
-#endif
-#include "G4UIGAG.hh"
-#ifdef G4UI_USE_WO
+#if defined(G4UI_USE_GAG)
+  #include "G4UIGAG.hh"
+#elif defined(G4UI_USE_TCSH)
+  #include "G4UItcsh.hh"
+#elif defined(G4UI_USE_WO)
   #include "G4UIWo.hh"
-#endif
-#ifdef G4UI_USE_XM
+#elif defined(G4UI_USE_XM)
   #include "G4UIXm.hh"
-#endif
-#ifdef G4UI_USE_XAW
+#elif defined(G4UI_USE_XAW)
   #include "G4UIXaw.hh"
-#endif
-#ifdef G4UI_USE_WIN32
+#elif defined(G4UI_USE_WIN32)
   #include "G4UIWin32.hh"
+#elif defined(G4UI_USE_QT)
+  #include "G4UIQt.hh"
 #endif
 
 #include "G4RunManager.hh"
@@ -99,29 +98,29 @@ int main (int argc, char** argv) {
   session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
 #else
   if (argc >= 2) {
-#ifdef G4UI_USE_TCSH
+  #if defined(G4UI_USE_TCSH)
     if (strcmp (argv[1], "tcsh")==0)     session =
-					   new G4UIterminal(new G4UItcsh);
-#endif
-#ifdef G4UI_USE_WO
-    else if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
-#endif
-#ifdef G4UI_USE_XM
-    else if (strcmp (argv[1], "Xm")==0)  session = new G4UIXm (argc, argv);
-#endif
-#ifdef G4UI_USE_XAW
-    else if (strcmp (argv[1], "Xaw")==0) session = new G4UIXaw (argc, argv);
-#endif
-    else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
-    else                                 session =
-					   new G4UIterminal();
+      new G4UIterminal(new G4UItcsh);
+  #elif defined(G4UI_USE_WO)
+    if (strcmp (argv[1], "Wo")==0)  session = new G4UIWo (argc, argv);
+  #elif defined(G4UI_USE_XM)
+    if (strcmp (argv[1], "Xm")==0)  session = new G4UIXm (argc, argv);
+  #elif defined(G4UI_USE_XAW)
+    if (strcmp (argv[1], "Xaw")==0) session = new G4UIXaw (argc, argv);
+  #elif defined(G4UI_USE_GAG)
+    if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
+  #elif defined(G4UI_USE_QT)
+    if (strcmp (argv[1], "Qt")==0)  session = new G4UIQt (argc, argv);
+  #else
+    session = new G4UIterminal();
+  #endif
+    else  session = new G4UIterminal();
   }
-  else                                   session =
-#ifdef G4UI_USE_TCSH
-					   new G4UIterminal(new G4UItcsh);
-#else
-					   new G4UIterminal();
-#endif
+  else                                   
+  {
+    G4cerr << "You should define a UI in order to interact with test" << G4endl;
+    return 0;
+  }
 #endif
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
