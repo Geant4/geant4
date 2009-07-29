@@ -1,4 +1,4 @@
-$Id: History,v 1.155 2009-07-29 16:34:54 gcosmo Exp $
+$Id: History,v 1.156 2009-07-29 16:48:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 23-Jul-2009  T.Nikitina (geom-specific-V09-02-04)
-- G4Ellipsoid: corrections to DistanceToIn(p,v) and in DistanceToOut(p,v) for
-  final fix problem report #1022.
+- G4Ellipsoid: fix to DistanceToIn(p,v) in the calculation of the roots of
+  the quadratic equation and in DistanceToOut(p,v) in the calculation of the
+  normal on cut surfaces. Final fix for problem report #1022 and #1050.
 - G4PolyconeSide: added protection in method Normal(), addressing problem
   report #1073.
 
