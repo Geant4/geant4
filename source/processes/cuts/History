@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2009-05-19 09:57:34 gcosmo Exp $
+$Id: History,v 1.25 2009-07-29 12:10:38 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 29, 2009  -  H.Kurashige (procuts-V09-02-01) 
+- Add implemtentaion of G4VRangeToEnergyConverter::GetParticleType 
 
 May 2nd, 2009  -  H.Kurashige (procuts-V09-02-00) 
 - Use std::fabs instead of std::abs.
