@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2009-07-27 14:01:13 lgarnier Exp $
+$Id: History,v 1.145 2009-07-29 10:04:45 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 July 2009, Laurent Garnier
+ - G4OpenGLQtViewer : Ensure the GL frame size will be correct
+   by setting a 0 size margin around 
 
 27 July 2009, Laurent Garnier
  - G4OpenGLStoredQtViewer : Remove picking to true at initialisation 

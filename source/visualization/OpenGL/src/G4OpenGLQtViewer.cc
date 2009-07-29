@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.42 2009-05-14 16:38:23 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.43 2009-07-29 10:04:45 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,7 +163,8 @@ void G4OpenGLQtViewer::CreateMainWindow (
   }
 
   QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
-
+  mainLayout->setMargin(0);
+  mainLayout->setSpacing(0);   
   mainLayout->addWidget(fWindow);
 
 #if QT_VERSION < 0x040000
@@ -1316,7 +1317,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
   name += "." + selectedFormat->toStdString();
   QString format = selectedFormat->toLower();
 #endif
-  setPrintFilename(name.c_str(),-1);
+  setPrintFilename(name.c_str(),0);
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
