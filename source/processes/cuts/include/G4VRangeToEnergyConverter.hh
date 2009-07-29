@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.4 2006-06-29 19:30:06 gunter Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.5 2009-07-29 12:02:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -174,6 +174,11 @@ inline
 }
 
 
+inline 
+ const G4ParticleDefinition* G4VRangeToEnergyConverter::GetParticleType() const
+{
+   return theParticle;
+}
 #endif
 
 
