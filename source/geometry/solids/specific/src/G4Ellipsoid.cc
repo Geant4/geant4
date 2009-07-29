@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.18 2009-07-23 09:54:03 tnikitin Exp $
+// $Id: G4Ellipsoid.cc,v 1.19 2009-07-29 16:34:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -379,7 +379,8 @@ G4Ellipsoid::CalculateExtent(const EAxis pAxis,
 // Each check modifies `in', or returns as approprate
 
 EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
-{ G4double rad2oo,  // outside surface outer tolerance
+{
+  G4double rad2oo,  // outside surface outer tolerance
            rad2oi;  // outside surface inner tolerance
   EInside in;
 
@@ -460,24 +461,27 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   distMin= kInfinity;
 
   // check to see if Z plane is relevant
-  if (p.z() <= zBottomCut+0.5*kCarTolerance) {
-    if (v.z() <= 0.0){return distMin;}
+  if (p.z() <= zBottomCut+0.5*kCarTolerance)
+  {
+    if (v.z() <= 0.0) { return distMin; }
     G4double distZ = (zBottomCut - p.z()) / v.z();
 
-    if (distZ >- kRadTolerance/2.0 && Inside(p+distZ*v) != kOutside )
-      {
-        // early exit since can't intercept curved surface if we reach here
-        return distMin= distZ;
-      }
+    if ( (distZ >- kRadTolerance/2.0) && (Inside(p+distZ*v) != kOutside) )
+    {
+      // early exit since can't intercept curved surface if we reach here
+      return distMin= distZ;
+    }
 
   }
-  if (p.z() >= zTopCut-0.5*kCarTolerance) {
-    if (v.z() >= 0.0){ return distMin;}
+  if (p.z() >= zTopCut-0.5*kCarTolerance)
+  {
+    if (v.z() >= 0.0) { return distMin;}
     G4double distZ = (zTopCut - p.z()) / v.z();
-    if (distZ > -kRadTolerance/2.0 && Inside(p+distZ*v) != kOutside )
-      { // early exit since can't intercept curved surface if we reach here
-        return distMin= distZ;
-      }
+    if ( (distZ > -kRadTolerance/2.0) && (Inside(p+distZ*v) != kOutside) )
+    {
+      // early exit since can't intercept curved surface if we reach here
+      return distMin= distZ;
+    }
   }
   // if fZCut1 <= p.z() <= fZCut2, then must hit curved surface
 
@@ -493,39 +497,34 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   C= B*B - 4.0*A*C;
   if (C > 0.0)
   {
-    
-      G4double distR= (-B - std::sqrt(C) ) / (2.0*A);
-      G4double intZ= p.z()+distR*v.z();
-      if (distR >- kRadTolerance/2.0
-      && intZ >= zBottomCut-kRadTolerance/2.0
-      && intZ <= zTopCut+kRadTolerance/2.0)
-        {
-          distMin = distR;
-        }
-      else
-        {
-          distR= (-B + std::sqrt(C) ) / (2.0*A);
-          intZ= p.z()+distR*v.z();
-          if (distR >- kRadTolerance/2.0
-              && intZ >= zBottomCut-kRadTolerance/2.0
-              && intZ <= zTopCut+kRadTolerance/2.0)
-            {
-              distMin = distR;
-            }
-        }
-      if ( distMin>dRmax ) // Avoid rounding errors due to precision issues seen on
-        {              // 64 bits systems. Split long distances and recompute
-          G4double fTerm = distMin-std::fmod(distMin,dRmax);
-          distMin = fTerm + DistanceToIn(p+fTerm*v,v);
-        } 
-
-
+    G4double distR = (-B - std::sqrt(C) ) / (2.0*A);
+    G4double intZ  = p.z()+distR*v.z();
+    if ( (distR >- kRadTolerance/2.0)
+      && (intZ >= zBottomCut-kRadTolerance/2.0)
+      && (intZ <= zTopCut+kRadTolerance/2.0) )
+    {
       distMin = distR;
-   
-     
+    }
+    else
+    {
+      distR = (-B + std::sqrt(C) ) / (2.0*A);
+      intZ  = p.z()+distR*v.z();
+      if ( (distR >- kRadTolerance/2.0)
+        && (intZ >= zBottomCut-kRadTolerance/2.0)
+        && (intZ <= zTopCut+kRadTolerance/2.0) )
+      {
+        distMin = distR;
+      }
+    }
+    if ( distMin>dRmax ) // Avoid rounding errors due to precision issues seen
+    {                    // on 64 bits systems. Split distances and recompute
+      G4double fTerm = distMin-std::fmod(distMin,dRmax);
+      distMin = fTerm + DistanceToIn(p+fTerm*v,v);
+    } 
+    distMin = distR;
   }
-  
- if(std::abs(distMin)<kRadTolerance*0.5)distMin=0.;
+
+  if(std::abs(distMin)<kRadTolerance*0.5)  { distMin=0.; }
   return distMin;
 } 
 
