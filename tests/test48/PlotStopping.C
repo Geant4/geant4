@@ -19,6 +19,7 @@
 #include "TRefArray.h"
 #include "TStyle.h"
 #include "TGraph.h"
+#include "TLegend.h"
 
 const int NModels=2;
 const int NModelsPiMinus=3;
@@ -185,18 +186,23 @@ void drawPiMinus( std::string target )
    
    // std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
    
+   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   
    for ( int m=0; m<NModelsPiMinus; m++ )
    {
       hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*5.); // hi[m]->SetTitle("");
+      leg->AddEntry( hi[m], Models[m].c_str(), "L" );
    }
-   
+      
    TGraph*  gr1 = new TGraphErrors(NPointsMadey,KENeut,Value[TargetID],0,Error[TargetID]);
    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
    gr1->SetMarkerSize(1.6);
    gr1->Draw("p");
    
-   // leg1 = new TLegend(0.42,0.55,0.90,0.90);
-   // leg1->Draw("same")
+   leg->AddEntry( gr1, "exp.data", "p");
+
+   leg->Draw();
+   leg->SetFillColor(kWhite);
 
    return;
 
