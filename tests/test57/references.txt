@@ -1,0 +1,92 @@
+
+ Angle distribution data
+
+ 1. A.0.Hanson et al. Phys.Rev. 84, 634.(1951)
+    15.7 MeV e-, thin Au and Be foils,
+    angle distribution (with tails!)
+ 2. L.A.Kulchitsky, G.D.Latyshev Phys.Rev. 61, 254. (1942)
+    2.25 MeV e-, different targets
+    theta0 of the angle distribution, no tails 
+ 3. H.Bichsel Phys.Rev. 112, 182. (1958)
+    few MeV protons, diff. targets, theta0
+ 4. B.Gottschalk et al. NIM B74, 467 (1993)
+    158.6 MeV protons, diff. targets and thicknesses
+    theta0 of the angle distribution
+ 5. E.V.Hungerford et al. Nucl. Phys. A197, 515 (1972)
+    600 MeV protons, diff. targets, angle distributions
+    (small angle)
+ 6. J.Vincour and P.Bem, NIM 148, 399 (1978)
+    6-12 MeV p and d, silicon, angle distributions
+    (small angle)
+ 7. B.W.Mayes et al. Nucl.Phys. A230, 515 (1974)
+    200 - 300 MeV/c pi+, different targets, thicknesses
+    theta0x,y (projected angle, small angles)
+ 8. S.A. Akimenko et al. NIM A243, 518 (1986)
+    7.3 and 11.7 GeV/c muons, Cu target
+    angle distr. (small angles)
+ 9. C.Michelet et al. NIM B181, 157 (2001)
+    2.5 MeV p and alpha, lateral distr. after mylar foils 
+
+  Transmission, backscattering, dose, energy deposit etc.
+
+ 9. S.M. Seltzer and M.J.Berger
+    NIM 119, 157 (1974)
+    Monte Carlo + a lot of exp. data with references!
+    transmission coeff, angle and energy distr. of
+    transmitted electrons, reflection coeff,
+    angle distr. of reflected electrons,
+    energy deposit as a function of depth,    
+ 10. D.H.Rester and J.H. Derrickson
+     J.Appl.Phys. 12, 714 (1971)
+     transmission of 1 MeV and 2.5 MeV e-,Al,Au
+     energy and angle distr. ot transmitted particles
+ 11. D.H.Rester and J.H. Derrickson
+     NIM 86, 261 (1970)
+     1 MeV e- , backscattering, diff. targets
+     energy and angular distr. of backscattered particles
+ 12. J.Jakschik and K.P. Jungst
+     NIM 79 , 240 (1970)
+     backscattering of 250/500 keV e- from THIN targets(Al)
+     backsc.coeff.,energy spectra of backscattered particles,
+     angle distr. of backscattered particles
+ 13. H.H.Seliger Phys.Rev. 100, 1029 (1955)
+     transmission of e-/e+ 159-960 keV, diff. materials/thicknesses
+     transm. coeff.
+ 14. H.J.Hunger and L.Kuchler Phys.Stat.Sol.(a) 56, K45 (1979)
+     e- backscatt. coeffs , 4-40 keV, Z=5-92 (numbers!)
+ 15. T.Tabata et al. NIM 94, 509 (1971)
+     empirical formula for e- backscattering,
+     comparison with data+references 
+ 16. V.A.Kuzminikh et al. NIM 118, 269 (1974)
+     empirical formula for e+ backscattering , comparison with data
+     0.1-20 MeV, arbitrary Z
+     it claims : tis formula is better than Tabata's
+ 17. E.H.Darlington J.Phys.D:Appl.Phys. 8, 85 (1975)
+     backscattering of 10-100keV e- from diff.targets,
+     backsc.coeff.+energy spectrum
+ 18. G.Neubert,S.Rogaschewsky Phys.Stat.Sol(a) 59, 35 (1980)
+     15-60 keV e- backscattering,diff. angles of incidence
+     and diff. targets
+ 19. P.G.Coleman et al. J.Phys: Condens.Matter 4,  10311(1992)
+     1 - 50 keV e+ backscattering, diff. angles of incidence,
+     diff. targets , bs coeffs(numbers!). 
+ 20. G.R.Massoumi et al. Phys.Rev. B 47, 11007(1993)
+     e-/e+ bs, T < 100 keV,very detailed MC calculation + data 
+ 21. H.Bichsel
+     Rev.Mod.Phys. 60, 663 (1988)
+     Energy deposit in Si detectors (e+-,p,pi, diff.energies/
+     detector thicknesses)         
+ 22. M.J.Berger et al. NIM 69, 181(1969).
+     Energy deposit of 250 keV - 1 MeV e- in Si counters,
+     energy deposit distributions
+     (sigma noise + en.cut in detectors included!)
+ 23. S.Kuhn et al. NIM B4 332 (1984)
+     Multiple scattering of protons in thick gas targets
+     ( lateral distribution of few MeV protons after 1.5 m gas)
+ 24. S.M.Seltzer and M.J.Berger
+     Energy deposition by electron,Bremsstrahlung and 60Co gamma-ray
+     beams in multi-layer media
+     Appl.Radiat.Isot. Vol.38 (1987) 349.
+ 25. R.Shimizu et al. J.Phys.D: Appl.Phys. 9.(1976) 101.
+     Transmission of 20 keV e- through very thin Al layers
+     (d = 320 and 1040 nanometer!)

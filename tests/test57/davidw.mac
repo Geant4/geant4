@@ -1,0 +1,23 @@
+#
+# Macro file for TestEm5.cc     
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Lead 
+/testem/det/setAbsThick 1 mm  
+/testem/det/setAbsYZ 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 250 MeV
+#
+/testem/histo/setFileName davidw.41r0
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 12 100 0 100 mrad		#space angle 
+#
+/run/beamOn 10000
+
+

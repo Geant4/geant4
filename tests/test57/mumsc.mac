@@ -1,0 +1,34 @@
+# $Id: mumsc.mac,v 1.1 2009-07-30 15:03:30 grichine Exp $
+#
+# macro file for TestEm5.cc
+#
+# mu+, transmitted through 1 m of iron
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Iron
+/testem/det/setAbsThick 1 m
+/testem/det/setAbsYZ    1 m
+/testem/det/setWorldX   1 m
+/testem/det/setWorldYZ  1 m
+#
+/testem/phys/addPhysics  emstandard
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle mu+
+/gun/energy 100 GeV
+#
+/testem/histo/setFileName mumsc/9.2-ref00-opt0
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
+/testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  
+#
+/testem/stack/killSecondaries
+#
+/testem/event/printModulo 4000
+/run/beamOn 40000

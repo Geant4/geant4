@@ -1,0 +1,15 @@
+FILE  testem5.hbook
+LIST
+ABSOR  23 (silicon) 20.5e-4 (thicknX) 0.1 (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+KINE   8 (pion) 5.0 (Ekine) 90.0 (theta)  0.0 (phi)
+*HISTO 1 (idh) 100 (nbins) 0. (Emin) 50. (Emax) 1.e-6 (keV)
+KILL  FALSE
+SWIT   0 (draw)
+DEBUG  2  1 10000        
+TRIG   100000
+END

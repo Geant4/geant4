@@ -1,0 +1,15 @@
+FILE  tramu.hbook
+LIST
+ABSOR  25 (iron)  300. (thicknX) 300. (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*21.0e-6 (bcute/m)  2*1.3e-3 (dcute/m)    10.e-3 (ppcutm) 
+KINE   5 (muon) 1000. (Ekin) 90.0 (theta)  0.0 (phi)
+*HISTO 10 (idh)  80 (nbins) 920. (Emin) 1000. (Emax) 1. (GeV)
+KILL   TRUE
+SWIT   0 (draw)      
+DEBUG  1 1 1000 
+TRIG   10000
+END
