@@ -74,31 +74,20 @@ void readAntiProton()
    std::cout << "Reads data from file " << fname1 << "\n";
    ifstream infile;
    infile.open(fname1.c_str());
-   
-   float Sum = 0.;
-   
+      
    for ( int i=0; i<NPointsAntiProtonMom; i++ )
    {
+      // NOTE: the numbers in the input file came from arXiv:hep-ph/9504362v1,
+      //       by the use of DigitizeIt to extract data from the graph 
+      //       (the "real original" probably comes from a conf.talk in 1975...)
       infile >> MomX[i] >> MomValue[i] >> MomError[i];
-      // rescale (like in chipstest)
-      Sum += MomValue[i];
-      // this is a replica of what I've seen in test29
-      // I'm not sure it makes any sense here, because
-      // I canNOT make the numbers match the "original"
-      // plot from let's say arXiv:hep-ph/9504362v1
-      // (although the "real original" probably comes
-      //  from a conf.talk in 1975...)
-      MomValue[i] *= 0.222;
-      MomError[i] *= 0.222;
    }
-   
-   std::cout << " Sum = " << Sum << std::endl;
-   
+      
    return;
    
 }
 
-void plotPiminus( std::string target )
+void plotPiMinus( std::string target )
 {
    
    int TargetID = -1;
@@ -133,6 +122,9 @@ void plotPiminus( std::string target )
       TFile* f = new TFile( histofile.c_str() );
       hi[m] = (TH1F*)f->Get("NvsT");
       hi[m]->SetLineColor(ColorModel[m]);
+      hi[m]->SetLineWidth(2);
+      hi[m]->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
+      hi[m]->GetYaxis()->SetTitle("Number of neutrons per MeV");
       int nx = hi[m]->GetNbinsX();
       for (int k=1; k <= nx; k++) {
 	double yy = hi[m]->GetBinContent(k);
@@ -143,11 +135,11 @@ void plotPiminus( std::string target )
       else hi[m]->Draw("same");
    }
    
-   std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
+   // std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
    
    for ( int m=0; m<NModelsPiMinus; m++ )
    {
-      hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*5.);
+      hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*5.); // hi[m]->SetTitle("");
    }
 
    readMadey();
@@ -167,8 +159,8 @@ void plotAntiProton( std::string target )
    TH1F* hi[NModels];
    
    TCanvas *myc = new TCanvas("myc","",800,600);
-   // myc->SetLogx(1);
-   // myc->SetLogy(1);
+   //myc->SetLogx(1);
+   //myc->SetLogy(1);
    
    double ymin = 100000.; // something big... don't know if I can use FLT_MAX
    double ymax = -1. ;
@@ -177,8 +169,12 @@ void plotAntiProton( std::string target )
       std::string histofile = "antiproton" + target + Models[m];
       histofile += ".root";
       TFile* f = new TFile( histofile.c_str() );
+      // f->ls();
       hi[m] = (TH1F*)f->Get("ChargedPionMomentum");
       hi[m]->SetLineColor(ColorModel[m]);
+      hi[m]->SetLineWidth(2);
+      hi[m]->GetXaxis()->SetTitle("Charged Pion Momentum (GeV/c)");
+      hi[m]->GetYaxis()->SetTitle("dN/dP (GeV/c)^{-1}");
       int nx = hi[m]->GetNbinsX();
       for (int k=1; k <= nx; k++) {
 	double yy = hi[m]->GetBinContent(k);
@@ -194,7 +190,7 @@ void plotAntiProton( std::string target )
    for ( int m=0; m<NModels; m++ )
    {
       //hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*10.);
-      // hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*1.1);
+      hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*1.1);
    }
    
    readAntiProton();

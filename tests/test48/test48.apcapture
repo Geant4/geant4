@@ -19,4 +19,7 @@ H
 #generator
 CHIPS
 #run
+#generator
+stopping
+#run
 #exit
