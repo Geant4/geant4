@@ -12,7 +12,7 @@ pi-
 0. 0. 1.
 //--------
 #material
-Pb
+Cu
 #momentum(MeV/c)
 0.0
 // ---
