@@ -105,7 +105,39 @@ void readAntiProton()
    
 }
 
+void plotPiMinusAll()
+{
+
+   readMadey();
+
+   TCanvas *myc = new TCanvas("myc","",1000,600);
+   myc->Divide(4,2);
+
+   for ( int i=0; i<NTargetsMadey; i++ )
+   {      
+      myc->cd(i+1); gPad->SetLogx(1); gPad->SetLogy(1);
+      drawPiMinus( TargetsMadey[i] ); 
+   }
+
+   return ;
+}
+
 void plotPiMinus( std::string target )
+{
+
+   readMadey();
+
+   TCanvas *myc = new TCanvas("myc","",800,600);
+   myc->SetLogx(1);
+   myc->SetLogy(1);
+   
+   drawPiMinus( target );
+   
+   return;   
+
+}
+
+void drawPiMinus( std::string target )
 {
    
    int TargetID = -1;
@@ -126,11 +158,7 @@ void plotPiMinus( std::string target )
    }
    
    TH1F* hi[NModelsPiMinus];
-   
-   TCanvas *myc = new TCanvas("myc","",800,600);
-   myc->SetLogx(1);
-   myc->SetLogy(1);
-   
+      
    double ymin = 10000.; // something big... don't know if I can use FLT_MAX
    double ymax = -1. ;
    for ( int m=0; m<NModelsPiMinus; m++ )
@@ -139,6 +167,8 @@ void plotPiMinus( std::string target )
       histofile += ".root";
       TFile* f = new TFile( histofile.c_str() );
       hi[m] = (TH1F*)f->Get("NvsT");
+      // turn off the stats pad; use this space to draw color codes, etc.
+      hi[m]->SetStats(0);
       hi[m]->SetLineColor(ColorModel[m]);
       hi[m]->SetLineWidth(2);
       hi[m]->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
@@ -159,13 +189,14 @@ void plotPiMinus( std::string target )
    {
       hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*5.); // hi[m]->SetTitle("");
    }
-
-   readMadey();
    
    TGraph*  gr1 = new TGraphErrors(NPointsMadey,KENeut,Value[TargetID],0,Error[TargetID]);
    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
    gr1->SetMarkerSize(1.6);
    gr1->Draw("p");
+   
+   // leg1 = new TLegend(0.42,0.55,0.90,0.90);
+   // leg1->Draw("same")
 
    return;
 

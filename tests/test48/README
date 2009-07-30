@@ -96,6 +96,11 @@ session:
 root [0] gROOT->LoadMacro("PlotStopping.C")
 root [1] plotPiMinus("Cu")
 
+If you wish to display results on pi- absorptions on all of the 7 targets in the test, 
+you can do it like this:
+root [0] gROOT->LoadMacro("PlotStopping.C")
+root [1] plotPiMinusAll()
+
 In order to compare the output of pbar annihilation on H vs experimental data (momentum
 spectra of final state charged pions or multiplicity of the final state pions) one can
 do the following:
