@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.72 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.73 2009-07-30 07:36:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -557,7 +557,7 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
 
 G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 			  	          const G4String& directory,
-			  	                G4bool ascii)
+					  G4bool ascii)
 {
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
@@ -576,13 +576,18 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 						   filename,ascii);
   if ( yes ) {
     if (0 < verboseLevel) {
-      G4cout << "Lambda table for " << particleName << " is Retrieved from <"
+      G4cout << "Lambda table for " << particleName 
+	     << " is Retrieved from <"
              << filename << ">"
              << G4endl;
     }
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = theLambdaTable->length();
-      for(size_t i=0; i<n; i++) {(* theLambdaTable)[i]->SetSpline(true);}
+      for(size_t i=0; i<n; i++) {
+        if((* theLambdaTable)[i]) {
+	  (* theLambdaTable)[i]->SetSpline(true);
+	}
+      }
     }
   } else {
     if (1 < verboseLevel) {

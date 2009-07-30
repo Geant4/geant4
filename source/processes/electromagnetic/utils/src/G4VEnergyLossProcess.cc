@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.153 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.154 2009-07-30 07:36:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1408,9 +1408,10 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
-       const G4ParticleDefinition* part, const G4String& directory,
-       G4bool ascii)
+G4bool 
+G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part, 
+					   const G4String& directory,
+					   G4bool ascii)
 {
   G4bool res = true;
   const G4String particleName = part->GetParticleName();
@@ -1458,7 +1459,7 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
         {res = false;}
 
       if(!fpi) yes = false;
-      if(!RetrieveTable(part,theIonisationSubTable,ascii,directory,"SubIonisation",yes)) 
+      if(!RetrieveTable(part,theIonisationSubTable,ascii,directory,"SubIonisation",yes))
         {res = false;}
     }
   }
@@ -1483,11 +1484,13 @@ G4bool G4VEnergyLossProcess::StoreTable(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part, 
-					   G4PhysicsTable* aTable, G4bool ascii,
-					   const G4String& directory,
-					   const G4String& tname,
-					   G4bool mandatory)
+G4bool 
+G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part, 
+				    G4PhysicsTable* aTable, 
+				    G4bool ascii,
+				    const G4String& directory,
+				    const G4String& tname,
+				    G4bool mandatory)
 {
   G4bool res = true;
   G4String filename = GetPhysicsTableFileName(part,directory,tname,ascii);
@@ -1498,7 +1501,11 @@ G4bool G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
 
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = aTable->length();
-      for(size_t i=0; i<n; i++) {(*aTable)[i]->SetSpline(true);}
+      for(size_t i=0; i<n; i++) {
+        if((*aTable)[i]) {
+	  (*aTable)[i]->SetSpline(true);
+	}
+      }
     }
   }
   if(yes) {

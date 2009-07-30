@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.71 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.72 2009-07-30 07:36:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -396,12 +396,12 @@ G4bool G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* part,
-					           const G4String& directory,
-			  	                         G4bool ascii)
+G4bool 
+G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* part,
+					    const G4String& directory,
+					    G4bool ascii)
 {
   if(0 < verboseLevel) {
-    //    G4cout << "========================================================" << G4endl;
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
@@ -413,20 +413,27 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
   const G4String particleName = part->GetParticleName();
 
   G4String filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
+  yes = 
+    G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
   if ( yes ) {
     if (0 < verboseLevel) {
-        G4cout << "Lambda table for " << part->GetParticleName() << " is retrieved from <"
+        G4cout << "Lambda table for " << part->GetParticleName() 
+	       << " is retrieved from <"
                << filename << ">"
                << G4endl;
     }
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = theLambdaTable->length();
-      for(size_t i=0; i<n; i++) {(* theLambdaTable)[i]->SetSpline(true);}
+      for(size_t i=0; i<n; i++) {
+        if((* theLambdaTable)[i]) {
+	  (* theLambdaTable)[i]->SetSpline(true);
+	}
+      }
     }
   } else {
     if (1 < verboseLevel) {
-        G4cout << "Lambda table for " << part->GetParticleName() << " in file <"
+        G4cout << "Lambda table for " << part->GetParticleName() 
+	       << " in file <"
                << filename << "> is not exist"
                << G4endl;
     }
