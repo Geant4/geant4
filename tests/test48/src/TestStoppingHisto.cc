@@ -47,9 +47,9 @@ void TestStoppingHisto::InitHistoGeneral()
    
    fHisto.push_back( new TH1F( "NSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "NChargedSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );
-   fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 25, 0., 25. ) );
-   fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 25, 0., 25. ) ) ;
-   fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 25, 0., 25. ) );
+   fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 15, 0., 15. ) );
+   fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 15, 0., 15. ) ) ;
+   fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 15, 0., 15. ) );
    fHisto.push_back( new TH1F( "NKaons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "NNeutrons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "ChargedSecondaryMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
