@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.9 2008-04-08 14:37:06 grichine Exp $
+// $Id: HistoManager.cc,v 1.10 2009-07-30 09:06:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -197,9 +197,13 @@ void HistoManager::BeginOfEvent()
   edepEvt        = 0.0;
   nOptEvent      = 0;
 
-  nOpCathode     = 0;
-  nOpCrCathode   = 0;
-  nOpScCathode   = 0;
+  nOpCathode1     = 0;
+  nOpCrCathode1   = 0;
+  nOpScCathode1   = 0;
+
+  nOpCathode2     = 0;
+  nOpCrCathode2   = 0;
+  nOpScCathode2   = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -215,9 +219,13 @@ void HistoManager::EndOfEvent()
   fOpEventNumbers.push_back(nOptEvent);
 
 
-  fOpCathodeEvNumbers.push_back(nOpCathode);
-  fOpCrCathodeEvNumbers.push_back(nOpCrCathode);
-  fOpScCathodeEvNumbers.push_back(nOpScCathode);
+  fOpCathodeEvNumbers1.push_back(nOpCathode1);
+  fOpCrCathodeEvNumbers1.push_back(nOpCrCathode1);
+  fOpScCathodeEvNumbers1.push_back(nOpScCathode1);
+
+  fOpCathodeEvNumbers2.push_back(nOpCathode2);
+  fOpCrCathodeEvNumbers2.push_back(nOpCrCathode2);
+  fOpScCathodeEvNumbers2.push_back(nOpScCathode2);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -328,6 +336,7 @@ void HistoManager::OpticalEndOfRun()
   G4cout << std::setprecision(4) << "Average number of cerenkov photons    " << xce << G4endl;
   G4cout << std::setprecision(4) << "Average number of scintillation photons    " << xsc << G4endl
          << G4endl;
+
   if (xop > 0.)
   {
     G4cout << "ratio of cerenkov/total = " << xce/xop << G4endl;
@@ -336,6 +345,7 @@ void HistoManager::OpticalEndOfRun()
   {
     G4cout << "ratio of cerenkov/total is not defined, total = 0"<< G4endl;
   }
+
   G4double mean, rms, sum1 = 0., sum2 = 0.;
   std::size_t i, iMax = fOpEventNumbers.size();
 
@@ -360,31 +370,72 @@ void HistoManager::OpticalEndOfRun()
     G4cout <<"mean op/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
   }
 
-  iMax = fOpCathodeEvNumbers.size();
+  // upstream cathode
+
+  iMax = fOpCathodeEvNumbers1.size();
   sum1 = 0.; 
   sum2 = 0.;
 
   for(i = 0; i < iMax; i++)
   {
-    sum1 += fOpCathodeEvNumbers[i];
+    sum1 += fOpCathodeEvNumbers1[i];
   }
   mean = sum1*x;
 
   for(i = 0; i < iMax; i++)
   {
-    sum2 += (fOpCathodeEvNumbers[i]-mean)*(fOpCathodeEvNumbers[i]-mean);
+    sum2 += (fOpCathodeEvNumbers1[i]-mean)*(fOpCathodeEvNumbers1[i]-mean);
   }
   if(y > 1.)
   {
     rms = sum2/(y-1.);
 
-    G4cout <<"mean cathode/event = "<<mean<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
+    G4cout <<"mean cathode1/event = "<<mean<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
   }
   else
   {
-    G4cout <<"mean cathode/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
+    G4cout <<"mean cathode1/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
   }
+  G4double mean1 = mean;
 
+  // downstream cathode
+
+  iMax = fOpCathodeEvNumbers2.size();
+  sum1 = 0.; 
+  sum2 = 0.;
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum1 += fOpCathodeEvNumbers2[i];
+  }
+  mean = sum1*x;
+
+  for(i = 0; i < iMax; i++)
+  {
+    sum2 += (fOpCathodeEvNumbers2[i]-mean)*(fOpCathodeEvNumbers2[i]-mean);
+  }
+  if(y > 1.)
+  {
+    rms = sum2/(y-1.);
+
+    G4cout <<"mean cathode2/event = "<<mean<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
+  }
+  else
+  {
+    G4cout <<"mean cathode2/event = "<<mean<<"; no rms, <= one event "<<endl<<endl;
+  }
+  // asymmetry = (1-2)/(1+2)
+
+  if(y >= 1.)
+  {
+    
+
+    G4cout <<"asymmetry/event = "<<(mean1-mean)/(mean1+mean)<<"; rms = "<<std::sqrt(rms)<<endl<<endl;
+  }
+  else
+  {
+    G4cout <<"asymmetry/event = "<<0.<<"; no rms, <= one event "<<endl<<endl;
+  }
 
 }
 
@@ -588,24 +639,52 @@ void HistoManager::AddCathodeStep(const G4Step* step)
 
    
   // const 
+
   G4Track* track = step->GetTrack();
-  currentDef     = track->GetDefinition(); 
+  currentDef     = track->GetDefinition();
 
-  if( currentDef != G4OpticalPhoton::OpticalPhotonDefinition() ) return;
-  else
+  G4String name = track->GetVolume()->GetName();
+
+  if( name == "Cathode1" )  
   {
-    nOpCathode +=  phBias;
+    if( currentDef != G4OpticalPhoton::OpticalPhotonDefinition() ) return;
+    else
+    {
+      nOpCathode1 +=  phBias;
 
-    if( track->GetCreatorProcess()->GetProcessName()=="Scintillation" )
-    {
-      nOpScCathode +=  phBias;
-    }        
-    else if( track->GetCreatorProcess()->GetProcessName()=="Cerenkov" )
-    {
-      nOpCrCathode +=  phBias;
-    }        
-    track->SetTrackStatus(fStopAndKill);
+      if( track->GetCreatorProcess()->GetProcessName()=="Scintillation" )
+      {
+        nOpScCathode1 +=  phBias;
+      }        
+      else if( track->GetCreatorProcess()->GetProcessName()=="Cerenkov" )
+      {
+        nOpCrCathode1 +=  phBias;
+      }        
+      track->SetTrackStatus(fStopAndKill);
+    }
   }
+  else if( name == "Cathode2" )  
+  {
+    if( currentDef != G4OpticalPhoton::OpticalPhotonDefinition() ) return;
+    else
+    {
+      nOpCathode2 +=  phBias;
+
+      if( track->GetCreatorProcess()->GetProcessName()=="Scintillation" )
+      {
+        nOpScCathode2 +=  phBias;
+      }        
+      else if( track->GetCreatorProcess()->GetProcessName()=="Cerenkov" )
+      {
+        nOpCrCathode2 +=  phBias;
+      }        
+      track->SetTrackStatus(fStopAndKill);
+    }
+  }
+
+
+
+
   /*
   currentKinEnergy     = track->GetKineticEnergy();
 

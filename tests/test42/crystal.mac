@@ -11,9 +11,9 @@
 /testhadr/TargetLength     230 cm
 /testhadr/NumberDivZ       1
 #
-/testhadr/PrintModulo      1
+/testhadr/PrintModulo      10
 #
-/testhadr/photonBias       1000
+/testhadr/photonBias       100
 #
 /testhadr/CutsAll          0.7 mm
 #
@@ -35,15 +35,15 @@
 #/process/inactivate Cerenkov
 #/process/inactivate Scintillation
 #
-#/gun/particle e-
+/gun/particle e-
 #
-/gun/particle proton
+#/gun/particle proton
 #
 #/gun/particle pi-
 #/gun/particle pi+
 #
-/gun/energy 10. GeV
+/gun/energy 1. GeV
 #/gun/energy 10. GeV
 #/gun/energy 100. GeV
-/run/beamOn 10
+/run/beamOn 100
 #

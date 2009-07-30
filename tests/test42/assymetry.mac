@@ -9,14 +9,14 @@
 /testhadr/TargetMat        G4_PbWO4
 /testhadr/TargetRadius     1.1 cm
 /testhadr/TargetLength     18 cm
-/testhadr/RotationAngle    130. degree
+/testhadr/RotationAngle    15. degree
 /testhadr/NumberDivZ       1
 #
 /PWOcrystal/setup          simpleCMSPWO
 #
 /testhadr/PrintModulo      10
 #
-/testhadr/photonBias       10
+/testhadr/photonBias       100
 #
 /testhadr/CutsAll          0.7 mm
 #

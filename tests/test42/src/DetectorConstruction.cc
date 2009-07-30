@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.11 2008-04-08 14:37:06 grichine Exp $
+// $Id: DetectorConstruction.cc,v 1.12 2009-07-30 09:06:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -369,7 +369,7 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
   //  G4VPhysicalVolume* physC = 
   G4RotationMatrix* rot = new G4RotationMatrix();
 
-  rot->rotateX(fRotAngle);
+  rot->rotateX(0.5*pi-fRotAngle);
 
   G4VPhysicalVolume* physCheck =  new G4PVPlacement(rot,
                 G4ThreeVector(), logicCheck, "World", logicWorld, false, 0);
@@ -396,9 +396,13 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   logicCathode->SetSensitiveDetector(cathodeSD);
 
-  G4VPhysicalVolume* physCathode = new G4PVPlacement(0,
+  G4VPhysicalVolume* physCathode1 = new G4PVPlacement(0,
                 G4ThreeVector(0.0,0.0,targetZ-3*phThickness), 
-                    logicCathode,"Cathode",logicTarget,false,0);
+                    logicCathode,"Cathode1",logicTarget,false,0);
+
+  G4VPhysicalVolume* physCathode2 = new G4PVPlacement(0,
+                G4ThreeVector(0.0,0.0,-targetZ+3*phThickness), 
+                    logicCathode,"Cathode2",logicTarget,false,0);
 
 
 
@@ -429,17 +433,17 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   const G4int num = 2;
 
-  G4double refl = 0.6; // 1.0;  // 0.8; 
+  G4double refl = 0.965; // 1.0;  // 0.85; 
   G4double phEnergy[num] = {1.7712*eV, 3.30625*eV};
 
  // Scintillator housing properties PWO-Al
 
   G4double reflectivity[num] = { refl, refl };
   // G4double efficiency[num]   = { 0.0, 0.0 };
-  G4double rindex[num]   = { 1.0, 1.0 };
+  G4double rindex[num]   = { 2.2, 2.4 };
 
   G4double specularlobe[num] = {1.0, 1.0};
-  G4double specularspike[num] = {0.0, 0.0};
+  G4double specularspike[num] = {0.9, 0.9};
   G4double backscatter[num] = {0.0, 0.0};
 
   G4MaterialPropertiesTable* pwoAlMPT = new G4MaterialPropertiesTable();
@@ -456,6 +460,8 @@ G4VPhysicalVolume* DetectorConstruction::CMSPWOsimpleConstruct()
 
   G4double sigmaAlpha = 0.1;
 
+  
+  // pwoAlOpSurface -> SetType(dielectric_metal);
   pwoAlOpSurface -> SetType(dielectric_dielectric);
   pwoAlOpSurface -> SetModel(unified);
   pwoAlOpSurface -> SetFinish(groundbackpainted);

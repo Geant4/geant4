@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.7 2008-04-08 14:37:06 grichine Exp $
+// $Id: HistoManager.hh,v 1.8 2009-07-30 09:06:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -168,18 +168,28 @@ private:
   G4int n_scint;
   G4int n_cerenkov;
   G4int nOptEvent;
-  G4int nOpCathode;
-  G4int nOpCrCathode;
-  G4int nOpScCathode;
+  G4int nOpCathode1;
+  G4int nOpCrCathode1;
+  G4int nOpScCathode1;
+
+  G4int nOpCathode2;
+  G4int nOpCrCathode2;
+  G4int nOpScCathode2;
 
 
   std::vector<G4int> fOpEventNumbers;
 
 
   std::vector<G4int> fPhElEventNumbers;
-  std::vector<G4int> fOpCathodeEvNumbers;
-  std::vector<G4int> fOpCrCathodeEvNumbers;
-  std::vector<G4int> fOpScCathodeEvNumbers;
+
+  std::vector<G4int> fOpCathodeEvNumbers1;
+  std::vector<G4int> fOpCrCathodeEvNumbers1;
+  std::vector<G4int> fOpScCathodeEvNumbers1;
+
+
+  std::vector<G4int> fOpCathodeEvNumbers2;
+  std::vector<G4int> fOpCrCathodeEvNumbers2;
+  std::vector<G4int> fOpScCathodeEvNumbers2;
 
 
   G4Timer fTimer;

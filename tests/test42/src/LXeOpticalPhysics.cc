@@ -69,8 +69,8 @@ void LXeOpticalPhysics::ConstructProcess()
 {
   theScintProcess = new G4Scintillation();
 
-  // theCerenkovProcess=new G4Cerenkov();
-  theCerenkovProcess=new Ts42Cerenkov();
+  //   theCerenkovProcess=new G4Cerenkov();
+    theCerenkovProcess=new Ts42Cerenkov();
 
 
 
