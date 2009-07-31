@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4QPomeron_h
-#define G4QPomeron_h 1
+#ifndef G4QProbability_h
+#define G4QProbability_h 1
 //
-// $Id: G4QPomeron.hh,v 1.4 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QProbability.hh,v 1.1 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      ---------------- G4QPomeron ----------------
+//      ---------------- G4QProbability ----------------
 //      by Mikhail Kossov Oct, 2006
 //      class for a Pomeron used by Parton String Models
 //   For comparison mirror member functions are taken from G4 class:
@@ -48,11 +48,11 @@
 
 #include "globals.hh"
 
-class G4QPomeron
+class G4QProbability
 {
  public:
-  G4QPomeron(G4int PDGCode = 211);
-  ~G4QPomeron(){;}
+  G4QProbability(G4int PDGCode = 211);
+  ~G4QProbability(){;}
   void Pomeron_S(G4double apomeron_S)              {pomeron_S = apomeron_S;}
   void Pomeron_Gamma(G4double apomeron_Gamma)      {pomeron_Gamma = apomeron_Gamma;}
   void Pomeron_C(G4double apomeron_C)              {pomeron_C = apomeron_C;}
@@ -69,16 +69,40 @@ class G4QPomeron
   G4double GetInelasticCrossSection(const G4double s)
                                 {return GetTotalCrossSection(s)-GetElasticCrossSection(s);}
   G4double GetTotalProbability(const G4double s, const G4double imp2)
-                                      {return 2*(1.-std::exp(-Eikonal(s,imp2)))/pomeron_C;}
+  {
+    //G4cout<<"G4QProbability::GetTotalP: Eikonal="<<Eikonal(s,imp2)<<G4endl;
+    return 2*(1.-std::exp(-Eikonal(s,imp2)))/pomeron_C;
+  }
+
   G4double GetDiffractiveProbability(const G4double s, const G4double imp2)
-                  {return (pomeron_C-1.)/pomeron_C*(GetTotalProbability(s,imp2) -
-                                                    GetNondiffractiveProbability(s,imp2));}
+  {
+    //G4cout<<"G4QProbability::GetDiffractiveP: pomeron_C="<<pomeron_C<<G4endl;
+    return ((pomeron_C-1.)/pomeron_C)*(GetTotalProbability(s,imp2) -
+                                                     GetNondiffractiveProbability(s,imp2));
+  }
+
   G4double GetNondiffractiveProbability(const G4double s, const G4double imp2)
-                                      {return (1.-std::exp(-2*Eikonal(s,imp2)))/pomeron_C;}
+  {
+    //G4cout<<"G4QProbability::GetNondifP: s="<<s<<",imp2="<<imp2<<G4endl;
+    //G4cout<<"G4QProbability::GetNondifP: Eikonal="<<Eikonal(s,imp2)<<G4endl;
+    return (1.-std::exp(-2*Eikonal(s,imp2)))/pomeron_C;
+  }
   G4double GetElasticProbability(const G4double s, const G4double imp2)
-                      {return GetTotalProbability(s,imp2)-GetInelasticProbability(s,imp2);}
+  {
+    //G4cout<<"G4QProbability::GetElasticP: s="<<s<<",imp2="<<imp2<<G4endl;
+    return GetTotalProbability(s,imp2)-GetInelasticProbability(s,imp2);
+  }
+
   G4double GetInelasticProbability(const G4double s, const G4double imp2)
-           {return GetNondiffractiveProbability(s,imp2)+GetDiffractiveProbability(s,imp2);}
+  {
+    //G4cout<<"G4QProbability::GetInelasticP: s="<<s<<",imp2="<<imp2<<G4endl;
+    //G4double DP=GetDiffractiveProbability(s,imp2);
+    //G4double NDP=GetNondiffractiveProbability(s,imp2);
+    //G4cout<<"G4QProbability::GetInelasticP: DP="<<DP<<", NDP="<<NDP<<G4endl;
+    //return NDP+DP;
+    return GetDiffractiveProbability(s,imp2) + GetNondiffractiveProbability(s,imp2);
+  }
+
   G4double GetCutPomeronProbability(const G4double s,const G4double ip2, const G4int nPom);
   void SetGamma(const G4double agam) {pomeron_Gamma=agam/GeV/GeV;} // @@ Temporary
   G4double SoftEikonal(G4double s, G4double imp2)
@@ -104,14 +128,29 @@ class G4QPomeron
   void InitForGamma();
  
   G4double Expand(G4double z);
-  G4double Z(const G4double Scms)    {return 2*pomeron_C*Power(s)/Lambda(Scms);}
-  G4double SigP(const G4double Scms) {return 8*pi*hbarc_squared*Power(Scms);}
-  G4double Power(const G4double Scms)
-                           {return pomeron_Gamma*std::pow(Scms/pomeron_S,pomeron_Alpha-1);}
+  G4double Z(const G4double s)
+  {
+    //G4cout<<"G4QProbability::Z: s="<<s<<G4endl;
+    //G4cout<<"G4QProbability::Z: Lambda(s)="<<Lambda(s)<<", Power(s)"<<Power(s)<<G4endl;
+    return 2*pomeron_C*Power(s)/Lambda(s);
+  }
+  G4double SigP(const G4double s) {return 8*pi*hbarc_squared*Power(s);}
+  G4double Power(const G4double s)
+  {
+    //G4cout<<"G4QProbability::Power: s="<<s<<", pom_S="<<pomeron_S<<G4endl;
+    return pomeron_Gamma*std::pow(s/pomeron_S, pomeron_Alpha-1);
+  }
   G4double Lambda(const G4double s)
-                         {return pomeron_Rsquare+pomeron_Alphaprime*std::log(s/pomeron_S);}
+  {
+    //G4cout<<"G4QProbability::Z: s="<<s<<", pomeron_S="<<pomeron_S<<G4endl;
+    return pomeron_Rsquare+pomeron_Alphaprime*std::log(s/pomeron_S);
+  }
   G4double Eikonal(const G4double s, const G4double imp2)
-                               {return std::exp(-imp2/(4*Lambda(s)*hbarc_squared))*Z(s)/2;}
+  {
+    //G4cout<<"G4QProbability::Eikonal: s="<<s<<", imp2="<<imp2<<G4endl;
+    //G4cout<<"G4QProbability::Eikonal: Lambda(s)="<<Lambda(s)<<",Z(s)"<<Z(s)<<G4endl;
+    return std::exp(-imp2/(4*Lambda(s)*hbarc_squared))*Z(s)/2;
+  }
   // Body
   G4double pomeron_S;
   G4double pomeron_Gamma;
@@ -119,7 +158,7 @@ class G4QPomeron
   G4double pomeron_Rsquare;
   G4double pomeron_Alpha;
   G4double pomeron_Alphaprime;
-  G4double pomeron_Gamma_Hard;
-  G4double pomeron_Alpha_Hard;
+  G4double pomeron_Gamma_Hard; // @@ ??
+  G4double pomeron_Alpha_Hard; // @@ ??
 };
 #endif

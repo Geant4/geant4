@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.41 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.42 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -77,6 +77,7 @@ public:
   G4int      GetMaxClust() const {return maxClust;} // Get Max BarNum of Clusters
   G4double   GetProbability(G4int bn=0) const {return probVect[bn];} // clust(BarN)probabil
   G4double   GetMZNS()     const {return GetQPDG().GetNuclMass(Z,N,S);} // not H or Q
+  G4double   GetTbIntegral(); // Calculate the integral of T(b)
   G4double   GetGSMass()   const {return GetQPDG().GetMass();}//Nucleus GSMass (not Hadron)
   G4QContent GetQCZNS()    const                    // Get ZNS quark content of Nucleus
   {
@@ -87,6 +88,7 @@ public:
   G4int      GetNDefBaryonC()const{return nDefBaryonC;};// max#of predefed baryonCandidates
   std::pair<G4double, G4double> RefetchImpactXandY() const {return theImpactParameter;}
   G4double GetDensity(const G4ThreeVector&aPos) {return rho0*GetRelativeDensity(aPos);}
+  G4double GetRho0()                 {return rho0;} // One nucleon prob-density 
   G4double GetRelativeDensity(const G4ThreeVector& aPosition); // Densyty/rho0
   G4double GetRelWSDensity(const G4double& r)       // Wood-Saxon rho/rho0(r)
                                         {return 1./(1.+exp((r-radius)/WoodSaxonSurf));}    
@@ -96,8 +98,10 @@ public:
   G4double GetDeriv(const G4ThreeVector& point);    // Derivitive of density
   G4double GetFermiMomentum(G4double density);      // Returns modul of FermyMomentum(dens)
   G4QHadron* GetNextNucleon()
-    {return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] :0;}
-  //std::vector<G4double>* GetBThickness() const {return Tb;} // T(b) function, step .1 fm
+  {
+    //G4cout<<"G4QNucleus::GetNextNucleon: cN="<<currentNucleon<<", A="<<GetA()<<G4endl;
+    return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] : 0;
+  }
   void SubtractNucleon(G4QHadron* pNucleon); // Subtract the nucleon from the 3D Nucleus
   G4LorentzVector GetNucleons4Momentum()
   {
@@ -124,6 +128,8 @@ public:
   G4int      NucToHadrPDG(G4int nPDG);              // Converts nuclear PDGCode to hadronic
   G4bool     Split2Baryons();                       // Is it possible to split two baryons?
   void       ActivateBThickness();                  // Calculate T(b) for nucleus (db=.1fm)
+  G4double   GetBThickness(G4double b);             // Calculates T(b)
+  G4double   GetThickness(G4double b);              // Calculates T(b)/rho(0)
   void       InitByPDG(G4int newPDG);               // Init existing nucleus by new PDG
   void       InitByQC(G4QContent newQC)             // Init existing nucleus by new QCont
                                 {G4int PDG=G4QPDGCode(newQC).GetPDGCode(); InitByPDG(PDG);}
@@ -143,6 +149,7 @@ public:
   G4QNucleus operator*=(const G4int& rhs);          // Multiplication of the Nucleus
   G4bool StartLoop();                               // returns size of theNucleons (cN=0)
   G4bool ReduceSum(G4ThreeVector* vectors, G4ThreeVector sum);// Reduce zero-sum of vectors
+  void SimpleSumReduction(G4ThreeVector* vectors, G4ThreeVector sum); // Reduce zero-V-sum
   void DoLorentzBoost(const G4LorentzVector& theBoost) // Boost nucleons by 4-vector
   {
     theMomentum.boost(theBoost);
@@ -213,6 +220,8 @@ private:
   G4double rho0;                  // Normalazation density
   G4double radius;                // Nuclear radius
   std::vector<G4double> Tb;       // T(b) function with step .1 fm (@@ make .1 a parameter)
+  G4bool TbActive;                // Flag that the T(b) is activated
+  G4bool RhoActive;               // Flag that the Density is activated
 };
 
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);

@@ -13,6 +13,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-00)
+-----------------------------------------------------------------------
+Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)
+
 29-May-2009 M.Kosov (hadr-chips-inter-V09-02-09)
 ------------------------------------------------------
 - Synchronization bug fix in pA and nA SC_in + fake piA SC is added for testing only

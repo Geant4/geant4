@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.103 2009-07-13 08:59:22 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.104 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -60,7 +60,8 @@ G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8
 G4double G4QNucleus::WoodSaxonSurf=.545*fermi; // WoodSaxon Surface Param (0.545 fm) (Body)
 
 G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), maxClust(0),
-  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(),radius(),Tb()
+                          probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),
+                          rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
@@ -72,7 +73,8 @@ G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), ma
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4QHadron(90000000+s*1000000+z*1000+n), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
-  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(),radius(),Tb()
+  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(1.), radius(),
+  Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
@@ -101,8 +103,9 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0), probVect(),
-  theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(), radius(), Tb()
+G4QNucleus::G4QNucleus(G4int nucPDG):
+  G4QHadron(nucPDG), maxClust(0), probVect(), theImpactParameter(), theNucleons(),
+  currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   InitByPDG(nucPDG);
 #ifdef pardeb
@@ -112,8 +115,8 @@ G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0), probVect()
 }
 
 G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
-  G4QHadron(nucPDG, p), maxClust(0), probVect(), theImpactParameter(),
-  theNucleons(), currentNucleon(-1), rho0(0.), radius(0.), Tb()
+  G4QHadron(nucPDG, p), maxClust(0), probVect(), theImpactParameter(), theNucleons(),
+  currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   InitByPDG(nucPDG);
   Set4Momentum(p);
@@ -125,7 +128,8 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QHadron(90000000+s*1000000+z*1000+n,p), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
-  probVect(),theImpactParameter(),theNucleons(),currentNucleon(-1),rho0(0.),radius(0.),Tb()
+  probVect(), theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(1.),radius(1.),
+  Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
   for(G4int i=1; i<256; i++) {probVect[i] = 0.;}
@@ -143,8 +147,9 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC):
-  G4QHadron(nucQC), dZ(0),dN(0),dS(0), maxClust(0), probVect(), theImpactParameter(),
-  theNucleons(), currentNucleon(-1), rho0(0), radius(0), Tb()
+  G4QHadron(nucQC), dZ(0), dN(0), dS(0), maxClust(0), probVect(), theImpactParameter(),
+  theNucleons(), currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false),
+  RhoActive(false)
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
 #ifdef debug
@@ -191,8 +196,9 @@ G4QNucleus::G4QNucleus(G4QContent nucQC):
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
-  G4QHadron(nucQC,p), dZ(0),dN(0),dS(0),maxClust(0),probVect(),
-  theImpactParameter(), theNucleons(), currentNucleon(-1), rho0(0.), radius(0.), Tb()
+  G4QHadron(nucQC,p), dZ(0), dN(0), dS(0), maxClust(0), probVect(), theImpactParameter(),
+  theNucleons(), currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false),
+  RhoActive(false)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
@@ -222,7 +228,11 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
 
 G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
 {
-  Tb = right->Tb;
+  Tb            = right->Tb;
+  rho0          = right->rho0;
+  radius        = right->radius;
+  TbActive      = right->TbActive;
+  RhoActive     = right->RhoActive;
   Set4Momentum   (right->Get4Momentum());
   SetQPDG        (right->GetQPDG());
   SetQC          (right->GetQC());
@@ -248,7 +258,12 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 {//               ==============================================
   if(this != &right)                          // Beware of self assignment
   {
-    Tb = right.Tb;
+    currentNucleon= -1;
+    Tb            = right.Tb;
+    rho0          = right.rho0;
+    radius        = right.radius;
+    TbActive      = right.TbActive;
+    RhoActive     = right.RhoActive;
     Set4Momentum   (right.Get4Momentum());
     SetQPDG        (right.GetQPDG());
     SetQC          (right.GetQC());
@@ -546,7 +561,7 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
 		G4QHadronVector::iterator u;                      // iterator of the used nucleon
   for(u=theNucleons.begin(); u!=theNucleons.end(); u++)
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QNucleus::SubtractNucleon: LOOP 4M="<<(*u)->Get4Momentum()<<G4endl;
 #endif
     if (uNuc==*u)                                   // Find uNuceon-pointer
@@ -560,13 +575,13 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
   {
     G4int tPDG=GetPDGCode();                    // Nucleus PDG before the subtraction
     G4LorentzVector t4M=Get4Momentum();         // Nucleus 4-mom before the subtraction
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QNucleus::SubtractNucleon: InitialNucleus 4M="<<t4M<<", PDG="<<tPDG<<", nN="
           <<theNucleons.size()<<G4endl;
 #endif
     G4int uPDG=(*u)->GetPDGCode();              // PDG code of the subtracted nucleon
     G4LorentzVector u4M=(*u)->Get4Momentum();   // 4-momentum of the subtracted nucleon
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QNucleus::SubtractNucleon: subtractNucleon 4M="<<u4M<<",PDG="<<uPDG<<G4endl;
 #endif
     delete *u;                                  // Delete the nucleon as an object
@@ -579,7 +594,7 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
       G4cerr<<"***G4QNucleus::SubtractNucleon: Unexpected Nucleon PDGCode ="<<uPDG<<G4endl;
       throw G4QException("G4QNucleus::SubtractNucleon: Impossible nucleon PDG Code");
     }
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QNucleus::SubtractNucleon: theResidualNucleus PDG="<<tPDG<<", 4M="<<t4M
           <<", nN="<<theNucleons.size()<<G4endl;
 #endif
@@ -588,7 +603,7 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
     //#ifdef debug
     G4double mR2=sqr(GetGSMass());              // Real squared residual nucleus mass 
     G4double tM2=t4M.m2();                      // Squared residual nucleus mass from 4M 
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QNucleus::SubtractNucleon: rAm2="<<mR2<<" =? 4Mm2="<<tM2<<G4endl;
     G4int cnt=0;                                // Counter of nucleons for print
 #endif
@@ -604,14 +619,14 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
       G4double m2=m2n;                          // default subResNucleusM2 (for neutrons) 
       if((*u)->GetPDGCode()==2212) m2=m2p;      // change it to subResNucleusM2 for protons
       G4double srE=std::sqrt(srP2+m2);          // Energy of the subResNucleus
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QNucleus::SubtractNucleon:#"<<cnt++<<", correctedEnergy="<<tE-srE<<G4endl;
 #endif
       n4M.setE(tE-srE);                         // Update the energy of the nucleon
       (*u)->Set4Momentum(n4M);                  // Update the 4-momentum of the nucleon
     }
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QNucleus::SubtractNucleon:ResNuc4M="<<theMomentum<<",Z="<<Z<<",N="<<N<<G4endl;
 #endif
 }
@@ -3386,16 +3401,18 @@ void G4QNucleus::InitDensity()
 #endif
   if(iA<17)                                           // Gaussian density distribution
   {
-    radius = r0sq*At2;                                // Mean Squared Radius (fm^2)
-    rho0   = pow(pi*radius, -1.5);                    // Central Density
+    radius = r0sq*At2;                                // R2 Mean Squared Radius (fm^2)
+    rho0   = pow(2*pi*radius, -1.5);                  // Central Density (M.K. 2 is added)
+    // V=4pi*R2*sqrt(pi*R2/2)=(sqrt(2*pi*R2))^3
   }
   else                                                // Wood-Saxon density distribution
   {
     G4double r0=1.16*(1.-1.16/At2)*fermi;             // Base for A-dependent radius
-    G4double rd=WoodSaxonSurf/r0;                     // Relative thickness of the surface
     radius = r0*At;                                   // Half Density Radius (fm)
-    rho0=0.75/(pi*pow(r0,3.)*iA*(1.+rd*rd*pi2));      // Central Density
+    G4double rd=WoodSaxonSurf/radius;                 // Relative thickness of the surface
+    rho0=0.75/(pi*pow(radius,3)*(1.+rd*rd*pi2));      // Central Density
   }
+  RhoActive=true;
 } // End of InitDensity
 
 // Calculates Derivity of the nuclear density
@@ -3465,16 +3482,18 @@ void G4QNucleus::ChooseFermiMomenta()
     {
       G4double eMax = sqrt(ferm*ferm+mProt2)-CoulombBarrier();
       if(eMax>mProt) mom=sqrt(eMax*eMax - mProt2)*rn3*dir; // 3D proton momentum
-      else G4cerr<<"G4QNucleus::ChooseFermMom:Fail to get protonMomentum -> mom=0"<<G4endl;
+#ifdef debug
+      else G4cerr<<"-Warning-G4QNucleus::ChooseFermM: FailToGetProtonMomentum,p=0"<<G4endl;
+#endif
     }
     else mom=ferm*rn3*dir;                            // 3-vector for the neutron momentum
     momentum[i]= mom;
     sumMom+= mom;
-#ifdef debug
+#ifdef pdebug
     G4cout<<"G4QNucleus::ChooseFermiMomentum: for i="<<i<<", candidate mom="<<mom<<G4endl;
 #endif
   }
-  if(theA > 2) ReduceSum(momentum, sumMom);           // Reduse momentum nonconservation
+  if(theA > 2) SimpleSumReduction(momentum, sumMom);  // Reduse momentum nonconservation
   //G4double bindEn=BindingEnergy()/theA;
   G4int thisPDG=GetPDG();
   G4double rMp=G4QPDGCode(thisPDG-1000).GetMass();    // Residual for the proton
@@ -3484,6 +3503,9 @@ void G4QNucleus::ChooseFermiMomenta()
   G4double rM=rMn;
   G4double rM2=rMn2;
   G4double thisM=GetGSMass();
+#ifdef pdebug
+  G4LorentzVector sum(0.,0.,0.,0.);
+#endif
   for(i=0; i< theA ; i++ )
   {
     if(theNucleons[i]->GetPDGCode() == 2212)
@@ -3499,15 +3521,27 @@ void G4QNucleus::ChooseFermiMomenta()
     G4ThreeVector curMom = momentum[i];
     G4double energy = thisM-std::sqrt(rM2+curMom.mag2()); // @@ update after splitting
     G4LorentzVector tempV(curMom,energy);
-#ifdef debug
-    G4cout<<"G4QNucleus::ChooseFermiMomentum: for i="<<i<<", mom="<<momentum[i]<<G4endl;
+#ifdef pdebug
+    G4cout<<"G4QNucleus::ChooseFermiMomentum: FINALLY for i="<<i<<", 4mom="<<tempV<<G4endl;
+    sum+=tempV;
 #endif
     theNucleons[i]->Set4Momentum(tempV);
   }
+#ifdef pdebug
+    G4cout<<"G4QNucleus::ChooseFermiMomentum: FINALLY sum4M="<<sum<<G4endl;
+#endif
   delete [] momentum;
 } // End of ChooseFermiMomenta
 
-// Reduce momentum nonconservation or center of mass shift (reenterable attempts)
+// Reduce momentum nonconservation or center of mass shift (Changes the momena!)
+void G4QNucleus::SimpleSumReduction(G4ThreeVector* vect, G4ThreeVector sum)
+{
+  G4int theA=GetA();                                // A#of nucleons
+  sum/=theA;
+  for(G4int i=0; i<theA; i++) vect[i]-=sum;        // Simple reduction
+}
+
+// Reduce momentum nonconservation or center of mass shift (Keep values of momena) @@Bug!@@
 G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
 {
   G4int theA=GetA();                                // A#of nucleons
@@ -3520,8 +3554,8 @@ G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
   G4int am1=theA-1;                                 // A-1 elements, which canBeCorrected
   G4double  sum2=sum.mag2();                        // Initial squared sum
   G4double  hsum2=sum2/2;                           // Half squared sum
-  G4double* dp = new G4double[am1];                 // Displacements
-  G4int     m=am1;                                  // #0fVectors contributing to correction
+  G4double*  dp= new G4double[am1];                 // Displacements
+  G4int     m=am1;                                  // #0fVectors used for correction
   G4double  minS=DBL_MAX;                           // Min value of Fermi Momentum
   G4int     minI=0;                                 // Index of maximum Fermi Momentum
   for(G4int i=0; i<am1; i++) dp[i]=sum.dot(vect[i]);// Calculation of dot-products
@@ -3552,7 +3586,7 @@ G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
     sum/=theA;
     for(G4int i=0; i<theA; i++) vect[i]-=sum;        // Final reduction
   }
-  delete [] dp;
+  delete dp;
   return true;
 } // End of ReduceSum
 
@@ -3655,7 +3689,49 @@ void G4QNucleus::ActivateBThickness()
     G4double E=B*std::exp(-D*b*b);          // b-dependent factor
     T=C*E/(1.+E);                           // T(b) in fm^-2
   }
+  TbActive=true;                            // Flag of activation
 } // End of "ActivateBThickness"
+
+// Calculate the integral of T(b)
+G4double G4QNucleus::GetTbIntegral() // Calculate the integral of T(b)
+//==================================
+{
+  if(!TbActive) ActivateBThickness();
+  G4int nt = Tb.size();
+  G4double sum=0.;
+  for(G4int i=0; i<nt; ++i) sum+=i*Tb[i];
+  sum*=.02*pi;
+#ifdef debug
+  G4cout<<"G4QNucleus::GetTbIntegral:TI="<<sum<<", RI="<<4*pi*rho0*pow(radius,3)/3<<G4endl;
+#endif
+  return sum;
+}
+
+// Calculates T(b)
+G4double G4QNucleus::GetBThickness(G4double b)
+//============================================
+{
+  static const G4double dfermi=fermi/10.;
+  static const G4double sfermi=fermi*fermi;
+  if(!TbActive) ActivateBThickness();
+  G4double bf = b/dfermi;
+  G4int nb = static_cast<int>(bf);
+  G4int eb = nb+1;
+  G4int nt = Tb.size();
+  if(eb>=nt) return 0.;
+  G4double nT=Tb[nb];
+  G4double eT=Tb[eb];
+  return (nT-(bf-nb)*(nT-eT))/sfermi; // Independent units
+}
+
+// Calculates T(b)/rho0
+G4double G4QNucleus::GetThickness(G4double b)
+//===========================================
+{
+  if(!TbActive) ActivateBThickness();
+  if(!RhoActive) InitDensity();
+  return GetBThickness(b)/rho0/GetA();
+}
 
 // Add Cluster
 G4QNucleus G4QNucleus::operator+=(const G4QNucleus& rhs)

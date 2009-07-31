@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.5 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QInteraction.hh,v 1.6 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,11 +58,13 @@ public:
   G4QHadron* GetProjectile() const                      {return theProjectile;}
   G4QHadron* GetTarget() const                          {return theTarget;}
   G4int GetNumberOfSoftCollisions()                     {return theNumberOfSoft;}
+  G4int GetNumberOfDINRCollisions()                     {return theNumberOfDINR;}
   G4int GetNumberOfHardCollisions()                     {return theNumberOfHard;}
   G4int GetNumberOfDiffractiveCollisions()              {return theNumberOfDiffractive;}
   void  SetTarget(G4QHadron* aTarget)                   {theTarget = aTarget;}
   void  SetProjectile(G4QHadron* aProjectile)           {theProjectile = aProjectile;}
   void  SetNumberOfSoftCollisions(G4int nofSoft)        {theNumberOfSoft = nofSoft;}
+  void  SetNumberOfDINRCollisions(G4int nofDINR)        {theNumberOfDINR = nofDINR;}
   void  SetNumberOfHardCollisions(G4int nofHard)        {theNumberOfHard = nofHard;}
   void  SetNumberOfDiffractiveCollisions(G4int nofDiff) {theNumberOfDiffractive = nofDiff;}
   void  SplitHadrons()
@@ -75,6 +77,7 @@ private:
   // Body
   G4QHadron* theProjectile;
   G4QHadron* theTarget;
+  G4int theNumberOfDINR;
   G4int theNumberOfHard;
   G4int theNumberOfSoft;
   G4int theNumberOfDiffractive;

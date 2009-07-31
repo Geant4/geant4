@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.42 2009-07-06 10:14:38 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.43 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -94,6 +94,9 @@ public:
   G4int             GetStrangeness()  const;
 
   //Modifiers
+  void Set4Momentum(G4LorentzVector Q4M) {q4Mom=Q4M;} // Set new value for the Quasmon 4mom
+  void Boost(const G4LorentzVector& theBoost);        // Boosts hadron's 4Momentum using 4M
+  void Boost(const G4ThreeVector& B){q4Mom.boost(B);} // Boosts 4-Momentum using v/c
   // Public wrapper for HadronizeQuasmon(,)
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ = 1);
   G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it's Res or Chipo

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.13 2009-07-26 21:14:18 mkossov Exp $
+// $Id: G4QString.cc,v 1.14 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -62,7 +62,6 @@ G4double G4QString::DiquarkBreakProb=0.1; // is Diquark breaking probability
 G4double G4QString::SmoothParam=0.9;      // QGS model parameter
 G4double G4QString::StrangeSuppress=0.435;// Strangeness suppression (u:d:s=1:1:0.3 ?M.K.)
 G4double G4QString::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
-G4int G4QString::StringLoopInterrupt=227;  // String fragmentation LOOP limit (was 227) 
 
 G4QString::G4QString() : theDirection(0), thePosition(G4ThreeVector(0.,0.,0.)) {}
 
@@ -175,7 +174,7 @@ void G4QString::Boost(G4ThreeVector& Velocity)
 
 // Fill parameters
 void G4QString::SetParameters(G4double mCut, G4double sigQT, G4double DQSup, G4double DQBU,
-                              G4double smPar, G4double SSup, G4double SigPt, G4int SLmax)
+                              G4double smPar, G4double SSup, G4double SigPt)
 {//  =============================================================================
   MassCut         = mCut;           // minimum mass cut for the string
   SigmaQT         = sigQT;          // quark transverse momentum distribution parameter 
@@ -184,7 +183,6 @@ void G4QString::SetParameters(G4double mCut, G4double sigQT, G4double DQSup, G4d
   SmoothParam     = smPar;          // QGS model parameter
   StrangeSuppress = SSup;           // Strangeness suppression parameter
   widthOfPtSquare = -2*SigPt*SigPt; // width^2 of pt for string excitation
-  StringLoopInterrupt = SLmax;      // String fragmentation LOOP limit 
 }
 
 // Pt distribution @@ one can use 1/(1+A*Pt^2)^B
@@ -348,7 +346,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #ifdef edebug
   G4LorentzVector string4M=Get4Momentum();         // Just for Energy-Momentum ConservCheck
 #endif 
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QString::FragmentString:-->Called,QL="<<QL<<", M="<<Get4Momentum().m()<<", L="
         <<GetLeftParton()->Get4Momentum()<<",R="<<GetRightParton()->Get4Momentum()<<G4endl;
 #endif 
@@ -369,7 +367,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #endif 
     return LeftVector; //@@ Just decay in 2 or 1 (?) hadron, if below theCut
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QString::FragmentString:OUTPUT is not yet defined, define Left/Right"<<G4endl;
 #endif  
   LeftVector = new G4QHadronVector;
@@ -377,7 +375,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   // Remember 4-momenta of the string ends (@@ only for the two-parton string, no gluons)
   G4LorentzVector left4M=GetLeftParton()->Get4Momentum(); // For recovery when failed
   G4LorentzVector right4M=GetRightParton()->Get4Momentum();
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QString::FragmString: ***Remember*** L4M="<<left4M<<", R4M="<<right4M<<G4endl;
 #endif
   G4int leftPDG=GetLeftParton()->GetPDGCode();
@@ -397,7 +395,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   G4QParton* LeftParton = new G4QParton(GetLeftParton());
   G4QParton* RightParton= new G4QParton(GetRightParton());
   G4QString* theStringInCMS = new G4QString(LeftParton,RightParton,GetDirection());
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QString::FragmentString: Copy with nP="<<theStringInCMS->thePartons.size()
         <<", beg="<<(*(theStringInCMS->thePartons.begin()))->GetPDGCode()
         <<", end="<<(*(theStringInCMS->thePartons.end()-1))->GetPDGCode()<<G4endl;
@@ -405,7 +403,8 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   G4bool success=false;
   G4bool inner_sucess=true;
   G4int attempt=0;
-#ifdef pdebug
+  G4int StringLoopInterrupt=27;  // String fragmentation LOOP limit 
+#ifdef debug
   G4cout<<"G4QString::FragmentString: BeforeWhileLOOP, max = "<<StringLoopInterrupt
         <<", nP="<<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
         <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
@@ -475,14 +474,14 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
         inner_sucess=false;
         break;
       }
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QString::FragmentString: LOOP/LOOP End, nP="
             <<thePartons.size()<<", beg="<<(*thePartons.begin())->GetPDGCode()
             <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
 #endif 
     } 
 #ifdef edebug
-				G4LorentzVector fLR=cmS4M-Get4Momentum();
+    G4LorentzVector fLR=cmS4M-Get4Momentum();
     for(unsigned L = 0; L < LeftVector->size(); L++)
     {
       G4QHadron* LH = (*LeftVector)[L];
@@ -569,7 +568,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       }
     }
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QString::FragmentString: LOOP/LOOP, success="<<success<<G4endl;
 #endif 
   if (!success)
@@ -585,7 +584,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       std::for_each(LeftVector->begin(), LeftVector->end(), DeleteQHadron());
       LeftVector->clear();
     }
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QString::FragmString:StringNotFragm,L4M="<<left4M<<",R4M="<<right4M<<G4endl;
 #endif
     // Recover the Left/Right partons 4-moms of the String in ZLS
@@ -621,6 +620,13 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
      RightVector->erase(RightVector->end()-1);
   }
   delete RightVector;
+  // @@ A trick, the real bug should be found !!
+  G4QHadronVector::iterator ilv;                                           // @@
+  for(ilv = LeftVector->begin(); ilv < LeftVector->end(); ilv++)           // @@
+  {
+    G4ThreeVector CV=(*ilv)->Get4Momentum().vect();                        // @@
+    if(CV.x()==0. && CV.y()==0. && CV.z()==0.) LeftVector->erase(ilv);     // @@
+  }
   // Calculate time and position of hadrons with @@ very rough formation time
   G4double StringMass=Get4Momentum().mag();
   static const G4double dkappa = 2.0 * GeV/fermi; // @@ 2*kappa kappa=1 GeV/fermi (?)
@@ -874,7 +880,7 @@ G4QHadron* G4QString::Splitup(G4bool QL)
 #endif
   if(HadronMomentum) // The decay succeeded, now the new 4-mon can be set to NewStringEnd
   {    
-#ifdef debug
+#ifdef pdebug
     G4cout<<">>>>>G4QString::Splitup: HFilled 4M="<<*HadronMomentum<<",PDG="
           <<Hadron->GetPDGCode()<<",s4M-h4M="<<Get4Momentum()-*HadronMomentum<<G4endl;
 #endif 

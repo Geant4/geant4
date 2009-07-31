@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.9 2009-07-26 21:14:18 mkossov Exp $
+// $Id: G4QString.hh,v 1.10 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -118,8 +118,10 @@ class G4QString
 
   // Modifiers
   void SetPosition(const G4ThreeVector& aPosition){thePosition= aPosition;}
-  void SetDirection(G4int dir)                    {if(dir==1 || dir==-1) theDirection=dir;}
-  void KillString()                               {theDirection=0;} // @@ Can be absolete
+  void SetDirection(G4int dir)       {if(dir==1 || dir==-1) theDirection=dir;}
+  void SetLeftParton(G4QParton* LP)  {thePartons[0]=LP;} // !! Not deleting the substituty
+  void SetRightParton(G4QParton* RP) {thePartons.pop_back(); thePartons.push_back(RP);}
+  void KillString()                  {theDirection=0;} // @@ Can be absolete
   void LorentzRotate(const G4LorentzRotation& rotation);
   //void InsertParton(G4QParton* aParton, const G4QParton* addafter = NULL);
   void Boost(G4ThreeVector& Velocity);
@@ -141,7 +143,7 @@ class G4QString
 
   // Static functions
   static void SetParameters(G4double mCut, G4double sigQT, G4double DQSup, G4double DQBU,
-                            G4double smPar, G4double SSup, G4double SigPt, G4int SLmax);
+                            G4double smPar, G4double SSup, G4double SigPt);
 
  private:
   enum Spin {SpinZero=1, SpinHalf=2, SpinOne=3, SpinThreeHalf=4};
@@ -163,7 +165,6 @@ class G4QString
   static G4double SmoothParam;       // QGS model parameter
   static G4double StrangeSuppress;   // Strangeness suppression parameter
   static G4double widthOfPtSquare;   // width^2 of pt for string excitation
-  static G4int StringLoopInterrupt;  // String fragmentation LOOP limit 
 
   // Body
   G4int         theDirection;        // must be 1 (PROJECTILE) or -1 (TARGET), 0 - DEAD

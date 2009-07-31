@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.cc,v 1.4 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QInteraction.cc,v 1.5 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------
@@ -52,5 +52,3 @@ G4QInteraction::G4QInteraction(const G4QInteraction &right) :
 
 G4QInteraction::~G4QInteraction()
 {}
-
-

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.112 2009-07-06 10:14:38 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.113 2009-07-31 12:43:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -5629,7 +5629,8 @@ G4QHadronVector* G4Quasmon::DecayQHadron(G4QHadron* qH) // Don't fill Internal Q
     if(nPart<2||nPart>3)
     {
       G4cerr<<"---Warning---G4Q::DecayQHadr:n="<<nPart<<",ch#"<<i<<",PDG="<<thePDG<<G4endl;
-      return false;
+      theFragments->push_back(qH);                    // Fill as it is (del.equiv.)
+      return theFragments;
     }
 #ifdef pdebug
     G4cout<<"G4Q::DecQH:Decay("<<ElMaDecays<<") PDG="<<thePDG<<t<<m<<",nP="<<nPart<<G4endl;
@@ -5845,7 +5846,7 @@ G4QHadronVector* G4Quasmon::DecayQHadron(G4QHadron* qH) // Don't fill Internal Q
           delete tHadr;                                // Delete "new tHadr"
           G4cerr<<"---Warning---G4Q::DecayQHadron:in3,PDGC="<<thePDG<<", ch#"<<i<<G4endl;
           theFragments->push_back(qH);             // Fill as it is (delete equivalent)
-          return false;
+          return theFragments;
         }
         else
         {
@@ -6005,3 +6006,13 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron, G4int nQ)
 #endif
   return theFragments;
 } // End of "Fragment"
+
+// Boost Quasmon 4-momentum, using Boost Lorentz vector
+void G4Quasmon::Boost(const G4LorentzVector& boost4M)
+{  
+  // see CERNLIB short writeup U101 for the algorithm
+  G4double bm=boost4M.mag();
+  G4double factor = (q4Mom.vect()*boost4M.vect()/(boost4M.e()+bm) - q4Mom.e())/bm;
+  q4Mom.setE(q4Mom.dot(boost4M)/bm);
+  q4Mom.setVect(factor*boost4M.vect() + q4Mom.vect());
+} // End of Boost
