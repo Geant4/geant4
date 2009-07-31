@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.2 2009-07-31 14:11:09 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.3 2009-07-31 15:31:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,7 @@ class G4WeMoSoftMscModel : public G4VMscModel
 
 public:
 
-  G4WeMoSoftMscModel(const G4String& nam = "WentzelVIUni");
+  G4WeMoSoftMscModel(const G4String& nam = "WeMoSoftMsc");
 
   virtual ~G4WeMoSoftMscModel();
 

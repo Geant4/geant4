@@ -51,15 +51,15 @@
 #ifndef G4WeMoHardScatModel_h
 #define G4WeMoHardScatModel_h 1
 
-#include "G4eCoulombScatteringModel.hh"
+#include "G4eWeMoHardScatModel.hh"
 #include "globals.hh"
 
-class G4WeMoHardScatModel : public G4eCoulombScatteringModel
+class G4WeMoHardScatModel : public G4eWeMoHardScatModel
 {
 
 public:
 
-  G4WeMoHardScatModel(const G4String& nam = "CoulombScattering");
+  G4WeMoHardScatModel(const G4String& nam = "WeMoHardScat");
  
   virtual ~G4WeMoHardScatModel();
 

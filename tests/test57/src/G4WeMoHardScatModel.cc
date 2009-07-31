@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoHardScatModel.cc,v 1.1 2009-07-31 08:55:08 grichine Exp $
+// $Id: G4WeMoHardScatModel.cc,v 1.2 2009-07-31 15:31:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,7 @@
 using namespace std;
 
 G4WeMoHardScatModel::G4WeMoHardScatModel(const G4String& nam)
-  : G4eCoulombScatteringModel(nam)
+  : G4eWeMoHardScatModel(nam)
 {}
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,39 +79,41 @@ G4double G4WeMoHardScatModel::ComputeCrossSectionPerAtom(
 				G4double)
 {
   SetupParticle(p);
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
+  G4double ekin = std::max(fLowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
   // save lab system kinematics
-  G4double xtkin = tkin;
-  G4double xmom2 = mom2;
-  G4double xinvb = invbeta2;
+
+  G4double xtkin = fTkin;
+  G4double xmom2 = fMom2;
+  G4double xinvb = fInvBeta2;
 
   // CM system
-  iz            = G4int(Z);
-  G4double m2   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
 
-  G4double m12  = mass*mass;
+  fiz            = G4int(Z);
+  G4double m2   = fNistManager->GetAtomicMassAmu(fiz)*amu_c2;
+  G4double etot = fTkin + fMass;
+  G4double ptot = sqrt(fMom2);
+
+  G4double m12  = fMass*fMass;
   G4double momCM= ptot*m2/sqrt(m12 + m2*m2 + 2.0*etot*m2);
 
-  mom2 = momCM*momCM;
-  tkin = sqrt(mom2 + m12) - mass;
+  fMom2 = momCM*momCM;
+  fTkin = sqrt(fMom2 + m12) - fMass;
 
   //invbeta2 = 1.0 +  m12/mom2;
  
-  G4double fm = m2/(mass + m2);
-  invbeta2 = 1.0 +  m12*fm*fm/mom2;
+  G4double fm = m2/(fMass + m2);
+  fInvBeta2 = 1.0 +  m12*fm*fm/fMom2;
 
-  SetupTarget(Z, tkin);
+  SetupTarget(Z, fTkin);
 
   G4double xsec = CrossSectionPerAtom();
 
   // restore Lab system kinematics
-  tkin = xtkin;
-  mom2 = xmom2;
-  invbeta2 = xinvb;
+  fTkin = xtkin;
+  fMom2 = xmom2;
+  fInvBeta2 = xinvb;
 
   return xsec;
 }
@@ -131,32 +133,35 @@ void G4WeMoHardScatModel::SampleSecondaries(
   if(kinEnergy <= DBL_MIN) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
+  G4double ekin = std::max(fLowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
 
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,ekin,ecut,tkin);
 
-  G4double Z  = currentElement->GetZ();
-  iz          = G4int(Z);
-  G4int ia    = SelectIsotopeNumber(currentElement);
-  G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
+  fCurrentElement = SelectRandomAtom( couple, fParticle, ekin, feCut, fTkin);
+
+  G4double Z  = fCurrentElement->GetZ();
+  fiz         = G4int(Z);
+  G4int ia    = SelectIsotopeNumber(fCurrentElement);
+  G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(fiz, ia);
 
   // CM system
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
+  G4double etot = fTkin + fMass;
+  G4double ptot = sqrt(fMom2);
 
-  G4double momCM= ptot*m2/sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
-  mom2 = momCM*momCM;
-  G4double m12 = mass*mass;
-  G4double eCM = sqrt(mom2 + m12);
+  G4double momCM = ptot*m2/sqrt(fMass*fMass + m2*m2 + 2.0*etot*m2);
+  fMom2 = momCM*momCM;
+  G4double m12 = fMass*fMass;
+  G4double eCM = sqrt(fMom2 + m12);
 
   // a correction for heavy projectile
-  G4double fm = m2/(mass + m2);
-  invbeta2 = 1.0 +  m12*fm*fm/mom2;
+
+  G4double fm = m2/(fMass + m2);
+  fInvBeta2 = 1.0 +  m12*fm*fm/fMom2;
 
   // sample scattering angle in CM system
-  SetupTarget(Z, eCM - mass);
+
+  SetupTarget(Z, eCM - fMass);
 
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
@@ -177,24 +182,27 @@ void G4WeMoHardScatModel::SampleSecondaries(
 
   //  G4double elab = gam*(eCM + bet*pzCM);
 
-  G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
+  G4double Ecm  = sqrt(fMass*fMass + m2*m2 + 2.0*etot*m2);
   G4double elab = etot - m2*(ptot/Ecm)*(ptot/Ecm)*(1.-cost) ;
 
  
-  ekin = elab - mass;
+  ekin = elab - fMass;
   if(ekin < 0.0) ekin = 0.0;
   fParticleChange->SetProposedKineticEnergy(ekin);
 
   // recoil
   G4double erec = kinEnergy - ekin;
 
-  if(erec > recoilThreshold) {
-    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
-    G4double plab = sqrt(ekin*(ekin + 2.0*mass));
+  if(erec > fRecoilThreshold) 
+  {
+    G4ParticleDefinition* ion = theParticleTable->FindIon(fiz, ia, 0, fiz);
+    G4double plab = sqrt(ekin*(ekin + 2.0*fMass));
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, erec);
     fvect->push_back(newdp);
-  } else if(erec > 0.0) {
+  } 
+  else if(erec > 0.0) 
+  {
     fParticleChange->ProposeLocalEnergyDeposit(erec);
     fParticleChange->ProposeNonIonizingEnergyDeposit(erec);
   }
