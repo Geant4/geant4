@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.1 2009-07-31 08:55:08 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.2 2009-07-31 14:11:09 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,81 +128,83 @@ private:
   G4PhysicsTable*           theLambdaTable;
   G4PhysicsTable*           theLambda2Table;
   G4LossTableManager*       theManager;
-  const G4DataVector*       currentCuts;
+  const G4DataVector*       fCurrentCuts;
 
   G4NistManager*            fNistManager;
 
-  G4double numlimit;
-  G4double tlimitminfix;
-  G4double invsqrt12;
+  G4double fNumLimit;
+  G4double ftLimitMinFix;
+  G4double fInvSqrt12;
 
   // cash
-  G4double preKinEnergy;
-  G4double ecut;
-  G4double lambda0;
-  G4double tPathLength;
-  G4double zPathLength;
-  G4double lambdaeff;
-  G4double currentRange; 
-  G4double par1;
-  G4double par2;
-  G4double par3;
 
-  G4double xtsec;
-  std::vector<G4double> xsecn;
-  std::vector<G4double> prob;
-  G4int    nelments;
+  G4double fPreKinEnergy;
+  G4double feCut;
+  G4double fLambda1;
+  G4double fTruePathLength;
+  G4double fGeomPathLength;
+  G4double fLambdaEff;
+  G4double fCurrentRange; 
 
-  G4int    nbins;
-  G4int    nwarnings;
-  G4int    nwarnlimit;
+  G4double fPar1;
+  G4double fPar2;
+  G4double fPar3;
 
-  G4int    currentMaterialIndex;
+  G4double fTransportXsc;
+  std::vector<G4double> fXsc;
+  std::vector<G4double> fProb;
+  G4int    fnElements;
 
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material* currentMaterial;
+  G4int    fnBins;
+  G4int    fnWarnings;
+  G4int    fnWarnLimit;
+
+  G4int    fCurrentMaterialIndex;
+
+  const G4MaterialCutsCouple* fCurrentCouple;
+  const G4Material* fCurrentMaterial;
 
   // single scattering parameters
 
-  G4double coeff;
-  G4double cosThetaMin;
-  G4double cosThetaMax;
-  G4double cosTetMaxNuc;
-  G4double cosTetMaxNuc2;
-  G4double cosTetMaxElec;
-  G4double cosTetMaxElec2;
-  G4double q2Limit;
-  G4double alpha2;
+  G4double fCoeff;
+  G4double fCosThetaMin;
+  G4double fCosThetaMax;
+  G4double fCosTetMaxNuc;
+  G4double fCosTetMaxNuc2;
+  G4double fCosTetMaxElec;
+  G4double fCosTetMaxElec2;
+  G4double fq2Limit;
+  G4double fAlpha2;
 
   // projectile
 
-  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* fParticle;
 
-  G4double chargeSquare;
-  G4double spin;
-  G4double mass;
-  G4double tkin;
-  G4double mom2;
-  G4double invbeta2;
-  G4double kinFactor;
-  G4double etag;
-  G4double lowEnergyLimit;
+  G4double fChargeSquare;
+  G4double fSpin;
+  G4double fMass;
+  G4double fTkin;
+  G4double fMom2;
+  G4double fInvBeta2;
+  G4double fKinFactor;
+  G4double feTag;
+  G4double fLowEnergyLimit;
 
   // target
 
-  G4double targetZ;
-  G4double targetMass;
-  G4double screenZ;
-  G4double formfactA;
-  G4int    iz;
+  G4double fTargetZ;
+  G4double fTargetMass;
+  G4double fScreenZ;
+  G4double fFormFactA;
+  G4int    fiz;
 
-  static G4double ScreenRSquare[100];
-  static G4double FormFactor[100];
+  static G4double fScreenRSquare[100];
+  static G4double fFormFactor[100];
 
   // flags
 
-  G4bool   isInitialized;
-  G4bool   inside;
+  G4bool   fInitialized;
+  G4bool   fInside;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -211,11 +213,11 @@ private:
 inline
 void G4WeMoSoftMscModel::DefineMaterial(const G4MaterialCutsCouple* cup) 
 { 
-  if( cup != currentCouple ) 
+  if( cup != fCurrentCouple ) 
   {
-    currentCouple        = cup;
-    currentMaterial      = cup->GetMaterial();
-    currentMaterialIndex = currentCouple->GetIndex(); 
+    fCurrentCouple        = cup;
+    fCurrentMaterial      = cup->GetMaterial();
+    fCurrentMaterialIndex = fCurrentCouple->GetIndex(); 
   }
 }
 
@@ -229,15 +231,15 @@ G4double G4WeMoSoftMscModel::GetLambda(G4double e)
   if(theLambdaTable) 
   {
     G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambdaTable)[fCurrentMaterialIndex])->GetValue(e, b);
   } 
   else 
   {
-    x = CrossSection(currentCouple,particle,e,
-		     (*currentCuts)[currentMaterialIndex]);
+    x = CrossSection(fCurrentCouple, fParticle, e, 
+		     (*fCurrentCuts)[fCurrentMaterialIndex]);
   }
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX;
+  if( x > DBL_MIN ) x = 1./x;
+  else              x = DBL_MAX;
   return x;
 }
 
@@ -247,14 +249,14 @@ inline void G4WeMoSoftMscModel::SetupParticle(const G4ParticleDefinition* p)
 {
   // Initialise mass and charge
 
-  if( p != particle ) 
+  if( p != fParticle ) 
   {
-    particle     = p;
-    mass         = particle->GetPDGMass();
-    spin         = particle->GetPDGSpin();
-    G4double q   = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    tkin         = 0.0;
+    fParticle     = p;
+    fMass         = fParticle->GetPDGMass();
+    fSpin         = fParticle->GetPDGSpin();
+    G4double q   = fParticle->GetPDGCharge()/eplus;
+    fChargeSquare = q*q;
+    fTkin         = 0.0;
   }
 }
 
@@ -262,17 +264,17 @@ inline void G4WeMoSoftMscModel::SetupParticle(const G4ParticleDefinition* p)
 
 inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
 {
-  if(ekin != tkin || ecut != cut) 
+  if( ekin != fTkin || feCut != cut) 
   {
-    tkin     = ekin;
-    mom2     = tkin*(tkin + 2.0*mass);
-    invbeta2 = 1.0 +  mass*mass/mom2;
+    fTkin     = ekin;
+    fMom2     = fTkin*(fTkin + 2.0*fMass);
+    fInvBeta2 = 1.0 +  fMass*fMass/fMom2;
 
-    cosTetMaxNuc = cosThetaMax;
+    fCosTetMaxNuc = fCosThetaMax;
 
-    if(mass < MeV && ekin <= 10.*cut) 
+    if(fMass < MeV && ekin <= 10.*cut) 
     {
-      cosTetMaxNuc = ekin*(cosThetaMax + 1.0)/(10.*cut) - 1.0;
+      fCosTetMaxNuc = ekin*(fCosThetaMax + 1.0)/(10.*cut) - 1.0;
     }
     ComputeMaxElectronScattering(cut);
   } 
@@ -282,36 +284,37 @@ inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
   
 inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
 {
-  if( Z != targetZ || e != etag ) 
+  if( Z != fTargetZ || e != feTag ) 
   {
-    etag    = e; 
-    targetZ = Z;
-    iz = G4int(Z);
+    feTag    = e; 
+    fTargetZ = Z;
+    fiz      = G4int(Z);
 
-    if(iz > 99) iz = 99;
+    if(fiz > 99) fiz = 99;
 
-    targetMass      = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    screenZ         = ScreenRSquare[iz]/mom2;
-    G4double gamma2 = 1./(1.-1./invbeta2);
-    G4double mu_c2  = (mass*targetMass)/(mass+targetMass);
-    kinFactor       = coeff*targetZ*chargeSquare*invbeta2*invbeta2/(gamma2*mu_c2*mu_c2);
+    fTargetMass      = fNistManager->GetAtomicMassAmu(fiz)*amu_c2;
+    fScreenZ         = fScreenRSquare[fiz]/fMom2;
+    G4double gamma2 = 1./(1.-1./fInvBeta2);
+    G4double mu_c2  = (fMass*fTargetMass)/(fMass+fTargetMass);
+    fKinFactor       = fCoeff*fTargetZ*fChargeSquare*fInvBeta2*fInvBeta2/(gamma2*mu_c2*mu_c2);
     /*
-    G4double m12  = mass*mass;
-    G4double x    = 1.0 + mass/targetMass;
-    kinFactor  = coeff*targetZ*chargeSquare*(1.0 +  m12/mom2)/mom2;
-    screenZ = ScreenRSquare[iz]/mom2;
-    if(iz > 1) {
-      screenZ *=(1.13 + 3.76*Z*Z*alpha2);
-      kinFactor /= (x*x);
+    G4double m12  = fMass*fMass;
+    G4double x    = 1.0 + fMass/fTargetMass;
+    fKinFactor  = fCoeff*fTargetZ*fChargeSquare*(1.0 +  m12/fMom2)/fMom2;
+    fScreenZ = fScreenRSquare[iz]/fMom2;
+    if(fiz > 1) 
+    {
+      fScreenZ *=(1.13 + 3.76*Z*Z*fAlpha2);
+      fKinFactor /= (x*x);
     }
     */
-    if(iz > 1) screenZ *=(1.13 + 3.76*Z*Z*alpha2);
+    if(fiz > 1) fScreenZ *=(1.13 + 3.76*Z*Z*fAlpha2);
 
-    //if(iz > 1) screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
+    //if(iz > 1) fScreenZ *=(1.13 + std::min(0.5,3.76*Z*Z*fInvBeta2*fAlpha2));
 
-    formfactA      = FormFactor[iz]*mom2;
-    cosTetMaxNuc2  = cosTetMaxNuc;
-    cosTetMaxElec2 = cosTetMaxElec;
+    fFormFactA      = fFormFactor[fiz]*fMom2;
+    fCosTetMaxNuc2  = fCosTetMaxNuc;
+    fCosTetMaxElec2 = fCosTetMaxElec;
   } 
 } 
 
