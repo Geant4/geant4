@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.18 2009-07-31 11:03:00 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.19 2009-07-31 14:36:02 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -148,7 +148,7 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 }
 
 // ------------------------------------------------------------
-struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){delete aH;} };
+struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){ delete aH;} };
 
 // ------------------------------------------------------------
 void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 2009
@@ -466,7 +466,7 @@ G4cout<<" Int num "<<counter<<G4endl;
 //G4cout<<"Process not successfull"<<G4endl;
 //           give up, clean up
 	  std::vector<G4VSplitableHadron *> primaries;
-	  std::vector<G4VSplitableHadron *> targets;
+//	  std::vector<G4VSplitableHadron *> targets;        // Uzhi 31.07.09
 	  theParticipants.StartLoop();    // restart a loop 
 	  while ( theParticipants.Next() ) 
 	  {
@@ -475,17 +475,18 @@ G4cout<<" Int num "<<counter<<G4endl;
 	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(),
                                                    interaction.GetProjectile()) )
 	    	primaries.push_back(interaction.GetProjectile());
-
+/*  // Uzhi 31.07.09
 	    if ( targets.end()   == std::find(targets.begin(), targets.end(),
                                                       interaction.GetTarget()) ) 
 	    	targets.push_back(interaction.GetTarget());
+*/  // Uzhi 31.07.09
 	  }
 	  std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
 	  primaries.clear();
-	
+/*  // Uzhi 31.07.09	
           std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
 	  targets.clear();
-
+*/  // Uzhi 31.07.09
 //          theParticipants.theNucleus->StartLoop();
 
 //G4cout<<"NumberOfInvolvedNucleon "<<NumberOfInvolvedNucleon<<G4endl;
@@ -495,8 +496,8 @@ G4cout<<" Int num "<<counter<<G4endl;
            aNucleon = TheInvolvedNucleon[i]->GetSplitableHadron();
            if(aNucleon)
            { 
-//             if(aNucleon->GetStatus() == 2) delete aNucleon;
-             if(aNucleon->GetStatus() == 2)   DeleteVSplitableHadron(aNucleon);
+             if(aNucleon->GetStatus() != 0) delete aNucleon;
+//           if(aNucleon->GetStatus() == 2)  DeleteVSplitableHadron()(aNucleon);
            }
           } 
 
