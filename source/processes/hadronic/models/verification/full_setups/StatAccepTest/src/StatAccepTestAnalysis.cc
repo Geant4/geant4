@@ -5,6 +5,9 @@
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4VProcess.hh"
+#include "G4ProcessType.hh"
+#include "G4HadronicProcessType.hh"
 
 #ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
@@ -22,6 +25,7 @@ bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = true;
 bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = false;  
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
+bool StatAccepTestAnalysis::isMapInfoAboutTrackOn = false;  
 
 G4double StatAccepTestAnalysis::infParticleEkin_electron = -999.9;
 G4double StatAccepTestAnalysis::supParticleEkin_electron = 1.0E+30; 
@@ -500,6 +504,32 @@ void StatAccepTestAnalysis::init() {
   mapParticleNames.clear();
 
   eventTimeSet.clear();
+
+  mapInfoAboutTrack.clear();
+  mapInfoAboutVertex.clear();
+
+  countNumberOfTracks = countNumberOfVertices = countNumberOfHadronicVertices = 0;
+  sumEvis_em = sumEtot_em = sumEvis_p = sumEtot_p = sumEvis_pi = sumEtot_pi =
+    sumEvis_ion = sumEtot_ion = 0.0;
+  sumEvis_from1stInterac_pi0 = sumEtot_from1stInterac_pi0 = 
+    sumEvis_from1stInterac_pip = sumEtot_from1stInterac_pip =
+    sumEvis_from1stInterac_pim = sumEtot_from1stInterac_pim =
+    sumEvis_from1stInterac_p = sumEtot_from1stInterac_p =
+    sumEvis_from1stInterac_n = sumEtot_from1stInterac_n =
+    sumEvis_from1stInterac_lightion = sumEtot_from1stInterac_lightion = 0.0;
+  sumEvis_closest_pi0 = sumEtot_closest_pi0 =
+    sumEvis_closest_pip = sumEtot_closest_pip =
+    sumEvis_closest_pim = sumEtot_closest_pim =
+    sumEvis_closest_p = sumEtot_closest_p =
+    sumEvis_closest_n = sumEtot_closest_n = 
+    sumEvis_closest_lightion = sumEtot_closest_lightion = 0.0;
+  sumEvis_em_from_pi0 = sumEtot_em_from_pi0 =
+    sumEvis_em_from_pip = sumEtot_em_from_pip =
+    sumEvis_em_from_pim = sumEtot_em_from_pim =
+    sumEvis_em_from_p = sumEtot_em_from_p =
+    sumEvis_em_from_n = sumEtot_em_from_n =
+    sumEvis_em_from_lightion = sumEtot_em_from_lightion = 0.0;
+
 }                       
 
 
@@ -1692,6 +1722,24 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
     }
   }
 
+  if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
+    G4int trackId = aStep->GetTrack()->GetTrackID();
+    if ( mapInfoAboutTrack.find( trackId ) != mapInfoAboutTrack.end() ) {
+      G4double edep = stepEnergyDeposit * stepWeight;
+      if ( volumeName == "physiActive" ) {
+	mapInfoAboutTrack.find( trackId )->second.theTrackVisibleEdep += edep; 
+	mapInfoAboutTrack.find( trackId )->second.theTrackDepositedEtot += edep; 	
+      } 
+      if ( volumeName == "physiAbsorber" ) {
+	mapInfoAboutTrack.find( trackId )->second.theTrackDepositedEtot += edep;
+      }
+    } else {
+      G4cout << "*** StatAccepTestAnalysis::infoStep : WARNING ***" << G4endl
+	     << "\t  trackId=" << trackId << " NOT found in mapInfoAboutTrack !"
+	     << G4endl;
+    }
+  }
+
 }
 
 
@@ -1792,7 +1840,8 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	numExitingOthers++;
       }
     }
-  } else {  // When a track is created.
+
+  } else if ( aTrack->GetCurrentStepNumber() == 0 ) {  // When a track is created.
 
     classifyParticle( true , aTrack->GetDefinition() );
 
@@ -1825,6 +1874,181 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
       pionMinusSpectrum->fill( std::log10( trackEkin/MeV ) );
     }
 #endif
+
+
+    if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
+
+      G4int trackId = aTrack->GetTrackID();
+      G4int parentId = aTrack->GetParentID();
+      const G4VProcess* creatorProcess = aTrack->GetCreatorProcess();
+
+      if ( parentId > 0  &&  creatorProcess ) {
+
+        // Find the closest vertex with the same parent and same process type.
+	G4double distance2 = 9.9E+99; // A very large value.
+	std::map< G4int, structInfoAboutVertex >::const_iterator found_citvtx = 
+	  mapInfoAboutVertex.end();
+	for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
+		citvtx = mapInfoAboutVertex.begin();
+	      citvtx != mapInfoAboutVertex.end() ; ++citvtx ) {
+	  if ( citvtx->second.theCreatorTrackID == parentId  
+	       &&
+	       citvtx->second.theCreatorProcessType == 
+               creatorProcess->GetProcessType()              
+	       &&
+	       citvtx->second.theCreatorProcessSubType == 
+	       creatorProcess->GetProcessSubType()          
+	     ) {
+	    G4double d2 = 
+	      ( aTrack->GetPosition().x() - citvtx->second.theVertexPosition_x ) * 
+	      ( aTrack->GetPosition().x() - citvtx->second.theVertexPosition_x )
+	      +
+	      ( aTrack->GetPosition().y() - citvtx->second.theVertexPosition_y ) * 
+	      ( aTrack->GetPosition().y() - citvtx->second.theVertexPosition_y )
+	      +
+	      ( aTrack->GetPosition().z() - citvtx->second.theVertexPosition_z ) * 
+	      ( aTrack->GetPosition().z() - citvtx->second.theVertexPosition_z );
+	    if ( d2 < distance2 ) {
+	      distance2 = d2;
+	      found_citvtx = citvtx;
+            }
+          }
+        }
+        // Create a new vertex either if a vertex with the same
+        // parent and process type does not exist, or if it exists
+        // but it is too displaced, by more than 1 nm .
+        if ( found_citvtx == mapInfoAboutVertex.end()  ||
+	     distance2 > 1.0E-12 ) {
+	  
+	  G4ProcessType creatorProcessType = creatorProcess->GetProcessType();
+	  G4int creatorProcessSubType = creatorProcess->GetProcessSubType();
+	  G4String creatorProcessName = creatorProcess->GetProcessName();
+	  G4String volumeName = aTrack->GetVolume()->GetName();
+	  G4double const x = aTrack->GetPosition().x(); 
+	  G4double const y = aTrack->GetPosition().y(); 
+	  G4double const z = aTrack->GetPosition().z(); 
+
+	  structInfoAboutVertex aStructInfoAboutVertex;
+
+	  aStructInfoAboutVertex.theCreatorTrackID = parentId;
+	  aStructInfoAboutVertex.theCreatorProcessType = 
+	    static_cast< G4int >( creatorProcessType );
+	  aStructInfoAboutVertex.theCreatorProcessSubType = creatorProcessSubType;
+	  aStructInfoAboutVertex.theCreatorProcessName = creatorProcessName;
+	  aStructInfoAboutVertex.theVertexVolumeName = volumeName;
+	  aStructInfoAboutVertex.theVertexPosition_x = x;
+	  aStructInfoAboutVertex.theVertexPosition_y = y;
+	  aStructInfoAboutVertex.theVertexPosition_z = z;
+
+	  G4int numberOfVertices = mapInfoAboutVertex.size();
+
+	  mapInfoAboutVertex.insert( std::pair< G4int, structInfoAboutVertex >
+				     ( numberOfVertices + 1, aStructInfoAboutVertex ) );
+	}
+      }
+
+      structInfoAboutTrack aStructInfoAboutTrack;
+
+      aStructInfoAboutTrack.theParticleName = particleName;
+      aStructInfoAboutTrack.theParticlePDGCode = particleId;
+      aStructInfoAboutTrack.theTrackEkinAtCreation = trackEkin;
+      aStructInfoAboutTrack.theTrackVisibleEdep = 0.0;
+      aStructInfoAboutTrack.theTrackDepositedEtot = 0.0;
+      aStructInfoAboutTrack.theParentTrackID = parentId;
+
+      // The starting vertex for the track is the closest vertex 
+      // originated by parentId, and with the same process type.
+      G4double distance2 = 9.9E+99; // A very large value.
+      std::map< G4int, structInfoAboutVertex >::const_iterator found_citvtx = 
+	mapInfoAboutVertex.end();
+      for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
+	      citvtx = mapInfoAboutVertex.begin();
+	    citvtx != mapInfoAboutVertex.end() ; ++citvtx ) {
+	if ( citvtx->second.theCreatorTrackID == parentId  
+	     &&
+	     citvtx->second.theCreatorProcessType == 
+	     creatorProcess->GetProcessType()              
+	     &&
+	     citvtx->second.theCreatorProcessSubType == 
+	     creatorProcess->GetProcessSubType()          
+	   ) {
+	  G4double d2 = 
+	    ( aTrack->GetPosition().x() - citvtx->second.theVertexPosition_x ) * 
+	    ( aTrack->GetPosition().x() - citvtx->second.theVertexPosition_x )
+	    +
+	    ( aTrack->GetPosition().y() - citvtx->second.theVertexPosition_y ) * 
+	    ( aTrack->GetPosition().y() - citvtx->second.theVertexPosition_y )
+	    +
+	    ( aTrack->GetPosition().z() - citvtx->second.theVertexPosition_z ) * 
+	    ( aTrack->GetPosition().z() - citvtx->second.theVertexPosition_z );
+	  if ( d2 < distance2 ) {
+	    distance2 = d2;
+	    found_citvtx = citvtx;
+	  }
+	}
+      }
+      if ( found_citvtx != mapInfoAboutVertex.end() ) {
+	aStructInfoAboutTrack.theStartingVertexID = found_citvtx->first;	
+      } else {  // It should happens only for the primary track.
+	aStructInfoAboutTrack.theStartingVertexID = 0;
+      }
+
+      // To find the closest hadronic relative, we need to look
+      // at the parent track, see if it produces a hadronic
+      // interaction; if this is the case, then the closest
+      // hadronic relative is the parent and we are done;
+      // else, we have to repeat the same procedure for the 
+      // grand-parent, then eventually for the grand-grand-parent,
+      // and so on, until either we find that one of these produces
+      // a hadronic interaction, or we scan the whole map, reaching
+      // the primary.
+      bool isSearchCompleted = false;
+      bool isFound = false;
+      G4int currentParent = parentId;
+      G4int currentParentVertex = aStructInfoAboutTrack.theStartingVertexID;
+      while ( ! isSearchCompleted  &&  ! isFound ) {
+	std::map< G4int, structInfoAboutVertex >::const_iterator citvtx_bis = 
+	  mapInfoAboutVertex.find( currentParentVertex );
+	if ( citvtx_bis != mapInfoAboutVertex.end() ) {
+	  G4int subtype = citvtx_bis->second.theCreatorProcessSubType;
+	  if ( 
+	      //subtype == 111  ||     // G4HadronicProcessType::fHadronElastic
+	      subtype == 121  ||     // G4HadronicProcessType::fHadronInelastic
+	      subtype == 131  ||     // G4HadronicProcessType::fCapture
+	      subtype == 141  ||     // G4HadronicProcessType::fFission
+	      subtype == 151  ||     // G4HadronicProcessType::fHadronAtRest
+	      subtype == 161         // G4HadronicProcessType::fChargeExchange 
+	      ) {
+	    isFound = true;
+          } else {
+	    std::map< G4int, structInfoAboutTrack >::const_iterator cittrk =
+	      mapInfoAboutTrack.find( currentParent );
+	    if ( cittrk != mapInfoAboutTrack.end() ) {
+	      currentParent = cittrk->second.theParentTrackID;
+	      currentParentVertex = cittrk->second.theStartingVertexID;
+            } else {
+	      isSearchCompleted = true;
+            }
+          }
+	} else {
+	  isSearchCompleted = true;
+	}
+      } // end of while loop
+      if ( isFound ) {
+	aStructInfoAboutTrack.theClosestHadronicRelativeID = currentParent;
+        aStructInfoAboutTrack.theClosestHadronicVertexID = currentParentVertex;
+      } else {  // It should happens only for the primary track and
+                // eventual ionization electrons or bremsstrahlung
+	        // gammas produced by the primary track before the
+	        // first inelastic hadronic interaction.
+	aStructInfoAboutTrack.theClosestHadronicRelativeID = 0;
+        aStructInfoAboutTrack.theClosestHadronicVertexID = 0;
+      }
+
+      mapInfoAboutTrack.insert( std::pair< G4int, structInfoAboutTrack >
+				( trackId , aStructInfoAboutTrack ) );
+
+    } // end of if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn )
 
   }
 }
@@ -3147,6 +3371,17 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
   // Keep the time per event in a multiset.
   eventTimeSet.insert( timeEventInSec );
+
+  if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
+    //analysisTrackAndVertices_0();  //***DEBUG*** : write details event information
+    analysisTrackAndVertices_1();
+    analysisTrackAndVertices_2();
+    analysisTrackAndVertices_3() ;
+    analysisTrackAndVertices_4() ;
+
+    mapInfoAboutTrack.clear();
+    mapInfoAboutVertex.clear();
+  }
 
 }
 
@@ -4800,6 +5035,161 @@ void StatAccepTestAnalysis::finish() {
     }   
   }
 
+
+  if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
+    G4cout << G4endl << " Analysis of interactions (Tracks & Vertices)" << G4endl;
+
+    G4cout << "\t average number of tracks = " << countNumberOfTracks / n << G4endl
+	   << "\t average number of vertices = " << countNumberOfVertices / n << G4endl
+	   << "\t average number of hadronic vertices = " 
+	   << countNumberOfHadronicVertices / n << G4endl
+	   << G4endl;
+
+    G4cout << "\t <Evis_em>  = " << sumEvis_em  / n 
+	   << "   <Etot_em>  = " << sumEtot_em  / n << "  MeV" << G4endl
+           << "\t <Evis_p>   = " << sumEvis_p   / n 
+	   << "   <Etot_p>   = " << sumEtot_p   / n << "  MeV" << G4endl
+           << "\t <Evis_pi>  = " << sumEvis_pi  / n 
+	   << "   <Etot_pi>  = " << sumEtot_pi  / n << "  MeV" << G4endl
+           << "\t <Evis_ion> = " << sumEvis_ion / n 
+	   << "   <Etot_ion> = " << sumEtot_ion / n << "  MeV" << G4endl
+           << G4endl;
+
+    G4cout << "\t <Evis_from1stInterac_pi0> = " << sumEvis_from1stInterac_pi0 / n
+           << "  MeV \t ( f_Evis = " << 100.0 * sumEvis_from1stInterac_pi0 / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_pi0> = " << sumEtot_from1stInterac_pi0 / n
+           << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_pi0 / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+           << "\t <Evis_from1stInterac_pi+> = " << sumEvis_from1stInterac_pip / n
+           << "  MeV \t ( f_Evis = " << 100.0 * sumEvis_from1stInterac_pip / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_pi+> = " << sumEtot_from1stInterac_pip / n
+           << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_pip / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+           << "\t <Evis_from1stInterac_pi-> = " << sumEvis_from1stInterac_pim / n
+           << "  MeV \t ( f_Evis = " << 100.0 * sumEvis_from1stInterac_pim / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_pi-> = " << sumEtot_from1stInterac_pim / n
+           << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_pim / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+           << "\t <Evis_from1stInterac_p> = " << sumEvis_from1stInterac_p / n
+           << "  MeV \t ( f_Evis = " << 100.0 * sumEvis_from1stInterac_p / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_p> = " << sumEtot_from1stInterac_p / n
+           << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_p / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+           << "\t <Evis_from1stInterac_n> = " << sumEvis_from1stInterac_n / n
+           << "  MeV \t ( f_Evis = " << 100.0 * sumEvis_from1stInterac_n / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_n> = " << sumEtot_from1stInterac_n / n
+           << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_n / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+           << "\t <Evis_from1stInterac_lightion> = " 
+	   << sumEvis_from1stInterac_lightion / n << "  MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_from1stInterac_lightion / sumEdepAct
+           << "% )" << G4endl
+	   << "\t <Etot_from1stInterac_lightion> = " 
+	   << sumEtot_from1stInterac_lightion / n << "  MeV \t ( f_Ebeam = " 
+           << 100.0 * sumEtot_from1stInterac_lightion / ( n * beamEnergy ) 
+	   << "% )" << G4endl
+	   << G4endl;
+
+    G4cout << "\t <Evis_closest_pi0> = " << sumEvis_closest_pi0 / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_pi0 / sumEdepAct
+	   << "% )" << G4endl
+           << "\t <Etot_closest_pi0> = " << sumEtot_closest_pi0 / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_pi0 / ( n * beamEnergy )
+	   << "% )" << G4endl
+           << "\t <Evis_closest_pi+> = " << sumEvis_closest_pip / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_pip / sumEdepAct
+	   << "% )" << G4endl
+           << "\t <Etot_closest_pi+> = " << sumEtot_closest_pip / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_pip / ( n * beamEnergy )
+	   << "% )" << G4endl
+           << "\t <Evis_closest_pi-> = " << sumEvis_closest_pim / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_pim / sumEdepAct 
+	   << "% )" << G4endl
+           << "\t <Etot_closest_pi-> = " << sumEtot_closest_pim / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_pim / ( n * beamEnergy )
+	   << "% )" << G4endl
+           << "\t <Evis_closest_p> = " << sumEvis_closest_p / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_p / sumEdepAct 
+	   << "% )" << G4endl
+           << "\t <Etot_closest_p> = " << sumEtot_closest_p / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_p / ( n * beamEnergy )
+	   << "% )" << G4endl
+           << "\t <Evis_closest_n> = " << sumEvis_closest_n / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_n / sumEdepAct 
+	   << "% )" << G4endl
+           << "\t <Etot_closest_n> = " << sumEtot_closest_n / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_n / ( n * beamEnergy )
+	   << "% )" << G4endl
+           << "\t <Evis_closest_lightion> = " << sumEvis_closest_lightion / n 
+	   << " MeV \t ( f_Evis = " 
+	   << 100.0 * sumEvis_closest_lightion / sumEdepAct 
+	   << "% )" << G4endl
+           << "\t <Etot_closest_lightion> = " << sumEtot_closest_lightion / n 
+	   << " MeV \t ( f_Ebeam = " 
+	   << 100.0 * sumEtot_closest_lightion / ( n * beamEnergy )
+	   << "% )" << G4endl
+	   << G4endl;
+
+    G4cout << "\t <Evis_em_from_pi0> = " << sumEvis_em_from_pi0 / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_pi0 / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_pi0> = " << sumEtot_em_from_pi0 / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_pi0 / sumEtot_em
+	   << "% )" << G4endl
+           << "\t <Evis_em_from_pi+> = " << sumEvis_em_from_pip / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_pip / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_pi+> = " << sumEtot_em_from_pip / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_pip / sumEtot_em
+	   << "% )" << G4endl
+           << "\t <Evis_em_from_pi-> = " << sumEvis_em_from_pim / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_pim / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_pi-> = " << sumEtot_em_from_pim / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_pim / sumEtot_em
+	   << "% )" << G4endl
+           << "\t <Evis_em_from_p> = " << sumEvis_em_from_p / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_p / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_p> = " << sumEtot_em_from_p / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_p / sumEtot_em
+	   << "% )" << G4endl
+           << "\t <Evis_em_from_n> = " << sumEvis_em_from_n / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_n / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_n> = " << sumEtot_em_from_n / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_n / sumEtot_em
+	   << "% )" << G4endl
+           << "\t <Evis_em_from_lightion> = " << sumEvis_em_from_lightion / n 
+	   << " MeV \t ( f_Evis_em = " << 100.0 * sumEvis_em_from_lightion / sumEvis_em 
+	   << "% )" << G4endl
+           << "\t <Etot_em_from_lightion> = " << sumEtot_em_from_lightion / n 
+	   << " MeV \t ( f_Etot_em = " << 100.0 * sumEtot_em_from_lightion / sumEtot_em
+	   << "% )" << G4endl
+	   << G4endl;
+  }
+
+
   // Print information about the CPU time per event.
   // We are interested in the mininum and maximum time, and on the
   // average, its error, and the rms of the distribution. However,
@@ -4869,3 +5259,404 @@ void StatAccepTestAnalysis::finish() {
 
 }
 
+
+void StatAccepTestAnalysis::analysisTrackAndVertices_0() {
+  // Event-by-event debugging information.
+  // Be careful that it writes a lot of information, so you should 
+  // use it only for few events.
+
+  G4cout << G4endl
+	 << "\t =============================================== " << G4endl
+	 << "\t ===  END OF EVENT INFO ABOUT TRACK & VERTEX === " << G4endl
+	 << "\t =============================================== " << G4endl
+	 << G4endl;
+
+  G4cout << G4endl
+	 << "\t          *** TRACKS *** "  << G4endl << G4endl
+	 << "\t mapInfoAboutTrack.size()=" << mapInfoAboutTrack.size() << G4endl
+	 << G4endl;
+  for ( std::map< G4int, structInfoAboutTrack >::const_iterator 
+	  cit = mapInfoAboutTrack.begin(); 
+	cit != mapInfoAboutTrack.end(); ++cit ) {
+    G4cout << "\t -------------------------------------------------------" << G4endl
+	   << "\t trackId=" << cit->first << G4endl
+	   << "\t particlePDGCode=" << cit->second.theParticlePDGCode 
+	   << "\t particleName=" << cit->second.theParticleName << G4endl
+	   << "\t trackEkinAtCreation=" << cit->second.theTrackEkinAtCreation 
+	   << " MeV" << G4endl
+	   << "\t trackVisibleEdep=" << cit->second.theTrackVisibleEdep 
+	   << " MeV" << G4endl
+	   << "\t trackDepositedEtot=" << cit->second.theTrackDepositedEtot 
+	   << " MeV" << G4endl
+	   << "\t parentTrackId=" << cit->second.theParentTrackID << G4endl 
+	   << "\t closestHadronicRelativeId=" 
+	   << cit->second.theClosestHadronicRelativeID << G4endl
+	   << "\t closestHadronicVertexId="
+	   << cit->second.theClosestHadronicVertexID << G4endl
+	   << "\t startingVertexId=" << cit->second.theStartingVertexID
+	   << G4endl;
+  }   
+
+  G4cout << G4endl << G4endl 
+	 << "\t          *** VERTICES *** "  << G4endl << G4endl
+	 << "\t mapInfoAboutVertex.size()=" << mapInfoAboutVertex.size() << G4endl
+	 << G4endl;
+  for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
+	  cit = mapInfoAboutVertex.begin(); 
+	cit != mapInfoAboutVertex.end(); ++cit ) {
+    G4cout << "\t -------------------------------------------------------" << G4endl
+	   << "\t vertexId=" << cit->first << G4endl
+	   << "\t parentTrackId=" << cit->second.theCreatorTrackID << G4endl
+	   << "\t creatorProcessType=" << cit->second.theCreatorProcessType << G4endl
+	   << "\t creatorProcessSubType=" << cit->second.theCreatorProcessSubType 
+	   << G4endl
+	   << "\t creatorProcessName=" << cit->second.theCreatorProcessName << G4endl
+	   << "\t vertexVolumeName=" << cit->second.theVertexVolumeName << G4endl
+	   << "\t theVertexPosition=(" 
+	   << cit->second.theVertexPosition_x << ","
+	   << cit->second.theVertexPosition_y << "," 
+	   << cit->second.theVertexPosition_z << ") mm" 
+	   << G4endl;
+  }
+
+  G4cout << G4endl << G4endl 
+	 << "\t          *** MOTHER/CHILDREN *** "  << G4endl << G4endl
+	 << G4endl;
+  for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
+	  citvtx = mapInfoAboutVertex.begin(); 
+	citvtx != mapInfoAboutVertex.end(); ++citvtx ) {
+    G4int mother = citvtx->second.theCreatorTrackID;
+    G4cout << "\t -------------------------------------------------------" << G4endl
+	   << "\t vertexId=" << citvtx->first 
+	   << "\t mother=" << mother;
+    std::map< G4int, structInfoAboutTrack >::const_iterator cittrk = 
+      mapInfoAboutTrack.find( mother ); 
+    if ( cittrk != mapInfoAboutTrack.end() ) {
+      G4cout << "  " << cittrk->second.theParticleName
+	     << "  vtx: " << cittrk->second.theStartingVertexID
+	     << "  (closestHadronicRelative: " 
+	     << cittrk->second.theClosestHadronicRelativeID;
+      std::map< G4int, structInfoAboutTrack >::const_iterator cittrk_bis = 
+	mapInfoAboutTrack.find( cittrk->second.theClosestHadronicRelativeID );
+      if ( cittrk_bis != mapInfoAboutTrack.end() ) {
+	G4cout << "  " << cittrk_bis->second.theParticleName;
+      }
+      G4cout << "  vtx: " << cittrk->second.theClosestHadronicVertexID
+	     << ")" << G4endl;
+    }
+    G4cout << "\t -> children:" << G4endl;
+    for ( ++cittrk ; cittrk != mapInfoAboutTrack.end() ; ++cittrk ) {
+      if ( cittrk->second.theStartingVertexID == citvtx->first ) {
+	G4cout << "\t \t" << cittrk->first 
+	       << "  " << cittrk->second.theParticleName 
+	       << "  Ekin=" << cittrk->second.theTrackEkinAtCreation
+	       << "  parentId=" << cittrk->second.theParentTrackID
+	       << G4endl;
+      }
+    }
+  }
+  
+  G4cout << G4endl
+	 << "\t =============================================== " << G4endl
+	 << G4endl;
+
+}
+
+
+void StatAccepTestAnalysis::analysisTrackAndVertices_1() {
+  // Some basic quantities are computed. 
+  // Some of these can be compared with independent estimations made 
+  // in other parts of this file, as a kind of sanity check.
+
+  countNumberOfTracks += mapInfoAboutTrack.size();
+  countNumberOfVertices += mapInfoAboutVertex.size();
+  
+  // Count the number of inelastic hadronic interactions.
+  for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
+	  cit = mapInfoAboutVertex.begin(); 
+	cit != mapInfoAboutVertex.end(); ++cit ) {
+    G4int subtype = cit->second.theCreatorProcessSubType;
+    if ( 
+	//subtype == 111  ||     // G4HadronicProcessType::fHadronElastic
+	subtype == 121  ||     // G4HadronicProcessType::fHadronInelastic
+	subtype == 131  ||     // G4HadronicProcessType::fCapture
+	subtype == 141  ||     // G4HadronicProcessType::fFission
+	subtype == 151  ||     // G4HadronicProcessType::fHadronAtRest
+	subtype == 161         // G4HadronicProcessType::fChargeExchange 
+	) {
+      countNumberOfHadronicVertices++;
+    }
+  }
+  
+  for ( std::map< G4int, structInfoAboutTrack >::const_iterator 
+	  cit = mapInfoAboutTrack.begin(); 
+	cit != mapInfoAboutTrack.end(); ++cit ) {
+    G4int pdgcode = cit->second.theParticlePDGCode;
+    G4double evis = cit->second.theTrackVisibleEdep;
+    G4double etot = cit->second.theTrackDepositedEtot;
+    if ( pdgcode == electronId  ||  pdgcode == positronId ) {
+      sumEvis_em += evis;
+      sumEtot_em += etot;
+    } else if ( pdgcode == pionPlusId  ||  pdgcode == pionMinusId ) {
+      sumEvis_pi += evis;
+      sumEtot_pi += etot;
+    } else if ( pdgcode == protonId  ||  pdgcode == antiProtonId ) {
+      sumEvis_p += evis;
+      sumEtot_p += etot;
+    } else if ( pdgcode == 0  ||  pdgcode/1000000000 >= 1  ||  pdgcode == neutronId ) {
+      sumEvis_ion += evis;
+      sumEtot_ion += etot;
+    }
+  }
+}
+
+
+void StatAccepTestAnalysis::analysisTrackAndVertices_2() {
+  // We try here to calculate some quantities that should help linking
+  // the calorimeter observables with the quantities we have calculated
+  // at model-level.
+  // We consider only the first hadronic inelastic interaction,
+  // and we look at the visible and total energies in the calorimeters
+  // that are coming from the particles produced directly, or
+  // indirectly (i.e. later generations) from that first hadronic 
+  // inelastic interaction.
+
+  for ( std::map< G4int, structInfoAboutTrack >::const_iterator 
+	  cit = mapInfoAboutTrack.begin(); 
+	cit != mapInfoAboutTrack.end(); ++cit ) {
+
+    G4double evis = cit->second.theTrackVisibleEdep;
+    G4double etot = cit->second.theTrackDepositedEtot;
+
+    // For each track, we look for its ancestors until we find a 
+    // daughter track of the primary particle (that always has 
+    // track id = 1).
+    std::map< G4int, structInfoAboutTrack >::const_iterator cit_bis = cit;
+    bool isFound = false;
+    G4int parentId = cit->second.theParentTrackID;
+    while ( parentId > 0  &&  ! isFound ) {
+      if ( parentId == 1 ) {  // primary beam particle
+	isFound = true;
+      } else {
+	cit_bis = mapInfoAboutTrack.find( parentId );
+	if ( cit_bis != mapInfoAboutTrack.end() ) {
+	  parentId = cit_bis->second.theParentTrackID;
+        } else {
+	  G4cout << "*** StatAccepTestAnalysis::analysisTrackAndVertices_2 : WARNING ***"
+		 << "\t parentId = " << parentId << " NOT found in the map!" << G4endl;
+	  parentId = 0;
+	}
+      }
+    }
+
+    //G4cout << "\t Examining track_id = " << cit->first              //***DEBUG*** 
+    //	     << "\t" << cit->second.theParticleName << G4endl; 
+    if ( isFound ) {
+      //G4cout << "\t \t FOUND 1st interaction relative: " << cit_bis->first 
+      //       << "\t" << cit_bis->second.theParticleName << G4endl;  //***DEBUG***
+      G4int pdgcode = cit_bis->second.theParticlePDGCode;
+      G4String name = cit_bis->second.theParticleName;
+      if ( pdgcode == pionZeroId ) {
+        sumEvis_from1stInterac_pi0 += evis;
+	sumEtot_from1stInterac_pi0 += etot;
+      } else if ( pdgcode == pionPlusId ) {  
+        sumEvis_from1stInterac_pip += evis;
+	sumEtot_from1stInterac_pip += etot;
+      } else if ( pdgcode == pionMinusId ) {
+        sumEvis_from1stInterac_pim += evis;
+	sumEtot_from1stInterac_pim += etot;
+      } else if ( pdgcode == protonId ) {
+        sumEvis_from1stInterac_p += evis;
+	sumEtot_from1stInterac_p += etot;
+      } else if ( pdgcode == neutronId ) {
+        sumEvis_from1stInterac_n += evis;
+	sumEtot_from1stInterac_n += etot;
+      } else if ( name == "deuteron"  || 
+		  name == "triton"    ||
+		  name == "alpha"     ||
+		  name == "He3" ) {
+        sumEvis_from1stInterac_lightion += evis;
+	sumEtot_from1stInterac_lightion += etot;
+      }
+    } // end if ( isFound )
+  } // End of loop over mapInfoAboutTrack
+}
+
+
+void StatAccepTestAnalysis::analysisTrackAndVertices_3() {
+  // We calculate the visible and total energy in the calorimeter
+  // due to pi0, pi+, pi-, p, n, light ion (d, t, 3He, alpha),
+  // when these particles are either directly depositing energy
+  // (via ionization) or the closest hadron of the actual
+  // track that deposited energy.
+  // Also for non-light nuclear fragments (i.e. excluding d, t, 3He, alpha)
+  // we consider the closest hadron that actually produced them
+  // (often neutrons).
+  // Notice that in the previous analysis (analysisTrackAndVertices_2)
+  // we have classified the visible and total energy in the calorimeter
+  // according to only the hadrons produced directly by the primary
+  // hadronic inelastic interaction, whereas here we are considering
+  // all hadrons, no matter when they have been generated.
+
+  for ( std::map< G4int, structInfoAboutTrack >::const_iterator 
+	  cit = mapInfoAboutTrack.begin(); 
+	cit != mapInfoAboutTrack.end(); ++cit ) {
+
+    G4double evis = cit->second.theTrackVisibleEdep;
+    G4double etot = cit->second.theTrackDepositedEtot; 
+
+    // For each track, we look for its ancestors until we find a 
+    // track of the following type: pi0, or pi+, or pi-, or p, or n,
+    // or light ion (d, t, 3He, alpha).
+    bool isFound = false;
+    std::map< G4int, structInfoAboutTrack >::const_iterator cit_bis = cit;
+    G4int parentId = cit->second.theParentTrackID;
+    G4int pdgcode = 0;
+    G4String name = "";
+    while ( parentId > 0  &&  ! isFound ) {
+      pdgcode = cit_bis->second.theParticlePDGCode;
+      name = cit_bis->second.theParticleName;
+      if ( pdgcode == pionZeroId  ||
+	   pdgcode == pionPlusId  ||  
+	   pdgcode == pionMinusId ||
+	   pdgcode == protonId    ||
+	   pdgcode == neutronId   ||
+	   name    == "deuteron"  || 
+	   name    == "triton"    ||
+	   name    == "alpha"     ||
+	   name    == "He3"      ) {
+	isFound = true;
+      } else {
+	cit_bis = mapInfoAboutTrack.find( parentId );
+	if ( cit_bis != mapInfoAboutTrack.end() ) {
+	  parentId = cit_bis->second.theParentTrackID;
+        } else {
+	  G4cout << "*** StatAccepTestAnalysis::analysisTrackAndVertices_3 : WARNING ***"
+		 << "\t parentId = " << parentId << " NOT found in the map!" << G4endl;
+	  parentId = 0;
+	}
+      }
+    }
+
+    //G4cout << "\t Examining track_id = " << cit->first              //***DEBUG*** 
+    //       << "\t" << cit->second.theParticleName << G4endl; 
+    if ( isFound ) {
+      //G4cout << "\t \t FOUND  closest hadron: " << cit_bis->first 
+      //       << "\t" << cit_bis->second.theParticleName << G4endl;  //***DEBUG***
+      if ( pdgcode == pionZeroId ) {
+         sumEvis_closest_pi0 += evis;
+	 sumEtot_closest_pi0 += etot;
+      } else if ( pdgcode == pionPlusId ) {  
+         sumEvis_closest_pip += evis;
+	 sumEtot_closest_pip += etot;
+      } else if ( pdgcode == pionMinusId ) {
+         sumEvis_closest_pim += evis;
+	 sumEtot_closest_pim += etot;
+      } else if ( pdgcode == protonId ) {
+         sumEvis_closest_p += evis;
+	 sumEtot_closest_p += etot;
+      } else if ( pdgcode == neutronId ) {
+         sumEvis_closest_n += evis;
+	 sumEtot_closest_n += etot;
+      } else if ( name == "deuteron"  || 
+		  name == "triton"    ||
+		  name == "alpha"     ||
+		  name == "He3" ) {
+         sumEvis_closest_lightion += evis;
+	 sumEtot_closest_lightion += etot;
+      }
+    } // end if ( isFound )
+  } // End of loop over mapInfoAboutTrack
+}
+
+
+void StatAccepTestAnalysis::analysisTrackAndVertices_4() {
+  // We know that the dominat component of the visible and
+  // and total energy deposited in a calorimeter is due to
+  // electromagnetic, i.e. ionization of e- and e+.
+  // We want to investigate here which are the closest hadrons
+  // that produce those e- and e+ : we expect that the largest
+  // contribution would come from pi0, but we want to see how
+  // much and who produces the rest.
+
+  for ( std::map< G4int, structInfoAboutTrack >::const_iterator 
+	  cit = mapInfoAboutTrack.begin(); 
+	cit != mapInfoAboutTrack.end(); ++cit ) {
+
+    // Skip any other track but electron and positron.
+    if ( cit->second.theParticlePDGCode == electronId  ||
+         cit->second.theParticlePDGCode == positronId ) {
+	 
+      G4double evis = cit->second.theTrackVisibleEdep;
+      G4double etot = cit->second.theTrackDepositedEtot; 
+
+      // We look for the ancestors of the selected track (e- or e+)
+      // until we find a track of the following type: 
+      // pi0, or pi+, or pi-, or p, or n, or 
+      // light ion (d, t, 3He, alpha).
+      bool isFound = false;
+      std::map< G4int, structInfoAboutTrack >::const_iterator cit_bis = cit;
+      G4int parentId = cit->second.theParentTrackID;
+      G4int pdgcode = 0;
+      G4String name = "";
+      while ( parentId > 0  &&  ! isFound ) {
+	pdgcode = cit_bis->second.theParticlePDGCode;
+	name = cit_bis->second.theParticleName;
+	// The first time the if statement below is evaluated
+	// it is not satisfied for sure, because the track is
+	// e- or e+. However, we prefer to keep the structure
+	// of the loop exactly as it was for the previous
+	// analysis (analysisTrackAndVertices_3).
+	if ( pdgcode == pionZeroId  ||
+	     pdgcode == pionPlusId  ||  
+	     pdgcode == pionMinusId ||
+	     pdgcode == protonId    ||
+	     pdgcode == neutronId   ||
+	     name    == "deuteron"  || 
+	     name    == "triton"    ||
+	     name    == "alpha"     ||
+	     name    == "He3"      ) {
+	  isFound = true;
+	} else {
+	  cit_bis = mapInfoAboutTrack.find( parentId );
+	  if ( cit_bis != mapInfoAboutTrack.end() ) {
+	    parentId = cit_bis->second.theParentTrackID;
+	  } else {
+	    G4cout << "***StatAccepTestAnalysis::analysisTrackAndVertices_4: WARNING ***"
+		   << "\t parentId = " << parentId << " NOT found in the map!" << G4endl;
+	    parentId = 0;
+	  }
+	}
+      }
+
+      //G4cout << "\t Examining track_id = " << cit->first              //***DEBUG*** 
+      //       << "\t" << cit->second.theParticleName << G4endl; 
+      if ( isFound ) {
+	//G4cout << "\t \t FOUND  em closest hadron : " << cit_bis->first 
+	//       << "\t" << cit_bis->second.theParticleName << G4endl;  //***DEBUG***
+	if ( pdgcode == pionZeroId ) {
+	  sumEvis_em_from_pi0 += evis;
+	  sumEtot_em_from_pi0 += etot;
+	} else if ( pdgcode == pionPlusId ) {  
+	  sumEvis_em_from_pip += evis;
+	  sumEtot_em_from_pip += etot;
+	} else if ( pdgcode == pionMinusId ) {
+	  sumEvis_em_from_pim += evis;
+	  sumEtot_em_from_pim += etot;
+	} else if ( pdgcode == protonId ) {
+	  sumEvis_em_from_p += evis;
+	  sumEtot_em_from_p += etot;
+	} else if ( pdgcode == neutronId ) {
+	  sumEvis_em_from_n += evis;
+	  sumEtot_em_from_n += etot;
+	} else if ( name == "deuteron"  || 
+		    name == "triton"    ||
+		    name == "alpha"     ||
+		    name == "He3" ) {
+	  sumEvis_em_from_lightion += evis;
+	  sumEtot_em_from_lightion += etot;
+	}
+      } // end if ( isFound )
+    } // end if electron or positron
+  } // End of loop over mapInfoAboutTrack
+}

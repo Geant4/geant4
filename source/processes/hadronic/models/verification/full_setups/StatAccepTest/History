@@ -1,6 +1,15 @@
                  History file
                  ------------
 
+31-Jul-2009 - A.Ribon (statAccepTest-V09-02-04)
+- Introduced in the analysis class (StatAccepTestAnalysis)
+  the possibility to have a detail map of tracks and
+  vertices, in order to link calorimeter observables
+  with hadronic interactions.
+  By default this is switched off; if it is turned on,
+  the execution becomes an order of magnitude longer.
+
+
 23-Jul-2009 - A.Ribon (statAccepTest-V09-02-03)
 - Fixed the problem that caused a low Grid efficiency
   in the June 2009 release testing, namely the absence

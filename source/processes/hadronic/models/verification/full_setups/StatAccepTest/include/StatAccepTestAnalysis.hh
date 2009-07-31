@@ -105,6 +105,8 @@ private:
 
   static bool isMapParticleNamesOn;  // To switch on/off the map of particle names.
 
+  static bool isMapInfoAboutTrackOn; // To switch on/off the map of track info.
+
   static G4double infParticleEkin_electron; // Energy thresholds for electrons,
   static G4double supParticleEkin_electron; // only for electron-information.
   static G4double infParticleEkin_muon;     // Energy thresholds for muons,
@@ -450,6 +452,114 @@ private:
 
   // Monitor the CPU time event by event.
   std::multiset<G4double> eventTimeSet;
+
+
+  // You will find below the member variables and methods that
+  // are needed to analyse the interactions using tracks and
+  // vertices.
+
+  struct structInfoAboutTrack {
+    G4String theParticleName;
+    G4double theTrackEkinAtCreation;
+    G4double theTrackVisibleEdep;   // Energy deposited in active layers
+    G4double theTrackDepositedEtot; // Energy deposited in the whole calorimeter
+    G4int theParticlePDGCode;
+    G4int theStartingVertexID;      // Index of mapInfoAboutVertex (see below)
+    G4int theParentTrackID;
+    G4int theClosestHadronicRelativeID;  // Track id of the particle that 
+                                         // originates the closest hadronic 
+                                         // interaction from which, directly 
+                                         // or indirectly, the current track
+                                         // comes from.
+    G4int theClosestHadronicVertexID;    // As above, for the vertex id.
+  };
+  std::map< G4int, structInfoAboutTrack > mapInfoAboutTrack;  
+  // The above map keeps the information about all tracks created 
+  // in an event. It is reset at the beginning of each event.
+  // This map uses the integer "track id" as index.
+  // Notice that the "track id" starts with 1, which is always the
+  // primary beam particle.
+  // theStartingVertexID , and  theParentTrackID  should be 0 for,
+  // and only for, the primary particle.
+  // theClosestHadronicRelativeID , and  theClosestHadronicVertexID
+  // should be 0 for, and only for, the primary particle and for any 
+  // (electromagnetic) particle produced by the primary particle 
+  // before the first hadronic interaction occurs (e.g. via ionization
+  // and/or bremsstrahlung).
+
+  struct structInfoAboutVertex {
+    G4String theCreatorProcessName;
+    G4String theVertexVolumeName;
+    G4double theVertexPosition_x;
+    G4double theVertexPosition_y;
+    G4double theVertexPosition_z;
+    G4int theCreatorTrackID;
+    G4int theCreatorProcessType;     // The meaning is (see G4ProcessType.hh):
+                                     //    0  :  fNotDefined
+                                     //    1  :  fTransportation
+                                     //    2  :  fElectromagnetic
+                                     //    3  :  fOptical
+                                     //    4  :  fHadronic
+                                     //    5  :  fPhotolepton_hadron
+                                     //    6  :  fDecay
+                                     //    7  :  fGeneral
+                                     //    8  :  fParameterisation
+                                     //    9  :  fUserDefined
+    G4int theCreatorProcessSubType;  // The meaning is (see G4HadronicProcessType.hh):
+                                     //  111  :  fHadronElastic
+                                     //  121  :  fHadronInelastic
+                                     //  131  :  fCapture
+                                     //  141  :  fFission
+                                     //  151  :  fHadronAtRest
+                                     //  161  :  fChargeExchange
+  };
+  std::map< G4int, structInfoAboutVertex > mapInfoAboutVertex;
+  // The above map keeps the information about all the vertices created 
+  // in an event. It is reset at the beginning of each event.
+  // This map uses an integer index which does not have other meanings
+  // besides to be a unique identifier for each vertex, starting with 1.
+  // Notice that the same track can be the "creator" of more than one 
+  // vertices (because some processes, like ionization, bremsstrahlung,
+  // hadronic elastic, etc. can keep the same track id as the parent 
+  // for one of its children).
+  // Not always the first vertex corresponds to the (first) 
+  // hadronic interaction of the primary beam: in fact, it
+  // could have some electromagnetic interactions (e.g. 
+  // ionization or bremsstrahlung) before.
+  // All the data members of each element of the map should have
+  // meaningful values, e.g. non-null strings and integers values.
+
+  // Variables which accumulates statistics for end-of-run analysis
+  // concerning tracks and vertices.
+  G4int countNumberOfTracks, countNumberOfVertices, countNumberOfHadronicVertices;
+  G4double sumEvis_em, sumEtot_em, sumEvis_p, sumEtot_p, sumEvis_pi, sumEtot_pi,
+    sumEvis_ion, sumEtot_ion;
+  G4double sumEvis_from1stInterac_pi0, sumEtot_from1stInterac_pi0,
+    sumEvis_from1stInterac_pip, sumEtot_from1stInterac_pip,
+    sumEvis_from1stInterac_pim, sumEtot_from1stInterac_pim,
+    sumEvis_from1stInterac_p, sumEtot_from1stInterac_p,
+    sumEvis_from1stInterac_n, sumEtot_from1stInterac_n,
+    sumEvis_from1stInterac_lightion, sumEtot_from1stInterac_lightion;
+  G4double sumEvis_closest_pi0, sumEtot_closest_pi0,
+    sumEvis_closest_pip, sumEtot_closest_pip,
+    sumEvis_closest_pim, sumEtot_closest_pim,
+    sumEvis_closest_p, sumEtot_closest_p,
+    sumEvis_closest_n, sumEtot_closest_n,
+    sumEvis_closest_lightion, sumEtot_closest_lightion;
+  G4double sumEvis_em_from_pi0, sumEtot_em_from_pi0,
+    sumEvis_em_from_pip, sumEtot_em_from_pip,
+    sumEvis_em_from_pim, sumEtot_em_from_pim,
+    sumEvis_em_from_p, sumEtot_em_from_p,
+    sumEvis_em_from_n, sumEtot_em_from_n,
+    sumEvis_em_from_lightion, sumEtot_em_from_lightion;
+
+  // Different analysis methods
+  void analysisTrackAndVertices_0();
+  void analysisTrackAndVertices_1();
+  void analysisTrackAndVertices_2();
+  void analysisTrackAndVertices_3();
+  void analysisTrackAndVertices_4();
+
 
 #ifdef G4ANALYSIS_USE
 
