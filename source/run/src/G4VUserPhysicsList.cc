@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.67 2009-07-31 06:47:25 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.68 2009-07-31 09:20:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -542,6 +542,9 @@ void G4VUserPhysicsList::BuildPhysicsTable()
       BuildPhysicsTable(particle); 
     }
   }
+  
+  // SetFlag
+  fIsPhysicsTableBuilt =true;  
 }
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
