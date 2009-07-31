@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.31 2008-06-08 12:43:19 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.32 2009-07-31 06:39:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,7 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4DecayTable.hh"
 #include "G4PDGCodeChecker.hh"
 
@@ -109,9 +110,7 @@ G4ParticleDefinition::G4ParticleDefinition(
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
-   // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
-   theParticleTable->Insert(this);
    
    //set verboseLevel equal to ParticleTable 
    verboseLevel = theParticleTable->GetVerboseLevel();
@@ -127,6 +126,15 @@ G4ParticleDefinition::G4ParticleDefinition(
      }
 #endif
    }
+   
+   if (theParticleTable->GetIonTable()->IsIon(this)) {
+     SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
+     SetAtomicMass( GetBaryonNumber() );
+   }
+
+   // check name and register this particle into ParticleTable
+   theParticleTable->Insert(this);
+
 }
 
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.33 2008-06-08 12:55:45 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.34 2009-07-31 06:39:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -234,7 +234,8 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
     if (contains(particle)) {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-	G4cout << "The particle has same name "<< G4endl;
+	G4cout << "The particle " << particle->GetParticleName() 
+	       << "has been already registered in the Particle Table "<< G4endl;
       }
       if (verboseLevel>1){
         FindParticle(particle) -> DumpTable();

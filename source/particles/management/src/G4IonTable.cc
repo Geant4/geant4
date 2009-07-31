@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.55 2009-04-02 02:24:53 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.56 2009-07-31 06:39:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,8 +166,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   ion->SetAntiPDGEncoding(0);
   
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
-    G4cout << "G4IonTable::CreateIon() : create ion of " << name << G4endl;
+   if (GetVerboseLevel()>1) {
+    G4cout << "G4IonTable::CreateIon() : create ion of " << name
+	   << "  " << Z << ", " << A
+	   << " encoding=" << encoding << G4endl;
   } 
 #endif
   
@@ -242,7 +244,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "G4IonTable::CreateIon() : create ion of " << name << G4endl;
+    G4cout << "G4IonTable::CreateIon() : create hyper ion of " << name 
+	   << " encoding=" << encoding << G4endl;
   } 
 #endif
   
@@ -368,20 +371,14 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
-  G4IonList::iterator idx;
-  for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
-    ion = *idx;
+  G4int encoding=GetNucleusEncoding(Z, A, 0);
+  G4IonList::iterator i = fIonList->find(encoding);
+  for( ;i != fIonList->end() ; i++) {
+    ion = i->second;
 
-    // Z = Atomic Number 
-    G4int     anAtomicNumber   = ion->GetAtomicNumber();
-     // A = baryon number
-    G4int  anAtomicMass    =  ion->GetAtomicMass();
      // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-
-    if ( (A == anAtomicMass) && 
-         (Z == anAtomicNumber ) && 
-	 ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+    if ( ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
       isFound = true;
       break;
     }
@@ -420,23 +417,15 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
-  G4IonList::iterator idx;
-  for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
-    ion = *idx;
+  G4int encoding=GetNucleusEncoding(Z, A, L);
+  G4IonList::iterator i = fIonList->find(encoding);
+  for( ;i != fIonList->end() ; i++) {
+    ion = i->second;
 
-    // Z = Atomic Number 
-    G4int     anAtomicNumber   = ion->GetAtomicNumber();
-    // A = baryon number
-    G4int  anAtomicMass    =  ion->GetAtomicMass();
-    // L = lambda number
-    G4int lambdaNumber = ion->GetQuarkContent(3);
      // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
 
-    if ( (A == anAtomicMass) && 
-         (Z == anAtomicNumber ) && 
-	 (L == lambdaNumber ) && 
-	 ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+    if ( ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
       isFound = true;
       break;
     }
@@ -585,7 +574,7 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4double E) co
 }
 
 /////////////////
-G4bool G4IonTable::IsIon(G4ParticleDefinition* particle)
+G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
@@ -701,20 +690,33 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A, G4int L) const
 /////////////////
 void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
-  if (IsIon(particle)) {
-    fIonList->push_back(particle);
-  }
+  if (!IsIon(particle)) return;
+  if (Contains(particle)) return;
+ 
+  G4int Z = particle->GetAtomicNumber();
+  G4int A = particle->GetAtomicMass();  
+  G4int L = particle->GetQuarkContent(3);  //strangeness 
+  G4int encoding=GetNucleusEncoding(Z, A, L);
+
+  fIonList->insert( std::pair<G4int, G4ParticleDefinition*>(encoding, particle) );
+
 }
 
 /////////////////
 void G4IonTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
-    G4IonList::iterator idx;
-    for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
-      if ( particle == *idx) {
-        fIonList->erase(idx);
-        break;
+    G4int Z = particle->GetAtomicNumber();
+    G4int A = particle->GetAtomicMass();  
+    G4int L = particle->GetQuarkContent(3);  //strangeness 
+    G4int encoding=GetNucleusEncoding(Z, A, L);
+    if (encoding !=0 ) {
+      G4IonList::iterator i = fIonList->find(encoding);
+      for( ;i != fIonList->end() ; i++) {
+	if (particle == i->second) {
+	  fIonList->erase(i);
+	  break;
+	}
       }
     }
   } else {
@@ -738,7 +740,7 @@ void G4IonTable::DumpTable(const G4String &particle_name) const
   G4ParticleDefinition* ion;
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
-    ion = *idx;
+    ion = idx->second;
     if (( particle_name == "ALL" ) || (particle_name == "all")){
       ion->DumpTable();
     } else if ( particle_name == ion->GetParticleName() ) {
@@ -859,7 +861,44 @@ G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
 }
 
 
+////////////////////
+void G4IonTable::CreateAllIon()
+{
+  G4int    Z; 
+  G4int    A;
+  G4double E=0.0; 
+  G4int    J=0;
+  
+  for (Z=1; Z<=120; Z++) {
+    for (A=Z;A<999 && A<Z*3+10; A++) {
+      if (G4NucleiProperties::IsInStableTable(A,Z)){      
+	GetIon(Z,A,E,J);
+      }
+    }
+  }
+}
 
+////////////////////
+G4ParticleDefinition* G4IonTable::GetParticle(G4int index) const
+{
+  if ( (index >=0) && (index < Entries()) ) {
+    G4IonList::iterator idx = fIonList->begin();
+    G4int counter = 0;
+    while( idx != fIonList->end() ){
+      if ( counter == index ) return idx->second;
+      counter++;
+      idx++;
+    }
+  } 
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>1){
+    G4cout << " G4IonTable::GetParticle";
+    G4cout << " invalid index (=" << index << ")" 
+	   << " entries = " << Entries() << G4endl;
+  }
+#endif
+  return 0;
+}
 
 
 
