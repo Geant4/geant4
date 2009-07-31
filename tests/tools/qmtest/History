@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2009-06-30 16:13:02 gunter Exp $
+$Id: History,v 1.36 2009-07-31 16:28:58 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.35 2009-06-30 16:13:02 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-July 2009 G.Folger                (testtools-QMtest-V09-02-27)
+- add testing of FTF_BIC to test12
+- fix typo in NRCC_E_Benchmark_V1-run.qmt (split line)
 
 30-June 2009 G.Folger                (testtools-QMtest-V09-02-26)
 - ...g01-run had rm in wrong place in previous tag
