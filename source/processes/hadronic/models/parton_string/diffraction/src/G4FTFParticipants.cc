@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.12 2009-07-17 12:47:14 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.13 2009-07-31 11:03:00 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -86,7 +86,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
     G4double xyradius;                          
     xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
                                                       // radius
-    G4bool nucleusNeedsShift = true;
+//    G4bool nucleusNeedsShift = true;                // Uzhi 20 July 2009
     
     while ( theInteractions.size() == 0 )
     {
@@ -95,13 +95,17 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	G4double impactX = theImpactParameter.first; 
 	G4double impactY = theImpactParameter.second;
 
+        G4ThreeVector thePosition(impactX, impactY, -DBL_MAX);     //Uzhi 24 July 09 
+        primarySplitable->SetPosition(thePosition);                //Uzhi 24 July 09
+
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
 //G4int InterNumber=0;           // Uzhi
-//G4int NucleonNumber(0);        // Uzhi
+G4int NucleonNumber(0);        // Uzhi
 //while ( (nucleon=theNucleus->GetNextNucleon())&& (InterNumber < 1) ) // Uzhi
 	while ( (nucleon=theNucleus->GetNextNucleon()) ) // Uzhi
 	{
+//G4cout<<"Nucl# "<<NucleonNumber<<G4endl; // Vova
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
                              sqr(impactY - nucleon->GetPosition().y());
 
@@ -110,6 +114,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 		> G4UniformRand() )
 	   {
 //InterNumber++;
+/*                                                    // Uzhi 20 July 2009
 	   	if ( nucleusNeedsShift ) 
 	   	{			// on the first hit, shift nucleus 
 	   	     nucleusNeedsShift = false;
@@ -117,12 +122,14 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	   	     impactX=0;
 	   	     impactY=0;
 	   	}
-
+*/                                                    // Uzhi 20 July 2009
+//G4cout<<"          Interact"<<G4endl;
                 primarySplitable->SetStatus(1);        // It takes part in the interaction
 
 		G4VSplitableHadron * targetSplitable=0;
 	   	if ( ! nucleon->AreYouHit() )
 	   	{
+//G4cout<<"Part "<<nucleon->Get4Momentum()<<G4endl;
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
                     targetSplitable->SetStatus(1);     // It takes part in the interaction
@@ -133,7 +140,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
                 aInteraction->SetTargetNucleon(nucleon);     // Uzhi 16.07.09
 		theInteractions.push_back(aInteraction);
 	   }
-//NucleonNumber++; // Uzhi
+NucleonNumber++; // Uzhi
 	}    
 // // Uzhi
 //	G4cout << "Number of Hit nucleons " << theInteractions.size()<<G4endl; //  entries() 

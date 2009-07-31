@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.6 2009-07-17 12:47:14 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.7 2009-07-31 11:03:00 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4FTFParameters.hh"
+
+#include "G4ios.hh"
+#include <utility>                                        // Uzhi 29.03.08
 
 G4FTFParameters::G4FTFParameters()
 {;}
@@ -42,7 +45,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                                                    G4double   theA,
                                                    G4double   theZ,
                                                    G4double   s) 
-    {
+{
     G4int PDGcode = particle->GetPDGEncoding();
     G4int absPDGcode = std::abs(PDGcode);
     G4double ProjectileMass = particle->GetPDGMass();
@@ -182,7 +185,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetElastisCrossSection(Xelastic);
       SetInelasticCrossSection(Xtotal-Xelastic);
 
-//  // Interactions with elastic ans inelastic collisions
+//  // Interactions with elastic and inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
 //
@@ -258,7 +261,25 @@ SetProbabilityOfTarDiff(0.05);
               SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
-             };
+             }
 
-    } 
+// --------- Set parameters of nuclear destruction--------------------
+
+    if( absPDGcode < 1000 ) 
+    {
+      SetCofNuclearDestruction(1.0);                 // for meson projectile
+    } else if( theA > 20. )
+    {
+      SetCofNuclearDestruction(0.2);                 // for baryon projectile and heavy target
+    } else
+    {
+      SetCofNuclearDestruction(1.0);                 // for baryon projectile and light target
+    }
+
+    SetR2ofNuclearDestruction(1.5*fermi*fermi);
+
+    SetDofNuclearDestruction(0.3);
+    SetPt2ofNuclearDestruction(0.17*GeV*GeV);
+    SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
+} 
 //**********************************************************************************************

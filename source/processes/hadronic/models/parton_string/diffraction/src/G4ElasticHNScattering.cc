@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.6 2009-07-17 12:47:14 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.7 2009-07-31 11:03:00 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -63,7 +63,7 @@ G4bool G4ElasticHNScattering::
 
            if(Pprojectile.z() < 0.)
            {
-            target->SetStatus(0);                                   // Uzhi 17.07.09
+            target->SetStatus(2);                                   // Uzhi 17.07.09
             return false;                                           // Uzhi 9.07.09
            } 
 
@@ -72,6 +72,12 @@ G4bool G4ElasticHNScattering::
      G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition();//Uzhi 24.06.09
 //   G4int    absProjectilePDGcode=std::abs(ProjectilePDGcode);
 
+//G4cout<<"In elast proj"<<ProjectilePDGcode;
+/*
+G4cout<<"Elastic interaction------------------"<<G4endl;
+G4cout<<"Proj PDG "<<ProjectilePDGcode<<" Activ? "<<projectile->GetStatus()<<G4endl;
+G4cout<<"Mom "<<Pprojectile<<" mass "<<Pprojectile.mag()<<G4endl;
+*/
            G4bool PutOnMassShell(false);
 
 	   G4double M0projectile = Pprojectile.mag();                        
@@ -88,13 +94,19 @@ G4bool G4ElasticHNScattering::
 
 // -------------------- Target parameters ----------------------------------------------
      G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding(); // Uzhi 24.06.09
+
+//G4cout<<" targ "<<TargetPDGcode<<G4endl;
+
 //   G4int    absTargetPDGcode=std::abs(TargetPDGcode);
 
   	   G4LorentzVector Ptarget=target->Get4Momentum();
            G4double TargetRapidity = Ptarget.rapidity();               // Uzhi 24.06.09
 	   G4double M0target = Ptarget.mag();
 //G4cout<<" Mp Mt Pt2 "<<M0projectile<<" "<<M0target<<" "<<AveragePt2/GeV/GeV<<G4endl;
-
+/*
+G4cout<<"Targ PDG "<<TargetPDGcode<<" Activ? "<<target->GetStatus()<<G4endl;
+G4cout<<"Mom "<<Ptarget<<" mass "<<M0target<<G4endl;
+*/
            if(M0target < target->GetDefinition()->GetPDGMass()) 
              {
               PutOnMassShell=true;
@@ -116,7 +128,7 @@ G4bool G4ElasticHNScattering::
 	   {
 	   // "String" moving backwards in  CMS, abort collision !!
            //G4cout << " abort Collision!! " << G4endl;
-                   target->SetStatus(0);                                   // Uzhi 17.07.09
+                   target->SetStatus(2);                                   // Uzhi 17.07.09
 		   return false; 
 	   }
 	   		   
@@ -151,7 +163,7 @@ G4bool G4ElasticHNScattering::
             }
             else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
             {
-             target->SetStatus(0);                                   // Uzhi 17.07.09
+             target->SetStatus(2);                                   // Uzhi 17.07.09
              return false;                   // The projectile was not excited,
                                              // but the energy was too low to put
                                              // the target nucleon on mass-shell

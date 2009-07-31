@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.3 2009-07-17 12:47:14 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.4 2009-07-31 11:03:00 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -70,6 +70,15 @@ class G4FTFParameters
         void SetAveragePt2(const G4double aValue);
    // Perevod mass*GeV Pt2*GeV*GeV
 
+// --------- Set parameters of nuclear destruction--------------------
+        void SetCofNuclearDestruction(const G4double aValue);
+        void SetR2ofNuclearDestruction(const G4double aValue);
+
+        void SetDofNuclearDestruction(const G4double aValue);
+        void SetPt2ofNuclearDestruction(const G4double aValue);
+        void SetMaxPt2ofNuclearDestruction(const G4double aValue);
+
+//--------------------------------------------------------------------
 // --------- Get geometrical parameteres -----------------------------
 	G4double GetTotalCrossSection();
 	G4double GetElasticCrossSection();
@@ -93,8 +102,15 @@ class G4FTFParameters
         G4double GetTarMinNonDiffMass();
         G4double GetProbabilityOfTarDiff();
 
-
         G4double GetAveragePt2();
+
+// --------- Get parameters of nuclear destruction---------------------
+        G4double GetCofNuclearDestruction();
+        G4double GetR2ofNuclearDestruction();
+
+        G4double GetDofNuclearDestruction();
+        G4double GetPt2ofNuclearDestruction();
+        G4double GetMaxPt2ofNuclearDestruction();
 
 //  private: 
 
@@ -123,6 +139,15 @@ class G4FTFParameters
         G4double ProbabilityOfTarDiff;
 
         G4double AveragePt2;
+
+// --------- Parameters of nuclear destruction------------------------
+        G4double CofNuclearDestruction;
+        G4double R2ofNuclearDestruction;
+
+        G4double DofNuclearDestruction;     
+        G4double Pt2ofNuclearDestruction;
+        G4double MaxPt2ofNuclearDestruction;
+
 };
 
 // --------------------------------------------------------------------
@@ -183,6 +208,19 @@ inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
              {AveragePt2 = aValue*GeV*GeV;}
 
+// --------- Set parameters of nuclear destruction--------------------
+inline  void G4FTFParameters::SetCofNuclearDestruction(const G4double aValue)
+             {CofNuclearDestruction = aValue;}
+inline  void G4FTFParameters::SetR2ofNuclearDestruction(const G4double aValue)
+             {R2ofNuclearDestruction = aValue;}
+
+inline  void G4FTFParameters::SetDofNuclearDestruction(const G4double aValue)
+             {DofNuclearDestruction = aValue;}
+inline  void G4FTFParameters::SetPt2ofNuclearDestruction(const G4double aValue)
+             {Pt2ofNuclearDestruction =aValue;}
+inline  void G4FTFParameters::SetMaxPt2ofNuclearDestruction(const G4double aValue)
+             {MaxPt2ofNuclearDestruction = aValue;}
+
 // --------- Get geometrical parameteres ------------------------------
 inline  G4double G4FTFParameters::GetTotalCrossSection()     {return FTFXtotal;}
 inline  G4double G4FTFParameters::GetElasticCrossSection()   {return FTFXelastic;}
@@ -220,4 +258,13 @@ inline  G4double G4FTFParameters::GetProbabilityOfTarDiff()   {return Probabilit
 
 inline  G4double G4FTFParameters::GetAveragePt2()             {return AveragePt2;}
 
+// --------- Get parameters of nuclear destruction---------------------
+inline  G4double G4FTFParameters::GetCofNuclearDestruction(){return CofNuclearDestruction;}
+inline  G4double G4FTFParameters::GetR2ofNuclearDestruction(){return R2ofNuclearDestruction;}
+
+inline  G4double G4FTFParameters::GetDofNuclearDestruction()
+                 {return DofNuclearDestruction;}
+inline  G4double G4FTFParameters::GetPt2ofNuclearDestruction(){return Pt2ofNuclearDestruction;}
+inline  G4double G4FTFParameters::GetMaxPt2ofNuclearDestruction()
+                 {return MaxPt2ofNuclearDestruction;}
 #endif

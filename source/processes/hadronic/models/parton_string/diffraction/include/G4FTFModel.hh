@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.7 2008-04-25 14:20:13 vuzhinsk Exp $
+// $Id: G4FTFModel.hh,v 1.8 2009-07-31 11:03:00 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -81,13 +81,19 @@ class G4FTFModel : public G4VPartonStringModel
   protected:
   
   private:
+       void ReggeonCascade();
+       G4bool PutOnMassShell();
        G4bool ExciteParticipants();
        G4ExcitedStringVector * BuildStrings();
+       G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
   
   private:     
 
        G4ReactionProduct theProjectile;       
        G4FTFParticipants theParticipants;
+       
+       G4Nucleon * TheInvolvedNucleon[250];
+       G4int NumberOfInvolvedNucleon;
 
        G4FTFParameters  *theParameters;        // Uzhi  29.03.08
        G4DiffractiveExcitation * theExcitation;

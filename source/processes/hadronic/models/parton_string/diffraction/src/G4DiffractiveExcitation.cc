@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.10 2009-07-17 12:47:14 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.11 2009-07-31 11:03:00 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -72,7 +72,7 @@ G4bool G4DiffractiveExcitation::
 
            if(Pprojectile.z() < 0.)
            {
-            target->SetStatus(0);                                   // Uzhi 17.07.09
+            target->SetStatus(2);                                   // Uzhi 17.07.09
             return false;                                           // Uzhi 16.07.09
            } 
 
@@ -87,7 +87,7 @@ G4bool G4DiffractiveExcitation::
      G4double M0projectile = Pprojectile.mag();                       // Without de-excitation
 /*
 G4cout<<"ExciteParticipants-------------------"<<G4endl;
-G4cout<<"Proj PDG "<<ProjectilePDGcode<<" Activ? "<<projectile->GetActivation()<<G4endl;
+G4cout<<"Proj PDG "<<ProjectilePDGcode<<" Activ? "<<projectile->GetStatus()<<G4endl;
 G4cout<<"Mom "<<Pprojectile<<" mass "<<M0projectile<<G4endl;
 */
      if(M0projectile < projectile->GetDefinition()->GetPDGMass())
@@ -112,7 +112,7 @@ G4cout<<ProjectileDiffStateMinMass<<" "<<ProjectileNonDiffStateMinMass<<" "<<Pro
      G4double M0target = Ptarget.mag();
      G4double TargetRapidity = Ptarget.rapidity();            // Uzhi 24.06.09
 /*
-G4cout<<"Targ PDG "<<TargetPDGcode<<" Activ? "<<target->GetActivation()<<G4endl;
+G4cout<<"Targ PDG "<<TargetPDGcode<<" Activ? "<<target->GetStatus()<<G4endl;
 G4cout<<"Mom "<<Ptarget<<" mass "<<M0target<<G4endl;
 */
      if(M0target < target->GetDefinition()->GetPDGMass())
@@ -143,9 +143,9 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
      G4LorentzVector Ptmp=toCms*Pprojectile;
      if ( Ptmp.pz() <= 0. )
         {
-          target->SetStatus(0);                                   // Uzhi 17.07.09
+          target->SetStatus(2);                                   // Uzhi 17.07.09
 	   // "String" moving backwards in  CMS, abort collision !!
-           //G4cout << " abort Collision!! " << G4endl;
+//G4cout << " abort Collision!! " << G4endl;
           return false;
 	 }
 
@@ -161,20 +161,21 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
 
      G4double SqrtS=std::sqrt(S);
 
+//G4cout<<"Energy low?"<<G4endl;
      if(absProjectilePDGcode > 1000 && SqrtS < 2200*MeV)
-     {target->SetStatus(0);  return false;}  // The model cannot work for
+     {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // p+p-interactions
                                              // at Plab < 1.3 GeV/c.
 
      if(( absProjectilePDGcode == 211 || ProjectilePDGcode ==  111) && SqrtS < 1600*MeV)
-     {target->SetStatus(0);  return false;}  // The model cannot work for
+     {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // Pi+p-interactions
                                              // at Plab < 1. GeV/c.
 
      if(( (absProjectilePDGcode == 321) || (ProjectilePDGcode == -311)   ||
           (absProjectilePDGcode == 311) || (absProjectilePDGcode == 130) ||  // Uzhi 16.07.09
           (absProjectilePDGcode == 310)) && SqrtS < 1600*MeV)
-     {target->SetStatus(0);  return false;}  // The model cannot work for
+     {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // K+p-interactions
                                              // at Plab < ??? GeV/c.  ???
 
@@ -182,8 +183,9 @@ G4cout<<TargetDiffStateMinMass<<" "<<TargetNonDiffStateMinMass<<" "<<ProbTargetD
              2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
              /4./S;
 
+//G4cout<<"Pzcms2 "<<PZcms2<<G4endl;
      if(PZcms2 < 0)
-     {target->SetStatus(0);  return false;}   // It can be in an interaction with 
+     {target->SetStatus(2);  return false;}   // It can be in an interaction with 
                                               // off-shell nuclear nucleon
 
      PZcms = std::sqrt(PZcms2);
@@ -239,6 +241,8 @@ G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
      if((absProjectilePDGcode < 1000) &&       // Absorption  Uzhi 7.07.09
         (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
      {
+//G4cout<<"Absorption"<<G4endl;
+
       G4int ProjQ1=  absProjectilePDGcode/ 100;
       G4int ProjQ2= (absProjectilePDGcode %100)/10;
 	   
@@ -256,7 +260,7 @@ G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
 
 //G4cout<<" Targ Qs "<<TargQ1<<" "<<TargQ2<<" "<<TargQ3<<G4endl;
 
-      G4int CombinedSystemQ1, CombinedSystemQ2, CombinedSystemQ3;
+      G4int CombinedSystemQ1(0), CombinedSystemQ2(0), CombinedSystemQ3(0);
 
       if(ProjQ1 < 0)        // Q1 of the projectile is anti-quark
       {
@@ -376,9 +380,9 @@ G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
       theParameters->SetProjMinNonDiffMass(theParameters->GetTarMinNonDiffMass()/GeV);
       theParameters->SetProbabilityOfProjDiff(theParameters->GetProbabilityOfTarDiff());      
 
-      projectile->SetStatus(2);
+      projectile->SetStatus(3);
 //
-      target->SetStatus(2);
+      target->SetStatus(3);
 
       projectile->IncrementCollisionCount(1);
       target->IncrementCollisionCount(1);
@@ -392,6 +396,7 @@ G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
 // ------------------- Ordinary job of the Fritiof model -----------
 //ProbProjectileDiffraction=1.;
 //ProbTargetDiffraction    =1.;
+
      G4double ProbOfDiffraction=ProbProjectileDiffraction +
                                 ProbTargetDiffraction;
 
@@ -447,7 +452,7 @@ G4cout<<"maxPtSquare "<<maxPtSquare<<G4endl;
              if (whilecount > 1000 )
              {
               Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              target->SetStatus(0);  return false;    //  Ignore this interaction
+              target->SetStatus(2);  return false;    //  Ignore this interaction
              };
 // --------------- Check that the interaction is possible -----------
              ProjMassT2=ProjectileDiffStateMinMass2;
@@ -467,7 +472,7 @@ if(PZcms2 < 0 )
 G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 G4int Uzhi; G4cin>>Uzhi;
 */
-target->SetStatus(0);  
+target->SetStatus(2);  
 return false;
 };
              maxPtSquare=PZcms2;
@@ -521,7 +526,7 @@ return false;
              if (whilecount > 1000 )
              {
               Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              target->SetStatus(0);  return false;    //  Ignore this interaction
+              target->SetStatus(2);  return false;    //  Ignore this interaction
              };
 // --------------- Check that the interaction is possible -----------
              ProjMassT2=M0projectile2;
@@ -541,7 +546,7 @@ if(PZcms2 < 0 )
 G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 G4int Uzhi; G4cin>>Uzhi;
 */
-target->SetStatus(0);  
+target->SetStatus(2);  
 return false;
 };
              maxPtSquare=PZcms2;
@@ -604,7 +609,7 @@ return false;
              if (whilecount > 1000 )
              {
               Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-              target->SetStatus(0);  return false;    //  Ignore this interaction
+              target->SetStatus(2);  return false;    //  Ignore this interaction
              };
 // --------------- Check that the interaction is possible -----------
              ProjMassT2=ProjectileNonDiffStateMinMass2;
@@ -624,7 +629,7 @@ if(PZcms2 < 0 )
 G4cout<<"whilecount "<<whilecount<<" "<<Pt2<<" "<<ProjMassT<<" "<<TargMassT<<" "<<PZcms2<<G4endl;
 G4int Uzhi; G4cin>>Uzhi;
 */
-target->SetStatus(0);  
+target->SetStatus(2);  
 return false;
 };
              maxPtSquare=PZcms2;
@@ -710,12 +715,12 @@ G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
 // Transform back and update SplitableHadron Participant.
 	   Pprojectile.transform(toLab);
 	   Ptarget.transform(toLab);
-
-//G4cout << "Pprojectile with Q M: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
-//G4cout << "Ptarget     with Q M: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
-//G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
-//G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
-
+/*
+G4cout << "Pprojectile with Q M: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
+G4cout << "Ptarget     with Q M: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
+G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
+G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
+*/
 /*
 if(!Flip){
 	   projectile->Set4Momentum(Pprojectile);
@@ -739,11 +744,13 @@ if(G4UniformRand() < 1.) {
 */ // For flip, for HARP
 
            G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
+
 // It is assumed that nucleon z-coordinates are ordered on increasing -----------
 
            G4double betta_z=projectile->Get4Momentum().pz()/projectile->Get4Momentum().e();
 
            G4double ZcoordinateOfPreviousCollision=projectile->GetPosition().z();
+
            if(projectile->GetSoftCollisionCount()==0) {
               projectile->SetTimeOfCreation(0.);
               target->SetTimeOfCreation(0.);
@@ -780,9 +787,10 @@ G4ExcitedString * G4DiffractiveExcitation::
            String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 {
 
-//G4cout<<"G4DiffractiveExcitation::String isProj"<<isProjectile<<G4endl;
+//G4cout<<"G4DiffractiveExcitation::String isProj "<<isProjectile<<" "<<hadron->GetDefinition()->GetParticleName()<<G4endl;
 
 	hadron->SplitUp();
+//G4cout<<"After splitUp"<<G4endl;
 	G4Parton *start= hadron->GetNextParton();
 	if ( start==NULL)
 	{ G4cout << " G4FTFModel::String() Error:No start parton found"<< G4endl;
