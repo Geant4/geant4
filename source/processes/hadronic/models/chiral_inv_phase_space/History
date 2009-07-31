@@ -1,36 +1,21 @@
--------------------------------------------------------------------
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
 
-      History file for the Chiral Invariant Phase Space Model
-      -------------------------------------------------------
+History file for  hadronic/models/chiral_inv_phase_space/body  directory.
+	
+Summarize all code modifications & keep track of all tags in this file.
 
-This file should be used to summarize modifications introduced in the 
-code and to keep track of all tags.
+****************************************************************************
+*** Geant4 developers can not make changes in this directory or make the ***
+*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
+****************************************************************************
 
-   ---------------------------------------------------------------
-   * Please list in reverse chronological order (last date on top)
-   ---------------------------------------------------------------
+     -----------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top) *
+     -----------------------------------------------------------------
 
-29 Apr 2009 - M.Kosov (hadr-chips-V09-02-01)
---------------------------------------------
-History file update with the coheren change with the QGSC from E=0 improvement
-
-29 Apr 2009 - M.Kosov (hadr-chips-inter-V09-02-02  to  hadr-chips-inter-V09-02-05)
---------------------------------------------------------------------------------------
-1. Better readability of the CHIPS code (get rid of tab's etc)
-1. Tuning of the G4QCollision for better description of the pA interactions (E<290 MeV)
-2. Improvement of the G4QuasiFreeRatios for application in QGSC from E=0
-3. In the G4QDiscProcessManager the deleting of processes is deligated to users
-4. Order of models is changed in G4QDiscProcessMixer (was from L to H, now from H to L)
-
-
-(hadr-chips-body-V09-01-04  to  hadr-chips-body-V09-00-20) ??
---------------------------------------------------------------------------------------
-
-29 Apr 2009 - M.Kosov (hadr-chips-body-V09-02-01  to  hadr-chips-body-V09-02-02)
---------------------------------------------------------------------------------------
-1. Better readability of the CHIPS code (get rid of tab's etc.)
-2. Bug fix: "Avoid /A when A=0 in G4QEnvironment"
+31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
+-----------------------------------------------------------------------
+Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)

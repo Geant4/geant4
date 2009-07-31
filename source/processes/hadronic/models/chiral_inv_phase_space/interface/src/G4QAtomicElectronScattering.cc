@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.cc,v 1.5 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QAtomicElectronScattering.cc,v 1.6 2009-07-31 12:43:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QAtomicElectronScattering class -----------------
@@ -62,7 +62,6 @@ G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& process
   G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // Clusterization param's
   G4Quasmon::SetParameters(Temperature,SSin2Gluons,EtaEtaprime);  // Hadronic parameters
   G4QEnvironment::SetParameters(SolidAngle); // SolAngle of pbar-A secondary mesons capture
-  //@@ Initialize here the G4QuasmonString parameters
 }
 
 G4bool   G4QAtomicElectronScattering::manualFlag=false; // If false:use standard parameters
@@ -456,8 +455,8 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   G4cout<<"G4QAtomElScat::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
   G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->------*
-  if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)         |
-  { //                                                                                   |
+  //if(momentum<1000.)// Condition for using G4QEnvironment (not G4QuasmonString)         |
+  //{//                                                                                   |
     G4QHadronVector projHV;                                 //                           |
     projHV.push_back(pH);                                   // DESTROYED over 2 lines -* |
     G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----* | |
@@ -479,43 +478,43 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
       G4Exception("G4QAtomElScat::PostStepDoIt:","27",FatalException,"CHIPScrash");//|   .
     }                                                             //                 |   ^
     delete pan;                              // Delete the Nuclear Environment <--<--*   .
-  } //                                                                                   ^
-  else               // Use G4QuasmonString                                              .
-  { //                                                                                   ^
-    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --*   .
-    delete pH;                                                    // --------<-------+---+
-#ifdef debug
-    G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
-    G4cout<<"G4QAtomElectScat::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //|
-#endif
-    //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
-    try                                                           //                 |
-    {                                                             //                 |
-      delete output;                                              //                 |
-      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
-      //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
-      //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
-      //{//                                                                          |
-      //  elF=true;                   // Just put a flag for the ellastic Scattering |
-      //  delete output;              // Delete a prototype of dummy G4QHadronVector |
-      //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
-      //}//                                                                          |
-      //eWei=pan->GetWeight();        // Just an example for the weight of the event |
-#ifdef debug
-      //G4cout<<"=====>>G4QAtomElScat::PostStepDoIt:elF="<<elF<<",n="<<tNH<<G4endl;//|
-#endif
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
-    }                                                             //                 |
-    catch (G4QException& error)//                                                    |
-    {                                                             //                 |
-      //#ifdef pdebug
-      G4cerr<<"**G4QAtomElectScat::PostStepDoIt: GEN Exception is catched"<<G4endl;//|
-      //#endif
-      G4Exception("G4QAtomElSct::AtRestDoIt:","27",FatalException,"QString Excep");//|
-    }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ---<--*
-  }
+  //}//                                                                                   ^
+  //else              // Use G4QuasmonString                                              .
+  //{//                                                                                   ^
+  //  G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --*  .
+  //  delete pH;                                                    // --------<-------+--+
+  //#ifdef debug
+  //  G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
+  //  G4cout<<"G4QAtomElectScat::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //|
+  //#endif
+  //  G4int tNH=0;                    // Prototype of the number of secondaries inOut|
+  //  try                                                           //                 |
+  //  {                                                             //                 |
+  //    delete output;                                              //                 |
+  //    output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
+  //    //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
+  //    //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
+  //    //{//                                                                          |
+  //    //  elF=true;                   // Just put a flag for the ellastic Scattering |
+  //    //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+  //    //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
+  //    //}//                                                                          |
+  //    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
+  //#ifdef debug
+  //    //G4cout<<"=====>>G4QAtomElScat::PostStepDoIt:elF="<<elF<<",n="<<tNH<<G4endl;//|
+  //#endif
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
+  //  }                                                             //                 |
+  //  catch (G4QException& error)//                                                    |
+  //  {                                                             //                 |
+  //    //#ifdef pdebug
+  //    G4cerr<<"**G4QAtomElectScat::PostStepDoIt: GEN Exception is catched"<<G4endl;//|
+  //    //#endif
+  //    G4Exception("G4QAtomElSct::AtRestDoIt:","27",FatalException,"QString Excep");//|
+  //  }                                                             //                 |
+  //  delete pan;                              // Delete the Nuclear Environment ---<--*
+  //}
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();

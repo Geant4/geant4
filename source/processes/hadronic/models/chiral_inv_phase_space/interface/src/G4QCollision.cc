@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.39 2009-07-24 16:37:49 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.40 2009-07-31 12:43:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1194,13 +1194,13 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt:*QS* piA nteraction, Z = "<<Z<<", N = "<<N<<G4endl;
 #endif
-    G4QFragmentation DINR;                   // Define the deep-inelastic nuclear reaction
     const G4QNucleus targNuc(Z,N);           // Define the target nucleus
     const G4QHadron projPi(projPDG,proj4M);  // Define the projectile pion
+    G4QFragmentation DINR(targNuc, projPi);  // Define the deep-inelastic nuclear reaction
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt: ==>>> Before QS interaction"<<G4endl;
 #endif
-    output=DINR.Breeder(targNuc, projPi);    // Make the reaction
+    output=DINR.Fragment();                  // Make the reaction
     G4int nOut=output->size();               // Length of the output
 #ifdef debug
     G4cout<<"G4QCollision::PostStepDoIt: <<<== After QS interaction nOut = "<<nOut<<G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicElectronScattering.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QAtomicElectronScattering.hh,v 1.4 2009-07-31 12:43:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QAtomicElectronScattering header ----------------
@@ -74,7 +74,6 @@
 #include "G4QPhotonNuclearCrossSection.hh"
 #include "G4QMuonNuclearCrossSection.hh"
 #include "G4QTauNuclearCrossSection.hh"
-#include "G4QuasmonString.hh"
 #include "G4QPDGToG4Particle.hh"
 //<vector> is included in G4QIsotope.hh
 //#include <vector>
