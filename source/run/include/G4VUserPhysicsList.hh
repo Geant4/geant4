@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.37 2009-06-13 01:35:25 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.38 2009-07-31 06:47:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -297,6 +297,9 @@ class G4VUserPhysicsList
 
    // flag for displaying the range cuts & energy thresholds
    G4int fDisplayThreshold;
+
+  // flag for Physics Table has been built 
+   G4bool fIsPhysicsTableBuilt;
 
   private:
    enum { FixedStringLengthForStore = 32 }; 

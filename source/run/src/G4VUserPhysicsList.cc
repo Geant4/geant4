@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.66 2009-05-22 00:47:45 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.67 2009-07-31 06:47:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
                     fDisplayThreshold(0),
+                    fIsPhysicsTableBuilt(false),
                     useCoupledTransportation(false)
 {
   // default cut value  (1.0mm)
@@ -183,7 +184,8 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     newManager->DumpInfo();
   }
 #endif
-  if (newParticle->GetParticleType() == "nucleus") {
+  if ( fIsPhysicsTableBuilt &&
+       (newParticle->GetParticleType() == "nucleus") ) {
     PreparePhysicsTable(newParticle);
     BuildPhysicsTable(newParticle);
   }
