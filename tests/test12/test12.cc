@@ -34,6 +34,7 @@
 #include "Tst12StackingAction.hh"
 
 #include "FTFP.hh"
+#include "FTF_BIC.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -49,7 +50,23 @@ int main(int argc,char** argv) {
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;
+  G4VUserPhysicsList * thePL(0);
+  G4String inputFileName="-";
+  if (argc > 2) { // second arg is PhysicsList
 
+     if (argv[2] == "FTFP" ) thePL=new FTFP;
+     else if (argv[2] == "FTF_BIC" ) thePL=new FTF_BIC;
+
+     G4cout << "Test12 using physics list " << argv[2] << G4endl;
+  }
+  if ( !thePL ) {
+     thePL=new FTFP;
+     G4cout << "Test12 using physics list FTFP (default)" << G4endl;
+  }
+  
+  if (argc>1 ) inputFileName=argv[1];
+     
+  
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst12DetectorConstruction);
   //  runManager->SetUserInitialization(new Tst12PhysicsList);
@@ -60,7 +77,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new Tst12PrimaryGeneratorAction);
   runManager->SetUserAction(new Tst12StackingAction);
 
-  if(argc==1)
+  if(inputFileName == "-")
   {
     // G4UIterminal is a (dumb) terminal.
     G4UIsession* session = new G4UIterminal;
@@ -71,8 +88,7 @@ int main(int argc,char** argv) {
   {
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+inputFileName);
   }
 
   delete runManager;
