@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.19 2009-04-02 02:43:42 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.20 2009-08-01 07:57:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 #include "G4RToEConvForElectron.hh"
 #include "G4RToEConvForGamma.hh"
 #include "G4RToEConvForPositron.hh"
+#include "G4RToEConvForProton.hh"
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
@@ -126,6 +127,10 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
     if(G4ParticleTable::GetParticleTable()->FindParticle("e+")){
       converters[2] = new G4RToEConvForPositron(); 
       converters[2]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("proton")){
+      converters[3] = new G4RToEConvForProton(); 
+      converters[3]->SetVerboseLevel(GetVerboseLevel());
     }
     firstUse = false;
   }
@@ -271,10 +276,8 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   if (range <=0.0) return -1.0;
 
   // check particle
-  G4int index = -1;
-  if (particle->GetParticleName() == "gamma") index = 0;
-  if (particle->GetParticleName() == "e-")    index = 1;
-  if (particle->GetParticleName() == "e+")    index = 2;
+  G4int index = G4ProductionCuts::GetIndex(particle);
+
   if (index<0) {
 #ifdef G4VERBOSE  
     if (verboseLevel >1) {
@@ -349,17 +352,19 @@ void G4ProductionCutsTable::DumpCouples() const
     G4cout << G4endl;
     G4cout << " Material : " << aCouple->GetMaterial()->GetName() << G4endl;
     G4cout << " Range cuts        : " 
-           << " gamma " << G4BestUnit(aCut->GetProductionCut("gamma"),"Length")
-           << "    e- " << G4BestUnit(aCut->GetProductionCut("e-"),"Length")
-           << "    e+ " << G4BestUnit(aCut->GetProductionCut("e+"),"Length")
+           << " gamma  " << G4BestUnit(aCut->GetProductionCut("gamma"),"Length")
+           << "    e-  " << G4BestUnit(aCut->GetProductionCut("e-"),"Length")
+           << "    e+  " << G4BestUnit(aCut->GetProductionCut("e+"),"Length")
+           << " proton " << G4BestUnit(aCut->GetProductionCut("proton"),"Length")
            << G4endl;
     G4cout << " Energy thresholds : " ;
     if(aCouple->IsRecalcNeeded()) {
       G4cout << " is not ready to print";
     } else {
-      G4cout << " gamma " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
-             << "    e- " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
-             << "    e+ " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy");
+      G4cout << " gamma  " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
+             << "    e-  " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
+             << "    e+  " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy") 
+	     << " proton " << G4BestUnit((*(energyCutTable[3]))[aCouple->GetIndex()],"Energy");
     }
     G4cout << G4endl;
 
@@ -449,7 +454,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL-V2.0";
+  const G4String key = "MATERIAL-V3.0";
   std::ofstream fOut;  
 
   // open output file //
@@ -532,7 +537,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL-V2.0";
+  const G4String key = "MATERIAL-V3.0";
   std::ifstream fIn;  
 
   // open input file //
@@ -654,7 +659,7 @@ G4bool
 						    G4bool          ascii)
 {  
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE-V2.0";
+  const G4String key = "COUPLE-V3.0";
   std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
 
@@ -781,7 +786,7 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
                                                    G4bool          ascii )
 {
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE-V2.0";
+  const G4String key = "COUPLE-V3.0";
   std::ifstream fIn;  
 
   // open input file //
@@ -949,7 +954,7 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
                                               G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT-V2.0";
+  const G4String key = "CUT-V3.0";
   std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
   
@@ -1023,7 +1028,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT-V2.0";
+  const G4String key = "CUT-V3.0";
   std::ifstream fIn;  
 
   // open input file //

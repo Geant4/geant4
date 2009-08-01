@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.cc,v 1.3 2006-06-29 19:30:30 gunter Exp $
+// $Id: G4RToEConvForProton.cc,v 1.4 2009-08-01 07:57:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,5 +55,13 @@ G4RToEConvForProton::G4RToEConvForProton() : G4VRangeToEnergyConverter()
 
 G4RToEConvForProton::~G4RToEConvForProton()
 { 
+}
+
+
+G4double G4RToEConvForProton::Convert(G4double rangeCut, const G4Material* )
+{
+  // Simple formula
+  //   range = Ekin/(100*keV)*(1*mm);
+  return (rangeCut/(1.0*mm)) * (100.0*keV); 
 }
 

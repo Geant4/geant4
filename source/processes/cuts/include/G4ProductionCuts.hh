@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.4 2006-06-29 19:29:48 gunter Exp $
+// $Id: G4ProductionCuts.hh,v 1.5 2009-08-01 07:57:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 //
 // ------------------------------------------------------------
 //   First Implementation          17 Sep. 2002  H.Kurahige
+//   Add cuts for proton           28 Jul. 2009  H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4ProductionCuts_h 
@@ -52,6 +53,8 @@ enum G4ProductionCutsIndex
   idxG4GammaCut =0,
   idxG4ElectronCut,
   idxG4PositronCut,
+ 
+  idxG4ProtonCut,  // for proton
 
   NumberOfG4CutIndex
 };
@@ -114,6 +117,9 @@ class G4ProductionCuts
   static const G4ParticleDefinition* gammaDef;
   static const G4ParticleDefinition* electDef;
   static const G4ParticleDefinition* positDef;
+
+  static const G4ParticleDefinition* protonDef; // for proton
+
 };
 
 

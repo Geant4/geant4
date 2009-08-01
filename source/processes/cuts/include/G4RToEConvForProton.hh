@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.hh,v 1.2 2006-06-29 19:30:04 gunter Exp $
+// $Id: G4RToEConvForProton.hh,v 1.3 2009-08-01 07:57:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ class G4RToEConvForProton : public G4VRangeToEnergyConverter
   //  destructor
   virtual ~G4RToEConvForProton();
 
-
+  virtual G4double Convert(G4double rangeCut, const G4Material* material);
 
 };
 
