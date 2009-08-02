@@ -9,6 +9,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+03.08.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-25
+            - Added ability to select the geometry using G4 macro commands
+            - Improved plotting scripts and improved normalization for the
+              fragment energy distribution
+
 27.07.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-24
             - IAEA geometry: added ability to remove the phantom by setting its thickness to zero
             - Collect simulation metadata: number of events, distance of the detector (IAEA geometry),

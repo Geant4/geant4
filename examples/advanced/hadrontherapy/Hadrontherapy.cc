@@ -64,6 +64,9 @@
 
 #include "IAEADetectorConstruction.hh"
 
+#include "HadrontherapyGeometryController.hh"
+#include "HadrontherapyGeometryMessenger.hh"
+
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
@@ -87,18 +90,12 @@ int main(int argc ,char ** argv)
   analysis -> book();
 #endif
 
-  // Initialize the geometry
-  if(argc > 1) {
-    G4String iaeaFlag = argv[1];
-    if(iaeaFlag == "macro/iaea.mac" || iaeaFlag == "iaea.mac") {
-      G4cout <<"Geometry for IAEA Benchmark" << G4endl;
-      runManager -> SetUserInitialization(new IAEADetectorConstruction());
-    } else {
-      runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
-    }
-  } else {
-    runManager -> SetUserInitialization(new HadrontherapyDetectorConstruction());
-  }
+  // Initialize the geometry user interface
+  HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
+  HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
+
+  // Initialize the default Hadrontherapy geometry
+  geometryController->SetGeometry("default");
 
   // Initialize the physics 
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
@@ -162,6 +159,9 @@ int main(int argc ,char ** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
+  delete geometryMessenger;
+  delete geometryController;
 
   delete runManager;
 

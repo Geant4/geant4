@@ -19,8 +19,10 @@
  */
 void fragmentEnergy() {
 
-//   gROOT->SetStyle("clearRetro");
-
+//   gROOT->SetStyle("clearRetro"); //For stylesheet
+////////////////////////////////////////
+//////     Importing data      /////////
+////////////////////////////////////////
    TString dir = gSystem->UnixPathName(gInterpreter->GetCurrentMacroName());
    dir.ReplaceAll("basic.C","");
    dir.ReplaceAll("/./","/");
@@ -52,13 +54,13 @@ void fragmentEnergy() {
    ntuple->Draw("Li:Energy","","l,Same");
    ntuple->Draw("Be:Energy","","l,Same");
    printf(" found %d points\n",nlines);
-   //Let's pull in the monte carlo analysis results
-
+   
+   //Let's pull in the monte carlo simulation results
    TCanvas *mc = new TCanvas("mc", "Simulation");
    TFile *MCData = TFile::Open("IAEA.root");
    TH1F* MC_helium = (TH1F*)MCData->Get("heliumEnergyAfterPhantom");
    TH1F* MC_hydrogen = (TH1F*)MCData->Get("hydrogenEnergyAfterPhantom");
-		//scale and plot
+	//scale and plot
    TNtuple *fragments = (TNtuple*) MCData->Get("fragmentNtuple");
 
    //Block bellow pulls out the simulation's metadata from the metadata ntuple.
@@ -74,71 +76,79 @@ void fragmentEnergy() {
 
 	//analysis numbers based on metadata
 	Double_t scatteringDistance = detectorDistance - phantomCenterDistance;
-   Double_t detectorSideLength = 4; //hardcoded, we have a zero angle square detector
+    Double_t detectorSideLength = 4; //hardcoded, we have a zero angle square detector
 	//good to keep for ref. G4 might give weird units due to change.
 	metadata->Scan();
 
-   //fragments->Scan();
-
-   Double_t ScaleHelium = 1/(MC_helium->Integral());
-   Double_t ScaleHydrogen = 1/(MC_hydrogen->Integral()); 
-   //x should also be scaled to per nucleon
    
-   MC_helium->Scale(ScaleHelium);
-//   MC_helium->Draw("");
-   //printf("Scaled helium by %.9f\n",ScaleHelium);
-
-   MC_hydrogen->Scale(ScaleHydrogen);
-   MC_hydrogen->SetLineColor(kRed);
-//   MC_hydrogen->Draw("Same");
-  // printf("Scaled hydrogen by %.9f\n",ScaleHydrogen);
-   
-   TH1F *histH = new TH1F("histH", "Hydrogen", 60, 0.0, 450.0);
-   TH1F *histHe = new TH1F("histHe", "Helium", 60, 0.0, 450.0);
+   Double_t binAmount = 50.0; //casting from int failed somehow, so in float temporarily, fixme
+   Double_t maxEnergy = 450.0;
+   Double_t binWidth = maxEnergy / binAmount;
+   TH1F *histH = new TH1F("histH", "Hydrogen", binAmount, 0.0, maxEnergy);
+   //HistH will be black
+   TH1F *histHe = new TH1F("histHe", "Helium", binAmount, 0.0, maxEnergy);
    histHe->SetLineColor(kRed);
-   TH1F *histLi = new TH1F("histLi", "Lithium", 60, 0.0, 450.0);
+   TH1F *histLi = new TH1F("histLi", "Lithium", binAmount, 0.0, maxEnergy);
    histLi->SetLineColor(kBlue);
-   TH1F *histBe = new TH1F("histBe", "Beryllium", 60, 0.0, 450.0);
+   TH1F *histBe = new TH1F("histBe", "Beryllium", binAmount, 0.0, maxEnergy);
    histBe->SetLineColor(kGreen);
-   TH1F *histB = new TH1F("histB", "Boron", 60, 0.0, 450.0);
+   TH1F *histB = new TH1F("histB", "Boron", binAmount, 0.0, maxEnergy);
    histB->SetLineColor(kYellow);
-   TH1F *histC = new TH1F("histC", "Carbon", 60, 0.0, 450.0);
+   TH1F *histC = new TH1F("histC", "Carbon", binAmount, 0.0, maxEnergy);
 
 	TH1F* histPos = new TH1F("histPos", "check position",100,-2000,2000);
-	//The steradian calculation is a bit of an approx as we have a square detector and the covering area is approximated to be the are of the square which it isn't
-	Double_t steradians = (detectorSideLength * detectorSideLength) / (4*TMath::Pi()*scatteringDistance);
-   TString normalization(Form("/%f", steradians*events));
+	//Solid angle according to \Omega = 4 \arcsin \frac {\alpha\beta} {\sqrt{(4d^2+\alpha^2)(4d^2+\beta^2)}}
+	Double_t steradians = 4 * TMath::ASin(pow(detectorSideLength,2.0) / (4*pow(scatteringDistance,2) + pow(detectorSideLength,2)) );
+   std::cout << "Detector seen at solid angle: " << steradians << endl;
+   TString normalization(Form("/%f", steradians*events*binWidth));
 
    fragments->SetLineColor(kRed);
    fragments->SetMarkerStyle(22);
    
-   fragments->Draw("posY:posZ", "abs(posZ) < 20 && abs(posY) < 20");
+   fragments->Draw("posY:posZ", "abs(posZ) < 2 && abs(posY) < 2");
 
-   fragments->Draw("energy >> histHe", "(Z == 2 && energy > 45 && abs(posY) < 2 && abs(posZ) < 2)" + normalization);
+	TString halfSideLengthString(Form("%f", detectorSideLength/2));
+
    
    fragments->SetLineColor(kGreen);
+   fragments->Project("histHe", "energy", "(Z == 2 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histB", "energy", "(Z == 5 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histH", "energy", "(Z == 1 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histLi", "energy", "(Z == 3 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histBe", "energy", "(Z == 4 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histB", "energy", "(Z == 5 && energy > 45 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
 
-   fragments->Draw("energy >> histB", "(Z == 5 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
-   fragments->Draw("energy >> histH", "(Z == 1 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
-   fragments->Draw("energy >> histLi", "(Z == 3 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
-   fragments->Draw("energy >> histBe", "(Z == 4 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
-   fragments->Draw("energy >> histB", "(Z == 5 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
-//   fragments->Draw("energy >> histC", "(Z == 6 && energy > 45 && abs(posY) < 200 && abs(posZ) < 200)" + normalization, "same");
+   histH->Draw("");
+   //TAxis *Yaxis = histH->GetYaxis();
+   //Yaxis->set
+   histH->SetMaximum(0.3);
+   histHe->Draw("same");
+   histLi->Draw("same");
+   histBe->Draw("same");
+   histB->Draw("same");
+
+	/*
+	 * This is cludgy but the previous plots can't contain <45MeV stuff but hte following calcualtions need them
+	 * Thus there is another projection done with different selections, this is error-prone, 
+	 * se to that changes are made in both places.
+	 * */
+   fragments->Project("histHe", "energy", "(Z == 2 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization);
+   fragments->Project("histB", "energy", "(Z == 5 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization, "same");
+   fragments->Project("histH", "energy", "(Z == 1 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization, "same");
+   fragments->Project("histLi", "energy", "(Z == 3 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization, "same");
+   fragments->Project("histBe", "energy", "(Z == 4 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization, "same");
+   fragments->Project("histB", "energy", "(Z == 5 && energy > 0 && abs(posY) < " + halfSideLengthString + " && abs(posZ) < " + halfSideLengthString + " )" + normalization, "same");
 
 
+	
    TCanvas *c3 = new TCanvas("histograms", "Histograms");
    Int_t nEve = events; //redundant
 
-
+   cout <<"H : " << histH->GetEntries() / nEve << endl;
+   histH->Draw("");
 
    cout <<"He : " << histHe->GetEntries() / nEve << endl;
-   histHe->Draw("");
-
-
-   cout <<"H : " << histH->GetEntries() / nEve << endl;
-   histH->Draw("same");
-
-
+   histHe->Draw("same");
     
    cout <<"Li : " << histLi->GetEntries() / nEve << endl;
    histLi->Draw("same");

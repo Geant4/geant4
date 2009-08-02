@@ -73,9 +73,9 @@ IAEADetectorConstruction::IAEADetectorConstruction()
   detectorMessenger = new IAEADetectorMessenger(this);
 
   // Detector sizes
-  detectorSizeX = 20.*mm;
-  detectorSizeY = 20.*mm;
-  detectorSizeZ = 20.*mm;
+  detectorSizeX = 20.*cm;
+  detectorSizeY = 20.*cm;
+  detectorSizeZ = 20.*cm;
 
   // Number of the detector voxels  
   numberOfVoxelsAlongX = 200;
@@ -248,7 +248,8 @@ void IAEADetectorConstruction::ConstructDetector()
 					      "DetectorLog",
 					      0,0,0);
   
-  G4double detectorXtranslation = -180.*mm;
+  //G4double detectorXtranslation = -180.*mm;
+  G4double detectorXtranslation = -180.*cm;
   detectorPhysicalVolume = new G4PVPlacement(0,
 					     G4ThreeVector(detectorXtranslation, 0.0 *mm, 0.0 *mm),
 					     "DetectorPhys",
@@ -266,12 +267,11 @@ void IAEADetectorConstruction::ConstructDetector()
   //Visualization attributes for the beamwindow
   
   //-----------
-  // NewDetector (mwpc etc. type behind hte phantom)
+  // NewDetector (mwpc etc. type behind the phantom)
   //-----------
   G4Material* NewDetectorMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", false);
   G4Box* NewDetector = new G4Box("NewDetector",endDetectorThickness/2,190.*cm,190.*cm); //huge detector, will be scaled in root
   //For integrated angular distribution below
-  //G4Box* NewDetector = new G4Box("NewDetector",3.7*cm,104.*cm,104.*cm);
   NewDetectorLogicalVolume = new G4LogicalVolume(NewDetector,
 					      NewDetectorMaterial,
 					      "NewDetectorLog",
@@ -301,7 +301,6 @@ void  IAEADetectorConstruction::ConstructSensitiveDetector()
   G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
 
   G4String sensitiveDetectorName = "Detector"; 
-
   if(!detectorSD)
     {
       // The sensitive detector is instantiated
@@ -309,7 +308,7 @@ void  IAEADetectorConstruction::ConstructSensitiveDetector()
       // The Read Out Geometry is instantiated
       G4String ROGeometryName = "DetectorROGeometry";
       detectorROGeometry = new HadrontherapyDetectorROGeometry(ROGeometryName,
-							     detectorSizeX,
+							     phantomDepth/2,
 							     detectorSizeY,
 							     detectorSizeZ,
 							     numberOfVoxelsAlongX,
