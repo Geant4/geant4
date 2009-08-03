@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh,v 1.4 2008-05-19 13:03:20 vuzhinsk Exp $
+// $Id: G4VParticipants.hh,v 1.5 2009-08-03 13:21:25 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -64,7 +64,7 @@ class G4VParticipants
       G4V3DNucleus * GetWoundedNucleus() const;
 
 
-  protected:
+//  protected:   // Uzhi 26 July 09
 
   
       G4V3DNucleus *theNucleus;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.8 2009-07-17 12:25:33 vuzhinsk Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.9 2009-08-03 13:21:25 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -80,9 +80,10 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
   G4LorentzVector KTsum;
   G4LorentzVector KTsecondaries;
   G4bool NeedEnergyCorrector=false;
-  
+//G4cout<<"Number of strings "<<theStrings->size()<<G4endl;   // Vova  
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
+//G4cout<<"String# "<<astring;  // Vova
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
 	if( !(KTsum.e()<1) && !(KTsum.e()>-1) )
 	{
@@ -104,7 +105,8 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 		G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl;
 		continue;
 	}
-	
+
+//G4cout<<" prod had "<<generatedKineticTracks->size()<<G4endl; // Vova	
 	G4LorentzVector KTsum1;
 	for ( unsigned int aTrack=0; aTrack<generatedKineticTracks->size();aTrack++)
 	{

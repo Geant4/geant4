@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.17 2009-07-17 12:25:33 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.18 2009-08-03 13:21:25 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -508,7 +508,7 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
      G4double kappa = GetStringTensionParameter();
 //G4cout<<"Kappa "<<kappa<<G4endl;                   // Uzhi 20.06.08
 //G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
-
+//G4cout<<"Number of hadrons "<<Hadrons->size()<<G4endl; // Vova
    for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 
