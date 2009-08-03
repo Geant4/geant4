@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.31 2009-08-03 09:43:20 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.32 2009-08-03 14:14:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -207,7 +207,6 @@ private:
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* thePositron;
-  const G4ParticleDefinition* theProton;
 
   G4int                       verboseLevel;
   G4bool                      severalModels;
