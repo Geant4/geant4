@@ -32,7 +32,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
-  LDFLAGS += -bind_at_load
+  LDFLAGS += -bind_at_load -arch_multiple
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
   ifndef X11FLAGS
