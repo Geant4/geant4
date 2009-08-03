@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.68 2009-07-31 09:20:59 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.69 2009-08-03 13:42:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fIsRestoredCutValues(false),
                     directoryPhysicsTable("."),
                     fDisplayThreshold(0),
-                    fIsPhysicsTableBuilt(false),
+		    fIsPhysicsTableBuilt(false),
                     useCoupledTransportation(false)
 {
   // default cut value  (1.0mm)
@@ -184,8 +184,8 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     newManager->DumpInfo();
   }
 #endif
-  if ( fIsPhysicsTableBuilt &&
-       (newParticle->GetParticleType() == "nucleus") ) {
+  if ( fIsPhysicsTableBuilt
+       && (newParticle->GetParticleType() == "nucleus")) {
     PreparePhysicsTable(newParticle);
     BuildPhysicsTable(newParticle);
   }
@@ -451,6 +451,7 @@ void G4VUserPhysicsList::SetCutsWithDefault()
   SetCutValue(cut, "gamma");
   SetCutValue(cut, "e-");
   SetCutValue(cut, "e+");
+  SetCutValue(cut, "proton");
 
   // dump Cut values if verboseLevel==3
   if (verboseLevel>2) {
@@ -466,6 +467,7 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
   SetCutValue(aCut, "gamma", rname);
   SetCutValue(aCut, "e-", rname);
   SetCutValue(aCut, "e+", rname);
+  SetCutValue(aCut, "proton", rname);
 }
 
 
@@ -542,9 +544,10 @@ void G4VUserPhysicsList::BuildPhysicsTable()
       BuildPhysicsTable(particle); 
     }
   }
-  
-  // SetFlag
-  fIsPhysicsTableBuilt =true;  
+
+  // Set flag
+  fIsPhysicsTableBuilt = true;
+
 }
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
@@ -807,6 +810,7 @@ void G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
     theParticleTable->FindParticle("gamma")->SetApplyCutsFlag(value);
     theParticleTable->FindParticle("e-")->SetApplyCutsFlag(value);
     theParticleTable->FindParticle("e+")->SetApplyCutsFlag(value);
+    theParticleTable->FindParticle("proton")->SetApplyCutsFlag(value);
   } else {
     theParticleTable->FindParticle(name)->SetApplyCutsFlag(value);
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.43 2008-07-10 09:27:19 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.44 2009-08-03 13:42:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -475,9 +475,10 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
     }
     G4cout << " Production cuts : "
-           << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
-           << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
-           << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << "  gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+           << "     e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+           << "     e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << " proton " << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
            << G4endl;
   }
 }

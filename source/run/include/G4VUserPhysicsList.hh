@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.38 2009-07-31 06:47:25 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.39 2009-08-03 13:42:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -177,7 +177,7 @@ class G4VUserPhysicsList
   public: // with description
     // Request to print out information of cut values
     // Printing will be performed when all tables are made
-    void DumpCutValuesTable(G4int nParticles=3);
+    void DumpCutValuesTable(G4int nParticles=4);
 
     // The following method actually trigger the print-out requested
     // by the above method. This method must be invoked by RunManager
