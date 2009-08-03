@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.32 2009-08-03 14:14:03 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.33 2009-08-03 15:54:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,7 +53,8 @@
 // 13-05-06 Add GetModel by index method (VI)
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
 // 08-04-08 Simplify Select method for only one G4RegionModel (VI)
-// 02-08-09 Use poiter to cut vector and do not create local copy (VI)
+// 03-08-09 Removed unused members and simplify model search if only one
+//          model is used (VI)
 //
 // Class Description:
 //
@@ -194,19 +195,13 @@ private:
 
   G4int                       nEmModels;
   G4int                       nRegions;
-  G4int                       nCouples;
 
   std::vector<G4int>            idxOfRegionModels;
   std::vector<G4RegionModels*>  setOfRegionModels;
 
-  G4double                    minSubRange;
-  G4double                    maxCutInRange;
   G4double                    maxSubCutInRange;
 
   const G4ParticleDefinition* particle;
-  const G4ParticleDefinition* secondaryParticle;
-  const G4ParticleDefinition* theGamma;
-  const G4ParticleDefinition* thePositron;
 
   G4int                       verboseLevel;
   G4bool                      severalModels;

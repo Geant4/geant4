@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.54 2009-08-03 14:14:03 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.55 2009-08-03 15:54:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
 // 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 // 08-04-08 Fixed and simplified initialisation of G4RegionModel (VI)
-// 02-08-09 Use poiter to cut vector and do not create local copy (VI)
+// 03-08-09 Create internal vectors only it is needed (VI)
 //
 // Class Description:
 //
@@ -121,15 +121,10 @@ G4RegionModels::~G4RegionModels()
 G4EmModelManager::G4EmModelManager():
   nEmModels(0),
   nRegions(0),
-  nCouples(0),
-  minSubRange(0.1),
   particle(0),
   verboseLevel(0)
 {
-  maxCutInRange    = 12.*cm;
   maxSubCutInRange = 0.7*mm;
-  theGamma = G4Gamma::Gamma();
-  thePositron = G4Positron::Positron();
   models.reserve(4);
   flucModels.reserve(4);
   regions.reserve(4);
@@ -155,9 +150,12 @@ void G4EmModelManager::Clear()
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager::Clear()" << G4endl;
   }
-  G4int n = setOfRegionModels.size();
+  size_t n = setOfRegionModels.size();
   if(n > 0) {
-    for(G4int i=0; i<n; ++i) {delete setOfRegionModels[i];}
+    for(size_t i=0; i<n; ++i) {
+      delete setOfRegionModels[i];
+      setOfRegionModels[i] = 0;
+    }
   }
 }
 
@@ -217,10 +215,11 @@ G4VEmModel* G4EmModelManager::GetModel(G4int i, G4bool ver)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
-                                                 const G4ParticleDefinition* sp,
-						 G4double theMinSubRange,
-						 G4int val)
+const G4DataVector* 
+G4EmModelManager::Initialise(const G4ParticleDefinition* p,
+			     const G4ParticleDefinition* secondaryParticle,
+			     G4double minSubRange,
+			     G4int val)
 {
   verboseLevel = val;
   G4String partname = p->GetParticleName();
@@ -229,13 +228,11 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
            << partname << G4endl;
   }
   // Are models defined?
-  if(!nEmModels) {
+  if(nEmModels < 1) {
     G4Exception("G4EmModelManager::Initialise without any model defined for "+partname);
   }
-  particle = p;
-  secondaryParticle = sp;
-  minSubRange = theMinSubRange;
 
+  particle = p;
   Clear(); // needed if run is not first
 
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
@@ -269,10 +266,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
-  if(nRegions > 1) idxOfRegionModels.resize(numOfCouples);
-  if(nEmModels > 1)setOfRegionModels.resize(nRegions);
-  else             setOfRegionModels.resize(1);
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  // prepare vectors, shortcut for the case of only 1 model
+  if(nRegions > 1 && nEmModels > 1) {
+    if(numOfCouples > idxOfRegionModels.size()) idxOfRegionModels.resize(numOfCouples);
+  }
+  size_t nr = 1;
+  if(nEmModels > 1) nr = nRegions;
+  if(nr > setOfRegionModels.size()) setOfRegionModels.resize(nr);
 
   std::vector<G4int>    modelAtRegion(nEmModels);
   std::vector<G4int>    modelOrd(nEmModels);
@@ -375,7 +377,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	    }
 	  }
 	  if(insert) {
-            for(G4int k=n-1; k>=idx; k--) {            
+            for(G4int k=n-1; k>=idx; --k) {    
 	      modelAtRegion[k+1] = modelAtRegion[k];
 	      modelOrd[k+1] = modelOrd[k];
 	      eLow[k+1]  = eLow[k];
@@ -385,7 +387,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	  //G4cout << "push= " << push << " insert= " << insert 
 	  //<< " idx= " << idx <<G4endl;
 	  if (push || insert) {
-            n++;
+            ++n;
 	    modelAtRegion[idx] = ii;
 	    modelOrd[idx] = ord;
 	    eLow[idx]  = tmin;
@@ -421,13 +423,15 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   // Access to materials and build cuts
   size_t idx = 1;
   if(secondaryParticle) {
-    if( secondaryParticle == theGamma )        idx = 0;
-    else if( secondaryParticle == thePositron) idx = 2;
+    if( secondaryParticle == G4Gamma::Gamma() )           idx = 0;
+    else if( secondaryParticle == G4Positron::Positron()) idx = 2;
   }
-  theCuts.resize(numOfCouples);
-  if(minSubRange < 1.0) theSubCuts.resize(numOfCouples);
 
-  for(G4int i=0; i<numOfCouples; ++i) {
+  if(numOfCouples > theCuts.size()) {theCuts.resize(numOfCouples);}
+  if(minSubRange < 1.0 && numOfCouples > theSubCuts.size()) {
+    theSubCuts.resize(numOfCouples);
+  }
+  for(size_t i=0; i<numOfCouples; ++i) {
 
     const G4MaterialCutsCouple* couple = 
       theCoupleTable->GetMaterialCutsCouple(i);
@@ -485,6 +489,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     if(minSubRange < 1.0) theSubCuts[i] = subcut;
   }
 
+  // initialize models
   G4int nn = 0;
   severalModels = true;
   for(G4int jj=0; jj<nEmModels; ++jj) {
@@ -800,10 +805,8 @@ void G4EmModelManager::DumpModelList(G4int verb)
   for(G4int i=0; i<nRegions; ++i) {
     G4RegionModels* r = setOfRegionModels[i];
     const G4Region* reg = r->Region();
-    //    if(verb > -1 || nRegions > 1) {
-    // }
     G4int n = r->NumberOfModels();  
-    if(verb > -1 || n > 0) {
+    if(n > 0) {
       G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; j++) {
@@ -816,6 +819,7 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	       << G4endl;
       }  
     }
+    if(1 == nEmModels) break; 
   }
 }
 
