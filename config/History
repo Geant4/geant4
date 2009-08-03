@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.358 2009-06-17 14:04:32 gunter Exp $
+cvs log $Id: History,v 1.359 2009-08-03 10:02:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17th June 2009 Gunter Folger  (config-V09-02-07)
-- binmake.gmk: Move definition of TARGOBJEXT to place not dependant
-   on G4EXLIB such that the extension is defined when no lib is present
-   (e.g. for test_hadronic_exerciser.cc)
+3rd August 2009 Gabriele Cosmo (config-V09-02-08)
+- Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
+  diagnostics for wrong architecture errors at link stage.
+
+17th June 2009 Gunter Folger (config-V09-02-07)
+- binmake.gmk: moved definition of TARGOBJEXT to place not dependent
+  on G4EXLIB, such that the extension is defined when no lib is present
+  (e.g. for hadronic exercisers).
 
 27th May 2009  Ben Morgan (config-V09-02-06)
 - Configure script:
