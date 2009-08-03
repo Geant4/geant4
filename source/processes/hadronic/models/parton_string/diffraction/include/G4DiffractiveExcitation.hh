@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.2 2008-04-25 14:20:13 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.3 2009-08-03 13:14:19 vuzhinsk Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -41,7 +41,7 @@
 #include "globals.hh"
 class G4VSplitableHadron;
 class G4ExcitedString;
-#include "G4FTFParameters.hh"                            // Uzhi 19.04.08
+#include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
 
 class G4DiffractiveExcitation 
@@ -49,7 +49,7 @@ class G4DiffractiveExcitation
 
   public:
 
-      G4DiffractiveExcitation();                           // Uzhi
+      G4DiffractiveExcitation();
       virtual ~G4DiffractiveExcitation();
 
       virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, 
@@ -62,8 +62,8 @@ class G4DiffractiveExcitation
 
       G4DiffractiveExcitation(const G4DiffractiveExcitation &right);
       
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const; // Uzhi
-      G4double ChooseP(G4double Pmin, G4double Pmax) const;                       // Uzhi
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
+      G4double ChooseP(G4double Pmin, G4double Pmax) const;
       
       const G4DiffractiveExcitation & operator=(const G4DiffractiveExcitation &right);
       int operator==(const G4DiffractiveExcitation &right) const;

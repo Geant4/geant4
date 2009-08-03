@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.8 2009-07-31 11:03:00 vuzhinsk Exp $
+// $Id: G4FTFModel.hh,v 1.9 2009-08-03 13:14:19 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -52,7 +52,7 @@
 class G4VSplitableHadron;
 class G4ExcitedString;
 
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 #include "G4FTFParticipants.hh"
 
 #include "G4ExcitedStringVector.hh"
@@ -63,8 +63,8 @@ class G4FTFModel : public G4VPartonStringModel
 {
 
   public:
-      G4FTFModel();                                          // Uzhi
-      G4FTFModel(G4double , G4double , G4double );           // Uzhi
+      G4FTFModel();
+      G4FTFModel(G4double , G4double , G4double );
       G4FTFModel(G4DiffractiveExcitation * anExcitation);
       G4FTFModel(const G4FTFModel &right);
       ~G4FTFModel();
@@ -95,9 +95,9 @@ class G4FTFModel : public G4VPartonStringModel
        G4Nucleon * TheInvolvedNucleon[250];
        G4int NumberOfInvolvedNucleon;
 
-       G4FTFParameters  *theParameters;        // Uzhi  29.03.08
+       G4FTFParameters  *theParameters;
        G4DiffractiveExcitation * theExcitation;
-       G4ElasticHNScattering   * theElastic;   // Uzhi 29.03.08
+       G4ElasticHNScattering   * theElastic;
 
 
 };
@@ -110,5 +110,3 @@ G4V3DNucleus * G4FTFModel::GetWoundedNucleus() const
 }
 
 #endif
-
-

@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.4 2009-07-31 11:03:00 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.5 2009-08-03 13:14:19 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -59,16 +59,15 @@ class G4FTFParameters
         void SetAvaragePt2ofElasticScattering(const G4double aPt2);
 
 // --------- Set parameters of excitations ---------------------------
-        void SetProjMinDiffMass(const G4double aValue); // Uzhi 19.04.08
+        void SetProjMinDiffMass(const G4double aValue);
         void SetProjMinNonDiffMass(const G4double aValue);
         void SetProbabilityOfProjDiff(const G4double aValue);
 
-        void SetTarMinDiffMass(const G4double aValue);  // Uzhi 19.04.08
+        void SetTarMinDiffMass(const G4double aValue); 
         void SetTarMinNonDiffMass(const G4double aValue);
         void SetProbabilityOfTarDiff(const G4double aValue);
 
         void SetAveragePt2(const G4double aValue);
-   // Perevod mass*GeV Pt2*GeV*GeV
 
 // --------- Set parameters of nuclear destruction--------------------
         void SetCofNuclearDestruction(const G4double aValue);
@@ -94,11 +93,11 @@ class G4FTFParameters
         G4double GetAvaragePt2ofElasticScattering();
 
 // --------- Get parameters of excitations ---------------------------
-        G4double GetProjMinDiffMass(); // Uzhi 19.04.08
+        G4double GetProjMinDiffMass();
         G4double GetProjMinNonDiffMass();
         G4double GetProbabilityOfProjDiff();
 
-        G4double GetTarMinDiffMass();  // Uzhi 19.04.08
+        G4double GetTarMinDiffMass();
         G4double GetTarMinNonDiffMass();
         G4double GetProbabilityOfTarDiff();
 
@@ -130,7 +129,7 @@ class G4FTFParameters
         G4double FTFGamma0;
 
 // --------- Parameters of excitations -------------------------------
-        G4double ProjMinDiffMass; // Uzhi 19.04.08
+        G4double ProjMinDiffMass;
         G4double ProjMinNonDiffMass;
         G4double ProbabilityOfProjDiff;
 
@@ -141,12 +140,12 @@ class G4FTFParameters
         G4double AveragePt2;
 
 // --------- Parameters of nuclear destruction------------------------
-        G4double CofNuclearDestruction;
-        G4double R2ofNuclearDestruction;
+        G4double CofNuclearDestruction;         // Cnd of nuclear destruction
+        G4double R2ofNuclearDestruction;        // R2nd
 
-        G4double DofNuclearDestruction;     
-        G4double Pt2ofNuclearDestruction;
-        G4double MaxPt2ofNuclearDestruction;
+        G4double DofNuclearDestruction;         // D for momentum sampling
+        G4double Pt2ofNuclearDestruction;       // Pt2
+        G4double MaxPt2ofNuclearDestruction;    // Max Pt2
 
 };
 
@@ -186,19 +185,17 @@ inline  void G4FTFParameters::SetGamma0(const G4double Gamma0)
 // --------- Set parameters of elastic scattering ---------------------
 inline  void G4FTFParameters::SetAvaragePt2ofElasticScattering(const G4double aPt2)
                  {
-//G4cout<<"Pt2 El "<<aPt2<<" "<<std::sqrt(aPt2)<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
 AvaragePt2ofElasticScattering = aPt2;}
 
 // --------- Set parameters of excitations ----------------------------
-inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)   // Uzhi 19.04.08
+inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
              {ProjMinDiffMass = aValue*GeV;}
 inline  void G4FTFParameters::SetProjMinNonDiffMass(const G4double aValue)
              {ProjMinNonDiffMass = aValue*GeV;}
 inline  void G4FTFParameters::SetProbabilityOfProjDiff(const G4double aValue)
              {ProbabilityOfProjDiff = aValue;}
 
-inline  void G4FTFParameters::SetTarMinDiffMass(const G4double aValue)  // Uzhi 19.04.08
+inline  void G4FTFParameters::SetTarMinDiffMass(const G4double aValue)
              {TarMinDiffMass = aValue*GeV;}
 inline  void G4FTFParameters::SetTarMinNonDiffMass(const G4double aValue)
              {TarMinNonDiffMass = aValue*GeV;}

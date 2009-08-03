@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.19 2009-07-31 14:36:02 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.20 2009-08-03 13:14:19 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,49 +37,34 @@
 // ------------------------------------------------------------
 
 #include "G4FTFModel.hh"
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 #include "G4FTFParticipants.hh"
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4InteractionContent.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
-#include <utility>                                        // Uzhi 29.03.08
+#include <utility> 
 
 // Class G4FTFModel 
 
 G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
-                         theElastic(new G4ElasticHNScattering()) // Uzhi 29.03.08
+                         theElastic(new G4ElasticHNScattering())
 {
 	G4VPartonStringModel::SetThisPointer(this);
-        theParameters=0;                                         // Uzhi 9.12.08
+        theParameters=0;
 }
-
-/*
-G4FTFModel::G4FTFModel(G4double , G4double , G4double ):theExcitation(new // Uzhi 9.12.08 G4DiffractiveExcitation())
-{
-	G4VPartonStringModel::SetThisPointer(this);
-}
-
-G4FTFModel::G4FTFModel(G4DiffractiveExcitation * anExcitation) 
-: 
-theExcitation(anExcitation)
-{
-	G4VPartonStringModel::SetThisPointer(this);
-}
-*/
 
 
 G4FTFModel::~G4FTFModel()
 {
-   if( theParameters != 0 ) delete theParameters;             // Uzhi 5.12.08
+   if( theParameters != 0 ) delete theParameters; 
 // Because FTF model can be called for various particles
 // theParameters must be erased at the end of each call.
 // Thus the delete is also in G4FTFModel::GetStrings() method
-   if( theExcitation != 0 ) delete theExcitation;             // Uzhi 5.12.08
-   if( theElastic    != 0 ) delete theElastic;                // Uzhi 5.12.08
+   if( theExcitation != 0 ) delete theExcitation;
+   if( theElastic    != 0 ) delete theElastic; 
 }
-
 
 const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
 {
@@ -103,7 +88,7 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
 {
 	theProjectile = aProjectile;  
 	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); 
-// Uzhi N-mass number Z-charge ------------------------- Uzhi 29.03.08
+// ----------- N-mass number Z-charge -------------------------
 
 // --- cms energy
 
@@ -118,10 +103,10 @@ G4cout << " primary space position " << theProjectile.GetPositionInNucleus() << 
 G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 */
 
-      if( theParameters != 0 ) delete theParameters;                    // Uzhi 9.12.08
+      if( theParameters != 0 ) delete theParameters;
       theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
                                           aNucleus.GetN(),aNucleus.GetZ(),
-                                          s);// ------------------------- Uzhi 19.04.08
+                                          s);
 //theParameters->SetProbabilityOfElasticScatt(0.); // To turn on/off (1/0) elastic scattering
 
 }
@@ -139,11 +124,11 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 //G4cout<<"Strings"<<G4endl;
 	G4ExcitedStringVector * theStrings = BuildStrings();
 //G4cout<<"Out FTF"<<G4endl;
-        if( theParameters != 0 )                              // Uzhi 9.12.08 
-        {                                                     // Uzhi 9.12.08
-          delete theParameters;                               // Uzhi 9.12.08
-          theParameters=0;                                    // Uzhi 9.12.08
-        }                                                     // Uzhi 9.12.08
+        if( theParameters != 0 )
+        {
+          delete theParameters;
+          theParameters=0;
+        }
 	return theStrings;
 }
 
@@ -155,11 +140,11 @@ void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 20
 { //--- Implementation of reggeon theory inspired model-------
         NumberOfInvolvedNucleon=0;
 
-G4int PrimInt(0);
+//G4int PrimInt(0);
         theParticipants.StartLoop();
 	while (theParticipants.Next())
 	{
-PrimInt++; 	   
+//PrimInt++; 	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
            G4Nucleon * TargetNucleon=collision.GetTargetNucleon();
 //G4cout<<"Prim Nnucl "<<TargetNucleon->Get4Momentum()<<G4endl;
@@ -171,7 +156,7 @@ PrimInt++;
 
            theParticipants.theNucleus->StartLoop();
            G4Nucleon * Neighbour;
-G4int NucleonNum(0);
+//G4int NucleonNum(0);
 	   while (Neighbour = theParticipants.theNucleus->GetNextNucleon())
            {
             if(!Neighbour->AreYouHit())
@@ -194,11 +179,50 @@ G4int NucleonNum(0);
               targetSplitable->SetStatus(2);     
              }
             }  // end of if(!Neighbour->AreYouHit())
-NucleonNum++;
+//NucleonNum++;
 	   }   // end of while (theParticipant.theNucleus->GetNextNucleon())
 //G4cout<<"Prim Int N Ninvolv "<<PrimInt<<" "<<NumberOfInvolvedNucleon<<G4endl;
 	}      // end of while (theParticipants.Next())
 //G4cout<<"At end "<<PrimInt<<" "<<NumberOfInvolvedNucleon<<G4endl;
+
+// ---------------- Calculation of creation time for each target nucleon -----------
+	theParticipants.StartLoop();    // restart a loop
+        theParticipants.Next();
+	G4VSplitableHadron * primary = theParticipants.GetInteraction().GetProjectile();
+        G4double betta_z=primary->Get4Momentum().pz()/primary->Get4Momentum().e();
+        primary->SetTimeOfCreation(0.);
+
+        G4double ZcoordinateOfPreviousCollision(0.);
+        G4double ZcoordinateOfCurrentInteraction(0.);
+        G4double TimeOfPreviousCollision(0.);
+        G4double TimeOfCurrentCollision(0);
+
+        theParticipants.theNucleus->StartLoop();
+        G4Nucleon * aNucleon;
+        G4bool theFirstInvolvedNucleon(true);
+	while (aNucleon = theParticipants.theNucleus->GetNextNucleon())
+        {
+          if(aNucleon->AreYouHit())
+          {
+            if(theFirstInvolvedNucleon)
+            {
+              ZcoordinateOfPreviousCollision=aNucleon->GetPosition().z();
+              theFirstInvolvedNucleon=false;
+            }
+
+            ZcoordinateOfCurrentInteraction=aNucleon->GetPosition().z();
+            TimeOfCurrentCollision=TimeOfPreviousCollision+ 
+            (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
+// It is assumed that the nucleons are ordered on increasing z-coordinate ------------
+            aNucleon->GetSplitableHadron()->SetTimeOfCreation(TimeOfCurrentCollision);
+
+            ZcoordinateOfPreviousCollision=ZcoordinateOfCurrentInteraction;
+            TimeOfPreviousCollision=TimeOfCurrentCollision;
+          }  // end of if(aNucleon->AreYouHit())
+	}   // end of while (theParticipant.theNucleus->GetNextNucleon())
+//
+// The algorithm can be improved, but it will be more complicated, and will require
+// changes in G4DiffractiveExcitation.cc and G4ElasticHNScattering.cc
 }                                                             // Uzhi 26 July 2009
 
 // ------------------------------------------------------------
@@ -220,12 +244,12 @@ G4bool G4FTFModel::PutOnMassShell()
         G4double        SumMasses = Mprojectile;
 
 //--------------- Target nucleus ------------------------------
-G4int Ninvolv(0);
+//G4int Ninvolv(0);
 	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         {
           G4Nucleon * aNucleon = TheInvolvedNucleon[i];
 //G4cout<<"          "<<Ninvolv<<" "<<aNucleon->Get4Momentum()<<G4endl;
-Ninvolv++;
+//Ninvolv++;
           Psum += aNucleon->Get4Momentum();
           SumMasses += aNucleon->GetDefinition()->GetPDGMass();                
 	}   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
@@ -260,7 +284,8 @@ Ninvolv++;
 //G4cout<<"Main work"<<G4endl;
 //-------------------------------------------------------------
 //------- Ascribing of the involved nucleons Pt and Xminus ----
-        G4double Dcor        = theParameters->GetDofNuclearDestruction()/Ninvolv;
+        G4double Dcor        = theParameters->GetDofNuclearDestruction()/
+                                                  NumberOfInvolvedNucleon;
         G4double AveragePt2  = theParameters->GetPt2ofNuclearDestruction();
         G4double maxPtSquare = theParameters->GetMaxPt2ofNuclearDestruction();
 
@@ -307,9 +332,9 @@ Ninvolv++;
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
 //---------------------------------------------------------------------------
-             G4double DeltaX      = PtSum.x()/Ninvolv;
-             G4double DeltaY      = PtSum.y()/Ninvolv;
-             G4double DeltaXminus = (XminusSum-1.)/Ninvolv;
+             G4double DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
+             G4double DeltaY      = PtSum.y()/NumberOfInvolvedNucleon;
+             G4double DeltaXminus = (XminusSum-1.)/NumberOfInvolvedNucleon;
 //G4cout<<"Deltas "<<DeltaX<<" "<<DeltaY<<" "<<DeltaXminus<<G4endl;
              M2target =0.;
 
@@ -355,7 +380,7 @@ Ninvolv++;
         primary->Set4Momentum(Pprojectile); // is finished at the moment.
 //G4cout<<"Proj After "<<Pprojectile<<G4endl;
 //-------------------------------------------------------------
-Ninvolv=0;
+//Ninvolv=0;
 	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         {
            G4Nucleon * aNucleon = TheInvolvedNucleon[i];
@@ -373,7 +398,7 @@ Ninvolv=0;
            tmp.setE(E);
            tmp.transform(toLab);
 //G4cout<<"invol  "<<Ninvolv<<" "<<tmp<<G4endl;
-Ninvolv++;
+//Ninvolv++;
            aNucleon->SetMomentum(tmp);
            G4VSplitableHadron * targetSplitable=aNucleon->GetSplitableHadron();
            targetSplitable->Set4Momentum(tmp);

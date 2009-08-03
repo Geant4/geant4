@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.5 2008-03-31 15:34:01 vuzhinsk Exp $
+// $Id: G4FTFParticipants.hh,v 1.6 2009-08-03 13:14:19 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@
 // ------------------------------------------------------------
 
 #include "G4VParticipants.hh"
-#include "G4FTFParameters.hh"   // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 #include <vector>
 #include "G4Nucleon.hh"
 #include "G4V3DNucleus.hh"
@@ -61,7 +61,7 @@ class G4FTFParticipants : public G4VParticipants
       int operator!=(const G4FTFParticipants &right) const;
 
       void GetList(const G4ReactionProduct  &thePrimary, 
-                         G4FTFParameters    *theParameters); // Uzhi 29.03.08
+                         G4FTFParameters    *theParameters);
 
       void StartLoop();
       G4bool Next();
