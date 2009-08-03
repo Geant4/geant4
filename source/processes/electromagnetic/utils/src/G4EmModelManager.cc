@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.55 2009-08-03 15:54:02 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.56 2009-08-03 18:01:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -229,7 +229,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   }
   // Are models defined?
   if(nEmModels < 1) {
-    G4Exception("G4EmModelManager::Initialise without any model defined for "+partname);
+    G4Exception("G4EmModelManager::Initialise: no model defined for " + partname);
   }
 
   particle = p;
@@ -263,6 +263,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       }
     }
   }
+  // Are models defined?
+  if(!isWorld) {
+    G4Exception("G4EmModelManager::Initialise: no models defined for " + 
+		partname + " in the World volume");
+  }
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -286,122 +291,113 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     const G4Region* region = setr[reg];
     G4int n = 0;
 
-    if(isWorld || 0 < reg) {
+    for (G4int ii=0; ii<nEmModels; ++ii) {
 
-      for (G4int ii=0; ii<nEmModels; ++ii) {
+      G4VEmModel* model = models[ii];
+      if ( region == regions[ii] ) {
 
-	G4VEmModel* model = models[ii];
-	if ( region == regions[ii] ) {
+	G4double tmin = model->LowEnergyLimit();
+	G4double tmax = model->HighEnergyLimit();
+	G4int  ord    = orderOfModels[ii];
+	G4bool push   = true;
+	G4bool insert = false;
+	G4int  idx    = n;
 
-	  G4double tmin = model->LowEnergyLimit();
-	  G4double tmax = model->HighEnergyLimit();
-          G4int  ord    = orderOfModels[ii];
-          G4bool push   = true;
-          G4bool insert = false;
-          G4int  idx    = n;
-
-	  if(1 < verboseLevel) {
-	    G4cout << "Model #" << ii 
-		   << " <" << model->GetName() << "> for region <";
-	    if (region) G4cout << region->GetName();
-	    G4cout << ">  "
-		   << " tmin(MeV)= " << tmin/MeV
-		   << "; tmax(MeV)= " << tmax/MeV
-		   << "; order= " << ord
-		   << G4endl;
-	  }
+	if(1 < verboseLevel) {
+	  G4cout << "Model #" << ii 
+		 << " <" << model->GetName() << "> for region <";
+	  if (region) G4cout << region->GetName();
+	  G4cout << ">  "
+		 << " tmin(MeV)= " << tmin/MeV
+		 << "; tmax(MeV)= " << tmax/MeV
+		 << "; order= " << ord
+		 << G4endl;
+	}
         
-          if(n > 0) {
+	if(n > 0) {
 
-	    // extend energy range to previous models
-	    tmin = std::min(tmin, eHigh[n-1]);
-	    tmax = std::max(tmax, eLow[0]);
-	    //G4cout << "tmin= " << tmin << "  tmax= " 
-	    //	   << tmax << "  ord= " << ord <<G4endl;
-	    // empty energy range
-	    if( tmax - tmin <= eV) push = false;
-	    // low-energy model
-            else if (tmax == eLow[0]) {
-	      push = false;
-              insert = true;
-              idx = 0;
-	      // resolve intersections
-	    } else if(tmin < eHigh[n-1]) { 
-	      // compare order
-	      for(G4int k=0; k<n; k++) {
-		// new model has lower application 
-		if(ord >= modelOrd[k]) {
-		  if(tmin < eHigh[k]  && tmin >= eLow[k]) tmin = eHigh[k];
-		  if(tmax <= eHigh[k] && tmax >  eLow[k]) tmax = eLow[k];
-		  if(tmax > eHigh[k] && tmin < eLow[k]) {
-                    if(tmax - eHigh[k] > eLow[k] - tmin) tmin = eHigh[k];
-                    else tmax = eLow[k];
-		  }
-                  if( tmax - tmin <= eV) {
-                    push = false;
-                    break;
-		  }
+	  // extend energy range to previous models
+	  tmin = std::min(tmin, eHigh[n-1]);
+	  tmax = std::max(tmax, eLow[0]);
+	  //G4cout << "tmin= " << tmin << "  tmax= " 
+	  //	   << tmax << "  ord= " << ord <<G4endl;
+	  // empty energy range
+	  if( tmax - tmin <= eV) push = false;
+	  // low-energy model
+	  else if (tmax == eLow[0]) {
+	    push = false;
+	    insert = true;
+	    idx = 0;
+	    // resolve intersections
+	  } else if(tmin < eHigh[n-1]) { 
+	    // compare order
+	    for(G4int k=0; k<n; ++k) {
+	      // new model has lower application 
+	      if(ord >= modelOrd[k]) {
+		if(tmin < eHigh[k]  && tmin >= eLow[k]) tmin = eHigh[k];
+		if(tmax <= eHigh[k] && tmax >  eLow[k]) tmax = eLow[k];
+		if(tmax > eHigh[k] && tmin < eLow[k]) {
+		  if(tmax - eHigh[k] > eLow[k] - tmin) tmin = eHigh[k];
+		  else tmax = eLow[k];
+		}
+		if( tmax - tmin <= eV) {
+		  push = false;
+		  break;
 		}
 	      }
-	      //G4cout << "tmin= " << tmin << "  tmax= " 
-	      //     << tmax << "  push= " << push << " idx= " << idx <<G4endl;
-              if(push) {
-		if (tmax == eLow[0]) {
+	    }
+	    //G4cout << "tmin= " << tmin << "  tmax= " 
+	    //     << tmax << "  push= " << push << " idx= " << idx <<G4endl;
+	    if(push) {
+	      if (tmax == eLow[0]) {
+		push = false;
+		insert = true;
+		idx = 0;
+		// continue resolve intersections
+	      } else if(tmin < eHigh[n-1]) { 
+		// last energy interval
+		if(tmin > eLow[n-1] && tmax >= eHigh[n-1]) {
+		  eHigh[n-1] = tmin;
+		  // first energy interval
+		} else if(tmin <= eLow[0] && tmax < eHigh[0]) {
+		  eLow[0] = tmax;
 		  push = false;
 		  insert = true;
 		  idx = 0;
-		  // continue resolve intersections
-		} else if(tmin < eHigh[n-1]) { 
-		  // last energy interval
-		  if(tmin > eLow[n-1] && tmax >= eHigh[n-1]) {
-		    eHigh[n-1] = tmin;
-		    // first energy interval
-		  } else if(tmin <= eLow[0] && tmax < eHigh[0]) {
-		    eLow[0] = tmax;
-		    push = false;
-		    insert = true;
-		    idx = 0;
-		  } else {
-		    // find energy interval to replace
-		    for(G4int k=0; k<n; k++) { 
-		      if(tmin <= eLow[k] && tmax >= eHigh[k]) {
-			push = false;
-			modelAtRegion[k] = ii;
-			modelOrd[k] = ord;
-			isUsed[ii] = 1;
-		      } 
-		    }
+		} else {
+		  // find energy interval to replace
+		  for(G4int k=0; k<n; k++) { 
+		    if(tmin <= eLow[k] && tmax >= eHigh[k]) {
+		      push = false;
+		      modelAtRegion[k] = ii;
+		      modelOrd[k] = ord;
+		      isUsed[ii] = 1;
+		    } 
 		  }
 		}
 	      }
 	    }
 	  }
-	  if(insert) {
-            for(G4int k=n-1; k>=idx; --k) {    
-	      modelAtRegion[k+1] = modelAtRegion[k];
-	      modelOrd[k+1] = modelOrd[k];
-	      eLow[k+1]  = eLow[k];
-	      eHigh[k+1] = eHigh[k];
-	    }
-	  }
-	  //G4cout << "push= " << push << " insert= " << insert 
-	  //<< " idx= " << idx <<G4endl;
-	  if (push || insert) {
-            ++n;
-	    modelAtRegion[idx] = ii;
-	    modelOrd[idx] = ord;
-	    eLow[idx]  = tmin;
-	    eHigh[idx] = tmax;
-            isUsed[ii] = 1;
+	}
+	if(insert) {
+	  for(G4int k=n-1; k>=idx; --k) {    
+	    modelAtRegion[k+1] = modelAtRegion[k];
+	    modelOrd[k+1] = modelOrd[k];
+	    eLow[k+1]  = eLow[k];
+	    eHigh[k+1] = eHigh[k];
 	  }
 	}
+	//G4cout << "push= " << push << " insert= " << insert 
+	//<< " idx= " << idx <<G4endl;
+	if (push || insert) {
+	  ++n;
+	  modelAtRegion[idx] = ii;
+	  modelOrd[idx] = ord;
+	  eLow[idx]  = tmin;
+	  eHigh[idx] = tmax;
+	  isUsed[ii] = 1;
+	}
       }
-    } else {
-      n = 1;
-      models.push_back(0);
-      modelAtRegion.push_back(nEmModels);
-      eLow.push_back(0.0);
-      eHigh.push_back(DBL_MAX);
     }
     eLow[0] = 0.0;
     eLow[n] = eHigh[n-1];
@@ -635,7 +631,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
     G4int k = 0;
     if (nmod > 1 && e > eLow[1]) {
       do {
-        k++;
+        ++k;
         fac *= (1.0 + factor[k]/e);
       } while (k+1 < nmod && e > eLow[k+1]);
     }
@@ -774,7 +770,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     G4double fac = 1.0;
     if (nmod > 1 && e > eLow[1]) {
       do {
-        k++;
+        ++k;
         fac *= (1.0 + factor[k]/e);
       } while ( k+1 < nmod && e > eLow[k+1] );
     }
