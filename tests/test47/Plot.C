@@ -35,27 +35,27 @@ std::string ModelNamesB[8] = {"LEP",   "FTF-Bin", "Bertini", "Binary",
 
 int         colModel[8]    = {8, 2, 6, 3, 7, 9, 1, 4};
 int         symbModel[8]   = {24, 29, 25, 27, 26, 23, 21, 20};
-int         stylModel[8]   = {1, 2, 3, 4, 5, 6, 7, 8};
+int         stylModel[8]   = {3, 2, 1, 4, 5, 6, 1, 7};
 double      keproton[4]    = {0.09, 0.15, 0.19, 0.23};
 double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
 
-void Plot( int index, char test[5]="ITEP" ) {
+void Plot(int index, char test[5]="ITEP") {
 
   if ( test == "BNL" ) {
     switch(index) {
     case 1:
-      plotMT4("Be","14.6", 0,1,1,-1., "piplus",  "proton");
-      plotMT4("Be","14.6", 0,1,1,-1., "piminus", "proton");
+      plotMT4("Be","14.6", 0,1,1,-1.,-1., "piplus",  "proton");
+      plotMT4("Be","14.6", 0,1,1,-1.,-1., "piminus", "proton");
       break;
     case 2:
-      plotMT4("Cu","14.6", 0,1,1,-1., "proton", "proton");
-      plotMT4("Cu","14.6", 0,1,1,-1., "kplus",  "proton");
-      plotMT4("Cu","14.6", 0,1,1,-1., "kminus", "proton");
+      plotMT4("Cu","14.6", 0,1,1,-1.,-1., "proton", "proton");
+      plotMT4("Cu","14.6", 0,1,1,-1.,-1., "kplus",  "proton");
+      plotMT4("Cu","14.6", 0,1,1,-1.,-1., "kminus", "proton");
       break;
     case 3:
-      plotMT4("Au","14.6", 0,1,1,-1., "piplus",  "proton");
-      plotMT4("Au","14.6", 0,1,1,-1., "piminus", "proton");
+      plotMT4("Au","14.6", 0,1,1,-1.,-1., "piplus",  "proton");
+      plotMT4("Au","14.6", 0,1,1,-1.,-1., "piminus", "proton");
       break;
     }
   } else if ( test == "ITEP" ) {
@@ -63,75 +63,75 @@ void Plot( int index, char test[5]="ITEP" ) {
     cnv->cd(); cnv->SetLogy(1); cnv->SetLeftMargin(0.15);
     switch(index) {
     case 1:
-      plotKE4("C","1.40",0,1,1,-1.,"proton","piplus");
+      plotKE4("C","1.40",0,1,1,-1.,-1.,"proton","piplus");
       cnv->cd();
-      plotKE("C","1.40","119.0",0,1,-1.,"neutron", "piplus");
+      plotKE("C","1.40","119.0",0,1,-1.,-1.,"neutron", "piplus");
       cnv->SaveAs("piplusCtoneutronat1.40GeV_1.eps");
       break;
     case 2:
-      plotKE4("U","1.40",0,1,1,-1.,"proton","piplus");
+      plotKE4("U","1.40",0,1,1,-1.,-1.,"proton","piplus");
       cnv->cd();
-      plotKE("U","1.40","119.0",0,1,-1.,"neutron","piplus");
+      plotKE("U","1.40","119.0",0,1,-1.,-1.,"neutron","piplus");
       cnv->SaveAs("piplusUtoneutronat1.40GeV_1.eps");
       break;
     case 3:
-      plotKE4("C","5.00",0,1,1,-1.,"proton","piplus");
+      plotKE4("C","5.00",0,1,1,-1.,-1.,"proton","piplus");
       cnv->cd();
-      plotKE("C","5.00","119.0",0,1,-1.,"neutron","piplus");
+      plotKE("C","5.00","119.0",0,1,-1.,-1.,"neutron","piplus");
       cnv->SaveAs("piplusCtoneutronat5.00GeV_1.eps");
       break;
     case 4:
-      plotKE4("U","5.00",0,1,1,-1.,"proton","piplus");
+      plotKE4("U","5.00",0,1,1,-1.,-1.,"proton","piplus");
       cnv->cd();
-      plotKE("U","5.00","119.0",0,1,-1.,"neutron","piplus");
+      plotKE("U","5.00","119.0",0,1,-1.,-1.,"neutron","piplus");
       cnv->SaveAs("piplusUtoneutronat5.00GeV_1.eps");
       break;
     case 5:
-      plotKE4("C","5.00",0,1,1,-1.,"proton","piminus");
+      plotKE4("C","5.00",0,1,1,-1.,-1.,"proton","piminus");
       cnv->cd();
       plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
       cnv->SaveAs("piminusCtoneutronat5.00GeV_1.eps");
       break;
     case 6:
-      plotKE4("Cu","5.00",0,1,1,-1.,"proton","piminus");
+      plotKE4("Cu","5.00",0,1,1,-1.,-1.,"proton","piminus");
       cnv->cd();
       plotKE("Cu","5.00","119.0",0,1,-1.,"neutron","piminus");
       cnv->SaveAs("piminusCutoneutronat5.00GeV_1.eps");
       break;
     case 7:
-      plotKE4("Pb","5.00",0,1,1,-1.,"proton","piminus");
+      plotKE4("Pb","5.00",0,1,1,-1.,-1.,"proton","piminus");
       cnv->cd();
-      plotKE("Pb","5.00","119.0",0,1,-1.,"neutron","piminus");
+      plotKE("Pb","5.00","119.0",0,1,-1.,-1.,"neutron","piminus");
       cnv->SaveAs("piminusPbtoneutronat5.00GeV_1.eps");
       break;
     case 8:
-      plotKE4("U","5.00",0,1,1,-1.,"proton","piminus");
+      plotKE4("U","5.00",0,1,1,-1.,-1.,"proton","piminus");
       cnv->cd();
-      plotKE("C","5.00","119.0",0,1,-1.,"neutron","piminus");
+      plotKE("C","5.00","119.0",0,1,-1.,-1.,"neutron","piminus");
       cnv->SaveAs("piminusUtoneutronat5.00GeV_1.eps");
       break;
     case 9:
       plotKE4("C","1.40",0,1,1);
       cnv->cd();
-      plotKE("C","1.40","119.0",0,1,-1.,"neutron");
+      plotKE("C","1.40","119.0",0,1,-1.,-1.,"neutron");
       cnv->SaveAs("protonCtoneutronat1.40GeV_1.eps");
       break;
     case 10:
       plotKE4("U","1.40",0,1,1);
       cnv->cd();
-      plotKE("U","1.40","119.0",0,1,-1.,"neutron");
+      plotKE("U","1.40","119.0",0,1,-1.,-1.,"neutron");
       cnv->SaveAs("protonUtoneutronat1.40GeV_1.eps");
       break;
     case 11:
       plotKE4("C","7.50",0,1,1);
       cnv->cd();
-      plotKE("C","7.50","119.0",0,1,-1.,"neutron");
+      plotKE("C","7.50","119.0",0,1,-1.,-1.,"neutron");
       cnv->SaveAs("protonCtoneutronat7.50GeV_1.eps");
       break;
     case 12:
       plotKE4("U","7.50",0,1,1);
       cnv->cd();
-      plotKE("U","7.50","119.0",0,1,-1.,"neutron");
+      plotKE("U","7.50","119.0",0,1,-1.,-1.,"neutron");
       cnv->SaveAs("protonUtoneutronat7.50GeV_1.eps");
       break;
     }
@@ -142,30 +142,36 @@ void Plot( int index, char test[5]="ITEP" ) {
 
 
 void plotStandard(bool ratio=false, char dir[20]=".", char dird[40]=".", 
-		  int leg1=1, int leg2=1, char mark=' ') {
+		  int leg1=1, int leg2=1, char mark=' ', bool error=true) {
 
-  plotKEp("C", "5.00", 0,1,1, -1., "piplus", ratio, leg1,leg2, dir,dird, mark);
-  plotKEp("U", "5.00", 0,1,1, 10., "piplus", ratio, leg1,leg2, dir,dird, mark);
-  plotKEp("C", "7.50", 0,1,1, 1.0, "proton", ratio, leg1,leg2, dir,dird, mark);
-  plotKEp("U", "7.50", 0,1,1, 10., "proton", ratio, leg1,leg2, dir,dird, mark);
-  plotKEx("5.00", " 59.1", 0,1,1, -1., "proton",  "piminus", ratio, leg1,leg2,
-	  dir,dird, mark);
-  plotKEx("5.00", "119.0", 0,1,1,100., "neutron", "piminus", ratio,leg1,leg2,
-	  dir,dird, mark);
-  plotKEn("5.00", 0,1,1, 10., "piplus", ratio, leg1,leg2, dir,dird, mark);
-  plotKEn("7.50", 0,1,1, 10., "proton", ratio, leg1,leg2, dir,dird, mark);
-  plotMT4(     "14.6", 0,1,1,-1.,"piplus", "proton",ratio,leg1,leg2,dir,dird,mark);
-  plotMT4(     "14.6", 0,1,1,-1.,"piminus","proton",ratio,leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1.,"kplus",  "proton",ratio,leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1.,"kminus", "proton",ratio,leg1,leg2,dir,dird,mark);
-  plotMT4("Cu","14.6", 0,1,1,-1.,"proton", "proton",ratio,leg1,leg2,dir,dird,mark);
+  plotKEp("C", "5.00",0,1,1,-1.0,-1.,"piplus",ratio,error,leg1,leg2,dir,dird,mark);
+  plotKEp("U", "5.00",0,1,1, 10.,-1.,"piplus",ratio,error,leg1,leg2,dir,dird,mark);
+  plotKEp("C", "7.50",0,1,1, 1.0,-1.,"proton",ratio,error,leg1,leg2,dir,dird,mark);
+  plotKEp("U", "7.50",0,1,1, 10.,-1.,"proton",ratio,error,leg1,leg2,dir,dird,mark);
+  plotKEx("5.00", " 59.1", 0,1,1, -1.,-1., "proton",  "piminus", ratio,error,
+	  leg1,leg2, dir,dird, mark);
+  plotKEx("5.00", "119.0", 0,1,1,100.,-1., "neutron", "piminus", ratio,error,
+	  leg1,leg2, dir,dird, mark);
+  plotKEn("5.00", 0,1,1, 10.,-1., "piplus", ratio,error,leg1,leg2, dir,dird, mark);
+  plotKEn("7.50", 0,1,1, 10.,-1., "proton", ratio,error,leg1,leg2, dir,dird, mark);
+  plotMT4(     "14.6", 0,1,1,-1.,-1.,"piplus", "proton", ratio,error,
+	  leg1,leg2, dir,dird, mark);
+  plotMT4(     "14.6", 0,1,1,-1.,-1.,"piminus","proton",ratio,error,
+          leg1,leg2, dir,dird, mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,-1.,"kplus",  "proton",ratio,error,
+	  leg1,leg2, dir,dird, mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,-1.,"kminus", "proton",ratio,error,
+	  leg1,leg2, dir,dird, mark);
+  plotMT4("Cu","14.6", 0,1,1,-1.,-1.,"proton", "proton",ratio,error,
+	  leg1,leg2, dir,dird, mark);
 }
 
 
 void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0, 
-	     double ymin=-1., char particle[8]="proton", char beam[8]="proton",
-	     bool ratio='false', int leg1=1, int leg2=1, char dir[20]=".", 
-	     char dird[40]=".", char mark=' ') {
+	     double ymin=-1., double ymax=-1.,char particle[8]="proton", 
+	     char beam[8]="proton", bool ratio='false', bool error=true, 
+	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
+	     char mark=' ') {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -175,27 +181,27 @@ void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotKERatio("C", ene,angle,first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotKERatio("C", ene,angle,first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
   else
-    plotKE("C", ene,angle,first,logy,ymin,particle,beam, leg1, dir,dird,markf);
+    plotKE("C", ene,angle,first,logy,ymin,ymax,particle,beam, leg1, dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotKERatio("Cu",ene,angle,first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotKERatio("Cu",ene,angle,first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotKE("Cu",ene,angle,first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotKE("Cu",ene,angle,first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotKERatio("Pb",ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+    plotKERatio("Pb",ene,angle,first,logy,ymin,ymax,particle,beam,error,leg, dir,dird,markf);
   else
-    plotKE("Pb",ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+    plotKE("Pb",ene,angle,first,logy,ymin,ymax,particle,beam,leg, dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotKERatio("U", ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+    plotKERatio("U", ene,angle,first,logy,ymin,ymax,particle,beam,error,leg, dir,dird,markf);
   else
-    plotKE("U", ene,angle,first,logy,ymin,particle,beam,leg, dir,dird,markf);
+    plotKE("U", ene,angle,first,logy,ymin,ymax,particle,beam,leg, dir,dird,markf);
 
   char anglx[6], fname[60];
   int nx = 0;
@@ -216,8 +222,9 @@ void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0,
 }
 
 void plotKEn(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1.,
-	     char beam[8]="proton", bool ratio=false, int leg1=1, int leg2=1,
-	     char dir[20]=".", char dird[40]=".", char mark=' ') {
+	     double ymax=-1., char beam[8]="proton", bool ratio=false, 
+	     bool error=true, int leg1=1, int leg2=1,char dir[20]=".", 
+	     char dird[40]=".", char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -227,27 +234,27 @@ void plotKEn(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1.,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotKERatio("C","1.40","119.0",first,logy,ymin,"neutron",beam,leg1,dir,dird,markf);
+    plotKERatio("C","1.40","119.0",first,logy,ymin,ymax,"neutron",beam,error,leg1,dir,dird,markf);
   else
-    plotKE("C","1.40","119.0",first,logy,ymin,"neutron",beam,leg1,dir,dird,markf);
+    plotKE("C","1.40","119.0",first,logy,ymin,ymax,"neutron",beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotKERatio("C",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
+    plotKERatio("C",ene,   "119.0",first,logy,ymin,ymax,"neutron",beam,error,leg2,dir,dird,markf);
   else
-    plotKE("C",ene,   "119.0",first,logy,ymin,"neutron",beam,leg2,dir,dird,markf);
+    plotKE("C",ene,   "119.0",first,logy,ymin,ymax,"neutron",beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotKERatio("U","1.40","119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+    plotKERatio("U","1.40","119.0",first,logy,ymin,ymax,"neutron",beam,error,leg,dir,dird,markf);
   else
-    plotKE("U","1.40","119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+    plotKE("U","1.40","119.0",first,logy,ymin,ymax,"neutron",beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotKERatio("U",ene,   "119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+    plotKERatio("U",ene,   "119.0",first,logy,ymin,ymax,"neutron",beam,error,leg,dir,dird,markf);
   else
-    plotKE("U",ene,   "119.0",first,logy,ymin,"neutron",beam,leg,dir,dird,markf);
+    plotKE("U",ene,   "119.0",first,logy,ymin,ymax,"neutron",beam,leg,dir,dird,markf);
   
   char fname[40];
   if (save != 0) {
@@ -265,9 +272,9 @@ void plotKEn(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1.,
 }
 
 void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
-	     double ymin=-1., char beam[8]="proton", bool ratio=false, 
-	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
-	     char mark=' ') {
+	     double ymin=-1., double ymax=-1., char beam[8]="proton", 
+	     bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
+	     char dir[20]=".", char dird[40]=".", char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -277,27 +284,27 @@ void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotKERatio(element,"1.40"," 59.1",first,logy,ymin,"proton",beam,leg1,dir,dird,markf);
+    plotKERatio(element,"1.40"," 59.1",first,logy,ymin,ymax,"proton",beam,error,leg1,dir,dird,markf);
   else
-    plotKE(element,"1.40"," 59.1",first,logy,ymin,"proton",beam,leg1,dir,dird,markf);
+    plotKE(element,"1.40"," 59.1",first,logy,ymin,ymax,"proton",beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotKERatio(element,ene,   " 59.1",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+    plotKERatio(element,ene,   " 59.1",first,logy,ymin,ymax,"proton",beam,error,leg2,dir,dird,markf);
   else
-    plotKE(element,ene,   " 59.1",first,logy,ymin,"proton",beam,leg2,dir,dird,markf);
+    plotKE(element,ene,   " 59.1",first,logy,ymin,ymax,"proton",beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotKERatio(element,"1.40","119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+    plotKERatio(element,"1.40","119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
   else
-    plotKE(element,"1.40","119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+    plotKE(element,"1.40","119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotKERatio(element,ene,   "119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+    plotKERatio(element,ene,   "119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
   else
-    plotKE(element,ene,   "119.0",first,logy,ymin,"proton",beam,leg,dir,dird,markf);
+    plotKE(element,ene,   "119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
@@ -315,9 +322,10 @@ void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 }
 
 void plotKE4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
-	     double ymin=-1., char particle[8]="proton", char beam[8]="proton",
-	     bool ratio=false, int leg1=1, int leg2=1, char dir[20]=".", 
-	     char dird[40]=".", char mark=' ') {
+	     double ymin=-1., double ymax=-1., char particle[8]="proton", 
+	     char beam[8]="proton", bool ratio=false, bool error=true, 
+	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
+	     char mark=' ') {
 
   setStyle();  
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -327,27 +335,27 @@ void plotKE4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotKERatio(element,ene," 59.1",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotKERatio(element,ene," 59.1",first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
   else
-    plotKE(element,ene," 59.1",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotKE(element,ene," 59.1",first,logy,ymin,ymax,particle,beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotKERatio(element,ene," 89.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotKERatio(element,ene," 89.0",first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotKE(element,ene," 89.0",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotKE(element,ene," 89.0",first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotKERatio(element,ene,"119.0",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+    plotKERatio(element,ene,"119.0",first,logy,ymin,ymax,particle,beam,error,leg,dir,dird,markf);
   else
-    plotKE(element,ene,"119.0",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+    plotKE(element,ene,"119.0",first,logy,ymin,ymax,particle,beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotKERatio(element,ene,"159.6",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+    plotKERatio(element,ene,"159.6",first,logy,ymin,ymax,particle,beam,error,leg,dir,dird,markf);
   else
-    plotKE(element,ene,"159.6",first,logy,ymin,particle,beam,leg,dir,dird,markf);
+    plotKE(element,ene,"159.6",first,logy,ymin,ymax,particle,beam,leg,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
@@ -365,17 +373,18 @@ void plotKE4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 }
 
 void plotKE1(char element[2], char ene[6], char angle[6], int first=0, 
-	     int logy=0, int save=0, double ymin=-1, char particle[8]="proton",
-	     char beam[8]="proton", bool ratio=false, int legend=1, 
-	     char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
+	     int logy=0, int save=0, double ymin=-1, double ymax=-1., 
+	     char particle[8]="proton", char beam[8]="proton", 
+	     bool ratio=false, bool error=true, int legend=1, char dir[20]=".",
+	     char dird[40]=".", char markf[4]=" ") {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",500,600); myc->SetLeftMargin(0.15);
   if (logy != 0) gPad->SetLogy(1);
   if (ratio) 
-    plotKERatio(element,ene,angle,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+    plotKERatio(element,ene,angle,first,logy,ymin,ymax,particle,beam,error,legend,dir,dird,markf);
   else
-    plotKE(element,ene,angle,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+    plotKE(element,ene,angle,first,logy,ymin,ymax,particle,beam,legend,dir,dird,markf);
 
   char anglx[6], fname[100];
   int nx = 0;
@@ -396,18 +405,19 @@ void plotKE1(char element[2], char ene[6], char angle[6], int first=0,
 }
 
 void plotKE(char element[2], char ene[6], char angle[6], int first=0, 
-	    int logy=0, double ymin=-1, char particle[8]="proton",
-            char beam[8]="proton", int legend=1, char dir[20]=".", 
-	    char dird[40]=".", char markf[4]=" ") {
+	    int logy=0, double ymin=-1, double ymax=-1., 
+	    char particle[8]="proton", char beam[8]="proton", int legend=1, 
+	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   char fname[120], list[40], hname[60], titlx[50];
   TH1F *hi[8];
-  int i=0, icol=1;
+  int i=0, icol=1, isty=1;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=1, ymi0=100., xlow=0.06, xhigh=0.26;
   if (particle == "neutron") {xlow= 0.0; xhigh=0.20;}
   for (i=0; i<modelsITEP; i++) {
-    sprintf (list, "%s", ModelsITEP[i].c_str());  icol = colModel[i]; 
+    sprintf (list, "%s", ModelsITEP[i].c_str());  
+    icol = colModel[i]; isty = stylModel[i];
     sprintf (fname, "%s/%s%s%s%sGeV.root", dir, beam, element, list, ene);
     sprintf (hname, "KE%s0%s%s%s%sGeV%s", particle, beam, element, list, ene, angle);
 
@@ -428,7 +438,8 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
       }
       hi[i]->GetXaxis()->SetRangeUser(xlow, xhigh); hi[i]->SetTitle("");
       hi[i]->GetXaxis()->SetTitle(titlx);
-      hi[i]->SetLineStyle(1);  hi[i]->SetLineWidth(2); hi[i]->SetLineColor(icol);
+      hi[i]->SetLineStyle(isty);  hi[i]->SetLineWidth(2); hi[i]->SetLineColor(icol);
+      hi[i]->GetXaxis()->SetLabelSize(0.035);hi[i]->GetYaxis()->SetLabelSize(0.035);
     }
     //    file->Close();
   }
@@ -465,6 +476,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0) ymi0 = ymin;
+  if (ymax > 0) ymx0 = ymax;
   for (i = 0; i<modelsITEP; i++) {
     if (debug) std::cout << "Model " << i << " " << hi[i] << " " << ymi0 << " " << ymx0 << "\n";
     if (hi[i] != 0) hi[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
@@ -511,8 +523,9 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
 }
 
 void plotKERatio(char element[2], char ene[6], char angle[6], int first=0, 
-		 int logy=0, double ymin=-1, char particle[8]="proton",
-		 char beam[8]="proton", int legend=1, char dir[20]=".", 
+		 int logy=0, double ymin=-1, double ymax=-1., 
+		 char particle[8]="proton", char beam[8]="proton", 
+		 bool error=true, int legend=1, char dir[20]=".",
 		 char dird[40]=".", char markf[4]=" ") {
 
   // First open the data file
@@ -537,7 +550,7 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
     if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << "\n";
   }
 
-  char list[40], hname[60], titlx[50];
+  char list[40], hname[60], titlx[100];
   TGraphErrors *gr[8];
   int icol=1, ityp=20;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
@@ -567,12 +580,13 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
 	    xx[np]    = x1[j];
 	    dx[np]    = 0;
 	    rat[np]   = yy/y1[j];
-	    drt[np]   = er1[j]*rat[j]/y1[j];
+	    drt[np]   = er1[j]*rat[np]/y1[j];
 	    if (xx[np] > xlow && xx[np] < xhigh) {
 	      if (rat[np]+drt[np] > ymx0) ymx0 = rat[np]+drt[np];
 	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
 	    }
 	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
+	    if ((!error) && (i != first)) drt[np] = 0;
 	    np++;
 	    break;
 	  }
@@ -585,6 +599,8 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
       gr[i]->SetLineStyle(stylModel[i]); gr[i]->SetLineWidth(2); 
       gr[i]->SetLineColor(icol);         gr[i]->SetMarkerColor(icol); 
       gr[i]->SetMarkerStyle(ityp);       gr[i]->SetMarkerSize(1.0); 
+      gr[i]->GetXaxis()->SetLabelSize(0.035);
+      gr[i]->GetYaxis()->SetLabelSize(0.035);
     } else {
       gr[i] = 0;
     }
@@ -594,6 +610,7 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0)   ymi0 = ymin;
+  if (ymax > 0)   ymx0 = ymax;
   for (i = 0; i<modelsITEP; i++) {
     if (debug) std::cout << "Model " << i << " " << gr[i] << " " << ymi0 << " " << ymx0 << "\n";
     if (gr[i] != 0) gr[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
@@ -997,9 +1014,9 @@ void plotBE(char element[2], char angle[6], double ke, int logy=0, int scan=1,
 }
  
 void plotMT4(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
-	     char particle[8]="piplus", char beam[8]="proton",bool ratio=false,
-	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
-	     char mark=' ') {
+	     double ymax=-1., char particle[8]="piplus", char beam[8]="proton",
+	     bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
+	     char dir[20]=".", char dird[40]=".", char mark=' ') {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -1008,27 +1025,27 @@ void plotMT4(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotMTRatio("Be",ene,"1.10", first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotMTRatio("Be",ene,"1.10", first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
   else
-    plotMT("Be",ene,"1.10", first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotMT("Be",ene,"1.10", first,logy,ymin,ymax,particle,beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotMTRatio("Be",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio("Be",ene,"2.30", first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT("Be",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT("Be",ene,"2.30", first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotMTRatio("Au",ene,"1.10", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio("Au",ene,"1.10", first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT("Au",ene,"1.10", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT("Au",ene,"1.10", first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotMTRatio("Au",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio("Au",ene,"2.30", first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT("Au",ene,"2.30", first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT("Au",ene,"2.30", first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
@@ -1045,9 +1062,10 @@ void plotMT4(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
 }
  
 void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
-	     double ymin=-1, char particle[8]="piplus", char beam[8]="proton", 
-	     bool ratio=false, int leg1=1, int leg2=1, char dir[20]=".", 
-	     char dird[40]=".", char mark=' ') {
+	     double ymin=-1, double ymax=-1., char particle[8]="piplus", 
+	     char beam[8]="proton", bool ratio=false, bool error=true, 
+	     int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
+	     char mark=' ') {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
@@ -1056,27 +1074,27 @@ void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
   myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(a)");
   if (ratio)
-    plotMTRatio(element,ene,"1.10",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotMTRatio(element,ene,"1.10",first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
   else
-    plotMT(element,ene,"1.10",first,logy,ymin,particle,beam,leg1,dir,dird,markf);
+    plotMT(element,ene,"1.10",first,logy,ymin,ymax,particle,beam,leg1,dir,dird,markf);
   myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
-    plotMTRatio(element,ene,"1.50",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio(element,ene,"1.50",first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT(element,ene,"1.50",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT(element,ene,"1.50",first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(c)");
   if (ratio)
-    plotMTRatio(element,ene,"1.90",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio(element,ene,"1.90",first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT(element,ene,"1.90",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT(element,ene,"1.90",first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
   if (ratio)
-    plotMTRatio(element,ene,"2.30",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMTRatio(element,ene,"2.30",first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
   else
-    plotMT(element,ene,"2.30",first,logy,ymin,particle,beam,leg2,dir,dird,markf);
+    plotMT(element,ene,"2.30",first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
@@ -1093,17 +1111,18 @@ void plotMT4(char element[2], char ene[6], int first=0, int logy=0, int save=0,
 }
  
 void plotMT1(char element[2], char ene[6], char rapid[6], int first=0, 
-	     int logy=0, int save=0, double ymin=-1, char particle[8]="piplus",
-	     char beam[8]="proton", bool ratio=false, int legend=1, 
-	     char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
+	     int logy=0, int save=0, double ymin=-1, double ymax=-1., 
+	     char particle[8]="piplus", char beam[8]="proton",bool ratio=false,
+	     bool error=true, int legend=1, char dir[20]=".",char dird[40]=".",
+	     char markf[4]=" ") {
 
   setStyle();
   TCanvas *myc = new TCanvas("myc","",800,600); myc->SetLeftMargin(0.15);
   if (logy != 0) gPad->SetLogy(1);
   if (ratio)
-    plotMTRatio(element,ene,rapid,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+    plotMTRatio(element,ene,rapid,first,logy,ymin,ymax,particle,beam,error,legend,dir,dird,markf);
   else
-    plotMT(element,ene,rapid,first,logy,ymin,particle,beam,legend,dir,dird,markf);
+    plotMT(element,ene,rapid,first,logy,ymin,ymax,particle,beam,legend,dir,dird,markf);
 
   char fname[40];
   if (save != 0) {
@@ -1120,9 +1139,9 @@ void plotMT1(char element[2], char ene[6], char rapid[6], int first=0,
 }
 
 void plotMT(char element[2], char ene[6], char rapid[6], int first=0, 
-	    int logy=0, double ymin=-1, char particle[8]="piplus", 
-	    char beam[8]="proton", int legend=0, char dir[20]=".",
-	    char dird[40]=".", char markf[4]=" ") {
+	    int logy=0, double ymin=-1, double ymax=-1., 
+	    char particle[8]="piplus", char beam[8]="proton", int legend=0, 
+	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   char fname[120], list[40], hname[60], titlx[50], sym[8];
   TH1F *hi[8];
@@ -1187,6 +1206,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0) ymi0 = ymin;
+  if (ymax > 0) ymx0 = ymax;
   for (i = 0; i<modelsBNL; i++) {
     if (hi[i] != 0) {
       if (debug) std::cout << "Model " << i << " " << hi[i] << " " << ymi0 << " " << ymx0 << "\n";
@@ -1234,8 +1254,9 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
 }
 
 void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0, 
-		 int logy=0, double ymin=-1, char particle[8]="piplus", 
-		 char beam[8]="proton", int legend=0, char dir[20]=".",
+		 int logy=0, double ymin=-1, double ymax=-1., 
+		 char particle[8]="piplus", char beam[8]="proton", 
+		 bool error=true, int legend=0, char dir[20]=".", 
 		 char dird[40]=".", char markf[4]=" ") {
 
   char titlx[50], sym[8];
@@ -1290,12 +1311,13 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
 	    xx[np]    = x1[j];
 	    dx[np]    = 0;
 	    rat[np]   = yy/y1[j];
-	    drt[np]   = er1[j]*rat[j]/y1[j];
+	    drt[np]   = er1[j]*rat[np]/y1[j];
 	    if (xx[np] > xlow && xx[np] < xhigh) {
 	      if (rat[np]+drt[np] > ymx0) ymx0 = rat[np]+drt[np];
 	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
 	    }
 	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
+	    if ((!error) && (i != first)) drt[np] = 0;
 	    np++;
 	    break;
 	  }
@@ -1317,6 +1339,7 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
   if (ymin > 0) ymi0 = ymin;
+  if (ymax > 0) ymx0 = ymax;
   for (i = 0; i<modelsBNL; i++) {
     if (gr[i] != 0) {
       if (debug) std::cout << "Model " << i << " " << gr[i] << " " << ymi0 << " " << ymx0 << "\n";

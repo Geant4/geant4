@@ -26,10 +26,10 @@ private:
 
   char                  fileName[160];
   char                  tag1Name[60], tag2Name[24], tag3Name[40];
-  double                dcth, de;
+  double                dtheta, de;
   std::vector<TH1F*>    hiKE11, hiKE12, hiCT11, hiCT12;
   std::vector<TH1F*>    hiKE21, hiKE22, hiCT21, hiCT22;
-  std::vector<G4double> energies, emin, emax, angles, cthmin, cthmax;
+  std::vector<G4double> energies, emin, emax, angles, cthmin, cthmax, dcth;
   
 };
 

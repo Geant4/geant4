@@ -52,13 +52,16 @@ HistoITEPTest47::HistoITEPTest47(std::string namePart, std::string nameMat,
   angles.push_back(173.5*deg);
   angles.push_back(177.0*deg);
 
-  dcth = 0.05;
-  de   = 0.02;
+  dtheta = 4.0*deg;
+  de     = 0.02;
 
   for (unsigned int ii=0; ii<angles.size(); ii++) {
-    double cth = cos(angles[ii]);
-    cthmin.push_back(cth-0.5*dcth);
-    cthmax.push_back(cth+0.5*dcth);
+
+    double cth1 = cos(std::min(angles[ii]+dtheta,180*deg));
+    double cth2 = cos(std::max(angles[ii]-dtheta,0.0*deg));
+    dcth.push_back(std::abs(cth1-cth2));
+    cthmin.push_back(std::min(cth1,cth2));
+    cthmax.push_back(std::max(cth1,cth2));
   }
 
   for (unsigned int ii=0; ii<energies.size(); ii++) {
@@ -69,7 +72,7 @@ HistoITEPTest47::HistoITEPTest47(std::string namePart, std::string nameMat,
 
   G4cout << "HistoITEPTest47:: Initialized with " << cthmin.size() << " theta bins and " << emin.size() << " energy bins" << G4endl;
   for (unsigned int ii=0; ii<cthmin.size(); ii++) 
-    G4cout << "HistoITEPTest47::Bin " << ii << " cos(theta) = " << cthmin[ii] << ":" << cthmax[ii] << G4endl;
+    G4cout << "HistoITEPTest47::Bin " << ii << " theta " << angles[ii]/deg << " cos(theta) = " << cthmin[ii] << ":" << cthmax[ii] << " dcostheta " << dcth[ii] << G4endl;
   for (unsigned int ii=0; ii<emin.size(); ii++) 
     G4cout << "HistoITEPTest47::Bin " << ii << " Energy = " << emin[ii] << ":" << emax[ii] << G4endl;
 
@@ -140,7 +143,7 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiKE11[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiKE12[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
     sprintf (title, "Kinetic Energy of p (GeV)");
     hiKE12[ii]->GetXaxis()->SetTitle(title);
     sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
@@ -157,7 +160,7 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiKE21[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiKE22[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
     sprintf (title, "Kinetic Energy of n (GeV)");
     hiKE22[ii]->GetXaxis()->SetTitle(title);
     sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
