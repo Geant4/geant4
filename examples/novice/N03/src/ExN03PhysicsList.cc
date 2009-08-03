@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.24 2008-10-31 08:40:41 maire Exp $
+// $Id: ExN03PhysicsList.cc,v 1.25 2009-08-03 16:28:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,6 +257,7 @@ void ExN03PhysicsList::SetCuts()
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
+  SetCutValue(defaultCutValue, "proton");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
