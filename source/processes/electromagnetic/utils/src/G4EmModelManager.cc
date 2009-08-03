@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.52 2009-08-03 08:46:42 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.53 2009-08-03 09:43:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,6 +137,7 @@ G4EmModelManager::G4EmModelManager():
   regions.reserve(4);
   orderOfModels.reserve(4);
   isUsed.reserve(4);
+  severalModels = true;
   currRegionModel = 0;
   currModel = 0;
 }
@@ -271,9 +272,12 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
-  if(nRegions > 1) idxOfRegionModels.resize(numOfCouples);
-  setOfRegionModels.resize(nRegions);
-
+  if(nEmModels > 1) {
+    if(nRegions > 1) idxOfRegionModels.resize(numOfCouples);
+    setOfRegionModels.resize(nRegions);
+  } else {
+    setOfRegionModels.resize(1);
+  }
   std::vector<G4int>    modelAtRegion(nEmModels);
   std::vector<G4int>    modelOrd(nEmModels);
   G4DataVector          eLow(nEmModels+1);
@@ -413,10 +417,10 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     }
     G4RegionModels* rm = new G4RegionModels(n, modelAtRegion, eLow, region);
     setOfRegionModels[reg] = rm;
+    if(1 == nEmModels) break;
   }
 
   currRegionModel = setOfRegionModels[0];
-  currModel = models[currRegionModel->SelectIndex(0.0)];
 
   // Access to materials and build cuts
   size_t idx = 1;
@@ -425,8 +429,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     else if( secondaryParticle == thePositron) idx = 2;
     else if( secondaryParticle == theProton )  idx = 3;
   }
-  const std::vector<G4double>* v = theCoupleTable->GetEnergyCutsVector(idx);
-  theCuts = static_cast<const G4DataVector*>(v);
+  theCuts.resize(numOfCouples);
   if(minSubRange < 1.0) theSubCuts.resize(numOfCouples);
 
   for(G4int i=0; i<numOfCouples; ++i) {
@@ -437,7 +440,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
  
     G4int reg = 0;
-    if(nRegions > 1) {
+    if(nRegions > 1 && nEmModels > 1) {
       reg = nRegions;
       do {reg--;} while (reg>0 && pcuts != (setr[reg]->GetProductionCuts()));
       idxOfRegionModels[i] = reg;
@@ -450,7 +453,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	     << G4endl;
     }
 
-    G4double cut = (*theCuts)[i];
+    G4double cut = theCuts[i];
     G4double subcut = DBL_MAX;
     if(secondaryParticle) {
 
@@ -483,15 +486,20 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 		   << G4endl;
       }
     }
+    theCuts[i] = cut;
     if(minSubRange < 1.0) theSubCuts[i] = subcut;
   }
 
+  G4int nm = 0;
   for(G4int jj=0; jj<nEmModels; ++jj) {
     if(1 == isUsed[jj]) {
-      models[jj]->Initialise(particle, *theCuts);
+      ++nm;
+      currModel = models[jj];
+      currModel->Initialise(particle, theCuts);
       if(flucModels[jj]) flucModels[jj]->InitialiseMe(particle);
     }
   }
+  if(1 == nm) severalModels = false;
 
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager for " << particle->GetParticleName() 
@@ -499,7 +507,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
            << G4endl;
   }
 
-  return theCuts;
+  return &theCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -512,7 +520,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   G4double e;
 
   size_t i = couple->GetIndex();
-  G4double cut = (*theCuts)[i];
+  G4double cut = theCuts[i];
   G4double emin = 0.0;
 
   if(fTotal == tType) cut = DBL_MAX;
@@ -667,7 +675,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   G4double e;
 
   size_t i = couple->GetIndex();
-  G4double cut  = (*theCuts)[i];
+  G4double cut  = theCuts[i];
   G4double tmax = DBL_MAX;
   if (fSubRestricted == tType) {
     tmax = cut;

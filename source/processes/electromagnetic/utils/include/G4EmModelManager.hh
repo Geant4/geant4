@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.30 2009-08-03 08:46:42 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.31 2009-08-03 09:43:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -183,7 +183,7 @@ private:
 
 private:
 
-  const G4DataVector*         theCuts;
+  G4DataVector                theCuts;
   G4DataVector                theSubCuts;
 
   std::vector<G4VEmModel*>                models;
@@ -210,6 +210,7 @@ private:
   const G4ParticleDefinition* theProton;
 
   G4int                       verboseLevel;
+  G4bool                      severalModels;
 
   // may be changed in run time
   G4RegionModels*             currRegionModel;
@@ -222,8 +223,10 @@ private:
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
 						 size_t& index)
 {
-  if(nRegions > 1)  currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
-  if(nEmModels > 1) currModel = models[currRegionModel->SelectIndex(kinEnergy)];
+  if(severalModels) {
+    if(nRegions > 1)  currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+    currModel = models[currRegionModel->SelectIndex(kinEnergy)];
+  }
   return currModel;
 }
 
@@ -231,7 +234,7 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy,
 
 inline const G4DataVector* G4EmModelManager::Cuts() const
 {
-  return theCuts;
+  return &theCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
