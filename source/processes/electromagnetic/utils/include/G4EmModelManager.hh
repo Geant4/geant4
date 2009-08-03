@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.29 2009-08-02 09:35:56 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.30 2009-08-03 08:46:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,7 +96,7 @@ private:
     G4int idx = 0;
     if (nModelsForRegion>1) {
       idx = nModelsForRegion;
-      do {idx--;} while (idx && e <= lowKineticEnergy[idx]);
+      do {--idx;} while (idx > 0 && e <= lowKineticEnergy[idx]);
     }
     return theListOfModelIndexes[idx];
   };
@@ -213,6 +213,7 @@ private:
 
   // may be changed in run time
   G4RegionModels*             currRegionModel;
+  G4VEmModel*                 currModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -221,8 +222,9 @@ private:
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
 						 size_t& index)
 {
-  if(nRegions > 1) currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
-  return models[currRegionModel->SelectIndex(kinEnergy)];
+  if(nRegions > 1)  currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+  if(nEmModels > 1) currModel = models[currRegionModel->SelectIndex(kinEnergy)];
+  return currModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

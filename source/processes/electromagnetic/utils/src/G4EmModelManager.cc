@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.51 2009-08-02 09:35:56 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.52 2009-08-03 08:46:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,8 +123,6 @@ G4EmModelManager::G4EmModelManager():
   nEmModels(0),
   nRegions(0),
   nCouples(0),
-  idxOfRegionModels(0),
-  setOfRegionModels(0),
   minSubRange(0.1),
   particle(0),
   verboseLevel(0)
@@ -139,6 +137,8 @@ G4EmModelManager::G4EmModelManager():
   regions.reserve(4);
   orderOfModels.reserve(4);
   isUsed.reserve(4);
+  currRegionModel = 0;
+  currModel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,15 +156,10 @@ void G4EmModelManager::Clear()
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager::Clear()" << G4endl;
   }
-
-  //  if(idxOfRegionModels) delete [] idxOfRegionModels;
-  //  if(setOfRegionModels && nRegions) {
   G4int n = setOfRegionModels.size();
   if(n > 0) {
     for(G4int i=0; i<n; ++i) {delete setOfRegionModels[i];}
   }
-  //  idxOfRegionModels = 0;
-  //  setOfRegionModels = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -276,9 +271,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
-  //  if(nRegions > 1) idxOfRegionModels = new G4int[numOfCouples];
   if(nRegions > 1) idxOfRegionModels.resize(numOfCouples);
-  //  setOfRegionModels = new G4RegionModels*[nRegions];
   setOfRegionModels.resize(nRegions);
 
   std::vector<G4int>    modelAtRegion(nEmModels);
@@ -423,6 +416,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   }
 
   currRegionModel = setOfRegionModels[0];
+  currModel = models[currRegionModel->SelectIndex(0.0)];
 
   // Access to materials and build cuts
   size_t idx = 1;
@@ -432,7 +426,6 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     else if( secondaryParticle == theProton )  idx = 3;
   }
   const std::vector<G4double>* v = theCoupleTable->GetEnergyCutsVector(idx);
-  //  theCuts = theCoupleTable->GetEnergyCutsVector(idx);
   theCuts = static_cast<const G4DataVector*>(v);
   if(minSubRange < 1.0) theSubCuts.resize(numOfCouples);
 
