@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2009-08-03 16:16:31 gcosmo Exp $
+$Id: History,v 1.157 2009-08-03 16:27:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,8 @@ committal in the CVS repository !
 
 Aug 3rd, 2009       G.Cosmo - geomvol-V09-02-00
 - Simplified initialisation of G4NavigationHistory in Clear() method, by
-  avoiding copies of temporary level objects.
+  avoiding copies of temporary level objects. Get rid of unnecessary call
+  to Reset() in destructor.
 - Added utility method SetLevelRepresentation() in G4NavigationLevel for use
   by G4NavigationHistory in initialisation.
 
