@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.13 2009-08-03 16:12:26 gcosmo Exp $
+// $Id: G4NavigationHistory.icc,v 1.14 2009-08-04 08:27:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@ inline
 G4NavigationHistory&
 G4NavigationHistory::operator=(const G4NavigationHistory &h)
 {
-  if (&h == this) return *this;
+  if (&h == this)  { return *this; }
 
   // fNavHistory=h.fNavHistory;   // This works, but is very slow.
 
@@ -63,11 +63,12 @@ inline
 void G4NavigationHistory::Clear()
 {
   G4AffineTransform origin(G4ThreeVector(0.,0.,0.));
+  G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
+
   Reset();
   for (register G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
   {
-     fNavHistory[ilev].SetLevelRepresentation(
-       new G4NavigationLevelRep(0, origin, kNormal, -1) );
+     fNavHistory[ilev] = tmpNavLevel;
   }
 }
 

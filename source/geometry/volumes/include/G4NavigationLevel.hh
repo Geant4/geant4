@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh,v 1.17 2009-08-03 16:13:19 gcosmo Exp $
+// $Id: G4NavigationLevel.hh,v 1.18 2009-08-04 08:27:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -87,8 +87,6 @@ class G4NavigationLevel
 
    inline const G4AffineTransform* GetPtrTransform() const;
      // To try to resolve the possible problem with returning a reference.
-   inline void SetLevelRepresentation(G4NavigationLevelRep* lrep);
-     // Directly set navigation level representation for fast initialisation.
 
    inline void *operator new(size_t);
    inline void operator delete(void *aLevel);

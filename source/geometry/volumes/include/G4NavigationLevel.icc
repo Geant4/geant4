@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc,v 1.21 2009-08-03 16:13:19 gcosmo Exp $
+// $Id: G4NavigationLevel.icc,v 1.22 2009-08-04 08:27:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
@@ -54,12 +54,6 @@ const G4AffineTransform* G4NavigationLevel::GetPtrTransform() const
 { 
   return fLevelRep->GetTransformPtr() ; 
 } 
-
-inline
-void G4NavigationLevel::SetLevelRepresentation(G4NavigationLevelRep* lrep)
-{
-  fLevelRep = lrep;
-}
 
 inline
 EVolume G4NavigationLevel::GetVolumeType() const 
