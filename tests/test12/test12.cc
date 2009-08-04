@@ -29,7 +29,6 @@
 #include "Tst12DetectorConstruction.hh"
 #include "Tst12RunAction.hh"
 #include "Tst12PrimaryGeneratorAction.hh"
-#include "Tst12PhysicsList.hh"
 #include "Tst12SteppingAction.hh"
 #include "Tst12StackingAction.hh"
 
