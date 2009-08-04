@@ -45,7 +45,6 @@
 #include "G4ReactionKinematics.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4LorentzVector.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4PiMinusStopMaterial.hh"
 #include "G4DistributionGenerator.hh"
 

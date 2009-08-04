@@ -38,7 +38,6 @@
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4ParticleTypes.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
 
