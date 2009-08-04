@@ -508,7 +508,22 @@ void StatAccepTestAnalysis::init() {
   mapInfoAboutTrack.clear();
   mapInfoAboutVertex.clear();
 
-  countNumberOfTracks = countNumberOfVertices = countNumberOfHadronicVertices = 0;
+  countNumberOfTracks = countNumberOfVertices = 
+    countNumberOfElectromagneticVertices = 
+    countNumberOfPhotoleptonHadronVertices =
+    countNumberOfDecayVertices =
+    countNumberOfHadronicVertices = 
+    countNumberOfHadronInelasticVertices_notFromNeutrons =
+    countNumberOfHadronInelasticVertices_fromNeutrons =
+    countNumberOfCaptureVertices_notFromNeutrons =
+    countNumberOfCaptureVertices_fromNeutrons =
+    countNumberOfFissionVertices_notFromNeutrons =
+    countNumberOfFissionVertices_fromNeutrons =
+    countNumberOfAtRestVertices_notFromNeutrons =
+    countNumberOfAtRestVertices_fromNeutrons =
+    countNumberOfChargeExchangeVertices_notFromNeutrons =
+    countNumberOfChargeExchangeVertices_fromNeutrons = 0;
+
   sumEvis_em = sumEtot_em = sumEvis_p = sumEtot_p = sumEvis_pi = sumEtot_pi =
     sumEvis_ion = sumEtot_ion = 0.0;
   sumEvis_from1stInterac_pi0 = sumEtot_from1stInterac_pi0 = 
@@ -5039,10 +5054,47 @@ void StatAccepTestAnalysis::finish() {
   if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
     G4cout << G4endl << " Analysis of interactions (Tracks & Vertices)" << G4endl;
 
-    G4cout << "\t average number of tracks = " << countNumberOfTracks / n << G4endl
-	   << "\t average number of vertices = " << countNumberOfVertices / n << G4endl
-	   << "\t average number of hadronic vertices = " 
-	   << countNumberOfHadronicVertices / n << G4endl
+    G4cout << "\t average number of tracks = " << countNumberOfTracks / n 
+	   << G4endl
+	   << "\t average number of vertices = " << countNumberOfVertices / n 
+	   << G4endl
+	   << "\t    electromagnetic = " << countNumberOfElectromagneticVertices / n 
+	   << G4endl
+	   << "\t    photolepton-hadron = " << countNumberOfPhotoleptonHadronVertices / n
+	   << G4endl
+	   << "\t    decay = " << countNumberOfDecayVertices / n 
+	   << G4endl
+	   << "\t    hadronic elastic : from neutrons = " 
+	   << countNumberOfHadronElastic_fromNeutrons / n 
+	   << "   from others = " << countNumberOfHadronElastic_notFromNeutrons / n
+	   << G4endl
+	   << "\t    hadronic non-elastic = " << countNumberOfHadronicVertices / n 
+	   << G4endl
+	   << "\t \t hadron inelastic : from neutrons = " 
+	   << countNumberOfHadronInelasticVertices_fromNeutrons / n
+	   << "   from others = " 
+	   << countNumberOfHadronInelasticVertices_notFromNeutrons / n
+	   << G4endl
+	   << "\t \t capture : from neutrons = " 
+	   << countNumberOfCaptureVertices_fromNeutrons / n
+	   << "   from others = " 
+	   << countNumberOfCaptureVertices_notFromNeutrons / n
+	   << G4endl
+	   << "\t \t fission : from neutrons = " 
+	   << countNumberOfFissionVertices_fromNeutrons / n
+	   << "   from others = " 
+	   << countNumberOfFissionVertices_notFromNeutrons / n
+	   << G4endl
+	   << "\t \t at rest : from neutrons = " 
+	   << countNumberOfAtRestVertices_fromNeutrons / n
+	   << "   from others = " 
+	   << countNumberOfAtRestVertices_notFromNeutrons / n
+	   << G4endl
+	   << "\t \t charge exchange : from neutrons = " 
+	   << countNumberOfChargeExchangeVertices_fromNeutrons / n
+	   << "   from others = " 
+	   << countNumberOfChargeExchangeVertices_notFromNeutrons / n
+	   << G4endl
 	   << G4endl;
 
     G4cout << "\t <Evis_em>  = " << sumEvis_em  / n 
@@ -5355,7 +5407,6 @@ void StatAccepTestAnalysis::analysisTrackAndVertices_0() {
       }
     }
   }
-  
   G4cout << G4endl
 	 << "\t =============================================== " << G4endl
 	 << G4endl;
@@ -5370,21 +5421,71 @@ void StatAccepTestAnalysis::analysisTrackAndVertices_1() {
 
   countNumberOfTracks += mapInfoAboutTrack.size();
   countNumberOfVertices += mapInfoAboutVertex.size();
-  
-  // Count the number of inelastic hadronic interactions.
   for ( std::map< G4int, structInfoAboutVertex >::const_iterator 
 	  cit = mapInfoAboutVertex.begin(); 
 	cit != mapInfoAboutVertex.end(); ++cit ) {
+    G4int type = cit->second.theCreatorProcessType;
     G4int subtype = cit->second.theCreatorProcessSubType;
-    if ( 
-	//subtype == 111  ||     // G4HadronicProcessType::fHadronElastic
-	subtype == 121  ||     // G4HadronicProcessType::fHadronInelastic
-	subtype == 131  ||     // G4HadronicProcessType::fCapture
-	subtype == 141  ||     // G4HadronicProcessType::fFission
-	subtype == 151  ||     // G4HadronicProcessType::fHadronAtRest
-	subtype == 161         // G4HadronicProcessType::fChargeExchange 
-	) {
-      countNumberOfHadronicVertices++;
+    G4int creator_pdgcode = 0;
+    if ( mapInfoAboutTrack.find( cit->second.theCreatorTrackID ) !=  
+	 mapInfoAboutTrack.end() ) {
+      creator_pdgcode = mapInfoAboutTrack.find( cit->second.theCreatorTrackID )->
+	second.theParticlePDGCode;
+    }
+    if ( type == 2 ) {            // G4ProcessType::fElectromagnetic
+      countNumberOfElectromagneticVertices += 1;
+    } else if ( type == 5 ) {     // G4ProcessType::fPhotolepton_hadron
+      countNumberOfPhotoleptonHadronVertices += 1;
+    } else if ( type == 6 ) {     // G4ProcessType::fDecay
+      countNumberOfDecayVertices += 1;
+    }
+    if ( subtype == 111 ) {  // G4HadronicProcessType::fHadronElastic
+      if ( creator_pdgcode == neutronId ) {
+	countNumberOfHadronElastic_fromNeutrons += 1;
+      } else {
+	countNumberOfHadronElastic_notFromNeutrons += 1;
+      }
+    } else {
+      if (
+	  subtype == 121  ||     // G4HadronicProcessType::fHadronInelastic
+	  subtype == 131  ||     // G4HadronicProcessType::fCapture
+	  subtype == 141  ||     // G4HadronicProcessType::fFission
+	  subtype == 151  ||     // G4HadronicProcessType::fHadronAtRest
+	  subtype == 161         // G4HadronicProcessType::fChargeExchange 
+	  ) {
+	countNumberOfHadronicVertices++;
+	if ( subtype == 121 ) {
+	  if ( creator_pdgcode == neutronId ) {
+	    countNumberOfHadronInelasticVertices_fromNeutrons += 1;
+	  } else {
+	    countNumberOfHadronInelasticVertices_notFromNeutrons += 1;
+	  }
+	} else if ( subtype == 131 ) {
+	  if ( creator_pdgcode == neutronId ) {
+	    countNumberOfCaptureVertices_fromNeutrons += 1;
+	  } else {
+	    countNumberOfCaptureVertices_notFromNeutrons += 1;
+	  }
+	} else if ( subtype == 141 ) {
+	  if ( creator_pdgcode == neutronId ) {
+	    countNumberOfFissionVertices_fromNeutrons += 1;
+	  } else {
+	    countNumberOfFissionVertices_notFromNeutrons += 1;
+	  }
+	} else if ( subtype == 151 ) {
+	  if ( creator_pdgcode == neutronId ) {
+	    countNumberOfAtRestVertices_fromNeutrons += 1;
+	  } else {
+	    countNumberOfAtRestVertices_notFromNeutrons += 1;
+	  }
+	} else if ( subtype == 161 ) {
+	  if ( creator_pdgcode == neutronId ) {
+	    countNumberOfChargeExchangeVertices_fromNeutrons += 1;
+	  } else {
+	    countNumberOfChargeExchangeVertices_notFromNeutrons += 1;
+	  }
+	}
+      } 
     }
   }
   
@@ -5416,7 +5517,7 @@ void StatAccepTestAnalysis::analysisTrackAndVertices_2() {
   // the calorimeter observables with the quantities we have calculated
   // at model-level.
   // We consider only the first hadronic inelastic interaction,
-  // and we look at the visible and total energies in the calorimeters
+  // and we look at the visible and total energies in the calorimeter
   // that are coming from the particles produced directly, or
   // indirectly (i.e. later generations) from that first hadronic 
   // inelastic interaction.

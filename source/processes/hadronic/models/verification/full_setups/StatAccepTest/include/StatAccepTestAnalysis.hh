@@ -531,7 +531,23 @@ private:
 
   // Variables which accumulates statistics for end-of-run analysis
   // concerning tracks and vertices.
-  G4int countNumberOfTracks, countNumberOfVertices, countNumberOfHadronicVertices;
+  G4int countNumberOfTracks, countNumberOfVertices, 
+    countNumberOfElectromagneticVertices,
+    countNumberOfPhotoleptonHadronVertices,
+    countNumberOfDecayVertices,
+    countNumberOfHadronicVertices,
+    countNumberOfHadronElastic_fromNeutrons,
+    countNumberOfHadronElastic_notFromNeutrons,
+    countNumberOfHadronInelasticVertices_fromNeutrons,
+    countNumberOfHadronInelasticVertices_notFromNeutrons,
+    countNumberOfCaptureVertices_fromNeutrons,
+    countNumberOfCaptureVertices_notFromNeutrons,
+    countNumberOfFissionVertices_fromNeutrons,
+    countNumberOfFissionVertices_notFromNeutrons,
+    countNumberOfAtRestVertices_fromNeutrons,
+    countNumberOfAtRestVertices_notFromNeutrons,
+    countNumberOfChargeExchangeVertices_fromNeutrons,
+    countNumberOfChargeExchangeVertices_notFromNeutrons;
   G4double sumEvis_em, sumEtot_em, sumEvis_p, sumEtot_p, sumEvis_pi, sumEtot_pi,
     sumEvis_ion, sumEtot_ion;
   G4double sumEvis_from1stInterac_pi0, sumEtot_from1stInterac_pi0,

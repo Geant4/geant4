@@ -1,13 +1,19 @@
                  History file
                  ------------
 
+04-Aug-2009 - A.Ribon (statAccepTest-V09-02-05)
+- Added some details on the type of vertices.
+
+
 31-Jul-2009 - A.Ribon (statAccepTest-V09-02-04)
 - Introduced in the analysis class (StatAccepTestAnalysis)
   the possibility to have a detail map of tracks and
   vertices, in order to link calorimeter observables
   with hadronic interactions.
   By default this is switched off; if it is turned on,
-  the execution becomes an order of magnitude longer.
+  the execution becomes an order of magnitude longer
+  for beam kinetic energies <= 20 GeV, and two or three 
+  orders of magnitude longer for higher beam energies.
 
 
 23-Jul-2009 - A.Ribon (statAccepTest-V09-02-03)
