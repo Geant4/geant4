@@ -1,0 +1,181 @@
+
+                       geant4-09-02-ref-07
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Reviewed implementation of G4PhysicsVector class and sub-classes.
+ o Added possibility to handle cuts for protons.
+ o Design update, bug fixes and models update for atomic shell hadronic CS
+   calculation in EM low-energy.
+ o New data set G4EMLOW-6.6 with new data files needed by ionisation cross
+   section models for PIXE..
+ o First Beta implementation of the CHIPS model valid for all energies.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-08
+------
+- Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
+  diagnostics for wrong architecture errors at link stage.
+
+geometry/solids/specific                         geom-specific-V09-02-05
+------------------------
+- G4Ellipsoid:
+  o Fixes in Inside(p) and in DistanceToIn(p,v) for points
+    located on the curved surface within tolerance. Final fix for issue
+    reported in problem report #1050 and concerning warnings reported by
+    grid_test.
+  o G4Ellipsoid: fix to DistanceToIn(p,v) in the calculation of the roots of
+    the quadratic equation and in DistanceToOut(p,v) in the calculation of the
+    normal on cut surfaces. Final fix for problem report #1022.
+  o Adopt pre-computed half-tolerance values for optimisation.
+- G4PolyconeSide: added protection in method Normal(), addressing problem
+  report #1073.
+
+geometry/volumes                                 geomvol-V09-02-00
+----------------
+- Get rid of unnecessary call to Reset() in G4NavigationHistory destructor.
+- Some code formatting...
+
+global                                           global-V09-02-06
+------
+- New class G4Pow for fast computation of log() and pow() for integer and
+  double arguments in the interval [1-256].
+- G4PhysicsVector:
+  o Added ComputeSecDerivative() and SplinePossible() methods as a
+    computation of Spline coefficients for small number of bins.
+  o Removed old obsolete hidden bin approach.
+  o Use std::vector for second derivatives instead of C arrays.
+
+materials                                        materials-V09-02-08
+---------
+- Improved implementation of UI commands in G4NistManager, G4NistMessenger
+  and G4NistElementBuilder.
+
+physics_lists                                    phys_lists-V09-02-22
+-------------
+- Adapted G4EmLivermorePolarizedPhysics builder as for the non polarized case.
+
+processes/cuts                                   procuts-V09-02-02
+--------------
+- Added cuts for proton.
+- Added missing implementation for method GetParticleType() in class
+  G4VRangeToEnergyConverter.
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-45
+-----------------------------------
+- Design update, bug fixes and models update for atomic shell hadronic CS
+  calculation. Requiring new data set G4EMLOW-6.6.
+- Modified classes G4VeLowEnergyLoss, G4eLowEnergyLoss and G4hLowEnergyLoss
+  according to updates in G4PhysicsVector.
+- Moved class G4AtomicShell to 'utils' module.
+- Fixed file names in G4ecpssrKCrossSection, G4ecpssrLCrossSection and
+  G4DNACrossSectionDataSet; removed debug printout.
+
+processes/electromagnetic/muons                  emmuons-V09-02-05
+-------------------------------
+- G4MuMultipleScattering: removed obosolete members and methods which are
+  already defined in the base class.
+- G4EnergyLossForExtrapolator: removed hidden bin to use full scale of 
+  of G4PhysicsVector; set 'linLossLimit' to 0.01.
+
+processes/electromagnetic/standard               emstand-V09-02-19
+----------------------------------
+- Added new classes G4NuclearStopping and G4ICRU49NuclearStoppingModel.
+- G4WentzelVIModel, G4eCoulombScatteringModel: fixed numerical problem at
+  very high energy.
+- G4PAIModel: fixed problem for the case of several materials.
+- G4PAIySection: added protections for numerical exceptions.
+- G4GoudsmitSaundersonMscModel: fix in the computation of the displacement.
+- G4MultipleScattering, G4eMultipleScattering, G4hMultipleScattering: moved 
+  initialisation of models to the base class.
+- G4hMultipleScattering: removed obsolete methods.
+- G4GoudsmitSaundersonMscModel: removed extra correction factor for sampling
+  in high-Z media.
+
+processes/electromagnetic/utils               emutils-V09-02-16
+-------------------------------
+- G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess: fixed bug in
+  method RetrieveTables(); check that each its physics-vector is retrieved
+  before setting the 'SplineFlag'.
+- Added G4AtomicShell class from 'lowenergy' module.
+- G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess:
+  o Adopt updated G4PhysicsVector with no longer hidden bin; use Energy()
+    and Value() methods instead of GetLowEdgeEnergy() and GetValue().
+  o Added initialisation of 'polarAngleLimit' and 'highEnergyLimit'
+    parameters for all models.
+- G4VEmProcess: modified method SelectModel() required for the process
+  G4NuclearStopping.
+- G4VMultipleScattering: added initialisation of generic multiple-scattering
+  model parameters, allowing to overwrite default models.
+- G4VMscModel: set 'facsafety' to 0.3 as it is defined in Urban models.
+- Code cleanup in G4EmConfigurator.
+- G4VEnergyLossProcess: fixed retrieve from ASCII files.
+- G4VMultipleScattering: removed obsolete method GetMscContinuesStepLimit().
+- Added new interface class G4VAtomDeexcitation.
+
+processes/electromagnetic/xrays               xrays-V09-02-00
+-------------------------------
+- Exclude short-lived particle from IsApplicable() for G4Cerenkov and
+  G4Scintillation processes.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space (hadr-chips-V09-02-02)
+  o Beta-version of the CHIPS model, covering all energies.
+    Removed obsolete classes.
+  o Replaced internal RndmDir() with general G4RandomDirection() in the code.
+  o Safety correction for calculation of sqrt() in G4QNucleus.
+  o Internal development of the pion production in CHIPS.
+- models/de_excitation (hadr-deex-V09-02-12)
+  o G4EvaporationDefaultGEMFactory: new class where light mesons probabilities
+    are computed from default classes and other fragments from GEM.
+  o G4Evaporation: added method SetCombinedCannels() to define new evaporation
+    factory G4EvaporationDefaultGEMFactory.
+  o Code cleanup in G4EvaporationGEMFactory.
+  o G4FissionLevelDensityParameter, G4FissionParameters: tuned against IAEA
+    benchmark data.
+  o G4GEMProbability: fixed units (hbar_Plank -> hbarc).
+  o G4FermiFragmentsPool: fixed units (keV -> MeV), removed wrong levels,
+    added new levels according to Broohaven data (see chart of nuclides at:
+    http://www.nndc.bnl.gov/chart).
+- models/radioactive_decay (radioactive_decay-V09-02-00)
+  o Added dependence on 'electromagnetic/util' module for usage of the
+    G4AtomicShell class.
+
+run                                              run-V09-02-02
+---
+- Modified G4VUserPhysicsList to fit with proton cuts.
+- Modified G4VUserPhysicsList::BuildPhysicsTable() to avoid problem when
+  ions are created in the 'Pre-Init' state.
+
+data sets
+---------
+- New G4EMLOW data set, version 6.6: added new directory and data files
+  needed by ionisation cross section models for PIXE.
+
+examples                                         examples-V09-02-06
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm2 (testem2-V09-02-00)
+  o Substituted obsolete low-energy physics builders with builders from
+    the general 'physics_list' module.
+  o Reduced number of hard-coded materials, added a possiblity to use NIST
+    materials.
+  o Some cleanup to macro files.
+- extended/exoticphysics/monopole (monopole-V09-02-00)
+  o Added messenger to define mass and charge of the monopole.
+
+tests                                            tests-V09-02-06
+-----
+- Updated reference outputs and tools.
+- test12 (test12-V09-02-02)
+  o Added option to choose physics-list between FTFP and FTF_BIC, allowing
+    testing of both combinations from the general 'physics_list' module.
+    Removed obsolete ad-hoc Tst12PhysicsList class.
+- test47 (test47-V09-02-02)
+  o Corrected scripts for plotting and corrected few data files.
