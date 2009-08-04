@@ -37,7 +37,6 @@
 // -------------------------------------------------------------------
 
 #include "G4KM_NucleonEqRhs.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4VNuclearDensity.hh"
 
 
