@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2009-07-29 16:48:19 gcosmo Exp $
+$Id: History,v 1.157 2009-08-04 10:27:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-Aug-2009  T.Nikitina (geom-specific-V09-02-05)
+- G4Ellipsoid:
+  o Fixes in Inside(p) and in DistanceToIn(p,v) for points
+    located on the curved surface within tolerance. Final fix for issue
+    reported in problem report #1050 and concerning warnings reported by
+    grid_test.
+  o Adopt pre-computed half-tolerance values for optimisation.
 
 23-Jul-2009  T.Nikitina (geom-specific-V09-02-04)
 - G4Ellipsoid: fix to DistanceToIn(p,v) in the calculation of the roots of
