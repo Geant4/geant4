@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+4-Aug-2009 M.Kosov                              (hadr-chips-body-V09-02-09)
+-----------------------------------------------------------------------
+Fast fix of brackets around && to avoid warnings
+
 31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
 -----------------------------------------------------------------------
 Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.18 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.19 2009-08-04 14:44:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -3618,8 +3618,8 @@ void G4QFragmentation::SwapPartons() // Swap string partons, if a string has neg
         G4int pRT=pRight->GetType();
         G4double LM=0.;
         G4double RM=0.;
-        if( (cLPDG<-7 || (cLPDG>0 && cLPDG< 7) ) && (pLPDG<-7 || (pLPDG>0 && pLPDG< 7) ) ||
-            (cLPDG> 7 || (cLPDG<0 && cLPDG>-7) ) && (pLPDG> 7 || (pLPDG<0 && cLPDG>-7) ) )
+        if(((cLPDG<-7 || (cLPDG>0 && cLPDG< 7) ) && (pLPDG<-7 || (pLPDG>0 && pLPDG< 7) ))||
+           ((cLPDG> 7 || (cLPDG<0 && cLPDG>-7) ) && (pLPDG> 7 || (pLPDG<0 && cLPDG>-7) )))
         {
           G4double pLM2=(cL4M+pR4M).m2();                      // new partner M2
           G4double cLM2=(cR4M+pL4M).m2();                      // new partner M2
@@ -3632,8 +3632,8 @@ void G4QFragmentation::SwapPartons() // Swap string partons, if a string has neg
             LM=std::min(pLM2,cLM2);
           }
         }
-        if( (cRPDG<-7 || (cRPDG>0 && cRPDG< 7) ) && (pRPDG<-7 || (pRPDG>0 && pRPDG< 7) ) ||
-            (cRPDG> 7 || (cRPDG<0 && cRPDG>-7) ) && (pRPDG> 7 || (pRPDG<0 && cRPDG>-7) ) )
+        if(((cRPDG<-7 || (cRPDG>0 && cRPDG< 7) ) && (pRPDG<-7 || (pRPDG>0 && pRPDG< 7) ))||
+           ((cRPDG> 7 || (cRPDG<0 && cRPDG>-7) ) && (pRPDG> 7 || (pRPDG<0 && cRPDG>-7) )) )
         {
           G4double pRM2=(cR4M+pL4M).m2();                      // new partner M2
           G4double cRM2=(cL4M+pR4M).m2();                      // new partner M2
