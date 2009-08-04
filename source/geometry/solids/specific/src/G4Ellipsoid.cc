@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.19 2009-07-29 16:34:40 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.20 2009-08-04 09:16:25 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -386,8 +386,8 @@ EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
 
   // check this side of z cut first, because that's fast
   //
-  if (p.z() < zBottomCut-kRadTolerance/2.0) { return in=kOutside; }
-  if (p.z() > zTopCut+kRadTolerance/2.0)    { return in=kOutside; }
+  if (p.z() < zBottomCut-kRadTolerance/2.0) {  return in=kOutside; }
+  if (p.z() > zTopCut+kRadTolerance/2.0)    {  return in=kOutside; }
 
   rad2oo= sqr(p.x()/(xSemiAxis+kRadTolerance/2.))
         + sqr(p.y()/(ySemiAxis+kRadTolerance/2.))
@@ -403,15 +403,17 @@ EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
   //  sets `in' (already checked for rad2oo > 1.0)
   //
   if (rad2oi < 1.0)
-  {
+  { 
     in = ( (p.z() < zBottomCut+kRadTolerance/2.0)
         || (p.z() > zTopCut-kRadTolerance/2.0) ) ? kSurface : kInside;
+    if(rad2oi>1.0-kRadTolerance*0.5)in=kSurface;
   }
   else 
   {
     in = kSurface;
   }
   return in;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -497,35 +499,38 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   C= B*B - 4.0*A*C;
   if (C > 0.0)
   {
-    G4double distR = (-B - std::sqrt(C) ) / (2.0*A);
-    G4double intZ  = p.z()+distR*v.z();
-    if ( (distR >- kRadTolerance/2.0)
-      && (intZ >= zBottomCut-kRadTolerance/2.0)
-      && (intZ <= zTopCut+kRadTolerance/2.0) )
-    {
-      distMin = distR;
-    }
-    else
-    {
-      distR = (-B + std::sqrt(C) ) / (2.0*A);
-      intZ  = p.z()+distR*v.z();
-      if ( (distR >- kRadTolerance/2.0)
-        && (intZ >= zBottomCut-kRadTolerance/2.0)
-        && (intZ <= zTopCut+kRadTolerance/2.0) )
-      {
-        distMin = distR;
-      }
-    }
-    if ( distMin>dRmax ) // Avoid rounding errors due to precision issues seen
-    {                    // on 64 bits systems. Split distances and recompute
-      G4double fTerm = distMin-std::fmod(distMin,dRmax);
-      distMin = fTerm + DistanceToIn(p+fTerm*v,v);
-    } 
-    distMin = distR;
+    
+      G4double distR= (-B - std::sqrt(C) ) / (2.0*A);
+      G4double intZ= p.z()+distR*v.z();
+      if (distR >- kRadTolerance/2.0
+      && intZ >= zBottomCut-kRadTolerance/2.0
+      && intZ <= zTopCut+kRadTolerance/2.0)
+        { 
+          distMin = distR;
+        }
+      else
+        {
+          distR= (-B + std::sqrt(C) ) / (2.0*A);
+          intZ= p.z()+distR*v.z();
+          if (distR >- kRadTolerance/2.0
+              && intZ >= zBottomCut-kRadTolerance/2.0
+              && intZ <= zTopCut+kRadTolerance/2.0)
+            {
+              if(p.dot(v)<0.)distMin = distR;
+             
+            }
+        }
+      if ( distMin>dRmax ) // Avoid rounding errors due to precision issues seen on
+      {              // 64 bits systems. Split long distances and recompute
+        G4double fTerm = distMin-std::fmod(distMin,dRmax);
+        distMin = fTerm + DistanceToIn(p+fTerm*v,v);
+      } 
+   
   }
+  
+ if(std::abs(distMin)<kRadTolerance*0.5)distMin=0.;
+ return distMin;
 
-  if(std::abs(distMin)<kRadTolerance*0.5)  { distMin=0.; }
-  return distMin;
 } 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -689,6 +694,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
       }
     }
   }
+   
   return distMin;
 }
 
