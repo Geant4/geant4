@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.20 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.21 2009-08-04 17:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "G4CoulombScatteringModel.hh"
 #include "G4eCoulombScatteringModel.hh"
 #include "G4Electron.hh"
+#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

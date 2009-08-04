@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.72 2009-07-27 10:43:15 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.73 2009-08-04 17:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,6 +65,7 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4ParticleTable.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -89,7 +90,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
   currentElement  = 0;
-  lowEnergyLimit = keV;
+  lowEnergyLimit  = 0.1*keV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = DBL_MIN;
@@ -106,10 +107,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
 
-    ScreenRSquare[0] = alpha2*a0*a0;
+    ScreenRSquare[0] = 2.*alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      ScreenRSquare[j] = 2.*alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -132,14 +133,15 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   cosThetaMin = cos(PolarAngleLimit());
-  currentCuts = &cuts;
+  pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
+  // G4cout << "cut0= " << cuts[0] << "  cut1= " << cuts[1] << G4endl;
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
- }
+  }
   if(mass < GeV && particle->GetParticleType() != "nucleus") {
     InitialiseElementSelectors(p,cuts);
   }
@@ -269,7 +271,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double ekin = std::max(lowEnergyLimit, kinEnergy);
   SetupKinematic(ekin, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
-  //	 << kinEnergy << "  " << particle->GetParticleName() << G4endl;
+  //	 << kinEnergy << "  " << particle->GetParticleName() 
+  //	 << " cut= " << cutEnergy<< G4endl;
  
   // Choose nucleus
   currentElement = SelectRandomAtom(couple,particle,ekin,cutEnergy,ekin);
@@ -298,8 +301,10 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(lowEnergyLimit < kinEnergy) {
     G4int ia = SelectIsotopeNumber(currentElement);
     G4double Trec = z1*mom2/(amu_c2*G4double(ia));
+    G4double Tcut = recoilThreshold;
+    if(pCuts) Tcut= (*pCuts)[currentMaterialIndex]; 
 
-    if(Trec > recoilThreshold) {
+    if(Trec > Tcut) {
       G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
       Trec = z1*mom2/ion->GetPDGMass();
       if(Trec < kinEnergy) {

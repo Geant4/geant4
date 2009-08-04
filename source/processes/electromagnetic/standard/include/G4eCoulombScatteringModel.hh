@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.45 2009-07-25 15:23:14 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.46 2009-08-04 17:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,9 +68,11 @@
 #include "G4PhysicsTable.hh"
 #include "globals.hh"
 #include "G4NistManager.hh"
+#include <vector>
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
+class G4DataVector;
 
 class G4eCoulombScatteringModel : public G4VEmModel
 {
@@ -130,7 +132,8 @@ protected:
   G4ParticleTable*          theParticleTable; 
   G4ParticleChangeForGamma* fParticleChange;
   G4NistManager*            fNistManager;
-  const G4DataVector*       currentCuts;
+
+  const std::vector<G4double>* pCuts;
 
   const G4MaterialCutsCouple* currentCouple;
   const G4Material*           currentMaterial;

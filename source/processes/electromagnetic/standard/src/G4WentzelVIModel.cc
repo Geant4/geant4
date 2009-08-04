@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.34 2009-07-25 15:23:14 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.35 2009-08-04 17:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,10 +112,10 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
 
-    ScreenRSquare[0] = alpha2*a0*a0;
+    ScreenRSquare[0] = 2*alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      ScreenRSquare[j] = 2.0*alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -430,8 +430,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
       xsec = ComputeXSectionPerVolume();
 
-      if(xtsec > DBL_MIN) x1 = 0.5*tPathLength*xtsec;
-      else                x1 = 0.0;
+      if(xtsec > 0.0) x1 = 0.5*tPathLength*xtsec;
+      else            x1 = 0.0;
 
       /*      
 	G4cout << "cosTetMaxNuc= " << cosTetMaxNuc 
@@ -451,8 +451,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // cost is sampled ------------------------------
   G4double cost = 1.0 - 2.0*z;
-  if(cost < -1.0) cost = -1.0;
-  else if(cost > 1.0) cost = 1.0;
+  //  if(cost < -1.0) cost = -1.0;
+  // else if(cost > 1.0) cost = 1.0;
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi  = twopi*G4UniformRand();
@@ -471,7 +471,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4bool isscat = false;
 
   // sample MSC scattering for large angle
-  // extra central scattering for holf step
+  // extra central scattering for half step
   if(largeAng) {
     isscat = true;
     pos.setZ(-0.5*zPathLength);
@@ -479,7 +479,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       z = -x1*log(G4UniformRand());
     } while (z > 1.0); 
     cost = 1.0 - 2.0*z;
-    if(std::abs(cost) > 1.0) cost = 1.0;
+    //if(std::fabs(cost) > 1.0) cost = 1.0;
 
     sint = sqrt((1.0 - cost)*(1.0 + cost));
     phi  = twopi*G4UniformRand();

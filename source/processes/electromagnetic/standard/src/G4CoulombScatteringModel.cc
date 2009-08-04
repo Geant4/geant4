@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.40 2009-06-18 17:01:46 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.41 2009-08-04 17:10:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -193,7 +193,10 @@ void G4CoulombScatteringModel::SampleSecondaries(
   // recoil
   G4double erec = kinEnergy - ekin;
 
-  if(erec > recoilThreshold) {
+  G4double Tcut = recoilThreshold;
+  if(pCuts) Tcut= (*pCuts)[currentMaterialIndex]; 
+
+  if(erec > Tcut) {
     G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
     G4double plab = sqrt(ekin*(ekin + 2.0*mass));
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
