@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Test60.cc,v 1.1 2009-05-04 10:05:35 sincerti Exp $
+// $Id: Test60.cc,v 1.2 2009-08-05 17:35:17 kurasige Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,8 +56,10 @@ int main(int argc,char** argv)
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);
-
+  PhysicsList * pl;
+  runManager->SetUserInitialization(pl = new PhysicsList);
+  pl->DisableCheckParticleList();
+ 
   // Set mandatory user action classes
   PrimaryGeneratorAction* primary;
   runManager->SetUserAction(primary = new PrimaryGeneratorAction(detector));

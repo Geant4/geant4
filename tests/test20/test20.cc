@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test20.cc,v 1.5 2006-06-29 21:45:40 gunter Exp $
+// $Id: test20.cc,v 1.6 2009-08-05 17:33:27 kurasige Exp $
 //
 
 #include "Tst20DetectorConstruction.hh"
@@ -53,7 +53,9 @@ int main(int argc,char** argv) {
   detector = new Tst20DetectorConstruction;
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Tst20PhysicsList);
+  Tst20PhysicsList* pl;
+  runManager->SetUserInitialization(pl = new Tst20PhysicsList);
+  pl->DisableCheckParticleList();
 
   // UserAction classes
   runManager->SetUserAction(new Tst20PrimaryGeneratorAction(detector));

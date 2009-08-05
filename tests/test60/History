@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009-05-25 10:34:06 sincerti Exp $
+$Id: History,v 1.2 2009-08-05 17:35:17 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05 Aug 2009 - H.Kurashige  tag test60-V09-02-02
+              Add DisableCheckParticleList to avoid G4Exception by PhysicsList
 
 25 May 2009 - S. Incerti, tag tag test60-V09-02-01
               Added History and README files.
