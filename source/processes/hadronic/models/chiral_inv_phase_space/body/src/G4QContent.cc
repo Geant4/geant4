@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.47 2009-07-24 16:37:03 mkossov Exp $
+// $Id: G4QContent.cc,v 1.48 2009-08-05 13:22:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -73,7 +73,7 @@ G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
 }
 
 // Initialize by a pair of partons
-G4QContent::G4QContent(std::pair<G4int,G4int> PP)
+G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(0),nAS(0)
 {
   G4int P1=PP.first;
   G4int P2=PP.second;
@@ -195,6 +195,7 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP)
     G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
   }
 }
+
 G4QContent::G4QContent(const G4QContent& right)
 {
   nU  = right.nU;
