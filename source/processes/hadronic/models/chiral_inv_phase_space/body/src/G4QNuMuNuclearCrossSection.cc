@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuANuNuclearCrossSection.cc,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.1 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QANuANuNuclearCrossSection for gamma+A cross sections
+// G4 Physics class: G4QNuMuNuclearCrossSection for (nu,mu-)A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
 // 
@@ -37,8 +37,6 @@
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
 //=========================================================================================
-// Short description: Provides the (anti-nu,anti-nu)A cross-section (Created by M. Kossov)
-// ----------------------------------------------------------------------------------------
 
 //#define debug
 //#define edebug
@@ -47,36 +45,36 @@
 //#define tdebug
 //#define sdebug
 
-#include "G4QANuANuNuclearCrossSection.hh"
+#include "G4QNuMuNuclearCrossSection.hh"
 
 // Initialization of the
-G4bool    G4QANuANuNuclearCrossSection::onlyCS=true;//Flag to calculate only CS (not QE)
-G4double  G4QANuANuNuclearCrossSection::lastSig=0.;//Last calculated total cross section
-G4double  G4QANuANuNuclearCrossSection::lastQEL=0.;//Last calculated quasi-el cross section
-G4int     G4QANuANuNuclearCrossSection::lastL=0;   //Last used in cross section TheLastBin
-G4double  G4QANuANuNuclearCrossSection::lastE=0.;  //Last used in cross section TheEnergy
-G4double* G4QANuANuNuclearCrossSection::lastEN=0;  //Pointer to theEnergy Scale of TX & QE
-G4double* G4QANuANuNuclearCrossSection::lastTX=0;  //Pointer to theLastArray of TX function
-G4double* G4QANuANuNuclearCrossSection::lastQE=0;  //Pointer to theLastArray of QE function
-G4int     G4QANuANuNuclearCrossSection::lastPDG=0; // The last PDG code of the projectile
-G4int     G4QANuANuNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4QANuANuNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QANuANuNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
-G4double  G4QANuANuNuclearCrossSection::lastTH=0.; // Last threshold momentum
-G4double  G4QANuANuNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
-G4int     G4QANuANuNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+G4bool    G4QNuMuNuclearCrossSection::onlyCS=true;// Flag to calculate only CS (not QE)
+G4double  G4QNuMuNuclearCrossSection::lastSig=0.;// Last calculated total cross section
+G4double  G4QNuMuNuclearCrossSection::lastQEL=0.;// Last calculated quasi-el. cross section
+G4int     G4QNuMuNuclearCrossSection::lastL=0;   // Last used in cross section TheLastBin
+G4double  G4QNuMuNuclearCrossSection::lastE=0.;  // Last used in cross section TheEnergy
+G4double* G4QNuMuNuclearCrossSection::lastEN=0;  // Pointer to the Energy Scale of TX & QE
+G4double* G4QNuMuNuclearCrossSection::lastTX=0;  // Pointer to the LastArray of TX function
+G4double* G4QNuMuNuclearCrossSection::lastQE=0;  // Pointer to the LastArray of QE function
+G4int     G4QNuMuNuclearCrossSection::lastPDG=0; // The last PDG code of the projectile
+G4int     G4QNuMuNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
+G4int     G4QNuMuNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
+G4double  G4QNuMuNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double  G4QNuMuNuclearCrossSection::lastTH=0.; // Last threshold momentum
+G4double  G4QNuMuNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
+G4int     G4QNuMuNuclearCrossSection::lastI=0;   // The last position in the DAMDB
 
 // Returns Pointer to the G4VQCrossSection class
-G4VQCrossSection* G4QANuANuNuclearCrossSection::GetPointer()
+G4VQCrossSection* G4QNuMuNuclearCrossSection::GetPointer()
 {
-  static G4QANuANuNuclearCrossSection theCrossSection; //*Static body of the Cross Section*
+  static G4QNuMuNuclearCrossSection theCrossSection; //**Static body of the Cross Section**
   return &theCrossSection;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
-G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
-                                                      G4int tgZ, G4int tgN, G4int pPDG)
+G4double G4QNuMuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
+                                                     G4int tgZ, G4int tgN, G4int pPDG)
 {
   static G4int j;                      // A#0f records found in DB for this projectile
   static std::vector <G4int>    colPDG;// Vector of the projectile PDG code
@@ -88,15 +86,15 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
 #ifdef debug
-  G4cout<<"G4QAMNCS::GetCS:>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
+  G4cout<<"G4QNMNCS::GetCS:>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-  if(pPDG!=-14)
+  if(pPDG!=14)
   {
-#ifdef debug
-    G4cout<<"G4QAMNCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+#ifdef pdebug
+    G4cout<<"G4QNMNCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
@@ -118,13 +116,13 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
-        G4cout<<"G4QAMNCS::GetCS:*Found*P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
+        G4cout<<"G4QNMNCS::GetCS:*Found*P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(pEn<=lastTH)
         {
 #ifdef pdebug
-          G4cout<<"G4QAMNCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",X=0"<<G4endl;
+          G4cout<<"G4QNMNCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",X=0"<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
           return 0.;                     // Energy is below the Threshold value
@@ -134,7 +132,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         if(std::fabs(lastP/pMom-1.)<tolerance)
         {
 #ifdef pdebug
-          G4cout<<"G4QAMNCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+          G4cout<<"G4QNMNCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
           return lastCS*millibarn;     // Use theLastCS
@@ -142,24 +140,24 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         in = true;                       // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
 #ifdef pdebug
-        G4cout<<"G4QAMNCS::G:UpdaDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
+        G4cout<<"G4QNMNCS::G:UpdaDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
 #endif
         lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // read & update
 #ifdef pdebug
-        G4cout<<"G4QAMNCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
+        G4cout<<"G4QNMNCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
         {
 #ifdef pdebug
-          G4cout<<"G4QAMNCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+          G4cout<<"G4QNMNCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
         break;                           // Go out of the LOOP
       }
 #ifdef pdebug
-      G4cout<<"---G4QAMNCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
+      G4cout<<"---G4QNMNCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
             <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -168,7 +166,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     if(!in)                            // This nucleus has not been calculated previously
     {
 #ifdef pdebug
-      G4cout<<"G4QAMNCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lstI="<<lastI<<G4endl;
+      G4cout<<"G4QNMNCS::GetCrSec: CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,lastPDG,lastZ,lastN,pMom); //calculate & create
@@ -176,18 +174,18 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       {
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
-        G4cout<<"G4QAMNCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+        G4cout<<"G4QNMNCrossSection::GetCrossSect:NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
 #endif
         if(pEn>lastTH)
         {
 #ifdef pdebug
-          G4cout<<"G4QAMNCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+          G4cout<<"G4QNMNCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
       }
 #ifdef pdebug
-      G4cout<<"G4QAMNCS::GetCrosSec:New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
+      G4cout<<"G4QNMNCS::GetCrosSec:New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       colN.push_back(tgN);
@@ -197,7 +195,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       colTH.push_back(lastTH);
       colCS.push_back(lastCS);
 #ifdef pdebug
-      G4cout<<"G4QAMNCS::GetCS:1st,P="<<pMom<<"(MeV),X="<<lastCS*millibarn<<"(mb)"<<G4endl;
+      G4cout<<"G4QNMNCS::GetCS:1st,P="<<pMom<<"(MeV),X="<<lastCS*millibarn<<"(mb)"<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       return lastCS*millibarn;
@@ -205,7 +203,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     else
     {
 #ifdef pdebug
-      G4cout<<"G4QAMNCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
+      G4cout<<"G4QNMNCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
       colP[lastI]=pMom;
       colPDG[lastI]=pPDG;
@@ -215,7 +213,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   else if(pEn<=lastTH)
   {
 #ifdef pdebug
-    G4cout<<"G4QAMNCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
+    G4cout<<"G4QNMNCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
@@ -223,7 +221,7 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   else if(std::fabs(lastP/pMom-1.)<tolerance)
   {
 #ifdef pdebug
-    G4cout<<"G4QAMNCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+    G4cout<<"G4QNMNCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return lastCS*millibarn;     // Use theLastCS
@@ -231,29 +229,49 @@ G4double G4QANuANuNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   else
   {
 #ifdef pdebug
-    G4cout<<"G4QAMNCS::GetCS:UpdaCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
+    G4cout<<"G4QNMNCS::GetCS:UpdaCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
 #endif
     lastCS=CalculateCrossSection(fCS,1,j,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
     lastP=pMom;
   }
 #ifdef pdebug
-  G4cout<<"G4QAMNCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+  G4cout<<"G4QNMNCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
   return lastCS*millibarn;
 }
 
 // Gives the threshold energy = the same for all nuclei (@@ can be reduced for hevy nuclei)
-G4double G4QANuANuNuclearCrossSection::ThresholdEnergy(G4int, G4int, G4int) {return 0.;}
+G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
+{
+  //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0)/GeV;
+  //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1)/GeV;
+  //static const G4double mDeut = G4NucleiProperties::GetNuclearMass(2,1)/GeV/2.;
+  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
+  static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
+  static const G4double mmu=.105658369; // Mass of a muon in GeV
+  static const G4double mmu2=mmu*mmu;   // Squared mass of a muon in GeV^2
+  static const G4double thresh=mmu+mmu2/dmN; // Universal threshold in GeV
+  // ---------
+  //static const G4double infEn = 9.e27;
+  G4double dN=0.;
+  if(Z>0||N>0) dN=thresh*GeV; // @@ if upgraded, change it in a total cross section
+  //@@ "dN=mmu+mmu2/G4NucleiProperties::GetNuclearMass(<G4double>(Z+N),<G4double>(Z)/GeV"
+  return dN;
+}
 
 // The main member function giving the gamma-A cross section (E_kin in MeV, CS in mb)
-G4double G4QANuANuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
-                                       G4int , G4int targZ, G4int targN, G4double Momentum)
+G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+                                        G4int, G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4double mb38=1.E-11;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
   static const G4int nE=65;   // !! If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
-  static const G4double EMi=0.; // Universal threshold of the reaction in GeV
+  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
+  static const G4double dmN=mN+mN;      // Doubled nucleon mass (2*AtomicMassUnit, GeV)
+  static const G4double mmu=.105658369; // Mass of a muon in GeV
+  static const G4double mmu2=mmu*mmu;   // Squared mass of a muon in GeV^2
+  static const G4double EMi=mmu+mmu2/dmN; // Universal threshold of the reaction in GeV
   static const G4double EMa=300.;       // Maximum tabulated Energy of nu_mu in GeV 
   // *** Begin of the Associative memory for acceleration of the cross section calculations
   static std::vector <G4double> colH;   //?? Vector of HighEnergyCoefficients (functional)
@@ -299,7 +317,7 @@ G4double G4QANuANuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW Calculate the Cross Section =====================
-  if (lastE<=EMi)                    // Check that antiNuEnergy is higher than ThreshE
+  if (lastE<=EMi)                   // Check that the neutrinoEnergy is higher than ThreshE
   {
     lastE=0.;
     lastSig=0.;
@@ -353,37 +371,39 @@ G4double G4QANuANuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 // *** This tables are the same for all lepto-nuclear reactions, only mass is different ***
 // ***@@ IT'S REASONABLE TO MAKE ADDiTIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR WITH THIS@@ ***
 // ****************************************************************************************
-G4int G4QANuANuNuclearCrossSection::GetFunctions (G4int z, G4int n,
+G4int G4QNuMuNuclearCrossSection::GetFunctions(G4int z, G4int n,
                                                      G4double* t, G4double* q, G4double* e)
 {
+  static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
+  static const G4double dmN=mN+mN;    // Doubled nucleon mass (2*AtomicMassUnit, GeV)
+  static const G4double mmu=.105658369; // Mass of a muon in GeV
+  static const G4double mmu2=mmu*mmu;   // Squared mass of a muon in GeV^2
+  static const G4double thresh=mmu+mmu2/dmN; // Universal threshold in GeV
   static const G4int nE=65; // !! If change this, change it in GetCrossSection() (*.cc) !!
-  static const G4double nuEn[nE]={0.,
-  1.00463e-5,1.05336e-5,1.10692e-5,1.16592e-5,1.23109e-5,1.30323e-5,1.38331e-5,1.47245e-5,
-  1.57194e-5,1.68335e-5,1.80848e-5,1.94948e-5,2.10894e-5,2.28991e-5,2.49608e-5,2.73189e-5,
-  3.00273e-5,3.31516e-5,3.67722e-5,4.09881e-5,4.59217e-5,5.17255e-5,5.85908e-5,6.67583e-5,
-  7.65338e-5,8.83078e-5,.000102583,.000120011,.000141441,.000167995,.000201160,.000242926,
-  .000295985,.000364008,.000452051,.000567152,.000719210,.000922307,.001196710,.001571930,
-  .002091530,.002820590,.003857810,.005354930,.007548840,.010815300,.015760100,.023376900,
-  .035325600,.054430800,.085595700,.137508000,.225898000,.379892000,.654712000,1.15767000,
-  2.10277000,3.92843000,7.55861000,14.9991000,30.7412000,65.1734000,143.155000,326.326000};
+  static const G4double nuEn[nE]={thresh,
+    .112039,.116079,.120416,.125076,.130090,.135494,.141324,.147626,.154445,.161838,
+    .169864,.178594,.188105,.198485,.209836,.222272,.235923,.250941,.267497,.285789,
+    .306045,.328530,.353552,.381466,.412689,.447710,.487101,.531538,.581820,.638893,
+    .703886,.778147,.863293,.961275,1.07445,1.20567,1.35843,1.53701,1.74667,1.99390,
+    2.28679,2.63542,3.05245,3.55386,4.15990,4.89644,5.79665,6.90336,8.27224,9.97606,
+    12.1106,14.8029,18.2223,22.5968,28.2351,35.5587,45.1481,57.8086,74.6682,97.3201,
+    128.036,170.085,228.220,309.420};
   static const G4double TOTX[nE]={0.,
-  3.63538e-5,3.81165e-5,4.00539e-5,4.21884e-5,4.45454e-5,4.71548e-5,5.00511e-5,5.32747e-5,
-  5.68730e-5,6.09016e-5,6.54261e-5,7.05246e-5,7.62894e-5,8.28315e-5,9.02838e-5,9.88066e-5,
-  .000108594,.000119884,.000132964,.000148191,.000166007,.000186959,.000211736,.000241202,
-  .000276453,.000318890,.000370311,.000433042,.000510116,.000605516,.000724514,.000874144,
-  .001063870,.001306520,.001619660,.002027520,.002563780,.003275710,.004230080,.005521890,
-  .007286920,.009719890,.013099700,.018695100,.029208400,.042095000,.059253700,.082373900,
-  .113071000,.151041000,.191803000,.224208000,.234187000,.217774000,.187139000,.157818000,
-  .137494000,.125872000,.120462000,.119148000,.120418000,.123027000,.126408000,.129071000};
+    .108618,.352160,.476083,.566575,.639014,.699871,.752634,.799407,.841524,.879844,
+    .914908,.947050,.976456,1.00321,1.02734,1.04881,1.06755,1.08349,1.09653,1.10657,
+    1.11355,1.11739,1.11806,1.11556,1.10992,1.10124,1.08964,1.07532,1.05851,1.03950,
+    1.01859,.996169,.972593,.948454,.923773,.899081,.874713,.850965,.828082,.806265,
+    .785659,.766367,.748450,.731936,.716824,.703098,.690723,.679652,.669829,.661187,
+    .653306,.646682,.640986,.636125,.631993,.628479,.625458,.622800,.620364,.616231,
+    .614986,.612563,.609807,.606511};
   static const G4double QELX[nE]={0.,
-  .365220e-9,.401502e-9,.443364e-9,.491885e-9,.548393e-9,.614536e-9,.692362e-9,.784441e-9,
-  .894012e-9,1.02519e-9,1.18322e-9,1.37487e-9,1.60890e-9,1.89677e-9,2.25355e-9,2.69928e-9,
-  3.26079e-9,3.97433e-9,4.88937e-9,6.07407e-9,7.62331e-9,9.67058e-9,1.24058e-8,1.61022e-8,
-  2.11580e-8,2.81605e-8,3.79876e-8,5.19696e-8,7.21515e-8,1.01724e-7,1.45743e-7,2.12353e-7,
-  3.14890e-7,4.75585e-7,7.32171e-7,1.14991e-6,1.84390e-6,3.02121e-6,5.06217e-6,8.68002e-6,
-  1.52408e-5,2.74159e-5,5.05363e-5,.000100111,.000220489,.000455269,.000933841,.001925650,
-  .003994300,.008221270,.016417600,.030830400,.052902400,.082519200,.115560000,.149598000,
-  .184112000,.215102000,.238253000,.252949000,.261267000,.265626000,.267782000,.268791000};
+    .012170,.040879,.057328,.070865,.083129,.094828,.106366,.118013,.129970,.142392,
+    .155410,.169138,.183676,.199123,.215573,.233120,.251860,.271891,.293317,.316246,
+    .340796,.367096,.395292,.425547,.458036,.491832,.524989,.556457,.585692,.612377,
+    .636544,.657790,.676260,.692007,.705323,.716105,.724694,.731347,.736340,.740172,
+    .742783,.744584,.745804,.746829,.747479,.747995,.748436,.749047,.749497,.749925,
+    .750486,.750902,.751268,.751566,.752026,.752266,.752428,.752761,.752873,.753094,
+    .753161,.753164,.753340,.753321};
   // --------------------------------
   G4int first=0;
   if(z<0.)
@@ -391,71 +411,79 @@ G4int G4QANuANuNuclearCrossSection::GetFunctions (G4int z, G4int n,
     first=1;
     z=-z;
   }
-  if(z<1 || z>92)             // neutron & plutonium are forbidden
+  if(z<1 || z>92)             // neutron and plutonium are forbidden
   {
-    G4cout<<"*G4QANuANuNuclearCrossSection::GetFunctions:Z="<<z<<".No CS returned"<<G4endl;
+    G4cout<<"***G4QNuMuNuclearCrossSection::GetFunctions:Z="<<z<<".No CS returned"<<G4endl;
     return -1;
   }
   for(G4int k=0; k<nE; k++)
   {
     G4double a=n+z;
-    G4double za=z+a;
-    G4double dz=z+z;
+    G4double na=n+a;
+    G4double dn=n+n;
     G4double da=a+a;
     G4double ta=da+a;
     if(first) e[k]=nuEn[k];       // Energy of neutrino E (first bin k=0 can be modified)
-    t[k]=TOTX[k]*nuEn[k]*(za+za)/ta+QELX[k]*(dz+dz-da)/ta; // TotalCrossSection
-    q[k]=QELX[k]*dz/a;                                     // QuasiElasticCrossSection
+    t[k]=TOTX[k]*nuEn[k]*(na+na)/ta+QELX[k]*(dn+dn-da)/ta; // TotalCrossSection
+    q[k]=QELX[k]*dn/a;                                     // QuasiElasticCrossSection
   }
   return first;
 }
 
 // Randomize Q2 from neutrino to the scattered muon when the scattering is quasi-elastic
-G4double G4QANuANuNuclearCrossSection::GetQEL_ExchangeQ2()
+G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
 {
+  static const G4double mmu=.105658369;// Mass of muon in GeV
+  static const G4double mmu2=mmu*mmu;  // Squared Mass of muon in GeV^2
+  static const double hmmu2=mmu2/2;    // .5*m_mu^2 in GeV^2
   static const double MN=.931494043;   // Nucleon mass (inside nucleus, atomicMassUnit,GeV)
+  static const double MN2=MN*MN;       // M_N^2 in GeV^2
   static const G4double power=-3.5;    // direct power for the magic variable
   static const G4double pconv=1./power;// conversion power for the magic variable
   static const G4int nQ2=101;          // #Of point in the Q2l table (in GeV^2)
   static const G4int lQ2=nQ2-1;        // index of the last in the Q2l table
   static const G4int bQ2=lQ2-1;        // index of the before last in the Q2 ltable
   // Reversed table
-  static const G4double Xl[nQ2]={5.20224e-16,
- .006125,.0137008,.0218166,.0302652,.0389497,.0478144,.0568228,.0659497,.0751768,.0844898,
- .093878, .103332, .112844, .122410, .132023, .141680, .151376, .161109, .170875, .180672,
- .190499, .200352, .210230, .220131, .230055, .239999, .249963, .259945, .269944, .279960,
- .289992, .300039, .310099, .320173, .330260, .340359, .350470, .360592, .370724, .380867,
- .391019, .401181, .411352, .421531, .431719, .441915, .452118, .462329, .472547, .482771,
- .493003, .503240, .513484, .523734, .533989, .544250, .554517, .564788, .575065, .585346,
- .595632, .605923, .616218, .626517, .636820, .647127, .657438, .667753, .678072, .688394,
- .698719, .709048, .719380, .729715, .740053, .750394, .760738, .771085, .781434, .791786,
- .802140, .812497, .822857, .833219, .843582, .853949, .864317, .874687, .885060, .895434,
- .905810, .916188, .926568, .936950, .947333, .957719, .968105, .978493, .988883, .999275};
-   // Direct table
+  static const G4double Xl[nQ2]={1.87905e-10,
+ .005231, .010602, .016192, .022038, .028146, .034513, .041130, .047986, .055071, .062374,
+ .069883, .077587, .085475, .093539, .101766, .110150, .118680, .127348, .136147, .145069,
+ .154107, .163255, .172506, .181855, .191296, .200825, .210435, .220124, .229886, .239718,
+ .249617, .259578, .269598, .279675, .289805, .299986, .310215, .320490, .330808, .341169,
+ .351568, .362006, .372479, .382987, .393527, .404099, .414700, .425330, .435987, .446670,
+ .457379, .468111, .478866, .489643, .500441, .511260, .522097, .532954, .543828, .554720,
+ .565628, .576553, .587492, .598447, .609416, .620398, .631394, .642403, .653424, .664457,
+ .675502, .686557, .697624, .708701, .719788, .730886, .741992, .753108, .764233, .775366,
+ .786508, .797658, .808816, .819982, .831155, .842336, .853524, .864718, .875920, .887128,
+ .898342, .909563, .920790, .932023, .943261, .954506, .965755, .977011, .988271, .999539};
+  // Direct table
   static const G4double Xmax=Xl[lQ2];
   static const G4double Xmin=Xl[0];
   static const G4double dX=(Xmax-Xmin)/lQ2;  // step in X(Q2, GeV^2)
   static const G4double inl[nQ2]={0,
- 1.52225, 2.77846, 3.96651, 5.11612, 6.23990, 7.34467, 8.43466, 9.51272, 10.5809, 11.6406,
- 12.6932, 13.7394, 14.7801, 15.8158, 16.8471, 17.8743, 18.8979, 19.9181, 20.9353, 21.9496,
- 22.9614, 23.9707, 24.9777, 25.9826, 26.9855, 27.9866, 28.9860, 29.9837, 30.9798, 31.9745,
- 32.9678, 33.9598, 34.9505, 35.9400, 36.9284, 37.9158, 38.9021, 39.8874, 40.8718, 41.8553,
- 42.8379, 43.8197, 44.8007, 45.7810, 46.7605, 47.7393, 48.7174, 49.6950, 50.6718, 51.6481,
- 52.6238, 53.5990, 54.5736, 55.5476, 56.5212, 57.4943, 58.4670, 59.4391, 60.4109, 61.3822,
- 62.3531, 63.3236, 64.2937, 65.2635, 66.2329, 67.2019, 68.1707, 69.1390, 70.1071, 71.0748,
- 72.0423, 73.0095, 73.9763, 74.9429, 75.9093, 76.8754, 77.8412, 78.8068, 79.7721, 80.7373,
- 81.7022, 82.6668, 83.6313, 84.5956, 85.5596, 86.5235, 87.4872, 88.4507, 89.4140, 90.3771,
- 91.3401, 92.3029, 93.2656, 94.2281, 95.1904, 96.1526, 97.1147, 98.0766, 99.0384, 100.000};
+ 1.88843, 3.65455, 5.29282, 6.82878, 8.28390, 9.67403, 11.0109, 12.3034, 13.5583, 14.7811,
+ 15.9760, 17.1466, 18.2958, 19.4260, 20.5392, 21.6372, 22.7215, 23.7933, 24.8538, 25.9039,
+ 26.9446, 27.9766, 29.0006, 30.0171, 31.0268, 32.0301, 33.0274, 34.0192, 35.0058, 35.9876,
+ 36.9649, 37.9379, 38.9069, 39.8721, 40.8337, 41.7920, 42.7471, 43.6992, 44.6484, 45.5950,
+ 46.5390, 47.4805, 48.4197, 49.3567, 50.2916, 51.2245, 52.1554, 53.0846, 54.0120, 54.9377,
+ 55.8617, 56.7843, 57.7054, 58.6250, 59.5433, 60.4603, 61.3761, 62.2906, 63.2040, 64.1162,
+ 65.0274, 65.9375, 66.8467, 67.7548, 68.6621, 69.5684, 70.4738, 71.3784, 72.2822, 73.1852,
+ 74.0875, 74.9889, 75.8897, 76.7898, 77.6892, 78.5879, 79.4860, 80.3835, 81.2804, 82.1767,
+ 83.0724, 83.9676, 84.8622, 85.7563, 86.6499, 87.5430, 88.4356, 89.3277, 90.2194, 91.1106,
+ 92.0013, 92.8917, 93.7816, 94.6711, 95.5602, 96.4489, 97.3372, 98.2252, 99.1128, 100.000};
   G4double Enu=lastE;                 // Get energy of the last calculated cross-section
   G4double dEnu=Enu+Enu;              // doubled energy of nu/anu
   G4double Enu2=Enu*Enu;              // squared energy of nu/anu
   G4double ME=Enu*MN;                 // M*E
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
-  G4double sqE=Enu*ME;
-  G4double E2M=MN*Enu2;
+  G4double MEm=ME-hmmu2;
+  G4double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
+  G4double E2M=MN*Enu2-(Enu+MN)*hmmu2;
   G4double ymax=(E2M+sqE)/dEMN;
-  G4double Q2mi=0.; // Q2_min(E_nu)
+  G4double ymin=(E2M-sqE)/dEMN;
+  G4double rmin=1.-ymin;
+  G4double rhm2E=hmmu2/Enu2;
+  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
   G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
   G4double Xma=std::pow((1.+Q2mi),power);  // X_max(E_nu)
   G4double Xmi=std::pow((1.+Q2ma),power);  // X_min(E_nu)
@@ -488,10 +516,14 @@ G4double G4QANuANuNuclearCrossSection::GetQEL_ExchangeQ2()
 }
 
 // Randomize Q2 from neutrino to the scattered muon when the scattering is not quasiElastic
-G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
+G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
 {
   static const double mpi=.13957018;    // charged pi meson mass in GeV
+  static const G4double mmu=.105658369; // Mass of muon in GeV
+  static const G4double mmu2=mmu*mmu;   // Squared Mass of muon in GeV^2
+  static const double hmmu2=mmu2/2;     // .5*m_mu^2 in GeV^2
   static const double MN=.931494043;    // Nucleon mass (inside nucleus,atomicMassUnit,GeV)
+  static const double MN2=MN*MN;        // M_N^2 in GeV^2
   static const double dMN=MN+MN;        // 2*M_N in GeV
   static const double mcV=(dMN+mpi)*mpi;// constant of W>M+mc cut for Quasi-Elastic
   static const G4int power=7;           // direct power for the magic variable
@@ -503,66 +535,66 @@ G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
   static const G4int bE=nE-1;           // index of the last in the El table
   static const G4int pE=bE-1;           // index of the before last in the El table
   // Reversed table
-  static const G4double X0[nX]={5.21412e-05,
- .437860, .681908, .891529, 1.08434, 1.26751, 1.44494, 1.61915, 1.79198, 1.96493, 2.13937,
- 2.31664, 2.49816, 2.68559, 2.88097, 3.08705, 3.30774, 3.54917, 3.82233, 4.15131, 4.62182};
-  static const G4double X1[nX]={.00102591,
- 1.00443, 1.55828, 2.03126, 2.46406, 2.87311, 3.26723, 3.65199, 4.03134, 4.40835, 4.78561,
- 5.16549, 5.55031, 5.94252, 6.34484, 6.76049, 7.19349, 7.64917, 8.13502, 8.66246, 9.25086};
-  static const G4double X2[nX]={.0120304,
- 2.59903, 3.98637, 5.15131, 6.20159, 7.18024, 8.10986, 9.00426, 9.87265, 10.7217, 11.5564,
- 12.3808, 13.1983, 14.0116, 14.8234, 15.6359, 16.4515, 17.2723, 18.1006, 18.9386, 19.7892};
-  static const G4double X3[nX]={.060124,
- 5.73857, 8.62595, 10.9849, 13.0644, 14.9636, 16.7340, 18.4066, 20.0019, 21.5342, 23.0142,
- 24.4497, 25.8471, 27.2114, 28.5467, 29.8564, 31.1434, 32.4102, 33.6589, 34.8912, 36.1095};
-  static const G4double X4[nX]={.0992363,
- 8.23746, 12.1036, 15.1740, 17.8231, 20.1992, 22.3792, 24.4092, 26.3198, 28.1320, 29.8615,
- 31.5200, 33.1169, 34.6594, 36.1536, 37.6044, 39.0160, 40.3920, 41.7353, 43.0485, 44.3354};
-  static const G4double X5[nX]={.0561127,
- 7.33661, 10.5694, 13.0778, 15.2061, 17.0893, 18.7973, 20.3717, 21.8400, 23.2211, 24.5291,
- 25.7745, 26.9655, 28.1087, 29.2094, 30.2721, 31.3003, 32.2972, 33.2656, 34.2076, 35.1265};
-  static const G4double X6[nX]={.0145859,
- 4.81774, 6.83565, 8.37399, 9.66291, 10.7920, 11.8075, 12.7366, 13.5975, 14.4025, 15.1608,
- 15.8791, 16.5628, 17.2162, 17.8427, 18.4451, 19.0259, 19.5869, 20.1300, 20.6566, 21.1706};
-  static const G4double X7[nX]={.00241155,
- 2.87095, 4.02492, 4.89243, 5.61207, 6.23747, 6.79613, 7.30433, 7.77270, 8.20858, 8.61732,
- 9.00296, 9.36863, 9.71682, 10.0495, 10.3684, 10.6749, 10.9701, 11.2550, 11.5306, 11.7982};
-  static const G4double X8[nX]={.000316863,
- 1.76189, 2.44632, 2.95477, 3.37292, 3.73378, 4.05420, 4.34415, 4.61009, 4.85651, 5.08666,
- 5.30299, 5.50738, 5.70134, 5.88609, 6.06262, 6.23178, 6.39425, 6.55065, 6.70149, 6.84742};
-  static const G4double X9[nX]={3.73544e-05,
- 1.17106, 1.61289, 1.93763, 2.20259, 2.42976, 2.63034, 2.81094, 2.97582, 3.12796, 3.26949,
- 3.40202, 3.52680, 3.64482, 3.75687, 3.86360, 3.96557, 4.06323, 4.15697, 4.24713, 4.33413};
-  static const G4double XA[nX]={4.19131e-06,
- .849573, 1.16208, 1.38955, 1.57379, 1.73079, 1.86867, 1.99221, 2.10451, 2.20770, 2.30332,
- 2.39252, 2.47622, 2.55511, 2.62977, 2.70066, 2.76818, 2.83265, 2.89437, 2.95355, 3.01051};
-  static const G4double XB[nX]={4.59981e-07,
- .666131, .905836, 1.07880, 1.21796, 1.33587, 1.43890, 1.53080, 1.61399, 1.69011, 1.76040,
- 1.82573, 1.88682, 1.94421, 1.99834, 2.04959, 2.09824, 2.14457, 2.18878, 2.23107, 2.27162};
-  static const G4double XC[nX]={4.99861e-08,
- .556280, .752730, .893387, 1.00587, 1.10070, 1.18317, 1.25643, 1.32247, 1.38269, 1.43809,
- 1.48941, 1.53724, 1.58203, 1.62416, 1.66391, 1.70155, 1.73728, 1.77128, 1.80371, 1.83473};
-  static const G4double XD[nX]={5.40832e-09,
- .488069, .657650, .778236, .874148, .954621, 1.02432, 1.08599, 1.14138, 1.19172, 1.23787,
- 1.28049, 1.32008, 1.35705, 1.39172, 1.42434, 1.45514, 1.48429, 1.51197, 1.53829, 1.56339};
-  static const G4double XE[nX]={5.84029e-10,
- .445057, .597434, .705099, .790298, .861468, .922865, .976982, 1.02542, 1.06930, 1.10939,
- 1.14630, 1.18050, 1.21233, 1.24208, 1.27001, 1.29630, 1.32113, 1.34462, 1.36691, 1.38812};
-  static const G4double XF[nX]={6.30137e-11,
- .418735, .560003, .659168, .737230, .802138, .857898, .906854, .950515, .989915, 1.02580,
- 1.05873, 1.08913, 1.11734, 1.14364, 1.16824, 1.19133, 1.21306, 1.23358, 1.25298, 1.27139};
-  static const G4double XG[nX]={6.79627e-12,
- .405286, .539651, .633227, .706417, .766929, .818642, .863824, .903931, .939963, .972639,
- 1.00250, 1.02995, 1.05532, 1.07887, 1.10082, 1.12134, 1.14058, 1.15867, 1.17572, 1.19183};
-  static const G4double XH[nX]={7.32882e-13,
- .404391, .535199, .625259, .695036, .752243, .800752, .842823, .879906, .912994, .942802,
- .969862, .994583, 1.01729, 1.03823, 1.05763, 1.07566, 1.09246, 1.10816, 1.12286, 1.13667};
-  static const G4double XI[nX]={7.90251e-14,
- .418084, .548382, .636489, .703728, .758106, .803630, .842633, .876608, .906576, .933269,
- .957233, .978886, .998556, 1.01651, 1.03295, 1.04807, 1.06201, 1.07489, 1.08683, 1.09792};
-  static const G4double XJ[nX]={8.52083e-15,
- .447299, .579635, .666780, .731788, .783268, .825512, .861013, .891356, .917626, .940597,
- .960842, .978802, .994820, 1.00917, 1.02208, 1.03373, 1.04427, 1.05383, 1.06253, 1.07046};
+  static const G4double X0[nX]={6.14081e-05,
+ .413394, .644455, .843199, 1.02623, 1.20032, 1.36916, 1.53516, 1.70008, 1.86539, 2.03244,
+ 2.20256, 2.37723, 2.55818, 2.74762, 2.94857, 3.16550, 3.40582, 3.68379, 4.03589, 4.77419};
+  static const G4double X1[nX]={.00125268,
+ .861178, 1.34230, 1.75605, 2.13704, 2.49936, 2.85072, 3.19611, 3.53921, 3.88308, 4.23049,
+ 4.58423, 4.94735, 5.32342, 5.71700, 6.13428, 6.58447, 7.08267, 7.65782, 8.38299, 9.77330};
+  static const G4double X2[nX]={.015694,
+ 1.97690, 3.07976, 4.02770, 4.90021, 5.72963, 6.53363, 7.32363, 8.10805, 8.89384, 9.68728,
+ 10.4947, 11.3228, 12.1797, 13.0753, 14.0234, 15.0439, 16.1692, 17.4599, 19.0626, 21.7276};
+  static const G4double X3[nX]={.0866877,
+ 4.03498, 6.27651, 8.20056, 9.96931, 11.6487, 13.2747, 14.8704, 16.4526, 18.0351, 19.6302,
+ 21.2501, 22.9075, 24.6174, 26.3979, 28.2730, 30.2770, 32.4631, 34.9243, 37.8590, 41.9115};
+  static const G4double X4[nX]={.160483,
+ 5.73111, 8.88884, 11.5893, 14.0636, 16.4054, 18.6651, 20.8749, 23.0578, 25.2318, 27.4127,
+ 29.6152, 31.8540, 34.1452, 36.5074, 38.9635, 41.5435, 44.2892, 47.2638, 50.5732, 54.4265};
+  static const G4double X5[nX]={.0999307,
+ 5.25720, 8.11389, 10.5375, 12.7425, 14.8152, 16.8015, 18.7296, 20.6194, 22.4855, 24.3398,
+ 26.1924, 28.0527, 29.9295, 31.8320, 33.7699, 35.7541, 37.7975, 39.9158, 42.1290, 44.4649};
+  static const G4double X6[nX]={.0276367,
+ 3.53378, 5.41553, 6.99413, 8.41629, 9.74057, 10.9978, 12.2066, 13.3796, 14.5257, 15.6519,
+ 16.7636, 17.8651, 18.9603, 20.0527, 21.1453, 22.2411, 23.3430, 24.4538, 25.5765, 26.7148};
+  static const G4double X7[nX]={.00472383,
+ 2.08253, 3.16946, 4.07178, 4.87742, 5.62140, 6.32202, 6.99034, 7.63368, 8.25720, 8.86473,
+ 9.45921, 10.0430, 10.6179, 11.1856, 11.7475, 12.3046, 12.8581, 13.4089, 13.9577, 14.5057};
+  static const G4double X8[nX]={.000630783,
+ 1.22723, 1.85845, 2.37862, 2.84022, 3.26412, 3.66122, 4.03811, 4.39910, 4.74725, 5.08480,
+ 5.41346, 5.73457, 6.04921, 6.35828, 6.66250, 6.96250, 7.25884, 7.55197, 7.84232, 8.13037};
+  static const G4double X9[nX]={7.49179e-05,
+ .772574, 1.16623, 1.48914, 1.77460, 2.03586, 2.27983, 2.51069, 2.73118, 2.94322, 3.14823,
+ 3.34728, 3.54123, 3.73075, 3.91638, 4.09860, 4.27779, 4.45428, 4.62835, 4.80025, 4.97028};
+  static const G4double XA[nX]={8.43437e-06,
+ .530035, .798454, 1.01797, 1.21156, 1.38836, 1.55313, 1.70876, 1.85712, 1.99956, 2.13704,
+ 2.27031, 2.39994, 2.52640, 2.65007, 2.77127, 2.89026, 3.00726, 3.12248, 3.23607, 3.34823};
+  static const G4double XB[nX]={9.27028e-07,
+ .395058, .594211, .756726, .899794, 1.03025, 1.15167, 1.26619, 1.37523, 1.47979, 1.58059,
+ 1.67819, 1.77302, 1.86543, 1.95571, 2.04408, 2.13074, 2.21587, 2.29960, 2.38206, 2.46341};
+  static const G4double XC[nX]={1.00807e-07,
+ .316195, .474948, .604251, .717911, .821417, .917635, 1.00829, 1.09452, 1.17712, 1.25668,
+ 1.33364, 1.40835, 1.48108, 1.55207, 1.62150, 1.68954, 1.75631, 1.82193, 1.88650, 1.95014};
+  static const G4double XD[nX]={1.09102e-08,
+ .268227, .402318, .511324, .606997, .694011, .774803, .850843, .923097, .992243, 1.05878,
+ 1.12309, 1.18546, 1.24613, 1.30530, 1.36313, 1.41974, 1.47526, 1.52978, 1.58338, 1.63617};
+  static const G4double XE[nX]={1.17831e-09,
+ .238351, .356890, .453036, .537277, .613780, .684719, .751405, .814699, .875208, .933374,
+ .989535, 1.04396, 1.09685, 1.14838, 1.19870, 1.24792, 1.29615, 1.34347, 1.38996, 1.43571};
+  static const G4double XF[nX]={1.27141e-10,
+ .219778, .328346, .416158, .492931, .562525, .626955, .687434, .744761, .799494, .852046,
+ .902729, .951786, .999414, 1.04577, 1.09099, 1.13518, 1.17844, 1.22084, 1.26246, 1.30338};
+  static const G4double XG[nX]={1.3713e-11,
+ .208748, .310948, .393310, .465121, .530069, .590078, .646306, .699515, .750239, .798870,
+ .845707, .890982, .934882, .977559, 1.01914, 1.05973, 1.09941, 1.13827, 1.17637, 1.21379};
+  static const G4double XH[nX]={1.47877e-12,
+ .203089, .301345, .380162, .448646, .510409, .567335, .620557, .670820, .718647, .764421,
+ .808434, .850914, .892042, .931967, .970812, 1.00868, 1.04566, 1.08182, 1.11724, 1.15197};
+  static const G4double XI[nX]={1.59454e-13,
+ .201466, .297453, .374007, .440245, .499779, .554489, .605506, .653573, .699213, .742806,
+ .784643, .824952, .863912, .901672, .938353, .974060, 1.00888, 1.04288, 1.07614, 1.10872};
+  static const G4double XJ[nX]={1.71931e-14,
+ .202988, .297870, .373025, .437731, .495658, .548713, .598041, .644395, .688302, .730147,
+ .770224, .808762, .845943, .881916, .916805, .950713, .983728, 1.01592, 1.04737, 1.07813};
   // Direct table
   static const G4double Xmin[nE]={X0[0],X1[0],X2[0],X3[0],X4[0],X5[0],X6[0],X7[0],X8[0],
                         X9[0],XA[0],XB[0],XC[0],XD[0],XE[0],XF[0],XG[0],XH[0],XI[0],XJ[0]};
@@ -575,65 +607,65 @@ G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
   static const G4double* Xl[nE]=
                              {X0,X1,X2,X3,X4,X5,X6,X7,X8,X9,XA,XB,XC,XD,XE,XF,XG,XH,XI,XJ};
   static const G4double I0[nX]={0,
- .354631, 1.08972, 2.05138, 3.16564, 4.38343, 5.66828, 6.99127, 8.32858, 9.65998, 10.9680,
- 12.2371, 13.4536, 14.6050, 15.6802, 16.6686, 17.5609, 18.3482, 19.0221, 19.5752, 20.0000};
+ .411893, 1.25559, 2.34836, 3.60264, 4.96046, 6.37874, 7.82342, 9.26643, 10.6840, 12.0555,
+ 13.3628, 14.5898, 15.7219, 16.7458, 17.6495, 18.4217, 19.0523, 19.5314, 19.8501, 20.0000};
   static const G4double I1[nX]={0,
- .281625, .877354, 1.67084, 2.60566, 3.64420, 4.75838, 5.92589, 7.12829, 8.34989, 9.57708,
- 10.7978, 12.0014, 13.1781, 14.3190, 15.4162, 16.4620, 17.4496, 18.3724, 19.2245, 20.0000};
+ .401573, 1.22364, 2.28998, 3.51592, 4.84533, 6.23651, 7.65645, 9.07796, 10.4780, 11.8365,
+ 13.1360, 14.3608, 15.4967, 16.5309, 17.4516, 18.2481, 18.9102, 19.4286, 19.7946, 20.0000};
   static const G4double I2[nX]={0,
- .201909, .642991, 1.24946, 1.98463, 2.82370, 3.74802, 4.74263, 5.79509, 6.89474, 8.03228,
- 9.19947, 10.3889, 11.5938, 12.8082, 14.0262, 15.2427, 16.4527, 17.6518, 18.8356, 20.0000};
+ .387599, 1.17339, 2.19424, 3.37090, 4.65066, 5.99429, 7.37071, 8.75427, 10.1232, 11.4586,
+ 12.7440, 13.9644, 15.1065, 16.1582, 17.1083, 17.9465, 18.6634, 19.2501, 19.6982, 20.0000};
   static const G4double I3[nX]={0,
- .140937, .461189, .920216, 1.49706, 2.17728, 2.94985, 3.80580, 4.73758, 5.73867, 6.80331,
- 7.92637, 9.10316, 10.3294, 11.6013, 12.9150, 14.2672, 15.6548, 17.0746, 18.5239, 20.0000};
+ .366444, 1.09391, 2.04109, 3.13769, 4.33668, 5.60291, 6.90843, 8.23014, 9.54840, 10.8461,
+ 12.1083, 13.3216, 14.4737, 15.5536, 16.5512, 17.4573, 18.2630, 18.9603, 19.5417, 20.0000};
   static const G4double I4[nX]={0,
- .099161, .337358, .694560, 1.16037, 1.72761, 2.39078, 3.14540, 3.98768, 4.91433, 5.92245,
- 7.00942, 8.17287, 9.41060, 10.7206, 12.1010, 13.5500, 15.0659, 16.6472, 18.2924, 20.0000};
+ .321962, .959681, 1.79769, 2.77753, 3.85979, 5.01487, 6.21916, 7.45307, 8.69991, 9.94515,
+ 11.1759, 12.3808, 13.5493, 14.6720, 15.7402, 16.7458, 17.6813, 18.5398, 19.3148, 20.0000};
   static const G4double I5[nX]={0,
- .071131, .255084, .543312, .932025, 1.41892, 2.00243, 2.68144, 3.45512, 4.32283, 5.28411,
- 6.33859, 7.48602, 8.72621, 10.0590, 11.4844, 13.0023, 14.6128, 16.3158, 18.1115, 20.0000};
+ .257215, .786302, 1.49611, 2.34049, 3.28823, 4.31581, 5.40439, 6.53832, 7.70422, 8.89040,
+ 10.0865, 11.2833, 12.4723, 13.6459, 14.7969, 15.9189, 17.0058, 18.0517, 19.0515, 20.0000};
   static const G4double I6[nX]={0,
- .053692, .202354, .443946, .778765, 1.20774, 1.73208, 2.35319, 3.07256, 3.89177, 4.81249,
- 5.83641, 6.96528, 8.20092, 9.54516, 10.9999, 12.5670, 14.2486, 16.0466, 17.9630, 20.0000};
+ .201608, .638914, 1.24035, 1.97000, 2.80354, 3.72260, 4.71247, 5.76086, 6.85724, 7.99243,
+ 9.15826, 10.3474, 11.5532, 12.7695, 13.9907, 15.2117, 16.4275, 17.6337, 18.8258, 20.0000};
   static const G4double I7[nX]={0,
- .043065, .168099, .376879, .672273, 1.05738, 1.53543, 2.10973, 2.78364, 3.56065, 4.44429,
- 5.43819, 6.54610, 7.77186, 9.11940, 10.5928, 12.1963, 13.9342, 15.8110, 17.8313, 20.0000};
+ .168110, .547208, 1.07889, 1.73403, 2.49292, 3.34065, 4.26525, 5.25674, 6.30654, 7.40717,
+ 8.55196, 9.73492, 10.9506, 12.1940, 13.4606, 14.7460, 16.0462, 17.3576, 18.6767, 20.0000};
   static const G4double I8[nX]={0,
- .036051, .143997, .327877, .592202, .941572, 1.38068, 1.91433, 2.54746, 3.28517, 4.13277,
- 5.09574, 6.17984, 7.39106, 8.73568, 10.2203, 11.8519, 13.6377, 15.5854, 17.7033, 20.0000};
+ .150652, .497557, .990048, 1.60296, 2.31924, 3.12602, 4.01295, 4.97139, 5.99395, 7.07415,
+ 8.20621, 9.38495, 10.6057, 11.8641, 13.1561, 14.4781, 15.8267, 17.1985, 18.5906, 20.0000};
   static const G4double I9[nX]={0,
- .030977, .125727, .289605, .528146, .846967, 1.25183, 1.74871, 2.34384, 3.04376, 3.85535,
- 4.78594, 5.84329, 7.03567, 8.37194, 9.86163, 11.5150, 13.3430, 15.3576, 17.5719, 20.0000};
+ .141449, .470633, .941304, 1.53053, 2.22280, 3.00639, 3.87189, 4.81146, 5.81837, 6.88672,
+ 8.01128, 9.18734, 10.4106, 11.6772, 12.9835, 14.3261, 15.7019, 17.1080, 18.5415, 20.0000};
   static const G4double IA[nX]={0,
- .027129, .111420, .258935, .475812, .768320, 1.14297, 1.60661, 2.16648, 2.83034, 3.60650,
- 4.50394, 5.53238, 6.70244, 8.02569, 9.51488, 11.1841, 13.0488, 15.1264, 17.4362, 20.0000};
+ .136048, .454593, .912075, 1.48693, 2.16457, 2.93400, 3.78639, 4.71437, 5.71163, 6.77265,
+ 7.89252, 9.06683, 10.2916, 11.5631, 12.8780, 14.2331, .625500, 17.0525, 18.5115, 20.0000};
   static const G4double IB[nX]={0,
- .024170, .100153, .234345, .433198, .703363, 1.05184, 1.48607, 2.01409, 2.64459, 3.38708,
- 4.25198, 5.25084, 6.39647, 7.70319, 9.18708, 10.8663, 12.7617, 14.8968, 17.2990, 20.0000};
+ .132316, .443455, .891741, 1.45656, 2.12399, 2.88352, 3.72674, 4.64660, 5.63711, 6.69298,
+ 7.80955, 8.98262, 10.2084, 11.4833, 12.8042, 14.1681, 15.5721, 17.0137, 18.4905, 20.0000};
   static const G4double IC[nX]={0,
- .021877, .091263, .214670, .398677, .650133, .976322, 1.38510, 1.88504, 2.48555, 3.19709,
- 4.03129, 5.00127, 6.12184, 7.40989, 8.88482, 10.5690, 12.4888, 14.6748, 17.1638, 20.0000};
+ .129197, .434161, .874795, 1.43128, 2.09024, 2.84158, 3.67721, 4.59038, 5.57531, 6.62696,
+ 7.74084, 8.91291, 10.1395, 11.4173, 12.7432, 14.1143, 15.5280, 16.9817, 18.4731, 20.0000};
   static const G4double ID[nX]={0,
- .020062, .084127, .198702, .370384, .606100, .913288, 1.30006, 1.77535, 2.34912, 3.03253,
- 3.83822, 4.78063, 5.87634, 7.14459, 8.60791, 10.2929, 12.2315, 14.4621, 17.0320, 20.0000};
+ .126079, .424911, .857980, 1.40626, 2.05689, 2.80020, 3.62840, 4.53504, 5.51456, 6.56212,
+ 7.67342, 8.84458, 10.0721, 11.3527, 12.6836, 14.0618, 15.4849, 16.9504, 18.4562, 20.0000};
   static const G4double IE[nX]={0,
- .018547, .078104, .185102, .346090, .567998, .858331, 1.22535, 1.67824, 2.22735, 2.88443,
- 3.66294, 4.57845, 5.64911, 6.89637, 8.34578, 10.0282, 11.9812, 14.2519, 16.8993, 20.0000};
+ .122530, .414424, .838964, 1.37801, 2.01931, 2.75363, 3.57356, 4.47293, 5.44644, 6.48949,
+ 7.59795, 8.76815, 9.99673, 11.2806, 12.6170, 14.0032, 15.4369, 16.9156, 18.4374, 20.0000};
   static const G4double IF[nX]={0,
- .017143, .072466, .172271, .323007, .531545, .805393, 1.15288, 1.58338, 2.10754, 2.73758,
- 3.48769, 4.37450, 5.41770, 6.64092, 8.07288, 9.74894, 11.7135, 14.0232, 16.7522, 20.0000};
+ .118199, .401651, .815838, 1.34370, 1.97370, 2.69716, 3.50710, 4.39771, 5.36401, 6.40164,
+ 7.50673, 8.67581, 9.90572, 11.1936, 12.5367, 13.9326, 15.3790, 16.8737, 18.4146, 20.0000};
   static const G4double IG[nX]={0,
- .015618, .066285, .158094, .297316, .490692, .745653, 1.07053, 1.47479, 1.96931, 2.56677,
- 3.28205, 4.13289, 5.14068, 6.33158, 7.73808, 9.40133, 11.3745, 13.7279, 16.5577, 20.0000};
+ .112809, .385761, .787075, 1.30103, 1.91700, 2.62697, 3.42451, 4.30424, 5.26158, 6.29249,
+ 7.39341, 8.56112, 9.79269, 11.0855, 12.4369, 13.8449, 15.3071, 16.8216, 18.3865, 20.0000};
   static const G4double IH[nX]={0,
- .013702, .058434, .139923, .264115, .437466, .667179, .961433, 1.32965, 1.78283, 2.33399,
- 2.99871, 3.79596, 4.74916, 5.88771, 7.24937, 8.88367, 10.8576, 13.2646, 16.2417, 20.0000};
+ .106206, .366267, .751753, 1.24859, 1.84728, 2.54062, 3.32285, .189160, 5.13543, 6.15804,
+ 7.25377, 8.41975, 9.65334, 10.9521, 12.3139, 13.7367, 15.2184, 16.7573, 18.3517, 20.0000};
   static const G4double II[nX]={0,
- .011264, .048311, .116235, .220381, .366634, .561656, .813132, 1.13008, 1.52322, 2.00554,
- 2.59296, 3.30542, 4.16834, 5.21490, 6.48964, 8.05434, 9.99835, 12.4580, 15.6567, 20.0000};
+ .098419, .343194, .709850, 1.18628, 1.76430, 2.43772, 3.20159, 4.05176, 4.98467, 5.99722,
+ 7.08663, 8.25043, 9.48633, 10.7923, 12.1663, 13.6067, 15.1118, 16.6800, 18.3099, 20.0000};
   static const G4double IJ[nX]={0,
- .008628, .037206, .089928, .171242, .286114, .440251, .640343, .894382, 1.21208, 1.60544,
- 2.08962, 2.68414, 3.41486, 4.31700, 5.44048, 6.85936, 8.69067, 11.1358, 14.5885, 20.0000};
+ .089681, .317135, .662319, 1.11536, 1.66960, 2.32002, 3.06260, 3.89397, 4.81126, 5.81196,
+ 6.89382, 8.05483, 9.29317, 10.6072, 11.9952, 13.4560, 14.9881, 16.5902, 18.2612, 20.0000};
   static const G4double* Il[nE]=
                              {I0,I1,I2,I3,I4,I5,I6,I7,I8,I9,IA,IB,IC,ID,IE,IF,IG,IH,II,IJ};
   static const G4double lE[nE]={
@@ -653,20 +685,24 @@ G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
   G4double dE=rE-fE;                  // relative log shift from the left bin
   G4double dEnu=Enu+Enu;              // doubled energy of nu/anu
   G4double Enu2=Enu*Enu;              // squared energy of nu/anu
-  G4double Emu=Enu;                   // Free Energy of neutrino/anti-neutrino
+  G4double Emu=Enu-mmu;               // Free Energy of neutrino/anti-neutrino
   G4double ME=Enu*MN;                 // M*E
   G4double dME=ME+ME;                 // 2*M*E
   G4double dEMN=(dEnu+MN)*ME;
-  G4double sqE=Enu*ME;
-  G4double E2M=MN*Enu2;
+  G4double MEm=ME-hmmu2;
+  G4double sqE=Enu*std::sqrt(MEm*MEm-mmu2*MN2);
+  G4double E2M=MN*Enu2-(Enu+MN)*hmmu2;
   G4double ymax=(E2M+sqE)/dEMN;
-  G4double Q2mi=0.;                   // Q2_min(E_nu)
-  G4double Q2ma=dME*ymax;             // Q2_max(E_nu)
+  G4double ymin=(E2M-sqE)/dEMN;
+  G4double rmin=1.-ymin;
+  G4double rhm2E=hmmu2/Enu2;
+  G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
+  G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
   G4double Q2nq=Emu*dMN-mcV;
   if(Q2ma>Q2nq) Q2ma=Q2nq;            // Correction for Non Quasi Elastic
   // --- now r_min=Q2mi/Q2ma and r_max=1.; when r is randomized -> Q2=r*Q2ma ---
   G4double Rmi=Q2mi/Q2ma;
-  G4double shift=.875/(1.+.2977/Enu/Enu)/std::pow(Enu,.78);
+  G4double shift=1.+.9673/(1.+.323/Enu/Enu)/std::pow(Enu,.78); //@@ different for anti-nu
   // --- E-interpolation must be done in a log scale ---
   G4double Xmi=std::pow((shift-Rmi),power);// X_min(E_nu)
   G4double Xma=std::pow((shift-1.),power); // X_max(E_nu)
@@ -712,7 +748,7 @@ G4double G4QANuANuNuclearCrossSection::GetNQE_ExchangeQ2()
 }
 
 // It returns a fraction of the direct interaction of the neutrino with quark-partons
-G4double G4QANuANuNuclearCrossSection::GetDirectPart(G4double Q2)
+G4double G4QNuMuNuclearCrossSection::GetDirectPart(G4double Q2)
 {
   G4double f=Q2/4.62;
   G4double ff=f*f;
@@ -723,10 +759,10 @@ G4double G4QANuANuNuclearCrossSection::GetDirectPart(G4double Q2)
 }
 
 // #of quark-partons in the nonperturbative phase space is the same for neut and anti-neut
-G4double G4QANuANuNuclearCrossSection::GetNPartons(G4double Q2)
+G4double G4QNuMuNuclearCrossSection::GetNPartons(G4double Q2)
 {
   return 3.+.3581*std::log(1.+Q2/.04); // a#of partons in the nonperturbative phase space
 }
 
-// This class can provide only virtual exchange by gamma (a substitute for Z0 boson)
-G4int G4QANuANuNuclearCrossSection::GetExchangePDGCode() {return 22;}
+// This class can provide only virtual exchange pi+ (a substitute for W+ boson)
+G4int G4QNuMuNuclearCrossSection::GetExchangePDGCode() {return 211;}

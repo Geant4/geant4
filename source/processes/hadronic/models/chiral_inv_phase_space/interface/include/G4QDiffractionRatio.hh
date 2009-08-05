@@ -43,11 +43,6 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include <vector>
-//#include "G4DynamicParticle.hh"
-//#include "G4Element.hh"
-//#include "G4ParticleTable.hh"
-//#include "G4NucleiProperties.hh"
-//#include "G4NucleiPropertiesTable.hh"
 #include "G4QPDGCode.hh"
 #include "G4QEnvironment.hh"
 #include "G4Quasmon.hh"

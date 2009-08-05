@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.6 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4VQCrossSection.hh,v 1.7 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,6 @@
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 

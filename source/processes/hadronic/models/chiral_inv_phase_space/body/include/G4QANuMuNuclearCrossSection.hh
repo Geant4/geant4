@@ -24,43 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuENuclearCrossSection.hh,v 1.2 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QANuMuNuclearCrossSection.hh,v 1.1 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4QANuENuclearCrossSection -- header file
-// M.V. Kossov, CERN-ITEP(Moscow), 20-SEP-2007
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 20-SEP-2007
+// GEANT4 physics class: G4QANuMuNuclearCrossSection -- header file for (anu_mu,mu+)A XS
+// M.V. Kossov, CERN-ITEP(Moscow), 20-DEC-2005
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 20-DEC-2005
 //
-// Short description: this G4 singletone class calculates (anu_e,e+) Nuclear cross section
+// Short description: this G4 singletone class calculates (nu_mu,mu) Nuclear cross section
 // (Energy limit: E<320GeV->badExtrapolation) for a particular isotope (proportional to A)
 // ****************************************************************************************
 
-#ifndef G4QANuENuclearCrossSection_h
-#define G4QANuENuclearCrossSection_h 1
+#ifndef G4QANuMuNuclearCrossSection_h
+#define G4QANuMuNuclearCrossSection_h 1
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4VQCrossSection.hh"
 
-class G4QANuENuclearCrossSection : public G4VQCrossSection
+class G4QANuMuNuclearCrossSection : public G4VQCrossSection
 {
 protected:
 
-  G4QANuENuclearCrossSection()  {};
+  G4QANuMuNuclearCrossSection()  {};
 
 public:
 
-  ~G4QANuENuclearCrossSection()  {};
+  ~G4QANuMuNuclearCrossSection()  {};
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=-12);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=-14);
 
   // At present momentum (pMom) must be in GeV (@@ Units)
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,

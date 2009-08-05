@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.1 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QCoherentChargeExchange.hh,v 1.2 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCoherentChargeExchange header ----------------
@@ -71,7 +71,6 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4HadronicProcessType.hh"

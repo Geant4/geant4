@@ -43,7 +43,6 @@
 #include "G4Element.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4QPDGCode.hh"
 #include "G4QException.hh"
 #include <vector>

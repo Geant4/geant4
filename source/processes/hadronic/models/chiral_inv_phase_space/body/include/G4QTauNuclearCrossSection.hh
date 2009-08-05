@@ -24,27 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QTauNuclearCrossSection.hh,v 1.5 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4QMuonNuclearCrossSection -- header file
+// GEANT4 physics class: G4QTauNuclearCrossSection -- header file
 // M.V. Kossov, CERN-ITEP(Moscow), 4-FEB-2004
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 4-Feb-04
 //
-// Short description: this G4 singletone class calculates muonNuclear cross section for
-// the particular isotope (GetCrossSection member function)
+// Short description: this G4 singletone class calculates tau-lepton-nuclear cross section
+// for the particular isotope (GetCrossSection member function)
 // ****************************************************************************************
 // ********* This HEADER is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******
 // ****************************************************************************************
-// Short description: reaction cross-sections for muon-nuclear reactions, which
-// are integrals over virtual equivalent photons photons. The muon-nuclear GHAD
-// model (not CHIPS) gives 2-3 times smaller scattering angle and deposited energy.
+// Short description: reaction cross-sections for tau-nuclear reactions, which
+// are integrals over virtual equivalent photons photons. The tau-nuclear
+// reactions do not exist in GHAD, so by the present physics lists it is not
+// simulated at all.
 // --------------------------------------------------------------------------------
 
-#ifndef G4QMuonNuclearCrossSection_h
-#define G4QMuonNuclearCrossSection_h 1
+#ifndef G4QTauNuclearCrossSection_h
+#define G4QTauNuclearCrossSection_h 1
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
@@ -54,19 +55,19 @@
 #include "G4MuonMinus.hh"
 #include "G4VQCrossSection.hh"
 
-class G4QMuonNuclearCrossSection : public G4VQCrossSection
+class G4QTauNuclearCrossSection : public G4VQCrossSection
 {
 protected:
 
-  G4QMuonNuclearCrossSection()  {};
+  G4QTauNuclearCrossSection()  {};
 
 public:
 
-  ~G4QMuonNuclearCrossSection()  {};
+  ~G4QTauNuclearCrossSection()  {};
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=13);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=15);
 
   // At present momentum (pMom) must be in GeV (@@ Units)
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
@@ -113,20 +114,20 @@ private:
   static G4int     lastI;    // The last position in the DAMDB
 };
 
-inline G4double G4QMuonNuclearCrossSection::DFun(G4double x)// Parametrization of PhotNucCS
+inline G4double G4QTauNuclearCrossSection::DFun(G4double x)// Parametrization of PhotNucCS
 {
   static const G4double shd=1.0734;                    // HE PomShadowing(D)
   static const G4double poc=0.0375;                    // HE Pomeron coefficient
   static const G4double pos=16.5;                      // HE Pomeron shift
   static const G4double reg=.11;                       // HE Reggeon slope
-  static const G4double mmu=105.65839;                 // Mass of a muon in MeV
-  static const G4double lmmu=std::log(mmu);                 // Log of a muon mass
-  G4double y=std::exp(x-lastG-lmmu);                        // y for the x
+  static const G4double mtu=1777.;                     // Mass of a muon in MeV
+  static const G4double lmtu=std::log(mtu);            // Log of a muon mass
+  G4double y=std::exp(x-lastG-lmtu);                   // y for the x
   G4double flux=lastG*(2.-y*(2.-y))-1.;                // flux factor
   return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
 }
 
-inline G4double G4QMuonNuclearCrossSection::Fun(G4double x) // Integrated PhoNucCS
+inline G4double G4QTauNuclearCrossSection::Fun(G4double x) // Integrated PhoNucCS
 {
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
@@ -134,7 +135,7 @@ inline G4double G4QMuonNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc
   return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x)/lastE);
 }
 
-inline G4double G4QMuonNuclearCrossSection::HighEnergyJ1(G4double lEn)
+inline G4double G4QTauNuclearCrossSection::HighEnergyJ1(G4double lEn)
 {
   static const G4double le=std::log(50000.); // log(E0)
   static const G4double le2=le*le;           // log(E0)^2
@@ -147,7 +148,7 @@ inline G4double G4QMuonNuclearCrossSection::HighEnergyJ1(G4double lEn)
   return ha*(lEn*lEn-le2)-ab*(lEn-le)-cd*(std::exp(-d*lEn)-ele);
 }
 
-inline G4double G4QMuonNuclearCrossSection::HighEnergyJ2(G4double lEn)
+inline G4double G4QTauNuclearCrossSection::HighEnergyJ2(G4double lEn)
 {
   static const G4double e=50000.;            // E0
   static const G4double le=std::log(e);      // log(E0)
@@ -161,7 +162,7 @@ inline G4double G4QMuonNuclearCrossSection::HighEnergyJ2(G4double lEn)
   return a*((lEn-1.)*En-le1)-ab*(En-e)+cd*(std::exp(d*lEn)-ele);
 }
 
-inline G4double G4QMuonNuclearCrossSection::HighEnergyJ3(G4double lEn)
+inline G4double G4QTauNuclearCrossSection::HighEnergyJ3(G4double lEn)
 {
   static const G4double e=50000.;            // E0
   static const G4double le=std::log(e);      // log(E0)

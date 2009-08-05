@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiffraction.hh,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QDiffraction.hh,v 1.4 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiffraction header ----------------
@@ -60,7 +60,6 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4HadronicProcessType.hh"

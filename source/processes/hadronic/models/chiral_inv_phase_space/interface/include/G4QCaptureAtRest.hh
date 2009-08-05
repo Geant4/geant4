@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.9 2009-06-29 16:03:33 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.10 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -94,7 +94,6 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"

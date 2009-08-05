@@ -24,39 +24,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.hh,v 1.7 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QANuANuNuclearCrossSection.hh,v 1.1 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4QANuMuNuclearCrossSection -- header file for (anu_mu,mu+)A XS
+// GEANT4 physics class: G4QANuANuNuclearCrossSection -- header file
 // M.V. Kossov, CERN-ITEP(Moscow), 20-DEC-2005
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 20-DEC-2005
 //
-// Short description: this G4 singletone class calculates (nu_mu,mu) Nuclear cross section
+// Short description: this G4 singletone class calculates (an-nu,an-nu)A cross section
 // (Energy limit: E<320GeV->badExtrapolation) for a particular isotope (proportional to A)
 // ****************************************************************************************
 
-#ifndef G4QANuMuNuclearCrossSection_h
-#define G4QANuMuNuclearCrossSection_h 1
+#ifndef G4QANuANuNuclearCrossSection_h
+#define G4QANuANuNuclearCrossSection_h 1
 
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4VQCrossSection.hh"
 
-class G4QANuMuNuclearCrossSection : public G4VQCrossSection
+class G4QANuANuNuclearCrossSection : public G4VQCrossSection
 {
 protected:
 
-  G4QANuMuNuclearCrossSection()  {};
+  G4QANuANuNuclearCrossSection()  {};
 
 public:
 
-  ~G4QANuMuNuclearCrossSection()  {};
+  ~G4QANuANuNuclearCrossSection()  {};
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 

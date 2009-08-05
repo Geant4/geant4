@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.28 2009-07-24 16:37:03 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.29 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -46,7 +46,6 @@
 #include "globals.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4ParticleTypes.hh"
 
 #include "G4QContent.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QDiscProcessMixer.hh,v 1.6 2009-04-17 15:22:31 mkossov Exp $
+// $Id: G4QDiscProcessMixer.hh,v 1.7 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDiscProcessMixer header ----------------
@@ -44,16 +44,10 @@
 #include "G4VDiscreteProcess.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-//#include "G4ParticleTypes.hh"
-//#include "G4VParticleChange.hh"
-//#include "G4ParticleDefinition.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4DynamicParticle.hh"
 #include "G4QDiscreteProcessVector.hh"
-//#include "G4NucleiPropertiesTable.hh"
-//#include "G4ThreeVector.hh"
-//#include "G4LorentzVector.hh"
 
 #include <vector>
 

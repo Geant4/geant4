@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.40 2009-07-31 12:43:53 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.41 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -612,11 +612,20 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   }
   aParticleChange.Initialize(track);
   G4double weight = track.GetWeight();
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: weight="<<weight<<G4endl;
+#endif
   if(photNucBias!=1.)      weight/=photNucBias;
   else if(weakNucBias!=1.) weight/=weakNucBias;
   G4double localtime = track.GetGlobalTime();
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: localtime="<<localtime<<G4endl;
+#endif
   G4ThreeVector position = track.GetPosition();
   G4TouchableHandle trTouchable = track.GetTouchableHandle();
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: position="<<position<<G4endl;
+#endif
   //
   G4int targPDG=90000000+Z*1000+N;            // PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);
@@ -626,7 +635,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4double absMom = 0.;                       // Prototype of absorbed by nucleus Moment
   G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVectorum
   G4LorentzVector lead4M(0.,0.,0.,0.);        // Prototype of LeadingQ 4-momentum
-
+#ifdef debug
+  G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<aProjPDG<<", targPDG="<<targPDG<<G4endl;
+#endif
   //  
   // Leptons with photonuclear
   // Lepto-nuclear case with the equivalent photon algorithm. @@InFuture + NC (?)
@@ -1226,6 +1237,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         continue;
       }
       G4DynamicParticle* theSec = new G4DynamicParticle;
+#ifdef pdebug
+      G4cout<<"G4QCollision::PostStepDoIt: *QS* PDG="<<PDGCode<<G4endl;
+#endif
       G4ParticleDefinition* theDefinition;
       if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
       else if(PDGCode==90001000) theDefinition = G4Proton::Proton(); // While it can be ion
@@ -1260,6 +1274,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         G4cout<<"G4QCollision::PostStepDoIt: *QS* AfterPartDef PDG="<<PDGCode<<G4endl;
 #endif
       } // End of the long if for the different particle kinds
+#ifdef pdebug
+      G4cout<<"G4QCollision::PostStepDoIt: *QS* theDefinition="<<theDefinition<<G4endl;
+#endif
       if(!theDefinition)
       {
 #ifdef debug

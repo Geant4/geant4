@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.60 2009-08-05 08:26:40 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.61 2009-08-05 09:29:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -1925,12 +1925,6 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
     // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
     if(A==256 && Z==128) m=256000.;
     else                 m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    //if(G4NucleiPropertiesTable::IsInTable(Z,A))
-    //                                         m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    //else if(A==256 && Z==128) m=256000.;
-    //else
-    //  m=k+G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
-   //m+=-sh[Z]-sh[N]+b1*D*D*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(fA,b9)+b6/fA);
   }
   //@@//G4double maxM= k+Z*mP+N*mN+S*mL+eps;      // @@ eps -- Wings of the Mass parabola
   //@@//if(m>maxM) m=maxM;
@@ -1967,13 +1961,6 @@ G4double G4QPDGCode::CalculateNuclMass(G4int z, G4int n, G4int s)
       // IsInTable is inside G4NucleiProperties::GetNuclearMass
       // G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm) creates new Ion!
       mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
-      //G4double fA=Am;
-      //if(G4NucleiPropertiesTable::IsInTable(Zm,Am))
-      //  mm=km+G4NucleiProperties::GetNuclearMass(Am,Zm);
-      //else
-      //  mm=km+G4ParticleTable::GetParticleTable()->FindIon(Zm,Am,0,Zm)->GetPDGMass();
-      //  //mm+=-sh[Zm]-sh[Nm]+b1*Dm*Dm*pow(fA,b2)+b3*(1.-2./(1.+exp(b4*Dm)))
-      //  //    +Zm*Zm*(b5*pow(fA,b9)+b6/Am);
     }
     //@@//G4double mM= km+Zm*mP+Nm*mN+eps;
     //@@//if(mm>mM) mm=mM;

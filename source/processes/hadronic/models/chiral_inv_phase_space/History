@@ -16,6 +16,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-03)
+-----------------------------------------------------------------------
+Migration of the rest of the XS from interface to body and exclusion of the
+dependency of the G4NucleiPropertiesTable class (absolete by Hisaya)
+
 31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
 -----------------------------------------------------------------------
 Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)
