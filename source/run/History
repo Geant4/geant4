@@ -1,4 +1,4 @@
-$Id: History,v 1.182 2009-08-03 16:17:38 kurasige Exp $
+$Id: History,v 1.183 2009-08-05 17:31:07 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Aug 05, 2009, Hisaya Kurashige (run-V09-02-03)
+- Add G4VUserPhysicsList::DiisableCheckParticleList method
+- Modify G4VUserPhysicsList::CheckParticleList to check existence
+   of any EM processes 
+
 Aug 03, 2009, Hisaya Kurashige (run-V09-02-02)
 - Modify G4VUserPhysicsList to fit with proton cuts 
 - Modify G4VUserPhysicsList::BuildPhysicsTable

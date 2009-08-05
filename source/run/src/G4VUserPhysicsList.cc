@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.69 2009-08-03 13:42:19 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.70 2009-08-05 17:31:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,8 @@
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
-                   :verboseLevel(1),
+                 :  fDisableCheckParticleList(false),
+		    verboseLevel(1),
 		    fRetrievePhysicsTable(false),
 		    fStoredInAscii(true),
 		    fIsCheckedForRetrievePhysicsTable(false),
@@ -202,11 +203,22 @@ void G4VUserPhysicsList::CheckParticleList()
   bool isGenericIon = false;
   bool isAnyIon   = false;
   bool isAnyChargedBaryon   = false;
+  bool isEmProc   = false;
+
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4String name = particle->GetParticleName();
+    // check if any EM process exists
+    if (!isEmProc) {
+      G4ProcessVector* list = particle->GetProcessManager()->GetProcessList();
+      for (int idx=0; idx<list->size(); idx++){
+	isEmProc = ((*list)[idx])->GetProcessType() == fElectromagnetic;
+	if (isEmProc) break;
+      }
+    }
+    
     if      ( name == "e-") isElectron = true; 
     else if ( name == "e+") isPositron = true; 
     else if ( name == "gamma") isGamma = true; 
@@ -217,6 +229,8 @@ void G4VUserPhysicsList::CheckParticleList()
        if ( particle->GetPDGCharge() != 0.0 ) isAnyChargedBaryon = true;
     }
   }
+
+  if (!isEmProc) return;
 
   // RULE 1
   //  e+, e- and gamma should exist 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.39 2009-08-03 13:42:19 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.40 2009-08-05 17:31:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ class G4VUserPhysicsList
  
    // Each physics process will be instantiated and
    // registered to the process manager of each particle type 
-   // This method is invoked in Construct" method 
+   // This method is invoked in Construct method 
    virtual void ConstructProcess() = 0;
 
   protected: // with description
@@ -258,12 +258,17 @@ class G4VUserPhysicsList
 			   G4ProcessManager*    newManager = 0 );
  
    /////////////////////////////////////////////////////////////////
+  public:
+    void DisableCheckParticleList();
+
   protected: 
+ 
     // check consistencies of list of particles 
 
     void CheckParticleList();
 
- 
+    bool fDisableCheckParticleList;
+
   ////////////////////////////////////////////////////////////////////////
   protected:
     // the particle table has the complete List of existing particle types
@@ -335,14 +340,15 @@ inline void G4VUserPhysicsList::Construct()
   if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
 #endif
 
-  CheckParticleList();
-
   InitializeProcessManager();
 
 #ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "Construct processes " << G4endl;  
 #endif
   ConstructProcess();
+
+  
+  if (!fDisableCheckParticleList) CheckParticleList();
 }
 
 inline G4double G4VUserPhysicsList::GetDefaultCutValue() const
@@ -395,5 +401,13 @@ inline
 {
   fStoredInAscii = false;
 }
+
+inline 
+ void  G4VUserPhysicsList::DisableCheckParticleList()
+{   
+  fDisableCheckParticleList = true;
+}
+
+
 #endif
 
