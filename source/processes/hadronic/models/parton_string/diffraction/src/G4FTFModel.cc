@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.21 2009-08-05 10:23:46 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.22 2009-08-05 16:43:22 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -304,7 +304,7 @@ G4bool G4FTFModel::PutOnMassShell()
           }
 //G4cout<<"Start Decay "<<G4endl; G4int Uzhi; G4cin>>Uzhi;
           G4ThreeVector PtSum;
-          G4double      XminusSum;
+          G4double      XminusSum(0.);
           G4double Xminus;
 
           do      // while((Xminus <= 0.) || (Xminus >= 1.));
@@ -579,7 +579,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 //G4cout<<"  Proj strings"<<G4endl;
 	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
 	{
-            G4bool isProjectile;
+            G4bool isProjectile(0);
             if(primaries[ahadron]->GetStatus() == 1) {isProjectile=true; }  // Uzhi 17.07.09
             if(primaries[ahadron]->GetStatus() == 3) {isProjectile=false;}  // Uzhi 17.07.09
 	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
