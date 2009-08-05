@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.20 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.21 2009-08-05 10:23:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -157,7 +157,7 @@ void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 20
            theParticipants.theNucleus->StartLoop();
            G4Nucleon * Neighbour;
 //G4int NucleonNum(0);
-	   while (Neighbour = theParticipants.theNucleus->GetNextNucleon())
+	   while ( (Neighbour = theParticipants.theNucleus->GetNextNucleon()) )
            {
             if(!Neighbour->AreYouHit())
             {
@@ -200,7 +200,7 @@ void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 20
         theParticipants.theNucleus->StartLoop();
         G4Nucleon * aNucleon;
         G4bool theFirstInvolvedNucleon(true);
-	while (aNucleon = theParticipants.theNucleus->GetNextNucleon())
+	while ( (aNucleon = theParticipants.theNucleus->GetNextNucleon()) )
         {
           if(aNucleon->AreYouHit())
           {
