@@ -13,6 +13,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 5 August 2009, V. Uzhinsky (hadr-prtn-V09-02-03)
+Some warning were erased at FTFModel compilation.
+----------------------------------------------------
  3 August 2009, V. Uzhinsky (hadr-prtn-V09-02-02)
    FTF model was complited by the reggeon cascade model.
 -----------------------------------------------------------
