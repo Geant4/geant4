@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.20 2009-08-05 08:26:40 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.21 2009-08-05 17:02:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1260,7 +1260,8 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
             }
             if(sing)
             {
-              G4QContent newStQC(std::make_pair(nLPDG,nRPDG)); // NewString QuarkContent
+              std::pair<G4int,G4int> newPair = std::make_pair(nLPDG,nRPDG);
+              G4QContent newStQC(newPair);        // NewString QuarkContent
 #ifdef debug
               G4cout<<"G4QFr::Con: LPDG="<<nLPDG<<",RPDG="<<nRPDG<<",QC="<<newStQC<<G4endl;
 #endif
@@ -1509,12 +1510,71 @@ G4QHadronVector* G4QFragmentation::Fragment()
   G4int nQuas=theQuasmons.size();
   if(nQuas && theResult->size())
   {
-    G4QHadron* resNuc = (*theResult)[theResult->size()-1];  // Pointer to Residual Nucleus
+    G4int theRS=theResult->size();                          // Size of Hadron Output by now
+    G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
     G4QNucleus      theEnv(resNucPDG);                      // NucleusHadron->NucleusAtRest
     delete resNuc;                                          // Delete resNucleus as aHadron
     theResult->pop_back();                                  // Exclude the nucleus from HV
+    --theRS;                                                // Reduce the OUTPUT by theNucl
+#ifdef pdebug
+    G4cout<<"G4QFragmentation::Fragment: #OfRemainingHadrons="<<theRS<<G4endl;
+#endif
+    // Now we need to be sure that the compound nucleus is heavier than the Ground State
+    if(theRS) for(G4int j=theRS-1; j>-2; --j)               // more than rest of hadrons !!
+    {
+      G4LorentzVector qsum4M=resNuc4M;                      // Proto compound 4-momentum
+      G4QContent qsumQC=theEnv.GetQCZNS();                  // Proto compound Quark Content
+#ifdef pdebug
+      G4cout<<"G4QFragmentation::Fragm:rN4M"<<qsum4M<<qsum4M.m()<<",rNQC="<<qsumQC<<G4endl;
+#endif
+      G4Quasmon* firstQ=0;                                  // Prototype of theFirstQuasmon
+      G4LorentzVector first4M;                              // Proto of the FirstQuasmon 4M
+      G4QContent firstQC;                                   // Proto of the FirstQuasmon QC
+      for(G4int i=0; i<nQuas; ++i)                          // LOOP over Quasmons
+      {
+        G4Quasmon* curQuasm=theQuasmons[i];                 // current Quasmon
+        G4LorentzVector cur4M=curQuasm->Get4Momentum();     // 4-Mom of the Quasmon
+        G4QContent curQC=curQuasm->GetQC();                 // Quark Content of the Quasmon
+        qsum4M+=cur4M;                                      // Add quasmon's 4-momentum
+        qsumQC+=curQC;                                      // Add quasmon's Quark Content
+#ifdef pdebug
+        G4cout<<"G4QFragmentation::Fragm: Q#"<<i<<", QQC="<<curQC<<",sQC="<<qsumQC<<G4endl;
+#endif
+        if(!i)                                              // Remember 1-st for correction
+        {
+          firstQ =curQuasm;
+          first4M=cur4M;
+          firstQC=curQC;
+        }
+      }
+      G4int miPDG=qsumQC.GetSPDGCode();                     // PDG of minM of hadron/fragm.
+      G4double gsM=G4QPDGCode(miPDG).GetMass();             // minM of hadron/fragm. for QC
+      G4double reM=qsum4M.m();                              // real mass of the compound
+#ifdef pdebug
+      G4cout<<"G4QFragmentation::Fragment: PDG="<<miPDG<<",rM="<<reM<<",GSM="<<gsM<<G4endl;
+#endif
+      if(reM > gsM) break;                                  // CHIPS can be called
+      if(j > -1)                                            // Can try to add hadrons to Q0
+      {
+        G4QHadron* cH = (*theResult)[j];                    // Pointer to the last Hadron
+        G4LorentzVector h4M = cH->Get4Momentum();           // 4-Momentum of the Hadron
+        G4QContent      hQC = cH->GetQC();                  // QC of the Hadron
+        firstQ->Set4Momentum(first4M+h4M);                  // Update the Quasmon's 4-Mom
+        firstQ->SetQC(firstQC+hQC);                         // Update the Quasmon's QCont
+        delete cH;                                          // Delete the Hadron
+        theResult->pop_back();                              // Exclude the hadron from HV
+#ifdef pdebug
+        G4cout<<"G4QFragm::Fragm: H#"<<j<<",hQC="<<hQC<<",hPDG="<<cH->GetPDGCode()<<G4endl;
+#endif
+      }
+      else
+      {
+        G4cerr<<"***G4QFragmentation::Fragm:PDG="<<miPDG<<",M="<<reM<<",GSM="<<gsM<<G4endl;
+        G4Exception("G4QFragmentation::Fragment:","27",FatalException,"Can't recover GSM");
+      }
+    }
     G4ThreeVector   nucVel=resNuc4M.vect()/resNuc4M.e();    // Nucleus velocity
     G4QHadronVector* output=0;                              // NucleusFragmentation Hadrons
     G4QEnvironment* pan= new G4QEnvironment(theEnv);        // ---> DELETED --->----------+

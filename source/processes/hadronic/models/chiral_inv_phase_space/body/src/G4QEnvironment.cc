@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.145 2009-06-29 16:04:46 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.146 2009-08-05 17:02:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7897,34 +7897,35 @@ void G4QEnvironment::DecayAntistrange(G4QHadron* qH)
     //theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
     return;
   }
-  else if(theLS<-1)
-  {
-    G4cout<<"*Warning*G4QEnvironment::DecayAntistrange: S="<<theLS<<",AsIsImprove"<<G4endl;
-    theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
-    return;
-  }
+  //else if(theLS<-1)
+  //{
+  //  G4cout<<"*Warning*G4QEnviron::DecayAntistrange: S="<<theLS<<",AsIs->Improve"<<G4endl;
+  //  theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
+  //  return;
+  //}
+  G4int astr=-theLS;                           // Number of K+ (or anti-K0)
   G4int theLB= qH->GetBaryonNumber();          // Baryon number of the Nucleus
   G4int theLC= qH->GetCharge();                // Chsrge of the Nucleus
   G4int qPDG = qH->GetPDGCode();               // PDG Code of the decaying Nucleus
-  G4int K0PDG= qPDG+999999;                    // Residual nonStrange nucleus for antiK0
-  G4QPDGCode K0QPDG(K0PDG);                    // QPDG of the nuclear residual for antiK0
-  G4double rK0M=K0QPDG.GetMass();              // Mass of the nuclear residual for antiK0
-  G4int KpPDG= qPDG+999000;                    // Residual nonStrange nucleus for K+
-  G4QPDGCode KpQPDG(KpPDG);                    // QPDG of the nuclear residual for K+
-  G4double rKpM=KpQPDG.GetMass();              // Mass of the nuclear residual for K+
+  G4int K0PDG= qPDG+astr*999999;               // Residual nonStrange nucleus for S*antiK0
+  G4QPDGCode K0QPDG(K0PDG);                    // QPDG of the nuclear residual for S*antiK0
+  G4double rK0M=K0QPDG.GetMass();              // Mass of the nuclear residual for S*antiK0
+  G4int KpPDG= qPDG+999000;                    // Residual nonStrange nucleus for S*K+
+  G4QPDGCode KpQPDG(KpPDG);                    // QPDG of the nuclear residual for S*K+
+  G4double rKpM=KpQPDG.GetMass();              // Mass of the nuclear residual for S*K+
   G4LorentzVector q4M = qH->Get4Momentum();    // Get 4-momentum of the Nucleus
   G4double         qM = q4M.m();               // Mass of the Nucleus
 #ifdef pdebug
   G4cout<<"G4QE::DecayAntistrang:S="<<theLS<<",C="<<theLC<<",B="<<theLB<<",M="<<qM<<G4endl;
 #endif
-  // Select a chanel of the decay
+  // Select a chanel of the decay: @@ The Kaon binding energy is not taken into account !!
   G4QPDGCode     fQPDG = kzQPDG;               // Prototype for Kaon (anti-K0)
   G4double       fMass= mK0;
   G4QPDGCode     sQPDG = K0QPDG;               // Prototype for residual nucleus to Kaon
   G4double       sMass= rK0M;
-  if(mK0+rK0M>qM)                              // Can not be K0
+  if(astr*mK0+rK0M>qM)                              // Can not be K0
   {
-    if(mK+rKpM>qM)                             // Can not be K+ too
+    if(astr*mK+rKpM>qM)                             // Can not be K+ too
     {
       G4cout<<"*Warning*G4QEnvironment::DecayAntistrange: Too low mass, keep AsIs"<<G4endl;
       theQHadrons.push_back(qH);               // Fill AsIs (delete equivalent)
@@ -7938,19 +7939,21 @@ void G4QEnvironment::DecayAntistrange(G4QHadron* qH)
       sMass= rKpM;
     }
   }
-  else if(mK+rKpM<qM && theLC>theLB-theLC)     // Switch to K+ if Z>N
+  else if(astr*mK+rKpM<qM && theLC>theLB-theLC)     // Switch to K+ if Z>N
   {
     fQPDG = kpQPDG;                            // Positive Kaon
     fMass= mK;
     sQPDG = KpQPDG;                            // Residual nucleus to K+
     sMass= rKpM;
   }
-  G4LorentzVector f4Mom(0.,0.,0.,fMass);
+  G4double afMass=fMass;
+  if(astr>1) afMass*=astr;
+  G4LorentzVector f4Mom(0.,0.,0.,afMass);
   G4LorentzVector s4Mom(0.,0.,0.,sMass);
-  G4double sum=fMass+sMass;
+  G4double sum=afMass+sMass;
   if(fabs(qM-sum)<eps)
   {
-    f4Mom=q4M*(fMass/sum);
+    f4Mom=q4M*(afMass/sum);
     s4Mom=q4M*(sMass/sum);
   }
   else if(qM<sum || !G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
@@ -7968,9 +7971,15 @@ void G4QEnvironment::DecayAntistrange(G4QHadron* qH)
 #endif
   delete qH;
   //
-  G4QHadron* H1 = new G4QHadron(fQPDG,f4Mom); // Create a Hadron for the 1-st baryon
+  if(astr>1) f4Mom/=astr;
+  G4QHadron* H1 = new G4QHadron(fQPDG,f4Mom); // Create a Hadron for the 1-st kaon
   theQHadrons.push_back(H1);                  // Fill "H1" (delete equivalent)
-  G4QHadron* H2 = new G4QHadron(sQPDG,s4Mom); // Create a Hadron for the 2-nd baryon
+  for(G4int ia=1; ia < astr; ++ia)
+  {
+    H1 = new G4QHadron(fQPDG,f4Mom);          // Create a Hadron for other kaons
+    theQHadrons.push_back(H1);                // Fill "H1" (delete equivalent)
+  }
+  G4QHadron* H2 = new G4QHadron(sQPDG,s4Mom); // Create a Hadron for the Residual Nucleus
   theQHadrons.push_back(H2);                  // Fill "H2" (delete equivalent)
 } // End of DecayAntistrange
 

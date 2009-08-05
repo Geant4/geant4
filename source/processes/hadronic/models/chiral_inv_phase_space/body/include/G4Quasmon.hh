@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.43 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.44 2009-08-05 17:02:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -95,6 +95,7 @@ public:
 
   //Modifiers
   void Set4Momentum(G4LorentzVector Q4M) {q4Mom=Q4M;} // Set new value for the Quasmon 4mom
+  void SetQC(G4QContent QQC)             {valQ=QQC;}  // Set new Quark Cont for the Quasmon
   void Boost(const G4LorentzVector& theBoost);        // Boosts hadron's 4Momentum using 4M
   void Boost(const G4ThreeVector& B){q4Mom.boost(B);} // Boosts 4-Momentum using v/c
   // Public wrapper for HadronizeQuasmon(,)
