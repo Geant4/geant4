@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.19 2009-08-04 14:44:50 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.20 2009-08-05 08:26:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -380,7 +380,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
       aTarget = new G4QHadron(*pNucleon);            // Copy selected nucleon for String
       aProjectile =cmProjectile;
       theNucleus.DoLorentzBoost(theCurrentVelocity); // Boost theResNucleus toRotatedLS
-      theNucleus.SubtractNucleon(pNucleon);          // Pointer to the used nucleon
+      theNucleus.SubtractNucleon(pNucleon);          // Pointer to theUsedNucleon to delete
       theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
     }
     G4QContent QQC=aTarget->GetQC()+aProjectile->GetQC(); // QContent of the compound
@@ -499,9 +499,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
     G4QParton* aParton = aProjectile->GetNextParton();
     if (aParton)
     {
-      aPartonPair=new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
-                                    G4QPartonPair::DIFFRACTIVE,
-                                    G4QPartonPair::PROJECTILE);
+      aPartonPair = new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
+                                      G4QPartonPair::DIFFRACTIVE,
+                                      G4QPartonPair::PROJECTILE);
       thePartonPairs.push_back(aPartonPair);
 #ifdef debug
       G4cout<<"G4QFragmentation::Construct: proj Diffractive PartonPair is filled"<<G4endl;
@@ -543,7 +543,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
   while(thePartonPairs.size()) // @@ At present noDifference in stringBuild (? M.K.)
   {
     aPair = thePartonPairs.back();           // Get the parton pair
-    thePartonPairs.pop_back();               // Clean up the parton pair in the vector
+    thePartonPairs.pop_back();               // Clean up thePartonPairPointer in the Vector
 #ifdef debug
     G4cout<<"G4QFragmentation::Construct: StringType="<<aPair->GetCollisionType()<<G4endl;
 #endif
@@ -1249,6 +1249,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
               G4int nR2=aRPDG%10;
               if(nL1!=nR1 && nL1!=nR2 && nL2!=nR1 && nL2!=nR2) // Unreducable DiQ-aDiQ
               {
+#ifdef debug
+                G4cout<<"G4QFragmentation::Const:aLPDG="<<aLPDG<<", aRPDG="<<aRPDG<<G4endl;
+#endif
                 sing=false;
                 G4QPDGCode tmp;
                 std::pair<G4int,G4int> pB=tmp.MakeTwoBaryons(nL1, nL2, nR1, nR2);
@@ -1258,6 +1261,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
             if(sing)
             {
               G4QContent newStQC(std::make_pair(nLPDG,nRPDG)); // NewString QuarkContent
+#ifdef debug
+              G4cout<<"G4QFr::Con: LPDG="<<nLPDG<<",RPDG="<<nRPDG<<",QC="<<newStQC<<G4endl;
+#endif
               G4int minPDG=newStQC.GetSPDGCode(); // PDG of the Lightest Hadron=String
               minM=G4QPDGCode(minPDG).GetMass() + mPi0; // Min SingleHadron=String Mass
             }
@@ -1441,6 +1447,46 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #endif
   G4int striNum=strings.size();                             // Find out if there're strings
   G4int hadrNum=theResult->size();                          // Find out if there're hadrons
+#ifdef edebug
+  G4int nQm=theQuasmons.size();
+  G4LorentzVector totLS4M=theNucleus.Get4Momentum();        // Nucleus 4Mom in LS
+  G4int totChg=theNucleus.GetZ();
+  G4int totBaN=theNucleus.GetA();
+  G4cout<<"-EMCLS-G4QF::Fragment: CHECKRecovery, #ofS="<<striNum<<", #Nuc4M(E=M)="<<totLS4M
+        <<",#Q="<<nQm<<",#H="<<hadrNum<<G4endl;
+  for(G4int i=0; i < striNum; i++)
+  {
+    G4LorentzVector strI4M=strings[i]->Get4Momentum();
+    totLS4M+=strI4M;
+    G4int sChg=strings[i]->GetCharge();
+    totChg+=sChg;
+    G4int sBaN=strings[i]->GetBaryonNumber();
+    totBaN+=sBaN;
+    G4cout<<"-EMCLS-G4QFragm::Fragment: String#"<<i<<", 4M="<<strI4M<<", M="<<strI4M.m()
+          <<", C="<<sChg<<", B="<<sBaN<<G4endl;
+  }
+  for(G4int i=0; i < nQm; i++)
+  {
+    G4LorentzVector hI4M=theQuasmons[i]->Get4Momentum();
+    totLS4M+=hI4M;
+    G4int hChg=theQuasmons[i]->GetCharge();
+    totChg+=hChg;
+    G4int hBaN=theQuasmons[i]->GetBaryonNumber();
+    totBaN+=hBaN;
+    G4cout<<"-EMCLS-G4QFragmentation::Fragment: Quasmon#"<<i<<", 4M="<<hI4M<<", C="<<hChg
+          <<", B="<<hBaN<<G4endl;
+  }
+  for(G4int i=0; i < hadrNum; i++)
+  {
+    G4LorentzVector hI4M=(*theResult)[i]->Get4Momentum();
+    totLS4M+=hI4M;
+    G4int hChg=(*theResult)[i]->GetCharge();
+    totChg+=hChg;
+    G4int hBaN=(*theResult)[i]->GetBaryonNumber();
+    totBaN+=hBaN;
+    G4cout<<"-EMCLS-G4QFr::Fragment:H#"<<i<<",4M="<<hI4M<<",C="<<hChg<<",B="<<hBaN<<G4endl;
+  }
+#endif
 #ifdef debug
   G4cout<<"***>G4QFragmentation::Fragment: #OfStr="<<striNum<<", #OfRes="<<hadrNum<<G4endl;
 #endif
@@ -1452,7 +1498,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
     return theResult;
   }
   else if(striNum) Breeder();                               // Strings fragmentation
-  else
+  else                                                      // No strings, make HadrNucleus
   {
     theResult = new G4QHadronVector;                        // Create new Result-vector
     G4LorentzVector r4M=theNucleus.Get4Momentum();          // Nucleus 4-momentum in LS
@@ -1505,8 +1551,29 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #ifdef debug
   G4cout<<"====>G4QFragmentation::Fragment: Final #OfResult="<<theResult->size()<<G4endl;
 #endif
+    G4int nQ =theQuasmons.size();
+    if(nQ) theQuasmons.clear();                              // @@ Not necesary ?
+#ifdef edebug
+    G4LorentzVector f4M(0.,0.,0.,0.);                        // Sum of the Result in LS
+    G4int fCh=totChg;
+    G4int fBN=totBaN;
+    G4int nHd=theResult->size();
+    G4cout<<"-EMCLS-G4QFragmentation::Fragment: #ofHadr="<<nHd<<", #OfQuasm="<<nQ<<G4endl;
+    for(G4int i=0; i<nHd; i++)
+    {
+      G4LorentzVector hI4M=(*theResult)[i]->Get4Momentum();
+      f4M+=hI4M;
+      G4int hChg=(*theResult)[i]->GetCharge();
+      fCh-=hChg;
+      G4int hBaN=(*theResult)[i]->GetBaryonNumber();
+      fBN-=hBaN;
+      G4cout<<"-EMCLS-G4QFragmentation::Fragment: Hadron#"<<i<<", 4M="<<hI4M<<", PDG="
+            <<(*theResult)[i]->GetPDGCode()<<", C="<<hChg<<", B="<<hBaN<<G4endl;
+    }
+    G4cout<<"-EMCLS-G4QFragm::Fragm:, r4M="<<f4M-totLS4M<<",rC="<<fCh<<",rB="<<fBN<<G4endl;
+#endif
   return theResult;
-}
+} // End of fragmentation
 
 void G4QFragmentation::Breeder()
 { // This is the member function, which returns the resulting vector of Hadrons & Quasmons
@@ -2122,11 +2189,11 @@ void G4QFragmentation::Breeder()
 #ifdef debug
                 G4cout<<"G4QFragm::Breed: *HadronFound*,PDG="<<selHP->GetPDGCode()<<G4endl;
 #endif
-#ifdef edebug
                 G4LorentzVector p4M=selHP->Get4Momentum();
-                G4int           Chg=selHP->GetCharge();
-                G4int           BaN=selHP->GetBaryonNumber();
                 curString4M+=p4M;
+#ifdef edebug
+                G4int Chg=selHP->GetCharge();
+                G4int BaN=selHP->GetBaryonNumber();
                 curStrChg+=Chg;
                 curStrBaN+=BaN;
                 G4cout<<"-EMC->>>>G4QFragmentation::Breeder: S+=H, 4M="<<curString4M<<",M="
@@ -2153,8 +2220,8 @@ void G4QFragmentation::Breeder()
 #endif
           if(!theHadrons && next == strings.size() && !(theResult->size()))// TryToDecay
           {
-            G4QContent miQC=curString->GetQC();        // QContent of the Lightest Hadron
-            G4int miPDG=miQC.GetSPDGCode();            // PDG of the Lightest Hadron
+            G4QContent miQC=curString->GetQC();    // QContent of the Lightest Hadron
+            G4int miPDG=miQC.GetSPDGCode();         // PDG of the Lightest Hadron
             if(miPDG == 10)                        // ==> Decay Hadron-Chipolino
             {
               G4QChipolino QCh(miQC);              // define theTotalResidual as aChipolino
@@ -2189,7 +2256,7 @@ void G4QFragmentation::Breeder()
                 G4int           fPD=h1H->GetPDGCode();
                 G4int           fCg=h1H->GetCharge();
                 G4int           fBN=h1H->GetBaryonNumber();
-                G4cout<<"-EMC->>>G4QFragmentation::Breeder:St=Hadr ChiPro1 is filled, f4M="
+                G4cout<<"-EMC->>>G4QFragment::Breeder: String=Hadr ChiPro1 is filled, f4M="
                       <<f4M<<", fPDG="<<fPD<<", fCg="<<fCg<<", fBN="<<fBN<<G4endl;
 #endif
                 G4QHadron* h2H = new G4QHadron(h2QPDG.GetPDGCode(),h24M);
@@ -2199,12 +2266,12 @@ void G4QFragmentation::Breeder()
                 G4int           sPD=h2H->GetPDGCode();
                 G4int           sCg=h2H->GetCharge();
                 G4int           sBN=h2H->GetBaryonNumber();
-                G4cout<<"-EMC->>>G4QFragmentation::Breeder:St=Hadr ChiPro2 is filled, s4M="
+                G4cout<<"-EMC->>>G4QFragmentation::Breeder: String=Hadr ChiPro2 is filled, s4M="
                       <<s4M<<", sPDG="<<sPD<<", sCg="<<sCg<<", sBN="<<sBN<<G4endl;
 #endif
 #ifdef edebug
-                G4cout<<"-EMC-..Chi..G4QFragmentation::Breeder:DecCHECK,Ch4M="<<curString4M
-                      <<", d4M="<<curString4M-h14M-h24M<<G4endl;
+                G4cout<<"-EMC-..Chi..G4QFragmentation::Breeder: DecayCHECK, Ch4M="
+                      <<curString4M<<", d4M="<<curString4M-h14M-h24M<<G4endl;
 #endif
                 break;                               // Go out of the main StringDecay LOOP
               }
@@ -2224,7 +2291,7 @@ void G4QFragmentation::Breeder()
               G4QHadronVector* tmpQHadVec=Quasm.DecayQHadron(sHad); // It deletes sHad
               G4int tmpN=tmpQHadVec->size();
 #ifdef debug
-              G4cout<<"G4QFragmentation::Breeder: Decay the Last,nH="<<tmpN<<G4endl;
+              G4cout<<"G4QFragmentation::Breeder: Decay the Last, Res#H="<<tmpN<<G4endl;
 #endif
               if(tmpN>1)
               {
@@ -2237,7 +2304,7 @@ void G4QFragmentation::Breeder()
                   G4int           PDG=prodH->GetPDGCode();
                   G4int           Chg=prodH->GetCharge();
                   G4int           BaN=prodH->GetBaryonNumber();
-                  G4cout<<"-EMC->>>G4QFragmentation::Breeder:St=Had,H#"<<aH<<" filled, 4M="
+                  G4cout<<"-EMC->>>G4QFragment::Breeder:String=Hadr,H#"<<aH<<" filled, 4M="
                         <<p4M<<", PDG="<<PDG<<", Chg="<<Chg<<", BaN="<<BaN<<G4endl;
 #endif
                 }
@@ -2245,6 +2312,11 @@ void G4QFragmentation::Breeder()
               else
               {
                 G4Quasmon* stringQuasmon = new G4Quasmon(miQC, curString4M);// String->Quas
+#ifdef debug
+                G4cout<<"G4QFragmentat::Breeder:==> to Quasm="<<miQC<<curString4M<<", Nuc="
+                      <<theNucleus<<theNucleus.Get4Momentum()<<", NString="<<strings.size()
+                      <<", nR="<<theResult->size()<<", nQ="<<theQuasmons.size()<<G4endl;
+#endif
                 theQuasmons.push_back(stringQuasmon);
                 delete sHad;
                 tmpQHadVec->clear();

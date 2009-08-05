@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.59 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.60 2009-08-05 08:26:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -2023,6 +2023,12 @@ G4QContent G4QPDGCode::GetQuarkContent() const
   }
   else if(ab<99)
   {
+    if     (thePDGCode== 11) return G4QContent(1,0,0,0,1,0);
+    else if(thePDGCode==-11) return G4QContent(0,1,0,1,0,0);
+    else if(thePDGCode== 13) return G4QContent(1,0,0,0,1,0);
+    else if(thePDGCode==-13) return G4QContent(0,1,0,1,0,0);
+    else if(thePDGCode== 15) return G4QContent(1,0,0,0,1,0);
+    else if(thePDGCode==-15) return G4QContent(0,1,0,1,0,0);
 #ifdef debug
     if     (ab==22) G4cout<<"-W-G4QPDGC::GetQuarkCont: For the Photon? - Return 0"<<G4endl;
     else if(ab==10) G4cout<<"-W-G4QPDGC::GetQuarkCont: For Chipolino? - Return 0"<<G4endl;

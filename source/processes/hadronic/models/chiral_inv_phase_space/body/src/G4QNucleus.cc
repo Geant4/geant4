@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.104 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.105 2009-08-05 08:26:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -558,7 +558,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din) // din true means use only dense nu
 void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
 {//  ============================================
   G4int NotFound=true;                              // Not found flag
-		G4QHadronVector::iterator u;                      // iterator of the used nucleon
+  G4QHadronVector::iterator u;                      // iterator of the used nucleon
   for(u=theNucleons.begin(); u!=theNucleons.end(); u++)
   {
 #ifdef debug

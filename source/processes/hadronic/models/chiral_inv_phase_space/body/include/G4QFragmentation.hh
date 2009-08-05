@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.12 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.13 2009-08-05 08:26:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -72,8 +72,8 @@ class G4QFragmentation
   G4bool ExciteDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const; //@@Once
   G4bool ExciteSingDiffParticipants(G4QHadron* aPartner, G4QHadron* bPartner) const;//@@Onc
   std::pair<G4int,G4int> ReducePair(G4int P1, G4int P2) const; // Reduce Q-pairs to singles
-  void Breeder(); // String fragmentation algoritm, which makes Hadrons & Quasmons
-  // At present always SingleDiffractive, so rhis is a fake member function
+  void Breeder(); // String fragmentation algoritm, which makes Hadrons & Quasmons from Str
+  // @@ At present always SingleDiffractive, so this is a fake member function
   G4bool IsSingleDiffractive() {G4bool r=false; if(G4UniformRand()<1.) r=true; return r;}
   G4int SumPartonPDG(G4int PDG1, G4int PFG2) const;
   G4double ChooseX(G4double Xmin, G4double Xmax) const;

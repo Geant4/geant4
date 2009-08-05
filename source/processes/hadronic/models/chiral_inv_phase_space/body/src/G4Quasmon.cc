@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.113 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.114 2009-08-05 08:26:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -5689,9 +5689,11 @@ G4QHadronVector* G4Quasmon::DecayQHadron(G4QHadron* qH) // Don't fill Internal Q
         {
           delete fHadr;                                   // Delete "new fHadr"
           delete sHadr;                                   // Delete "new sHadr"
+#ifdef pdebug
           G4cerr<<"---Warning---G4Q::DecayQHadron:in2,PDGC="<<thePDG<<", ch#"<<i<<": 4M="
                 <<qH->Get4Momentum()<<"("<<qH->GetMass()<<")->"<<f4Mom<<"+"<<s4Mom<<G4endl;
           //throw G4QException("***Exception***G4Q::DecayQHadron: Failed to decay in 2");
+#endif
           theFragments->push_back(qH);                    // Fill as it is (del.equiv.)
           return theFragments;
         }
