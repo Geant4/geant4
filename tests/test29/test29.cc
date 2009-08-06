@@ -74,7 +74,7 @@
 #include "G4ParticleChange.hh"
 #include "G4QCaptureAtRest.hh"
 #include "G4MuonMinusCaptureAtRest.hh"
-#include "G4QuasmonString.hh"
+//#include "G4QuasmonString.hh"
 
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
