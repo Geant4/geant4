@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.58 2009-08-06 14:46:27 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.59 2009-08-06 15:59:32 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -595,7 +595,8 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
   static G4String nucleus("nucleus");
   static G4String proton("proton");
 
-  if (particle->GetAtomicMass() >0) return true;
+  // neutron is not ion
+  if ((particle->GetAtomicMass() >0) && (particle->GetAtomicNumber()>0)) return true;
    
   //  particles derived from G4VIon and G4Ions
   if (particle->GetParticleType() == nucleus) return true;
