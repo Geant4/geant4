@@ -52,7 +52,6 @@
 #include "G4StopDummyDeexcitation.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DynamicParticleVector.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
