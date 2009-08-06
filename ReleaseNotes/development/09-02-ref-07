@@ -5,6 +5,7 @@
 Some of the development/fixes included since the last development tag are:
 
  o Reviewed implementation of G4PhysicsVector class and sub-classes.
+ o Added possibility to handle cuts for protons.
  o Design update, bug fixes and models update for atomic shell hadronic CS
    calculation in EM low-energy.
  o New data set G4EMLOW-6.6 with new data files needed by ionisation cross
@@ -62,8 +63,9 @@ physics_lists                                    phys_lists-V09-02-22
 -------------
 - Adapted G4EmLivermorePolarizedPhysics builder as for the non polarized case.
 
-processes/cuts                                   procuts-V09-02-01
+processes/cuts                                   procuts-V09-02-02
 --------------
+- Added possibility to handle cuts for protons.
 - Added missing implementation for method GetParticleType() in class
   G4VRangeToEnergyConverter.
 
@@ -146,7 +148,7 @@ processes/hadronic
   o G4FermiFragmentsPool: fixed units (keV -> MeV), removed wrong levels,
     added new levels according to Broohaven data (see chart of nuclides at:
     http://www.nndc.bnl.gov/chart).
-- models/parton_string (hadr-prtn-V09-02-02)
+- models/parton_string (hadr-prtn-V09-02-03)
   o Completed implementation of Reggeon cascade model in FTF.
   o Implemented charge-exchange for pn->np in elastic and inelastic
     interactions simulated by FTF.
@@ -168,6 +170,17 @@ processes/hadronic
     G4AtomicShell class.
 - stopping (hadr-stopping-V09-02-02)
   o Removed dependency on unused class G4NucleiPropertiesTable.
+
+run                                              run-V09-02-03
+---
+- G4VUserPhysicsList:
+  o Added method CheckParticleList() to probe consistency of list of particles
+    before constructing processes; check being executed within call to
+    BuildPhysicsTable().
+  o Added DisableCheckParticleList() method as well and modified
+    BuildPhysicsTable() to avoid problem when ions are created in the
+    Pre-Init state.
+  o Adapted implementation for handling proton cuts.
 
 data sets
 ---------
@@ -193,5 +206,11 @@ tests                                            tests-V09-02-06
   o Added option to choose physics-list between FTFP and FTF_BIC, allowing
     testing of both combinations from the general 'physics_list' module.
     Removed obsolete ad-hoc Tst12PhysicsList class.
+- test20 (test20-V09-02-00)
+  o Use DisableCheckParticleList() in main() to avoid induced exception in
+    initialisation of PhysicsList.
 - test47 (test47-V09-02-02)
   o Corrected scripts for plotting and corrected few data files.
+- test60 (test60-V09-02-02)
+  o Use DisableCheckParticleList() in main() to avoid induced exception in
+    initialisation of PhysicsList.
