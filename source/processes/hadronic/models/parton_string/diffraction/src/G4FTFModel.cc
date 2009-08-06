@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.22 2009-08-05 16:43:22 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.23 2009-08-06 09:12:22 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -304,8 +304,8 @@ G4bool G4FTFModel::PutOnMassShell()
           }
 //G4cout<<"Start Decay "<<G4endl; G4int Uzhi; G4cin>>Uzhi;
           G4ThreeVector PtSum;
-          G4double      XminusSum(0.);
-          G4double Xminus;
+          G4double XminusSum(0.);
+          G4double Xminus(0.);
 
           do      // while((Xminus <= 0.) || (Xminus >= 1.));
           {
