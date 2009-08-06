@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.15 2009-08-06 15:45:39 kurasige Exp $
+// $Id: G4Ions.cc,v 1.16 2009-08-06 15:53:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,11 +66,9 @@ G4Ions::G4Ions(
    theExcitationEnergy = excitation;
 
    if (GetAtomicNumber() == 0  ) {
-     G4cerr << "G4Ions::" << GetParticleName() << G4endl; 
      SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
      SetAtomicMass( GetBaryonNumber() );
    }
-   //G4cout << "G4Ions::" << GetParticleName() << G4endl; 
 }
 
 
