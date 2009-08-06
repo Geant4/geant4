@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.57 2009-08-01 07:38:30 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.58 2009-08-06 14:46:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,7 +128,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
       G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
     }
 #endif
-      return 0;
+    return 0;
   } 
 
   G4double life = -1.0;
@@ -442,15 +442,20 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
 /////////////////
 G4int G4IonTable::GetNucleusEncoding(G4int Z, G4int A, G4double E, G4int )
 {
-// PDG code for Ions
-// Nuclear codes are given as 10-digit numbers +-100ZZZAAAI.
-//For a nucleus consisting of np protons and nn neutrons
-// A = np + nn and Z = np.
-// I gives the isomer level, with I = 0 corresponding 
-// to the ground state and I >0 to excitations
-
-//!!! I = 1 is assigned fo all excitation states !!!   
-
+  // PDG code for Ions
+  // Nuclear codes are given as 10-digit numbers +-100ZZZAAAI.
+  //For a nucleus consisting of np protons and nn neutrons
+  // A = np + nn and Z = np.
+  // I gives the isomer level, with I = 0 corresponding 
+  // to the ground state and I >0 to excitations
+  
+  //!!! I = 1 is assigned fo all excitation states !!!   
+  const G4double EnergyTorelance = 0.1 * keV;
+  if ( Z==1 && A==1 && E< EnergyTorelance ) {
+    //proton
+    return 2212;
+  }
+  
   G4int encoding = 1000000000;
   encoding += Z * 10000;
   encoding += A *10;
@@ -490,7 +495,16 @@ G4bool G4IonTable::GetNucleusByEncoding(G4int encoding,
   if (encoding <= 0) {
     // anti particle   
     return false;
+  } 
+  if (encoding == 2212) {
+    // proton
+    Z = 1;
+    A = 1;
+    E=0.0;
+    J=0; 
+    return true;
   }
+
   if (encoding % 10 != 0) {
     //!!!not supported for excitation states !!!   
     return false;
