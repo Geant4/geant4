@@ -1,4 +1,4 @@
-$Id: History,v 1.379 2009-08-06 15:12:13 alechner Exp $
+$Id: History,v 1.380 2009-08-06 16:29:25 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.08.2009, A. Lechner, tag emlowen-V09-02-47
+            Bug fix in G4IonDEDXHandler (access of physics vector was
+            corrected, in compliance with new version of G4PhysicsVector 
+            where hidden bin no longer exists).
 
 06.08.2009, A. Lechner, tag emlowen-V09-02-46
             Bug fix in G4IonDEDXScalingICRU73 (initialization of cached values)

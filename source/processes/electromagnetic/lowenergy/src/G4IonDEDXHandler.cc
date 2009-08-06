@@ -273,7 +273,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
         size_t nmbdEdxBins = dEdxTable[0] -> GetVectorLength();
         G4double lowerEdge = dEdxTable[0] -> GetLowEdgeEnergy(0);
-        G4double upperEdge = dEdxTable[0] -> GetLowEdgeEnergy(nmbdEdxBins);
+        G4double upperEdge = dEdxTable[0] -> GetLowEdgeEnergy(nmbdEdxBins-1);
 
         G4LPhysicsFreeVector* dEdxBragg = 
                     new G4LPhysicsFreeVector(nmbdEdxBins,
