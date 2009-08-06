@@ -158,6 +158,7 @@ processes/hadronic
       2 - absorbed nucleon
     + Defined correlation between a participant nucleon and a nuclear nucleon
       in G4InteractionContent.
+  o Improved Kaon A interactions in FTF (hadr-string-diff-V09-02-11)
   o Fixed bug in G4VLongitudinalStringDecay for the calculation of
     formation/creation time; inserted 'c_light'. Due to this string
     tension parameter has been set to the usual value (1 GeV/fm) in
@@ -202,7 +203,7 @@ examples                                         examples-V09-02-06
 tests                                            tests-V09-02-06
 -----
 - Updated reference outputs and tools.
-- test12 (test12-V09-02-03)
+- test12 (test12-V09-02-04)
   o Added option to choose physics-list between FTFP and FTF_BIC, allowing
     testing of both combinations from the general 'physics_list' module.
     Removed obsolete ad-hoc Tst12PhysicsList class.
