@@ -36,7 +36,7 @@
 //
 // First implementation: 10. 05. 2009
 //
-// Modifications: 
+// Modifications: 06. 08. 2009 -- Minor bug fix (initialization of cache) AL
 //
 //
 // Class description:
@@ -65,7 +65,13 @@ G4IonDEDXScalingICRU73::G4IonDEDXScalingICRU73(
      excludedIon( false ),
      reference( 0 ),
      atomicNumberRef( atomicNumberReference ),
-     massNumberRef( massNumberReference ) { 
+     massNumberRef( massNumberReference ),
+     cacheParticle( 0 ),
+     cacheMassNumber( 0 ),
+     cacheAtomicNumber( 0 ),
+     cacheAtomicNumberPow23( 0 ),
+     cacheCharge( 0 ),
+     cacheMass( 0 ) { 
 
 }
 
