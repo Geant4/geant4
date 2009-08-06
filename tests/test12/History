@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2009-08-04 16:12:50 gunter Exp $
+$Id: History,v 1.16 2009-08-06 10:49:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,21 +15,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4  Aug 2009 Gunter Folger                test12-V09-02-03
--  remove include for Tst12PhysicsList.hh
+6th August 2009 Gabriele Cosmo           test12-V09-02-04
+- Avoid comparison with string literals for input arguments in main().
 
-31 July 2009 Gunter Folger               test12-V09-02-02
-- add option to choose Physics list between FTFP and FTF_BIC, allowing testing
-  of both combinations
-- remove unused Tst12PhysicsList{.hh,cc}
+4th August 2009 Gunter Folger            test12-V09-02-03
+- Removed include for Tst12PhysicsList.hh.
+
+31st July 2009 Gunter Folger             test12-V09-02-02
+- Added option to choose Physics list between FTFP and FTF_BIC, allowing
+  testing of both combinations
+- Removed unused Tst12PhysicsList{.hh,cc}.
   
-25 May 2009 Gunter Folger                test12-V09-02-01
-- rename exerciser files to avoid warning on Windows:
+25th May 2009 Gunter Folger              test12-V09-02-01
+- Renamed exerciser files to avoid warning on Windows:
   GNUmakefile.hadronic.exerciser  -> GNUmakefile_hadronic_exerciser, and
   test12.hadronic.exerciser.cc    -> test12_hadronic_exerciser.cc
 
 25 May 2009 Gunter Folger                test12-V09-02-00
-- use G4LundStringFragmentation for FTF not G4QGSM....
+- Use G4LundStringFragmentation for FTF not G4QGSM....
 - NOT including in tag modified test12 using FTFP directly in place of 
   Tst12PhysicsList
 
