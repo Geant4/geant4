@@ -169,7 +169,7 @@ processes/hadronic
 - models/radioactive_decay (radioactive_decay-V09-02-00)
   o Added dependence on 'electromagnetic/util' module for usage of the
     G4AtomicShell class.
-- stopping (hadr-stopping-V09-02-02)
+- stopping (hadr-stopping-V09-02-03)
   o Removed dependency on unused class G4NucleiPropertiesTable.
 
 run                                              run-V09-02-03
