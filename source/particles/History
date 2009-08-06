@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2009-08-03 17:04:57 kurasige Exp $
+$Id: History,v 1.174 2009-08-06 15:45:39 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Aug 05 2009     Hisaya Kurashige (particles-V09-02-09)
+- Fix a bug that A nad Z of neutron are not defined
+- Fix handling of PDG encoding for proton in G4IonTable 
 
 - Aug 03 2009     Hisaya Kurashige (particles-V09-02-08)
 - Remove G4NucleiPropertiesTable
