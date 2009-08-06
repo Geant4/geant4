@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.12 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.13 2009-08-06 12:44:56 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -213,14 +213,15 @@ G4bool G4DiffractiveExcitation::
 //
 // ------------------------------------------------------------------
 //  In the case of the projectile pion an absorption is possible ----
-     if((absProjectilePDGcode < 1000) &&       // Absorption  Uzhi 7.07.09
-        (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
+     if((absProjectilePDGcode < 1000) ) //&&       // Absorption  Uzhi 7.07.09
+//        (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
      {
 
       G4int ProjQ1=  absProjectilePDGcode/ 100;
       G4int ProjQ2= (absProjectilePDGcode %100)/10;
 	   
       G4int anti= 1 -2 * ( std::max( ProjQ1, ProjQ2 ) % 2 );
+
       if (ProjectilePDGcode < 0 ) anti *=-1;
 	    
       ProjQ1 *= anti;
@@ -241,23 +242,27 @@ G4bool G4DiffractiveExcitation::
         CombinedSystemQ3 = TargQ3;
        } else 
        {
-         if(ProjQ1 + TargQ2 == 0)        // Pr Q1 annihilates with Tr Q2
+        if(ProjQ1 + TargQ2 == 0)        // Pr Q1 annihilates with Tr Q2
+        {
+         CombinedSystemQ2 = TargQ1;
+         CombinedSystemQ3 = TargQ3;
+        } else
+        {
+         if(ProjQ1 + TargQ3 == 0)       // Pr Q1 annihilates with Tr Q3
          {
           CombinedSystemQ2 = TargQ1;
-          CombinedSystemQ3 = TargQ3;
+          CombinedSystemQ3 = TargQ2;
          } else
          {
-          if(ProjQ1 + TargQ3 == 0)       // Pr Q1 annihilates with Tr Q3
-          {
-           CombinedSystemQ2 = TargQ1;
-           CombinedSystemQ3 = TargQ2;
-          }
-         }
-       }
-      } else                             // Q2 of the projectile is anti-quark
+          CombinedSystemQ2 = 0;         // Annihilation is impossible
+          CombinedSystemQ3 = 0;         
+         }  // end of if(ProjQ1 + TargQ3 == 0)
+        }   // end of if(ProjQ1 + TargQ2 == 0)
+       }    // end of if(ProjQ1 + TargQ1 == 0)
+      } else                            // Q2 of the projectile is anti-quark
       {
        CombinedSystemQ1 = ProjQ1; 
-       if(ProjQ2 + TargQ1 == 0)          // Pr Q2 annihilates with Tr Q1
+       if(ProjQ2 + TargQ1 == 0)         // Pr Q2 annihilates with Tr Q1
        {
         CombinedSystemQ2 = TargQ2;
         CombinedSystemQ3 = TargQ3;
@@ -273,12 +278,18 @@ G4bool G4DiffractiveExcitation::
           {
            CombinedSystemQ2 = TargQ1;
            CombinedSystemQ3 = TargQ2;
-          }
-         }
-       }     
+          } else
+          {
+          CombinedSystemQ2 = 0;         // Annihilation is impossible
+          CombinedSystemQ3 = 0;         
+          }  // end of if(ProjQ2 + TargQ3 == 0)
+         }   // end of if(ProjQ2 + TargQ2 == 0)
+       }     // end of if(ProjQ2 + TargQ1 == 0)     
       };
 // Odering of the quarks
 
+      if(CombinedSystemQ2*CombinedSystemQ3 != 0) // Annihilation took place.
+      {
       G4int TmpQ;
       if( CombinedSystemQ3 > CombinedSystemQ2 ) 
       {
@@ -332,10 +343,10 @@ G4bool G4DiffractiveExcitation::
       target->IncrementCollisionCount(1);
 
       return true;
+      } // end of if(CombinedSystemQ2*CombinedSystemQ3 != 0) // Annihilation took place.
      };        // End Absorption =============================
 
 // ------------------- Ordinary job of the Fritiof model -----------
-
      G4double ProbOfDiffraction=ProbProjectileDiffraction +
                                 ProbTargetDiffraction;
 
