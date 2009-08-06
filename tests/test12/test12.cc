@@ -52,9 +52,9 @@ int main(int argc,char** argv) {
   G4VUserPhysicsList * thePL(0);
   G4String inputFileName="-";
   if (argc > 2) { // second arg is PhysicsList
-
-     if (argv[2] == "FTFP" ) thePL=new FTFP;
-     else if (argv[2] == "FTF_BIC" ) thePL=new FTF_BIC;
+     G4String opt = argv[2];
+     if (opt == "FTFP" ) thePL=new FTFP;
+     else if (opt == "FTF_BIC" ) thePL=new FTF_BIC;
 
      G4cout << "Test12 using physics list " << argv[2] << G4endl;
   }
