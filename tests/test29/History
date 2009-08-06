@@ -1,0 +1,24 @@
+$Id: History,v 1.1 2009-08-06 09:39:04 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     Test 29 History file
+                     --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Aug 6th, 2009  Gabriele Cosmo (test29-V09-02-01)
+- Commented out inclusion of G4QuasmonString.hh in test29.cc,
+  header no longer existing...
+
+Aug 6th, 2009  Gabriele Cosmo
+- Created.
+
