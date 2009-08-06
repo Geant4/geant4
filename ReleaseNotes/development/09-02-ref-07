@@ -148,7 +148,7 @@ processes/hadronic
   o G4FermiFragmentsPool: fixed units (keV -> MeV), removed wrong levels,
     added new levels according to Broohaven data (see chart of nuclides at:
     http://www.nndc.bnl.gov/chart).
-- models/parton_string (hadr-prtn-V09-02-03)
+- models/parton_string (hadr-prtn-V09-02-04)
   o Completed implementation of Reggeon cascade model in FTF.
   o Implemented charge-exchange for pn->np in elastic and inelastic
     interactions simulated by FTF.
@@ -209,6 +209,9 @@ tests                                            tests-V09-02-06
 - test20 (test20-V09-02-00)
   o Use DisableCheckParticleList() in main() to avoid induced exception in
     initialisation of PhysicsList.
+- test29 (test29-V09-02-01)
+  o Commented out inclusion of no longer existing G4QuasmonString header
+    from main().
 - test47 (test47-V09-02-02)
   o Corrected scripts for plotting and corrected few data files.
 - test60 (test60-V09-02-02)
