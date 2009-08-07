@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.21 2009-08-05 17:02:31 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.22 2009-08-07 08:58:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -101,9 +101,10 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
 #endif
   theNucleus.Init3D();                    // 3D-initialisation(nucleons) of theNucleusClone
   // Now we can make the Quasi-Elastic (@@ Better to select a nucleon from the perifery)
-  std::pair<G4double,G4double> ratios=theQuasiElastic->GetRatios(proj4M.vect().mag(), pPDG,
-                                                                 tZ, tN);
-  if(G4UniformRand() < ratios.first*ratios.second) // The Quasi-Elastic is selected
+  std::pair<G4double,G4double> ratios=std::make_pair(0.,0.);
+  G4int apPDG=std::abs(pPDG);
+  if(apPDG>99) ratios=theQuasiElastic->GetRatios(proj4M.vect().mag(), pPDG, tZ, tN);
+  if(apPDG>99 && G4UniformRand() < ratios.first*ratios.second)// Make Quasi-Elastic
   {
     theNucleus.StartLoop();                            // Prepare Loop ovder nucleons
     G4QHadron* pNucleon = theNucleus.GetNextNucleon(); // Get the next nucleon to try
