@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.10 2008-12-08 14:16:05 gcosmo Exp $
+// $Id: G4String.hh,v 1.11 2009-08-07 09:55:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
