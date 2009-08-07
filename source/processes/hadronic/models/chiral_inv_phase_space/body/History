@@ -15,7 +15,11 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
-5-Aug-2009 M.Kosov                              (hadr-chips-body-V09-02-11)
+5-Aug-2009 M.Kosov                          (hadr-chips-body-V09-02-12)
+----------------------------------------------------------------------
+Bug fix: quasielastic is closed for photons and leptons
+
+5-Aug-2009 M.Kosov                          (hadr-chips-body-V09-02-11)
 -----------------------------------------------------------------------
 Bug fix: noninitialized variabkles in G4QContent class
 
