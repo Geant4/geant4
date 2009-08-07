@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.11 2009-08-07 09:55:51 gcosmo Exp $
+// $Id: G4String.hh,v 1.12 2009-08-07 10:09:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,9 +77,9 @@ public:
 
   inline G4int operator!() const;
 
-  inline G4bool operator==(G4String) const;
+  inline G4bool operator==(const G4String&) const;
   inline G4bool operator==(const char*) const;
-  inline G4bool operator!=(G4String) const;
+  inline G4bool operator!=(const G4String&) const;
   inline G4bool operator!=(const char*) const;
 
   inline str_size length() const;

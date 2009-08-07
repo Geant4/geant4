@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.13 2009-08-07 10:05:49 gcosmo Exp $
+// $Id: G4String.icc,v 1.14 2009-08-07 10:09:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ G4int G4SubString::operator!() const
   return extent==0 ? 1 : 0;
 }
 
-G4bool G4SubString::operator==(G4String s) const
+G4bool G4SubString::operator==(const G4String& s) const
 {
   return mystring->find_first_of(s, mystart, extent)
          != std::string::npos ? true : false;
@@ -105,7 +105,7 @@ G4bool G4SubString::operator==(const char* s) const
          != std::string::npos ? true : false;
 }
 
-G4bool G4SubString::operator!=(G4String s) const
+G4bool G4SubString::operator!=(const G4String& s) const
 {
   return mystring->find_first_of(s, mystart, extent)
          == std::string::npos ? true : false;
