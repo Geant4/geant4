@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.14 2009-08-07 10:09:19 gcosmo Exp $
+// $Id: G4String.icc,v 1.15 2009-08-07 13:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,22 +222,22 @@ G4String& G4String::operator+=(const char &c)
 
 G4bool G4String::operator==(const G4String &s) const
 {
-  return (*this == s);
+  return (std_string::compare(s) == 0) ? true : false;
 }
 
 G4bool G4String::operator==(const char* s) const
 {
-  return (*this == s);
+  return (std_string::compare(s) == 0) ? true : false;
 }
 
 G4bool G4String::operator!=(const G4String &s) const
 {
-  return (*this != s);
+  return !(*this == s);
 }
 
 G4bool G4String::operator!=(const char* s) const
 {
-  return (*this != s);
+  return !(*this == s);
 }
 
 G4String::operator const char*() const
