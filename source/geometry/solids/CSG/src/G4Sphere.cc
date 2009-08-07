@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.82 2009-06-30 10:10:11 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.83 2009-08-07 15:40:34 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2627,10 +2627,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         {
           xi = p.x() + snxt*v.x();
           yi = p.y() + snxt*v.y();
-          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanSTheta2));
-          *n = G4ThreeVector( xi/rhoSecTheta,   // N-
+          rho2=xi*xi+yi*yi;
+          if(rho2){ 
+           rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
+           *n = G4ThreeVector( xi/rhoSecTheta,   // N-
                               yi/rhoSecTheta,
                               -tanSTheta/std::sqrt(1+tanSTheta2));
+          }else{
+           *n = G4ThreeVector(0.,0.,1.);}
           *validNorm=true;
         }
         else  { *validNorm=false; }  // Concave STheta cone
@@ -2646,10 +2650,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         {
           xi=p.x()+snxt*v.x();
           yi=p.y()+snxt*v.y();
-          rhoSecTheta = std::sqrt((xi*xi+yi*yi)*(1+tanETheta2));
+          rho2=xi*xi+yi*yi;
+          if(rho2){ 
+          rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
           *n = G4ThreeVector( xi/rhoSecTheta,   // N+
                               yi/rhoSecTheta,
                               -tanETheta/std::sqrt(1+tanETheta2) );
+           }else{
+           *n = G4ThreeVector(0.,0.,-1.);}
           *validNorm=true;
         }
         else  { *validNorm=false; }   // Concave ETheta cone
