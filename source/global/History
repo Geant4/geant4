@@ -1,4 +1,4 @@
-$Id: History,v 1.226 2009-07-03 13:12:54 gcosmo Exp $
+$Id: History,v 1.227 2009-08-07 10:12:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 7, 2009  G.Cosmo (global-V09-02-07)
+- Some improvements to G4String and G4SubString implementation of operators
+  and comparison stub functions, to reduce generation of temporaries.
 
 July 3, 2009  V.Ivanchenko (global-V09-02-06)
 - New class G4Pow, a singleton for fast computation of log() and pow() for 
