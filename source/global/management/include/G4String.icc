@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.12 2009-08-07 09:55:51 gcosmo Exp $
+// $Id: G4String.icc,v 1.13 2009-08-07 10:05:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,18 +263,14 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
 
 G4int G4String::compareTo(const char* s, caseCompare mode)
 {
-  if(mode==exact)
-    { return strcmp(c_str(),s); }
-  else
-    { return strcasecompare(c_str(),s); }
+  return (mode==exact) ? strcmp(c_str(),s)
+                       : strcasecompare(c_str(),s);
 }
 
 G4int G4String::compareTo(const G4String& s, caseCompare mode)
 {
-  if(mode==exact)
-    { return strcmp(c_str(),s.c_str()); }
-  else
-    { return strcasecompare(c_str(),s.c_str()); }
+  return (mode==exact) ? strcmp(c_str(),s.c_str())
+                       : strcasecompare(c_str(),s.c_str());
 }
 
 G4String& G4String::prepend (const char* str)
@@ -322,8 +318,7 @@ G4String& G4String::replace(str_size pos, str_size n, const char* s)
 
 G4String& G4String::remove(str_size n)
 {
-  if(n<size())
-    { erase(n,size()-n); }
+  if(n<size()) { erase(n,size()-n); }
   return *this;
 }
 
@@ -345,20 +340,12 @@ G4int G4String::last(char c) const
 
 G4bool G4String::contains(std::string s) const
 {
-  G4int i=std_string::find(s);
-  if(i != G4int(std_string::npos))
-    { return true; }
-  else
-    { return false; }
+  return (std_string::find(s) != std_string::npos) ? true : false;
 }
 
 G4bool G4String::contains(char c) const
 {
-  G4int i=std_string::find(c);
-  if(i != G4int(std_string::npos))
-    { return true; }
-  else
-    { return false; }
+  return (std_string::find(c) != std_string::npos) ? true : false;
 }
 
 G4String G4String::strip (G4int strip_Type, char c)
