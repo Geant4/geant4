@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.42 2009-08-05 17:02:31 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.43 2009-08-07 14:20:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -201,12 +201,59 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   else if(incidentParticleDefinition == G4KaonZeroLong::KaonZeroLong())
   {
     CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
-    pPDG=130;
+    if(G4UniformRand() > 0.5) pPDG= 311;
+    else                      pPDG=-311;
   }
   else if(incidentParticleDefinition == G4KaonZeroShort::KaonZeroShort())
   {
     CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
-    pPDG=310;
+    if(G4UniformRand() > 0.5) pPDG= 311;
+    else                      pPDG=-311;
+  }
+  else if(incidentParticleDefinition == G4Lambda::Lambda())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3122;
+  }
+  else if(incidentParticleDefinition == G4SigmaPlus::SigmaPlus())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3222;
+  }
+  else if(incidentParticleDefinition == G4SigmaMinus::SigmaMinus())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3112;
+  }
+  else if(incidentParticleDefinition == G4SigmaZero::SigmaZero())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3212;
+  }
+  else if(incidentParticleDefinition == G4XiMinus::XiMinus())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3312;
+  }
+  else if(incidentParticleDefinition == G4XiZero::XiZero())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3322;
+  }
+  else if(incidentParticleDefinition == G4OmegaMinus::OmegaMinus())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=3334;
+  }
+  else if(incidentParticleDefinition == G4AntiNeutron::AntiNeutron())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=-2112;
+  }
+  else if(incidentParticleDefinition == G4AntiProton::AntiProton())
+  {
+    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=-2212;
   }
   else if(incidentParticleDefinition == G4Gamma::Gamma())
   {
@@ -395,15 +442,15 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(     G4KaonMinus::KaonMinus()     )) return true;
   else if (particle == *(  G4KaonZeroLong::KaonZeroLong()  )) return true;
   else if (particle == *( G4KaonZeroShort::KaonZeroShort() )) return true;
-  //else if (particle == *(        G4Lambda::Lambda()        )) return true;
-  //else if (particle == *(     G4SigmaPlus::SigmaPlus()     )) return true;
-  //else if (particle == *(    G4SigmaMinus::SigmaMinus()    )) return true;
-  //else if (particle == *(     G4SigmaZero::SigmaZero()     )) return true;
-  //else if (particle == *(       G4XiMinus::XiMinus()       )) return true;
-  //else if (particle == *(        G4XiZero::XiZero()        )) return true;
-  //else if (particle == *(    G4OmegaMinus::OmegaMinus()    )) return true;
-  //else if (particle == *(   G4AntiNeutron::AntiNeutron()   )) return true;
-  //else if (particle == *(    G4AntiProton::AntiProton()    )) return true;
+  else if (particle == *(        G4Lambda::Lambda()        )) return true;
+  else if (particle == *(     G4SigmaPlus::SigmaPlus()     )) return true;
+  else if (particle == *(    G4SigmaMinus::SigmaMinus()    )) return true;
+  else if (particle == *(     G4SigmaZero::SigmaZero()     )) return true;
+  else if (particle == *(       G4XiMinus::XiMinus()       )) return true;
+  else if (particle == *(        G4XiZero::XiZero()        )) return true;
+  else if (particle == *(    G4OmegaMinus::OmegaMinus()    )) return true;
+  else if (particle == *(   G4AntiNeutron::AntiNeutron()   )) return true;
+  else if (particle == *(    G4AntiProton::AntiProton()    )) return true;
   //else if (particle == *(G4AntiNeutrinoTau::AntiNeutrinoTau())) return true;
   //else if (particle == *(    G4NeutrinoTau::NeutrinoTau()    )) return true;
 #ifdef debug
@@ -1279,6 +1326,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
       else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
       else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
+      else if(PDGCode==89999999) theDefinition = G4AntiNeutron::AntiNeutron();
+      else if(PDGCode==89999000) theDefinition = G4AntiProton::AntiProton(); 
+      else if(PDGCode==89000000) theDefinition = G4AntiLambda::AntiLambda();
       else if(PDGCode >80000000) // Define hypernuclei as normal nuclei (N=N+S Correction!)
       {
         G4int aZ = hadr->GetCharge();

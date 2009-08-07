@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.22 2009-08-07 08:58:26 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.23 2009-08-07 14:20:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -989,7 +989,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
                  {
                    order=-1;
                    if     (cRPDG < pLPDG) nLPDG=cRPDG*1000+pLPDG*100-1;
-                   else if(cRPDG > pLPDG) nLPDG=pRPDG*1000+cLPDG*100-1;
+                   else if(cRPDG > pLPDG) nLPDG=pLPDG*1000+cRPDG*100-1;
                    else                   nLPDG=pLPDG*1000+cRPDG*100-3;
                    if  ( cLPDG == pR1)    nRPDG=-pR2;
                    else                   nRPDG=-pR1; // cLPDG == pR2
@@ -1049,7 +1049,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
                    else                   nRPDG=R1; // -pRPDG == R2
                  }
                  break;
-               case 3: // ....................... cLPDG <-7
+               case 3: // ....................... cLPDG <-7 (cRPDG <0)
                  if(pLPDG > 0)
                  {
                    order= 1;
@@ -1069,12 +1069,12 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
                    else                   nRPDG=-L1; // pRPDG == L2
                  }
                  break;
-               case 4: // ....................... cLRDG <-7
-                 if(pLPDG > 0)
+               case 4: // ....................... cRPDG <-7 (cLPDG <0)
+                 if(pLPDG > 0)                       // pRPDG & cLPDG are anti-quarks
                  {
                    order=-1;
                    if     (pRPDG < cLPDG) nRPDG=pRPDG*1000+cLPDG*100-1;
-                   else if(pRPDG > cLPDG) nRPDG=cRPDG*1000+pLPDG*100-1;
+                   else if(pRPDG > cLPDG) nRPDG=cLPDG*1000+pRPDG*100-1;
                    else                   nRPDG=cLPDG*1000+pRPDG*100-3;
                    if  ( pLPDG == R1)     nLPDG=-R2;
                    else                   nLPDG=-R1; // pLPDG == R2
@@ -1551,7 +1551,13 @@ G4QHadronVector* G4QFragmentation::Fragment()
         }
       }
       G4int miPDG=qsumQC.GetSPDGCode();                     // PDG of minM of hadron/fragm.
-      G4double gsM=G4QPDGCode(miPDG).GetMass();             // minM of hadron/fragm. for QC
+      G4double gsM=0.;                                      // Proto minM of had/frag forQC
+      if(miPDG != 10) gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
+      else
+      {
+        G4QChipolino QCh(qsumQC);                           // define TotNuc as a Chipolino
+        gsM=QCh.GetQPDG1().GetMass()+QCh.GetQPDG2().GetMass(); // Sum of Hadron Masses
+      }
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef pdebug
       G4cout<<"G4QFragmentation::Fragment: PDG="<<miPDG<<",rM="<<reM<<",GSM="<<gsM<<G4endl;

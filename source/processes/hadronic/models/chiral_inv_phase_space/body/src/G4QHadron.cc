@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.58 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.59 2009-08-07 14:20:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -1483,23 +1483,23 @@ G4bool G4QHadron::SplitBaryon(G4int PDGcode, G4int* quark, G4int* diQuark)
   G4double               prb[5];
   G4int                  nc=0;
   G4int            aPDGcode=std::abs(PDGcode);
-  if(aPDGcode==2212)                         // ==> Proton
+  if(aPDGcode==2212)        // ==> Proton
   {
     nc=3;
     qdq[0]=make_pair(2203, 1); prb[0]=r3;    // uu_1, d
     qdq[1]=make_pair(2103, 2); prb[1]=r6;    // ud_1, u
     qdq[2]=make_pair(2101, 2); prb[2]=r2;    // ud_0, u
   }
-  else if(aPDGcode==2112)                    // ==> Neutron
+  else if(aPDGcode==2112)   // ==> Neutron
   {
     nc=3;
     qdq[0]=make_pair(2103, 1); prb[0]=r6;    // ud_1, d
     qdq[1]=make_pair(2101, 1); prb[1]=r2;    // ud_0, d
     qdq[2]=make_pair(1103, 2); prb[2]=r3;    // dd_1, u
   }
-  else if(aPDGcode%10<3)                     // ==> Spin 1/2 Hyperons
+  else if(aPDGcode%10<3)    // ==> Spin 1/2 Hyperons
   {
-    if(aPDGcode==3122)
+    if(aPDGcode==3122)      // Lambda
     {
       nc=5;
       qdq[0]=make_pair(2103, 3); prb[0]=r3;  // ud_1, s
