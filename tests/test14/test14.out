@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -106,21 +106,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.33111 keV    e- 130.147 keV    e+ 127.666 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.33111 keV    e-  130.147 keV    e+  127.666 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -152,21 +152,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -186,21 +186,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -227,21 +227,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -261,21 +261,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -302,21 +302,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -326,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -336,21 +336,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -377,21 +377,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -401,7 +401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -413,21 +413,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -454,21 +454,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -478,7 +478,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -488,21 +488,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -529,21 +529,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -563,21 +563,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -604,21 +604,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -628,7 +628,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -638,21 +638,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -679,21 +679,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -703,7 +703,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /calor/setAbsMat Lead
 
@@ -724,26 +724,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -770,196 +770,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
-#
-/gun/energy 2 keV
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0       50     0.002        0      100       100       World Transportation
-    2        0        0    1e+03     0.002        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
-#
-/gun/energy 600 eV
-/tracking/verbose 2
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0       50    0.0006        0      100       100       World Transportation
-    2        0        0    1e+03    0.0006        0      950  1.05e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -971,6 +801,176 @@ Run Summary
   Number of events processed : 1000
   User=0.02s Real=0.01s Sys=0s
 #
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1        0        0       50     0.002        0      100       100       World Transportation
+    2        0        0    1e+03     0.002        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.02s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0       50    0.0006        0      100       100       World Transportation
+    2        0        0    1e+03    0.0006        0      950  1.05e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+#
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
@@ -979,26 +979,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1025,26 +1025,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1054,7 +1054,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1066,26 +1066,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1112,26 +1112,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1151,26 +1151,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1197,26 +1197,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1226,7 +1226,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1236,26 +1236,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1282,26 +1282,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1311,7 +1311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1321,26 +1321,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1367,26 +1367,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1396,7 +1396,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1418,31 +1418,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1469,31 +1469,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1503,7 +1503,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1513,31 +1513,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1564,31 +1564,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1598,7 +1598,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1608,31 +1608,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1659,31 +1659,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1693,7 +1693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1703,31 +1703,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1754,31 +1754,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1788,7 +1788,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -1800,31 +1800,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1851,31 +1851,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1885,7 +1885,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1895,31 +1895,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1946,31 +1946,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1980,7 +1980,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1990,31 +1990,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2041,31 +2041,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2075,7 +2075,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -2085,31 +2085,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2136,31 +2136,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2170,7 +2170,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2205,75 +2205,33 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
-/gun/energy 100 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
 
 ====================================================================
 
@@ -2282,6 +2240,48 @@ Run terminated.
 Run Summary
   Number of events processed : 1000
   User=0.02s Real=0.02s Sys=0s
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2297,75 +2297,33 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
-/gun/energy 100 MeV
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
 
 ====================================================================
 
@@ -2374,6 +2332,48 @@ Run terminated.
 Run Summary
   Number of events processed : 1000
   User=0.02s Real=0.02s Sys=0s
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2389,31 +2389,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2423,7 +2423,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2431,31 +2431,31 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Water 
- Production cuts :  gamma 100 um     e- 100 um     e+ 100 um 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 100 um     e- 100 um     e+ 100 um 
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
+ Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2465,7 +2465,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

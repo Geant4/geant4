@@ -5,7 +5,7 @@ RunManager construction starting....
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,7 +73,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -123,12 +123,12 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -170,7 +170,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -227,7 +227,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 ### Run 0 start.
 
 *********************************************************************************************************
@@ -350,7 +350,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.222      603    1e+03      1.72   0.0435    0.128     0.128     Crystal msc
     2     0.16      603    1e+03      1.65   0.0654    0.128     0.256     Crystal msc
     3   0.0813      603    1e+03       1.6   0.0491    0.128     0.384     Crystal msc
-    4 -1.14e-15      603    1e+03      1.56   0.0425   0.0937     0.477     Crystal CoupledTransportation
+    4 -8.6e-16      603    1e+03      1.56   0.0425   0.0937     0.477     Crystal CoupledTransportation
     5  -0.0877      603 1.01e+03      1.52   0.0414    0.112     0.589     Crystal msc
     6   -0.135      603 1.01e+03      1.36   0.0176   0.0585     0.647     Crystal eBrem
     7   -0.239      603 1.01e+03       1.3   0.0541    0.112     0.759     Crystal msc
@@ -375,7 +375,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.588      603    1e+03     0.511        0        0         0     Crystal initStep
     1    -2.05      605    1e+03     0.345        0     2.53      2.53     Crystal compt
-    2 -8.88e-16      613    1e+03     0.345        0     9.21      11.7     Crystal CoupledTransportation
+    2 1.78e-15      613    1e+03     0.345        0     9.21      11.7     Crystal CoupledTransportation
     3    0.216      614    1e+03     0.345        0    0.971      12.7 WorldPhysical CoupledTransportation
     4     46.9      792      900     0.345        0      209       222 DriftChamberPhysical CoupledTransportation
     5      167 1.25e+03      643     0.345        0      539       761 WorldPhysical CoupledTransportation
@@ -395,7 +395,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.588      603    1e+03     0.511        0        0         0     Crystal initStep
-    1 -7.77e-16      602    1e+03     0.511        0     1.02      1.02     Crystal CoupledTransportation
+    1 1.55e-15      602    1e+03     0.511        0     1.02      1.02     Crystal CoupledTransportation
     2     1.72      600    1e+03     0.511        0     2.97      3.98     Crystal CoupledTransportation
     3     21.7      572    1e+03     0.507        0     34.5      38.5     Crystal compt
     4     24.6      569    1e+03      0.35        0     4.49      42.9     Crystal compt
@@ -445,7 +445,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     0.22      603 1.01e+03      5.81    0.357    0.854     0.854     Crystal msc
     2    0.253      603 1.01e+03      5.45    0.363    0.854      1.71     Crystal msc
     3   0.0237      604 1.01e+03      5.01    0.433    0.854      2.56     Crystal msc
-    4 1.63e-15      604 1.01e+03      4.97   0.0468   0.0847      2.65     Crystal CoupledTransportation
+    4 -1.05e-15      604 1.01e+03      4.97   0.0468   0.0847      2.65     Crystal CoupledTransportation
     5  -0.0852      604 1.01e+03      4.73    0.242    0.561      3.21     Crystal msc
     6   -0.109      605 1.01e+03      4.47    0.254    0.561      3.77     Crystal msc
     7    -0.12      605 1.01e+03      4.23    0.242    0.561      4.33     Crystal msc
@@ -454,7 +454,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10   -0.345      606 1.01e+03      3.09    0.238    0.561      5.53     Crystal msc
    11   -0.196      606 1.01e+03      2.84    0.248    0.561       6.1     Crystal msc
    12  -0.0645      607 1.01e+03      2.63    0.211    0.561      6.66     Crystal msc
-   13 -1.35e-15      607 1.01e+03      2.55   0.0851    0.147       6.8     Crystal CoupledTransportation
+   13 -1.65e-15      607 1.01e+03      2.55   0.0851    0.147       6.8     Crystal CoupledTransportation
    14   0.0102      607 1.01e+03      2.49   0.0599    0.186      6.99     Crystal msc
    15    0.128      607 1.01e+03       2.4   0.0874    0.186      7.18     Crystal msc
    16    0.272      607 1.01e+03      2.31   0.0866    0.186      7.36     Crystal msc
@@ -491,7 +491,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0   -0.013      607 1.01e+03     0.455        0        0         0     Crystal initStep
     1  -0.0109      607 1.01e+03     0.439   0.0158   0.0239    0.0239     Crystal msc
     2 -0.00189      607 1.01e+03     0.373   0.0667   0.0239    0.0479     Crystal msc
-    3 -1.35e-15      607 1.01e+03     0.372  0.00101  0.00197    0.0498     Crystal CoupledTransportation
+    3 1.69e-15      607 1.01e+03     0.372  0.00101  0.00197    0.0498     Crystal CoupledTransportation
     4    0.014      607 1.01e+03      0.36   0.0117    0.018    0.0679     Crystal msc
     5     0.03      607 1.01e+03     0.353  0.00719    0.018    0.0859     Crystal msc
     6   0.0379      607 1.01e+03     0.342    0.011    0.018     0.104     Crystal msc

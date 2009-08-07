@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -131,7 +131,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 LowEnergyIoni:  Total cross sections from EEDL database.
       Gamma energy sampled from a parametrised formula.
@@ -169,7 +169,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -183,7 +183,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -225,7 +225,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -287,7 +287,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -371,113 +371,113 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : vacuum
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Al6061
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 9.61286 keV    e- 1.02044 MeV    e+ 981.911 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  9.61286 keV    e-  1.02044 MeV    e+  981.911 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : AlHoneycomb
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 1.47519 keV    e- 73.0604 keV    e+ 71.6677 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  1.47519 keV    e-  73.0604 keV    e+  71.6677 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : CFRP
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 3.81634 keV    e- 764.561 keV    e+ 735.691 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  3.81634 keV    e-  764.561 keV    e+  735.691 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : MLImat
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 3.95385 keV    e- 694.417 keV    e+ 668.195 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  3.95385 keV    e-  694.417 keV    e+  668.195 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : foam
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 250 eV     e- 85.2216 keV    e+ 84.4054 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  85.2216 keV    e+  84.4054 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes     recalculation needed : No 
  Material : Scell
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 17.0843 keV    e- 2.72314 MeV    e+ 2.57036 MeV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  17.0843 keV    e-  2.72314 MeV    e+  2.57036 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 7     used in the geometry : Yes     recalculation needed : No 
  Material : TiAlloy
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 18.105 keV    e- 1.44292 MeV    e+ 1.36196 MeV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  18.105 keV    e-  1.44292 MeV    e+  1.36196 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes     recalculation needed : No 
  Material : ULEglass
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 7.83917 keV    e- 909.156 keV    e+ 874.826 keV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  7.83917 keV    e-  909.156 keV    e+  874.826 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 9     used in the geometry : Yes     recalculation needed : No 
  Material : SiC
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 9.50746 keV    e- 1.20181 MeV    e+ 1.14535 MeV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  9.50746 keV    e-  1.20181 MeV    e+  1.14535 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 10     used in the geometry : Yes     recalculation needed : No 
  Material : molybdenum
- Range cuts        :  gamma 2 mm     e- 2 mm     e+ 2 mm 
- Energy thresholds :  gamma 64.242 keV    e- 2.83 MeV    e+ 2.62031 MeV
+ Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 0 fm 
+ Energy thresholds :  gamma  64.242 keV    e-  2.83 MeV    e+  2.62031 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 11     used in the geometry : Yes     recalculation needed : No 
  Material : molybdenum
- Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  50 nm     e-  50 nm     e+  50 nm  proton 50 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 5 eV 
  Region(s) which use this couple : 
     sensor
 
 Index : 12     used in the geometry : Yes     recalculation needed : No 
  Material : gold
- Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  50 nm     e-  50 nm     e+  50 nm  proton 50 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 5 eV 
  Region(s) which use this couple : 
     sensor
 
 Index : 13     used in the geometry : Yes     recalculation needed : No 
  Material : vacuum
- Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  50 nm     e-  50 nm     e+  50 nm  proton 50 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 5 eV 
  Region(s) which use this couple : 
     sensor
 
 Index : 14     used in the geometry : Yes     recalculation needed : No 
  Material : AuPt
- Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  50 nm     e-  50 nm     e+  50 nm  proton 50 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 5 eV 
  Region(s) which use this couple : 
     sensor
 
 Index : 15     used in the geometry : Yes     recalculation needed : No 
  Material : SHAPAL-M
- Range cuts        :  gamma 50 nm     e- 50 nm     e+ 50 nm 
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Range cuts        :  gamma  50 nm     e-  50 nm     e+  50 nm  proton 50 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 5 eV 
  Region(s) which use this couple : 
     sensor
 
@@ -490,7 +490,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

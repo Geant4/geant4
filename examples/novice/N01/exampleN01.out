@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,22 +15,22 @@
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : ArgonGas
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminum
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -226,6 +226,6 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0s Real=0s Sys=0s
+  User=0s Real=0s Sys=0.01s
 G4 kernel has come to Quit state.
 

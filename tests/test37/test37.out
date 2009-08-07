@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -30,7 +30,7 @@ conv:   for  gamma    SubType= 14
 
 muMsc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 56 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1
+      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 GeV
 
@@ -83,7 +83,7 @@ CoulombScat:   for  e+    SubType= 1
 
 muMsc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 56 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1
+      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 GeV
 
@@ -104,7 +104,7 @@ CoulombScat:   for  proton    SubType= 1
    CoulombScattering :     Emin=         10 MeV        Emax=   10 GeV
 
 muMsc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 0
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 GeV
 
@@ -153,7 +153,7 @@ hIoni:   for  kaon-    SubType= 2
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 56 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1
+      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 GeV
 
@@ -231,7 +231,7 @@ CoulombScat:   for  pi+    SubType= 1
 
 muMsc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 56 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1
+      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 GeV
 
@@ -248,15 +248,15 @@ hIoni:   for  pi-    SubType= 2
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma 20 um     e- 20 um     e+ 20 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  20 um     e-  20 um     e+  20 um  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Mo
- Range cuts        :  gamma 20 um     e- 20 um     e+ 20 um 
- Energy thresholds :  gamma 4.50109 keV    e- 94.143 keV    e+ 91.8534 keV
+ Range cuts        :  gamma  20 um     e-  20 um     e+  20 um  proton 0 fm 
+ Energy thresholds :  gamma  4.50109 keV    e-  94.143 keV    e+  91.8534 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -277,7 +277,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=65.86s Real=65.86s Sys=0s
+  User=69.01s Real=69.02s Sys=0.01s
 Thicknesses(mm)= 1.5742333  1  1  
 Bins(R/R0)=      0.0073831317  0  0  
  ----------------------------------------------------------
@@ -382,7 +382,7 @@ Bins(R/R0)=      0.0073831317  0  0
 	   0.69401438	          0.007195843
 	   0.70139751	          0.0072595575
 	   0.70878064	          0.0053459662
-	   0.71616377	          0.0074589425
+	   0.71616377	          0.0074589426
 	   0.7235469	          0.0048096294
 	   0.73093004	          0.0020620963
 	   0.73831317	          0.0025288281

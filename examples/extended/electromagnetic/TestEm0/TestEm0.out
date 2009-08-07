@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,8 +69,8 @@
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Germanium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 20.7022 keV    e- 867.397 keV    e+ 827.585 keV
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  20.7022 keV    e-  867.397 keV    e+  827.585 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -115,7 +115,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   range from restrict dE/dx: 	 6.05738 cm  ( 6.05738 g/cm2 )
   range from full dE/dx    : 	  4.9049 cm  (  4.9049 g/cm2 )
  
-  transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
+  transport mean free path : 	 28.2437 cm  ( 28.2437 g/cm2 )
  
   critical energy (Rossi)  : 	 78.7733 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 

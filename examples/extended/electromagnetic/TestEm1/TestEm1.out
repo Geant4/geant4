@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -154,7 +154,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -182,7 +182,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -232,7 +232,7 @@ hIoni:   for  kaon-    SubType= 2
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -307,7 +307,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -338,14 +338,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  6.88731 keV    e-  596.68 keV    e+  568.011 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -368,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.67s Real=7.74s Sys=0.06s
+  User=7.84s Real=7.89s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -376,29 +376,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.795 MeV
+ total energy deposit: 99.817 MeV
 
- nb tracks/event   neutral:     27.672   charged:      149.5
- nb  steps/event   neutral:     140.64   charged:     479.78
+ nb tracks/event   neutral:     27.885   charged:     150.36
+ nb  steps/event   neutral:     141.53   charged:     480.81
 
  nb of process calls per event: 
             msc       eBrem       eIoni       compt        phot        conv     annihilTransportation
-         150.09      25.133      303.15      112.97      25.294       1.401       1.401      0.9855
+         151.13      25.296      302.93      113.64      25.521       1.432       1.432       0.947
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.056 cm    rms = 3.7554 cm 
- proj Range = 9.6467 cm    rms = 3.4792 cm 
- proj/true  = 0.87252
- transverse dispersion at end = 1.6443 cm 
-      mass true Range from simulation = 29.852 g/cm2 
+ true Range = 11.135 cm    rms = 3.8286 cm 
+ proj Range = 9.6892 cm    rms = 3.5387 cm 
+ proj/true  = 0.87016
+ transverse dispersion at end = 1.6701 cm 
+      mass true Range from simulation = 30.065 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1121746141, 1694490769
+ Current couple of seeds = 858732321, 1075406485
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -411,14 +411,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :  gamma 10 um     e- 10 um     e+ 10 um 
+ Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 990 eV     e- 33.887552 keV    e+ 33.472938 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  33.887552 keV    e+  33.472938 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -428,7 +428,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1121746141, 1694490769
+ Current couple of seeds = 858732321, 1075406485
 ----------------------------------------
 Start Run processing.
 
@@ -436,7 +436,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=14.08s Real=14.14s Sys=0.06s
+  User=14.4s Real=14.45s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -444,29 +444,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.786 MeV
+ total energy deposit: 99.814 MeV
 
- nb tracks/event   neutral:     34.779   charged:     296.23
- nb  steps/event   neutral:      144.1   charged:     913.33
+ nb tracks/event   neutral:     35.156   charged:     298.22
+ nb  steps/event   neutral:     145.93   charged:     918.08
 
  nb of process calls per event: 
-          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-          587.7      32.957      291.29      32.431      109.32        1.39        1.39      0.9635
+          eIoni       eBrem       compt        phot         mscTransportation        conv     annihil
+         590.34      33.259      110.77      32.779      293.04      0.9575       1.428      1.4285
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.247 cm    rms = 3.8251 cm 
- proj Range = 9.7814 cm    rms = 3.5772 cm 
- proj/true  = 0.86968
- transverse dispersion at end = 1.7417 cm 
-      mass true Range from simulation = 30.367 g/cm2 
+ true Range = 11.087 cm    rms = 3.8385 cm 
+ proj Range = 9.6574 cm    rms = 3.5814 cm 
+ proj/true  = 0.87106
+ transverse dispersion at end = 1.7173 cm 
+      mass true Range from simulation = 29.935 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1165570424, 116661000
+ Current couple of seeds = 1765080717, 1211860338
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

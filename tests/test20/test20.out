@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-06    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -477,8 +477,8 @@ annihil:   for  e+    SubType= 5
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -488,8 +488,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=9.72s Real=9.72s Sys=0s
-Time elapsed in 1 events ---- User=9.72s Real=9.72s Sys=0s
+  User=9.48s Real=9.48s Sys=0s
+Time elapsed in 1 events ---- User=9.48s Real=9.48s Sys=0s
 #
 /gun/particle proton
 /gun/energy 0.01 MeV
@@ -499,8 +499,8 @@ Time elapsed in 1 events ---- User=9.72s Real=9.72s Sys=0s
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -510,8 +510,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.68s Real=1.69s Sys=0.01s
-Time elapsed in 1 events ---- User=1.68s Real=1.69s Sys=0.01s
+  User=1.68s Real=1.68s Sys=0s
+Time elapsed in 1 events ---- User=1.68s Real=1.68s Sys=0s
 #
 /gun/particle hydrogen
 /gun/energy 0.01 MeV
@@ -521,8 +521,8 @@ Time elapsed in 1 events ---- User=1.68s Real=1.69s Sys=0.01s
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -532,8 +532,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.62s Real=1.61s Sys=0s
-Time elapsed in 1 events ---- User=1.62s Real=1.61s Sys=0s
+  User=1.6s Real=1.6s Sys=0s
+Time elapsed in 1 events ---- User=1.6s Real=1.6s Sys=0s
 #
 /gun/particle alpha
 /gun/energy 0.01 MeV
@@ -543,8 +543,8 @@ Time elapsed in 1 events ---- User=1.62s Real=1.61s Sys=0s
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -554,8 +554,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.67s Real=1.71s Sys=0.03s
-Time elapsed in 1 events ---- User=1.67s Real=1.71s Sys=0.03s
+  User=1.73s Real=1.74s Sys=0.01s
+Time elapsed in 1 events ---- User=1.73s Real=1.74s Sys=0.01s
 #
 /gun/particle alpha+
 /gun/energy 0.01 MeV
@@ -565,8 +565,8 @@ Time elapsed in 1 events ---- User=1.67s Real=1.71s Sys=0.03s
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -576,8 +576,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.69s Real=1.71s Sys=0.02s
-Time elapsed in 1 events ---- User=1.69s Real=1.71s Sys=0.02s
+  User=1.72s Real=2.92s Sys=0.03s
+Time elapsed in 1 events ---- User=1.72s Real=2.92s Sys=0.03s
 #
 /gun/particle helium
 /gun/energy 0.01 MeV
@@ -587,8 +587,8 @@ Time elapsed in 1 events ---- User=1.69s Real=1.71s Sys=0.02s
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 1 um     e- 1 um     e+ 1 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -598,8 +598,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.66s Real=1.69s Sys=0.03s
-Time elapsed in 1 events ---- User=1.66s Real=1.69s Sys=0.03s
+  User=1.68s Real=1.71s Sys=0.02s
+Time elapsed in 1 events ---- User=1.68s Real=1.71s Sys=0.02s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 2 calls
