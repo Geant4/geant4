@@ -290,6 +290,8 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
   result = pi * r_0*r_0 *
            std::pow((std::pow(AT,third) + std::pow(AP,third) + deltaE),2.0) *
            (1.0 - R_c*B/E_cm) * X_m;
+  if(result < 0.0) result = 0.0;
+  /*
   if (!lowEnergyCheck)
   {
     if (result < 0.0)  result = 0.0;
@@ -306,7 +308,7 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
       if (resultp >result) result = 0.0;
     }
   }
-
+  */
   return result;
 }
 

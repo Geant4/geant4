@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.3 2009-02-25 16:27:36 vnivanch Exp $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.4 2009-08-08 16:21:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,9 +54,7 @@ G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 }
 
 G4CrossSectionDataSetRegistry::G4CrossSectionDataSetRegistry()
-{
-  nxs = 0;
-}
+{}
 
 G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 {
@@ -65,35 +63,28 @@ G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 
 void G4CrossSectionDataSetRegistry::Clean()
 {
-  if(0 == nxs) return;
-  for (G4int i=0; i<nxs; i++) {
-    if( xSections[i] ) {
-      delete xSections[i];
-      xSections[i] = 0;
-    }
-  }
-  nxs = 0;
+  std::vector<G4VCrossSectionDataSet*>::iterator it = xSections.begin();
+  for (; it != xSections.end(); ++it) {delete *it;}
+  xSections.clear();
 }
 
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
 {
-  if(nxs > 0) {
-    for (G4int i=0; i<nxs; i++) {
-      if( p == xSections[i] ) return;
-    }
+  if(!p) return;
+  std::vector<G4VCrossSectionDataSet*>::iterator it = xSections.begin();
+  for (; it != xSections.end(); ++it) {
+    if( p == *it ) {return;}
   }
   xSections.push_back(p);
-  nxs++;
 }
 
 void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 {
-  if(nxs > 0) {
-    for (G4int i=0; i<nxs; i++) {
-      if( p == xSections[i] ) {
-	xSections[i] = 0;
-	return;
-      }
+  std::vector<G4VCrossSectionDataSet*>::iterator it = xSections.begin();
+  for (; it != xSections.end(); ++it) {
+    if( p == *it ) {
+      xSections.erase(it);
+      return;
     }
   }
 }

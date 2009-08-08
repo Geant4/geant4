@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 Aug 2009 Vladimir Ivanchenko (hadr-cross-V09-02-05)
+------------------------------------------------------------
+- G4TripathiLightIonCrossSection - add simple check that X-section is
+                              positive and remove not optimal control
+- G4TripathiCrossSection - added constructor and destructor
+- G4CrossSectionDataSetRegistry - use pure stl commands to remove elements
+                                  of stl vector
+
 21 March 2009 Vladimir Ivanchenko (hadr-cross-V09-02-04)
 ------------------------------------------------------------
 - G4IonsKoxCrossSection, G4IonsShenCrossSection, G4TripathiCrossSection,
