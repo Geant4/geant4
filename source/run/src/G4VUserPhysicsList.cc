@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.70 2009-08-05 17:31:07 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.71 2009-08-09 14:31:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -196,6 +196,10 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::CheckParticleList()
 {
+
+  // skip if fDisableCheckParticleList is set  
+  if (fDisableCheckParticleList) return;
+
   bool isElectron = false;
   bool isPositron = false;
   bool isGamma    = false;

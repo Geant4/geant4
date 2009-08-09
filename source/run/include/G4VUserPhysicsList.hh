@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.40 2009-08-05 17:31:07 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.41 2009-08-09 14:31:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -259,14 +259,14 @@ class G4VUserPhysicsList
  
    /////////////////////////////////////////////////////////////////
   public:
-    void DisableCheckParticleList();
-
-  protected: 
- 
     // check consistencies of list of particles 
 
     void CheckParticleList();
 
+    void DisableCheckParticleList();
+ 
+ protected: 
+ 
     bool fDisableCheckParticleList;
 
   ////////////////////////////////////////////////////////////////////////
@@ -347,8 +347,6 @@ inline void G4VUserPhysicsList::Construct()
 #endif
   ConstructProcess();
 
-  
-  if (!fDisableCheckParticleList) CheckParticleList();
 }
 
 inline G4double G4VUserPhysicsList::GetDefaultCutValue() const
