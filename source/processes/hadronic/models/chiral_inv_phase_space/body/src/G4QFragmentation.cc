@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.23 2009-08-07 14:20:57 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.24 2009-08-10 16:36:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -62,6 +62,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron  
 {
   static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
   static const G4double  mPi0  = G4PionZero::PionZero()->GetPDGMass(); // Mass of Pi0
+  theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
   theQuasiElastic=G4QuasiFreeRatios::GetPointer();
   theResult = new G4QHadronVector;        // Define theResultingHadronVector
   G4bool stringsInitted=false;            // Strings ure initiated
@@ -1508,10 +1509,14 @@ G4QHadronVector* G4QFragmentation::Fragment()
     G4QHadron* resNuc = new G4QHadron(rPDG,r4M);            // Nucleus -> Hadron
     theResult->push_back(resNuc);                           // Fill the residual nucleus
   }
-  G4int nQuas=theQuasmons.size();
-  if(nQuas && theResult->size())
+  G4int nQuas=theQuasmons.size();                           // Size of the Quasmon OUTPUT
+  G4int theRS=theResult->size();                            // Size of Hadron Output by now
+#ifdef debug
+  G4cout<<"***>G4QFragmentation::Fragment:beforeEnv,#OfQ="<<nQuas<<",#OfR="<<theRS<<G4endl;
+#endif
+  if(nQuas && theRS)
   {
-    G4int theRS=theResult->size();                          // Size of Hadron Output by now
+
     G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
@@ -1520,10 +1525,10 @@ G4QHadronVector* G4QFragmentation::Fragment()
     theResult->pop_back();                                  // Exclude the nucleus from HV
     --theRS;                                                // Reduce the OUTPUT by theNucl
 #ifdef pdebug
-    G4cout<<"G4QFragmentation::Fragment: #OfRemainingHadrons="<<theRS<<G4endl;
+    G4cout<<"G4QFragmentation::Fragment:#OfRemainingHadron="<<theRS<<",A="<<theEnv<<G4endl;
 #endif
     // Now we need to be sure that the compound nucleus is heavier than the Ground State
-    if(theRS) for(G4int j=theRS-1; j>-2; --j)               // more than rest of hadrons !!
+    for(G4int j=theRS-1; j>-2; --j)                         // try to reach M_compound>M_GS
     {
       G4LorentzVector qsum4M=resNuc4M;                      // Proto compound 4-momentum
       G4QContent qsumQC=theEnv.GetQCZNS();                  // Proto compound Quark Content
@@ -1552,12 +1557,21 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
       G4int miPDG=qsumQC.GetSPDGCode();                     // PDG of minM of hadron/fragm.
       G4double gsM=0.;                                      // Proto minM of had/frag forQC
-      if(miPDG != 10) gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
-      else
+      if(miPDG == 10)
       {
         G4QChipolino QCh(qsumQC);                           // define TotNuc as a Chipolino
         gsM=QCh.GetQPDG1().GetMass()+QCh.GetQPDG2().GetMass(); // Sum of Hadron Masses
+        //gsM=theWorld->GetQParticle(QCh.GetQPDG1())->MinMassOfFragm() +
+        //    theWorld->GetQParticle(QCh.GetQPDG2())->MinMassOfFragm();
       }
+      else if(miPDG>80000000)                               // Compound Nucleus
+      {
+        G4QNucleus rtN(qsumQC);                  // Create PseudoNucl for totCompound
+        gsM=rtN.GetGSMass(); // MinMass of residQ+(Env-ParC) syst.      }
+      }
+      else if(std::abs(miPDG)%10 > 2)
+                           gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
+      else gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef pdebug
       G4cout<<"G4QFragmentation::Fragment: PDG="<<miPDG<<",rM="<<reM<<",GSM="<<gsM<<G4endl;
@@ -1582,14 +1596,24 @@ G4QHadronVector* G4QFragmentation::Fragment()
         G4Exception("G4QFragmentation::Fragment:","27",FatalException,"Can't recover GSM");
       }
     }
-    G4ThreeVector   nucVel=resNuc4M.vect()/resNuc4M.e();    // Nucleus velocity
+    G4double nucE=resNuc4M.e();                             // Total energy of the nuclEnv
+    if(nucE<1.E-12) nucE=0.;                                // Computer accuracy safety
+    G4ThreeVector   nucVel(0.,0.,0.);                       // Proto of the NucleusVelocity
     G4QHadronVector* output=0;                              // NucleusFragmentation Hadrons
     G4QEnvironment* pan= new G4QEnvironment(theEnv);        // ---> DELETED --->----------+
+#ifdef pdebug
+    G4cout<<"G4QFragm::Fragm: nucE="<<nucE<<",nQ="<<nQuas<<G4endl; //                     |
+#endif
+    if(nucE) nucVel=resNuc4M.vect()/nucE;                   // The NucleusVelocity        |
     for(G4int i=0; i<nQuas; ++i)                            // LOOP over Quasmons         |
     {                                                       //                            |
       G4Quasmon* curQuasm=theQuasmons[i];                   // current Quasmon            |
-      curQuasm->Boost(-nucVel);                             // Boost it to CMS of Nucleus |
+      if(nucE) curQuasm->Boost(-nucVel);                    // Boost it to CMS of Nucleus |
       pan->AddQuasmon(curQuasm);                            // Fill the predefined Quasmon|
+#ifdef pdebug
+      G4LorentzVector cQ4M=curQuasm->Get4Momentum();        // Just for printing          |
+      G4cout<<"G4QFragmentation::Fragment: Quasmon# "<<i<<" added, 4M="<<cQ4M<<G4endl; // |
+#endif
     }                                                       //                            |
     try                                                     //                            |
     {                                                       //                            |
@@ -1608,7 +1632,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
       for(G4int j=0; j<nOut; j++)            // LOOP over Hadrons transferring to LS    |
       {                                      //                                         |
         G4QHadron* curHadron=(*output)[j];   // Hadron from the nucleus fragmentation   |
-        curHadron->Boost(nucVel);            // Boost it back to Laboratory System      |
+        if(nucE) curHadron->Boost(nucVel);   // Boost it back to Laboratory System      |
         theResult->push_back(curHadron);     // Transfer it to the result               |
       }                                      //                                         |
       delete output;                         // Delete the OUTPUT <-----<-----<-----<---+
@@ -3013,14 +3037,19 @@ void G4QFragmentation::Breeder()
     G4QHadronVector::iterator ih;
     G4QHadronVector::iterator nih;
     G4QHadronVector::iterator mih;
+    G4QHadronVector::iterator lst=theResult->end();
+    lst--;
     G4double minMesEn=DBL_MAX;
     G4double minBarEn=DBL_MAX;
     G4bool nfound=false;
     G4bool mfound=false;
-    for(ih = theResult->begin(); ih < theResult->end(); ih++)// Only 1Mes+1Bar are selected
+    for(ih = theResult->begin(); ih < theResult->end(); ++ih) if(ih != lst)
     {
       G4LorentzVector h4M=(*ih)->Get4Momentum();
       G4int          hPDG=(*ih)->GetPDGCode();
+#ifdef debug
+      G4cout<<"%->G4QFragmentation::Breeder: TRY hPDG="<<hPDG<<", h4M="<<h4M<<G4endl;
+#endif
       if(hPDG>1111 && hPDG<3333)
       {
         G4double bE=h4M.e()-(*ih)->GetMass();
@@ -3162,7 +3191,7 @@ G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
   toCms.rotateZ(-Ptmp.phi());
   toCms.rotateY(-Ptmp.theta());
 #ifdef debug
-  G4cout<<"G4QFragment::ExciteDiffParticipantts: Be4Boost Pproj="<<Pprojectile<<", Ptarg="
+  G4cout<<"G4QFragment::ExciteDiffParticipantts:BeforBoost Pproj="<<Pprojectile<<", Ptarg="
         <<Ptarget<<G4endl;
 #endif
   G4LorentzRotation toLab(toCms.inverse()); // Boost Rotation to LabSys (LS)
@@ -3171,18 +3200,22 @@ G4bool G4QFragmentation::ExciteDiffParticipants(G4QHadron* projectile,
 #ifdef debug
   G4cout<< "G4QFragment::ExciteDiffParticipantts: AfterBoost Pproj="<<Pprojectile<<"Ptarg="
         <<Ptarget<<", cms4M="<<Pprojectile+Ptarget<<G4endl;
-  G4cout<<"G4QFragment::ExciteDiffParticipantts: ProjX+="<<Pprojectile.plus()<<", ProjX-="
+  G4cout<<"G4QFragment::ExciteDiffParticipants: ProjX+="<<Pprojectile.plus()<<", ProjX-="
         <<Pprojectile.minus()<<", TargX+="<< Ptarget.plus()<<", TargX-="<<Ptarget.minus()
         <<G4endl;
 #endif
   G4LorentzVector Qmomentum(0.,0.,0.,0.);
   G4int whilecount=0;
+#ifdef debug
+  G4cout<<"G4QFragmentation::ExciteDiffParticipants: Before DO"<<G4endl;
+#endif
   do
   {
     //  Generate pt  
     G4double maxPtSquare=sqr(Ptarget.pz());
-    if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
 #ifdef debug
+    G4cout<<"G4QFragmentation::ExciteDiffParticipants: maxPtSq="<<maxPtSquare<<G4endl;
+    if(whilecount++>=500 && whilecount%100==0) // @@ M.K. Hardwired limits 
     G4cout<<"G4QFragmentation::ExciteDiffParticipantts: can loop, loopCount="<<whilecount
           <<", maxPtSquare="<<maxPtSquare<<G4endl;
 #endif
@@ -3399,9 +3432,14 @@ G4double G4QFragmentation::ChooseX(G4double Xmin, G4double Xmax) const
 // Pt distribution @@ one can use 1/(1+A*Pt^2)^B
 G4ThreeVector G4QFragmentation::GaussianPt(G4double widthSq, G4double maxPtSquare) const
 {
+#ifdef debug
+  G4cout<<"G4QFragmentation::GaussianPt:width2="<<widthSq<<",maxPt2="<<maxPtSquare<<G4endl;
+#endif
   G4double pt2=0.;
-  do{pt2=widthSq*std::log(G4UniformRand());} while (pt2>maxPtSquare);
-  pt2=std::sqrt(pt2);
+  G4double rm=maxPtSquare/widthSq;                      // Negative
+  if(rm>-.01) pt2=widthSq*(std::sqrt(1.-G4UniformRand()*(1.-sqr(1.+rm)))-1.);
+  else        pt2=widthSq*std::log(1.-G4UniformRand()*(1.-std::exp(rm)));
+  pt2=std::sqrt(pt2);                                   // It is not pt2, but pt now
   G4double phi=G4UniformRand()*twopi;
   return G4ThreeVector(pt2*std::cos(phi),pt2*std::sin(phi),0.);    
 } // End of GaussianPt

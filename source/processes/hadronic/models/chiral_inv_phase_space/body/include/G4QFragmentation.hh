@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.hh,v 1.13 2009-08-05 08:26:40 mkossov Exp $
+// $Id: G4QFragmentation.hh,v 1.14 2009-08-10 16:36:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -97,6 +97,7 @@ class G4QFragmentation
   G4double        maxEn;                                 // Energy absorbed by the nucleus
   G4double        maxNuc;                                // #0fNucleons in the Flux Tube
   G4QuasiFreeRatios* theQuasiElastic;                    // For CHIPS Quasi-Elastic
+  G4QCHIPSWorld*     theWorld;                           // Pointer to the CHIPS World
 };
 
 #endif

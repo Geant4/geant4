@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.35 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.36 2009-08-10 16:36:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -221,10 +221,12 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
     G4cout<<"G4QChipolino: NucFragment case nQ="<<nQ<<",nAQ="<<nA<<", QC="<<rQC<<",fl="<<fl
           <<G4endl;
 #endif
- if((fl&&kS>1)||(!fl&&mS>1))
+    if( (fl && kS>1) || (!fl && mS>1))
     {
+#ifdef debug
       G4cerr<<"***G4QChipolino: ***Overfowed by strange quarks*** rQC="<<rQC<<G4endl;
       //throw G4QException("G4QChipolino: NuclearFragment is overflowed by strangeQuarks");
+#endif
     }
     else if(fl)                // ===> Anti-fragment
     {
