@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.49 2009-07-26 15:51:01 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.50 2009-08-10 14:31:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -181,8 +181,8 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       if( fCutCouple ) {
 	fMaterialCutsCoupleVector.push_back(fCutCouple);
 
-	fPAItransferTable = new G4PhysicsTable(fTotBin);
-	fPAIdEdxTable = new G4PhysicsTable(fTotBin);
+	fPAItransferTable = new G4PhysicsTable(fTotBin+1);
+	fPAIdEdxTable = new G4PhysicsTable(fTotBin+1);
 
 	fDeltaCutInKinEnergy = 
 	  (*theCoupleTable->GetEnergyCutsVector(1))[fCutCouple->GetIndex()];
@@ -518,7 +518,7 @@ G4double G4PAIModel::CrossSectionPerVolume( const G4Material*,
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
-  else if(iPlace > fTotBin) iPlace = fTotBin; 
+  else if(iPlace >= fTotBin) iPlace = fTotBin-1; 
 
   //G4cout<<"iPlace = "<<iPlace<<"; tmax = "
   // <<tmax<<"; cutEnergy = "<<cutEnergy<<G4endl;  
@@ -762,12 +762,11 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector   = fdNdxCutTable[jMat];
 
-  G4int iTkin, iTransfer, iPlace  ;
+  G4int iTkin, iTransfer, iPlace;
   G4long numOfCollisions=0;
 
-  //  G4cout<<"G4PAIModel::SampleFluctuations"<<G4endl ;
-  //G4cout<<"in:  "<<fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName()<<G4endl ;
-
+  //G4cout<<"G4PAIModel::SampleFluctuations"<<G4endl ;
+  //G4cout<<"in: "<<fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName()<<G4endl;
   G4double loss = 0.0, charge2 ;
   G4double stepSum = 0., stepDelta, lambda, omega; 
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
@@ -784,10 +783,10 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   }
   iPlace = iTkin - 1 ; 
   if(iPlace < 0) iPlace = 0;
-  //  G4cout<<"from search, iPlace = "<<iPlace<<G4endl ;
+  else if(iPlace >= fTotBin) iPlace = fTotBin - 1;
+  //G4cout<<"from search, iPlace = "<<iPlace<<G4endl ;
   dNdxCut1 = (*fdNdxCutVector)(iPlace) ;  
-  //  G4cout<<"dNdxCut1 = "<<dNdxCut1<<G4endl ;
-
+  //G4cout<<"dNdxCut1 = "<<dNdxCut1<<G4endl ;
 
   if(iTkin == fTotBin) // Fermi plato, try from left
   {
@@ -804,7 +803,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
      if(stepSum >= step) break;
      numOfCollisions++;
     }   
-    //    G4cout<<"##1 numOfCollisions = "<<numOfCollisions<<G4endl ;
+    //G4cout<<"##1 numOfCollisions = "<<numOfCollisions<<G4endl ;
 
     while(numOfCollisions)
     {
@@ -817,7 +816,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
         if(position >= (*(*fPAItransferTable)(iPlace))(iTransfer)) break ;
       }
       omega = GetEnergyTransfer(iPlace,position,iTransfer);
-      // G4cout<<"G4PAIModel::SampleFluctuations, omega = "<<omega/keV<<" keV; "<<"\t";
+      //G4cout<<"G4PAIModel::SampleFluctuations, omega = "<<omega/keV<<" keV; "<<"\t";
       loss += omega;
       numOfCollisions-- ;
     }
@@ -825,7 +824,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   else
   {
     dNdxCut2 = (*fdNdxCutVector)(iPlace+1) ; 
-    //  G4cout<<"dNdxCut2 = "<<dNdxCut2<<G4endl ;
+    //G4cout<<"dNdxCut2 = "<<dNdxCut2<< " iTkin= "<<iTkin<<" iPlace= "<<iPlace<<G4endl;
  
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
@@ -833,17 +832,17 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       if( meanNumber < 0. ) meanNumber = 0. ;
       //  numOfCollisions = CLHEP::RandPoisson::shoot(meanNumber) ;
       //  numOfCollisions = G4Poisson(meanNumber) ;
-    if( meanNumber > 0.) lambda = step/meanNumber;
-    else                 lambda = DBL_MAX;
-    while(numb)
-    {
-     stepDelta = CLHEP::RandExponential::shoot(lambda);
-     stepSum += stepDelta;
-     if(stepSum >= step) break;
-     numOfCollisions++;
-    }   
+      if( meanNumber > 0.) lambda = step/meanNumber;
+      else                 lambda = DBL_MAX;
+      while(numb)
+	{
+	  stepDelta = CLHEP::RandExponential::shoot(lambda);
+	  stepSum += stepDelta;
+	  if(stepSum >= step) break;
+	  numOfCollisions++;
+	}   
 
-    //G4cout<<"##2 numOfCollisions = "<<numOfCollisions<<G4endl ;
+      //G4cout<<"##2 numOfCollisions = "<<numOfCollisions<<G4endl ;
 
       while(numOfCollisions)
       {
@@ -856,7 +855,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
           if(position >= (*(*fPAItransferTable)(iPlace+1))(iTransfer)) break ;
         }
         omega = GetEnergyTransfer(iPlace,position,iTransfer);
-        // G4cout<<omega/keV<<"\t";
+        //G4cout<<omega/keV<<"\t";
         loss += omega;
         numOfCollisions-- ;
       }
@@ -869,9 +868,10 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
 
-      // G4cout<<"(*(*fPAItransferTable)(iPlace))(0) = "<<
+      //G4cout << fPAItransferTable->size() << G4endl;
+      //G4cout<<"(*(*fPAItransferTable)(iPlace))(0) = "<<
       //   (*(*fPAItransferTable)(iPlace))(0)<<G4endl ;
-      // G4cout<<"(*(*fPAItransferTable)(iPlace+1))(0) = "<<
+      //G4cout<<"(*(*fPAItransferTable)(iPlace+1))(0) = "<<
       //     (*(*fPAItransferTable)(iPlace+1))(0)<<G4endl ;
 
       meanNumber=( ((*(*fPAItransferTable)(iPlace))(0)-dNdxCut1)*W1 + 
@@ -879,17 +879,17 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       if(meanNumber<0.0) meanNumber = 0.0;
       //  numOfCollisions = RandPoisson::shoot(meanNumber) ;
       // numOfCollisions = G4Poisson(meanNumber) ;
-    if( meanNumber > 0.) lambda = step/meanNumber;
-    else                 lambda = DBL_MAX;
-    while(numb)
-    {
-     stepDelta = CLHEP::RandExponential::shoot(lambda);
-     stepSum += stepDelta;
-     if(stepSum >= step) break;
-     numOfCollisions++;
-    }   
+      if( meanNumber > 0.) lambda = step/meanNumber;
+      else                 lambda = DBL_MAX;
+      while(numb)
+	{
+	  stepDelta = CLHEP::RandExponential::shoot(lambda);
+	  stepSum += stepDelta;
+	  if(stepSum >= step) break;
+	  numOfCollisions++;
+	}   
 
-    //G4cout<<"##3 numOfCollisions = "<<numOfCollisions<<endl ;
+      //G4cout<<"##3 numOfCollisions = "<<numOfCollisions<<endl ;
 
       while(numOfCollisions)
       {
@@ -917,7 +917,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
       }
     }
   } 
-  //  G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
+  //G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
   //  <<step/mm<<" mm"<<G4endl ; 
   if(loss > Tkin) loss=Tkin;
   if(loss < 0.  ) loss = 0.;
