@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.12 2009-08-07 10:09:19 gcosmo Exp $
+// $Id: G4String.hh,v 1.13 2009-08-10 09:40:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,7 +137,6 @@ public:
   inline G4bool operator!=(const G4String&) const;
   inline G4bool operator!=(const char*) const;
 
-  //inline G4String operator () (unsigned int, unsigned int);
   inline operator const char*() const;
   inline G4SubString operator()(str_size, str_size);
 
@@ -186,7 +185,7 @@ public:
 
   // useful for supplying hash functions to template hash collection ctors
   //
-  static inline unsigned int hash(const G4String&);
+  inline unsigned int hash(const G4String&);
 
 };
 
