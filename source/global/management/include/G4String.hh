@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.13 2009-08-10 09:40:08 gcosmo Exp $
+// $Id: G4String.hh,v 1.14 2009-08-10 09:51:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,7 +158,7 @@ public:
   inline G4int first(char) const;
   inline G4int last(char) const;
 
-  inline G4bool contains(std::string) const;
+  inline G4bool contains(const std::string&) const;
   inline G4bool contains(char) const;
 
   // stripType = 0 beginning

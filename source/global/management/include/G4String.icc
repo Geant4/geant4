@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.16 2009-08-10 09:40:08 gcosmo Exp $
+// $Id: G4String.icc,v 1.17 2009-08-10 09:51:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -334,7 +334,7 @@ G4int G4String::last(char c) const
   return rfind(c);
 }
 
-G4bool G4String::contains(std::string s) const
+G4bool G4String::contains(const std::string& s) const
 {
   return (std_string::find(s) != std_string::npos);
 }
