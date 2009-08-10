@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009-08-06 15:00:35 mkossov Exp $
+$Id: History,v 1.3 2009-08-10 10:05:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,12 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-
 Aug 6th, 2009  Mikhail Kossov (test29-V09-02-03)
-- Internal tag bringing the Head to test29-V09-02-01
+- Restored correct CVS Head as in "test29-V09-02-01"
 
 Aug 6th, 2009  Mikhail Kossov (test29-V09-02-02)
-- The non-used G4QuasmonString (obsolite) header is excluded.-Clash
+- Internal tag...
 
 Aug 6th, 2009  Gabriele Cosmo (test29-V09-02-01)
 - Commented out inclusion of G4QuasmonString.hh in test29.cc,
@@ -32,4 +31,3 @@ May 26th, 2009  Mikhail Kossov (test29-V09-02-00)
 
 May 25th, 2009  Mikhail Kossov
 - Created.
-
