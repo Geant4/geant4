@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.44 2009-08-03 13:42:19 kurasige Exp $
+// $Id: G4RunManagerKernel.cc,v 1.45 2009-08-10 07:10:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -263,6 +263,8 @@ void G4RunManagerKernel::InitializePhysics()
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
 
+  if(verboseLevel>1) G4cout << "physicsList->CheckParticleList() start." << G4endl;
+  physicsList->CheckParticleList();
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   physicsList->SetCuts();
   CheckRegions();
