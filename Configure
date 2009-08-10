@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.116 2009-05-26 17:37:44 bmorgan Exp $
+# $Id: Configure,v 1.117 2009-08-10 10:35:20 bmorgan Exp $
 #
-# Generated on Tue May 26 18:39:05 BST 2009 [metaconfig 3.0 PL70]
+# Generated on Mon Aug 10 11:39:19 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3201,7 +3201,7 @@ done
 
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.2'
+g4data_g4emlow_version='G4EMLOW6.6'
 g4data_g4ndl_version='G4NDL3.13'
 g4data_g4abla_version='G4ABLA3.0'
 #END GEANT4 DATA OPTIONS
