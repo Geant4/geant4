@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.17 2009-08-10 09:51:18 gcosmo Exp $
+// $Id: G4String.icc,v 1.18 2009-08-10 10:18:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -453,9 +453,4 @@ unsigned int G4String::stlhash() const
     { h = 5*h + *s; }
 
   return str_size(h);
-}
-
-unsigned int G4String::hash(const G4String& s)
-{
-  return s.hash();
 }

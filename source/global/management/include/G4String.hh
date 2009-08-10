@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.14 2009-08-10 09:51:18 gcosmo Exp $
+// $Id: G4String.hh,v 1.15 2009-08-10 10:18:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -182,11 +182,6 @@ public:
 
   inline unsigned int hash( caseCompare cmp = exact ) const;
   inline unsigned int stlhash() const;
-
-  // useful for supplying hash functions to template hash collection ctors
-  //
-  inline unsigned int hash(const G4String&);
-
 };
 
 #include "G4String.icc"
