@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.4 2009-04-29 14:17:03 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.5 2009-08-10 07:04:01 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,6 +89,7 @@ void PhysicsList::ConstructBarions()
   //  baryons
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
+  G4GenericIon:GenericIonDefinition();
 
   // Geant4 DNA new particles
   G4DNAGenericIonsManager * genericIonsManager;

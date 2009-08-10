@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2009-04-29 14:17:03 sincerti Exp $
+$Id: History,v 1.10 2009-08-10 07:04:01 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,8 +9,11 @@ $Id: History,v 1.9 2009-04-29 14:17:03 sincerti Exp $
                        Package History file
                        --------------------
 
+10 August 2009 - S. Incerti - microdosimetry-V09-02-02
+- added GenericIon definition to PhysicsList (required by rules of G4VUserPhysicsList)
+
 29 April 2009 - S. Incerti - microdosimetry-V09-02-01
-- modified Physics List for migrated Geant4-DNA processes
+- modified PhysicsList for migrated Geant4-DNA processes
 - modified SteppingAction accordingly
 - updated README
 
