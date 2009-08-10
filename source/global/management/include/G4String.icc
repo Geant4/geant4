@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.18 2009-08-10 10:18:09 gcosmo Exp $
+// $Id: G4String.icc,v 1.19 2009-08-10 10:30:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,22 +95,22 @@ G4int G4SubString::operator!() const
 
 G4bool G4SubString::operator==(const G4String& s) const
 {
-  return (mystring->find(s,mystart,extent) != std::string::npos) ? true : false;
+  return (mystring->find(s,mystart,extent) != std::string::npos);
 }
 
 G4bool G4SubString::operator==(const char* s) const
 {
-  return (mystring->find(s,mystart,extent) != std::string::npos) ? true : false;
+  return (mystring->find(s,mystart,extent) != std::string::npos);
 }
 
 G4bool G4SubString::operator!=(const G4String& s) const
 {
-  return (mystring->find(s,mystart,extent) == std::string::npos) ? true : false;
+  return (mystring->find(s,mystart,extent) == std::string::npos);
 }
 
 G4bool G4SubString::operator!=(const char* s) const
 {
-  return (mystring->find(s,mystart,extent) == std::string::npos) ? true : false;
+  return (mystring->find(s,mystart,extent) == std::string::npos);
 }
 
 str_size G4SubString::length() const
