@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.33 2009-08-03 15:54:02 vnivanch Exp $
+// $Id: G4EmModelManager.hh,v 1.34 2009-08-11 10:29:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,6 +175,12 @@ public:
 
 private:
 
+  inline G4double ComputeDEDX(G4VEmModel* model,
+			      const G4MaterialCutsCouple*,
+			      G4double kinEnergy,
+			      G4double cutEnergy,
+			      G4double minEnergy);
+
   // hide  assignment operator
 
   G4EmModelManager(G4EmModelManager &);
@@ -218,7 +224,9 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy,
 						 size_t& index)
 {
   if(severalModels) {
-    if(nRegions > 1)  currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+    if(nRegions > 1) {
+      currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+    }
     currModel = models[currRegionModel->SelectIndex(kinEnergy)];
   }
   return currModel;
@@ -243,6 +251,23 @@ inline const G4DataVector* G4EmModelManager::SubCutoff() const
 inline G4int G4EmModelManager::NumberOfModels() const
 {
   return nEmModels;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4EmModelManager::ComputeDEDX(G4VEmModel* model,
+			      const G4MaterialCutsCouple* couple,
+			      G4double e,
+			      G4double cut,
+			      G4double emin)
+{
+  G4double dedx = 0.0;
+  if(model && cut > emin) {
+    dedx = model->ComputeDEDX(couple,particle,e,cut); 
+    if(emin > 0.0) {dedx -= model->ComputeDEDX(couple,particle,e,emin);} 
+  }
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
