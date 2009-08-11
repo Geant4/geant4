@@ -1,6 +1,11 @@
                  History file
                  ------------
 
+11-Aug-2009 - A.Ribon (statAccepTest-V09-02-06)
+- Fixed a mistake in the treatment of the environmental
+  variable HISTOGRAMS_ON that controls the extra histograms.
+
+
 04-Aug-2009 - A.Ribon (statAccepTest-V09-02-05)
 - Added some details on the type of vertices.
 

@@ -2,6 +2,10 @@ name := mainStatAccepTest
 G4TARGET := $(name)
 G4EXLIB := true
 
+ifdef HISTOGRAMS_ON
+  CPPFLAGS += -DflagHISTOGRAMS_ON
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all

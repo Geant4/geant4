@@ -1386,14 +1386,14 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 
 #ifdef G4ANALYSIS_USE
   // This method is called at each event, so it is useful to commit
-  // the tree from time to time, for instance every 10 events, in
+  // the tree from time to time, for instance every 1000 events, in
   // such a way that it is possible to see the ntuple  ntuple.hbook
   // while the job is running, for instance for a quick check that
   // it makes sense. Or, if the job crashes after many events, we
   // have anyhow some data already stored in the ntuple to be checked.
   // Remember that when you look the ntuple with PAW, while is running,
   // you need to close the session and open a new one to see the updates.
-  if ( numberOfEvents % 1000 == 0 ) {
+  if ( numberOfEvents > 0  and  numberOfEvents % 1000 == 0 ) {
     if ( tree ) {
       tree->commit();
       //G4cout << " tree commit ,  at event=" << numberOfEvents-1 

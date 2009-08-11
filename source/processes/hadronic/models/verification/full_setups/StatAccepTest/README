@@ -1,5 +1,5 @@
 
- Last update: 23-Jul-2009
+ Last update: 11-Aug-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -67,6 +67,12 @@
  Furthermore, look at the biasing parameters in the file
   src/StatAccepTestStackingAction.cc
  (search for the string "***LOOKHERE***").
+
+ If you want to produce (many) extra histograms, besides the
+ ntuple (and few other basic histograms), you need to define
+ the environmental variable HISTOGRAMS_ON, e.g.
+       export HISTOGRAMS_ON=1
+ before compiling.
 
  In the macro command file  * exercise.g4 *  you can choose: 
    -  the production range cut;

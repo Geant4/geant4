@@ -359,8 +359,8 @@ if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
 else :
     setupFile.write( "export IS_BIASING_ACTIVE=1 \n" )
 
-#***LOOKHERE*** Switch off the histograms (leave only the ntuple).
-setupFile.write( "export HISTOGRAMS_OFF=1 \n" )
+#***LOOKHERE*** Switch on the extra histograms (else only the ntuple).
+###setupFile.write( "export HISTOGRAMS_ON=1 \n" )
 
 setupFile.write( "export PHYSLIST=" + PHYSICS + "\n" )
 
