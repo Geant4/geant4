@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.8 2009-06-26 10:15:19 mantero Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.9 2009-08-11 10:50:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -426,7 +426,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     
     fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
     fParticleChangeForGamma->SetProposedKineticEnergy(k-bindingEnergy-secondaryKinetic);
-    //fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
+    fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
 
     G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
     fvect->push_back(dp);
