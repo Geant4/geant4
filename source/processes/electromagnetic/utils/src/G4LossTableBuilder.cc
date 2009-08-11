@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.29 2009-06-25 14:46:54 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.30 2009-08-11 11:21:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,14 +85,15 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
   size_t n_vectors = (list[0])->length();
   if(0 >= n_vectors) return;
 
-  G4PhysicsVector* pv = (*(list[0]))[0];
-  G4PhysicsVector* pv1;
-  size_t npoints = pv->GetVectorLength();
-  G4double elow = pv->Energy(0);
-  G4double ehigh = pv->Energy(npoints-1);
+  G4PhysicsVector* pv0 = (*(list[0]))[0];
+  G4PhysicsVector* pv, pv1;
+  size_t npoints = pv0->GetVectorLength();
+  G4double elow = pv0->Energy(0);
+  G4double ehigh = pv0->Energy(npoints-1);
   for (size_t i=0; i<n_vectors; i++) {
 
-    pv = new G4PhysicsLogVector(elow, ehigh, npoints-1);
+    pv = new G4PhysicsLogVector(*pv0);
+    //    pv = new G4PhysicsLogVector(elow, ehigh, npoints-1);
     pv->SetSpline(splineFlag);
     for (size_t j=0; j<npoints; j++) {
       G4double dedx = 0.0;
@@ -145,7 +146,9 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       // G4cout<<"nbins= "<<npoints-1<<" elow= "<<elow<<" ehigh= "<<ehigh<<G4endl;
       // initialisation of a new vector
       if(npoints < 2) npoints = 2;
-      G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, npoints-1);
+      G4PhysicsLogVector* v;
+      if(0 == bin0) { v = new G4PhysicsLogVector(*pv); }
+      else          { v = new G4PhysicsLogVector(elow, ehigh, npoints-1); }
       // dedx is exect zero
       if(2 == npoints) {
 	v->PutValue(0,1000.);

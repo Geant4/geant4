@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.154 2009-07-30 07:36:29 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.155 2009-08-11 11:21:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -626,6 +626,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(!table) return table;
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+  G4PhysicsVector* aVector = 0;
+  G4PhysicsVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; i++) {
 
@@ -638,7 +640,13 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      G4PhysicsVector* aVector = new G4PhysicsLogVector(emin, emax, bin);
+      if(!bVector) {
+	aVector = new G4PhysicsLogVector(emin, emax, bin);
+        bVector = aVector;
+      } else {
+        aVector = new G4PhysicsLogVector(*bVector);
+      }
+      //      G4PhysicsVector* aVector = new G4PhysicsLogVector(emin, emax, bin);
       aVector->SetSpline(splineFlag);
 
       modelManager->FillDEDXVector(aVector, couple, tType);
