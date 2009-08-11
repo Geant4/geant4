@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.28 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.29 2009-08-11 15:23:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,6 +93,7 @@ G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
     p = static_cast<G4ParticleChangeForLoss*>(pParticleChange);
   } else {
     p = new G4ParticleChangeForLoss();
+    pParticleChange = p;
   }
   return p;
 }
@@ -106,6 +107,7 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
     p = static_cast<G4ParticleChangeForGamma*>(pParticleChange);
   } else {
     p = new G4ParticleChangeForGamma();
+    pParticleChange = p;
   }
   return p;
 }

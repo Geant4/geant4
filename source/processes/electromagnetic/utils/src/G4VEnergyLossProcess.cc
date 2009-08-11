@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.155 2009-08-11 11:21:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.156 2009-08-11 15:23:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -626,8 +626,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(!table) return table;
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
-  G4PhysicsVector* aVector = 0;
-  G4PhysicsVector* bVector = 0;
+  G4PhysicsLogVector* aVector = 0;
+  G4PhysicsLogVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; i++) {
 

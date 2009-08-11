@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.74 2009-08-11 11:21:35 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.75 2009-08-11 15:23:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -317,17 +317,19 @@ void G4VEmProcess::BuildLambdaTable()
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
-  G4PhysicsVector* aVector = 0;
-  G4PhysicsVector* bVector = 0;
+  G4PhysicsLogVector* aVector = 0;
+  G4PhysicsLogVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; i++) {
 
     if (theLambdaTable->GetFlag(i)) {
 
       // create physics vector and fill it
-      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+      const G4MaterialCutsCouple* couple = 
+	theCoupleTable->GetMaterialCutsCouple(i);
       if(!bVector) {
-	aVector = LambdaPhysicsVector(couple);
+	aVector = 
+	  static_cast<G4PhysicsLogVector*>(LambdaPhysicsVector(couple));
         bVector = aVector;
       } else {
         aVector = new G4PhysicsLogVector(*bVector);
