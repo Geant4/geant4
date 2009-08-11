@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.31 2009-08-11 15:23:39 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.32 2009-08-11 17:24:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,8 +99,9 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 	dedx += (*pv1)[j];
       }
       pv->PutValue(j, dedx);
-      G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, pv);
     }
+    if(splineFlag) pv->FillSecondDerivatives();
+    G4PhysicsTableHelper::SetPhysicsVector(dedxTable, i, pv);
   }
 }
 
