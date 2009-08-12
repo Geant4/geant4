@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.50 2009-08-10 14:31:18 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.51 2009-08-12 21:28:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -480,7 +480,7 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
   //	 << "  " << fdEdxVector->GetVectorLength()<<G4endl; 
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
-  else if(iPlace > fTotBin) iPlace = fTotBin;
+  else if(iPlace >= fTotBin) iPlace = fTotBin-1;
   G4double dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cut) );
   if( dEdx < 0.) dEdx = 0.;
   return dEdx;
@@ -637,6 +637,7 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
   iPlace = iTkin - 1 ;
   // G4cout<<"from search, iPlace = "<<iPlace<<G4endl ;
   if(iPlace < 0) iPlace = 0;
+  else if(iPlace >= fTotBin) iPlace = fTotBin-1; 
   dNdxCut1 = (*fdNdxCutVector)(iPlace) ;  
   // G4cout<<"dNdxCut1 = "<<dNdxCut1<<G4endl ;
 
