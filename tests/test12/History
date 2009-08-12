@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2009-08-06 10:49:44 gcosmo Exp $
+$Id: History,v 1.17 2009-08-12 09:49:39 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 August 2009 Gunter Folger
+- pass correct physics list to runManager
 
 6th August 2009 Gabriele Cosmo           test12-V09-02-04
 - Avoid comparison with string literals for input arguments in main().
