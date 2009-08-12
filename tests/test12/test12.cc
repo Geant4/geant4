@@ -56,7 +56,7 @@ int main(int argc,char** argv) {
      if (opt == "FTFP" ) thePL=new FTFP;
      else if (opt == "FTF_BIC" ) thePL=new FTF_BIC;
 
-     G4cout << "Test12 using physics list " << argv[2] << G4endl;
+     if ( thePL ) G4cout << "Test12 using physics list " << opt << G4endl;
   }
   if ( !thePL ) {
      thePL=new FTFP;
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst12DetectorConstruction);
   //  runManager->SetUserInitialization(new Tst12PhysicsList);
-  runManager->SetUserInitialization(new FTFP);
+  runManager->SetUserInitialization(thePL);
 
   // UserAction classes
   runManager->SetUserAction(new Tst12RunAction);
