@@ -230,19 +230,17 @@ private:
   TH1F *histo15;
   TH1F *histo16;
   
-  ///metadata relayed to root
-  G4double detectorDistance;
-  G4double phantomDepth;
-  G4double beamEnergy;
-  G4double energyError;
-  G4double phantomCenterDistance;
-  
   TNtuple *theROOTNtuple;
   TNtuple *theROOTIonTuple;
   TNtuple *fragmentNtuple; // fragments
   TNtuple *metaData;
 #endif
-  G4long eventCounter;
+  G4long eventCounter;      // Simulation metadata
+  G4double detectorDistance;
+  G4double phantomDepth;
+  G4double beamEnergy;
+  G4double energyError;
+  G4double phantomCenterDistance;
 };
 #endif
 

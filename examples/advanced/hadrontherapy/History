@@ -9,6 +9,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+13.08.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-26
+            - Fixed compilation errors when AIDA analysis is used
+
 03.08.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-25
             - Added ability to select the geometry using G4 macro commands
             - Improved plotting scripts and improved normalization for the
