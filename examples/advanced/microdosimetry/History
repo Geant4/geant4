@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2009-08-10 07:04:01 sincerti Exp $
+$Id: History,v 1.11 2009-08-13 11:41:04 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.10 2009-08-10 07:04:01 sincerti Exp $
 
                        Package History file
                        --------------------
+
+13 August 2009 - S. Incerti - microdosimetry-V09-02-03
+- replaced H2O material by NIST G4_WATER 
+  (to be used with emlowen-V09-02-50) 
 
 10 August 2009 - S. Incerti - microdosimetry-V09-02-02
 - added GenericIon definition to PhysicsList (required by rules of G4VUserPhysicsList)
