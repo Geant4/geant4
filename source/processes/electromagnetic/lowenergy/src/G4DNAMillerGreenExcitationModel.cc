@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.5 2009-08-13 07:00:27 sincerti Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.6 2009-08-13 11:32:47 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -227,27 +227,19 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
 	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
 	    const G4Material* material = couple->GetMaterial();
 
-            size_t j = material->GetNumberOfElements();
-            while (j>0)
+            if (material->GetName() == "G4_WATER") 
             {
-               j--;
-               const G4Element* element(material->GetElement(j));
-               if (element->GetZ() == 8.)
-	       {
-	          G4double density = material->GetAtomicNumDensityVector()[j];
-                  if (density > 0.) 
-		  { 
-		    flagMaterialIsWater = true; 
-		    densityWater = density; 
-		    
-		    if (verboseLevel > 3) 
-                    G4cout << "Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-		  }
-	       }
+              G4double density = material->GetAtomicNumDensityVector()[1];
+	      flagMaterialIsWater = true; 
+	      densityWater = density; 
+	      
+	      if (verboseLevel > 3) 
+              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
             }
   
           }
-   } // if(numOfCouples>0)
+
+    } // if(numOfCouples>0)
 
   } // if (theCoupleTable)
 

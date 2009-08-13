@@ -1,4 +1,4 @@
-$Id: History,v 1.382 2009-08-13 07:00:27 sincerti Exp $
+$Id: History,v 1.383 2009-08-13 11:32:47 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13.08.2009, S. Incerti, tag emlowen-V09-02-50
+            Added G4_WATER NIST material to Geant4-DNA models
 
 13.08.2009, S. Incerti, tag emlowen-V09-02-49
             Added verbose condition to all Geant4-DNA models
