@@ -1,4 +1,4 @@
-$Id: History,v 1.381 2009-08-11 10:50:17 sincerti Exp $
+$Id: History,v 1.382 2009-08-13 07:00:27 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.08.2009, S. Incerti, tag emlowen-V09-02-49
+            Added verbose condition to all Geant4-DNA models
+
 11.08.2009, S. Incerti, tag emlowen-V09-02-48
             Bug fix in G4DNABornIonisationModel (energy deposit was
-            commented)
+            commented in last reference tag)
 
 06.08.2009, A. Lechner, tag emlowen-V09-02-47
             Bug fix in G4IonDEDXHandler (access of physics vector was

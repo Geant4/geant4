@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.7 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.8 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,12 +56,15 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Screened Rutherford Elastic model is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / MeV << " MeV"
-         << G4endl;
- 
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Screened Rutherford Elastic model is constructed " << G4endl
+           << "Energy range: "
+           << lowEnergyLimit / eV << " eV - "
+           << highEnergyLimit / MeV << " MeV"
+           << G4endl;
+  }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,12 +130,15 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
 
   //
 
-  G4cout << "Screened Rutherford elastic model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / MeV << " MeV"
-         << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Screened Rutherford elastic model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
+  }
+  
   if(!isInitialised) 
   {
     isInitialised = true;
@@ -492,7 +498,6 @@ G4double G4DNAScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosThet
  do 
  { 
    cosTheta = 2. * G4UniformRand() - 1.;
-//G4cout << "SR cos=" << cosTheta << G4endl;
    fCosTheta = (1 + 2.*n - cosTheta);
    if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
  }

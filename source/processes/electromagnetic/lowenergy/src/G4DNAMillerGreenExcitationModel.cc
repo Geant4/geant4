@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.5 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,8 +48,10 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Miller & Green excitation model is constructed " << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Miller & Green excitation model is constructed " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -185,14 +187,16 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   nLevels = waterExcitation.NumberOfLevels();
 
   //
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Miller & Green excitation model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / keV << " keV for "
+           << particle->GetParticleName()
+           << G4endl;
+  }
   
-  G4cout << "Miller & Green excitation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / keV << " keV for "
-         << particle->GetParticleName()
-         << G4endl;
-
   if(!isInitialised) 
   {
     isInitialised = true;

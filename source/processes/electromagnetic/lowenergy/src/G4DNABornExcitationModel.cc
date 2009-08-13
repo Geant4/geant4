@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNABornExcitationModel.cc,v 1.5 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,12 +59,15 @@ G4DNABornExcitationModel::G4DNABornExcitationModel(const G4ParticleDefinition*,
   
   //
   
-  G4cout << "Born excitation model is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
-         << highEnergyLimit / MeV << " MeV"
-         << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Born excitation model is constructed " << G4endl
+           << "Energy range: "
+           << lowEnergyLimit / keV << " keV - "
+           << highEnergyLimit / MeV << " MeV"
+           << G4endl;
+  }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -108,11 +111,14 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle
     table->LoadData("dna/sigma_excitation_p_born");
   }
 
-  G4cout << "Born excitation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / MeV << " MeV " << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Born excitation model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / keV << " keV - "
+           << HighEnergyLimit() / MeV << " MeV " << G4endl;
+  }
+  
   if(!isInitialised) 
   {
     isInitialised = true;

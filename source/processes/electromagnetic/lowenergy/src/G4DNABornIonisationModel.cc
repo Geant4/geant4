@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.9 2009-08-11 10:50:17 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.10 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,10 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Born ionisation model is constructed " << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Born ionisation model is constructed " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -211,13 +214,16 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     SetHighEnergyLimit(highEnergyLimit[proton]);
   }
 
-  G4cout << "Born ionisation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / keV << " keV for "
-         << particle->GetParticleName()
-         << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Born ionisation model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / keV << " keV for "
+           << particle->GetParticleName()
+           << G4endl;
+  }
+  
   //
   
   if(!isInitialised) 

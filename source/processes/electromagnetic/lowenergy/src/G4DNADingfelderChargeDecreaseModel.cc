@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.5 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,8 +48,10 @@ G4DNADingfelderChargeDecreaseModel::G4DNADingfelderChargeDecreaseModel(const G4P
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Dingfelder charge decrease model is constructed " << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Dingfelder charge decrease model is constructed " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -184,13 +186,16 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
 
   //
   
-  G4cout << "Dingfelder charge decrease model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / MeV << " MeV for "
-         << particle->GetParticleName()
-         << G4endl;
-
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Dingfelder charge decrease model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / keV << " keV - "
+           << HighEnergyLimit() / MeV << " MeV for "
+           << particle->GetParticleName()
+           << G4endl;
+  }
+  
   if(!isInitialised) 
   {
     isInitialised = true;

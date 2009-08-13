@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.8 2009-06-26 09:42:32 mantero Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.9 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,10 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Rudd ionisation model is constructed " << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Rudd ionisation model is constructed " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -243,12 +246,15 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     SetHighEnergyLimit(highEnergyLimit[alphaPlusPlus]);
   }
 
-  G4cout << "Rudd ionisation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / keV << " keV for "
-         << particle->GetParticleName()
-         << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Rudd ionisation model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / keV << " keV for "
+           << particle->GetParticleName()
+           << G4endl;
+  }
 
   //
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.7 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.8 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,12 +55,14 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Champion Elastic model is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / MeV << " MeV"
-         << G4endl;
- 
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Champion Elastic model is constructed " << G4endl
+           << "Energy range: "
+           << lowEnergyLimit / eV << " eV - "
+           << highEnergyLimit / MeV << " MeV"
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -173,11 +175,14 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Champion Elastic model" << G4endl;
 
-  G4cout << "Champion Elastic model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / MeV << " MeV"
-         << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Champion Elastic model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
+  }
 
   if(!isInitialised) 
   {

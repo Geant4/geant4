@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.4 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.5 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,10 @@ G4DNADingfelderChargeIncreaseModel::G4DNADingfelderChargeIncreaseModel(const G4P
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  G4cout << "Dingfelder charge increase model is constructed " << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Dingfelder charge increase model is constructed " << G4endl;
+  }
 
 }
 
@@ -174,12 +177,15 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   
   //
   
-  G4cout << "Dingfelder charge increase model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / MeV << " MeV for "
-         << particle->GetParticleName()
-         << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Dingfelder charge increase model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / keV << " keV - "
+           << HighEnergyLimit() / MeV << " MeV for "
+           << particle->GetParticleName()
+           << G4endl;
+  }
 
   if(!isInitialised) 
   {
@@ -408,7 +414,7 @@ G4ParticleDefinition* G4DNADingfelderChargeIncreaseModel::OutgoingParticleDefini
   if (particleDefinition == instance->GetIon("hydrogen")) return G4Proton::Proton(); 
   if (particleDefinition == instance->GetIon("alpha+")) return instance->GetIon("alpha++");
 
-  if (particleDefinition == instance->GetIon("alpha+")) return instance->GetIon("helium");
+  if (particleDefinition == instance->GetIon("helium"))
   {
     if (finalStateIndex==0) return instance->GetIon("alpha+"); 
     return instance->GetIon("alpha++");

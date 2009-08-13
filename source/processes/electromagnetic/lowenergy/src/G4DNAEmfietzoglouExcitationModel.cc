@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.6 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.7 2009-08-13 07:00:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,12 +55,14 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
   
   if (verboseLevel > 3)
 
-  G4cout << "Emfietzoglou Excitation model is constructed " << G4endl
-         << "Energy range: "
-         << lowEnergyLimit / eV << " eV - "
-         << highEnergyLimit / MeV << " MeV"
-         << G4endl;
- 
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Emfietzoglou Excitation model is constructed " << G4endl
+           << "Energy range: "
+           << lowEnergyLimit / eV << " eV - "
+           << highEnergyLimit / MeV << " MeV"
+           << G4endl;
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,12 +100,14 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*
   nLevels = waterExcitation.NumberOfLevels();
 
   //
-  
-  G4cout << "Emfietzoglou Excitation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / eV << " eV - "
-         << HighEnergyLimit() / MeV << " MeV"
-         << G4endl;
+  if( verboseLevel>0 ) 
+  { 
+    G4cout << "Emfietzoglou Excitation model is initialized " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
+  }
 
   if(!isInitialised) 
   {
