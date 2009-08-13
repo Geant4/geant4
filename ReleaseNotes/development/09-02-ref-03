@@ -17,6 +17,7 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (*)  Fixes included in release 9.2.p01
+(o)  Fixes included in release 9.2.p02
 
 Summarised, the list of changes is the following:
 
@@ -25,7 +26,7 @@ config                                           config-V09-02-04            (*)
 - common.gmk, globlib.gmk, source/GNUmakefile: added removal of moc sources
   in clean target.
 
-geometry/magneticfield                           field-V09-02-01
+geometry/magneticfield                           field-V09-02-01             (o)
 ----------------------
 - Added 3rd term of BMT equation (Spin x Beta x Efield) to G4EqEMFieldWithSpin,
   as reported in the Emfield Hypernews Forum posting #155.
@@ -76,7 +77,7 @@ persistency/gdml                                 gdml-V09-02-06
   therefore repeated...
 - Strip off white spaces from names G4GDMLWrite::GenerateName(), to avoid    (*)
   parsing problems in imported files.
-- Added empty default constructor and virtual destructor to classes in the
+- Added empty default constructor and virtual destructor to classes in the   (o)
   inheritance chain.
 
 physics_lists                                    phys-lists-V09-02-04
@@ -134,7 +135,7 @@ processes/hadronic
 - util (hadr-util-V09-02-00)                                                 (*)
   o G4StableIsotopes: filled in missing isotope names.
 
-processes/optical                                op-V09-02-01
+processes/optical                                op-V09-02-01                (o)
 -----------------
 - Fix in G4OpBoundaryProcess for complex index of refraction: resample the
   reflectivity every time for DielectricMetal, and do not re-calculate normal
@@ -144,9 +145,9 @@ processes/optical                                op-V09-02-01
 examples                                         examples-V09-02-03
 --------
 - Updated reference outputs.
-- advanced/nanobeam (nanobeam-V09-02-01)
+- advanced/nanobeam (nanobeam-V09-02-01)                                     (o)
   o Fixed compilation warnings on gcc-4.3 on SLC5.
-- extended/biasing/B02 (B02-V09-02-00)
+- extended/biasing/B02 (B02-V09-02-00)                                       (o)
   o GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
     since already handled in the internal configuration scripts.
 - extended/electromagnetic/TestEm3 (testem3-V09-02-00)
@@ -155,8 +156,8 @@ examples                                         examples-V09-02-03
 - extended/electromagnetic/TestEm18 (testem18-V09-02-01)
   o Removed command "/testem/phys/cutLimit" already in /cuts/setLowEdge.
   o PhysicsList::SetCuts(): removed call to SetEnergyRange().
-- extended/errorpropagation (exerrprop-V09-02-00)
-- extended/parallel/ExDiane (ExDiane-V09-02-00)
+- extended/errorpropagation (exerrprop-V09-02-00)                            (o)
+- extended/parallel/ExDiane (ExDiane-V09-02-00)                              (o)
   o GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
     since already handled in the internal configuration scripts.
 

@@ -19,22 +19,23 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-05
+config                                           config-V09-02-05            (o)
 ------
 - Corrections in analysis.gmk for AIDA setup on Windows.
 - Improved non-standard setup for Qt on Linux, Mac and Windows.
 - Removed "-lcxa -lunwind" LOADLIBS addition in Linux-icc.gmk,
   no longer necessary since icc version 11.0.083.
 
-geometry/management                              geommng-V09-02-00
+geometry/management                              geommng-V09-02-00           (o)
 -------------------
 - Adopt 'const' references for strings as arguments/return-values in
   G4LogicalSurface. Some minor cleanup...
 
-geometry/solids/specific                         geom-specific-V09-02-01
+geometry/solids/specific                         geom-specific-V09-02-01     (o)
 ------------------------
 - Relaxed error condition in G4TessellatedSolid::Inside(p) to warning, for
   excess of max trials and anomalous conditions in distance calculation.
@@ -59,19 +60,19 @@ particles                                        particles-V09-02-03
 
 persistency/gdml                                 gdml-V09-02-13
 ----------------
-- Correction in materials and solids tags for allowing parsing of
+- Correction in materials and solids tags for allowing parsing of            (o)
   definitions within the tag scope; possibility foreseen by the schema.
-- Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
+- Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle         (o)
   cases of nested displaced solids given to both operands in a Boolean
   operation (ATLAS use case).
-- Completed virtual layer for allowing customisation of the writer for
+- Completed virtual layer for allowing customisation of the writer for       (o)
   user-extended schemas.
 - Implemented ability to write surface properties associated to volumes
   and material properties.
 - Allow for reading/writing of constant material properties.
-- Defined missing copy constructor and operator=() to G4GDMLMatrix
+- Defined missing copy constructor and operator=() to G4GDMLMatrix           (o)
   internal class, to avoid cases of memory corruption when handling matrices.
-- Renamed flag for maximum number of transformations applied to a solid
+- Renamed flag for maximum number of transformations applied to a solid      (o)
   and moved to G4GDMLWriteSolids base class.
 - Some code cleanup: rationalised inclusion of headers, replacing them
   with forward declarations where possible.
@@ -93,11 +94,11 @@ physics_lists                                    phys-lists-V09-02-15
   G4QDiscProcessMixer interface.
   Added the corresponding physics builders.
 - Fixed G4EmLivermorePhysics, G4EmPenelopePhysics
-- Fix in G4HadronInelasticQBBC: cross sections are created dynamically
+- Fix in G4HadronInelasticQBBC: cross sections are created dynamically       (o)
   not by value, fission only instantiated for HP.
-- Fix to address problem report #1056: all cross section data sets are
+- Fix to address problem report #1056: all cross section data sets are       (o)
   created dynamically and no longer member of the class.
-- Inline constructor and destructors are moved to source for classes:
+- Inline constructor and destructors are moved to source for classes:        (o)
   G4VNeutronBuilder, G4VPiKBuilder, G4VProtonBuilder, G4WarnPLStatus.
 
 processes/electromagnetic/highenergy             emhighenergy-V09-02-01
@@ -178,18 +179,18 @@ processes/hadronic
     improvement for the case when the Hypernucleus cannot decay in the
     residual nucleus and pion; now it is decayed in the residual nucleus
     and gamma. (hadr-chips-body-V09-02-03).
-- models/parton_string/hadronization (hadr-prtn-hadr-V09-02-01)
+- models/parton_string/hadronization (hadr-prtn-hadr-V09-02-01)              (o)
   o Removed warning in G4ExcitedStringDecay for applying QGSC from zero energy.
-- models/parton_string/qgsm (hadr-qgsm-V09-02-01)
+- models/parton_string/qgsm (hadr-qgsm-V09-02-01)                            (o)
   o Modifications in G4GammaParticipants and G4QGSParticipants for applying
     QGSC from zero energy.
-- models/qmd (hadr-qmd-V09-02-01)
+- models/qmd (hadr-qmd-V09-02-01)                                            (o)
   o Fixed bug in gamma (mass zero) participants in G4QMDCollision.
   o Changed object data member to pointer in G4QMDReaction.
 - models/theo_high_energy (had-theo-HE-V09-02-02)
   o Quasi Elastic part is made more used in QGSC at low energies to improve
     the performance of QGSC at low energies.
-- processes (hadr-proc-V09-02-00)
+- processes (hadr-proc-V09-02-00)                                            (o)
   o Fix to address problem report #1056: cross section data set now are
     created dynamically in G4PhotoNuclearProcess, G4ElectronNuclearProcess
     and G4PositronNuclearProcess.
@@ -206,22 +207,21 @@ examples                                         examples-V09-02-04
 - Updated reference outputs.
 - advanced/amsEcal (amsEcal-V09-02-01)
   o New example implementing the AMS Ecal calorimeter.
-- advanced/lAr_calorimenter (lAr_calorimeter-V09-02-00)
-- advanced/human_phantom (human_phantom-V09-02-02)
-- advanced/medical_linac (medical_linac-V09-02-00)
-- advanced/purging_magnet (purtag-V09-02-00)
+- advanced/lAr_calorimenter (lAr_calorimeter-V09-02-00)                      (o)
+- advanced/medical_linac (medical_linac-V09-02-00)                           (o)
+- advanced/purging_magnet (purtag-V09-02-00)                                 (o)
   o Removed unnecessary AIDA setup in GNUmakefile.
-- advanced/radiation_monitor (radmon-V09-02-00)
+- advanced/radiation_monitor (radmon-V09-02-00)                              (o)
   o Added macros reproducing run results: new results with proton at
     254MeV, 150 Mev and 50 Mev of energy; new macros with Kapton material.
   o Changed limits of LENeutronInelastic for 0.1 GeV in
     RadmonPhysicsNeutronBertini and RadmonPhysicsNeutronBinary classes.
   o Fix for compilation error in RadmonTLabelledCollection.
   o Removed unnecessary AIDA setup in GNUmakefile.
-- advanced/radioprotection (radioprotection-V09-02-00)
-- advanced/Rich (Rich-V09-02-00)
+- advanced/radioprotection (radioprotection-V09-02-00)                       (o)
+- advanced/Rich (Rich-V09-02-00)                                             (o)
   o Removed unnecessary AIDA setup in GNUmakefile.
-- advanced/xray_fluorescence (XrayFluo-V09-02-00)
+- advanced/xray_fluorescence (XrayFluo-V09-02-00)                            (o)
   o Reviewed physics setup and analysis.
   o Removed unnecessary AIDA setup in GNUmakefile.
 - extended/persistency/gdml/G01 (G01-V09-02-01)

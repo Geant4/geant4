@@ -12,16 +12,17 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-07
+config                                           config-V09-02-07            (o)
 ------
 - binmake.gmk: move definition of TARGOBJEXT to place not dependent
   on G4EXLIB such that the extension is defined when no lib is present
   (change required for upgrading exercisers in testing).
 
-event                                            event-V09-02-01
+event                                            event-V09-02-01             (o)
 -----
 - Minor chnages to G4GeneralParticleSourceMessenger: now using full range
   of predefined units for length, energy and angle.
@@ -38,7 +39,7 @@ geometry/solids/CSG                              geom-csg-V09-02-04
 - Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
   introduced in previous tag.
 
-geometry/solids/specific                         geom-specific-V09-02-03
+geometry/solids/specific                         geom-specific-V09-02-03     (o)
 ------------------------
 - G4Ellipsoid: introduced to DistanceToIn(p,v) splitting of the distance for
   point very far from intersection area and big difference between solid

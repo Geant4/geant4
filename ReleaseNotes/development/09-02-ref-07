@@ -14,15 +14,16 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-08
+config                                           config-V09-02-08            (o)
 ------
 - Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
   diagnostics for wrong architecture errors at link stage.
 
-geometry/solids/specific                         geom-specific-V09-02-05
+geometry/solids/specific                         geom-specific-V09-02-05     (o)
 ------------------------
 - G4Ellipsoid:
   o Fixes in Inside(p) and in DistanceToIn(p,v) for points
@@ -36,7 +37,7 @@ geometry/solids/specific                         geom-specific-V09-02-05
 - G4PolyconeSide: added protection in method Normal(), addressing problem
   report #1073.
 
-geometry/volumes                                 geomvol-V09-02-00
+geometry/volumes                                 geomvol-V09-02-00           (o)
 ----------------
 - Get rid of unnecessary call to Reset() in G4NavigationHistory destructor.
 - Some code formatting...
@@ -63,7 +64,7 @@ physics_lists                                    phys_lists-V09-02-22
 processes/cuts                                   procuts-V09-02-02
 --------------
 - Added possibility to handle cuts for protons.
-- Added missing implementation for method GetParticleType() in class
+- Added missing implementation for method GetParticleType() in class         (o)
   G4VRangeToEnergyConverter.
 
 processes/electromagnetic/lowenergy              emlowen-V09-02-45

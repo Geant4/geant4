@@ -19,10 +19,11 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-06
+config                                           config-V09-02-06            (o)
 ------
 - Configure script (Configure-V09-02-02):
   o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
@@ -32,12 +33,12 @@ config                                           config-V09-02-06
     Added safety reset of OpenGL QT build and use variables.
   o Commented out echo compatibility warning to address problem report #1067.
 
-digits_hits                                      digits_hits-V09-02-01
+digits_hits                                      digits_hits-V09-02-01       (o)
 -----------
 - Replaced usage of non-Standard calls to sprintf() with ostringstream,
   to fix compilation errors reported by gcc-4.4.0 compiler.
 
-environments                                     envs-V09-02-00
+environments                                     envs-V09-02-00              (o)
 ------------
 - G4Py: updated configuration scripts and some minor fixes.
 
@@ -54,17 +55,17 @@ geometry/division                                geomdiv-V09-02-00
 - Fixed initialization of division in Phi for polyhedras to not take into
   account user defined width.
 
-geometry/magnetic_field                          field-V09-02-02
+geometry/magnetic_field                          field-V09-02-02             (o)
 -----------------------
 - Enhanced algorithm G4ChordFinder::ApproxCurvePointS() in order to speedup
   Brent locator.
 
-geometry/management                              geommng-V09-02-01
+geometry/management                              geommng-V09-02-01           (o)
 -------------------
 - Fixed initialisation of min/max extent in method BuildReplicaVoxels() in
   G4SmartVoxelHeader.
 
-geometry/navigation                              geomnav-V09-02-06
+geometry/navigation                              geomnav-V09-02-06           (o)
 -------------------
 - Fix in G4Navigator::ComputeStep() for the computation of rotation of the
   'LocalExitNormal' in cases when DistanceToOut() returns non-valid normal
@@ -94,7 +95,7 @@ geometry/solids/CSG                              geom-csg-V09-02-02
 - G4Tubs, G4Cons: rationalised usage of modifiers for Phi angles and
   simplified constructors.
 
-geometry/solids/specific                         geom-specific-V09-02-02
+geometry/solids/specific                         geom-specific-V09-02-02     (o)
 ------------------------
 - Corrected typo in base implementation of G4VCSGfaceted::GetSurfaceArea(),
   which was erroneously returning cubic volume estimation.
@@ -154,12 +155,12 @@ particles                                        particles-V09-02-06
 - Added method GetNuclearMass(A,Z) in G4NuclearProperty.
 - Fixed bugs in electron mass calculation and moved it to
   G4NucleiPropertiesTableAME03. Cleanup of comments.
-- Ascertain that the absolute of the argument to boost is less than 1 in
+- Ascertain that the absolute of the argument to boost is less than 1 in     (o)
   G4MuonRadiativeDecayChannelWithSpin.
 
 persistency/gdml                                 gdml-V09-02-15
 ----------------
-- Restricted usage of loops only for placement of volumes. Now correctly
+- Restricted usage of loops only for placement of volumes. Now correctly     (o)
   handling most common use-case of multiple copies of the same volume/solid
   through loop statement. Addressing problem report #1063.
 
@@ -184,7 +185,7 @@ physics_lists                                    phys-lists-V09-02-21
   G4RayleighScattering process.
 - G4EmLivermorePhysics: set upper limit of Livermore models to 1 GeV
 
-processes/cuts                                   procuts-V09-02-00
+processes/cuts                                   procuts-V09-02-00           (o)
 --------------
 - Replaced usage of std::abs() with std::fabs() where appropriate.
 
@@ -210,7 +211,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-39
 
 processes/electromagnetic/muons                  emmuons-V09-02-03
 -------------------------------
-- G4MuPairProductionModel: added protection for the case when
+- G4MuPairProductionModel: added protection for the case when                (o)
   'maxPairEnergy' is less than 'minPairEnergy' (empty interval for energy
   transfer observed for rare case with kaons).
 
@@ -250,25 +251,25 @@ processes/hadronic
   o Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)
     to be consistent with latest changes in particles. Changes are made for
     G4Q[Photon,Electron,Muon,Tau]NuclearCrossSection classes.
-- models/neutron_hp (hadr-hpn-V09-02-00)
+- models/neutron_hp (hadr-hpn-V09-02-00)                                     (o)
   o Fixed bug in IC electron emissions for G4NeutronHPPhotonDist and
     G4NeutronHPInelasticCompFS.
-- models/parton_string/hadronization (had-hadronization-V09-02-01)
+- models/parton_string/hadronization (had-hadronization-V09-02-01)           (o)
   o Changed pt sampling in G4LundStringFragmentation to avoid near endless
     loop; this should improve overall performance slightly. Addresses problem
     report #1066. Affected G4VLongitudinalStringDecay, where SampleQuarkPt()
     is  implemented; added new optional argument of max Pt to SampleQuarkPt().
-- models/parton_string/qgsm (hadr-qgsm-V09-02-02)
+- models/parton_string/qgsm (hadr-qgsm-V09-02-02)                            (o)
   o Fix in G4SPBaryon for anti-baryon: a diquark & quark was given instead of 
     anti-diquark & antiquark; note the reverse order, too. 
     Fixes problems with incident anti-baryons, e.g. anti-proton, manifesting
     in problems with forming hadrons.
-- models/rpg (hadr-rpg-V09-02-00)
+- models/rpg (hadr-rpg-V09-02-00)                                            (o)
   o Removed global variables (pointers to static particle definitions) in
     G4RPGInelastic and replaced with local array. Fixing issues of wrong
     order for static initialization.
 
-processes/optical                    op-V09-02-02
+processes/optical                    op-V09-02-02                            (o)
 -----------------
 - Added exception for cases where invalid normal is returned; following
   problem report #1060.
@@ -279,7 +280,7 @@ track                                track-V09-02-02
 
 visualization
 -------------
-- HepRep: added inclusion of <cstdio> in DeflateOutputStreamBuffer.h to
+- HepRep: added inclusion of <cstdio> in DeflateOutputStreamBuffer.h to      (o)
   resolve compilation errors reported by gcc-4.4.0.
 
 data-sets
@@ -293,7 +294,7 @@ data-sets
 examples                                         examples-V09-02-05
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V09-02-00)
+- advanced/air_shower (air_shower-V09-02-00)                                 (o)
   o Updated README file.
 - advanced/amsEcal (amsEcal-V09-02-02)
   o Added printout of calorimeter dimensions.
@@ -314,18 +315,19 @@ examples                                         examples-V09-02-05
 - advanced/microdosimetry (microdosimetry-V09-02-01)
   o Updated physics-list to migrated Geant4-DNA processes.
     Modified SteppingAction accordingly. Updated README.
-- extended/analysis/AnaEx01 (AnaEx01-V09-02-00)
+- extended/analysis/AnaEx01 (AnaEx01-V09-02-00)                              (o)
   o Corrected GNUmakefile and some cleanup.
 - extended/electromagnetic/TestEm6 (testem6-V09-02-00)
   o Increased upper limit of energy in the tables to 1000 TeV.
-- extended/field/field04 (fieldex04-V09-02-00)
+- extended/field/field04 (fieldex04-V09-02-00)                               (o)
   o Commented out timing on initial seed to allow for reproducibility of
     results.
 - extended/hadronic/Hadr01 (exhadr01-V09-02-00)
   o Updated physics-list.
 - extended/persistency/gdml/G01 (G01-V09-02-03)
-  o Modified loop.gdml and matricesandloops.gdml to only demonstrate multiple
-    placements through the loop statement.
+  o Modified loop.gdml to only demonstrate multiple placements through the   (o)
+    loop statement.
+  o Modified matricesandloops.gdml as above.
   o Added possibility to run application in batch mode giving a macro
     as input (e.g.: load_gdml solids.gdml g01.gdml g01.in); option to be used
     by system testing for batch test.
