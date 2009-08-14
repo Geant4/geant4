@@ -37,7 +37,7 @@ List of fixes included in this public patch since the public release 9.2.p01:
 
   o Event:
     -----
-    + Minor chnages to G4GeneralParticleSourceMessenger to now use full range
+    + Minor changes to G4GeneralParticleSourceMessenger to now use full range
       of predefined units for length, energy and angle.
     + Fixed gcc-4.4.0 compilation warning message for non-initialised variable
       in G4SPSEneDistribution.
