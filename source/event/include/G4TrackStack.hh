@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.6 2006-06-29 18:09:13 gunter Exp $
+// $Id: G4TrackStack.hh,v 1.7 2009-08-15 15:45:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,6 +37,8 @@
 
 #include "G4StackedTrack.hh"
 #include "globals.hh"
+
+class G4SmartTrackStack;
 
 // class description:
 //
@@ -62,6 +64,7 @@ class G4TrackStack
       void GrabFromStack(G4StackedTrack * aStackedTrack);
       void clear();
       void TransferTo(G4TrackStack * aStack);
+      void TransferTo(G4SmartTrackStack * aStack);
 
   private:
       G4int n_stackedTrack;

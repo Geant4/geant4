@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: evmandefs.hh,v 1.4 2006-06-29 18:09:27 gunter Exp $
+// $Id: evmandefs.hh,v 1.5 2009-08-15 15:45:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,4 +35,9 @@
 #endif
 
 #include "trajectoryControl.hh"
+
+//================ G4SmartStack ===================
+//
+//#define G4_USESMARTSTACK 1
+//
 

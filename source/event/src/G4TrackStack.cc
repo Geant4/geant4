@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.6 2006-06-29 18:10:26 gunter Exp $
+// $Id: G4TrackStack.cc,v 1.7 2009-08-15 15:45:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4TrackStack.hh"
+#include "G4SmartTrackStack.hh"
 #include "G4VTrajectory.hh"
 
 G4TrackStack::G4TrackStack()
@@ -86,6 +87,12 @@ void G4TrackStack::TransferTo(G4TrackStack * aStack)
   n_stackedTrack = 0;
   firstStackedTrack = 0;
   lastStackedTrack = 0;
+}
+
+void G4TrackStack::TransferTo(G4SmartTrackStack * aStack)
+{
+  while(n_stackedTrack)
+  { aStack->PushToStack(PopFromStack()); }
 }
 
 G4StackedTrack * G4TrackStack::PopFromStack()

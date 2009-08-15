@@ -24,34 +24,66 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scorer.cc,v 1.2 2006-06-29 18:10:13 gunter Exp $
+// $Id: G4SmartTrackStack.hh,v 1.1 2009-08-15 15:45:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
 //
-// G4Scorer.cc
+//  Last Modification : 09/Dec/96 M.Asai
 //
-// ----------------------------------------------------------------------
 
-#include "G4Scorer.hh"
 
-G4Scorer::G4Scorer() 
-  :
-  fCellStoreScorer(fCellScorerStore)
+#ifndef G4SmartTrackStack_h
+#define G4SmartTrackStack_h 1
+
+#include "G4StackedTrack.hh"
+#include "G4TrackStack.hh"
+#include "globals.hh"
+
+// class description:
+//
+//  This is a stack class used by G4StackManager. This class object
+// stores G4StackedTrack class objects in the form of bi-directional
+// linked list.
+
+class G4SmartTrackStack 
 {
-  fCellScorerStore.SetAutoScorerCreate();
-}
+  public:
+      G4SmartTrackStack();
+      ~G4SmartTrackStack();
 
-G4Scorer::~G4Scorer()
-{
-}
+  private:
+      const G4SmartTrackStack & operator=
+                          (const G4SmartTrackStack &right);
+      G4int operator==(const G4SmartTrackStack &right) const;
+      G4int operator!=(const G4SmartTrackStack &right) const;
 
-void G4Scorer::Score(const G4Step &aStep, const G4GeometryCellStep &aPStep){
-  fCellStoreScorer.Score(aStep, aPStep);
-}
+  public:
+      void PushToStack(G4StackedTrack * aStackedTrack);
+      G4StackedTrack * PopFromStack();
+      void clear();
+      void TransferTo(G4TrackStack * aStack);
 
-const G4MapGeometryCellCellScorer &G4Scorer::GetMapGeometryCellCellScorer() const {
-  return fCellScorerStore.GetMapGeometryCellCellScorer();
-}
+  private:
+      G4int fTurn;
+      G4int nTurn; // should be 5
+      G4TrackStack* stacks[5];
+      // = 0 : all primaries and secondaries except followings
+      // = 1 : secondary neutrons
+      // = 2 : secondary electrons
+      // = 3 : secondary gammas
+      // = 4 : secondary positrons
+
+  public:
+      inline G4int GetNTrack() const
+      { return n_stackedTrack(); }
+
+  private:
+      inline G4int n_stackedTrack() const
+      {
+        return stacks[0]->GetNTrack()+stacks[1]->GetNTrack()
+         +stacks[2]->GetNTrack()+stacks[3]->GetNTrack()+stacks[4]->GetNTrack();
+      }
+};
+
+#endif
 
