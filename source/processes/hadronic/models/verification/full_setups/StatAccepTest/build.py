@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
+# Last update: 14-Aug-2009.
+#
 # This Python script has the following input parameters:
 #
 #   1) the Geant4 reference tag ; example:  9.2.p01
@@ -241,7 +243,7 @@ setupFile = open( "setup.sh", "w" )
 
 setupFile.write( "#!/bin/sh \n" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirJun09 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirAug09 \n" )   #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -335,22 +337,16 @@ setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/plists/$G4SYSTE
 
 setupFile.write( "export G4WORKDIR=$PWD \n" )
 setupFile.write( "export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM \n" )
-setupFile.write( "export G4ANALYSIS_USE=1 \n" )
+setupFile.write( "export G4ANALYSIS_USEROOT=1 \n" )
 
-setupFile.write( "export CERNLIB_DIR=$DIR_INSTALLATIONS/dirCERNLIB \n" )
-setupFile.write( "export PATH=$DIR_INSTALLATIONS/diriAIDA/bin:${PATH} \n" )
-setupFile.write( "eval `aida-config --runtime sh` \n" )
+setupFile.write( "export ROOTSYS=$DIR_INSTALLATIONS/dirROOT \n" )
+setupFile.write( "export PATH=${PATH}:$ROOTSYS/bin \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTSYS/lib \n" )
 
-setupFile.write( "export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$DIR_STAT/lib:$LD_LIBRARY_PATH \n" )
-
-setupFile.write( "export GSL_DIR=$DIR_INSTALLATIONS/dirGSL \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib \n" )
-
-setupFile.write( "export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW \n" )
-
-setupFile.write( "export EXPAT_DIR=$DIR_INSTALLATIONS/dirExtra/dirExpat \n" )
-setupFile.write( "export LD_LIBRARY_PATH=$EXPAT_DIR/lib:$LD_LIBRARY_PATH \n" )
+# The following is needed by ROOT to find libG4TypesDict.so, which has
+# been created with the reference version of Geant4 and copied by hand
+# from $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/ .
+setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4WORKDIR/lib_`uname -i`/$G4SYSTEM \n" )
 
 # If the beam energy is below a given threshold (in GeV) then
 # no biasing is used (i.e. the StackingAction is not used).

@@ -7,16 +7,13 @@
 #include <set>
 #include "G4ThreeVector.hh"
 
-#ifdef G4ANALYSIS_USE
-namespace AIDA {
-  class IAnalysisFactory;
-  class IHistogramFactory;
-  class ITree;
-  class IHistogram1D;
-  class IHistogram2D;
-  class ITuple;
-  class IPlotter;
-}
+#ifdef G4ANALYSIS_USEROOT
+#include <TFile.h>
+#include <TList.h>
+#include <string>
+class TTree;
+class TH1;
+class TH2;
 #endif
 
 class G4Step;
@@ -453,7 +450,6 @@ private:
   // Monitor the CPU time event by event.
   std::multiset<G4double> eventTimeSet;
 
-
   // You will find below the member variables and methods that
   // are needed to analyse the interactions using tracks and
   // vertices.
@@ -576,124 +572,95 @@ private:
   void analysisTrackAndVertices_3();
   void analysisTrackAndVertices_4();
 
-
-#ifdef G4ANALYSIS_USE
-
-  // AIDA stuff from now on.
-  AIDA::IAnalysisFactory* analysisFactory;
-  AIDA::ITree* tree;
-  AIDA::ITuple* tuple;
-  AIDA::IHistogramFactory* histoFactory;
-
-  // Summary histograms for the longitudinal and transverse shower profiles. 
-  AIDA::IHistogram1D* longitudinalProfileHisto;
-  AIDA::IHistogram1D* transverseProfileHisto;
-
-  // Step Energy vs. Step Length information.
-  AIDA::IHistogram2D* h2stepEvsL_active;
-  AIDA::IHistogram2D* h2stepEvsL_electron_active;
-  AIDA::IHistogram2D* h2stepEvsL_muon_active;
-  AIDA::IHistogram2D* h2stepEvsL_pionCharged_active;
-  AIDA::IHistogram2D* h2stepEvsL_proton_active;
-  AIDA::IHistogram2D* h2stepEvsL_gamma_active;
-  AIDA::IHistogram2D* h2stepEvsL_neutron_active;
-  AIDA::IHistogram2D* h2stepEvsL_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_electron_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_muon_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_pionCharged_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_proton_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_gamma_absorber;
-  AIDA::IHistogram2D* h2stepEvsL_neutron_absorber;
-
-  // Kinetic spectra of some particles when entering an active layer.
-  AIDA::IHistogram1D* emSpectrum1[10];
-  AIDA::IHistogram1D* emSpectrum2[10];
-  AIDA::IHistogram1D* emSpectrum3[10];
-  AIDA::IHistogram1D* emSpectrum4[10];
-  AIDA::IHistogram1D* emSpectrum5[10];
-  AIDA::IHistogram1D* pionSpectrum1[10];
-  AIDA::IHistogram1D* pionSpectrum2[10];
-  AIDA::IHistogram1D* pionSpectrum3[10];
-  AIDA::IHistogram1D* pionSpectrum4[10];
-  AIDA::IHistogram1D* pionSpectrum5[10];
-  AIDA::IHistogram1D* protonSpectrum1[10];
-  AIDA::IHistogram1D* protonSpectrum2[10];
-  AIDA::IHistogram1D* protonSpectrum3[10];
-  AIDA::IHistogram1D* protonSpectrum4[10];
-  AIDA::IHistogram1D* protonSpectrum5[10];
-  AIDA::IHistogram1D* neutronSpectrum1[10];
-  AIDA::IHistogram1D* neutronSpectrum2[10];
-  AIDA::IHistogram1D* neutronSpectrum3[10];
-  AIDA::IHistogram1D* neutronSpectrum4[10];
-  AIDA::IHistogram1D* neutronSpectrum5[10];
-  AIDA::IHistogram1D* gammaSpectrum1[10];
-  AIDA::IHistogram1D* gammaSpectrum2[10];
-  AIDA::IHistogram1D* gammaSpectrum3[10];
-  AIDA::IHistogram1D* gammaSpectrum4[10];
-  AIDA::IHistogram1D* gammaSpectrum5[10];
-  AIDA::IHistogram1D* pionPlusSpectrum1[10];
-  AIDA::IHistogram1D* pionPlusSpectrum2[10];
-  AIDA::IHistogram1D* pionPlusSpectrum3[10];
-  AIDA::IHistogram1D* pionPlusSpectrum4[10];
-  AIDA::IHistogram1D* pionPlusSpectrum5[10];
-  AIDA::IHistogram1D* pionMinusSpectrum1[10];
-  AIDA::IHistogram1D* pionMinusSpectrum2[10];
-  AIDA::IHistogram1D* pionMinusSpectrum3[10];
-  AIDA::IHistogram1D* pionMinusSpectrum4[10];
-  AIDA::IHistogram1D* pionMinusSpectrum5[10];
-
-  // Now the same histograms, but weighted with 1/momentum
-  // (for the plots in logarithmic scale, i.e. where the
-  //  x-axis is  log_10( Ekin/MeV ), the weight is 
-  // 1/(Ekin*momentum) .
-  AIDA::IHistogram1D* emSpectrumWeighted1[10];
-  AIDA::IHistogram1D* emSpectrumWeighted2[10];
-  AIDA::IHistogram1D* emSpectrumWeighted3[10];
-  AIDA::IHistogram1D* emSpectrumWeighted4[10];
-  AIDA::IHistogram1D* emSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionSpectrumWeighted5[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted1[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted2[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted3[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted4[10];
-  AIDA::IHistogram1D* protonSpectrumWeighted5[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted1[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted2[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted3[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted4[10];
-  AIDA::IHistogram1D* neutronSpectrumWeighted5[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted1[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted2[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted3[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted4[10];
-  AIDA::IHistogram1D* gammaSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionPlusSpectrumWeighted5[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted1[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted2[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted3[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted4[10];
-  AIDA::IHistogram1D* pionMinusSpectrumWeighted5[10];
-
-  // Kinetic spectra of some particles when created.
-  AIDA::IHistogram1D* gammaSpectrum;
-  AIDA::IHistogram1D* neutronSpectrum;
-  AIDA::IHistogram1D* protonSpectrum;
-  AIDA::IHistogram1D* pionZeroSpectrum;
-  AIDA::IHistogram1D* pionPlusSpectrum;
-  AIDA::IHistogram1D* pionMinusSpectrum;
-
-#endif
+#ifdef G4ANALYSIS_USEROOT
+  TFile outFile;
+  TTree* tree;  // ROOT TTree
+  // All these are helper variables for TTree filling
+  std::vector< G4double >* plongitudinalProfile;
+  std::vector< G4double >* ptransverseProfile;
+  Int_t pID;
+  Float_t totEDepActiveLayer;
+  Float_t totEDepCalorimeter;
+  TList histoList;
+  // Histograms: helper function to book histograms. Example:
+  // TH1* h_myhisto = book1D< TH1D >( "name", "title", 100, 0.0, 10.0, "X", "Y" );
+  // TH2* h_2d      = book2D< TH2D >( "name", "title", 100, 0.0, 10.0, 100, 0.0, 10.0, 
+  //                                  "X", "Y", "Z" );
+  template < class H >
+  TH1* book1D( const char* name, const char* title,
+	       Int_t nbinx, Double_t minx, Double_t maxx,
+	       const char* xAxisTitle = NULL, const char* yAxisTitle = NULL ) {
+    H* h = new H( name, title, nbinx, minx, maxx );
+    if ( xAxisTitle )
+      h->GetXaxis()->SetTitle( xAxisTitle );
+    if ( yAxisTitle )
+      h->GetYaxis()->SetTitle( yAxisTitle );
+    histoList.Add( h );
+    return h;
+  }
+  template < class H >
+  TH2* book2D( const char* name, const char* title,
+	       Int_t nbinx, Double_t minx, Double_t maxx,
+	       Int_t nbiny, Float_t miny, Float_t maxy,
+	       const char* xAxisTitle = NULL, const char* yAxisTitle = NULL,
+	       const char* zAxisTitle = NULL ) {
+    H* h = new H( name, title, nbinx, minx, maxx, nbiny, miny, maxy );
+    if ( xAxisTitle )
+      h->GetXaxis()->SetTitle( xAxisTitle );
+    if ( yAxisTitle )
+      h->GetYaxis()->SetTitle( yAxisTitle );
+    if ( zAxisTitle )
+      h->GetZaxis()->SetTitle( zAxisTitle );
+    histoList.Add( h );
+    return h;
+  }
+  TH1* h_longitudinalProfile;
+  TH1* h_transverseProfile;
+  typedef std::map< std::string, TH1* > histoMap_t;
+  typedef histoMap_t::iterator histoMapIt_t;
+  typedef histoMap_t::const_iterator histoMapConstIt_t;
+  histoMap_t h_Spectrum;
+  histoMap_t h_stepEvsL;
+  // Enumerator for spectra energy range
+  enum SpectraERange {
+	  E100, // Energy up to 100   GeV
+	  E10,  // Energy up to  10   GeV
+	  E1,   // Energy up to   1   GeV
+	  E01,  // Energy up to   0.1 GeV
+	  ELOG  // Log10 from  0.1 keV  to  1 TeV
+  };
+  typedef std::string spectra_t;
+  // This function is used to generate the key for the histograms of spectra in layers.
+  // parameter  ptype  is the particle type, e.g. electronId;
+  // parameter  etype  is the energy range, see SpectraERange enum;
+  // parameter  layer  is the layer number 0-9;
+  // parameter  combinedPions  if true consider the pions all together.
+  // Returns a pair: first the key, second a human readable string (histogram title).
+  std::pair< spectra_t, std::string > getKey( const G4int& partId, 
+					      const SpectraERange& etype, 
+					      const unsigned int& layer, 
+					      bool combinePions = true ) const;
+  typedef std::map< spectra_t, TH1* > histoSpectraMap_t;
+  typedef histoSpectraMap_t::iterator histoSpectraMapIt_t;
+  typedef histoSpectraMap_t::const_iterator histoSpectraMapConstIt_t;
+  histoSpectraMap_t h_SpectraFlux;
+  histoSpectraMap_t h_SpectraFluxWeight;
+  // This keeps track of unknown particles that do not fill spectra.
+  // The first element of the pair is a counter, the second is the sum of Ekin (MeV).
+  typedef std::map< std::string, std::pair< unsigned int, G4double > > unknownCounter_t;
+  typedef unknownCounter_t::iterator unknownCounterIt_t;
+  typedef unknownCounter_t::const_iterator unknowCounterConstIt_t;
+  unknownCounter_t unknownCounter;
+  struct printUnknownMap {
+    void operator() ( const std::pair< std::string, 
+		                       std::pair< unsigned int, G4double > >& elem ) {
+      G4cout << elem.first << " N=" << elem.second.first 
+	     << " Tot Ekin=" << elem.second.second << " (MeV)" << G4endl;
+    }
+  };
+#endif // G4ANALYSIS_USEROOT
 
 };
-
 
 inline bool StatAccepTestAnalysis::getIsHistogramOn() {
   return isHistogramOn;

@@ -6,6 +6,11 @@ ifdef HISTOGRAMS_ON
   CPPFLAGS += -DflagHISTOGRAMS_ON
 endif
 
+ifdef G4ANALYSIS_USEROOT
+  EXTRALIBS += $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o
+  EXTRA_LINK_DEPENDENCIES := $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libG4TypesDict.so
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all
@@ -14,12 +19,29 @@ all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-ifdef G4ANALYSIS_USE  
-  CPPFLAGS += `aida-config --include`
-  LDFLAGS  += `aida-config --lib`
-  LOADLIBS += `aida-config --lib`
+ifdef G4ANALYSIS_USEROOT
+  CPPFLAGS += -DG4ANALYSIS_USEROOT
+  CPPFLAGS += `root-config --cflags`
+  LDFLAGS  += `root-config --libs`
 endif
 
 ifdef FULLY_STATIC_EXECUTABLE
   LDFLAGS  += -static
 endif 
+
+$(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libG4TypesDict.so: $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o
+ifdef CPPVERBOSE
+	g++ $(CPPFLAGS) -shared -fPIC -Wl,-soname,libG4TypesDict.so -o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libG4TypesDict.so $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o
+else
+	@g++ $(CPPFLAGS) -shared -fPIC -Wl,-soname,libG4TypesDict.so -o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libG4TypesDict.so $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o
+endif
+
+$(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o: src/G4TypesLinkDef.h
+ifdef CPPVERBOSE
+	rootcint -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.cxx -c -I$(G4INSTALL)/source/global/management/include G4Types.hh src/G4TypesLinkDef.h
+	g++ $(CPPFLAGS) -fPIC -c -o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.cxx
+else
+	@rootcint -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.cxx -c -I$(G4INSTALL)/source/global/management/include G4Types.hh src/G4TypesLinkDef.h
+	@g++ $(CPPFLAGS) -fPIC -c -o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.o $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/G4TypesDict.cxx
+endif
+

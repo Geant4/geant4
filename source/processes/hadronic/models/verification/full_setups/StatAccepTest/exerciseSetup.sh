@@ -1,5 +1,11 @@
 #!/bin/sh
 #
+#----------------------------------------------------------------------------
+# Last update: 14-Aug-2009.
+#
+# Setup script. 
+#----------------------------------------------------------------------------
+#
 #***LOOKHERE***
 export VO_GEANT4_SW_DIR=$PWD/..
 #
@@ -56,22 +62,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4LIB/plists/$G4SYSTEM
 # --- Setup your Geant4 application environment ---
 export G4WORKDIR=$PWD
 export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
-export G4ANALYSIS_USE=1
+export G4ANALYSIS_USEROOT=1
 #
-# --- AIDA ---
-export CERNLIB_DIR=$DIR_INSTALLATIONS/dirCERNLIB
-export PATH=$DIR_INSTALLATIONS/diriAIDA/bin:$PATH
-eval `aida-config --runtime sh`
-#
-# --- Statistical toolkit ---
-export DIR_STAT=$DIR_INSTALLATIONS/dirStatisticalToolkit
-export LD_LIBRARY_PATH=$DIR_STAT/lib:$LD_LIBRARY_PATH
-#
-# --- GSL : this is needed only for  dirStat/pvalue.cpp ---
-export GSL_DIR=$DIR_INSTALLATIONS/dirGSL
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GSL_DIR/lib
-#
-# --- PAW
-export PATH=$PATH:$DIR_INSTALLATIONS/dirPAW
+# --- ROOT ---
+export ROOTSYS=/afs/cern.ch/sw/lcg/app/releases/ROOT/5.24.00/slc4_amd64_gcc34/root
+export PATH=$PATH:$ROOTSYS/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTSYS/lib
 #
 export PHYSLIST=FTFP

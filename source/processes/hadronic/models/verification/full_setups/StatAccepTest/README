@@ -1,5 +1,5 @@
 
- Last update: 11-Aug-2009
+ Last update: 16-Aug-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -18,6 +18,9 @@
  found in the parent directory of the application directory 
  (i.e. in ../StatAccepTest/), then this release is used; if not, 
  then it will be taken from $VO_GEANT4_SW_DIR/dirInstallations .
+ However, recently (2009) we have found more convenient (and
+ indeed needed on OSG sites) to ship directly the binaries
+ (see below for more details).
 
  If you want to run on your computer, then you need to modify
  the setup script: look at  exerciseSetup.sh  and  build.py .
@@ -34,18 +37,34 @@
  If $PHYSLIST is undefined, then by default the Physics List 
  QGSP_BERT will be automatically selected. 
 
- If you run on the Grid, for each OS (e.g. SLC4, SLC5) you
- do not need a separate tar-ball for 32-bits and 64-bits
- architectures. Instead, you can prepare a single tar-ball
- containing the following 6 executables:
+ If you run on the Grid, for each platform (e.g. SLC4 32-bits, 
+ SLC4 64-bits, SLC5 64-bits, etc.) you need a different 
+ installation tar-ball; however, for the application tar-ball,
+ you do not need a separate tar-ball for 32-bits and 64-bits
+ architectures (but SLC4 and SLC5 must be kept separated).
+ Instead, you can prepare a single tar-ball containing the 
+ following 4 executables:
    1) 32-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-i386 
    2) 32-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-i386 
    3) 64-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-x86_64
    4) 64-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-x86_64
-   5) 32-bits pvalue :     pvalue-i386
-   6) 64-bits pvalue :     pvalue-x86_64
  Notice that you can get "i386" or "x86_64" with the command
  `uname -i` .
+ Furthermore, in order to let ROOT to find the library
+ libG4TypesDict.so , which is automatically created when you
+ build the binaries in:
+    $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/
+ you need to create by hand the subdirectories:
+    a)  $G4WORKDIR/lib_i386/Linux-g++/  
+    b)  $G4WORKDIR/lib_x86_64/Linux-g++/
+ and then copy (by hand) such library:
+   cp $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/libG4TypesDict.so \
+      $G4WORKDIR/lib_`uname -i`/Linux-g++/
+ and finally setting the library path:
+ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/
+ After that, you can delete the directory $G4WORKDIR/tmp .
+ Notice that it does not matter which version of Geant4
+ you use: in practice, you can use the reference version. 
 
  If you want to build a fully static executable (this can be
  convenient if you want to avoid to build it on the remote
@@ -53,12 +72,11 @@
  you need to define the environmental variable
        export FULLY_STATIC_EXECUTABLE=1
  before building the executable.
- The same is true for the  dirStat/pvalue  executable.
  Notice that at run time the variable $FULLY_STATIC_EXECUTABLE
  is not used at all.
- It could be that you are not allowed to build a fully static
- executable because of iAIDA (this seems the case in 32-bits
- platforms).
+ With this variable you can avoid to use the shared libraries
+ of Geant4, but in general you won't get a fully static
+ executable.
 
  If you want to activate the Stacking Action, in order to run
  in biasing mode, then you need to define the environmental
@@ -107,9 +125,6 @@
  of lambda (of the absorber) or in [mm]. The bins have incresing
  size as the radius grows, in such a way to keep enough statistics
  in spite of the rapid decrease of the shower with the radius.   
- Notice that, due to HBOOK limitations, there should be not
- more than 100 layers for the longitudinal shower profile, 
- and not more than 30 layers for the lateral shower profile.
  
  In the case of Scintillator as active material, it is possible
  to switch on the quenching effect as described by the Birks' law.
@@ -120,18 +135,19 @@
  In the case you want to run the simulation only to get the 
  information printed out (in the screen) at the end of execution,
  without the ntuple and the histograms, then it is enough to
- not define the environmental variable  G4ANALYSIS_USE . 
- In this case, you do not need AIDA.
+ not define the environmental variable  G4ANALYSIS_USEROOT . 
+ In this case, you do not need ROOT.
 
- If the environmental variable G4ANALYSIS_USE is defined (and
- you have an AIDA implementation), then the output of the program
- is an HBOOK ntuple  * ntuple.hbook *  which contains some 
+ If the environmental variable G4ANALYSIS_USEROOT is defined 
+ (and you have somewhere a ROOT installation, specified in
+  the environmental variable ROOTSYS), then the output of the 
+ program is a ROOT tree  * ntuple.tree *  which contains some 
  physics variables, like the total energy deposit in the active layers,
  the total deposit in the whole calorimeter, the energy deposit in 
  each active layer, and the transverse energy deposition sum over all
  the active layers, in a certain number of radial bins.
 
- In the same HBOOK file, also a number of histograms can be
+ In the same ROOT file, also a number of histograms can be
  produced, describing the following information:
     -  step energy vs. step length (2D histograms)
     -  kinetic energy spectra of some particles, entering
@@ -142,22 +158,33 @@
   energy vs. length) are switched off, whereas the others are
   active.)
 
- The ntuple is then used in the stand-alone (i.e. independent from
- Geant4) program  pvalue , in the subdirectory dirStat/.
- This program reads two ntuples, ntuple_a.hbook and ntuple_b.hbook,
- which can be obtained by running the same simulation program,
- mainStatAccepTest, and with same configuration, run.g4,
- for the two versions of Geant4 that we want to compare.
- The program pvalue make the statitical tests between the
- various distributions, and signal a  ***WARNING***  when the
- p-value of that test is below a certain threshold, fixed at 1%.
- Notice that this does not mean necessarily that the two 
- distributions are statistically incompatible with each other,
- because, by definition, 1% of pair of distributions coming
- from the same parent distributions have a p-value below 1%.
+ If you run twice the same program, or once by linking against
+ a given version of Geant4, and another by linking against a
+ different version of Geant4, then you have two trees:
+     ntuple_a.root  and  ntuple_b.root .
+ You can make a statistical tests of the various observables
+ contained in the two trees by calling the ROOT macro:
+       mainRootScript.C
+ (which, in turn, makes use of  extraRootFunctions.C ).
+ For a given observable, if the p-value of the statistical test
+ is below a certain threshold, currently fixed at 1%, then
+ a PostScript file is automatically produced showing the two
+ distributions.
+ Notice that the fact that the p-value is below the threshold
+ does not mean necessarily that the two distributions are 
+ statistically incompatible with each other, because, 
+ by definition, 1% of the pairs of distributions coming from 
+ the same parent distribution have a p-value below 1%.
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
- presence of a bug.
+ presence of a bug or by a change in the hadronic models.
+ Due to current limitations of ROOT, we are using only the
+ Kolmogorov unbinned statistical tests (and not any longer the
+ other two tests, Cramer-von Mises and Anderson-Darling, that
+ were available with the Statistical Toolkit. 
+ The old directory:  dirStat/
+ where the Statistical Toolkit where used with AIDA, is not
+ needed anymore, but it is left there for reference.)
  Colours convention used in the plots: the first Geant4 version,
  i.e. "REF1" in the main script mainScript.py, is plotted in RED; 
  the second Geant4 version, i.e. "REF2" in mainScript.py, is 
@@ -180,27 +207,31 @@
    o  average step length and number of steps for some particles;
    o  information about the kinetic energy of exiting particles.
 
- Some scripts and one kumac has been provided to allow a full
- automatization of this Statistical Acceptance suite.
- Here is the structure of these scripts/kumac:
+ Some scripts/macros (shell, Python, and ROOT) are provided to allow
+ a full automatization of this Statistical Acceptance suite.
+ Here is the structure of these scripts:
 
     1)  mainScript.py 
          ---> 2)  simuDriver.sh  
                   ---> 3a)  build.py
                   ---> 3b)  execute mainAcceptanceTest
-                  ---> 3c)  dirStat/driver.py        
-                            ---> 4)  drivePlot.py
-                                     ---> 5a)  execute  pvalue 
-                                     ---> 5b)  plot.py
-                                               ---> 6) plot.kumac
+                  ---> 3c)  drivePlot.py
+                            ---> 4)  execute  mainRootScript.C
 
  only the first one, mainScript.py , needs to be modified by the user.
+ ( TO-DO: 
+   Possible future improvements:
+     a)  Use PyROOT instead of ROOT directly;
+     b)  Replace the shell scripts with Python scripts;
+     c)  Add other statistical tests 
+         (like (unbinned) Cramer-von Mises and Anderson-Darling).
+ ) 
 
  After the whole simulation is completed, a post-processing phase
  must be performed in order to produce plots of various observables.
  This phase requires that all the output files of the simulation
  are collected in the same directory tree (eventual with a 
- subdirectory structure), whereas the HBOOK files (ntuples) are
+ subdirectory structure), whereas the ROOT files (ntuples) are
  not needed. 
  The subdirectory  dirObservables/  contains a Python script,
  observables.py , and some kumacs that are invoked by the script

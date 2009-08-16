@@ -9,20 +9,18 @@
 #include "G4ProcessType.hh"
 #include "G4HadronicProcessType.hh"
 
-#ifdef G4ANALYSIS_USE
-#include <AIDA/AIDA.h>
-
-//***TEMPORARY WORK-AROUND*** : need  AIDA_Dev/  subdirectory at the
-//                              same level as  AIDA/  in PI/PI_1_3_0/include .
-//                              But it does not work! 
-// // //#include <AIDA_Dev/IDevHistogram1D.h>
+#ifdef G4ANALYSIS_USEROOT
+#include <TTree.h>
+#include <TH1D.h>
+#include <TH1F.h>
+#include <TH2D.h>
 #endif
 
 //***LOOKHERE***
 bool StatAccepTestAnalysis::isHistogramOn = true;
-bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = false;
+bool StatAccepTestAnalysis::is2DHistogramStepLvsEOn = true;
 bool StatAccepTestAnalysis::isHistogramSpectrumUnweightedOn = true;
-bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = false;  
+bool StatAccepTestAnalysis::isHistogramSpectrumWeightedOn = true;
 bool StatAccepTestAnalysis::isCountingProcessesOn = false;  
 bool StatAccepTestAnalysis::isMapParticleNamesOn = false;  
 bool StatAccepTestAnalysis::isMapInfoAboutTrackOn = false;  
@@ -79,70 +77,128 @@ StatAccepTestAnalysis::StatAccepTestAnalysis() :
   , antiProtonId( G4AntiProton::AntiProtonDefinition()->GetPDGEncoding() )
   , neutronId( G4Neutron::NeutronDefinition()->GetPDGEncoding() )
   , antiNeutronId( G4AntiNeutron::AntiNeutronDefinition()->GetPDGEncoding() )
-  //
-#ifdef G4ANALYSIS_USE
-  , analysisFactory( 0 ), tree( 0 ), tuple( 0 ), histoFactory( 0 )
-  , longitudinalProfileHisto( 0 ), transverseProfileHisto( 0 )
+#ifdef G4ANALYSIS_USEROOT
+  , outFile( "ntuple.root", "recreate" ), tree( 0 )
+  , plongitudinalProfile( 0 ), ptransverseProfile( 0 )
+  , h_longitudinalProfile( 0 ), h_transverseProfile( 0 )
 #endif
-
 {
-#ifdef G4ANALYSIS_USE
-  analysisFactory = AIDA_createAnalysisFactory();
-  if ( analysisFactory ) {    
-    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if ( treeFactory ) {
-      // Trees in memory: create a "tree" associated to an hbook file,
-      // which will be filled with an ntuple, and several other trees
-      // associated to an XML file, for data sets.
-      bool readOnly = false;  // we want to write.
-      bool createNew = true ; // create file if it doesn't exist.
-      tree = treeFactory->create( "ntuple.hbook", "hbook", readOnly, createNew );
-      if ( tree ) {
-	// Get a tuple factory :
-	AIDA::ITupleFactory* tupleFactory = analysisFactory->createTupleFactory( *tree );
-	if ( tupleFactory ) {
-	  // Create a tuple :
-	  std::string description = "float ID, E, EDEP_ACT, EDEP_CAL; "; 
-          description += "int nLayers, nBinR; ";
-          description += "Tuple{ float L} L; ";
-          description += "Tuple{ float R} R"; 
-	  std::string option = "nLayers[0,100] L(nLayers) nBinR[0,30] R(nBinR)";
-	  tuple = tupleFactory->create("1","Event info", description, option);
-	  assert( tuple );
-	  delete tupleFactory;
-	}
-        // Create a factory for histograms :
-        histoFactory = analysisFactory->createHistogramFactory( *tree );  
-      }
-      delete treeFactory; // It will not delete the ITree.
+#ifdef G4ANALYSIS_USEROOT
+    if ( outFile.IsZombie() ) {
+      G4cerr << "*ERROR* Cannot open ntuple.root file." 
+	     << "        Ntuple and histograms will not be saved." << G4endl;
     }
-  }
-#endif
+    tree = new TTree( "SimplifiedCalorimeter", "SimplifiedCalorimeter Tree" );
+    tree->Branch( "ID",       &primaryParticleId,     "id/I" );
+    tree->Branch( "E",        &beamEnergy,            "E/D" );
+    tree->Branch( "nLayers",  &numberOfReadoutLayers, "nLayers/I" );
+    tree->Branch( "nBinR",    &numberOfRadiusBins,    "nBinR/I" );
+    tree->Branch( "EDEP_ACT", &totEDepActiveLayer,    "EDEP_ACT/F" );
+    tree->Branch( "EDEP_CAL", &totEDepCalorimeter,    "EDEP_CAL/F");
+    // This needs an explanation: longitudinal and transverse are 
+    // of type  std::vector< G4double >  therefore we need to create
+    // the branch using the syntax for objects: 
+    //  TTree::Branch( const char** barnchName, 
+    //                 const char** className, 
+    //                 void ** object, ... ) 
+    // so (see the third argument) we need a pointer to the 
+    // pointer of the class.
+    plongitudinalProfile = &longitudinalProfile;
+    tree->Branch( "L", "std::vector<G4double>", &plongitudinalProfile );
+    ptransverseProfile = &transverseProfile;
+    tree->Branch( "R", "std::vector<G4double>", &ptransverseProfile );
+#endif // G4ANALYSIS_USEROOT
 }
 
 
 StatAccepTestAnalysis::~StatAccepTestAnalysis() {}
 
 
+#ifdef G4ANALYSIS_USEROOT
+std::pair< StatAccepTestAnalysis::spectra_t, std::string >
+StatAccepTestAnalysis::getKey( const G4int& pId, 
+			       const SpectraERange& etype, 
+			       const unsigned int& layer, 
+			       bool combinedPions ) const {
+  std::string p, t;
+  if ( pId == electronId  ||  pId == positronId ) { 
+    p = "e"; 
+    t = "e^{-} e^{+}";
+  } else if ( combinedPions  &&  ( pId == pionPlusId   || 
+				   pId == pionMinusId  || 
+				   pId == pionZeroId ) ) { 
+    p = "pi"; 
+    t = "#pi^{+-0}";
+  } else if ( pId == protonId  ||  pId==antiProtonId ) { 
+    p = "p"; 
+    t = "proton";
+  } else if ( pId == neutronId  ||  pId == antiNeutronId ) { 
+    p = "n"; 
+    t = "neutron";
+  } else if (  pId == gammaId ) { 
+    p = "gamma"; 
+    t = "#gamma";
+  } else if ( pId == pionPlusId ) { 
+    p = "piPlus"; 
+    t = "#pi^{+}"; 
+  } else if ( pId == pionMinusId ) { 
+    p = "piMinus"; 
+    t = "#pi^{-}"; 
+  } else {
+    return std::pair< spectra_t, std::string >( spectra_t( "" ), "" );
+  }
+  std::map< SpectraERange, std::string > m;
+  m[ E100 ] = "E100";
+  m[ E10 ]  = "E10";
+  m[ E1 ]   = "E1";
+  m[ E01 ]  = "E01";
+  m[ ELOG ] = "ELOG";
+  char buf[30];
+  sprintf( buf, "h_%s_%s_%d", p.c_str(), m[ etype ].c_str(), layer );
+  char title[256];
+  sprintf( title, "Spectrum %s , Layer %d ", t.c_str(), layer );
+  return std::make_pair< spectra_t, std::string >( spectra_t( buf ), std::string( title ) );
+}
+#endif // G4ANALYSIS_USEROOT
+
+
 void StatAccepTestAnalysis::close() {
-#ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USEROOT
+#ifdef G4VERBOSE
   if ( tree ) {
-    tree->commit();
-    tree->close();
-  }
-  if ( tree ) {
-    delete tree;
-    tree = 0;
-  }
-  if ( analysisFactory ) {
-    delete analysisFactory;
-    analysisFactory = 0;
-  }
-  if ( histoFactory ) {
-    delete histoFactory;
-    histoFactory = 0;
+    tree->Print();
   }
 #endif
+  int nbytes = 0;
+  if ( ! outFile.IsZombie() ) {
+    // We used the AutoSave feature to save the ntuple tree periodically.
+    // We thus use option kWriteDelete to ask ROOT to delete from the TFile
+    // all previous (if any) copies of the tree from the file.
+    // We also use (the slow) "delete after write" option to increase security
+    // otherwise, if, for any reason, Write() would fail we would lose the tree.
+    nbytes = outFile.Write( 0, TObject::kWriteDelete );
+  }
+  if ( tree ) { // The tree will be deleted by calling TFile::Close()
+    tree = NULL;
+  }
+  // Actually histograms will be saved in the file, thus they will be deleted
+  // automatically when the file is closed, but this is harmless anyway
+  // (the TFile will recognize the histos have been already deleted).
+  // Note that if the TH1::AddDirectory(false) method has been called
+  // histograms are not added to the file and thus not deleted automatically.
+  // This will clean also them (provided that have been booked with the
+  // book<>(...) method
+  histoList.Delete();
+  if ( ! outFile.IsZombie() ) { // Safely close the file
+    G4cout << "Wrote file " << outFile.GetName() << " (" 
+	   << nbytes/(1.e+6) << "MB)" << G4endl;
+    outFile.Close();
+  }
+  G4cout << "Spectra do not include the following particles:" << G4endl
+         << "=====================" << G4endl;
+  std::for_each( unknownCounter.begin(), unknownCounter.end(), printUnknownMap() );
+  G4cout << "=====================" << G4endl;
+#endif // G4ANALYSIS_USEROOT
 }
 
 
@@ -167,8 +223,8 @@ void StatAccepTestAnalysis::init() {
   // the result of the simulation, i.e. the content of the
   // ntuple in the file ntuple.hbook.
 
-#ifdef G4ANALYSIS_USE  
-  if ( tuple ) tuple->reset();
+#ifdef G4ANALYSIS_USEROOT
+  tree->Reset();
 #endif
 
   longitudinalProfile.clear();
@@ -579,540 +635,275 @@ void StatAccepTestAnalysis::init( const G4int numberOfReplicasIn,
   //       << "\t radiusBin             = " << radiusBin/mm << " mm" 
   //       << G4endl;  //***DEBUG***
 
-#ifdef G4ANALYSIS_USE
-  assert( histoFactory );
-  if ( histoFactory ) {
- 
-    // Create two histograms: one for the longitudinal shower profile,
-    // and one for the transverse shower profile.
-    // // // if ( ! tree->find( "50" ) ) {
-    longitudinalProfileHisto = 
-      histoFactory->createHistogram1D("50", "Longitudinal shower profile", 
-				      numberOfReadoutLayers, 0.0, 
-				      1.0*numberOfReadoutLayers );
-    //G4cout << " Created longitudinalProfileHisto " << G4endl;
-    // // // if ( ! tree->find( "60" ) ) {
-    transverseProfileHisto = 
-      histoFactory->createHistogram1D("60", "Transverse shower profile", 
-				      numberOfRadiusBins, 0.0, 1.0*numberOfRadiusBins );
-    //G4cout << " Created transverseProfileHisto " << G4endl;
-
-    // Kinetic spectra of some particles when they are created.
-    // The x-axis is LOG10(energy/MeV), from inf=-4.0 to sup=+6.0
-    // (i.e. from 0.1 keV up to 1000 GeV), with 1000 (logarithmic) 
-    // bins. 
-    gammaSpectrum = histoFactory->
-      createHistogram1D( "71", "log10(energy/MeV) for gamma", 1000, -4.0, 6.0 );
-    neutronSpectrum = histoFactory->
-      createHistogram1D( "72", "log10(energy/MeV) for neutron", 1000, -4.0, 6.0 );
-    protonSpectrum = histoFactory->
-      createHistogram1D( "73", "log10(energy/MeV) for proton", 1000, -4.0, 6.0 );
-    pionZeroSpectrum = histoFactory->
-      createHistogram1D( "74", "log10(energy/MeV) for pionZero", 1000, -4.0, 6.0 );
-    pionPlusSpectrum = histoFactory->
-      createHistogram1D( "75", "log10(energy/MeV) for pionPlus", 1000, -4.0, 6.0 );
-    pionMinusSpectrum = histoFactory->
-      createHistogram1D( "76", "log10(energy/MeV) for pionMinus", 1000, -4.0, 6.0 );
-
+#ifdef G4ANALYSIS_USEROOT
+  if ( outFile.IsZombie() == kFALSE ) outFile.cd(); // Save histograms in file.
+  histoList.Delete(); // This recursively cleans the list calling delete 
+                      // for each element of the list.
+  h_longitudinalProfile = book1D< TH1D >( "hLongProfile", 
+					  "Longitudinal Shower Profile",
+					  numberOfReadoutLayers,
+					  -0.5,
+					  1.0*numberOfReadoutLayers - 0.5,
+					  "Layer",
+					  "<E> (MeV)" );
+  h_transverseProfile =   book1D< TH1D >( "hTransvProfile",
+					  "Transverse Shower Profile",
+					  numberOfRadiusBins,
+					  -0.5, 
+					  1.0*numberOfRadiusBins - 0.5,
+					  "Radial Layer",
+					  "<E> (MeV)" );
+  const Int_t nbinx = 1000;
+  const Float_t minx = -4.0;
+  const Float_t maxx = 6.0;
+  if ( ! outFile.IsZombie() ) {
+    TDirectory* dir = outFile.mkdir( "Spectra" );
+    if ( dir ) {
+      dir->cd();
+    } else {
+      outFile.cd( "Spectra" );
+    }
   }
-
-  // Create all the other histograms.
-  if ( isHistogramOn && histoFactory ) {
-
-      // Step Energy versus step Length.
-      if ( is2DHistogramStepLvsEOn ) {
-	h2stepEvsL_active = 
-	  histoFactory->createHistogram2D( "80", "Step: Energy(MeV) vs. Length(mm), active", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_electron_active = 
-	  histoFactory->createHistogram2D( "81", "Step: Energy(MeV) vs. Length(mm), active, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_muon_active = 
-	  histoFactory->createHistogram2D( "82", "Step: Energy(MeV) vs. Length(mm), active,  MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_pionCharged_active = 
-	  histoFactory->createHistogram2D( "83", "Step: Energy(MeV) vs. Length(mm), active, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_proton_active = 
-	  histoFactory->createHistogram2D( "84", "Step: Energy(MeV) vs. Length(mm), active, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_gamma_active = 
-	  histoFactory->createHistogram2D( "85", "Step: Energy(MeV) vs. Length(mm), active, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_neutron_active = 
-	  histoFactory->createHistogram2D( "86", "Step: Energy(MeV) vs. Length(mm), active, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_absorber = 
-	  histoFactory->createHistogram2D( "90", "Step: Energy(MeV) vs. Length(mm), absorber", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_electron_absorber = 
-	  histoFactory->createHistogram2D( "91", "Step: Energy(MeV) vs. Length(mm), absorber, ELECTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_muon_absorber = 
-	  histoFactory->createHistogram2D( "92", "Step: Energy(MeV) vs. Length(mm), absorber, MUON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_pionCharged_absorber = 
-	  histoFactory->createHistogram2D( "93", "Step: Energy(MeV) vs. Length(mm), absorber, PION charged", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_proton_absorber = 
-	  histoFactory->createHistogram2D( "94", "Step: Energy(MeV) vs. Length(mm), absorber, PROTON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_gamma_absorber = 
-	  histoFactory->createHistogram2D( "95", "Step: Energy(MeV) vs. Length(mm), absorber, GAMMA", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-	h2stepEvsL_neutron_absorber = 
-	  histoFactory->createHistogram2D( "96", "Step: Energy(MeV) vs. Length(mm), absorber, NEUTRON", 100, 0.0, 10.0, 100, 0.0, 10.0 );
-      }
-
-      // Kinetic spectra of some particles in some planes (normal
-      // to the beam direction).
-      // We evaluate the kinetic spectra in 10 active layers,
-      // uniformely spread along the calorimeter.
-      // Here is the decoding of the histograms:
-      //    [particle type]*1000 + [energy type]*100 + [layer number]
-      // where:
-      //     particle type:  1 : electrons and positrons combined
-      //                     2 : pi+ pi- pi0 combined
-      //                     3 : protons
-      //                     4 : neutrons
-      //                     5 : gammas
-      //                     6 : pi+
-      //                     7 : pi-
-      //     energy type: 
-      //        1 : Particle flux up to 100 GeV (backward going have negative energy)
-      //            -100. to +100. GeV  (2000 bins) - energy in GeV
-      //        2 : Particle flux up to 10 GeV (backward going have negative energy)
-      //            -10. to +10. GeV  (2000 bins) - energy in GeV
-      //        3 : Particle flux up to 1 GeV (backward going have negative energy)
-      //            -1. to +1. GeV  (2000 bins) - energy in GeV
-      //        4 : Particle flux up to 0.1 GeV (backward going have negative energy)
-      //            -0.1 to +0.1 GeV  (2000 bins) - energy in GeV
-      //        5 : LOG10(energy/MeV) Particle flux from 0.1 keV up to 1000 GeV 
-      //            (backward going are REMOVED)
-      //            -4.0 to +6.0  (1000 logarithmic bins) 
-      //            energy in MeV from  0.1 keV to 1000 GeV
-      // Example:
-      //   5201 is the histogram of energy of gammas passing into the 
-      //   second layer (index #1) binned linearly between -10 and 10 GeV.
-      // We put a "9" in front of the above ID, for the corresponding
-      // weighted histograms, for example:
-      //   95201 is the histogram of energy of gammas passing into the
-      //   second layer (index #1) binned linearly between -10 and 10 GeV,
-      //   and weighted with 1/momentum of the gamma.
-      // Due to space problems, we keep only the histograms with "9"
-      // in front of them.
-      char id[5], histotag[60];
-      for ( int iLayer = 0; iLayer < 10; iLayer++ ) {
-	sprintf( id, "%d", iLayer+1100 );
-	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  emSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+91100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  emSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+1200 );
-	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  emSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+91200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  emSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+1300 );
-	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  emSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+91300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  emSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+1400 );
-	sprintf( histotag, "Elec./Pos. Lin. Energy Spectrum in Active Layer %d in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  emSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+91400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  emSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+1500 );
-	sprintf( histotag, "Elec./Pos. Log10 Energy Spectrum in Active Layer %d in MeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  emSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+91500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  emSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+2100 );
-	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer) ;
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+92100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+2200 );
-	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+92200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+2300 );
-	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+92300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+2400 );
-	sprintf( histotag, "Pion Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+92400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+2500 );
-	sprintf( histotag, "Pion Log10 Energy Spectrum in Active Layer %d in MeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+92500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+3100 );
-	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  protonSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+93100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  protonSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+3200 );
-	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  protonSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+93200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  protonSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+3300 );
-	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  protonSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+93300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  protonSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+3400 );
-	sprintf( histotag, "Proton Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  protonSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+93400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  protonSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+3500 );
-	sprintf( histotag, "Proton Log10 Energy Spectrum in Active Layer %d in MeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  protonSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+93500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  protonSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+4100 );
-	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  neutronSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+94100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  neutronSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+4200 );
-	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  neutronSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+94200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  neutronSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+4300 );
-	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  neutronSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+94300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  neutronSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+4400 );
-	sprintf( histotag, "Neutron Lin. Energy Spectrum in Active Layer%d   in GeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  neutronSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+94400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  neutronSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+4500 );
-	sprintf( histotag, "Neutron Log10 Energy Spectrum in Active Layer %d in MeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  neutronSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+94500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  neutronSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+5100 );
-	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer%d   in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  gammaSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+95100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  gammaSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+5200 );
-	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  gammaSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+95200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  gammaSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+5300 );
-	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  gammaSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+95300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  gammaSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+5400 );
-	sprintf( histotag, "Gamma Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  gammaSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+95400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  gammaSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+5500 );
-	sprintf( histotag, "Gamma Log10 Energy Spectrum in Active Layer %d in MeV",
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  gammaSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+95500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  gammaSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+6100 );
-	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer) ;
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionPlusSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+96100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionPlusSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+6200 );
-	sprintf( histotag, "Pion Plus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionPlusSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+96200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionPlusSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+6300 );
-	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionPlusSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+96300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionPlusSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+6400 );
-	sprintf( histotag, "PionPlus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionPlusSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+96400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionPlusSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+6500 );
-	sprintf( histotag, "PionPlus Log10 Energy Spectrum in Active Layer %d in MeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionPlusSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+96500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionPlusSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+7100 );
-	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer) ;
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionMinusSpectrum1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+97100 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionMinusSpectrumWeighted1[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -100.0, 100.0 );
-	}
-	sprintf( id, "%d", iLayer+7200 );
-	sprintf( histotag, "Pion Minus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionMinusSpectrum2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+97200 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionMinusSpectrumWeighted2[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -10.0, 10.0 );
-	}
-	sprintf( id, "%d", iLayer+7300 );
-	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionMinusSpectrum3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+97300 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionMinusSpectrumWeighted3[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -1.0, 1.0 );
-	}
-	sprintf( id, "%d", iLayer+7400 );
-	sprintf( histotag, "PionMinus Lin. Energy Spectrum in Active Layer %d in GeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionMinusSpectrum4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+97400 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionMinusSpectrumWeighted4[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 2000, -0.1, 0.1 );
-	}
-	sprintf( id, "%d", iLayer+7500 );
-	sprintf( histotag, "PionMinus Log10 Energy Spectrum in Active Layer %d in MeV", 
-		 iLayer );
-	if ( isHistogramSpectrumUnweightedOn ) {
-	  pionMinusSpectrum5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
-	}
-	sprintf( id, "%d", iLayer+97500 );
-	if ( isHistogramSpectrumWeightedOn ) {
-	  pionMinusSpectrumWeighted5[ iLayer ] = 
-	    histoFactory->createHistogram1D( id, histotag, 1000, -4.0, 6.0 );
+  h_Spectrum[ "gamma" ]     = book1D< TH1F >( "hGammaSpectrum",
+					      "Kinetic Energy for #gamma",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  h_Spectrum[ "neutron" ]   = book1D< TH1F >( "hNeutronSpectrum",
+					      "Kinetic Energy for neutron",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  h_Spectrum[ "proton" ]    = book1D< TH1F >( "hProtonSpectrum",
+					      "Kinetic Energy for proton",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  h_Spectrum[ "pionZero" ]  = book1D< TH1F >( "hPionZeroSpectrum",
+					      "Kinetic Energy for #pi^{0}",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  h_Spectrum[ "pionMinus" ] = book1D< TH1F >( "hPionMinusSpectrum",
+					      "Kinetic Energy for #pi^{-}",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  h_Spectrum[ "pionPlus" ]  = book1D< TH1F >( "hPionPlusSpectrum",
+					      "Kinetic Energy for #pi^{+}",
+					      nbinx, minx, maxx,
+					      "log10(E_{kin}) (MeV)", "Entries" );
+  // Other histograms are optional.
+  if ( isHistogramOn ) {
+    if ( is2DHistogramStepLvsEOn ) {
+      if ( ! outFile.IsZombie() ) {
+	TDirectory* dir = outFile.mkdir( "StepEdepVsLength" );
+	if ( dir ) {
+	  dir->cd();
+	} else {
+	  outFile.cd( "StepEdepVsLength" );
 	}
       }
-  }
-#endif
+      // Active
+      h_stepEvsL[ "active" ] = 
+	book2D< TH2D >( "hStepEVsL_active",
+			"Step: Energy vs. Length,active",
+			100, 0.0, 10.0, 
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "electron_active" ] = 
+	book2D< TH2D >( "hStepEVsL_electron_active",
+			"Step: Energy vs. Length,active, ELECTRON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "muon_active" ] = 
+	book2D< TH2D >( "hStepEVsL_muon_active",
+			"Step: Energy vs. Length,active, MUON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "pioncharged_active" ] =
+	book2D< TH2D >( "hStepEVsL_pioncharged_active",
+			"Step: Energy vs. Length,active, PION charged",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "proton_active" ] =
+	book2D< TH2D >( "hStepEVsL_proton_active",
+			"Step: Energy vs. Length,active, PROTON",
+			100, 0.0, 10.0, 
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)","Entries" );
+      h_stepEvsL[ "gamma_active" ] = 
+	book2D< TH2D >( "hStepEVsL_gamma_active",
+			"Step: Energy vs. Length,active, GAMMA",
+			100, 0.0, 10.0, 
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "neutron_active" ] =
+	book2D< TH2D >( "hStepEVsL_neutron_active",
+			"Step: Energy vs. Length,active, NEUTRON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "other_active" ] =
+	book2D< TH2D >( "hStepEVsL_other_active",
+			"Step: Energy vs. Length,active, OTHER",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      // Absorber
+      h_stepEvsL[ "absorber" ] =
+	book2D< TH2D >( "hStepEVsL_absorber",
+			"Step: Energy vs. Length,absorber",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "electron_absorber" ] = 
+	book2D< TH2D >( "hStepEVsL_electron_absorber",
+			"Step: Energy vs. Length,absorber, ELECTRON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "muon_absorber" ] = 
+	book2D< TH2D >( "hStepEVsL_muon_absorber",
+			"Step: Energy vs. Length,absorber, MUON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "pioncharged_absorber" ] =
+	book2D< TH2D >( "hStepEVsL_pioncharged_absorber",
+			"Step: Energy vs. Length,absorber, PION charged",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "proton_absorber" ] =
+	book2D< TH2D >( "hStepEVsL_proton_absorber",
+			"Step: Energy vs. Length,absorber, PROTON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "gamma_absorber" ] = 
+	book2D< TH2D >( "hStepEVsL_gamma_absorber", 
+			"Step: Energy vs. Length,absorber, GAMMA",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "neutron_absorber" ] = 
+	book2D< TH2D >( "hStepEVsL_neutron_absorber",
+			"Step: Energy vs. Length,absorber, NEUTRON",
+			100, 0.0, 10.0,
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+      h_stepEvsL[ "other_absorber" ] =
+	book2D< TH2D >( "hStepEVsL_other_absorber",
+			"Step: Energy vs. Length,absorber, OTHER",
+			100, 0.0, 10.0, 
+			100, 0.0, 10.0,
+			"L (mm)", "E_{dep} (MeV)", "Entries" );
+    }
+    // Kinetic spectra of some particles in some planes (normal
+    // to the beam direction).
+    // We evaluate the kinetic spectra in 10 active layers,
+    // uniformely spread along the calorimeter.
+    //     particle type:  1 : electrons and positrons combined
+    //                     2 : pi+ pi- pi0 combined
+    //                     3 : protons
+    //                     4 : neutrons
+    //                     5 : gammas
+    //                     6 : pi+
+    //                     7 : pi-
+    //     energy type:
+    //        1 : Particle flux up to 100 GeV (backward going have negative energy)
+    //            -100. to +100. GeV  (2000 bins) - energy in GeV
+    //        2 : Particle flux up to 10 GeV (backward going have negative energy)
+    //            -10. to +10. GeV  (2000 bins) - energy in GeV
+    //        3 : Particle flux up to 1 GeV (backward going have negative energy)
+    //            -1. to +1. GeV  (2000 bins) - energy in GeV
+    //        4 : Particle flux up to 0.1 GeV (backward going have negative energy)
+    //            -0.1 to +0.1 GeV  (2000 bins) - energy in GeV
+    //        5 : LOG10(energy/MeV) Particle flux from 0.1 keV up to 1000 GeV
+    //            (backward going are REMOVED)
+    //            -4.0 to +6.0  (1000 logarithmic bins)
+    //            energy in MeV from  0.1 keV to 1000 GeV
+    // The name of the histogram and the key in the container map codes 
+    // the particle type, the energy binning and the layer (0-9)
+    if ( isHistogramSpectrumUnweightedOn  ||  isHistogramSpectrumWeightedOn ) {
+      if ( ! outFile.IsZombie() ) {
+	TDirectory* dir = outFile.mkdir( "SpectraDetailed" );
+	if ( dir ) {
+	  dir->cd();
+	} else {
+	  outFile.cd( "SpectraDetailed" );
+	}
+      }
+      G4int parts[ 6 ] = { electronId , pionMinusId , pionPlusId , 
+			   protonId , neutronId , gammaId };
+      SpectraERange allE[ 5 ] = { E100 , E10 , E1 , E01 , ELOG };
+      const char* xtitle[ 5 ] = { "E_{kin} (GeV)" , "E_{kin} (GeV)" , "E_{kin} (GeV)" ,
+				  "E_{kin} (GeV)" , "log10(E_{kin} (GeV))" };
+      const char* ytitle[ 5 ] = { "#frac{dN}{dE_{kin}} (GeV^{-1})" , 
+				  "#frac{dN}{dE_{kin}} (GeV^{-1})", 
+				  "#frac{dN}{dE_{kin}} (GeV^{-1})" , 
+				  "#frac{dN}{dE_{kin}} (GeV^{-1})" , 
+				  "#frac{dN}{d(log10(E_{kin}))} (log10(GeV)^{-1})" };
+      const char* ytitleW[ 5 ] = { "#frac{1}{P}*#frac{dN}{dE_{kin}} (GeV^{-2})" , 
+				   "#frac{1}{P}*#frac{dN}{dE_{kin}} (GeV^{-2})", 
+				   "#frac{1}{P}*#frac{dN}{dE_{kin}} (GeV^{-2})" , 
+				   "#frac{1}{P}*#frac{dN}{dE_{kin}} (GeV^{-2})", 
+				   "#frac{1}{E_{kin}P}*#frac{dN}{d(log10(E_{kin}))} ((GeV)^{-2}*log10(GeV)^{-1})" };
+      float eminx[ 5 ] = { -100, -10, -1, -0.1, -4.0 };
+      float emaxx[ 5 ] = { 100, 10, 1, 0.1, 6 };
+      int nbinsx = 1000;
+      for ( unsigned int layerIndex = 0 ; layerIndex < 10 ; ++layerIndex ) {
+	for ( unsigned int et = 0 ; et < 5 ; ++et ) {
+	  for ( unsigned ipart = 0 ; ipart < 6 ; ++ipart ) {
+	    std::pair< spectra_t, std::string > key = 
+	      getKey( parts[ ipart ], allE[ et ], layerIndex, false );
+	    // First consider pions separately
+	    if ( key.first == "" ) {
+	      G4cerr << "Non valid key for: particle ID:" 
+		     << parts[ ipart ] << " E=" << allE[ et ] 
+		     << "and layer:" << layerIndex << G4endl;
+	    } else {
+	      if ( isHistogramSpectrumUnweightedOn ) {
+		h_SpectraFlux[ key.first ] = 
+		  book1D< TH1F >( key.first.c_str(), key.second.c_str(),
+				  nbinsx, eminx[ et ], emaxx[ et ],
+				  xtitle[ et ], ytitle[ et ] );
+	      }
+	      if ( isHistogramSpectrumWeightedOn ) {
+		h_SpectraFluxWeight[ key.first ] = 
+		  book1D< TH1F >( std::string( key.first + "W" ).c_str(), 
+				  std::string( key.second + " (Weighted)" ).c_str(),
+				  nbinsx, eminx[ et ], emaxx[ et ],
+				  xtitle[ et ], ytitleW[ et ] );
+	      }
+	    }
+	  } // End of loop on different particles types, 
+            // we still need to handle the special case of "all pions together"
+	  std::pair< spectra_t, std::string > key = 
+	    getKey( pionMinusId, allE[ et ], layerIndex, true ); 
+	  // Key for combined pions, just take one pion id
+	  // G4cout << key.first << " " << key.second << G4endl;
+	  if ( key.first == "" ) {
+	    G4cerr << "Non valid key for: particle ID:" << pionMinusId
+		   << " E=" << allE[ et ] << "and layer:" << layerIndex << G4endl;
+	  } else {
+	    if ( isHistogramSpectrumUnweightedOn )
+	      h_SpectraFlux[ key.first ] = 
+		book1D< TH1F >( key.first.c_str(), key.second.c_str(),
+				nbinsx, eminx[ et ], emaxx[ et ],
+				xtitle[ et ], ytitle[ et ] );
+	    if ( isHistogramSpectrumWeightedOn )
+	      h_SpectraFluxWeight[ key.first ] = 
+		book1D< TH1F >( std::string( key.first + "W" ).c_str(), 
+				std::string( key.second + " (Weighted)" ).c_str(),
+				nbinsx, eminx[ et ], emaxx[ et ],
+				xtitle[ et ], ytitleW[ et ] );
+	  }
+	}
+      }
+      
+    }
+  } // isHistogrammOn
+#endif // G4ANALYSIS_USEROOT
 }                       
 
 
@@ -1128,10 +919,10 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
   //  1/|momentum|, exept for those in logarithmic scale in the x-axis
   // (i.e. log_10(kinEnergy/MeV) ), where the weight must be
   //  1/(|momentum*Ekin|) .
-
-#ifdef G4ANALYSIS_USE
-  if ( ! isHistogramOn ) return;
-
+#ifdef G4ANALYSIS_USEROOT
+  if ( ! isHistogramOn  || 
+       ( ! isHistogramSpectrumUnweightedOn  &&  
+	 ! isHistogramSpectrumWeightedOn ) ) return;
   if ( numberOfReplicas < 10  ||
        layerNumber % (numberOfReplicas/10) != 0  ||
        layerNumber / (numberOfReplicas/10) >= 10 ) return;
@@ -1151,164 +942,62 @@ void StatAccepTestAnalysis::fillSpectrum( const G4ParticleDefinition* particleDe
     //	     <<  "  p=" << p / MeV << " MeV" << G4endl;       //***DEBUG***
   }
   G4double p_inGeV = p / GeV;
-
-  // 02-Apr-2007 : I have tried to transform the following long  if  
-  //               statement into a  switch  statement in which 
-  // "electronId", "positronId", etc. appear as "case label", but 
-  // I got a strange compilation error saying that 
-  //      "case label does not reduce to an integer constant"
-  // in spite of being defined as integer constants. 
-  // The errors do not disappear if static constants are used instead
-  // of simple constant integers. So I gave up!
-
-  if ( particleId == electronId  ||  particleId == positronId ) {
-    if ( isHistogramSpectrumUnweightedOn ) {
-      emSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      emSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      emSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      emSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	emSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
-      }
-    }
-    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-      emSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      emSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      emSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      emSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      if ( kinEnergy > 0.0 ) {
-	emSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 
-						  1.0/(p*std::abs(kinEnergy)) );
-      }
-    }
-  } else if ( particleId == gammaId ) {
-    if ( isHistogramSpectrumUnweightedOn ) {
-      gammaSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      gammaSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      gammaSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      gammaSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	gammaSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
-      }
-    }
-    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-      gammaSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      gammaSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      gammaSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      gammaSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      if ( kinEnergy > 0.0 ) {
-	gammaSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ), 
-						     1.0/(p*std::abs(kinEnergy)) );
-      }
-    }
-  } else if ( particleId == pionPlusId   ||
-	      particleId == pionMinusId  ||
-	      particleId == pionZeroId ) {
-    if ( isHistogramSpectrumUnweightedOn ) {
-      pionSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      pionSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	pionSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
-      }
-    }
-    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-      pionSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      pionSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      pionSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      pionSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      if ( kinEnergy > 0.0 ) {
-	pionSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
-						    1.0/(p*std::abs(kinEnergy)) );
-      }
-    }
-    // Now separate between pi+ and pi-, because they have, 
-    // in general, different spectra.
-    if ( particleId == pionPlusId ) { 
-      if ( isHistogramSpectrumUnweightedOn ) {
-	pionPlusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionPlusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionPlusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionPlusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-	if ( kinEnergy > 0.0 ) {
-	  pionPlusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
+  //float weight = ( eidx < 4 )  ?  1.0/p_inGeV  :  1.0 / (p*std::abs(kinEnergy));
+  static const float cw = 4*pi*std::log(10.0);
+  float w_lin = 1.0 / (4*pi*p_inGeV);
+  float w_log = 1.0 / (cw*p_inGeV*std::abs(kinEnergy));
+  SpectraERange etype[ 5 ] = { E100 , E10 , E1 , E01 , ELOG };
+  // We need to find the key of the histogram for all Energy types for particleId.
+  // The complication is that we need to fill two histograms for pions: 
+  // the "all together" and the pi+/pi- separately.
+  for ( int eidx = 0 ; eidx <5 ; ++eidx ) {
+    if ( eidx == 4  &&  kinEnergy <= 0 ) continue; 
+    // Cannot fill Log histogram if energy is <=0 .
+    spectra_t key = getKey( particleId, etype[ eidx ], sampleLayer, true ).first;
+    // First all pions together
+    histoSpectraMapIt_t uWe = h_SpectraFlux.find( key );
+    histoSpectraMapIt_t Wei = h_SpectraFluxWeight.find( key );
+    if ( uWe == h_SpectraFlux.end() ||  Wei == h_SpectraFluxWeight.end() ) {
+      // Log this information once, it is a particle for which no histogram 
+      // is defined (neutrino, Kaon for example).
+      if ( eidx == 0  &&  sampleLayer == 0 ) {
+	char buf[100];
+	sprintf( buf, "particleId=%d", particleId );
+	std::string theId( buf );
+	unknownCounterIt_t it = unknownCounter.find( theId );
+	if ( it == unknownCounter.end() ) {  // Element not present
+	  unknownCounter[ theId ] = 
+	    std::make_pair< unsigned int, G4double >( 1, std::abs( kinEnergy/MeV) );
+	} else {
+	  std::pair< unsigned int, G4double >& element = (*it).second;
+	  element.first  += 1; // Increase counter
+	  element.second += std::abs( kinEnergy/MeV );
 	}
       }
-      if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-	pionPlusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionPlusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionPlusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionPlusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	if ( kinEnergy > 0.0 ) {
-	  pionPlusSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
-							  1.0/(p*std::abs(kinEnergy)) );
-	}
-      }
+      continue;
     }
-    if ( particleId == pionMinusId ) { 
-      if ( isHistogramSpectrumUnweightedOn ) {
-	pionMinusSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionMinusSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionMinusSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-	pionMinusSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-	if ( kinEnergy > 0.0 ) {
-	  pionMinusSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
-	}
-      }
-      if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-	pionMinusSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionMinusSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionMinusSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	pionMinusSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-	if ( kinEnergy > 0.0 ) {
-	  pionMinusSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
-							   1.0/(p*std::abs(kinEnergy)) );
-	}
-      }
+    float weight = ( eidx < 4 )  ?  w_lin :  w_log ; 
+    // Correct weight for lorentz invariant: EdN/d3p
+    TH1* huWe = (*uWe).second;
+    TH1* hWei = (*Wei).second;
+    if ( isHistogramSpectrumUnweightedOn ) huWe->Fill( kinEnergy/GeV ); 
+    if ( isHistogramSpectrumWeightedOn )   hWei->Fill( kinEnergy/GeV, weight );
+    // In case the particle is a pi+ or a pi- fill two additional sets 
+    // of spectra for pi+ and pi- alone.
+    if ( particleId == pionMinusId  ||  particleId == pionPlusId ) {
+      key = getKey( particleId, etype[ eidx ], sampleLayer, false ).first;
+      // All pions together.
+      uWe = h_SpectraFlux.find( key );
+      Wei = h_SpectraFluxWeight.find( key );
+      assert ( uWe != h_SpectraFlux.end() );
+      assert ( Wei != h_SpectraFluxWeight.end() );
+      huWe = (*uWe).second;
+      hWei = (*Wei).second;
+      if ( isHistogramSpectrumUnweightedOn ) huWe->Fill( kinEnergy/GeV );
+      if ( isHistogramSpectrumWeightedOn )   hWei->Fill( kinEnergy/GeV, weight );
     }
-  } else if ( particleId == protonId ) {
-    if ( isHistogramSpectrumUnweightedOn ) {
-      protonSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      protonSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      protonSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      protonSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	protonSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );  
-      }
-    }
-    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-      protonSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      protonSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      protonSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      protonSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      if ( kinEnergy > 0.0 ) {
-	protonSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
-						      1.0/(p*std::abs(kinEnergy)) );
-      }
-    }
-  } else if ( particleId == neutronId ) {
-    if ( isHistogramSpectrumUnweightedOn ) {
-      neutronSpectrum1[ sampleLayer ]->fill( kinEnergy/GeV );
-      neutronSpectrum2[ sampleLayer ]->fill( kinEnergy/GeV );
-      neutronSpectrum3[ sampleLayer ]->fill( kinEnergy/GeV );
-      neutronSpectrum4[ sampleLayer ]->fill( kinEnergy/GeV );
-      if ( kinEnergy > 0.0 ) {
-	neutronSpectrum5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ) );
-      }
-    }
-    if ( p > 0.0  &&  isHistogramSpectrumWeightedOn ) {
-      neutronSpectrumWeighted1[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      neutronSpectrumWeighted2[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      neutronSpectrumWeighted3[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      neutronSpectrumWeighted4[ sampleLayer ]->fill( kinEnergy/GeV, 1.0/p_inGeV );
-      if ( kinEnergy > 0.0 ) {
-	neutronSpectrumWeighted5[ sampleLayer ]->fill( std::log10( kinEnergy/MeV ),
-						       1.0/(p*std::abs(kinEnergy)) );
-      }
-    }
-  }  
-#endif
+  }
+#endif // G4ANALYSIS_USEROOT
 }
 
 
@@ -1333,29 +1022,31 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   //       << "\t totalEnergyDepositedInActiveLayers = " 
   //       << totalEnergyDepositedInActiveLayers << G4endl
   //       << "\t totalEnergyDepositedInCalorimeter = " 
-  //       << totalEnergyDepositedInCalorimeter << G4endl;       // ***DEBUG***
+  //       << totalEnergyDepositedInCalorimeter << G4endl;       //***DEBUG***
 
-#ifdef G4ANALYSIS_USE
-  if ( tuple ) {
-    tuple->fill( tuple->findColumn( "ID" ), incidentParticleId );
-    tuple->fill( tuple->findColumn( "E" ), incidentParticleEnergy );
-    tuple->fill( tuple->findColumn( "EDEP_ACT" ), totalEnergyDepositedInActiveLayers );
-    tuple->fill( tuple->findColumn( "EDEP_CAL" ), totalEnergyDepositedInCalorimeter );
-    tuple->fill( tuple->findColumn( "nLayers" ), numberOfReadoutLayers );
-    tuple->fill( tuple->findColumn( "nBinR" ), numberOfRadiusBins );
-    AIDA::ITuple* tpL = tuple->getTuple( tuple->findColumn( "L" ) );
-    AIDA::ITuple* tpR = tuple->getTuple( tuple->findColumn( "R" ) );
-    for ( int iLayer = 0; iLayer < numberOfReadoutLayers; iLayer++ ) {
-      tpL->fill( 0, longitudinalProfile[ iLayer ] );
-      tpL->addRow();
+#ifdef G4ANALYSIS_USEROOT
+  if ( tree ) {
+    // Fill copy variables with data.
+    totEDepActiveLayer = (Float_t) totalEnergyDepositedInActiveLayers;
+    totEDepCalorimeter = (Float_t) totalEnergyDepositedInCalorimeter;
+    // Verified with a cout that the content of the produced ntuple is identical
+    // to the value of the longitudinalProfile variable.
+    //for ( int i= 0; i < numberOfRadiusBins; ++i ) 
+    //  G4cout << transverseProfile[ i ] << G4endl;
+    tree->Fill();
+    
+    // This method is called at each event, so it is useful to commit
+    // the tree from time to time, for instance every 1000 events, in
+    // such a way that it is possible to see the ntuple while the job 
+    // is running, for instance for a quick check that it makes sense. 
+    // Or, if the job crashes after many events, we have anyhow some data
+    // already stored in the ntuple to be checked.
+    if ( numberOfEvents > 0  and  numberOfEvents % 1000 == 0 ) {
+      tree->AutoSave( "SaveSelf" ); 
+      // SaveSelf allows another process to concurrently open the root file.
     }
-    for ( int iBinR = 0; iBinR < numberOfRadiusBins; iBinR++ ) {
-      tpR->fill( 0, transverseProfile[ iBinR ] );
-      tpR->addRow();
-    }
-    tuple->addRow();
   }
-#endif
+#endif // G4ANALYSIS_USEROOT
 
   sumEdepAct  += totalEnergyDepositedInActiveLayers;
   sumEdepAct2 += 
@@ -1383,24 +1074,6 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
   }
 
   numberOfEvents++;
-
-#ifdef G4ANALYSIS_USE
-  // This method is called at each event, so it is useful to commit
-  // the tree from time to time, for instance every 1000 events, in
-  // such a way that it is possible to see the ntuple  ntuple.hbook
-  // while the job is running, for instance for a quick check that
-  // it makes sense. Or, if the job crashes after many events, we
-  // have anyhow some data already stored in the ntuple to be checked.
-  // Remember that when you look the ntuple with PAW, while is running,
-  // you need to close the session and open a new one to see the updates.
-  if ( numberOfEvents > 0  and  numberOfEvents % 1000 == 0 ) {
-    if ( tree ) {
-      tree->commit();
-      //G4cout << " tree commit ,  at event=" << numberOfEvents-1 
-      //      << G4endl; //***DEBUG***
-    }
-  }
-#endif
 
   // Store information of the visible energy, for later computing
   // of the energy resolution.
@@ -1638,64 +1311,58 @@ void StatAccepTestAnalysis::infoStep( const G4Step* aStep ) {
     }  
   }
 
-#ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USEROOT
   // 2D plots on Step Energy vs. Step Length.
-  if ( isHistogramOn && is2DHistogramStepLvsEOn ) {
-
+  if ( isHistogramOn  &&  is2DHistogramStepLvsEOn ) {
     if ( volumeName == "physiActive" ) {
-      h2stepEvsL_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
+    	h_stepEvsL[ "active" ]->Fill( stepLength / mm, stepEnergyDeposit / MeV );
     } else if ( volumeName == "physiAbsorber" ) {
-      h2stepEvsL_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
+    	h_stepEvsL[ "absorber" ]->Fill( stepLength / mm, stepEnergyDeposit / MeV );
     }
-
-    // 02-Apr-2007 : I have tried to transform the following long  if  
-    //               statement into a  switch  statement in which 
-    // "electronId", "positronId", etc. appear as "case label", but 
-    // I got a strange compilation error saying that 
+    // 02-Apr-2007 : I have tried to transform the following long  if
+    //               statement into a  switch  statement in which
+    // "electronId", "positronId", etc. appear as "case label", but
+    // I got a strange compilation error saying that
     //      "case label does not reduce to an integer constant"
-    // in spite of being defined as integer constants. 
+    // in spite of being defined as integer constants.
     // The errors do not disappear if static constants are used instead
     // of simple constant integers. So I gave up!
-
-    if ( particleId == electronId  ||  particleId == positronId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_electron_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_electron_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
+    std::string postfix = "";
+    if ( volumeName == "physiActive" ) {
+      postfix="_active";
+    } else if ( volumeName == "physiAbsorber" ) {
+      postfix="_absorber";
+    }
+    if ( postfix != "" ) { // We still have to deal with the case the step is in expHall.
+      std::string partname = "";
+      if ( particleId == electronId  ||  particleId == positronId ) { 
+	partname = "electron"; 
+      } else if ( particleId == gammaId ) { 
+	partname = "gamma";
+      } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) { 
+	partname = "muon"; 
+      } else if ( particleId == pionPlusId  ||  particleId == pionMinusId ) { 
+	partname = "pioncharged"; 
+      } else if ( particleId == protonId  ||  particleId==antiProtonId ) { 
+	partname = "proton"; 
+      } else if ( particleId == neutronId  ||  particleId==antiNeutronId ) { 
+	partname = "neutron"; 
+      } else { 
+	partname = "other"; 
       }
-    } else if ( particleId == gammaId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_gamma_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_gamma_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
+      std::string id = partname + postfix;
+      histoMapConstIt_t it = h_stepEvsL.find( id );
+      if ( it == h_stepEvsL.end() ) {
+	G4cerr << "Error, cannot find histogram \"Step Edep Vs Length\" for particle id:"
+	       << id << "(" << partname << ")" << " - Edep=" 
+	       << stepEnergyDeposit/MeV << "(MeV) L=" <<stepLength/mm 
+	       << "(mm)" << G4endl;
+      } else {
+	it->second->Fill( stepLength/mm, stepEnergyDeposit/MeV );
       }
-    } else if ( particleId == muonMinusId  ||  particleId == muonPlusId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_muon_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_muon_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      }
-    } else if ( particleId == pionPlusId  ||  particleId == pionMinusId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_pionCharged_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_pionCharged_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      }
-    } else if ( particleId == protonId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_proton_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_proton_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      }
-    } else if ( particleId == neutronId ) {
-      if ( volumeName == "physiActive" ) {
-	h2stepEvsL_neutron_active->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      } else if ( volumeName == "physiAbsorber" ) {
-	h2stepEvsL_neutron_absorber->fill( stepLength / mm, stepEnergyDeposit / MeV );
-      }    
     }
   }
-#endif
+#endif // G4ANALYSIS_USEROOT
 
   // Update the information on the energy deposition in the absorber
   // for the following particles (in the case of the energy deposition
@@ -1855,7 +1522,6 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	numExitingOthers++;
       }
     }
-
   } else if ( aTrack->GetCurrentStepNumber() == 0 ) {  // When a track is created.
 
     classifyParticle( true , aTrack->GetDefinition() );
@@ -1869,26 +1535,25 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	mapParticleNames.find( particleName )->second += 1;
       }
     }
-
-#ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USEROOT
     if ( trackEkin < 1.0*eV ) {
-      // To avoid problem with the logarithm below.
-      trackEkin = 1.0*eV;  
+      // This is to avoid problems with the logarithm.
+      trackEkin = 1.0*eV;
     }
     if ( particleId == gammaId ) {
-      gammaSpectrum->fill( std::log10( trackEkin/MeV ) );
+    	h_Spectrum[ "gamma" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == neutronId ) {
-      neutronSpectrum->fill( std::log10( trackEkin/MeV ) );      
+    	h_Spectrum[ "neutron" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == protonId ) {
-      protonSpectrum->fill( std::log10( trackEkin/MeV ) );
+    	h_Spectrum[ "proton" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == pionZeroId ) {
-      pionZeroSpectrum->fill( std::log10( trackEkin/MeV ) );
+    	h_Spectrum[ "pionZero" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == pionPlusId ) {
-      pionPlusSpectrum->fill( std::log10( trackEkin/MeV ) );
+    	h_Spectrum[ "pionMinus" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == pionMinusId ) {
-      pionMinusSpectrum->fill( std::log10( trackEkin/MeV ) );
+    	h_Spectrum[ "pionPlus" ]->Fill( std::log10( trackEkin/MeV ) );
     }
-#endif
+#endif // G4ANALYSIS_USEROOT
 
 
     if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn ) { 
@@ -3499,11 +3164,9 @@ void StatAccepTestAnalysis::finish() {
 	   << mu << " +/- " << mu_sigma << G4endl;
     //}
 
-#ifdef G4ANALYSIS_USE
-    if ( longitudinalProfileHisto ) {
-      //***LOOKHERE*** :  mu_sigma  should be set as error.
-      longitudinalProfileHisto->fill( 1.0*iLayer, mu );
-    }
+#ifdef G4ANALYSIS_USEROOT
+    h_longitudinalProfile->SetBinContent( h_longitudinalProfile->FindBin( iLayer ), mu );
+    h_longitudinalProfile->SetBinError( h_longitudinalProfile->FindBin( iLayer ), mu_sigma );
 #endif
 
     if ( iLayer < numberOfReadoutLayers/4 ) {
@@ -3596,14 +3259,10 @@ void StatAccepTestAnalysis::finish() {
     G4cout << "\t iBinR = " << iBinR << "\t <E> = " 
 	   << mu << " +/- " << mu_sigma << G4endl;
     //}
-
-#ifdef G4ANALYSIS_USE
-    if ( transverseProfileHisto ) {
-      //***LOOKHERE*** :  mu_sigma  should be set as error.
-      transverseProfileHisto->fill( 1.0*iBinR, mu );
-    }
+#ifdef G4ANALYSIS_USEROOT
+    h_transverseProfile->SetBinContent( h_transverseProfile->FindBin( iBinR ), mu );
+    h_transverseProfile->SetBinError( h_transverseProfile->FindBin( iBinR ), mu_sigma );
 #endif
-
     // // // rmsTransverseProfile.push_back( mu_sigma );   //***TEMPORARY WORK-AROUND***
     if ( iBinR < numberOfRadiusBins/3 ) {
       fractionTransverse1stThird += mu;
@@ -3719,10 +3378,6 @@ void StatAccepTestAnalysis::finish() {
 	 << energyResolution_sigma << G4endl
          << "\t sampling fraction = " << samplingFraction << " +/- " 
 	 << samplingFraction_sigma << G4endl;
-
-#ifdef G4ANALYSIS_USE
-  if ( tree ) tree->commit();
-#endif
 
   // Print information on the different particle contributions to
   // the visible energy, the total energy, and the shower shapes.

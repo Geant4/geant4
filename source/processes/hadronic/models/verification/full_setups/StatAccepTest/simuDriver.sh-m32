@@ -1,6 +1,8 @@
 #!/bin/sh
 #
 #----------------------------------------------------------------------------
+# Last update: 14-Aug-2009.
+#
 # This Bash shell script has the following 11 parameters:
 #
 #   1)  Geant4 reference; e.g. 4.6.2.ref03 , or a local directory. 
@@ -18,7 +20,7 @@
 # This script invokes the Python  build.py  that writes the setup
 # and the Geant4 command file, and then run the simulation(s).
 # After that, this script eventually (if the flag is on) calls the 
-# Python script  dirStat/driver.py  that does the Statistical tests.
+# Python script  driveStatTest.py  that does the Statistical tests.
 #
 # Notice that the "LABEL" which specifies all the input parameters
 # does not contain the Bfield in the default case of zero magnetic field.
@@ -110,7 +112,7 @@ echo ' UNAMEI      =' $UNAMEI
 	rm -rf tmp/ ;
 	exit $EXITCODE ;
     fi
-    mv ntuple.hbook ntuple.hbook-$LABEL ;
+    mv ntuple.root ntuple.root-$LABEL ;
 #
     echo ' ' ;
     echo '--- Check results after running 1st reference ---' ; 
@@ -164,7 +166,7 @@ fi
 	rm -rf tmp/ ;
 	exit $EXITCODE ;
     fi
-    mv ntuple.hbook ntuple.hbook-$LABEL ;
+    mv ntuple.root ntuple.root-$LABEL ;
 #
     echo ' ' ;
     echo '--- Check results after running 2nd reference ---' ; 
@@ -202,12 +204,10 @@ fi
 	    echo ' ***ERROR*** from: . setup.sh-... ! exitCode = 31' ;
 	    exit 31 ;	
 	fi
-	cd dirStat/ ;
 
-	python driver.py $REF1 $REF2 $LABEL ; 
+	python driveStatTest.py $REF1 $REF2 $LABEL ; 
 	if [ $? != 0 ] ; then
-	    echo ' ***ERROR*** from: python driver.py ... ! exitCode = 33' ;   
-	    rm -f pvalue.o pvalue ;
+	    echo ' ***ERROR*** from: python driveStatTest.py ... ! exitCode = 33' ;   
 	    exit 33 ;
 	fi
 #

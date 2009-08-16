@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+16-Aug-2009 - A.Ribon (statAccepTest-V09-02-07)
+- Migration to ROOT.
+  The directory dirStat/ is not needed any longer,
+  but it is left there.
+
+
 11-Aug-2009 - A.Ribon (statAccepTest-V09-02-06)
 - Fixed a mistake in the treatment of the environmental
   variable HISTOGRAMS_ON that controls the extra histograms.
