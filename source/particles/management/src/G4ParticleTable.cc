@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.34 2009-07-31 06:39:22 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.35 2009-08-17 14:52:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -454,8 +454,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
 
 void G4ParticleTable::CheckReadiness()
 {
-  if(!readyToUse)
-  {
+  if(!readyToUse) {
    G4String msg;
    msg = " Access to G4ParticleTable for finding a particle or equivalent\n";
    msg += "operation occurs before G4VUserPhysicsList is instantiated and\n";
