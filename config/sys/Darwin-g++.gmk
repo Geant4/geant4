@@ -30,6 +30,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
+  ifdef G4OPTDEBUG
+    CXXFLAGS  += -O2 -g
+    FCFLAGS   += -O2 -g
+    CCFLAGS   += -O2 -g
+  endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load -arch_multiple
