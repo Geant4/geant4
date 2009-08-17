@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.11 2009-08-15 15:45:50 asaim Exp $
+// $Id: G4StackManager.cc,v 1.12 2009-08-17 10:51:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,7 +46,7 @@ G4StackManager::G4StackManager()
   G4cout<<"+++ G4StackManager uses G4SmartTrackStack. +++"<<G4endl;
 #else
   urgentStack = new G4TrackStack;
-  G4cout<<"+++ G4StackManager uses ordinary G4TrackStack. +++"<<G4endl;
+//  G4cout<<"+++ G4StackManager uses ordinary G4TrackStack. +++"<<G4endl;
 #endif
   waitingStack = new G4TrackStack;
   postponeStack = new G4TrackStack;
