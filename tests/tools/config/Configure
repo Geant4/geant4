@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.31 2009-08-10 10:34:00 bmorgan Exp $
+# $Id: Configure,v 1.32 2009-08-17 13:54:34 bmorgan Exp $
 #
-# Generated on Mon Aug 10 11:39:19 BST 2009 [metaconfig 3.0 PL70]
+# Generated on Mon Aug 17 14:53:41 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -495,12 +495,27 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-build) shift; g4build=yes;;
-	-incflags) shift; g4incflags=yes;;
+	-incflags) 
+		shift 
+		g4incflags=yes
+		g4query_conf=yes;;
 	-install) shift; install=yes;;
-	-cppflags) shift; g4cppflags=yes;;
-	-cxxflags) shift; g4cxxflags=yes;;
-	-ldlibs) shift; g4ldlibs=yes;;
-	-ldflags) shift; g4ldflags=yes;;
+	-cppflags) 
+		shift
+		g4query_conf=yes
+		g4cppflags=yes;;
+	-cxxflags) 
+		shift
+		g4query_conf=yes
+		g4cxxflags=yes;;
+	-ldlibs) 
+		shift
+		g4query_conf=yes
+		g4ldlibs=yes;;
+	-ldflags) 
+		shift
+		g4query_conf=yes
+		g4ldflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -588,11 +603,13 @@ esac
 
 : Sanity checks
 case "$fastread$alldone" in
-yescont|yesexit) ;;
+yescontyes|yesexityes) ;;
 *)
-	if test ! -t 0; then
+	if test "x$g4query_conf" != "xyes" ; then
+	    if test ! -t 0; then
 		echo "Say 'sh Configure', not 'sh <Configure'"
 		exit 1
+	    fi
 	fi
 	;;
 esac
