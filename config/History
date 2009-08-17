@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.359 2009-08-03 10:02:24 gcosmo Exp $
+cvs log $Id: History,v 1.360 2009-08-17 15:59:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd August 2009 Gabriele Cosmo (config-V09-02-08)
+17th August 2009  Gabriele Cosmo (config-V09-02-09)
+- Added G4OPTDEBUG option for hybrid optimized-debug build also to
+  Darwin-g++ and WIN32-g++ configurations.
+
+3rd August 2009  Gabriele Cosmo (config-V09-02-08)
 - Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
   diagnostics for wrong architecture errors at link stage.
 
-17th June 2009 Gunter Folger (config-V09-02-07)
+17th June 2009  Gunter Folger (config-V09-02-07)
 - binmake.gmk: moved definition of TARGOBJEXT to place not dependent
   on G4EXLIB, such that the extension is defined when no lib is present
   (e.g. for hadronic exercisers).
