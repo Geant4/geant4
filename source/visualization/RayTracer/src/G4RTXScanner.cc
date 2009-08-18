@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc,v 1.5 2007-05-22 17:10:42 allison Exp $
+// $Id: G4RTXScanner.cc,v 1.6 2009-08-18 10:47:15 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,6 +149,13 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
       width = 600;
       height = 600;
     }
+  } else {
+    G4cout << "ERROR: Geometry string \""
+	   << XGeometryString	   
+           << "\" is empty.  Using \"600x600\"."
+	   << G4endl;
+    width = 600;
+    height = 600;  
   }
   size_hints->width = width;
   size_hints->height = height;
