@@ -489,6 +489,7 @@ private:
     G4double theVertexPosition_x;
     G4double theVertexPosition_y;
     G4double theVertexPosition_z;
+    G4double theVertexTime;      // Time since the start of the event [nsec].
     G4int theCreatorTrackID;
     G4int theCreatorProcessType;     // The meaning is (see G4ProcessType.hh):
                                      //    0  :  fNotDefined

@@ -1607,6 +1607,8 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	  G4double const x = aTrack->GetPosition().x(); 
 	  G4double const y = aTrack->GetPosition().y(); 
 	  G4double const z = aTrack->GetPosition().z(); 
+	  G4double const t = aTrack->GetGlobalTime(); // Time since the start of 
+                                                      // the event [nsec].
 
 	  structInfoAboutVertex aStructInfoAboutVertex;
 
@@ -1619,6 +1621,7 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 	  aStructInfoAboutVertex.theVertexPosition_x = x;
 	  aStructInfoAboutVertex.theVertexPosition_y = y;
 	  aStructInfoAboutVertex.theVertexPosition_z = z;
+	  aStructInfoAboutVertex.theVertexTime = t;
 
 	  G4int numberOfVertices = mapInfoAboutVertex.size();
 
@@ -5022,7 +5025,8 @@ void StatAccepTestAnalysis::analysisTrackAndVertices_0() {
 	   << "\t theVertexPosition=(" 
 	   << cit->second.theVertexPosition_x << ","
 	   << cit->second.theVertexPosition_y << "," 
-	   << cit->second.theVertexPosition_z << ") mm" 
+	   << cit->second.theVertexPosition_z << ") mm" << G4endl
+	   << "\t global time=" << cit->second.theVertexTime << " nsec" << G4endl
 	   << G4endl;
   }
 
