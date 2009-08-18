@@ -76,6 +76,12 @@ List of fixes included in this public patch since the public release 9.2.p01:
       o Added method BuildContainerSolid() taking a solid as argument to
         G4PhantomParameterisation and added protection to GetMaterialIndex()
         for zero index.
+    + solids/CSG:
+      o Introduced to DistanceToIn(p,v) splitting of the distance for point
+        very far from intersection area and big difference between solid
+        dimensions and distance to it; resolves issue observed on 64 bits
+        systems. Affected solids: G4Tubs, G4Cons, G4Sphere, G4Orb.
+        Addresses problem report #1022.
     + solids/specific:
       o G4Ellipsoid:
         - Fixes in Inside(p) and in DistanceToIn(p,v) for points

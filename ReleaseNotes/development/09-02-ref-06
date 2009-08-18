@@ -31,9 +31,9 @@ event                                            event-V09-02-01             (o)
 
 geometry/solids/CSG                              geom-csg-V09-02-04
 -------------------
-- Introduced to DistanceToIn(p,v) splitting of the distance for point very far
-  from intersection area and big difference between solid dimensions and
-  distance to it; resolves issue observed on 64 bits problem. Affected solids:
+- Introduced to DistanceToIn(p,v) splitting of the distance for point very   (o)
+  far from intersection area and big difference between solid dimensions and
+  distance to it; resolves issue observed on 64 bits systems. Affected solids:
   G4Tubs, G4Cons, G4Sphere, G4Orb. Addresses problem report #1022.
 - Fixed rare cases of NaN on G4Sphere.
 - Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
