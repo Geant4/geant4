@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.56 2009-05-14 16:38:23 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.57 2009-08-19 13:28:10 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,8 +91,6 @@ fSizeHasChanged(0)
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
 
   fGL2PSAction = new G4OpenGL2PSAction();
 
@@ -113,6 +111,9 @@ void G4OpenGLViewer::InitializeGLView ()
   glDisable (GL_BLEND);
   glDisable (GL_LINE_SMOOTH);
   glDisable (GL_POLYGON_SMOOTH);
+
+  fWinSize_x = fVP.GetWindowSizeHintX();
+  fWinSize_y = fVP.GetWindowSizeHintY();
 }  
 
 void G4OpenGLViewer::ClearView () {
@@ -492,7 +493,7 @@ GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned i
 void G4OpenGLViewer::printEPS() {
   bool res;
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printEPS file:%s Vec:%d\n",getRealPrintFilename().c_str(),fVectoredPs);
+  printf("G4OpenGLViewer::printEPS file:%s Vec:%d Name:%s\n",getRealPrintFilename().c_str(),fVectoredPs,GetName().c_str());
 #endif
   if (fVectoredPs) {
     res = printVectoredEPS();

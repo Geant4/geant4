@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2009-07-29 10:04:45 lgarnier Exp $
+$Id: History,v 1.146 2009-08-19 13:28:10 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 August 2009 Laurent Garnier
+ - G4OpenGLXmViewer : Fix a wrong initialization introduce by the 
+   new way of handling window size hints (January 2009)
 
 29 July 2009, Laurent Garnier
  - G4OpenGLQtViewer : Ensure the GL frame size will be correct
