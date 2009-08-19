@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2009-08-18 10:47:15 lgarnier Exp $
+$Id: History,v 1.56 2009-08-19 08:39:19 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+19 August 2009 Laurent Garnier
+ - G4RayTracerViewer.cc, G4RayTracerXViewer.cc : Fix an bad use of fVP
+   parameters
 
 18 August 2009 Laurent Garnier
  - G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the 

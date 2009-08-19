@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc,v 1.6 2009-08-18 10:47:15 lgarnier Exp $
+// $Id: G4RayTracerXViewer.cc,v 1.7 2009-08-19 08:39:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
@@ -49,6 +49,11 @@ G4RayTracerXViewer::G4RayTracerXViewer
 }
 
 void G4RayTracerXViewer::Initialise() {
+
+  if (theTracer) {
+    theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+    theTracer->SetNRow(fVP.GetWindowSizeHintY());
+  }
 
   // Set up X Window...
   G4RTXScanner* theXScanner = (G4RTXScanner*)theTracer->GetScanner();
