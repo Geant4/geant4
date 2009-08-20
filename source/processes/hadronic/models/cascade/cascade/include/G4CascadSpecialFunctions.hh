@@ -34,6 +34,8 @@
 
 namespace G4CascadSpecialFunctions {
 
+  std::pair<G4int, G4double> getPositionInEnergyScale3(G4double e); 
+
   std::pair<G4int, G4double> getPositionInEnergyScale2(G4double e); 
 
   std::pair<G4int, G4double> getPositionInEnergyScale1(G4double e);

@@ -26,6 +26,31 @@
 #include "G4CascadSpecialFunctions.hh"
 
 std::pair<G4int, G4double> 
+G4CascadSpecialFunctions::getPositionInEnergyScale3(G4double e) 
+{
+
+  const G4double EMT3[30] = {
+  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+  0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+  2.4,  3.2,  4.2,   5.6,   7.5,  10.0,  13.0,  18.0,  24.0,  32.0};
+
+  G4int ik = 29;
+  G4double sk = 1.0;
+
+  for (G4int i = 1; i < 30; i++) {
+
+    if (e <= EMT3[i]) {
+      ik = i;
+      sk = (e - EMT3[ik - 1]) / (EMT3[ik] - EMT3[ik - 1]);
+      break;
+    }
+  }
+
+  return std::pair<G4int, G4double>(ik, sk);
+}
+
+
+std::pair<G4int, G4double> 
 G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) 
 {
   G4int verboseLevel = 2;
@@ -188,6 +213,70 @@ G4CascadSpecialFunctions::crossSection(G4double e, G4int is)
     G4cout << " >>> G4CascadSpecialFunctions::crossSection" << G4endl;
   }
 
+  //
+  // Total cross sections (mbarns)
+  //
+  const G4double pipPtot[30] = { 
+    0.0,   1.2,   2.5,   3.8,   5.0,  7.0,   9.0,  15.0, 30.0,  64.0,
+  130.0, 190.0, 130.0,  56.0,  28.0, 17.14, 19.28, 27.4, 40.05, 32.52,
+   30.46, 29.0,  27.26, 25.84, 25.5, 24.5,  24.0,  23.5, 23.0,  23.0};
+
+  const G4double pimPtot[30] = { 
+    0.0,   3.5,  4.0,   4.7,   6.0,   7.5,   8.3,  12.0,  14.4,  24.0,
+   44.0,  67.0, 45.06, 28.82, 28.98, 41.66, 37.32, 51.37, 35.67, 33.25,
+   31.84, 31.0, 29.32, 27.5,  26.5,  25.9,  25.5,  25.2,  25.0,  24.8};
+
+  const G4double pizPtot[30] = {
+    0.0,   3.55,  4.65,  5.9,   7.75, 10.1,  11.8,  18.0,  27.7, 52.5,
+  102.0, 150.0, 102.64, 51.03, 34.94, 34.52, 32.45, 44.05, 40.2, 34.93,
+   32.0,  30.0,  28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0, 23.9};
+
+  const G4double kpPtot[30] = { 
+   10.0,  10.34, 10.44, 10.61, 10.82, 11.09, 11.43, 11.71, 11.75, 11.8,
+   11.98, 12.28, 12.56, 12.48, 12.67, 14.48, 15.92, 17.83, 17.93, 17.88,
+   17.46, 17.3,  17.3,  17.4,  17.4,  17.4,  17.4,  17.5,  17.7,  17.8};
+
+  const G4double kpNtot[30] = {
+    6.64,  6.99,  7.09,  7.27,  7.48,  7.75,  8.1,  8.49,  8.84, 9.31,
+    9.8,  10.62, 11.64, 13.08, 14.88, 16.60, 17.5, 18.68, 18.68, 18.29,
+   17.81, 17.6,  17.6,  17.6,  17.6,  17.6,  17.7, 17.8,  17.9,  18.0};
+
+  const G4double kmPtot[30] = { 
+ 1997.0, 1681.41, 1586.74, 1428.95, 1239.59, 987.12, 671.54, 377.85, 247.30, 75.54,
+    71.08, 54.74,   44.08,   44.38,   45.45,  45.07,  41.04,  35.75,  33.22, 30.08,
+    27.61, 26.5,    25.2,    24.0,    23.4,   22.8,   22.0,   21.3,   21.0,  20.9};
+
+  const G4double kmNtot[30] = { 
+    6.15,  6.93,  7.16,  7.55,  8.02,  8.65,  9.43, 10.36, 11.34, 12.64,
+   14.01, 16.45, 19.32, 23.0,  27.6,  30.92, 29.78, 28.28, 25.62, 23.1,
+   22.31, 21.9,  21.73, 21.94, 21.23, 20.5,  20.4,  20.2,  20.1,  20.0};
+
+  const G4double lPtot[30] = { 
+  300.0, 249.07, 233.8, 208.33, 177.78, 137.04, 86.11, 41.41, 28.86, 12.35,
+   13.82, 16.76, 20.68,  25.9,   30.37,  31.56, 32.83, 34.5,  34.91, 35.11,
+   35.03, 36.06, 35.13,  35.01,  35.0,   35.0,  35.0,  35.0,  35.0,  35.0};
+
+  const G4double spPtot[30] = { 
+  150.0, 146.0, 144.8, 142.8, 140.4, 137.2, 133.2, 127.6, 120.0, 110.0,
+   98.06, 84.16, 72.28, 56.58, 43.22, 40.44, 36.14, 30.48, 31.53, 31.92,
+   29.25, 28.37, 29.81, 33.15, 33.95, 34.0,  34.0,  34.0,  34.0,  34.0};
+
+  const G4double smPtot[30] = {
+  937.0, 788.14, 743.48, 669.05, 579.74, 460.65, 311.79, 183.33, 153.65, 114.6,
+  105.18, 89.54,  70.58,  45.5,   32.17,  32.54,  32.95,  33.49,  33.55,  33.87,
+   34.02, 34.29,  33.93,  33.88,  34.0,   34.0,   34.0,   34.0,   34.0,   34.0};
+
+  const G4double xi0Ptot[30] = {
+  16.0,  14.72, 14.34, 13.7,  12.93, 11.9,  10.62, 9.29, 8.3,   7.0,
+   7.96,  9.56, 11.48, 14.04, 19.22, 25.29, 29.4, 34.8, 34.32, 33.33,
+  31.89, 29.55, 27.89, 21.43, 17.0,  16.0,  16.0, 16.0, 16.0,  16.0};
+
+  const G4double ximPtot[30] = {
+  33.0,  32.5,  32.35, 32.1,  31.8,  31.4,  30.9, 30.2, 29.25, 28.0,
+  26.5,  24.6,  22.8,  20.78, 18.22, 19.95, 21.7, 24.0, 24.74, 25.95,
+  27.59, 27.54, 23.16, 17.43, 12.94, 12.0,  12.0, 12.0, 12.0,  12.0};
+
+
   const G4double dsig[46][2] = {
     {13.7,  15.0}, {15.8,  17.6}, {19.0,  15.0}, {46.0,  15.8}, {52.0,  21.0},
     {55.0,  21.9}, {77.0,  31.0}, {101.0, 38.4}, {124.0, 42.7}, {148.0, 55.4},
@@ -320,7 +409,15 @@ G4CascadSpecialFunctions::crossSection(G4double e, G4int is)
     l = 5;
   };
 
-  if (e < EMT2_10) { 
+  // DHW exclude pions here
+  // also kaons and hyperons
+  if (e < EMT2_10 && 
+        l != 3 && l != 4 && l != 5 && 
+        l != 11 && l != 13 && l != 15 && l != 17 &&
+        l != 22 && l != 26 && l != 30 && l != 34 &&
+        l != 21 && l != 42 && l != 23 && l != 54 &&
+        l != 25 && l != 50 && l != 27 && l != 46 &&
+        l != 29 && l != 31 && l != 58 && l != 62) { 
 
     if (l == 1) { // pp or nn
 
@@ -375,26 +472,116 @@ G4CascadSpecialFunctions::crossSection(G4double e, G4int is)
 	  int j = l - 3;
 	  csec = dsig[ik - 1][j] + sk * (dsig[ik][j] - dsig[ik - 1][j]);
 
-	} else {
+	} else if (l==5) {
 	  csec = 0.5 * (dsig[ik - 1][0] + dsig[ik - 1][1] + 
 			sk * (dsig[ik][0] - dsig[ik - 1][0] + dsig[ik][1] - dsig[ik - 1][1]));
-	}; 
+	} else {
+          G4cout << " unknown collison type at low energy = " << l << G4endl;
+          csec = 0;   // temporary for strange particles
+	}
       }; 
     };  
 
   } else {
-    std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
-    G4int ik = iksk.first;
-    G4double sk = iksk.second;
+    G4int ik;
+    G4double sk;
 
-    if (l < 5) {
+    // pp, pn, nn
+    if (l < 3) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
+      ik = iksk.first;
+      sk = iksk.second;
       csec = asig[l - 1][5][ik - 1] + sk * (asig[l - 1][5][ik] - asig[l - 1][5][ik - 1]);
 
+    // pi+p, pi-n  
+    } else if (l == 3) { 
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = pipPtot[ik - 1] + sk * (pipPtot[ik] - pipPtot[ik - 1]);
+
+    // pi-p, pi+n 
+    } else if (l == 4) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = pimPtot[ik - 1] + sk * (pimPtot[ik] - pimPtot[ik - 1]);
+
+    // pi0p, pi0n
+    } else if (l == 5) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = pizPtot[ik - 1] + sk * (pizPtot[ik] - pizPtot[ik - 1]);
+
+    // k+ p, k0 n 
+    } else if (l == 11 || l == 30) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = kpPtot[ik - 1] + sk * (kpPtot[ik] - kpPtot[ik - 1]);
+
+    // k- p, k0b n 
+    } else if (l == 13 || l == 34) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = kmPtot[ik - 1] + sk * (kmPtot[ik] - kmPtot[ik - 1]);
+
+    // k+ n, k0 p
+    } else if (l == 22 || l == 15) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = kpNtot[ik - 1] + sk * (kpNtot[ik] - kpNtot[ik - 1]);
+
+    // k- n, k0b p
+    } else if (l == 26 || l == 17) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = kmNtot[ik - 1] + sk * (kmNtot[ik] - kmNtot[ik - 1]);
+
+    // L p, L n, S0 p, S0 n 
+    } else if (l == 21 || l == 25 || l == 42 || l == 50) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = lPtot[ik - 1] + sk * (lPtot[ik] - lPtot[ik - 1]);
+
+    // Sp p, Sm n
+    } else if (l == 23 || l == 54) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = spPtot[ik - 1] + sk * (spPtot[ik] - spPtot[ik - 1]);
+
+    // Sm p, Sp n
+    } else if (l == 27 || l == 46) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = smPtot[ik - 1] + sk * (smPtot[ik] - smPtot[ik - 1]);
+
+    // Xi0 p, Xi- n
+    } else if (l == 29 || l == 62) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = xi0Ptot[ik - 1] + sk * (xi0Ptot[ik] - xi0Ptot[ik - 1]);
+
+    // Xi- p, Xi0 n
+    } else if (l == 31 || l == 58) {
+      std::pair<G4int, G4double> iksk = getPositionInEnergyScale3(e);
+      ik = iksk.first;
+      sk = iksk.second;
+      csec = ximPtot[ik - 1] + sk * (ximPtot[ik] - ximPtot[ik - 1]);
+
     } else {
-      csec = 0.5 * (asig[2][5][ik - 1] + asig[3][5][ik - 1] +
-		    sk * (asig[2][5][ik] - asig[2][5][ik - 1] +
-			  asig[3][5][ik] - asig[3][5][ik - 1]));
-    }; 
+      G4cout << " unknown collison type = " << l << G4endl; 
+      csec = 0.0;
+    }
+
   }; 
 
   return csec;  
