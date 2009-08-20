@@ -1,4 +1,4 @@
-$Id: History,v 1.444 2009-05-18 20:19:00 perl Exp $
+$Id: History,v 1.445 2009-08-20 15:16:58 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19 August 2009 Laurent Garnier
+ - RayTracer : Fix an bad use of fVP parameters [bugzilla Problem 1072]
+
 18 May 2009, Joseph Perl (vis-V09-02-05)
 - opengl-V09-02-04: add missing header to G4OpenGLViewerMessenger.hh
 
