@@ -67,6 +67,71 @@ void G4NucleiModel::generateModel(G4double a,
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateModel" << G4endl;
+    const G4double EMT3[30] = {
+      0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+      0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+      2.4,  3.2,  4.2,   5.6,   7.5,  10.0,  13.0,  18.0,  24.0,  32.0};
+
+    G4cout << " Incident Kinetic Energy " << G4endl; 
+    G4double KE;
+    for (G4int i = 0; i < 10; i++) {
+      KE = EMT3[i];
+      G4cout << KE << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 10; i < 20; i++) {
+      KE = EMT3[i];
+      G4cout << KE << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 20; i < 30; i++) {
+      KE = EMT3[i];
+      G4cout << KE << " , " ;
+    }
+    G4cout << G4endl;
+
+
+    G4cout << " S- p total cross section " << G4endl; 
+    for (G4int i = 0; i < 10; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaMinusPChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 10; i < 20; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaMinusPChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 20; i < 30; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaMinusPChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
+
+    G4cout << " S+ n total cross section " << G4endl; 
+    for (G4int i = 0; i < 10; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaPlusNChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 10; i < 20; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaPlusNChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
+    for (G4int i = 20; i < 30; i++) {
+      KE = EMT3[i];
+      G4cout << G4CascadeSigmaPlusNChannel::getCrossSection(KE) << " , " ;
+    }
+    G4cout << G4endl;
+
   }
 
   const G4double AU = 1.7234;
@@ -451,7 +516,8 @@ G4InuclElementaryParticle G4NucleiModel::generateQuasiDeutron(G4int type1,
   return G4InuclElementaryParticle(dmom, dtype);
 }
 
-partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
+partners 
+G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
@@ -515,39 +581,42 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
 
     dummy_convertor.setBullet(pmom, pmass);
   
-    G4int rtype;
+    //    G4int rtype;
 
     for (G4int ip = 1; ip < 3; ip++) { 
       G4InuclElementaryParticle particle = generateNucleon(ip, zone);
       dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       G4double csec = crossSection(ekin, ptype * ip);
+
+      /*
       rtype = ptype*ip;
 
-      if ( (rtype > 10 && rtype < 14) || (rtype > 14 && rtype < 63) ) {
+      //      if ( (rtype > 10 && rtype < 14) || (rtype > 14 && rtype < 63) ) {
+      if ( rtype > 21 && rtype < 63 ) {
         // strange particle branch
-        if (rtype == 11) {
-          csec = G4CascadeKplusPChannel::getCrossSection(ekin);
-        } else if (rtype == 13) {
-          csec = G4CascadeKminusPChannel::getCrossSection(ekin);
-        } else if (rtype == 15) {
-          csec = G4CascadeKzeroPChannel::getCrossSection(ekin);
-        } else if (rtype == 17) {
-          csec = G4CascadeKzeroBarPChannel::getCrossSection(ekin);
-        } else if (rtype == 21) {
-          csec = G4CascadeLambdaPChannel::getCrossSection(ekin);
-        } else if (rtype == 23) {
-          csec = G4CascadeSigmaPlusPChannel::getCrossSection(ekin);
-        } else if (rtype == 25) {
-          csec = G4CascadeSigmaZeroPChannel::getCrossSection(ekin);
-        } else if (rtype == 27) {
-          csec = G4CascadeSigmaMinusPChannel::getCrossSection(ekin);
-        } else if (rtype == 29) {
-          csec = G4CascadeXiZeroPChannel::getCrossSection(ekin);
-        } else if (rtype == 31) {
-          csec = G4CascadeXiMinusPChannel::getCrossSection(ekin);
+        //        if (rtype == 11) {
+        //          csec = G4CascadeKplusPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 13) {
+	//          csec = G4CascadeKminusPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 15) {
+	//          csec = G4CascadeKzeroPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 17) {
+	//          csec = G4CascadeKzeroBarPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 21) {
+	//          csec = G4CascadeLambdaPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 23) {
+	//          csec = G4CascadeSigmaPlusPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 25) {
+	//          csec = G4CascadeSigmaZeroPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 27) {
+	//          csec = G4CascadeSigmaMinusPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 29) {
+	//          csec = G4CascadeXiZeroPChannel::getCrossSection(ekin);
+	//        } else if (rtype == 31) {
+	//          csec = G4CascadeXiMinusPChannel::getCrossSection(ekin);
 
-        } else if (rtype == 22) {
+        if (rtype == 22) {
           csec = G4CascadeKplusNChannel::getCrossSection(ekin);
         } else if (rtype == 26) {
           csec = G4CascadeKminusNChannel::getCrossSection(ekin);
@@ -575,6 +644,7 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
                  << rtype << G4endl;
         }
       }
+      */
 
       if(verboseLevel > 2){
 	G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
@@ -582,9 +652,6 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
 
       G4double dens = nucleon_densities[ip - 1][zone];
       G4double rat = getRatio(ip);
-
-      // double rat = 1.0;
-
       G4double pw = -path * dens * csec * rat;
 
       if (pw < -huge_num) pw = -huge_num;
@@ -759,8 +826,10 @@ partners G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle)
   return thePartners;
 }
 
-std::vector<G4CascadParticle> G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
-								    G4ElementaryParticleCollider* theElementaryParticleCollider) {
+
+std::vector<G4CascadParticle> 
+G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
+                                    G4ElementaryParticleCollider* theElementaryParticleCollider) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
