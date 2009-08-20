@@ -52,8 +52,9 @@
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
+
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(1) 
+  : verboseLevel(1)
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
@@ -338,7 +339,18 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
              << G4endl;
     }
 
-  } else {   // non-strange particle branch
+  // pion test branches
+
+  } else if (l == 3 || l == 10) {
+    // |T,Tz> = |3/2,3/2> 
+    mul = piSampler.GetMultiplicityT33(ekin) - 2;
+  } else if (l == 5 || l == 6) {
+    // |T,Tz> = |3/2,1/2> 
+    mul = piSampler.GetMultiplicityT31(ekin) - 2;
+  } else if (l == 7 || l == 14) {
+    // |T,Tz> = |1/2,1/2> 
+    mul = piSampler.GetMultiplicityT11(ekin) - 2;
+  } else {   // non-strange particle branch (nucleon-nucleon for now 8 May 09)
 
     //  DHW 3 Sept 08  const G4double large_cut = 4.0;
     std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
@@ -398,7 +410,7 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   return mul + 2;
 }
 
-
+ 
 std::vector<G4InuclElementaryParticle> 
 G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin, 
 		                     G4double etot_scm, 
@@ -429,7 +441,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
   G4int multiplicity = 0;
   G4bool generate = true;
    
-  while (generate) {      
+  while (generate) {
 
     if(multiplicity == 0) {
       multiplicity = generateMultiplicity(is, ekin);
@@ -439,54 +451,44 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     }
 
     if(multiplicity == 2) { // 2 -> 2
-      G4int kw;
-      kw = 1;
+      G4int kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
 	  generateStrangeChannelPartTypes(is, 2, ekin);
 
         G4int finaltype = particle_kinds[0]*particle_kinds[1];
         if (finaltype != is) kw = 2;  // Charge or strangeness exchange
-      } else {
 
-        if(reChargering(ekin, is)) { // rechargering
-	  kw = 2;
-
-	  switch (is) {
-
-          case 6: // pi+ N -> pi0 P
-            particle_kinds.push_back(7);
-	    particle_kinds.push_back(1);
-	    break;    
-
-          case 5: // pi- P -> pi0 N
-	    particle_kinds.push_back(7);
-	    particle_kinds.push_back(2);
-	    break;    
-
-          case 7: // pi0 P -> pi+ N
-	    particle_kinds.push_back(3);
-	    particle_kinds.push_back(2);
-	    break;    
-
-          case 14: // pi0 N -> pi- P
-	    particle_kinds.push_back(5);
-	    particle_kinds.push_back(1);
-	    break;    
-
-	  default: 
-	    G4cout << " strange recharge: " << is << G4endl;
-            particle_kinds.push_back(type1);
-            particle_kinds.push_back(type2);
-            kw = 1;
-          };
-
-        } else { // just elastic
-
-          kw = 1;
+      } else if (is == 1 || is == 2 || is == 4) {
           particle_kinds.push_back(type1);
-          particle_kinds.push_back(type2);       
-        };
+          particle_kinds.push_back(type2);
+
+      } else if (is == 3) {
+        particle_kinds = piSampler.GetFSPartTypesForPipP(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
+
+      } else if (is == 10) {
+        particle_kinds = piSampler.GetFSPartTypesForPimN(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
+
+      } else if (is == 5) {
+        particle_kinds = piSampler.GetFSPartTypesForPimP(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
+
+      } else if (is == 6) {
+        particle_kinds = piSampler.GetFSPartTypesForPipN(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
+
+      } else if (is == 7) {
+        particle_kinds = piSampler.GetFSPartTypesForPizP(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
+
+      } else if (is == 14) {
+        particle_kinds = piSampler.GetFSPartTypesForPizN(2, ekin);
+        if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
+
+      } else {
+        G4cout << " Unexpected interaction type (2->2) is = " << is << G4endl;
       }
 
       G4CascadeMomentum mom;
@@ -509,6 +511,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       } else {
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
       };
+
+      //      G4cout << " Particle kinds = " << particle_kinds[0] << " , " << particle_kinds[1] << G4endl;
 
       if (verboseLevel > 3){
 	G4cout << " before rotation px " << mom[1] << " py " << mom[2] <<
@@ -534,10 +538,36 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
-	  generateStrangeChannelPartTypes(is, multiplicity, ekin);
-      } else {
+          generateStrangeChannelPartTypes(is, multiplicity, ekin);
+
+      } else if (is == 1 || is == 2 || is == 4) {
         particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
+
+      } else if (is == 3) {
+        particle_kinds = piSampler.GetFSPartTypesForPipP(multiplicity, ekin);
+
+      } else if (is == 10) {
+        particle_kinds = piSampler.GetFSPartTypesForPimN(multiplicity, ekin);
+
+      } else if (is == 5) {
+        particle_kinds = piSampler.GetFSPartTypesForPimP(multiplicity, ekin);
+
+      } else if (is == 6) {
+        particle_kinds = piSampler.GetFSPartTypesForPipN(multiplicity, ekin);
+
+      } else if (is == 7) {
+        particle_kinds = piSampler.GetFSPartTypesForPizP(multiplicity, ekin);
+
+      } else if (is == 14) {
+        particle_kinds = piSampler.GetFSPartTypesForPizN(multiplicity, ekin);
+
+      } else {
+        G4cout << " Unexpected interaction type is = " << is << G4endl;
       }
+
+      //      G4cout << " Particle kinds = " ;
+      //      for (G4int i = 0; i < multiplicity; i++) G4cout << particle_kinds[i] << " , " ;
+      //       G4cout << G4endl;
 
       G4int itry = 0;
       G4bool bad = true;
@@ -1460,7 +1490,8 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
   return mom;  
 }
 
-   
+
+/*
 G4bool 
 G4ElementaryParticleCollider::reChargering(G4double ekin, 
 					   G4int is) const 
@@ -1599,6 +1630,7 @@ G4ElementaryParticleCollider::reChargering(G4double ekin,
 
   return rech;
 }
+*/
 
 
 std::pair<G4double, G4double> 
