@@ -53,6 +53,7 @@
 #include "G4StateManager.hh"
 #include "G4DecayPhysics.hh"
 #include "G4Timer.hh"
+#include "Randomize.hh"
 
 #include <fstream>
 #include <string>
@@ -68,6 +69,7 @@ int main(int argc, char** argv) {
   G4cout <<"======      Intermediate Energy Test Start      ========" <<G4endl;
   G4cout <<"========================================================" <<G4endl;
 
+  // Set default parameter values
   G4String  namePart = "proton";
   G4String  nameMat  = "Be";
   G4String  nameGen  = "Binary";
@@ -82,6 +84,12 @@ int main(int argc, char** argv) {
   G4int  verbose  = 0; 
   G4bool xsbgg    = true;
   G4bool nevap    = true;
+  G4long myseed   = 135799753;
+
+  // Choose the Random engine
+  //
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::HepRandom::setTheSeed(myseed);
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
@@ -149,6 +157,7 @@ int main(int argc, char** argv) {
   G4cout << "#HETCEmission" << G4endl;
   G4cout << "#GNASHTransition" << G4endl;
   G4cout << "#GEMEvaporation" << G4endl;
+  G4cout << "#randomSeed" << G4endl;
 
   G4String line, line1;
   G4bool end = true;
@@ -209,6 +218,10 @@ int main(int argc, char** argv) {
         gtran = true;
       } else if(line == "#GEMEvaporation") {
         nevap = true;
+      } else if(line == "#randomSeed") {
+        (*fin) >> myseed;
+	CLHEP::HepRandom::setTheSeed(myseed);
+	G4cout << "###### Set Random Seed to " << myseed << "     #####" << G4endl;
       }
     } while(end);
 

@@ -20,22 +20,22 @@
 #include "TStyle.h"
 #include "TGraph.h"
 
-const int modelsITEP=8, modelsBNL=5;
+const int modelsITEP=9, modelsBNL=5;
 
-std::string ModelsITEP[8]  = {"lepar", "ftfb",    "bertini", "binary", 
-			      "qgsc",      "qgsp",      "qgsb",   "ftfp"};
-std::string ModelNamesI[8] = {"LEP",   "FTF-Bin", "Bertini", "Binary", 
-			      "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco"};
+std::string ModelsITEP[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
+std::string ModelNamesI[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco", "CHIPS"};
 
-std::string ModelsBNL[8]   = {"lepar", "ftfb",    "bertini", "binary", 
-			      "qgsc",      "qgsp",      "qgsb",   "ftfp"};
-std::string ModelNamesB[8] = {"LEP",   "FTF-Bin", "Bertini", "Binary", 
-			      "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco"};
+std::string ModelsBNL[9]   = {"lepar", "ftfb",    "bertini", "binary", 
+			      "qgsc",      "qgsp",      "qgsb",   "ftfp",
+                              "CHIPS"};
+std::string ModelNamesB[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", 
+			      "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco",
+                              "CHIPS"};
 
 
-int         colModel[8]    = {8, 2, 6, 3, 7, 9, 1, 4};
-int         symbModel[8]   = {24, 29, 25, 27, 26, 23, 21, 20};
-int         stylModel[8]   = {3, 2, 1, 4, 5, 6, 1, 7};
+int         colModel[9]    = {8, 2, 6, 3, 7, 9, 1, 4, 12};
+int         symbModel[9]   = {24, 29, 25, 27, 26, 23, 21, 20, 22};
+int         stylModel[9]   = {3, 2, 1, 4, 5, 6, 1, 7, 8};
 double      keproton[4]    = {0.09, 0.15, 0.19, 0.23};
 double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
@@ -410,7 +410,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int first=0,
 	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   char fname[120], list[40], hname[60], titlx[50];
-  TH1F *hi[8];
+  TH1F *hi[9];
   int i=0, icol=1, isty=1;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=1, ymi0=100., xlow=0.06, xhigh=0.26;
@@ -541,17 +541,19 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
 
   // Read contents of the data file
   int     q1;
-  float   m1, r1, x1[30], y1[30], er1[30], staterr, syserr;
+  float   m1, r1, x1[30], y1[30], er1[30], y2[30], er2[30], staterr, syserr;
   infile >> m1 >> r1 >> q1;
   for (i=0; i<q1; i++) {
     infile >> x1[i] >> y1[i] >> staterr >> syserr;
     syserr *= y1[i];
     er1[i]  = sqrt(syserr*syserr+staterr*staterr);
-    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << "\n";
+    y2[i]   = 1.;
+    er2[i]  = er1[i]/y1[i];
+    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << " " << er2[i] << "\n";
   }
 
   char list[40], hname[60], titlx[100];
-  TGraphErrors *gr[8];
+  TGraphErrors *gr[9], *gref;
   int icol=1, ityp=20;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=0.1, ymi0=100., xlow=0.06, xhigh=0.26;
@@ -586,7 +588,7 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
 	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
 	    }
 	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
-	    if ((!error) && (i != first)) drt[np] = 0;
+	    if (!error) drt[np] = 0;
 	    np++;
 	    break;
 	  }
@@ -606,6 +608,15 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
     }
     file->Close();
   }
+  gref = new TGraphErrors(q1, xx, y2, dx, er2);
+  gref->GetXaxis()->SetRangeUser(xlow, xhigh); gref->SetTitle("");
+  gref->GetXaxis()->SetTitle(titlx);
+  gref->GetYaxis()->SetTitle("MC/Data");
+  gref->SetLineStyle(1);    gref->SetLineWidth(1); 
+  gref->SetLineColor(1);    gref->SetMarkerColor(1); 
+  gref->SetMarkerStyle(20); gref->SetMarkerSize(0.1); 
+  gref->GetXaxis()->SetLabelSize(0.035);
+  gref->GetYaxis()->SetLabelSize(0.035);
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -621,6 +632,7 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int first=0,
   for (i=0; i<modelsITEP; i++) {
     if (i != first && gr[i] != 0) gr[i]->Draw("Pl");
   }
+  if (!error) gref->Draw("P");
 
   TLegend *leg1;
   if (legend < 0) {
@@ -717,7 +729,7 @@ void plotCT(char element[2], char ene[6], double ke, int first=0, int scan=1,
   if (debug) std::cout << " gives " << nn << " angles\n";
 
   char fname[120], list[40], hname[60];
-  TH1F *hi[8];
+  TH1F *hi[9];
   int i=0, icol=1;
   double  ymx0=1, ymi0=100., xlow=-1.0, xhigh=1.0;
   for (i=0; i<modelsITEP; i++) {
@@ -1144,7 +1156,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int first=0,
 	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   char fname[120], list[40], hname[60], titlx[50], sym[8];
-  TH1F *hi[8];
+  TH1F *hi[9];
   int i=0, icol=1;
   if      (particle=="piminus") sprintf(sym, "#pi^{-}");
   else if (particle=="piplus")  sprintf(sym, "#pi^{+}");
@@ -1275,17 +1287,19 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
   ifstream infile;
   infile.open(fname);
   int     q1;
-  float   ym1, ym2, sys, x1[50], y1[50], er1[50], staterr, syserr;
+  float   ym1, ym2, sys, x1[50], y1[50], y2[50], er1[50], er2[50], staterr, syserr;
   infile >> q1 >> ym1 >> ym2 >> sys;
   for (i=0; i<q1; i++) {
     infile >> x1[i] >> y1[i] >> staterr;
     syserr = sys*y1[i];
     er1[i] = sqrt(syserr*syserr+staterr*staterr);
-    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << "\n";
+    y2[i]  = 1.;
+    er2[i] = er1[i]/y1[i];
+    if (debug) std::cout << i << " " << x1[i] << " " << y1[i] << " " << er1[i] << " " << er2[i] << "\n";
   }
 
   char          list[40], hname[60];
-  TGraphErrors *gr[8];
+  TGraphErrors *gr[9], *gref;
   double        ymx0=1, ymi0=100., xlow=0.1, xhigh=1.6;
   for (i=0; i<modelsBNL; i++) {
     icol = colModel[i]; ityp = symbModel[i];
@@ -1317,7 +1331,7 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
 	      if (rat[np]-drt[np] < ymi0) ymi0 = rat[np]-drt[np];
 	    }
 	    if (debug) std::cout << np << "/" << j << "/" << k << " x " << xx[np] << " (" << xx1 << ":" << xx1+xx2 << ")" << " y " << yy << "/" << y1[j] << " = " << rat[np] << " +- " << drt[np] << "\n";
-	    if ((!error) && (i != first)) drt[np] = 0;
+	    if (!error) drt[np] = 0;
 	    np++;
 	    break;
 	  }
@@ -1335,6 +1349,15 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
     }
     file->Close();
   }
+  gref = new TGraphErrors(q1, xx, y2, dx, er2);
+  gref->GetXaxis()->SetRangeUser(xlow, xhigh); gref->SetTitle("");
+  gref->GetXaxis()->SetTitle(titlx);
+  gref->GetYaxis()->SetTitle("MC/Data");
+  gref->SetLineStyle(1);    gref->SetLineWidth(1); 
+  gref->SetLineColor(1);    gref->SetMarkerColor(1); 
+  gref->SetMarkerStyle(20); gref->SetMarkerSize(0.1); 
+  gref->GetXaxis()->SetLabelSize(0.035);
+  gref->GetYaxis()->SetLabelSize(0.035);
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -1353,6 +1376,7 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int first=0,
     for (i=0; i<modelsBNL; i++) {
       if (i != first && gr[i] != 0) gr[i]->Draw("Pl");
     }
+    if (!error) gref->Draw("P");
 
     TLegend *leg1;
     if (legend < 0) {
