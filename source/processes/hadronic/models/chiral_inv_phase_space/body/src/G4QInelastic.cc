@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.1 2009-08-17 15:15:09 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.2 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -58,139 +58,119 @@ G4double G4QInelastic::tubeDensity  =1./fermi;
 // Parameters of diffractional fragmentation
 G4double G4QInelastic::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
 
-G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimary)
+G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, G4QNucleus &tNucleus)
 {
   static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
   static const G4double  mPi0  = G4PionZero::PionZero()->GetPDGMass(); // Mass of Pi0
-  theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
-  theQuasiElastic=G4QuasiFreeRatios::GetPointer();
+  theWorld= G4QCHIPSWorld::Get();         // Get a pointer to the CHIPS World
   theResult = new G4QHadronVector;        // Define theResultingHadronVector
-  G4bool stringsInitted=false;            // Strings ure initiated
-  G4QHadron aProjectile = aPrimary;       // As a primary is const
+  G4bool stringsInitted=false;            // Strings are initiated
   G4LorentzRotation toZ;                  // Lorentz Transformation to the projectileSystem
-  G4LorentzVector proj4M=aProjectile.Get4Momentum(); // Projectile 4-momentum in LS
+  G4LorentzVector proj4M=pNucleus.Get4Momentum(); // Projectile nucleus 4-momentum in LS
+  G4double projM=pNucleus.GetGSMass();    // Ground state mass of the projectile nucleus
+  G4double targM=tNucleus.GetGSMass();    // Ground state mass of the target nucleus
 #ifdef edebug
-  G4double tgMass=aNucleus.GetGSMass();   // Ground state mass of the nucleus
-  G4cout<<"G4QInelastic::Constr: Called,p4M="<<proj4M<<",A="<<aNucleus<<tgMass<<G4endl;
+  G4cout<<"G4QIn::Constr:*Called*,pA="<<pNucleus<<proj4M<<",tA="<<tNucleus<<targM<<G4endl;
 #endif
-  G4int tZ=aNucleus.GetZ();
-  G4int tN=aNucleus.GetN();
+  G4int pZ=pNucleus.GetZ();
+  G4int pN=pNucleus.GetN();
+  G4int pA=pZ+pN;
+  G4int pPDG=90000000+pZ*1000+pN;
+  G4int tZ=tNucleus.GetZ();
+  G4int tN=tNucleus.GetN();
+  G4int tA=tZ+tN;
   G4int tPDG=90000000+tZ*1000+tN;
   toZ.rotateZ(-proj4M.phi());
   toZ.rotateY(-proj4M.theta());
-  G4LorentzVector zProj4M=toZ*proj4M;     // Proj 4-momentum in LS rotated to Z axis
-  aProjectile.Set4Momentum(zProj4M);      // Now the projectile moves along Z axis
+  G4LorentzVector zProj4M=toZ*proj4M; // Proj 4-momentum in LS rotated to Z axis
+  pNucleus.Set4Momentum(zProj4M);         // Now the projectile nucleus moves along Z axis
 #ifdef edebug
-  G4int totChg=aProjectile.GetCharge()+tZ;// Charge of the projectile+target for the CHECK
-  G4int totBaN=aProjectile.GetBaryonNumber()+tZ+tN;// Baryon Number of Proj+Targ for CHECK
-  G4LorentzVector tgLS4M(0.,0.,0.,tgMass);// Target 4-momentum in LS
+  G4int totChg=pZ+tZ;                     // Charge of the projectile+target for the CHECK
+  G4int totBaN=pA+tA;                     // Baryon Number of Proj+Targ for CHECK
+  G4LorentzVector tgLS4M(0.,0.,0.,targM); // Target 4-momentum in LS
   G4LorentzVector totLS4M=proj4M+tgLS4M;  // Total 4-momentum in LS
   G4LorentzVector totZLS4M=zProj4M+tgLS4M;// Total 4-momentum in LS with momentum along Z
-  G4cout<<"-EMC-G4QInelastic::Construct:tLS4M="<<totLS4M<<",tZLS4M="<<totZLS4M<<G4endl;
+  G4cout<<"-EMC-G4QInelastic::Construct: tLS4M="<<totLS4M<<", tZLS4M="<<totZLS4M<<G4endl;
   // === From nere all consideration is made in the rotated LS frame (proj is along Z) ===
 #endif
   G4LorentzRotation toLab(toZ.inverse()); // Lorentz Transfornation "ZLS"->LS (at the end)
-  G4int pPDG=aProjectile.GetPDGCode();    // The PDG code of the projectile
-  G4double projM=aProjectile.GetMass();   // Mass of the projectile
   G4QInteractionVector theInteractions;   // A vector of interactions (taken from the Body)
   G4QPartonPairVector  thePartonPairs;    // The parton pairs (taken from the Body)
   G4int                ModelMode=SOFT;    // The current model type (taken from the Body)
-  theNucleus=G4QNucleus(tZ,tN);           // Create theNucleus (Body) to Move From LS to CM
-  theNucleus.InitByPDG(tPDG);             // Reinit the Nucleus for the new Attempt
+  theProjNucleus=G4QNucleus(tZ,tN);       // Create thePrNucleus to Move From LS to CM
+  theTargNucleus.InitByPDG(tPDG);         // Reinit the Nucleus for the new Attempt?
 #ifdef debug
-  G4cout<<"G4QInelastic::Construct: Nucleus4Mom="<<theNucleus.Get4Momentum()<<G4endl;
+  G4cout<<"G4QInelastic::Construc:TargNucleus4Mom="<<theTargNucleus.Get4Momentum()<<G4endl;
 #endif
-  theNucleus.Init3D();                    // 3D-initialisation(nucleons) of theNucleusClone
-  // Now we can make the Quasi-Elastic (@@ Better to select a nucleon from the perifery)
-  std::pair<G4double,G4double> ratios=std::make_pair(0.,0.);
-  G4int apPDG=std::abs(pPDG);
-  if(apPDG>99) ratios=theQuasiElastic->GetRatios(proj4M.vect().mag(), pPDG, tZ, tN);
-  if(apPDG>99 && G4UniformRand() < ratios.first*ratios.second)// Make Quasi-Elastic
-  {
-    theNucleus.StartLoop();                            // Prepare Loop ovder nucleons
-    G4QHadron* pNucleon = theNucleus.GetNextNucleon(); // Get the next nucleon to try
-    G4LorentzVector pN4M=pNucleon->Get4Momentum();     // Selected Nucleon 4-momentum
-    G4int pNPDG=pNucleon->GetPDGCode();                // Selected Nucleon PDG code
+  theTargNucleus=G4QNucleus(tZ,tN);       // Create theTargNucleus to Move From LS to CM
+  theTargNucleus.InitByPDG(tPDG);         // Reinit the Nucleus for the new Attempt?
+  theTargNucleus.Init3D();                // 3D-initialisation(nucleons)ofTheTGNucleusClone
 #ifdef debug
-    G4cout<<">QE>G4QInelastic::Construct:TryQE,R="<<ratios.first*ratios.second<<",N4M="
-          <<pN4M<<",NPDG="<<pNPDG<<G4endl;
+  G4cout<<"G4QInelastic::Construc:TargNucleus4Mom="<<theTargNucleus.Get4Momentum()<<G4endl;
 #endif
-    std::pair<G4LorentzVector,G4LorentzVector> QEout=theQuasiElastic->Scatter(pNPDG,pN4M,
-                                                                              pPDG,proj4M);
-    if(QEout.first.e() > 0)                            // ==> Successful scattering
-    {
-      G4QHadron* qfN = new G4QHadron(pNPDG,QEout.first);
-      theResult->push_back(qfN);                       // Scattered Quasi-free nucleon  
-      G4QHadron* qfP = new G4QHadron(pPDG,QEout.second);
-      theResult->push_back(qfP);                       // Scattered Projectile  
-      theNucleus.SubtractNucleon(pNucleon);            // Exclude the used nucleon from Nuc
-      G4LorentzVector r4M=theNucleus.Get4Momentum();   // Nucleus 4-momentum in LS
-      G4int rPDG=theNucleus.GetPDG();                  // Nuclear PDG
-      G4QHadron* resNuc = new G4QHadron(rPDG,r4M);     // The residual Nucleus
-      theResult->push_back(resNuc);                    // Fill the residual nucleus
+
+  theProjNucleus=G4QNucleus(pZ,pN);       // Create theProjNucleus to Move From LS to CM
+  theProjNucleus.InitByPDG(pPDG);         // Reinit the Nucleus for the new Attempt?
+  theProjNucleus.Init3D();                // 3D-initialisation(nucleons)ofThePrNucleusClone
 #ifdef debug
-      G4cout<<"-->QE-->G4QInelastic::Construct:QEDone, N4M="<<QEout.first<<", p4M="
-            <<QEout.second<<G4endl;
+  G4cout<<"G4QInelastic::Construc:ProjNucleus4Mom="<<theProjNucleus.Get4Momentum()<<G4endl;
 #endif
-      return;                                          // The Quasielastic is the only act
-    }
-  }
 #ifdef edebug
-  G4LorentzVector sum1=theNucleus.GetNucleons4Momentum(); // Sum ofNucleons4M inRotatedLS
-  G4cout<<"-EMC-G4QInelastic::Construct: Nuc4M="<<sum1<<G4endl;
+  G4LorentzVector sumP1=theProjNucleus.GetNucleons4Momentum();// Sum ofPrNucleons4M inRotLS
+  G4LorentzVector sumT1=theTargNucleus.GetNucleons4Momentum();// Sum ofTgNucleons4M inRotLS
+  G4cout<<"-EMC-G4QInelastic::Construct: pNuc4M="<<sumP1<<", tNuc4M="<<sumT1<<G4endl;
 #endif
-  G4ThreeVector theCurrentVelocity(0.,0.,0.);        // "CM" velosity (temporary)
-  // @@ "target Nucleon" == "Proton at rest" case (M.K. ?)
-  G4double nCons = 1;                                // 1 or baryonNum of the Projectile
-  G4int projAbsB=std::abs(aProjectile.GetBaryonNumber());// Fragment/Baryon (Meson/AntiB)
-  if(projAbsB>1) nCons = projAbsB;                   // @@ what if this is a meson ?
+  G4ThreeVector theCMVelocity(0.,0.,0.);             // Prototype of the "CM" velocity
+  G4ThreeVector theALVelocity(0.,0.,0.);             // Prototype of the "AntiLab" velocity
   // Very important! Here the projectile 4M is recalculated in the ZLS (previously in LS)
-  proj4M = aProjectile.Get4Momentum();               // 4-mom of theProjectileHadron inZLS
-  G4double pz_per_projectile = proj4M.pz()/nCons;    // Momentum per nucleon (hadron?)
-  // @@ use M_A/A instead of mProt ------------ M.K.
-  G4double e_per_projectile = proj4M.e()/nCons+mProt;// @@ Add MassOfTargetProtonAtRest
+  proj4M = pNucleus.Get4Momentum();                  // 4-mom of theProjectileHadron inZLS
+  G4double pz_per_projectile = proj4M.pz()/pA;       // Momentum per nucleon
+  G4double e_per_projectile = proj4M.e()/pA+targM/tA;// Add MassOfTargetNucleon
   G4double vz = pz_per_projectile/e_per_projectile;  // Speed of the "oneNuclenCM"
 #ifdef debug
-  G4cout<<"G4QInelastic::Construct: Projectile4M="<<proj4M<<", Vz="<<vz<<", nC="
-        <<nCons<<", pE="<<e_per_projectile<<G4endl;
+  G4cout<<"G4QInelastic::Construct: Projectile4M="<<proj4M<<", Vz="<<vz<<", pA="
+        <<pA<<", pE="<<e_per_projectile<<G4endl;
 #endif
-  theCurrentVelocity.setZ(vz);                       // CM (w/r to one nucleon) velosity
-  theNucleus.DoLorentzBoost(-theCurrentVelocity);    // BoostTgNucleus to"CM"
+  theCMVelocity.setZ(vz);                            // CM (w/r to one nucleon) velosity
+  theProjNucleus.DoLorentzBoost(-theCMVelocity);     // BoostProjNucleus to "CM"
+  theTargNucleus.DoLorentzBoost(-theCMVelocity);     // BoostProjNucleus to "CM"
+  G4LorentzVector tgN4M=theTargNucleus.Get4Momentum();
+  G4double avz=tgN4M.pz()/tgN4M.e();                 // Speed of AntiLabSys in CMS
+  theALVelocity.setZ(avz);                           // CM (w/r to one nucleon) velosity
 #ifdef edebug
-  G4LorentzVector sum2=theNucleus.GetNucleons4Momentum();// Sum of Nucleons 4M in RotatedCM
-  G4cout<<"-EMC-G4QInelastic::Construct: AfterBoost, v="<<vz<<", Nuc4M="<<sum2<<G4endl;
+  G4LorentzVector sumP2=theProjNucleus.GetNucleons4Momentum();// Sum of Nucleons4M in RotCM
+  G4LorentzVector sumT2=theTargNucleus.GetNucleons4Momentum();// Sum of Nucleons4M in RotCM
+  G4cout<<"-EMC-G4QInelastic::Construct: Boosted, vCM="<<vz<<", vAL="<<avz<<", tN4M="
+        <<sumT2<<", pN4M="<<sumP2<<G4endl;
 #endif
-  G4LorentzVector cmProjMom = proj4M;                // Copy the original proj4M in LS
-  cmProjMom.boost(-theCurrentVelocity);              // Bring the LS proj4Mom to "CM"
-  G4double eKin = cmProjMom.e()-projM;               // Primary kinetic energy (MeV!)
-  // @@ The maxCuts can improve the performance at low energies
-  G4int maxCuts = std::min( 7, std::max( 1, static_cast<int>(std::log(eKin/GeV)) ) );
-#ifdef debug
-  G4cout<<"G4QInelastic::Construct: Proj4MInCM="<<cmProjMom<<", pPDG="<<pPDG<<G4endl;
-#endif
+  G4int maxCuts = 7;                                 // @@ Can be reduced for low energies
   //
-  // >>>>>>>>>> Find collisions meeting collision conditions
+  // >>>>>>>>>> Find collisions meeting collision conditions @@@ get proj Nucleon
   //
-  G4QHadron* cmProjectile = new G4QHadron(pPDG,cmProjMom); // HipCopy of the CMProjectile
+  // 
+  theProjNucleus.StartLoop();                        // Prepare Loop ovder nucleons
+  G4QHadron* pNucleon = theProjNucleus.GetNextNucleon(); // Get the next projNucleon to try
+  G4LorentzVector pNuc4M=pNucleon->Get4Momentum();
+  theTargNucleus.StartLoop();                        // Prepare Loop ovder nucleons
+  G4QHadron* tNucleon = theTargNucleus.GetNextNucleon(); // Get the next targNucleon to try
+  G4LorentzVector tNuc4M=tNucleon->Get4Momentum();
   // @@ Do not forget to delete the probability! 
   G4QProbability theProbability(pPDG);               // thePDG must be a data member
-  G4double outerRadius = theNucleus.GetOuterRadius();// Get the nucleus frontiers
+  G4double outerRadius = theProjNucleus.GetOuterRadius()+theTargNucleus.GetOuterRadius();
 #ifdef debug
-  G4cout<<"G4QInel::Constr:OutR="<<outerRadius<<",mC="<<maxCuts<<",A="<<theNucleus<<G4endl;
+  G4cout<<"G4QInel::Constr:OuterR="<<outerRadius<<", mC="<<maxCuts<<", pA="<<theProjNucleus
+        <<", tA="<<theTargNucleus<<G4endl;
 #endif
   // Check the reaction threshold 
-  theNucleus.StartLoop();                            // Prepare Loop ovder nucleons
-  G4QHadron* pNucleon = theNucleus.GetNextNucleon(); // Get the next nucleon to try
-  G4LorentzVector pNuc4M=pNucleon->Get4Momentum();
-  G4double s = (cmProjMom + pNuc4M).mag2();          // Squared CM Energy of compound
-  G4double ThresholdMass = projM + pNucleon->GetMass(); // @@ Nucleon can be virtual...?
+  G4double s = (tNuc4M + pNuc4M).mag2();             // Squared CM Energy of compound
+  G4double ThresholdMass = projM + tNucleon->GetMass(); // @@ Nucleon can be virtual...?
 #ifdef debug
   G4cout<<"G4QInel::Constr: pN4M="<<pNuc4M<<", s="<<s<<", ThreshM="<<ThresholdMass<<G4endl;
 #endif
   ModelMode = SOFT;                                  // NOT-Diffractive hadronization
   if (s < 0.)                                        // At ThP=0 is impossible(virtNucl)
   {
-    G4cerr<<"***G4QInelastic::Construct: s="<<s<<", pN4M="<<pNuc4M<<G4endl;
+    G4cerr<<"***G4QInelastic::Construct:s="<<s<<",pN4M="<<pNuc4M<<",tN4M="<<tNuc4M<<G4endl;
     G4Exception("G4QInelastic::Construct:","72",FatalException,"LowEnergy(NegativeS)");
   }
   if (s < sqr(ThresholdMass))                        // --> Only diffractive interaction
@@ -211,8 +191,8 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
   G4int attCnt=0;
   G4int maxAtt=27;
   G4double prEn=proj4M.e();                           // For mesons
-  G4int proB=aProjectile.GetBaryonNumber();
-  if     (proB>0) prEn-=aProjectile.GetMass();        // For baryons
+  G4int proB=pNucleus.GetBaryonNumber();
+  if     (proB>0) prEn-=pNucleus.GetMass();           // For baryons
   else if(proB<0) prEn+=mProt;                        // For anti-baryons
 #ifdef debug
   G4double impactUsed = 0.;
@@ -225,15 +205,15 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
 #endif
     // choose random impact parameter
     std::pair<G4double, G4double> theImpactParameter;
-    theImpactParameter = theNucleus.ChooseImpactXandY(outerRadius);
+    theImpactParameter = theProjNucleus.ChooseImpactXandY(outerRadius);
     G4double impactX = theImpactParameter.first; 
     G4double impactY = theImpactParameter.second;
 #ifdef debug
     G4cout<<"G4QInelastic::Construct: Impact Par X="<<impactX<<", Y="<<impactY<<G4endl;
 #endif
     G4double impar=std::sqrt(impactX*impactX+impactY*impactY);   
-    G4int nA=theNucleus.GetA();
-    G4double eflen=theNucleus.GetThickness(impar);   // EffectiveLength
+    G4int nA=theTargNucleus.GetA();
+    G4double eflen=theTargNucleus.GetThickness(impar);   // EffectiveLength
     maxEn=eflen*stringTension;                       // max absorbed energy in IndUnits=MeV
     maxNuc=static_cast<int>(eflen*tubeDensity+0.5);  // max #0f involved nuclear nucleons
 #ifdef debug
@@ -241,44 +221,50 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
 #endif
     if(prEn < maxEn)                                 // Create DIN interaction and go out
     {
-      theNucleus.StartLoop();                        // Initialize newSelection forNucleons
-      pNucleon=theNucleus.GetNextNucleon();          // Select a nucleon
-      G4QHadron* aTarget = new G4QHadron(*pNucleon); // Copy selected nucleon for String
-      G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
+      theProjNucleus.StartLoop();                    // Initialize newSelection forNucleons
+      pNucleon=theProjNucleus.GetNextNucleon();      // Select a nucleon
+      G4QHadron* aProjectile = new G4QHadron(*pNucleon); // Copy selected PrNuc for String
+      theTargNucleus.StartLoop();                    // Initialize newSelection forNucleons
+      tNucleon=theTargNucleus.GetNextNucleon();      // Select a nucleon
+      G4QHadron* aTarget = new G4QHadron(*tNucleon); // Copy selected nucleon for String
+      G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
       anInteraction->SetTarget(aTarget); 
       anInteraction->SetNumberOfDINRCollisions(1);   // Consider this interaction as DINR
-      theInteractions.push_back(anInteraction);      //--> now theInteractions not empty
-      theNucleus.DoLorentzBoost(theCurrentVelocity); // Boost theResNucleus toRotatedLS
-      theNucleus.SubtractNucleon(pNucleon);          // Pointer to the used nucleon
-      theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
+      theInteractions.push_back(anInteraction);      //--> now the Interaction is not empty
+      theProjNucleus.DoLorentzBoost(-theALVelocity); // Boost theResPrNucleus toRotAntiLab
+      theProjNucleus.SubtractNucleon(pNucleon);      // Pointer to the used ProjNucleon
+      theProjNucleus.DoLorentzBoost(theALVelocity);  // Boost theResProjNucleus back to CM
+      theTargNucleus.DoLorentzBoost(theCMVelocity);  // Boost theResTgNucleus to RotatedLS
+      theTargNucleus.SubtractNucleon(tNucleon);      // Pointer to the used TargNucleon
+      theTargNucleus.DoLorentzBoost(-theCMVelocity); // Boost theResTargNucleus back to CM
 #ifdef debug
       G4cout<<"G4QInelastic::Construct: DINR interaction is created"<<G4endl;
 #endif
       break;                                         // Break the WHILE of interactions
     }
     // LOOP over nuclei of the target nucleus to select collisions
-    theNucleus.StartLoop();                          // To get the same nucleon
-    G4int nucleonCount = 0;
+    theTargNucleus.StartLoop();                          // To get the same nucleon
+    G4int nucCount = 0;
 #ifdef debug
     G4cout<<"G4QInelastic::Construct: Before the WHILE over nucleons, A="<<nA<<G4endl;
 #endif
-    while( (pNucleon=theNucleus.GetNextNucleon()) && nucleonCount<nA && totalCuts<maxCuts)
+    while((tNucleon=theTargNucleus.GetNextNucleon()) && nucCount<nA && totalCuts<maxCuts)
     {
-      ++nucleonCount;
+      ++nucCount;
       // Needs to be moved to Probability class @@@
-      G4double s = (cmProjMom + pNucleon->Get4Momentum()).mag2();
+      G4double s = ( pNucleon->Get4Momentum() + tNucleon->Get4Momentum() ).mag2();
       if(s<=10000.)
       {
-        G4cout<<"-Warning-G4QInelastic::Construct: s < .01 GeV^2, p4M="<<cmProjMom
-              <<",t4M="<<pNucleon->Get4Momentum()<<G4endl;
+        G4cout<<"-Warning-G4QInelastic::Construct: s < .01 GeV^2, p4M="
+              <<pNucleon->Get4Momentum()<<",t4M="<<tNucleon->Get4Momentum()<<G4endl;
         continue;
       }
 #ifdef sdebug
-      G4cout<<"G4QInelastic::Construct:LOOPovNuc,nC="<<nucleonCount<<", s="<<s<<G4endl;
-      G4cout<<"G4QInelastic::Construct:LOOPovNuc, R="<<pNucleon->GetPosition()<<G4endl;
+      G4cout<<"G4QInelastic::Construct:LOOPovNuc,nC="<<nucCount<<", s="<<s<<", pR="
+            <<pNucleon->GetPosition()<<", tR="<<tNucleon->GetPosition()<<G4endl;
 #endif
-      G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x()) +
-                           sqr(impactY - pNucleon->GetPosition().y());
+      G4double Distance2 = sqr(impactX - tNucleon->GetPosition().x()) +
+                           sqr(impactY - tNucleon->GetPosition().y());
 #ifdef sdebug
       G4cout<<"G4QInelastic::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
 #endif
@@ -295,27 +281,31 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
 #endif
       if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction (JOB)
       {
-        G4QHadron* aTarget = new G4QHadron(*pNucleon);// Copy selected nucleon for String
+        G4QHadron* aProjectile = new G4QHadron(*pNucleon);// Copy selected PrNuc for String
+        G4QHadron* aTarget = new G4QHadron(*tNucleon);// Copy selected TgNucleon for String
 #ifdef edebug
         G4cout<<"--->EMC-->G4QInelastic::Construct: Target Nucleon is filled, 4M/PDG="
               <<aTarget->Get4Momentum()<<aTarget->GetPDGCode()<<G4endl;
 #endif
         // Now the energy of the nucleons must be updated in CMS
-        theNucleus.DoLorentzBoost(theCurrentVelocity);// Boost theResNucleus toRotatedLS
-        theNucleus.SubtractNucleon(pNucleon);         // Pointer to the used nucleon
-        theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
+        theProjNucleus.DoLorentzBoost(-theALVelocity);// Boost theResNucleus toRotatedLS
+        theProjNucleus.SubtractNucleon(pNucleon);     // Pointer to the used nucleon
+        theProjNucleus.DoLorentzBoost(theALVelocity); // Boost theResNucleus back to CM
+        theTargNucleus.DoLorentzBoost(theCMVelocity); // Boost theResNucleus toRotatedLS
+        theTargNucleus.SubtractNucleon(tNucleon);     // Pointer to the used nucleon
+        theTargNucleus.DoLorentzBoost(-theCMVelocity);// Boost theResNucleus back to CM
         if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
             G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
         { 
           // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
-          if(IsSingleDiffractive()) ExciteSingDiffParticipants(cmProjectile, aTarget);
-          else                          ExciteDiffParticipants(cmProjectile, aTarget);
-          G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
+          if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
+          else                          ExciteDiffParticipants(aProjectile, aTarget);
+          G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
           anInteraction->SetTarget(aTarget); 
           anInteraction->SetNumberOfDiffractiveCollisions(1); // Why not increment? M.K.?
           theInteractions.push_back(anInteraction);   //--> now theInteractions not empty
           // @@ Why not breake the NLOOP, if only one diffractive can happend?
-          totalCuts++;                               // UpdateOfNucleons in't necessary
+          totalCuts++;                                // UpdateOfNucleons in't necessary
 #ifdef debug
           G4cout<<"G4QInelastic::Construct:NLOOP DiffInteract, tC="<<totalCuts<<G4endl;
 #endif
@@ -324,9 +314,9 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
         {
           // -------------->>>>> nondiffractive = soft interaction
           // sample nCut+1 (cut Pomerons) pairs of strings can be produced
-          G4int nCut;                                // Result in a chosen number of cuts
-          G4double* running = new G4double[nCutMax]; // @@ This limits the max cuts
-          for(nCut = 0; nCut < nCutMax; nCut++)      // Calculates multiCut probabilities
+          G4int nCut;                                 // Result in a chosen number of cuts
+          G4double* running = new G4double[nCutMax];  // @@ This limits the max cuts
+          for(nCut = 0; nCut < nCutMax; nCut++)       // Calculates multiCut probabilities
           {
             running[nCut]= theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
             if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
@@ -341,8 +331,8 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
           // @@ nCut is found with big efforts and now nCut=0 ?? M.K. ?? !!
           //nCut = 0; // @@ in original code ?? @@
           aTarget->IncrementCollisionCount(nCut+1); // @@ What about multyNucleon target?
-          cmProjectile->IncrementCollisionCount(nCut+1);
-          G4QInteraction* anInteraction = new G4QInteraction(cmProjectile);
+          aProjectile->IncrementCollisionCount(nCut+1);
+          G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
           anInteraction->SetTarget(aTarget);
           anInteraction->SetNumberOfSoftCollisions(nCut+1);
           theInteractions.push_back(anInteraction);
@@ -354,17 +344,17 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
         }
       }
     } // End of While over nucleons
-    // When nucleon count is incremented, the LOOP stops, so nucleonCount==1 always!
+    // When nucleon count is incremented, the LOOP stops, so nucCount==1 always!
 #ifdef debug
-    G4cout<<"G4QInelastic::Construct: NUCLEONCOUNT="<<nucleonCount<<G4endl;
+    G4cout<<"G4QInelastic::Construct: NUCLEONCOUNT="<<nucCount<<G4endl;
 #endif
   }
   G4int nInt=theInteractions.size();
 #ifdef debug
-  G4cout<<"G4QInelastic::Constryct: CUTDEBUG="<<totalCuts<<", ImpactParam="
+  G4cout<<"G4QInelastic::Construct: CUTDEBUG="<<totalCuts<<", ImpactParam="
         <<impactUsed<<", #ofInter="<<nInt<<G4endl;
 #endif
-  if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1))
+  if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1)) // QFreeInel
   {
     G4QHadron* aTarget;
     G4QHadron* aProjectile;
@@ -375,39 +365,32 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
       theInteractions.clear();
       delete theInteractions[0];
     }
-    else                                             // Create a new target nucleon
+    else                                             // Create a new target nucleon (?)
     {
-      theNucleus.StartLoop();                        // To get the same nucleon
-      pNucleon=theNucleus.GetNextNucleon();          // Get the nucleon to create
-      aTarget = new G4QHadron(*pNucleon);            // Copy selected nucleon for String
-      aProjectile =cmProjectile;
-      theNucleus.DoLorentzBoost(theCurrentVelocity); // Boost theResNucleus toRotatedLS
-      theNucleus.SubtractNucleon(pNucleon);          // Pointer to theUsedNucleon to delete
-      theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
+      theProjNucleus.StartLoop();                    // To get the same nucleon from projec
+      pNucleon=theProjNucleus.GetNextNucleon();      // Get theNucleon to create projectNuc
+      aProjectile = new G4QHadron(*pNucleon);        // Copy selected pNucleon for String
+      theProjNucleus.DoLorentzBoost(-theALVelocity); // Boost theResProjNucleus toRotatedLS
+      theProjNucleus.SubtractNucleon(pNucleon);      // Pointer to SelProjNucleon to delete
+      theProjNucleus.DoLorentzBoost(theALVelocity);  // Boost theResProNucleus back to CMS
+      theTargNucleus.StartLoop();                    // To get the same nucleon from target
+      tNucleon=theTargNucleus.GetNextNucleon();      // Get theNucleon to create targetNucl
+      aTarget = new G4QHadron(*tNucleon);            // Copy selected tNucleon for String
+      theTargNucleus.DoLorentzBoost(theCMVelocity);  // Boost theResTargNucleus toRotatedLS
+      theTargNucleus.SubtractNucleon(tNucleon);      // Pointer to SelTargNucleon to delete
+      theTargNucleus.DoLorentzBoost(-theCMVelocity); // Boost theResTargNucleus back to CMS
     }
     G4QContent QQC=aTarget->GetQC()+aProjectile->GetQC(); // QContent of the compound
     G4LorentzVector Q4M=aTarget->Get4Momentum()+aProjectile->Get4Momentum(); // 4-mom of Q
     delete aTarget;
     delete aProjectile;
-    //if(maxNuc>1)                                     // Absorb moreNucleons to theQuasmon
-    //{
-    //  for(G4int i=1; i<maxNuc; ++i)
-    //  {
-    //    pNucleon=theNucleus.GetNextNucleon();        // Get the next nucleon
-    //    QQC+=pNucleon->GetQC();                      // Add it to the Quasmon
-    //    Q4M+=pNucleon->Get4Momentum();
-    //    theNucleus.DoLorentzBoost(theCurrentVelocity); // Boost theResNucleus toRotatedLS
-    //    theNucleus.SubtractNucleon(pNucleon);        // Exclude the used nucleon from Nuc
-    //    theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
-    //  }
-    //}
-    // 4-Mom should be converted to LS
-    Q4M.boost(theCurrentVelocity);
+    // @@ 4-Mom should be converted to LS for the TargQuasmon and to AL for the ProjQuasmon
+    Q4M.boost(theCMVelocity);
     Q4M=toLab*Q4M;
     G4Quasmon* stringQuasmon = new G4Quasmon(QQC, Q4M);
     theQuasmons.push_back(stringQuasmon);
-    theNucleus.DoLorentzBoost(theCurrentVelocity);   // BoostTheResidualNucleus toRotatedLS
-    theNucleus.DoLorentzRotation(toLab);// Recove Z-direction in LS ("LS"->LS) for rNucleus
+    theTargNucleus.DoLorentzBoost(theCMVelocity);   // BoostTheResidualNucleus toRotatedLS
+    theTargNucleus.DoLorentzRotation(toLab);        // Recove Z-direction in LS ("LS"->LS)
     return;
   }
   //
@@ -419,11 +402,11 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
 #ifdef edebug
     G4QHadron* projH=theInteractions[i]->GetProjectile(); // Projectile of theInteraction
     G4QHadron* targH=theInteractions[i]->GetTarget();     // Target of the Interaction
-    G4LorentzVector pSP(0.,0.,0.,0.);                // Sum of parton's 4mom's for proj
-    G4LorentzVector tSP(0.,0.,0.,0.);                // Sum of parton's 4mom's for proj
-    std::list<G4QParton*> projCP=projH->GetColor();  // Pointers to proj Color-partons
+    G4LorentzVector pSP(0.,0.,0.,0.);               // Sum of parton's 4mom's for proj
+    G4LorentzVector tSP(0.,0.,0.,0.);               // Sum of parton's 4mom's for proj
+    std::list<G4QParton*> projCP=projH->GetColor(); // Pointers to proj Color-partons
     std::list<G4QParton*> projAC=projH->GetAntiColor();// PointersTo projAntiColorPartons
-    std::list<G4QParton*> targCP=targH->GetColor();  // Pointers to targ Color-partons
+    std::list<G4QParton*> targCP=targH->GetColor(); // Pointers to targ Color-partons
     std::list<G4QParton*> targAC=targH->GetAntiColor();// PointersTo targAntiColorPartons
     std::list<G4QParton*>::iterator picp = projCP.begin();
     std::list<G4QParton*>::iterator pecp = projCP.end();
@@ -468,17 +451,17 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
         aPair = new G4QPartonPair(pTarget->GetNextParton(),
                                   pProjectile->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::TARGET);
-        thePartonPairs.push_back(aPair); // A target pair (Why TAGRET?)
+        thePartonPairs.push_back(aPair);            // A target pair (Why TAGRET?)
         aPair = new G4QPartonPair(pProjectile->GetNextParton(),
                                   pTarget->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
-        thePartonPairs.push_back(aPair); // A projectile pair (Why Projectile?)
+        thePartonPairs.push_back(aPair);            // A projectile pair (Why Projectile?)
 #ifdef debug
         G4cout<<"--->G4QInelastic::Construct: SOFT, 2 parton pairs are filled"<<G4endl;
 #endif
       }  
       delete *i;
-      i=theInteractions.erase(i);       // Soft interactions are converted & erased
+      i=theInteractions.erase(i);                   // SoftInteractions're converted&erased
       i--;
     }
   }
@@ -526,16 +509,16 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
   G4cout<<"G4QInelastic::Construct: DiffractivePartonPairs are created"<<G4endl;
 #endif  
   //
-  // >>>>>>>>>>>>>> clean-up  Interactions and cmProjectile, if necessary
+  // >>>>>>>>>>>>>> clean-up  Interactions, if necessary
   //
   std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
   theInteractions.clear();
-  delete cmProjectile;
 #ifdef debug
   G4cout<<"G4QInelastic::Construct: Temporary objects are cleaned up"<<G4endl;
 #endif  
   // This function prepares theBoost for transformation of secondaries to LS (-ProjRot!)
-  theNucleus.DoLorentzBoost(theCurrentVelocity);// Boost theResidualNucleus to RotatedLS
+  theProjNucleus.DoLorentzBoost(theCMVelocity);// Boost theResidualProjNucleus to RotatedLS
+  theTargNucleus.DoLorentzBoost(theCMVelocity);// Boost theResidualTargNucleus to RotatedLS
   // @@ Nucleus isn't completely in LS, it needs the toZ (-ProjRot) rotation to consE/M
 #ifdef debug
   G4cout<<">>>>>>>>>>>>G4QInelastic::Construct: >>>>>>>> Strings are created "<<G4endl;
@@ -553,15 +536,15 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
 #ifdef debug
     G4cout<<"G4QInelastic::Construct:NewString4M="<<aString->Get4Momentum()<<G4endl;
 #endif
-    aString->Boost(theCurrentVelocity);       // ! Strings are moved to ZLS when pushed !
+    aString->Boost(theCMVelocity);       // ! Strings are moved to ZLS when pushed !
     strings.push_back(aString);
     stringsInitted=true;
     delete aPair;
   } // End of the String Creation LOOP
 #ifdef edebug
-  G4LorentzVector sum=theNucleus.Get4Momentum();// Nucleus 4Mom in rotatedLS
-  G4int rChg=totChg-theNucleus.GetZ();
-  G4int rBaN=totBaN-theNucleus.GetA();
+  G4LorentzVector sum=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum(); // in LS
+  G4int rChg=totChg-theProjNucleus.GetZ()-theTargNucleus.GetZ();
+  G4int rBaN=totBaN-theProjNucleus.GetA()-theTargNucleus.GetA();
   G4int nStrings=strings.size();
   G4cout<<"-EMC-G4QInelastic::Construct:#ofString="<<nStrings<<",tNuc4M="<<sum<<G4endl;
   for(G4int i=0; i<nStrings; i++)
@@ -595,12 +578,13 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
   //
   for(unsigned astring=0; astring < strings.size(); astring++)
             strings[astring]->LorentzRotate(toLab); // Recove Z-direction in LS ("LS"->LS)
-  theNucleus.DoLorentzRotation(toLab); // Recove Z-direction in LS ("LS"->LS) for rNucleus
+  theProjNucleus.DoLorentzRotation(toLab); // Recove Z-dir in LS ("LS"->LS) for ProjNucleus
+  theTargNucleus.DoLorentzRotation(toLab); // Recove Z-dir in LS ("LS"->LS) for TargNucleus
   // Now everything is in LS system
 #ifdef edebug
-  G4LorentzVector sm=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS
-  G4int rCg=totChg-theNucleus.GetZ();
-  G4int rBC=totBaN-theNucleus.GetA();
+  G4LorentzVector sm=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum();// NucInLS
+  G4int rCg=totChg-theProjNucleus.GetZ()-theTargNucleus.GetZ();
+  G4int rBC=totBaN-theProjNucleus.GetA()-theTargNucleus.GetA();
   G4int nStrs=strings.size();
   G4cout<<"-EMCLS-G4QInelastic::Constr: #ofS="<<nStrings<<",tNuc4M(E=M)="<<sum<<G4endl;
   for(G4int i=0; i<nStrs; i++)
@@ -677,6 +661,7 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
         }
       }
 	if(single) miM=G4QPDGCode((*ist)->GetQC().GetSPDGCode()).GetMass() + mPi0;//MinHSMass
+	//if(single) miM=G4QPDGCode((*ist)->GetQC().GetSPDGCode()).GetMass();//MinHSMass
 #ifdef debug
       G4cout<<"G4QInel::Const:*IsItGood? realM="<<std::sqrt(cSM2)<<" > GSM="<<miM<<G4endl;
 #endif
@@ -752,23 +737,23 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
         {
           tf=2;
           if     (pLPDG > 7 &&
-                  ( (cLPDG<0 && (-cLPDG==pL1 || -cLPDG==pL2) ) ||
-                    (cRPDG<0 && (-cRPDG==pL1 || -cRPDG==pL2) )
+                  ( (cLPDG<0 && (-cLPDG==pL1 || -cLPDG==pL2 || -cLPDG==pRPDG) ) ||
+                    (cRPDG<0 && (-cRPDG==pL1 || -cRPDG==pL2 || -cRPDG==pRPDG) )
                   )
                  ) af=1;
           else if(pRPDG > 7 &&
-                  ( (cLPDG<0 && (-cLPDG==pR1 || -cLPDG==pR2) ) ||
-                    (cRPDG<0 && (-cRPDG==pR1 || -cRPDG==pR2) )
+                  ( (cLPDG<0 && (-cLPDG==pR1 || -cLPDG==pR2 || -cLPDG==pLPDG) ) ||
+                    (cRPDG<0 && (-cRPDG==pR1 || -cRPDG==pR2 || -cRPDG==pLPDG) )
                   )
                  ) af=2;
           else if(pLPDG <-7 &&
-                  ( (cLPDG>0 && ( cLPDG==pL1 || cLPDG==pL2) ) ||
-                    (cRPDG>0 && ( cRPDG==pL1 || cRPDG==pL2) )
+                  ( (cLPDG>0 && ( cLPDG==pL1 || cLPDG==pL2 || cLPDG==-pRPDG) ) ||
+                    (cRPDG>0 && ( cRPDG==pL1 || cRPDG==pL2 || cRPDG==-pRPDG) )
                   )
                  ) af=3;
           else if(pRPDG <-7 &&
-                  ( (cLPDG>0 && ( cLPDG==pR1 || cLPDG==pR2) ) ||
-                    (cRPDG>0 && ( cRPDG==pR1 || cRPDG==pR2) )
+                  ( (cLPDG>0 && ( cLPDG==pR1 || cLPDG==pR2 || cLPDG==-pLPDG) ) ||
+                    (cRPDG>0 && ( cRPDG==pR1 || cRPDG==pR2 || cRPDG==-pLPDG) )
                   )
                  ) af=4;
 #ifdef debug
@@ -929,80 +914,144 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
                  if(cLPDG < 0)
                  {
                    order= 1;
-                   if     (cRPDG > pRPDG) nRPDG=cRPDG*1000+pRPDG*100+1;
-                   else if(cRPDG < pRPDG) nRPDG=pRPDG*1000+cRPDG*100+1;
-                   else                   nRPDG=pRPDG*1000+cRPDG*100+3;
-                   if  (-cLPDG == pL1)    nLPDG=pL2;
-                   else                   nLPDG=pL1; // -cLPDG == pL2
+                   if(-cLPDG==pRPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (cRPDG > pRPDG) nRPDG=cRPDG*1000+pRPDG*100+1;
+                     else if(cRPDG < pRPDG) nRPDG=pRPDG*1000+cRPDG*100+1;
+                     else                   nRPDG=pRPDG*1000+cRPDG*100+3;
+                     if  (-cLPDG == pL1)    nLPDG=pL2;
+                     else                   nLPDG=pL1; // -cLPDG == pL2
+                   }
                  }
                  else // cRPDG < 0
                  {
                    order=-1;
-                   if     (cLPDG > pRPDG) nRPDG=cLPDG*1000+pRPDG*100+1;
-                   else if(cLPDG < pRPDG) nRPDG=pRPDG*1000+cLPDG*100+1;
-                   else                   nRPDG=pRPDG*1000+cLPDG*100+3;
-                   if  (-cRPDG == pL1)    nLPDG=pL2;
-                   else                   nLPDG=pL1; // -cRPDG == pL2
+                   if(-cRPDG==pRPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cLPDG;
+                   }
+                   else
+                   {
+                     if     (cLPDG > pRPDG) nRPDG=cLPDG*1000+pRPDG*100+1;
+                     else if(cLPDG < pRPDG) nRPDG=pRPDG*1000+cLPDG*100+1;
+                     else                   nRPDG=pRPDG*1000+cLPDG*100+3;
+                     if  (-cRPDG == pL1)    nLPDG=pL2;
+                     else                   nLPDG=pL1; // -cRPDG == pL2
+                   }
                  }
                  break;
                case 2: // ....................... pRPDG > 7
                  if(cLPDG < 0)
                  {
                    order=-1;
-                   if     (cRPDG > pLPDG) nLPDG=cRPDG*1000+pLPDG*100+1;
-                   else if(cRPDG < pLPDG) nLPDG=pLPDG*1000+cRPDG*100+1;
-                   else                   nLPDG=pLPDG*1000+cRPDG*100+3;
-                   if  (-cLPDG == pR1)    nRPDG=pR2;
-                   else                   nRPDG=pR1; // -cLPDG == pR2
+                   if(-cLPDG==pLPDG)
+                   {
+                     nLPDG=cRPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (cRPDG > pLPDG) nLPDG=cRPDG*1000+pLPDG*100+1;
+                     else if(cRPDG < pLPDG) nLPDG=pLPDG*1000+cRPDG*100+1;
+                     else                   nLPDG=pLPDG*1000+cRPDG*100+3;
+                     if  (-cLPDG == pR1)    nRPDG=pR2;
+                     else                   nRPDG=pR1; // -cLPDG == pR2
+                   }
                  }
                  else // cRPDG < 0
                  {
                    order= 1;
-                   if     (cLPDG > pLPDG) nLPDG=cLPDG*1000+pLPDG*100+1;
-                   else if(cLPDG < pLPDG) nLPDG=pLPDG*1000+cLPDG*100+1;
-                   else                   nLPDG=pLPDG*1000+cLPDG*100+3;
-                   if  (-cRPDG == pR1)    nRPDG=pR2;
-                   else                   nRPDG=pR1; // -cRPDG == pR2
+                   if(-cRPDG==pLPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (cLPDG > pLPDG) nLPDG=cLPDG*1000+pLPDG*100+1;
+                     else if(cLPDG < pLPDG) nLPDG=pLPDG*1000+cLPDG*100+1;
+                     else                   nLPDG=pLPDG*1000+cLPDG*100+3;
+                     if  (-cRPDG == pR1)    nRPDG=pR2;
+                     else                   nRPDG=pR1; // -cRPDG == pR2
+                   }
                  }
                  break;
                case 3: // ....................... pLPDG <-7
                  if(cLPDG > 0)
                  {
                    order= 1;
-                   if     (cRPDG < pRPDG) nRPDG=cRPDG*1000+pRPDG*100-1;
-                   else if(cRPDG > pRPDG) nRPDG=pRPDG*1000+cRPDG*100-1;
-                   else                   nRPDG=pRPDG*1000+cRPDG*100-3;
-                   if  ( cLPDG == pL1)    nLPDG=-pL2;
-                   else                   nLPDG=-pL1; // cLPDG == pL2
+                   if(cLPDG==-pRPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (cRPDG < pRPDG) nRPDG=cRPDG*1000+pRPDG*100-1;
+                     else if(cRPDG > pRPDG) nRPDG=pRPDG*1000+cRPDG*100-1;
+                     else                   nRPDG=pRPDG*1000+cRPDG*100-3;
+                     if  ( cLPDG == pL1)    nLPDG=-pL2;
+                     else                   nLPDG=-pL1; // cLPDG == pL2
+                   }
                  }
                  else // cRPDG > 0
                  {
                    order=-1;
-                   if     (cLPDG < pRPDG) nRPDG=cLPDG*1000+pRPDG*100-1;
-                   else if(cLPDG > pRPDG) nRPDG=pRPDG*1000+cLPDG*100-1;
-                   else                   nRPDG=pRPDG*1000+cLPDG*100-3;
-                   if  ( cRPDG == pL1)    nLPDG=-pL2;
-                   else                   nLPDG=-pL1; // cRPDG == pL2
+                   if(cRPDG==-pRPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cLPDG;
+                   }
+                   else
+                   {
+                     if     (cLPDG < pRPDG) nRPDG=cLPDG*1000+pRPDG*100-1;
+                     else if(cLPDG > pRPDG) nRPDG=pRPDG*1000+cLPDG*100-1;
+                     else                   nRPDG=pRPDG*1000+cLPDG*100-3;
+                     if  ( cRPDG == pL1)    nLPDG=-pL2;
+                     else                   nLPDG=-pL1; // cRPDG == pL2
+                   }
                  }
                  break;
-               case 4: // ....................... pLRDG <-7
+               case 4: // ....................... pRPDG <-7
                  if(cLPDG > 0)
                  {
                    order=-1;
-                   if     (cRPDG < pLPDG) nLPDG=cRPDG*1000+pLPDG*100-1;
-                   else if(cRPDG > pLPDG) nLPDG=pLPDG*1000+cRPDG*100-1;
-                   else                   nLPDG=pLPDG*1000+cRPDG*100-3;
-                   if  ( cLPDG == pR1)    nRPDG=-pR2;
-                   else                   nRPDG=-pR1; // cLPDG == pR2
+                   if(cLPDG==-pLPDG)
+                   {
+                     nLPDG=cRPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (cRPDG < pLPDG) nLPDG=cRPDG*1000+pLPDG*100-1;
+                     else if(cRPDG > pLPDG) nLPDG=pLPDG*1000+cRPDG*100-1;
+                     else                   nLPDG=pLPDG*1000+cRPDG*100-3;
+                     if  ( cLPDG == pR1)    nRPDG=-pR2;
+                     else                   nRPDG=-pR1; // cLPDG == pR2
+                   }
                  }
                  else // cRPDG > 0
                  {
                    order= 1;
-                   if     (cLPDG < pLPDG) nLPDG=cLPDG*1000+pLPDG*100-1;
-                   else if(cLPDG > pLPDG) nLPDG=pLPDG*1000+cLPDG*100-1;
-                   else                   nLPDG=pLPDG*1000+cLPDG*100-3;
-                   if  ( cRPDG == pR1)    nRPDG=-pR2;
-                   else                   nRPDG=-pR1; // cRPDG == pR2
+                   if(cRPDG==-pLPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (cLPDG < pLPDG) nLPDG=cLPDG*1000+pLPDG*100-1;
+                     else if(cLPDG > pLPDG) nLPDG=pLPDG*1000+cLPDG*100-1;
+                     else                   nLPDG=pLPDG*1000+cLPDG*100-3;
+                     if  ( cRPDG == pR1)    nRPDG=-pR2;
+                     else                   nRPDG=-pR1; // cRPDG == pR2
+                   }
                  }
                  break;
              }
@@ -1344,9 +1393,9 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
   }
 #ifdef edebug
   // This print has meaning only if something appear between it and the StringFragmLOOP
-  G4LorentzVector t4M=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS
-  G4int rC=totChg-theNucleus.GetZ();
-  G4int rB=totBaN-theNucleus.GetA();
+  G4LorentzVector t4M=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum();//NucInLS
+  G4int rC=totChg-theProjNucleus.GetZ()-theTargNucleus.GetZ();
+  G4int rB=totBaN-theProjNucleus.GetA()-theTargNucleus.GetA();
   G4int nStr=strings.size();
   G4cout<<"-EMCLS-G4QIn::Const: AfterSUPPRESION #ofS="<<nStr<<",tNuc4M(E=M)="<<sum<<G4endl;
   for(G4int i=0; i<nStr; i++)
@@ -1418,9 +1467,9 @@ G4QInelastic::G4QInelastic(const G4QNucleus &aNucleus, const G4QHadron  &aPrimar
     SwapPartons();
   } // End of IF(problem)
 #ifdef edebug
-  G4LorentzVector u4M=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS
-  G4int rCh=totChg-theNucleus.GetZ();
-  G4int rBa=totBaN-theNucleus.GetA();
+  G4LorentzVector u4M=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum();//NucInLS
+  G4int rCh=totChg-theProjNucleus.GetZ()-theTargNucleus.GetZ();
+  G4int rBa=totBaN-theProjNucleus.GetA()-theTargNucleus.GetA();
   G4int nStri=strings.size();
   G4cout<<"-EMCLS-G4QIn::Const: FinalConstruct, #ofSt="<<nStri<<",tN4M(E=M)="<<t4M<<G4endl;
   for(G4int i=0; i<nStri; i++)
@@ -1452,9 +1501,9 @@ G4QHadronVector* G4QInelastic::Fragment()
   G4int hadrNum=theResult->size();                          // Find out if there're hadrons
 #ifdef edebug
   G4int nQm=theQuasmons.size();
-  G4LorentzVector totLS4M=theNucleus.Get4Momentum();        // Nucleus 4Mom in LS
-  G4int totChg=theNucleus.GetZ();
-  G4int totBaN=theNucleus.GetA();
+  G4LorentzVector totLS4M=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum(); //LS
+  G4int totChg=theProjNucleus.GetZ()+theTargNucleus.GetZ();
+  G4int totBaN=theTargNucleus.GetA()+theTargNucleus.GetA();
   G4cout<<"-EMCLS-G4QIn::Fragment: CHECKRecovery, #ofS="<<striNum<<", Nuc4M(E=M)="<<totLS4M
         <<",#Q="<<nQm<<",#H="<<hadrNum<<G4endl;
   for(G4int i=0; i < striNum; i++)
@@ -1504,10 +1553,14 @@ G4QHadronVector* G4QInelastic::Fragment()
   else                                                      // No strings, make HadrNucleus
   {
     theResult = new G4QHadronVector;                        // Create new Result-vector
-    G4LorentzVector r4M=theNucleus.Get4Momentum();          // Nucleus 4-momentum in LS
-    G4int rPDG=theNucleus.GetPDG();                         // Nuclear PDG
-    G4QHadron* resNuc = new G4QHadron(rPDG,r4M);            // Nucleus -> Hadron
-    theResult->push_back(resNuc);                           // Fill the residual nucleus
+    G4LorentzVector rp4M=theProjNucleus.Get4Momentum();     // Nucleus 4-momentum in LS
+    G4int rpPDG=theProjNucleus.GetPDG();                    // Nuclear PDG
+    G4QHadron* resPNuc = new G4QHadron(rpPDG,rp4M);         // Nucleus -> Hadron
+    theResult->push_back(resPNuc);                          // Fill the residual nucleus
+    G4LorentzVector rt4M=theTargNucleus.Get4Momentum();     // Nucleus 4-momentum in LS
+    G4int rtPDG=theTargNucleus.GetPDG();                    // Nuclear PDG
+    G4QHadron* resTNuc = new G4QHadron(rtPDG,rt4M);         // Nucleus -> Hadron
+    theResult->push_back(resTNuc);                          // Fill the residual nucleus
   }
   G4int nQuas=theQuasmons.size();                           // Size of the Quasmon OUTPUT
   G4int theRS=theResult->size();                            // Size of Hadron Output by now
@@ -1673,9 +1726,9 @@ void G4QInelastic::Breeder()
   // ------------ At this point the strings are fragmenting to hadrons in LS -------------
   //
 #ifdef edebug
-  G4LorentzVector totLS4M=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS
-  G4int totChg=theNucleus.GetZ();
-  G4int totBaN=theNucleus.GetA();
+  G4LorentzVector totLS4M=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum(); //LS
+  G4int totChg=theProjNucleus.GetZ()+theTargNucleus.GetZ();
+  G4int totBaN=theProjNucleus.GetA()+theTargNucleus.GetA();
   G4int nStri=strings.size();
   G4cout<<"-EMCLS-G4QIn::Breed: CHECKRecovery #ofS="<<nStri<<",N4M(E=M)="<<totLS4M<<G4endl;
   for(G4int i=0; i<nStri; i++)
@@ -1715,18 +1768,22 @@ void G4QInelastic::Breeder()
     G4cout<<"->G4QInelastic::Breeder:*TotQ*,QC="<<ftQC<<",4M="<<ft4M<<ft4M.m()<<G4endl;
 #endif
     theQuasmons.push_back(stringQuasmon);
-    G4LorentzVector r4M=theNucleus.Get4Momentum();  // Nucleus 4-momentum in LS
-    G4int rPDG=theNucleus.GetPDG();
-    G4QHadron* resNuc = new G4QHadron(rPDG,r4M);
-    theResult->push_back(resNuc);                   // Fill the residual nucleus
+    G4LorentzVector rp4M=theProjNucleus.Get4Momentum(); // Nucleus 4-momentum in LS
+    G4int rpPDG=theProjNucleus.GetPDG();
+    G4QHadron* resPNuc = new G4QHadron(rpPDG,rp4M);
+    theResult->push_back(resPNuc);                  // Fill the residual projectile nucleus
+    G4LorentzVector rt4M=theTargNucleus.Get4Momentum(); // Nucleus 4-momentum in LS
+    G4int rtPDG=theTargNucleus.GetPDG();
+    G4QHadron* resTNuc = new G4QHadron(rtPDG,rt4M);
+    theResult->push_back(resTNuc);                  // Fill the residual target nucleus
     return;
   }
   for (G4int astring=0; astring < nOfStr; astring++)
   {
 #ifdef edebug
-    G4LorentzVector sum=theNucleus.Get4Momentum();  // Nucleus 4Mom in LS
-    G4int rChg=totChg-theNucleus.GetZ();
-    G4int rBaN=totBaN-theNucleus.GetA();
+    G4LorentzVector sum=theProjNucleus.Get4Momentum()+theTargNucleus.Get4Momentum(); //inLS
+    G4int rChg=totChg-theProjNucleus.GetZ()-theTargNucleus.GetZ();
+    G4int rBaN=totBaN-theProjNucleus.GetA()-theTargNucleus.GetA();
     G4int nOfHadr=theResult->size();
     G4cout<<"-EMCLS-G4QInelastic::Breeder:#ofSt="<<nOfStr<<",#ofHad="<<nOfHadr<<G4endl;
     for(G4int i=astring; i<nOfStr; i++)
@@ -2404,9 +2461,11 @@ void G4QInelastic::Breeder()
               {
                 G4Quasmon* stringQuasmon = new G4Quasmon(miQC, curString4M);// String->Quas
 #ifdef debug
-                G4cout<<"G4QInelastic::Breeder:==> to Quasm="<<miQC<<curString4M<<", Nuc="
-                      <<theNucleus<<theNucleus.Get4Momentum()<<", NString="<<strings.size()
-                      <<", nR="<<theResult->size()<<", nQ="<<theQuasmons.size()<<G4endl;
+                G4cout<<"G4QInelastic::Breeder:==> to Quasm="<<miQC<<curString4M<<", pNuc="
+                      <<theProjNucleus<<theProjNucleus.Get4Momentum()<<", tNuc="
+                      <<theTargNucleus<<theTargNucleus.Get4Momentum()<<", NString="
+                      <<strings.size()<<", nR="<<theResult->size()<<", nQ="
+                      <<theQuasmons.size()<<G4endl;
 #endif
                 theQuasmons.push_back(stringQuasmon);
                 delete sHad;
@@ -2497,8 +2556,7 @@ void G4QInelastic::Breeder()
             G4double      cE=curString4M.e();    // Energy of the curString
             G4ThreeVector curV=cP/cE;    // curRelativeVelocity
             G4double miM2=miM*miM;
-            G4double cM2=cM*cM;
-            G4int restr=0;               // To use beyon the LOOP for printing
+            G4int restr=0;            // To use beyon the LOOP for printing
             G4int fustr=0;               // Selected String-partner (0 = NotFound)
             G4double selX=0.;            // Selected value of x
             G4double maD=-DBL_MAX;       // Maximum Free Mass
@@ -2507,7 +2565,8 @@ void G4QInelastic::Breeder()
 #ifdef debug
             G4cout<<"G4QInelastic::Breeder: TryRecover, cV="<<curV<<G4endl;
 #endif
-            for (restr=next; restr < nOfStr; restr++) if(restr != astring)
+            nOfStr=strings.size();
+            for(restr=next; restr < nOfStr; ++restr) if(restr != astring)
             {
               G4QString* pString=strings[restr];
               G4LorentzVector p4M=pString->Get4Momentum();
@@ -2516,8 +2575,11 @@ void G4QInelastic::Breeder()
               G4double D2=cE*pE-cP.dot(pP); 
               G4double pM2=p4M.m2();
               G4double dM4=pM2*(miM2-cM2);
-              G4double x=(std::sqrt(D2*D2+dM4)-D2)/pM2; // what we should get from p
+              G4double D=D2*D2+dM4;
+              G4double x=-1.;                // Bad preexpectation 
+              if(D >= 0. && pM2>.01) x=(std::sqrt(D)-D2)/pM2; // what we should get from p
 #ifdef debug
+		  else G4cout<<"G4QInelastic::Breeder:D="<<D<<",D2="<<D2<<",pM4="<<dM4<<G4endl;
               G4cout<<"G4QInelastic::Breeder: pM2="<<pM2<<",D2="<<D2<<",x="<<x<<G4endl;
 #endif
               if(x > 0. && x < 1.)          // We are getting x part of p4M
@@ -2986,7 +3048,6 @@ void G4QInelastic::Breeder()
 #endif
       }
     }
-    G4LorentzVector r4M=theNucleus.GetNucleons4Momentum();// Sum of N4M's in RotatedLS=LS
     // clean up (the issues are filled to theResult)
     if(theHadrons) delete theHadrons;
 #ifdef edebug
@@ -2994,18 +3055,23 @@ void G4QInelastic::Breeder()
           <<", rChg="<<curStrChg<<", rBaN="<<curStrBaN<<G4endl;
 #endif
   } // End of the main LOOP over decaying strings
-  G4LorentzVector r4M=theNucleus.Get4Momentum(); // Nucleus 4-momentum in LS
-  G4int rPDG=theNucleus.GetPDG();
-  G4QHadron* resNuc = new G4QHadron(rPDG,r4M);
-  theResult->push_back(resNuc);                          // Fill the residual nucleus
+  G4LorentzVector rp4M=theProjNucleus.Get4Momentum(); // projNucleus 4-momentum in LS
+  G4int rpPDG=theProjNucleus.GetPDG();
+  G4QHadron* resPNuc = new G4QHadron(rpPDG,rp4M);
+  theResult->push_back(resPNuc);                      // Fill the residual nucleus
+  G4LorentzVector rt4M=theTargNucleus.Get4Momentum(); // Nucleus 4-momentum in LS
+  G4int rtPDG=theTargNucleus.GetPDG();
+  G4QHadron* resTNuc = new G4QHadron(rtPDG,rt4M);
+  theResult->push_back(resTNuc);                      // Fill the residual nucleus
 #ifdef edebug
-  G4LorentzVector s4M(0.,0.,0.,0.); // Sum of the Result in LS
+  G4LorentzVector s4M(0.,0.,0.,0.);                   // Sum of the Result in LS
   G4int rCh=totChg;
   G4int rBN=totBaN;
   G4int nHadr=theResult->size();
   G4int nQuasm=theQuasmons.size();
-  G4cout<<"-EMCLS-G4QInelastic::Breeder:#ofHadr="<<nHadr<<", #OfQuasm="<<nQuasm<<",rN="
-        <<r4M.m()<<"="<<G4QNucleus(rPDG).GetGSMass()<<G4endl;
+  G4cout<<"-EMCLS-G4QInel::Breeder: #ofHadr="<<nHadr<<", #OfQ="<<nQuasm<<", rPA="<<rp4M.m()
+        <<"="<<G4QNucleus(rpPDG).GetGSMass()<<", rTA="<<rt4M.m()<<"="
+        <<G4QNucleus(rtPDG).GetGSMass()<<G4endl;
   for(G4int i=0; i<nHadr; i++)
   {
     G4LorentzVector hI4M=(*theResult)[i]->Get4Momentum();
@@ -3134,8 +3200,9 @@ void G4QInelastic::Breeder()
     G4int fBN=totBaN;
     G4int nHd=theResult->size();
     G4int nQm=theQuasmons.size();
-    G4cout<<"-EMCLS-G4QInelastic::Breeder:#ofHadr="<<nHd<<", #OfQuasm="<<nQm<<",rN="
-          <<r4M.m()<<"="<<G4QNucleus(rPDG).GetGSMass()<<G4endl;
+    G4cout<<"-EMCLS-G4QInelastic::Breeder:#ofHadr="<<nHd<<", #OfQ="<<nQm
+          <<",rPA="<<rt4M.m()<<"="<<G4QNucleus(rtPDG).GetGSMass()
+          <<",rTA="<<rt4M.m()<<"="<<G4QNucleus(rtPDG).GetGSMass()<<G4endl;
     for(G4int i=0; i<nHd; i++)
     {
       G4LorentzVector hI4M=(*theResult)[i]->Get4Momentum();
@@ -3769,7 +3836,7 @@ void G4QInelastic::SwapPartons() // Swap string partons, if a string has negativ
   {
     G4LorentzVector cS4M=(*ist)->Get4Momentum();
     G4double cSM2=cS4M.m2();                         // Squared mass of the String
-    if(cSM2<0.)                                      // Parton Swapping is needed
+    if(cSM2<0.1)                                     // Parton Swapping is needed
     {
       G4QParton* cLeft=(*ist)->GetLeftParton();      // Current String Left Parton 
       G4QParton* cRight=(*ist)->GetRightParton();    // Current String Right Parton 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.59 2009-08-07 14:20:57 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.60 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -1104,6 +1104,7 @@ void G4QHadron::SplitUp()
     // momenta of string ends 
     G4double pt2 = theMomentum.perp2();
     G4double transverseMass2 = theMomPlus*theMomMinus;
+    if(transverseMass2<0.) transverseMass2=0.;
     G4double maxAvailMomentum2 = sqr(std::sqrt(transverseMass2) - std::sqrt(pt2));
     G4ThreeVector pt(minTransverseMass, minTransverseMass, 0); // default value
     if(maxAvailMomentum2/widthOfPtSquare > 0.01)
@@ -1230,9 +1231,13 @@ void G4QHadron::SplitUp()
     G4cout<<"G4QHadron::SplitUp: *Soft* Col&Anticol are filled PDG="<<GetPDGCode()<<G4endl;
 #endif
     // Sample X
-    G4double Xmin = std::min( theMinPz/(theMomentum.e() - GetMass()), 0.5/(nSeaPair+2) );
-    //G4double Xmin = 0.;                                      // Can be absolete... ? 
+    //G4double Xmin = std::min( theMinPz/(theMomentum.e() - GetMass()), 0.5/(nSeaPair+2) );
+    G4double Xmin = 0.;                                      // Can be absolete... ? 
+    G4double Xtot = 1.;                                      // Only for CHIPS 
     G4int    nAttempt = 0;
+#ifdef pdebug
+    G4cout<<"G4QHadron::SplitUp: Xmin="<<Xmin<<G4endl;
+#endif
     G4double SumX = 0;
     G4double aBeta = beta;                                   // default for all baryons
     G4double ColorX, AntiColorX;
@@ -1254,10 +1259,11 @@ void G4QHadron::SplitUp()
     {
       SumX=0.;
       nAttempt++;
+      //G4int NumberOfUnsampledSeaQuarks = dnSeaPair+2; // QGS
+      G4int NumberOfUnsampledSeaQuarks = dnSeaPair+2; // CHIPS
 #ifdef pdebug
-      G4cout<<"G4QHadron::SplitUp: *Soft* ------->LOOP. Attempt#"<<nAttempt<<G4endl;
+      G4cout<<"G4QHad::SpUp:Attempt #"<<nAttempt<<",N="<<dnSeaPair+2<<",tX="<<Xtot<<G4endl;
 #endif
-      G4int NumberOfUnsampledSeaQuarks = dnSeaPair;
       //G4double beta1 = beta; // !! beta1 is not used !!
       ////For mesons (what about Kaons, for which aBeta=0? M.K.?) 
       //if(std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000)beta1=1.;
@@ -1265,7 +1271,10 @@ void G4QHadron::SplitUp()
       G4cout<<"G4QHadron::SplitUp:*Sft* Loop Before Xmin="<<Xmin<<",aB="<<aBeta
             <<",nUnsampledSea="<<NumberOfUnsampledSeaQuarks<<G4endl;
 #endif
-      ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
+      // From this point the nonitarative CHIPS algorithm is used
+      ColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
+      Xtot-=ColorX;                                            // Only for CHIPS
+      //ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
 #ifdef pdebug
       G4cout<<"G4QHadron::SplitUp:*Sft* Loop ColorX="<<ColorX<<G4endl;
 #endif
@@ -1277,29 +1286,40 @@ void G4QHadron::SplitUp()
       std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
       std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
       eanticolor--;
+#ifdef pdebug
+      G4int nc=0;
+#endif
       for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
       {
         NumberOfUnsampledSeaQuarks--;
-        ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
+        ColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
+        Xtot-=ColorX;                                            // Only for CHIPS
+        //ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
         (*icolor)->SetX(ColorX);
         SumX += ColorX; 
 #ifdef pdebug
-        G4cout<<"G4QHadron::SplitUp:*Sft* Loop/loopC sumX="<<SumX<<",Xmin="<<Xmin<<G4endl;
+        ++nc;
+        G4cout<<"G4QHadr::SplitUp:*S*L/LC,nc="<<nc<<",sX="<<SumX<<",ColX="<<ColorX<<G4endl;
 #endif
         NumberOfUnsampledSeaQuarks--;
-        AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
+        AntiColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
+        Xtot-=AntiColorX;                                            // Only for CHIPS
+        //AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
         (*ianticolor)->SetX(AntiColorX); // the 'sea' partons
         SumX += AntiColorX;
 #ifdef pdebug
         G4cout<<"G4QHadron::SplitUp:*Sft* Loop/loopAC sumX="<<SumX<<",Xmin="<<Xmin<<G4endl;
 #endif
-        if (1. - SumX <= Xmin)  break;
+        if (1. - SumX <= Xmin)  break;   // @@ Should never happen for CHIPS
 #ifdef pdebug
         G4cout<<"G4QHadron::SplitUp:*Sft* LOOP nUnSea="<<NumberOfUnsampledSeaQuarks
               <<", 1-SumX="<<1.- SumX<<", Xmin="<<Xmin<<G4endl;
 #endif
       }
-    } while (1. - SumX <= Xmin); 
+#ifdef pdebug
+      G4cout<<"G4QH::SpUp:nc="<<nc<<"<"<<Color.size()<<",1-sX="<<1.-SumX<<",ColX="<<G4endl;
+#endif
+    } while (1. - SumX <= Xmin); // @@ Should be always true for CHIPS (by definition)
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Sfot* After LOOP SumX="<<SumX<<",1-Xm="<<1.-Xmin<<G4endl;
 #endif
@@ -1342,7 +1362,16 @@ G4QParton* G4QHadron::BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode)
   return result;
 } // End of BuildSeaQuark
 
-// @@ This can be upgraded using the phase-space CHIPS algorthm
+// Non-iterative recursive phase-space CHIPS algorthm
+G4double G4QHadron::SampleCHIPSX(G4double anXtot, G4int nSea)
+{
+  G4double ns=nSea;
+  if(nSea<1 || anXtot<=0.) G4cout<<"-Warning-G4QHad::SCX:N="<<nSea<<",tX="<<anXtot<<G4endl;
+  if(nSea<2) return anXtot;
+  return anXtot*(1.-std::pow(G4UniformRand(),1./ns));
+}
+
+// Iterative QGS algorithm
 G4double G4QHadron::SampleX(G4double anXmin, G4int nSea, G4int totSea, G4double aBeta)
 {
   G4double x;

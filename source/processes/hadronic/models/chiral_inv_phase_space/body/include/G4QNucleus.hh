@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.42 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.43 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -161,7 +161,10 @@ public:
     for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->LorentzRotate(theLoRot);
   }
   void DoLorentzBoost(const G4ThreeVector& theBeta)// Boost nucleons by v/c
-             {for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBeta);}
+  {
+    theMomentum.boost(theBeta);
+    for(unsigned i=0; i<theNucleons.size(); i++) theNucleons[i]->Boost(theBeta);
+  }
   void DoLorentzContraction(const G4LorentzVector&B){DoLorentzContraction(B.vect()/B.e());}
   void DoLorentzContraction(const G4ThreeVector& theBeta); // Lorentz Contraction by v/c
   void DoTranslation(const G4ThreeVector& theShift); // Used only in G4QFragmentation

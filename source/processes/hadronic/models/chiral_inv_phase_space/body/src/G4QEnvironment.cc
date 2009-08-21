@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.148 2009-08-07 14:20:57 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.149 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5890,33 +5890,39 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4cout<<"---Warning---G4QE::FSI:En/MomCons.Error is corrected:"<<cor4M<<G4endl;
           }
 #endif
-          G4QHadron* prevHadr = theQHadrons[nHadr-2]; // GetPointer to Hadr prev to theLast
-          G4LorentzVector pH4Mom = prevHadr->Get4Momentum(); // 4-mom of thePreviousHadron
           G4double cHM = curHadr->GetMass();  // Mass of the current hadron
-          G4double pHM = prevHadr->GetMass(); // Mass of the current hadron
-          tot4Mom+=cH4Mom+pH4Mom;
-          G4double totRM=tot4Mom.m();
-          if(cHM+pHM<=totRM)                  // *** Make the final correction ***
+          G4int ch=0;
+          for(ch=nHadr-2; ch>-1; --ch)
           {
-            if(!G4QHadron(tot4Mom).DecayIn2(pH4Mom,cH4Mom))
+            G4QHadron* prevHadr = theQHadrons[ch]; // GetPointer to Hadr prev to theLast
+            G4LorentzVector pH4Mom = prevHadr->Get4Momentum();// 4-mom of thePreviousHadron
+            G4double pHM = prevHadr->GetMass(); // Mass of the current hadron
+            tot4Mom+=cH4Mom+pH4Mom;
+            G4double totRM=tot4Mom.m();
+            if(cHM+pHM<=totRM)                  // *** Make the final correction ***
             {
-              G4cout<<"***G4QE::FSI:**Correction**tot4M="<<tot4Mom<<totRM<<">sM="<<cHM+cHM
-                    <<G4endl;
+              if(!G4QHadron(tot4Mom).DecayIn2(pH4Mom,cH4Mom))
+              {
+                G4cout<<"***G4QEnv::FSI:**Correction**,tot4M="<<tot4Mom<<totRM<<" > sM="
+                      <<cHM+cHM<<G4endl;
 #ifdef debug
-              throw G4QException("***G4QEnvironment::FSInteract:CORRECTION DecIn2 error");
+                throw G4QException("***G4QEnvironment::FSInteract:CORRECTION DecIn2Error");
 #endif
-            }
+              }
 #ifdef chdebug
-            G4cout<<"---Warning---G4QE::FSI:***CORRECTION IS DONE*** d="<<dem<<G4endl;
+              G4cout<<"---!!!---G4QE::FSI:***CORRECTION IS DONE*** d="<<dem<<G4endl;
 #endif
-            curHadr->Set4Momentum(cH4Mom);
-            prevHadr->Set4Momentum(pH4Mom);
+              curHadr->Set4Momentum(cH4Mom);
+              prevHadr->Set4Momentum(pH4Mom);
+              break;                            // Get out of the correction LOOP
+            }
+            else tot4Mom-=cH4Mom+pH4Mom;
           }
-          else
+          if(ch<0)
           {
-            G4cerr<<"*!*G4QE::FSI:NoCor "<<cHM<<"+"<<pHM<<"="<<cHM+pHM<<">"<<totRM<<G4endl;
+            G4cerr<<"*Warning*G4QEnvir::FSI:***EnergyMomentumCorrection FAILED***"<<G4endl;
 #ifdef debug
-            throw G4QException("***G4QEnvironment::FSInteraction: TEMPORARY EXCEPTION");
+            throw G4QException("***G4QEnvironment::FSInteraction: EnMomCorrectionFailed");
 #endif
           }
         }
@@ -7552,13 +7558,14 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       theFragments->push_back(curHadr);  //(del eq. - user is responsible for deleting)
     }
   }
+#ifdef chdebug
   if(cfContSum-chContSum || bfContSum-bnContSum)
   {
     G4cerr<<"*G4QE::FSI:(9) Ch="<<cfContSum-chContSum<<",Bn="<<bfContSum-bnContSum<<G4endl;
-#ifdef chdebug
+
     throw G4QException("G4QEnvironment::FSInteract: (9) Charge is not conserved");
-#endif
   }
+#endif
   // ***
   return theFragments;
 } // End of "FSInteraction"
@@ -7675,7 +7682,7 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
   static const G4double mLPi0 = mPi0+ mLamb;
   static const G4double mLPi  = mPi + mLamb;
   static const G4double mSpPi = mPi + mSigP;
-  static const G4double mSmPi = mPi + mSigP;
+  static const G4double mSmPi = mPi + mSigM;
   static const G4double mPK   = mK  + mProt;
   static const G4double mPKZ  = mK0 + mProt;
   static const G4double mNKZ  = mK0 + mNeut;
@@ -8168,12 +8175,37 @@ void G4QEnvironment::DecayBaryon(G4QHadron* qH)
         }
       }
     }
+    else if(theLC==2 || theLC==-2) // SigmaPlus+PiPlus or SigmaMinus+PiMinus
+    {
+      if(theLC==2 && qM>=mSpPi) // SigmaPlus+PiPlus decay is possible
+      {
+        fQPDG=spQPDG;           // Baryon is SigmaP
+        fMass=mSigP;
+        sQPDG=pipQPDG;          // Pi+ Meson
+        sMass=mPi;
+      }
+      if(theLC==-2 && qM>=mSmPi)// SigmaPlus+PiPlus decay is possible
+      {
+        fQPDG=smQPDG;           // Baryon is SigmaP
+        fMass=mSigM;
+        sQPDG=pimQPDG;          // Pi- Meson
+        sMass=mPi;
+      }
+      else
+      {
+#ifdef debug
+        G4cout<<"-Warning-G4QE::DecBary:*AsIs* Baryon(S=1,|C|=2),QC="<<qH->GetQC()<<G4endl;
+#endif
+        theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
+        return;
+      }
+    }
     else 
     {
       //KsiM: KsiM+Pi0=1456.29, Ksi0+Pi=1454.4, L+K=1609.36, Sig0+K=1686.32, SigM+K0=1695.1
       //KsiZ: Ksi0+Pi0=1449.81, KsiM+Pi=1460.9, L+K0=1613.3, Sig0+K0=1690.3, SigP+K=1683.05
       //Omeg: Omeg+Pi0=1807.43, Ksi0+K=1808.5, KsiM+K0=1818.96
-      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknownBaryon(S>1)QC="<<qH->GetQC()<<G4endl;
+      G4cout<<"-Warning-G4QE::DecBary:*AsIs* UnknownBaryon(S=1)QC="<<qH->GetQC()<<G4endl;
       theQHadrons.push_back(qH);                 // Fill AsIs (delete equivalent)
       return;
     }

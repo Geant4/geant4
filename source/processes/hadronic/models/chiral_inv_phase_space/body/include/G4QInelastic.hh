@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.hh,v 1.1 2009-08-17 15:15:09 mkossov Exp $
+// $Id: G4QInelastic.hh,v 1.2 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 class G4QInelastic
 {
  public:
-  G4QInelastic(const G4QNucleus& aNucleus, const G4QHadron& aPrimary);
+  G4QInelastic(G4QNucleus& pNucleus, G4QNucleus& tNucleus);
   ~G4QInelastic(); 
 
   G4QHadronVector* Fragment(); // Calls Breeder & fragments Quasmons inside ResidualNucleus
@@ -90,14 +90,14 @@ class G4QInelastic
   static G4double widthOfPtSquare;                       // width^2 of pt(StringExcitation)
 
   // Body
-  G4QNucleus      theNucleus;                            // TargetNucleus moving fromLStoCM
+  G4QNucleus      theProjNucleus;                        // ProjectileNucleus moving LS->CM
+  G4QNucleus      theTargNucleus;                        // TargetNucleus moving fromLStoCM
   G4QStringVector strings;                               // Vector of created strings
   G4QuasmonVector theQuasmons;                           // Strings converter to Quasmons
   G4QHadronVector* theResult;                            // Pointer to the OUTPUT Result
   G4double        maxEn;                                 // Energy absorbed by the nucleus
   G4double        maxNuc;                                // #0fNucleons in the Flux Tube
-  G4QuasiFreeRatios* theQuasiElastic;                    // For CHIPS Quasi-Elastic
-  G4QCHIPSWorld*     theWorld;                           // Pointer to the CHIPS World
+  G4QCHIPSWorld*  theWorld;                              // Pointer to the CHIPS World
 };
 
 #endif

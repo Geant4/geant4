@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.42 2009-07-17 16:54:57 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.43 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -77,7 +77,9 @@ public:
   G4int                 GetQCode()        const;    // Get Q code of the Hadron
   G4QPDGCode            GetQPDG()         const;    // Get QPDG of the Hadron
   G4double              GetSpin()         const{return .5*(GetPDGCode()%10-1);}
-  G4LorentzVector       Get4Momentum()    const;    // Get 4-mom of the Hadron
+  G4LorentzVector       Get4Momentum()    const{return theMomentum;} // Get 4-mom of Hadron
+  G4ThreeVector         Get3Momentum()    const{return theMomentum.vect();}// Get 3-mom ofH
+  G4double              GetEnergy()       const{return theMomentum.e();} // Get E of Hadron
   G4QContent            GetQC()           const;    // Get private quark content
   G4double              GetMass()         const;    // Get a mass of the Hadron
   G4double              GetMass2()        const;    // Get an m^2 value for the Hadron
@@ -131,6 +133,7 @@ private:
   void DefineQC(G4int PDGCode);
   G4QParton* BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode);
   G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
+  G4double SampleCHIPSX(G4double anXtot, G4int nSea); // @@ Do we need beta at all?
   void GetValenceQuarkFlavors(G4QParton* &Part1,G4QParton* &Part2);
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
   G4bool SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd);
@@ -172,7 +175,6 @@ inline G4int           G4QHadron::GetPDGCode()      const  {return theQPDG.GetPD
 inline G4int           G4QHadron::GetQCode()        const  {return theQPDG.GetQCode();}
 inline G4QPDGCode      G4QHadron::GetQPDG()         const  {return theQPDG;}
 inline G4QContent      G4QHadron::GetQC()           const  {return valQ;}
-inline G4LorentzVector G4QHadron::Get4Momentum()    const  {return theMomentum;}
 inline G4int           G4QHadron::GetNFragments()   const  {return nFragm;}
 //@@ This is an example how to make other inline selectors for the 4-Momentum of the Hadron
 inline G4double        G4QHadron::GetMass()         const  {return theMomentum.m();}

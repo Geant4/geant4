@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.105 2009-08-05 08:26:40 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.106 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -108,9 +108,11 @@ G4QNucleus::G4QNucleus(G4int nucPDG):
   currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   InitByPDG(nucPDG);
+  G4LorentzVector p(0.,0.,0.,GetGSMass());
+  Set4Momentum(p);
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(3) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
-        <<", R="<<mediRatio<<G4endl;
+        <<", R="<<mediRatio<<", 4M="<<p<<G4endl;
 #endif
 }
 
@@ -122,7 +124,7 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
   Set4Momentum(p);
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(4) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
-        <<", R="<<mediRatio<<G4endl;
+        <<", R="<<mediRatio<<", 4M="<<p<<G4endl;
 #endif
 }
 
@@ -609,7 +611,7 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
 #endif
     if(std::fabs(mR2-tM2)>.01)G4cout<<"*G4QNucleus::SubNucleon:rM="<<mR2<<"#"<<tM2<<G4endl;
     //#endif
-    G4double tE=t4M.e();                        // Energy of the residual nucleus
+    G4double tE=t4M.e();                        // Energy of the residual nucleus (in CM!)
     G4double m2p=sqr(G4QNucleus(tPDG-1000).GetGSMass()); // subResid. nuclearM2 for protons
     G4double m2n=sqr(G4QNucleus(tPDG-1).GetGSMass()); // subResidual nuclearM2 for neutrons
     for(u=theNucleons.begin(); u!=theNucleons.end(); u++) // Correct the nucleon's energies
@@ -3607,18 +3609,24 @@ void G4QNucleus::Init3D()
 #ifdef debug
   G4cout<<"G4QNucl::Init3D: DensityPars for A="<<theA<<":R="<<radius <<",r0="<<rho0<<G4endl;
 #endif
-  ChoosePositions();
+  ChoosePositions(); // CMS positions! No Lorentz boost! Use properely!
 #ifdef debug
   G4cout<<"G4QNucleus::Init3D: Nucleons are positioned in the coordinate space"<<G4endl;
 #endif
-  ChooseFermiMomenta();
+  ChooseFermiMomenta(); // CMS Fermi Momenta! Must be transfered to the LS if not at rest!
+  G4ThreeVector n3M=Get3Momentum();                   // Velocity of the nucleus in LS
+  if(n3M.x() || n3M.y() || n3M.z())                   // Boost the nucleons to LS
+  {
+    n3M/=GetEnergy();                                 // Now this is the boost velocity
+    DoLorentzBoost(n3M);                              // Now nucleons are in LS
+  }
 #ifdef debug
   G4cout<<"G4QNucleus::Init3D: Nucleons are positioned in the momentum space"<<G4endl;
 #endif
   G4double Ebind= BindingEnergy()/theA;
   for (G4int i=0; i<theA; i++) theNucleons[i]->SetBindingEnergy(Ebind); // @@ ? M.K.
   currentNucleon=0;                                   // Automatically starts the LOOP
-  return;  
+  return;
 } // End of Init3D
 
 // Get radius of the most far nucleon (+ nucleon radius)

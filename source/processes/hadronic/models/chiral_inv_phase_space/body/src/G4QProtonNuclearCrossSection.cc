@@ -77,7 +77,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
-#ifdef debug
+#ifdef pebug
   G4cout<<"G4QPrCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
@@ -114,7 +114,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         if(std::fabs(lastP-pMom)<tolerance*pMom)
         //if(lastP==pMom)              // VI do not use tolerance
         {
-#ifdef debug
+#ifdef pdebug
           G4cout<<"..G4QPrCS::GetCS:.DoNothing.P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
 #endif
           //CalculateCrossSection(fCS,-1,j,2212,lastZ,lastN,pMom); // Update param's only
@@ -195,7 +195,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   else if(std::fabs(lastP-pMom)<tolerance*pMom)
   //else if(lastP==pMom)               // VI do not use tolerance
   {
-#ifdef debug
+#ifdef pdebug
     G4cout<<"..G4QPCS::GetCS:OldNZ&P="<<lastP<<"="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
 #endif
     return lastCS*millibarn;           // Use theLastCS
@@ -250,11 +250,10 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
     if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
     {
       G4int sync=LEN.size();
-      if(sync<=I) G4cerr<<"*!*G4QProtonNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
+      if(sync<=I) G4cout<<"*!*G4QProtonNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
       lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
       lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
     }
-    else if(Momentum<ThresholdMomentum(targZ,targN)) return 0.; // BelowThreshold -> NotIni
     else                               // This isotope wasn't calculated before => CREATE
     {
       lastLEN = new G4double[nL];      // Allocate memory for the new LEN cross sections
@@ -280,7 +279,7 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
       G4int sync=LEN.size();
       if(sync!=I)
       {
-        G4cerr<<"***G4QProtonNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
+        G4cout<<"***G4QProtonNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
               <<", N="<<targN<<", F="<<F<<G4endl;
         //G4Exception("G4ProtonNuclearCS::CalculateCS:","39",FatalException,"overflow DB");
       }

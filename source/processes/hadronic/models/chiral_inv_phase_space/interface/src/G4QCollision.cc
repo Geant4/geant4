@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.43 2009-08-07 14:20:57 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.44 2009-08-21 11:56:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -180,79 +180,79 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   }
   else if(incidentParticleDefinition == G4PionMinus::PionMinus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=-211;
   }
   else if(incidentParticleDefinition == G4PionPlus::PionPlus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=211;
   }
   else if(incidentParticleDefinition == G4KaonMinus::KaonMinus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=-321;
   }
   else if(incidentParticleDefinition == G4KaonPlus::KaonPlus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=321;
   }
   else if(incidentParticleDefinition == G4KaonZeroLong::KaonZeroLong())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     if(G4UniformRand() > 0.5) pPDG= 311;
     else                      pPDG=-311;
   }
   else if(incidentParticleDefinition == G4KaonZeroShort::KaonZeroShort())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     if(G4UniformRand() > 0.5) pPDG= 311;
     else                      pPDG=-311;
   }
   else if(incidentParticleDefinition == G4Lambda::Lambda())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3122;
   }
   else if(incidentParticleDefinition == G4SigmaPlus::SigmaPlus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3222;
   }
   else if(incidentParticleDefinition == G4SigmaMinus::SigmaMinus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3112;
   }
   else if(incidentParticleDefinition == G4SigmaZero::SigmaZero())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3212;
   }
   else if(incidentParticleDefinition == G4XiMinus::XiMinus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3312;
   }
   else if(incidentParticleDefinition == G4XiZero::XiZero())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3322;
   }
   else if(incidentParticleDefinition == G4OmegaMinus::OmegaMinus())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3334;
   }
   else if(incidentParticleDefinition == G4AntiNeutron::AntiNeutron())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=-2112;
   }
   else if(incidentParticleDefinition == G4AntiProton::AntiProton())
   {
-    CSmanager=G4QPionMinusNuclearCrossSection::GetPointer(); // Fake (pA)
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=-2212;
   }
   else if(incidentParticleDefinition == G4Gamma::Gamma())
@@ -823,8 +823,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     // Scatter the lepton ( @@ make the same thing for real photons)
     // At this point we have photonEnergy and photonQ2 (with notDefinedPhi)->SelectProjPart
     G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
-    //if(am>1 && absEn < photonEnergy)     // --> the absorption of energy can happen
-    if(absEn < photonEnergy)     // --> the absorption of energy can happen
+    if(am>1 && absEn < photonEnergy)     // --> the absorption of energy can happen
+    //if(absEn < photonEnergy)             // --> the absorption of energy can happen
     {
       G4double abtEn = absEn+hdM;        // @@(b) MeanEnergyAbsorbed by a nucleus (+M_N)
       G4double abEn2 = abtEn*abtEn;      // Squared absorbed Energy + MN
@@ -1270,8 +1270,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   // quasi-elastic (& pickup process) for p+A(Z,N)
   //
   }
-  else if (aProjPDG == 211 && Z > 0 && N > 0)// Made for both pi+ and pi- (experimental)
-  //else if(2>3) 
+  //else if (aProjPDG == 211 && Z > 0 && N > 0)// Made for both pi+ and pi- (experimental)
+  else if(2>3)                               // All experiments are closed
   {
     // Only deep-inelastic interactions are experimentally included (for debuggin purposes)
 #ifdef debug
