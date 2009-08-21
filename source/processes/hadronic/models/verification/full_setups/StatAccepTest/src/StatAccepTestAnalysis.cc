@@ -1549,9 +1549,9 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
     } else if ( particleId == pionZeroId ) {
     	h_Spectrum[ "pionZero" ]->Fill( std::log10( trackEkin/MeV ) );
     } else if ( particleId == pionPlusId ) {
-    	h_Spectrum[ "pionMinus" ]->Fill( std::log10( trackEkin/MeV ) );
-    } else if ( particleId == pionMinusId ) {
     	h_Spectrum[ "pionPlus" ]->Fill( std::log10( trackEkin/MeV ) );
+    } else if ( particleId == pionMinusId ) {
+    	h_Spectrum[ "pionMinus" ]->Fill( std::log10( trackEkin/MeV ) );
     }
 #endif // G4ANALYSIS_USEROOT
 
