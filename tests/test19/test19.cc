@@ -259,17 +259,10 @@ int main()
   G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
   G4String tsy[nTg]={"1H","He","14N","59Co","238U"};// Target symbols for the Target Loop
   G4Material* mat[nTg]={0,0,0,0,0}; // Material pointers for the Target Loop
-<<<<<<< test19.cc
   const G4int nPr=12;          // Length of the projectile list for the Performance test
   G4int pli[nPr] = {2212, 2112, 211, -211, 3122, 321, -321, -2212, -2112, 11, 13, 22};//Pro
   const G4int nEn=4;           // Length of the kin. energy list for the Performance test
   G4double eli[nEn] = {27., 227., 999., 9999.}; // Kinetic energy values
-=======
-  const G4int nPr=6;  // Length of the projectile list for the Performance test
-  G4int pli[nPr] = {11, 13, 15, 22, 2212, 2112}; // PDG Codes of the projectile particles
-  const G4int nEn=3;  // Length of the kin. energy list for the Performance test
-  G4double eli[nEn] = {27., 227., 999.}; // Kinetic energy values for the Loop
->>>>>>> 1.21
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
 #ifdef tdebug
   const G4int nT=20;           // Dimension of the t-distribution vectors
