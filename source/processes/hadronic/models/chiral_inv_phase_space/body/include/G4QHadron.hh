@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.43 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.44 2009-08-23 19:56:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -132,8 +132,8 @@ private:
   // Private methods
   void DefineQC(G4int PDGCode);
   G4QParton* BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode);
-  G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
   G4double SampleCHIPSX(G4double anXtot, G4int nSea); // @@ Do we need beta at all?
+  G4double* RandomX(G4int nPart);
   void GetValenceQuarkFlavors(G4QParton* &Part1,G4QParton* &Part2);
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
   G4bool SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd);
@@ -144,13 +144,9 @@ protected:
 
 private:
   // Static Parameters of QGSM Splitting
-  static G4double alpha;            // changing rapidity distribution for all
-  static G4double beta;             // changing rapidity distribution for projectile region
-  static G4double theMinPz;         // Can be from 14 to 140 MeV
   static G4double StrangeSuppress;  // ? M.K.
-  static G4double sigmaPt;          // Can be 0
+  static G4double sigmaPt;          // Can be 0 ?
   static G4double widthOfPtSquare;  // ? M.K.
-  static G4double minTransverseMass;// ? M.K.
   // Body 
   G4QPDGCode             theQPDG;           // Instance of QPDG for the Hadron
   G4QContent             valQ;              // QC (@@ for Quasmon and Chipolino?)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.60 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.61 2009-08-23 19:56:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -47,13 +47,9 @@
 #include <cmath>
 using namespace std;
 
-G4double G4QHadron::alpha = -0.5;   // (alpha_s(0) changing rapidity distribution for all
-G4double G4QHadron::beta  = 2.5;    // changing rapidity distribution for projectile region
-G4double G4QHadron::theMinPz = 14.*MeV; // @@GetRidOfIt@@ Can be 14-140 MeV @@ used once
 G4double G4QHadron::StrangeSuppress = 0.48;         // ? M.K.
 G4double G4QHadron::sigmaPt = 1.7*GeV;              // Can be 0 ?
 G4double G4QHadron::widthOfPtSquare = 0.01*GeV*GeV; // ? M.K.
-G4double G4QHadron::minTransverseMass = 1.*keV;     // ? M.K.
 
 G4QHadron::G4QHadron(): theMomentum(0.,0.,0.,0.), theQPDG(0), valQ(0,0,0,0,0,0), nFragm(0),
   thePosition(0.,0.,0.), theCollisionCount(0), isSplit(false), Direction(true),
@@ -1106,7 +1102,7 @@ void G4QHadron::SplitUp()
     G4double transverseMass2 = theMomPlus*theMomMinus;
     if(transverseMass2<0.) transverseMass2=0.;
     G4double maxAvailMomentum2 = sqr(std::sqrt(transverseMass2) - std::sqrt(pt2));
-    G4ThreeVector pt(minTransverseMass, minTransverseMass, 0); // default value
+    G4ThreeVector pt(0., 0., 0.); // Prototype
     if(maxAvailMomentum2/widthOfPtSquare > 0.01)
                                          pt=GaussianPt(widthOfPtSquare, maxAvailMomentum2);
 #ifdef pdebug
@@ -1231,22 +1227,6 @@ void G4QHadron::SplitUp()
     G4cout<<"G4QHadron::SplitUp: *Soft* Col&Anticol are filled PDG="<<GetPDGCode()<<G4endl;
 #endif
     // Sample X
-    //G4double Xmin = std::min( theMinPz/(theMomentum.e() - GetMass()), 0.5/(nSeaPair+2) );
-    G4double Xmin = 0.;                                      // Can be absolete... ? 
-    G4double Xtot = 1.;                                      // Only for CHIPS 
-    G4int    nAttempt = 0;
-#ifdef pdebug
-    G4cout<<"G4QHadron::SplitUp: Xmin="<<Xmin<<G4endl;
-#endif
-    G4double SumX = 0;
-    G4double aBeta = beta;                                   // default for all baryons
-    G4double ColorX, AntiColorX;
-    G4int aPDG=std::abs(GetPDGCode());
-    if (aPDG ==211 || aPDG == 22 || aPDG == 111) aBeta = 1.; // light mesons (@@ eta?)
-    else if (aPDG/100 == 3)                      aBeta = 0.; // all kaons
-    // Default aBeta=beta=2.5 is used for others (including nucleons)
-    //else G4cout<<"-Warning-G4QHadron::SplitUp: wrong PDG="<<GetPDGCode()<<G4endl;
-    G4int dnSeaPair=nSeaPair+nSeaPair;
     G4int nColor=Color.size();
     G4int nAntiColor=AntiColor.size();
     if(nColor!=nAntiColor || nColor != nSeaPair+1)
@@ -1255,84 +1235,27 @@ void G4QHadron::SplitUp()
              <<G4endl;
       G4Exception("G4QHadron::SplitUp:","72",FatalException,"Colours&AntiColours notSinc");
     }
-    do
-    {
-      SumX=0.;
-      nAttempt++;
-      //G4int NumberOfUnsampledSeaQuarks = dnSeaPair+2; // QGS
-      G4int NumberOfUnsampledSeaQuarks = dnSeaPair+2; // CHIPS
 #ifdef pdebug
-      G4cout<<"G4QHad::SpUp:Attempt #"<<nAttempt<<",N="<<dnSeaPair+2<<",tX="<<Xtot<<G4endl;
+    G4cout<<"G4QHad::SpUp:,nPartons="<<nColor+nColor<<<<G4endl;
 #endif
-      //G4double beta1 = beta; // !! beta1 is not used !!
-      ////For mesons (what about Kaons, for which aBeta=0? M.K.?) 
-      //if(std::abs(ColorEncoding) <= 1000 && std::abs(AntiColorEncoding) <= 1000)beta1=1.;
+   
+    G4double* xs=RandomX(nColor+nColor); // Non-iterative CHIPS algorithm of splitting
 #ifdef pdebug
-      G4cout<<"G4QHadron::SplitUp:*Sft* Loop Before Xmin="<<Xmin<<",aB="<<aBeta
-            <<",nUnsampledSea="<<NumberOfUnsampledSeaQuarks<<G4endl;
+    G4cout<<"G4QHadron::SplitUp:*Sft* Loop ColorX="<<ColorX<<G4endl;
 #endif
-      // From this point the nonitarative CHIPS algorithm is used
-      ColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
-      Xtot-=ColorX;                                            // Only for CHIPS
-      //ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
-#ifdef pdebug
-      G4cout<<"G4QHadron::SplitUp:*Sft* Loop ColorX="<<ColorX<<G4endl;
-#endif
-      Color.back()->SetX(SumX = ColorX);             // this is the valence quark.
-      // Now select x for the sea partons
-      std::list<G4QParton*>::iterator icolor = Color.begin();
-      std::list<G4QParton*>::iterator ecolor = Color.end();
-      ecolor--;
-      std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
-      std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
-      eanticolor--;
-#ifdef pdebug
-      G4int nc=0;
-#endif
-      for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
-      {
-        NumberOfUnsampledSeaQuarks--;
-        ColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
-        Xtot-=ColorX;                                            // Only for CHIPS
-        //ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
-        (*icolor)->SetX(ColorX);
-        SumX += ColorX; 
-#ifdef pdebug
-        ++nc;
-        G4cout<<"G4QHadr::SplitUp:*S*L/LC,nc="<<nc<<",sX="<<SumX<<",ColX="<<ColorX<<G4endl;
-#endif
-        NumberOfUnsampledSeaQuarks--;
-        AntiColorX = SampleCHIPSX(Xtot, NumberOfUnsampledSeaQuarks); // Xmin=0 in CHIPS
-        Xtot-=AntiColorX;                                            // Only for CHIPS
-        //AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, dnSeaPair, aBeta);
-        (*ianticolor)->SetX(AntiColorX); // the 'sea' partons
-        SumX += AntiColorX;
-#ifdef pdebug
-        G4cout<<"G4QHadron::SplitUp:*Sft* Loop/loopAC sumX="<<SumX<<",Xmin="<<Xmin<<G4endl;
-#endif
-        if (1. - SumX <= Xmin)  break;   // @@ Should never happen for CHIPS
-#ifdef pdebug
-        G4cout<<"G4QHadron::SplitUp:*Sft* LOOP nUnSea="<<NumberOfUnsampledSeaQuarks
-              <<", 1-SumX="<<1.- SumX<<", Xmin="<<Xmin<<G4endl;
-#endif
-      }
-#ifdef pdebug
-      G4cout<<"G4QH::SpUp:nc="<<nc<<"<"<<Color.size()<<",1-sX="<<1.-SumX<<",ColX="<<G4endl;
-#endif
-    } while (1. - SumX <= Xmin); // @@ Should be always true for CHIPS (by definition)
-#ifdef pdebug
-    G4cout<<"G4QHadron::SplitUp: *Sfot* After LOOP SumX="<<SumX<<",1-Xm="<<1.-Xmin<<G4endl;
-#endif
-    AntiColor.back()->SetX(1.0 - SumX); // the di-quark takes the rest, then go to momentum
     std::list<G4QParton*>::iterator icolor = Color.begin();
     std::list<G4QParton*>::iterator ecolor = Color.end();
     std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
     std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
+    G4int xi=-1;                         // x-index
     for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
     {
+      (*icolor)->SetX(xs[++xi]);
       (*icolor)->DefineEPz(theMomentum);
+      (*ianticolor)->SetX(xs[++xi]);
       (*ianticolor)->DefineEPz(theMomentum);
     }
+    delete xs;                           // The calculated array must be deleted
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Soft* ===> End, ColSize="<<Color.size()<<G4endl;
 #endif
@@ -1362,6 +1285,35 @@ G4QParton* G4QHadron::BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode)
   return result;
 } // End of BuildSeaQuark
 
+// Fast non-iterative CHIPS algorithm
+G4double* G4QHadron::RandomX(G4int nPart)
+{
+  G4double* x = 0;
+  if(nPart<2)
+  {
+    G4cout<<"-Warning-G4QHadron::RandomX: nPart="<<nPart<<" < 2"<<G4endl;
+    return x;
+  }
+  x = new G4double[nPart];
+  G4int nP1=nPart-1;
+  x[0]=G4UniformRand();
+  for(G4int i=1; i<nP1; ++i)
+  {
+    G4double r=G4UniformRand();
+    G4int j=0;
+    for( ; j<i; ++j) if(r < x[j])
+    {
+      for(G4int k=i; k>j; --k) x[k]=x[k-1];
+      x[j]=r;
+      break;
+    }
+    if(j==i) x[i]=r;
+  }
+  x[nP1]=1.;
+  for(G4int i=nP1; i>0; --i) x[i]-=x[i-1];
+  return x;
+}
+
 // Non-iterative recursive phase-space CHIPS algorthm
 G4double G4QHadron::SampleCHIPSX(G4double anXtot, G4int nSea)
 {
@@ -1370,44 +1322,6 @@ G4double G4QHadron::SampleCHIPSX(G4double anXtot, G4int nSea)
   if(nSea<2) return anXtot;
   return anXtot*(1.-std::pow(G4UniformRand(),1./ns));
 }
-
-// Iterative QGS algorithm
-G4double G4QHadron::SampleX(G4double anXmin, G4int nSea, G4int totSea, G4double aBeta)
-{
-  G4double x;
-  G4double b1=aBeta+1.;
-  G4double a1=alpha+1.;                              // = 0.5 
-  //G4double ymax = 0;
-  //for(G4int ii=1; ii<100; ii++)                    // @@ 100 is hardwired ? M.K.
-  //{// y=[(1-x-m*x)**(a+1)-x**(a+1)]**n * [(1-x-m*x)**(b+1) - x**(b+1)] / ii**a
-  //  G4double r = 1.- anXmin - totSea*anXmin;
-  //  y = (std::pow(r,aBeta+1) - std::pow(anXmin,aBeta+1)) / std::pow(G4double(ii),alpha);
-  //  y*= std::pow(std::pow(r, alpha+1)-std::pow(anXmin, alpha+1), nSea);
-  //  if(y > ymax) ymax = y;
-  //}
-  // M.K.
-  G4double Xpa1=std::pow(anXmin, a1);
-  G4double Xpb1=std::pow(anXmin, b1);
-  G4double r= 1.- anXmin - totSea * anXmin;
-  G4double ymax = (std::pow(r, b1) - Xpb1) * std::pow(std::pow(r, a1)-Xpa1, nSea);
-  G4double xMax=1.-(totSea+1)*anXmin;
-  if(anXmin > xMax || xMax < 0.) 
-  {
-    G4cerr<<"***G4QHadron::SampleX: anXmin="<<anXmin<<" > xMax="<<xMax<<", nSea="<<nSea
-          <<", totSea="<<totSea<<G4endl;
-    G4Exception("G4QHadron::SampleX:","72",FatalException,"TooBigXValue or negativeXMax");
-  }
-  do
-  {
-    x = anXmin + G4UniformRand()*(xMax-anXmin);
-    r = 1.- x - totSea * anXmin;
-  } while( ymax * G4UniformRand() > std::pow(x, alpha) *
-           std::pow( std::pow(r,a1)-Xpa1, nSea) * (std::pow(r, b1)-Xpb1) ); 
-#ifdef debug
-  G4cout<<"G4QHadron::SampleX:x="<<x<<",Xi="<<anXmin<<",nS="<<nSea<<",tS="<<totSea<<G4endl;
-#endif
-  return x;  
-} // End of SampleX
 
 // Get flavors for the valence quarks of this hadron
 void G4QHadron::GetValenceQuarkFlavors(G4QParton* &Parton1, G4QParton* &Parton2)
