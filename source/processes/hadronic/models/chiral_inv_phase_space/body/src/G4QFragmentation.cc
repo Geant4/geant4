@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.25 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.26 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -426,10 +426,10 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   }
   G4int nInt=theInteractions.size();
 #ifdef debug
-  G4cout<<"G4QFragmentation::Construct: CUTDEBUG="<<totalCuts<<", ImpactParam="
-        <<impactUsed<<", #ofInter="<<nInt<<G4endl;
+  G4cout<<"G4QFrag::Con:CUT="<<totalCuts<<",ImpPar="<<impactUsed<<",#ofInt="<<nInt<<G4endl;
 #endif
-  if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1))
+  //--- Valgrind --- theInteractions[0]->GetNumberOfDINRCollisions() can be not initialized
+  if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1)) // @@ ?? @@
   {
     G4QHadron* aTarget=0;
     G4QHadron* aProjectile=0;

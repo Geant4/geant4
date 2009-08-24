@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.14 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QString.cc,v 1.15 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -263,9 +263,9 @@ void G4QString::ExciteString(G4QParton* Color, G4QParton* AntiColor, G4int Direc
   G4LorentzVector sum=Color->Get4Momentum();
   thePartons.push_back(AntiColor);
   sum+=AntiColor->Get4Momentum();
-	 Pplus =sum.e() + sum.pz();
-	 Pminus=sum.e() - sum.pz();
-	 decaying=None;
+  Pplus =sum.e() + sum.pz();
+  Pminus=sum.e() - sum.pz();
+  decaying=None;
 #ifdef debug
   G4cout<<"G4QString::ExciteString: ***Done***, beg="<<(*thePartons.begin())->GetPDGCode()
           <<",end="<<(*(thePartons.end()-1))->GetPDGCode()<<G4endl;
@@ -276,20 +276,20 @@ void G4QString::ExciteString(G4QParton* Color, G4QParton* AntiColor, G4int Direc
 G4double G4QString::GetLundLightConeZ(G4double zmin, G4double zmax, G4int , // @@ ? M.K.
                                       G4QHadron* pHadron, G4double Px, G4double Py)
 {
-    static const G4double  alund = 0.7/GeV/GeV; 
-    // If blund get restored, you MUST adapt the calculation of zOfMaxyf.
-    //static const G4double  blund = 1;
-    G4double z, yf;
-    G4double Mt2 = Px*Px + Py*Py + pHadron->GetMass2();
-    G4double zOfMaxyf=alund*Mt2/(alund*Mt2+1.);
-    G4double maxYf=(1.-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
-    do
-    {
-       z = zmin + G4UniformRand()*(zmax-zmin);
-       // yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
-       yf = (1-z)/z * std::exp(-alund*Mt2/z);
-    } while (G4UniformRand()*maxYf>yf); 
-    return z;
+  static const G4double  alund = 0.7/GeV/GeV; 
+  // If blund get restored, you MUST adapt the calculation of zOfMaxyf.
+  //static const G4double  blund = 1;
+  G4double z, yf;
+  G4double Mt2 = Px*Px + Py*Py + pHadron->GetMass2();
+  G4double zOfMaxyf=alund*Mt2/(alund*Mt2+1.);
+  G4double maxYf=(1.-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
+  do
+  {
+     z = zmin + G4UniformRand()*(zmax-zmin);
+     // yf = std::pow(1. - z, blund)/z*std::exp(-alund*Mt2/z);
+     yf = (1-z)/z * std::exp(-alund*Mt2/z);
+  } while (G4UniformRand()*maxYf>yf); 
+  return z;
 } // End of GetLundLightConeZ
 
 
@@ -434,11 +434,13 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       std::for_each(LeftVector->begin(), LeftVector->end(), DeleteQHadron());
       LeftVector->clear();
     }
+    //delete LeftVector; // @@ Valgrind ?
     if(RightVector->size())
     {
       std::for_each(RightVector->begin(), RightVector->end(), DeleteQHadron());
       RightVector->clear();
     }
+    //delete RightVector; // @@ Valgrind ?
     inner_sucess=true;                                           // set false on failure
     while (!StopFragmentation())                                 // LOOP with break
     {  // Split current string into hadron + new string state
@@ -470,7 +472,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #ifdef debug
         G4cout<<"G4QString::FragmentString: LOOP/LOOP, Start from scratch"<<G4endl;
 #endif 
-        if (Hadron)    delete Hadron;
+        if (Hadron) delete Hadron;
         inner_sucess=false;
         break;
       }
@@ -554,7 +556,9 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
         if(G4QHadron(tot4M).DecayIn2(Lh4M,Rh4M))
         {
           LeftVector->push_back(new G4QHadron(LeftHadron, 0, Pos, Lh4M));
+          delete LeftHadron;
           RightVector->push_back(new G4QHadron(RightHadron, 0, Pos, Rh4M));
+          delete RightHadron;
         }
 #ifdef debug
         G4cout<<">>>>>G4QString::FragmentString: HFilled (L) PDG="
@@ -584,6 +588,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       std::for_each(LeftVector->begin(), LeftVector->end(), DeleteQHadron());
       LeftVector->clear();
     }
+    // delete LeftVector;   // @@ Valgrind ?
 #ifdef debug
     G4cout<<"G4QString::FragmString:StringNotFragm,L4M="<<left4M<<",R4M="<<right4M<<G4endl;
 #endif
@@ -676,8 +681,8 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #ifdef debug
   G4cout<<"G4QString::FragmentString: *** Done *** "<<G4endl;
 #endif 
-  return LeftVector;
-} // End of FragmentLundString
+  return LeftVector; // Should be deleted by user (@@ Valgrind complain ?)
+} // End of FragmentString
 
 // Simple decay of the string if the excitation mass is too small for HE fragmentation
 // !! If the mass is below the single hadron threshold, make warning (improve) and convert
@@ -768,10 +773,12 @@ G4double G4QString::FragmentationMass(G4int HighSpin, G4QHadronPair* pdefs)
   G4int LPDG= GetLeftParton()->GetPDGCode();
   G4int LT  = GetLeftParton()->GetType();
   if ( (LPDG > 0 && LT == 1)  || (LPDG < 0 && LT == 2) ) iflc = -iflc; // anti-quark
+  G4QParton* piflc = new G4QParton( iflc);
+  G4QParton* miflc = new G4QParton(-iflc);
   if(HighSpin)
   {
-    Hadron1 = CreateHighSpinHadron(GetLeftParton(),CreateParton(iflc));
-    Hadron2 = CreateHighSpinHadron(GetRightParton(),CreateParton(-iflc));
+    Hadron1 = CreateHighSpinHadron(GetLeftParton(),piflc);
+    Hadron2 = CreateHighSpinHadron(GetRightParton(),miflc);
 #ifdef debug
     G4cout<<"G4QString::FragmentationMass: High, PDG1="<<Hadron1->GetPDGCode()
           <<", PDG2="<<Hadron2->GetPDGCode()<<G4endl;
@@ -779,8 +786,8 @@ G4double G4QString::FragmentationMass(G4int HighSpin, G4QHadronPair* pdefs)
   }
   else
   {
-    Hadron1 = CreateLowSpinHadron(GetLeftParton(),CreateParton(iflc));
-    Hadron2 = CreateLowSpinHadron(GetRightParton(),CreateParton(-iflc));
+    Hadron1 = CreateLowSpinHadron(GetLeftParton(),piflc);
+    Hadron2 = CreateLowSpinHadron(GetRightParton(),miflc);
 #ifdef debug
     G4cout<<"G4QString::FragmentationMass: Low, PDG1="<<Hadron1->GetPDGCode()
           <<", PDG2="<<Hadron2->GetPDGCode()<<G4endl;
@@ -797,6 +804,8 @@ G4double G4QString::FragmentationMass(G4int HighSpin, G4QHadronPair* pdefs)
     if(Hadron1) delete Hadron1;
     if(Hadron2) delete Hadron2;
   }
+  delete piflc;
+  delete miflc;
 #ifdef debug
   G4cout<<"G4QString::FragmentationMass: ***Done*** mass="<<mass<<G4endl;
 #endif 
@@ -1019,11 +1028,11 @@ G4QHadron* G4QString::DiQuarkSplitup(G4QParton* decay, G4QParton* &created)
     G4int i20  = std::min(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
     G4int spin = (i10 != i20 && G4UniformRand() <= 0.5) ? 1 : 3;
     G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
-    created = CreateParton(NewDecayEncoding);
+    created = new G4QParton(NewDecayEncoding);
 #ifdef debug
     G4cout<<"G4QString::DiQuarkSplitup: inside, crP="<<created->GetPDGCode()<<G4endl;
 #endif 
-    G4QParton* decayQuark=CreateParton(decayQuarkEncoding);
+    G4QParton* decayQuark= new G4QParton(decayQuarkEncoding);
     return CreateHadron(QuarkPair.GetParton1(), decayQuark);
   }
   else
@@ -1058,16 +1067,16 @@ G4QPartonPair G4QString::CreatePartonPair(G4int NeedParticle, G4bool AllowDiquar
 #ifdef debug
 		  G4cout<<"G4QString::CreatePartonPair: Created dQ-AdQ, PDG="<<PDGcode<<G4endl;
 #endif 
-    return G4QPartonPair(CreateParton(-PDGcode),CreateParton(PDGcode));
+    return G4QPartonPair(new G4QParton(-PDGcode), new G4QParton(PDGcode));
   }
   else
   {
-    // Create a Quark - AntiQuark pair, first in pair  IsParticle
+    // Create a Quark - AntiQuark pair, first in pair is a Particle
     G4int PDGcode=SampleQuarkFlavor()*NeedParticle;
 #ifdef debug
   		G4cout<<"G4QString::CreatePartonPair: Created Q-aQ, PDG="<<PDGcode<<G4endl;
 #endif 
-    return G4QPartonPair(CreateParton(PDGcode),CreateParton(-PDGcode));
+    return G4QPartonPair(new G4QParton(PDGcode), new G4QParton(-PDGcode));
   }
 } // End of CreatePartonPair
 G4QHadron* G4QString::CreateMeson(G4QParton* black, G4QParton* white, Spin theSpin)

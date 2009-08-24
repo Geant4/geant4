@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.61 2009-08-23 19:56:44 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.62 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -1255,7 +1255,7 @@ void G4QHadron::SplitUp()
       (*ianticolor)->SetX(xs[++xi]);
       (*ianticolor)->DefineEPz(theMomentum);
     }
-    delete xs;                           // The calculated array must be deleted
+    delete[] xs;                           // The calculated array must be deleted
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Soft* ===> End, ColSize="<<Color.size()<<G4endl;
 #endif

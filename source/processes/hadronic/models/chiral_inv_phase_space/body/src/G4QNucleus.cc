@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.106 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.107 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3588,7 +3588,7 @@ G4bool G4QNucleus::ReduceSum(G4ThreeVector* vect, G4ThreeVector sum)
     sum/=theA;
     for(G4int i=0; i<theA; i++) vect[i]-=sum;        // Final reduction
   }
-  delete dp;
+  delete[] dp;
   return true;
 } // End of ReduceSum
 

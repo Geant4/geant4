@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.10 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QString.hh,v 1.11 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4QString_h
@@ -135,7 +135,6 @@ class G4QString
   void SetRightPartonStable();
   G4QHadron* Splitup(G4bool QL);
   G4LorentzVector* SplitEandP(G4QHadron* pHadron, G4bool QL); // QGSM:QL=true,Lund:QL=false
-  G4QParton* CreateParton(G4int PDGcode)                   {return new G4QParton(PDGcode);}
   G4QPartonPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);
   G4QHadron* QuarkSplitup(G4QParton* decay, G4QParton* &created);
   G4QHadron* DiQuarkSplitup(G4QParton* decay, G4QParton* &created);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.11 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.12 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -1628,11 +1628,11 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
 #endif
     }
     pair<G4int,G4double>* abP= new pair<G4int,G4double>(N,abu);
-    A->push_back(abP);
+    A->push_back(abP); // @@ Valgrind thinks that it is not deleted (?) (Line 703)
     pair<G4int,G4double>* saP= new pair<G4int,G4double>(N,sumAbu);
-    S->push_back(saP);
+    S->push_back(saP); // @@ Valgrind thinks that it is not deleted (?) (Line 713)
     pair<G4int,G4double>* csP= new pair<G4int,G4double>(N,0.);
-    C->push_back(csP);
+    C->push_back(csP); // @@ Valgrind thinks that it is not deleted (?) (Line 723)
 #ifdef debug
     G4cout<<"G4QIsotope::InitElement: A & S & C are filled nP="<<C->size()<<G4endl;
 #endif

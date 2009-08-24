@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.2 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.3 2009-08-24 14:41:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, G4QNucleus &tNucleus)
   G4cout<<"-EMC-G4QInelastic::Construct: pNuc4M="<<sumP1<<", tNuc4M="<<sumT1<<G4endl;
 #endif
   G4ThreeVector theCMVelocity(0.,0.,0.);             // Prototype of the "CM" velocity
-  G4ThreeVector theALVelocity(0.,0.,0.);             // Prototype of the "AntiLab" velocity
+  G4ThreeVector theALVelocity(0.,0.,0.);             // Prototype of "CMAntiLab" velocity
   // Very important! Here the projectile 4M is recalculated in the ZLS (previously in LS)
   proj4M = pNucleus.Get4Momentum();                  // 4-mom of theProjectileHadron inZLS
   G4double pz_per_projectile = proj4M.pz()/pA;       // Momentum per nucleon
@@ -134,8 +134,8 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, G4QNucleus &tNucleus)
   theCMVelocity.setZ(vz);                            // CM (w/r to one nucleon) velosity
   theProjNucleus.DoLorentzBoost(-theCMVelocity);     // BoostProjNucleus to "CM"
   theTargNucleus.DoLorentzBoost(-theCMVelocity);     // BoostProjNucleus to "CM"
-  G4LorentzVector tgN4M=theTargNucleus.Get4Momentum();
-  G4double avz=tgN4M.pz()/tgN4M.e();                 // Speed of AntiLabSys in CMS
+  G4LorentzVector prN4M=theProjNucleus.Get4Momentum();
+  G4double avz=prN4M.pz()/prN4M.e();                 // Speed of AntiLabSys in CMS
   theALVelocity.setZ(avz);                           // CM (w/r to one nucleon) velosity
 #ifdef edebug
   G4LorentzVector sumP2=theProjNucleus.GetNucleons4Momentum();// Sum of Nucleons4M in RotCM
