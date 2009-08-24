@@ -101,7 +101,7 @@ List of fixes included in this public patch since the public release 9.2.p01:
       o Corrected typo in base implementation of GetSurfaceArea() in
         G4VCSGfaceted, which was erroneously returning cubic volume estimation.
         Addresses problem report #1062.
-      o Relaxed error condition in G4TessellatedSolid::Inside(p) to warning,
+      o Relaxed error in G4TessellatedSolid::Inside(p) to warning,
         for excess of max trials and anomalous conditions in distance
         calculation. Added more printout information when error condition is
         detected.
@@ -136,8 +136,7 @@ List of fixes included in this public patch since the public release 9.2.p01:
         removed not optimal control in G4TripathiLightIonCrossSection class.
         Added default constructor and destructor to G4TripathiCrossSection.
       o G4GGNuclNuclCrossSection: updated Glauber-Gribov cross section for ions.
-      o G4CrossSectionDataSetRegistry: use STL commands to remove elements
-        in vector, for better memory management.
+      o G4CrossSectionDataSetRegistry: fixes for better memory management.
     + models/neutron_hp:
       o Fixed bug in IC electron emissions for G4NeutronHPPhotonDist and
         G4NeutronHPInelasticCompFS.
@@ -241,7 +240,8 @@ List of fixes included in this public patch since the public release 9.2.p01:
                              Technical Notes
                              --------------- 
 
-  o  This patch should be applied on top of release 9.2 or 9.2.p01.
+  o  This is a cumulative patch and can be applied on top of relese 9.2
+     or 9.2.p01.
   o  Technical notes distributed for release 9.2 are also applicable and
      valid for this patch.
 
