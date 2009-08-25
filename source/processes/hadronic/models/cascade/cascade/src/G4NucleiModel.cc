@@ -581,70 +581,11 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
     dummy_convertor.setBullet(pmom, pmass);
   
-    //    G4int rtype;
-
     for (G4int ip = 1; ip < 3; ip++) { 
       G4InuclElementaryParticle particle = generateNucleon(ip, zone);
       dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       G4double csec = crossSection(ekin, ptype * ip);
-
-      /*
-      rtype = ptype*ip;
-
-      //      if ( (rtype > 10 && rtype < 14) || (rtype > 14 && rtype < 63) ) {
-      if ( rtype > 21 && rtype < 63 ) {
-        // strange particle branch
-        //        if (rtype == 11) {
-        //          csec = G4CascadeKplusPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 13) {
-	//          csec = G4CascadeKminusPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 15) {
-	//          csec = G4CascadeKzeroPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 17) {
-	//          csec = G4CascadeKzeroBarPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 21) {
-	//          csec = G4CascadeLambdaPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 23) {
-	//          csec = G4CascadeSigmaPlusPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 25) {
-	//          csec = G4CascadeSigmaZeroPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 27) {
-	//          csec = G4CascadeSigmaMinusPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 29) {
-	//          csec = G4CascadeXiZeroPChannel::getCrossSection(ekin);
-	//        } else if (rtype == 31) {
-	//          csec = G4CascadeXiMinusPChannel::getCrossSection(ekin);
-
-        if (rtype == 22) {
-          csec = G4CascadeKplusNChannel::getCrossSection(ekin);
-        } else if (rtype == 26) {
-          csec = G4CascadeKminusNChannel::getCrossSection(ekin);
-        } else if (rtype == 30) {
-          csec = G4CascadeKzeroNChannel::getCrossSection(ekin);
-        } else if (rtype == 34) {
-          csec = G4CascadeKzeroBarNChannel::getCrossSection(ekin);
-        } else if (rtype == 42) {
-          csec = G4CascadeLambdaNChannel::getCrossSection(ekin);
-        } else if (rtype == 46) {
-          csec = G4CascadeSigmaPlusNChannel::getCrossSection(ekin);
-        } else if (rtype == 50) {
-          csec = G4CascadeSigmaZeroNChannel::getCrossSection(ekin);
-        } else if (rtype == 54) {
-          csec = G4CascadeSigmaMinusNChannel::getCrossSection(ekin);
-        } else if (rtype == 58) {
-          csec = G4CascadeXiZeroNChannel::getCrossSection(ekin);
-        } else if (rtype == 62) {
-          csec = G4CascadeXiMinusNChannel::getCrossSection(ekin);
-
-        } else {
-          csec = 0;
-          G4cout << " G4NucleiModel:"
-		 << " Unknown strange interaction channel - returning zero cross section : rtype = " 
-                 << rtype << G4endl;
-        }
-      }
-      */
 
       if(verboseLevel > 2){
 	G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
