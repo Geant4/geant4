@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.44 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.45 2009-08-25 04:40:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -117,7 +117,23 @@ void G4QCollision::SetWeakNucBias(G4double ccnB) {weakNucBias=ccnB;}
 
 // Destructor
 
-G4QCollision::~G4QCollision() {}
+G4QCollision::~G4QCollision()
+{
+  ElementZ.clear();
+  ElProbInMat.clear();
+  for(unsigned i=0; i < ElIsoN.size(); ++i)
+  {
+    std::vector<G4int>* curEIN=ElIsoN[i];
+    curEIN.clear();
+    delete curEIN;
+  }
+  for(unsigned i=0; i < IsoProbInEl.size(); ++i)
+  {
+    std::vector<G4int>* curEIN=IsoProbInEl[i];
+    curEIN.clear();
+    delete curEIN;
+  }
+}
 
 
 G4LorentzVector G4QCollision::GetEnegryMomentumConservation()
