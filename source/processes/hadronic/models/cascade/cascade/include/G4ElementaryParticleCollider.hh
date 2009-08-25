@@ -72,9 +72,6 @@ private:
 				      G4double ekin, 
 				      G4double etot_cm) const; 
       
-  //  G4bool reChargering(G4double ekin, G4int is) const;
-
-
   G4CascadeMomentum particleSCMmomentumFor2to2(G4int is, 
 			             G4int kw, 
 				     G4double ekin,
