@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.1 2009-08-20 14:05:20 dennis Exp $
+// $Id: G4PionSampler.cc,v 1.2 2009-08-25 23:56:47 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -395,88 +395,88 @@ const G4int G4PionSampler::pipPindex[8][2] =
 // T33_nbfs = final state types for pi+ p and pi- n
 
 const G4int G4PionSampler::T33_2bfs[2][2][2] =
-  {{{pro,pip}, {sp,kp}},
+  {{{pip,pro}, {kp,sp}},
 
-   {{neu,pim}, {sm,k0}}};
+   {{pim,neu}, {k0,sm}}};
 
 const G4int G4PionSampler::T33_3bfs[2][7][3] =
-  {{{pro,pip,pi0}, {neu,pip,pip}, {sp,kp,pi0}, {sp,k0,pip}, 
-    {s0,kp,pip},   {lam,kp,pip},  {pro,kp,k0b}},
+  {{{pip,pro,pi0}, {pip,neu,pip}, {pi0,sp,kp}, {pip,sp,k0}, 
+    {pip,s0,kp},   {pip,lam,kp},  {kp,pro,k0b}},
 
-   {{neu,pim,pi0}, {pro,pim,pim}, {sm,k0,pi0}, {sm,kp,pim},
-    {s0,k0,pim},   {lam,k0,pim},  {neu,k0,km}}};
+   {{pim,neu,pi0}, {pim,pro,pim}, {pi0,sm,k0}, {pim,sm,kp},
+    {pim,s0,k0},   {pim,lam,k0},  {k0,neu,km}}};
 
 const G4int G4PionSampler::T33_4bfs[2][15][4] =
-  {{{pro,pip,pip,pim},{pro,pip,pi0,pi0},{neu,pip,pip,pi0},
-    {sp,kp,pip,pim},  {sp,kp,pi0,pi0},  {sp,k0,pip,pi0},
-    {s0,k0,pip,pip},  {s0,kp,pip,pi0},  {lam,kp,pip,pi0},
-    {lam,k0,pip,pip}, {sm,kp,pip,pip},  {pro,pip,kp,km},
-    {pro,pip,k0,k0b}, {pro,pi0,kp,k0b}, {neu,pip,kp,k0b}},
+  {{{pip,pro,pip,pim},{pip,pro,pi0,pi0},{pip,neu,pip,pi0},
+    {pip,sp,kp,pim},  {pi0,sp,kp,pi0},  {pip,sp,k0,pi0},
+    {pip,s0,k0,pip},  {pip,s0,kp,pi0},  {pip,lam,kp,pi0},
+    {pip,lam,k0,pip}, {pip,sm,kp,pip},  {pip,pro,kp,km},
+    {pip,pro,k0,k0b}, {pi0,pro,kp,k0b}, {pip,neu,kp,k0b}},
 
-   {{neu,pip,pim,pim},{neu,pim,pi0,pi0},{pro,pim,pim,pi0},
-    {sm,k0,pip,pim},  {sm,k0,pi0,pi0},  {sm,kp,pim,pi0},
-    {s0,kp,pim,pim},  {s0,k0,pim,pi0},  {lam,k0,pim,pi0},
-    {lam,kp,pim,pim}, {sp,k0,pim,pim},  {neu,pim,k0,k0b},
-    {neu,pim,kp,km},  {neu,pi0,k0,km},  {pro,pim,k0,km}}};
+   {{pim,neu,pip,pim},{pim,neu,pi0,pi0},{pim,pro,pim,pi0},
+    {pim,sm,k0,pip},  {pi0,sm,k0,pi0},  {pim,sm,kp,pi0},
+    {pim,s0,kp,pim},  {pim,s0,k0,pi0},  {pim,lam,k0,pi0},
+    {pim,lam,kp,pim}, {pim,sp,k0,pim},  {pim,neu,k0,k0b},
+    {pim,neu,kp,km},  {pi0,neu,k0,km},  {pim,pro,k0,km}}};
 
 const G4int G4PionSampler::T33_5bfs[2][24][5] =
-  {{{pro,pip,pip,pim,pi0}, {pro,pip,pi0,pi0,pi0}, {neu,pip,pip,pip,pim},
-    {neu,pip,pip,pi0,pi0}, {sp,kp,pip,pim,pi0},   {sp,kp,pi0,pi0,pi0},
-    {sp,k0,pip,pip,pim},   {sp,k0,pip,pi0,pi0},   {lam,k0,pip,pip,pi0},
-    {lam,kp,pip,pip,pim},  {lam,kp,pip,pi0,pi0},  {s0,kp,pip,pip,pim},
-    {s0,kp,pip,pi0,pi0},   {s0,k0,pip,pip,pi0},   {sm,kp,pip,pip,pi0},
-    {sm,k0,pip,pip,pip},   {pro,pip,pim,kp,k0b},  {pro,pip,pip,k0,km},
-    {pro,pip,pi0,kp,km},   {pro,pip,pi0,k0,k0b},  {pro,pi0,pi0,kp,k0b},
-    {neu,pip,pip,kp,km},   {neu,pip,pip,k0,k0b},  {neu,pip,pi0,kp,k0b}},
+  {{{pip,pro,pip,pim,pi0}, {pip,pro,pi0,pi0,pi0}, {pip,neu,pip,pip,pim},
+    {pip,neu,pip,pi0,pi0}, {pip,sp,kp,pim,pi0},   {pi0,sp,kp,pi0,pi0},
+    {pip,sp,k0,pip,pim},   {pip,sp,k0,pi0,pi0},   {pip,lam,k0,pip,pi0},
+    {pip,lam,kp,pip,pim},  {pip,lam,kp,pi0,pi0},  {pip,s0,kp,pip,pim},
+    {pip,s0,kp,pi0,pi0},   {pip,s0,k0,pip,pi0},   {pip,sm,kp,pip,pi0},
+    {pip,sm,k0,pip,pip},   {pip,pro,pim,kp,k0b},  {pip,pro,pip,k0,km},
+    {pip,pro,pi0,kp,km},   {pip,pro,pi0,k0,k0b},  {pi0,pro,pi0,kp,k0b},
+    {pip,neu,pip,kp,km},   {pip,neu,pip,k0,k0b},  {pip,neu,pi0,kp,k0b}},
 
-   {{neu,pip,pim,pim,pi0}, {neu,pim,pi0,pi0,pi0}, {pro,pip,pim,pim,pim},
-    {pro,pim,pim,pi0,pi0}, {sm,k0,pip,pim,pi0},   {sm,k0,pi0,pi0,pi0},
-    {sm,kp,pip,pim,pim},   {sm,kp,pim,pi0,pi0},   {lam,kp,pim,pim,pi0},
-    {lam,k0,pip,pim,pim},  {lam,k0,pim,pi0,pi0},  {s0,k0,pip,pim,pim},
-    {s0,k0,pim,pi0,pi0},   {s0,kp,pim,pim,pi0},   {sp,k0,pim,pim,pi0},
-    {sp,kp,pim,pim,pim},   {neu,pip,pim,k0,km},   {neu,pim,pim,kp,k0b},
-    {neu,pim,pi0,k0,k0b},  {neu,pim,pi0,kp,km},   {neu,pi0,pi0,k0,km},
-    {pro,pim,pim,k0,k0b},  {pro,pim,pim,kp,km},   {pro,pim,pi0,k0,km}}};
+   {{pim,neu,pip,pim,pi0}, {pim,neu,pi0,pi0,pi0}, {pim,pro,pip,pim,pim},
+    {pim,pro,pim,pi0,pi0}, {pim,sm,k0,pip,pi0},   {pi0,sm,k0,pi0,pi0},
+    {pim,sm,kp,pip,pim},   {pim,sm,kp,pi0,pi0},   {pim,lam,kp,pim,pi0},
+    {pim,lam,k0,pip,pim},  {pim,lam,k0,pi0,pi0},  {pim,s0,k0,pip,pim},
+    {pim,s0,k0,pi0,pi0},   {pim,s0,kp,pim,pi0},   {pim,sp,k0,pim,pi0},
+    {pim,sp,kp,pim,pim},   {pim,neu,pip,k0,km},   {pim,neu,pim,kp,k0b},
+    {pim,neu,pi0,k0,k0b},  {pim,neu,pi0,kp,km},   {pi0,neu,pi0,k0,km},
+    {pim,pro,pim,k0,k0b},  {pim,pro,pim,kp,km},   {pim,pro,pi0,k0,km}}};
 
 const G4int G4PionSampler::T33_6bfs[2][5][6] =
-{{{pro,pip,pip,pip,pim,pim}, {pro,pip,pip,pim,pi0,pi0},
-  {pro,pip,pi0,pi0,pi0,pi0}, {neu,pip,pip,pi0,pi0,pi0},
-  {neu,pip,pip,pip,pim,pi0}},
+{{{pip,pro,pip,pip,pim,pim}, {pip,pro,pip,pim,pi0,pi0},
+  {pip,pro,pi0,pi0,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0},
+  {pip,neu,pip,pip,pim,pi0}},
 
- {{neu,pip,pip,pim,pim,pim}, {neu,pip,pim,pim,pi0,pi0},
-  {neu,pim,pi0,pi0,pi0,pi0}, {pro,pim,pim,pi0,pi0,pi0},
-  {pro,pip,pim,pim,pim,pi0}}};
+ {{pim,neu,pip,pip,pim,pim}, {pim,neu,pip,pim,pi0,pi0},
+  {pim,neu,pi0,pi0,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0},
+  {pim,pro,pip,pim,pim,pi0}}};
 
 const G4int G4PionSampler::T33_7bfs[2][6][7] =
-{{{pro,pip,pip,pip,pim,pim,pi0}, {pro,pip,pip,pim,pi0,pi0,pi0},
-  {pro,pip,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pip,pim,pim},
-  {neu,pip,pip,pip,pim,pi0,pi0}, {neu,pip,pip,pi0,pi0,pi0,pi0}},
+{{{pip,pro,pip,pip,pim,pim,pi0}, {pip,pro,pip,pim,pi0,pi0,pi0},
+  {pip,pro,pi0,pi0,pi0,pi0,pi0}, {pip,neu,pip,pip,pip,pim,pim},
+  {pip,neu,pip,pip,pim,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0,pi0}},
 
- {{neu,pip,pip,pim,pim,pim,pi0}, {neu,pip,pim,pim,pi0,pi0,pi0},
-  {neu,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pip,pim,pim,pim,pim},
-  {pro,pip,pim,pim,pim,pi0,pi0}, {pro,pim,pim,pi0,pi0,pi0,pi0}}};
+ {{pim,neu,pip,pip,pim,pim,pi0}, {pim,neu,pip,pim,pi0,pi0,pi0},
+  {pim,neu,pi0,pi0,pi0,pi0,pi0}, {pim,pro,pip,pip,pim,pim,pim},
+  {pim,pro,pip,pim,pim,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T33_8bfs[2][7][8] =
-{{{pro,pip,pip,pip,pip,pim,pim,pim}, {pro,pip,pip,pip,pim,pim,pi0,pi0},
-  {pro,pip,pip,pim,pi0,pi0,pi0,pi0}, {pro,pip,pi0,pi0,pi0,pi0,pi0,pi0},
-  {neu,pip,pip,pip,pip,pim,pim,pi0}, {neu,pip,pip,pip,pim,pi0,pi0,pi0},
-  {neu,pip,pip,pi0,pi0,pi0,pi0,pi0}},
+{{{pip,pro,pip,pip,pip,pim,pim,pim}, {pip,pro,pip,pip,pim,pim,pi0,pi0},
+  {pip,pro,pip,pim,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pip,neu,pip,pip,pip,pim,pim,pi0}, {pip,neu,pip,pip,pim,pi0,pi0,pi0},
+  {pip,neu,pip,pi0,pi0,pi0,pi0,pi0}},
 
- {{neu,pip,pip,pip,pim,pim,pim,pim}, {neu,pip,pip,pim,pim,pim,pi0,pi0},
-  {neu,pip,pim,pim,pi0,pi0,pi0,pi0}, {neu,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-  {pro,pip,pip,pim,pim,pim,pim,pi0}, {pro,pip,pim,pim,pim,pi0,pi0,pi0},
-  {pro,pim,pim,pi0,pi0,pi0,pi0,pi0}}};
+ {{pim,neu,pip,pip,pip,pim,pim,pim}, {pim,neu,pip,pip,pim,pim,pi0,pi0},
+  {pim,neu,pip,pim,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pim,pro,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pim,pim,pi0,pi0,pi0},
+  {pim,pro,pim,pi0,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T33_9bfs[2][8][9] =
-{{{pro,pip,pip,pip,pip,pim,pim,pim,pi0}, {pro,pip,pip,pip,pim,pim,pi0,pi0,pi0},
-  {pro,pip,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-  {neu,pip,pip,pip,pip,pip,pim,pim,pim}, {neu,pip,pip,pip,pip,pim,pim,pi0,pi0},
-  {neu,pip,pip,pip,pim,pi0,pi0,pi0,pi0}, {neu,pip,pip,pi0,pi0,pi0,pi0,pi0,pi0}},
+{{{pip,pro,pip,pip,pip,pim,pim,pim,pi0}, {pip,pro,pip,pip,pim,pim,pi0,pi0,pi0},
+  {pip,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pip,neu,pip,pip,pip,pip,pim,pim,pim}, {pip,neu,pip,pip,pip,pim,pim,pi0,pi0},
+  {pip,neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0}},
 
- {{neu,pip,pip,pip,pim,pim,pim,pim,pi0}, {neu,pip,pip,pim,pim,pim,pi0,pi0,pi0},
-  {neu,pip,pim,pim,pi0,pi0,pi0,pi0,pi0}, {neu,pim,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-  {pro,pip,pip,pip,pim,pim,pim,pim,pim}, {pro,pip,pip,pim,pim,pim,pim,pi0,pi0},
-  {pro,pip,pim,pim,pim,pi0,pi0,pi0,pi0}, {pro,pim,pim,pi0,pi0,pi0,pi0,pi0,pi0}}};
+ {{pim,neu,pip,pip,pip,pim,pim,pim,pi0}, {pim,neu,pip,pip,pim,pim,pi0,pi0,pi0},
+  {pim,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pim,pro,pip,pip,pip,pim,pim,pim,pim}, {pim,pro,pip,pip,pim,pim,pim,pi0,pi0},
+  {pim,pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0}}};
 
 //
 // Cross sections (in mb) for pi+ p -> 2-9 body final states
@@ -908,108 +908,108 @@ const G4int G4PionSampler::pimPindex[8][2] =
 // T31_nbfs = final state types for pi- p and pi+ n
 
 const G4int G4PionSampler::T31_2bfs[2][5][2] =
-  {{{pro,pim}, {neu,pi0}, {lam,k0}, {s0,k0}, {sm,kp}},
+  {{{pim,pro}, {pi0,neu}, {k0,lam}, {k0,s0}, {kp,sm}},
 
-   {{neu,pip}, {pro,pi0}, {lam,kp}, {s0,kp}, {sp,k0}}};
+   {{pip,neu}, {pi0,pro}, {kp,lam}, {kp,s0}, {k0,sp}}};
 
 const G4int G4PionSampler::T31_3bfs[2][13][3] =
-  {{{pro,pim,pi0}, {neu,pip,pim}, {neu,pi0,pi0}, {lam,k0,pi0}, 
-    {lam,kp,pim},  {sm,k0,pip},   {sm,kp,pi0},   {sp,k0,pim},
-    {s0,kp,pim},   {s0,k0,pi0},   {pro,k0,km},   {neu,kp,km},
-    {neu,k0,k0b}},
+  {{{pim,pro,pi0}, {pim,neu,pip}, {pi0,neu,pi0}, {pi0,lam,k0}, 
+    {pim,lam,kp},  {pip,sm,k0},   {pi0,sm,kp},   {pim,sp,k0},
+    {pim,s0,kp},   {pi0,s0,k0},   {km,pro,k0},   {km,neu,kp},
+    {k0b,neu,k0}},
 
-   {{neu,pip,pi0}, {pro,pip,pim}, {pro,pi0,pi0}, {lam,kp,pi0},
-    {lam,k0,pip},  {sp,kp,pim},   {sp,k0,pi0},   {sm,kp,pip},
-    {s0,k0,pip},   {s0,kp,pi0},   {neu,kp,k0b},  {pro,k0,k0b},
-    {pro,kp,km}}};
+   {{pip,neu,pi0}, {pip,pro,pim}, {pi0,pro,pi0}, {pi0,lam,kp},
+    {pip,lam,k0},  {pim,sp,kp},   {pi0,sp,k0},   {pip,sm,kp},
+    {pip,s0,k0},   {pi0,s0,kp},   {k0b,neu,kp},  {k0b,pro,k0},
+    {km,pro,kp}}};
 
 const G4int G4PionSampler::T31_4bfs[2][22][4] =
-  {{{pro,pip,pim,pim}, {pro,pim,pi0,pi0}, {neu,pip,pim,pi0},
-    {neu,pi0,pi0,pi0}, {lam,k0,pip,pim},  {lam,k0,pi0,pi0},
-    {lam,kp,pim,pi0},  {s0,k0,pip,pim},   {s0,k0,pi0,pi0},
-    {s0,kp,pim,pi0},   {sp,kp,pim,pim},   {sp,k0,pim,pi0},
-    {sm,kp,pip,pim},   {sm,kp,pi0,pi0},   {sm,k0,pip,pi0},
-    {pro,pim,kp,km},   {pro,pim,k0,k0b},  {pro,pi0,k0,km},
-    {neu,pip,k0,km},   {neu,pi0,k0,k0b},  {neu,pi0,kp,km},
-    {neu,pim,kp,k0b}},
+  {{{pim,pro,pip,pim}, {pim,pro,pi0,pi0}, {pim,neu,pip,pi0},
+    {pi0,neu,pi0,pi0}, {pim,lam,k0,pip},  {pi0,lam,k0,pi0},
+    {pim,lam,kp,pi0},  {pim,s0,k0,pip},   {pi0,s0,k0,pi0},
+    {pim,s0,kp,pi0},   {pim,sp,kp,pim},   {pim,sp,k0,pi0},
+    {pim,sm,kp,pip},   {pi0,sm,kp,pi0},   {pip,sm,k0,pi0},
+    {pim,pro,kp,km},   {pim,pro,k0,k0b},  {pi0,pro,k0,km},
+    {pip,neu,k0,km},   {pi0,neu,k0,k0b},  {pi0,neu,kp,km},
+    {pim,neu,kp,k0b}},
 
-   {{neu,pip,pip,pim},  {neu,pip,pi0,pi0}, {pro,pip,pim,pi0},
-    {pro,pi0,pi0,pi0},  {lam,kp,pip,pim},  {lam,kp,pi0,pi0},
-    {lam,k0,pip,pi0},   {s0,kp,pip,pim},   {s0,kp,pi0,pi0},
-    {s0,k0,pip,pi0},    {sm,k0,pip,pip},   {sm,kp,pip,pi0},
-    {sp,k0,pip,pim},    {sp,k0,pi0,pi0},   {sp,kp,pim,pi0},
-    {neu,pip,k0,k0b},   {neu,pip,kp,km},   {neu,pi0,kp,k0b},
-    {pro,pim,kp,k0b},   {pro,pi0,kp,km},   {pro,pi0,k0,k0b},
-    {pro,pip,k0,km}}};
+   {{pip,neu,pip,pim},  {pip,neu,pi0,pi0}, {pip,pro,pim,pi0},
+    {pi0,pro,pi0,pi0},  {pip,lam,kp,pim},  {pi0,lam,kp,pi0},
+    {pip,lam,k0,pi0},   {pip,s0,kp,pim},   {pi0,s0,kp,pi0},
+    {pip,s0,k0,pi0},    {pip,sm,k0,pip},   {pip,sm,kp,pi0},
+    {pip,sp,k0,pim},    {pi0,sp,k0,pi0},   {pim,sp,kp,pi0},
+    {pip,neu,k0,k0b},   {pip,neu,kp,km},   {pi0,neu,kp,k0b},
+    {pim,pro,kp,k0b},   {pi0,pro,kp,km},   {pi0,pro,k0,k0b},
+    {pip,pro,k0,km}}};
 
 const G4int G4PionSampler::T31_5bfs[2][31][5] =
-  {{{pro,pip,pim,pim,pi0}, {pro,pim,pi0,pi0,pi0}, {neu,pip,pip,pim,pim},
-    {neu,pip,pim,pi0,pi0}, {neu,pi0,pi0,pi0,pi0}, {lam,k0,pip,pim,pi0},
-    {lam,kp,pim,pi0,pi0},  {lam,kp,pip,pim,pim},  {lam,k0,pi0,pi0,pi0},
-    {s0,kp,pip,pim,pim},   {s0,kp,pim,pi0,pi0},   {s0,k0,pip,pim,pi0},
-    {s0,k0,pi0,pi0,pi0},   {sp,k0,pip,pim,pim},   {sp,k0,pim,pi0,pi0},
-    {sp,kp,pim,pim,pi0},   {sm,k0,pip,pip,pim},   {sm,k0,pip,pi0,pi0},
-    {sm,kp,pip,pim,pi0},   {sm,kp,pi0,pi0,pi0},   {pro,pim,pi0,kp,km},
-    {pro,pim,pi0,k0,k0b},  {pro,pip,pim,k0,km},   {pro,pi0,pi0,k0,km},
-    {pro,pim,pim,kp,k0b},  {neu,pip,pim,kp,km},   {neu,pip,pim,k0,k0b},
-    {neu,pip,pi0,k0,km},   {neu,pim,pi0,kp,k0b},  {neu,pi0,pi0,k0,k0b},
-    {neu,pi0,pi0,kp,km}}, 
+  {{{pim,pro,pip,pim,pi0}, {pim,pro,pi0,pi0,pi0}, {pim,neu,pip,pip,pim},
+    {pim,neu,pip,pi0,pi0}, {pi0,neu,pi0,pi0,pi0}, {pim,lam,k0,pip,pi0},
+    {pim,lam,kp,pi0,pi0},  {pim,lam,kp,pip,pim},  {pi0,lam,k0,pi0,pi0},
+    {pim,s0,kp,pip,pim},   {pim,s0,kp,pi0,pi0},   {pim,s0,k0,pip,pi0},
+    {pi0,s0,k0,pi0,pi0},   {pim,sp,k0,pip,pim},   {pim,sp,k0,pi0,pi0},
+    {pim,sp,kp,pim,pi0},   {pim,sm,k0,pip,pip},   {pip,sm,k0,pi0,pi0},
+    {pim,sm,kp,pip,pi0},   {pi0,sm,kp,pi0,pi0},   {pim,pro,pi0,kp,km},
+    {pim,pro,pi0,k0,k0b},  {pim,pro,pip,k0,km},   {pi0,pro,pi0,k0,km},
+    {pim,pro,pim,kp,k0b},  {pim,neu,pip,kp,km},   {pim,neu,pip,k0,k0b},
+    {pip,neu,pi0,k0,km},   {pim,neu,pi0,kp,k0b},  {pi0,neu,pi0,k0,k0b},
+    {pi0,neu,pi0,kp,km}}, 
 
-   {{neu,pip,pip,pim,pi0}, {neu,pip,pi0,pi0,pi0}, {pro,pip,pip,pim,pim},
-    {pro,pip,pim,pi0,pi0}, {pro,pi0,pi0,pi0,pi0}, {lam,kp,pip,pim,pi0},
-    {lam,k0,pip,pi0,pi0},  {lam,k0,pip,pip,pim},  {lam,kp,pi0,pi0,pi0},
-    {s0,k0,pip,pip,pim},   {s0,k0,pip,pi0,pi0},   {s0,kp,pip,pim,pi0},
-    {s0,kp,pi0,pi0,pi0},   {sm,kp,pip,pip,pim},   {sm,kp,pip,pi0,pi0},
-    {sm,k0,pip,pip,pi0},   {sp,kp,pip,pim,pim},   {sp,kp,pim,pi0,pi0},
-    {sp,k0,pip,pim,pi0},   {sp,k0,pi0,pi0,pi0},   {neu,pip,pi0,k0,k0b},
-    {neu,pip,pi0,kp,km},   {neu,pip,pim,kp,k0b},  {neu,pi0,pi0,kp,k0b},
-    {neu,pip,pip,k0,km},   {pro,pip,pim,k0,k0b},  {pro,pip,pim,kp,km},
-    {pro,pim,pi0,kp,k0b},  {pro,pip,pi0,k0,km},   {pro,pi0,pi0,kp,km},
-    {pro,pi0,pi0,k0,k0b}}};
+   {{pip,neu,pip,pim,pi0}, {pip,neu,pi0,pi0,pi0}, {pip,pro,pip,pim,pim},
+    {pip,pro,pim,pi0,pi0}, {pi0,pro,pi0,pi0,pi0}, {pip,lam,kp,pim,pi0},
+    {pip,lam,k0,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,kp,pi0,pi0},
+    {pip,s0,k0,pip,pim},   {pip,s0,k0,pi0,pi0},   {pip,s0,kp,pim,pi0},
+    {pi0,s0,kp,pi0,pi0},   {pip,sm,kp,pip,pim},   {pip,sm,kp,pi0,pi0},
+    {pip,sm,k0,pip,pi0},   {pip,sp,kp,pim,pim},   {pim,sp,kp,pi0,pi0},
+    {pip,sp,k0,pim,pi0},   {pi0,sp,k0,pi0,pi0},   {pip,neu,pi0,k0,k0b},
+    {pip,neu,pi0,kp,km},   {pip,neu,pim,kp,k0b},  {pi0,neu,pi0,kp,k0b},
+    {pip,neu,pip,k0,km},   {pip,pro,pim,k0,k0b},  {pip,pro,pim,kp,km},
+    {pim,pro,pi0,kp,k0b},  {pip,pro,pi0,k0,km},   {pi0,pro,pi0,kp,km},
+    {pi0,pro,pi0,k0,k0b}}};
 
 const G4int G4PionSampler::T31_6bfs[2][6][6] =
-{{{pro,pip,pip,pim,pim,pim}, {pro,pip,pim,pim,pi0,pi0},
-  {pro,pim,pi0,pi0,pi0,pi0}, {neu,pip,pip,pim,pim,pi0},
-  {neu,pip,pim,pi0,pi0,pi0}, {neu,pi0,pi0,pi0,pi0,pi0}},
+{{{pim,pro,pip,pip,pim,pim}, {pim,pro,pip,pim,pi0,pi0},
+  {pim,pro,pi0,pi0,pi0,pi0}, {pim,neu,pip,pip,pim,pi0},
+  {pim,neu,pip,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0}},
 
- {{neu,pip,pip,pip,pim,pim}, {neu,pip,pip,pim,pi0,pi0},
-  {neu,pip,pi0,pi0,pi0,pi0}, {pro,pip,pip,pim,pim,pi0},
-  {pro,pip,pim,pi0,pi0,pi0}, {pro,pi0,pi0,pi0,pi0,pi0}}};
+ {{pip,neu,pip,pip,pim,pim}, {pip,neu,pip,pim,pi0,pi0},
+  {pip,neu,pi0,pi0,pi0,pi0}, {pip,pro,pip,pim,pim,pi0},
+  {pip,pro,pim,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T31_7bfs[2][7][7] =
-{{{pro,pip,pip,pim,pim,pim,pi0}, {pro,pip,pim,pim,pi0,pi0,pi0},
-  {pro,pim,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pim},
-  {neu,pip,pip,pim,pim,pi0,pi0}, {neu,pip,pim,pi0,pi0,pi0,pi0},
-  {neu,pi0,pi0,pi0,pi0,pi0,pi0}},
+{{{pim,pro,pip,pip,pim,pim,pi0}, {pim,pro,pip,pim,pi0,pi0,pi0},
+  {pim,pro,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pip,pip,pim,pim},
+  {pim,neu,pip,pip,pim,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0},
+  {pi0,neu,pi0,pi0,pi0,pi0,pi0}},
 
- {{neu,pip,pip,pip,pim,pim,pi0}, {neu,pip,pip,pim,pi0,pi0,pi0},
-  {neu,pip,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim},
-  {pro,pip,pip,pim,pim,pi0,pi0}, {pro,pip,pim,pi0,pi0,pi0,pi0},
-  {pro,pi0,pi0,pi0,pi0,pi0,pi0}}};
+ {{pip,neu,pip,pip,pim,pim,pi0}, {pip,neu,pip,pim,pi0,pi0,pi0},
+  {pip,neu,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pip,pip,pim,pim,pim},
+  {pip,pro,pip,pim,pim,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0},
+  {pi0,pro,pi0,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T31_8bfs[2][8][8] =
-{{{pro,pip,pip,pip,pim,pim,pim,pim}, {pro,pip,pip,pim,pim,pim,pi0,pi0},
-  {pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-  {neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pim,pi0,pi0,pi0,pi0,pi0},
-  {neu,pip,pip,pim,pim,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pim,pi0}},
+{{{pim,pro,pip,pip,pip,pim,pim,pim}, {pim,pro,pip,pip,pim,pim,pi0,pi0},
+  {pim,pro,pip,pim,pi0,pi0,pi0,pi0}, {pim,pro,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0,pi0},
+  {pim,neu,pip,pip,pim,pi0,pi0,pi0}, {pim,neu,pip,pip,pip,pim,pim,pi0}},
 
- {{neu,pip,pip,pip,pip,pim,pim,pim}, {neu,pip,pip,pip,pim,pim,pi0,pi0},
-  {neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
-  {pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pim,pi0,pi0,pi0,pi0,pi0},
-  {pro,pip,pip,pim,pim,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pi0}}};
+ {{pip,neu,pip,pip,pip,pim,pim,pim}, {pip,neu,pip,pip,pim,pim,pi0,pi0},
+  {pip,neu,pip,pim,pi0,pi0,pi0,pi0}, {pip,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0,pi0},
+  {pip,pro,pip,pim,pim,pi0,pi0,pi0}, {pip,pro,pip,pip,pim,pim,pim,pi0}}};
 
 const G4int G4PionSampler::T31_9bfs[2][9][9] =
-{{{pro,pip,pip,pip,pim,pim,pim,pim,pi0}, {pro,pip,pip,pim,pim,pim,pi0,pi0,pi0},
-  {pro,pip,pim,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pim,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-  {neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-  {neu,pip,pip,pim,pim,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pim,pi0,pi0},
-  {neu,pip,pip,pip,pip,pim,pim,pim,pim}},
+{{{pim,pro,pip,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pip,pim,pim,pi0,pi0,pi0},
+  {pim,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pim,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pim,neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {pim,neu,pip,pip,pip,pim,pim,pi0,pi0},
+  {pim,neu,pip,pip,pip,pip,pim,pim,pim}},
 
- {{neu,pip,pip,pip,pip,pim,pim,pim,pi0}, {neu,pip,pip,pip,pim,pim,pi0,pi0,pi0},
-  {neu,pip,pip,pim,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-  {pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-  {pro,pip,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pi0,pi0},
-  {pro,pip,pip,pip,pip,pim,pim,pim,pim}}};
+ {{pip,neu,pip,pip,pip,pim,pim,pim,pi0}, {pip,neu,pip,pip,pim,pim,pi0,pi0,pi0},
+  {pip,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pip,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0},
+  {pip,pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pip,pro,pip,pip,pim,pim,pim,pi0,pi0},
+  {pip,pro,pip,pip,pip,pim,pim,pim,pim}}};
 
 //
 // Cross sections (in mb) for pi- p -> 2-9 body final states
@@ -1575,104 +1575,104 @@ const G4int G4PionSampler::pizPindex[8][2] =
 // T11_nbfs = final state types for pi0 p and pi0 n
 
 const G4int G4PionSampler::T11_2bfs[2][5][2] =
-  {{{pro,pi0}, {neu,pip}, {lam,kp}, {s0,kp}, {sp,k0}},
+  {{{pi0,pro}, {pip,neu}, {kp,lam}, {kp,s0}, {k0,sp}},
 
-   {{neu,pi0}, {pro,pim}, {lam,k0}, {s0,k0}, {sm,kp}}};
+   {{pi0,neu}, {pim,pro}, {k0,lam}, {k0,s0}, {kp,sm}}};
 
 const G4int G4PionSampler::T11_3bfs[2][13][3] =
-  {{{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0}, {lam,kp,pi0}, 
-    {lam,k0,pip},  {s0,kp,pi0},   {s0,k0,pip},   {sp,k0,pi0},
-    {sp,kp,pim},   {sm,kp,pip},   {pro,kp,km},   {pro,k0,k0b},
-    {neu,kp,k0b}},
+  {{{pip,pro,pim}, {pi0,pro,pi0}, {pi0,neu,pip}, {pi0,lam,kp}, 
+    {pip,lam,k0},  {pi0,s0,kp},   {pip,s0,k0},   {pi0,sp,k0},
+    {pim,sp,kp},   {pip,sm,kp},   {km,pro,kp},   {k0b,pro,k0},
+    {k0b,neu,kp}},
 
-   {{neu,pip,pim}, {neu,pi0,pi0}, {pro,pim,pi0}, {lam,k0,pi0},
-    {lam,kp,pim},  {s0,k0,pi0},   {s0,kp,pim},   {sm,kp,pi0},  
-    {sm,k0,pip},   {sp,k0,pim},   {neu,k0,k0b},  {neu,kp,km},
-    {pro,k0,km}}};
+   {{pim,neu,pip}, {pi0,neu,pi0}, {pi0,pro,pim}, {pi0,lam,k0},
+    {pim,lam,kp},  {pi0,s0,k0},   {pim,s0,kp},   {pi0,sm,kp},  
+    {pip,sm,k0},   {pim,sp,k0},   {k0b,neu,k0},  {km,neu,kp},
+    {km,pro,k0}}};
 
 const G4int G4PionSampler::T11_4bfs[2][21][4] =
-  {{{pro,pip,pim,pi0}, {pro,pi0,pi0,pi0}, {neu,pip,pip,pim},
-    {neu,pip,pi0,pi0}, {lam,kp,pip,pim},  {s0,kp,pip,pim}, 
-    {lam,kp,pi0,pi0},  {s0,kp,pi0,pi0},   {sp,k0,pi0,pi0}, 
-    {lam,k0,pip,pi0},  {s0,k0,pip,pi0},   {sp,k0,pip,pim}, 
-    {sp,kp,pim,pi0},   {sm,kp,pip,pi0},   {pro,pi0,kp,km}, 
-    {pro,pi0,k0,k0b},  {pro,pip,k0,km},   {pro,pim,kp,k0b}, 
-    {neu,pip,kp,km},   {neu,pip,k0,k0b},  {neu,pi0,kp,k0b}}, 
+  {{{pi0,pro,pim,pip}, {pi0,pro,pi0,pi0}, {pip,neu,pip,pim},
+    {pi0,neu,pip,pi0}, {pip,lam,kp,pim},  {pip,s0,kp,pim}, 
+    {pi0,lam,kp,pi0},  {pi0,s0,kp,pi0},   {pi0,sp,k0,pi0}, 
+    {pi0,lam,k0,pip},  {pi0,s0,k0,pip},   {pip,sp,k0,pim}, 
+    {pi0,sp,kp,pim},   {pi0,sm,kp,pip},   {pi0,pro,kp,km}, 
+    {pi0,pro,k0,k0b},  {pip,pro,k0,km},   {pim,pro,kp,k0b}, 
+    {pip,neu,kp,km},   {pip,neu,k0,k0b},  {pi0,neu,kp,k0b}}, 
 
-   {{neu,pip,pim,pi0}, {neu,pi0,pi0,pi0}, {pro,pip,pim,pim},
-    {pro,pim,pi0,pi0}, {lam,k0,pip,pim},  {s0,k0,pip,pim},
-    {lam,k0,pi0,pi0},  {s0,k0,pi0,pi0},   {sm,kp,pi0,pi0},
-    {lam,kp,pim,pi0},  {s0,kp,pim,pi0},   {sm,kp,pip,pim},
-    {sm,k0,pip,pi0},   {sp,k0,pim,pi0},   {neu,pi0,k0,k0b},
-    {neu,pi0,kp,km},   {neu,pim,kp,k0b},  {neu,pip,k0,km},
-    {pro,pim,k0,k0b},  {pro,pim,kp,km},   {pro,pi0,k0,km}}};
+   {{pi0,neu,pim,pip}, {pi0,neu,pi0,pi0}, {pim,pro,pip,pim},
+    {pi0,pro,pim,pi0}, {pip,lam,k0,pim},  {pip,s0,k0,pim},
+    {pi0,lam,k0,pi0},  {pi0,s0,k0,pi0},   {pi0,sm,kp,pi0},
+    {pi0,lam,kp,pim},  {pi0,s0,kp,pim},   {pip,sm,kp,pim},
+    {pi0,sm,k0,pip},   {pi0,sp,k0,pim},   {pi0,neu,k0,k0b},
+    {pi0,neu,kp,km},   {pim,neu,kp,k0b},  {pip,neu,k0,km},
+    {pim,pro,k0,k0b},  {pim,pro,kp,km},   {pi0,pro,k0,km}}};
 
 const G4int G4PionSampler::T11_5bfs[2][30][5] =
-  {{{pro,pip,pip,pim,pim}, {pro,pip,pim,pi0,pi0}, {pro,pi0,pi0,pi0,pi0},
-    {neu,pip,pip,pim,pi0}, {neu,pip,pi0,pi0,pi0}, {lam,kp,pip,pim,pi0},
-    {lam,kp,pi0,pi0,pi0},  {lam,k0,pip,pip,pim},  {lam,k0,pip,pi0,pi0},  
-    {s0,kp,pip,pim,pi0},   {s0,kp,pi0,pi0,pi0},   {s0,k0,pip,pip,pim},
-    {s0,k0,pip,pi0,pi0},   {sp,k0,pip,pim,pi0},   {sp,k0,pi0,pi0,pi0},
-    {sp,kp,pip,pim,pim},   {sp,kp,pim,pi0,pi0},   {sm,kp,pip,pip,pim}, 
-    {sm,kp,pip,pi0,pi0},   {pro,kp,km,pi0,pi0},   {pro,k0,k0b,pi0,pi0}, 
-    {pro,kp,k0b,pim,pi0},  {pro,k0,km,pip,pi0},   {pro,kp,km,pip,pim},
-    {pro,k0,k0b,pip,pim},  {neu,kp,km,pip,pi0},   {neu,k0,k0b,pip,pi0},
-    {neu,kp,k0b,pi0,pi0},  {neu,k0,km,pip,pip},   {neu,kp,k0b,pip,pim}},
+  {{{pip,pro,pip,pim,pim}, {pi0,pro,pip,pim,pi0}, {pi0,pro,pi0,pi0,pi0},
+    {pi0,neu,pip,pip,pim}, {pi0,neu,pip,pi0,pi0}, {pi0,lam,kp,pip,pim},
+    {pi0,lam,kp,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,k0,pip,pi0},  
+    {pi0,s0,kp,pip,pim},   {pi0,s0,kp,pi0,pi0},   {pip,s0,k0,pip,pim},
+    {pi0,s0,k0,pip,pi0},   {pi0,sp,k0,pip,pim},   {pi0,sp,k0,pi0,pi0},
+    {pim,sp,kp,pip,pim},   {pi0,sp,kp,pim,pi0},   {pip,sm,kp,pip,pim}, 
+    {pi0,sm,kp,pip,pi0},   {pi0,pro,kp,km,pi0},   {pi0,pro,k0,k0b,pi0}, 
+    {pi0,pro,kp,k0b,pim},  {pi0,pro,k0,km,pip},   {pip,pro,kp,km,pim},
+    {pip,pro,k0,k0b,pim},  {pi0,neu,kp,km,pip},   {pi0,neu,k0,k0b,pip},
+    {pi0,neu,kp,k0b,pi0},  {pip,neu,k0,km,pip},   {pip,neu,kp,k0b,pim}},
 
-   {{neu,pip,pip,pim,pim}, {neu,pip,pim,pi0,pi0}, {neu,pi0,pi0,pi0,pi0},
-    {pro,pip,pim,pim,pi0}, {pro,pim,pi0,pi0,pi0}, {lam,k0,pip,pim,pi0},
-    {lam,k0,pi0,pi0,pi0},  {lam,kp,pip,pim,pim},  {lam,kp,pim,pi0,pi0},
-    {s0,k0,pip,pim,pi0},   {s0,k0,pi0,pi0,pi0},   {s0,kp,pip,pim,pim},
-    {s0,kp,pim,pi0,pi0},   {sm,kp,pip,pim,pi0},   {sm,kp,pi0,pi0,pi0},
-    {sm,k0,pip,pip,pim},   {sm,k0,pip,pi0,pi0},   {sp,k0,pip,pim,pim},
-    {sp,k0,pim,pi0,pi0},   {neu,k0,k0b,pi0,pi0},  {neu,kp,km,pi0,pi0},
-    {neu,k0,km,pip,pi0},   {neu,kp,k0b,pim,pi0},  {neu,k0,k0b,pip,pim},
-    {neu,kp,km,pip,pim},   {pro,k0,k0b,pim,pi0},  {pro,kp,km,pim,pi0},
-    {pro,k0,km,pi0,pi0},   {pro,kp,k0b,pim,pim},  {pro,k0,km,pip,pim}}};
+   {{pim,neu,pip,pip,pim}, {pi0,neu,pip,pim,pi0}, {pi0,neu,pi0,pi0,pi0},
+    {pi0,pro,pip,pim,pim}, {pi0,pro,pim,pi0,pi0}, {pi0,lam,k0,pip,pim},
+    {pi0,lam,k0,pi0,pi0},  {pim,lam,kp,pip,pim},  {pi0,lam,kp,pim,pi0},
+    {pi0,s0,k0,pip,pim},   {pi0,s0,k0,pi0,pi0},   {pim,s0,kp,pip,pim},
+    {pi0,s0,kp,pim,pi0},   {pi0,sm,kp,pip,pim},   {pi0,sm,kp,pi0,pi0},
+    {pip,sm,k0,pip,pim},   {pi0,sm,k0,pip,pi0},   {pim,sp,k0,pip,pim},
+    {pi0,sp,k0,pim,pi0},   {pi0,neu,k0,k0b,pi0},  {pi0,neu,kp,km,pi0},
+    {pi0,neu,k0,km,pip},   {pi0,neu,kp,k0b,pim},  {pim,neu,k0,k0b,pip},
+    {pim,neu,kp,km,pip},   {pi0,pro,k0,k0b,pim},  {pi0,pro,kp,km,pim},
+    {pi0,pro,k0,km,pi0},   {pim,pro,kp,k0b,pim},  {pim,pro,k0,km,pip}}};
 
 const G4int G4PionSampler::T11_6bfs[2][6][6] =
-  {{{pro,pip,pip,pim,pim,pi0}, {pro,pip,pim,pi0,pi0,pi0},
-    {pro,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim},
-    {neu,pip,pip,pim,pi0,pi0}, {neu,pip,pi0,pi0,pi0,pi0}},
+  {{{pi0,pro,pip,pip,pim,pim}, {pi0,pro,pip,pim,pi0,pi0},
+    {pi0,pro,pi0,pi0,pi0,pi0}, {pip,neu,pip,pip,pim,pim},
+    {pi0,neu,pip,pip,pim,pi0}, {pi0,neu,pip,pi0,pi0,pi0}},
  
-   {{neu,pip,pip,pim,pim,pi0}, {neu,pip,pim,pi0,pi0,pi0},
-    {neu,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pip,pim,pim,pim},
-    {pro,pip,pim,pim,pi0,pi0}, {pro,pim,pi0,pi0,pi0,pi0}}};
+   {{pi0,neu,pip,pip,pim,pim}, {pi0,neu,pip,pim,pi0,pi0},
+    {pi0,neu,pi0,pi0,pi0,pi0}, {pim,pro,pip,pip,pim,pim},
+    {pi0,pro,pip,pim,pim,pi0}, {pi0,pro,pim,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T11_7bfs[2][7][7] =
-  {{{pro,pip,pip,pip,pim,pim,pim}, {pro,pip,pip,pim,pim,pi0,pi0},
-    {pro,pip,pim,pi0,pi0,pi0,pi0}, {pro,pi0,pi0,pi0,pi0,pi0,pi0},
-    {neu,pip,pip,pip,pim,pim,pi0}, {neu,pip,pip,pim,pi0,pi0,pi0},
-    {neu,pip,pi0,pi0,pi0,pi0,pi0}},
+  {{{pip,pro,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pi0},
+    {pi0,pro,pip,pim,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0,pi0},
+    {pi0,neu,pip,pip,pip,pim,pim}, {pi0,neu,pip,pip,pim,pi0,pi0},
+    {pi0,neu,pip,pi0,pi0,pi0,pi0}},
 
-   {{neu,pip,pip,pip,pim,pim,pim}, {neu,pip,pip,pim,pim,pi0,pi0},
-    {neu,pip,pim,pi0,pi0,pi0,pi0}, {neu,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,pip,pip,pim,pim,pim,pi0}, {pro,pip,pim,pim,pi0,pi0,pi0},
-    {pro,pim,pi0,pi0,pi0,pi0,pi0}}};
+   {{pim,neu,pip,pip,pip,pim,pim}, {pi0,neu,pip,pip,pim,pim,pi0},
+    {pi0,neu,pip,pim,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0,pi0},
+    {pi0,pro,pip,pip,pim,pim,pim}, {pi0,pro,pip,pim,pim,pi0,pi0},
+    {pi0,pro,pim,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T11_8bfs[2][8][8] =
-  {{{pro,pip,pip,pip,pim,pim,pim,pi0}, {pro,pip,pip,pim,pim,pi0,pi0,pi0},
-    {pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-    {neu,pip,pip,pip,pip,pim,pim,pim}, {neu,pip,pip,pip,pim,pim,pi0,pi0},
-    {neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {neu,pip,pi0,pi0,pi0,pi0,pi0,pi0}},
+  {{{pi0,pro,pip,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pi0,pi0},
+    {pi0,pro,pip,pim,pi0,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0},
+    {pip,neu,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pip,pim,pim,pi0},
+    {pi0,neu,pip,pip,pim,pi0,pi0,pi0}, {pi0,neu,pip,pi0,pi0,pi0,pi0,pi0}},
 
-   {{neu,pip,pip,pip,pim,pim,pim,pi0}, {neu,pip,pip,pim,pim,pi0,pi0,pi0},
-    {neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,pip,pip,pip,pim,pim,pim,pim}, {pro,pip,pip,pim,pim,pim,pi0,pi0},
-    {pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pim,pi0,pi0,pi0,pi0,pi0,pi0}}};
+   {{pi0,neu,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pim,pim,pi0,pi0},
+    {pi0,neu,pip,pim,pi0,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+    {pim,pro,pip,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pim,pi0},
+    {pi0,pro,pip,pim,pim,pi0,pi0,pi0}, {pi0,pro,pim,pi0,pi0,pi0,pi0,pi0}}};
 
 const G4int G4PionSampler::T11_9bfs[2][9][9] =
-  {{{pro,pip,pip,pip,pip,pim,pim,pim,pim}, {pro,pip,pip,pip,pim,pim,pim,pi0,pi0},
-    {pro,pip,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pip,pim,pim,pim,pi0},
-    {neu,pip,pip,pip,pim,pim,pi0,pi0,pi0}, {neu,pip,pip,pim,pi0,pi0,pi0,pi0,pi0},
-    {neu,pip,pi0,pi0,pi0,pi0,pi0,pi0,pi0}},
+  {{{pip,pro,pip,pip,pip,pim,pim,pim,pim}, {pi0,pro,pip,pip,pip,pim,pim,pim,pi0},
+    {pi0,pro,pip,pip,pim,pim,pi0,pi0,pi0}, {pi0,pro,pip,pim,pi0,pi0,pi0,pi0,pi0},
+    {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pi0,neu,pip,pip,pip,pip,pim,pim,pim},
+    {pi0,neu,pip,pip,pip,pim,pim,pi0,pi0}, {pi0,neu,pip,pip,pim,pi0,pi0,pi0,pi0},
+    {pi0,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0}},
 
-   {{neu,pip,pip,pip,pip,pim,pim,pim,pim}, {neu,pip,pip,pip,pim,pim,pim,pi0,pi0},
-    {neu,pip,pip,pim,pim,pi0,pi0,pi0,pi0}, {neu,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
-    {neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pim,pi0},
-    {pro,pip,pip,pim,pim,pim,pi0,pi0,pi0}, {pro,pip,pim,pim,pi0,pi0,pi0,pi0,pi0},
-    {pro,pim,pi0,pi0,pi0,pi0,pi0,pi0,pi0}}};
+   {{pim,neu,pip,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pip,pim,pim,pim,pi0},
+    {pi0,neu,pip,pip,pim,pim,pi0,pi0,pi0}, {pi0,neu,pip,pim,pi0,pi0,pi0,pi0,pi0},
+    {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pi0,pro,pip,pip,pip,pim,pim,pim,pim},
+    {pi0,pro,pip,pip,pim,pim,pim,pi0,pi0}, {pi0,pro,pip,pim,pim,pi0,pi0,pi0,pi0},
+    {pi0,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0}}};
 
 //
 // Cross sections (in mb) for pi0 p -> 2-9 body final states
