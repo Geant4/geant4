@@ -23,40 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TGUIHelper
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// This class constructs different graphical user interfaces for the
+// simulation and analysis tools. It also has a GUI for making the publications.
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
+#ifndef G4TGUIHelper_H_
+#define G4TGUIHelper_H_
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "G4TSimHelper.h"
+#include "../CommonHeaders.h"
+#include "../Database/G4TCatalog.h"
+#include "../GUI/G4TSimulationGUI.h"
+#include "../GUI/G4TAnalysisGUI.h"
+#include "../GUI/G4TPublicationGUI.h"
+#include "../GUI/G4TToolMenuGUI.h"
 
-#include "globals.hh"
 
-class G4Material;
 
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
+#include "Riostream.h"
+
+class G4TGUIHelper : public TObject {
+
   private:
 
-	void Initialise();
-	     
+  public:
+
+
+	  G4TGUIHelper() { }
+	  virtual ~G4TGUIHelper () {}
+
+	  void ShowMenu();
+	  void ShowPublicationGUI();
+	  void ShowSimulationGUI();
+	  void ShowAnalysisGUI();
+
+
+	  ClassDef(G4TGUIHelper, 1)  //The class for Geant4 Simulation
 };
+
+R__EXTERN G4TGUIHelper *gGUIHelper;
 
 #endif
 
- 
+
 
 

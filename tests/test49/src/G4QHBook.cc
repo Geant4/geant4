@@ -1,26 +1,29 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHBook.cc,v 1.1 2006-12-12 13:13:29 mkossov Exp $
+// $Id: G4QHBook.cc,v 1.2 2009-08-27 14:13:54 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHBook ----------------
@@ -120,7 +123,7 @@ G4QHBook::G4QHBook() :
 //#endif
 //}
 
-void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
+void G4QHBook::FillEvt(const G4VParticleChange* hadrons, const G4DynamicParticle* pdProj)
 {
   // *** For ntuple case *** Fill Histo No.1 - N events
   //histNevt.fill(1.);
@@ -129,6 +132,9 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   G4cout<<"G4QHBook::FillEvt - Start, nEvnt="<<nEvnt<<G4endl;
 #endif
   G4int tNH = hadrons->GetNumberOfSecondaries();
+  G4TrackStatus lead = hadrons->GetTrackStatus();
+  G4int begi=0;
+  if(lead==fAlive) begi=-1;   // Means that leading particle is alive
   // Calculate multiplicities & fill ntuples for All tracks
   G4int Mprot=0;
   G4int Mneut=0;
@@ -168,36 +174,51 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   const G4DynamicParticle* cHd = 0;
   G4ParticleDefinition* pd = 0;
 
-  for (G4int jnd=0; jnd<tNH; jnd++)
+  for (G4int jnd=begi; jnd<tNH; jnd++)
   {
-    cHd = hadrons->GetSecondary(jnd)->GetDynamicParticle();
-    pd  = cHd->GetDefinition();
+    if(jnd<0) pd  = pdProj->GetDefinition();
+    else
+    {
+      cHd = hadrons->GetSecondary(jnd)->GetDynamicParticle();
+      pd  = cHd->GetDefinition();
+    }
     G4int c = pd->GetPDGEncoding();
     if(!c)
     {
       G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
       G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-      c=90000000+chrg*999+bary;
+      //c=90000000+chrg*999+bary; // OLD CHIPS notation
+      c=1000000000+chrg*10000+bary*10; // New PDG 2006 definition
     }
 	   if(picount<3 && (c==111 || c==211 || c==-211 || c==311 || c==-311 || c==221 || c==331))
 	   {
  	    pdgm[picount]  = c;
       G4double mass  = pd->GetPDGMass();                      // Mass of the particle
-      G4ThreeVector mom = cHd->GetMomentumDirection();        // Direction of the momentum
-      G4double ener = cHd->GetKineticEnergy();                // Kinetic energy
+      G4ThreeVector mom;        // Direction of the momentum
+      G4double ener;            // Kinetic energy
+      if(jnd<0)
+      {
+        mom = pdProj->GetMomentumDirection();        // Direction of the momentum
+        ener = pdProj->GetKineticEnergy();                // Kinetic energy
+      }
+      else
+      {
+        mom = cHd->GetMomentumDirection();        // Direction of the momentum
+        ener = cHd->GetKineticEnergy();                // Kinetic energy
+      }
       G4double ten = ener + mass;                             // Total energy
 	     G4double p = std::sqrt(ener*(ten + mass));                   // Abs value of the momentum
 	     mom *= p;                                               // 3-momentum
 	     lorVm[picount] =  G4LorentzVector(mom, ten);
 	     picount++;
 	   }
-
-	   if     (c==2212 || c==90001000)      Mprot++;
-	   else if(c==2112 || c==90000001)      Mneut++;
-	   else if(c==90001001)                 Mdeut++;
-	   else if(c==90001002)                 Mtrit++;
-	   else if(c==90002001)                 MHe3++;
-	   else if(c==90002002)                 MHe4++;
+    // count number of particles
+	   if     (c==2212 || c==1000010010)      Mprot++;
+	   else if(c==2112 || c==1000000010)      Mneut++;
+	   else if(c==1000010020)                 Mdeut++;
+	   else if(c==1000010030)                 Mtrit++;
+	   else if(c==1000020030)                 MHe3++;
+	   else if(c==1000020040)                 MHe4++;
 	   else if(c== 111)      Mpi0++;
 	   else if(c== 211)      Mpip++;
 	   else if(c==-211)      Mpim++;
@@ -223,8 +244,9 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
 	   else if(c== 225)      Mf2++;
 	   else if(c== 335)      Mf2p++;
   }
+  G4int fNH=tNH-begi;
   // Fill the output file for the meson triplets (necessary for P-antiP) simulation only
-  if(tNH==3 && ( (Mpi0+Mpip+Mpim)==3 ||
+  if(fNH==3 && ( (Mpi0+Mpip+Mpim)==3 ||
                  (Mpi0==1 && MK0==1 && MaK0==1) ||
                  (Mpi0==1 && Meta==1 && Metap==1)
                )
@@ -242,8 +264,8 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     //float xtup3pi[40];
     //G4int pidnt=0;
     //xtup3pi[pidnt++] = nEvnt;
-    //xtup3pi[pidnt++] = tNH;
-    //xtup3pi[pidnt++] = tNH;
+    //xtup3pi[pidnt++] = fNH;
+    //xtup3pi[pidnt++] = fNH;
     //xtup3pi[pidnt++] = Mprot;
     //xtup3pi[pidnt++] = Mneut;
     //xtup3pi[pidnt++] = Mdeut;
@@ -278,7 +300,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     //xtup3pi[pidnt++] = pdgm[1];
     //xtup3pi[pidnt++] = pdgm[2];
 	   //tuple3pi.fill(xtup3pi);
-	   tuple3pi<<nEvnt<<" "<<tNH  <<" "<<tNH   <<" "<<Mprot<<" "<<Mneut<<" "
+	   tuple3pi<<nEvnt<<" "<<fNH  <<" "<<fNH   <<" "<<Mprot<<" "<<Mneut<<" "
 	           <<Mdeut<<" "<<Mtrit<<" "<<MHe3  <<" "<<MHe4 <<" "<<Mgam <<" "
 	           <<Mpip <<" "<<Mpim <<" "<<Mpi0  <<" "<<MKp  <<" "<<MK0  <<" "
 	           <<MKm  <<" "<<MaK0 <<" "<<Meta  <<" "<<Metap<<" "<<Mrhom<<" "
@@ -292,8 +314,8 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   //float xtupev[33];
   //G4int evdnt=0;
   //xtupev[evdnt++] = nEvnt;
-  //xtupev[evdnt++] = tNH;
-  //xtupev[evdnt++] = tNH;
+  //xtupev[evdnt++] = fNH;
+  //xtupev[evdnt++] = fNH;
   //xtupev[evdnt++] = Mprot;
   //xtupev[evdnt++] = Mneut;
   //xtupev[evdnt++] = Mdeut;
@@ -325,7 +347,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   //xtupev[evdnt++] = Ma20;
   //xtupev[evdnt++] = Mf2p;
   //tupleEvtA.fill(xtupev);
-  tuplEvtA<<nEvnt<<" "<<tNH  <<" "<<tNH   <<" "<<Mprot<<" "<<Mneut<<" "
+  tuplEvtA<<nEvnt<<" "<<fNH  <<" "<<fNH   <<" "<<Mprot<<" "<<Mneut<<" "
           <<Mdeut<<" "<<Mtrit<<" "<<MHe3  <<" "<<MHe4 <<" "<<Mgam <<" "
           <<Mpip <<" "<<Mpim <<" "<<Mpi0  <<" "<<MKp  <<" "<<MK0  <<" "
           <<MKm  <<" "<<MaK0 <<" "<<Meta  <<" "<<Metap<<" "<<Mrhom<<" "
@@ -337,25 +359,40 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   {
     //float xtupin[43];
     G4int d=0; // a fake number to support the universal way of writing
-    cHd = hadrons->GetSecondary(knd)->GetDynamicParticle();
-    pd  = cHd->GetDefinition();
+    if(knd<0) pd  = pdProj->GetDefinition();
+    else
+    {
+      cHd = hadrons->GetSecondary(knd)->GetDynamicParticle();
+      pd  = cHd->GetDefinition();
+    }
     G4double m  = pd->GetPDGMass();                      // Mass of the particle
-    G4ThreeVector mom = cHd->GetMomentumDirection();     // Direction of the momentum
-    G4double ener = cHd->GetKineticEnergy();             // Kinetic energy
+    G4ThreeVector mom;        // Direction of the momentum
+    G4double ener;            // Kinetic energy
+    if(knd<0)
+    {
+      mom = pdProj->GetMomentumDirection();        // Direction of the momentum
+      ener = pdProj->GetKineticEnergy();                // Kinetic energy
+    }
+    else
+    {
+      mom = cHd->GetMomentumDirection();        // Direction of the momentum
+      ener = cHd->GetKineticEnergy();                // Kinetic energy
+    }
     G4double e = ener + m;                             // Total energy
 	   G4double p = std::sqrt(ener*(e + m));                   // Abs value of the momentum
 	   mom *= p;                                            // 3-momentum
     G4LorentzVector lorV =  G4LorentzVector(mom, e);
     G4int   c = pd->GetPDGEncoding();
-    G4int ns=0;
-    G4int nz=0;
-    G4int nn=0;
-    if(!c)
-    {
-      nz=static_cast<G4int>(pd->GetPDGCharge());
-      nn=static_cast<G4int>(pd->GetBaryonNumber())-nz;
-      c=90000000+nz*1000+nn;
-    }
+    G4int ns=pd->GetQuarkContent(3)-pd->GetAntiQuarkContent(3);
+    G4int nz=static_cast<G4int>(pd->GetPDGCharge());
+    G4int nn=pd->GetBaryonNumber()-nz-ns;
+    //if(!c)
+    //{
+    //  nz=static_cast<G4int>(pd->GetPDGCharge());
+    //  nn=static_cast<G4int>(pd->GetBaryonNumber())-nz;
+				//  //c=90000000+nz*1000+nn;     // Old CHIPS notation
+				//  c=1000000000+nz*10010+nn*10; // New PDG 2006 definition
+    //}
     G4double px = lorV.x();
     G4double py = lorV.y();
     G4double pz = lorV.z();
@@ -366,8 +403,8 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     //float xtupin[43];
     //G4int indnt=0;
     //xtupin[indnt++] = nEvnt;
-    //xtupin[indnt++] = tNH;
-    //xtupin[indnt++] = tNH;
+    //xtupin[indnt++] = fNH;
+    //xtupin[indnt++] = fNH;
     //xtupin[indnt++] = Mprot;
     //xtupin[indnt++] = Mneut;
     //xtupin[indnt++] = Mdeut;
@@ -400,7 +437,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
     //xtupin[indnt++] = Mf2p;
     //xtupin[indnt++] = m;
 	   //tupleIncl.fill(xtupin);
-    tuplIncl<<nEvnt<<" "<<tNH  <<" "<<tNH   <<" "<<Mprot<<" "<<Mneut<<" "
+    tuplIncl<<nEvnt<<" "<<fNH  <<" "<<fNH   <<" "<<Mprot<<" "<<Mneut<<" "
             <<Mdeut<<" "<<Mtrit<<" "<<MHe3  <<" "<<MHe4 <<" "<<Mgam <<" "
             <<Mpip <<" "<<Mpim <<" "<<Mpi0  <<" "<<MKp  <<" "<<MK0  <<" "
             <<MKm  <<" "<<MaK0 <<" "<<Meta  <<" "<<Metap<<" "<<Mrhom<<" "
@@ -442,24 +479,29 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   Ma2p=0;
   Ma20=0;
   Mf2p=0;
-  G4int i=0;
+  G4int i=begi;
   while (i<tNH)
   {
-    cHd = hadrons->GetSecondary(i)->GetDynamicParticle();
-    pd  = cHd->GetDefinition();
+    if(i<0) pd  = pdProj->GetDefinition();
+    else
+    {
+      cHd = hadrons->GetSecondary(i)->GetDynamicParticle();
+      pd  = cHd->GetDefinition();
+    }
     G4int c = pd->GetPDGEncoding();
     if(!c)
     {
       G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
       G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-      c=90000000+chrg*999+bary;
+      //c=90000000+chrg*999+bary;     // Old CHIPS notation
+      c=1000000000+chrg*10000+bary*10; // New PDG 2006 definition
     }
-	   if     (c==2212 || c==90001000)      Mprot++;
-	   else if(c==2112 || c==90000001)      Mneut++;
-	   else if(c==90001001)                 Mdeut++;
-	   else if(c==90001002)                 Mtrit++;
-	   else if(c==90002001)                 MHe3++;
-	   else if(c==90002002)                 MHe4++;
+	   if     (c==2212 || c==1000010010)      Mprot++;
+	   else if(c==2112 || c==1000000010)      Mneut++;
+	   else if(c==1000010020)                 Mdeut++;
+	   else if(c==1000010030)                 Mtrit++;
+	   else if(c==1000020030)                 MHe3++;
+	   else if(c==1000020040)                 MHe4++;
 	   else if(c== 111)      Mpi0++;
     else if(c== 211)      Mpip++;
     else if(c==-211)      Mpim++;
@@ -489,8 +531,8 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   // *** For Ntuple case ***    
   //    evdnt=0;
   //    xtupev[evdnt++] = nEvnt;
-  //    xtupev[evdnt++] = tNH;
-  //    xtupev[evdnt++] = tNH;
+  //    xtupev[evdnt++] = fNH;
+  //    xtupev[evdnt++] = fNH;
   //    xtupev[evdnt++] = Mprot;
   //    xtupev[evdnt++] = Mneut;
   //    xtupev[evdnt++] = Mdeut;
@@ -522,7 +564,7 @@ void G4QHBook::FillEvt(const G4VParticleChange* hadrons)
   //    xtupev[evdnt++] = Ma20;
   //    xtupev[evdnt++] = Mf2p;
   //    tupleEvtQ.fill(xtupev);
-  tuplEvtQ<<nEvnt<<" "<<tNH  <<" "<<tNH <<" "<<Mprot<<" "<<Mneut<<" "
+  tuplEvtQ<<nEvnt<<" "<<fNH  <<" "<<fNH <<" "<<Mprot<<" "<<Mneut<<" "
           <<Mdeut<<" "<<Mtrit<<" "<<MHe3  <<" "<<MHe4 <<" "<<Mgam <<" "
           <<Mpip <<" "<<Mpim <<" "<<Mpi0  <<" "<<MKp  <<" "<<MK0  <<" "
           <<MKm  <<" "<<MaK0 <<" "<<Meta  <<" "<<Metap<<" "<<Mrhom<<" "

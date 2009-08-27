@@ -23,40 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TAnalysisTool
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// The analysis tool, takes a publication, searches for the simulation
+// files and renders the model comparison plot.
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#ifndef G4TAnalysisTool_H_
+#define G4TAnalysisTool_H_
 
-#include "globals.hh"
+#include "CommonHeaders.h"
+#include "G4TTool.h"
+#include "G4TModelParams.h"
+#include "Helpers/G4TPlotHelper.h"
+#include "Helpers/G4TSimHelper.h"
+#include "Database/G4TData.h"
+#include "Database/G4TDataBase.h"
 
-class G4Material;
+class G4TAnalysisTool : public G4TTool {
 
-class Test49Material 
-{
+  protected:
+	  Int_t 					fNP; // Number of Protons
+	  Int_t 					fNN; // Number of Neutrons
+	  Double_t 					fKineticEnergy;
+
+	  Int_t						fTargetPDG;
+	  Int_t						fProjectilePDG;
+	  Int_t						fSecondaryPDG;
+	  TString					fModelName;
+	  Int_t						fCrossSection;
+
+	  vector<G4TData*>			fSimulations;
+
+
+
+	  void			SetSecondaryToAnalyze(Int_t idx, Int_t np);
+	  void 			InternalExecute(Int_t secondaryPDGorIdx = 0, Int_t np = 13, Int_t nn = 14, Int_t e = 90, const TString& pq = "32-rb20-hp",
+			  Int_t nzone = 2, Int_t nvex = 26, const TString& dir = "./"  );
+
   public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
 
-	void Initialise();
-	     
+	  virtual ~G4TAnalysisTool() {}
+	  G4TAnalysisTool() { }
+
+	  int Run(TString const& publicationFile, Int_t secondaryPDGorIdx = 0, TString const& printQue = "32-rb20-hp" );
+
+	  ClassDef(G4TAnalysisTool, 1)  //The class for Geant4 Analyzing (p90.kumac base)
 };
+
+R__EXTERN G4TAnalysisTool *gAnalysisTool;
 
 #endif
 
- 
+
 
 

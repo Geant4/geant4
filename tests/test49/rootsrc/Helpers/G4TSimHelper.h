@@ -23,40 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TSimHelper
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// This class makes use of G4TModelParams class in order to prepare the
+// parameters and launch a simulation.
+// The testing program test19 should be located in:
+//        $G4INSTALL/bin/$G4SYSTEM/test19
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
+#ifndef G4TSIMHELPER_H_
+#define G4TSIMHELPER_H_
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "../CommonHeaders.h"
+#include "../G4TModelParams.h"
 
-#include "globals.hh"
+class G4TSimHelper : public TObject {
 
-class G4Material;
-
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
   private:
 
-	void Initialise();
-	     
+	  TString fEventsNumberFileName;
+
+	  TFile* MakeTree();
+
+  public:
+
+
+	  G4TSimHelper() {
+		  fEventsNumberFileName = "histnevt.out";
+	  }
+	  virtual ~G4TSimHelper () {}
+
+	  //Static Members
+	  static void LoadLibraries();
+
+	  //Public Members
+	  TString const& GetEventsNumberFileName(){ return fEventsNumberFileName; }
+	  void SetEventsNumberFileName(const TString& filename){ fEventsNumberFileName = filename; }
+
+	  Int_t GetEventsNumber();
+
+	  TFile* ExecuteTest(Int_t np = 13, Int_t nn = 14,  Int_t e = 90, Int_t runNumber = 25, Int_t nbEvents = 50000, const TString& dir = "" );
+
+
+	  ClassDef(G4TSimHelper, 1)  //The class for Geant4 Simulation
 };
+
+R__EXTERN G4TSimHelper *gSimHelper;
 
 #endif
 
- 
+
 
 

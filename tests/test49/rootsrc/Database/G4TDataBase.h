@@ -23,40 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TDataBase
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// The class to handle loading and saving of the G4TData objects, it
+// is recommended to only use this class and not use directly the Save()
+// and Load() methods of G4TData class.
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#ifndef G4TDataBase_H_
+#define G4TDataBase_H_
 
-#include "globals.hh"
+#include "../CommonHeaders.h"
+#include "G4TCatalog.h"
+#include "G4TData.h"
 
-class G4Material;
 
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
+class G4TDataBase : public TObject {
+
   private:
+	  TString fDirectory;
 
-	void Initialise();
-	     
+  public:
+
+	  G4TDataBase() : fDirectory("./database/") {  }
+	  virtual ~G4TDataBase () {}
+
+	  // Access Methods
+	  G4TData*		LoadData(G4TData* object, Int_t secondaryPDG = 0);
+	  G4TData*		LoadData(TString const& filename, Int_t secondaryPDG = 0);
+	  void			SaveData(G4TData* object);
+
+	  // Getters/Setters
+	  TString		GetDirectory() const;
+	  void			SetDirectory(TString fDirectory);
+
+
+	  ClassDef(G4TDataBase, 1)  //The class for Geant4 Testing Database DAL
 };
+
+
+R__EXTERN G4TDataBase *gTestDB;
 
 #endif
 
- 
+
 
 

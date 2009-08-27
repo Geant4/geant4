@@ -23,40 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Description:
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// A file for link definitions of ROOT. More information here:
+// http://root.cern.ch/drupal/content/selecting-dictionary-entries-linkdefh
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
 //
-//===========================================================================
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#ifdef __CINT__
 
-#include "globals.hh"
+#pragma link off all globals;
+#pragma link off all classes;
+#pragma link off all functions;
+#pragma link C++ nestedclasses;
 
-class G4Material;
+#pragma link C++ class G4TModelParams+;
+#pragma link C++ class G4TSimulationTool+;
+#pragma link C++ class G4TSimHelper+;
+#pragma link C++ class G4TAnalysisTool+;
+#pragma link C++ class G4TPlotHelper+;
+#pragma link C++ class G4TData+;
+#pragma link C++ class G4TDataItem+;
+#pragma link C++ class G4TParticlesDAL+;
+#pragma link C++ class G4TCatalog+;
+#pragma link C++ class G4TTool+;
+#pragma link C++ class G4TDataBase+;
+#pragma link C++ class G4TGUIHelper+;
+#pragma link C++ class G4TSimulationGUI+;
+#pragma link C++ class G4TAnalysisGUI+;
+#pragma link C++ class G4TPublicationGUI+;
+#pragma link C++ class G4TToolMenuGUI+;
 
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
 
-	void Initialise();
-	     
-};
+
+#pragma link C++ global gPlotHelper;
+#pragma link C++ global gParticlesDAL;
+#pragma link C++ global gCatalog;
+#pragma link C++ global gSimHelper;
+#pragma link C++ global gSimulationTool;
+#pragma link C++ global gAnalysisTool;
+#pragma link C++ global gTestDB;
+#pragma link C++ global gGUIHelper;
 
 #endif
 
- 
 
 

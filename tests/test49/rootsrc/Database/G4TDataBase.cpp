@@ -24,39 +24,56 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
-//
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
-//
-//===========================================================================
+// --------------------------------------------------------------------
+// Class implementation
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "G4TDataBase.h"
 
-#include "globals.hh"
 
-class G4Material;
+G4TDataBase *gTestDB = new G4TDataBase();
 
-class Test49Material 
+
+ClassImp(G4TDataBase)
+
+using namespace std;
+using namespace ROOT;
+using namespace TMath;
+
+
+//______________________________________________________________________________
+G4TData* G4TDataBase::LoadData(G4TData* object, Int_t secondaryPDG )
 {
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
-
-	void Initialise();
-	     
-};
-
-#endif
-
- 
+	object->SetDirectory(fDirectory);
+	object->Load(secondaryPDG);
+	return object;
+}
 
 
+//______________________________________________________________________________
+G4TData* G4TDataBase::LoadData(TString const& filename, Int_t secondaryPDG )
+{
+	G4TData* data = new G4TData(filename);
+	data->SetDirectory(fDirectory);
+	data->Load(secondaryPDG);
+	return data;
+}
+
+//______________________________________________________________________________
+void G4TDataBase::SaveData(G4TData* object)
+{
+	object->SetDirectory(fDirectory);
+	object->Save();
+}
+
+//______________________________________________________________________________
+TString G4TDataBase::GetDirectory() const
+{
+	return fDirectory;
+}
+
+//______________________________________________________________________________
+void G4TDataBase::SetDirectory(TString fDirectory)
+{
+	this->fDirectory = fDirectory;
+}

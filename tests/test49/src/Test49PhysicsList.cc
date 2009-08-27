@@ -1,42 +1,32 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //    ---------- fake Test49PhysicsList class -------
-//    Created by Mikhail Kossov, 7 Jan 2005 
+//    Created by Mikhail Kossov, 7 Dec 2004 
 //
 // **********************************************************************
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4ShortLivedConstructor.hh"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-#include "G4ios.hh"
-
-#include "globals.hh"
 
 #include "Test49PhysicsList.hh"
 
@@ -51,7 +41,8 @@ Test49PhysicsList::Test49PhysicsList():  G4VUserPhysicsList()
   SetVerboseLevel(1);
 }
 
-Test49PhysicsList::~Test49PhysicsList() {}
+Test49PhysicsList::~Test49PhysicsList()
+{}
 
 void Test49PhysicsList::ConstructParticle()
 {
@@ -60,6 +51,7 @@ void Test49PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
+  ConstructIons();
   ConstructAllShortLiveds();
 }
 
@@ -77,31 +69,115 @@ void Test49PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
-
 void Test49PhysicsList::ConstructLeptons()
 {
   // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+  G4TauPlus::TauPlusDefinition();
+  G4TauMinus::TauMinusDefinition();
 
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+  G4NeutrinoTau::NeutrinoTauDefinition();
+  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition();  
 }
-
-void Test49PhysicsList::ConstructMesons() {}
-
-void Test49PhysicsList::ConstructBaryons()  //  barions
+void Test49PhysicsList::ConstructMesons()
 {
+  // mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
+
+  G4DMesonPlus::DMesonPlusDefinition();
+  G4DMesonMinus::DMesonMinusDefinition();
+  G4DMesonZero::DMesonZeroDefinition();
+  G4AntiDMesonZero::AntiDMesonZeroDefinition();
+  G4DsMesonPlus::DsMesonPlusDefinition();
+  G4DsMesonMinus::DsMesonMinusDefinition();
+  G4JPsi::JPsiDefinition();
+
+  G4BMesonPlus::BMesonPlusDefinition();
+  G4BMesonMinus::BMesonMinusDefinition();
+  G4BMesonZero::BMesonZeroDefinition();
+  G4AntiBMesonZero::AntiBMesonZeroDefinition();
+  G4BsMesonZero::BsMesonZeroDefinition();
+  G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
+}
+void Test49PhysicsList::ConstructBaryons()
+{
+  // barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
+
+  G4Lambda::LambdaDefinition();
+  G4SigmaPlus::SigmaPlusDefinition();
+  G4SigmaZero::SigmaZeroDefinition();
+  G4SigmaMinus::SigmaMinusDefinition();
+  G4XiMinus::XiMinusDefinition();
+  G4XiZero::XiZeroDefinition();
+  G4OmegaMinus::OmegaMinusDefinition();
+
+  G4AntiLambda::AntiLambdaDefinition();
+  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
+  G4AntiSigmaZero::AntiSigmaZeroDefinition();
+  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
+  G4AntiXiMinus::AntiXiMinusDefinition();
+  G4AntiXiZero::AntiXiZeroDefinition();
+  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
+
+  G4LambdacPlus::LambdacPlusDefinition();
+  G4SigmacPlusPlus::SigmacPlusPlusDefinition();
+  G4SigmacPlus::SigmacPlusDefinition();
+  G4SigmacZero::SigmacZeroDefinition();
+  G4XicPlus::XicPlusDefinition();
+  G4XicZero::XicZeroDefinition();
+  G4OmegacZero::OmegacZeroDefinition();
+
+  G4AntiLambdacPlus::AntiLambdacPlusDefinition();
+  G4AntiSigmacPlusPlus::AntiSigmacPlusPlusDefinition();
+  G4AntiSigmacPlus::AntiSigmacPlusDefinition();
+  G4AntiSigmacZero::AntiSigmacZeroDefinition();
+  G4AntiXicPlus::AntiXicPlusDefinition();
+  G4AntiXicZero::AntiXicZeroDefinition();
+  G4AntiOmegacZero::AntiOmegacZeroDefinition();
 }
+void Test49PhysicsList::ConstructIons()
+{
+  // ions
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4ParticleDefinition* genericIon = G4GenericIon::GenericIonDefinition();
+  genericIon->SetProcessManager(new G4ProcessManager(genericIon));
 
-void Test49PhysicsList::ConstructAllShortLiveds() {}
+  //  Construct light ions @@ Is that the same as above?
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+void Test49PhysicsList::ConstructAllShortLiveds()
+{
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();  
 
+}
 void Test49PhysicsList::ConstructProcess()
 {
   // Transportation, electromagnetic and general processes 
@@ -124,44 +200,52 @@ void Test49PhysicsList::ConstructProcess()
 void Test49PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() )
-  {
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    if (particleName == "gamma")	    //gamma
-	   {
-	     pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
-	     pmanager->AddDiscreteProcess(new G4ComptonScattering());
-	     pmanager->AddDiscreteProcess(new G4GammaConversion());
-	   }
-    else if (particleName == "e-")	  //electron
-	   {
-	     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-	     pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	     pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-	   }
-    else if (particleName == "e+")	  //positron
-	   {
-	     pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
-	     pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	     pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-	     pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
-	   }
-    else if (!particle->IsShortLived() && particle->GetPDGCharge() != 0.0 &&
-	            particle->GetParticleName() != "chargedgeantino")
-	   {
-	     //all others charged particles except geantino
-	     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-	     G4double demax = 0.05;  // try to lose at most 5% of the energy in
-	     //    a single step (in limit of large energies)
-	     G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
-	     // reproduced angular distribution of TRIM
-	     G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
-	     pmanager->AddProcess( lowEIonisation, -1,2,2);
-	     lowEIonisation->SetStepFunction( demax, stmin );
-	   }
-  }
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+
+      if (particleName == "gamma")
+	{
+	  //gamma
+	  pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+	  pmanager->AddDiscreteProcess(new G4ComptonScattering());
+	  pmanager->AddDiscreteProcess(new G4GammaConversion());
+	}
+      else if (particleName == "e-")
+	{
+	  //electron
+	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+	}
+      else if (particleName == "e+")
+	{
+	  //positron
+	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
+	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+	  pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
+	}
+      else if ((!particle->IsShortLived()) &&
+	       (particle->GetPDGCharge() != 0.0) &&
+	       (particle->GetParticleName() != "chargedgeantino"))
+	{
+	  //all others charged particles except geantino
+	  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+
+	  G4double demax = 0.05;  // try to lose at most 5% of the energy in
+	  //    a single step (in limit of large energies)
+	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
+	  // reproduced angular distribution of TRIM
+
+	  G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
+	  pmanager->AddProcess( lowEIonisation, -1,2,2);
+	  lowEIonisation->SetStepFunction( demax, stmin );
+	}
+    }
 }
 
 #include "G4Decay.hh"
@@ -170,12 +254,10 @@ void Test49PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
-  while( (*theParticleIterator)() )
-  {
+  while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle))
-    {
+    if (theDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(theDecayProcess);
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
@@ -186,7 +268,10 @@ void Test49PhysicsList::ConstructGeneral()
 void Test49PhysicsList::SetCuts()
 {
   // defaultCutValue you have typed in is used
-  if (verboseLevel >1) G4cout << "Test49PhysicsList::SetCuts:" << G4endl;
+
+  if (verboseLevel >1){
+    G4cout << "Test49PhysicsList::SetCuts:" << G4endl;
+  }
 
   // set cut values for gamma at first and for e- second
   SetCutValue(cutForGamma, "gamma");
@@ -199,7 +284,9 @@ void Test49PhysicsList::SetCuts()
 
   // SetCutValueForOthers(defaultCutValue); 
  
-  if (verboseLevel >1) DumpCutValuesTable();
+  if (verboseLevel >1) { 
+    DumpCutValuesTable(); 
+  } 
 }
 
 void Test49PhysicsList::SetCutForGamma(G4double cut)
@@ -220,11 +307,20 @@ void Test49PhysicsList::SetCutForProton(G4double cut)
   cutForProton = cut;
 }
 
-G4double Test49PhysicsList::GetCutForGamma() const { return cutForGamma; }
+G4double Test49PhysicsList::GetCutForGamma() const
+{
+  return cutForGamma;
+}
 
-G4double Test49PhysicsList::GetCutForElectron() const { return cutForElectron; }
+G4double Test49PhysicsList::GetCutForElectron() const
+{
+  return cutForElectron;
+}
 
-G4double Test49PhysicsList::GetCutForProton() const { return cutForProton; }
+G4double Test49PhysicsList::GetCutForProton() const
+{
+  return cutForProton;
+}
 
 
 

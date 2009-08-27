@@ -10,46 +10,72 @@ Authors: Mikhail Kosov
 
 ---- Status: Beta version
 
----- Input file: chipstest.in
+---- Input file for Geant4: chipstest.in
 
 ---- Output: screan or chip_{name}.log in the subdirectory made by kumac
 ---- Output ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
 
 ---- Location of the reference output: any name defined after >
 
----- Macros: no macros
+---- Macros: run.C
 
----- Other files required: no additional files
+---- Other files required: ROOT files
 
----- How to run it?
-     > cd test49
-     [ edit the test49.cc file. If "#define nout" is uncommented, then the ]
-     [ resulting executable is not providing the output files for PAW.  ]  
-     > make  (compile the cc files and make the executable)
-     > ln -s ../../bin/Linux-g++/test49 test49 (ore another path)
-     > test49 (uses internally chipstest.in file, switch of the output)
-     {> test49 test49.in >& result.out (not implemented yet)}
-     {> test49 test49.large_N.in >& result.large_N.out (not yet)}
-     ==>>: Before the simulation of pictures, comment "#define nout" in
-     ==>>: the test49.cc file and recompile test49 (> make)
-     > cd {subdirectory}
-     > ls *.kumac
-     name1.kumac ... nemeI.kumac (not all kumac's are working, see below)
-     > paw
-     paw >> exe nameI {param1 {param2...} usually param1=f, nEv=f*2000
-     ----- test49 start working using chipstest_nucleus.in files --------
-     ----- the last picture (usually the only picture) is on the screan -
-     paw >> pict/list
-     PICT1
-     ...
-     PICTI
-     paw >> pict/plot PICTI (just to look on the picture I)
-     paw >> meta 10 -113 (after that all pictures are stored to paw.metafile)
-     paw >> pict/plot PICTI (put picture I in the paw.metafile as eps)
-     paw >> exit (quit does not save the paw.metafile correctly!)
-     > mv paw.metafile nucleus.eps
 
-Directories:
+---- How to compile and run it ?
+
+make -f GNUmakefile
+
+(The ROOTSYS variable must be defined e.g.)
+setenv ROOTSYS /afs/cern.ch/sw/lcg/external/root/5.21.02/slc4_amd64_gcc34/root
+
+(for bash:)
+. $ROOTSYS/bin/thisroot.sh
+
+(or for tcsh:)
+source $ROOTSYS/bin/thisroot.csh
+
+make -f ROOTmakefile
+(make clean -f ROOTmakefile CAN BE USED)
+
+(The library libG4ModelTester.so is created in the current directory = test49)
+
+root -l .x run.C               (-l means no log-screen)
+
+
+Description of classes and ROOT source files:
+
+ * LinkDef.h: A file for link definitions of ROOT. More information here: http://root.cern.ch/drupal/content/selecting-dictionary-entries-linkdefh
+
+ * Makefile and Makefile.arch: Makefiles used to build the shared library.
+
+ * CommonHeaders.h:  Contains the headers for the ROOT classes, included into each header file by default
+
+ * G4TModelParams: Class that takes care of parsing (loading, saving) the chipstest.in file, uses also chipstest_default.in in order to take the defaults and transform them.
+
+ * G4TTool: An abstract (base) class for the tools (simulation and analysis).
+
+ * G4TSimulationTool: The simulation tool, performs a simulation (prepares chipstest.in and launches test19 executable), does the cuts and also plots the output histogram.
+
+ * G4TAnalysisTool: The analysis tool, takes a publication, searches for the simulation files and renders the model comparison plot.
+
+ * G4TCatalog: Handles the management of the catalog.txt (loads the items, inserts or updates them).
+
+ * G4TDataBase: The class to handle loading and saving of the G4TData objects, it is recommended to only use this class and not use directly the Save() and Load() methods of G4TData class.
+
+ * G4TData: A class to represent a publication or simulation. Contains a header and a vector of G4TDataItem.
+
+ * G4TDataItem: A class to represent a sub-item of a publication or simulation. Contains and saves a TTree (data). Also used to hold the histogram (for plotting), but the histogram itself is not saved.
+
+ * G4TParticlesDAL: Data access layer for the particles pdg. This class handles nuclear mass calculation, requests to get the particles by name or A and Z. 
+
+ * G4TPlotHelper: This class is a simple wrapper/helper for ROOT plotting commands.
+
+ * G4TSimHelper: This class makes use of G4TModelParams class in order to prepare the parameters and launch a simulation.
+
+
+
+
 
 ---- Contactperson: Mikhail.Kossov@cern.ch
 

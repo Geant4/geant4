@@ -23,40 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TToolMenuGUI
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// The GUI for the tools menu
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
+#ifndef G4TToolMenuGUI_H_
+#define G4TToolMenuGUI_H_
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "../CommonHeaders.h"
+#include "../Database/G4TCatalog.h"
+#include "../GUI/G4TSimulationGUI.h"
+#include "../GUI/G4TAnalysisGUI.h"
+#include "../GUI/G4TPublicationGUI.h"
+#include "Riostream.h"
 
-#include "globals.hh"
 
-class G4Material;
+class G4TToolMenuGUI : public TGMainFrame {
 
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
   private:
+		TGTextButton*	bRun1;
+		TGTextButton*	bRun2;
+		TGTextButton*	bRun3;
 
-	void Initialise();
-	     
+		void Initialize();
+		void Run1_Click();
+		void Run2_Click();
+		void Run3_Click();
+  public:
+
+
+	G4TToolMenuGUI(const TGWindow *p, UInt_t w, UInt_t h);
+	virtual ~G4TToolMenuGUI ();
+
+
+	virtual void CloseWindow();
+	virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
+
+
+	ClassDef(G4TToolMenuGUI, 1)  //The class for Geant4 Simulation
 };
+
+
 
 #endif
 
- 
+
 
 

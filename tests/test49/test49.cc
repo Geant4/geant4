@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -26,30 +29,47 @@
 //      GEANT 4 class file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
 //
-//      File name:     Test49 (Comparison of G4QElastic Results with Data)
+//      File name:     Test49 (Comparison of G4QString Results with Data)
 //
 //      Author:        M.Kossov (made of test19)
 // 
-//      Creation date: 23 Jan 2006
+//      Creation date: 26 Aug 2009
 //
-//      Modifications:
+//      Modifications: G4electroweak CHIPS interface (G4QCaptureAtRest)
+//                     which is independent of the "hadronic" package
+//                     classes is added to this test for the debugging,
+//                     physics tests and development of the CHIPS model.
 //
 // -------------------------------------------------------------------
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
-#define nout
+//#define pdebug
+//#define nout
+//#define inter
 //#define pscan
+//#define csdebug
 //#define smear
 //#define escan
 //#define idebug
 //#define tdebug
-#define csdebug
-//#define tdisthist
-//#define pverb
 //#define debug
-//#define pdebug
-//#define fdebug
+//#define ppdebug
+//#define hdebug
+//#define lhepdbg
+//#define meandbg
+//#define ekindbg
+//#define histdbg
+//--- Random seed
+//#define ranseed
+//--- Flags of models (only one must be chosen), CHIPS is a default for System Testing ---
+#define chips
+//#define lep
+//#define hep
+//#define preco
+//#define berti
+//#define binar
+//#define qgsc
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
 #include "globals.hh"
@@ -62,32 +82,38 @@
 #include "G4RunManager.hh"
 #include "G4VUserPhysicsList.hh"
 //#include "G4VUserDetectorConstruction.hh"
-
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
-#include "G4VParticleChange.hh"        // @@ should we keep both? (this is not necessary)
+#include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
-#include "G4QCaptureAtRest.hh"
+
 #include "G4QCollision.hh"
-#include "G4QElastic.hh"               // CHIPS
-#include "G4LElastic.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4HadronElastic.hh"
-//#include "G4LElasticB.hh"
-#include "G4LEnp.hh"
-#include "G4LEpp.hh"
-#include "G4ElasticCascadeInterface.hh"
-#include "G4NeutronHPChannel.hh"       // HP cross-section
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
-#include "G4NeutronHPElasticFS.hh"
-#include "G4NeutronHPThermalBoost.hh"
-#include "G4ElasticHadrNucleusHE.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4HadronCrossSections.hh"
-#include "G4QElasticCrossSection.hh"   // CHIPS Cross-Sections
+#include "G4QDiffraction.hh"
+#include "G4QLowEnergy.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4AntiProtonInelasticProcess.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4HadronInelasticDataSet.hh"
+#include "G4PionPlusInelasticProcess.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4PionMinusInelasticProcess.hh"
+#include "G4KaonPlusInelasticProcess.hh"
+#include "G4KaonMinusInelasticProcess.hh"
+//Does not work with shared libraries//#include "G4MuNuclearInteraction.hh"
+#include "G4QMuonNuclearCrossSection.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4CrossSectionDataStore.hh"
+#include "G4HadronElasticDataSet.hh"
+#include "G4HadronInelasticDataSet.hh"
 
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
@@ -96,6 +122,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -120,18 +147,37 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
+#include "G4UImanager.hh" 
+
 #include "Test49Physics.hh"
 #include "Test49PhysicsList.hh"
 
 //#include "G4HadronCrossSections.hh"
 //#include "G4VCrossSectionDataSet.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
+//#include "G4ProtonInelasticCrossSection.hh"
+//#include "G4NeutronInelasticCrossSection.hh"
 //#include "G4HadronInelasticDataSet.hh"
 
-//#include "G4ExcitationHandler.hh"
-//#include "G4PreCompoundModel.hh"
-//#include "G4Evaporation.hh"
+// *** M o d e l s ****
+#include "G4LEProtonInelastic.hh"
+#include "G4HEProtonInelastic.hh"
+#include "G4LENeutronInelastic.hh"
+#include "G4HENeutronInelastic.hh"
+#include "G4LEPionMinusInelastic.hh"
+#include "G4HEPionMinusInelastic.hh"
+#include "G4LEPionPlusInelastic.hh"
+#include "G4HEPionPlusInelastic.hh"
+#include "G4LEKaonPlusInelastic.hh"
+#include "G4HEKaonPlusInelastic.hh"
+#include "G4LEKaonMinusInelastic.hh"
+#include "G4HEKaonMinusInelastic.hh"
+#include "G4LEAntiProtonInelastic.hh"
+#include "G4HEAntiProtonInelastic.hh"
+#include "G4BinaryCascade.hh"
+#include "G4CascadeInterface.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4Evaporation.hh"
 
 // New Histogramming (from AIDA and Anaphe):
 //#include <memory> // for the auto_ptr(T>
@@ -147,195 +193,90 @@
 #include "G4Timer.hh"
 #include "time.h"
 
-//#define debug
-
 //int main(int argc, char** argv)
 int main()
 {
-  const G4int nTg=8;   // Length of the target list for the Performance test
-  G4int tli[nTg]={90001000,90002002,90003004,90006006,90013014,90029034,90050069,90082126};
-  G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Carbon","Aluminum","Copper","Tin",
-                     "Lead"}; // Target names
-  G4String tsy[nTg]={"H","He","Li","C","Al","Cu","Sn","Pb"}; // Target symbols
-  G4Material* mat[nTg]={0,0,0,0,0,0,0,0}; // Material pointers for the Target Loop
-  const G4int nPr=2;  // Length of the projectile list for the Performance test
-  G4int pli[nPr] = {2212, 2112}; // PDG Codes of the projectile particles
-  const G4int nMom=5;  // Length of the projectile momentum list for the Performance test
-  G4double mom[nMom] = {30., 200., 1500., 10000., 100000.}; // Set of momenta in MeV/c !
+#ifdef csdebug
+  static const G4double T0=273*kelvin; // Room temperature for the XS tests
+#endif
+#ifdef ranseed
+  //G4UImanager* UI = G4UImanager::GetUIpointer();
+  //UI->ApplyCommand( "" );
+  CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
+  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
+  G4int seed = time( NULL ); 
+  CLHEP::HepRandom::setTheSeed( seed ); 
+#endif
+#ifdef meandbg
+  G4double pE=0.;
+  G4double sE=0.;
+  G4double sE2=0.;
+  G4double nE=0.;
+  G4double nD=0.;
+#endif
+#ifdef ekindbg
+  G4double pE=0.;
+  G4double sE=0.;
+  G4double sE2=0.;
+  G4double nE=0.;
+  G4double nD=0.;
+#endif
+#ifdef histdbg
+  const G4int nHst=40;
+  G4int nHst1=nHst-1;
+  G4int dQnM=nHst/2;
+  G4int dQnM1=dQnM-1;
+  G4int dQnE=nHst/2;
+  //G4int dQnE1=dQnE-1;
+  G4int rEnH[nHst];
+  G4int rPzH[nHst];
+  G4int rPrH[nHst];
+  G4int dEnH[nHst];
+  G4int dPzH[nHst];
+  G4int dPrH[nHst];
+  G4int dChH[nHst];
+  G4int dBnH[nHst];
+  G4int nGaH[nHst];
+  G4int GaSE[nHst];
+  for(G4int ih=0; ih<nHst; ih++)
+  {
+    rEnH[ih]=0; rPzH[ih]=0; rPrH[ih]=0; dEnH[ih]=0; dPzH[ih]=0; dPrH[ih]=0;
+    dChH[ih]=0; dBnH[ih]=0; nGaH[ih]=0; GaSE[ih]=0;
+  }
+#endif
+#ifdef hdebug
+  G4StringChipsParticleLevelInterface::SetMaxB(20.); // Impact parameter limit
+  G4StringChipsParticleLevelInterface::SetMaxE(20.); // Energy deposition limit
+  G4StringChipsParticleLevelInterface::Reset();   // Initialize historgamming in the class
+#endif
+  //const G4int nTg=4;   // Length of the target list for the Performance test
+  //G4int tli[nTg]={90001000,90002002,90007007,90027032}; // PDG Codes of targets
+  //G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt"}; // Target names
+  //G4String tsy[nTg]={"1H","He","14N","59Co"}; // Target symbols for the Target Loop
+  //G4Material* mat[nTg]={0,0,0,0}; // Material pointers for the Target Loop
+  const G4int nTg=5;   // Length of the target list for the Performance test
+  G4int tli[nTg]={90001000,90002002,90007007,90027032,90092146}; // PDG Codes of targets
+  G4String tnm[nTg]={"Hydrogen","Helium","Nitrogen","Cobalt","Uranium"}; // Target names
+  G4String tsy[nTg]={"1H","He","14N","59Co","238U"};// Target symbols for the Target Loop
+  G4Material* mat[nTg]={0,0,0,0,0}; // Material pointers for the Target Loop
+  const G4int nPr=12;          // Length of the projectile list for the Performance test
+  G4int pli[nPr] = {2212, 2112, 211, -211, 3122, 321, -321, -2212, -2112, 11, 13, 22};//Pro
+  const G4int nEn=4;           // Length of the kin. energy list for the Performance test
+  G4double eli[nEn] = {27., 227., 999., 9999.}; // Kinetic energy values
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
 #ifdef tdebug
   const G4int nT=20;           // Dimension of the t-distribution vectors
   //const G4int nT1=nT-1;        // The last bin of the t-distribution vector
   const G4double maxT=200000.; // -t_max for the T-vectors
-		const G4double dT=maxT/nT;   // Step of the t-hystogram
-		const G4double fT=dT/2;      // Center of the first bin of the t-histogram
+  const G4double dT=maxT/nT;   // Step of the t-hystogram
+  const G4double fT=dT/2;      // Center of the first bin of the t-histogram
   G4double tVal[nT];           // -t values for centers of bins of the t-hystogram
   G4int tSig[nT];              // t-histogram (filled and reset many times
 #endif
-  const G4int nAZ=270;         // Dimension of the table
-  const G4int mAZ=266;         // Maximum filled A (at present). Must be mAZ<nAZ
-  // Best Z for the given A - changed by MK (@@Not one-to-one correspondance! Make alt "-")
-  const G4int bestZ[nAZ] = {
-     0,  1,  1,  2,  2,  0,  3,  3,  4,  4,   //0
-     5,  5,  6,  6,  7,  7,  8,  8,  8,  9,   //10
-    10, 10, 10, 11, 12, 12, 12, 13, 14, 14,   //20
-    14, 15, 16, 16, 16, 17, 18, 17, 18, 19,   //30
-    18, 19, 20, 20, 20, 21, 22, 22, 23, 23,   //40
-    22, 23, 24, 24, 26, 25, 26, 26, 28, 27,   //50
-    28, 28, 28, 29, 30, 29, 30, 30, 30, 31,   //60
-    32, 31, 32, 32, 32, 33, 34, 34, 34, 35,   //70
-    34, 35, 36, 36, 36, 37, 39, 36, 38, 39,   //80
-    40, 40, 41, 40, 40, 42, 42, 42, 42, 44,   //90
-    44, 44, 44, 45, 44, 46, 46, 47, 46, 47,   //100
-    48, 48, 48, 48, 48, 49, 50, 50, 50, 50,   //110
-    50, 51, 50, 51, 50, 52, 52, 53, 52, 54,   //120
-    52, 54, 54, 55, 54, 56, 54, 56, 56, 57,   //130
-    58, 59, 60, 60, 60, 60, 60, 62, 62, 62,   //140
-    62, 63, 62, 63, 62, 64, 64, 64, 64, 65,   //150
-    64, 66, 66, 66, 66, 67, 68, 68, 68, 69,   //160
-    68, 70, 70, 70, 70, 71, 70, 72, 72, 72,   //170
-    72, 73, 74, 74, 74, 75, 74, 75, 76, 76,   //180
-    76, 77, 76, 77, 78, 78, 78, 79, 80, 80,   //190
-    80, 80, 80, 81, 80, 81, 82, 82, 82, 83,   //200
-    82,  0, 82,  0, 82,  0, 84,  0,  0,  0,   //210
-    86,  0, 86, 87, 88,  0, 88, 89, 88, 89,   //220
-    89, 91, 90,  0, 92, 92,  0, 93, 92, 94,   //230
-     0,  0,  0, 95, 94,  0,  0, 96,  0,  0,   //240
-     0, 98, 99,  0,  0,  0,  0,100,101,102,   //250
-   103,104,105,106,  0,108,109,  0,  0,  0};  //260
-  // 0   1   2   3   4   5   6   7   8   9
-  // Second candidate
-  const G4int secoZ[nAZ] = {
-     0,  0,  0,  1,  0,  0,  0,  4,  0,  0,   //0
-     4,  6,  5,  7,  0,  8,  0,  0,  0,  8,   //10
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   //20
-     0,  0, 15,  0,  0, 16,  0,  0,  0,  0,   //30
-    20, 20,  0,  0,  0,  0, 20,  0,  0,  0,   //40
-    24,  0,  0,  0, 24,  0,  0,  0, 26,  0,   //50
-    27,  0,  0,  0, 28,  0,  0,  0,  0,  0,   //60
-    30,  0,  0,  0, 34,  0, 32,  0,  0,  0,   //70
-    36,  0, 34,  0, 38,  0, 38, 38,  0,  0,   //80
-     0,  0, 42,  0, 42,  0, 44,  0, 44,  0,   //90
-    42,  0, 46,  0, 46,  0, 48,  0, 48,  0,   //100
-    46,  0, 50, 49, 50, 50, 48,  0,  0,  0,   //110
-    52,  0, 52,  0, 52,  0, 54,  0, 54,  0,   //120
-    54,  0, 56,  0, 56,  0, 56,  0, 58,  0,   //130
-    54,  0, 58,  0, 62, 61,  0,  0, 60,  0,   //140
-    60,  0, 64,  0, 64,  0, 66,  0, 66,  0,   //150
-    66,  0, 68,  0, 68,  0,  0,  0, 70,  0,   //160
-    70,  0,  0,  0, 72,  0, 72,  0,  0,  0,   //170
-    74,  0,  0,  0, 76,  0, 76, 76,  0,  0,   //180
-    78,  0, 78,  0,  0,  0, 80,  0, 78,  0,   //190
-     0,  0,  0,  0, 82,  0,  0,  0,  0, 84,   //200
-    84,  0, 83,  0, 83,  0,  0,  0,  0,  0,   //210
-     0,  0,  0,  0,  0,  0,  0,  0, 89,  0,   //220
-     0,  0,  0,  0, 93,  0,  0,  0, 93,  0,   //230
-     0,  0,  0,  0,  0,  0,  0, 97,  0,  0,   //240
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,   //250
-     0,  0,107,  0,  0,  0,  0,  0,  0,  0};  //260
-  // 0   1   2   3   4   5   6   7   8   9
-  // Second candidate
-  const G4int thrdZ[nAZ] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //0
-    0, 0, 7, 0, 0, 0, 0, 0, 0, 0,   //10
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //20
-    0, 0, 0, 0, 0,20, 0, 0, 0, 0,   //30
-   19, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //40
-   23, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //50
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //60
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //70
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //80
-    0, 0,36, 0,38, 0,40, 0, 0, 0,   //90
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //100
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //110
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //120
-   56, 0,50, 0, 0, 0,58, 0,57, 0,   //130
-    0, 0, 0, 0, 0, 0, 0, 0,65, 0,   //140
-    0, 0,66, 0, 0, 0, 0, 0, 0, 0,   //150
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //160
-    0, 0, 0, 0, 0, 0,71, 0, 0, 0,   //170
-   73, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //180
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //190
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //200
-   83, 0,84, 0,84, 0, 0, 0, 0, 0,   //210
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //220
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //230
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //240
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //250
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //260
-  //0  1  2  3  4  5  6  7  8  9
-  // Fourth candidate (only two isotopes)
-  const G4int quadZ[nAZ] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //0
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //10
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //20
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //30
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //40
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //50
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //60
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //70
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //80
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //90
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //100
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //110
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //120
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //130
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //140
-    0, 0,67, 0, 0, 0, 0, 0, 0, 0,   //150
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //160
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //170
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //180
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //190
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //200
-   85, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //210
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //220
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //230
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //240
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //250
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //260
-  //0  1  2  3  4  5  6  7  8  9
-
-  // Test of not overlaping four tables above (can be commented)
-  if(mAZ>=nAZ) G4cout<<"***Test49: Too big mAZ="<<mAZ<<", nAZ="<<nAZ<<G4endl;
-
   // Run manager
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test49PhysicsList);
-		G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
-  G4ParticleDefinition* ionDefinition=0;
-  ionDefinition=G4ParticleTable::GetParticleTable()->FindIon(6,12,0,6);
-		if(!ionDefinition)
-		{
-    G4cerr<<"*** Error! *** Test49:(6,6) ion can not be defined"<<G4endl;
-    return 0;
-  }
-  else G4cout<<"Test49: (6,6) ion is OK, Run State="<<G4StateManager::GetStateManager()->
-              GetStateString(G4StateManager::GetStateManager()->GetCurrentState())<<G4endl;
-
-  for(G4int a=1; a<nAZ; a++)
-  {
-    G4int z1=bestZ[a]; // First table
-    G4int z2=secoZ[a]; // Second table
-    G4int z3=thrdZ[a]; // Third table
-    G4int z4=quadZ[a]; // Fourth table
-    if(z2)
-	   {
-      if(z1==z2)G4cout<<"#"<<a<<": z1="<<z1<<" = z2="<<z2<<", z3="<<z3<<",z4="<<z4<<G4endl;
-      if(z3)
-	     {
-        if(z1==z3)G4cout<<"#"<<a<<",z1="<<z1<<" = z3="<<z3<<",z2="<<z2<<",z4="<<z4<<G4endl;
-        if(z2==z3)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<" = z3="<<z3<<",z4="<<z4<<G4endl;
-        if(z4)
-	       {
-          if(z1==z4)G4cout<<"#"<<a<<",z1="<<z1<<"=z4="<<z4<<",z2="<<z2<<",z3="<<z3<<G4endl;
-          if(z2==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<"=z4="<<z4<<",z3="<<z3<<G4endl;
-          if(z3==z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<",z3="<<z3<<"=z4="<<z4<<G4endl;
-        }
-      }
-      else if(z4) G4cout<<"#"<<a<<",z1="<<z1<<",z2="<<z2<<",z3=0.(!) & z4="<<z4<<G4endl;
-    }
-    else if(z3||z4)G4cout<<"#"<<a<<",z1="<<z1<<",z2=0.(!) & z3="<<z3<<" & z4="<<z4<<G4endl;
-  }
+  G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
 #ifdef debug
   G4cout<<"Test49: Prepare G4QHBook files or ntuples"<<G4endl;
 #endif
@@ -366,22 +307,34 @@ int main()
   G4cout<<"Test49:Par's: T="<<temperature<<",S="<<ssin2g<<",Eta="<<eteps<<",nop="
         <<nop<<",p="<<momb<<",e="<<enb<<",pPDG="<<pPDG<<",tPDG="<<tPDG<<",nEv="
         <<nEvt<<",fN="<<fN<<",fD="<<fD<<",cP="<<cP<<",rM="<<rM<<",sA="<<sA<<G4endl;
-  //-------- Initialize CHIPS interaction (not necessary)
-  //G4QCHIPSWorld* theW=G4QCHIPSWorld::Get();
-  //theW->GetParticles(nop);           // Create CHIPS World of nop particles
+  //-------- Initialize CHIPS
+  G4QCHIPSWorld* theW=G4QCHIPSWorld::Get();
+  theW->GetParticles(nop);           // Create CHIPS World of nop particles
+  //G4Exception("***CHIPStest: TMP");
+  G4QCollision::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
+  G4QCollision::SetManual();
   // ********** Now momb is a momentum of the incident particle, if =0 => LOOP ************
+//#ifdef chips
+//#else
+  // Not necessary for CHIPS, only for GHAD: fake force condition
+  G4ForceCondition* cond = new G4ForceCondition;
+  *cond=NotForced;
+//#endif
   G4double mp=G4QPDGCode(pPDG).GetMass();
   G4double ep=mp;
   G4int cnE=1;
-  if(momb==0.) cnE=nMom;
+  if(momb==0.) cnE=nEn;
   else
-		{
+  {
     ep=std::sqrt(mp*mp+momb*momb);
     if(enb>0.) ep=enb;
   }
   //G4int tPDG=90000000+tgZ*1000+tgN;
   G4int    tgZ=(tPDG-90000000)/1000;
   G4int    tgN=tPDG-90000000-tgZ*1000;
+#ifdef debug
+  G4cout<<"Test49: projectilePDG="<<pPDG<<", tgZ = "<<tgZ<<", tgN = "<<tgN<<G4endl;
+#endif
   // ---------- Define material for the simulation ------------------
   G4int tgA        = tgZ+tgN; // Mass number - fake
   // The material can be copied from the commented cMaterial Factory above
@@ -390,13 +343,17 @@ int main()
   G4Material* material=0;
   // LOOPs for the wide performance test
   G4double      aTime      = 0. ;
-  G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
+  //G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
+  G4ThreeVector aDirection = G4ThreeVector(0.,1.,0.); // @@ Temporary "not along Z"
   G4int tgm=1;                                        // By default only one target
   if(!tPDG) // Make max for the LOOP over all targets and define materials
   {
+#ifdef debug
+    G4cout<<"Test49: targetPDG="<<tPDG<<", tgm = "<<tgm<<", nTg = "<<nTg<<G4endl;
+#endif
     tgm=nTg;
     for(G4int tgi=0; tgi<tgm; tgi++)
-				{
+    {
       tPDG=tli[tgi];
       tgZ = (tPDG-90000000)/1000;
       tgN = tPDG-90000000-tgZ*1000;
@@ -407,8 +364,7 @@ int main()
       element->AddIsotope(isotope, 100.*perCent);
       material = new G4Material(tnm[tgi], 1.*g/cm3, 1);
       material->AddElement(element, 1);
-      G4cout<<"Test49:-->Material("<<tgZ<<","<<tgN<<"):"<<tnm[tgi]<<","<<tsy[tgi]
-            <<"; index="<<material->GetIndex()<<G4endl;
+      G4cout<<"Test49:-->Material("<<tgZ<<","<<tgN<<"):"<<tnm[tgi]<<","<<tsy[tgi]<<G4endl;
       mat[tgi]=material;
     }
   }
@@ -426,58 +382,137 @@ int main()
   if(!material)
   {
     G4cout<<"Test49: Last Material "<<material->GetName()<<" is not defined."<<G4endl;
-	   exit(1);
+    exit(1);
   }
   // ---------------------- PSEUDO-TRACK DEFINISIONS -------------------------
   G4double nx = 0.;
   G4double ny = 0.;
   G4double nz = 0.;
-  G4int npart=1;                                      // By default only one particle
-  if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
-  // Different Process Managers are used for the atRest and onFlight processes
-		//G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
-  //G4VDiscreteProcess* proc = new G4QCollision;
-  // ============ GHAD definition of the Hadron Elastic process ====================
-  // Define the Elastic Process
-  //G4LEnp* theElasticModel = new G4LEnp;// A model for the Elastic Process (only for np!)
-  //G4LEpp* theElasticModel = new G4LEpp;// A model for the Elastic Process (only for pp!)
-  //G4LElastic* theElasticModel = new G4LElastic;// A model for the Elastic Process (Old)
-  //G4LElasticB* theElasticModel = new G4LElasticB;// A model for ElasticProcess (cons.E)
-  //G4ElasticCascadeInterface* theElasticModel = new G4ElasticCascadeInterface; //(Cascade)
-  //G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE; //(Coherent)
-  //G4HadronElasticProcess* proc = new G4HadronElasticProcess;
-  //proc->RegisterMe(theElasticModel);
-  //........... Unified GHAD/CHIPS elastic process of V.Ivanchenko ..............
-  ///G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE;//(Coherent,N.S.)
-  ///G4HadronElastic* theElasticModel = new G4HadronElastic(0.);//ElasticModel(cons4m,V.I.)
-  ///G4UHadronElasticProcess* proc = new G4UHadronElasticProcess;
-  ///proc->RegisterMe(theElasticModel);
-  // -> Alternative (one step) CHIPS definition of the Hadron Elastic Process
-  G4QElastic* proc = new G4QElastic;
-#ifdef debug
-  G4cout<<"G4GH_ElasticPhysics::ConstructProcess: the elastic model is defined"<<G4endl;
+  G4int npart=1;                                       // By default only one particle
+  if(!pPDG) npart=nPr;                                 // Make a LOOP ove all particles
+#ifdef chips
+  // *************** CHIPS process definition starts here *******************************
+  G4QCollision* proc = new G4QCollision;               // A general CHIPS process
+  ///G4QDiffraction* proc = new G4QDiffraction;           // A diffraction CHIPS process
+  ///G4QLowEnergy* proc = new G4QLowEnergy;               // fragment-nucleus universal
 #endif
+  // **************** GHAD process definition starts here *******************************
+#ifdef preco
+  G4PreCompoundModel* aModel = new G4PreCompoundModel(new G4ExcitationHandler); // Preco
+#endif
+#ifdef berti
+  G4CascadeInterface* aModel = new G4CascadeInterface; // Bertini
+#endif
+#ifdef binar
+  G4BinaryCascade* aModel = new G4BinaryCascade;       // Binary
+#endif
+#ifdef lep
+  G4HadronicInteraction* aModel;                       // LEP generators
+  if     (pPDG==2212) aModel = new G4LEProtonInelastic;
+  else if(pPDG==2112) aModel = new G4LENeutronInelastic;
+  else if(pPDG==-211) aModel = new G4LEPionMinusInelastic;
+  else if(pPDG== 211) aModel = new G4LEPionPlusInelastic;
+  else if(pPDG==-321) aModel = new G4LEKaonMinusInelastic;
+  else if(pPDG== 321) aModel = new G4LEKaonPlusInelastic;
+  else if(pPDG==-2112)aModel = new G4LEAntiProtonInelastic;
+  else
+  {
+    G4cout<<"-Error-Test49: Process is not defined in LEP for PDG="<<pPDG<<G4endl;
+    aModel = new G4LEProtonInelastic;
+  }
+#endif
+#ifdef hep
+  G4HadronicInteraction* aModel;                       // HEP generators
+  if     (pPDG==2212) aModel = new G4HEProtonInelastic;
+  else if(pPDG==2112) aModel = new G4HEProtonInelastic;
+  else if(pPDG==-211) aModel = new G4HEPionMinusInelastic;
+  else if(pPDG== 211) aModel = new G4HEPionPlusInelastic;
+  else if(pPDG==-321) aModel = new G4HEKaonPlusInelastic;
+  else if(pPDG== 321) aModel = new G4HEKaonPlusInelastic;
+  else if(pPDG==-2112)aModel = new G4HEAntiProtonInelastic;
+  else
+  {
+    aModel = new G4HEProtonInelastic;
+    G4cout<<"-Error-Test49: Process is not defined in HEP for PDG="<<pPDG<<G4endl;
+  }
+#endif
+#ifdef qgsc
+  G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF
+  G4StringChipsParticleLevelInterface* theCHIPS=new G4StringChipsParticleLevelInterface;
+  //G4cout<<"Tst19:*> Nuclear fragmentation model is defined"<<G4endl;
+  //// ------------- Defines a Kind of nuclear fragmentation model--------
+  aModel->SetTransport(theCHIPS);
+  G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
+  //G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
+  //// ----------- Defines a Kind of the QGS model -------------
+  G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
+  G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
+  aStringModel->SetFragmentationModel(aStringDecay);
+  aModel->SetHighEnergyGenerator(aStringModel);
+  G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
+  aModel->SetQuasiElasticChannel(theQuasiElastic);
+  //G4cout<<"Tst19:*> String model is defined"<<G4endl;
+  //// ----------- Defines energy limits of the model ----------
+  ///aModel->SetMinEnergy(8*GeV);                // Do we need this ?
+  ///aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
+#endif
+#ifdef chips
   if(!proc)
   {
-    G4cout<<"Tst49: there is no G4...Elastic process"<<G4endl;
-	   exit(1);
+    G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
+    exit(1);
   }
+  // Comment for G4QLowEnergies
+  proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+#else
+  G4HadronInelasticProcess* proc = 0;
+  if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
+  else if(pPDG==2112) proc = new G4ProtonInelasticProcess;
+  else if(pPDG==-211) proc = new G4PionMinusInelasticProcess;
+  else if(pPDG== 211) proc = new G4PionPlusInelasticProcess;
+  else if(pPDG==-321) proc = new G4KaonMinusInelasticProcess;
+  else if(pPDG== 321) proc = new G4KaonPlusInelasticProcess;
+  else if(pPDG==-2112) proc = new G4AntiProtonInelasticProcess;
+  else G4cout<<"-Error-Test49: Process is not defined for PDG="<<pPDG<<G4endl;
+  proc->RegisterMe(aModel); // from G4HadronicProcess
+  G4VCrossSectionDataSet* theCS;
+  if(pPDG==2212 || pPDG==2112) theCS = new G4ProtonInelasticCrossSection;
+  else if(pPDG==211||pPDG==-211) theCS = new G4PiNuclearCrossSection;
+  else theCS = new G4HadronInelasticDataSet; // For kaons anti-protons and others...
+  proc->AddDataSet(theCS);   // Can not be skipped for the event generator
+#endif
 #ifdef debug
   G4cout<<"Test49:--***-- process is created --***--" << G4endl; // only one run
 #endif
+#ifdef hdebug
+  G4Timer* timer = new G4Timer();
+  timer->Start();
+#endif
   G4int nTot=npart*tgm*cnE;
   G4int nCur=0;
-  for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
+  for(G4int pnb=0; pnb<npart; pnb++)           // LOOP over particles
   {
    if (npart>1) pPDG=pli[pnb];
    G4QContent pQC=G4QPDGCode(pPDG).GetQuarkContent();
-   G4int        cp = pQC.GetCharge();          // @@ must be the same as chp
-   if(pPDG==22) cp = 0;                        // QuarkContent of photon is not supported
-   if(pPDG==11 || pPDG==13 || pPDG==15) cp=-1; // QuarkContent of leptons is not supported
-   if(pPDG==-11|| pPDG==-13|| pPDG==-15) cp=1; // QuarkContent of antilept isn't supported
-   G4ParticleDefinition* part=0;               // DefaultProj is particle is empty
+   G4int        cp = pQC.GetCharge();          // Charge of the projectile
+   G4int        sp = pQC.GetStrangeness();     // Strangeness of the projectile
+   if(pPDG==22 || pPDG==12 || pPDG==14 || pPDG== 16 || pPDG==-11 || pPDG==-13 || pPDG==-15)
+   {                                           // QCont of gamma&neutrinos is not supported
+     cp=0;
+     sp=0;
+   }
+   if(pPDG==11 || pPDG==13 || pPDG== 15)       // QuarkContent of leptons is not supported
+   {
+     cp=-1;
+     sp=0;
+   }
+   if(pPDG==-11|| pPDG==-13|| pPDG==-15)       // QuarkContent of antilept isn't supported
+   {
+     cp=1;
+     sp=0;
+   }
+   G4ParticleDefinition* part=G4AntiSigmaPlus::AntiSigmaPlus(); // DefaultProj definition
    if(pPDG==2212) part=G4Proton::Proton();           // Definition of Proton projectile
-   else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG==22) part=G4Gamma::Gamma();          // Definition of gamma projectile
    else if(pPDG==11) part=G4Electron::Electron();    // Definition of electron projectile
    else if(pPDG==-11) part=G4Positron::Positron();   // Definition of positron projectile
@@ -485,8 +520,15 @@ int main()
    else if(pPDG==-13) part=G4MuonPlus::MuonPlus();   // Definition of the mu+ projectile
    else if(pPDG==15) part=G4TauMinus::TauMinus();    // Definition of tau- projectile
    else if(pPDG==-15) part=G4TauPlus::TauPlus();     // Definition of tau+ projectile
+   else if(pPDG==12) part=G4NeutrinoE::NeutrinoE();  // Definition of e_neutrino projectile
+   else if(pPDG==-12) part=G4AntiNeutrinoE::AntiNeutrinoE(); // anti-e_neutrino projectile
+   else if(pPDG==14) part=G4NeutrinoMu::NeutrinoMu();  // Definition of mu-neutrino proj.
+   else if(pPDG==-14) part=G4AntiNeutrinoMu::AntiNeutrinoMu(); // anti-mu_neutrino proj.
+   //else if(pPDG==16) part=G4NeutrinoTau::NeutrinoTau(); // Definition of tau-neutrino
+   //else if(pPDG==-16) part=G4AntiNeutrinoTau::AntiNeutrinoTau(); // anti-tau_neutrino
+   else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG==-211) part=G4PionMinus::PionMinus();// Definition of Pi- projectile
-   else if(pPDG==211)  part=G4PionPlus::PionPlus();// Definition of Pi+ projectile
+   else if(pPDG==211)  part=G4PionPlus::PionPlus();  // Definition of Pi+ projectile
    else if(pPDG==321)  part=G4KaonPlus::KaonPlus();  // Definition of K+ projectile
    else if(pPDG==-321) part=G4KaonMinus::KaonMinus();// Definition of K- projectile
    else if(pPDG==130)part=G4KaonZeroLong::KaonZeroLong();//Definition of K0_L projectile
@@ -501,41 +543,32 @@ int main()
    else if(pPDG==3334) part=G4OmegaMinus::OmegaMinus(); // Definition of Omega- projectile
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
-		 {
+   {
      G4cerr<<"***Test49: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
      G4Exception("***Test49: OnFlight Process is called for not supported particle");
    }
-   // Not for CHIPS & not for GHAD/G4LElasic: only for G4UHadronElastic of V. Ivanchenko
-   ///proc->BuildPhysicsTable(*part);//NotNecessary forG4LElastic&CHIPS. Only forNewEl V.I.
-   // ----------------------------
-   G4double pMass = part->GetPDGMass();                 // Mass of the projectile in IU
+   G4double pMass = part->GetPDGMass();                 // Mass of the projectile
    //
    G4ThreeVector aPosition(nx*mm, ny*mm, nz*mm);
    G4DynamicParticle* dParticle = new G4DynamicParticle(part,aDirection,0.);// Dummy Energy
+
+   //G4cout<<"Test49: before the new Track definition"<<G4endl;
    // General Track definition
    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
-   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   //G4DynamicParticle* pPart = new G4DynamicParticle(G4Proton::Proton(),aDirection,0.);
-   //G4DynamicParticle* nPart = new G4DynamicParticle(G4Neutron::Neutron(),aDirection,0.);
-   //G4Track* pTrack = new G4Track(pPart,aTime,aPosition); // Track definition (NoTarg)
-   //G4Track* nTrack = new G4Track(nPart,aTime,aPosition); // Track definition (NoTarg)
-   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   G4int    bnp=pQC.GetBaryonNumber();                  // Baryon number of the projectile
-   G4LorentzVector proj4Mom(0.,0.,momb,ep);
+
+   G4int    bnp=pQC.GetBaryonNumber();
    // ---------- Define material for the simulation ------------------
    //G4double tgA     = 26.98; // @@ Important? Can it be just tgZ+tgN?
-   G4int tgA        = tgZ+tgN;
+   G4int tgA        = tgZ+tgN; // @@ Temporary, not good
    G4String nameMat = "Thin Target";  // @@ Not important can be an arbitrary name
    // The material can be copied from the commented cMaterial Factory above
    G4Isotope* isotope = new G4Isotope("Isotop", tgZ, tgA);
    G4Element* element = new G4Element("ZA_Isotop", "ZA", 1);
    element->AddIsotope(isotope, 100.*perCent);
-   G4Material* material = new G4Material("ZA_Isomer", 2.*g/cm3, 1);
+   G4Material* material = new G4Material("ZA_Isomer", 1.*g/cm3, 1);
    material->AddElement(element, 1);
 #ifdef debug
-   G4cout<<"Test49:Material=Element: Z="<<element->GetZ()<<"("<<tgZ<<"), A="
-         <<element->GetA()*mole/g<<"("<<tgA<<")"<<element->GetN()<<G4endl;
-   G4cout << *material << G4endl;
+   G4cout<<"Test49:--- Material is defined ---" << G4endl; // only one run
 #endif
    // For the Material Factory case
    //G4String  nameMat  = "Si";
@@ -543,7 +576,7 @@ int main()
    if(!material)
    {
      G4cout<<"Test49:Material "<<nameMat<<" is not defined in the Test49Material"<<G4endl;
-	    exit(1);
+     exit(1);
    }
    // ----------- Geometry definition (simple BOX) ----------------
    G4double dimX = 100.*cm;
@@ -557,10 +590,10 @@ int main()
 #ifdef pverb
    G4cout<<"Test49:###### Start new run #####" << G4endl; // only one run
 #endif
-   G4int    chp=static_cast<G4int>(part->GetPDGCharge()); // Charge of the projectile
 #ifdef debug
-   G4double totCN  = tgZ+chp;
-   G4int    totBNN = tgA+bnp;
+   G4double totCN  = tgZ+part->GetPDGCharge();
+   G4double totSN  = tgZ+part->GetPDGCharge();
+   G4int    totBNN = tgZ+tgN+part->GetBaryonNumber();
 #endif
    G4double theStep   = 0.01*micrometer;
    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
@@ -578,47 +611,44 @@ int main()
    for(G4int ip=0; ip<nT; ip++) tVal[ip]=(fT+dT*ip)/1000000.;// Fill the t-histogram
 #endif
    // Create a DynamicParticle
-   for(G4int nen=0; nen<cnE; nen++)                         // LOOP over projectile energy
-		 {
-    if(cnE>1)
-    {
-      ep = std::sqrt(mom[nen]*mom[nen]+pMass*pMass);
-      mp = pMass;
-    }
-    G4double  energy = (ep-mp)*MeV;                         // kinetic particle energy IU
-#ifdef pdebug
-    G4cout<<"Test49: M1="<<mp<<", MM="<<pMass<<", T="<<energy<<", p="<<mom[nen]<<G4endl;
+   for(G4int nen=0; nen<cnE; nen++)                          // LOOP over projectile energy
+   {
+    G4double  energy = (ep-mp)*MeV;                          // projectile kinetic energy
+    if(cnE>1) energy = eli[nen]*MeV;
+#ifdef debug
+    G4cout<<"Test49: M="<<mp<<", T="<<energy<<", MeV"<<G4endl;
 #endif
-    dParticle->SetKineticEnergy(energy);// Fill the Kinetic Energy of the projectile
+    dParticle->SetKineticEnergy(energy); // Fill the Kinetic Energy of the projectile
 
     for(G4int tgi=0; tgi<tgm; tgi++) // Loop over materials
     {
- 				nCur++;
+     nCur++;
      if (tgm>1)
      {
       tPDG=tli[tgi];
       tgZ = (tPDG-90000000)/1000;
       tgN = tPDG-90000000-tgZ*1000;
-      tgA = tgN+tgZ;
       material=mat[tgi];
       G4Element* curEl=(*(material->GetElementVector()))[0];
       G4cout<<"Test49: Material="<<material->GetName()<<", Element[0]="<<curEl->GetName()
-												<<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
+            <<",A[0]="<<(*(curEl->GetIsotopeVector()))[0]->GetN()<<" is selected."<<G4endl;
      }
-  			G4cout<<"Test49:*NewRun* Targ="<<tPDG<<",Proj="<<pPDG<<",P="<<mom[nen]<<" MeV/c, =>> "
-           <<nCur<<" of "<<nTot<<G4endl;
-     G4double mt=G4QPDGCode(tPDG).GetMass()*MeV;             // Target mass in IU (MeV?)
+     G4cout<<"Test49:NewRun: Targ="<<tPDG<<",M="<<G4QPDGCode(tPDG).GetMass()<<", Proj="
+           <<pPDG<<", E="<<energy<<" MeV, Run #"<<nCur<<" of "<<nTot<<G4endl;
+     //G4double mt=G4QPDGCode(tPDG).GetMass();             // @@ just for check
      G4QContent tQC=G4QPDGCode(tPDG).GetQuarkContent();
      G4int    ct=tQC.GetCharge();
+     G4int    st=tQC.GetStrangeness();
      G4int    bnt=tQC.GetBaryonNumber();
 #ifdef debug
      G4cout<<"Test49: pQC"<<pQC<<", pch="<<cp<<", tQC"<<tQC<<", tch="<<ct<<G4endl;
 #endif
-
      G4int    totC=cp+ct;
+     G4int    totS=sp+st;
      G4int    totBN=bnp+bnt;
 #ifdef debug
-     G4cout<<"Test49:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<G4endl;
+     G4cout<<"Test49:tC="<<totC<<"?="<<totCN<<",tB="<<totBN<<"?="<<totBNN<<",tS="<<totS
+           <<"?="<<totSN<<G4endl;
 #endif
      // Step Definition
      G4Step* step = new G4Step();
@@ -650,115 +680,75 @@ int main()
 #ifdef pverb
      G4cout<<"Test49: The Box frame is set "<<G4endl;
 #endif
-     //G4VTouchable* vtouch = nav->CreateTouchableHistory();
      G4TouchableHandle touch(nav->CreateTouchableHistory());
 #ifdef pverb
-     G4cout<<"Test49: The TouchableHandle is defined "<<G4endl;
+    G4cout<<"Test49: The TouchableHandle is defined "<<G4endl;
 #endif
      G4Timer* timer = new G4Timer();
      timer->Start();
 #ifdef idebug
-     G4cout<<"Test49: Run's started, timer's started, kinEnergy="<<energy<<"(MeV)"<<G4endl;
+     G4cout<<"Test49: Run is started, timer is started, kinEnergy="<<energy<<G4endl;
 #endif
      const G4DynamicParticle* sec = 0;
      G4ParticleDefinition* pd = 0;
-     G4ThreeVector  mom;
+     G4ThreeVector  mom(0.,0.,0.);
      G4LorentzVector totSum, lorV;
-     G4double e, p, m, sm;
+     G4double e, p, m, totKE;
      // @@ G4double px, py, pz, pt;
+     //G4VParticleChange* aChange = 0;
      G4ParticleChange* aChange = 0;
-     G4double e0 = energy+pMass;                  // Total energy of the projectile in IU
-     G4double pMass2=pMass*pMass;
-     G4double pmax=std::sqrt(e0*e0-pMass2);       // Momentum of the projectile in IU
-     G4LorentzVector incident4M(0.,0.,pmax,e0);
-     G4double et=e0+mt;                           // Total energy in the reaction in IU
+     G4double e0 = energy+pMass;
+     G4ThreeVector pmax=std::sqrt(e0*e0-pMass*pMass)*aDirection;
+     //G4double et=e0+mt;
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
      G4int    iRandCount = nEvt%100;
      G4double vRandCount = 0.;
-     while (iRandCount>0)                         // Shift of the RNDN values 
+     while (iRandCount>0)                // Shift of the RNDN values 
      {
-      vRandCount = G4UniformRand();               // Fake calls
+      vRandCount = G4UniformRand();     // Fake calls
       iRandCount--;
      }
 #ifdef tdebug
-     for(G4int it=0; it<nT; it++) tSig[it]=0;     // Reset the output value
+     for(G4int it=0; it<nT; it++) tSig[it]=0; // Reset the output value
 #endif
-#ifdef idebug
-     G4cout<<"Test49: Before EventLoop, nEvs="<<nEvt<<",M="<<pMass<<",T="<<energy<<G4endl;
-#endif
-     G4double dTot=0.;
-     G4double dEl=0.;
-     G4int goodE=0;                              // a#of good events
-     G4int misTG=0;                               // a#of events with missing recoil
-     G4int badTG=0;                               // a#of events with wrong recoil
-     G4int zeroO=0;                               // a#of events with noLead & 0 in OUT
-     G4int alonO=0;                               // a#of events with noLead & 1 in OUT
-     G4int badOT=0;                               // a#of events with wrong secondaries
-     const G4int ntpt=40;
-     G4double thist[ntpt];                        // Values of t in the histogram
-#ifdef tdisthist
-     G4double shist[ntpt];                        // Collected values in the histogram
-#endif
-     //G4double tMin=.0001;                         // in GeV^2  (pPb)
-     //G4double tMin=.00001;                        // in GeV^2  (pd)
-     //G4double tMin=.000005;                       // in GeV^2 (pp_le)
-     //G4double tMin=.0005;                         // in GeV^2 (pp_he4)
-     G4double tMin=.0003;                         // in GeV^2 (pp_he3)
-     ///G4double tMax=energy*pMass/GeV/GeV;          // 1/2 max -t value in GeV^2 (pp)
-     ///if(tMax>9.)tMax=9.;
-     G4double gev2=GeV*GeV;
-     G4double tmt=(e0-mp)*mt/gev2;                  // T_proj*M_targ (GeV^2)
-     //G4double emt=e0*mt/gev2;                     // E_proj*M_targ (GeV^2) - Wrong Calc
-     //G4double mp2=mp*mp/gev2;                     // M_proj^2 (GeV^2)
-     //G4double mt2=mt*mt/gev2;                     // M_trag^2 (GeV^2)
-     //G4double pl2=pmax*pmax/gev2;                 // P_proj^2 (GeV^2)
-     //G4double tMax=4.8*pl2*mt2/(mt2+mp2+emt+emt); // max -t value in GeV^2 (pd?-Wrong)
-     G4double tMax=2.2*tmt;                       // max -t value in GeV^2 (pA)
-     G4double tMaM=3.3;                           // max_max -t value in GeV^2 (pA)
-     G4cout<<"Test49: Mt="<<mt<<", Mp="<<mp<<", tmt="<<tmt<<", E="<<e0<<G4endl;
-     if(tMax>tMaM) tMax=tMaM;
-     G4double ltMin=std::log(tMin);
-     G4double ltMax=std::log(tMax);
-     G4double dlt=(ltMax-ltMin)/ntpt;
-#ifdef debug
-     G4cout<<"Test49: n="<<ntpt<<", ti="<<tMin<<", ta="<<tMax<<", dl="<<dlt<<G4endl;
-#endif
-     G4double hdlt=dlt/2;
-     G4double beglt=ltMin+hdlt;
-     for(G4int ti=0; ti<ntpt; ti++) thist[ti]=std::exp(beglt+ti*dlt);
-#ifdef debug
-     G4cout<<"Test49: beg="<<beglt<<", dl="<<dlt<<", t0="<<thist[0]<<G4endl;
-#endif
-     // Fake call to avoib GHAD complains
-     G4ForceCondition* cond = new G4ForceCondition;
-     *cond=NotForced;
-     // End of the fake call
-     // ************************** CROSS-SECTION *******************************
-     // -----> For GHAD
-     //G4HadronCrossSections* HadrCS = new G4HadronCrossSections;// GHAD/DB of CrossSec's
-     G4ProtonInelasticCrossSection* HadrCS = new G4ProtonInelasticCrossSection;// AW
-     // -----> For HP
-     //G4NeutronHPElasticFS* theFS = new G4NeutronHPElasticFS;
-     //G4String dirName=getenv("NeutronHPCrossSections");
-     //G4String tString = "/Elastic/";
-     //dirName = dirName + tString;
-     //G4NeutronHPChannel HadrCS;
-     //HadrCS.Init((*(G4Element::GetElementTable()))[0], dirName);
-     //while(!HadrCS.Register(theFS));
-     //delete theFS;
-     // ------> for CHIPS
-     //G4VQCrossSection* HadrCS = G4QElasticCrossSection::GetPointer(); // CHIPS ElasticCS
 #ifdef csdebug
+     //G4cout<<"Test49: before new Mu-Nuclear process"<<G4endl;
+     // -----> For GHAD muons
+     ///G4MuNuclearInteraction* HadrPR = new G4MuNuclearInteraction;// GHAD MuNuclear Proc.
+     ///HadrPR->SetPhysicsTableBining(.01*GeV, 7.e8*GeV, 1000); // For the table
+     ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QCollision
+     // -----> For GHAD hadrons
+     G4PiNuclearCrossSection  barashPiXS;      // Barashenkov parameterization of pion-A XS
+     G4CrossSectionDataStore  theElasticXS;    // GEISHA Elastic hadron-A XS
+     G4HadronElasticDataSet   theElasticData;  // GEISHA Elastic SX Tables
+     theElasticXS.AddDataSet(&theElasticData); // Put parameterization in the XS class
+     G4CrossSectionDataStore  theInelasticXS;  // GEISHA Inelastic hadron-A XS
+     G4HadronInelasticDataSet theInelasticData;// GEISHA Elastic SX Tables
+     theInelasticXS.AddDataSet(&theInelasticData); // Put parameterization in the XS class
+     // -----> For CHIPS
+     // ..... CHIPS on the Process level
+     ///G4QCollision* HadrPR = new G4QCollision(); // CHIPS MuNuc
+     // ..... CHIPS on the Cross-Section level
+     //G4VQCrossSection* HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // CHIPS MuNuc
+     // ______ End of CHIPS/GHAD ___________
+     //G4cout<<"Test49: before new Mu-Nuclear process"<<G4endl;
      // --- A temporary LOOP for calculation of total cross section ------------
-     G4double pMax=500.;                            // in GeV
-     G4double pMin=.05;                              // in GeV/c
-     G4int nic=50;
+     //G4double pMin=.02;                            // in GeV --> for protons
+     G4double pMax=300.;                             // in GeV ==> for pions
+     //G4double pMax=10000000.;                      // in GeV --> np
+     //G4double pMax=1000.;                           // in GeV --> np->inelastic
+     //G4double pMin=.03;                            // in GeV --> np->dg
+     G4double pMin=.1;                               // in GeV --> for pions
+     //G4double pMin=.000004;                        // in GeV --> for neutrons
+     //G4double pMax=700.;                           // in GeV
+     G4int nic=50;                                 // Number of points
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
      G4double dlp=(lpMax-lpMin)/nic;
      G4double lmic=lpMin-dlp/2;
-     G4double hMa=pMass/GeV;                       //Mass of a projectile in GeV
+     //G4double hMa=.938272;                         // Mass of a proton in GeV
+     G4double hMa=.13957;                            // Mass of a charged pion in GeV
      G4double hMa2=hMa*hMa;
      G4cout<<"Test49: mi="<<lmic+dlp<<",ma="<<lmic+dlp*nic<<",d="<<dlp<<",n="<<nic<<", Z="
            <<tgZ<<", N="<<tgN<<", Element="<<*element<<G4endl;
@@ -767,441 +757,524 @@ int main()
        lmic+=dlp;
        G4double mic=std::exp(lmic);                // current Momentum in GeV
        G4double p2=mic*mic;
-       G4double ken=(std::sqrt(p2+hMa2)-hMa)*GeV;
-       dParticle->SetKineticEnergy(ken);           // Fill Kinetic Energy of the projectile
-       // GHAD Cross-section
-       ///G4double CS = HadrCS->GetElasticCrossSection(dParticle,element);
-       //HadrCS->SetCorrectInelasticNearZero(true);
-       //G4double CS = HadrCS->GetInelasticCrossSection(dParticle,element); //Geisha
-       G4double CS = HadrCS->GetCrossSection(dParticle,element,0.); // A.-W.
-       // HP_GHAD Cross-section
-       //G4double CS = HadrCS.GetXsec(ken*GeV);
-							//G4NeutronHPThermalBoost aThermalE;
-       //G4double CS = HadrCS.GetXsec(aThermalE.GetThermalEnergy(aTrack,element,
-  					//	                                                    material->GetTemperature()));
-       // ==================== End of GHAD ==============================
-       // CHIPS calculation by G4QElasticCrossSection
-       //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
-       // ------ direct CHIPS approximation of elastic cross section --------
-       //G4double sp=std::sqrt(mic);
-       //G4double dl=lmic-3.;
-							//G4double CS=2.648/p2/sp+(18.73+.6351*dl*dl+9./mic)/(1+.4186*lmic)/(1+.3953/p2/p2);
-       //CS*=millibarn;
-       // ------ end of direct CHIPS approximation (temporary, not necessary)--------
-       gTrack->SetStep(step);            // Now step is included in the Track (see above)
-       gTrack->SetKineticEnergy(ken);    // Duplication of Kin. Energy for the Track
-       gTrack->SetTouchableHandle(touch);// Set Box touchable history
-					  G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond); // Calculate the meanFreePath
-       G4cout<<"Test49: P="<<mic<<" (GeV/c), CrosSec="<<CS/millibarn<<",MFP="<<mfp<<G4endl;
+       G4double ken=std::sqrt(p2+hMa2)-hMa;
+       // CHIPS calculation by G4QElasticCrossSection___ Only for CHIPS CS level
+       //G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG); 
+       //
+       // === From here CHECK of energy-momentum conservation starts ===
+       //G4double den=0.;
+       //gTrack->SetStep(step);             // Now step is included in theTrack (see above)
+       //gTrack->SetKineticEnergy(ken*GeV); // Duplication of KinEnergy for the Track (?!)
+       //gTrack->SetTouchableHandle(touch); // Set Box touchable history
+       ////
+       ////G4cout<<"Test49: before MeanFreePath out of Loop"<<G4endl;
+       //G4double MFP = 2.e99;
+       //MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+       ////G4cout<<"Test49: after MeanFreePath out of Loop MFP="<<MFP<<G4endl;
+       //G4int nen=10000;
+       //G4int cen=0;
+       /////if(CS>0.) for(G4int ie=0; ie<nen; ie++) //@@ for CHIPS only
+       //if(MFP<1.e99)for(G4int ie=0; ie<nen; ie++)
+       //{
+       //  //
+       //  gTrack->SetStep(step);            // Now step is included inTheTrack (see above)
+       //  gTrack->SetKineticEnergy(ken*GeV);// Duplication of KinEnergy for the Track (?!)
+       //  gTrack->SetTouchableHandle(touch);// Set Box touchable history
+       //  //
+       //  //G4cout<<"Test49: before MeanFreePath"<<G4endl;
+       //  HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+       //  // GHAD/CHIPS Energy Deposition
+       //  //G4cout<<"Test49: before PostStepDoIt ie="<<ie<<G4endl;
+       //  G4ParticleChange* aChange =
+       //              static_cast<G4ParticleChange*>(HadrPR->PostStepDoIt(*gTrack,*step));
+       //  //G4cout<<"Test49:afterPostStepDoIt, Alive="<<aChange->GetTrackStatus()<<G4endl;
+       //  //if(aChange->GetTrackStatus()==fAlive) den += ken*GeV-aChange->GetEnergy();//dE
+       //  if(aChange->GetTrackStatus()==fAlive && 1.-aChange->GetEnergy()/ken/GeV>.000001)
+       //  {
+       //    G4double dz=aChange->GetMomentumDirection()->z();
+       //    den += std::sqrt(1.-dz*dz);
+       //    cen++;
+       //  }
+       //  G4int nS = aChange->GetNumberOfSecondaries();
+       //  //G4cout<<"Test49: before delete secondaries, nS="<<nS<<G4endl;
+       //  if(nS) for(G4int ides=0; ides<nS; ides++) delete aChange->GetSecondary(ides);
+       //  //G4cout<<"Test49: before aCange->Clear, nS="<<nS<<G4endl;
+       //  aChange->Clear();
+       //  //
+       dParticle->SetKineticEnergy(ken*GeV);   // Fill Kinetic Energy of thep rojectile
+       //  // GHAD Cross-section on process level
+       //  //G4double MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+       // ..... GHAD on the Cross-Section level .... mu-nuclear
+       //G4double aZ=tgZ;
+       //G4double aA=(tgZ+tgN)*g/mole;
+       //G4double CS = HadrPR->ComputeMicroscopicCrossSection(part,ken*GeV,aZ,aA);
+       //G4double CS = HadrPR->GetElasticCrossSection(dParticle,element);
+       // ..... GHAD on the Cross-Section level .... pions
+       //G4double CS = theElasticXS.GetCrossSection(dParticle,element,T0) +
+       //              theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
+       G4double ICS= barashPiXS.GetCrossSection(dParticle,element,T0);// BarashenkovPiAin
+       G4double ECS= barashPiXS.GetElasticXsc();// BarashenkovPiAin (call after GetCrSec)
+       G4double CS = barashPiXS.GetTotalXsc();// BarashenkovPiAtot (call after GetCrosSe)
+       //  // ==================== End of GHAD ==============================
+       //  // CHIPS calculation by G4QElasticCrossSection
+       //  // ..... CHIPS CS on the CS level
+       //  //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
+       //  // ..... CHIPS dE on the CS level
+       //  //den += HadrCS->GetExchangeEnergy(); 
+       //  // ..... CHIPS CS on the Process level
+       //  //G4double MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
+       //} // End of energy loop
+       // === End of CHECK of energy and momentum conservation
+       //G4cout<<"Test49: P="<<mic" (GeV/c), MeanFreePath="<<MFP<<G4endl;
+       G4cout<<"Test49: P="<<mic<<" "<<CS/millibarn<<G4endl;
+       //G4cout<<"Test49: P="<<mic<<" (GeV/c), XS="<<CS/millibarn/tgA<<G4endl; // Muons
+       //G4cout<<"Test49: P="<<mic<<" (GeV/c), <dE>/E="<<den/nen/ken/GeV<<G4endl;
+       //G4cout<<"Test49: P="<<mic<<" (GeV/c), <std::sin(t)>="<<den/cen<<G4endl;
      }
-     // @@ TEMPORARY !!!!
-     return EXIT_SUCCESS;
      // --- End of the temporary LOOP for calculation of total cross section ------------
+     return EXIT_SUCCESS;
 #endif
-     if(HadrCS) dParticle->SetKineticEnergy(energy);// Fill the KineticEnergy of projectile
-#ifdef tdisthist
-     // --> For GHAD
-     ///G4double reactCS = HadrCS->GetElasticCrossSection(dParticle,element);
-     // --> For HP_GHAD
-     //G4double reactCS = HadrCS.GetXsec(energy);
-     // ==================== End of GHAD ==============================
-     // --> For CHIPS ("false" of onlyCS to prepare parameters for differential cross-sect)
-     // P=pmax is in GeV, but this is not necessary
-     G4double reactCS = HadrCS->GetCrossSection(false, pmax, tgZ, tgN, pPDG);
-     // --- End
-     for(G4int is=0; is<ntpt; is++) shist[is]=0.; // Reset Collected values
+#ifdef idebug
+     G4cout<<"Test49: Before the event loop, nEvents= "<<nEvt<<G4endl;
 #endif
-     // ********************* END OF CROSS-SECTION ***************************************
-#ifdef debug
-     G4cout<<"Test49:---->, E="<<energy<<"(IU=MeV), CrossSect="<<reactCS/millibarn<<G4endl;
-#endif
-     gTrack->SetStep(step);            // Now step is included in the Track (see above)
-     gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
-     gTrack->SetTouchableHandle(touch);// Set Box touchable history
-					G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond);
-     if(mfp<1.e12) for (G4int iter=0; iter<nEvt; iter++)
+     G4double dTot=0.;
+     G4double dEl=0.;
+     G4int    nDoNothing=0;
+     for (G4int iter=0; iter<nEvt; iter++)
      {
 #ifdef debug
-      G4cout<<"Test49: ### "<<iter<< "-th event starts.### energy(IU)="<<energy<<G4endl;
+      G4cout<<"Test49: ### "<<iter<< "-th event starts.### energy="<<energy<<G4endl;
 #endif
 
-      if(!(iter%100000)&&iter)G4cout<<"*=>TEST49: "<<iter<<" events are simulated"<<G4endl;
+      if(!(iter%1000)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
 
-      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RANDOM ENERGY AND RANDOM n/p SEQUENCE
-      //energy=G4UniformRand()*.3*GeV;
-      //gTrack=pTrack;
-      //if(G4UniformRand()>.5) gTrack=nTrack;
-      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
       gTrack->SetTouchableHandle(touch);// Set Box touchable history
 #ifdef debug
-      G4cout<<"Test49: Before PostStepDoIt, T="<<energy<<G4endl;
+      G4cout<<"Test49: Before the fake proc->GetMeanFreePath call"<<G4endl;
 #endif
-      G4bool flead=false;   // existance of the leading particle
-      G4bool fakeel=true;   // bad event (must be changed to good inside while)
-      G4int fcn=0;
-      while(fakeel)
-      {
-        fcn++;
+//#ifdef chips
+//#else
+      proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
+//#endif
 #ifdef debug
-        G4cout<<"Test49: Before the fake proc->GetMeanFreePath call"<<G4endl;
+      G4cout<<"Test49: Before PostStepDoIt"<<G4endl;
 #endif
-        // CHIPS does not need it: keep only for GHAD
-						  proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
-#ifdef debug
-        G4cout<<"Test49: After the fake proc->GetMeanFreePath call"<<G4endl;
-#endif
-        //..............................................................................
-        aChange = static_cast<G4ParticleChange*>(proc->PostStepDoIt(*gTrack,*step));
-        G4int nS = aChange->GetNumberOfSecondaries();
-        G4TrackStatus lead = aChange->GetTrackStatus();
-#ifdef fdebug
-        G4cout<<"Test49:AfterPostStepDoIt #"<<fcn<<",NSec="<<nS<<",Lead=0?="<<lead<<G4endl;
-#endif
-        flead=false;
-        G4int bn1=-2727;
-        G4int ch1=-2727;
-        if(nS)
-        {
-          const G4DynamicParticle* sec0=aChange->GetSecondary(0)->GetDynamicParticle();
-          bn1=sec0->GetDefinition()->GetBaryonNumber();
-          ch1=static_cast<G4int>(sec0->GetDefinition()->GetPDGCharge()); 
-#ifdef fdebug
-          G4double Ekin0=sec0->GetKineticEnergy();
-          G4int PDG0=sec0->GetDefinition()->GetPDGEncoding();
-          G4cout<<"Test49:Rec, CH="<<ch1<<",BN="<<bn1<<",PDG="<<PDG0<<",T="<<Ekin0<<G4endl;
-#endif
-        }
-        G4int ch2=-2727;
-        G4int bn2=-2727;
-        if(lead==fAlive)
-						  {
-          flead=true;
-#ifdef fdebug
-          G4double len=aChange->GetEnergy();  // Energy of the leading particle in MeV
-          G4double lma=aChange->GetMass();
-          G4double lch=aChange->GetCharge();
-          G4cout<<"Test49: Leading particle Ekin="<<len<<",M="<<lma<<",Chrg="<<lch<<G4endl;
-          G4cout<<"Test49: b1="<<bn1<<" = tgA="<<tgA<<", c1="<<ch1<<" = tgZ="<<tgZ<<G4endl;
-#endif
-          if(bn1==tgA&&ch1==tgZ) fakeel=false;
-          else if(bn1==-2727) misTG++;
-          else badTG++;
-        }
-        else
-								{
-          if(nS>1)
-          {
-            const G4DynamicParticle* sec1=aChange->GetSecondary(1)->GetDynamicParticle();
-            ch2=static_cast<G4int>(sec1->GetDefinition()->GetPDGCharge());
-            bn2=sec1->GetDefinition()->GetBaryonNumber();
-#ifdef fdebug
-            G4double Ekin1=sec1->GetKineticEnergy();
-            G4int PDG1=sec1->GetDefinition()->GetPDGEncoding();
-            G4cout<<"Test49: 2nd secondary BN="<<bn2<<",PDG="<<PDG1<<",Ek="<<Ekin1<<G4endl;
-#endif
-          }
-          if(bn1==bnp&&ch1==chp && bn2==tgA&&ch2==tgZ ||
-             bn2==bnp&&ch2==chp && bn1==tgA&&ch1==tgZ)     fakeel=false;
-          else if(bn1==-2727) zeroO++;
-          else if(bn2==-2727) alonO++;
-          else badOT++;
-								}
-#ifdef debug
-        G4cout<<"Test49:b1="<<bn1<<",b2="<<bn2<<",p="<<bnp<<",t="<<tgA<<",c="<<fcn
-              <<", fake="<<fakeel<<G4endl;
-#endif
-        if(fakeel) // Cleaning of the bad secondaries
-        {
-          G4int nS = aChange->GetNumberOfSecondaries();
-          for(G4int ides=0; ides<nS; ides++) delete aChange->GetSecondary(ides);
-          aChange->Clear();
-          if(alonO+zeroO+badOT+misTG+badTG>100000+nEvt) break;
-        }
-      } // End of while
-      if(fakeel) break;
-      goodE++;
-#ifdef debug
-      G4cout<<"Test49: ***OUT OF LOOP*** c="<<fcn<<" ****************************"<<G4endl;
-#endif
+      aChange = static_cast<G4ParticleChange*>(proc->PostStepDoIt(*gTrack,*step)); // Up
       G4int nSec = aChange->GetNumberOfSecondaries();
+      G4TrackStatus lead = aChange->GetTrackStatus();
 #ifdef debug
-      G4cout<<"Test49: "<<nSec<<" secondaries in the event"<<G4endl;
+      G4cout<<"T19:AfterPostStepDoIt,nS="<<nSec<<",l="<<lead<<" =? fA="<<fAlive<<G4endl;
 #endif
-      G4double totCharge = totC;
-      //............................ONLY for CHIPS................................
-      G4int    curN=proc->GetNumberOfNeutronsInTarget(); // Works only for CHIPS
-      G4int    dBN = curN-tgN;
-      G4int    totBaryN = totBN+dBN;
-      G4int    curPDG=tPDG+dBN;
-      G4LorentzVector Residual=proc->GetEnegryMomentumConservation(); // Only for CHIPS
-						//............................ONLY FOR GHAD...............................
-      ///G4int    totBaryN = totBN;                   // Substitute for not CHIPS
-      ///G4int    curPDG=tPDG;                        // Substitute for not CHIPS
-      //........................................................................
-      G4double curM=G4QPDGCode(curPDG).GetMass();  // Update mass of the TargetNucleus
-      totSum = G4LorentzVector(0., 0., pmax, et+curM-mt);
-      //
-#ifdef debug
-      G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
-      G4cout<<"Test49: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
-#endif
-      // @@ ----------------------- Begin
-      G4double weight = aChange->GetSecondary(0)->GetDynamicParticle()->GetKineticEnergy();
-#ifdef debug
-      G4cout<<"Test49:----------------: Weight="<<weight<<G4endl;
-#endif
-      dTot+=weight;
-      if(nSec>1) dEl+=weight;
-      // @@ ----------------------- End
-      //G4int nbar = 0;
-
-      // @@ G4int npt=0;
-      G4int    c=0;    // Prototype of the PDG Code of the particle
-      G4int nGamma=0;
-      G4double EGamma=0;
-      G4int nP0=0;
-      G4int nPP=0;
-      G4int nPN=0;
-      G4int nKaons=0;
-      G4int nEta=0;
-      // @@ G4int nAlphas=0;
-      G4int nPhotons=0;
-      G4int nProtons=0;
-      G4int nNeutrons=0;
-      G4int nSpNeut=0;
-      // @@ G4int nSpAlph=0;
-      G4int nOmega=0;
-      // @@ G4int nDec=0;
-      // @@ G4int dirN=0;
-#ifdef pdebug
-      G4cout<<"Test49:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
-      if(!(iter%100)) G4cerr<<"#"<<iter<<G4endl;
-#endif
-      G4bool alarm=false;
-      // @@ G4bool rad=false;
-      // @@ G4bool hyp=false;
-      // @@ G4bool badPDG=false;
-      // ------- LOOP over secondary particles -------
-      G4int ii=0;
-      if(flead) ii=-1;
-      for(G4int i=ii; i<nSec; i++)
+      if(!nSec && lead==fAlive)
       {
-        if(i>-1)
-								{
-          sec = aChange->GetSecondary(i)->GetDynamicParticle();
-          pd  = sec->GetDefinition();
-          c   = pd->GetPDGEncoding();
-          if(!c)
-          {
-            G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
-            G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-            c=90000000+chrg*999+bary;
-          }
-          m   = pd->GetPDGMass();
-          mom = sec->GetMomentumDirection();
-          e   = sec->GetKineticEnergy();
-        }
-        else                                // leading particle
+        G4double eOut=aChange->GetEnergy();
+        if(std::fabs(eOut-energy) < .01) nDoNothing++; // Calculate # of DoNothing events
+        else G4cerr<<"**Tst19: DoNothing E="<<eOut<<" # "<<energy<<G4endl;
+      }
+      else
+      {
+#ifdef debug
+       G4cout<<"T19: "<<nSec<<",L="<<lead<<","<<fAlive<<",tC="<<totC<<",tS="<<totS<<G4endl;
+#endif
+       G4LorentzVector totSumM(0.,0.,0.,0.);
+       G4int begi=0;
+       if(nSec || lead==fAlive)
+       {
+        G4int totCharge = totC; 
+        G4int totStran  = totS; 
+#ifdef chips
+        G4int    curN=proc->GetNumberOfNeutronsInTarget();
+#else
+        // for GHAD
+        G4int    curN = tgN; 
+#endif
+        G4int    dBN = curN-tgN;
+        G4int    totBaryN = totBN+dBN;
+        G4int    curPDG=tPDG+dBN;
+        G4double curM=G4QPDGCode(curPDG).GetMass(); // Update mass of the TargetNucleus
+        totSum = G4LorentzVector(pmax, e0+curM);
+        totKE=0.;
+        if(lead==fAlive)
         {
-          pd  = part;                       // @@ if there is a mistake...?
-          c   = pd->GetPDGEncoding();
-          if(!c)
-          {
-            G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
-            G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-            c=90000000+chrg*999+bary;
-          }
-          m   = aChange->GetMass();
-          mom = *(aChange->GetMomentumDirection());
-          e   = aChange->GetEnergy();
+          begi=-1;                                  // Means that leading particle is alive
+          totCharge-=static_cast<G4int>(aChange->GetCharge());
+          totStran-=sp;
+          totBaryN-=bnp;
+          G4double sen=aChange->GetEnergy();
+          G4double sma=aChange->GetMass();
+          const G4ThreeVector* smo=aChange->GetMomentumDirection();
+          G4double ten=sen+sma;
+          G4LorentzVector s4m(aChange->CalcMomentum(sen,*smo,sma),ten);
+#ifdef debug
+          G4cout<<"Test49: E="<<sen+sma<<",p="<<(*smo)*std::sqrt(ten*ten-sma*sma)<<G4endl;
+          G4cout<<"Test49: L4m="<<s4m<<",T4m="<<totSum<<", N="<<curN<<",M="<<curM<<G4endl;
+#endif
+          totKE+=s4m.e()-sma;
+          totSum-=s4m;
+          totSumM=totSum;
         }
-	       if (e < 0.0)
-        {
-	         G4cerr<<"**Test49:Event#"<<iter<<",Hadron#"<<i<<", E="<<e<<" <0 (Set 0)"<<G4endl;
-          e = 0.0;
-        }
-	       // for exclusive reaction 2 particles in final state
-	       p = std::sqrt(e*(e + m + m));
-	       mom *= p;
-        //if(i==1) // Means the target secondary for the ellastic scattering
-								//{
-        //  G4double t=e*m;
-        //  t=t+t;
-        //  G4int tb=static_cast<G4int>(t/dT);
-        //  if(tb>nT1) tb=nT1;
-        //  tSig[tb]++;
-								//}
-        lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
-        totSum -= lorV;
-        //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
-        if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
-	       {
-		        G4cerr<<"***Test49: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
-          alarm=true;
-	       }
-        if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
-           !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
-	       {
-		        G4cerr<<"***Test49: NAN in LorentzVector="<<lorV<<G4endl;
-          alarm=true;
-	       }
-        if(c==90000002||c==90002000||c==92000000)
-        {
-          G4cout<<"***Test49:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
-          alarm=true;
-        }
-        if(c==90000003||c==90003000||c==93000000)
-        {
-          G4cout<<"***Test49:***Tribaryon *** i="<<i<<", PDG="<<c<<G4endl;
-          alarm=true;
-        }
-        if(c==223) nOmega++;
-        if(c==22) nPhotons++;
-        if(c==311||c==321||c==-311||c==-321) nKaons++; // kaons
-        if(c==221) nEta++;                             // etas
-        //if(c==90002002) nAlphas++;                     // Alphas
-        if(c==2212) nProtons++;                        // Protons
-        if(c==2112) nNeutrons++;                       // Neutrons
-        if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
-        //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
-        if(c==111) nP0++;                              // Neutral  pions
-        if(c==-211) nPN++;                             // Negative pions
-        if(c==211) nPP++;                              // Positive pions
-        if(c==22) nGamma++;                            // Gammas
-        if(c==22) EGamma+=e;                           // Energy of gammas
+#ifdef debug
+        G4cout<<"Test49: tChg="<<totC<<", T4m="<<totSum<<",tBar="<<totBaryN<<G4endl;
+#endif
+#ifdef chips
+        G4LorentzVector Residual=proc->GetEnegryMomentumConservation();
+#else
+        // for GHAD
+        G4LorentzVector Residual(0.,0.,0.,0.);
+#endif
+#ifdef debug
+        G4double de = aChange->GetLocalEnergyDeposit();// Init TotalEnergy by EnergyDeposit
+        G4cout<<"Test49: "<<nSec<<" secondary particles are generated, dE="<<de<<G4endl;
+#endif
+        // @@ ----------------------- Begin
+        G4double weight=aChange->GetSecondary(0)->GetDynamicParticle()->GetKineticEnergy();
+#ifdef debug
+        G4cout<<"Test49:----------------: Weigh="<<weight<<G4endl;
+#endif
+        dTot+=weight;
+        if(nSec>1) dEl+=weight;
+        // @@ ----------------------- End
+        //G4int nbar = 0;
+
+        // @@ G4int npt=0;
+        G4int    c=0;    // Prototype of the PDG Code of the particle
+        G4int nGamma=0;
+        G4double EGamma=0;
+        G4int nP0=0;
+        G4int nPP=0;
+        G4int nPN=0;
+        G4int nKaons=0;
+        G4int nEta=0;
+        // @@ G4int nAlphas=0;
+        G4int nPhotons=0;
+        G4int nProtons=0;
+        G4int nNeutrons=0;
+        G4int nSpNeut=0;
+        // @@ G4int nSpAlph=0;
+        G4int nOmega=0;
+        // @@ G4int nDec=0;
+        // @@ G4int dirN=0;
+#ifdef pdebug
+        G4cout<<"Test49:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
+        if(!(iter%1000)) G4cerr<<"#"<<iter<<G4endl;
+#endif
+        G4bool alarm=false;
+        // @@ G4bool rad=false;
+        // @@ G4bool hyp=false;
+        // @@ G4bool badPDG=false;
+        // ------- LOOP over secondary particles -------
+        G4int cST=0;
         G4int cCG=0;
         G4int cBN=0;
-        if(std::abs(c)>99)                               // Do not count charge of leptons
+        for(G4int i=begi; i<nSec; i++)
         {
-          cCG=static_cast<G4int>(pd->GetPDGCharge());
-          cBN=static_cast<G4int>(pd->GetBaryonNumber());
-          totCharge-=cCG;
-          totBaryN-=cBN;
-        }
-#ifdef pdebug
-        G4cout<<"Test49:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
-              <<lorV.e()-m<<G4endl;
-#endif
-        // ********************* calculation of t and filling histogram *****************
-#ifdef tdisthist
-								G4LorentzVector t4M=incident4M-lorV;
-        G4double tval=-t4M.m2()/GeV/GeV;
-#ifdef pdebug
-        G4cout<<"Ts49:c="<<c<<",t="<<tval<<",i="<<tMin<<",a="<<tMax<<",s="<<lorV<<G4endl;
-#endif
-        if(c==pPDG && tval>tMin && tval<tMax) // fill the histogram
-								{
-          G4int nchan=static_cast<G4int>((std::log(tval)-ltMin)/dlt);
-          if(nchan<0) nchan=0;
-          if(nchan>=ntpt) nchan=ntpt-1;
-          shist[nchan]+=1./tval; // 1/t in GeV^2
-#ifdef pdebug
-          G4cout<<"Test49: shist["<<nchan<<"]="<<shist[nchan]<<G4endl;
-#endif
-        }
-#endif
-        // *****************End of calculation of t and filling histogram ***************
-        //delete aChange->GetSecondary(i);
-	     } // End of the LOOP over secondaries
-	     //	delete secondaries in the end of the event       	 
-      G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
-                  std::fabs(totSum.z());
-      //G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+
-      //            std::fabs(Residual.y())+std::fabs(Residual.z());    
-#ifdef pdebug
-      G4cout<<">TEST49:r4M="<<totSum<<ss<<",rCh="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
-#endif
-	     ///if (1>2) // @@ The check is temporary closed LHEP
-						//if (ss>.27) // Not CHIPS, but conservs energy
-						if (totCharge ||totBaryN || ss>.27 || alarm || nGamma&&!EGamma) // for CHIPS
-      {
-        totSum = G4LorentzVector(0., 0., pmax, et);
-        G4cerr<<"**Test49:#"<<iter<<": n="<<nSec<<", 4M="<<totSum<<", Charge="<<totCharge
-							 ///      <<", BaryN="<<totBaryN<<",D2="<<ss<<G4endl; // Not CHIPS
-              <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
-        if(nGamma&&!EGamma)G4cerr<<"***Test49: Egamma=0"<<G4endl;
-        G4int indi=0;
-								if(flead) indi=-1;
-        for (G4int indx=indi; indx<nSec; indx++)
-        {
-          if(indx>-1)
+          if(i<0) // Leading particle
           {
-            sec = aChange->GetSecondary(indx)->GetDynamicParticle();
+            e  = aChange->GetEnergy();
+            m  = aChange->GetMass();
+            mom= *(aChange->GetMomentumDirection());
+            c  = pPDG;
+#ifdef debug
+            G4cout<<"Test49:LeadingParticle is found, E="<<e<<",m="<<m<<",PDG="<<c<<G4endl;
+#endif
+            cST= sp;
+            cCG= cp;
+            cBN= bnp;
+
+          }
+          else    // Secondaries
+          {
+#ifdef debug
+            G4cout<<"Test49:Secondary i="<<i<<",*Ses="<<aChange->GetSecondary(i)<<G4endl;
+#endif
+            sec = aChange->GetSecondary(i)->GetDynamicParticle();
+#ifdef debug
+            G4cout<<"Test49:Secondary i="<<i<<",*SPD="<<sec<<G4endl;
+#endif
             pd  = sec->GetDefinition();
+#ifdef debug
+            G4cout<<"Test49:Secondary i="<<i<<",*PD="<<pd<<G4endl;
+#endif
             c   = pd->GetPDGEncoding();
-            if(!c)
-            {
-              G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
-              G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-              c=90000000+chrg*999+bary;
-            }
+            cST = static_cast<G4int>(pd->GetQuarkContent(3)-pd->GetAntiQuarkContent(3));
+            cCG = static_cast<G4int>(pd->GetPDGCharge());
+            cBN = static_cast<G4int>(pd->GetBaryonNumber());
+            if(!c) c=90000000+cST*999999+cCG*999+cBN;
             m   = pd->GetPDGMass();
             mom = sec->GetMomentumDirection();
-            G4QPDGCode cQPDG(c);
-            sm   = cQPDG.GetMass();
             e   = sec->GetKineticEnergy();
-          }
-          else                                // leading particle
-          {
-            pd  = part;
-            c   = pd->GetPDGEncoding();
-            if(!c)
-            {
-              G4int chrg=static_cast<G4int>(pd->GetPDGCharge());
-              G4int bary=static_cast<G4int>(pd->GetBaryonNumber());
-              c=90000000+chrg*999+bary;
-            }
-            m   = aChange->GetMass();
-            mom = *(aChange->GetMomentumDirection());
-            G4QPDGCode cQPDG(c);
-            sm  = cQPDG.GetMass();
-            e   = aChange->GetEnergy();
-          }
-	         p = std::sqrt(e*(e + m + m));
-	         mom *= p;
-          lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
-          totSum -= lorV;
-          G4cerr<<"Test49:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
-                <<", d4M="<<totSum<<G4endl;
-        }
-        if(sr>.27)
-          G4Exception("***Test49: ALARM or baryn/charge/energy/momentum is not conserved");
-      }
-#ifndef nout
-	     ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
-#endif
-      // =============== May be print it here if it is not zero...
-      for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
-      aChange->Clear();
 #ifdef debug
-      G4cout<<"Test49:--->>> After ntp.FillEvt, ntpt="<<ntpt<<G4endl;
+            G4cout<<"Test49:SecPt#"<<i<<",T="<<e<<",m="<<m<<",PDG="<<c<<",C="<<cCG<<G4endl;
 #endif
-     } // End of the LOOP over events
-     else
-     {
-       G4cout<<"Test49: Simulation is skipped because of big MeanFreePath="<<mfp<<G4endl;
-       goodE=1;
-     }
-     // Stop the timer to estimate the speed of the generation
-     timer->Stop();
-     G4cout<<"Test49:CalculationTimePerEvent="<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
-     delete timer;
-     G4double tS=goodE+misTG+badTG+zeroO+alonO+badOT;
-     G4cout<<"Test49: g="<<goodE/tS<<" mTG="<<misTG/tS<<" bTG="<<badTG/tS
-           <<" 0="<<zeroO/tS<<" 1="<<alonO/tS<<" b="<<badOT/tS<<G4endl;
-     // *************** Resulting print for the collected t-histograms ***************
-#ifdef tdisthist
-     G4double csmb=reactCS/millibarn/goodE/dlt;
-     for(G4int ti=0; ti<ntpt; ti++)
-     {
-       shist[ti]*=csmb;
-       G4cout<<"Test49: t="<<thist[ti]<<" ,dsig/dt="<<shist[ti]<<G4endl;
-     }
+          }
+          if (e < 0.0)
+          {
+            G4cerr<<"**Test49:Event#"<<iter<<",Hadron#"<<i<<",T="<<e<<"<0 (Set 0)"<<G4endl;
+            e = 0.0;
+          }
+          // for exclusive reaction 2 particles in final state
+          p = std::sqrt(e*(e + m + m));
+          mom *= p;
+#ifdef debug
+          G4cout<<"Test49:Secondary #"<<i<<" E="<<e+m<<", P="<<mom<<G4endl;
 #endif
-     // ************ End of resulting print for the collected t-histograms ***************
+          //if(i==1) // Means the target secondary for the ellastic scattering
+          //{
+          //  G4double t=e*m;
+          //  t=t+t;
+          //  G4int tb=static_cast<G4int>(t/dT);
+          //  if(tb>nT1) tb=nT1;
+          //  tSig[tb]++;
+          //}
+          lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
+          if(i>=0)                             // Do not count LV & charges of leptons
+          {
+            totStran-=cST;
+            totCharge-=cCG;
+            totBaryN-=cBN;
+            totSum -= lorV;
+            G4double visE=lorV.e();
+            if(cBN>0) visE-=m;
+            if(cBN<0) visE+=m;
+            totKE +=  visE;
+#ifdef debug
+            G4cout<<"Test49:i="<<i<<",tS="<<totStran<<",tC="<<totC<<",t4="<<totSum<<",tB="
+                  <<totBaryN<<G4endl;
+#endif
+          }
+#ifdef debug
+          G4cout<<"Test49: *** M="<<lorV.m()<<G4endl;
+#endif
+          //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
+          if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
+          {
+            G4cerr<<"***Test49: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
+            alarm=true;
+          }
+          if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
+             !(lorV.py()>=0||lorV.py()<0) || !(lorV.pz()>=0||lorV.pz()<0))
+          {
+            G4cerr<<"***Test49: NAN in LorentzVector="<<lorV<<G4endl;
+            alarm=true;
+          }
+          if(c==90000002||c==90002000||c==92000000)
+          {
+            G4cout<<"***Test49:***Dibaryon *** i="<<i<<", PDG="<<c<<G4endl;
+            alarm=true;
+          }
+          if(c==90000003||c==90003000||c==93000000)
+          {
+            G4cout<<"***Test49:***Tribaryon *** i="<<i<<", PDG="<<c<<G4endl;
+            alarm=true;
+          }
+#ifdef debug
+          G4cout<<"Test49: ===> alarm="<<alarm<<G4endl;
+#endif
+          if(c==223) nOmega++;
+          if(c==22) nPhotons++;
+          if(c==311||c==321||c==-311||c==-321) nKaons++; // kaons
+          if(c==221) nEta++;                             // etas
+          //if(c==90002002) nAlphas++;                     // Alphas
+          if(c==2212) nProtons++;                        // Protons
+          if(c==2112) nNeutrons++;                       // Neutrons
+          if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
+          //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
+          if(c==111) nP0++;                              // Neutral  pions
+          if(c==-211) nPN++;                             // Negative pions
+          if(c==211) nPP++;                              // Positive pions
+          if(c==22)                                      // Gammas
+          {
+            nGamma++;                                    // # of gammas
+            EGamma+=e;                                   // Total energy in gammas
+          }
 #ifdef ppdebug
+          if(lead==fAlive && (i==-1 || c==2112 || c==2212 || c==90000001 || c==90001000))
+          //if(lead==fAlive)
+            G4cout<<"Test49:#"<<i<<",PDG="<<c<<",S="<<cST<<",C="<<cCG<<",B="<<cBN<<",4M="
+                  <<lorV<<m<<",T="<<lorV.e()-m<<G4endl;
+#endif
+          //delete aChange->GetSecondary(i);
+#ifdef pdebug
+          //if(lead==fAlive && (i==-1 || c==2112 || c==2212 || c==90000001 || c==90001000))
+          G4cout<<"Test49:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
+                <<lorV.e()-m<<G4endl;
+#endif
+        } // End of the LOOP over secondaries
+        // delete secondaries in the end of the event         
+#ifdef cchips
+        G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+
+                    std::fabs(totSum.y())+std::fabs(totSum.z());
+#ifdef inter
+	  G4double misr=.27;
+#else
+	  G4double misr=-DBL_MAX;
+#endif
+        G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+
+                    std::fabs(Residual.y())+std::fabs(Residual.z());    
+#endif
+#ifdef lhepdbg
+        // --- Start detailed correction
+        G4double resGSM =
+                   G4QNucleus(90000000+totStran*999999+totCharge*999+totBaryN).GetGSMass();
+        G4double resMom = totSum.rho();
+        G4double resE= std::sqrt(resGSM*resGSM+resMom*resMom);
+        G4double redE= totSum.e()-resE;
+        // *** Debug print
+        //G4double resT= resE-resGSM;
+        //G4cout<<"Test49: LHEP_COR_E="<<redE<<", T="<<resT<<", P="<<resMom<<G4endl;
+        // *** End of debug print
+        totSum=G4LorentzVector(0.,0.,0.,redE);
+        // --- Stop detailed correction
+        totStran=0;
+        totCharge=0;
+        totBaryN=0;
+        // --- Print flag for
+        G4bool prtf=false;
+        //if(std::fabs(totSum.e())>.1) 
+        //{
+        //  prtf=true;
+        //  G4cout<<"Test49:----->LHEP_COR_E="<<redE<<", T="<<resT<<", P="<<resMom<<G4endl;
+        //}
+#endif
+#ifdef meandbg
+        //G4double eng=energy+mp;
+        G4double eng=energy;
+        G4double cE=eng-totSum.t();
+        if(cE<0.) G4cout<<"Test49: **Negative**, E="<<cE<<G4endl;
+        if(cE>eng+eng) nD++;
+        nE++;
+        sE+=cE;
+        sE2+=cE*cE;
+        pE+=eng;
+#endif
+#ifdef ekindbg
+        if(totKE<0.) G4cout<<"Test49: **Negative**, E="<<totKE<<G4endl;
+        if(totKE>energy+energy) nD++;
+        nE++;
+        sE+=totKE;
+        sE2+=totKE*totKE;
+        pE+=energy+mp;
+#endif
+#ifdef histdbg
+       
+        if(nGamma>=nHst) nGamma=nHst-1;
+        nGaH[nGamma]++;
+        G4int nESG=static_cast<G4int>(EGamma+.00001);
+        if(nESG>=nHst) nESG=nHst-1;
+        GaSE[nESG]++;
+        if(totCharge>=dQnM) totCharge=dQnM1;
+        if(totCharge<-dQnM) totCharge=-dQnM;
+        dChH[totCharge+dQnM]++;
+        if(totBaryN>=dQnM) totBaryN=dQnM1;
+        if(totBaryN<-dQnM) totBaryN=-dQnM;
+        dBnH[totBaryN+dQnM]++;
+        G4double dE=totSum.t();
+        G4int rdE=static_cast<G4int>(dQnM*20.*dE/e0-17+dQnM);
+        //G4int dEn=static_cast<G4int>(dE*10.+dQnM);
+        G4int dEn=static_cast<G4int>(dE/10.+dQnE);
+        if(rdE>=nHst) rdE=nHst1;
+        if(rdE<0) rdE=0;
+        if(dEn>=nHst)
+        {
+          //G4cout<<"Test49: Too big energy nonconservation dE="<<dE<<G4endl;
+          dEn=nHst1;
+        }
+        if(dEn<0) dEn=0;
+        rEnH[rdE]++;
+        dEnH[dEn]++;
+        //if(nPN || nP0 || nPP) dEnH[dEn]++;
+        G4double dZ=totSum.z();
+        G4int rdZ=static_cast<G4int>(dQnM*20.*dZ/pmax-17+dQnM);
+        G4int dZn=static_cast<G4int>(dZ*10.+dQnM);
+        if(rdZ>=nHst) rdZ=nHst1;
+        if(rdZ<0) rdZ=0;
+        if(dZn>=nHst) dZn=nHst1;
+        if(dZn<0) dZn=0;
+        rPzH[rdZ]++;
+        dPzH[dZn]++;
+        G4double dR=std::sqrt(totSum.x()*totSum.x()+totSum.y()*totSum.y());
+        G4int rdR=static_cast<G4int>(dQnM*20.*dR/pmax);
+        G4int dRn=static_cast<G4int>(dR*100.);
+        if(rdR>=nHst) rdR=nHst1;
+        if(rdR<0) rdR=0;
+        if(dRn>=nHst) dRn=nHst1;
+        if(dRn<0) dRn=0;
+        rPrH[rdR]++;
+        dPrH[dRn]++;
+        //if(!(iter%100)&&iter) G4cout<<"BN="<<totBaryN<<",dE="<<dE<<",E="<<e0<<",dZ="<<dZ
+        //                            <<",P="<<pmax<<",dR="<<dR<<G4endl;
+#endif
+#ifdef pdebug
+        G4cout<<">TEST19: r4M="<<totSum<<",rCh="<<totCharge<<",rBN="<<totBaryN<<G4endl;
+#endif
+#ifdef lhepdbg 
+        if(prtf)
+#endif
+#ifdef cchips
+        if (totCharge || totBaryN || ss>.27 || alarm || (nGamma && !EGamma))// OnlyForCHIPS
+        {
+          G4cerr<<"**Test49:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
+                <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
+          totSum = totSumM;
+          if(nGamma&&!EGamma)G4cerr<<"***Test49: Egamma=0"<<G4endl;
+          for (G4int indx=begi; indx<nSec; indx++)
+          {
+            if(indx<0) // Leading particle
+            {
+              e  = aChange->GetEnergy();
+              m  = aChange->GetMass();
+              mom= *(aChange->GetMomentumDirection());
+              c  = pPDG;
+              cST= sp;
+              cCG= cp;
+              cBN= bnp;
+            }
+            else    // Secondaries
+            {
+              sec = aChange->GetSecondary(indx)->GetDynamicParticle();
+              pd  = sec->GetDefinition();
+              c   = pd->GetPDGEncoding();
+              cST = static_cast<G4int>(pd->GetQuarkContent(3)-pd->GetAntiQuarkContent(3));
+              cCG = static_cast<G4int>(pd->GetPDGCharge());
+              cBN = static_cast<G4int>(pd->GetBaryonNumber());
+              if(!c) c=90000000+cST*999999+cCG*999+cBN;
+              m   = pd->GetPDGMass();
+              //G4cerr<<"***Tmp***Test49:#"<<indx<<",S="<<cST<<",C="<<cCG<<",B="<<cBN
+              //      <<",M="<<m<<G4endl;
+              mom = sec->GetMomentumDirection();
+              e   = sec->GetKineticEnergy();
+            }
+            p = std::sqrt(e*(e + m + m));
+            mom *= p;
+            lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
+            totSum -= lorV;
+            G4cerr<<"Test49:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
+                  <<", d4M="<<totSum<<", S="<<cST<<", C="<<cCG<<", B="<<cBN<<G4endl;
+          }
+          if(sr>misr)G4Exception("***Test49:ALARM/baryn/chrg/energy/mom isn't conserved");
+          //G4Exception("***Test49: ALARM/baryn/chrg/energy/mom is not conserved");
+        }
+#endif
+#ifndef nout
+        ntp->FillEvt(aChange,dParticle); // Fill the simulated event in the ASCII "ntuple"
+#endif
+        // =============== May be print it here if it is not zero...
+        for(G4int ides=0; ides<nSec; ides++) delete aChange->GetSecondary(ides);
+        aChange->Clear();
+#ifdef debug
+        G4cout<<"Test49:--->>> Ev # "<<iter<<", After ntp.FillEvt"<<G4endl;
+#endif
+       } // End of nSec>0 IF
+      } // End of Check for DoNothing
+     } // End of the LOOP over events
+     // Stop the timer to estimate the speed of the generation
+     G4double dn=100.* nDoNothing / nEvt;
+     timer->Stop();
+     G4cout<<"Test49:Time/Ev="<<timer->GetUserElapsed()/nEvt<<" s, DN="<<dn<<" %"<<G4endl;
+     delete timer;
+#ifdef tdebug
      G4double pGeV=pmax/1000.;
      G4double alp=std::log(pGeV/(1.+1./pGeV/pGeV/pGeV));
      G4double exr=1.-.822/(1.+std::exp(-(alp-.2)*1.15));
@@ -1214,7 +1287,7 @@ int main()
 #endif
      delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
     } // End of the target LOOP
-		 } // End of the Energy LOOP
+   } // End of the Energy LOOP
    delete gTrack; // The G4Track delets the G4DynamicParticle
   } // End of the projectile LOOP
   delete proc;
@@ -1230,10 +1303,53 @@ int main()
   //delete cmaterial;                   // Temporary material definition pointer (?)
 #ifndef nout
   //G4cout << "Test49: Before ntp" << G4endl;
-	 delete ntp; // Delete the class to fill the#of events
+  delete ntp; // Delete the class to fill the#of events
   //G4cout << "Test49: After ntp" << G4endl;
 #endif
+#ifdef hdebug
+  timer->Stop();
+  G4int    nbnh=G4StringChipsParticleLevelInterface::GetNbn();
+  G4double hbdb=G4StringChipsParticleLevelInterface::GetDB();
+  //G4double hede=G4StringChipsParticleLevelInterface::GetDE(); // The same now
+  G4double toth=G4StringChipsParticleLevelInterface::GetTot();
+  G4double ovrb=G4StringChipsParticleLevelInterface::GetBov();
+  G4double ovre=G4StringChipsParticleLevelInterface::GetEov();
+  G4cout<<"Test49:TimePerEvent="<<timer->GetUserElapsed()/toth<<", N="<<toth
+        <<", overB="<<ovrb/toth<<", overE="<<ovre/toth<<G4endl;
+  delete timer;
+  G4double bc=-hbdb/2;
+  for(G4int ih=0; ih<nbnh; ih++)
+  {
+    bc+=hbdb;
+    G4double nE=G4StringChipsParticleLevelInterface::GetE(ih);
+    G4double nB=G4StringChipsParticleLevelInterface::GetB(ih);
+    G4cout<<"Test49:be="<<bc<<" "<<nE/toth<<" "<<std::sqrt(nE)/toth
+          <<" "<<nB/toth/bc<<" "<<std::sqrt(nB)/toth/bc<<G4endl;
+  }
+#endif
   delete runManager;
+#ifdef meandbg
+  G4cout<<"E="<<pE/nE<<":sE/E="<<sE/pE<<",dE/E="<<std::sqrt(sE2*nE-sE*sE)/pE
+        <<",D%="<<100*nD/nE<<",sE="<<sE<<",sE2="<<sE2<<",nE="<<nE<<G4endl;
+#endif
+#ifdef ekindbg
+  G4cout<<"Ei="<<pE/nE<<": Ef="<<sE/nE<<", dE="<<std::sqrt(sE2*nE-sE*sE)/nE<<", D%="
+        <<100*nD/nE<<",sE="<<sE<<",sE2="<<sE2<<",nE="<<nE<<G4endl;
+#endif
+#ifdef histdbg
+  G4cout<<std::setw(2)<<"#"<<" : "<<std::setw(9)<<"#gamma"<<std::setw(9)<<"SumEGam"
+        <<std::setw(9)<<"dBrN+20"<<std::setw(9)<<"dChg+20" <<std::setw(9)<<"rE(5%)"
+    //<<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(.1)"
+        <<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(10.)"
+        <<std::setw(9)<<"dPz(.1)"<<std::setw(9)<<"dPr(.01)"<<G4endl;
+  for(G4int jh=0; jh<nHst; jh++)
+  {
+    G4cout<<std::setw(2)<<jh<<" : "<<std::setw(9)<<nGaH[jh]<<std::setw(9)<<GaSE[jh]
+          <<std::setw(9)<<dBnH[jh]<<std::setw(9)<<dChH[jh]<<std::setw(9)<<rEnH[jh]
+          <<std::setw(9)<<rPzH[jh]<<std::setw(9)<<rPrH[jh]<<std::setw(9)<<dEnH[jh]
+          <<std::setw(9)<<dPzH[jh]<<std::setw(9)<<dPrH[jh]<<G4endl;
+  }
+#endif
 #ifdef pverb
   G4cout << "###### End of Test49 #####" << G4endl;
 #endif

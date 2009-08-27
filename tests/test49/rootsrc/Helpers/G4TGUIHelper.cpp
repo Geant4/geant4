@@ -24,39 +24,52 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
-//
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
-//
-//===========================================================================
+// --------------------------------------------------------------------
+// Class implementation
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "G4TGUIHelper.h"
 
-#include "globals.hh"
+G4TGUIHelper *gGUIHelper = new G4TGUIHelper();
 
-class G4Material;
 
-class Test49Material 
+ClassImp(G4TGUIHelper)
+
+using namespace std;
+using namespace ROOT;
+using namespace TMath;
+
+//______________________________________________________________________________
+void G4TGUIHelper::ShowMenu()
 {
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
+	G4TSimHelper::LoadLibraries();
+	G4TToolMenuGUI* Window = new G4TToolMenuGUI(gClient->GetRoot(), 0, 0);
+	Window->MapWindow();
+}
 
-	void Initialise();
-	     
-};
+//______________________________________________________________________________
+void G4TGUIHelper::ShowSimulationGUI()
+{
+	G4TSimHelper::LoadLibraries();
+	G4TSimulationGUI* Window = new G4TSimulationGUI(gClient->GetRoot(), 0, 0);
+	Window->MapWindow();
+}
 
-#endif
 
- 
+//______________________________________________________________________________
+void G4TGUIHelper::ShowAnalysisGUI()
+{
+	G4TSimHelper::LoadLibraries();
+	G4TAnalysisGUI* Window = new G4TAnalysisGUI(gClient->GetRoot(), 0, 0);
+	Window->MapWindow();
+}
+
+//______________________________________________________________________________
+void G4TGUIHelper::ShowPublicationGUI()
+{
+	G4TSimHelper::LoadLibraries();
+	G4TPublicationGUI* Window = new G4TPublicationGUI(gClient->GetRoot(), 0, 0);
+	Window->MapWindow();
+}
 
 

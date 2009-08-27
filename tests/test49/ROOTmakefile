@@ -1,0 +1,105 @@
+##source ($ROOTSYS)/bin/thisroot.sh
+
+include rootsrc/Makefile.arch
+
+
+#------------------------------------------------------------------------------
+
+SRCDIR  =	rootsrc/
+DBDIR	  =	$(SRCDIR)Database/
+HLPDIR  =	$(SRCDIR)Helpers/
+GUIDIR  =	$(SRCDIR)GUI/
+
+HDRS	  =	$(SRCDIR)G4TModelParams.h $(DBDIR)G4TCatalog.h $(SRCDIR)G4TTool.h \
+$(SRCDIR)G4TSimulationTool.h $(DBDIR)G4TDataItem.h $(DBDIR)G4TDataBase.h  \
+$(HLPDIR)G4TSimHelper.h $(HLPDIR)G4TPlotHelper.h $(DBDIR)G4TData.h \
+$(SRCDIR)G4TAnalysisTool.h $(DBDIR)G4TParticlesDAL.h $(HLPDIR)G4TGUIHelper.h \
+$(GUIDIR)G4TSimulationGUI.h  $(GUIDIR)G4TAnalysisGUI.h $(GUIDIR)G4TPublicationGUI.h \
+$(GUIDIR)G4TToolMenuGUI.h
+
+OBJS	  =	$(SRCDIR)G4TModelParams.o $(DBDIR)G4TCatalog.o $(SRCDIR)G4TTool.o \
+$(SRCDIR)G4TSimulationTool.o $(DBDIR)G4TDataItem.o $(DBDIR)G4TDataBase.o \
+$(HLPDIR)G4TSimHelper.o $(DBDIR)G4TData.o $(SRCDIR)G4TAnalysisTool.o \
+$(DBDIR)G4TParticlesDAL.o $(HLPDIR)G4TPlotHelper.o $(HLPDIR)G4TGUIHelper.o \
+$(GUIDIR)G4TSimulationGUI.o $(GUIDIR)G4TAnalysisGUI.o $(GUIDIR)G4TPublicationGUI.o \
+$(GUIDIR)G4TToolMenuGUI.o ReflexionDict.o
+
+#------------------------------------------------------------------------------
+
+PROGRAM	= libG4ModelTester.$(DllSuf)
+PROGRAMLIB	= $(shell pwd)/$(PROGRAM)
+
+all:		$(PROGRAM)
+
+$(PROGRAM):     $(OBJS)
+ifeq ($(ARCH),aix)
+		/usr/ibmcxx/bin/makeC++SharedLib $(OutPutOpt) $@ $(LIBS) -p 0 $^
+else
+ifeq ($(ARCH),aix5)
+		/usr/vacpp/bin/makeC++SharedLib $(OutPutOpt) $@ $(LIBS) -p 0 $^
+else
+ifeq ($(PLATFORM),macosx)
+# We need to make both the .dylib and the .so
+		$(LD) $(SOFLAGS) $^ $(OutPutOpt) $@
+ifneq ($(subst $(MACOSX_MINOR),,1234),1234)
+ifeq ($(MACOSX_MINOR),4)
+		ln -sf $@ $(subst .$(DllSuf),.so,$@)
+else
+		$(LD) -bundle -undefined $(UNDEFOPT) $(LDFLAGS) $^ \
+		   $(OutPutOpt) $(subst .$(DllSuf),.so,$@)
+endif
+endif
+else
+ifeq ($(PLATFORM),win32)
+		bindexplib $* $^ > $*.def
+		lib -nologo -MACHINE:IX86 $^ -def:$*.def \
+		   $(OutPutOpt)$(PROGRAMLIB)
+		$(LD) $(SOFLAGS) $(LDFLAGS) $^ $*.exp $(LIBS) \
+		   $(OutPutOpt)$@
+		$(MT_DLL)
+else
+		$(LD) $(SOFLAGS) $(LDFLAGS) $^ $(OutPutOpt) $@ $(EXPLLINKLIBS)
+endif
+endif
+endif
+endif
+		@echo "Cleaning the dictionaries and objs..."
+		@rm *Dict*
+		@rm $(SRCDIR)*.o
+		@rm $(DBDIR)*.o
+		@rm $(HLPDIR)*.o
+		@rm $(GUIDIR)*.o
+		@echo "$@ done..."
+
+clean:;			@rm -f $(OBJS) core
+
+#------------------------------------------------------------------------------
+
+$(HLPDIR)G4TSimHelper.o: $(HLPDIR)G4TSimHelper.h
+$(HLPDIR)G4TPlotHelper.o: $(HLPDIR)G4TPlotHelper.h
+$(HLPDIR)G4TGUIHelper.o: $(HLPDIR)G4TGUIHelper.h
+$(DBDIR)G4TData.o: $(DBDIR)G4TData.h
+$(DBDIR)G4TDataItem.o: $(DBDIR)G4TDataItem.h
+$(DBDIR)G4TParticlesDAL.o: $(DBDIR)G4TParticlesDAL.h
+$(DBDIR)G4TCatalog.o:  $(DBDIR)G4TCatalog.h
+$(DBDIR)G4TDataBase.o: $(DBDIR)G4TDataBase.h
+$(GUIDIR)G4TToolMenuGUI.o: $(GUIDIR)G4TToolMenuGUI.h
+$(GUIDIR)G4TSimulationGUI.o: $(GUIDIR)G4TSimulationGUI.h
+$(GUIDIR)G4TAnalysisGUI.o: $(GUIDIR)G4TAnalysisGUI.h
+$(GUIDIR)G4TPublicationGUI.o: $(GUIDIR)G4TPublicationGUI.h
+$(SRCDIR)G4TModelParams.o: $(SRCDIR)G4TModelParams.h
+$(SRCDIR)G4TTool.o: $(SRCDIR)G4TTool.h
+$(SRCDIR)G4TSimulationTool.o: $(SRCDIR)G4TSimulationTool.h
+$(SRCDIR)G4TAnalysisTool.o: $(SRCDIR)G4TAnalysisTool.h
+
+
+#------------------------------------------------------------------------------
+
+ReflexionDict.cpp: $(HDRS)
+		@echo "Generating dictionary ..."
+		@rootcint ReflexionDict.cpp -c $(HDRS) $(SRCDIR)LinkDef.h
+		@echo "done."
+
+
+
+

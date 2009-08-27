@@ -23,40 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TSimulationGUI
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// The GUI for the simulation tool
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
+#ifndef G4TSimulationGUI_H_
+#define G4TSimulationGUI_H_
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#include "../CommonHeaders.h"
+#include "../Database/G4TCatalog.h"
+#include "../Helpers/G4TSimHelper.h"
+#include "../G4TSimulationTool.h"
 
-#include "globals.hh"
+#include "Riostream.h"
 
-class G4Material;
 
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
+class G4TSimulationGUI : public TGMainFrame {
+
   private:
+  TGTextButton* bRun;
+  TGTextButton* bClose;
+  TGComboBox*  cPublication;
+  TGComboBox*  cModel;
+  TGNumberEntry* nCrossSection;
+  TGNumberEntry* nRuns;
+  TGCheckButton*  cExisting;
 
-	void Initialise();
-	     
+  void Initialize();
+
+  void Run_Click();
+  void Close_Click();
+
+  public:
+
+
+ G4TSimulationGUI(const TGWindow *p, UInt_t w, UInt_t h);
+ virtual ~G4TSimulationGUI ();
+
+ virtual void CloseWindow();
+ virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
+
+
+ ClassDef(G4TSimulationGUI, 1)  //The class for Geant4 Simulation
 };
+
+
 
 #endif
 
- 
+
 
 

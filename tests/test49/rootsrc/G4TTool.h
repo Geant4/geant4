@@ -23,40 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TTool
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// An abstract (base) class for the tools (simulation and analysis).
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
 
-#include "globals.hh"
+#ifndef G4TTool_H_
+#define G4TTool_H_
 
-class G4Material;
+#include "CommonHeaders.h"
 
-class Test49Material 
-{
+#include "G4TModelParams.h"
+#include "Helpers/G4TSimHelper.h"
+#include "Helpers/G4TPlotHelper.h"
+#include "Database/G4TData.h"
+#include "Database/G4TDataItem.h"
+#include "Database/G4TDataBase.h"
+
+using namespace std;
+using namespace ROOT;
+using namespace TMath;
+
+
+class G4TTool : public TObject {
+
+  protected:
+
+		Double_t fHxmin;
+		Double_t fHxmax;
+		Double_t fHymin;
+		Double_t fHymax;
+		Double_t fHfbin;
+		Double_t fHnbin;
+		Double_t fDangle;
+		Double_t fPi;
+		Double_t fDanrad;
+		Double_t fHlxmin;
+		Double_t fHlxmax;
+
+		TH1F* fHZL;
+		TH1F* fHDT;
+
+		G4TData*		fPublication;
+
+		virtual void Initialize();
+		virtual void PrepareHistograms(Double_t hnbin, Double_t hlxmin, Double_t hlxmax);
+		virtual void RenderHSolid(TH1F* hist, Int_t hf, Int_t hn, Double_t m, Color_t color = 2, Bool_t noDots = false);
+
+
   public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
 
-	void Initialise();
-	     
+		G4TTool() {
+
+		}
+		virtual ~G4TTool () {}
+
+
+		ClassDef(G4TTool, 1)  //Base class for tools
 };
 
 #endif
 
- 
 
 

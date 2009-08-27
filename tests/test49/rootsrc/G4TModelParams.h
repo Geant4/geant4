@@ -23,40 +23,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Class G4TModelParams
 //
-// -------------------------------------------------------------
-//      GEANT 4 class 
+// Class description:
 //
-//      ---------- Test49Material -------
-// 
-//    Converted from Test29 to Test49 by Mikhail Kossov, 29 Jan 2005 
+// TClass that takes care of parsing (loading, saving) the chipstest.in
+// file, uses also chipstest_default.in in order to take the defaults and transform them.
 //
-//===========================================================================
+// History:
+// Roman Atachiants, 18/08/2009 - initial version
+//
+// --------------------------------------------------------------------
 
-#ifndef Test49Material_h
-#define Test49Material_h 1
+#ifndef G4TMODELPARAMS_H_
+#define G4TMODELPARAMS_H_
 
-#include "globals.hh"
+#include "CommonHeaders.h"
 
-class G4Material;
-
-class Test49Material 
-{
-  public:
-  
-    Test49Material();
-   ~Test49Material();
-     
-	G4Material* GetMaterial(const G4String&);     
-                      
-  private:
-
-	void Initialise();
-	     
+struct ParamsData_t  {
+  Float_t temp;
+  Float_t ssse;
+  Float_t eepr;
+  Float_t nop;
+  Float_t momb;
+  Float_t enb;
+  Int_t pdgpr;
+  Int_t pdgtg;
+  Int_t nevnt;
+  Float_t freeN;
+  Float_t freeD;
+  Float_t clustP;
+  Float_t rMed;
+  Float_t solA;
 };
+
+class G4TModelParams : public TObject {
+
+  private:
+	  ParamsData_t fData;
+
+	  inline void Tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
+
+  public:
+
+	  // Getter/Setters
+	  ParamsData_t& GetData(){ return fData; }
+	  void SetData(ParamsData_t const& data){ fData = data; }
+
+
+	  void Load(const TString& pf = "chipstest.in");
+	  void Save(const TString& pf = "chipstest.in");
+
+	  G4TModelParams() {
+		  fData.temp = 180.00;
+		  fData.ssse = 0.30;
+		  fData.eepr = 0.30;
+		  fData.nop = 152;
+		  fData.momb = 0;
+		  fData.enb = 0;
+		  fData.pdgpr = 2212;
+		  fData.pdgtg = 90013014;
+		  fData.nevnt = 2000;
+		  fData.freeN = 0.40;
+		  fData.freeD = 0.20;
+		  fData.clustP = 5.00;
+		  fData.rMed = 1.00;
+		  fData.solA = 0.50;
+	  }
+	  virtual ~G4TModelParams () {}
+
+	  ClassDef(G4TModelParams, 1)  //The class for Geant4 parameters handling
+};
+
+
 
 #endif
 
- 
+
 
 
