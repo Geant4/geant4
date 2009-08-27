@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.45 2009-08-25 04:40:53 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.46 2009-08-27 14:57:31 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -124,13 +124,13 @@ G4QCollision::~G4QCollision()
   for(unsigned i=0; i < ElIsoN.size(); ++i)
   {
     std::vector<G4int>* curEIN=ElIsoN[i];
-    curEIN.clear();
+    curEIN->clear();
     delete curEIN;
   }
   for(unsigned i=0; i < IsoProbInEl.size(); ++i)
   {
-    std::vector<G4int>* curEIN=IsoProbInEl[i];
-    curEIN.clear();
+    std::vector<G4double>* curEIN=IsoProbInEl[i];
+    curEIN->clear();
     delete curEIN;
   }
 }
@@ -765,6 +765,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
@@ -779,6 +780,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     G4double photonQ2 = CSmanager->GetExchangeQ2(photonEnergy);// Q2(t) of EqivExchangePart
@@ -794,6 +796,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     // Update G4VParticleChange for the scattered muon
@@ -811,6 +814,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     G4double iniE=kinEnergy+ml;          // Initial total energy of the lepton
@@ -916,6 +920,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
             <<ptm<<",pa="<<absMom<<",El="<<absEn<<",Pl="<<ptm-absMom<<G4endl;
 #endif
     }
+    else
+    {
+      G4int qNH=leadhs->size();
+      if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
+      delete leadhs;
+    }
     projPDG=22;
     proj4M=G4LorentzVector(photon3M,photonEnergy);
 #ifdef debug
@@ -1001,6 +1011,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
     G4bool secnu=false;
@@ -1107,6 +1118,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       aParticleChange.ProposeLocalEnergyDeposit(0.);
       aParticleChange.ProposeMomentumDirection(dir);
       aParticleChange.ProposeTrackStatus(fAlive);
+      delete output;
       return G4VDiscreteProcess::PostStepDoIt(track,step);
     }
 #ifdef debug
@@ -1279,6 +1291,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         scatReN->SetWeight(weight);                                   //    weighted
         scatReN->SetTouchableHandle(trTouchable);                     //    residual
         aParticleChange.AddSecondary(scatReN);                        //    nucleus
+        delete output;
         return G4VDiscreteProcess::PostStepDoIt(track, step);
       }
     }
@@ -1476,6 +1489,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
           scatReN->SetWeight(weight);                                   //    residual
           scatReN->SetTouchableHandle(trTouchable);                     //    recoil
           aParticleChange.AddSecondary(scatReN);                        //    nucleus
+          delete output;
           return G4VDiscreteProcess::PostStepDoIt(track, step);
         }
       }
@@ -1767,6 +1781,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         scatReN->SetWeight(weight);                                   //    weighted
         scatReN->SetTouchableHandle(trTouchable);                     //    residual
         aParticleChange.AddSecondary(scatReN);                        //    nucleus
+        delete output;
         return G4VDiscreteProcess::PostStepDoIt(track, step);
        }
 #ifdef qedebug
@@ -1941,6 +1956,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef pickupd
         G4cout<<"G4QCol::PStDoIt: rZ="<<rZ<<", rA="<<rA<<",r4M="<<r4M.m()<<r4M<<G4endl;
 #endif
+        delete output;
         return G4VDiscreteProcess::PostStepDoIt(track, step);
 	 }
       }
@@ -2001,6 +2017,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4QHadron* loh=(*leadhs)[iq];   // Pointer to the output hadron
       output->push_back(loh);
     }
+    delete leadhs;
+  }
+  else
+  {
+    if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
     delete leadhs;
   }
   // ------------- From here the secondaries are filled -------------------------
