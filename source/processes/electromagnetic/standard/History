@@ -1,4 +1,4 @@
-$Id: History,v 1.462 2009-08-12 21:32:30 vnivanch Exp $
+$Id: History,v 1.463 2009-08-28 16:42:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 August 09:  V.Ivant (emstand-V09-02-21)
+- G4PAIModel - fixed problem conneted with modifications for 
+               G4PhysicsVector (removel of hidden bin)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - O.Kadri
+               speadup computations, in particular, by reducing of 
+               number of calls to log
 
 12 August 09:  V.Ivant (emstand-V09-02-20)
 - G4PAIModel - fixed problem for high energy connected with bin number
