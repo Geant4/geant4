@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.30 2009-06-23 11:51:26 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.31 2009-08-28 09:21:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "emstandard_opt3") {
 
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    emPhysicsList = new G4EmStandardPhysics_option3();
 
   } else if (name == "emstandard_opt1") {
 

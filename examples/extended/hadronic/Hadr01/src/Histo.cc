@@ -50,11 +50,11 @@ Histo::Histo(G4int ver)
 {
   verbose    = ver;
   histName   = "histo";
-  histType   = "hbook";
+  histType   = "root";
   option     = "--noErrors uncompress";
   nHisto     = 0;
   defaultAct = 1;
-  tupleName  = "tuple.hbook";
+  tupleName  = "tree.root";
   tupleId    = "100";
   tupleList  = "";
   ntup       = 0;
