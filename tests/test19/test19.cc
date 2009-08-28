@@ -1328,6 +1328,7 @@ int main()
   }
 #endif
   delete runManager;
+  delete cond;
 #ifdef meandbg
   G4cout<<"E="<<pE/nE<<":sE/E="<<sE/pE<<",dE/E="<<std::sqrt(sE2*nE-sE*sE)/pE
         <<",D%="<<100*nD/nE<<",sE="<<sE<<",sE2="<<sE2<<",nE="<<nE<<G4endl;
