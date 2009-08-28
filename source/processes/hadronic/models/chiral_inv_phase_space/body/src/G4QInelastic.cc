@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.4 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.5 2009-08-28 17:08:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -108,7 +108,6 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, G4QNucleus &tNucleus)
 #ifdef debug
   G4cout<<"G4QInelastic::Construc:TargNucleus4Mom="<<theTargNucleus.Get4Momentum()<<G4endl;
 #endif
-
   theProjNucleus=G4QNucleus(pZ,pN);       // Create theProjNucleus to Move From LS to CM
   theProjNucleus.InitByPDG(pPDG);         // Reinit the Nucleus for the new Attempt?
   theProjNucleus.Init3D();                // 3D-initialisation(nucleons)ofThePrNucleusClone
@@ -145,210 +144,217 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, G4QNucleus &tNucleus)
 #endif
   G4int maxCuts = 7;                                 // @@ Can be reduced for low energies
   //
-  // >>>>>>>>>> Find collisions meeting collision conditions @@@ get proj Nucleon
+  // >>>>>>>>>> Find collisions meeting collision conditions and the NN interaction XS
   //
-  // 
-  theProjNucleus.StartLoop();                        // Prepare Loop ovder nucleons
-  G4QHadron* pNucleon = theProjNucleus.GetNextNucleon(); // Get the next projNucleon to try
-  G4LorentzVector pNuc4M=pNucleon->Get4Momentum();
-  theTargNucleus.StartLoop();                        // Prepare Loop ovder nucleons
-  G4QHadron* tNucleon = theTargNucleus.GetNextNucleon(); // Get the next targNucleon to try
-  G4LorentzVector tNuc4M=tNucleon->Get4Momentum();
-  // @@ Do not forget to delete the probability! 
-  G4QProbability theProbability(pPDG);               // thePDG must be a data member
   G4double outerRadius = theProjNucleus.GetOuterRadius()+theTargNucleus.GetOuterRadius();
-#ifdef debug
-  G4cout<<"G4QInel::Constr:OuterR="<<outerRadius<<", mC="<<maxCuts<<", pA="<<theProjNucleus
-        <<", tA="<<theTargNucleus<<G4endl;
-#endif
-  // Check the reaction threshold 
-  G4double s = (tNuc4M + pNuc4M).mag2();             // Squared CM Energy of compound
-  G4double ThresholdMass = projM + tNucleon->GetMass(); // @@ Nucleon can be virtual...?
-#ifdef debug
-  G4cout<<"G4QInel::Constr: pN4M="<<pNuc4M<<", s="<<s<<", ThreshM="<<ThresholdMass<<G4endl;
-#endif
-  ModelMode = SOFT;                                  // NOT-Diffractive hadronization
-  if (s < 0.)                                        // At ThP=0 is impossible(virtNucl)
-  {
-    G4cerr<<"***G4QInelastic::Construct:s="<<s<<",pN4M="<<pNuc4M<<",tN4M="<<tNuc4M<<G4endl;
-    G4Exception("G4QInelastic::Construct:","72",FatalException,"LowEnergy(NegativeS)");
-  }
-  if (s < sqr(ThresholdMass))                        // --> Only diffractive interaction
-  {
-#ifdef debug
-    G4cout<<"G4QInelastic::Construct:*OnlyDiffraction*ThM="<<ThresholdMass<<">sqrt(s)="
-          <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif toQuasmon
-#endif
-    ModelMode = DIFFRACTIVE;
-  }
+  G4QProbability theProbability(2212);               // *** proj/targ nucleons ***
   // Clean up all previous interactions and reset the counters
 #ifdef debug
   G4cout<<"G4QInelastic::Construct: theIntSize="<<theInteractions.size()<<G4endl;
 #endif
-  std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
-  theInteractions.clear();
-  G4int totalCuts = 0;
   G4int attCnt=0;
   G4int maxAtt=27;
-  G4double prEn=proj4M.e();                           // For mesons
-  G4int proB=pNucleus.GetBaryonNumber();
-  if     (proB>0) prEn-=pNucleus.GetMass();           // For baryons
-  else if(proB<0) prEn+=mProt;                        // For anti-baryons
-#ifdef debug
-  G4double impactUsed = 0.;
-  G4cout<<"G4QInelastic::Construct: estimated energy, prEn="<<prEn<<G4endl;
-#endif
-  while(!theInteractions.size() && ++attCnt < maxAtt) // Till Interaction is created
+  // From here a loop over nucleons of the projectile Nucleus (@@ Z-sorting isn't implem!!)
+  //
+  G4QHadron* pNucleon; // Proto of the Projectile Nucleon pointer
+  G4QHadron* tNucleon; // Proto of the Target Nucleon pointer
+  while(!theInteractions.size() && ++attCnt < maxAtt)// TillAtLeastOneInteractionExists
   {
+    std::for_each(theInteractions.begin(),theInteractions.end(), DeleteQInteraction());
+    theInteractions.clear();
+    // @@ Recover the proj and Targ nuclei !!
+    theProjNucleus.StartLoop();                      // Prepare Loop ovder nucleons
+    pNucleon = theProjNucleus.GetNextNucleon();      // Get theNextProjNucleon to try
+    G4LorentzVector pNuc4M=pNucleon->Get4Momentum();
+    G4double prEn=proj4M.e();                          // For mesons
+    G4int proB=pNucleus.GetBaryonNumber();
+    if     (proB>0) prEn-=pNucleus.GetMass();          // For baryons
+    else if(proB<0) prEn+=mProt;                       // For anti-baryons
 #ifdef debug
-    G4cout<<"G4QInelastic::Construct: *EnterTheInteractionLOOP*, att#"<<attCnt<<G4endl;
+    G4double impactUsed = 0.;
+    G4cout<<"G4QInelastic::Construct: estimated energy, prEn="<<prEn<<G4endl;
 #endif
-    // choose random impact parameter
-    std::pair<G4double, G4double> theImpactParameter;
-    theImpactParameter = theProjNucleus.ChooseImpactXandY(outerRadius);
-    G4double impactX = theImpactParameter.first; 
-    G4double impactY = theImpactParameter.second;
-#ifdef debug
-    G4cout<<"G4QInelastic::Construct: Impact Par X="<<impactX<<", Y="<<impactY<<G4endl;
-#endif
-    G4double impar=std::sqrt(impactX*impactX+impactY*impactY);   
-    G4int nA=theTargNucleus.GetA();
-    G4double eflen=theTargNucleus.GetThickness(impar);   // EffectiveLength
-    maxEn=eflen*stringTension;                       // max absorbed energy in IndUnits=MeV
-    maxNuc=static_cast<int>(eflen*tubeDensity+0.5);  // max #0f involved nuclear nucleons
-#ifdef debug
-    G4cout<<"G4QInelastic::Construct: pE="<<prEn<<" < mE="<<maxEn<<", mN="<<maxNuc<<G4endl;
-#endif
-    if(prEn < maxEn)                                 // Create DIN interaction and go out
+    G4int totalCuts = 0;
+    G4int atCn=0;
+    G4int maxAt=27;
+    while(!theInteractions.size() && ++atCn < maxAt)// Till Interaction is created
     {
-      theProjNucleus.StartLoop();                    // Initialize newSelection forNucleons
-      pNucleon=theProjNucleus.GetNextNucleon();      // Select a nucleon
-      G4QHadron* aProjectile = new G4QHadron(*pNucleon); // Copy selected PrNuc for String
-      theTargNucleus.StartLoop();                    // Initialize newSelection forNucleons
-      tNucleon=theTargNucleus.GetNextNucleon();      // Select a nucleon
-      G4QHadron* aTarget = new G4QHadron(*tNucleon); // Copy selected nucleon for String
-      G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
-      anInteraction->SetTarget(aTarget); 
-      anInteraction->SetNumberOfDINRCollisions(1);   // Consider this interaction as DINR
-      theInteractions.push_back(anInteraction);      //--> now the Interaction is not empty
-      theProjNucleus.DoLorentzBoost(-theALVelocity); // Boost theResPrNucleus toRotAntiLab
-      theProjNucleus.SubtractNucleon(pNucleon);      // Pointer to the used ProjNucleon
-      theProjNucleus.DoLorentzBoost(theALVelocity);  // Boost theResProjNucleus back to CM
-      theTargNucleus.DoLorentzBoost(theCMVelocity);  // Boost theResTgNucleus to RotatedLS
-      theTargNucleus.SubtractNucleon(tNucleon);      // Pointer to the used TargNucleon
-      theTargNucleus.DoLorentzBoost(-theCMVelocity); // Boost theResTargNucleus back to CM
+      // @@ This is a fake (random) s calculation @@ can be done inside the TARG-while
+      theTargNucleus.StartLoop();                      // Prepare Loop ovder nucleons
+      tNucleon = theTargNucleus.GetNextNucleon(); // Get theNextTargNucleon to try
+      G4LorentzVector tNuc4M=tNucleon->Get4Momentum();
 #ifdef debug
-      G4cout<<"G4QInelastic::Construct: DINR interaction is created"<<G4endl;
+      G4cout<<"G4QInelastic::Constr:OuterR="<<outerRadius<<", mC="<<maxCuts<<", pA="
+            <<theProjNucleus<<", tA="<<theTargNucleus<<G4endl;
 #endif
-      break;                                         // Break the WHILE of interactions
-    }
-    // LOOP over nuclei of the target nucleus to select collisions
-    theTargNucleus.StartLoop();                          // To get the same nucleon
-    G4int nucCount = 0;
+      // Check the reaction threshold 
+      G4double s = (tNuc4M + pNuc4M).mag2();           // Squared CM Energy of compound
+      G4double ThresholdMass = pNucleon->GetMass() + tNucleon->GetMass(); // @@ Low Energies
 #ifdef debug
-    G4cout<<"G4QInelastic::Construct: Before the WHILE over nucleons, A="<<nA<<G4endl;
+      G4cout<<"G4QInel::Constr: s="<<s<<", ThreshM="<<ThresholdMass<<G4endl;
 #endif
-    while((tNucleon=theTargNucleus.GetNextNucleon()) && nucCount<nA && totalCuts<maxCuts)
-    {
-      ++nucCount;
-      // Needs to be moved to Probability class @@@
-      G4double s = ( pNucleon->Get4Momentum() + tNucleon->Get4Momentum() ).mag2();
-      if(s<=10000.)
+      ModelMode = SOFT;                                // NOT-Diffractive hadronization
+      if (s < 0.)                                      // At ThP=0 is impossible(virtNucl)
       {
-        G4cout<<"-Warning-G4QInelastic::Construct: s < .01 GeV^2, p4M="
-              <<pNucleon->Get4Momentum()<<",t4M="<<tNucleon->Get4Momentum()<<G4endl;
-        continue;
+        G4cerr<<"***G4QInelast::Construct:s="<<s<<",pN4M="<<pNuc4M<<",tN4M="<<tNuc4M<<G4endl;
+        G4Exception("G4QInelastic::Construct:","72",FatalException,"LowEnergy(NegativeS)");
       }
-#ifdef sdebug
-      G4cout<<"G4QInelastic::Construct:LOOPovNuc,nC="<<nucCount<<", s="<<s<<", pR="
-            <<pNucleon->GetPosition()<<", tR="<<tNucleon->GetPosition()<<G4endl;
-#endif
-      G4double Distance2 = sqr(impactX - tNucleon->GetPosition().x()) +
-                           sqr(impactY - tNucleon->GetPosition().y());
-#ifdef sdebug
-      G4cout<<"G4QInelastic::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
-#endif
-      G4double Probability = theProbability.GetInelasticProbability(s, Distance2);// INEL
-      // test for inelastic collision
-#ifdef sdebug
-      G4cout<<"G4QInelastic::Construct: Probubility="<<Probability<<G4endl;
-#endif
-      G4double rndNumber = G4UniformRand();           // For the printing purpose
-      // ModelMode = DIFFRACTIVE;
-#ifdef sdebug
-      G4cout<<"G4QInelastic::Construct: NLOOP prob="<<Probability<<", rndm="<<rndNumber
-            <<", d="<<std::sqrt(Distance2)<<G4endl;
-#endif
-      if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction (JOB)
+      if (s < sqr(ThresholdMass))                      // --> Only diffractive interaction
       {
-        G4QHadron* aProjectile = new G4QHadron(*pNucleon);// Copy selected PrNuc for String
-        G4QHadron* aTarget = new G4QHadron(*tNucleon);// Copy selected TgNucleon for String
+#ifdef debug
+        G4cout<<"G4QInelastic::Construct:*OnlyDiffraction*ThM="<<ThresholdMass<<">sqrt(s)="
+              <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif toQuasmon
+#endif
+        ModelMode = DIFFRACTIVE;
+      }
+#ifdef debug
+      G4cout<<"G4QInelastic::Construct: *EnterTheInteractionLOOP*, att#"<<atCn<<G4endl;
+#endif
+      // choose random impact parameter
+      std::pair<G4double, G4double> theImpactParameter;
+      theImpactParameter = theProjNucleus.ChooseImpactXandY(outerRadius);
+      G4double impactX = theImpactParameter.first; 
+      G4double impactY = theImpactParameter.second;
+#ifdef debug
+      G4cout<<"G4QInelastic::Construct: Impact Par X="<<impactX<<", Y="<<impactY<<G4endl;
+#endif
+      G4double impar=std::sqrt(impactX*impactX+impactY*impactY); // @@ change for AA   
+      G4int nA=theTargNucleus.GetA();
+      G4double eflen=theTargNucleus.GetThickness(impar); // EffectiveLength
+      maxEn=eflen*stringTension;                       // maxAbsorbedEnergy in IndUnits=MeV
+      maxNuc=static_cast<int>(eflen*tubeDensity+0.5);  // max #0f involved nuclear nucleons
+#ifdef debug
+      G4cout<<"G4QInelastic::Construct: pE="<<prEn<<" < mE="<<maxEn<<", mN="<<maxNuc<<G4endl;
+#endif
+      if(prEn < maxEn)                                 // Create DIN interaction and go out
+      {
+        G4QHadron* aProjectile = new G4QHadron(*pNucleon); // Copy selected PrNuc for String
+        theTargNucleus.StartLoop();                    // Initialize newSelection forNucleons
+        tNucleon=theTargNucleus.GetNextNucleon();      // Select a nucleon
+        G4QHadron* aTarget = new G4QHadron(*tNucleon); // Copy selected nucleon for String
+        G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
+        anInteraction->SetTarget(aTarget); 
+        anInteraction->SetNumberOfDINRCollisions(1);   // Consider this interaction as DINR
+        theInteractions.push_back(anInteraction);      //--> now the Interaction is not empty
+        theProjNucleus.DoLorentzBoost(-theALVelocity); // Boost theResPrNucleus toRotAntiLab
+        theProjNucleus.SubtractNucleon(pNucleon);      // Pointer to the used ProjNucleon
+        theProjNucleus.DoLorentzBoost(theALVelocity);  // Boost theResProjNucleus back to CM
+        theTargNucleus.DoLorentzBoost(theCMVelocity);  // Boost theResTgNucleus to RotatedLS
+        theTargNucleus.SubtractNucleon(tNucleon);      // Pointer to the used TargNucleon
+        theTargNucleus.DoLorentzBoost(-theCMVelocity); // Boost theResTargNucleus back to CM
+#ifdef debug
+        G4cout<<"G4QInelastic::Construct: DINR interaction is created"<<G4endl;
+#endif
+        break;                                         // Break the WHILE of interactions
+      }
+      // LOOP over nuclei of the target nucleus to select collisions
+      theTargNucleus.StartLoop();                          // To get the same nucleon
+      G4int nucCount = 0;
+#ifdef debug
+      G4cout<<"G4QInelastic::Construct: Before the WHILE over nucleons, A="<<nA<<G4endl;
+#endif
+      while((tNucleon=theTargNucleus.GetNextNucleon()) && nucCount<nA && totalCuts<maxCuts)
+      {
+        ++nucCount;
+        // Needs to be moved to Probability class @@@
+        G4double s = ( pNucleon->Get4Momentum() + tNucleon->Get4Momentum() ).mag2();
+        if(s<=10000.)
+        {
+          G4cout<<"-Warning-G4QInelastic::Construct: s < .01 GeV^2, p4M="
+                <<pNucleon->Get4Momentum()<<",t4M="<<tNucleon->Get4Momentum()<<G4endl;
+          continue;
+        }
+#ifdef sdebug
+        G4cout<<"G4QInelastic::Construct:LOOPovNuc,nC="<<nucCount<<", s="<<s<<", pR="
+              <<pNucleon->GetPosition()<<", tR="<<tNucleon->GetPosition()<<G4endl;
+#endif
+        G4double Distance2 = sqr(impactX - tNucleon->GetPosition().x()) +
+                             sqr(impactY - tNucleon->GetPosition().y());
+#ifdef sdebug
+        G4cout<<"G4QInelastic::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
+#endif
+        G4double Probability = theProbability.GetInelasticProbability(s, Distance2);// INEL
+        // test for inelastic collision
+#ifdef sdebug
+        G4cout<<"G4QInelastic::Construct: Probubility="<<Probability<<G4endl;
+#endif
+        G4double rndNumber = G4UniformRand();           // For the printing purpose
+        // ModelMode = DIFFRACTIVE;
+#ifdef sdebug
+        G4cout<<"G4QInelastic::Construct: NLOOP prob="<<Probability<<", rndm="<<rndNumber
+              <<", d="<<std::sqrt(Distance2)<<G4endl;
+#endif
+        if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction (JOB)
+        {
+          G4QHadron* aProjectile = new G4QHadron(*pNucleon);// Copy selected PrNuc for String
+          G4QHadron* aTarget = new G4QHadron(*tNucleon);// Copy selected TgNucleon for String
 #ifdef edebug
-        G4cout<<"--->EMC-->G4QInelastic::Construct: Target Nucleon is filled, 4M/PDG="
+          G4cout<<"--->EMC-->G4QInelastic::Construct: Target Nucleon is filled, 4M/PDG="
               <<aTarget->Get4Momentum()<<aTarget->GetPDGCode()<<G4endl;
 #endif
-        // Now the energy of the nucleons must be updated in CMS
-        theProjNucleus.DoLorentzBoost(-theALVelocity);// Boost theResNucleus toRotatedLS
-        theProjNucleus.SubtractNucleon(pNucleon);     // Pointer to the used nucleon
-        theProjNucleus.DoLorentzBoost(theALVelocity); // Boost theResNucleus back to CM
-        theTargNucleus.DoLorentzBoost(theCMVelocity); // Boost theResNucleus toRotatedLS
-        theTargNucleus.SubtractNucleon(tNucleon);     // Pointer to the used nucleon
-        theTargNucleus.DoLorentzBoost(-theCMVelocity);// Boost theResNucleus back to CM
-        if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
-            G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
-        { 
-          // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
-          if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
-          else                          ExciteDiffParticipants(aProjectile, aTarget);
-          G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
-          anInteraction->SetTarget(aTarget); 
-          anInteraction->SetNumberOfDiffractiveCollisions(1); // Why not increment? M.K.?
-          theInteractions.push_back(anInteraction);   //--> now theInteractions not empty
-          // @@ Why not breake the NLOOP, if only one diffractive can happend?
-          totalCuts++;                                // UpdateOfNucleons in't necessary
+          // Now the energy of the nucleons must be updated in CMS
+          theProjNucleus.DoLorentzBoost(-theALVelocity);// Boost theResNucleus toRotatedLS
+          theProjNucleus.SubtractNucleon(pNucleon);     // Pointer to the used nucleon
+          theProjNucleus.DoLorentzBoost(theALVelocity); // Boost theResNucleus back to CM
+          theTargNucleus.DoLorentzBoost(theCMVelocity); // Boost theResNucleus toRotatedLS
+          theTargNucleus.SubtractNucleon(tNucleon);     // Pointer to the used nucleon
+          theTargNucleus.DoLorentzBoost(-theCMVelocity);// Boost theResNucleus back to CM
+          if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
+              G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
+          { 
+            // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
+            if(IsSingleDiffractive()) ExciteSingDiffParticipants(aProjectile, aTarget);
+            else                          ExciteDiffParticipants(aProjectile, aTarget);
+            G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
+            anInteraction->SetTarget(aTarget); 
+            anInteraction->SetNumberOfDiffractiveCollisions(1); // Why not increment? M.K.?
+            theInteractions.push_back(anInteraction);   //--> now theInteractions not empty
+            // @@ Why not breake the NLOOP, if only one diffractive can happend?
+            totalCuts++;                                // UpdateOfNucleons in't necessary
 #ifdef debug
-          G4cout<<"G4QInelastic::Construct:NLOOP DiffInteract, tC="<<totalCuts<<G4endl;
+            G4cout<<"G4QInelastic::Construct:NLOOP DiffInteract, tC="<<totalCuts<<G4endl;
 #endif
-        }
-        else
-        {
-          // -------------->>>>> nondiffractive = soft interaction
-          // sample nCut+1 (cut Pomerons) pairs of strings can be produced
-          G4int nCut;                                 // Result in a chosen number of cuts
-          G4double* running = new G4double[nCutMax];  // @@ This limits the max cuts
-          for(nCut = 0; nCut < nCutMax; nCut++)       // Calculates multiCut probabilities
-          {
-            running[nCut]= theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
-            if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
           }
-          G4double random = running[nCutMax-1]*G4UniformRand();
-          for(nCut = 0; nCut < nCutMax; nCut++) if(running[nCut] > random) break;
-          delete [] running;
+          else
+          {
+            // -------------->>>>> nondiffractive = soft interaction
+            // sample nCut+1 (cut Pomerons) pairs of strings can be produced
+            G4int nCut;                                 // Result in a chosen number of cuts
+            G4double* running = new G4double[nCutMax];  // @@ This limits the max cuts
+            for(nCut = 0; nCut < nCutMax; nCut++)       // Calculates multiCut probabilities
+            {
+              running[nCut]= theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
+              if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
+            }
+            G4double random = running[nCutMax-1]*G4UniformRand();
+            for(nCut = 0; nCut < nCutMax; nCut++) if(running[nCut] > random) break;
+            delete [] running;
 #ifdef debug
-          G4cout<<"G4QInelastic::Construct: NLOOP-Soft Chosen nCut="<<nCut<<G4endl;
+            G4cout<<"G4QInelastic::Construct: NLOOP-Soft Chosen nCut="<<nCut<<G4endl;
 #endif
-          // @@ If nCut>0 interaction with a few nucleons is possible
-          // @@ nCut is found with big efforts and now nCut=0 ?? M.K. ?? !!
-          //nCut = 0; // @@ in original code ?? @@
-          aTarget->IncrementCollisionCount(nCut+1); // @@ What about multyNucleon target?
-          aProjectile->IncrementCollisionCount(nCut+1);
-          G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
-          anInteraction->SetTarget(aTarget);
-          anInteraction->SetNumberOfSoftCollisions(nCut+1);
-          theInteractions.push_back(anInteraction);
-          totalCuts += nCut+1;
+            // @@ If nCut>0 interaction with a few nucleons is possible
+            // @@ nCut is found with big efforts and now nCut=0 ?? M.K. ?? !!
+            //nCut = 0; // @@ in original code ?? @@
+            aTarget->IncrementCollisionCount(nCut+1); // @@ What about multyNucleon target?
+            aProjectile->IncrementCollisionCount(nCut+1);
+            G4QInteraction* anInteraction = new G4QInteraction(aProjectile);
+            anInteraction->SetTarget(aTarget);
+            anInteraction->SetNumberOfSoftCollisions(nCut+1);
+            theInteractions.push_back(anInteraction);
+            totalCuts += nCut+1;
 #ifdef debug
-          G4cout<<"G4QInelastic::Construct:NLOOP SoftInteract, tC="<<totalCuts<<G4endl;
-          impactUsed=Distance2;
+            G4cout<<"G4QInelastic::Construct:NLOOP SoftInteract, tC="<<totalCuts<<G4endl;
+            impactUsed=Distance2;
 #endif
+          }
         }
-      }
-    } // End of While over nucleons
-    // When nucleon count is incremented, the LOOP stops, so nucCount==1 always!
+      } // End of While over target nucleons
+      // When nucleon count is incremented, the LOOP stops, so nucCount==1 always!
 #ifdef debug
-    G4cout<<"G4QInelastic::Construct: NUCLEONCOUNT="<<nucCount<<G4endl;
+      G4cout<<"G4QInelastic::Construct: NUCLEONCOUNT="<<nucCount<<G4endl;
 #endif
-  }
+    } // End of WHILE over attempts to find the target nucleon
+  } // End of WHILE over attempts to find at least one nucleus-nucleus interaction
   G4int nInt=theInteractions.size();
 #ifdef debug
   G4cout<<"G4QInelastic::Construct: CUTDEBUG="<<totalCuts<<", ImpactParam="

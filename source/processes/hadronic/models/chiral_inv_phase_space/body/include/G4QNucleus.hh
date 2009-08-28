@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.43 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.44 2009-08-28 17:08:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -57,9 +57,9 @@ public:
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s=0);                 // At Rest ZNS-Constructor
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
-  //G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
   G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
   ~G4QNucleus();                                           // Public Destructor
+  const G4QNucleus& Copy3D(const G4QNucleus& right);       // Copy 3D nucleus
   // Overloaded Operators
   const G4QNucleus& operator=(const G4QNucleus& right);
   G4bool operator==(const G4QNucleus &right) const {return this==&right;}
@@ -86,7 +86,6 @@ public:
   }
   G4int      GetNDefMesonC() const{return nDefMesonC;}; // max#of predefed mesonCandidates
   G4int      GetNDefBaryonC()const{return nDefBaryonC;};// max#of predefed baryonCandidates
-  std::pair<G4double, G4double> RefetchImpactXandY() const {return theImpactParameter;}
   G4double GetDensity(const G4ThreeVector&aPos) {return rho0*GetRelativeDensity(aPos);}
   G4double GetRho0()                 {return rho0;} // One nucleon prob-density 
   G4double GetRelativeDensity(const G4ThreeVector& aPosition); // Densyty/rho0
@@ -217,7 +216,6 @@ private:
   G4int maxClust;                 // Baryon Number of the last calculated cluster
   G4double probVect[256];         // Cluster probability ("a#of issues" can be real) Vector
   // 3D
-  std::pair<G4double, G4double> theImpactParameter; // 2D impact parameter vector bbar
   G4QHadronVector theNucleons;    // Vector of nucleons of which the Nucleus consists of
   G4int currentNucleon;           // Current nucleon for the NextNucleon (? M.K.)
   G4double rho0;                  // Normalazation density
