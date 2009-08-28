@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.62 2009-08-24 14:41:49 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.63 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -1128,7 +1128,8 @@ void G4QHadron::SplitUp()
     G4cout<<"G4QHadron::SplitUp: *Dif* Rminus="<<RightMinus<<",Lminus="<<LeftMinus<<",hmm="
           <<theMomentum.minus()<<G4endl;
 #endif
-    G4double LeftPlus  = LeftMom.perp2()/LeftMinus;
+    G4double LeftPlus  = 0.;
+    if(LeftMinus) LeftPlus  = LeftMom.perp2()/LeftMinus;
     G4double RightPlus = theMomentum.plus() - LeftPlus;
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Dif* Rplus="<<RightPlus<<", Lplus="<<LeftPlus<<G4endl;

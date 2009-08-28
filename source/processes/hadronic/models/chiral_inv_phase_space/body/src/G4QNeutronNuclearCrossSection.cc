@@ -57,12 +57,24 @@ G4double  G4QNeutronNuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QNeutronNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QNeutronNuclearCrossSection::lastI=0;   // The last position in the DAMDB
 G4double  G4QNeutronNuclearCrossSection::HEthresh=0.;// HE threshold for the CS calculation
+std::vector<G4double*>* G4QNeutronNuclearCrossSection::LEN = new std::vector<G4double*>;
+std::vector<G4double*>* G4QNeutronNuclearCrossSection::HEN = new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QNeutronNuclearCrossSection::GetPointer()
 {
   static G4QNeutronNuclearCrossSection theCrossSection; //**Static body of Cross Section**
   return &theCrossSection;
+}
+
+G4QNeutronNuclearCrossSection::~G4QNeutronNuclearCrossSection()
+{
+  G4int lens=LEN->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*LEN)[i];
+  delete LEN;
+  G4int hens=HEN->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
+  delete HEN;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -234,8 +246,6 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
   //
   // Associative memory for acceleration
   //static std::vector <G4double>  spA;  // shadowing coefficients (A-dependent)
-  static std::vector <G4double*> LEN;  // Vector of pointers to LowEnProtonCrossSection
-  static std::vector <G4double*> HEN;  // Vector of pointers to HighEnProtonCrossSection
 #ifdef debug
   G4cout<<"G4QNeutNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
@@ -250,10 +260,10 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
   {
     if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
     {
-      G4int sync=LEN.size();
+      G4int sync=LEN->size();
       if(sync<=I) G4cerr<<"*!*G4QNetronNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
-      lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
-      lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
+      lastLEN=(*LEN)[I];               // Pointer to prepared LowEnergy cross sections
+      lastHEN=(*HEN)[I];               // Pointer to prepared High Energy cross sections
     }
     else                               // This isotope wasn't calculated before => CREATE
     {
@@ -280,7 +290,7 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       }
       // --- End of possible separate function
       // *** The synchronization check ***
-      G4int sync=LEN.size();
+      G4int sync=LEN->size();
 #ifdef debug
       G4cout<<"-*->G4QNeutNCS::CCS:Z="<<targZ<<",N="<<targN<<",I="<<I<<",S="<<sync<<G4endl;
 #endif
@@ -290,8 +300,8 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
               <<", N="<<targN<<", F="<<F<<G4endl;
         //G4Exception("G4ProtonNuclearCS::CalculateCS:","39",FatalException,"overflow DB");
       }
-      LEN.push_back(lastLEN);          // remember the Low Energy Table
-      HEN.push_back(lastHEN);          // remember the High Energy Table
+      LEN->push_back(lastLEN);          // remember the Low Energy Table
+      HEN->push_back(lastHEN);          // remember the High Energy Table
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================

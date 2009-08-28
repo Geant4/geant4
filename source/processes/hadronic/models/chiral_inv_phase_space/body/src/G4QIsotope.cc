@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.12 2009-08-24 14:41:49 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.13 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -696,29 +696,20 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
   {
     pair<G4int, vector<pair<G4int,G4double>*>* >* nEl= newElems[j];
     G4int nEn=nEl->second->size();
-    if(nEn) for(G4int k=0; k<nEn; k++)
-    {
-      pair<G4int,G4double>* curA=(*(nEl->second))[k];
-      delete curA;                 // Delete vect<pair(N,Abundancy)*>
-    }
+    if(nEn) for(G4int k=0; k<nEn; k++) delete (*(nEl->second))[k]; // Del vect<pair(N,A)*>
+    delete nEl->second;            // Delete the vector
     delete nEl;                    // Delete vect<IndZ,vect<pair(N,Ab)*>*> newElementVector
     //
     pair<G4int, vector<pair<G4int,G4double>*>* >* nSA= newSumAb[j];
     G4int nSn=nSA->second->size();
-    if(nSn) for(G4int n=0; n<nSn; n++)
-    {
-      pair<G4int,G4double>* curS=(*(nSA->second))[n];
-      delete curS;                 // Delete vect<pair(N,SumAbund)*>
-    }
+    if(nSn) for(G4int n=0; n<nSn; n++) delete (*(nSA->second))[n]; // Del vect<pair(N,S)*>
+    delete nSA->second;            // Delete the vector
     delete nSA;                    // Delete vect<IndZ,vect<pair(N,SA)*>*> newSumAbunVector
     //
     pair<G4int, vector<pair<G4int,G4double>*>* >* nCS= newIsoCS[j];
     G4int nCn=nCS->second->size();
-    if(nCn) for(G4int m=0; m<nCn; m++)
-    {
-      pair<G4int,G4double>* curC = (*(nCS->second))[m];
-      delete curC;                 // Delete vect<pair(N,CrossSect)*>
-    }
+    if(nCn) for(G4int m=0; m<nCn; m++) delete (*(nCS->second))[m]; // Del vect<pair(N,C)*>
+    delete nCS->second;            // Delete the vector
     delete nCS;                    // Delete vect<IndZ,vect<pair(N,CS)*>*> newIsoCroSVector
     //
     if(nEn!=nCn) G4cerr<<"*G4QIsotope-WORNING-:#El="<<j<<":nE="<<nEn<<"!=nC="<<nCn<<G4endl;

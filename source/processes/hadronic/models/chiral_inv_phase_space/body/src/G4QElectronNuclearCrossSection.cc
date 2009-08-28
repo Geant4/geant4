@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.5 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.6 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,12 +64,28 @@ G4double  G4QElectronNuclearCrossSection::lastP=0.;  // Last used in cross secti
 G4double  G4QElectronNuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QElectronNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QElectronNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+std::vector<G4double*>* G4QElectronNuclearCrossSection::J1 = new std::vector<G4double*>;
+std::vector<G4double*>* G4QElectronNuclearCrossSection::J2 = new std::vector<G4double*>;
+std::vector<G4double*>* G4QElectronNuclearCrossSection::J3 = new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QElectronNuclearCrossSection::GetPointer()
 {
   static G4QElectronNuclearCrossSection theCrossSection; //**Static body of Cross Section**
   return &theCrossSection;
+}
+
+G4QElectronNuclearCrossSection::~G4QElectronNuclearCrossSection()
+{
+  G4int lens=J1->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*J1)[i];
+  delete J1;
+  G4int hens=J2->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*J2)[i];
+  delete J2;
+  G4int pens=J3->size();
+  for(G4int i=0; i<pens; ++i) delete[] (*J3)[i];
+  delete J3;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -304,36 +320,32 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
 {
   static const G4int nE=336; // !!  If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
-  static const G4double EMi=2.0612;     // Minimum tabulated Energy of the Electron
-  static const G4double EMa=50000.;     // Maximum tabulated Energy of the Electron 
+  static const G4double EMi=2.0612;  // Minimum tabulated Energy of the Electron
+  static const G4double EMa=50000.;  // Maximum tabulated Energy of the Electron 
   static const G4double lEMi=std::log(EMi); // Min tabulated logarithmic Energy of Electron
   static const G4double lEMa=std::log(EMa); // Max tabulated logarithmic Energy of Electron
   static const G4double dlnE=(lEMa-lEMi)/mL; // Log step in the table for electron Energy
   static const G4double alop=1./137.036/3.14159265; //coefficient for Ee>50000 calculations
   static const G4double mel=0.5109989;       // Mass of the electron in MeV
-  static const G4double mel2=mel*mel;        // Squared Mass of the electron in MeV
+  static const G4double mel2=mel*mel;// Squared Mass of the electron in MeV
   static const G4double lmel=std::log(mel);       // Log of the electron mass
   // *** Begin of the Associative memory for acceleration of the cross section calculations
-  static std::vector <G4int> colF;     // Vector of LastStartPosition in Ji-function tables
-  static std::vector <G4double> colH;  // Vector of HighEnergyCoefficients (functional)
-  static std::vector <G4double*> J1;   // Vector of pointers to the J1 tabulated functions
-  static std::vector <G4double*> J2;   // Vector of pointers to the J2 tabulated functions
-  static std::vector <G4double*> J3;   // Vector of pointers to the J3 tabulated functions
+  static std::vector <G4int> colF;   // Vector of LastStartPosition in Ji-function tables
+  static std::vector <G4double> colH;// Vector of HighEnergyCoefficients (functional)
 #ifdef pdebug
-  G4cout<<"G4QElectronNucCrossSection::CalculateCrossSection: ***Called*** "<<J3.size();
-  if(J3.size()) G4cout<<", p="<<J3[0];
+  G4cout<<"G4QElectronNucCrossSection::CalculateCrossSection: ***Called*** "<<J3->size();
+  if(J3->size()) G4cout<<", p="<<(*J3)[0];
   G4cout<<G4endl;
-  //if(F==-27) return 0.;
 #endif
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Electron
-  onlyCS=CS;                           // Flag to calculate only CS (not Si/Bi)
+  onlyCS=CS;                         // Flag to calculate only CS (not Si/Bi)
   G4double TotEnergy2=Momentum*Momentum+mel2;
   G4double TotEnergy=std::sqrt(TotEnergy2); // Total energy of the electron
   lastE=TotEnergy-mel;                 // Kinetic energy of the electron
 #ifdef pdebug
   G4cout<<"G4QElectronNucCS::CalcCS: P="<<Momentum<<", F="<<F<<", I="<<I<<", Z="<<targZ;
-  if(J3.size()) G4cout<<", p="<<J3[0];
+  if(J3->size()) G4cout<<", p="<<(*J3)[0];
   G4cout<<", N="<<targN<<", onlyCS="<<CS<<",E="<<lastE<<",th="<<EMi<<G4endl;
 #endif
   G4double A=targN+targZ;            // New A (can differ from G4double targetAtomicNumber)
@@ -351,9 +363,9 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
 #endif
         return 0.;
       }
-      lastJ1 =J1[I];                 // Pointer to the prepared J1 function
-      lastJ2 =J2[I];                 // Pointer to the prepared J2 function
-      lastJ3 =J3[I];                 // Pointer to the prepared J3 function
+      lastJ1 =(*J1)[I];              // Pointer to the prepared J1 function
+      lastJ2 =(*J2)[I];              // Pointer to the prepared J2 function
+      lastJ3 =(*J3)[I];              // Pointer to the prepared J3 function
       lastF  =colF[I];               // Last ZeroPosition in the J-functions
       lastH  =colH[I];               // Last High Energy Coefficient (A-dependent)
     }
@@ -370,11 +382,11 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
       G4cout<<G4endl;
 #endif
       // *** The synchronization check ***
-      G4int sync=J1.size();
+      G4int sync=J1->size();
       if(sync!=I) G4cerr<<"***G4QElectNuclearCS::CalcCS: PDG=11 ,S="<<sync<<"#"<<I<<G4endl;
-      J1.push_back(lastJ1);
-      J2.push_back(lastJ2);
-      J3.push_back(lastJ3);
+      J1->push_back(lastJ1);
+      J2->push_back(lastJ2);
+      J3->push_back(lastJ3);
       colF.push_back(lastF);
       colH.push_back(lastH);
     } // End of creation of the new set of parameters
@@ -416,7 +428,7 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
     G4cout<<"G4QElectNucCS::CalcCS:S="<<lastSig<<",lE="<<lE<<",Yi="<<YNi<<",Yj="<<YNj
           <<",J1="<<lastJ1[blast]<<",J2="<<lastJ2[blast]<<",J3="<<lastJ3[blast]<<G4endl;
     G4cout<<"G4QElectNucCS::CalcCS:s="<<shift<<",Jb="<<lastJ1[blast]<<",J="<<lastJ1[lastL];
-    if(J3.size()) G4cout<<", p="<<J3[0];
+    if(J3->size()) G4cout<<", p="<<(*J3)[0];
     G4cout<<",b="<<blast<<",lEmax="<<lEMa<<",lgoe="<<lgoe<<G4endl;
 #endif
   }
@@ -433,13 +445,13 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int 
 #ifdef pdebug
     G4cout<<"G4QElNucCS::CalculateCrossSection:S="<<lastSig<<",lE="<<lE<<",J1="
           <<lastH*HighEnergyJ1(lE)<<",Pm="<<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh=";
-    if(J3.size()) G4cout<<", p="<<J3[0];
+    if(J3->size()) G4cout<<", p="<<(*J3)[0];
     G4cout<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
 #endif
   }
   if(lastSig<0.) lastSig = 0.;
 #ifdef pdebug
-  if(J3.size()) G4cout<<">>>>>>>>>>G4QElNucCS::CalculateCrossSection: p="<<J3[0]<<G4endl;
+  if(J3->size()) G4cout<<">>>>>>>>G4QElNucCS::CalculateCrossSection: p="<<(*J3)[0]<<G4endl;
 #endif
   return lastSig;
 }
@@ -2684,8 +2696,11 @@ G4double G4QElectronNuclearCrossSection::GetExchangeEnergy()
     if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
     else phLE=7.;
   }
+#ifdef pdebug
+  G4cout<<"G4QElectronNuclearCS::GetExchangeEnergy: *** DONE ***, lphE="<<phLE<<G4endl;
+#endif
   return std::exp(phLE);
-}
+} // End of GetExchangeEnergy
 
 G4double G4QElectronNuclearCrossSection::SolveTheEquation(G4double f)
 {

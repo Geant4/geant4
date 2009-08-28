@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.5 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.cc,v 1.6 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,12 +69,28 @@ G4double  G4QMuonNuclearCrossSection::lastP=0.;  // Last used in cross section M
 G4double  G4QMuonNuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QMuonNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QMuonNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+std::vector<G4double*>* G4QMuonNuclearCrossSection::J1 = new std::vector<G4double*>;
+std::vector<G4double*>* G4QMuonNuclearCrossSection::J2 = new std::vector<G4double*>;
+std::vector<G4double*>* G4QMuonNuclearCrossSection::J3 = new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QMuonNuclearCrossSection::GetPointer()
 {
   static G4QMuonNuclearCrossSection theCrossSection; //**Static body of the Cross Section**
   return &theCrossSection;
+}
+
+G4QMuonNuclearCrossSection::~G4QMuonNuclearCrossSection()
+{
+  G4int lens=J1->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*J1)[i];
+  delete J1;
+  G4int hens=J2->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*J2)[i];
+  delete J2;
+  G4int pens=J3->size();
+  for(G4int i=0; i<pens; ++i) delete[] (*J3)[i];
+  delete J3;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -320,14 +336,10 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
   // *** Begin of the Associative memory for acceleration of the cross section calculations
   static std::vector <G4int> colF;     // Vector of LastStartPosition in Ji-function tables
   static std::vector <G4double> colH;  // Vector of HighEnergyCoefficients (functional)
-  static std::vector <G4double*> J1;   // Vector of pointers to the J1 tabulated functions
-  static std::vector <G4double*> J2;   // Vector of pointers to the J2 tabulated functions
-  static std::vector <G4double*> J3;   // Vector of pointers to the J3 tabulated functions
 #ifdef pdebug
-  G4cout<<"G4QMuonNucCrossSection::CalculateCrossSection: ***Called*** "<<J3.size();
-  if(J3.size()) G4cout<<", p="<<J3[0];
+  G4cout<<"G4QMuonNucCrossSection::CalculateCrossSection: ***Called*** "<<J3->size();
+  if(J3->size()) G4cout<<", p="<<(*J3)[0];
   G4cout<<G4endl;
-  //if(F==-27) return 0.;
 #endif
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
@@ -354,9 +366,9 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
 #endif
         return 0.;
       }
-      lastJ1 =J1[I];                 // Pointer to the prepared J1 function
-      lastJ2 =J2[I];                 // Pointer to the prepared J2 function
-      lastJ3 =J3[I];                 // Pointer to the prepared J3 function
+      lastJ1 =(*J1)[I];              // Pointer to the prepared J1 function
+      lastJ2 =(*J2)[I];              // Pointer to the prepared J2 function
+      lastJ3 =(*J3)[I];              // Pointer to the prepared J3 function
       lastF  =colF[I];               // Last ZeroPosition in the J-functions
       lastH  =colH[I];               // Last High Energy Coefficient (A-dependent)
     }
@@ -371,11 +383,11 @@ G4double G4QMuonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G
       G4cout<<"==>G4QMuNCS::CalcCS:lJ1="<<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3<<G4endl;
 #endif
       // *** The synchronization check ***
-      G4int sync=J1.size();
+      G4int sync=J1->size();
       if(sync!=I) G4cerr<<"***G4QMuonNuclearCS::CalcCrS: PDG=13, S="<<sync<<"#"<<I<<G4endl;
-      J1.push_back(lastJ1);
-      J2.push_back(lastJ2);
-      J3.push_back(lastJ3);
+      J1->push_back(lastJ1);
+      J2->push_back(lastJ2);
+      J3->push_back(lastJ3);
       colF.push_back(lastF);
       colH.push_back(lastH);
     } // End of creation of the new set of parameters

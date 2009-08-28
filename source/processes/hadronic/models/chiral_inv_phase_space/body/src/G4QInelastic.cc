@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.3 2009-08-24 14:41:49 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.4 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1552,7 +1552,11 @@ G4QHadronVector* G4QInelastic::Fragment()
   else if(striNum) Breeder();                               // Strings fragmentation
   else                                                      // No strings, make HadrNucleus
   {
-    theResult = new G4QHadronVector;                        // Create new Result-vector
+    if(hadrNum)
+    {
+      for(G4int ih=0; ih<hadrNum; ih++) delete (*theResult)[ih];
+      theResult->clear();
+    }
     G4LorentzVector rp4M=theProjNucleus.Get4Momentum();     // Nucleus 4-momentum in LS
     G4int rpPDG=theProjNucleus.GetPDG();                    // Nuclear PDG
     G4QHadron* resPNuc = new G4QHadron(rpPDG,rp4M);         // Nucleus -> Hadron

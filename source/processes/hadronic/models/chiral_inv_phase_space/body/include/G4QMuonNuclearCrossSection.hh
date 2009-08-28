@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.hh,v 1.5 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QMuonNuclearCrossSection.hh,v 1.6 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ protected:
 
 public:
 
-  ~G4QMuonNuclearCrossSection()  {};
+  ~G4QMuonNuclearCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
@@ -111,6 +111,9 @@ private:
   static G4double  lastTH;   // Last value of the Momentum Threshold
   static G4double  lastCS;   // Last value of the Cross Section
   static G4int     lastI;    // The last position in the DAMDB
+  static std::vector <G4double*>* J1; // Vector of pointers to the J1 tabulated functions
+  static std::vector <G4double*>* J2; // Vector of pointers to the J2 tabulated functions
+  static std::vector <G4double*>* J3; // Vector of pointers to the J3 tabulated functions
 };
 
 inline G4double G4QMuonNuclearCrossSection::DFun(G4double x)// Parametrization of PhotNucCS

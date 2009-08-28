@@ -55,7 +55,7 @@ protected:
 
 public:
 
-  ~G4QProtonNuclearCrossSection() {}
+  ~G4QProtonNuclearCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
@@ -85,6 +85,8 @@ private:
   static G4double  lastTH;  // Last value of the Momentum Threshold
   static G4double  lastCS;  // Last value of the Cross Section
   static G4int     lastI;   // The last position in the DAMDB
+  static std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
+  static std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
 };
 
 #endif

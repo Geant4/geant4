@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.26 2009-08-24 14:41:49 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.27 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -360,7 +360,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #endif
       if (Probability > rndNumber) // Inelastic (diffractive or soft) interaction (JOB)
       {
-        G4QHadron* aTarget = new G4QHadron(*pNucleon);// Copy selected nucleon for String
+        G4QHadron* aTarget = new G4QHadron(*pNucleon);// Copy for String (ValgrindComplain)
 #ifdef edebug
         G4cout<<"--->EMC-->G4QFragmentation::Construct: Target Nucleon is filled, 4M/PDG="
               <<aTarget->Get4Momentum()<<aTarget->GetPDGCode()<<G4endl;
@@ -428,7 +428,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #ifdef debug
   G4cout<<"G4QFrag::Con:CUT="<<totalCuts<<",ImpPar="<<impactUsed<<",#ofInt="<<nInt<<G4endl;
 #endif
-  //--- Valgrind --- theInteractions[0]->GetNumberOfDINRCollisions() can be not initialized
+  // --- Use this line ---
   if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1)) // @@ ?? @@
   {
     G4QHadron* aTarget=0;
@@ -1569,7 +1569,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   }
   G4cout<<"-EMCLS-G4QFragm::Construct:r4M="<<u4M-totLS4M<<",rC="<<rCh<<",rB="<<rBa<<G4endl;
 #endif
-}
+} // End of the Constructer
 
 G4QFragmentation::~G4QFragmentation()
 {
@@ -1639,7 +1639,11 @@ G4QHadronVector* G4QFragmentation::Fragment()
   else if(striNum) Breeder();                               // Strings fragmentation
   else                                                      // No strings, make HadrNucleus
   {
-    theResult = new G4QHadronVector;                        // Create new Result-vector
+    if(hadrNum)
+    {
+      for(G4int ih=0; ih<hadrNum; ih++) delete (*theResult)[ih];
+      theResult->clear();
+    }
     G4LorentzVector r4M=theNucleus.Get4Momentum();          // Nucleus 4-momentum in LS
     G4int rPDG=theNucleus.GetPDG();                         // Nuclear PDG
     G4QHadron* resNuc = new G4QHadron(rPDG,r4M);            // Nucleus -> Hadron
@@ -1652,7 +1656,6 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #endif
   if(nQuas && theRS)
   {
-
     G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
@@ -1768,7 +1771,13 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #endif
     try                                                     //                            |
     {                                                       //                            |
+#ifdef debug
+    G4cout<<"G4QFrag::Fragm: *** Before Del Output ***"<<G4endl; //                       |
+#endif
       delete output;                                        //                            |
+#ifdef debug
+    G4cout<<"G4QFrag::Fragm: *** After Del Output ***"<<G4endl; //                        |
+#endif
       output = pan->Fragment();// DESTROYED after theHadrons are transferred to theResult |
     }                                                       //                          | |
     catch (G4QException& error)                             //                          | |
@@ -1776,7 +1785,13 @@ G4QHadronVector* G4QFragmentation::Fragment()
       G4cerr<<"***G4QFragmentation::Fragment: G4QE Exception is catched"<<G4endl; //    | |
       G4Exception("G4QFragmentation::Fragment:","27",FatalException,"CHIPSCrash");//    | |
     }                                                       //                          | |
-    delete pan;                              // Delete the Nuclear Environment <-----<--+-+
+#ifdef debug
+    G4cout<<"G4QFrag::Fragm: *** Before Del Pan ***"<<G4endl; //                        | |
+#endif
+    delete pan;                              // Delete the Nuclear Environment <-----<--+-*
+#ifdef debug
+    G4cout<<"G4QFrag::Fragm: *** After Del Pan ***"<<G4endl; //                         |
+#endif
     if(output)                               // Output exists                           |
     {                                        //                                         |
       G4int nOut=output->size();             // #ofHadrons in the Nuclear Fragmentation |

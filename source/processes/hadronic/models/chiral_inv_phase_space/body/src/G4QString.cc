@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.15 2009-08-24 14:41:49 mkossov Exp $
+// $Id: G4QString.cc,v 1.16 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -261,7 +261,7 @@ void G4QString::ExciteString(G4QParton* Color, G4QParton* AntiColor, G4int Direc
 #endif
   thePartons.push_back(Color);
   G4LorentzVector sum=Color->Get4Momentum();
-  thePartons.push_back(AntiColor);
+  thePartons.push_back(AntiColor); // @@ Complain of Valgrind
   sum+=AntiColor->Get4Momentum();
   Pplus =sum.e() + sum.pz();
   Pminus=sum.e() - sum.pz();
@@ -370,7 +370,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #ifdef debug
   G4cout<<"G4QString::FragmentString:OUTPUT is not yet defined, define Left/Right"<<G4endl;
 #endif  
-  LeftVector = new G4QHadronVector;
+  LeftVector = new G4QHadronVector; // Valgrind complain to LeftVector
   G4QHadronVector* RightVector = new G4QHadronVector;
   // Remember 4-momenta of the string ends (@@ only for the two-parton string, no gluons)
   G4LorentzVector left4M=GetLeftParton()->Get4Momentum(); // For recovery when failed
@@ -515,14 +515,14 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
 #endif 
       G4QHadron* LeftHadron;
       G4QHadron* RightHadron;
-      G4QParton* quark = 0;
+      G4QParton* RQuark = 0;
       SetLeftPartonStable();              // to query quark contents
       if(DecayIsQuark() && StableIsQuark()) // There're quarks on clusterEnds
       {
 #ifdef debug
         G4cout<<"G4QString::FragmentString: LOOP Quark Algorithm"<<G4endl;
 #endif 
-        LeftHadron= QuarkSplitup(GetLeftParton(), quark);
+        LeftHadron= QuarkSplitup(GetLeftParton(), RQuark);
       }
       else
       {
@@ -534,18 +534,20 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
         if(StableIsQuark()) IsParticle=(GetLeftParton()->GetPDGCode()>0)?-1:1;
         else                IsParticle=(GetLeftParton()->GetPDGCode()>0)?1:-1;
         G4QPartonPair QuarkPair = CreatePartonPair(IsParticle,false); // no diquarks
-        quark = QuarkPair.GetParton2();
-        LeftHadron = CreateHadron(QuarkPair.GetParton1(), GetLeftParton());
+        RQuark = QuarkPair.GetParton2();
+        G4QParton* LQuark = QuarkPair.GetParton1();
+        LeftHadron = CreateHadron(LQuark, GetLeftParton()); // Create Left Hadron
+        delete LQuark;                                      // Delete the temporaryParton
       }
-      RightHadron = CreateHadron(GetRightParton(), quark);
+      RightHadron = CreateHadron(GetRightParton(), RQuark); // Create Right Hadron
+      delete RQuark;                                        // Delete the temporaryParton
       //... repeat procedure, if mass of cluster is too low to produce hadrons
       G4double LhM=LeftHadron->GetMass();
       G4double RhM=RightHadron->GetMass();
 #ifdef debug
-      G4cout<<"G4QString::FragmentString: LOOP L="<<LeftHadron->GetPDGCode()<<", R="
-            <<RightHadron->GetPDGCode()<<", ML="<<LhM<<", MR="<<RhM<<", SumM="<<LhM+RhM
-            <<", tM="<<totM<<G4endl;
-#endif 
+      G4cout<<"G4QStr::FrSt:L="<<LeftHadron->GetPDGCode()<<",R="<<RightHadron->GetPDGCode()
+            <<",ML="<<LhM<<",MR="<<RhM<<",SumM="<<LhM+RhM<<",tM="<<totM<<G4endl;
+#endif
       if(totM < LhM + RhM) success=false;
       //... compute hadron momenta and energies   
       if(success)
@@ -561,17 +563,21 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
           delete RightHadron;
         }
 #ifdef debug
-        G4cout<<">>>>>G4QString::FragmentString: HFilled (L) PDG="
-              <<LeftHadron->GetPDGCode()<<", 4M="<<Lh4M<<G4endl;
-        G4cout<<">>>>>G4QString::FragmentString: HFilled (R) PDG="
-              <<RightHadron->GetPDGCode()<<", 4M="<<Rh4M<<G4endl;
+        G4cout<<">>>G4QStr::FragString:HFilled (L) PDG="<<LeftHadron->GetPDGCode()<<", 4M="
+              <<Lh4M<<", (R) PDG="<<RightHadron->GetPDGCode()<<", 4M="<<Rh4M<<G4endl;
 #endif
 #ifdef edebug
 	  G4cout<<"-EMC-G4QString::FragmentString: Residual4M="<<tot4M-Lh4M-Rh4M<<G4endl;
 #endif
       }
-    }
-  }
+      else
+      {
+        if(LeftHadron)  delete LeftHadron;
+        if(RightHadron) delete RightHadron;
+      }
+    } // End of inner success
+  } // End of while
+  delete theStringInCMS;
 #ifdef debug
   G4cout<<"G4QString::FragmentString: LOOP/LOOP, success="<<success<<G4endl;
 #endif 
@@ -588,7 +594,7 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
       std::for_each(LeftVector->begin(), LeftVector->end(), DeleteQHadron());
       LeftVector->clear();
     }
-    // delete LeftVector;   // @@ Valgrind ?
+    delete LeftVector;
 #ifdef debug
     G4cout<<"G4QString::FragmString:StringNotFragm,L4M="<<left4M<<",R4M="<<right4M<<G4endl;
 #endif
@@ -898,20 +904,20 @@ G4QHadron* G4QString::Splitup(G4bool QL)
     Hadron->SetPosition(GetPosition());
     if(decaying == Left)
     {
-      G4QParton* theFirst = thePartons[0];
-      delete theFirst;
-      thePartons[0] = newStringEnd;
+      G4QParton* theFirst = thePartons[0];            // Substitute for the First Parton
+      delete theFirst;                                // The OldParton instance is deleted
+      thePartons[0] = newStringEnd;                   // Delete equivalent for newStringEnd
 #ifdef debug
       G4cout<<"G4QString::Splitup:  theFirstPDG="<<theFirst->GetPDGCode()<<G4endl;
 #endif 
       Ptleft  -= HadronMomentum->vect();
-      Ptleft.setZ(0.);                         // @@ (Z is anyway ignored) M.K. (?)
+      Ptleft.setZ(0.);                                // @@ (Z is anyway ignored) M.K. (?)
     }
     else if (decaying == Right)
     {
-      G4QParton* theLast = thePartons[thePartons.size()-1];
-      delete theLast;                          // The instance of the parton is deleted
-      thePartons[thePartons.size()-1] = newStringEnd;
+      G4QParton* theLast = thePartons[thePartons.size()-1]; // Substitute for theLastParton
+      delete theLast;                                 // The OldParton instance is deleted
+      thePartons[thePartons.size()-1] = newStringEnd; // Delete equivalent for newStringEnd
 #ifdef debug
       G4cout<<"G4QString::Splitup:  theLastPDG="<<theLast->GetPDGCode()<<", nP="
             <<thePartons.size()<<", beg="<<thePartons[0]->GetPDGCode()<<",end="
@@ -919,7 +925,7 @@ G4QHadron* G4QString::Splitup(G4bool QL)
             <<"="<<thePartons[thePartons.size()-1]<<G4endl;
 #endif 
       Ptright -= HadronMomentum->vect();
-      Ptright.setZ(0.);                        // @@ (Z is anyway ignored) M.K. (?)
+      Ptright.setZ(0.);                               // @@ (Z is anyway ignored) M.K. (?)
     }
     else
     {
@@ -993,15 +999,18 @@ G4ThreeVector G4QString::SampleQuarkPt()
    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
 }
 
-G4QHadron* G4QString::QuarkSplitup(G4QParton* decay, G4QParton *&created)
+G4QHadron* G4QString::QuarkSplitup(G4QParton* decay, G4QParton* &created)// VGComplTo decay
 {
   G4int IsParticle=(decay->GetPDGCode()>0) ? -1 : +1; // a quark needs antiquark or diquark
   G4QPartonPair QuarkPair = CreatePartonPair(IsParticle);
-  created = QuarkPair.GetParton2();
+  created = QuarkPair.GetParton2();                   // New Parton after splitting
 #ifdef debug
   G4cout<<"G4QString::QuarkSplitup: ***Called*** crP="<<created->GetPDGCode()<<G4endl;
-#endif 
-  return CreateHadron(QuarkPair.GetParton1(), decay);
+#endif
+  G4QParton* P1=QuarkPair.GetParton1();
+  G4QHadron* result=CreateHadron(P1, decay);         // New Hadron after splitting
+  delete P1;                                         // Clean up the temporary parton
+  return result; 
 } // End of QuarkSplitup
 
 //
@@ -1020,10 +1029,10 @@ G4QHadron* G4QString::DiQuarkSplitup(G4QParton* decay, G4QParton* &created)
       decayQuarkEncoding = Swap;
     }
     G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;// Diquark is equivalent to antiquark
-    // if we have a quark, we need antiquark)
     G4QPartonPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
-    //... Create new Diquark
-    G4int QuarkEncoding=QuarkPair.GetParton2()->GetPDGCode();
+    G4QParton* P2=QuarkPair.GetParton2();
+    G4int QuarkEncoding=P2->GetPDGCode();
+    delete P2;
     G4int i10  = std::max(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
     G4int i20  = std::min(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
     G4int spin = (i10 != i20 && G4UniformRand() <= 0.5) ? 1 : 3;
@@ -1033,19 +1042,25 @@ G4QHadron* G4QString::DiQuarkSplitup(G4QParton* decay, G4QParton* &created)
     G4cout<<"G4QString::DiQuarkSplitup: inside, crP="<<created->GetPDGCode()<<G4endl;
 #endif 
     G4QParton* decayQuark= new G4QParton(decayQuarkEncoding);
-    return CreateHadron(QuarkPair.GetParton1(), decayQuark);
+    G4QParton* P1=QuarkPair.GetParton1();
+    G4QHadron* newH=CreateHadron(P1, decayQuark);
+    delete P1;
+    delete decayQuark;
+    return newH;
   }
   else
   {
     //... Diquark does not break
     G4int IsParticle=(decay->GetPDGCode()>0) ? +1 : -1; 
-     // if we have a diquark, we need quark)
     G4QPartonPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
     created = QuarkPair.GetParton2();
 #ifdef debug
     G4cout<<"G4QString::DiQuarkSplitup: diQ not break, crP="<<created->GetPDGCode()<<G4endl;
 #endif 
-    return CreateHadron(QuarkPair.GetParton1(), decay);
+    G4QParton* P1=QuarkPair.GetParton1();
+    G4QHadron* newH=CreateHadron(P1, decay);
+    delete P1;
+    return newH;
  }
 } // End of DiQuarkSplitup
 
@@ -1079,6 +1094,8 @@ G4QPartonPair G4QString::CreatePartonPair(G4int NeedParticle, G4bool AllowDiquar
     return G4QPartonPair(new G4QParton(PDGcode), new G4QParton(-PDGcode));
   }
 } // End of CreatePartonPair
+
+// Creation of the Meson out of two partons (q, anti-q) 
 G4QHadron* G4QString::CreateMeson(G4QParton* black, G4QParton* white, Spin theSpin)
 {
   static G4double scalarMesonMixings[6]={0.5, 0.25, 0.5, 0.25, 1.0, 0.5}; 
@@ -1127,10 +1144,13 @@ G4QHadron* G4QString::CreateMeson(G4QParton* black, G4QParton* white, Spin theSp
   G4QHadron* Meson= new G4QHadron(PDGEncoding);
 #ifdef debug
   G4cout<<"G4QString::CreateBaryon: Meson is created with PDG="<<PDGEncoding<<G4endl;
-#endif 
+#endif
+  //delete black;                          // It is better to delete here and consider  
+  //delete white;                          // the hadron creation as a delete equivalent
   return Meson;
 }
 
+// Creation of the Baryon out of two partons (q, di-q), (anti-q, anti-di-q) 
 G4QHadron* G4QString::CreateBaryon(G4QParton* black, G4QParton* white, Spin theSpin)
 {
   G4int id1= black->GetPDGCode();
@@ -1190,6 +1210,8 @@ G4QHadron* G4QString::CreateBaryon(G4QParton* black, G4QParton* white, Spin theS
 #ifdef debug
   G4cout<<"G4QString::CreateBaryon: Baryon is created with PDG="<<PDGEncoding<<G4endl;
 #endif 
+  //delete black;                          // It is better to delete here and consider  
+  //delete white;                          // the hadron creation as a delete equivalent
   return Baryon;
 } // End of CreateBaryon
 
@@ -1221,8 +1243,9 @@ G4QHadron* G4QString::CreateHadron(G4QParton* black, G4QParton* white)
 #endif 
     return CreateMeson(black, white, spin);
   }
-}
+} // End of Create Hadron
 
+// Creation of only High Spin (2,3/2) hadrons
 G4QHadron* G4QString::CreateLowSpinHadron(G4QParton* black, G4QParton* white)
 {
   G4int bT=black->GetType();
@@ -1245,8 +1268,9 @@ G4QHadron* G4QString::CreateLowSpinHadron(G4QParton* black, G4QParton* white)
 #endif 
     return CreateBaryon(black, white, SpinHalf);
   }
-}
+} // End of CreateLowSpinHadron
 
+// Creation of only High Spin (2,3/2) hadrons
 G4QHadron* G4QString::CreateHighSpinHadron(G4QParton* black, G4QParton* white)
 {
   G4int bT=black->GetType();
@@ -1269,4 +1293,4 @@ G4QHadron* G4QString::CreateHighSpinHadron(G4QParton* black, G4QParton* white)
 #endif 
     return CreateBaryon(black,white,SpinThreeHalf);
   }
-}
+} // End of CreateHighSpinHadron

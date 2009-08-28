@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.149 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.150 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -6999,7 +6999,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               nL=0;
             }
           }
+#ifdef pdebug
           else G4cout<<"-Warning-G4QEn::FSI:*Improve*,nC>nB-nL,nC<=nB, PDG="<<hPDG<<G4endl;
+#endif
         }
         else
         {
@@ -7505,7 +7507,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           } // End of decay in 2
         }
       }
+#ifdef pdebug
       else G4cout<<"-Warning-G4QE::FSI:*Improve*,S="<<SS<<">B="<<nB<<",PDG="<<hPDG<<G4endl;
+#endif
     }
     //unsigned nHd=theQHadrons.size()-1;
     //if(hd==nHd && !fOK)

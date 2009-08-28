@@ -55,7 +55,7 @@ protected:
 
 public:
 
-  ~G4QNeutronNuclearCrossSection() {}
+  ~G4QNeutronNuclearCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
@@ -85,6 +85,8 @@ private:
   static G4double  lastCS;  // Last value of the Cross Section
   static G4int     lastI;   // The last position in the DAMDB
   static G4double  HEthresh;  // High energy threshold parameter for the CS calculation
+  static std::vector<G4double*>* LEN;  // Vector of pointers to LowEnNeutronCrossSection
+  static std::vector<G4double*>* HEN;  // Vector of pointers to HighEnNeutronCrossSection
 };
 
 #endif

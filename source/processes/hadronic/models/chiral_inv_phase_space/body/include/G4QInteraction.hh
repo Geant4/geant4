@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.6 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QInteraction.hh,v 1.7 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,5 +84,3 @@ private:
 };
 
 #endif
-
-

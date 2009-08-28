@@ -62,12 +62,24 @@ G4double  G4QPhotonNuclearCrossSection::lastP=0.;  // Last used in cross section
 G4double  G4QPhotonNuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QPhotonNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QPhotonNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+std::vector<G4double*>* G4QPhotonNuclearCrossSection::GDR = new std::vector<G4double*>;
+std::vector<G4double*>* G4QPhotonNuclearCrossSection::HEN = new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QPhotonNuclearCrossSection::GetPointer()
 {
   static G4QPhotonNuclearCrossSection theCrossSection; //**Static body of Cross Section**
   return &theCrossSection;
+}
+
+G4QPhotonNuclearCrossSection::~G4QPhotonNuclearCrossSection()
+{
+  G4int lens=GDR->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*GDR)[i];
+  delete GDR;
+  G4int hens=HEN->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
+  delete HEN;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -298,9 +310,9 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #ifdef pdebug
   G4cout<<"G4QPhotonNucCrossSection::CalculateCrossSection: ***Called***"<<G4endl;
 #endif
-  static const G4double THmin=2.;  // minimum Energy Threshold
-  static const G4double dE=1.;     // step for the GDR table
-  static const G4int    nL=105;    // A#of GDResonance points in E (each MeV from 2 to 106)
+  static const G4double THmin=2.;    // minimum Energy Threshold
+  static const G4double dE=1.;       // step for the GDR table
+  static const G4int    nL=105;      // A#of GDResonance points in E (1 MeV from 2 to 106)
   static const G4double Emin=THmin+(nL-1)*dE; // minE for the HighE part
   static const G4double Emax=50000.;       // maxE for the HighE part
   static const G4int    nH=224;            // A#of HResonance points in lnE
@@ -309,17 +321,15 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   static const G4double dlE=(malE-milE)/(nH-1); // Step in log energy in the HighE part
   //
   //static const G4double shd=1.075-.0023*log(2.);  // HE PomShadowing(D)
-  static const G4double shd=1.0734;                 // HE PomShadowing(D)
-  static const G4double shc=0.072;                  // HE Shadowing constant
-  static const G4double poc=0.0375;                 // HE Pomeron coefficient
-  static const G4double pos=16.5;                   // HE Pomeron shift
-  static const G4double reg=.11;                    // HE Reggeon slope
-  static const G4double shp=1.075;                  // HE PomShadowing(P)
+  static const G4double shd=1.0734;  // HE PomShadowing(D)
+  static const G4double shc=0.072;   // HE Shadowing constant
+  static const G4double poc=0.0375;  // HE Pomeron coefficient
+  static const G4double pos=16.5;    // HE Pomeron shift
+  static const G4double reg=.11;     // HE Reggeon slope
+  static const G4double shp=1.075;   // HE PomShadowing(P)
   //
   // Associative memory for acceleration
   static std::vector <G4double> spA; // shadowing coefficients (A-dependent)
-  static std::vector <G4double*> GDR;// Vector of pointers to GDRPhotonuclearCrossSection
-  static std::vector <G4double*> HEN;// Vector of pointers to HighEnPhotonuclearCrossSect
   //
   onlyCS=CS;                         // Flag to calculate only CS (not Si/Bi)
 #ifdef pdebug
@@ -334,7 +344,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #ifdef pdebug
     G4cout<<"---> G4QMuonNucCS::CalcCS: CS=0  as E="<<Energy<<" < "<<THmin<<G4endl;
 #endif
-    return 0.;                      // @@ This can be dangerouse for the heaviest nuc.!
+    return 0.;                       // @@ This can be dangerouse for the heaviest nuc.!
   }
   G4double sigma=0.;
   G4double A=targN+targZ;
@@ -342,34 +352,34 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
     {
-      lastGDR=GDR[I];                // Pointer to prepared GDR cross sections
-      lastHEN=HEN[I];                // Pointer to prepared High Energy cross sections
+      lastGDR=(*GDR)[I];             // Pointer to prepared GDR cross sections
+      lastHEN=(*HEN)[I];             // Pointer to prepared High Energy cross sections
       lastSP =spA[I];                // Shadowing coefficient for UHE
     }
     else                             // This isotope wasn't calculated previously => CREATE
     {
-      G4double lnA=std::log(A);          // The nucleus is not found in DB. It is new.
-      if(A==1.) lastSP=1.;               // The Reggeon shadowing (A=1)
-      else      lastSP=A*(1.-shc*lnA);   // The Reggeon shadowing
+      G4double lnA=std::log(A);      // The nucleus is not found in DB. It is new.
+      if(A==1.) lastSP=1.;           // The Reggeon shadowing (A=1)
+      else      lastSP=A*(1.-shc*lnA); // The Reggeon shadowing
 #ifdef debug
       G4cout<<">>>G4QPhotonNuclearCrossSect::CalcCS:lnA="<<lnA<<",lastSP="<<lastSP<<G4endl;
 #endif
 #ifdef debug3
       if(A==3) G4cout<<"G4QPhotonNuclearCrossSection::CalcCS: lastSP="<<lastSP<<G4endl;
 #endif
-      lastGDR = new G4double[nL];        // Allocate memory for the new GDR cross sections
-      lastHEN = new G4double[nH];        // Allocate memory for the new HEN cross sections
+      lastGDR = new G4double[nL];    // Allocate memory for the new GDR cross sections
+      lastHEN = new G4double[nH];    // Allocate memory for the new HEN cross sections
       G4int er=GetFunctions(A,lastGDR,lastHEN);// set newZeroPosition and fill theFunctions
       if(er<1) G4cerr<<"***G4QPhotNucCrosSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
 #ifdef debug
       G4cout<<"G4QPhotonNuclearCrossSec::CalcCS:**GDR/HEN're made** GetFunEr="<<er<<G4endl;
 #endif
       // *** The synchronization check ***
-      G4int sync=GDR.size();
+      G4int sync=GDR->size();
       if(sync!=I) G4cerr<<"***G4QPhotoNuclearCS::CalcCS: PDG=22, S="<<sync<<"#"<<I<<G4endl;
-      GDR.push_back(lastGDR);            // added GDR, found by AH 10/7/02
-      HEN.push_back(lastHEN);            // added HEN, found by AH 10/7/02
-      spA.push_back(lastSP);             // Pomeron Shadowing
+      GDR->push_back(lastGDR);       // added GDR, found by AH 10/7/02
+      HEN->push_back(lastHEN);       // added HEN, found by AH 10/7/02
+      spA.push_back(lastSP);         // Pomeron Shadowing
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================

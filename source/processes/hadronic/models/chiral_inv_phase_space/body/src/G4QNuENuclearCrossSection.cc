@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNuENuclearCrossSection.cc,v 1.1 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QNuENuclearCrossSection.cc,v 1.2 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,12 +63,24 @@ G4double  G4QNuENuclearCrossSection::lastP=0.;  // Last used in cross section Mo
 G4double  G4QNuENuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QNuENuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QNuENuclearCrossSection::lastI=0;   // The last position in the DAMDB
+std::vector<G4double*>* G4QNuENuclearCrossSection::TX = new std::vector<G4double*>;
+std::vector<G4double*>* G4QNuENuclearCrossSection::QE = new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QNuENuclearCrossSection::GetPointer()
 {
   static G4QNuENuclearCrossSection theCrossSection; //**Static body of the Cross Section**
   return &theCrossSection;
+}
+
+G4QNuENuclearCrossSection::~G4QNuENuclearCrossSection()
+{
+  G4int lens=TX->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*TX)[i];
+  delete TX;
+  G4int hens=QE->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*QE)[i];
+  delete QE;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -264,38 +276,36 @@ G4double G4QNuENuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 G4double G4QNuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double mb38=1.E-11;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
+  static const G4double mb38=1.E-11; // Conversion 10^-38 cm^2 to mb=10^-27 cm^2
   static const G4int nE=65;        // !! If change this, change it in GetFunctions()33/65!!
   static const G4int mL=nE-1;
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
-  static const G4double dmN=mN+mN;      // Doubled nucleon mass (2*AtomicMassUnit, GeV)
+  static const G4double dmN=mN+mN;   // Doubled nucleon mass (2*AtomicMassUnit, GeV)
   static const G4double me=.00051099892;// electron mass in GeV
-  static const G4double me2=me*me;      // Squared mass of an electron in GeV^2
+  static const G4double me2=me*me;   // Squared mass of an electron in GeV^2
   static const G4double EMi=me+me2/dmN; // Universal threshold of the reaction in GeV
-  static const G4double EMa=300.;       // Maximum tabulated Energy of nu_e in GeV 
+  static const G4double EMa=300.;    // Maximum tabulated Energy of nu_e in GeV 
   // *** Begin of the Associative memory for acceleration of the cross section calculations
-  static std::vector <G4double> colH;   //?? Vector of HighEnergyCoefficients (functional)
-  static std::vector <G4double*> TX;    // Vector of pointers to the TX tabulated functions
-  static std::vector <G4double*> QE;    // Vector of pointers to the QE tabulated functions
-  static G4bool first=true;             // Flag of initialization of the energy axis
+  static std::vector <G4double> colH;//?? Vector of HighEnergyCoefficients (functional)
+  static G4bool first=true;          // Flag of initialization of the energy axis
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Electron
   //G4double TotEnergy2=Momentum;
-  onlyCS=CS;                            // Flag to calculate only CS (not TX & QE)
-  lastE=Momentum/GeV;                   // Kinetic energy of the electron neutrino (in GeV)
-  if (lastE<=EMi)                       // Energy is below the minimum energy in the table
+  onlyCS=CS;                         // Flag to calculate only CS (not TX & QE)
+  lastE=Momentum/GeV;                // Kinetic energy of the electron neutrino (in GeV)
+  if (lastE<=EMi)                    // Energy is below the minimum energy in the table
   {
     lastE=0.;
     lastSig=0.;
     return 0.;
   }
-  G4int Z=targZ;                        // New Z, which can change the sign
-  if(F<=0)                              // This isotope was not the last used isotop
+  G4int Z=targZ;                     // New Z, which can change the sign
+  if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
     {
-      lastTX =TX[I];                 // Pointer to the prepared TX function (same isotope)
-      lastQE =QE[I];                 // Pointer to the prepared QE function (same isotope)
+      lastTX =(*TX)[I];              // Pointer to the prepared TX function (same isotope)
+      lastQE =(*QE)[I];              // Pointer to the prepared QE function (same isotope)
    }
    else                              // This isotope wasn't calculated previously => CREATE
    {
@@ -310,10 +320,10 @@ G4double G4QNuENuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4
       G4int res=GetFunctions(Z,targN,lastTX,lastQE,lastEN);//@@analize(0=first,-1=bad,1=OK)
       if(res<0) G4cerr<<"*W*G4NuENuclearCS::CalcCrossSect:Bad Function Retrieve"<<G4endl;
       // *** The synchronization check ***
-      G4int sync=TX.size();
+      G4int sync=TX->size();
       if(sync!=I) G4cerr<<"***G4NuENuclearCS::CalcCrossSect:Sync.="<<sync<<"#"<<I<<G4endl;
-      TX.push_back(lastTX);
-      QE.push_back(lastQE);
+      TX->push_back(lastTX);
+      QE->push_back(lastQE);
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW Calculate the Cross Section =====================

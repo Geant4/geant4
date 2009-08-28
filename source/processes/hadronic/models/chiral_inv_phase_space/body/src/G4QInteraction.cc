@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.cc,v 1.5 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QInteraction.cc,v 1.6 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------
@@ -41,14 +41,18 @@
 
 #include "G4QInteraction.hh"
 
-G4QInteraction::G4QInteraction(G4QHadron* aProjectile) : theProjectile(aProjectile),
-  theTarget(0),theNumberOfHard(0),theNumberOfSoft(0),theNumberOfDiffractive(0)
+G4QInteraction::G4QInteraction(G4QHadron* aProjectile) :
+  theProjectile(aProjectile), theTarget(0), theNumberOfDINR(0),
+  theNumberOfHard(0),theNumberOfSoft(0),theNumberOfDiffractive(0)
 {}
 
 G4QInteraction::G4QInteraction(const G4QInteraction &right) :
   theProjectile(right.GetProjectile()), theTarget(right.GetTarget()),
-  theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0)
+  theNumberOfDINR(0), theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0)
 {}
 
 G4QInteraction::~G4QInteraction()
-{}
+{
+  //delete theProjectile;
+  //if(theTarget) delete theTarget;
+}

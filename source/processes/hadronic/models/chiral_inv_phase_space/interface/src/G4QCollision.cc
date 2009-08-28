@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.46 2009-08-27 14:57:31 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.47 2009-08-28 14:49:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -721,7 +721,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4double tM=tgM;                            // Target mass (copy to be changed)
   G4QHadronVector* output=new G4QHadronVector;// Prototype of EnvironOutput G4QHadronVector
   G4double absMom = 0.;                       // Prototype of absorbed by nucleus Moment
-  G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVectorum
+  G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVector
   G4LorentzVector lead4M(0.,0.,0.,0.);        // Prototype of LeadingQ 4-momentum
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<aProjPDG<<", targPDG="<<targPDG<<G4endl;
@@ -905,7 +905,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4Quasmon* pan= new G4Quasmon(G4QContent(1,1,0,1,1,0),proj4M);// ---> DELETED -->---+
       try                                                           //                    |
       {                                                             //                    |
-        delete leadhs;                                              //                    |
+        if(leadhs) delete leadhs;                                   //                    |
         G4QNucleus vac(90000000);                                   //                    |
         leadhs=pan->Fragment(vac,1);  // DELETED after it is copied to output vector      |
       }                                                             //                    |
@@ -922,9 +922,11 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     else
     {
-      G4int qNH=leadhs->size();
+      G4int qNH=0;
+      if(leadhs) qNH=leadhs->size();
       if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
-      delete leadhs;
+      if(leadhs) delete leadhs;
+      leadhs=0;
     }
     projPDG=22;
     proj4M=G4LorentzVector(photon3M,photonEnergy);
@@ -2009,7 +2011,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4QHadron* scatHadron = new G4QHadron(scatPDG,scat4M);
     output->push_back(scatHadron);
   }
-  G4int qNH=leadhs->size();
+  G4int qNH=0;
+  if(leadhs) qNH=leadhs->size();
   if(absMom)
   {
     if(qNH) for(G4int iq=0; iq<qNH; iq++)
@@ -2017,12 +2020,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4QHadron* loh=(*leadhs)[iq];   // Pointer to the output hadron
       output->push_back(loh);
     }
-    delete leadhs;
+    if(leadhs) delete leadhs;
+    leadhs=0;
   }
   else
   {
     if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
-    delete leadhs;
+    if(leadhs) delete leadhs;
+    leadhs=0;
   }
   // ------------- From here the secondaries are filled -------------------------
   G4int tNH = output->size();       // A#of hadrons in the output
@@ -2140,6 +2145,13 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   } //                                                                                    |
   delete output; // instances of the G4QHadrons from the output are already deleted above +
+  if(leadhs)     // To satisfy Valgrind ( How can that be?)
+  {
+    G4int qNH=leadhs->size();
+    if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
+    delete leadhs;
+    leadhs=0;
+  }
 #ifdef debug
   G4cout<<"G4QCollision::PostStDoIt: after St="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
