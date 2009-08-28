@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.14 2009-07-20 18:41:15 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.15 2009-08-28 16:36:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,6 +45,9 @@
 //
 // 12.06.2009 O.Kadri: linear log-log extrapolation of lambda0 & lambda1 between 1 GeV - 100 TeV
 //                     adding a theta min limit due to screening effect of the atomic nucleus
+// 26.08.2009 O.Kadri: Cubic Spline interpolation was replaced with polynomial method
+//                     within CalculateIntegrals method
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //REFERENCES:
@@ -63,7 +66,6 @@
 #include "G4ParticleChangeForMSC.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
-#include "G4DataInterpolation.hh" 
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
@@ -334,7 +336,7 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-// Cubic spline log-log interpolation of Lambda0 and Lambda1 between 100 eV - 1 GeV
+// Polynomial log-log interpolation of Lambda0 and Lambda1 between 100 eV - 1 GeV
 // linear log-log extrapolation between 1 GeV - 100 TeV
 
 void 
@@ -342,49 +344,54 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 						 G4double kinEnergy,G4double &Lam0,
 						 G4double &Lam1)
 { 
-  G4double TCSEForThisAtom[106],FTCSEForThisAtom[106],
-    TCSPForThisAtom[106],FTCSPForThisAtom[106];
   G4double summ00=0.0;
   G4double summ10=0.0;
-  G4double InterpolatedValue=0.0;
-  G4double x1,x2,y1,y2;
+  G4double x1,x2,y1,y2,acoeff,bcoeff;
   G4double kineticE = kinEnergy;
   if(kineticE<lowKEnergy)kineticE=lowKEnergy;
   if(kineticE>highKEnergy)kineticE=highKEnergy;
   kineticE /= eV;
+  G4double logE=log(kineticE);
+  
   G4int  iZ = G4int(Z);
   if(iZ > 103) iZ = 103;
 
-  for(G4int i=0;i<106;i++)
-    {
-      TCSEForThisAtom[i]=TCSE[iZ-1][i];FTCSEForThisAtom[i]=FTCSE[iZ-1][i];
-      TCSPForThisAtom[i]=TCSP[iZ-1][i];FTCSPForThisAtom[i]=FTCSP[iZ-1][i];
-    }
-    
+  G4int enerInd=0;
+  for(G4int i=1;i<106;i++)
+  {
+  if((logE>=ener[i])&&(logE<ener[i+1])){enerInd=i;break;}
+  }
+
   if(p==G4Electron::Electron())        
     {
-    if(kineticE<=1.0e+9)
+    if(kineticE<=1.0e+9)//Interpolation of the form y=ax²+b
       {
-	MyValue= new G4DataInterpolation(ener,TCSEForThisAtom,106,0.0,0);  
-	InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
-	delete  MyValue;
-	summ00 = exp(InterpolatedValue);  
-	MyValue= new G4DataInterpolation(ener,FTCSEForThisAtom,106,0.0,0);  
-	InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
-	delete  MyValue;
-	summ10 = exp(InterpolatedValue);
+	x1=ener[enerInd];
+	x2=ener[enerInd+1];       
+	y1=TCSE[iZ-1][enerInd];
+	y2=TCSE[iZ-1][enerInd+1];
+	acoeff=(y2-y1)/(x2*x2-x1*x1);
+	bcoeff=y2-acoeff*x2*x2;
+	summ00=acoeff*logE*logE+bcoeff;
+	summ00 =exp(summ00);
+	y1=FTCSE[iZ-1][enerInd];
+	y2=FTCSE[iZ-1][enerInd+1];
+	acoeff=(y2-y1)/(x2*x2-x1*x1);
+	bcoeff=y2-acoeff*x2*x2;
+	summ10=acoeff*logE*logE+bcoeff;
+	summ10 =exp(summ10);
       }
-    else
+    else  //Interpolation of the form y=ax+b
       {  
 	x1=ener[104];
 	x2=ener[105];       
-	y1=TCSEForThisAtom[104];
-	y2=TCSEForThisAtom[105];
-	summ00=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+	y1=TCSE[iZ-1][104];
+	y2=TCSE[iZ-1][105];
+	summ00=(y2-y1)*(logE-x1)/(x2-x1)+y1;
 	summ00 =exp(summ00);
-	y1=FTCSEForThisAtom[104];
-	y2=FTCSEForThisAtom[105];
-	summ10=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+	y1=FTCSE[iZ-1][104];
+	y2=FTCSE[iZ-1][105];
+	summ10=(y2-y1)*(logE-x1)/(x2-x1)+y1;
 	summ10 =exp(summ10);
       }
     }
@@ -392,26 +399,32 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
     {
     if(kinEnergy<=1.0e+9)
       {
-	MyValue= new G4DataInterpolation(ener,TCSPForThisAtom,106,0.0,0);  
-	InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
-	delete  MyValue;
-	summ00 = exp(InterpolatedValue);  
-	MyValue= new G4DataInterpolation(ener,FTCSPForThisAtom,106,0.0,0);  
-	InterpolatedValue = MyValue ->CubicSplineInterpolation(log(kineticE));
-	delete  MyValue;
-	summ10 = exp(InterpolatedValue);
+	x1=ener[enerInd];
+	x2=ener[enerInd+1];       
+	y1=TCSP[iZ-1][enerInd];
+	y2=TCSP[iZ-1][enerInd+1];
+	acoeff=(y2-y1)/(x2*x2-x1*x1);
+	bcoeff=y2-acoeff*x2*x2;
+	summ00=acoeff*logE*logE+bcoeff;
+	summ00 =exp(summ00);
+	y1=FTCSP[iZ-1][enerInd];
+	y2=FTCSP[iZ-1][enerInd+1];
+	acoeff=(y2-y1)/(x2*x2-x1*x1);
+	bcoeff=y2-acoeff*x2*x2;
+	summ10=acoeff*logE*logE+bcoeff;
+	summ10 =exp(summ10);
       }
     else
       {  
-	x1=log(ener[104]);
-	x2=log(ener[105]);       
-	y1=TCSPForThisAtom[104];
-	y2=TCSPForThisAtom[105];
-	summ00=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+	x1=ener[104];
+	x2=ener[105];       
+	y1=TCSP[iZ-1][104];
+	y2=TCSP[iZ-1][105];
+	summ00=(y2-y1)*(logE-x1)/(x2-x1)+y1;
 	summ00 =exp(summ00);
-	y1=FTCSPForThisAtom[104];
-	y2=FTCSPForThisAtom[105];
-	summ10=(y2-y1)*(log(kineticE)-x1)/(x2-x1)+y1;
+	y1=FTCSP[iZ-1][104];
+	y2=FTCSP[iZ-1][105];
+	summ10=(y2-y1)*(logE-x1)/(x2-x1)+y1;
 	summ10 =exp(summ10);
       }
     }

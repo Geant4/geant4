@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.3 2009-06-18 18:42:58 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.4 2009-08-28 16:36:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,8 @@
 //
 // Modifications:
 // 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
+// 26.08.2009 O.Kadri: avoiding unuseful calculations and optimizing the root finding parameter error's 
+//                     within SampleTheta method
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
@@ -203,9 +205,9 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 
   ///////////////////////////////////////////////////////////////////////////
   // Find Lambda and Chia2 Index
-  for(G4int k=0;k<75;k++){if((lambda>=LAMBDAN[k])&&(lambda<LAMBDAN[k+1]))KIndex=k;}  
+  for(G4int k=0;k<75;k++){if((lambda>=LAMBDAN[k])&&(lambda<LAMBDAN[k+1])){KIndex=k;break;}}  
   for(G4int j=0;j<11;j++){A[j]=scrA[11*KIndex+j];}  
-  for(G4int j=0;j<10;j++){if((Chia2>=A[j])&&(Chia2<A[j+1]))JIndex=j;}
+  for(G4int j=0;j<10;j++){if((Chia2>=A[j])&&(Chia2<A[j+1])){JIndex=j;break;}}
 
   ///////////////////////////////////////////////////////////////////////////
   // Calculate some necessary coefficients for PDF and CPDF interpolation 
@@ -227,14 +229,15 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
     CPDF3[i]=CPDF[Ind2+i];CPDF4[i]=CPDF[Ind3+i];  
     ThisPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];
     ThisCPDF[i]=Ckj*CPDF1[i]+CkjPlus1*CPDF2[i]+CkPlus1j*CPDF3[i]+CkPlus1jPlus1*CPDF4[i];  
+  // Find u Index using secant method
+  if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // Find u Index using secant method
-  for(G4int i=0;i<319;i++){if((rndm>=ThisCPDF[i])&&(rndm<ThisCPDF[i+1]))IIndex=i;}
   //CPDF^-1(rndm)=x ==> CPDF(x)=rndm;
   aa=uvalues[IIndex];
   b=uvalues[IIndex+1];
+  
   do{
     m=0.5*(aa+b);
     F=(ThisCPDF[IIndex]+(m-uvalues[IIndex])*ThisPDF[IIndex]
@@ -242,7 +245,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
     if(F>0.)b=m;
     else aa=m;
-  } while(sqrt((b-aa)*(b-aa))>1.0e-10);
+  } while(sqrt((b-aa)*(b-aa))>1.0e-6);
 
   return m;
 }
