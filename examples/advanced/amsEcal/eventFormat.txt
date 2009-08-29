@@ -14,6 +14,7 @@
 
 Coding convention
 -----------------
-- Pixel has a double index : Pixel[i1,i2]  i1 = 0...N1Pixels, i2 = 0...N2Pixels
+- Pixel has a double index :
+    Pixel[i1,i2]  i1 = 0,...,N1Pixels-1,  i2 = 0,...,N2Pixels-1
 - by convention PixelNb = i1*N1Shift+i2
 - therefore : i1 = int(PixelNb/N1Shift),  i2 = PixelNb%N1Shift

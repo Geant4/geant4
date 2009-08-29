@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.4 2009-06-08 12:58:13 maire Exp $
+// $Id: RunAction.hh,v 1.5 2009-08-29 08:48:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,8 +62,11 @@ public:
   void fillPerEvent_2(G4int,G4double,G4double);  
   void fillPerEvent_3(G4double,G4double,G4double);
   void fillDetailedLeakage(G4int,G4double);
-  void fillNbRadLen(G4double);    
-
+  void fillNbRadLen(G4double);
+      
+  void SetWriteFile(G4bool val)    {writeFile = val;};
+  void CreateFilePixels();
+      
 private:
   
   DetectorConstruction*   detector;
@@ -81,7 +84,10 @@ private:
   G4double calorEtot, calorEtot2;
   G4double Eleak,     Eleak2;
   G4double EdLeak[3];
-  G4double nbRadLen, nbRadLen2;  
+  G4double nbRadLen, nbRadLen2;
+      
+  G4bool   writeFile;
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

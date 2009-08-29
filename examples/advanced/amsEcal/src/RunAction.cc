@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2009-07-24 13:02:02 maire Exp $
+// $Id: RunAction.cc,v 1.7 2009-08-29 08:48:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,9 @@
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* hist)
 :detector(det), primary(prim), histoManager(hist)
-{ }
+{  
+  writeFile = false; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -102,6 +104,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   histoManager->book();
+  
+  //create ascii file for pixels
+  //
+  if (writeFile) CreateFilePixels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -332,3 +338,27 @@ void RunAction::EndOfRunAction(const G4Run*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+        
+#include <fstream>
+
+void RunAction::CreateFilePixels()
+{
+  //create file and write run header
+  //
+  G4String name = histoManager->GetFileName(); 
+  G4String fileName = name + ".ascii";
+  
+  std::ofstream File(fileName, std::ios::out);
+
+  G4int n1pxl   = detector->GetN1Pixels();
+  G4int n2pxl   = detector->GetN2Pixels();
+  G4int n1shift = detector->GetN1Shift();    
+  G4int nbEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
+                     ->GetNumberOfEventToBeProcessed();
+  File << nbEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
+         << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+

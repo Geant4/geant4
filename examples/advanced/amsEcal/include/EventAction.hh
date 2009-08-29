@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.hh,v 1.4 2009-07-24 13:02:02 maire Exp $
+// $Id: EventAction.hh,v 1.5 2009-08-29 08:48:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@ class EventAction : public G4UserEventAction
 				 
     void SumNbRadLength  (G4double dn)  {nbRadLen += dn;};
     
-    void SetWriteFile   (G4bool val)    {writeFile = val;};    
+    void SetWriteFile(G4bool);    
     void WritePixels(const G4Event*);
     				         
   private:  

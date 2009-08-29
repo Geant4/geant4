@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.6 2009-07-24 13:02:02 maire Exp $
+// $Id: EventAction.cc,v 1.7 2009-08-29 08:48:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,40 +171,35 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void EventAction::SetWriteFile(G4bool val)    
+{
+  writeFile = val;
+  runAct->SetWriteFile(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+        
 #include <fstream>
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 
 void EventAction::WritePixels(const G4Event* evt)
 {
-  G4int evtNb = evt->GetEventID();
-  
-  //create file and write run header
+  // event is appended onto file created at BeginOfRun
   //
-////  if (evtNb == 0) {
-    G4String name = histoManager->GetFileName(); 
-    G4String fileName = name + ".ascii";
-    std::ofstream File(fileName, std::ios::out);
-    std::ios::fmtflags mode = File.flags();  
-    File.setf( std::ios::scientific, std::ios::floatfield );
-    
-    //run header
-    //
-    G4int n1pxl   = detector->GetN1Pixels();
-    G4int n2pxl   = detector->GetN2Pixels();
-    G4int n1shift = detector->GetN1Shift();    
-    G4int nbEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
-                       ->GetNumberOfEventToBeProcessed();
-    File << nbEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
-         << G4endl;
-////  }
+  G4String name = histoManager->GetFileName(); 
+  G4String fileName = name + ".ascii";
+
+  std::ofstream File(fileName, std::ios::app);
+  std::ios::fmtflags mode = File.flags();  
+  File.setf( std::ios::scientific, std::ios::floatfield );
   G4int prec = File.precision(3);
     
-  //write event number
+  //write event number  
   //
-  File << evtNb << G4endl;
+  File << evt->GetEventID() << G4endl;
   
-  //initial particle informations
+  //gun particle informations
   //
   G4ParticleGun* gun = primary->GetParticleGun();
   G4double ekin = gun->GetParticleEnergy();
@@ -227,7 +222,7 @@ void EventAction::WritePixels(const G4Event* evt)
     if (totalEnergy[k] > 0.0) 
     File << k << " " << visibleEnergy[k] << " " << totalEnergy[k] << " "; 
   }            
-
+  File << G4endl;
     
   // restaure default formats
   File.setf(mode,std::ios::floatfield);
