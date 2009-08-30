@@ -21,7 +21,7 @@ code and to keep track of all tags.
                            methods;
                            use const pointers to G4Element and G4Material; 
                            moved G4ReactionDynamics instance to parametrize
-                           model class G4NelasticInteraction,
+                           model class G4InelasticInteraction,
 
 2 July 2009 - V.Ivanchenko (hadr-modman-V09-02-04)
 ------------------------------------------------------
