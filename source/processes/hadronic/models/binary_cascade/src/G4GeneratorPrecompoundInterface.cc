@@ -50,7 +50,7 @@
      G4KineticTrackVector *result1, *secondaries, *result;
      result1=theSecondaries;
      result=new G4KineticTrackVector();
-     
+
      for (unsigned int aResult=0; aResult < result1->size(); aResult++)
      {
        G4ParticleDefinition * pdef;
@@ -142,7 +142,7 @@
        }
        theCurrentNucleon = theNucleus->GetNextNucleon();
      }   
-     
+ 
      if(!theDeExcitation)
      {
        // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
@@ -151,10 +151,11 @@
      {
        G4double residualMass =  
                 G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
-       residualMass += exEnergy;
+         residualMass += exEnergy;
+
        G4LorentzVector exciton4Momentum(exciton3Momentum, 
                                         std::sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
-     
+    
        anInitialState.SetA(anA);
        anInitialState.SetZ(aZ);
        anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
@@ -164,7 +165,9 @@
 //      anInitialState.SetExcitationEnergy(exEnergy); // now a redundant call.
 
      // call pre-compound
+//G4cout<<"To G4Fragment "<<G4endl;
        const G4Fragment aFragment(anInitialState);
+//G4cout<<"To theDeExcitation->DeExcite(aFragment)"<<G4endl;
        G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
 //       G4ReactionProductVector * aPreResult = new G4ReactionProductVector;
        // fill pre-compound part into the result, and return
@@ -173,6 +176,7 @@
          theTotalResult->push_back(aPreResult->operator[](ll));
        }
        delete aPreResult;
+//G4cout<<"End Precompound"<<G4endl;
      }
      else
      {

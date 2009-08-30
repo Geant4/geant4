@@ -312,10 +312,19 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   if(nucleus->GetMass()>60) theCutOnP = 50*MeV;
   if(nucleus->GetMass()>120) theCutOnP = 45*MeV;
 
+  G4double StartingTime=DBL_MAX;        // Search for minimal formation time Uzhi
+  for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)    // Uzhi
+  {                                                                       // Uzhi
+    if((*iter)->GetFormationTime() < StartingTime)                        // Uzhi
+        StartingTime = (*iter)->GetFormationTime();                       // Uzhi
+  }                                                                       // Uzhi
+
   for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
   {
 //  G4cout << " Formation time : " << (*iter)->GetDefinition()->GetParticleName() << " " 
 // 	 << (*iter)->GetFormationTime() << G4endl;
+    G4double FormTime = (*iter)->GetFormationTime() - StartingTime;       // Uzhi
+    (*iter)->SetFormationTime(FormTime);                                  // Uzhi
     if( (*iter)->GetState() == G4KineticTrack::undefined ) 
     {
        FindLateParticleCollision(*iter);
@@ -526,19 +535,21 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	return products;   // return empty products
   }
 
-
 // find a fragment and call the precompound model.
   G4Fragment * fragment = 0;
   G4ReactionProductVector * precompoundProducts = 0;
+
   G4LorentzVector pFragment(0);
-
-   if ( ExcitationEnergy >= 0 ) 
-   {
         // G4cout << " final4mon " << GetFinal4Momentum() /MeV << G4endl; 
-       fragment = FindFragments();
 
-    //  theDeExcitation =0;
-       if(fragment && fragment->GetA() >1.5) // hpw @@@@ still to add the nucleon, if one exists.
+//   if ( ExcitationEnergy >= 0 )                                         // closed by Uzhi
+//   {                                                                    // closed by Uzhi
+  fragment = FindFragments();
+  if(fragment)                                                            // Uzhi
+  {                                                                       // Uzhi
+//  theDeExcitation =0;
+//       if(fragment && fragment->GetA() >1.5) // hpw @@@@ still to add the nucleon, if one exists.                                                                   // closed by Uzhi
+       if(fragment->GetA() >1.5)                                          // Uzhi
        {
 	 if (theDeExcitation)                // pre-compound
 	 {
@@ -555,56 +566,107 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
              delete fragment;
              fragment=0;
 	 }
-       } else {
+       } else 
+       {                                   // fragment->GetA() < 1.5
+	 precompoundProducts = new G4ReactionProductVector();
+	 std::vector<G4KineticTrack *>::iterator i;
          if ( theTargetList.size() == 1 )
 	 {
-	     precompoundProducts = new G4ReactionProductVector();
-	     std::vector<G4KineticTrack *>::iterator i=theTargetList.begin();
+             i=theTargetList.begin();
 	     G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
 	     aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());       
-	     aNew->SetMomentum(G4ThreeVector(0));		// see boost fro preCompoundProducts below..
+	     aNew->SetMomentum(G4ThreeVector(0));// see boost fro preCompoundProducts below..
 	     precompoundProducts->push_back(aNew);
-	  } else if ( theTargetList.size() > 1)
-	  {
-	     precompoundProducts = new G4ReactionProductVector();
-	     std::vector<G4KineticTrack *>::iterator aNuc;
-	     G4LorentzVector aVec;
-	     std::vector<G4double> masses;
-	     G4double sumMass(0);
-	     for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
-	     {
-	        G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
-		masses.push_back(mass);
-		sumMass += mass;
-	     }
-	     G4LorentzVector finalP=GetFinal4Momentum();
-	     G4FermiPhaseSpaceDecay decay;
-//	     G4cout << " some neutrons? " << masses.size() <<" " << theTargetList.size()<<" "<<finalP <<" " << finalP.mag()<<G4endl;
-             G4double eCMS=finalP.mag();
-	     if ( eCMS < sumMass )                    // @@GF --- Cheat!!
-	     {
-	        eCMS=sumMass + (2*MeV*masses.size());     
-		finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
-	     }
-	     precompoundLorentzboost.set(finalP.boostVector());
-	     std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
-	     std::vector<G4LorentzVector*>::iterator aMom=momenta->begin();
-	     for ( aNuc=theTargetList.begin(); 
-	          (aNuc != theTargetList.end()) && (aMom!=momenta->end()); 
-		  aNuc++, aMom++ )
-	     {
-	        G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
-		aNew->SetTotalEnergy((*aMom)->e());
-		aNew->SetMomentum((*aMom)->vect());
-		precompoundProducts->push_back(aNew);
-//		G4cout << " only neutrons? " <<  (*aNuc)->GetDefinition()->GetParticleName() << G4endl;
-                delete *aMom;
-	     }
-	     delete momenta;
-	  }
-       }
+	 } 
 
-   } 
+         if ( theCapturedList.size() == 1 )                               // Uzhi
+	 {                                                                // Uzhi
+             i=theCapturedList.begin();                                   // Uzhi
+	     G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition()); // Uzhi
+	     aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());   // Uzhi
+	     aNew->SetMomentum(G4ThreeVector(0));// see boost below..     // Uzhi
+	     precompoundProducts->push_back(aNew);                        // Uzhi
+	 }                                                                // Uzhi
+       }                            // End of fragment->GetA() < 1.5
+  } else                            // End of if(fragment)
+  {                                 // No fragment, can be neutrons only  // Uzhi
+     precompoundProducts = new G4ReactionProductVector();                      
+                                                                               
+     std::vector<G4KineticTrack *>::iterator aNuc;                             
+     G4LorentzVector aVec;                                                     
+     std::vector<G4double> masses;                                             
+     G4double sumMass(0);
+
+     if ( theTargetList.size() != 0)                                      // Uzhi
+     {
+        for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
+        {
+           G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
+           masses.push_back(mass);
+           sumMass += mass;
+        }
+     }                                                                    // Uzhi
+
+     if ( theCapturedList.size() != 0)                                    // Uzhi
+     {                                                                    // Uzhi
+        for(aNuc = theCapturedList.begin();                               // Uzhi
+            aNuc != theCapturedList.end(); aNuc++)                        // Uzhi
+        {                                                                 // Uzhi
+           G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();          // Uzhi
+           masses.push_back(mass);                                        // Uzhi
+           sumMass += mass;                                               // Uzhi
+        }                 
+     }
+
+     G4LorentzVector finalP=GetFinal4Momentum();
+     G4FermiPhaseSpaceDecay decay;
+// G4cout << " some neutrons? " << masses.size() <<" " ;
+// G4cout<< theTargetList.size()<<" "<<finalP <<" " << finalP.mag()<<G4endl;
+
+     G4double eCMS=finalP.mag();
+     if ( eCMS < sumMass )                    // @@GF --- Cheat!!
+     {
+        eCMS=sumMass + (2*MeV*masses.size());     
+	finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
+     }
+
+     precompoundLorentzboost.set(finalP.boostVector());
+     std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
+     std::vector<G4LorentzVector*>::iterator aMom=momenta->begin();
+
+     if ( theTargetList.size() != 0)
+     {
+       for ( aNuc=theTargetList.begin(); 
+            (aNuc != theTargetList.end()) && (aMom!=momenta->end()); 
+             aNuc++, aMom++ )
+       {
+          G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
+          aNew->SetTotalEnergy((*aMom)->e());
+          aNew->SetMomentum((*aMom)->vect());
+          precompoundProducts->push_back(aNew);
+
+          delete *aMom;
+       }
+     }
+
+     if ( theCapturedList.size() != 0)                                    // Uzhi
+     {                                                                    // Uzhi
+       for ( aNuc=theCapturedList.begin();                                // Uzhi
+            (aNuc != theCapturedList.end()) && (aMom!=momenta->end());    // Uzhi
+	     aNuc++, aMom++ )                                             // Uzhi
+       {                                                                  // Uzhi
+          G4ReactionProduct * aNew = new G4ReactionProduct(               // Uzhi
+                                    (*aNuc)->GetDefinition());            // Uzhi
+          aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
+          aNew->SetMomentum((*aMom)->vect());                             // Uzhi
+          precompoundProducts->push_back(aNew);                           // Uzhi
+          delete *aMom;                                                   // Uzhi
+       }                                                                  // Uzhi
+     }                                                                    // Uzhi
+
+     if(momenta) delete momenta;                                          // Uzhi
+  }                   // End if(!fragment)
+
 
   {
 // fill in products the outgoing particles
@@ -739,10 +801,12 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   {
      nucleusMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA);
   } 
-  else if (currentZ==0 && currentA==1 )
-  {
-     nucleusMass = G4Neutron::Neutron()->GetPDGMass();
-  } 
+  else if (currentZ==0 )     // Uzhi && currentA==1 )                     // Uzhi
+  {                                                                       // Uzhi
+     if(currentA == 1) {nucleusMass = G4Neutron::Neutron()->GetPDGMass();}// Uzhi
+     else              {nucleusMass = GetFinalNucleusMomentum().mag()     // Uzhi
+                                      - 3.*MeV*currentA;}                 // Uzhi
+  }                                                                       // Uzhi
   else
   {
      #ifdef debug_G4BinaryCascade
@@ -1018,11 +1082,25 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4int PDGcode=std::abs(primary->GetDefinition()->GetPDGEncoding());
   mom4Primary=primary->Get4Momentum();
   initial_Efermi=RKprop->GetField(primary->GetDefinition()->GetPDGEncoding(),primary->GetPosition());
+
+if(!haveTarget)                                                          // Uzhi 
+{                                                                        // Uzhi
+  if ( PDGcode > 1000 )                                                  // Uzhi
+  {                                                                      // Uzhi
+     initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(), // Uzhi
+                                                primary->GetPosition()); // Uzhi
+     primary->Update4Momentum(mom4Primary.e() - initial_Efermi);         // Uzhi
+  }                                                                      // Uzhi
+} else                                                                   // Uzhi
+{                                                                        // Uzhi
   if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
   {
-     initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),primary->GetPosition());
+     initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
+                                                primary->GetPosition());
      primary->Update4Momentum(mom4Primary.e() - initial_Efermi);
   }
+}                                                                        // Uzhi
+
   std::vector<G4KineticTrack *>::iterator titer;
   for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
   {
