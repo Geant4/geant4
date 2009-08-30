@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.6 2009-01-24 11:56:27 vnivanch Exp $
+// $Id: G4InelasticInteraction.hh,v 1.7 2009-08-30 16:12:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Inelastic Interaction 
@@ -41,6 +41,7 @@
 //                                      TwoCluster, and allowing TwoCluster to be
 //                                      called with no secondaries
 // 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
+// 29-Aug-2009 V.Ivanchenko moveded G4ReactionDynamics instance from the based class 
  
 #ifndef G4InelasticInteraction_h
 #define G4InelasticInteraction_h 1
@@ -101,6 +102,9 @@ private:
    
       G4double cache;
       G4ThreeVector what;
+
+protected:
+      G4ReactionDynamics theReactionDynamics;
 
 };
  
