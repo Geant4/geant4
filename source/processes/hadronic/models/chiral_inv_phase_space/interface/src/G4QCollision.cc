@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.48 2009-08-31 11:23:40 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.49 2009-08-31 13:22:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -586,7 +586,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4cerr<<"*G4QCollision::PostStepDoIt: P="<<Momentum<<"#"<<momentum<<G4endl;
 #ifdef debug
   G4double mp=proj4M.m();
-  G4cout<<"-->G4QCollis::PostStDoIt:called,P="<<Momentum<<"="<<momentum<<",m="<<mp<<G4endl;
+  G4cout<<"-->G4QCollis::PostStDoIt:*called*, 4M="<<proj4M<<", P="<<Momentum<<"="<<momentum
+        <<",m="<<mp<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
