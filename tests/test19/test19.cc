@@ -88,6 +88,7 @@
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
+#include "G4GenericIon.hh"
 
 #include "G4QCollision.hh"
 #include "G4QDiffraction.hh"
@@ -518,14 +519,6 @@ int main()
    else if(pPDG==-11) part=G4Positron::Positron();   // Definition of positron projectile
    else if(pPDG==13) part=G4MuonMinus::MuonMinus();  // Definition of mu- projectile
    else if(pPDG==-13) part=G4MuonPlus::MuonPlus();   // Definition of the mu+ projectile
-   else if(pPDG==15) part=G4TauMinus::TauMinus();    // Definition of tau- projectile
-   else if(pPDG==-15) part=G4TauPlus::TauPlus();     // Definition of tau+ projectile
-   else if(pPDG==12) part=G4NeutrinoE::NeutrinoE();  // Definition of e_neutrino projectile
-   else if(pPDG==-12) part=G4AntiNeutrinoE::AntiNeutrinoE(); // anti-e_neutrino projectile
-   else if(pPDG==14) part=G4NeutrinoMu::NeutrinoMu();  // Definition of mu-neutrino proj.
-   else if(pPDG==-14) part=G4AntiNeutrinoMu::AntiNeutrinoMu(); // anti-mu_neutrino proj.
-   //else if(pPDG==16) part=G4NeutrinoTau::NeutrinoTau(); // Definition of tau-neutrino
-   //else if(pPDG==-16) part=G4AntiNeutrinoTau::AntiNeutrinoTau(); // anti-tau_neutrino
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG==-211) part=G4PionMinus::PionMinus();// Definition of Pi- projectile
    else if(pPDG==211)  part=G4PionPlus::PionPlus();  // Definition of Pi+ projectile
@@ -535,13 +528,34 @@ int main()
    else if(pPDG==310)part=G4KaonZeroShort::KaonZeroShort();//Definition of K0S projectile
    else if(pPDG==-2212)part=G4AntiProton::AntiProton();//Define antiProton projectile
    else if(pPDG==-2112)part=G4AntiNeutron::AntiNeutron();// Define AntiNeutron projectile
+   else if(pPDG>999999)
+   {
+     G4int ZN=pPDG%1000000;
+     G4int Z=ZN/1000;
+     G4int A=Z+ZN%1000;
+     part = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);// Define the Generic Ion
+   }
    else if(pPDG==3122) part=G4Lambda::Lambda();      // Definition of Lambda projectile
    else if(pPDG==3112) part=G4SigmaMinus::SigmaMinus();// Definition of Sigma- projectile
+   else if(pPDG==3122) part=G4SigmaZero::SigmaZero();// Definition of Sigma0 projectile
    else if(pPDG==3222) part=G4SigmaPlus::SigmaPlus();// Definition of Sigma+ projectile
    else if(pPDG==3322) part=G4XiMinus::XiMinus();    // Definition of the Xi- projectile
    else if(pPDG==3312) part=G4XiZero::XiZero();      // Definition of the Xi- projectile
    else if(pPDG==3334) part=G4OmegaMinus::OmegaMinus(); // Definition of Omega- projectile
-   else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
+   else if(pPDG==-3122) part=G4AntiLambda::AntiLambda(); // Definition of AntiLambda
+   else if(pPDG==-3112) part=G4AntiSigmaMinus::AntiSigmaMinus();// Definition of AntiSigma-
+   else if(pPDG==-3122) part=G4AntiSigmaZero::AntiSigmaZero();// Definition of AntiSigma0
+   else if(pPDG==-3322) part=G4AntiXiMinus::AntiXiMinus(); // Definition of the AntiXi-
+   else if(pPDG==-3312) part=G4AntiXiZero::AntiXiZero(); // Definition of the Xi0
+   else if(pPDG==-3334) part=G4AntiOmegaMinus::AntiOmegaMinus();// Definition of AntiOmega-
+   else if(pPDG==15) part=G4TauMinus::TauMinus();    // Definition of tau- projectile
+   else if(pPDG==-15) part=G4TauPlus::TauPlus();     // Definition of tau+ projectile
+   else if(pPDG==12) part=G4NeutrinoE::NeutrinoE();  // Definition of e_neutrino projectile
+   else if(pPDG==-12) part=G4AntiNeutrinoE::AntiNeutrinoE(); // anti-e_neutrino projectile
+   else if(pPDG==14) part=G4NeutrinoMu::NeutrinoMu();  // Definition of mu-neutrino proj.
+   else if(pPDG==-14) part=G4AntiNeutrinoMu::AntiNeutrinoMu(); // anti-mu_neutrino proj.
+   //else if(pPDG==16) part=G4NeutrinoTau::NeutrinoTau(); // Definition of tau-neutrino
+   //else if(pPDG==-16) part=G4AntiNeutrinoTau::AntiNeutrinoTau(); // anti-tau_neutrino
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
    {
      G4cerr<<"***Test19: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
