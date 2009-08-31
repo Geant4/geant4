@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.108 2009-08-28 17:08:29 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.109 2009-08-31 11:21:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -228,17 +228,8 @@ G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
+G4QNucleus::G4QNucleus(G4QNucleus* right, G4bool cop3D) : currentNucleon(-1)
 {
-  Tb            = right->Tb;
-  rho0          = right->rho0;
-  radius        = right->radius;
-  TbActive      = right->TbActive;
-  RhoActive     = right->RhoActive;
-  Set4Momentum   (right->Get4Momentum());
-  SetQPDG        (right->GetQPDG());
-  SetQC          (right->GetQC());
-  SetNFragments  (right->GetNFragments());
   Z             = right->Z;
   N             = right->N;
   S             = right->S;
@@ -249,6 +240,61 @@ G4QNucleus::G4QNucleus(G4QNucleus* right) : currentNucleon(-1)
   for(G4int i=0; i<=maxClust; i++) probVect[i] = right->probVect[i];
   probVect[254] = right->probVect[254];
   probVect[255] = right->probVect[255];
+  Tb            = right->Tb;
+  TbActive      = right->TbActive;
+  RhoActive     = right->RhoActive;
+  Set4Momentum   (right->Get4Momentum());
+  SetQPDG        (right->GetQPDG());
+  SetQC          (right->GetQC());
+  SetNFragments  (right->GetNFragments());
+  if(cop3D)
+  {
+    rho0          = right->rho0;
+    radius        = right->radius;
+    G4int nn=right->theNucleons.size();
+    for(G4int i=0; i<nn; ++i)
+    {
+      G4QHadron* nucleon = new G4QHadron(right->theNucleons[i]);
+      theNucleons.push_back(nucleon);
+    }
+  }
+#ifdef pardeb
+  G4cout<<"G4QNucleus::Constructor:(8) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
+        <<", R="<<mediRatio<<G4endl;
+#endif
+}
+
+G4QNucleus::G4QNucleus(const G4QNucleus &right, G4bool cop3D):
+  G4QHadron(), currentNucleon(-1)
+{
+  Z             = right.Z;
+  N             = right.N;
+  S             = right.S;
+  dZ            = right.dZ;
+  dN            = right.dN;
+  dS            = right.dS;
+  maxClust      = right.maxClust;
+  for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
+  probVect[254] = right.probVect[254];
+  probVect[255] = right.probVect[255];
+  Tb            = right.Tb;
+  TbActive      = right.TbActive;
+  RhoActive     = right.RhoActive;
+  Set4Momentum   (right.Get4Momentum());
+  SetQPDG        (right.GetQPDG());
+  SetQC          (right.GetQC());
+  SetNFragments  (right.GetNFragments());
+  if(cop3D)
+  {
+    rho0        = right.rho0;
+    radius      = right.radius;
+    G4int nn=right.theNucleons.size();
+    for(G4int i=0; i<nn; ++i)
+    {
+      G4QHadron* nucleon = new G4QHadron(right.theNucleons[i]);
+      theNucleons.push_back(nucleon);
+    }
+  }
 #ifdef pardeb
   G4cout<<"G4QNucleus::Constructor:(9) N="<<freeNuc<<", D="<<freeDib<<", W="<<clustProb
         <<", R="<<mediRatio<<G4endl;
@@ -261,60 +307,31 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
   if(this != &right)                          // Beware of self assignment
   {
     currentNucleon= -1;
+    TbActive      = right.TbActive;
     Tb            = right.Tb;
+    RhoActive     = right.RhoActive;
     rho0          = right.rho0;
     radius        = right.radius;
-    TbActive      = right.TbActive;
-    RhoActive     = right.RhoActive;
-    Set4Momentum   (right.Get4Momentum());
-    SetQPDG        (right.GetQPDG());
-    SetQC          (right.GetQC());
-    SetNFragments  (right.GetNFragments());
-    Z             = right.Z;
-    N             = right.N;
-    S             = right.S;
-    dZ            = right.dZ;
-    dN            = right.dN;
-    dS            = right.dS;
-    maxClust      = right.maxClust;
-    for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
-    probVect[254] = right.probVect[254];
-    probVect[255] = right.probVect[255];
-  }
-  return *this;
-}
-
-// Assignment operator
-const G4QNucleus& G4QNucleus::Copy3D(const G4QNucleus& right)
-{//               ===========================================
-  if(this != &right)                          // Beware of self assignment
-  {
-    currentNucleon= -1;
-    Z             = right.Z;
-    N             = right.N;
-    S             = right.S;
-    dZ            = right.dZ;
-    dN            = right.dN;
-    dS            = right.dS;
-    maxClust      = right.maxClust;
-    for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
-    probVect[254] = right.probVect[254];
-    probVect[255] = right.probVect[255];
-    G4int nn=right.theNucleons.size();
-    for(G4int i=0; i<nn; ++i)
+    G4int nn      = right.theNucleons.size();
+    for(G4int i=0; i < nn; ++i)
     {
       G4QHadron* nucleon = new G4QHadron(right.theNucleons[i]);
       theNucleons.push_back(nucleon);
     }
-    rho0          = right.rho0;
-    radius        = right.radius;
-    Tb            = right.Tb;
-    TbActive      = right.TbActive;
-    RhoActive     = right.RhoActive;
     Set4Momentum   (right.Get4Momentum());
     SetQPDG        (right.GetQPDG());
     SetQC          (right.GetQC());
     SetNFragments  (right.GetNFragments());
+    Z             = right.Z;
+    N             = right.N;
+    S             = right.S;
+    dZ            = right.dZ;
+    dN            = right.dN;
+    dS            = right.dS;
+    maxClust      = right.maxClust;
+    for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
+    probVect[254] = right.probVect[254];
+    probVect[255] = right.probVect[255];
   }
   return *this;
 }
@@ -623,6 +640,7 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
 #endif
     delete *u;                                  // Delete the nucleon as an object
     theNucleons.erase(u);                       // exclude the nucleon pointer from the HV
+    --currentNucleon;                           // Continue selection from theSame position
     t4M-=u4M;                                   // Update the nucleus 4-momentum VALUE
     if     (uPDG==2212) tPDG-=1000;             // Reduce the nucleus PDG Code by a proton
     else if(uPDG==2112) tPDG--;                 // Reduce the nucleus PDG Code by a neutron
@@ -666,6 +684,14 @@ void G4QNucleus::SubtractNucleon(G4QHadron* uNuc)
 #ifdef debug
   G4cout<<"G4QNucleus::SubtractNucleon:ResNuc4M="<<theMomentum<<",Z="<<Z<<",N="<<N<<G4endl;
 #endif
+}
+
+// Delete all residual nucleons
+void G4QNucleus::DeleteNucleons()
+{//  ============================
+  G4QHadronVector::iterator u;                      // iterator for the nucleons
+  for(u=theNucleons.begin(); u!=theNucleons.end(); u++) delete *u;
+  theMomentum=G4LorentzVector(0.,0.,0.,0.);
 }
 
 // Reduce nucleus by emitted cluster with PDG Code cPDG

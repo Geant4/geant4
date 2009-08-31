@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.hh,v 1.2 2009-08-21 11:56:53 mkossov Exp $
+// $Id: G4QInelastic.hh,v 1.3 2009-08-31 11:21:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 class G4QInelastic
 {
  public:
-  G4QInelastic(G4QNucleus& pNucleus, G4QNucleus& tNucleus);
+  G4QInelastic(G4QNucleus& pNucleus, const G4QNucleus& tNucleus);
   ~G4QInelastic(); 
 
   G4QHadronVector* Fragment(); // Calls Breeder & fragments Quasmons inside ResidualNucleus

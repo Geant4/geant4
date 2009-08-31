@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.44 2009-08-28 17:08:29 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.45 2009-08-31 11:21:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -57,9 +57,9 @@ public:
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s=0);                 // At Rest ZNS-Constructor
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
-  G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
+  G4QNucleus(G4QNucleus* right, G4bool cop3D = false);     // Copy Constructor by pointer
+  G4QNucleus(const G4QNucleus &right, G4bool cop3D=false); // Copy Constructor by value
   ~G4QNucleus();                                           // Public Destructor
-  const G4QNucleus& Copy3D(const G4QNucleus& right);       // Copy 3D nucleus
   // Overloaded Operators
   const G4QNucleus& operator=(const G4QNucleus& right);
   G4bool operator==(const G4QNucleus &right) const {return this==&right;}
@@ -102,6 +102,7 @@ public:
     return (currentNucleon>=0&&currentNucleon<GetA()) ? theNucleons[currentNucleon++] : 0;
   }
   void SubtractNucleon(G4QHadron* pNucleon); // Subtract the nucleon from the 3D Nucleus
+  void DeleteNucleons();                     // Deletes all residual nucleons
   G4LorentzVector GetNucleons4Momentum()
   {
     G4LorentzVector sum(0.,0.,0.,0.);
