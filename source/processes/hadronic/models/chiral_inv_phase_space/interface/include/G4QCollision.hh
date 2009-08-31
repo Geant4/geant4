@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.16 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QCollision.hh,v 1.17 2009-08-31 11:23:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision header ----------------
@@ -108,7 +108,7 @@
 #include "G4QANuANuNuclearCrossSection.hh"
 #include "G4QNeutronNuclearCrossSection.hh"
 #include "G4QNeutronCaptureRatio.hh"
-//#include "G4QuasmonString.hh"
+#include "G4QInelastic.hh"
 #include "G4QFragmentation.hh"
 #include "G4QuasiFreeRatios.hh"
 #include "G4QPDGToG4Particle.hh"

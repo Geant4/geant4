@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.47 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.48 2009-08-31 11:23:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -181,6 +181,8 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   G4VQCrossSection* CSmanager=0;
   G4VQCrossSection* CSmanager2=0;
   G4int pPDG=0;
+  G4int pZ = incidentParticleDefinition->GetAtomicNumber();
+  G4int pA = incidentParticleDefinition->GetAtomicMass();
   if(incidentParticleDefinition == G4Neutron::Neutron()) // @@ make a switch
   {
     CSmanager=G4QNeutronNuclearCrossSection::GetPointer();
@@ -230,6 +232,11 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
   {
     CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
     pPDG=3122;
+  }
+  else if(pZ > 0 && pA > 1)
+  {
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // Fake (pA)
+    pPDG=90000000+999*pZ+pA;
   }
   else if(incidentParticleDefinition == G4SigmaPlus::SigmaPlus())
   {
@@ -439,19 +446,15 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 
 G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle) 
 {
+  G4int Z=particle.GetAtomicNumber();
+  G4int A=particle.GetAtomicMass();
   if      (particle == *(       G4Neutron::Neutron()       )) return true; 
   else if (particle == *(        G4Proton::Proton()        )) return true;
   else if (particle == *(      G4MuonPlus::MuonPlus()      )) return true;
   else if (particle == *(     G4MuonMinus::MuonMinus()     )) return true;
   else if (particle == *(         G4Gamma::Gamma()         )) return true;
-  else if (particle == *(       G4TauPlus::TauPlus()       )) return true;
-  else if (particle == *(      G4TauMinus::TauMinus()      )) return true;
   else if (particle == *(      G4Electron::Electron()      )) return true;
   else if (particle == *(      G4Positron::Positron()      )) return true;
-  else if (particle == *( G4AntiNeutrinoE::AntiNeutrinoE() )) return true;
-  else if (particle == *(     G4NeutrinoE::NeutrinoE()     )) return true;
-  else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
-  else if (particle == *(    G4NeutrinoMu::NeutrinoMu()    )) return true;
   else if (particle == *(     G4PionMinus::PionMinus()     )) return true;
   else if (particle == *(      G4PionPlus::PionPlus()      )) return true;
   else if (particle == *(      G4KaonPlus::KaonPlus()      )) return true;
@@ -465,8 +468,22 @@ G4bool G4QCollision::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(       G4XiMinus::XiMinus()       )) return true;
   else if (particle == *(        G4XiZero::XiZero()        )) return true;
   else if (particle == *(    G4OmegaMinus::OmegaMinus()    )) return true;
+  else if (Z > 0 && A > 1)                                    return true; // Proj Ion
   else if (particle == *(   G4AntiNeutron::AntiNeutron()   )) return true;
   else if (particle == *(    G4AntiProton::AntiProton()    )) return true;
+  else if (particle == *(    G4AntiLambda::AntiLambda()    )) return true;
+  else if (particle == *( G4AntiSigmaPlus::AntiSigmaPlus() )) return true;
+  else if (particle == *(G4AntiSigmaMinus::AntiSigmaMinus())) return true;
+  else if (particle == *( G4AntiSigmaZero::AntiSigmaZero() )) return true;
+  else if (particle == *(   G4AntiXiMinus::AntiXiMinus()   )) return true;
+  else if (particle == *(    G4AntiXiZero::AntiXiZero()    )) return true;
+  else if (particle == *(G4AntiOmegaMinus::AntiOmegaMinus())) return true;
+  else if (particle == *(       G4TauPlus::TauPlus()       )) return true;
+  else if (particle == *(      G4TauMinus::TauMinus()      )) return true;
+  else if (particle == *( G4AntiNeutrinoE::AntiNeutrinoE() )) return true;
+  else if (particle == *(     G4NeutrinoE::NeutrinoE()     )) return true;
+  else if (particle == *(G4AntiNeutrinoMu::AntiNeutrinoMu())) return true;
+  else if (particle == *(    G4NeutrinoMu::NeutrinoMu()    )) return true;
   //else if (particle == *(G4AntiNeutrinoTau::AntiNeutrinoTau())) return true;
   //else if (particle == *(    G4NeutrinoTau::NeutrinoTau()    )) return true;
 #ifdef debug
@@ -586,27 +603,17 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
   // Not all these particles are implemented yet (see Is Applicable)
+  G4int pZ=particle->GetAtomicNumber();
+  G4int pA=particle->GetAtomicMass();
   if      (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
   else if (particle ==          G4Proton::Proton()         ) projPDG= 2212;
-  else if (particle ==        G4MuonPlus::MuonPlus()       ) projPDG=  -13;
-  else if (particle ==       G4MuonMinus::MuonMinus()      ) projPDG=   13;
-  else if (particle ==           G4Gamma::Gamma()          ) projPDG=   22;
-  else if (particle ==        G4Electron::Electron()       ) projPDG=   11;
-  else if (particle ==        G4Positron::Positron()       ) projPDG=  -11;
-  else if (particle ==      G4NeutrinoMu::NeutrinoMu()     ) projPDG=   14;
-  else if (particle ==  G4AntiNeutrinoMu::AntiNeutrinoMu() ) projPDG=  -14;
-  else if (particle ==       G4NeutrinoE::NeutrinoE()      ) projPDG=   12;
-  else if (particle ==   G4AntiNeutrinoE::AntiNeutrinoE()  ) projPDG=  -12;
-  else if (particle ==         G4TauPlus::TauPlus()        ) projPDG=  -15;
-  else if (particle ==        G4TauMinus::TauMinus()       ) projPDG=   15;
   else if (particle ==       G4PionMinus::PionMinus()      ) projPDG= -211;
   else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
   else if (particle ==        G4KaonPlus::KaonPlus()       ) projPDG=  321;
   else if (particle ==       G4KaonMinus::KaonMinus()      ) projPDG= -321;
   else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) projPDG=  130;
   else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) projPDG=  310;
-  else if (particle ==     G4NeutrinoTau::NeutrinoTau()    ) projPDG=   16;
-  else if (particle == G4AntiNeutrinoTau::AntiNeutrinoTau()) projPDG=  -16;
+  else if (                      pZ > 0 && pA > 1          ) projPDG = 90000000+999*pZ+pA;
   else if (particle ==          G4Lambda::Lambda()         ) projPDG= 3122;
   else if (particle ==       G4SigmaPlus::SigmaPlus()      ) projPDG= 3222;
   else if (particle ==      G4SigmaMinus::SigmaMinus()     ) projPDG= 3112;
@@ -616,6 +623,26 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   else if (particle ==      G4OmegaMinus::OmegaMinus()     ) projPDG= 3334;
   else if (particle ==     G4AntiNeutron::AntiNeutron()    ) projPDG=-2112;
   else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
+  else if (particle ==        G4MuonPlus::MuonPlus()       ) projPDG=  -13;
+  else if (particle ==       G4MuonMinus::MuonMinus()      ) projPDG=   13;
+  else if (particle ==           G4Gamma::Gamma()          ) projPDG=   22;
+  else if (particle ==        G4Electron::Electron()       ) projPDG=   11;
+  else if (particle ==        G4Positron::Positron()       ) projPDG=  -11;
+  else if (particle ==      G4NeutrinoMu::NeutrinoMu()     ) projPDG=   14;
+  else if (particle ==  G4AntiNeutrinoMu::AntiNeutrinoMu() ) projPDG=  -14;
+  else if (particle ==      G4AntiLambda::AntiLambda()     ) projPDG=-3122;
+  else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) projPDG=-3222;
+  else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) projPDG=-3112;
+  else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) projPDG=-3212;
+  else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) projPDG=-3312;
+  else if (particle ==      G4AntiXiZero::AntiXiZero()     ) projPDG=-3322;
+  else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) projPDG=-3334;
+  else if (particle ==       G4NeutrinoE::NeutrinoE()      ) projPDG=   12;
+  else if (particle ==   G4AntiNeutrinoE::AntiNeutrinoE()  ) projPDG=  -12;
+  else if (particle ==         G4TauPlus::TauPlus()        ) projPDG=  -15;
+  else if (particle ==        G4TauMinus::TauMinus()       ) projPDG=   15;
+  else if (particle ==     G4NeutrinoTau::NeutrinoTau()    ) projPDG=   16;
+  else if (particle == G4AntiNeutrinoTau::AntiNeutrinoTau()) projPDG=  -16;
   G4int aProjPDG=std::abs(projPDG);
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
@@ -1302,127 +1329,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   //
   }
   //else if (aProjPDG == 211 && Z > 0 && N > 0)// Made for both pi+ and pi- (experimental)
-  else if(2>3)                               // All experiments are closed
-  {
-    // Only deep-inelastic interactions are experimentally included (for debuggin purposes)
-#ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt:*QS* piA nteraction, Z = "<<Z<<", N = "<<N<<G4endl;
-#endif
-    const G4QNucleus targNuc(Z,N);           // Define the target nucleus
-    const G4QHadron projPi(projPDG,proj4M);  // Define the projectile pion
-    G4QFragmentation DINR(targNuc, projPi);  // Define the deep-inelastic nuclear reaction
-#ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt: ==>>> Before QS interaction"<<G4endl;
-#endif
-    output=DINR.Fragment();                  // Make the reaction
-    G4int nOut=output->size();               // Length of the output
-#ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt: <<<== After QS interaction nOut = "<<nOut<<G4endl;
-#endif
-    if(nOut) for(G4int i=0; i<nOut; i++)     // Loop over the output
-    {
-      // Note that one still has to take care of Hypernuclei (with Lambda or Sigma inside)
-      // Hypernucleus mass calculation and ion-table interface upgrade => work for Hisaya
-      // The decau process for hypernuclei must be developed in GEANT4 (change CHIPS body)
-      G4QHadron* hadr=(*output)[i];          // Pointer to the output hadron    
-      G4int PDGCode = hadr->GetPDGCode();
-      G4int nFrag   = hadr->GetNFragments();
-#ifdef pdebug
-      G4cout<<"G4QCollision::PostStepDoIt: *QS* H#"<<i<<",PDG="<<PDGCode<<",nF="<<nFrag
-            <<", 4Mom="<<hadr->Get4Momentum()<<G4endl;
-#endif
-      if(nFrag)                              // Skip intermediate (decayed) hadrons
-      {
-#ifdef debug
-        G4cout<<"G4QCollision::PostStepDoIt: *QS* Intermediate particle # "<<i<<G4endl;
-#endif
-        delete hadr;
-        continue;
-      }
-      G4DynamicParticle* theSec = new G4DynamicParticle;
-#ifdef pdebug
-      G4cout<<"G4QCollision::PostStepDoIt: *QS* PDG="<<PDGCode<<G4endl;
-#endif
-      G4ParticleDefinition* theDefinition;
-      if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
-      else if(PDGCode==90001000) theDefinition = G4Proton::Proton(); // While it can be ion
-      else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
-      else if(PDGCode==311 || PDGCode==-311)
-      {
-        if(G4UniformRand()>.5) theDefinition = G4KaonZeroLong::KaonZeroLong();   // K_L
-        else                   theDefinition = G4KaonZeroShort::KaonZeroShort(); // K_S
-      }
-      else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
-      else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
-      else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
-      else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
-      else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
-      else if(PDGCode==89999999) theDefinition = G4AntiNeutron::AntiNeutron();
-      else if(PDGCode==89999000) theDefinition = G4AntiProton::AntiProton(); 
-      else if(PDGCode==89000000) theDefinition = G4AntiLambda::AntiLambda();
-      else if(PDGCode >80000000) // Define hypernuclei as normal nuclei (N=N+S Correction!)
-      {
-        G4int aZ = hadr->GetCharge();
-        G4int aA = hadr->GetBaryonNumber();
-#ifdef pdebug
-        G4cout<<"G4QCollision::PostStepDoIt: *QS* Ion Z="<<aZ<<", A="<<aA<<G4endl;
-#endif
-        theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,aA,0,aZ);
-      }
-      //else theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(PDGCode);
-      else
-      {
-#ifdef pdebug
-        G4cout<<"G4QCollision::PostStepDoIt: *QS* Particle with PDG = "<<PDGCode<<G4endl;
-#endif
-        theDefinition = G4QPDGToG4Particle::Get()->GetParticleDefinition(PDGCode);
-#ifdef pdebug
-        G4cout<<"G4QCollision::PostStepDoIt: *QS* AfterPartDef PDG="<<PDGCode<<G4endl;
-#endif
-      } // End of the long if for the different particle kinds
-#ifdef pdebug
-      G4cout<<"G4QCollision::PostStepDoIt: *QS* theDefinition="<<theDefinition<<G4endl;
-#endif
-      if(!theDefinition)
-      {
-#ifdef debug
-        G4cout<<"---Warning---G4QCollision::PostStepDoIt: *QS* drop PDG="<<PDGCode<<G4endl;
-#endif
-        delete hadr;
-        continue;
-      }
-#ifdef pdebug
-      G4cout<<"G4QCollision::PostStepDoIt:Name="<<theDefinition->GetParticleName()<<G4endl;
-#endif
-      theSec->SetDefinition(theDefinition);
-      G4LorentzVector h4M=hadr->Get4Momentum();
-      EnMomConservation-=h4M;
-#ifdef tdebug
-      G4cout<<"G4QCollis::PSDI:"<<i<<","<<PDGCode<<h4M<<h4M.m()<<EnMomConservation<<G4endl;
-#endif
-#ifdef debug
-      G4cout<<"G4QCollision::PostStepDoIt:*QS*#"<<i<<",PDG="<<PDGCode<<",4M="<<h4M<<G4endl;
-#endif
-      theSec->Set4Momentum(h4M); //                                                       ^
-      delete hadr; // <-----<-----------<-------------<-------------------<---------<-----+
-#ifdef debug
-      G4ThreeVector curD=theSec->GetMomentumDirection();              //                  ^
-      G4double curM=theSec->GetMass();                                //                  |
-      G4double curE=theSec->GetKineticEnergy()+curM;                  //                  ^
-      G4cout<<"G4QCollis::PSDI:p="<<curD<<curD.mag()<<",e="<<curE<<",m="<<curM<<G4endl;// |
-#endif
-      G4Track* aNewTrack = new G4Track(theSec, localtime, position ); //                  ^
-      aNewTrack->SetWeight(weight);                                   //    weighted      |
-      aNewTrack->SetTouchableHandle(trTouchable);                     //                  |
-      aParticleChange.AddSecondary( aNewTrack );                      //                  |
-#ifdef debug
-      G4cout<<"G4QCollision::PostStepDoIt:#"<<i<<" is done."<<G4endl; //                  |
-#endif
-    } // End of the conversion LOOP                                                       |
-    delete output;//Instances of the G4QHadrons from the output are already deleted above +
-    aParticleChange.ProposeTrackStatus(fStopAndKill);        // Kill the absorbed particle
-    return G4VDiscreteProcess::PostStepDoIt(track, step);    // *** Very temporary ! ***
-  }
   else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0)
   //else if(2>3) 
   {
@@ -1978,32 +1884,36 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef ldebug
   G4cout<<"^^G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  //G4QHadron* pH = new G4QHadron(projPDG,proj4M);            // ---> DELETED -->----+*
-  //G4QHadronVector projHV;                               //                          |
-  //projHV.push_back(pH);                                 // DESTROYED over 2 lines-+ |
-  //G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);//---> DELETED --->---+ | |
-  const G4QNucleus targNuc(Z,N);                          // Define the target nucleus|
-  const G4QHadron projPi(projPDG,proj4M);                 // Define the projectile|   |
-  G4QFragmentation DINR(targNuc, projPi);// Define the deep-inelastic nuclear reaction|
-  //std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<----<---+-+-+
-  //projHV.clear(); // <------------<---------------<-----------------<-----------+-+ .
+  delete output;                                          // Before the output creation
+  const G4QNucleus targNuc(Z,N);                          // Define the target nucleus
+  if(projPDG>9000000)
+  {
+    G4QNucleus projNuc(proj4M,projPDG);                   // Define the projectile nucleus
+    G4QInelastic IonIon(projNuc, targNuc); // Define the deep-inelastic ion-ion reaction
 #ifdef debug
-  G4cout<<"G4QCol::PStDoIt:Proj="<<projPDG<<proj4M<<",Targ="<<targPDG<<G4endl; // |   .
+    G4cout<<"G4QCol::PStDoIt: ProjNuc="<<projPDG<<proj4M<<", TargNuc="<<targPDG<<G4endl;
 #endif
-  try                                                           //                |   .
-  {                                                             //                |   .
-    delete output;                                              //                |   .
-    output = DINR.Fragment();                                   // DINR reaction  |   .
-    //output = pan->Fragment();// DESTROYED in the end of the LOOP work space     |   .
-  }                                                             //                |   .
-  catch (G4QException& error)//                                                   |   .
-  {                                                             //                |   .
-    //#ifdef pdebug
-    G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |   .
-    //#endif
-    G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPSCrash");//|   .
-  }                                                             //                |   .
-  //delete pan;                            // Delete the Nuclear Environment <-<--+   .
+    try {output = IonIon.Fragment();}                     // DINR AA interaction products
+    catch (G4QException& error)
+    {
+      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
+      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+    }
+  }
+  else                                                    // --> A projectile hadron
+  {
+    const G4QHadron projH(projPDG,proj4M);                // Define the projectile particle
+    G4QFragmentation DINR(targNuc, projH); // Define the deep-inelastic h-nuclear reaction
+#ifdef debug
+    G4cout<<"G4QCollision::PStDoIt: Proj="<<projPDG<<proj4M<<", TargNuc="<<targPDG<<G4endl;
+#endif
+    try {output = DINR.Fragment();}                       // DINR hA interaction products
+    catch (G4QException& error)
+    {
+      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
+      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+    }
+		}
   //
   // --- the scattered hadron with changed nature can be added here ---
   if(scat)
