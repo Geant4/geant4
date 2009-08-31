@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.6 2009-08-13 11:32:47 sincerti Exp $
+// $Id: G4DNABornExcitationModel.cc,v 1.7 2009-08-31 14:03:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@ G4DNABornExcitationModel::G4DNABornExcitationModel(const G4ParticleDefinition*,
 {
 
   lowEnergyLimit = 500 * keV; 
-  highEnergyLimit = 10 * MeV;
+  highEnergyLimit = 100 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 

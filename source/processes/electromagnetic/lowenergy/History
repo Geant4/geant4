@@ -1,4 +1,4 @@
-$Id: History,v 1.383 2009-08-13 11:32:47 sincerti Exp $
+$Id: History,v 1.384 2009-08-31 14:03:28 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.08.2009, S. Incerti, tag emlowen-V09-02-51
+            Extended high energy coverage of proton ionisation 
+            (G4DNABornIonisationModel.cc) and excitation
+            (G4DNABornExcitationModel.cc)
+            Decreased temporarily high energy coverage of electron
+            ionisation from 30 keV to 20 keV (G4DNABornIonisationModel.cc)
+            The new data files are provided by Z. Francis.
 
 13.08.2009, S. Incerti, tag emlowen-V09-02-50
             Added G4_WATER NIST material to Geant4-DNA models
