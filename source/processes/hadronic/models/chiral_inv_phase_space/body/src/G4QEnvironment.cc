@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.150 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.151 2009-08-31 13:22:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -6876,8 +6876,11 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       }
       else if(reM<sum || !G4QHadron(r4M).DecayIn2(n4M,k4M))
       {
+#ifdef debug
+
         G4cout<<"---Warning---G4QE::FSI: Try to recover ASN="<<hPDG<<","<<reM<<"<"<<mR<<"+"
               <<mKaon<<"="<<sum<<G4endl;
+#endif
         if(!theEnvironment.GetA())
         {
           G4QHadron* theLast = curHadr;          // Prototype of Pointer to theLastHadron
@@ -6896,7 +6899,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(!CheckGroundState(quasH,true))      // Try to correct by other hadrons
           {
             qH->SetNFragments(-1);              //@@ To avoid looping
+#ifdef debug
             G4cout<<"---Warning---G4QE::FSI:AntiStraN Failed LeaveAsItIs 4m="<<r4M<<G4endl;
+#endif
             theQHadrons.push_back(qH);           // Leave as it is (delete equivalent)
           }
           else
