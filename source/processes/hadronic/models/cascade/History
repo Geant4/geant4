@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 Aug 2009 Dennis Wright (hadr-casc-V09-02-05)
+-----------------------------------------------
+- add class G4FinalStateSampler which was accidentally omitted from
+  the previous tag
+
 25 Aug 2009 Dennis Wright (hadr-casc-V09-02-04)
 -----------------------------------------------
 - correct bug in particle ordering in G4PionSampler
