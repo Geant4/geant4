@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronInelasticPhysics.hh,v 1.1 2009-07-02 09:32:05 vnivanch Exp $
+// $Id: G4VHadronPhysics.hh,v 1.1 2009-09-01 14:48:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4VHadronInelasticPhysics
+// ClassName:  G4VHadronPhysics
 //
 // Author: 28 June 2009 V.Ivanchenko
 //
@@ -36,8 +36,8 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4VHadronInelasticPhysics_h
-#define G4VHadronInelasticPhysics_h 1
+#ifndef G4VHadronPhysics_h
+#define G4VHadronPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4VHadronModelBuilder.hh"
@@ -46,22 +46,27 @@
 
 class G4ParticleDefinition;
 class G4VCrossSectionDataSet;
+class G4HadronicProcess;
+class G4HadronicInteraction;
 
-class G4VHadronInelasticPhysics : public G4VPhysicsConstructor
+class G4VHadronPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4VHadronInelasticPhysics(const G4String& name ="hInelastic", G4int verbose = 0);
+  G4VHadronPhysics(const G4String& name ="hInelastic", 
+			    G4int verbose = 0);
 
-  virtual ~G4VHadronInelasticPhysics();
+  virtual ~G4VHadronPhysics();
 
   virtual void ConstructParticle();
-
-  //  virtual void ConstructProcess();
 
   G4HadronicInteraction* BuildModel(G4VHadronModelBuilder*,
 				    G4double emin, 
 				    G4double emax);
+
+  G4HadronicInteraction* NewModel(G4HadronicInteraction*,
+				  G4double emin, 
+				  G4double emax);
 
   void AddInelasticCrossSection(const G4String&, 
 				G4VCrossSectionDataSet*);
@@ -69,15 +74,35 @@ public:
   void AddInelasticCrossSection(const G4ParticleDefinition*, 
 				G4VCrossSectionDataSet*);
 
+  void AddElasticCrossSection(const G4String&, 
+			      G4VCrossSectionDataSet*);
+
+  void AddElasticCrossSection(const G4ParticleDefinition*, 
+			      G4VCrossSectionDataSet*);
+
   void AddCaptureCrossSection(G4VCrossSectionDataSet*);
 
   void AddFissionCrossSection(G4VCrossSectionDataSet*);
 
+protected:
+
+  G4HadronicProcess* FindInelasticProcess(const G4String&);
+
+  G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+
+  G4HadronicProcess* FindElasticProcess(const G4String&);
+
+  G4HadronicProcess* FindElasticProcess(const G4ParticleDefinition*);
+
+  G4HadronicProcess* FindCaptureProcess();
+
+  G4HadronicProcess* FindFissionProcess();
+
 private:
 
   // copy constructor and hide assignment operator
-  G4VHadronInelasticPhysics(G4VHadronInelasticPhysics &);
-  G4VHadronInelasticPhysics & operator=(const G4VHadronInelasticPhysics &right);
+  G4VHadronPhysics(G4VHadronPhysics &);
+  G4VHadronPhysics & operator=(const G4VHadronPhysics &right);
 
   std::vector<G4VHadronModelBuilder*> builders;
  

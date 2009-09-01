@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronModelBuilder.cc,v 1.1 2009-07-02 09:32:41 vnivanch Exp $
+// $Id: G4VHadronModelBuilder.cc,v 1.2 2009-09-01 14:48:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,17 +41,13 @@
 
 G4VHadronModelBuilder::G4VHadronModelBuilder(const G4String& aName) 
   : model(0),name(aName)
-{
-}
+{}
 
 G4VHadronModelBuilder::~G4VHadronModelBuilder() 
-{
-  delete model;
-}                                     
+{}                                     
 
 G4HadronicInteraction* G4VHadronModelBuilder::GetModel()
 {
   if(!model) model = BuildModel();
   return model;
 }
-
