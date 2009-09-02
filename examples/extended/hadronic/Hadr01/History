@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2009-06-23 11:51:26 vnivanch Exp $
+$Id: History,v 1.30 2009-09-02 10:23:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-09-09  V.Ivant (exhadr01-V09-02-02)
+- Added histograms on energy depositions: total, electromagnetic,
+  pion, proton
 
 23-06-09  V.Ivant (exhadr01-V09-02-01)
 - FB68 substituted by FTFP_BERT_TRV
