@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.15 2009-08-28 09:21:34 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.16 2009-09-02 10:21:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -133,13 +133,13 @@ void HistoManager::bookHisto()
   histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
   histo->add1D("22","Energy deposition in the target normalized to beam energy",
-	       100,0.0,1.0,1.0);
+	       110,0.0,1.1,1.0);
   histo->add1D("23","EM energy deposition in the target normalized to beam energy",
-	       100,0.0,1.0,1.0);
+	       110,0.0,1.1,1.0);
   histo->add1D("24","Pion energy deposition in the target normalized to beam energy",
-	       100,0.0,1.0,1.0);
+	       110,0.0,1.1,1.0);
   histo->add1D("25","Proton energy deposition in the target normalized to beam energy",
-	       100,0.0,1.0,1.0);
+	       110,0.0,1.1,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
