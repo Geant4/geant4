@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.44 2009-08-23 19:56:44 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.45 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -132,7 +132,7 @@ private:
   // Private methods
   void DefineQC(G4int PDGCode);
   G4QParton* BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode);
-  G4double SampleCHIPSX(G4double anXtot, G4int nSea); // @@ Do we need beta at all?
+  G4double SampleCHIPSX(G4double anXtot, G4int nSea);
   G4double* RandomX(G4int nPart);
   void GetValenceQuarkFlavors(G4QParton* &Part1,G4QParton* &Part2);
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);

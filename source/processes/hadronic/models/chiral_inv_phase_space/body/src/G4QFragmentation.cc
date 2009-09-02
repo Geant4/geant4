@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.27 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.28 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -168,13 +168,15 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #endif
   G4LorentzVector cmProjMom = proj4M;                // Copy the original proj4M in LS
   cmProjMom.boost(-theCurrentVelocity);              // Bring the LS proj4Mom to "CM"
-  //G4double eKin = cmProjMom.e()-projM;               // Primary kinetic energy (MeV!)
+  G4double kE=cmProjMom.e()-projM;
 #ifdef debug
-  //G4cout<<"G4QFragmentation::Construct: eKin="<<eKin<<G4endl;
+  G4cout<<"G4QFragmentation::Construct: kE="<<kE<<G4endl;
 #endif
+  G4int maxCt=1;
+  if(kE > 720.) maxCt=static_cast<int>(std::log(kE/270.)); // 270 MeV !
   // @@ The maxCuts can improve the performance at low energies
-  //G4int maxCuts = std::min( 7, std::max( 1, static_cast<int>(std::log(eKin/GeV)) ) );
-  G4int maxCuts = 7;
+  //G4int maxCuts = 7;
+  G4int maxCuts=std::min( 7 , std::max(1, maxCt) );
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: Proj4MInCM="<<cmProjMom<<", pPDG="<<pPDG<<G4endl;
 #endif
@@ -347,7 +349,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #ifdef sdebug
       G4cout<<"G4QFragmentation::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
 #endif
-      G4double Probability = theProbability.GetInelasticProbability(s, Distance2);// INEL
+      G4double Probability = theProbability.GetPomInelProbability(s, Distance2); // PomINEL
       // test for inelastic collision
 #ifdef sdebug
       G4cout<<"G4QFragmentation::Construct: Probubility="<<Probability<<G4endl;
@@ -369,7 +371,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         theNucleus.DoLorentzBoost(theCurrentVelocity);// Boost theResNucleus toRotatedLS
         theNucleus.SubtractNucleon(pNucleon);         // Pointer to the used nucleon
         theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
-        if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
+        if((theProbability.GetPomDiffProbability(s,Distance2)/Probability >
             G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
         { 
           // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
@@ -393,7 +395,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
           G4double* running = new G4double[nCutMax]; // @@ This limits the max cuts
           for(nCut = 0; nCut < nCutMax; nCut++)      // Calculates multiCut probabilities
           {
-            running[nCut]= theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
+            running[nCut]= theProbability.GetCutPomProbability(s, Distance2, nCut+1);
             if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
           }
           G4double random = running[nCutMax-1]*G4UniformRand();
@@ -1659,6 +1661,11 @@ G4QHadronVector* G4QFragmentation::Fragment()
     G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
+    if(resNucPDG==90000000)
+    {
+      resNuc4M=G4LorentzVector(0.,0.,0.,0.);
+      resNuc->Set4Momentum(resNuc4M);
+    }
 #ifdef edebug
     G4int rnChg=resNuc->GetCharge();
     G4int rnBaN=resNuc->GetBaryonNumber();
@@ -1756,6 +1763,10 @@ G4QHadronVector* G4QFragmentation::Fragment()
     for(G4int i=0; i<nQuas; ++i)                            // LOOP over Quasmons         |
     {                                                       //                            |
       G4Quasmon* curQuasm=theQuasmons[i];                   // current Quasmon            |
+#ifdef debug
+      if(nucE) G4cout<<"G4QFr::Fr:V="<<nucVel<<",Q="<<curQuasm->Get4Momentum()<<",R=" //  |
+                     <<resNuc4M<<resNucPDG<<G4endl;         //                            |
+#endif
       if(nucE) curQuasm->Boost(-nucVel);                    // Boost it to CMS of Nucleus |
       pan->AddQuasmon(curQuasm);                            // Fill the predefined Quasmon|
 #ifdef edebug

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.63 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.64 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -1239,8 +1239,11 @@ void G4QHadron::SplitUp()
 #ifdef pdebug
     G4cout<<"G4QHad::SpUp:,nPartons="<<nColor+nColor<<<<G4endl;
 #endif
-   
-    G4double* xs=RandomX(nColor+nColor); // Non-iterative CHIPS algorithm of splitting
+    G4int dnCol=nColor+nColor;
+    // From here two algorithm of splitting can be used (All(default): New, OBO: Olg, Bad)
+    G4double* xs=RandomX(dnCol);        // All-Non-iterative CHIPS algorithm of splitting
+    // Instead one can try one-by-one CHIPS algorithm (faster? but not exact). OBO comment.
+    //G4double Xmax=1.;                   // OBO
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp:*Sft* Loop ColorX="<<ColorX<<G4endl;
 #endif
@@ -1248,15 +1251,26 @@ void G4QHadron::SplitUp()
     std::list<G4QParton*>::iterator ecolor = Color.end();
     std::list<G4QParton*>::iterator ianticolor = AntiColor.begin();
     std::list<G4QParton*>::iterator eanticolor = AntiColor.end();
-    G4int xi=-1;                         // x-index
+    G4int xi=-1;                        // XIndex for All-Non-interactive CHIPS algorithm
+    //G4double X=0.;                      // OBO
     for ( ; icolor != ecolor && ianticolor != eanticolor; ++icolor, ++ianticolor)
     {
-      (*icolor)->SetX(xs[++xi]);
+      (*icolor)->SetX(xs[++xi]);        // All-Non-iterative CHIPS algorithm of splitting
+      //X=SampleCHIPSX(Xmax, dnCol);      // OBO
+      //Xmax-=X;                          // OBO
+      //--dnCol;                          // OBO
+      //(*icolor)->SetX(X);               // OBO
+      // ----
       (*icolor)->DefineEPz(theMomentum);
-      (*ianticolor)->SetX(xs[++xi]);
+      (*ianticolor)->SetX(xs[++xi]);    // All-Non-iterative CHIPS algorithm of splitting
+      //X=SampleCHIPSX(Xmax, dnCol);      // OBO
+      //Xmax-=X;                          // OBO
+      //--dnCol;                          // OBO
+      //(*ianticolor)->SetX(X);           // OBO 
+      // ----
       (*ianticolor)->DefineEPz(theMomentum);
     }
-    delete[] xs;                           // The calculated array must be deleted
+    delete[] xs;                           // The calculated array must be deleted (All)
 #ifdef pdebug
     G4cout<<"G4QHadron::SplitUp: *Soft* ===> End, ColSize="<<Color.size()<<G4endl;
 #endif

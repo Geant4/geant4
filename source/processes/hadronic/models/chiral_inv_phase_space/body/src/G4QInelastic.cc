@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.7 2009-08-31 13:22:03 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.8 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -255,7 +255,7 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
         G4double s = (tNuc4M + pNuc4M).mag2();         // Squared CM Energy of compound
         G4double ThresholdMass = pNucleon->GetMass() + tNucleon->GetMass();
 #ifdef debug
-        G4cout<<"G4QInel::Constr: s="<<s<<", ThreshM="<<ThresholdMass<<G4endl;
+        G4cout<<"G4QInel::Constr: s="<<s<<", ThreshM="<<sqr(ThresholdMass)<<G4endl;
 #endif
         ModelMode = SOFT;                              // NOT-Diffractive hadronization
         if (s < 0.)                                    // At ThP=0 is impossible(virtNucl)
@@ -285,11 +285,7 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
                 <<pNucleon->Get4Momentum()<<",t4M="<<tNucleon->Get4Momentum()<<G4endl;
           continue;                                  // skip the rest of the targetNucleons
         }
-#ifdef sdebug
-        G4cout<<"G4QInelastic::Construct:LOOPovNuc,nC="<<nucCount<<", s="<<s<<", pR="
-              <<pNucleon->GetPosition()<<", tR="<<tNucleon->GetPosition()<<G4endl;
-#endif
-        G4double Probability = theProbability.GetInelasticProbability(s, Distance2);// INEL
+        G4double Probability = theProbability.GetPomInelProbability(s, Distance2);// P_INEL
         // test for inelastic collision
 #ifdef sdebug
         G4cout<<"G4QInelastic::Construct: Probubility="<<Probability<<G4endl;
@@ -315,7 +311,7 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
           curTargNucleus.DoLorentzBoost(theCMVelocity); // Boost theResNucleus toRotatedLS
           curTargNucleus.SubtractNucleon(tNucleon);     // Pointer to the used nucleon
           curTargNucleus.DoLorentzBoost(-theCMVelocity);// Boost theResNucleus back to CM
-          if((theProbability.GetDiffractiveProbability(s,Distance2)/Probability >
+          if((theProbability.GetPomDiffProbability(s,Distance2)/Probability >
               G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
           { 
             // ------------->>>> diffractive interaction @@ IsSingleDiffractive called once
@@ -339,7 +335,7 @@ G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
             G4double* running = new G4double[nCutMax];// @@ This limits the max cuts
             for(nCut = 0; nCut < nCutMax; nCut++)    // Calculates multiCut probabilities
             {
-              running[nCut]= theProbability.GetCutPomeronProbability(s, Distance2, nCut+1);
+              running[nCut]= theProbability.GetCutPomProbability(s, Distance2, nCut+1);
               if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
             }
             G4double random = running[nCutMax-1]*G4UniformRand();

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.151 2009-08-31 13:22:03 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.152 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -9157,7 +9157,9 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                     return true;
                   }
                 }
-                else G4cout<<"**G4QEnv::CheckGS:M="<<ttM<<" < GSM="<<ttGSM<<ttQPDG<<G4endl;
+#ifdef debug
+                else G4cout<<"-W-G4QEn::CheckGS:M="<<ttM<<" < GSM="<<ttGSM<<ttQPDG<<G4endl;
+#endif
               }
             }
           }

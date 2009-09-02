@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProbability.cc,v 1.1 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QProbability.cc,v 1.2 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,27 +32,29 @@
 //
 //      ---------------- G4QProbability ----------------
 //      by Mikhail Kossov Oct, 2006
-//      class for a Pomeron used by Parton String Models
+//   class for Pomeron & Reggeon amplitudes used by CHIPS
 //   For comparison mirror member functions are taken from G4 class:
 //   G4PomeronCrossSection
 // ------------------------------------------------------------------
 // Short description: Pomeron is one of the possible vacuum pole (the
 // second is Oderon, but they are identical in the present model), by
-// which particle exchang in the ellastic scattering process. Strings,
-// which appear as a cut of the Pomeron (optic theorem connects the
-// amplitude of scattering at zero angle with the total inelastic
-// cross-section), describe most of the processes at high energies.
+// which particle exchang in the ellastic scattering process. Others
+// are Reggeons and, possibly Instantons (for spin-flip reactions).
+// Strings are cuts of Pomerons and Reggeons (optic theorem connects
+// the amplitude of scattering at zero angle with the total inelastic
+// cross-section). They describe inelastic processes at high energies.
 // ------------------------------------------------------------------
 
 #include "G4QProbability.hh"
 
 G4QProbability::G4QProbability(G4int PDG)
 {
-  pomeron_S          = 1.*GeV*GeV;     // Must be a constant (just GeV^2 unit !)
-  pomeron_Alpha      = 1.0808;         // Must be the same for all hadrons
-  pomeron_Alphaprime = 0.25/GeV/GeV;     
-  pomeron_Gamma_Hard = 0.0002/GeV/GeV; // (?)
-  pomeron_Alpha_Hard = 1.47;           // (?)
+  S0             = 1.*GeV*GeV;     // Must be a constant (just GeV^2 unit !)
+  pom_Alpha      = 1.0808;         // Must be the same for all hadrons
+  pom_Alphaprime = 0.25/GeV/GeV;     
+  qex_Gamma      = 9./GeV/GeV;
+  qex_R2         = 27./GeV/GeV;
+  qex_Alphaprime = 1.5/GeV/GeV;     
 
   G4int aP = std::abs(PDG);
   if     (PDG==2212 || PDG==2112)                     InitForNucleon();
@@ -63,64 +65,78 @@ G4QProbability::G4QProbability(G4int PDG)
   else if(PDG <-2000)                                 InitForAntiBaryon();
   else
   {
-    G4cout<<"-Warning-G4QProbability is initialised for PDGCode="<<PDG<<" as a pion"<<G4endl;
+    G4cout<<"-Warning-G4QProbability is initialized for PDGCode="<<PDG<<" as Pion"<<G4endl;
     InitForPion();
   }
 }
 
-G4double G4QProbability::GetCutPomeronProbability(const G4double s,const G4double imp2,
+G4double G4QProbability::GetCutPomProbability(const G4double s, const G4double imp2,
                                               const G4int nPom)
 {
-  static const G4int nft=9;
+  static const G4int nft=11;
   static const G4int nf1=nft-1;
-  static const G4double ft[nft]={1.,1.,2.,6.,24.,120.,720.,5040.,40320.};
+  static const G4double ft[nft]={1.,1.,2.,6.,24.,120.,720.,5040.,40320.,362880.,3628800.};
   if(nPom<0) return 0.;
   G4double f=ft[nf1];
   if(nPom<nft) f=ft[nPom];
   else for(G4int i=nft; i<= nPom; i++) f*=i;         // Calculate factorial for high nPom
-  G4double e=Eikonal(s,imp2); e+=e;                  // Doubled Eikonal
-  return std::exp(-e)*std::pow(e,nPom)/pomeron_C/f;
+  G4double e=PomEikonal(s,imp2); e+=e;               // Doubled Eikonal
+  return std::exp(-e)*std::pow(e,nPom)/pom_C/f;
+}
+
+G4double G4QProbability::GetCutQexProbability(const G4double s, const G4double imp2,
+                                              const G4int nQex)
+{
+  static const G4int nft=11;
+  static const G4int nf1=nft-1;
+  static const G4double ft[nft]={1.,1.,2.,6.,24.,120.,720.,5040.,40320.,362880.,3628800.};
+  if(nQex<0) return 0.;
+  G4double f=ft[nf1];
+  if(nQex<nft) f=ft[nQex];
+  else for(G4int i=nft; i<= nQex; i++) f*=i;         // Calculate factorial for high nPom
+  G4double e=QexEikonal(s,imp2); e+=e;               // Doubled Eikonal
+  return std::exp(-e)*std::pow(e,nQex)/f;
 }
 
 void G4QProbability::InitForNucleon()
 {
-  pomeron_Gamma   = (2.6+3.96)/GeV/GeV; // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.4;
-  pomeron_Rsquare = 3.56/GeV/GeV;
+  pom_Gamma = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.4;
+  pom_R2    = 3.30/GeV/GeV;
 }
 
 void G4QProbability::InitForHyperon()
 {
-  pomeron_Gamma   = 3.96/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.4;
-  pomeron_Rsquare = 3.56/GeV/GeV;       // ? M.K.@@ Just a guess
+  pom_Gamma = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.4;
+  pom_R2    = 3.30/GeV/GeV;       // ? M.K.@@ Just a guess
 }
 void G4QProbability::InitForAntiBaryon()
 {
-  pomeron_Gamma   = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.4;
-  pomeron_Rsquare = 3.56/GeV/GeV;
+  pom_Gamma = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.4;
+  pom_R2    = 3.30/GeV/GeV;
 }
 
 void G4QProbability::InitForPion()
 {
-  pomeron_Gamma   = 2.17/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.6;                // Only: for mesons it is bigger than for baryons
-  pomeron_Rsquare = 2.36/GeV/GeV;
+  pom_Gamma = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.6;                // Only: for mesons it is bigger than for baryons
+  pom_R2    = 2.36/GeV/GeV;
 }
 
 void G4QProbability::InitForKaon()
 {
-  pomeron_Gamma   = 1.92/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.8;                // 1.7 (?)
-  pomeron_Rsquare = 1.96/GeV/GeV;       // ? M.K.@@ Just a guess
+  pom_Gamma = 1.92/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.8;                // 1.7 (?)
+  pom_R2    = 1.96/GeV/GeV;       // ? M.K.@@ Just a guess
 }
 
 void G4QProbability::InitForGamma()
 {
-  pomeron_Gamma   = 2.07/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
-  pomeron_C       = 1.7;
-  pomeron_Rsquare = 2.16/GeV/GeV;       // ? M.K.@@ Just a guess
+  pom_Gamma = 2.16/GeV/GeV;       // ? M.K.@@ Must be taken from total cross-sections
+  pom_C     = 1.7;
+  pom_R2    = 2.16/GeV/GeV;       // ? M.K.@@ Just a guess
 }
 
 G4double G4QProbability::Expand(G4double z)

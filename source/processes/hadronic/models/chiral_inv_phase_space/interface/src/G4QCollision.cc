@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.49 2009-08-31 13:22:29 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.50 2009-09-02 15:45:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -747,7 +747,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4QPDGCode targQPDG(targPDG);
   G4double tgM=targQPDG.GetMass();            // Target mass
   G4double tM=tgM;                            // Target mass (copy to be changed)
-  G4QHadronVector* output=new G4QHadronVector;// Prototype of EnvironOutput G4QHadronVector
+  G4QHadronVector* output=new G4QHadronVector;// Prototype of Fragm Output G4QHadronVector
   G4double absMom = 0.;                       // Prototype of absorbed by nucleus Moment
   G4QHadronVector* leadhs=new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVector
   G4LorentzVector lead4M(0.,0.,0.,0.);        // Prototype of LeadingQ 4-momentum
@@ -1885,10 +1885,10 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef ldebug
   G4cout<<"^^G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  delete output;                                          // Before the output creation
   const G4QNucleus targNuc(Z,N);                          // Define the target nucleus
   if(projPDG>9000000)
   {
+    delete output;                                        // Before the output creation
     G4QNucleus projNuc(proj4M,projPDG);                   // Define the projectile nucleus
     G4QInelastic IonIon(projNuc, targNuc); // Define the deep-inelastic ion-ion reaction
 #ifdef debug
@@ -1903,18 +1903,46 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   }
   else                                                    // --> A projectile hadron
   {
-    const G4QHadron projH(projPDG,proj4M);                // Define the projectile particle
-    G4QFragmentation DINR(targNuc, projH); // Define the deep-inelastic h-nuclear reaction
-#ifdef debug
-    G4cout<<"G4QCollision::PStDoIt: Proj="<<projPDG<<proj4M<<", TargNuc="<<targPDG<<G4endl;
-#endif
-    try {output = DINR.Fragment();}                       // DINR hA interaction products
-    catch (G4QException& error)
+    G4int maxCn=7;
+    G4int atCn=0;                                         // Attempts counter
+    G4bool inel=false;
+    while (inel==false && ++atCn <= maxCn)                // To evoid elastic final state
     {
-      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
-      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+      G4int outN=output->size();
+      if(outN)                                            // The output is not empty
+      {
+        for_each(output->begin(), output->end(), DeleteQHadron());
+        output->clear();
+      }
+      delete output;                                      // Before the new output creation
+      const G4QHadron projH(projPDG,proj4M);              // Define the projectile particle
+      G4QFragmentation DINR(targNuc, projH);              // Define deep-inel. h-A reaction
+#ifdef debug
+      G4cout<<"G4QCollision::PStDoIt:Proj="<<projPDG<<proj4M<<",TargNuc="<<targPDG<<G4endl;
+#endif
+      try {output = DINR.Fragment();}                     // DINR hA fragmentation
+      catch (G4QException& error)
+      {
+        G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
+        G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+      }
+      outN=output->size();
+#ifdef debug
+      G4cout<<"G4QCollision::PostStepDoIt:  At# "<<atCn<<", nSec="<<outN<<", fPDG="
+            <<(*output)[0]->GetPDGCode()<<", pPDG="<< projPDG<<G4endl;
+#endif
+      inel=true;
+      if(outN < 2)
+      {
+        G4cout<<"-Warning-G4QCollision::PostStepDoIt: nSec="<<outN<<", At# "<<atCn<<G4endl;
+        inel=false;
+      }
+      else if(outN==2 && (*output)[0]->GetPDGCode() == projPDG) inel=false;
+#ifdef debug
+      if(atCn==maxCn) G4cout<<"-Warn-G4QCol::PostStDoIt:mAt="<<atCn<<" is reached"<<G4endl;
+#endif
     }
-		}
+  }
   //
   // --- the scattered hadron with changed nature can be added here ---
   if(scat)
