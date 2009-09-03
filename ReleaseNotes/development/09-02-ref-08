@@ -1,0 +1,171 @@
+
+                       geant4-09-02-ref-08
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o New optional G4SmartTrackStack class, aimed to improve performance for
+   large scale simulations.
+ o Reviewed G4String and G4SubString implementation, to reduce generation
+   of temporaries.
+ o Added method G4IonTable::CreateAllIon() and "/particle/createAllIon"
+   command.
+ o Extended high energy coverage of proton ionisation in low-energy DNA model;
+   requiring new data set G4EMLOW-6.7.
+ o New class G4PionSampler for sampling partial cross sections, multiplicities
+   and final state particle types required for pi+, pi- and pi0 scattering
+   within a nucleus in Bertini cascade hadronic model.
+ o Extensions in CHIPS to cover all energies for hadrons, nucleons and mesons.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 9.2.p02
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-09
+------
+- Added G4OPTDEBUG option for hybrid optimized-debug build also to
+  Darwin-g++ and WIN32-g++ configurations.
+
+event                                            event-V09-02-02
+-----
+- Introducing G4SmartTrackStack class. By using this new stack as the urgent
+  stack of G4StackManager, the next track popped up from the stack is not
+  necessarily the last track stored in the stack, but the track of same
+  particle type as the previous one, as long as such a track exists in the
+  urgent stack. This mechanism is expected to improve the performance for
+  ultra-large scale simulation such as LHC, by increasing the cache hit rate
+  of the physics tables.
+  The use of G4SmartTrackStack is temporarily optional. To use it, uncomment
+  the "#define" line in include/evmandefs.hh.
+
+geometry/solids/CSG                              geom-csg-V09-02-05
+-------------------
+- G4Sphere: fix for the calculation of the normal in DistanceToOut()
+  to avoid cases of division by zero in specific configurations.
+  Addresses problem report #977.
+
+global                                           global-V09-02-07            (o)
+------
+- Some improvements to G4String and G4SubString implementation of operators
+  and comparison stub functions, to reduce generation of temporaries.
+- Removed obsolete static hash(s) method.
+
+particles                                        particles-V09-02-09
+---------
+- Use std::map for G4IonTable; modified G4IonTable::IsIon() method.
+- Added method G4IonTable::CreateAllIon() and "/particle/createAllIon" command.
+- Fixed a bug for A and Z of neutron not defined, and fixed handling of PDG
+  encoding for proton in G4IonTable.
+- Removed obsolete class G4NucleiPropertiesTable.
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-45
+-----------------------------------
+- Extended high energy coverage of proton ionisation (G4DNABornIonisationModel)
+  and excitation (G4DNABornExcitationModel). Decreased temporarily high energy
+  coverage of electron ionisation from 30 keV to 20 keV.
+  Requires new data set G4EMLOW-6.7.
+- Added G4_WATER NIST material to Geant4-DNA models.
+  Added verbose condition to all Geant4-DNA models.
+- Bug fix in G4DNABornIonisationModel for energy deposit.
+- Bug fix in G4IonDEDXHandler: corrected access to physics vector, in
+  compliance with new version of G4PhysicsVector where hidden bin is no
+  longer available.
+- Bug fix in G4IonDEDXScalingICRU73 for initialization of cached values.
+
+processes/electromagnetic/muons                  emmuons-V09-02-06
+-------------------------------
+- G4MuPairProductionModel restored to the head of repository; no code changes.
+
+processes/electromagnetic/standard               emstand-V09-02-21
+----------------------------------
+- G4PAIModel: fixed problem connected with changes related to G4PhysicsVector
+  for the removal of hidden bin.
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: speed-up improvement
+  by reducing number of calls to log().
+- G4WentzelVIModel and G4eCoulombScatteringModel: extended low-energy
+  cross-section to 0.1 keV.
+
+processes/electromagnetic/utils                  emutils-V09-02-17
+-------------------------------
+- G4EmModelManager: reduced length of internal arrays, simplified
+  initialisation by smoothing procedure; the size of executable should be
+  reduced.
+- G4VEmProcess, G4VMultipleScattering, G4VEnergyLossProcess,
+  G4LossTableBuilder: use copy constructors to create Physics Vectors in
+  order to reduce number of calls to log() function.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-02-06)                                      (o)
+  o G4TripathiLightIonCrossSection: added simple check that X-section is
+    positive and remove not optimal control
+  o Added constructor and destructor to G4TripathiCrossSection.
+  o G4CrossSectionDataSetRegistry: fixes for better memory management.
+- models/cascade (had-casc-V09-02-05)
+  o New class G4PionSampler: samples partial cross sections, multiplicities
+    and final state particle types required for pi+, pi- and pi0 scattering
+    within a nucleus. This class uses re-evaluated pion partial cross-sections
+    and includes production of strange particle pairs.
+  o Added class G4FinalStateSampler.
+  o G4CascadeSigmaPlusNChannel: corrected sigma plus cross-sections.
+  o G4CascadSpecialFunctions: moved pion, kaon, hyperon total cross-sections
+    to this class.
+  o G4ElementaryParticleCollider: re-written to use G4PionSampler class for
+    cross-sections and multiplicities; removed method reChargering(), now
+    redundant.
+  o Clean up of dead code in G4NucleiModel and G4ElementaryParticleCollider.
+- models/chiral_inv_phase_space (hadr-chips-V09-02-06)
+  o Migration of XS from interface to body module and cleared dependency of
+    now removed G4NucleiPropertiesTable class.
+  o Extended model for all energies for hadrons, nucleons and mesons (only
+    pi+/- & K-).
+  o Added photon and lepton-nuclear CHIPS inelastic; improved model to work for
+    all targets, including Hydrogen.
+  o Fixed non-initialised variables in G4QContent and fix in quasi-elastic
+    for photons and leptons
+- models/management (hadr-modman-V09-02-05)
+  o G4HadronicInteraction: renamed 'SampleT' with 'SampleInvariantT';
+    added 'recoilEnergyThreshold' parameter and accessors methods; use const
+    pointers to G4Element and G4Material; moved G4ReactionDynamics instance
+    to parameterised model class G4InelasticInteraction.
+
+run                                              run-V09-02-04
+---
+- G4RunManagerKernel now invokes G4VUserPhysicsList::CheckParticleList()
+  just before invoking G4VUserPhysicsList::SetCuts().
+
+data sets
+---------
+- New G4EMLOW data set, version 6.7:
+  o Extended high energy coverage of proton excitation and ionization
+  o Improved precision of e- ionisation Born model.
+
+examples                                         examples-V09-02-07
+--------
+- Updated reference outputs.
+- advanced/amsEcal (amsEcal-V09-02-10)
+  o pixels file created at BeginOfRun and appended at EndOfEvent.
+  o EventActionMessenger: added command /ams/event/writePixels [bool].
+  o Changed names for pixels numbering.
+- advanced/microdosimetry (microdosimetry-V09-02-04)
+  o Replaced H2O material by NIST G4_WATER
+  o Added GenericIon definition to PhysicsList.
+- extended/hadronic/Hadr01 (exhadr01-V09-02-02)
+  o Added histograms on energy depositions: total/electromagnetic, pion/proton.
+
+tests                                            tests-V09-02-07
+-----
+- Updated reference outputs and tools.
+- test12 (test12-V09-02-05)
+  o Pass correct physics list to runManager.
+- test19 (test19-V09-02-03)
+  o Updated test for checking all-particles, all-targets, all-energies in CHIPS.
+- test29 (test29-V09-02-03)
+  o Synchronised with repository head. No changes.
+- test47 (test47-V09-02-03)
+  o Added ability to provide random seed.
+- test60 (test60-V09-02-03)
+  o Replaced H2O by NIST G4_WATER.
