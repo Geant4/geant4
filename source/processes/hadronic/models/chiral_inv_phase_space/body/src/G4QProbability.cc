@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProbability.cc,v 1.2 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QProbability.cc,v 1.3 2009-09-04 16:13:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -68,6 +68,7 @@ G4QProbability::G4QProbability(G4int PDG)
     G4cout<<"-Warning-G4QProbability is initialized for PDGCode="<<PDG<<" as Pion"<<G4endl;
     InitForPion();
   }
+  pom_sqC=std::sqrt(pom_C);
 }
 
 G4double G4QProbability::GetCutPomProbability(const G4double s, const G4double imp2,
@@ -149,4 +150,49 @@ G4double G4QProbability::Expand(G4double z)
     sum+=current;
   }
   return sum;
+}
+
+G4double G4QProbability::GetQexTotProbability(const G4double s, const G4double imp2)
+{
+  G4double ExpPom=std::exp(-PomEikonal(s,imp2));
+  G4double ExpQex=std::exp(-QexEikonal(s,imp2));
+  G4double Amp=(ExpQex*(1.-ExpPom) + sqr(pom_sqC-1.)*ExpPom*(1.-ExpQex))/pom_C;
+  return Amp+Amp;
+}
+
+G4double G4QProbability::GetQexElProbability(const G4double s, const G4double imp2)
+{
+  G4double ExpPom=std::exp(-PomEikonal(s,imp2));
+  G4double ExpQex=std::exp(-QexEikonal(s,imp2));
+  G4double Amp=(ExpQex*(1.-ExpPom) + sqr(pom_sqC-1.)*ExpPom*(1.-ExpQex))/pom_C;
+  return Amp*Amp;
+}
+
+G4double G4QProbability::GetQexDubDiffProbability(const G4double s, const G4double imp2)
+{
+  G4double ExpPom=std::exp(-PomEikonal(s,imp2));
+  G4double ExpQex=std::exp(-QexEikonal(s,imp2));
+  G4double Amp=sqr(pom_sqC-1.)*(ExpQex*(1.-ExpPom) + ExpPom*(1.-ExpQex))/pom_C;
+  return Amp*Amp;
+}
+
+G4double G4QProbability::GetQexSinDiffProbability(const G4double s, const G4double imp2)
+{
+  G4double ExpPom=std::exp(-PomEikonal(s,imp2));
+  G4double ExpQex=std::exp(-QexEikonal(s,imp2));
+  G4double Amp=(pom_sqC-1.)*(ExpQex*(1.-ExpPom) - (pom_sqC-1.)*ExpPom*(1.-ExpQex))/pom_C;
+  return Amp*Amp;
+}
+
+G4double G4QProbability::GetQexDiffProbability(const G4double s, const G4double imp2)
+{
+  return GetQexDubDiffProbability(s,imp2)+2*GetQexSinDiffProbability(s,imp2);
+}
+
+G4double G4QProbability::GetQexInelProbability(const G4double s, const G4double imp2)
+{
+  G4double ExpPom=std::exp(-PomEikonal(s,imp2));
+  G4double ExpQex=std::exp(-QexEikonal(s,imp2));
+  G4double Amp=sqr(pom_sqC-1.)*(ExpQex*(1.-ExpPom) + ExpPom*(1.-ExpQex))/pom_C;
+  return Amp+Amp-Amp*Amp;
 }

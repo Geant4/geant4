@@ -26,7 +26,7 @@
 #ifndef G4QProbability_h
 #define G4QProbability_h 1
 //
-// $Id: G4QProbability.hh,v 1.3 2009-09-04 13:53:03 mkossov Exp $
+// $Id: G4QProbability.hh,v 1.4 2009-09-04 16:13:19 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -62,27 +62,29 @@ class G4QProbability
   void SetPom_Alpha(G4double aPom_Alpha)          {pom_Alpha = aPom_Alpha;}
   void SetPom_Alphaprime(G4double aPom_Alphaprime){pom_Alphaprime = aPom_Alphaprime;}
   // Genegal (with low energies)
-  G4double GetQexTotProbability(const G4double s, const G4double imp2)
-         {return 2*(1.-std::exp(-PomEikonal(s,imp2)))/pom_C;}
-  G4double GetQexDiffProbability(const G4double s, const G4double imp2) // !
-         {return ((pom_C-1.)/pom_C)*(GetQexTotProbability(s,imp2) -
-                                     GetQexAbsProbability(s,imp2));}
-  G4double GetQexAbsProbability(const G4double s, const G4double imp2)
-         {return (1.-std::exp(-2*PomEikonal(s,imp2)))/pom_C;}
-  G4double GetQexElProbability(const G4double s, const G4double imp2)
-         {return GetQexTotProbability(s,imp2)-GetQexInelProbability(s,imp2);}
-  G4double GetQexInelProbability(const G4double s, const G4double imp2)
-         {return GetQexDiffProbability(s,imp2) + GetQexAbsProbability(s,imp2);}
+  G4double GetQexTotProbability(const G4double s, const G4double imp2);
+  G4double GetQexCohProbability(const G4double s, const G4double imp2);
+  G4double GetQexDiffProbability(const G4double s, const G4double imp2);
+  G4double GetQexDubDiffProbability(const G4double s, const G4double imp2);
+  G4double GetQexSinDiffProbability(const G4double s, const G4double imp2);//For each T & B
+  G4double GetQexAbsProbability(const G4double s, const G4double imp2);
+  G4double GetQexElProbability(const G4double s, const G4double imp2);
+  G4double GetQexInelProbability(const G4double s, const G4double imp2);
   // Only Pomeron (high energies)
   G4double GetPomTotProbability(const G4double s, const G4double imp2)
          {return 2*(1.-std::exp(-PomEikonal(s,imp2)))/pom_C;}
+  G4double GetPomCohProbability(const G4double s, const G4double imp2)
+         {return sqr(1.-std::exp(-PomEikonal(s,imp2)))/pom_C;}
   G4double GetPomDiffProbability(const G4double s, const G4double imp2)
-         {return ((pom_C-1.)/pom_C)*(GetPomTotProbability(s,imp2) -
-                                     GetPomAbsProbability(s,imp2));}
+         {return ((pom_C-1.)/pom_C)*GetPomCohProbability(s,imp2);}
+  G4double GetPomDubDiffProbability(const G4double s, const G4double imp2)
+         {return (sqr(pom_sqC-1.)/pom_C)*GetPomCohProbability(s,imp2);}
+  G4double GetPomSinDiffProbability(const G4double s, const G4double imp2) //For each T & B
+         {return ((pom_sqC-1.)/pom_C)*GetPomCohProbability(s,imp2);}
   G4double GetPomAbsProbability(const G4double s, const G4double imp2)
          {return (1.-std::exp(-2*PomEikonal(s,imp2)))/pom_C;}
   G4double GetPomElProbability(const G4double s, const G4double imp2)
-         {return GetPomTotProbability(s,imp2)-GetPomInelProbability(s,imp2);}
+         {return GetPomCohProbability(s,imp2)/pom_C;}
   G4double GetPomInelProbability(const G4double s, const G4double imp2)
          {return GetPomDiffProbability(s,imp2) + GetPomAbsProbability(s,imp2);}
 
@@ -113,6 +115,7 @@ class G4QProbability
   G4double S0;
   G4double pom_Gamma;
   G4double pom_C;
+  G4double pom_sqC;
   G4double pom_R2;
   G4double pom_Alpha;
   G4double pom_Alphaprime;
