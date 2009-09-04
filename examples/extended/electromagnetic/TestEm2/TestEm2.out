@@ -336,25 +336,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.62s Real=7.62s Sys=0s
+  User=6.92s Real=7.78s Sys=0.01s
 
  SUMMARY 
 
- energy deposit :   94.50 % E0 +-    1.97 % E0
- charged traklen:  477.71 radl +-    9.91 radl
- neutral traklen: 4437.10 radl +-  154.42 radl
+ energy deposit :   94.77 % E0 +-    0.81 % E0
+ charged traklen:  479.25 radl +-    4.34 radl
+ neutral traklen: 4477.38 radl +-  116.76 radl
 
- 90.00 % confinement: radius = 3.11 radl  (2.78 cm )
+ 90.00 % confinement: radius = 3.03 radl  (2.70 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1075567884, 494906847
+ Current couple of seeds = 1476075892, 670300373
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94496622  delEdep= -0.004033782 nrms= -4.9192463
-Erms: 0.019712026  delErms= 0.011512026 nrms= 14.039056
-<<<<END>>>>   IS NOT ACCEPTED
+Edep: 0.94767095  delEdep= -0.0013290526 nrms= -1.6207959
+Erms: 0.0080594109  delErms= -0.00014058909 nrms= -0.17145011
+<<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
 

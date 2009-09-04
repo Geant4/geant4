@@ -357,7 +357,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     3   2.99 cm   23.1 cm   -1.4 m    1.49 MeV     0 eV   20.5 cm   1.06 m       Chamber  Transportation
     4   4.85 cm   36.2 cm    -80 cm   1.49 MeV     0 eV   61.5 cm   1.68 m       Tracker  Transportation
     5   5.47 cm   40.6 cm    -60 cm   1.49 MeV     0 eV   20.5 cm   1.88 m       Chamber  Transportation
-    6   7.33 cm   53.8 cm      0 fm   1.49 MeV     0 eV   61.5 cm    2.5 m       Tracker  Transportation
+    6   7.33 cm   53.8 cm  0.114 fm   1.49 MeV     0 eV   61.5 cm    2.5 m       Tracker  Transportation
     7   7.95 cm   58.2 cm     20 cm   1.49 MeV     0 eV   20.5 cm    2.7 m       Chamber  Transportation
     8   9.81 cm   71.4 cm     80 cm   1.49 MeV     0 eV   61.5 cm   3.32 m       Tracker  Transportation
     9   10.4 cm   75.8 cm      1 m    1.49 MeV     0 eV   20.5 cm   3.52 m       Chamber  Transportation
@@ -2160,7 +2160,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm  -2.91 m       1 TeV     0 eV      0 fm      0 fm        World    initStep
     1      0 fm      0 fm  -2.45 m   1e+03 GeV   114 keV    46 cm     46 cm        World  Transportation
-    2  -8.66 nm    6.4 nm   -2.4 m   1e+03 GeV  77.1 MeV     5 cm     51 cm       Target  Transportation
+    2  -8.66 nm    6.4 nm   -2.4 m   1e+03 GeV  75.7 MeV     5 cm     51 cm       Target  Transportation
     3    6.6 um   4.05 um   -2.3 m   1e+03 GeV  19.8 keV    10 cm     61 cm      Tracker  StepLimiter
     4   13.2 um   8.11 um   -2.2 m   1e+03 GeV  31.1 keV    10 cm     71 cm      Tracker  StepLimiter
     5   19.7 um   12.2 um   -2.1 m   1e+03 GeV  22.8 keV    10 cm     81 cm      Tracker  StepLimiter
@@ -2176,7 +2176,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    15   85.4 um   52.5 um   -1.1 m   1e+03 GeV  20.9 keV    10 cm   1.81 m       Tracker  StepLimiter
    16   91.9 um   56.7 um     -1 m   1e+03 GeV  18.5 keV    10 cm   1.91 m       Tracker  StepLimiter
    17   98.4 um   60.9 um    -90 cm  1e+03 GeV  27.5 keV    10 cm   2.01 m       Tracker  StepLimiter
-   18   98.8 um   61.2 um  -89.4 cm  1e+03 GeV  1.28 keV  6.32 mm   2.02 m       Tracker      muIoni
+   18   98.8 um   61.2 um  -89.4 cm  1e+03 GeV  1.28 keV  6.33 mm   2.02 m       Tracker      muIoni
    19    105 um   65.1 um    -80 cm  1e+03 GeV  19.9 keV  9.37 cm   2.11 m       Tracker  Transportation
    20    118 um   73.5 um    -60 cm  1e+03 GeV   154 keV    20 cm   2.31 m       Chamber  Transportation
    21    125 um   77.7 um    -50 cm  1e+03 GeV  26.4 keV    10 cm   2.41 m       Tracker  StepLimiter
@@ -2185,7 +2185,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    24    144 um   90.4 um    -20 cm  1e+03 GeV    19 keV    10 cm   2.71 m       Tracker  StepLimiter
    25    151 um   94.6 um    -10 cm  1e+03 GeV  21.3 keV    10 cm   2.81 m       Tracker  StepLimiter
    26    157 um   98.8 um   -1.8 nm  1e+03 GeV    17 keV    10 cm   2.91 m       Tracker  StepLimiter
-   27    157 um   98.8 um -0.0044 fm  1e+03 GeV0.000432 eV    1.8 nm   2.91 m       Tracker  Transportation
+   27    157 um   98.8 um -0.00435 fm  1e+03 GeV0.000432 eV    1.8 nm   2.91 m       Tracker  Transportation
    28    170 um    107 um     20 cm  1e+03 GeV   154 keV    20 cm   3.11 m       Chamber  Transportation
    29    177 um    111 um     30 cm  1e+03 GeV  21.7 keV    10 cm   3.21 m       Tracker  StepLimiter
    30    183 um    115 um     40 cm  1e+03 GeV  43.5 keV    10 cm   3.31 m       Tracker  StepLimiter
@@ -2196,7 +2196,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    35    208 um    132 um     80 cm  1e+03 GeV0.000411 eV   1.71 nm   3.71 m       Tracker  Transportation
    36    209 um    133 um   81.8 cm  1e+03 GeV  14.7 keV  1.77 cm   3.73 m       Chamber      muIoni
    37    215 um    137 um   91.6 cm  1e+03 GeV   104 keV  9.85 cm   3.83 m       Chamber      muIoni
-   38    220 um    141 um      1 m   1e+03 GeV  50.6 keV  8.38 cm   3.91 m       Chamber  Transportation
+   38    220 um    141 um      1 m   1e+03 GeV  50.5 keV  8.38 cm   3.91 m       Chamber  Transportation
    39    226 um    145 um    1.1 m   1e+03 GeV    27 keV    10 cm   4.01 m       Tracker  StepLimiter
    40    233 um    149 um    1.2 m   1e+03 GeV    24 keV    10 cm   4.11 m       Tracker  StepLimiter
    41    239 um    153 um    1.3 m   1e+03 GeV  24.3 keV    10 cm   4.21 m       Tracker  StepLimiter
@@ -2239,17 +2239,17 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0    209 um    133 um   81.8 cm   80.5 keV     0 eV      0 fm      0 fm      Chamber    initStep
     1  -1.12 mm  -3.62 mm   81.8 cm     74 keV  6.53 keV  5.31 mm   5.31 mm      Chamber         msc
-    2  -1.86 mm  -3.91 mm     82 cm   71.1 keV  2.85 keV  3.62 mm   8.93 mm      Chamber         msc
+    2  -1.86 mm  -3.91 mm     82 cm   71.1 keV  2.85 keV  3.62 mm   8.94 mm      Chamber         msc
     3   -854 um  -5.18 mm   82.2 cm   67.1 keV  3.97 keV   2.9 mm   1.18 cm      Chamber         msc
-    4   -911 um  -7.36 mm   82.2 cm   62.2 keV  4.91 keV  2.74 mm   1.46 cm      Chamber         msc
-    5    692 um  -8.42 mm   82.1 cm   59.2 keV  3.06 keV  2.39 mm    1.7 cm      Chamber         msc
+    4   -912 um  -7.36 mm   82.2 cm   62.2 keV  4.91 keV  2.74 mm   1.46 cm      Chamber         msc
+    5    691 um  -8.42 mm   82.1 cm   59.2 keV  3.06 keV  2.39 mm    1.7 cm      Chamber         msc
     6   1.91 mm  -9.14 mm     82 cm   55.3 keV  3.92 keV  2.39 mm   1.94 cm      Chamber         msc
-    7    821 um  -1.05 cm   81.9 cm   48.7 keV  6.56 keV  2.39 mm   2.18 cm      Chamber         msc
-    8   2.22 mm   -1.1 cm   81.8 cm   45.6 keV  3.08 keV  2.39 mm   2.41 cm      Chamber         msc
+    7    822 um  -1.05 cm   81.9 cm   48.7 keV  6.56 keV  2.39 mm   2.18 cm      Chamber         msc
+    8   2.22 mm   -1.1 cm   81.8 cm   45.6 keV  3.08 keV  2.39 mm   2.42 cm      Chamber         msc
     9   3.27 mm   -1.1 cm   81.7 cm   39.4 keV  6.23 keV  2.39 mm   2.65 cm      Chamber         msc
    10   3.09 mm  -1.25 cm   81.7 cm   36.2 keV  3.21 keV  2.39 mm   2.89 cm      Chamber         msc
-   11   3.64 mm  -1.38 cm   81.6 cm   29.8 keV   6.4 keV  2.39 mm   3.13 cm      Chamber         msc
-   12   4.25 mm   -1.5 cm   81.7 cm     17 keV  12.7 keV  2.39 mm   3.37 cm      Chamber         msc
+   11   3.65 mm  -1.38 cm   81.6 cm   29.8 keV   6.4 keV  2.39 mm   3.13 cm      Chamber         msc
+   12   4.25 mm   -1.5 cm   81.7 cm     17 keV  12.8 keV  2.39 mm   3.37 cm      Chamber         msc
    13   4.49 mm   -1.5 cm   81.7 cm      0 eV     17 keV  1.81 mm   3.55 cm      Chamber       eIoni
 
 *********************************************************************************************************

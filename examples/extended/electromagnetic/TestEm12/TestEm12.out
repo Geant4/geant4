@@ -93,6 +93,7 @@ userDetector->Construct() start.
 Absorber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -405,7 +406,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=41.23s Real=41.45s Sys=0.22s
+  User=40.79s Real=50.19s Sys=0.28s
 
  ======================== run summary ======================
 
@@ -413,18 +414,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.934 MeV +- 237.817 keV
+ Total Energy deposited        = 3.935 MeV +- 227.214 keV
 
- Track length of primary track = 2.024 cm  +- 2.773 mm 
+ Track length of primary track = 2.020 cm  +- 2.772 mm 
  Range from EmCalculator       = 2.026 cm  (from full dE/dx)
 
- Projected range               = 1.305 cm  +- 4.157 mm 
+ Projected range               = 1.305 cm  +- 4.130 mm 
 
- Nb of steps of primary track  = 239.32 +- 30.86	 Step size= 84.563 um  +- 4.603 um 
+ Nb of steps of primary track  = 238.88 +- 30.98	 Step size= 84.585 um  +- 4.614 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 510166102, 2066873679
+ Current couple of seeds = 1113199493, 1148241488
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

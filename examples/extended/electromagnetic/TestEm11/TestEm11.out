@@ -112,6 +112,7 @@ userDetector->Construct() start.
 Absorber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -403,7 +404,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=12.81s Real=13.29s Sys=0.47s
+  User=12.33s Real=15.74s Sys=0.48s
 
  ======================== run summary ======================
 

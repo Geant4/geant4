@@ -260,9 +260,6 @@ Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
 Event number 200
 Idle> #
 Idle> # proton at 1 TeV in Pb
@@ -272,15 +269,6 @@ Idle> /gun/energy 1 TeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: Too low mass, keep AsIs
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
-*Warning*G4QEnvironment::DecayAntistrange: S=-2,AsIsImprove
 Event number 300
 Idle> #
 Idle> # proton at 100 GeV in Al

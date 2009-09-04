@@ -144,32 +144,32 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.27s Real=0.27s Sys=0s
+  User=0.28s Real=0.29s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         67.47   RMS(MeV) 64.22
-Average number of steps              245.3
-Average number of gamma              2.34
-Average number of e-                 4.2
-Average number of e+                 0.06
+Average energy deposit (MeV)         64.28   RMS(MeV) 56.03
+Average number of steps              246.2
+Average number of gamma              2.32
+Average number of e-                 4.15
+Average number of e+                 0.02
 Average number of neutrons           1.31
-Average number of protons            1.23
+Average number of protons            1.21
 Average number of antiprotons        0
 Average number of pi+ & pi-          0.23
-Average number of pi0                0.17
+Average number of pi0                0.11
 Average number of kaons              0
 Average number of muons              0.01
-Average number of deuterons+tritons  0.15
-Average number of He3+alpha          0.16
-Average number of ions               0.55
-Average number of forward neutrons   0.17
-Average number of reflected neutrons 0.04
-Average number of leaked neutrons    1.02
-Average number of proton leak        0.51
+Average number of deuterons+tritons  0.12
+Average number of He3+alpha          0.11
+Average number of ions               0.53
+Average number of forward neutrons   0.22
+Average number of reflected neutrons 0.05
+Average number of leaked neutrons    0.91
+Average number of proton leak        0.53
 Average number of pion leak          0.22
 ========================================================
 

@@ -79,6 +79,7 @@ userDetector->Construct() start.
 Water is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
 /gun/particle gamma
@@ -291,7 +292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.85s Real=0.85s Sys=0s
+  User=0.85s Real=1.25s Sys=0s
 
  The run consists of 100000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 

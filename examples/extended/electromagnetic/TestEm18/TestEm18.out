@@ -67,6 +67,7 @@ userDetector->Construct() start.
 Water is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -292,7 +293,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.9s Real=1.89s Sys=0s
+  User=1.76s Real=2.91s Sys=0s
 
  ======================== run summary ======================
 

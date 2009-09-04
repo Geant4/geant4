@@ -18,6 +18,7 @@ userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
 /gun/direction 1 0 0
@@ -282,7 +283,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=48s Real=48s Sys=0.01s
+  User=46s Real=65s Sys=0.03s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -706,11 +707,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-GroundStateNucleus state cannot be created. Try again with another parameters.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=7.01s Real=7.02s Sys=0s
+  User=7.39s Real=8.09s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -928,10 +928,11 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+GroundStateNucleus state cannot be created. Try again with another parameters.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.47s Real=3.48s Sys=0.01s
+  User=3.7s Real=3.72s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -979,7 +980,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1026,7 +1027,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1073,7 +1074,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.21s Real=0.22s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1302,7 +1303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=12.91s Real=12.92s Sys=0.01s
+  User=0.08s Real=0.09s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

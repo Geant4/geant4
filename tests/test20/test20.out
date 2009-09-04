@@ -488,8 +488,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=9.48s Real=9.48s Sys=0s
-Time elapsed in 1 events ---- User=9.48s Real=9.48s Sys=0s
+  User=10.23s Real=11.36s Sys=0s
+Time elapsed in 1 events ---- User=10.23s Real=11.36s Sys=0s
 #
 /gun/particle proton
 /gun/energy 0.01 MeV
@@ -510,8 +510,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.68s Real=1.68s Sys=0s
-Time elapsed in 1 events ---- User=1.68s Real=1.68s Sys=0s
+  User=2.47s Real=2.47s Sys=0s
+Time elapsed in 1 events ---- User=2.47s Real=2.47s Sys=0s
 #
 /gun/particle hydrogen
 /gun/energy 0.01 MeV
@@ -532,8 +532,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.6s Real=1.6s Sys=0s
-Time elapsed in 1 events ---- User=1.6s Real=1.6s Sys=0s
+  User=1.7s Real=1.7s Sys=0s
+Time elapsed in 1 events ---- User=1.7s Real=1.7s Sys=0s
 #
 /gun/particle alpha
 /gun/energy 0.01 MeV
@@ -554,8 +554,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.73s Real=1.74s Sys=0.01s
-Time elapsed in 1 events ---- User=1.73s Real=1.74s Sys=0.01s
+  User=1.75s Real=1.77s Sys=0.02s
+Time elapsed in 1 events ---- User=1.75s Real=1.77s Sys=0.02s
 #
 /gun/particle alpha+
 /gun/energy 0.01 MeV
@@ -576,8 +576,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.72s Real=2.92s Sys=0.03s
-Time elapsed in 1 events ---- User=1.72s Real=2.92s Sys=0.03s
+  User=1.72s Real=1.86s Sys=0.02s
+Time elapsed in 1 events ---- User=1.72s Real=1.86s Sys=0.02s
 #
 /gun/particle helium
 /gun/energy 0.01 MeV
@@ -598,18 +598,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.68s Real=1.71s Sys=0.02s
-Time elapsed in 1 events ---- User=1.68s Real=1.71s Sys=0.02s
+  User=1.74s Real=1.96s Sys=0.04s
+Time elapsed in 1 events ---- User=1.74s Real=1.96s Sys=0.04s
 #
 G4 kernel has come to Quit state.
-DNAProcess for alpha in Water : 2 calls
-DNAProcess for alpha+ in Water : 11 calls
-DNAProcess for helium in Water : 1868 calls
-DNAProcess for hydrogen in Water : 1086 calls
-DNAProcess for proton in Water : 593 calls
-ElasticChampion for e- in Water : 17340 calls
-ExcitationEmfietzoglou for e- in Water : 127 calls
-IonisationBorn for e- in Water : 118 calls
+DNAProcess for alpha in Water : 1 calls
+DNAProcess for alpha+ in Water : 5 calls
+DNAProcess for helium in Water : 1854 calls
+DNAProcess for hydrogen in Water : 1187 calls
+DNAProcess for proton in Water : 458 calls
+ElasticChampion for e- in Water : 21378 calls
+ExcitationEmfietzoglou for e- in Water : 164 calls
+IonisationBorn for e- in Water : 138 calls
 Transportation for e- in Water : 1 calls
-Transportation for proton in Water : 2 calls
+Transportation for hydrogen in Water : 2 calls
 

@@ -350,37 +350,37 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.83s Real=2.83s Sys=0s
+  User=2.35s Real=2.38s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         1323
-Average number of gamma      699.8
-Average number of e+         49.23
-Average number of steps      3989
-Edep 1x1 =                   0.83 +- 0.002882  res=  3.472 %
-Edep 3x3 =                   0.9584 +- 0.001284  res=  1.313 %
-Edep 5x5 =                   0.9806 +- 0.0008177  res=  0.8127 %
+Average number of e-         1312
+Average number of gamma      695.4
+Average number of e+         48.22
+Average number of steps      3969
+Edep 1x1 =                   0.826 +- 0.002933  res=  3.406 %
+Edep 3x3 =                   0.9568 +- 0.001243  res=  1.253 %
+Edep 5x5 =                   0.9802 +- 0.0008252  res=  0.8118 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.83 +- 0.002882  res=  3.472 %
-Edep 3x3 =                   0.9564 +- 0.001588  res=  1.66 %
-Edep 5x5 =                   0.9784 +- 0.00131  res=  1.339 %
+Edep 1x1 =                   0.8187 +- 0.003667  res=  4.479 %
+Edep 3x3 =                   0.9533 +- 0.001764  res=  1.851 %
+Edep 5x5 =                   0.9778 +- 0.00123  res=  1.257 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8678 +- 0.002494
-  E1/E25 =                   0.8483 +- 0.002643
-  E9/E25 =                   0.9775 +- 0.0009716
+  E1/E9  =                   0.8586 +- 0.003154
+  E1/E25 =                   0.8373 +- 0.003423
+  E9/E25 =                   0.975 +- 0.001077
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.83  delEdep1x1= 0.002906 nrms= 0.9771
-Erms1x1: 0.02882  delErms1x1= -0.0009241 nrms= -0.3107
-Edep3x3: 0.9584  delEdep3x3= 0.001368 nrms= 1.064
-Erms3x3: 0.01258  delErms3x3= -0.0002774 nrms= -0.2157
-Edep5x5: 0.9806  delEdep5x5= 0.001305 nrms= 1.476
-Erms5x5: 0.00797  delErms5x5= -0.0008702 nrms= -0.9844
+Edep1x1: 0.826  delEdep1x1= -0.001109 nrms= -0.3728
+Erms1x1: 0.02813  delErms1x1= -0.001607 nrms= -0.5405
+Edep3x3: 0.9568  delEdep3x3= -0.0001784 nrms= -0.1387
+Erms3x3: 0.01199  delErms3x3= -0.0008742 nrms= -0.6798
+Edep5x5: 0.9802  delEdep5x5= 0.0009475 nrms= 1.072
+Erms5x5: 0.007958  delErms5x5= -0.000882 nrms= -0.9978
 <<<<<END>>>>>   IS ACCEPTED
 
 #

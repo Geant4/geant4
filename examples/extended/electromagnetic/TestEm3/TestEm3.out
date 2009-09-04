@@ -43,6 +43,7 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 /process/eLoss/verbose 1
@@ -376,13 +377,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.99s Real=4.99s Sys=0s
+  User=4.92s Real=6.65s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 781.58 MeV :  15.81 MeV     2.023 +- 0.2023 %      53.8 cm  +-  1.2 cm 
-   liquidArgon: 207.61 MeV :  15.92 MeV     7.667 +- 0.7667 %      1.02 m   +- 8.15 cm 
+          Lead: 783.38 MeV :  16.54 MeV     2.111 +- 0.2111 %      53.8 cm  +- 1.25 cm 
+   liquidArgon: 205.74 MeV :  15.88 MeV     7.719 +- 0.7719 %      1.01 m   +- 8.03 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -390,15 +391,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 781.576 MeV
-liquidArgon:	 207.558 MeV
+      Lead:	 783.387 MeV
+liquidArgon:	 205.713 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 122888054, 2035657709
+ Current couple of seeds = 1758342359, 301364741
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

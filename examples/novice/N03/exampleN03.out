@@ -573,15 +573,15 @@ hPairProd:   for  pi-    SubType= 4
 ----------------------------------------
 ---> End of event: 0
    Absorber: total energy: 269.12852 MeV       total track length: 18.377364 cm 
-        Gap: total energy: 14.589527 MeV       total track length: 6.9180264 cm 
+        Gap: total energy: 14.589528 MeV       total track length: 6.9180267 cm 
 
 --------------------End of Run------------------------------
 
  mean Energy in Absorber : 269.12852 MeV +- 0 eV 
- mean Energy in Gap      : 14.589527 MeV +- 0 eV 
+ mean Energy in Gap      : 14.589528 MeV +- 0 eV 
 
  mean trackLength in Absorber : 18.377364 cm  +- 0 fm 
- mean trackLength in Gap      : 6.9180264 cm  +- 0 fm 
+ mean trackLength in Gap      : 6.9180267 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -803,12 +803,12 @@ hPairProd:   for  pi-    SubType= 4
 ----------------------------------------
 ---> End of event: 0
    Absorber: total energy: 417.63601 MeV       total track length: 99.855712 cm 
-        Gap: total energy: 74.979284 MeV       total track length: 2.0626878 m  
+        Gap: total energy: 74.979282 MeV       total track length: 2.0626878 m  
 
 --------------------End of Run------------------------------
 
  mean Energy in Absorber : 417.63601 MeV +- 0 eV 
- mean Energy in Gap      : 74.979284 MeV +- 0 eV 
+ mean Energy in Gap      : 74.979282 MeV +- 0 eV 
 
  mean trackLength in Absorber : 99.855712 cm  +- 0 fm 
  mean trackLength in Gap      : 2.0626878 m   +- 0 fm 

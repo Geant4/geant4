@@ -38,6 +38,7 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -363,7 +364,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.73s Real=11.44s Sys=2.4s
+  User=7.21s Real=16.78s Sys=2.37s
 
  ======================== run summary ======================
 
@@ -741,7 +742,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=9.16s Real=11.35s Sys=2.17s
+  User=8.42s Real=12.58s Sys=2.36s
 
  ======================== run summary ======================
 

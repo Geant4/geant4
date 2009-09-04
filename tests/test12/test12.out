@@ -16,10 +16,6 @@
 
 Test12 using physics list FTFP (default)
 SimpleBox is now made of Pb
-
-<<< Geant4 Physics List engine packaging library: PACK 5.4
-<<< Geant4 Physics List simulation engine: FTFP 4.4
-
 PreInit> #
 PreInit> # Auto-generated test input file for test12 hadronics.
 PreInit> #

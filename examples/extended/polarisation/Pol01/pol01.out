@@ -26,6 +26,7 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
 /polarization/manager/verbose 1
@@ -151,7 +152,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.24s Real=0.25s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
@@ -175,7 +176,7 @@ Run Summary
  Gamma: 
 Mean Number per Event :1.0083
 Mean Energy :9.6041 MeV +- 1.8409 MeV
-Mean Polarization :-0.96709 +- 0.17524
+Mean Polarization :-0.96709 +- 0.17525
  Electron: 
 Mean Number per Event :0.0317
 Mean Energy :5.1861 MeV +- 2.4325 MeV

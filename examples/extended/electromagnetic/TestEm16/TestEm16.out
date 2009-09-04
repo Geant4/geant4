@@ -69,6 +69,7 @@ userDetector->Construct() start.
 Vacuum is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 CutLength : 1 km 
 #
@@ -246,7 +247,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.69s Real=0.7s Sys=0s
+  User=0.57s Real=0.57s Sys=0s
 Summary for synchrotron radiation :
   Number of photons = 64554
   Emean             = 20.24 +/- 0.1449 keV

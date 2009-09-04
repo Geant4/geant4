@@ -51,6 +51,7 @@ userDetector->Construct() start.
 Chamber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 10 km 
 #
@@ -155,7 +156,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=32.04s Real=32.05s Sys=0s
+  User=29.93s Real=32.46s Sys=0s
 
  ======================== run summary ======================
 
