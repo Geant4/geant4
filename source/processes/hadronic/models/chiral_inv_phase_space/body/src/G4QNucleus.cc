@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.110 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.111 2009-09-04 13:53:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3804,7 +3804,7 @@ G4double G4QNucleus::GetThickness(G4double b)
     G4cout<<"-Warning-G4QNucleus::GetThickness: for A="<<tA<<", => return 0"<<G4endl;
     return 0.;
   }
-  else if(tA==1) return fermi;
+  else if(tA==1) return 0.;
   if(!TbActive) ActivateBThickness();
   if(!RhoActive) InitDensity();
   return GetBThickness(b)/rho0/tA;

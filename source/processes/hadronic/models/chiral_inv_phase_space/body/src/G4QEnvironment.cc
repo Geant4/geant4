@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.152 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.153 2009-09-04 13:53:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7208,6 +7208,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           }
           // @@ Add multybaryon decays if necessary
         }
+#ifdef pdebug
         else // If this Error shows up (lowProbable appearance) => now it is left as is
         {
           G4double d=rlM+MLa-reM;
@@ -7216,6 +7217,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4cerr<<"-W-G4QE::FSI:HypN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
           //throw G4QException("G4QEnvironment::FSInteract: Hypernuclear conversion");
         }
+#endif
       }
       else if(SS==nB)
       {
