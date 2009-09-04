@@ -40,6 +40,8 @@ public:
 
   G4CollisionOutput();
 
+  G4CollisionOutput& operator=(const G4CollisionOutput& right);
+
   void reset() {
     nucleiFragments.resize(0);
     outgoingParticles.resize(0);
