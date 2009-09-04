@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QString.cc,v 1.16 2009-08-28 14:49:10 mkossov Exp $
+// $Id: G4QString.cc,v 1.17 2009-09-04 14:38:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -1217,8 +1217,10 @@ G4QHadron* G4QString::CreateBaryon(G4QParton* black, G4QParton* white, Spin theS
 
 G4QHadron* G4QString::CreateHadron(G4QParton* black, G4QParton* white)
 {
-  static G4double mesonLowSpin = 0.25;      // probability to create scalar meson 
-  static G4double baryonLowSpin= 1./3.;     // probability to create 1/2 baryon 
+  //static G4double mesonLowSpin = 0.25;      // probability to create scalar meson (2s+1) 
+  //static G4double baryonLowSpin= 1./3.;     // probability to create 1/2 baryon  (2s+1)
+  static G4double mesonLowSpin = 0.5;      // probability to create scalar meson (spFlip)
+  static G4double baryonLowSpin= 0.5;      // probability to create 1/2 baryon (spinFlip)
   G4int bT=black->GetType();
   G4int wT=white->GetType();
 #ifdef debug
