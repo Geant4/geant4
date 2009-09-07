@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.115 2009-08-10 16:36:53 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.116 2009-09-07 09:33:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4627,9 +4627,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
                   if(pPrint) G4cout<<"G4Q::CHP:parentPossibility="<<possib<<",pZ="<<charge
                                    <<",pN="<<barot-charge<<", cPDG="<<cPDG<<G4endl;
 #endif
-                  if(possib&&charge<=envZ&&barot-charge<=envN)
+                  if(possib && charge<=envZ && barot-charge<=envN)
                   {
-                    G4QContent rQQC = valQ+ioQC;  // Quark Content of Residual Quasmon
+                    //G4QContent rQQC = valQ+ioQC;  // Quark Content of Residual Quasmon
                     ///////////G4int rQU=rQQC.GetU()-rQQC.GetAU();
                     ///////////G4int rQD=rQQC.GetD()-rQQC.GetAD();
                     G4int isos  = barot-charge-charge; // Isospin of the Parent Cluster
@@ -4720,7 +4720,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                       if(pPrint)G4cout<<"G4Q::CHP:r="<<resPDG<<",M="<<minM<<",k="<<kLS<<"<"
                                       <<kCut<<",E="<<E<<">"<<nDelta<<",p="<<parPDG<<G4endl;
 #endif
-                      if(resPDG&&minM>0.) // Kinematical analysis of hadronization
+                      if(resPDG && minM>0.) // Kinematical analysis of hadronization
                       {
 #ifdef pdebug
                         if(pPrint) G4cout<<"G4Q::CHP:fM="<<frM<<",bM="<<boundM<<",rM="
@@ -5093,6 +5093,15 @@ void G4Quasmon::CalculateHadronizationProbabilities
                           // pPP   - probability to find (a#of) the Parent Cluster
                           // noc   - a#of o-quarks in the Parent Cluster
                           // pUD   - suppression for NuclearClusters fare from Z=N Mirror
+                          G4QContent rQQC = valQ+ioQC;// Quark Content of Residual Quasmon
+                          G4int BarRQC=rQQC.GetBaryonNumber(); // Res Quasmon BaryonNumber
+                          G4int StrRQC=rQQC.GetStrangeness();  // Res Quasmon Strangeness
+                          if(BarRQC==2 && !StrRQC)             // --> DiBaryon Correction 
+                          {
+                            G4int ChgRQC=rQQC.GetCharge();     // Res Quasmon Charge
+                            if(ChgRQC==1) probab/=2;           // Only one S
+                            else          probab*=2;           // One S + three P
+                          }
 #ifdef pdebug
                           if(pPrint)G4cout<<"G4Q::CHP:prob="<<probab<<",qF="<<qFact<<",iq="
                                           <<iq<<",oq="<<oq<<",Pho4M="<<phot4M<<",pUD="<<pUD
@@ -5121,12 +5130,12 @@ void G4Quasmon::CalculateHadronizationProbabilities
                                          <<",posib="<<parCand->GetParPossibility()<<G4endl;
 #endif
                         pc++;
-                      }
-                    }
+                      }                       // >>>> End of the Minimum mass cut
+                    }                         // >>>> End of the isotope focusing
 #ifdef sdebug
                     else G4cout<<"***G4Q::CHP:dI="<<dI<<",cC="<<cC<<G4endl;
 #endif
-                  }
+                  }                           // >>>> End of tje final state possibility
                 }                             // >>>> End of if of QuarkExchangePossibility
               }                               // +++> End of if of existinr residual Q Code
               probability+=comb;              // Collect the probability for the fragment
@@ -5182,11 +5191,11 @@ void G4Quasmon::CalculateHadronizationProbabilities
 #endif
           }
           curQ -= candQC;                    // This is a quark content of residual quasmon
-          resPDG = curQ.GetSPDGCode();       // PDG for the lowest residual hadronic state
+          resPDG = curQ.GetSPDGCode();       // PDG of theLowest residualQuas hadronicState
           G4QContent resTQC = curQ+envQC;    // Total nuclear Residual Quark Content
           G4double resTM=G4QPDGCode(resTQC.GetSPDGCode()).GetMass();
 #ifdef pdebug
-          G4bool priCon=aPDG<10000&&aPDG%10<3;
+          G4bool priCon = aPDG < 10000 && aPDG%10 < 3;
           if(priCon) G4cout<<"G4Q::CHP:***>>cPDG="<<cPDG<<",cQC="<<candQC<<",comb="<<comb
                            <<",curQC="<<curQ<<",mQ="<<mQ<<",ab="<<absb<<G4endl;
 #endif
@@ -5202,7 +5211,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
 #endif
           if (comb && resPDG && totMass > frM-CB+resTM &&
              ((resPDG > 80000000 && resPDG != 90000000) || resPDG<10000) )
-   {
+          {
 #ifdef pdebug
             if(priCon) G4cout<<"G4Q::CHP:ind="<<index<<",qQC="<<valQ<<mQ<<",cPDG="<<cPDG
                              <<",rPDG="<<resPDG<<curQ<<G4endl;
@@ -5278,18 +5287,26 @@ void G4Quasmon::CalculateHadronizationProbabilities
                                    <<",zMin="<<zMin<<G4endl;
 #endif
                 
-                  if(qBar>1&&baryn>0)           //---> High baryon number ("nuclear") case
-                  {
-                    G4QContent rtQC=curQ+envQC;       // Total Residual Quark Content @@ ??
-                    G4QNucleus rtN(rtQC);             // Create pseudo-nucleus for residual
-                    //////G4double rtM =rtN.GetMZNS();// Min Mass of total residual Nucleus
-                    /////////G4double bnRQ=rtM-envM;      // Bound mass of residual Quasmon
-                  }
-                  else                        //---> Low baryon number case (tuned on p-ap)
-                  {
+                  //if(qBar > 1 && baryn > 0)     //---> HighBaryonNumber ("nuclear") case
+                  //{
+                  //  //G4QContent rtQC=curQ+envQC; // Total Residual Quark Content @@ ??
+                  //  //G4QNucleus rtN(rtQC);       // Create pseudo-nucleus for residual
+                  //  /////G4double rtM =rtN.GetMZNS();// MinMass of total residual Nucleus
+                  //  /////////G4double bnRQ=rtM-envM; // Bound mass of residual Quasmon
+                  //}
+                  //else                        //---> LowBaryonNumber case (tuned on p-ap)
+                  //{
                     if(cPDG==110||cPDG==220||cPDG==330) probability*=comb; // f0 has spin 0
                     else probability*=comb*(abs(cPDG)%10); // Spin of resonance
-                  }
+                    G4int BarRQC=curQ.GetBaryonNumber();   // Res Quasmon BaryonNumber
+                    G4int StrRQC=curQ.GetStrangeness();    // Res Quasmon Strangeness
+                    if(BarRQC==2 && !StrRQC)               // --> DiBaryon Correction 
+                    {
+                      G4int ChgRQC=curQ.GetCharge();       // Res Quasmon Charge
+                      if(ChgRQC==1) probability/=2;        // Only one S
+                      else          probability*=2;        // One S + three P
+                    }
+                  //}
                 }
               }
               else
@@ -5316,9 +5333,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
                              <<":c=0(!) || tM="<<totMass<<"<"<<frM-CB+resTM<<" = fM="<<frM
                              <<"+rTM="<<resTM<<"-CB="<<CB<< G4endl;
 #endif
-          }
+          } // ---> End of the possibility IF
           //if(cPDG==111) secondProbab = 1.;
-        }// ---> End of Hadronic Case of fragmentation
+        }   // ---> End of Hadronic Case of fragmentation
         else probability=0.;
 #ifdef pdebug
         G4int aPDG = abs(cPDG);
