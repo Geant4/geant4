@@ -53,6 +53,7 @@
 //#define escan
 //#define idebug
 //#define tdebug
+//#define pidebug
 //#define debug
 //#define ppdebug
 //#define hdebug
@@ -696,7 +697,7 @@ int main()
 #endif
      G4TouchableHandle touch(nav->CreateTouchableHistory());
 #ifdef pverb
-    G4cout<<"Test19: The TouchableHandle is defined "<<G4endl;
+     G4cout<<"Test19: The TouchableHandle is defined "<<G4endl;
 #endif
      G4Timer* timer = new G4Timer();
      timer->Start();
@@ -851,6 +852,13 @@ int main()
 #ifdef idebug
      G4cout<<"Test19: Before the event loop, nEvents= "<<nEvt<<G4endl;
 #endif
+#ifdef pidebug
+     // Tmp "Event counting for pions pi-N-N"
+     G4int nP0=0;
+     G4int nPP=0;
+     G4int nPN=0;
+     // End of Tmp
+#endif
      G4double dTot=0.;
      G4double dEl=0.;
      G4int    nDoNothing=0;
@@ -956,9 +964,13 @@ int main()
         G4int    c=0;    // Prototype of the PDG Code of the particle
         G4int nGamma=0;
         G4double EGamma=0;
+#ifdef pidebug
+        // fake line
+#else
         G4int nP0=0;
         G4int nPP=0;
         G4int nPN=0;
+#endif
         G4int nKaons=0;
         G4int nEta=0;
         // @@ G4int nAlphas=0;
@@ -1095,9 +1107,15 @@ int main()
           if(c==2112) nNeutrons++;                       // Neutrons
           if(c==2112 && std::fabs(e-1005.)<3.) nSpNeut++;// Dibar-Neutrons
           //if(c==90002002 && e-m<7.) nSpAlph++;           // Special Alphas
-          if(c==111) nP0++;                              // Neutral  pions
+#ifdef pidebug
+          if(nSec==3 && c== 111) nP0++;                  // Neutral  pions
+          if(nSec==3 && c==-211) nPN++;                  // Negative pions
+          if(nSec==3 && c== 211) nPP++;                  // Positive pions
+#else
+          if(c== 111) nP0++;                             // Neutral  pions
           if(c==-211) nPN++;                             // Negative pions
-          if(c==211) nPP++;                              // Positive pions
+          if(c== 211) nPP++;                             // Positive pions
+#endif
           if(c==22)                                      // Gammas
           {
             nGamma++;                                    // # of gammas
@@ -1117,7 +1135,7 @@ int main()
 #endif
         } // End of the LOOP over secondaries
         // delete secondaries in the end of the event         
-#ifdef cchips
+#ifdef chips
         G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+
                     std::fabs(totSum.y())+std::fabs(totSum.z());
 #ifdef inter
@@ -1226,7 +1244,7 @@ int main()
 #ifdef lhepdbg 
         if(prtf)
 #endif
-#ifdef cchips
+#ifdef chips
         if (totCharge || totBaryN || ss>.27 || alarm || (nGamma && !EGamma))// OnlyForCHIPS
         {
           G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
@@ -1284,6 +1302,9 @@ int main()
       } // End of Check for DoNothing
      } // End of the LOOP over events
      // Stop the timer to estimate the speed of the generation
+#ifdef pidebug
+     G4cerr<<"Test19: nPi0="<<nP0<<", nPiP="<<nPP<<", nPiM="<<nPN<<G4endl;
+#endif
      G4double dn=100.* nDoNothing / nEvt;
      timer->Stop();
      G4cout<<"Test19:Time/Ev="<<timer->GetUserElapsed()/nEvt<<" s, DN="<<dn<<" %"<<G4endl;
