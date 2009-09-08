@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.45 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.46 2009-09-08 14:04:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -95,6 +95,7 @@ public:
   std::list<G4QParton*> GetAntiColor() {return AntiColor;}//pointer to anti-quarks/diquarks
   // Modifiers
   void SetQPDG(const G4QPDGCode& QPDG);             // Set QPDG of the Hadron
+  void SetPDGCode(const G4QPDGCode& PDG){SetQPDG(G4QPDGCode(PDG));}// Set PDGCode of Hadron
   void Set4Momentum(const G4LorentzVector& aMom);   // Set 4-mom of the Hadron
   void SetQC(const G4QContent& newQC);              // Set new private quark content
   void SetNFragments(const G4int& nf);              // Set a#of Fragments of this Hadron

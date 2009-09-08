@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.28 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.29 2009-09-08 14:04:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -850,23 +850,23 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         {
           tf=3;
           if     (cLPDG > 7 &&
-                  ( (pLPDG<0 && (-pLPDG==L1 || -pLPDG==L2) ) ||
-                    (pRPDG<0 && (-pRPDG==L1 || -pRPDG==L2) )
+                  ( (pLPDG<0 && (-pLPDG==L1 || -pLPDG==L2 || -pLPDG==cRPDG) ) ||
+                    (pRPDG<0 && (-pRPDG==L1 || -pRPDG==L2 || -pRPDG==cRPDG) )
                   )
                  ) af=1;
           else if(cRPDG > 7 &&
-                  ( (pLPDG<0 && (-pLPDG==R1 || -pLPDG==R2) ) ||
-                    (pRPDG<0 && (-pRPDG==R1 || -pRPDG==R2) )
+                  ( (pLPDG<0 && (-pLPDG==R1 || -pLPDG==R2 || -pLPDG==cLPDG) ) ||
+                    (pRPDG<0 && (-pRPDG==R1 || -pRPDG==R2 || -pRPDG==cLPDG) )
                   )
                  ) af=2;
           else if(cLPDG <-7 &&
-                  ( (pLPDG>0 && ( pLPDG==L1 || pLPDG==L2) ) ||
-                    (pRPDG>0 && ( pRPDG==L1 || pRPDG==L2) )
+                  ( (pLPDG>0 && ( pLPDG==L1 || pLPDG==L2 || pLPDG==-cRPDG) ) ||
+                    (pRPDG>0 && ( pRPDG==L1 || pRPDG==L2 || pRPDG==-cRPDG) )
                   )
                  ) af=3;
           else if(cRPDG <-7 &&
-                  ( (pLPDG>0 && ( pLPDG==R1 || pLPDG==R2) ) ||
-                    (pRPDG>0 && ( pRPDG==R1 || pRPDG==R2) )
+                  ( (pLPDG>0 && ( pLPDG==R1 || pLPDG==R2 || pLPDG==-cLPDG) ) ||
+                    (pRPDG>0 && ( pRPDG==R1 || pRPDG==R2 || pRPDG==-cLPDG) )
                   )
                  ) af=4;
 #ifdef debug
@@ -1149,80 +1149,144 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
                  if(pLPDG < 0)
                  {
                    order= 1;
-                   if     (pRPDG > cRPDG) nRPDG=pRPDG*1000+cRPDG*100+1;
-                   else if(pRPDG < cRPDG) nRPDG=cRPDG*1000+pRPDG*100+1;
-                   else                   nRPDG=cRPDG*1000+pRPDG*100+3;
-                   if  (-pLPDG == L1)     nLPDG=L2;
-                   else                   nLPDG=L1; // -pLPDG == L2
+                   if(-pLPDG==cRPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (pRPDG > cRPDG) nRPDG=pRPDG*1000+cRPDG*100+1;
+                     else if(pRPDG < cRPDG) nRPDG=cRPDG*1000+pRPDG*100+1;
+                     else                   nRPDG=cRPDG*1000+pRPDG*100+3;
+                     if  (-pLPDG == L1)     nLPDG=L2;
+                     else                   nLPDG=L1; // -pLPDG == L2
+                   }
                  }
                  else // pRPDG < 0
                  {
                    order=-1;
-                   if     (pLPDG > cRPDG) nLPDG=pLPDG*1000+cRPDG*100+1;
-                   else if(pLPDG < cRPDG) nLPDG=cRPDG*1000+pLPDG*100+1;
-                   else                   nLPDG=cRPDG*1000+pLPDG*100+3;
-                   if  (-pRPDG == L1)     nRPDG=L2;
-                   else                   nRPDG=L1; // -pRPDG == L2
+                   if(-pRPDG==cRPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pLPDG;
+                   }
+                   else
+                   {
+                     if     (pLPDG > cRPDG) nLPDG=pLPDG*1000+cRPDG*100+1;
+                     else if(pLPDG < cRPDG) nLPDG=cRPDG*1000+pLPDG*100+1;
+                     else                   nLPDG=cRPDG*1000+pLPDG*100+3;
+                     if  (-pRPDG == L1)     nRPDG=L2;
+                     else                   nRPDG=L1; // -pRPDG == L2
+                   }
                  }
                  break;
                case 2: // ....................... cRPDG > 7
                  if(pLPDG < 0)
                  {
                    order=-1;
-                   if     (pRPDG > cLPDG) nRPDG=pRPDG*1000+cLPDG*100+1;
-                   else if(pRPDG < cLPDG) nRPDG=cLPDG*1000+pRPDG*100+1;
-                   else                   nRPDG=cLPDG*1000+pRPDG*100+3;
-                   if  (-pLPDG == R1)     nLPDG=R2;
-                   else                   nLPDG=R1; // -pLPDG == R2
+                   if(-pLPDG==cLPDG)
+                   {
+                     nLPDG=pRPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (pRPDG > cLPDG) nRPDG=pRPDG*1000+cLPDG*100+1;
+                     else if(pRPDG < cLPDG) nRPDG=cLPDG*1000+pRPDG*100+1;
+                     else                   nRPDG=cLPDG*1000+pRPDG*100+3;
+                     if  (-pLPDG == R1)     nLPDG=R2;
+                     else                   nLPDG=R1; // -pLPDG == R2
+                   }
                  }
                  else // pRPDG < 0
                  {
                    order= 1;
-                   if     (pLPDG > cLPDG) nLPDG=pLPDG*1000+cLPDG*100+1;
-                   else if(pLPDG < cLPDG) nLPDG=cLPDG*1000+pLPDG*100+1;
-                   else                   nLPDG=cLPDG*1000+pLPDG*100+3;
-                   if  (-pRPDG == R1)     nRPDG=R2;
-                   else                   nRPDG=R1; // -pRPDG == R2
+                   if(-pRPDG==cLPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (pLPDG > cLPDG) nLPDG=pLPDG*1000+cLPDG*100+1;
+                     else if(pLPDG < cLPDG) nLPDG=cLPDG*1000+pLPDG*100+1;
+                     else                   nLPDG=cLPDG*1000+pLPDG*100+3;
+                     if  (-pRPDG == R1)     nRPDG=R2;
+                     else                   nRPDG=R1; // -pRPDG == R2
+                   }
                  }
                  break;
                case 3: // ....................... cLPDG <-7 (cRPDG <0)
                  if(pLPDG > 0)
                  {
                    order= 1;
-                   if     (pRPDG < cRPDG) nRPDG=pRPDG*1000+cRPDG*100-1;
-                   else if(pRPDG > cRPDG) nRPDG=cRPDG*1000+pRPDG*100-1;
-                   else                   nRPDG=cRPDG*1000+pRPDG*100-3;
-                   if  ( pLPDG == L1)     nLPDG=-L2;
-                   else                   nLPDG=-L1; // pLPDG == L2
+                   if(pLPDG==-cRPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pRPDG;
+                   }
+                   else
+                   {
+                     if     (pRPDG < cRPDG) nRPDG=pRPDG*1000+cRPDG*100-1;
+                     else if(pRPDG > cRPDG) nRPDG=cRPDG*1000+pRPDG*100-1;
+                     else                   nRPDG=cRPDG*1000+pRPDG*100-3;
+                     if  ( pLPDG == L1)     nLPDG=-L2;
+                     else                   nLPDG=-L1; // pLPDG == L2
+                   }
                  }
                  else // pRPDG > 0
                  {
                    order=-1;
-                   if     (pLPDG < cRPDG) nLPDG=pLPDG*1000+cRPDG*100-1;
-                   else if(pLPDG > cRPDG) nLPDG=cRPDG*1000+pLPDG*100-1;
-                   else                   nLPDG=cRPDG*1000+pLPDG*100-3;
-                   if  ( pRPDG == L1)     nRPDG=-L2;
-                   else                   nRPDG=-L1; // pRPDG == L2
+                   if(pRPDG==-cRPDG)
+                   {
+                     nLPDG=cLPDG;
+                     nRPDG=pLPDG;
+                   }
+                   else
+                   {
+                     if     (pLPDG < cRPDG) nLPDG=pLPDG*1000+cRPDG*100-1;
+                     else if(pLPDG > cRPDG) nLPDG=cRPDG*1000+pLPDG*100-1;
+                     else                   nLPDG=cRPDG*1000+pLPDG*100-3;
+                     if  ( pRPDG == L1)     nRPDG=-L2;
+                     else                   nRPDG=-L1; // pRPDG == L2
+                   }
                  }
                  break;
                case 4: // ....................... cRPDG <-7 (cLPDG <0)
                  if(pLPDG > 0)                       // pRPDG & cLPDG are anti-quarks
                  {
                    order=-1;
-                   if     (pRPDG < cLPDG) nRPDG=pRPDG*1000+cLPDG*100-1;
-                   else if(pRPDG > cLPDG) nRPDG=cLPDG*1000+pRPDG*100-1;
-                   else                   nRPDG=cLPDG*1000+pRPDG*100-3;
-                   if  ( pLPDG == R1)     nLPDG=-R2;
-                   else                   nLPDG=-R1; // pLPDG == R2
+                   if(pLPDG==-cLPDG)
+                   {
+                     nLPDG=pRPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (pRPDG < cLPDG) nRPDG=pRPDG*1000+cLPDG*100-1;
+                     else if(pRPDG > cLPDG) nRPDG=cLPDG*1000+pRPDG*100-1;
+                     else                   nRPDG=cLPDG*1000+pRPDG*100-3;
+                     if  ( pLPDG == R1)     nLPDG=-R2;
+                     else                   nLPDG=-R1; // pLPDG == R2
+                   }
                  }
                  else // pRPDG > 0
                  {
                    order= 1;
-                   if     (pLPDG < cLPDG) nLPDG=pLPDG*1000+cLPDG*100-1;
-                   else if(pLPDG > cLPDG) nLPDG=cLPDG*1000+pLPDG*100-1;
-                   else                   nLPDG=cLPDG*1000+pLPDG*100-3;
-                   if  ( pRPDG == R1)     nRPDG=-R2;
-                   else                   nRPDG=-R1; // pRPDG == R2
+                   if(pRPDG==-cLPDG)
+                   {
+                     nLPDG=pLPDG;
+                     nRPDG=cRPDG;
+                   }
+                   else
+                   {
+                     if     (pLPDG < cLPDG) nLPDG=pLPDG*1000+cLPDG*100-1;
+                     else if(pLPDG > cLPDG) nLPDG=cLPDG*1000+pLPDG*100-1;
+                     else                   nLPDG=cLPDG*1000+pLPDG*100-3;
+                     if  ( pRPDG == R1)     nRPDG=-R2;
+                     else                   nRPDG=-R1; // pRPDG == R2
+                   }
                  }
                  break;
              }
@@ -1583,6 +1647,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
   static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
   static const G4double  mNeut = G4Neutron::Neutron()->GetPDGMass(); // Mass of neutron
   static const G4double  mPiCh = G4PionMinus::PionMinus()->GetPDGMass();// Mass of chgdPion
+  static const G4double  mPiZr = G4PionZero::PionZero()->GetPDGMass(); // Mass of neutrPion
 #ifdef debug
   G4cout<<"*******>G4QFragmentation::Fragment: ***Called***, Res="<<theResult<<G4endl;
 #endif
@@ -1907,29 +1972,164 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #endif
     }
   }
-  if(rnBn==2 && !rnCg) // Di-meutron pair
+  if(rnBn==2)                                       // Di-baryon
   {
-    G4LorentzVector tot4M=resNuc->Get4Momentum();       // 4-mom to be split
-    G4LorentzVector n14M(0.,0.,0.,mNeut);
-    G4LorentzVector n24M(0.,0.,0.,mNeut);
-    if(!G4QHadron(tot4M).DecayIn2(n14M,n24M))
+    if(!rnCg)                                       // Di-neutron pair
     {
-      G4cerr<<"***G4QFrag::Frag: tM="<<tot4M.m()<<" -> n*2="<<2*mNeut<<G4endl;
-      G4Exception("G4QFragmentation::Breeder:","72",FatalException,"ImpossibleDecayIn2n");
+      G4LorentzVector tot4M=resNuc->Get4Momentum(); // 4-mom to be split
+      G4LorentzVector n14M(0.,0.,0.,mNeut);
+      G4LorentzVector n24M(0.,0.,0.,mNeut);
+      if(!G4QHadron(tot4M).DecayIn2(n14M,n24M))
+      {
+        G4cerr<<"***G4QFrag::Frag: tM="<<tot4M.m()<<" -> n*2="<<2*mNeut<<G4endl;
+        G4Exception("G4QFragmentation::Breeder:","72",FatalException,"ImpossibleDecay-2n");
+      }
+      theResult->pop_back();
+      delete resNuc;
+      G4QHadron* n1H = new G4QHadron(2112,n14M);
+      theResult->push_back(n1H);
+#ifdef debug
+      G4cout<<"G4QFragment::Fragment:DecayIn2, Neutron1="<<n14M<<G4endl;
+#endif
+      G4QHadron* n2H = new G4QHadron(2112,n24M);
+      theResult->push_back(n2H);
+#ifdef debug
+      G4cout<<"G4QFragment::Fragment:DecayIn2, Neutron2="<<n24M<<G4endl;
+#endif
     }
-    theResult->pop_back();
-    delete resNuc;
-    G4QHadron* n1H = new G4QHadron(2112,n14M);
-    theResult->push_back(n1H);
+    else if(rnCg==2)                                // Di-proton pair
+    {
+      G4LorentzVector tot4M=resNuc->Get4Momentum(); // 4-mom to be split
+      G4LorentzVector n14M(0.,0.,0.,mProt);
+      G4LorentzVector n24M(0.,0.,0.,mProt);
+      if(!G4QHadron(tot4M).DecayIn2(n14M,n24M))
+      {
+        G4cerr<<"***G4QFrag::Frag: tM="<<tot4M.m()<<" -> n*2="<<2*mProt<<G4endl;
+        G4Exception("G4QFragmentation::Breeder:","72",FatalException,"ImpossibleDecay-2p");
+      }
+      theResult->pop_back();
+      delete resNuc;
+      G4QHadron* n1H = new G4QHadron(2212,n14M);
+      theResult->push_back(n1H);
 #ifdef debug
-    G4cout<<"G4QFragment::Fragment:DecayIn2, Neutron1="<<n14M<<G4endl;
+      G4cout<<"G4QFragment::Fragment:DecayIn2, Proton1="<<n14M<<G4endl;
 #endif
-    G4QHadron* n2H = new G4QHadron(2112,n24M);
-    theResult->push_back(n2H);
+      G4QHadron* n2H = new G4QHadron(2212,n24M);
+      theResult->push_back(n2H);
 #ifdef debug
-    G4cout<<"G4QFragment::Fragment:DecayIn2, Neutron2="<<n24M<<G4endl;
+      G4cout<<"G4QFragment::Fragment:DecayIn2, Proton2="<<n24M<<G4endl;
 #endif
-  }
+    }
+  } // End of the residual dibaryon decay
+  // Now we should check and correct the final state dibaryons (NN-pairs)
+  nHd=theResult->size();
+  for(G4int i=0; i<nHd; ++i)
+  {
+    G4int found=0;
+    G4int hPDG=(*theResult)[i]->GetPDGCode();
+    if(hPDG==2212 || hPDG==2112)
+    {
+      for(G4int j=i+1; j<nHd; ++j)
+      {
+        G4int pPDG=(*theResult)[j]->GetPDGCode();
+        if(hPDG==pPDG)                       // The pp or nn pair is found
+        {
+          G4LorentzVector h4M=(*theResult)[i]->Get4Momentum();
+          G4LorentzVector p4M=(*theResult)[j]->Get4Momentum();
+          G4LorentzVector d4M=h4M+p4M;
+          G4double E=d4M.mag();              // Proto of tot CM energy
+          if(hPDG==2212) E -= mProt+mProt;   // Reduction to tot kin energy in CM
+          else           E -= mNeut+mNeut;
+          if(E < 140. && G4UniformRand() < .6)// A close pair was found @@ Par 140.
+          {
+            G4int          piPDG= 211;       // Pi+ default for nn pairs
+            if(hPDG==2212) piPDG=-211;       // Pi- for pp pairs
+            for(G4int k=0; k<nHd; ++k)
+            {
+              G4int mPDG=(*theResult)[k]->GetPDGCode();
+              if(mPDG==111 || mPDG==piPDG)   // Appropriate for correction pion is found
+              {
+                G4LorentzVector m4M=(*theResult)[k]->Get4Momentum();
+                G4double mN=mProt;           // Final nucleon after charge exchange (nn)
+                G4int  nPDG=2212;
+                G4int  tPDG=-211;            // Proto Pion after charge exchange from Pi0
+                if(hPDG==2212)               // (pp)
+                {
+                  mN=mNeut;
+                  nPDG=2112;
+                  tPDG= 211;
+                }
+                G4double mPi=mPiZr;          // Pion after the charge exchange from Pi+/-
+                G4int   sPDG=111;
+                if(mPDG==111)
+                {
+                  mPi=mPiCh;                 // Pion after the charge exchange from Pi0
+                  sPDG=tPDG;
+                }
+                //G4cout<<"G4QFrag::Frag: H="<<hPDG<<", P="<<pPDG<<", M="<<mPDG<<", N="
+                //      <<nPDG<<", S="<<sPDG<<G4endl;
+                G4double D=mPi+mN;
+                G4LorentzVector t4M=m4M+h4M;
+                G4LorentzVector n4M=h4M;
+                G4double D2=D*D;
+                G4double S=t4M.mag2();
+                if(S > D2)         found= 1; // 1st nucleon correction can be done
+                else
+                {
+                  t4M=m4M+p4M;
+                  n4M=p4M;
+                  S=t4M.mag2();
+                  if(S > D2)      found=-1;  // 2nd nucleon correction can be done
+                }
+                if(found)                    // Isotopic Correction
+                {
+                  G4ThreeVector tV=t4M.vect()/t4M.e();
+                  //G4cout<<"G4QFragment::Fragment: Before 4M/M2="<<m4M<<m4M.m2()<<G4endl;
+                  m4M.boost(-tV);
+                  //G4cout<<"G4QFragment::Fragment: After 4M/M2="<<m4M<<m4M.m2()<<G4endl;
+                  n4M.boost(-tV);
+                  G4double mPi2=mPi*mPi;
+                  G4double mN2=mN*mN;
+                  G4double C=S-mPi2-mN2;
+                  G4double p2=(C*C/4.-mPi2*mN2)/S;
+                  if(p2 < 0.) G4cout<<"-Warning-G4QFragment::Fragment: P2="<<p2<<G4endl;
+                  G4double pc2=m4M.vect().mag2();
+                  //G4double nc2=n4M.vect().mag2();
+                  G4double r=1.;
+                  if(pc2 < .00000000000001)
+                          G4cout<<"-Warning-G4QFragment::Fragment: PC2="<<pc2<<m4M<<G4endl;
+                  else r=std::sqrt(p2/pc2);
+                  m4M.setV(r*m4M.vect());
+                  m4M.setE(std::sqrt(mPi2+p2));
+                  //G4cout<<"G4QFragment::Fragment: Changed 4M/M2="<<m4M<<m4M.m2()<<", pc2="
+                  //      <<pc2<<", nc2="<<nc2<<G4endl;
+                  n4M.setV(r*n4M.vect());
+                  n4M.setE(std::sqrt(mN2+p2));
+                  m4M.boost(tV);
+                  n4M.boost(tV);
+                  (*theResult)[k]->SetPDGCode(sPDG);
+                  (*theResult)[k]->Set4Momentum(m4M);
+                  if(found > 0)              // Hadron correction
+                  {
+                    (*theResult)[i]->SetPDGCode(nPDG);
+                    (*theResult)[i]->Set4Momentum(n4M);
+                  }
+                  else
+                  {
+                    (*theResult)[j]->SetPDGCode(nPDG);
+                    (*theResult)[j]->Set4Momentum(n4M);
+                  }
+                  break;                     // Break the pion LOOP
+                }
+              }
+            } // End of the pion LOOP
+            if(found) break;                 // Break the nucleon partner LOOP
+          }
+        }
+      } // End of the nucleon partner LOOP
+    } // End of nucleon IF
+  } // End of the primary hadron LOOP
+  //
   return theResult;
 } // End of fragmentation
 
@@ -2431,7 +2631,16 @@ void G4QFragmentation::Breeder()
             for (G4int reh=0; reh < nHadr; reh++)
             {
               G4QHadron* curHadr=(*theResult)[reh];
+              G4int curPDG=curHadr->GetPDGCode(); // PDGCode of the hadron
               G4QContent curQC=curHadr->GetQC();  // Quark content of the hadron
+              if(curPDG==331 && sPDG!=3 && nPDG!=3 && sPDG!=-3 && nPDG!=-3) // eta' red
+              {
+                if(sPDG==2 || sPDG==-2 || nPDG==2 || nPDG==-2)
+                                                             curQC=G4QContent(0,1,0,0,1,0);
+                else                                         curQC=G4QContent(1,0,0,1,0,0);
+              }
+              else if(curPDG==221 && sPDG!=2 && nPDG!=2 && sPDG!=-2 && nPDG!=-2) // eta
+                                                             curQC=G4QContent(1,0,0,1,0,0);
               G4int partPDG1=curQC.AddParton(sPDG);
               G4int partPDG2=curQC.AddParton(nPDG);
 #ifdef debug
