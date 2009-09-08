@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.360 2009-08-17 15:59:11 gcosmo Exp $
+cvs log $Id: History,v 1.361 2009-09-08 14:10:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th September 2009  Gabriele Cosmo (config-V09-02-10)
+- Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to
+  setup for Qt4 configuration.
 
 17th August 2009  Gabriele Cosmo (config-V09-02-09)
 - Added G4OPTDEBUG option for hybrid optimized-debug build also to
