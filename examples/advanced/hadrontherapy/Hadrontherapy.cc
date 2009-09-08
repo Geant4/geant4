@@ -59,8 +59,10 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 #include "HadrontherapySteppingAction.hh"
+#include "HadrontherapyInteractionParameters.hh"
 
 #include "HadrontherapyAnalysisManager.hh"
+
 
 #include "IAEADetectorConstruction.hh"
 
@@ -94,6 +96,10 @@ int main(int argc ,char ** argv)
   HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
   HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
 
+  // Initialize the geometry
+  HadrontherapyDetectorConstruction* pDetect = new HadrontherapyDetectorConstruction();
+  runManager -> SetUserInitialization(pDetect);
+
   // Initialize the default Hadrontherapy geometry
   geometryController->SetGeometry("default");
 
@@ -107,7 +113,7 @@ int main(int argc ,char ** argv)
   // Initialize matrix 
   HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
   matrix -> Initialize();
-
+  
   // Optional UserActions: run, event, stepping
   HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
   runManager -> SetUserAction(pRunAction);
@@ -117,6 +123,9 @@ int main(int argc ,char ** argv)
 
   HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
+
+  // Interaction data
+  new HadrontherapyInteractionParameters(pDetect);
 
 
 
@@ -130,7 +139,11 @@ int main(int argc ,char ** argv)
   G4UIsession* session = 0;
   if (argc == 1)   
     {
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
       session = new G4UIterminal();
+#endif
     }
 
   // Get the pointer to the User Interface manager 

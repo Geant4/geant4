@@ -72,6 +72,7 @@ private:
   //  G4VisAttributes* redWire;
   
 public: 
+  G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
 
   void SetModulatorAngle(G4double angle);
   // This method allows moving the modulator through UI commands

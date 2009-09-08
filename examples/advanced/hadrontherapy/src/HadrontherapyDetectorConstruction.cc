@@ -216,9 +216,9 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
   
   // A smaller cut is fixed in the phantom to calculate the energy deposit with the
   // required accuracy 
-  // G4Region* aRegion = new G4Region("DetectorLog");
-  //detectorLogicalVolume -> SetRegion(aRegion);
-  //aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
+  G4Region* aRegion = new G4Region("DetectorLog");
+  detectorLogicalVolume -> SetRegion(aRegion);
+  aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
 /////////////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()

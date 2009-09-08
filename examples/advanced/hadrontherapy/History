@@ -8,6 +8,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
          ====================================================
 
                       Category History file
+08.09.2009 S.E. Mazzaglia; Tag: hadrontherapy-V09-02-27
+            - Added a method to retrieve stopping power values for protons, alphas and electrons.
+	      This method is implemented in the new class HadrontherapyInteractionParameters.
 
 13.08.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-26
             - Fixed compilation errors when AIDA analysis is used
