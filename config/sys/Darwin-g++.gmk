@@ -96,6 +96,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
       QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
       QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     else
       QTFLAGS   := -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
@@ -104,7 +105,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     ifeq ($(QT_VERSION),3)
       QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "$(QTHOME)/lib/qt3/lib" || echo "$(QTHOME)/lib" )
     else
-      QTLIBPATH  := -F$(QTHOME)
+      QTLIBPATH  := -F$(QTHOME)/lib -F$(QTHOME)
     endif
   endif
   ifndef QTLIBS
