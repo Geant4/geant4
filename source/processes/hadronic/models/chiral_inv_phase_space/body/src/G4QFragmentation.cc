@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.29 2009-09-08 14:04:14 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.30 2009-09-08 16:10:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -2021,13 +2021,15 @@ G4QHadronVector* G4QFragmentation::Fragment()
 #endif
     }
   } // End of the residual dibaryon decay
-  // Now we should check and correct the final state dibaryons (NN-pairs)
+  // Now we should check and correct the final state dibaryons (NN-pairs) and 90000000->22
   nHd=theResult->size();
   for(G4int i=0; i<nHd; ++i)
   {
     G4int found=0;
     G4int hPDG=(*theResult)[i]->GetPDGCode();
-    if(hPDG==2212 || hPDG==2112)
+    if(hPDG==90000000 && (*theResult)[i]->Get4Momentum()>0.)
+                                                           (*theResult)[i]->SetPDGCode(22);
+    else if(hPDG==2212 || hPDG==2112)
     {
       for(G4int j=i+1; j<nHd; ++j)
       {
@@ -2587,7 +2589,7 @@ void G4QFragmentation::Breeder()
           else
           {
 
-            G4cerr<<"**G4QFragmentation::Breeder:*NoPart*M="<<curString->Get4Momentum().m()
+            G4cout<<"**G4QFragmentation::Breeder:*NoPart*M="<<curString->Get4Momentum().m()
                   <<", F="<<fusionDONE<<", LPDG="<<curString->GetLeftParton()->GetPDGCode()
                   <<", RPDG="<<curString->GetRightParton()->GetPDGCode()<<G4endl;
           }
@@ -2641,6 +2643,8 @@ void G4QFragmentation::Breeder()
               }
               else if(curPDG==221 && sPDG!=2 && nPDG!=2 && sPDG!=-2 && nPDG!=-2) // eta
                                                              curQC=G4QContent(1,0,0,1,0,0);
+              else if(curPDG==111 && sPDG!=1 && nPDG!=1 && sPDG!=-1 && nPDG!=-1) // eta
+                                                             curQC=G4QContent(0,1,0,0,1,0);
               G4int partPDG1=curQC.AddParton(sPDG);
               G4int partPDG2=curQC.AddParton(nPDG);
 #ifdef debug
@@ -2731,7 +2735,7 @@ void G4QFragmentation::Breeder()
             else
             {
 #ifdef debug
-              G4cerr<<"**G4QFragmentation::Breeder:*NoH*,M="<<curString->Get4Momentum().m()
+              G4cout<<"**G4QFragmentation::Breeder:*NoH*,M="<<curString->Get4Momentum().m()
                     <<", LPDG="<<curString->GetLeftParton()->GetPDGCode()
                     <<", RPDG="<<curString->GetRightParton()->GetPDGCode()<<G4endl;
               // @@ Temporary exception for the future solution
@@ -3181,7 +3185,7 @@ void G4QFragmentation::Breeder()
         } // End of IF(CM2>0.)
       } // End of IF(Can try to correct by String-String)
 #ifdef debug
-      else G4cerr<<"***G4QFragmentation::Breeder: **No SSCorrection**,next="<<next<<G4endl;
+      else G4cout<<"***G4QFragmentation::Breeder: **No SSCorrection**,next="<<next<<G4endl;
 #endif
       // ------------ At this point we can reduce the 3/-3 meson to 1/-1 meson ------------
       G4QParton* lpcS=curString->GetLeftParton();
@@ -3206,7 +3210,7 @@ void G4QFragmentation::Breeder()
       if(!theHadrons && nofRH)                  // Hadrons are existing for SH Correction
       {
 #ifdef debug
-        G4cerr<<"!G4QFragmentation::Breeder:Can try SHCor, nH="<<theResult->size()<<G4endl;
+        G4cout<<"!G4QFragmentation::Breeder:Can try SHCor, nH="<<theResult->size()<<G4endl;
 #endif
         // @@ string can be not convertable to one hadron (2,0.0,0,2,0) - To be improved
         G4QContent miQC=curString->GetQC();     // QContent of the Lightest Hadron
@@ -3223,11 +3227,11 @@ void G4QFragmentation::Breeder()
         G4double      cE=curString4M.e();       // Energy of the curString
         G4ThreeVector curV=cP/cE;               // curRelativeVelocity
         G4int reha=0;                           // Hadron # to use beyon the LOOP
-        G4int fuha=0;                           // Selected Hadron-partner (0 = NotFound)
+        G4int fuha=-1;                          // Selected Hadron-partner (0 = NotFound)
         G4double dMmin=DBL_MAX;                 // min Excess of the mass
         G4LorentzVector s4M(0.,0.,0.,0.);       // Selected 4-mom of the Hadron+String
         G4double sM=0.;                         // Selected Mass of the Hadron+String
-        for (reha=next; reha < nofRH; reha++)   // LOOP over already collected hadrons
+        for (reha=0; reha < nofRH; reha++)      // LOOP over already collected hadrons
         {
           G4QHadron* pHadron=(*theResult)[reha];// Pointer to the current Partner-Hadron
           G4LorentzVector p4M=pHadron->Get4Momentum();
@@ -3247,8 +3251,15 @@ void G4QFragmentation::Breeder()
               sM=tM;
             }
           }
+#ifdef debug
+          else G4cout<<"G4QFragmentation::Breeder:H# "<<reha<<",tM="<<std::sqrt(tM2)<<" < "
+                     <<" mS="<<miM<<" + mH="<<pM<<" = "<<pM+miM<<G4endl;
+#endif
         } // End of the LOOP over string-partners for Correction
-        if(fuha)                                // The hadron-partner was found
+#ifdef debug
+        G4cout<<"G4QFragment::Breeder: fuha="<<fuha<<", dMmin="<<dMmin<<G4endl;
+#endif
+        if(fuha>-1)                             // The hadron-partner was found
         { 
           G4QHadron* pHadron=(*theResult)[fuha];// Necessary for update
           G4LorentzVector mi4M(0.,0.,0.,miM);   // Prototype of the new String=Hadron
@@ -3381,9 +3392,30 @@ void G4QFragmentation::Breeder()
         else
         {
 #ifdef debug
-          G4cout<<"-EMC->>>G4QFragmentation::Breeder: Str+Hadr Failed, 4M="<<curString4M
-                <<", PDG="<<miPDG<<G4endl;
+          G4cout<<"G4QFragmentation::Breeder: Str+Hadr Failed, 4M="<<curString4M
+                <<", PDG="<<miPDG<<" -> Now try to recover the string as a hadron"<<G4endl;
 #endif
+          //for (reha=0; reha < nofRH; reha++)      // LOOP over already collected hadrons
+          //{
+          //  G4QHadron* pHadron=(*theResult)[reha];// Pointer to the CurrentPartnerHadron
+          //  G4LorentzVector p4M=pHadron->Get4Momentum();
+          //  G4double         pM=p4M.m();          // Mass of the Partner-Hadron
+          //  G4LorentzVector t4M=p4M+curString4M;  // Total momentum of the compound
+          //  G4double        tM2=t4M.m2();         // Squared total mass of the compound
+          //  if(tM2 >= sqr(pM+miM+eps))            // Condition of possible correction
+          //  {
+          //    G4double tM=std::sqrt(tM2);         // Mass of the Hadron+String compound
+          //    G4double dM=tM-pM-miM;              // Excess of the compound mass
+          //    if(dM < dMmin)
+          //    {
+          //      dMmin=dM;
+          //      fuha=reha;
+          //      spM=pM;
+          //      s4M=t4M;
+          //      sM=tM;
+          //    }
+          //  }
+          //} // End of the LOOP over string-partners for Correction
         }
         // @@@ convert string to Quasmon with curString4M
         G4QContent curStringQC=curString->GetQC();
