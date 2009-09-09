@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.21 2009-08-04 10:22:18 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.22 2009-09-09 08:16:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -459,7 +459,6 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
                                     const G4ThreeVector& v  ) const
 {
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
   static const G4double halfRadTolerance=kRadTolerance*0.5;
 
   G4double distMin = std::min(xSemiAxis,ySemiAxis);
@@ -467,23 +466,23 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   distMin= kInfinity;
 
   // check to see if Z plane is relevant
-  if (p.z() <= zBottomCut+halfCarTolerance)
+  if (p.z() <= zBottomCut)
   {
     if (v.z() <= 0.0) { return distMin; }
     G4double distZ = (zBottomCut - p.z()) / v.z();
 
-    if ( (distZ >- halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
+    if ( (distZ > halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
       return distMin= distZ;
     }
 
   }
-  if (p.z() >= zTopCut-halfCarTolerance)
+  if (p.z() >= zTopCut)
   {
     if (v.z() >= 0.0) { return distMin;}
     G4double distZ = (zTopCut - p.z()) / v.z();
-    if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
+    if ( (distZ > halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
       return distMin= distZ;
@@ -505,7 +504,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
   {    
     G4double distR= (-B - std::sqrt(C)) / (2.0*A);
     G4double intZ = p.z()+distR*v.z();
-    if ( (distR >- halfRadTolerance)
+    if ( (distR > halfRadTolerance)
       && (intZ >= zBottomCut-halfRadTolerance)
       && (intZ <= zTopCut+halfRadTolerance) )
     { 
@@ -515,7 +514,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     {
       distR= (-B + std::sqrt(C)) / (2.0*A);
       intZ = p.z()+distR*v.z();
-      if ( (distR >- halfRadTolerance)
+      if ( (distR > halfRadTolerance)
         && (intZ >= zBottomCut-halfRadTolerance)
         && (intZ <= zTopCut+halfRadTolerance) )
       {
