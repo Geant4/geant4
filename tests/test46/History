@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-05-14 13:30:31 vnivanch Exp $
+$Id: History,v 1.4 2009-09-09 16:47:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-09-09 V.Ivant (test46-V09-02-01)
+- added script for test of EM initialisation time
 
 14-05-09 V.Ivant (test46-V09-02-00)
 - first release
