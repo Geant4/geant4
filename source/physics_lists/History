@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2009-07-19 18:24:03 kaitanie Exp $
+$Id: History,v 1.96 2009-09-09 16:02:02 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-09-2009, S.Incerti                      (phys-lists-V09-02-24)
+- added high energy limit to e- models for better clarity in
+G4EmLivermorePhysics.cc
+G4EmLivermorePolarizedPhysics.cc
 
 19-07-2009, P.Kaitaniemi                   (phys-lists-V09-02-23)
 - Added INCL/ABLA physics builders for protons, neutrons, pions and light ions

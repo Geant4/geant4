@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePhysics.cc,v 1.3 2009-05-10 18:46:51 vnivanch Exp $
+// $Id: G4EmLivermorePhysics.cc,v 1.4 2009-09-09 16:02:02 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePhysics.hh"
@@ -208,13 +208,19 @@ void G4EmLivermorePhysics::ConstructProcess()
       
       // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(), new G4UniversalFluctuation() );
+      G4LivermoreIonisationModel* theIoniLivermore = new
+        G4LivermoreIonisationModel();
+      theIoniLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit); 
+      eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
       eIoni->SetStepFunction(0.2, 100*um); //     
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
       
       // Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
-      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
+      G4LivermoreBremsstrahlungModel* theBremLivermore = new
+        G4LivermoreBremsstrahlungModel();
+      theBremLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      eBrem->AddEmModel(0, theBremLivermore);
       pmanager->AddProcess(eBrem, -1,-3, 3);
 
     } else if (particleName == "e+") {
