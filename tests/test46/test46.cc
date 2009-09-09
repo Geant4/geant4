@@ -56,12 +56,16 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "StackingAction.hh"
+#include "G4Timer.hh"
 
 #include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
+
+  G4Timer timer;
+  timer.Start();
 
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
@@ -114,6 +118,8 @@ int main(int argc,char** argv) {
   //job termination
   if(visManager) delete visManager;
   delete runManager;
+  timer.Stop();
+  G4cout << timer << std::endl;
 
   return 0;
 }
