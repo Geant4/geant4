@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: evmandefs.hh,v 1.5 2009-08-15 15:45:50 asaim Exp $
+// $Id: evmandefs.hh,v 1.6 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,6 +38,6 @@
 
 //================ G4SmartStack ===================
 //
-//#define G4_USESMARTSTACK 1
+#define G4_USESMARTSTACK 1
 //
 

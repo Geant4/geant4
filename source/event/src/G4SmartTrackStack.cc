@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.1 2009-08-15 15:45:50 asaim Exp $
+// $Id: G4SmartTrackStack.cc,v 1.2 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,6 +36,12 @@ G4SmartTrackStack::G4SmartTrackStack()
 {
   for(int i=0;i<nTurn;i++)
   { stacks[i] = new G4TrackStack(); }
+  // If entry of one sub-stack exceeds safetyValve1, we will stick
+  // to that sub-stack until entry of that sub-stack goes down
+  // to safetyValve2.
+  safetyValve1 = 20000; 
+  safetyValve2 = 10000;
+  maxNTracks = 0;
 }
 
 G4SmartTrackStack::~G4SmartTrackStack()
@@ -66,7 +72,7 @@ G4StackedTrack * G4SmartTrackStack::PopFromStack()
     if(stacks[fTurn]->GetNTrack()==0)
     {
       fTurn = (++fTurn)%nTurn;
-      //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
+      G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
     }
     else
     { aStackedTrack = stacks[fTurn]->PopFromStack(); }
@@ -106,6 +112,19 @@ void G4SmartTrackStack::PushToStack( G4StackedTrack * aStackedTrack )
   }
 
   stacks[iDest]->PushToStack(aStackedTrack);
+
+  if(stacks[iDest]->GetNTrack()>safetyValve1)
+  {
+    // Too many tracks in the stack. Process tracks in this stack first
+    // unless the current stack also have too many tracks.
+    if(stacks[fTurn]->GetNTrack()<safetyValve2)
+    {
+      fTurn = iDest;
+      G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
+    }
+  }
+
+  if(n_stackedTrack()>maxNTracks) maxNTracks = n_stackedTrack();
 }
 
 void G4SmartTrackStack::clear()

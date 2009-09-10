@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.7 2009-08-15 15:45:50 asaim Exp $
+// $Id: G4TrackStack.hh,v 1.8 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,10 +70,14 @@ class G4TrackStack
       G4int n_stackedTrack;
       G4StackedTrack * firstStackedTrack;
       G4StackedTrack * lastStackedTrack;
+      G4int maxNTracks;
 
   public:
       inline G4int GetNTrack() const
       { return n_stackedTrack; }
+      inline G4int GetMaxNTrack() const
+      { return maxNTracks; }
+
 };
 
 #endif

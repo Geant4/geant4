@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.hh,v 1.1 2009-08-15 15:45:50 asaim Exp $
+// $Id: G4SmartTrackStack.hh,v 1.2 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,10 +72,15 @@ class G4SmartTrackStack
       // = 2 : secondary electrons
       // = 3 : secondary gammas
       // = 4 : secondary positrons
+      G4int safetyValve1; 
+      G4int safetyValve2; 
+      G4int maxNTracks;
 
   public:
       inline G4int GetNTrack() const
       { return n_stackedTrack(); }
+      inline G4int GetMaxNTrack() const
+      { return maxNTracks; }
 
   private:
       inline G4int n_stackedTrack() const

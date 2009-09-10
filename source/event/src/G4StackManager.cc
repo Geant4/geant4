@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.12 2009-08-17 10:51:15 asaim Exp $
+// $Id: G4StackManager.cc,v 1.13 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,6 +55,10 @@ G4StackManager::G4StackManager()
 G4StackManager::~G4StackManager()
 {
   if(userStackingAction) delete userStackingAction;
+
+  G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
+  G4cout << " Maximum number of tracks in the urgent stack : " << urgentStack->GetMaxNTrack() << G4endl;
+  G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
   delete urgentStack;
   delete waitingStack;
   delete postponeStack;

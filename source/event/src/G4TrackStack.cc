@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.cc,v 1.7 2009-08-15 15:45:50 asaim Exp $
+// $Id: G4TrackStack.cc,v 1.8 2009-09-10 21:31:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,9 @@
 
 G4TrackStack::G4TrackStack()
 :n_stackedTrack(0),firstStackedTrack(0),lastStackedTrack(0)
-{;}
+{
+  maxNTracks = 0;
+}
 
 G4TrackStack::~G4TrackStack()
 {
@@ -117,6 +119,7 @@ void G4TrackStack::PushToStack( G4StackedTrack * aStackedTrack )
   }
   lastStackedTrack = aStackedTrack;
   n_stackedTrack++;
+  if(n_stackedTrack>maxNTracks) maxNTracks = n_stackedTrack;
 }
 
 void G4TrackStack::GrabFromStack( G4StackedTrack * aStackedTrack )
