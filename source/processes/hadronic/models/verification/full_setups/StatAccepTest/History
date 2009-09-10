@@ -1,6 +1,14 @@
                  History file
                  ------------
 
+10-Sep-2009 - A.Ribon (statAccepTest-V09-02-08)
+- Few fixes and improvements relevant only to the
+  "trkvtx" analysis: fixed non-initialized counting 
+  of neutron elastic vertices; speed-up a bit the
+  code using "suggested position" in filling the
+  track and vertex maps.
+
+
 16-Aug-2009 - A.Ribon (statAccepTest-V09-02-07)
 - Migration to ROOT.
   The directory dirStat/ is not needed any longer,

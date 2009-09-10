@@ -526,6 +526,10 @@ private:
   // All the data members of each element of the map should have
   // meaningful values, e.g. non-null strings and integers values.
 
+  std::map< G4int, structInfoAboutTrack >::iterator suggestedTrackPosition;
+  std::map< G4int, structInfoAboutVertex >::iterator suggestedVertexPosition;
+  // Useful to speed up the insertion of new elements on these maps.
+
   // Variables which accumulates statistics for end-of-run analysis
   // concerning tracks and vertices.
   G4int countNumberOfTracks, countNumberOfVertices, 
@@ -533,8 +537,8 @@ private:
     countNumberOfPhotoleptonHadronVertices,
     countNumberOfDecayVertices,
     countNumberOfHadronicVertices,
-    countNumberOfHadronElastic_fromNeutrons,
-    countNumberOfHadronElastic_notFromNeutrons,
+    countNumberOfHadronElasticVertices_fromNeutrons,
+    countNumberOfHadronElasticVertices_notFromNeutrons,
     countNumberOfHadronInelasticVertices_fromNeutrons,
     countNumberOfHadronInelasticVertices_notFromNeutrons,
     countNumberOfCaptureVertices_fromNeutrons,

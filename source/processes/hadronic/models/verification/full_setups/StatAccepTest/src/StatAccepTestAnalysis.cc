@@ -564,11 +564,16 @@ void StatAccepTestAnalysis::init() {
   mapInfoAboutTrack.clear();
   mapInfoAboutVertex.clear();
 
+  suggestedTrackPosition = mapInfoAboutTrack.begin();
+  suggestedVertexPosition = mapInfoAboutVertex.begin();
+
   countNumberOfTracks = countNumberOfVertices = 
     countNumberOfElectromagneticVertices = 
     countNumberOfPhotoleptonHadronVertices =
     countNumberOfDecayVertices =
     countNumberOfHadronicVertices = 
+    countNumberOfHadronElasticVertices_notFromNeutrons =
+    countNumberOfHadronElasticVertices_fromNeutrons =
     countNumberOfHadronInelasticVertices_notFromNeutrons =
     countNumberOfHadronInelasticVertices_fromNeutrons =
     countNumberOfCaptureVertices_notFromNeutrons =
@@ -1625,8 +1630,10 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
 
 	  G4int numberOfVertices = mapInfoAboutVertex.size();
 
-	  mapInfoAboutVertex.insert( std::pair< G4int, structInfoAboutVertex >
-				     ( numberOfVertices + 1, aStructInfoAboutVertex ) );
+	  suggestedVertexPosition = 
+	    mapInfoAboutVertex.insert( suggestedVertexPosition,
+	  			       std::pair< G4int, structInfoAboutVertex >
+	  			       ( numberOfVertices + 1, aStructInfoAboutVertex ) );
 	}
       }
 
@@ -1728,8 +1735,10 @@ void StatAccepTestAnalysis::infoTrack( const G4Track* aTrack ) {
         aStructInfoAboutTrack.theClosestHadronicVertexID = 0;
       }
 
-      mapInfoAboutTrack.insert( std::pair< G4int, structInfoAboutTrack >
-				( trackId , aStructInfoAboutTrack ) );
+      suggestedTrackPosition = 
+	mapInfoAboutTrack.insert( suggestedTrackPosition,
+				  std::pair< G4int, structInfoAboutTrack >
+				  ( trackId , aStructInfoAboutTrack ) );
 
     } // end of if ( StatAccepTestAnalysis::isMapInfoAboutTrackOn )
 
@@ -2404,7 +2413,6 @@ classifyParticle( const bool isTrack, const G4ParticleDefinition* particleDef ) 
 }
 
 
-
 void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
   // This method is useful to update the "squared" event variables
   // which are used at the end of the Run to compute the statistical
@@ -3064,6 +3072,9 @@ void StatAccepTestAnalysis::endOfEvent( const G4double timeEventInSec ) {
 
     mapInfoAboutTrack.clear();
     mapInfoAboutVertex.clear();
+
+    suggestedTrackPosition = mapInfoAboutTrack.begin();
+    suggestedVertexPosition = mapInfoAboutVertex.begin();
   }
 
 }
@@ -4723,10 +4734,9 @@ void StatAccepTestAnalysis::finish() {
 	   << "\t    decay = " << countNumberOfDecayVertices / n 
 	   << G4endl
 	   << "\t    hadronic elastic : from neutrons = " 
-	   << countNumberOfHadronElastic_fromNeutrons / n 
-	   << "   from others = " << countNumberOfHadronElastic_notFromNeutrons / n
-	   << G4endl
-	   << "\t    hadronic non-elastic = " << countNumberOfHadronicVertices / n 
+	   << countNumberOfHadronElasticVertices_fromNeutrons / n 
+	   << "   from others = " 
+	   << countNumberOfHadronElasticVertices_notFromNeutrons / n
 	   << G4endl
 	   << "\t \t hadron inelastic : from neutrons = " 
 	   << countNumberOfHadronInelasticVertices_fromNeutrons / n
@@ -5100,9 +5110,9 @@ void StatAccepTestAnalysis::analysisTrackAndVertices_1() {
     }
     if ( subtype == 111 ) {  // G4HadronicProcessType::fHadronElastic
       if ( creator_pdgcode == neutronId ) {
-	countNumberOfHadronElastic_fromNeutrons += 1;
+	countNumberOfHadronElasticVertices_fromNeutrons += 1;
       } else {
-	countNumberOfHadronElastic_notFromNeutrons += 1;
+	countNumberOfHadronElasticVertices_notFromNeutrons += 1;
       }
     } else {
       if (
