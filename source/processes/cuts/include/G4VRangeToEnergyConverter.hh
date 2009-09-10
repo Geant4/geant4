@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.5 2009-07-29 12:02:25 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.6 2009-09-10 14:06:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,6 +85,10 @@ class G4VRangeToEnergyConverter
   //  get energy range for all particle type
   static G4double GetLowEdgeEnergy();
   static G4double GetHighEdgeEnergy();
+
+  //  get/set max cut energy for all particle type
+  static G4double GetMaxEnergyCut();
+  static void SetMaxEnergyCut(G4double value);
   
   // return pointer to the particle type which this converter takes care
   const G4ParticleDefinition* GetParticleType() const;
@@ -99,12 +103,13 @@ class G4VRangeToEnergyConverter
  
  protected:
     static G4double               LowestEnergy, HighestEnergy;
-
+    static G4double               MaxEnergyCut; 
+  
     const G4ParticleDefinition*   theParticle;
     typedef G4PhysicsTable        G4LossTable;
     G4LossTable*                  theLossTable;
     G4int                         NumberOfElements;
-
+  
     typedef G4PhysicsLogVector    G4LossVector;
     G4int                         TotBin;
 
@@ -118,11 +123,14 @@ class G4VRangeToEnergyConverter
   //-------------- Range Table ------------------------------------------
   protected:
     typedef G4PhysicsLogVector G4RangeVector;
+
     virtual void BuildRangeVector(const G4Material* aMaterial,
                                   G4double       maxEnergy,
                                   G4double       aMass,
                                   G4RangeVector* rangeVector);
 
+    std::vector< G4RangeVector* > fRangeVectorStore;   
+      
   protected:
     G4double ConvertCutToKineticEnergy(
                                        G4RangeVector* theRangeVector,

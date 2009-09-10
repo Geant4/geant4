@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.11 2009-08-01 07:57:13 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.12 2009-09-10 14:06:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 #include "G4VRangeToEnergyConverter.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
+#include "G4MaterialTable.hh"
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
@@ -44,8 +45,11 @@
 G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
 G4double  G4VRangeToEnergyConverter::HighestEnergy = 100.0e6*MeV;
 
+// max energy cut
+G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 10.0*GeV;
+
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
-  theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(200),
+  theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(100),
   verboseLevel(1)
 {
 }
@@ -75,12 +79,32 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
   // fill the loss table
   for (size_t j=0; j<size_t(NumberOfElements); j++){
     G4LossVector* aVector= new
-            G4LossVector(LowestEnergy, HighestEnergy, TotBin);
+            G4LossVector(LowestEnergy, MaxEnergyCut, TotBin);
     for (size_t i=0; i<size_t(TotBin); i++) {
       G4double Value = (*((*right.theLossTable)[j]))[i];
       aVector->PutValue(i,Value);
     }
     theLossTable->insert(aVector);
+  }
+
+  // clean up range vector store
+  for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
+    delete fRangeVectorStore.at(idx);
+  }
+  fRangeVectorStore.clear();
+
+  // copy range vector store
+  for (size_t j=0; j<((right.fRangeVectorStore).size()); j++){
+    G4RangeVector* vector = (right.fRangeVectorStore).at(j);
+    G4RangeVector* rangeVector = 0; 
+    if (vector !=0 ) {
+      rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin);
+      for (size_t i=0; i<size_t(TotBin); i++) {
+	G4double Value = (*vector)[i];
+	rangeVector->PutValue(i,Value);
+      }
+    }
+    fRangeVectorStore.push_back(rangeVector);
   }
   return *this;
 }
@@ -88,11 +112,18 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
+  // delete loss table
   if (theLossTable) {  
     theLossTable->clearAndDestroy();
     delete theLossTable;
   }
   theLossTable=0;
+  
+  //clear RangeVectorStore
+  for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
+    delete fRangeVectorStore.at(idx);
+  }
+  fRangeVectorStore.clear();
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
@@ -112,6 +143,14 @@ G4int G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &rig
 G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut, 
 					    const G4Material* material) 
 {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>3) {
+      G4cout << "G4VRangeToEnergyConverter::Convert() ";
+      G4cout << "Convert for " << material->GetName() 
+	     << " with Range Cut " << rangeCut/mm << "[mm]" << G4endl;
+    }
+#endif
+
   G4double Mass   = theParticle->GetPDGMass();
   G4double theKineticEnergyCuts = 0.;
  
@@ -122,27 +161,49 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
   // fill theKineticEnergyCuts and delete the range vector
   G4double tune = 0.025*mm*g/cm3 ,lowen = 30.*keV ; 
 
-  G4int idx = material->GetIndex(); 
+  // check density
   G4double density = material->GetDensity() ;
-  if(density > 0.) {
-    G4RangeVector* rangeVector = new G4RangeVector(LowestEnergy, HighestEnergy, TotBin);
-    BuildRangeVector(material, HighestEnergy, Mass, rangeVector);
-    theKineticEnergyCuts = ConvertCutToKineticEnergy(rangeVector, rangeCut, idx);
-
-    if( ((theParticle->GetParticleName()=="e-")||(theParticle->GetParticleName()=="e+"))
-	&& (theKineticEnergyCuts < lowen) ) {
-      //  corr. should be switched on smoothly   
-      theKineticEnergyCuts /= (1.+(1.-theKineticEnergyCuts/lowen)*
-                                    tune/(rangeCut*density)); 
+  if(density <= 0.) {
+ #ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4VRangeToEnergyConverter::Convert() ";
+      G4cout << material->GetName() << "has zero density "
+	     << "( " << density << ")" << G4endl;
     }
-
-    if(theKineticEnergyCuts < LowestEnergy) {
-      theKineticEnergyCuts = LowestEnergy ;
-    }
-
-    delete rangeVector;
+#endif
+    return 0.;
+  }
+ 
+   // initialize RangeVectorStore
+  const G4MaterialTable* table = G4Material::GetMaterialTable();
+  G4int ext_size = table->size() - fRangeVectorStore.size();
+  for (int i=0; i<ext_size; i++) fRangeVectorStore.push_back(0);
+  
+  // Build Range Vector
+  G4int idx = material->GetIndex(); 
+  G4RangeVector* rangeVector = fRangeVectorStore.at(idx);
+  if (rangeVector == 0) {
+    rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin);
+    BuildRangeVector(material, MaxEnergyCut, Mass, rangeVector);
+    fRangeVectorStore.at(idx) = rangeVector;
   }
 
+  // Convert Range Cut ro Kinetic Energy Cut 
+  theKineticEnergyCuts = ConvertCutToKineticEnergy(rangeVector, rangeCut, idx);
+  
+  if( ((theParticle->GetParticleName()=="e-")||(theParticle->GetParticleName()=="e+"))
+      && (theKineticEnergyCuts < lowen) ) {
+    //  corr. should be switched on smoothly   
+    theKineticEnergyCuts /= (1.+(1.-theKineticEnergyCuts/lowen)*
+			     tune/(rangeCut*density)); 
+  }
+  
+  if(theKineticEnergyCuts < LowestEnergy) {
+    theKineticEnergyCuts = LowestEnergy ;
+  } else if(theKineticEnergyCuts > MaxEnergyCut) {
+    theKineticEnergyCuts = MaxEnergyCut;
+  }
+  
   return theKineticEnergyCuts;
 }
 
@@ -173,6 +234,16 @@ G4double G4VRangeToEnergyConverter::GetLowEdgeEnergy()
 G4double G4VRangeToEnergyConverter::GetHighEdgeEnergy()
 {
   return HighestEnergy;
+}
+
+G4double G4VRangeToEnergyConverter::GetMaxEnergyCut()
+{
+  return MaxEnergyCut;
+}
+
+void G4VRangeToEnergyConverter::SetMaxEnergyCut(G4double value)
+{
+  MaxEnergyCut = value;
 }
 
 // **********************************************************************
@@ -287,7 +358,7 @@ void G4VRangeToEnergyConverter::BuildLossTable()
     for (size_t j=0; j<size_t(NumberOfElements); j++){
       G4double Value;
       G4LossVector* aVector= new
-	G4LossVector(LowestEnergy, HighestEnergy, TotBin);
+	G4LossVector(LowestEnergy, MaxEnergyCut, TotBin);
       for (size_t i=0; i<size_t(TotBin); i++) {
 	Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
 			      aVector->GetLowEdgeEnergy(i)
@@ -431,8 +502,8 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
 
   //  find max. range and the corresponding energy (rmax,Tmax)
   G4double rmax= -1.e10*mm;
-  G4double Tmax= HighestEnergy;
-  G4double fac = std::exp( std::log(HighestEnergy/LowestEnergy)/TotBin );
+  G4double Tmax= MaxEnergyCut;
+  G4double fac = std::exp( std::log(MaxEnergyCut/LowestEnergy)/TotBin );
   G4double T=LowestEnergy/fac;
   G4bool isOut;
 

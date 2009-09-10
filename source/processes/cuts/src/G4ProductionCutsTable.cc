@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.20 2009-08-01 07:57:13 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.21 2009-09-10 14:06:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,8 @@
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4Timer.hh"
 
 #include "G4ios.hh"
 #include <iomanip>                
@@ -221,6 +223,10 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 
   // Update RangeEnergy cuts tables
   size_t idx = 0;
+  G4Timer timer;
+  if (verboseLevel>2) {
+    timer.Start();
+  }
   for(CoupleTableIterator cItr=coupleTable.begin();
       cItr!=coupleTable.end();cItr++){
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
@@ -238,6 +244,12 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
       }
     }
     idx++;  
+  }
+  if (verboseLevel>2) {
+    timer.Stop();
+    std::cout << "G4ProductionCutsTable::UpdateCoupleTable "
+	      << "  elapsed time for calculation of  energy cuts " << G4endl;
+    std::cout << timer <<G4endl;
   }
 
   // resize Range/Energy cuts double vectors if new couple is made
