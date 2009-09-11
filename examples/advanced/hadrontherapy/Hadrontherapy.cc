@@ -60,14 +60,15 @@
 #include "globals.hh"
 #include "HadrontherapySteppingAction.hh"
 #include "HadrontherapyInteractionParameters.hh"
-
 #include "HadrontherapyAnalysisManager.hh"
-
-
 #include "IAEADetectorConstruction.hh"
-
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
+
+#if defined(G4UI_USE_TCSH)
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#endif
 
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
@@ -77,25 +78,28 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE_QT
+#include "G4UIQt.hh"
+#include "G4Qt.hh"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
 {
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-
   G4RunManager* runManager = new G4RunManager;
   //Initialize possible analysis needs, needs to come early in order to pick up metadata
 #ifdef ANALYSIS_USE
-  HadrontherapyAnalysisManager* analysis = 
-    HadrontherapyAnalysisManager::getInstance();
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
   analysis -> book();
 #endif
-
+  
   // Initialize the geometry user interface
   HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
   HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
-
+  
   // Initialize the geometry
   HadrontherapyDetectorConstruction* pDetect = new HadrontherapyDetectorConstruction();
   runManager -> SetUserInitialization(pDetect);
@@ -127,43 +131,52 @@ int main(int argc ,char ** argv)
   // Interaction data
   new HadrontherapyInteractionParameters(pDetect);
 
-
-
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
 
-  // Define UI session for interactive mode.
-  G4UIsession* session = 0;
-  if (argc == 1)   
-    {
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
+G4UImanager* UI = G4UImanager::GetUIpointer();      
+  
+ if (argc!=1)   // batch mode
+   {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);    
+   }
+ 
+ else  // interactive mode : define visualization UI terminal
+   {
+     G4UIsession* session = 0;
+     
+     // If the enviroment variable for the TCSH terminal is active, it is used and the
+     // defaultMacro.mac file is executed
+#if defined(G4UI_USE_TCSH)
+     session = new G4UIterminal(new G4UItcsh);      
+     UI->ApplyCommand("/control/execute defaultMacro.mac");  
+
+     // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
+     // G$UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
+     // In this case a gui.mac file is executed
+#elif defined(G4UI_USE_QT)
+     session = new G4UIQt(argc,argv);
+     UI->ApplyCommand("/control/execute gui.mac");      
+     
+     // As final option, the simpler user interface terminal is opened
 #else
-      session = new G4UIterminal();
+     session = new G4UIterminal();
 #endif
-    }
-
-  // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-  if (session)   // Define UI session for interactive mode.
-    { 
-      G4cout<<" UI session starts ..."<< G4endl;
-      UI -> ApplyCommand("/control/execute defaultMacro.mac");    
-      session -> SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI -> ApplyCommand(command + fileName);
-    }
-
-  matrix -> TotalEnergyDeposit();
-
+      
+      //#ifdef G4VIS_USE
+      //UI->ApplyCommand("/control/execute vis.mac");     
+      //#endif
+      
+	session->SessionStart();
+	delete session;
+   }
+ matrix -> TotalEnergyDeposit();
+ 
 #ifdef ANALYSIS_USE
   analysis -> finish();
 #endif
@@ -172,11 +185,9 @@ int main(int argc ,char ** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-
+  
   delete geometryMessenger;
   delete geometryController;
-
   delete runManager;
-
   return 0;
 }
