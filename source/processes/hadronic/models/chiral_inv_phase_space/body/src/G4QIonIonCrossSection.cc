@@ -427,33 +427,42 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
   {
     if ( (pZ == 1 && !pN) || (tZ == 1 && !tN) ) // proton-nuclear
     {
-      elCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
-      inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
+      inCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
+      elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
     }
     else if(pN==1 && !pZ)                // neutron-nuclear
     {
-      elCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
-      inCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
+      inCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
+      elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
     }
     else G4cerr<<"-Warn-G4QIICS::CaCS:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
   }
   else
   {
-    G4double P2=Mom*Mom;
-    G4double P4=P2*P2;
-    G4double P8=P4*P4;
     G4double T=ThresholdMomentum(pZ, pN, tZ, tN); // @@ Can be cashed as lastTH (?)
-    G4double T2=T*T;
-    G4double T4=T2*T2;
-    G4double tot=CalculateTotal(pA, tA, Mom)*P8/(P8+T4*T4); // @@ convert to Indep. Units
-    G4double rat=CalculateElTot(pA, tA, Mom);
-    elCS=tot*rat;
-    inCS=tot-elCS;
+    if(Mom<=T)
+    {
+      elCS=0.;
+      inCS=0.;
+    }
+    else
+    {
+      G4double P2=Mom*Mom;
+      G4double T2=T*T;
+      G4double R=1.-T2/P2;                        // @@ Very rough threshold effect
+      G4double P4=P2*P2;
+      G4double P8=P4*P4;
+      G4double T4=T2*T2;
+      G4double tot=R*CalculateTotal(pA, tA, Mom)*P8/(P8+T4*T4); // @@ convert to IndepUnits
+      G4double rat=CalculateElTot(pA, tA, Mom);
+      elCS=tot*rat;
+      inCS=tot-elCS;
+    }
   }
   return std::make_pair(inCS,elCS);
 }
 
-// Total Ion-ion cross-section (mb), Momentum (Mom) here is p/A (MeV/c=IU)
+// Total Ion-ion cross-section (mb), Momentum (Mom) here is p/A (MeV/c=IU) (No Threshold)
 G4double G4QIonIonCrossSection::CalculateTotal(G4double pA, G4double tA, G4double Mom)
 {
   G4double y=std::log(Mom/1000.); // Log of momentum in GeV/c
