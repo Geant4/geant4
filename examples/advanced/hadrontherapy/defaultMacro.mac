@@ -57,8 +57,13 @@
 /beam/energy/sigmaEnergy 400 keV
 /beam/position/Xposition -2700 mm
 
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 10
 
 #########################
 # Start of the run
 #
-/run/beamOn 500
+/run/beamOn 10

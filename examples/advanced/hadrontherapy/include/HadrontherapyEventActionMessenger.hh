@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.hh; May 2005
+// $Id: HadrontherapyEventActionMessenger.cc;
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,44 +41,30 @@
 // * cirrone@lns.infn.it
 // --------------------------------------------------------------
 
-#ifndef HadrontherapyEventAction_h
-#define HadrontherapyEventAction_h 1
+#ifndef HadrontherapyEventActionMessenger_h
+#define HadrontherapyEventActionMessenger_h 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class HadrontherapyMatrix;
-class HadrontherapyEventActionMessenger;
+class HadrontherapyEventAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
-class HadrontherapyEventAction : public G4UserEventAction
+class HadrontherapyEventActionMessenger: public G4UImessenger
 {
-public:
-  HadrontherapyEventAction(HadrontherapyMatrix*);
-  ~HadrontherapyEventAction();
-
-public:
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
-
-  void SetPrintModulo(G4int val)
-  {
-    printModulo = val;
-  };
-
-  void SetDrawFlag(G4String val)
-  {
-    drawFlag = val;
-  };
-
-private: 
-  G4String drawFlag; //Visualisation flag
-  G4int hitsCollectionID;
-  HadrontherapyMatrix *matrix; 
-  G4int printModulo;  
-  HadrontherapyEventActionMessenger* pointerEventMessenger;
+  public:
+    HadrontherapyEventActionMessenger(HadrontherapyEventAction*);
+   ~HadrontherapyEventActionMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    HadrontherapyEventAction*          eventAction;
+    G4UIdirectory*        eventDir;        
+    G4UIcmdWithAString*   DrawCmd;
+    G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 #endif
-
-
-

@@ -54,32 +54,38 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyEventActionMessenger.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* matrixPointer) :
-  drawFlag("all" ),printModulo(10000)
+  drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
 { 
   hitsCollectionID = -1;
   matrix = matrixPointer; 
+  pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::~HadrontherapyEventAction()
 {
+ delete pointerEventMessenger;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
-{
-  
+{ 
   G4int evtNb = evt->GetEventID();
   
   //printing survey
   if (evtNb%printModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
+   
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
     hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
   if(hitsCollectionID < 0)

@@ -35,7 +35,7 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
 :pPhysicsList(pPhys)
 {
   physDir = new G4UIdirectory("/physic/");
-  physDir->SetGuidance("commands to activate models and set Cuts");
+  physDir->SetGuidance("Commands to activate physics models and set cuts");
    
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");

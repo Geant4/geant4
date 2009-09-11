@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.hh; May 2005
+// $Id: HadrontherapyEventActionMessenger.cc;
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -38,44 +41,50 @@
 // * cirrone@lns.infn.it
 // --------------------------------------------------------------
 
-#ifndef HadrontherapyEventAction_h
-#define HadrontherapyEventAction_h 1
+#include "HadrontherapyEventActionMessenger.hh"
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "HadrontherapyEventAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
-class HadrontherapyMatrix;
-class HadrontherapyEventActionMessenger;
-
-class HadrontherapyEventAction : public G4UserEventAction
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyEventActionMessenger::HadrontherapyEventActionMessenger(HadrontherapyEventAction* EvAct)
+:eventAction(EvAct)
 {
-public:
-  HadrontherapyEventAction(HadrontherapyMatrix*);
-  ~HadrontherapyEventAction();
+  eventDir = new G4UIdirectory("/event/");
+  eventDir->SetGuidance("Permits controls on simulation events");
+ 
+  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+  DrawCmd->SetGuidance("Draw the tracks in the event");
+  DrawCmd->SetGuidance("  Choice : none,charged, all");
+  DrawCmd->SetParameterName("choice",true);
+  DrawCmd->SetDefaultValue("all");
+  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->AvailableForStates(G4State_Idle);
+  
+  PrintCmd = new G4UIcmdWithAnInteger("/event/printEventNumber",this);
+  PrintCmd->SetGuidance("Print the event number of modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+  PrintCmd->AvailableForStates(G4State_Idle);      
+}
 
-public:
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyEventActionMessenger::~HadrontherapyEventActionMessenger()
+{
+  delete DrawCmd;
+  delete PrintCmd;
+  delete eventDir;         
+}
 
-  void SetPrintModulo(G4int val)
-  {
-    printModulo = val;
-  };
-
-  void SetDrawFlag(G4String val)
-  {
-    drawFlag = val;
-  };
-
-private: 
-  G4String drawFlag; //Visualisation flag
-  G4int hitsCollectionID;
-  HadrontherapyMatrix *matrix; 
-  G4int printModulo;  
-  HadrontherapyEventActionMessenger* pointerEventMessenger;
-};
-
-#endif
-
-
-
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyEventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{ 
+  if(command == DrawCmd)
+    {eventAction->SetDrawFlag(newValue);}
+    
+  if(command == PrintCmd)
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}           
+ }
