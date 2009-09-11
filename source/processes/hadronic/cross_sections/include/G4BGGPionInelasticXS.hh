@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.hh,v 1.2 2008-12-01 16:50:23 vnivanch Exp $
+// $Id: G4BGGPionInelasticXS.hh,v 1.3 2009-09-11 18:52:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,7 +124,7 @@ inline
 G4bool G4BGGPionInelasticXS::IsZAApplicable(const G4DynamicParticle*, 
 					    G4double /*Z*/, G4double/* A*/)
 {
-  return true;
+  return false;
   // return (dp->GetDefinition() == particle);
 }
 

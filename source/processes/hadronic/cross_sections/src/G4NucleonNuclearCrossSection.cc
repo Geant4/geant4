@@ -31,14 +31,12 @@
 //
 // Modified:
 // 05.03.07 V.Ivanchenko - add IfZAApplicable, remove "debug"
+// 11.09.09 V.Ivanchenko - fixed bug in interpolation
 //
 
 #include "G4NucleonNuclearCrossSection.hh"
-//#include "G4HadronicException.hh"
-//#include "G4HadTmpUtil.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
-//#include "G4ping.hh"
 
 // Group 1: He, Be, C for 44 energies  
 
@@ -601,9 +599,8 @@ GetIsoZACrossSection( const G4DynamicParticle* aParticle,
 
    size_t it = 0;
 
-   while( it < theZ.size() && Z > theZ[it] ) it++;
-
-   // if( Z == 29 ) tuning=.96;
+   while( it < theZ.size() && Z > theZ[it] ) {++it;}
+   if(it >= theZ.size()) it = theZ.size() - 1; 
 
    if( Z > theZ[it] ) Z = theZ[it]; 
    G4int Z1, Z2;
@@ -720,8 +717,8 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
 
   // More precise average
   if(Z1 != Z2) {
-    G4double alp1 = G4double(Z - Z1);
-    G4double alp2 = G4double(Z2 - Z);
+    G4double alp1 = (A[Z-1] - A[Z1-1]);
+    G4double alp2 = (A[Z2-1] - A[Z-1]);
     result = (r1*alp2 + r2*alp1)/(alp1 + alp2);
   }
   //       G4cout << "x1/2, z1/2 z" <<x1<<" "<<x2<<" "<<Z1<<" "<<Z2<<" "<<Z<<G4endl;
