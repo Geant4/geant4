@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.hh,v 1.2 2006-06-29 19:29:56 gunter Exp $
+// $Id: G4RToEConvForElectron.hh,v 1.3 2009-09-11 15:21:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,12 +63,6 @@ class G4RToEConvForElectron : public G4VRangeToEnergyConverter
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
                                 ) const;
-
-  //-------------- Range Table ------------------------------------------
-    virtual void BuildRangeVector(const G4Material* aMaterial,
-                                  G4double       maxEnergy,
-                                  G4double       aMass,
-                                  G4RangeVector* rangeVector);
 
 
 };

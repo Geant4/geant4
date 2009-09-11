@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.6 2009-09-10 14:06:48 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.7 2009-09-11 15:21:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,34 +100,35 @@ class G4VRangeToEnergyConverter
    // Each loss vector has energy loss values (cross section values
    // for neutral particles) which are calculated by
    // ComputeLoss(G4double AtomicNumber,G4double KineticEnergy).
+   // ComputeLoss method is pure virtual and should be provided for each 
+   // particle type
  
  protected:
     static G4double               LowestEnergy, HighestEnergy;
     static G4double               MaxEnergyCut; 
-  
+    G4double                      fMaxEnergyCut;
+   
     const G4ParticleDefinition*   theParticle;
     typedef G4PhysicsTable        G4LossTable;
     G4LossTable*                  theLossTable;
     G4int                         NumberOfElements;
   
     typedef G4PhysicsLogVector    G4LossVector;
-    G4int                         TotBin;
+    const G4int                   TotBin;
 
   protected:// with description  
-   virtual void BuildLossTable();
+    virtual void BuildLossTable();
 
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-                                ) const;
+			       ) const = 0;
 
   //-------------- Range Table ------------------------------------------
   protected:
     typedef G4PhysicsLogVector G4RangeVector;
 
     virtual void BuildRangeVector(const G4Material* aMaterial,
-                                  G4double       maxEnergy,
-                                  G4double       aMass,
-                                  G4RangeVector* rangeVector);
+                                   G4RangeVector* rangeVector);
 
     std::vector< G4RangeVector* > fRangeVectorStore;   
       
@@ -137,24 +138,6 @@ class G4VRangeToEnergyConverter
 				       G4double       theCutInLength, 
                                        size_t         materialIndex
                                       ) const;
-
-    G4double RangeLinSimpson(
-                            G4int  numberOfElements,
-                            const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-			    G4double aMass,
-                            G4double taulow, G4double tauhigh,
-                            G4int nbin
-                          ); 
-
-    G4double RangeLogSimpson(
-                            G4int  numberOfElements,
-                            const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-                            G4double aMass,
-                            G4double ltaulow, G4double ltauhigh,
-                            G4int nbin
-                          );
 
   public: // with description  
       void  SetVerboseLevel(G4int value);

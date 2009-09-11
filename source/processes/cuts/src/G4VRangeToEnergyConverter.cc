@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.12 2009-09-10 14:06:48 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.13 2009-09-11 15:21:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,12 +49,13 @@ G4double  G4VRangeToEnergyConverter::HighestEnergy = 100.0e6*MeV;
 G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 10.0*GeV;
 
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
-  theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(100),
+  theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(300),
   verboseLevel(1)
 {
+  fMaxEnergyCut = 0.;
 }
 
-G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right)
+G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) : TotBin(right.TotBin)
 {
   *this = right;
 }
@@ -69,7 +70,7 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
  }
 
   NumberOfElements = right.NumberOfElements;
-  TotBin = right.TotBin;
+  //TotBin = right.TotBin;
   theParticle = right.theParticle;
   verboseLevel = right.verboseLevel;
   
@@ -151,8 +152,17 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
     }
 #endif
 
-  G4double Mass   = theParticle->GetPDGMass();
   G4double theKineticEnergyCuts = 0.;
+
+  if (fMaxEnergyCut != MaxEnergyCut) {
+    fMaxEnergyCut = MaxEnergyCut;      
+    NumberOfElements = 0;
+    //clear RangeVectorStore
+    for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
+      delete fRangeVectorStore.at(idx);
+    }
+    fRangeVectorStore.clear();
+  }
  
   // Build the energy loss table
   BuildLossTable();
@@ -183,8 +193,8 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
   G4int idx = material->GetIndex(); 
   G4RangeVector* rangeVector = fRangeVectorStore.at(idx);
   if (rangeVector == 0) {
-    rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin);
-    BuildRangeVector(material, MaxEnergyCut, Mass, rangeVector);
+    rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin); 
+    BuildRangeVector(material, rangeVector);
     fRangeVectorStore.at(idx) = rangeVector;
   }
 
@@ -246,83 +256,6 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(G4double value)
   MaxEnergyCut = value;
 }
 
-// **********************************************************************
-// ************************ RangeLinSimpson *****************************
-// **********************************************************************
-G4double G4VRangeToEnergyConverter::RangeLinSimpson(
-				     G4int numberOfElement,
-                                     const G4ElementVector* elementVector,
-                                     const G4double* atomicNumDensityVector,
-                                     G4double aMass,   
-                                     G4double taulow, G4double tauhigh, G4int nbin)
-{
-  // Simpson numerical integration, linear binning
-  G4double dtau = (tauhigh-taulow)/nbin;
-  G4double Value=0.;
-  for (size_t i=0; i<=size_t(nbin); i++){
-    G4double taui=taulow+dtau*i;
-    G4double ti=aMass*taui;
-    G4double lossi=0.;
-    size_t nEl = (size_t)(numberOfElement);
-    for (size_t j=0; j<nEl; j++) {
-      G4bool isOut;
-      G4int IndEl = (*elementVector)[j]->GetIndex();
-      lossi += atomicNumDensityVector[j]*
-              (*theLossTable)[IndEl]->GetValue(ti,isOut);
-   }
-    if ( i==0 ) {
-      Value += 0.5/lossi;
-    } else {
-      if ( i<size_t(nbin) ) Value += 1./lossi;
-      else            Value += 0.5/lossi;
-    }
-  }
-  Value *= aMass*dtau;
-
-  return Value;
-}
-
-
-// **********************************************************************
-// ************************ RangeLogSimpson *****************************
-// **********************************************************************
-G4double G4VRangeToEnergyConverter::RangeLogSimpson(
-				     G4int numberOfElement,
-                                     const G4ElementVector* elementVector,
-                                     const G4double* atomicNumDensityVector,
-                                     G4double aMass,   
-                                     G4double ltaulow, G4double ltauhigh,
-                                     G4int nbin)
-{
-  // Simpson numerical integration, logarithmic binning
-  if(nbin<0) nbin = TotBin;
-  G4double ltt = ltauhigh-ltaulow;
-  G4double dltau = ltt/nbin;
-  G4double Value = 0.;
-  for (size_t i=0; i<=size_t(nbin); i++){
-    G4double ui = ltaulow+dltau*i;
-    G4double taui = std::exp(ui);
-    G4double ti = aMass*taui;
-    G4double lossi = 0.;
-    size_t nEl = (size_t)(numberOfElement);
-
-    for (size_t j=0; j<nEl; j++) {
-      G4bool isOut;
-      G4int IndEl = (*elementVector)[j]->GetIndex();
-      lossi += atomicNumDensityVector[j]*
-              (*theLossTable)[IndEl]->GetValue(ti,isOut);
-    }
-    if ( i==0 ) {
-      Value +=  0.5*taui/lossi;
-    } else {
-      if ( i<size_t(nbin) ) Value += taui/lossi;
-      else Value +=  0.5*taui/lossi;
-    }
-  }
-  Value *= aMass*dltau;
-
-  return Value;
-}
 
 // **********************************************************************
 // ************************ BuildLossTable ******************************
@@ -331,163 +264,87 @@ G4double G4VRangeToEnergyConverter::RangeLogSimpson(
 //   (cross section tabel for neutral )
 void G4VRangeToEnergyConverter::BuildLossTable()
 {
-   //  Build dE/dx tables for elements
-  if (size_t(NumberOfElements) != G4Element::GetNumberOfElements()) {
-    if (theLossTable!=0) {
-      theLossTable->clearAndDestroy();
-      delete theLossTable;
-    }
-    theLossTable =0; 
-    NumberOfElements = 0;
+  if (size_t(NumberOfElements) == G4Element::GetNumberOfElements()) return;
+  
+  //  Build dE/dx tables for elements
+  if (theLossTable!=0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
   }
+  theLossTable =0; 
+  NumberOfElements = 0;
 
-  if (NumberOfElements ==0) {
-    NumberOfElements = G4Element::GetNumberOfElements();
-    theLossTable = new G4LossTable();
-    theLossTable->reserve(G4Element::GetNumberOfElements());
+  NumberOfElements = G4Element::GetNumberOfElements();
+  theLossTable = new G4LossTable();
+  theLossTable->reserve(G4Element::GetNumberOfElements());
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>3) {
-      G4cout << "G4VRangeToEnergyConverter::BuildLossTable() ";
-      G4cout << "Create theLossTable[" << theLossTable << "]";
-      G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
-    }
+  if (GetVerboseLevel()>3) {
+    G4cout << "G4VRangeToEnergyConverter::BuildLossTable() ";
+    G4cout << "Create theLossTable[" << theLossTable << "]";
+    G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
+  }
 #endif
- 
-
-    // fill the loss table
-    for (size_t j=0; j<size_t(NumberOfElements); j++){
-      G4double Value;
-      G4LossVector* aVector= new
-	G4LossVector(LowestEnergy, MaxEnergyCut, TotBin);
-      for (size_t i=0; i<size_t(TotBin); i++) {
-	Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
-			      aVector->GetLowEdgeEnergy(i)
-			      );
-	aVector->PutValue(i,Value);
-      }
-      theLossTable->insert(aVector);
+  
+  
+  // fill the loss table
+  for (size_t j=0; j<size_t(NumberOfElements); j++){
+    G4double Value;
+    G4LossVector* aVector= 0;
+    aVector= new G4LossVector(LowestEnergy, MaxEnergyCut, TotBin);
+    for (size_t i=0; i<size_t(TotBin); i++) {
+      Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
+			    aVector->GetLowEdgeEnergy(i)
+			    );
+      aVector->PutValue(i,Value);
     }
+    theLossTable->insert(aVector);
   }
-}
-
-// **********************************************************************
-// ************************** ComputeLoss *******************************
-// **********************************************************************
-G4double G4VRangeToEnergyConverter::ComputeLoss(G4double AtomicNumber,
-						G4double KineticEnergy) const
-{
-  //  calculate dE/dx
-
-  static G4double Z;  
-  static G4double ionpot, tau0, taum, taul, ca, cba, cc;
-
-  G4double  z2Particle = theParticle->GetPDGCharge()/eplus;
-  z2Particle *=  z2Particle;
-  if (z2Particle < 0.1) return 0.0;
-
-  if( std::fabs(AtomicNumber-Z)>0.1 ){
-    // recalculate constants
-    Z = AtomicNumber;
-    G4double Z13 = std::exp(std::log(Z)/3.);
-    tau0 = 0.1*Z13*MeV/proton_mass_c2;
-    taum = 0.035*Z13*MeV/proton_mass_c2;
-    taul = 2.*MeV/proton_mass_c2;
-    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z));
-    cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
-    cc = 2.*twopi_mc2_rcl2*Z*cc*std::sqrt(taul);
-    ca = cc/((1.-0.5*std::sqrt(tau0/taum))*tau0);
-    cba = -0.5/std::sqrt(taum);
-  }
-
-  G4double tau = KineticEnergy/theParticle->GetPDGMass();
-  G4double dEdx;
-  if ( tau <= tau0 ) {
-    dEdx = ca*(std::sqrt(tau)+cba*tau);
-  } else {
-    if( tau <= taul ) {
-      dEdx = cc/std::sqrt(tau);
-    } else {
-      dEdx = (tau+1.)*(tau+1.)*
-	     std::log(2.*electron_mass_c2*tau*(tau+2.)/ionpot)/(tau*(tau+2.))-1.;
-      dEdx = 2.*twopi_mc2_rcl2*Z*dEdx;
-    }
-  }
-  return dEdx*z2Particle ;
 }
 
 // **********************************************************************
 // ************************ BuildRangeVector ****************************
 // **********************************************************************
-void G4VRangeToEnergyConverter::BuildRangeVector(
-                                  const G4Material* aMaterial,
-                                  G4double       maxEnergy,
-                                  G4double       aMass,
-                                  G4RangeVector* rangeVector)
+void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
+					     G4PhysicsLogVector* rangeVector)
 {
   //  create range vector for a material
-  const G4double tlim=2.*MeV, t1=0.1*MeV, t2=0.025*MeV; 
-  const G4int  maxnbint=100;
- 
   const G4ElementVector* elementVector = aMaterial->GetElementVector();
   const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-
   G4int NumEl = aMaterial->GetNumberOfElements();
 
   // calculate parameters of the low energy part first
-  G4double loss1=0.;
-  G4double loss2=0.;
   size_t i;
-  for (i=0; i<size_t(NumEl); i++) {
-    G4bool isOut;
-    G4int IndEl = (*elementVector)[i]->GetIndex();
-    loss1 += atomicNumDensityVector[i]*
-            (*theLossTable)[IndEl]->GetValue(t1,isOut);
-    loss2 += atomicNumDensityVector[i]*
-            (*theLossTable)[IndEl]->GetValue(t2,isOut);
-  }
-  G4double tau1 = t1/proton_mass_c2;
-  G4double sqtau1 = std::sqrt(tau1);
-  G4double ca = (4.*loss2-loss1)/sqtau1;
-  G4double cb = (2.*loss1-4.*loss2)/tau1;
-  G4double cba = cb/ca;
-  G4double taulim = tlim/proton_mass_c2;
-  G4double taumax = maxEnergy/aMass;
-  G4double ltaumax = std::log(taumax);
-
-  // now we can fill the range vector....
-  G4double  rmax = 0.0;
-  for (i=0; i<size_t(TotBin); i++) {
-    G4double  LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-    G4double  tau = LowEdgeEnergy/aMass;
-    G4double  Value;
- 
-    if ( tau <= tau1 ){
-      Value =2.*aMass*std::log(1.+cba*std::sqrt(tau))/cb;
-    } else {
-      Value = 2.*aMass*std::log(1.+cba*sqtau1)/cb;
-      if ( tau <= taulim ) {
-        G4int nbin = (G4int)(maxnbint*(tau-tau1)/(taulim-tau1));
-        if ( nbin<1 ) nbin = 1;
-        Value += RangeLinSimpson( NumEl, elementVector,
-				  atomicNumDensityVector, aMass,
-                                  tau1, tau, nbin);
-      } else {
-        Value += RangeLinSimpson( NumEl, elementVector,
-				  atomicNumDensityVector, aMass,
-				  tau1, taulim, maxnbint);
-        G4double ltaulow  = std::log(taulim);
-        G4double ltauhigh = std::log(tau);
-        G4int nbin = (G4int)(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
-        if ( nbin<1 ) nbin = 1;
-        Value += RangeLogSimpson(NumEl, elementVector,
-				 atomicNumDensityVector, aMass,
-				 ltaulow, ltauhigh, nbin);
-      }
+  std::vector<G4double> lossV;
+  for ( size_t ib=0; ib<size_t(TotBin); ib++) {
+    G4double loss=0.;
+    for (i=0; i<size_t(NumEl); i++) {
+      G4int IndEl = (*elementVector)[i]->GetIndex();
+      loss += atomicNumDensityVector[i]*
+	        (*((*theLossTable)[IndEl]))[ib];
     }
-    rangeVector->PutValue(i,Value); 
-    if (rmax < Value) rmax = Value;
+    lossV.push_back(loss);
   }
-}
+   
+  // Integrate with Simpson formula with logarithmic binning
+  G4double ltt = std::log(MaxEnergyCut/LowestEnergy);
+  G4double dltau = ltt/TotBin;
+
+  G4double s0 = 0.;
+  G4double Value;
+  for ( i=0; i<size_t(TotBin); i++) {
+    G4double t = rangeVector->GetLowEdgeEnergy(i);
+    G4double s = t/lossV[i];
+    if (i==0) s0 += 0.5*s;
+    else s0 += s;
+    
+    if (i==0) {
+       Value = (s0 + 0.5*s)*dltau ;
+    } else {
+      Value = (s0 - 0.5*s)*dltau ;
+    }
+    rangeVector->PutValue(i,Value);
+  }
+} 
 
 // **********************************************************************
 // ****************** ConvertCutToKineticEnergy *************************
@@ -503,13 +360,10 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   //  find max. range and the corresponding energy (rmax,Tmax)
   G4double rmax= -1.e10*mm;
   G4double Tmax= MaxEnergyCut;
-  G4double fac = std::exp( std::log(MaxEnergyCut/LowestEnergy)/TotBin );
-  G4double T=LowestEnergy/fac;
-  G4bool isOut;
 
   for (size_t ibin=0; ibin<size_t(TotBin); ibin++) {
-    T *= fac;
-    G4double r=rangeVector->GetValue(T,isOut);
+    G4double T=rangeVector->GetLowEdgeEnergy(ibin);
+    G4double r=(*rangeVector)[ibin];
     if ( r>rmax )    {
        Tmax=T;
        rmax=r;
@@ -533,7 +387,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   
   // convert range to energy
   G4double T1 = LowestEnergy;
-  G4double r1 = rangeVector->GetValue(T1,isOut);
+  G4double r1 = rangeVector->Value(T1);
   if ( theCutInLength <= r1 )
   {
     return T1;
@@ -541,7 +395,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
 
   G4double T2 = Tmax ;
   G4double T3 = std::sqrt(T1*T2);
-  G4double r3 = rangeVector->GetValue(T3,isOut);
+  G4double r3 = rangeVector->Value(T3);
   while ( std::fabs(1.-r3/theCutInLength)>epsilon ) {
     if ( theCutInLength <= r3 ) {
       T2 = T3;
@@ -549,7 +403,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
       T1 = T3;
     }
     T3 = std::sqrt(T1*T2);
-    r3 = rangeVector->GetValue(T3,isOut);
+    r3 = rangeVector->Value(T3);
   }
 
   return T3;
