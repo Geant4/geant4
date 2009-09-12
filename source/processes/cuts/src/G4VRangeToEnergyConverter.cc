@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.13 2009-09-11 15:21:39 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.14 2009-09-12 12:09:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -359,14 +359,27 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
 
   //  find max. range and the corresponding energy (rmax,Tmax)
   G4double rmax= -1.e10*mm;
-  G4double Tmax= MaxEnergyCut;
 
+  G4double T1 = LowestEnergy;
+  G4double r1 =(*rangeVector)[0] ;
+
+  G4double T2 = MaxEnergyCut;
+
+  // check theCutInLength < r1 
+  if ( theCutInLength <= r1 ) {  return T1; }
+
+  // scan range vector to find nearest bin 
+  // ( suppose that r(Ti) > r(Tj) if Ti >Tj )
   for (size_t ibin=0; ibin<size_t(TotBin); ibin++) {
     G4double T=rangeVector->GetLowEdgeEnergy(ibin);
     G4double r=(*rangeVector)[ibin];
-    if ( r>rmax )    {
-       Tmax=T;
-       rmax=r;
+    if ( r>rmax )   rmax=r;
+    if (r <theCutInLength ) {
+      T1 = T;
+      r1 = r;
+    } else if (r >theCutInLength ) {
+      T2 = T;
+      break;
     }
   }
 
@@ -379,21 +392,12 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
       G4cout << "The cut in range [" << theCutInLength/mm << " (mm)]  ";
       G4cout << " is too big  " ;
       G4cout << " for material  idx=" << materialIndex <<G4endl; 
-      G4cout << "The cut in energy is set" << DBL_MAX/GeV << "GeV " <<G4endl; 
     }
 #endif
-    return  DBL_MAX;
+    return  MaxEnergyCut;
   }
   
   // convert range to energy
-  G4double T1 = LowestEnergy;
-  G4double r1 = rangeVector->Value(T1);
-  if ( theCutInLength <= r1 )
-  {
-    return T1;
-  }
-
-  G4double T2 = Tmax ;
   G4double T3 = std::sqrt(T1*T2);
   G4double r3 = rangeVector->Value(T3);
   while ( std::fabs(1.-r3/theCutInLength)>epsilon ) {
