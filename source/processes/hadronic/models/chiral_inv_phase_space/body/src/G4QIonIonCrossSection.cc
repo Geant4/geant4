@@ -86,13 +86,11 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
   G4cout<<"G4QIICS::GetCS:>>> f="<<fCS<<", Z="<<tZ<<"("<<lastZ<<"), N="<<tN<<"("<<lastN
         <<"),PDG="<<pPDG<<"("<<lastPDG<<"), p="<<pMom<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
-  //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
   if(!pPDG)
   {
 #ifdef pdebug
     G4cout<<"G4QIonIonCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
-    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -114,13 +112,11 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
         lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
         G4cout<<"G4QIICS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
-        //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(pMom<=lastTH)
         {
 #ifdef pdebug
           G4cout<<"G4QIICS::GetCS:Found P="<<pMom<<"<Threshold="<<lastTH<<"->XS=0"<<G4endl;
-          //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
           return 0.;                     // Energy is below the Threshold value
         }
@@ -159,7 +155,6 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
 #ifdef pdebug
       G4cout<<"--->G4QIonIonCrossSec::GetCrosSec: pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
             <<",Z["<<i<<"]="<<colZ[i]<<",PDG="<<colPDG[i]<<G4endl;
-      //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
       j++;                             // Increment a#0f records found in DB for this pPDG
     }
@@ -173,7 +168,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
       lastECS=CalculateCrossSection(false,0,j,lastPDG,lastZ,lastN,pMom); //calculate&create
       if(lastICS<=0. || lastECS<=0.)
       {
-        lastTH = ThresholdEnergy(tZ, tN); // The Threshold Energy which is now the last
+        lastTH = ThresholdEnergy(tZ, tN); // Threshold Energy=Mom=0 which is now the last
 #ifdef pdebug
         G4cout<<"G4QIonIonCrossSect::GetCrossSect:NewThresh="<<lastTH<<",P="<<pMom<<G4endl;
 #endif
@@ -186,7 +181,7 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
         }
       }
 #ifdef pdebug
-      G4cout<<"G4QIICS::GetCS: *New* ICS="<<lastICS<<", ECS="<<lastICS<<",N="<<lastN<<",Z="
+      G4cout<<"G4QIICS::GetCS: *New* ICS="<<lastICS<<", ECS="<<lastECS<<",N="<<lastN<<",Z="
             <<lastZ<<G4endl;
 #endif
       colN.push_back(tN);
@@ -218,7 +213,6 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
   {
 #ifdef pdebug
     G4cout<<"G4QIICS::GetCS: Current T="<<pMom<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
-    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
@@ -271,7 +265,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   static std::vector <G4double*> LENE;   // Vector of pointers: LowEnElaIonIonCrossSection
   static std::vector <G4double*> HENE;   // Vector of pointers: HighEnElaIonIonCrossSection
 #ifdef debug
-  G4cout<<"G4QIonIonCrossSection::CalcCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<G4endl;
+  G4cout<<"G4QIonIonCrossSection::CalcCS: Z="<<tZ<<", N="<<tN<<", P="<<TotMom<<G4endl;
 #endif
   G4int dPDG=pPDG/10;                // 10SZZZAAA
   G4int zPDG=dPDG/1000;              // 10SZZZ (?)
@@ -286,7 +280,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
   G4double pA=zA;                    // Projectile weight
   if(F<=0)                           // This isotope was not the last used isotop
   {
-    if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
+    if(F<0 || !XS)                   // This isotope was found in DAMDB or Elast =>RETRIEVE
     {
       lastLENI=LENI[I];              // Pointer to Low Energy inelastic cross sections
       lastHENI=HENI[I];              // Pointer to High Energy inelastic cross sections
@@ -328,15 +322,16 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
     }
     else
     {
-      if(XS) sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLENI);
-      else   sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLENE);
+      G4double dPp=dP*pA;
+      if(XS) sigma=EquLinearFit(Momentum,nL,THmin,dPp,lastLENI);
+      else   sigma=EquLinearFit(Momentum,nL,THmin,dPp,lastLENE);
     }
 #ifdef debugn
     if(sigma<0.) G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<",tA="<<tA<<",XS="<<XS<<",P="
                        <<Momentum<<", Th="<<THmin<<", dP="<<dP<<G4endl;
 #endif
   }
-  else if (Momentum<Pmax)                     // High Energy region
+  else if (Momentum<Pmax*pA)                     // High Energy region
   {
     G4double lP=std::log(Momentum);
 #ifdef debug
@@ -344,13 +339,14 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
 #endif
     if(tA<=1. || pA<=1.)
     {
-      G4cout<<"-Warning-G4QIICS::CalcCS:pA="<<pA<<"or tA="<<tA<<" aren't composit"<<G4endl;
+      G4cout<<"-Warning-G4QIICS::CalCS:pA="<<pA<<" or tA="<<tA<<" aren't composit"<<G4endl;
       sigma=0.;
     }
     else
     {
-      if(XS) sigma=EquLinearFit(lP,nH,milP,dlP,lastHENI);
-      else   sigma=EquLinearFit(lP,nH,milP,dlP,lastHENE);
+      G4double milPp=milP+std::log(pA);
+      if(XS) sigma=EquLinearFit(lP,nH,milPp,dlP,lastHENI);
+      else   sigma=EquLinearFit(lP,nH,milPp,dlP,lastHENE);
     }
   }
   else                                      // UltraHighE region (not frequent)
@@ -377,36 +373,38 @@ G4int G4QIonIonCrossSection::GetFunctions(G4int pZ,G4int pN,G4int tZ,G4int tN,G4
   static const G4double dP=10.;    // step for the LEN table
   static const G4int    nL=100;    // A#of LENesonance points in E (each MeV from 2 to 106)
   static const G4double Pmin=THmin+(nL-1)*dP;   // minE for the HighE part
-  static const G4double Pmax=100000.;           // maxE for the HighE part
+  static const G4double Pmax=300000.;           // maxE for the HighE part
   static const G4int    nH=100;                 // A#of HResonance points in lnE
   static const G4double milP=std::log(Pmin);    // Low logarithm energy for the HighE part
   static const G4double malP=std::log(Pmax);    // High logarithm energy
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HighE part
   static const G4double lP=std::exp(dlP);       // Multiplication factor in the HighE part
   // If the cross section approximation formula is changed - replace from file.
-  if(pZ<1 || pN<0 || tZ<1 || pN<0)
+  if(pZ<1 || pN<0 || tZ<1 || tN<0)
   {
     G4cout<<"-W-G4QIonIonCS::GetFunct:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
     return -1;
   }
+  G4int pA=pN+pZ;
+  G4double dPp=dP*pA;
   G4double Mom=THmin;
   for(G4int k=0; k<nL; k++)
   {
     std::pair<G4double,G4double> len = CalculateXS(pZ, pN, tZ, tN, Mom);
     li[k]=len.first;
     le[k]=len.second;
-    Mom+=dP;
+    Mom+=dPp;
   }
-  G4double lMom=Pmin;
+  G4double lMom=Pmin*pA;
   for(G4int j=0; j<nH; j++)
   {
-    std::pair<G4double,G4double> len = CalculateXS(pZ, pN, pZ, pN, Mom);
+    std::pair<G4double,G4double> len = CalculateXS(pZ, pN, pZ, pN, lMom);
     hi[j]=len.first;
     he[j]=len.second;
     lMom*=lP;
   }
 #ifdef debug
-  G4cout<<"G4QIonIonCS::GetFunctions:p="<<pA<<",t="<<tA<<" pair is calculated"<<G4endl;
+  G4cout<<"G4QIonIonCS::GetFunctions: pZ="<<pZ<<", tZ="<<tZ<<" pair is calculated"<<G4endl;
 #endif
   return 1;
 }
@@ -423,14 +421,14 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
   if(pA<.9 || tA<.9 ||pA>239. || tA>239 || Mom < 0.) return std::make_pair(0.,0.);
   G4double inCS=0.;
   G4double elCS=0.;
-  if(pA<1.1 || tA<1.1) // Ion-nucleon/nucleon-ion interaction use NA(in,el)
+  if(pA<1.1 )               // nucleon-ion interaction use NA(in,el)
   {
-    if ( (pZ == 1 && !pN) || (tZ == 1 && !tN) ) // proton-nuclear
+    if     (pZ == 1 && !pN) // proton-nuclear
     {
       inCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
       elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
     }
-    else if(pN==1 && !pZ)                // neutron-nuclear
+    else if(pN == 1 && !pZ) // neutron-nuclear
     {
       inCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
       elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
@@ -450,10 +448,11 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
       G4double P2=Mom*Mom;
       G4double T2=T*T;
       G4double R=1.-T2/P2;                        // @@ Very rough threshold effect
-      G4double P4=P2*P2;
-      G4double P8=P4*P4;
-      G4double T4=T2*T2;
-      G4double tot=R*CalculateTotal(pA, tA, Mom)*P8/(P8+T4*T4); // @@ convert to IndepUnits
+      //G4double P4=P2*P2;
+      //G4double P8=P4*P4;
+      //G4double T4=T2*T2;
+      //G4double tot=CalculateTotal(pA, tA, Mom)*P8/(P8+T4*T4); // @@ convert to IndepUnits
+      G4double tot=R*CalculateTotal(pA, tA, Mom); // @@ convert to IndepUnits
       G4double rat=CalculateElTot(pA, tA, Mom);
       elCS=tot*rat;
       inCS=tot-elCS;
@@ -471,10 +470,13 @@ G4double G4QIonIonCrossSection::CalculateTotal(G4double pA, G4double tA, G4doubl
   G4double ap=std::log(pA*tA);
   G4double e=std::pow(pA,0.1)+std::pow(tA,0.1);
   G4double d=e-1.55/std::pow(al,0.2);
-  G4double f=3.3+130./ab/ab+2.25/e;
-  if(pA<4. || tA<4.) f=4.;
+  G4double f=4.;
+  if(pA>4. && tA>4.) f=3.3+130./ab/ab+2.25/e;
   G4double c=(385.+11.*ab/(1.+.02*ab*al)+(.5*ab+500./al/al)/al)*std::pow(d,f);
   G4double r=y-3.-4./ap/ap;
+#ifdef pdebug
+  G4cout<<"G4QIonIonCS::CalcTot:P="<<Mom<<", stot="<<c+d*r*r<<", d="<<d<<", r="<<r<<G4endl;
+#endif
   return c+d*r*r;
 }
 
@@ -500,6 +502,9 @@ G4double G4QIonIonCrossSection::CalculateElTot(G4double pA, G4double tA, G4doubl
   G4double g=std::log(std::pow(pA,0.35)+std::pow(tA,0.35));
   G4double h=g*g;
   G4double c=f/(1.+e/h/h);
+#ifdef pdebug
+  G4cout<<"G4QIonIonCS::CalcElT:P="<<Mom<<",el/tot="<<c+d*r*r<<",d="<<d<<", r="<<r<<G4endl;
+#endif
   return c+d*r*r;
 }
 
@@ -513,6 +518,6 @@ G4double G4QIonIonCrossSection::ThresholdMomentum(G4int pZ, G4int pN, G4int tZ, 
   G4double tA=tZ+tN;
   G4double pA=pZ+pN;
   //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
-  G4double dE=pZ*tZ/(std::pow(pA,third)+std::pow(tA,third))/pA; // dE/pA
+  G4double dE=pZ*tZ/(std::pow(pA,third)+std::pow(tA,third))/pA; // dE/pA (per projNucleon)
   return std::sqrt(dE*(tpM+dE));
 }

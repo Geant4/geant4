@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.1 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.2 2009-09-13 21:11:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -286,7 +286,6 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     return 0;
   }
   const G4Material* material = track.GetMaterial();      // Get the current material
-  G4int Z=0;
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int nE=material->GetNumberOfElements();
 #ifdef debug
@@ -351,9 +350,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     if(i>=nE) i=nE-1;                        // Top limit for the Element
   }
   G4Element* pElement=(*theElementVector)[i];
-  Z=static_cast<G4int>(pElement->GetZ());
+  G4int Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-    G4cout<<"G4QElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+  G4cout<<"G4QElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
 #endif
   if(Z<=0)
   {
@@ -392,11 +391,6 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
-  if(N<0)
-  {
-    G4cerr<<"*Warning*G4QElastic::PostStepDoIt:Element with N="<<N<< G4endl;
-    return 0;
-  }
   aParticleChange.Initialize(track);
 #ifdef debug
   G4cout<<"G4QElastic::PostStepDoIt: track is initialized"<<G4endl;
@@ -413,7 +407,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   //
   G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);         // @@ one can use G4Ion and get rid of CHIPS World
+  G4QPDGCode targQPDG(targPDG);            // @@ one can use G4Ion & get rid of CHIPSWorld
   G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector

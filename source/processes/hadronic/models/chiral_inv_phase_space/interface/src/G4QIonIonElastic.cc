@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.5 2009-09-11 16:04:55 mkossov Exp $
+// $Id: G4QIonIonElastic.cc,v 1.6 2009-09-13 21:12:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
@@ -37,8 +37,8 @@
 // For heavy by heavy ions it can reach 50% of the total cross-section.
 // -----------------------------------------------------------------------
 
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 //#define tdebug
 //#define nandebug
 //#define ppdebug
@@ -73,6 +73,7 @@ G4QIonIonElastic::~G4QIonIonElastic() {}
 G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
                                            G4ForceCondition* Fc)
 {
+  static const G4double mProt = G4QPDGCode(2212).GetMass()/MeV;// CHIPS proton Mass in MeV
   *Fc = NotForced;
   const G4DynamicParticle* incidentParticle = aTrack.GetDynamicParticle();
   G4ParticleDefinition* incidentParticleDefinition=incidentParticle->GetDefinition();
@@ -92,22 +93,20 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
   G4cout<<"G4QIonIonElastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
   G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
+  G4VQCrossSection* HCSmanager=G4QElasticCrossSection::GetPointer();
   G4int pPDG=0;
   // Probably enough: pPDG=incidentParticleDefinition->GetPDGEncoding();
-  G4int Z=incidentParticleDefinition->GetAtomicNumber();
-  G4int A=incidentParticleDefinition->GetAtomicMass();
-  if      ( incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 1000010020;
-  else if ( incidentParticleDefinition ==  G4Alpha::Alpha()           ) pPDG = 1000020040;
-  else if ( incidentParticleDefinition ==  G4Triton::Triton()         ) pPDG = 1000010030;
-  else if ( incidentParticleDefinition ==  G4He3::He3()               ) pPDG = 1000020030;
-  //else if ( incidentParticleDefinition ==  G4GenericIon::GenericIon() )
-  else if (Z > 0 && A > 1)
+  G4int pZ=static_cast<G4int>(incidentParticleDefinition->GetPDGCharge());
+  G4int pA=incidentParticleDefinition->GetBaryonNumber();
+  if      (incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 1000010020;
+  else if (incidentParticleDefinition ==  G4Alpha::Alpha()           ) pPDG = 1000020040;
+  else if (incidentParticleDefinition ==  G4Triton::Triton()         ) pPDG = 1000010030;
+  else if (incidentParticleDefinition ==  G4He3::He3()               ) pPDG = 1000020030;
+  else if (incidentParticleDefinition ==  G4GenericIon::GenericIon() || (pZ > 0 && pA > 0))
   {
     pPDG=incidentParticleDefinition->GetPDGEncoding();
 #ifdef debug
-    G4int B=incidentParticleDefinition->GetBaryonNumber();
-    G4int C=static_cast<G4int>(incidentParticleDefinition->GetPDGCharge());
-    G4int prPDG=1000000000+10000*C+B*10;
+    G4int prPDG=1000000000+10000*pZ+10*pA;
     G4cout<<"G4QIonIonElastic::GetMeanFreePath: PDG="<<prPDG<<"="<<pPDG<<G4endl;
 #endif
   }
@@ -188,13 +187,19 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-      G4cout<<"G4QIIEl::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
+      G4cout<<"G4QIIE::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",pPDG="<<pPDG<<G4endl;
 #endif
       G4bool ccsf=false;                    // Extract elastic Ion-Ion cross-section
 #ifdef debug
       G4cout<<"G4QIonIonElastic::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
-      G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+      G4double CSI=0.;
+      if(Z==1 && !N)                        // Proton target. Reversed kinematics.
+      {
+        G4double projM=G4QPDGCode(2212).GetNuclMass(pZ,pA-pZ,0); // Mass of the projNucleus
+        CSI=HCSmanager->GetCrossSection(true, Momentum*mProt/projM, Z, N, 2212); // Ap CS
+      }
+      else CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // CS(j,i) for isotope
 #ifdef debug
       G4cout<<"G4QIonIonElastic::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum
             <<", XSec="<<CSI/millibarn<<G4endl;
@@ -214,7 +219,7 @@ G4double G4QIonIonElastic::GetMeanFreePath(const G4Track& aTrack, G4double,
 #ifdef debug
   G4cout<<"G4QIonIonElastic::GetMeanFreePath: MeanFreePath="<<1./sigma<<G4endl;
 #endif
-  if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
+  if(sigma > 0.00000000001) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }
 
@@ -227,8 +232,8 @@ G4bool G4QIonIonElastic::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *( G4Alpha::Alpha()           )) return true;
   else if (particle == *( G4Triton::Triton()         )) return true;
   else if (particle == *( G4He3::He3()               )) return true;
-  //else if (particle == *( G4GenericIon::GenericIon() )) return true;
-  else if (Z > -1 && A > 0)                             return true;
+  else if (particle == *( G4GenericIon::GenericIon() )) return true;
+  else if (Z > 0 && A > 0)                              return true;
 #ifdef debug
   G4cout<<"***>>G4QIonIonElastic::IsApplicable: PDG="<<particle.GetPDGEncoding()<<", A="
         <<A<<", Z="<<Z<<G4endl;
@@ -238,6 +243,7 @@ G4bool G4QIonIonElastic::IsApplicable(const G4ParticleDefinition& particle)
 
 G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
+  static const G4double mProt= G4QPDGCode(2212).GetMass(); // CHIPS proton mass in MeV
   static const G4double fm2MeV2 = 3*38938./1.09; // (3/1.09)*(hc)^2 in fm^2*MeV^2
   static G4bool CWinit = true;                   // CHIPS Warld needs to be initted
   if(CWinit)
@@ -253,13 +259,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
         <<projHadron->Get4Momentum()<<" of PDG="<<particle->GetPDGEncoding()<<", Type="
         <<particle->GetParticleType()<<", Subtp="<<particle->GetParticleSubType()<<G4endl;
 #endif
-  //G4ForceCondition cond=NotForced;
-  //GetMeanFreePath(track, -27., &cond);                // @@ ?? jus to update parameters?
-#ifdef debug
-  G4cout<<"G4QIonIonElastic::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
-#endif
   G4LorentzVector proj4M=(projHadron->Get4Momentum())/MeV; // Convert to MeV!
-  G4LorentzVector scat4M=proj4M;                      // @@ Must be filled (?)
   G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
@@ -267,8 +267,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4double pM2=proj4M.m2();        // in MeV^2
   G4double pM=std::sqrt(pM2);      // in MeV
 #ifdef pdebug
-  G4cout<<"G4QIonIonElastic::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM
-        <<",scat4M="<<scat4M<<scat4M.m()<<G4endl;
+  G4cout<<"G4QIonIonEl::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",pM="<<pM<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
@@ -283,20 +282,17 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
 #endif
   // Probably enough: projPDG=particle->GetPDGEncoding();
   G4int projPDG=0;                           // CHIPS PDG Code for the captured hadron
-  G4int Z=particle->GetAtomicNumber();
-  G4int A=particle->GetAtomicMass();
-  if      (particle ==  G4Deuteron::Deuteron()     ) projPDG= 1000010020;
-  else if (particle ==  G4Alpha::Alpha()           ) projPDG= 1000020040;
-  else if (particle ==  G4Triton::Triton()         ) projPDG= 1000010030;
-  else if (particle ==  G4He3::He3()               ) projPDG= 1000020030;
-  //else if (particle ==  G4GenericIon::GenericIon() )
-  else if (Z > 0 && A > 1)
+  G4int pZ=static_cast<G4int>(particle->GetPDGCharge());
+  G4int pA=particle->GetBaryonNumber();
+  if      (particle ==  G4Deuteron::Deuteron() ) projPDG= 1000010020;
+  else if (particle ==  G4Alpha::Alpha()       ) projPDG= 1000020040;
+  else if (particle ==  G4Triton::Triton()     ) projPDG= 1000010030;
+  else if (particle ==  G4He3::He3()           ) projPDG= 1000020030;
+  else if (particle ==  G4GenericIon::GenericIon() || (pZ > 0 && pA > 0))
   {
     projPDG=particle->GetPDGEncoding();
 #ifdef debug
-    G4int B=particle->GetBaryonNumber();
-    G4int C=static_cast<G4int>(particle->GetPDGCharge());
-    G4int prPDG=1000000000+10000*C+10*B;
+    G4int prPDG=1000000000+10000*pZ+10*pA;
     G4cout<<"G4QIonIonElastic::PostStepDoIt: PDG="<<prPDG<<"="<<projPDG<<G4endl;
 #endif
   }
@@ -310,9 +306,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     G4cerr<<"-Warning-G4QIonIonElastic::PostStepDoIt:Undefined interactingNucleus"<<G4endl;
     return 0;
   }
-  G4double pA=particle->GetBaryonNumber();     // Projectile A
-  G4double pZ=particle->GetPDGCharge();        // Projectile Z
-  G4double pN=pA-pZ;                           // Projectile N
+  G4int pN=pA-pZ;                           // Projectile N
   G4int EPIM=ElProbInMat.size();
 #ifdef debug
   G4cout<<"G4QIonIonElastic::PSDI:m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
@@ -331,14 +325,14 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     if(i>=nE) i=nE-1;                        // Top limit for the Element
   }
   G4Element* pElement=(*theElementVector)[i];
-  Z=static_cast<G4int>(pElement->GetZ());
+  G4int tZ=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
-    G4cout<<"G4QIonIonElastic::PostStepDoIt: i="<<i<<", Z(element)="<<Z<<G4endl;
+    G4cout<<"G4QIonIonElastic::PostStepDoIt: i="<<i<<", Z(element)="<<tZ<<G4endl;
 #endif
-  if(Z<=0)
+  if(tZ<=0)
   {
-    G4cerr<<"---Warning---G4QIonIonElastic::PostStepDoIt: Element with Z="<<Z<<G4endl;
-    if(Z<0) return 0;
+    G4cerr<<"---Warning---G4QIonIonElastic::PostStepDoIt: Element with Z="<<tZ<<G4endl;
+    if(tZ<0) return 0;
   }
   std::vector<G4double>* SPI = IsoProbInEl[i];// Vector of summedProbabilities for isotopes
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
@@ -359,24 +353,19 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     }
     if(j>=nofIsot) j=nofIsot-1;            // Top limit for the isotope
   }
-  G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
+  G4int tN =(*IsN)[j]; ;                   // Randomized number of neutrons
 #ifdef debug
-  G4cout<<"G4QIonIonElastic::PostStepDoIt:j="<<i<<",N(isotope)="<<N<<", MeV="<<MeV<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt:j="<<i<<",N(isotope)="<<tN<<",MeV="<<MeV<<G4endl;
 #endif
-  if(N<0)
+  if(tN<0)
   {
-    G4cerr<<"-Warning-G4QIonIonElastic::PostStepDoIt:IsotopeZ="<<Z<<" has 0>N="<<N<<G4endl;
+    G4cerr<<"-Warning-G4QIonIonElastic::PostStepDoIt:IsotopeZ="<<tZ<<" & 0>N="<<tN<<G4endl;
     return 0;
   }
-  nOfNeutrons=N;                           // Remember it for the energy-momentum check
+  nOfNeutrons=tN;                           // Remember it for the energy-momentum check
 #ifdef debug
-  G4cout<<"G4QIonIonElastic::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt: N="<<tN<<" for element with Z="<<tZ<<G4endl;
 #endif
-  if(N<0)
-  {
-    G4cerr<<"-Warning-G4QIonIonElastic::PostStepDoIt:Element with N="<<N<< G4endl;
-    return 0;
-  }
   aParticleChange.Initialize(track);
 #ifdef debug
   G4cout<<"G4QIonIonElastic::PostStepDoIt: track is initialized"<<G4endl;
@@ -391,14 +380,39 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
 #ifdef debug
   G4cout<<"G4QIonIonElastic::PostStepDoIt: Touchable is extracted"<<G4endl;
 #endif
-  //
-  G4double tA=Z+N;
-  G4int targPDG=90000000+Z*1000+N;         // CHIPS PDG Code of the target nucleus
-  G4QPDGCode targQPDG(targPDG);            // @@ one can use G4Ion & get rid of CHIPS World
-  G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
+  // Definitions for do nothing
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector
-  G4LorentzVector tot4M=proj4M+G4LorentzVector(0.,0.,0.,tM); // Total 4-mom of the reaction
+  // !! Exception for the proton target !!
+  G4bool revkin=false;
+  G4ThreeVector bvel(0.,0.,0.);
+  G4double tA=tZ+tN;
+  G4int targPDG=90000000+tZ*1000+tN;       // CHIPS PDG Code of the target nucleus
+  G4QPDGCode targQPDG(targPDG);            // @@ one can use G4Ion & get rid of CHIPS World
+  G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
+  G4LorentzVector targ4M(0.,0.,0.,tM);
+  if(tZ==1 && !tN)                         // Update parameters in DB and trans to Antilab
+  {
+    G4ForceCondition cond=NotForced;
+    GetMeanFreePath(track, -27., &cond);   // @@ ?? jus to update parameters?
+#ifdef debug
+    G4cout<<"G4QIonIonElastic::PostStepDoIt: After the GetMeanFreePath is called"<<G4endl;
+#endif
+    revkin=true;
+    tZ=pZ;
+    tN=pN;
+    tA=tZ+tN;
+    tM=pM;
+    pZ=1;                                  // @@ Is that necessary ??
+    pN=0;                                  // @@ Is that necessary ??
+    pA=1;                                  // @@ Is that necessary ??
+    pM=mProt;
+    bvel=proj4M.vect()/proj4M.e();         // Lab->Antilab transition boost velocity
+    proj4M=targ4M.boost(-bvel);            // Proton 4-mom in Antilab
+				targ4M=G4LorentzVector(0.,0.,0.,mProt);// Projectile nucleus 4-mom in Antilab
+    Momentum = proj4M.rho();               // Recalculate Momentum in Antilab
+  }
+  G4LorentzVector tot4M=proj4M+targ4M;     // Total 4-mom of the reaction
 #ifdef debug
   G4cout<<"G4QIonIonElastic::PostStDI: tM="<<tM<<", p4M="<<proj4M<<", t4M="<<tot4M<<G4endl;
 #endif
@@ -407,10 +421,12 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
   // @@ Probably this is not necessary any more
 #ifdef debug
-  G4cout<<"G4QIIEl::PSDI:false,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
+  G4cout<<"G4QIIEl::PSDI:f, P="<<Momentum<<",Z="<<tZ<<",N="<<tN<<",tPDG="<<projPDG<<G4endl;
 #endif
   // false means elastic cross-section
-  G4double xSec=CSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);// Rec.CrossSect
+  G4double xSec=0.;                           // Proto of Recalculated Cross Section
+  if(revkin) xSec=ELmanager->GetCrossSection(false, Momentum, tZ, tN, 2212);
+  else       xSec=CSmanager->GetCrossSection(false, Momentum, tZ, tN, projPDG);
 #ifdef debug
   G4cout<<"G4QIIEl::PSDI: pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -431,32 +447,43 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
+  G4double mint=0;
+  G4double maxt=0;
   G4double dtM=tM+tM;
-  G4double PA=Momentum*pA;
-  G4double PA2=PA*PA;
-  G4double maxt=dtM*PA2/(std::sqrt(PA2+pM2)+tM/2+pM2/dtM);
+  if(revkin)
+  {
+    mint=ELmanager->GetExchangeT(tZ,tN,projPDG); // functional randomized -t in MeV^2
+    maxt=ELmanager->GetHMaxT();
+  }
+  else
+  {
+    G4double PA=Momentum*pA;
+    G4double PA2=PA*PA;
+    maxt=dtM*PA2/(std::sqrt(PA2+pM2)+tM/2+pM2/dtM);
 #ifdef pdebug
-  G4cout<<"G4QIonIonElastic::PostStDoIt:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum
-        <<",CS="<<xSec<<",maxt="<<maxt<<G4endl;
+    G4cout<<"G4QIonIonElastic::PostStDoIt:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="
+          <<Momentum<<",CS="<<xSec<<",maxt="<<maxt<<G4endl;
 #endif
-  xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2212);// pp=nn
-  G4double B1=ELmanager->GetSlope(1,0,2212); // slope for pp=nn
-  xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2112);// np=pn
-  G4double B2 =ELmanager->GetSlope(1,0,2112); // slope for np=pn
-  G4double mB =((pZ*Z+pN*N)*B1+(pZ*N+pN*Z)*B2)/(pA+tA);
-  G4double pR2=std::pow(pA+4.,.305)/fm2MeV2;
-  G4double tR2=std::pow(tA+4.,.305)/fm2MeV2;
-  G4double eB =mB+pR2+tR2;
-  G4double mint=-std::log(1.-G4UniformRand()*(1.-std::exp(-eB*maxt)))/eB;
+    xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2212);// pp=nn
+    G4double B1=ELmanager->GetSlope(1,0,2212); // slope for pp=nn
+    xSec=ELmanager->GetCrossSection(false, Momentum, 1, 0, 2112);// np=pn
+    G4double B2 =ELmanager->GetSlope(1,0,2112); // slope for np=pn
+    G4double mB =((pZ*tZ+pN*tN)*B1+(pZ*tN+pN*tZ)*B2)/(pA+tA);
+    G4double pR2=std::pow(pA+4.,.305)/fm2MeV2;
+    G4double tR2=std::pow(tA+4.,.305)/fm2MeV2;
+    G4double eB =mB+pR2+tR2;
+    mint=-std::log(1.-G4UniformRand()*(1.-std::exp(-eB*maxt)))/eB;
+    mint+=mint;
 #ifdef pdebug
-  G4cout<<"G4QIonIonElastic::PostStDoIt:B1="<<B1<<",B2="<<B2<<",mB="<<mB
-        <<",pR2="<<pR2<<",tR2="<<tR2<<",eB="<<eB<<",mint="<<mint<<G4endl;
+    G4cout<<"G4QIonIonElastic::PostStDoIt:B1="<<B1<<",B2="<<B2<<",mB="<<mB
+          <<",pR2="<<pR2<<",tR2="<<tR2<<",eB="<<eB<<",mint="<<mint<<G4endl;
 #endif
+  }
 #ifdef nandebug
   if(mint>-.0000001);
   else  G4cout<<"-Warning-G4QIonIonElastic::PostStDoIt:-t="<<mint<<G4endl;
 #endif
-  G4double cost=1.-(mint+mint)/maxt; // cos(theta) in CMS
+  G4double cost=1.-mint/maxt; // cos(theta) in CMS
   // 
 #ifdef ppdebug
   G4cout<<"G4QIonIonElastic::PoStDoI:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()<<",Ek="
@@ -477,11 +504,20 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
   }
-  G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,tM);      // 4mom of the recoil target
+  G4LorentzVector scat4M(0.,0.,0.,pM);            // 4-mom of the scattered projectile
+  G4LorentzVector reco4M(0.,0.,0.,tM);            // 4-mom of the recoil target
   G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-tM-pM)*.01);
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
     G4cerr<<"G4QIonIonE::PSDI:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
+  }
+  if(revkin)
+  {
+    G4LorentzVector tmpLV=scat4M.boost(bvel);     // Recoil target Back to LS
+    scat4M=reco4M.boost(bvel);                    // Scattered Progectile Back to LS
+    reco4M=tmpLV;
+    pM=tM;
+    tM=mProt;
   }
 #ifdef debug
   G4cout<<"G4QIonIonElast::PSDI:s4M="<<scat4M<<"+r4M="<<reco4M<<"="<<scat4M+reco4M<<G4endl;
@@ -504,18 +540,17 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
   // This is how in general the secondary should be identified
   G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
-  G4int aA = Z+N;
 #ifdef pdebug
-  G4cout<<"G4QIonIonElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
+  G4cout<<"G4QIonIonElastic::PostStepDoIt: Ion tZ="<<tZ<<", tA="<<tA<<G4endl;
 #endif
-  G4ParticleDefinition* theDefinition=G4ParticleTable::GetParticleTable()
-                                                                       ->FindIon(Z,aA,0,Z);
+  G4ParticleDefinition* theDefinition=0;
+  if(revkin) theDefinition = G4Proton::Proton();
+  else       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(tZ,tA,0,tZ);
   if(!theDefinition)G4cout<<"-Warning-G4QIonIonElastic::PoStDI:drop PDG="<<targPDG<<G4endl;
 #ifdef pdebug
   G4cout<<"G4QIonIonElastic::PoStDI:RecoilName="<<theDefinition->GetParticleName()<<G4endl;
 #endif
   theSec->SetDefinition(theDefinition);
-
   EnMomConservation-=reco4M;
 #ifdef tdebug
   G4cout<<"G4QIonIonElastic::PSD:"<<targPDG<<reco4M<<reco4M.m()<<EnMomConservation<<G4endl;

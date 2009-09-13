@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.10 2009-09-11 16:04:55 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.11 2009-09-13 21:12:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -36,8 +36,8 @@
 // nuclear fragments upto alpha only. Never was tumed (but can be).
 // ---------------------------------------------------------------
 
-#define debug
-#define pdebug
+//#define debug
+//#define pdebug
 //#define tdebug
 //#define nandebug
 //#define ppdebug
@@ -95,15 +95,14 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
   G4cout<<"G4QLowEnergy::GetMeanFreePath:"<<nE<<" Elems"<<G4endl;
 #endif
   G4int pPDG=0;
-  G4int Z=incidentParticleDefinition->GetAtomicNumber();
-  G4int A=incidentParticleDefinition->GetAtomicMass();
-  if      ( incidentParticleDefinition ==  G4Proton::Proton()         ) pPDG = 2212;
-  else if ( incidentParticleDefinition ==  G4Deuteron::Deuteron()     ) pPDG = 1000010020;
-  else if ( incidentParticleDefinition ==  G4Alpha::Alpha()           ) pPDG = 1000020040;
-  else if ( incidentParticleDefinition ==  G4Triton::Triton()         ) pPDG = 1000010030;
-  else if ( incidentParticleDefinition ==  G4He3::He3()               ) pPDG = 1000020030;
-  //else if ( incidentParticleDefinition ==  G4GenericIon::GenericIon() )
-  else if (Z > 0 && A > 1)
+  G4int Z=static_cast<G4int>(incidentParticleDefinition->GetPDGCharge());
+  G4int A=incidentParticleDefinition->GetBaryonNumber();
+  if      ( incidentParticleDefinition == G4Proton::Proton()     ) pPDG = 2212;
+  else if ( incidentParticleDefinition == G4Deuteron::Deuteron() ) pPDG = 1000010020;
+  else if ( incidentParticleDefinition == G4Alpha::Alpha()       ) pPDG = 1000020040;
+  else if ( incidentParticleDefinition == G4Triton::Triton()     ) pPDG = 1000010030;
+  else if ( incidentParticleDefinition == G4He3::He3()           ) pPDG = 1000020030;
+  else if ( incidentParticleDefinition == G4GenericIon::GenericIon() || (Z > 0 && A > 0))
   {
     pPDG=incidentParticleDefinition->GetPDGEncoding();
 #ifdef debug
@@ -113,7 +112,7 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
   }
   else G4cout<<"-Warning-G4QLowEnergy::GetMeanFreePath: only AA & pA implemented"<<G4endl;
   G4VQCrossSection* CSmanager=G4QIonIonCrossSection::GetPointer();
-  if(pPDG == 2212) CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+  if(pPDG == 2212) CSmanager=G4QProtonNuclearCrossSection::GetPointer(); // just to test
   Momentum/=incidentParticleDefinition->GetBaryonNumber(); // Divide Mom by projectile A
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -190,7 +189,7 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
 #ifdef debug
-      G4cout<<"G4QLowE::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
+      G4cout<<"G4QLoE::GMFP:true,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",pPDG="<<pPDG<<G4endl;
 #endif
       G4bool ccsf=true;                    // Extract inelastic Ion-Ion cross-section
 #ifdef debug
@@ -216,7 +215,7 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
 #ifdef debug
   G4cout<<"G4QLowEnergy::GetMeanFreePath: MeanFreePath="<<1./sigma<<G4endl;
 #endif
-  if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
+  if(sigma > 0.000000001) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
 }
 
@@ -230,8 +229,8 @@ G4bool G4QLowEnergy::IsApplicable(const G4ParticleDefinition& particle)
   else if (particle == *(      G4Alpha::Alpha()      )) return true;
   else if (particle == *(     G4Triton::Triton()     )) return true;
   else if (particle == *(        G4He3::He3()        )) return true;
-  //else if (particle == *( G4GenericIon::GenericIon() )) return true;
-  else if (Z > -1 && A > 0)                             return true; // Proj Ion
+  else if (particle == *( G4GenericIon::GenericIon() )) return true;
+  else if (Z > 0 && A > 0)                              return true;
 #ifdef debug
   G4cout<<"***>>G4QLowEnergy::IsApplicable: projPDG="<<particle.GetPDGEncoding()<<", A="
         <<A<<", Z="<<Z<<G4endl;
@@ -302,22 +301,19 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
   // Not all these particles are implemented yet (see Is Applicable)
-  G4int Z=particle->GetAtomicNumber();
-  G4int A=particle->GetAtomicMass();
+  G4int Z=static_cast<G4int>(particle->GetPDGCharge());
+  G4int A=particle->GetBaryonNumber();
   if      (particle ==      G4Proton::Proton()     ) projPDG= 2212;
   else if (particle ==     G4Neutron::Neutron()    ) projPDG= 2112;
   else if (particle ==    G4Deuteron::Deuteron()   ) projPDG= 1000010020;
   else if (particle ==       G4Alpha::Alpha()      ) projPDG= 1000020040;
   else if (particle ==      G4Triton::Triton()     ) projPDG= 1000010030;
   else if (particle ==         G4He3::He3()        ) projPDG= 1000020030;
-  //else if (particle ==  G4GenericIon::GenericIon() )
-  else if (Z > 0 && A > 1)
+  else if (particle ==  G4GenericIon::GenericIon() || (Z > 0 && A > 0))
   {
     projPDG=particle->GetPDGEncoding();
 #ifdef debug
-    G4int B=particle->GetBaryonNumber();
-    G4int C=static_cast<G4int>(particle->GetPDGCharge());
-    G4int prPDG=1000000000+10000*C+10*B;
+    G4int prPDG=1000000000+10000*Z+10*A;
     G4cout<<"G4QLowEnergy::PostStepDoIt: PDG="<<prPDG<<"="<<projPDG<<G4endl;
 #endif
   }
