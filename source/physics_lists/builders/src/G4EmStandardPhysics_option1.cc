@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.12 2009-05-10 18:46:51 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.13 2009-09-13 16:22:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -160,7 +160,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
@@ -170,7 +170,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
-      G4MultipleScattering* msc = new G4MultipleScattering;
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(eioni,                   -1, 2, 2);

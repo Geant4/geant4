@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2009-07-19 18:24:03 kaitanie Exp $
+# $Id: GNUmakefile,v 1.7 2009-09-13 16:22:34 vnivanch Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/builders library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -13,6 +13,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
