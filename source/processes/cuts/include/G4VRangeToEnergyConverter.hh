@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.7 2009-09-11 15:21:39 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.8 2009-09-14 07:27:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,7 +102,10 @@ class G4VRangeToEnergyConverter
    // ComputeLoss(G4double AtomicNumber,G4double KineticEnergy).
    // ComputeLoss method is pure virtual and should be provided for each 
    // particle type
- 
+
+  // reset Loss Table and Range Vectors
+  virtual void Reset();
+    
  protected:
     static G4double               LowestEnergy, HighestEnergy;
     static G4double               MaxEnergyCut; 

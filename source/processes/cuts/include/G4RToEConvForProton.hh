@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.hh,v 1.4 2009-09-11 15:21:39 kurasige Exp $
+// $Id: G4RToEConvForProton.hh,v 1.5 2009-09-14 07:27:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,9 @@ class G4RToEConvForProton : public G4VRangeToEnergyConverter
   virtual ~G4RToEConvForProton();
 
   virtual G4double Convert(G4double rangeCut, const G4Material* material);
+
+  // reset Loss Table and Range Vectors
+  virtual void Reset();
 
   protected:
     virtual G4double ComputeLoss(G4double AtomicNumber,

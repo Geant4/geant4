@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.14 2009-09-12 12:09:42 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.15 2009-09-14 07:27:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,18 +113,7 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-  // delete loss table
-  if (theLossTable) {  
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  theLossTable=0;
-  
-  //clear RangeVectorStore
-  for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
-    delete fRangeVectorStore.at(idx);
-  }
-  fRangeVectorStore.clear();
+  Reset(); 
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
@@ -156,12 +145,8 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
 
   if (fMaxEnergyCut != MaxEnergyCut) {
     fMaxEnergyCut = MaxEnergyCut;      
-    NumberOfElements = 0;
-    //clear RangeVectorStore
-    for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
-      delete fRangeVectorStore.at(idx);
-    }
-    fRangeVectorStore.clear();
+    // clear loss table and renge vectors
+    Reset();
   }
  
   // Build the energy loss table
@@ -246,6 +231,9 @@ G4double G4VRangeToEnergyConverter::GetHighEdgeEnergy()
   return HighestEnergy;
 }
 
+// **********************************************************************
+// ******************* Get/SetMaxEnergyCut  *****************************
+// **********************************************************************
 G4double G4VRangeToEnergyConverter::GetMaxEnergyCut()
 {
   return MaxEnergyCut;
@@ -255,6 +243,26 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(G4double value)
 {
   MaxEnergyCut = value;
 }
+
+// **********************************************************************
+// ************************ Reset  **************************************
+// **********************************************************************
+void G4VRangeToEnergyConverter::Reset()
+{
+  // delete loss table
+  if (theLossTable) {  
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+  }
+  theLossTable=0;
+  NumberOfElements=0;
+  
+  //clear RangeVectorStore
+  for (size_t idx=0; idx<fRangeVectorStore.size(); idx++){
+    delete fRangeVectorStore.at(idx);
+  }
+  fRangeVectorStore.clear();
+} 
 
 
 // **********************************************************************
@@ -266,14 +274,10 @@ void G4VRangeToEnergyConverter::BuildLossTable()
 {
   if (size_t(NumberOfElements) == G4Element::GetNumberOfElements()) return;
   
-  //  Build dE/dx tables for elements
-  if (theLossTable!=0) {
-    theLossTable->clearAndDestroy();
-    delete theLossTable;
-  }
-  theLossTable =0; 
-  NumberOfElements = 0;
+  // clear Loss table and Range vectors
+  Reset();
 
+  //  Build dE/dx tables for elements
   NumberOfElements = G4Element::GetNumberOfElements();
   theLossTable = new G4LossTable();
   theLossTable->reserve(G4Element::GetNumberOfElements());

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.cc,v 1.5 2009-09-11 15:21:39 kurasige Exp $
+// $Id: G4RToEConvForProton.cc,v 1.6 2009-09-14 07:27:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,4 +109,14 @@ G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
     }
   }
   return dEdx*z2Particle ;
+}
+
+
+// **********************************************************************
+// ************************* Reset       ********************************
+// **********************************************************************
+void G4RToEConvForProton::Reset()
+{
+  // do nothing because loss tables and range vectors are not used 
+  return;
 }

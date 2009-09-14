@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.9 2008-03-02 10:52:55 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.10 2009-09-14 07:27:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,6 +167,9 @@ class G4ProductionCutsTable
     // This method gives energy corresponding to range value  
     // 
     // -1 is returned if particle or material is not found.
+
+  void RestConverters();
+    // reset all Range To Energy Converters  
     
   private:
     void ScanAndSetCouple(G4LogicalVolume* aLV,
