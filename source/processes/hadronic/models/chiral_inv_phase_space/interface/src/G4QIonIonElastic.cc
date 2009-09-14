@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.6 2009-09-13 21:12:09 mkossov Exp $
+// $Id: G4QIonIonElastic.cc,v 1.7 2009-09-14 09:01:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
@@ -386,7 +386,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   // !! Exception for the proton target !!
   G4bool revkin=false;
   G4ThreeVector bvel(0.,0.,0.);
-  G4double tA=tZ+tN;
+  G4int tA=tZ+tN;
   G4int targPDG=90000000+tZ*1000+tN;       // CHIPS PDG Code of the target nucleus
   G4QPDGCode targQPDG(targPDG);            // @@ one can use G4Ion & get rid of CHIPS World
   G4double tM=targQPDG.GetMass();          // CHIPS target mass in MeV
