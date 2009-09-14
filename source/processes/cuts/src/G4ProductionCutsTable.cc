@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.23 2009-09-14 07:48:20 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.24 2009-09-14 22:41:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -313,7 +313,7 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
 void G4ProductionCutsTable::ResetConverters()
 {
   for(size_t i=0;i< NumberOfG4CutIndex;i++){
-    if (!converters[i]) converters[i]->Reset();
+    if (converters[i]!=0) converters[i]->Reset();
   }
 }
 
