@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2009-08-06 15:45:39 kurasige Exp $
+$Id: History,v 1.175 2009-09-14 08:25:32 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Sep 14 2009     Hisaya Kurashige (particles-V09-02-10)
+- Clean up codes for DecayChannels and so on
 
 - Aug 05 2009     Hisaya Kurashige (particles-V09-02-09)
 - Fix a bug that A nad Z of neutron are not defined
