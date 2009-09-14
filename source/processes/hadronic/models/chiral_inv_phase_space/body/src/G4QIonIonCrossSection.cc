@@ -104,9 +104,15 @@ G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int
     lastZ   = tZ;                      // The last Z of the calculated nucleus
     lastI   = colN.size();             // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
-    if(lastI) for(G4int i=0; i<lastI; i++) if(colPDG[i]==pPDG) // The partType is found
+#ifdef pdebug
+    G4cout<<"G4QIICS::GetCS:FindI="<<lastI<<",pPDG="<<pPDG<<",tN="<<tN<<",tZ="<<tZ<<G4endl;
+#endif
+    if(lastI) for(G4int i=0; i<lastI; i++) // Loop over all DB
     {                                  // The nucleus with projPDG is found in AMDB
-      if(colN[i]==tN && colZ[i]==tZ)
+#ifdef pdebug
+      G4cout<<"G4QII::GCS:P="<<colPDG[i]<<",N="<<colN[i]<<",Z="<<colZ[i]<<",j="<<j<<G4endl;
+#endif
+      if(colPDG[i]==pPDG && colN[i]==tN && colZ[i]==tZ)
       {
         lastI=i;
         lastTH =colTH[i];                // Last THreshold (A-dependent)
@@ -301,7 +307,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
 #endif
       // *** The synchronization check ***
       G4int sync=LENI.size();
-      if(sync!=I) G4cerr<<"***G4IonIonCrossSec::CalcCrossSect:Sync="<<sync<<"#"<<I<<G4endl;
+      if(sync!=I) G4cout<<"*W*G4IonIonCrossSec::CalcCrossSect:Sync="<<sync<<"#"<<I<<G4endl;
       LENI.push_back(lastLENI);      // added LEN Inelastic
       HENI.push_back(lastHENI);      // added HEN Inelastic
       LENE.push_back(lastLENE);      // added LEN Elastic
