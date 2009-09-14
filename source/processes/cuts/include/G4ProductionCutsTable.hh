@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.10 2009-09-14 07:27:46 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.11 2009-09-14 07:48:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,7 +168,7 @@ class G4ProductionCutsTable
     // 
     // -1 is returned if particle or material is not found.
 
-  void RestConverters();
+  void ResetConverters();
     // reset all Range To Energy Converters  
     
   private:
