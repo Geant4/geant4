@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.32 2009-07-31 06:39:22 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.33 2009-09-15 12:18:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,7 @@
 #include "G4IonTable.hh"
 #include "G4DecayTable.hh"
 #include "G4PDGCodeChecker.hh"
+#include "G4StateManager.hh"
 
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
@@ -110,7 +111,8 @@ G4ParticleDefinition::G4ParticleDefinition(
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
-   theParticleTable = G4ParticleTable::GetParticleTable();
+  static G4String nucleus("nucleus");
+  theParticleTable = G4ParticleTable::GetParticleTable();
    
    //set verboseLevel equal to ParticleTable 
    verboseLevel = theParticleTable->GetVerboseLevel();
@@ -126,12 +128,29 @@ G4ParticleDefinition::G4ParticleDefinition(
      }
 #endif
    }
+
+   // check initialization is in Pre_Init state except for ions
+   G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
+
+   if ( (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+#ifdef G4VERBOSE
+     if (GetVerboseLevel()>0) {
+       G4cout << "G4ParticleDefintion (other than ions) should be created in Pre_Init state  "; 
+       G4cout << aName << G4endl;
+     }
+#endif
+     G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+		  "Illegal operation", RunMustBeAborted, 
+		  "G4ParticleDefinition should be created in PreInit state");
+   }
+
    
    if (theParticleTable->GetIonTable()->IsIon(this)) {
      SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
      SetAtomicMass( GetBaryonNumber() );
    }
-
+  
+   
    // check name and register this particle into ParticleTable
    theParticleTable->Insert(this);
 
