@@ -22,6 +22,8 @@ code and to keep track of all tags.
    G4ProtonGEMCoulombBarrier, G4TritonGEMCoulombBarrier and corresponding 
    changings in other classes of the sub-package;
    fixed units inside G4GEMProbability compuattions
+-  G4Evaporation.cc - set default G4EvaporationDefaultGEMFactory instead
+   of G4EvaporationFactory
 
 27 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-12)
 ---------------------------------------------------------
