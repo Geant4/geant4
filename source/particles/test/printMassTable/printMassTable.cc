@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: printMassTable.cc,v 1.2 2009-05-02 11:17:21 kurasige Exp $
+// $Id: printMassTable.cc,v 1.3 2009-09-15 14:34:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 #include "tst2ParticleConstructor.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4StateManager.hh"
 
 #include <fstream>
 #include <iomanip>
@@ -47,6 +48,8 @@ int main(int ,char** ) {
   outFile.setf( std::ios::fixed);
   outFile.setf( std::ios::right, std::ios::adjustfield );
 
+  // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
   
   // set readiness for the particle table
   G4ParticleTable::GetParticleTable()->SetReadiness();

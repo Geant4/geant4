@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: storeParticles.cc,v 1.2 2006-06-29 19:27:40 gunter Exp $
+// $Id: storeParticles.cc,v 1.3 2009-09-15 14:36:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,11 +33,16 @@
 #include "globals.hh"
 #include "tst2ParticleConstructor.hh"
 #include "G4ParticlePropertyTable.hh"
+#include "G4StateManager.hh"
 #include "G4TextPPReporter.hh"
 #include <fstream>
 #include <iomanip>
 
-int main(int argc,char** argv) {
+int main() 
+{
+   // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
+
   // create all particles
   tst2ParticleConstructor pConstructor;
   pConstructor.ConstructParticle();

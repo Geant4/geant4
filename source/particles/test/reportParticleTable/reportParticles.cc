@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: reportParticles.cc,v 1.10 2006-06-29 19:27:28 gunter Exp $
+// $Id: reportParticles.cc,v 1.11 2009-09-15 14:40:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,13 +35,17 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticlePropertyTable.hh"
 #include "G4SimplePPReporter.hh"
+#include "G4StateManager.hh"
 #include "G4HtmlPPReporter.hh"
 #include <fstream>
 #include <iomanip>
 
 #define USE_HTML_REPORTER 1
 
-int main(int argc,char** argv) {
+int main() 
+{
+  // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
   G4ParticleTable::GetParticleTable()->SetReadiness();
 

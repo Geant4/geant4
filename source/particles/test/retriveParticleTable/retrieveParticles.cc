@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: retrieveParticles.cc,v 1.2 2006-06-29 19:27:34 gunter Exp $
+// $Id: retrieveParticles.cc,v 1.3 2009-09-15 14:38:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,10 +35,15 @@
 #include "G4ParticlePropertyTable.hh"
 #include "G4TextPPRetriever.hh"
 #include "G4SimplePPReporter.hh"
+#include "G4StateManager.hh"
 #include <fstream>
 #include <iomanip>
 
-int main(int ,char** ) {
+int main(int ,char** ) 
+{
+  // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
+
   // create all particles
   tst2ParticleConstructor pConstructor;
   pConstructor.ConstructParticle();
