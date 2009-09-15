@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc,v 1.2 2009-09-01 15:43:16 vnivanch Exp $
+// $Id: G4NeutronRadCapture.cc,v 1.3 2009-09-15 19:05:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,8 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   lowestEnergyLimit = 0.1*eV;
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
-  photonEvaporation = new G4PhotonEvaporation();
+  //  photonEvaporation = new G4PhotonEvaporation();
+  photonEvaporation = 0;
 }
 
 G4NeutronRadCapture::~G4NeutronRadCapture()
@@ -76,7 +77,51 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
   G4LorentzVector lv0(0.0,0.0,0.0,m1);   
   G4LorentzVector lv1 = aTrack.Get4Momentum() + lv0;
   G4ThreeVector bst = lv1.boostVector();
+  G4double M  = lv1.mag();
 
+  ++A;
+  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  if(M - m2 <= lowestEnergyLimit) {
+    return &theParticleChange;
+  }
+
+  if (verboseLevel > 1) {
+    G4cout << "G4NeutronRadCapture::DoIt: Eini(MeV)=" 
+	   << aTrack.GetKineticEnergy()/MeV << "  Eexc(MeV)= " 
+	   << (M - m2)/MeV 
+	   << "  Z= " << Z << "  A= " << A << G4endl;
+  }
+
+  G4double e1 = (M - m2)*(M + m2)/(2*M);
+  G4double cost = 2.0*G4UniformRand() - 1.0;
+  if(cost > 1.0) {cost = 1.0;}
+  else if(cost < -1.0) {cost = -1.0;}
+  G4double sint = sqrt((1. - cost)*(1.0 + cost));
+  G4double phi  = G4UniformRand()*CLHEP::twopi;
+  G4LorentzVector lv2(e1*sint*std::cos(phi),e1*sint*std::sin(phi),e1*cost,e1);   
+  lv2.boost(bst);
+  theParticleChange.AddSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
+  G4ParticleDefinition* theDef = 0;
+
+  lv1 -= lv2; 
+  if(Z > 2 || A > 4) 
+    {
+      theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+    }
+  else if (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
+  else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
+  else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
+  else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
+
+  if (verboseLevel > 1) {
+    G4cout << "Gamma 4-mom: " << lv2 << "   " 
+	   << theDef->GetParticleName() << "   " << lv1 << G4endl;
+  }
+  if(theDef) {
+    theParticleChange.AddSecondary(new G4DynamicParticle(theDef, lv1));
+  }
+  
+  /*
   // Create fragment in its rest frame
   lv1.boost(-bst);
   G4Fragment aNucleus(A+1, Z, lv1);
@@ -94,6 +139,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
   //
   // Sample final state
   //
+
   G4FragmentVector* fv = photonEvaporation->BreakItUp(aNucleus);
   size_t n = fv->size();
 
@@ -127,7 +173,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     }
     delete f;
   }
-
+  */
   return &theParticleChange;
 }
 
