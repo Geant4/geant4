@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-13)
+----------------------------------------------------------
+-  J.M.Quesada updated nearly all classes of GEM sub-package by
+   introduction new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
+   G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
+   G4ProtonGEMCoulombBarrier, G4TritonGEMCoulombBarrier and corresponding 
+   changings in other classes of the sub-package;
+   fixed units inside G4GEMProbability compuattions
+
 27 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-12)
 ---------------------------------------------------------
 - G4EvaporationGEMFactory - cleanup
