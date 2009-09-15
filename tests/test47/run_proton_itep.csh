@@ -112,6 +112,16 @@ $energyPRO[$i]
 // ---
 EOF
 
+if ( $#argv > 0 )
+{
+set seed=1234
+@ seed = ( $seed + $1 )
+printf "myseed\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "%d\n" $seed >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "#jobID\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "%d\n" $1 >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+}
+
 if ( $energyPRO[$i] == 1400 ) then
 set maxLists = 3
 else

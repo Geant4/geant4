@@ -107,6 +107,7 @@ int main(int argc, char** argv) {
   G4double      aTime      = 0. ;
   G4ThreeVector aDirection = G4ThreeVector(0.0,0.0,1.0);
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
+  G4int jobid = -1;
 
   // Control on input
 
@@ -222,6 +223,10 @@ int main(int argc, char** argv) {
         (*fin) >> myseed;
 	CLHEP::HepRandom::setTheSeed(myseed);
 	G4cout << "###### Set Random Seed to " << myseed << "     #####" << G4endl;
+      } else if ( line == "#jobID") {
+         (*fin) >> jobid ;
+	histoITEP.setJobID(jobid);
+	histoBNL.setJobID(jobid);
       }
     } while(end);
 

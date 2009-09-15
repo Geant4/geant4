@@ -228,8 +228,16 @@ void HistoBNLTest47::initialize() {
 
   unInitialized = false;
   G4cout << "HistoBNLTest47::initialize invoked" << G4endl;
-  sprintf (fileName, "%s%s%s%4.1fGeV.root", particle.c_str(), target.c_str(),
-	   generator.c_str(), energy);
+  if ( jobID > -1 )
+  {
+     sprintf ( fileName, "%s%s%s%4.2fGeV-%d.root", particle.c_str(), target.c_str(),
+	       generator.c_str(), energy, jobID );
+  }
+  else
+  {
+     sprintf ( fileName, "%s%s%s%4.2fGeV.root", particle.c_str(), target.c_str(),
+	       generator.c_str(), energy );
+  }
   sprintf (tag1Name, "%s%s%s%4.1fGeV", particle.c_str(), target.c_str(),
 	   generator.c_str(), energy); 
   sprintf (tag2Name, "%s+%s", particle.c_str(), target.c_str());

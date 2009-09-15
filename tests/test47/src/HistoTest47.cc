@@ -14,7 +14,9 @@
 #include "G4Proton.hh"
 
 HistoTest47::HistoTest47(std::string namePart, std::string nameMat, 
-			 G4double momentum, std::string nameGen) {
+			 G4double momentum, std::string nameGen) 
+   : jobID(-1)
+{
 
   setParticle(namePart);
   setTarget(nameMat);
