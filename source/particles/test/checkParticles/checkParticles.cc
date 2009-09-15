@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: checkParticles.cc,v 1.10 2008-09-18 08:37:27 kurasige Exp $
+// $Id: checkParticles.cc,v 1.11 2009-09-15 13:26:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,8 +33,11 @@
 #include "globals.hh"
 #include "tstParticleConstructor.hh"
 #include "G4ParticleTable.hh"
+#include "G4StateManager.hh"
+#include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 void CheckMass(const char*);
 void CheckWidth(const char*);
@@ -52,6 +55,9 @@ int main(int argc,char** argv) {
     G4cerr << "pdg data file <" << pdgFileName << "> could not open." << G4endl;
 	exit(1);
   }
+  // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
+
 
   // set Readiness
   G4ParticleTable::GetParticleTable()->SetReadiness();
@@ -84,14 +90,12 @@ int main(int argc,char** argv) {
   return EXIT_SUCCESS;
 }
 
-#include <strstream>
-
 #include "G4ParticleTable.hh"
 
 void CheckMass(const char* inputString)
 {
   const char* t = inputString;
-  std::istrstream is((char*)t);
+  std::istringstream is((char*)t);
  
   G4int     encoding;
   G4double  mass;
@@ -101,7 +105,7 @@ void CheckMass(const char* inputString)
   is >> encoding;
 
   t = &inputString[33];
-  std::istrstream is2((char*)t);
+  std::istringstream is2((char*)t);
   is2 >> mass >> massRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding
@@ -142,7 +146,7 @@ void CheckMass(const char* inputString)
 void CheckWidth(const char* inputString)
 {
   const char* t = inputString;
-  std::istrstream is((char*)t);
+  std::istringstream is((char*)t);
  
   G4int     encoding;
   G4double  width;
@@ -152,7 +156,7 @@ void CheckWidth(const char* inputString)
   is >> encoding;
 
    t = &inputString[33];
-   std::istrstream is2((char*)t);
+   std::istringstream is2((char*)t);
    is2 >> width >> widthRange >> name;
 
   // get a pointer to G4ParticleDefinition with encoding
