@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2009-07-31 16:28:58 gunter Exp $
+$Id: History,v 1.37 2009-09-15 16:02:21 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.36 2009-07-31 16:28:58 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-Sept 2009 G.Folger                (testtools-QMtest-V09-02-28)
+- add add radioactive decay extended example to test{build,run}all.qms
 
 31-July 2009 G.Folger                (testtools-QMtest-V09-02-27)
 - add testing of FTF_BIC to test12
