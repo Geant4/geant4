@@ -2,7 +2,7 @@
 0
 #rad
 #events
-10
+1000000
 //--------Proton_processes
 #particle
 proton
@@ -16,10 +16,6 @@ proton
 Be
 #momentum(MeV/c)
 7500.0
-#myseed 
-1234
-#jobID 
-1
 // ---
 #generator
 lepar

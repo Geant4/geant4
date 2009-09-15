@@ -15,6 +15,6 @@ notify_user = yarba_j@fnal.gov
 
 X509UserProxy = /tmp/x509up_u5145 
 
-Arguments = $(Process) 
+Arguments = $(Process) $(Cluster)
 queue 4
 

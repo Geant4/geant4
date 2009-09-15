@@ -112,14 +112,14 @@ $energyPRO[$i]
 // ---
 EOF
 
-if ( $#argv > 0 )
+if ( $#argv > 1 )
 {
 set seed=1234
-@ seed = ( $seed + $1 )
+@ seed = ( $seed + $2 )
 printf "myseed\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
 printf "%d\n" $seed >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
 printf "#jobID\n" >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
-printf "%d\n" $1 >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
+printf "%d\n" $2 >> ITEP.pro.$energyPRO[$i].$targetPRO[$j]
 }
 
 if ( $energyPRO[$i] == 1400 ) then
