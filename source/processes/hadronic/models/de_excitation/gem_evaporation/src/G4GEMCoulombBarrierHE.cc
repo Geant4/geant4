@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.6 2006-06-29 20:22:09 gunter Exp $
+// $Id: G4GEMCoulombBarrierHE.cc,v 1.7 2009-09-15 12:54:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations

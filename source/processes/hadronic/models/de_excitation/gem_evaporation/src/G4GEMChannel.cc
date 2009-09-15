@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.7 2009-03-12 11:25:28 ahoward Exp $
+// $Id: G4GEMChannel.cc,v 1.8 2009-09-15 12:54:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -124,12 +124,8 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
     // Effective excitation energy
     //    G4double ExEnergy = fragment.GetExcitationEnergy() -
     //      G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
-//090120
-    //G4double ExEnergy = fragment.GetExcitationEnergy() -
-      //G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
-    G4double ExEnergy = fragment.GetExcitationEnergy(); 
-    if ( AResidual > 0 ) ExEnergy -= G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
-//090120
+    G4double ExEnergy = fragment.GetExcitationEnergy() -
+      G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
     
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||
@@ -263,11 +259,8 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 
     G4double a = theLevelDensityPtr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
 							   static_cast<G4int>(fragment.GetZ()),U);
-//090115
-//G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
-//								       static_cast<G4int>(fragment.GetZ()));
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
-//090115
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
+									       static_cast<G4int>(fragment.GetZ()));
     
     G4double Alpha = theEvaporationProbabilityPtr->CalcAlphaParam(fragment);
     G4double Beta = theEvaporationProbabilityPtr->CalcBetaParam(fragment);
@@ -313,10 +306,6 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 
 //      std::cout << "\t\tEjectile (" << A << ',' << Z << ") V = " << CoulombBarrier 
 //  	      << " Beta = " << Beta << " V+Beta = " << CoulombBarrier+Beta << '\n';
-
-//G4cout << AResidual << " " << ZResidual << " " << ConstantFactor << " " << Beta << " " << CoulombBarrier << " " << MaximalKineticEnergy << " " << CoulombBarrier + MaximalKineticEnergy + Beta << G4endl;
-//090128
-if ( CoulombBarrier + MaximalKineticEnergy + Beta <= 0 ) return 0; 
 
     do 
       {

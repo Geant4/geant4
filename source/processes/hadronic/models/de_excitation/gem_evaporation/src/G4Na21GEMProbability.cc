@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Na21GEMProbability.cc,v 1.5 2006-06-29 20:22:55 gunter Exp $
+// $Id: G4Na21GEMProbability.cc,v 1.6 2009-09-15 12:54:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
