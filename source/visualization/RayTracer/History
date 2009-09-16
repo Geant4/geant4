@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2009-08-19 08:39:19 lgarnier Exp $
+$Id: History,v 1.57 2009-09-16 16:56:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,16 +24,19 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+16 September 2009  John Allison  (raytracer-V09-01-01)
+- Cosmetic adjustments and tagging.
+
 19 August 2009 Laurent Garnier
- - G4RayTracerViewer.cc, G4RayTracerXViewer.cc : Fix an bad use of fVP
-   parameters
+- G4RayTracerViewer.cc, G4RayTracerXViewer.cc : Fix an bad use of fVP
+  parameters
 
 18 August 2009 Laurent Garnier
- - G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the 
-   new way of handling window size hints (January 2009)
+- G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the 
+  new way of handling window size hints (January 2009)
 
 4th April 2008  John Allison  (raytracer-V09-01-00)
- - Fixed gcc-4.3.0 compiler warnings.
+- Fixed gcc-4.3.0 compiler warnings.
 
 14th June 2007  John Allison  (raytracer-V08-03-01)
 - Fixed memory leak in G4RayTracer (wrapper class).
