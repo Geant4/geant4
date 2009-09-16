@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.hh,v 1.4 2009-08-18 14:13:57 lgarnier Exp $
+// $Id: G4RayTracerXViewer.hh,v 1.5 2009-09-16 16:56:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -40,7 +40,7 @@ class G4RayTracerXViewer: public G4RayTracerViewer {
 public:
   G4RayTracerXViewer(G4VSceneHandler&,const G4String& name);
   virtual ~G4RayTracerXViewer();
-  void Initialise ();
+  void Initialise();
 };
 
 #endif
