@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histogram filled by Geant4 TestEm2 simulation
-   TFile f("./9.1ref08++.root");
+   TFile f("./9.2ref04.root");
    TH1D* h1d = (TH1D*) f.Get("4");
    h1d->SetTitle("30 GeV e- on 20 X0 Fe : energy dep, longit profil");
    h1d->GetXaxis()->SetTitle("depth (X0)");
@@ -34,7 +34,7 @@
 
    // Print the histograms legend
    TLegend *legend = new TLegend(0.65,0.55,0.85,0.68);
-   legend->AddEntry(h1d,"Geant4-9.1ref08++","l");
+   legend->AddEntry(h1d,"Geant4-9.2ref04","l");
    legend->AddEntry(h1f,"EGS4","L");
    legend->Draw();
 }

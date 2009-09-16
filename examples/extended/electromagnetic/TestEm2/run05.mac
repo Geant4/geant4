@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.6 2009-07-11 16:27:38 vnivanch Exp $
+# $Id: run05.mac,v 1.7 2009-09-16 18:07:30 maire Exp $
 #
 #
 # Macro file for "TestEm2.cc"
@@ -9,7 +9,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  local
 #
 /testem/phys/setCuts 1 mm
 #
@@ -24,7 +24,7 @@
 /run/dumpCouples
 #
 #
-/testem/det/setMat  G4_WATER
+/testem/det/setMat  Water
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
 /testem/det/update

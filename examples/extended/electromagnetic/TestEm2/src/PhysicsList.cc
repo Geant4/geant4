@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.15 2009-07-11 16:27:38 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.16 2009-09-16 18:07:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,8 +109,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics();
-  emName = "emstandard";
+  ///emName = "emstandard_opt0";  
+  ///emPhysicsList = new G4EmStandardPhysics();
+  emName = "local";    
+  emPhysicsList = new PhysListEmStandard(emName);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -201,13 +203,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard_local") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
     
-  } else if (name == "emstandard") {
+  } else if (name == "emstandard_opt0") {
 
     emName = name;
     delete emPhysicsList;

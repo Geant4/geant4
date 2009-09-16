@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.13 2009-07-11 16:27:38 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.14 2009-09-16 18:07:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,7 +107,12 @@ void DetectorConstruction::DefineMaterials()
   // pure materails
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
-   
+  new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);  
+  new G4Material("Copper",      z=29., a= 63.55*g/mole, density= 8.960*g/cm3); 
+  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3);    
+  new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);  
+  new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
+
   // compound material
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
