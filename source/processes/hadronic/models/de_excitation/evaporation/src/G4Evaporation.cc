@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.14 2009-09-15 15:40:16 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.15 2009-09-16 15:32:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -48,8 +48,8 @@
 
 G4Evaporation::G4Evaporation() 
 {
-  //  theChannelFactory = new G4EvaporationFactory();
-  theChannelFactory = new G4EvaporationDefaultGEMFactory();
+  theChannelFactory = new G4EvaporationFactory();
+  //theChannelFactory = new G4EvaporationDefaultGEMFactory();
   theChannels = theChannelFactory->GetChannel();
 }
 
