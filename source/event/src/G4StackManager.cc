@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.13 2009-09-10 21:31:41 asaim Exp $
+// $Id: G4StackManager.cc,v 1.14 2009-09-16 23:10:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,9 +56,12 @@ G4StackManager::~G4StackManager()
 {
   if(userStackingAction) delete userStackingAction;
 
-  G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
-  G4cout << " Maximum number of tracks in the urgent stack : " << urgentStack->GetMaxNTrack() << G4endl;
-  G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
+  if(verboseLevel>0)
+  {
+    G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
+    G4cout << " Maximum number of tracks in the urgent stack : " << urgentStack->GetMaxNTrack() << G4endl;
+    G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
+  }
   delete urgentStack;
   delete waitingStack;
   delete postponeStack;
@@ -88,7 +91,7 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
   if(classification==fKill)   // delete newTrack without stacking
   {
 #ifdef G4VERBOSE
-    if( verboseLevel > 0 )
+    if( verboseLevel > 1 )
     {
       G4cout << "   ---> G4Track " << newTrack << " (trackID "
 	 << newTrack->GetTrackID() << ", parentID "
@@ -130,7 +133,7 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
 G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
 {
 #ifdef G4VERBOSE
-  if( verboseLevel > 0 )
+  if( verboseLevel > 1 )
   {
     G4cout << "### pop requested out of " 
          << GetNUrgentTrack() << " stacked tracks." << G4endl;
@@ -140,7 +143,7 @@ G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
   while( GetNUrgentTrack() == 0 )
   {
 #ifdef G4VERBOSE
-    if( verboseLevel > 0 ) G4cout << "### " << GetNWaitingTrack()
+    if( verboseLevel > 1 ) G4cout << "### " << GetNWaitingTrack()
                       << " waiting tracks are re-classified to" << G4endl;
 #endif
     waitingStack->TransferTo(urgentStack);
@@ -155,7 +158,7 @@ G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
     }
     if(userStackingAction) userStackingAction->NewStage();
 #ifdef G4VERBOSE
-    if( verboseLevel > 0 ) G4cout << "     " << GetNUrgentTrack()
+    if( verboseLevel > 1 ) G4cout << "     " << GetNUrgentTrack()
                       << " urgent tracks and " << GetNWaitingTrack()
                       << " waiting tracks." << G4endl;
 #endif
@@ -167,7 +170,7 @@ G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
   *newTrajectory = selectedStackedTrack->GetTrajectory();
 
 #ifdef G4VERBOSE
-  if( verboseLevel > 1 )
+  if( verboseLevel > 2 )
   {
     G4cout << "Selected G4StackedTrack : " << selectedStackedTrack 
          << " with G4Track " << selectedStackedTrack->GetTrack()
@@ -231,7 +234,7 @@ G4int G4StackManager::PrepareNewEvent()
   if( GetNPostponedTrack() > 0 )
   {
 #ifdef G4VERBOSE
-    if( verboseLevel > 0 )
+    if( verboseLevel > 1 )
     {
       G4cout << GetNPostponedTrack() 
            << " postponed tracked are now shifted to the stack." << G4endl;

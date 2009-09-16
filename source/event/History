@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2009-08-17 09:42:22 asaim Exp $
+$Id: History,v 1.125 2009-09-16 23:10:46 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 16, 2009, M.Asai (event-V09-02-03)
+- Improved the logic in G4SmartTrackStack. 
+- Added /event/stack/verbose to have a short report of peak number of tracks in
+  the urgent stack.
 
 August 17, 2009, M.Asai (event-V09-02-02)
 - Introducing G4SmartTrackStack class. By using this new stack as the urgent stack of
