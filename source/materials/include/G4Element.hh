@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.23 2008-11-14 15:14:24 gcosmo Exp $
+// $Id: G4Element.hh,v 1.24 2009-09-17 14:23:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,7 +70,7 @@
 // 26-02-02, fIndexInTable renewed 
 // 01-04-05, new data member fIndexZ to count the number of elements with same Z
 // 17-10-06: Add Get/Set fNaturalAbandances (V.Ivanchenko)
-
+// 17.09.09, add fNbOfSubshellElectrons and methods (V. Grichine)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4ELEMENT_HH
@@ -133,6 +133,7 @@ public:  // with description
   //the binding energy of the shell:
   //
   G4double GetAtomicShell(G4int) const;
+  G4int    GetNbOfSubshellElectrons(G4int) const;
     
   //number of isotopes constituing this element:
   //
@@ -232,6 +233,7 @@ private:
     
   G4int fNbOfAtomicShells;     // number  of atomic shells
   G4double* fAtomicShells ;    // Pointer to atomic shell binding energies
+  G4int* fNbOfSubshellElectrons; // pointer to the number of subshell electrons
     
   // Isotope vector contains constituent isotopes of the element   
   size_t fNumberOfIsotopes;    // Number of isotopes added to the element

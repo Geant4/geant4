@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.31 2008-08-11 11:53:11 vnivanch Exp $
+// $Id: G4Element.cc,v 1.32 2009-09-17 14:23:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,10 +98,14 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 		 " Attempt to create an Element with N < Z !!!" );
   }
    
-  fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
-  fAtomicShells     = new G4double[fNbOfAtomicShells];
-  for (G4int i=0;i<fNbOfAtomicShells;i++) {
+  fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
+  fAtomicShells          = new G4double[fNbOfAtomicShells];
+  fNbOfSubshellElectrons = new G4int[fNbOfAtomicShells];
+
+  for (G4int i=0;i<fNbOfAtomicShells;i++) 
+  {
     fAtomicShells[i] = G4AtomicShells::GetBindingEnergy(iz, i);
+    fNbOfSubshellElectrons[i] = G4AtomicShells::GetNumberOfElectrons(iz, i);
   }
   ComputeDerivedQuantities();
 }
@@ -187,6 +191,7 @@ void G4Element::InitializePointers()
   theIsotopeVector = 0;
   fRelativeAbundanceVector = 0;
   fAtomicShells = 0;
+  fNbOfSubshellElectrons = 0;
   fIonisation = 0;
   fNumberOfIsotopes = 0;
   fNaturalAbandances = false;
@@ -214,6 +219,7 @@ G4Element::~G4Element()
   if (theIsotopeVector)         delete theIsotopeVector;
   if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
   if (fAtomicShells)            delete [] fAtomicShells;
+  if (fNbOfSubshellElectrons)   delete [] fNbOfSubshellElectrons;
   if (fIonisation)              delete    fIonisation;
   
   //remove this element from theElementTable
@@ -290,6 +296,15 @@ G4double G4Element::GetAtomicShell(G4int i) const
   if (i<0 || i>=fNbOfAtomicShells)
       G4Exception("Invalid argument in G4Element::GetAtomicShell");
   return fAtomicShells[i];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4Element::GetNbOfSubshellElectrons(G4int i) const
+{
+  if (i<0 || i>=fNbOfAtomicShells)
+      G4Exception("Invalid argument in G4Element::GetAtomicShell");
+  return fNbOfSubshellElectrons[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
