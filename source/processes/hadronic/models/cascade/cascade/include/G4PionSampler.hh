@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.hh,v 1.1 2009-08-20 14:05:06 dennis Exp $
+// $Id: G4PionSampler.hh,v 1.2 2009-09-17 18:10:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -81,50 +81,54 @@ class G4PionSampler : public G4FinalStateSampler
 
  protected:
 
-   static const G4int pipPindex[8][2];
-   static const G4int pimPindex[8][2];
-   static const G4int pizPindex[8][2];
+   G4int pipPindex[8][2];
+   G4int pimPindex[8][2];
+   G4int pizPindex[8][2];
 
-   static const G4int T33_2bfs[2][2][2];
-   static const G4int T33_3bfs[2][7][3];
-   static const G4int T33_4bfs[2][15][4];
-   static const G4int T33_5bfs[2][24][5];
-   static const G4int T33_6bfs[2][5][6];
-   static const G4int T33_7bfs[2][6][7];
-   static const G4int T33_8bfs[2][7][8];
-   static const G4int T33_9bfs[2][8][9];
+   G4int T33_2bfs[2][2][2];
+   G4int T33_3bfs[2][7][3];
+   G4int T33_4bfs[2][15][4];
+   G4int T33_5bfs[2][24][5];
+   G4int T33_6bfs[2][5][6];
+   G4int T33_7bfs[2][6][7];
+   G4int T33_8bfs[2][7][8];
+   G4int T33_9bfs[2][8][9];
 
-   static const G4int T31_2bfs[2][5][2];
-   static const G4int T31_3bfs[2][13][3];
-   static const G4int T31_4bfs[2][22][4];
-   static const G4int T31_5bfs[2][31][5];
-   static const G4int T31_6bfs[2][6][6];
-   static const G4int T31_7bfs[2][7][7];
-   static const G4int T31_8bfs[2][8][8];
-   static const G4int T31_9bfs[2][9][9];
+   G4int T31_2bfs[2][5][2];
+   G4int T31_3bfs[2][13][3];
+   G4int T31_4bfs[2][22][4];
+   G4int T31_5bfs[2][31][5];
+   G4int T31_6bfs[2][6][6];
+   G4int T31_7bfs[2][7][7];
+   G4int T31_8bfs[2][8][8];
+   G4int T31_9bfs[2][9][9];
 
-   static const G4int T11_2bfs[2][5][2];
-   static const G4int T11_3bfs[2][13][3];
-   static const G4int T11_4bfs[2][21][4];
-   static const G4int T11_5bfs[2][30][5];
-   static const G4int T11_6bfs[2][6][6];
-   static const G4int T11_7bfs[2][7][7];
-   static const G4int T11_8bfs[2][8][8];
-   static const G4int T11_9bfs[2][9][9];
+   G4int T11_2bfs[2][5][2];
+   G4int T11_3bfs[2][13][3];
+   G4int T11_4bfs[2][21][4];
+   G4int T11_5bfs[2][30][5];
+   G4int T11_6bfs[2][6][6];
+   G4int T11_7bfs[2][7][7];
+   G4int T11_8bfs[2][8][8];
+   G4int T11_9bfs[2][9][9];
 
-   static G4double pipPsummed[30];
-   static G4double pipPtot[30];
-   static G4double pimPsummed[30];
-   static G4double pimPtot[30];
-   static G4double pizPsummed[30];
-   static G4double pizPtot[30];
-   static G4double t31_dSigma_dMult[8][30];
-   static G4double t33_dSigma_dMult[8][30];
-   static G4double t11_dSigma_dMult[8][30];
+   G4double pipPsummed[30];
+   G4double pipPtot[30];
+   G4double pimPsummed[30];
+   G4double pimPtot[30];
+   G4double pizPsummed[30];
+   G4double pizPtot[30];
+   G4double t31_dSigma_dMult[8][30];
+   G4double t33_dSigma_dMult[8][30];
+   G4double t11_dSigma_dMult[8][30];
 
-   static const G4float pipPCrossSections[74][30];
-   static const G4float pimPCrossSections[101][30];
-   static const G4float pizPCrossSections[99][30];
+   G4float pipPCrossSections[74][30];
+   G4float pimPCrossSections[101][30];
+   G4float pizPCrossSections[99][30];
+
+ private:
+
+   void initCrossSections();
 
  };
 #endif
