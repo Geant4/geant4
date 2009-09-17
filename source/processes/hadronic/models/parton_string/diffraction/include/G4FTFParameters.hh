@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.5 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.6 2009-09-17 18:24:30 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -59,6 +59,10 @@ class G4FTFParameters
         void SetAvaragePt2ofElasticScattering(const G4double aPt2);
 
 // --------- Set parameters of excitations ---------------------------
+        void SetMagQuarkExchange(const G4double aValue);
+        void SetSlopeQuarkExchange(const G4double aValue);
+        void SetDeltaProbAtQuarkExchange(const G4double aValue);
+
         void SetProjMinDiffMass(const G4double aValue);
         void SetProjMinNonDiffMass(const G4double aValue);
         void SetProbabilityOfProjDiff(const G4double aValue);
@@ -68,6 +72,12 @@ class G4FTFParameters
         void SetProbabilityOfTarDiff(const G4double aValue);
 
         void SetAveragePt2(const G4double aValue);
+
+// --------- Set parameters of a string kink --------------------------------
+        void SetPt2Kink(const G4double aValue);
+        void SetQuarkProbabilitiesAtGluonSplitUp(const G4double Puubar,
+                                                 const G4double Pddbar,
+                                                 const G4double Pssbar );
 
 // --------- Set parameters of nuclear destruction--------------------
         void SetCofNuclearDestruction(const G4double aValue);
@@ -93,6 +103,10 @@ class G4FTFParameters
         G4double GetAvaragePt2ofElasticScattering();
 
 // --------- Get parameters of excitations ---------------------------
+        G4double GetMagQuarkExchange();
+        G4double GetSlopeQuarkExchange();
+        G4double GetDeltaProbAtQuarkExchange();
+
         G4double GetProjMinDiffMass();
         G4double GetProjMinNonDiffMass();
         G4double GetProbabilityOfProjDiff();
@@ -102,6 +116,10 @@ class G4FTFParameters
         G4double GetProbabilityOfTarDiff();
 
         G4double GetAveragePt2();
+
+// --------- Get parameters of a string kink --------------------------------
+        G4double GetPt2Kink();
+        std::vector<G4double>  GetQuarkProbabilitiesAtGluonSplitUp();
 
 // --------- Get parameters of nuclear destruction---------------------
         G4double GetCofNuclearDestruction();
@@ -129,6 +147,10 @@ class G4FTFParameters
         G4double FTFGamma0;
 
 // --------- Parameters of excitations -------------------------------
+        G4double MagQuarkExchange;
+        G4double SlopeQuarkExchange;
+        G4double DeltaProbAtQuarkExchange;
+
         G4double ProjMinDiffMass;
         G4double ProjMinNonDiffMass;
         G4double ProbabilityOfProjDiff;
@@ -138,6 +160,10 @@ class G4FTFParameters
         G4double ProbabilityOfTarDiff;
 
         G4double AveragePt2;
+
+// ---------- Parameters of kink -------------------------------------
+        G4double Pt2kink;
+        std::vector<G4double> QuarkProbabilitiesAtGluonSplitUp;
 
 // --------- Parameters of nuclear destruction------------------------
         G4double CofNuclearDestruction;         // Cnd of nuclear destruction
@@ -188,6 +214,13 @@ inline  void G4FTFParameters::SetAvaragePt2ofElasticScattering(const G4double aP
 AvaragePt2ofElasticScattering = aPt2;}
 
 // --------- Set parameters of excitations ----------------------------
+inline  void G4FTFParameters::SetMagQuarkExchange(const G4double aValue)
+             {MagQuarkExchange = aValue;}
+inline  void G4FTFParameters::SetSlopeQuarkExchange(const G4double aValue)
+             {SlopeQuarkExchange = aValue;}
+inline  void G4FTFParameters::SetDeltaProbAtQuarkExchange(const G4double aValue)
+             {DeltaProbAtQuarkExchange = aValue;}
+
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
              {ProjMinDiffMass = aValue*GeV;}
 inline  void G4FTFParameters::SetProjMinNonDiffMass(const G4double aValue)
@@ -204,6 +237,20 @@ inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
 
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
              {AveragePt2 = aValue*GeV*GeV;}
+
+// --------- Set parameters of a string kink --------------------------------
+inline  void G4FTFParameters::SetPt2Kink(const G4double aValue) 
+             {Pt2kink = aValue;}
+
+inline  void G4FTFParameters::SetQuarkProbabilitiesAtGluonSplitUp(
+                                                 const G4double Puubar,
+                                                 const G4double Pddbar,
+                                                 const G4double Pssbar )
+             {
+              QuarkProbabilitiesAtGluonSplitUp.push_back(Puubar); 
+              QuarkProbabilitiesAtGluonSplitUp.push_back(Puubar+Pddbar);
+              QuarkProbabilitiesAtGluonSplitUp.push_back(Puubar+Pddbar+Pssbar);
+             }
 
 // --------- Set parameters of nuclear destruction--------------------
 inline  void G4FTFParameters::SetCofNuclearDestruction(const G4double aValue)
@@ -245,6 +292,12 @@ inline  G4double G4FTFParameters::GetAvaragePt2ofElasticScattering()
                  {return AvaragePt2ofElasticScattering;}
 
 // --------- Get parameters of excitations ---------------------------
+inline  G4double G4FTFParameters::GetMagQuarkExchange()       {return MagQuarkExchange;}
+inline  G4double G4FTFParameters::GetSlopeQuarkExchange()     {return SlopeQuarkExchange;}
+inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange()
+                                                              {return DeltaProbAtQuarkExchange;}
+
+
 inline  G4double G4FTFParameters::GetProjMinDiffMass()        {return ProjMinDiffMass;}
 inline  G4double G4FTFParameters::GetProjMinNonDiffMass()     {return ProjMinNonDiffMass;}
 inline  G4double G4FTFParameters::GetProbabilityOfProjDiff()  {return ProbabilityOfProjDiff;} 
@@ -254,6 +307,12 @@ inline  G4double G4FTFParameters::GetTarMinNonDiffMass()      {return TarMinNonD
 inline  G4double G4FTFParameters::GetProbabilityOfTarDiff()   {return ProbabilityOfTarDiff;}
 
 inline  G4double G4FTFParameters::GetAveragePt2()             {return AveragePt2;}
+
+// --------- Get parameters of a string kink --------------------------
+inline  G4double G4FTFParameters::GetPt2Kink()                {return Pt2kink;}
+inline  std::vector<G4double> 
+                 G4FTFParameters::GetQuarkProbabilitiesAtGluonSplitUp() 
+                                  {return QuarkProbabilitiesAtGluonSplitUp;}
 
 // --------- Get parameters of nuclear destruction---------------------
 inline  G4double G4FTFParameters::GetCofNuclearDestruction(){return CofNuclearDestruction;}

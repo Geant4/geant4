@@ -1,5 +1,4 @@
-//
-// ********************************************************************
+//********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
@@ -24,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.7 2009-07-31 11:03:00 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.8 2009-09-17 18:24:30 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -208,25 +207,35 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 //----------- Parameters of excitations ---------------------------------------------
            if( absPDGcode > 1000 )                        //------Projectile is baryon --------
              {
+              SetMagQuarkExchange(3.4); //3.8); 
+              SetSlopeQuarkExchange(1.2);
+              SetDeltaProbAtQuarkExchange(0.1); //(0.1*4.);
+
               SetProjMinDiffMass(1.1);                    // GeV
               SetProjMinNonDiffMass(1.1);                 // GeV
-              SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.76*std::pow(s/GeV/GeV,-0.35));
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.76*std::pow(s/GeV/GeV,-0.35));
 
               SetAveragePt2(0.3);                         // GeV^2
              }
            else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
              {
+              SetMagQuarkExchange(120.); // 210.
+              SetSlopeQuarkExchange(2.0);
+              SetDeltaProbAtQuarkExchange(0.6);
+
               SetProjMinDiffMass(0.5);                    // GeV
               SetProjMinNonDiffMass(0.3);                 // GeV
-              SetProbabilityOfProjDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
-
+              SetProbabilityOfProjDiff(0.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+//G4cout<<"Params "<<0.6*0.62*std::pow(s/GeV/GeV,-0.51)<<G4endl;
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+//G4cout<<"       "<<2.7*0.62*std::pow(s/GeV/GeV,-0.51)<<G4endl; // was 2
+//G4int Uzhi; G4cin>>Uzhi;
+              SetProbabilityOfTarDiff(2.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
 /*
 SetProjMinDiffMass(0.5);
@@ -239,6 +248,11 @@ SetProbabilityOfTarDiff(0.05);
            else if( (absPDGcode == 321) || (PDGcode == 311) || 
                        (PDGcode == 130) || (PDGcode == 310))  //Projectile is Kaon
              {
+// Must be corrected, taken from PiN
+              SetMagQuarkExchange(120.);
+              SetSlopeQuarkExchange(2.0);
+              SetDeltaProbAtQuarkExchange(0.6);
+
               SetProjMinDiffMass(0.7);                    // GeV 1.1
               SetProjMinNonDiffMass(0.7);                 // GeV
               SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
@@ -252,6 +266,10 @@ SetProbabilityOfTarDiff(0.05);
            else                                           //------Projectile is undefined,
                                                           //------Nucleon assumed
              {
+              SetMagQuarkExchange(3.5);
+              SetSlopeQuarkExchange(1.0);
+              SetDeltaProbAtQuarkExchange(0.1);
+
               SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
@@ -263,17 +281,23 @@ SetProbabilityOfTarDiff(0.05);
               SetAveragePt2(0.3);                         // GeV^2
              }
 
+// ---------- Set parameters of a string kink -------------------------------
+             SetPt2Kink(6.*GeV*GeV);
+             G4double Puubar(1./3.), Pddbar(1./3.), Pssbar(1./3.); // SU(3) symmetry
+//           G4double Puubar(0.41 ), Pddbar(0.41 ), Pssbar(0.18 ); // Broken SU(3) symmetry
+             SetQuarkProbabilitiesAtGluonSplitUp(Puubar, Pddbar, Pssbar);
+
 // --------- Set parameters of nuclear destruction--------------------
 
     if( absPDGcode < 1000 ) 
     {
-      SetCofNuclearDestruction(1.0);                 // for meson projectile
+      SetCofNuclearDestruction(0.); //1.0);                 // for meson projectile
     } else if( theA > 20. )
     {
-      SetCofNuclearDestruction(0.2);                 // for baryon projectile and heavy target
+      SetCofNuclearDestruction(0.); //2);                 // for baryon projectile and heavy target
     } else
     {
-      SetCofNuclearDestruction(1.0);                 // for baryon projectile and light target
+      SetCofNuclearDestruction(0.); //1.0);                 // for baryon projectile and light target
     }
 
     SetR2ofNuclearDestruction(1.5*fermi*fermi);

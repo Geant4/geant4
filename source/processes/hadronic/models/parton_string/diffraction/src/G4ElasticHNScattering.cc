@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.8 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.9 2009-09-17 18:24:30 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -183,7 +183,7 @@ G4bool G4ElasticHNScattering::
 
 //----- Charge exchange between the projectile and the target, if possible 
 //        (G4UniformRand() < 0.5*std::exp(-0.5*(ProjectileRapidity - TargetRapidity))))
-//
+/*
            if((ProjectilePDGcode != TargetPDGcode) && 
              ((ProjectilePDGcode > 1000) && (TargetPDGcode > 1000)) &&
              (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
@@ -191,7 +191,7 @@ G4bool G4ElasticHNScattering::
               projectile->SetDefinition(target->GetDefinition());
               target->SetDefinition(ProjectileDefinition); 
            }
-
+*/
 // ------ Now we can calculate the transfered Pt --------------------------
 	   G4double Pt2;                                                    
            G4double ProjMassT2, ProjMassT;                                  
