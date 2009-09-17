@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateSampler.hh,v 1.1 2009-08-31 17:36:31 dennis Exp $
+// $Id: G4FinalStateSampler.hh,v 1.2 2009-09-17 18:11:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -42,7 +42,6 @@
 #include <vector>
 #include "G4FastVector.hh"
 #include "G4ReactionProduct.hh"
-// #include "Randomize.hh"
 
 
 class G4FinalStateSampler
@@ -51,13 +50,10 @@ class G4FinalStateSampler
     
    G4FinalStateSampler()
    { }
-    
+     
    virtual ~G4FinalStateSampler()
    { }
     
-  //   enum {pi0, pip, pim, kp, km, k0, k0b, pro, neu, 
-  //         lam, sp, s0, sm, xi0, xim, om, ap, an};
-
    enum {pi0=7, pip=3, pim=5, kp=11, km=13, k0=15, k0b=17, pro=1, neu=2, 
          lam=21, sp=23, s0=25, sm=27, xi0=29, xim=31, om=33, ap=35, an=37};
 
@@ -72,8 +68,6 @@ class G4FinalStateSampler
                    G4ReactionProduct &currentParticle,
                    G4ReactionProduct &targetParticle,
                    G4double Q, G4double B, G4double S);
-
-   static G4ParticleDefinition* particleDef[18];
 
  private:
    

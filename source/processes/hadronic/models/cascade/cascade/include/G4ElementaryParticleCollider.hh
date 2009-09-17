@@ -52,19 +52,18 @@ private:
   G4PionSampler piSampler;
 
   G4int verboseLevel;
-  G4int generateMultiplicity(G4int is, 
-			     G4double ekin) const;
+  G4int generateMultiplicity(G4int is, G4double ekin) const;
 
   void collide(G4InuclElementaryParticle* bullet,
 	       G4InuclElementaryParticle* target,
 	       G4CollisionOutput& output);
 
       
-  std::vector<G4InuclElementaryParticle> generateSCMfinalState(G4double ekin, 
-							       G4double etot_scm, G4double pscm,	     
-							       G4InuclElementaryParticle* particle1,
-							       G4InuclElementaryParticle* particle2, 
-							       G4LorentzConvertor* toSCM) const; 
+  std::vector<G4InuclElementaryParticle> 
+  generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,	     
+		        G4InuclElementaryParticle* particle1,
+			G4InuclElementaryParticle* particle2, 
+			G4LorentzConvertor* toSCM) const; 
 
   std::vector<G4double> generateMomModules(const std::vector<G4int>& kinds, 
 				      G4int mult,
