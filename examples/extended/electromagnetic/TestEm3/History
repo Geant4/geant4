@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2009-03-05 09:57:19 vnivanch Exp $
+$Id: History,v 1.125 2009-09-17 20:06:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-- PhysicsList - added option "emstandard_msc91"
+     
+17-09-09 mma (testem3-V09-02-01)
+- PhysicsList.cc :
+  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+  - Substituted obsolete low-energy physics builders by builders from
+    the physics_list library;
+- updated README and macro files  
+  
+- PhysicsList - added option "emstandard_msc91" (V.Ivant)
      
 04-03-09 mma (testem3-V09-02-00)
 - HistoManager::PrintHisto() : avoid empty ascii file

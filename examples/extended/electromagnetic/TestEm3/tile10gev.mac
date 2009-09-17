@@ -1,4 +1,4 @@
-# $Id: tile10gev.mac,v 1.1 2009-03-06 15:30:25 vnivanch Exp $
+# $Id: tile10gev.mac,v 1.2 2009-09-17 20:06:26 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -14,7 +14,7 @@
 /testem/det/setAbsor 2 Scintillator  3  mm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  emstandard_opt0
 #
 #/testem/run/setHisto 1 100   1150.   1850.  MeV
 #/testem/run/setHisto 2 100  27450.  28150.  MeV
@@ -24,7 +24,6 @@
 #/gun/position -40.635 0 0
 #
 #/process/eLoss/StepFunction 0.2 1 mm
-#/process/eLoss/preciseRange true
 #
 #/testem/tracking/stepMax 1 mum
 #

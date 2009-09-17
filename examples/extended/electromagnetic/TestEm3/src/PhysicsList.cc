@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.28 2009-03-05 10:01:53 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.29 2009-09-17 20:06:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,13 +33,13 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -59,8 +59,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-  // EM physics - default
-  emName = G4String("standard_local");
+  // EM physics
+  emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -215,13 +215,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "emstandard_local") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "emstandard") {
+  } else if (name == "emstandard_opt0") {
 
     emName = name;
     delete emPhysicsList;
@@ -255,17 +255,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4UrbanMscModel* msc2 = new G4UrbanMscModel();
     em_config.SetExtraEmModel("e-","msc",msc2);
     
-  } else if (name == "livermore") {
+  } else if (name == "emlivermore") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
+    emPhysicsList = new G4EmLivermorePhysics();
 
-  } else if (name == "penelope") {
+  } else if (name == "empenelope") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
+    emPhysicsList = new G4EmPenelopePhysics();
 
   } else {
 
