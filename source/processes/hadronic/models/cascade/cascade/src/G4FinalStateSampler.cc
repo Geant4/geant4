@@ -23,33 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateSampler.cc,v 1.1 2009-08-31 17:37:02 dennis Exp $
+// $Id: G4FinalStateSampler.cc,v 1.2 2009-09-17 18:15:38 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4FinalStateSampler.hh"
 #include "Randomize.hh"
 
-#include "G4PionZero.hh"
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4Lambda.hh"
-#include "G4SigmaPlus.hh"
-#include "G4SigmaZero.hh"
-#include "G4SigmaMinus.hh"
-#include "G4XiZero.hh"
-#include "G4XiMinus.hh"
-#include "G4OmegaMinus.hh"
-#include "G4AntiProton.hh"
-#include "G4AntiNeutron.hh"
 
- 
 std::pair<G4int, G4double>
 G4FinalStateSampler::interpolateEnergy(G4double e) const
 {
@@ -145,28 +126,5 @@ const G4double G4FinalStateSampler::energyScale[30] = {
   0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
   0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
   2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
-
-G4ParticleDefinition* p0 = G4PionZero::PionZero();
-G4ParticleDefinition* p1 = G4PionPlus::PionPlus();
-G4ParticleDefinition* p2 = G4PionMinus::PionMinus();
-G4ParticleDefinition* p3 = G4KaonPlus::KaonPlus();
-G4ParticleDefinition* p4 = G4KaonMinus::KaonMinus();
-G4ParticleDefinition* p5 = G4KaonZero::KaonZero();
-G4ParticleDefinition* p6 = G4AntiKaonZero::AntiKaonZero();
-G4ParticleDefinition* p7 = G4Proton::Proton();
-G4ParticleDefinition* p8 = G4Neutron::Neutron();
-G4ParticleDefinition* p9 = G4Lambda::Lambda();
-G4ParticleDefinition* p10 = G4SigmaPlus::SigmaPlus();
-G4ParticleDefinition* p11 = G4SigmaZero::SigmaZero();
-G4ParticleDefinition* p12 = G4SigmaMinus::SigmaMinus();
-G4ParticleDefinition* p13 = G4XiZero::XiZero();
-G4ParticleDefinition* p14 = G4XiMinus::XiMinus();
-G4ParticleDefinition* p15 = G4OmegaMinus::OmegaMinus();
-G4ParticleDefinition* p16 = G4AntiProton::AntiProton();
-G4ParticleDefinition* p17 = G4AntiNeutron::AntiNeutron();
-
-G4ParticleDefinition* G4FinalStateSampler::particleDef[18] = {
-  p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, 
-  p15, p16, p17 };
 
 /* end of file */
