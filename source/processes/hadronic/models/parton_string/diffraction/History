@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2009-08-06 12:47:38 vuzhinsk Exp $
+$Id: History,v 1.17 2009-09-17 18:28:31 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+17 Sept., 2009, V. Uzhinsky (hadr-string-diff-V09-02-12)
+   FTF parameters have been tunned on hN-interactions.
+   Binary reactions were introduced and checked.
+   Creation of s-channel Delta's was erased.
+
+-----------------------------------------
 6 August 2009, V. Uzhinsky (hadr-string-diff-V09-02-11)
   Kaon A interactions are improved in FTFModel.
 ----------------------------------------------------------
