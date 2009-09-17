@@ -294,24 +294,13 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	  shellNum++;
  	  if(shellNum == maxNumOfShells)
  	    {
-//  	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
-// 	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
- 	      G4Exception("G4AtomicDeexcitation: No Auger transition found");
+
+ 	      //G4Exception("G4AtomicDeexcitation: No Auger transition found");
 	      return 0;
  	    }
 	}
  	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
       }
-	  /*	{
-
-	  if(shellNum == maxNumOfShells-1)
-	    {
-	      G4Exception("G4AtomicDeexcitation: No Auger tramsition found");
-	    }
-	  shellNum++;
-	  }*/
-    
-
 
 
       // Now we have that shellnum is the shellIndex of the shell named ShellId
