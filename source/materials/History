@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2009-09-17 14:25:47 grichine Exp $
+$Id: History,v 1.145 2009-09-18 15:35:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17-09-09 V. Grichine, G4Element returns the number of electrons on a shell, 
-         testG4AtomicShells was modified to check this access
+17-09-09 V.Ivanchenko (materials-V09-02-09)
+- G4Element - (V. Grichine) added method GetNbOfShellElectrons which
+                            returns the number of electrons on a shell 
 
 17-07-09 V.Ivanchenko (materials-V09-02-08)
 - G4NistManager, G4NistMessenger, G4NistElementBuilder - improved 

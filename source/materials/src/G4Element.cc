@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.33 2009-09-18 07:47:07 grichine Exp $
+// $Id: G4Element.cc,v 1.34 2009-09-18 15:35:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,7 +100,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
    
   fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
   fAtomicShells          = new G4double[fNbOfAtomicShells];
-  fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
+  fNbOfShellElectrons    = new G4int[fNbOfAtomicShells];
 
   for (G4int i=0;i<fNbOfAtomicShells;i++) 
   {
@@ -222,7 +222,7 @@ G4Element::~G4Element()
   if (theIsotopeVector)         delete theIsotopeVector;
   if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
   if (fAtomicShells)            delete [] fAtomicShells;
-  if (fNbOfShellElectrons)   delete [] fNbOfShellElectrons;
+  if (fNbOfShellElectrons)      delete [] fNbOfShellElectrons;
   if (fIonisation)              delete    fIonisation;
   
   //remove this element from theElementTable
@@ -296,8 +296,9 @@ void G4Element::ComputeLradTsaiFactor()
 
 G4double G4Element::GetAtomicShell(G4int i) const
 {
-  if (i<0 || i>=fNbOfAtomicShells)
-      G4Exception("Invalid argument in G4Element::GetAtomicShell");
+  if (i<0 || i>=fNbOfAtomicShells) {
+    G4Exception("Invalid argument in G4Element::GetAtomicShell");
+  }
   return fAtomicShells[i];
 }
 
@@ -305,8 +306,9 @@ G4double G4Element::GetAtomicShell(G4int i) const
 
 G4int G4Element::GetNbOfShellElectrons(G4int i) const
 {
-  if (i<0 || i>=fNbOfAtomicShells)
-      G4Exception("Invalid argument in G4Element::GetNbOfShellElectrons");
+  if (i<0 || i>=fNbOfAtomicShells) {
+    G4Exception("Invalid argument in G4Element::GetNbOfShellElectrons");
+  }
   return fNbOfShellElectrons[i];
 }
 
