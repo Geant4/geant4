@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.hh,v 1.9 2006-06-29 21:20:34 gunter Exp $
+// $Id: G4OpenInventorWinViewer.hh,v 1.10 2009-09-18 12:48:43 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,8 @@ public:
   G4OpenInventorWinViewer(G4OpenInventorSceneHandler& scene,
 		       const G4String& name = "");
   virtual ~G4OpenInventorWinViewer();
+  void Initialise();
+
 private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
 private:

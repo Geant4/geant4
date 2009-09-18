@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc,v 1.6 2006-06-29 21:22:20 gunter Exp $
+// $Id: G4OpenInventorWin.cc,v 1.7 2009-09-18 12:48:43 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -52,7 +52,8 @@ void G4OpenInventorWin::Initialize ()
 
   SetInteractorManager (G4Win32::getInstance());
   GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  
-  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
+
+  //  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
 
   HWND toplevel = (HWND)GetInteractorManager()->GetMainInteractor();
 
