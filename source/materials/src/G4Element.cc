@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.32 2009-09-17 14:23:27 grichine Exp $
+// $Id: G4Element.cc,v 1.33 2009-09-18 07:47:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,12 +100,12 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
    
   fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
   fAtomicShells          = new G4double[fNbOfAtomicShells];
-  fNbOfSubshellElectrons = new G4int[fNbOfAtomicShells];
+  fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
 
   for (G4int i=0;i<fNbOfAtomicShells;i++) 
   {
     fAtomicShells[i] = G4AtomicShells::GetBindingEnergy(iz, i);
-    fNbOfSubshellElectrons[i] = G4AtomicShells::GetNumberOfElectrons(iz, i);
+    fNbOfShellElectrons[i] = G4AtomicShells::GetNumberOfElectrons(iz, i);
   }
   ComputeDerivedQuantities();
 }
@@ -175,10 +175,13 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       
     fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
     fAtomicShells     = new G4double[fNbOfAtomicShells];
-    for (G4int j=0;j<fNbOfAtomicShells;j++) {
-      fAtomicShells[j] = G4AtomicShells::GetBindingEnergy(iz, j);
-    }
-         
+    fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
+
+    for ( G4int j = 0; j < fNbOfAtomicShells; j++ ) 
+    {
+      fAtomicShells[j]       = G4AtomicShells::GetBindingEnergy(iz, j);
+      fNbOfShellElectrons[j] = G4AtomicShells::GetNumberOfElectrons(iz, j);
+    }         
     ComputeDerivedQuantities();
 
   }
@@ -191,7 +194,7 @@ void G4Element::InitializePointers()
   theIsotopeVector = 0;
   fRelativeAbundanceVector = 0;
   fAtomicShells = 0;
-  fNbOfSubshellElectrons = 0;
+  fNbOfShellElectrons = 0;
   fIonisation = 0;
   fNumberOfIsotopes = 0;
   fNaturalAbandances = false;
@@ -204,7 +207,7 @@ void G4Element::InitializePointers()
 
 G4Element::G4Element( __void__& )
   : fZeff(0), fNeff(0), fAeff(0), fNbOfAtomicShells(0), 
-    fAtomicShells(0), fNumberOfIsotopes(0), theIsotopeVector(0), 
+    fAtomicShells(0), fNbOfShellElectrons(0), fNumberOfIsotopes(0), theIsotopeVector(0), 
     fRelativeAbundanceVector(0), fCountUse(0), fIndexInTable(0), 
     fCoulomb(0), fRadTsai(0), fIonisation(0)
 {
@@ -219,7 +222,7 @@ G4Element::~G4Element()
   if (theIsotopeVector)         delete theIsotopeVector;
   if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
   if (fAtomicShells)            delete [] fAtomicShells;
-  if (fNbOfSubshellElectrons)   delete [] fNbOfSubshellElectrons;
+  if (fNbOfShellElectrons)   delete [] fNbOfShellElectrons;
   if (fIonisation)              delete    fIonisation;
   
   //remove this element from theElementTable
@@ -300,11 +303,11 @@ G4double G4Element::GetAtomicShell(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4Element::GetNbOfSubshellElectrons(G4int i) const
+G4int G4Element::GetNbOfShellElectrons(G4int i) const
 {
   if (i<0 || i>=fNbOfAtomicShells)
-      G4Exception("Invalid argument in G4Element::GetAtomicShell");
-  return fNbOfSubshellElectrons[i];
+      G4Exception("Invalid argument in G4Element::GetNbOfShellElectrons");
+  return fNbOfShellElectrons[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -366,11 +369,18 @@ const G4Element& G4Element::operator=(const G4Element& right)
       fAeff                    = right.fAeff;
       
       if (fAtomicShells) delete [] fAtomicShells;      
-      fNbOfAtomicShells        = right.fNbOfAtomicShells;
+      fNbOfAtomicShells = right.fNbOfAtomicShells; 
       fAtomicShells     = new G4double[fNbOfAtomicShells];
-      for (G4int i=0;i<fNbOfAtomicShells;i++)      
-         fAtomicShells[i]      = right.fAtomicShells[i];
-	 
+
+      if (fNbOfShellElectrons) delete [] fNbOfShellElectrons;
+      fNbOfAtomicShells   = right.fNbOfAtomicShells;            
+      fNbOfShellElectrons = new G4int[fNbOfAtomicShells];
+
+      for ( G4int i = 0; i < fNbOfAtomicShells; i++ ) 
+      {     
+         fAtomicShells[i]     = right.fAtomicShells[i];
+         fNbOfShellElectrons[i] = right.fNbOfShellElectrons[i];
+      } 
       if (theIsotopeVector) delete theIsotopeVector;
       if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
 	      	 

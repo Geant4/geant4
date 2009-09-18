@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AtomicShells.cc,v 1.6 2009-09-17 14:23:27 grichine Exp $
+// $Id: testG4AtomicShells.cc,v 1.7 2009-09-18 07:47:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,8 @@ int main()
    G4int Z, NbOfShells, shell, sumNe, Nshell ;
    G4double BindingEnergy;
 
-   for ( Z = 1; Z <= 100; Z++ )
+   //   for ( Z = 1; Z <= 100; Z++ )
+   for ( Z = 100; Z <= 100; Z++ )
    {
      G4cout << "\n Atomic Number: " << Z << G4endl; 
      NbOfShells = G4AtomicShells::GetNumberOfShells(Z);
@@ -70,7 +71,7 @@ int main()
        Nshell        = G4AtomicShells::GetNumberOfElectrons(Z,shell);
        sumNe        += Nshell; 
        G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy")<<"("<<Nshell<<")";
-       if ((shell+1)%5 == 0) G4cout << G4endl;
+       if ((shell+1)%4 == 0) G4cout << G4endl;
      }
      if( sumNe != Z )
      {
@@ -91,9 +92,9 @@ int main()
    for ( shell = 0; shell < NbOfShells; shell++ )
    { 
      BindingEnergy = van->GetAtomicShell(shell);            
-     Nshell = van->GetNbOfSubshellElectrons(shell);            
+     Nshell = van->GetNbOfShellElectrons(shell);            
      G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy")<<"("<<Nshell<<")";
-     if ((shell+1)%5 == 0) G4cout << G4endl;
+     if ((shell+1)%4 == 0) G4cout << G4endl;
    }
 //
 //      
@@ -105,9 +106,9 @@ int main()
    for ( shell = 0; shell < NbOfShells; shell++ )
    { 
      BindingEnergy = xe.GetAtomicShell(shell);            
-     Nshell        = xe.GetNbOfSubshellElectrons(shell);            
+     Nshell        = xe.GetNbOfShellElectrons(shell);            
      G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy")<<"("<<Nshell<<")";
-     if ((shell+1)%5 == 0) G4cout << G4endl;
+     if ((shell+1)%4 == 0) G4cout << G4endl;
    }
 //
 //                  
@@ -119,10 +120,11 @@ int main()
    for ( shell = 0; shell < NbOfShells; shell++ )
    { 
      BindingEnergy = fm->GetAtomicShell(shell);            
-     Nshell        = fm->GetNbOfSubshellElectrons(shell);            
+     Nshell        = fm->GetNbOfShellElectrons(shell);            
      G4cout << std::setw(12) << G4BestUnit(BindingEnergy, "Energy")<<"("<<Nshell<<")";
-     if ((shell+1)%5 == 0) G4cout << G4endl;
+     if ((shell+1)%4 == 0) G4cout << G4endl;
    }   
-  
+   G4cout << G4endl;
+ 
    return EXIT_SUCCESS;
 }
