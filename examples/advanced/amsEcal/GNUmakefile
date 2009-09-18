@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2009-06-22 13:36:13 maire Exp $
+# $Id: GNUmakefile,v 1.4 2009-09-18 17:34:54 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,6 +6,8 @@
 name := amsEcal
 G4TARGET := $(name)
 G4EXLIB := true
+
+#### CPPFLAGS := ${CPPFLAGS} -g
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..

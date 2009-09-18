@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.7 2009-08-29 08:48:30 maire Exp $
+// $Id: EventAction.cc,v 1.8 2009-09-18 17:34:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     visibleEnergy.resize(nbOfPixels);
       totalEnergy.resize(nbOfPixels);
   }
-  
+
   for (G4int k=0; k<nbOfPixels; k++) {
     visibleEnergy[k] = totalEnergy[k] = 0.0;
   }   
@@ -92,7 +92,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* evt)
-{  
+{
   G4int n1pxl   = detector->GetN1Pixels();
   G4int n2pxl   = detector->GetN2Pixels();
   G4int n1shift = detector->GetN1Shift();
@@ -188,7 +188,7 @@ void EventAction::WritePixels(const G4Event* evt)
   // event is appended onto file created at BeginOfRun
   //
   G4String name = histoManager->GetFileName(); 
-  G4String fileName = name + ".ascii";
+  G4String fileName = name + ".pixels.ascii";
 
   std::ofstream File(fileName, std::ios::app);
   std::ios::fmtflags mode = File.flags();  

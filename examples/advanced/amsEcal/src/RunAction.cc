@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2009-08-29 08:48:30 maire Exp $
+// $Id: RunAction.cc,v 1.8 2009-09-18 17:34:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,11 +85,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4int n1pxl = detector->GetN1Pixels();
   size = layerEtot.size();
   if (size < n1pxl) {  
-    layerEvis.resize(n1pxl);  layerEvis.clear();  
-    layerEtot.resize(n1pxl);  layerEtot.clear();     
-
-    layerEvis2.resize(n1pxl);  layerEvis2.clear();   
-    layerEtot2.resize(n1pxl);  layerEtot2.clear();
+    layerEvis.resize(n1pxl);
+    layerEtot.resize(n1pxl);
+    layerEvis2.resize(n1pxl);
+    layerEtot2.resize(n1pxl);
   }
   
   for (G4int k=0; k<n1pxl; k++) {
@@ -346,7 +345,7 @@ void RunAction::CreateFilePixels()
   //create file and write run header
   //
   G4String name = histoManager->GetFileName(); 
-  G4String fileName = name + ".ascii";
+  G4String fileName = name + ".pixels.ascii";
   
   std::ofstream File(fileName, std::ios::out);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.8 2009-07-24 13:02:02 maire Exp $
+// $Id: SteppingAction.cc,v 1.9 2009-09-18 17:34:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,8 +75,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
    moduleThickness = detector->GetModuleThickness();   
    d1Pixel = detector->GetD1Pixel();
    d2Pixel = detector->GetD2Pixel();
+   n1pxl   = detector->GetN1Pixels();
+   n2pxl   = detector->GetN2Pixels();      
    n1shift = detector->GetN1Shift();   
-   n2pxl   = detector->GetN2Pixels();
       
    first = false;   
  }
@@ -110,7 +111,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  G4int i1Module = (int) ((point1.x() + 0.5*calorThickness)/moduleThickness); 
  G4int i1Pixel  = (int) ((point1.x() + 0.5*calorThickness)/d1Pixel);
  if (i1Pixel < 0 ) i1Pixel = 0;
- if (i1Pixel >= n1shift) i1Pixel = n1shift - 1;
+ if (i1Pixel >= n1pxl) i1Pixel = n1pxl - 1;
  G4double point1yz = point1.y();
  if (i1Module%2 != 0) point1yz = point1.z();
  G4int i2Pixel = (int) ((point1yz + 0.5*calorSizeYZ)/d2Pixel);
@@ -122,11 +123,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step )
  // sum total energy deposit
  //
  eventAct->SumTotalEnergy(iPixel, edep);         
- 
+
  //in fiber ?
- // 
+ //  
  if (lvol == lvol_fiber) {
-   eventAct->SumVisibleEnergy(iPixel, edep);                     
+   eventAct->SumVisibleEnergy(iPixel, edep);
  }
 }
 
