@@ -69,7 +69,7 @@ G4VQCrossSection* G4QIonIonCrossSection::GetPointer()
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
-// Make pMom in independent units ! (Now it is MeV)
+// Make pMom in independent units !(Now it is MeV): fCS=true->Inelastic, fCS=false->Elastic
 G4double G4QIonIonCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tZ,
                                                 G4int tN, G4int pPDG)
 {
@@ -343,7 +343,7 @@ G4double G4QIonIonCrossSection::CalculateCrossSection(G4bool XS,G4int F,G4int I,
 #ifdef debug
     G4cout<<"G4QIonIonCS::CalcCS:before HEN nH="<<nH<<",iE="<<milP<<",dlP="<<dlP<<G4endl;
 #endif
-    if(tA<=1. || pA<=1.)
+    if(tA<1. || pA<1.)
     {
       G4cout<<"-Warning-G4QIICS::CalCS:pA="<<pA<<" or tA="<<tA<<" aren't composit"<<G4endl;
       sigma=0.;

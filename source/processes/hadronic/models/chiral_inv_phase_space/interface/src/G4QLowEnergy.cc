@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.11 2009-09-13 21:12:09 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.12 2009-09-18 12:41:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -38,6 +38,7 @@
 
 //#define debug
 //#define pdebug
+//#define edebug
 //#define tdebug
 //#define nandebug
 //#define ppdebug
@@ -241,12 +242,16 @@ G4bool G4QLowEnergy::IsApplicable(const G4ParticleDefinition& particle)
 G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
   static const G4double mProt= G4QPDGCode(2212).GetMass()/MeV; // CHIPS proton Mass in MeV
+  static const G4double mPro2= mProt*mProt;                    // CHIPS sq proton Mass
   static const G4double mNeut= G4QPDGCode(2112).GetMass()/MeV; // CHIPS neutron Mass in MeV
+  static const G4double mNeu2= mNeut*mNeut;                    // CHIPS sq neutron Mass
   static const G4double mLamb= G4QPDGCode(3122).GetMass()/MeV; // CHIPS Lambda Mass in MeV
   static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0)/MeV;
   static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0)/MeV;
   static const G4double mHel3= G4QPDGCode(2112).GetNuclMass(2,1,0)/MeV;
   static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0)/MeV;
+  static const G4double mFm= 250*MeV;
+  static const G4double third= 1./3.;
   static const G4ThreeVector zeroMom(0.,0.,0.);
   static G4ParticleDefinition* aGamma    = G4Gamma::Gamma();
   static G4ParticleDefinition* aProton   = G4Proton::Proton();
@@ -269,8 +274,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   //-------------------------------------------------------------------------------------
   const G4DynamicParticle* projHadron = track.GetDynamicParticle();
   const G4ParticleDefinition* particle=projHadron->GetDefinition();
-#ifdef debug
-  G4cout<<"G4QLowEnergy::PostStepDoIt: Before the GetMeanFreePath is called In4M="
+#ifdef pdebug
+  G4cout<<"G4QLowEnergy::PostStepDoIt: *** Called *** In4M="
         <<projHadron->Get4Momentum()<<" of PDG="<<particle->GetPDGEncoding()<<", Type="
         <<particle->GetParticleType()<<",SubType="<<particle->GetParticleSubType()<<G4endl;
 #endif
@@ -279,13 +284,14 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt: After GetMeanFreePath is called"<<G4endl;
 #endif
+  std::vector<G4Track*> result;
   G4LorentzVector proj4M=(projHadron->Get4Momentum())/MeV; // Convert to MeV!
   G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
     G4cerr<<"-Warning-G4QLowEnergy::PostStepDoIt:P_IU="<<Momentum<<"#"<<momentum<<G4endl;
-#ifdef pdebug
-  G4cout<<"G4QLowEnergy::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",proj4M/m="
+#ifdef debug
+  G4cout<<"G4QLowEnergy::PostStepDoIt: pP(IU)="<<Momentum<<"="<<momentum<<",proj4M,m="
         <<proj4M<<proj4M.m()<<G4endl;
 #endif
   if (!IsApplicable(*particle))  // Check applicability
@@ -318,7 +324,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   }
   else G4cout<<"-Warning-G4QLowEnergy::PostStepDoIt:Unknown projectile Ion"<<G4endl;
-#ifdef debug
+#ifdef pdebug
   G4int prPDG=particle->GetPDGEncoding();
   G4cout<<"G4QLowEnergy::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
 #endif
@@ -389,7 +395,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   if(tN<0)
   {
-    G4cerr<<"*Warning*G4QLowEnergy::PostStepDoIt:Element with N="<<tN<< G4endl;
+    G4cerr<<"***Warning***G4QLowEnergy::PostStepDoIt: Element with N="<<tN<< G4endl;
     return 0;
   }
   aParticleChange.Initialize(track);
@@ -419,8 +425,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   G4double kinEnergy= projHadron->GetKineticEnergy()*MeV; // Kin energy in MeV (Is *MeV n?)
   G4ParticleMomentum dir = projHadron->GetMomentumDirection();// It is a unit three-vector
-  G4LorentzVector tot4M=proj4M+G4LorentzVector(0.,0.,0.,tM); // Total 4-mom of the reaction
-#ifdef debug
+  G4LorentzVector targ4M=G4LorentzVector(0.,0.,0.,tM); // Target's 4-mom
+  G4LorentzVector tot4M =proj4M+targ4M;      // Total 4-mom of the reaction
+#ifdef pdebug
   G4cout<<"G4QLowEnergy::PostStepDoIt: tM="<<tM<<",p4M="<<proj4M<<",t4M="<<tot4M<<G4endl;
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
@@ -429,8 +436,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   G4cout<<"G4QLE::PSDI:false,P="<<Momentum<<",Z="<<pZ<<",N="<<pN<<",PDG="<<projPDG<<G4endl;
 #endif
   G4double xSec=CalculateXS(Momentum, tZ, tN, projPDG); // Recalculate CrossSection
-#ifdef debug
-  G4cout<<"G4QLowEn::PSDI:PDG="<<projPDG<<",P="<<Momentum<<",XS="<<xSec/millibarn<<G4endl;
+#ifdef pdebug
+  G4cout<<"G4QLowEn::PSDI:PDG="<<projPDG<<",P="<<Momentum<<",tZ="<<tZ<<",N="<<tN<<",XS="
+        <<xSec/millibarn<<G4endl;
 #endif
 #ifdef nandebug
   if(xSec>0. || xSec<0. || xSec==0);
@@ -439,7 +447,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
-#ifdef pdebug
+#ifdef debug
     G4cerr<<"-Warning-G4QLowEnergy::PSDoIt:*Zero cross-section* PDG="<<projPDG
           <<",Z="<<tZ<<",tN="<<tN<<",P="<<Momentum<<G4endl;
 #endif
@@ -452,52 +460,750 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   // Kill interacting hadron
   aParticleChange.ProposeEnergy(0.);
   aParticleChange.ProposeTrackStatus(fStopAndKill);
-#ifdef debug
-  G4cout<<"G4QLowEn::PSDI: Projectile track is killed"<<G4endl;
+  G4int tB=tZ+tN;
+  G4int pB=pZ+pN;
+#ifdef pdebug
+  G4cout<<"G4QLowEn::PSDI: Projectile track is killed"<<", tA="<<tB<<", pA="<<pB<<G4endl;
 #endif
-  // algorithm implementation --- STARTS HERE --- All calculations are in IU --------
-  G4double totM=tot4M.m(); // total CMS mass of the reaction
+  // algorithm implementation STARTS HERE --- All calculations are in IU --------
+  G4double tA=tB;
+  G4double pA=pB;
+  G4double tR=1.1;                    // target nucleus R in fm
+  if(tB > 1) tR*=std::pow(tA,third);  // in fm
+  G4double pR=1.1;                    // projectile nucleus R in fm
+  if(pB > 1) pR*=std::pow(pA,third);  // in fm
+  G4double R=tR+pR;                   // total radius
+  G4double R2=R*R;
+  G4int tD=0;
+  G4int pD=0;
+  G4int nAt=0;
+  G4int nAtM=27;
+  G4int nSec = 0;
+  G4double tcM=0.;
+  G4double tnM=1.;
+#ifdef edebug
+  G4int totChg=0;
+  G4int totBaN=0;
+  G4LorentzVector tch4M =tot4M;       // Total 4-mom of the reaction
+#endif
+  while((!tD && !pD && ++nAt<nAtM) || tcM<tnM)
+  {
+#ifdef edebug
+    totChg=tZ+pZ;
+    totBaN=tB+pB;
+    tch4M =tot4M;
+    G4cout<<">G4QLEn::PSDI:#"<<nAt<<",tC="<<totChg<<",tA="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+    G4LorentzVector tt4M=tot4M;
+    G4int resN=result.size();
+    if(resN)
+    {
+      for(G4int i=0; i<resN; ++i) delete result[i];
+      result.clear();
+    }
+    G4double D=std::sqrt(R2*G4UniformRand());
+#ifdef pdebug
+    G4cout<<"G4QLowEn::PSDI: D="<<D<<", tR="<<tR<<", pR="<<pR<<G4endl;
+#endif
+    if(D > std::fabs(tR-pR))          // leading parts can be separated
+    {
+      nSec = 0;
+      G4double DtR=D-tR;
+      G4double DpR=D-pR;
+      G4double DtR2=DtR*DtR;
+      G4double DpR2=DpR*DpR;
+      //G4double DtR3=DtR2*DtR;
+      G4double DpR3=DpR2*DpR;
+      //G4double DtR4=DtR3*DtR;
+      G4double DpR4=DpR3*DpR;
+      G4double tR2=tR*tR;
+      G4double pR2=pR*pR;
+      G4double tR3=tR2*tR;
+      //G4double pR3=pR2*pR;
+      G4double tR4=tR3*tR;
+      //G4double pR4=pR3*pR;
+      G4double HD=16.*D;
+      G4double tF=tA*(6*tR2*(pR2-DtR2)-4*D*(tR3-DpR3)+3*(tR4-DpR4))/HD/tR3;
+      G4double pF=tF;
+      tD=static_cast<G4int>(tF);
+      pD=static_cast<G4int>(pF);
+      //if(G4UniformRand() < tF-tD) ++tD; // Simple solution
+      //if(G4UniformRand() < pF-pD) ++pD;
+      // Enhance alphas solution
+      if(std::fabs(tF-4.)<1.) tD=4;       // @@ 1. is the enhancement parameter
+      else if(G4UniformRand() < tF-tD) ++tD;
+      if(std::fabs(pF-4.)<1.) pD=4;
+      else if(G4UniformRand() < pF-pD) ++pD;
+      if(tD > tB) tD=tB;
+      if(pD > pB) pD=tB;
+      // @@ Quasi Free is not debugged @@ The following close it
+      if(tD < 1) tD=1;
+      if(pD < 1) pD=1;
+#ifdef pdebug
+      G4cout<<"G4QLE::PSDI:#"<<nAt<<",pF="<<pF<<",tF="<<tF<<",pD="<<pD<<",tD="<<tD<<G4endl;
+#endif
+      G4int pC=0;                     // charge of the projectile fraction
+      G4int tC=0;                     // charge of the target fraction
+      if((tD || pD) && tD<tB && pD<pB)// Periferal interaction
+      {
+        if(!tD || !pD)                // Quasi-Elastic: B+A->(B-1)+N+A || ->B+N+(A-1)
+        {
+          G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+          G4int pPDG=2112;            // Proto of the nucleon PDG (proton)
+          G4double prM =mNeut;        // Proto of the nucleon mass
+          G4double prM2=mNeu2;        // Proto of the nucleon sq mass
+          if     (!tD)                // Quasi-elastic scattering of the proj QF nucleon
+          {
+            if(pD > 1) pD=1;
+            if(!pN || (pZ && pA*G4UniformRand() < pZ) ) // proj QF proton
+            {
+              pPDG=2212;
+              prM=mProt;
+              prM2=mPro2;
+              pC=1;
+            }
+            G4double Mom=0.;
+            G4LorentzVector com4M = targ4M; // Proto of 4mom of compound
+            G4double tgM=targ4M.e();
+            G4double rNM=0.;
+            G4LorentzVector rNuc4M(0.,0.,0.,0.);
+            if(pD==pB)
+            {
+              Mom=proj4M.rho();
+              com4M += proj4M;        // Total 4-mom for scattering
+              rNM=prM;
+            }
+            else                      // It is necessary to split the nucleon (with fermiM)
+            {
+              G4ThreeVector fm=mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
+              rNM=G4QPDGCode(2112).GetNuclMass(pZ-pC, pN, 0);
+              G4double rNE=std::sqrt(fm*fm+rNM*rNM);
+              rNuc4M=G4LorentzVector(fm,rNE);
+              G4ThreeVector boostV=proj4M.vect()/proj4M.e();
+              rNuc4M.boost(boostV);
+              G4LorentzVector qfN4M=proj4M - rNuc4M;// 4Mom of the quasi-free nucleon in LS
+              com4M += qfN4M;         // Calculate Total 4Mom for NA scattering
+              G4double pNE = qfN4M.e(); // Energy of the QF nucleon in LS
+              if(rNE >= prM) Mom = std::sqrt(pNE*pNE-prM2); // Mom(s) fake value
+              else break;             // Break the while loop
+            }
+            G4double xSec=CSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
+            if( xSec <= 0. ) break;   // Break the while loop
+            G4double mint=CSmanager->GetExchangeT(tZ,tN,pPDG); // functional randomized -t
+            G4double cost=1.-mint/CSmanager->GetHMaxT();       // cos(theta) in CMS
+            if(cost>1. || cost<-1.) break; // Break the while loop
+            G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,tgM); // 4mom of recoil target
+            G4LorentzVector scat4M=G4LorentzVector(0.,0.,0.,rNM); // 4mom of scattered N
+            G4LorentzVector dir4M=tt4M-G4LorentzVector(0.,0.,0.,(com4M.e()-rNM-prM)*.01);
+            if(!G4QHadron(com4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
+            {
+              G4cout<<"G4QLE::Pt="<<com4M.m()<<",p="<<prM<<",r="<<rNM<<",c="<<cost<<G4endl;
+              break;                  // Break the while loop
+            }
+            G4Track* projSpect = 0;
+            G4Track* aNucTrack = 0;
+            if(pB > pD)               // Fill the proj residual nucleus
+            {
+              G4int rZ=pZ-pC;
+              G4int rA=pB-1;
+              G4ParticleDefinition* theDefinition;// Prototype of residualNucleusDefinition
+              if(rA==1)
+              {
+                if(!rZ) theDefinition = aNeutron;
+                else    theDefinition = aProton;
+              }
+              else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);
+              G4DynamicParticle* resN = new G4DynamicParticle(theDefinition, rNuc4M);
+              projSpect = new G4Track(resN, localtime, position );
+              projSpect->SetWeight(weight);                    //    weighted
+              projSpect->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+             G4cout<<"G4QLowEn::PSDI:-->ProjQFSA="<<rA<<",rZ="<<rZ<<",4M="<<rNuc4M<<G4endl;
+#endif
+              ++nSec;
+            }
+            G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
+            if(pPDG=2212) theDefinition = G4Proton::Proton();
+            G4DynamicParticle* scatN = new G4DynamicParticle(theDefinition, scat4M);
+            aNucTrack = new G4Track(scatN, localtime, position );
+            aNucTrack->SetWeight(weight);                    //    weighted
+            aNucTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+             G4cout<<"G4QLowEn::PSDI:-->TgQFNPDG="<<pPDG<<", 4M="<<scat4M<<G4endl;
+#endif
+            ++nSec;
+            G4Track* aFraTrack=0;
+            if(tA==1)
+            {
+              if(!tZ) theDefinition = aNeutron;
+              else    theDefinition = aProton;
+            }
+            else if(tA==8 && tC==4)             // Be8 decay
+            {
+              theDefinition = anAlpha;
+              G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 1st alpha
+              G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 2nd alpha
+              if(!G4QHadron(reco4M).DecayIn2(f4M, s4M))
+              {
+                G4cout<<"*G4QLE::TS->A+A,t="<<reco4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+              }
+              G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+              aFraTrack = new G4Track(pAl, localtime, position );
+              aFraTrack->SetWeight(weight);                    //    weighted
+              aFraTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+              G4cout<<"G4QLowEn::PSDI:-->TgRQFA4M="<<f4M<<G4endl;
+#endif
+              ++nSec;
+              reco4M=s4M;
+            }
+            else if(tA==5 && (tC==2 || tC==3))   // He5/Li5 decay
+            {
+              theDefinition = aProton;
+              G4double mNuc = mProt;
+              if(tC==2)
+              {
+                theDefinition = aNeutron;
+                mNuc = mNeut;
+              }
+              G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNuc);  // 4mom of the nucleon
+              G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of the alpha
+              if(!G4QHadron(reco4M).DecayIn2(f4M, s4M))
+              {
+                G4cout<<"*G4QLE::TS->N+A,t="<<reco4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+              }
+              G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+              aFraTrack = new G4Track(pAl, localtime, position );
+              aFraTrack->SetWeight(weight);                    //    weighted
+              aFraTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+              G4cout<<"G4QLowEn::PSDI:-->TgQFRN4M="<<f4M<<G4endl;
+#endif
+              ++nSec;
+              theDefinition = anAlpha;
+              reco4M=s4M;
+            }
+            else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(tZ,tB,0,tZ);
+            ++nSec;
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->PQF_nSec="<<nSec<<G4endl;
+#endif
+            aParticleChange.SetNumberOfSecondaries(nSec); 
+            if(projSpect) aParticleChange.AddSecondary(projSpect);
+            if(aNucTrack) aParticleChange.AddSecondary(aNucTrack);
+            if(aFraTrack) aParticleChange.AddSecondary(aFraTrack);
+            G4DynamicParticle* resA = new G4DynamicParticle(theDefinition, reco4M);
+            G4Track* aResTrack = new G4Track(resA, localtime, position );
+            aResTrack->SetWeight(weight);                    //    weighted
+            aResTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->TgR4M="<<reco4M<<", checkNSec="<<nSec<<G4endl;
+#endif
+            aParticleChange.AddSecondary(aResTrack);
+          }
+          else                         // !pD : QF target Nucleon on the whole Projectile
+          {
+            if(tD > 1) tD=1;
+            if(!tN || (tZ && tA*G4UniformRand() < tZ) ) // target QF proton
+            {
+              pPDG=2212;
+              prM=mProt;
+              prM2=mPro2;
+              tC=1;
+            }
+            G4double Mom=0.;
+            G4LorentzVector com4M=proj4M; // Proto of 4mom of compound
+            G4double prM=proj4M.m();
+            G4double rNM=0.;
+            G4LorentzVector rNuc4M(0.,0.,0.,0.);
+            if(tD==tB)
+            {
+              Mom=prM*proj4M.rho()/proj4M.m();
+              com4M += targ4M;        // Total 4-mom for scattering
+              rNM=prM;
+            }
+            else                      // It is necessary to split the nucleon (with fermiM)
+            {
+              G4ThreeVector fm=250.*std::pow(G4UniformRand(),third)*G4RandomDirection();
+              rNM=G4QPDGCode(2112).GetNuclMass(tZ-tC, tN, 0)/MeV;
+              G4double rNE=std::sqrt(fm*fm+rNM*rNM);
+              rNuc4M=G4LorentzVector(fm,rNE);
+              G4LorentzVector qfN4M=targ4M - rNuc4M;// 4Mom of the quasi-free nucleon in LS
+              com4M += qfN4M;         // Calculate Total 4Mom for NA scattering
+              G4ThreeVector boostV=proj4M.vect()/proj4M.e();
+              qfN4M.boost(-boostV);
+              G4double tNE = qfN4M.e(); // Energy of the QF nucleon in LS
+              if(rNE >= prM) Mom = std::sqrt(tNE*tNE-prM2); // Mom(s) fake value
+              else break;             // Break the while loop
+            }
+            G4double xSec=CSmanager->GetCrossSection(false, Mom, pZ, pN, pPDG);
+            if( xSec <= 0. ) break;   // Break the while loop
+            G4double mint=CSmanager->GetExchangeT(pZ,pN,pPDG); // functional randomized -t
+            G4double cost=1.-mint/CSmanager->GetHMaxT();       // cos(theta) in CMS
+            if(cost>1. || cost<-1.) break; // Break the while loop
+            G4LorentzVector reco4M=G4LorentzVector(0.,0.,0.,prM); // 4mom of recoil target
+            G4LorentzVector scat4M=G4LorentzVector(0.,0.,0.,rNM); // 4mom of scattered N
+            G4LorentzVector dir4M=tt4M-G4LorentzVector(0.,0.,0.,(com4M.e()-rNM-prM)*.01);
+            if(!G4QHadron(com4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
+            {
+              G4cout<<"G4QLE::Tt="<<com4M.m()<<",p="<<prM<<",r="<<rNM<<",c="<<cost<<G4endl;
+              break;                  // Break the while loop
+            }
+            G4Track* targSpect = 0;
+            G4Track* aNucTrack = 0;
+            if(tB > tD)               // Fill the residual nucleus
+            {
+              G4int rZ=tZ-tC;
+              G4int rA=tB-1;
+              G4ParticleDefinition* theDefinition;// Prototype of residualNucleusDefinition
+              if(rA==1)
+              {
+                if(!rZ) theDefinition = aNeutron;
+                else    theDefinition = aProton;
+              }
+              else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);
+              G4DynamicParticle* resN = new G4DynamicParticle(theDefinition, rNuc4M);
+              targSpect = new G4Track(resN, localtime, position );
+              targSpect->SetWeight(weight);                    //    weighted
+              targSpect->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+             G4cout<<"G4QLowEn::PSDI:-->TargQFSA="<<rA<<",rZ="<<rZ<<",4M="<<rNuc4M<<G4endl;
+#endif
+              ++nSec;
+            }
+            G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
+            if(pPDG=2212) theDefinition = G4Proton::Proton();
+            G4DynamicParticle* scatN = new G4DynamicParticle(theDefinition, scat4M);
+            aNucTrack = new G4Track(scatN, localtime, position );
+            aNucTrack->SetWeight(weight);                    //    weighted
+            aNucTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+             G4cout<<"G4QLowEn::PSDI:-->PrQFNPDG="<<pPDG<<", 4M="<<scat4M<<G4endl;
+#endif
+            ++nSec;
+            G4Track* aFraTrack=0;
+            if(pA==1)
+            {
+              if(!pZ) theDefinition = aNeutron;
+              else    theDefinition = aProton;
+            }
+            else if(pA==8 && pC==4)             // Be8 decay
+            {
+              theDefinition = anAlpha;
+              G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 1st alpha
+              G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 2nd alpha
+              if(!G4QHadron(reco4M).DecayIn2(f4M, s4M))
+              {
+                G4cout<<"*G4QLE::PS->A+A,t="<<reco4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+              }
+              G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+              aFraTrack = new G4Track(pAl, localtime, position );
+              aFraTrack->SetWeight(weight);                    //    weighted
+              aFraTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+              G4cout<<"G4QLowEn::PSDI:-->PrRQFA4M="<<f4M<<G4endl;
+#endif
+              ++nSec;
+              reco4M=s4M;
+            }
+            else if(pA==5 && (pC==2 || pC==3))   // He5/Li5 decay
+            {
+              theDefinition = aProton;
+              G4double mNuc = mProt;
+              if(pC==2)
+              {
+                theDefinition = aNeutron;
+                mNuc = mNeut;
+              }
+              G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNuc);  // 4mom of the nucleon
+              G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of the alpha
+              if(!G4QHadron(reco4M).DecayIn2(f4M, s4M))
+              {
+                G4cout<<"*G4QLE::PS->N+A,t="<<reco4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+              }
+              G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+              aFraTrack = new G4Track(pAl, localtime, position );
+              aFraTrack->SetWeight(weight);                    //    weighted
+              aFraTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+              G4cout<<"G4QLowEn::PSDI:-->PrQFRN4M="<<f4M<<G4endl;
+#endif
+              ++nSec;
+              theDefinition = anAlpha;
+              reco4M=s4M;
+            }
+            else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(pZ,pB,0,pZ);
+            ++nSec;
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->TQF_nSec="<<nSec<<G4endl;
+#endif
+            aParticleChange.SetNumberOfSecondaries(nSec); 
+            if(targSpect) aParticleChange.AddSecondary(targSpect);
+            if(aNucTrack) aParticleChange.AddSecondary(aNucTrack);
+            if(aFraTrack) aParticleChange.AddSecondary(aFraTrack);
+            G4DynamicParticle* resA = new G4DynamicParticle(theDefinition, reco4M);
+            G4Track* aResTrack = new G4Track(resA, localtime, position );
+            aResTrack->SetWeight(weight);                    //    weighted
+            aResTrack->SetTouchableHandle(trTouchable);
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->TgR4M="<<reco4M<<", checkNSec="<<nSec<<G4endl;
+#endif
+            aParticleChange.AddSecondary( aResTrack );
+          }
+#ifdef debug
+          G4cout<<"G4QLowEnergy::PostStepDoIt:***PostStepDoIt is done:Quasi-El***"<<G4endl;
+#endif
+          return G4VDiscreteProcess::PostStepDoIt(track, step);
+        }
+        else                          // The cental region compound can be created
+        {
+          // First calculate the isotopic state of the parts of the compound
+          if(!pZ) pC=0;
+          else if(!pN) pC=pD;
+          else
+          {
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI: pD="<<pD<<", pZ="<<pZ<<", pA="<<pA<<G4endl;
+#endif
+            G4double C=pD*pZ/pA;
+            pC=static_cast<G4int>(C); 
+            if(G4UniformRand() < C-pC) ++pC;
+          }
+          if(!tZ) tC=0;
+          else if(!tN) tC=tD;
+          else
+          {
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI: tD="<<tD<<", tZ="<<tZ<<", tA="<<tA<<G4endl;
+#endif
+            G4double C=tD*tZ/tA;
+            tC=static_cast<G4int>(C); 
+            if(G4UniformRand() < C-tC) ++tC;
+          }
+          // calculate the transferred momentum
+          G4ThreeVector pFM(0.,0.,0.);
+          if(pD<pB)                    // The projectile nucleus must be splitted
+          {
+            G4int nc=pD;
+            if(pD+pD>pB) nc=pB-pD;
+            pFM = mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
+            for(G4int i=1; i < nc; ++i)
+                             pFM+= mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
+          }
+          G4ThreeVector tFM(0.,0.,0.);
+          if(tD<tB)                    // The projectile nucleus must be splitted
+          {
+            G4int nc=pD;
+            if(tD+tD>tB) nc=tB-tD;
+            tFM = mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
+            for(G4int i=1; i < nc; ++i)
+                             tFM+= mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
+          }
+#ifdef pdebug
+          G4cout<<"G4QLE::PSDI:pC="<<pC<<", tC="<<tC<<", pFM="<<pFM<<", tFM="<<tFM<<G4endl;
+#endif
+          // Split the projectile spectator
+          G4int rpZ=pZ-pC;            // number of protons in the projectile spectator
+          G4int pF=pD-pC;             // number of neutrons in the projectile part of comp
+          G4int rpN=pN-pF;            // number of neutrons in the projectile spectator
+          G4double rpNM=G4QPDGCode(2112).GetNuclMass(rpZ, rpN, 0); // Mass of the spectator
+          G4ThreeVector boostV=proj4M.vect()/proj4M.e(); // Antilab Boost Vector
+          G4double rpE=std::sqrt(rpNM*rpNM+pFM.mag2());
+          G4LorentzVector rp4M(pFM,rpE);
+#ifdef pdebug
+	    G4cout<<"G4QLE::PSDI: boostV="<<boostV<<",rp4M="<<rp4M<<",pr4M="<<proj4M<<G4endl;
+#endif
+          rp4M.boost(boostV);
+#ifdef pdebug
+	    G4cout<<"G4QLE::PSDI: After boost, rp4M="<<rp4M<<G4endl;
+#endif
+          G4ParticleDefinition* theDefinition; // Prototype of projSpectatorNuclDefinition
+          G4int rpA=rpZ+rpN;
+          G4Track* aFraPTrack = 0;
+          theDefinition = 0;
+          if(rpA==1)
+          {
+            if(!rpZ) theDefinition = G4Neutron::Neutron();
+            else     theDefinition = G4Proton::Proton();
+#ifdef pdebug
+            G4cout<<"G4QLE::PSDI: rpA=1, rpZ"<<rpZ<<G4endl;
+#endif
+          }
+          else if(rpA==8 && rpZ==4)            // Be8 decay
+          {
+            theDefinition = anAlpha;
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 1st alpha
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 2nd alpha
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->A+A,mBe8="<<rp4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+#endif
+            if(!G4QHadron(rp4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CPS->A+A,t="<<rp4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+            }
+            G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+            aFraPTrack = new G4Track(pAl, localtime, position );
+            aFraPTrack->SetWeight(weight);                    //    weighted
+            aFraPTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            totChg-=2;
+            totBaN-=4;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:1,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            rp4M=s4M;
+          }
+          else if(rpA==5 && (rpZ==2 || rpZ==3)) // He5/Li5 decay
+          {
+            theDefinition = aProton;
+            G4double mNuc = mProt;
+            if(rpZ==2)
+            {
+              theDefinition = aNeutron;
+              mNuc = mNeut;
+            }
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNuc);  // 4mom of the nucleon
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of the alpha
+#ifdef pdebug
+            G4cout<<"G4QLowE::CPS->N+A, tM5="<<rp4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+#endif
+            if(!G4QHadron(rp4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CPS->N+A,t="<<rp4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+            }
+            G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+            aFraPTrack = new G4Track(pAl, localtime, position );
+            aFraPTrack->SetWeight(weight);                    //    weighted
+            aFraPTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            if(theDefinition == aProton) totChg-=1;
+            totBaN-=1;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:2,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectN4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            theDefinition = anAlpha;
+            rp4M=s4M;
+          }
+          else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rpZ,rpA,0,rpZ);
+          if(!theDefinition)
+            G4cout<<"-Warning-G4QLowEn::PSDI: pDef=0, Z="<<rpZ<<", A="<<rpA<<G4endl;
+#ifdef edebug
+          if(theDefinition == anAlpha)
+          {
+            totChg-=2;
+            totBaN-=4;
+          }
+          else
+          {
+            totChg-=rpZ;
+            totBaN-=rpA;
+          }
+          tch4M -=rp4M;
+          G4cout<<">>G4QLEn::PSDI:3, tZ="<<totChg<<",tB="<<totBaN<<", t4M="<<tch4M<<G4endl;
+#endif
+          G4DynamicParticle* rpD = new G4DynamicParticle(theDefinition, rp4M);
+          G4Track* aNewPTrack = new G4Track(rpD, localtime, position);
+          aNewPTrack->SetWeight(weight);//    weighted
+          aNewPTrack->SetTouchableHandle(trTouchable);
+          tt4M-=rp4M;
+#ifdef pdebug
+          G4cout<<"G4QLowEn::PSDI:-->ProjSpectR4M="<<rp4M<<",Z="<<rpZ<<",A="<<rpA<<G4endl;
+#endif
+          ++nSec;
+          //
+          // Split the target spectator
+          G4int rtZ=tZ-tC;            // number of protons in the target spectator
+          G4int tF=tD-tC;             // number of neutrons in the target part of comp
+          G4int rtN=tN-tF;            // number of neutrons in the target spectator
+          G4double rtNM=G4QPDGCode(2112).GetNuclMass(rtZ, rtN, 0); // Mass of the spectator
+          G4double rtE=std::sqrt(rtNM*rtNM+tFM.mag2());
+          G4LorentzVector rt4M(tFM,rtE);
+          G4int rtA=rtZ+rtN;
+          G4Track* aFraTTrack = 0;
+          theDefinition = 0;
+          if(rtA==1)
+          {
+            if(!rtZ) theDefinition = G4Neutron::Neutron();
+            else     theDefinition = G4Proton::Proton();
+#ifdef pdebug
+            G4cout<<"G4QLE::PSDI: rtA=1, rtZ"<<rtZ<<G4endl;
+#endif
+          }
+          else if(rtA==8 && rtZ==4)            // Be8 decay
+          {
+            theDefinition = anAlpha;
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 1st alpha
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of 2nd alpha
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->A+A,mBe8="<<rt4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+#endif
+            if(!G4QHadron(rt4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CTS->A+A,t="<<rt4M.m()<<" >? 2*MAlpha="<<2*mAlph<<G4endl;
+            }
+            G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+            aFraTTrack = new G4Track(pAl, localtime, position );
+            aFraTTrack->SetWeight(weight);                        // weighted
+            aFraTTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            totChg-=2;
+            totBaN-=4;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:4,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->TargSpectA4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            rt4M=s4M;
+          }
+          else if(rtA==5 && (rtZ==2 || rtZ==3)) // He5/Li5 decay
+          {
+            theDefinition = aProton;
+            G4double mNuc = mProt;
+            if(rpZ==2)
+            {
+              theDefinition = aNeutron;
+              mNuc = mNeut;
+            }
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNuc);  // 4mom of the nucleon
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mAlph); // 4mom of the alpha
+#ifdef pdebug
+            G4cout<<"G4QLowE::CPS->N+A, tM5="<<rt4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+#endif
+            if(!G4QHadron(rt4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CTS->N+A,t="<<rt4M.m()<<" >? MA+MN="<<mAlph+mNuc<<G4endl;
+            }
+            G4DynamicParticle* pAl = new G4DynamicParticle(theDefinition, f4M);
+            aFraTTrack = new G4Track(pAl, localtime, position );
+            aFraTTrack->SetWeight(weight);                        // weighted
+            aFraTTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            if(theDefinition == aProton) totChg-=1;
+            totBaN-=1;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:5,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->TargSpectN4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            theDefinition = anAlpha;
+            rt4M=s4M;
+          }
+          else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rtZ,rtA,0,rtZ);
+          if(!theDefinition)
+            G4cout<<"-Warning-G4QLowEn::PSDI: tDef=0, Z="<<rtZ<<", A="<<rtA<<G4endl;
+#ifdef edebug
+          if(theDefinition == anAlpha)
+          {
+            totChg-=2;
+            totBaN-=4;
+          }
+          else
+          {
+            totChg-=rtZ;
+            totBaN-=rtA;
+          }
+          tch4M -=rt4M;
+          G4cout<<">>G4QLEn::PSDI:6, tZ="<<totChg<<",tB="<<totBaN<<", t4M="<<tch4M<<G4endl;
+#endif
+          G4DynamicParticle* rtD = new G4DynamicParticle(theDefinition, rt4M);
+          G4Track* aNewTTrack = new G4Track(rtD, localtime, position);
+          aNewTTrack->SetWeight(weight);                         // weighted
+          aNewTTrack->SetTouchableHandle(trTouchable);
+          tt4M-=rt4M;
+#ifdef pdebug
+          G4cout<<"G4QLowEn::PSDI:-->TargSpectR4M="<<rt4M<<",Z="<<rtZ<<",A="<<rtA<<G4endl;
+#endif
+          ++nSec;
+          nSec+=3;
+          aParticleChange.SetNumberOfSecondaries(nSec); 
+          if(aFraPTrack) result.push_back(aFraPTrack);
+          if(aNewPTrack) result.push_back(aNewPTrack);
+          if(aFraTTrack) result.push_back(aFraTTrack);
+          if(aNewTTrack) result.push_back(aNewTTrack);
+          tcM = tt4M.m();            // total CMS mass of the compound
+          G4int sN=tF+pF;
+          G4int sZ=tC+pC;
+          tnM = targQPDG.GetNuclMass(sZ,sN,0); // GSM
+#ifdef pdebug
+          G4cout<<"G4QLEn::PSDI:At#"<<nAt<<",totM="<<tcM<<",gsM="<<tnM<<",Z="<<sZ<<",N="
+                <<sN<<G4endl;
+#endif
+          if(tcM>tnM)
+          {
+            pZ=pC;
+            pN=pF;
+            tZ=tC;
+            tN=tF;
+            tot4M=tt4M;
+          }
+        }
+      }                               // At least one is splitted
+      else if(tD==tB || pD==pB)       // Total absorption
+      {
+        tD=tZ+tN;
+        pD=pZ+pN;
+        tcM=tnM+1.;
+      }
+    }
+    else                              // Total compound (define tD to go out of the while
+    {
+      tD=tZ+tN;
+      pD=pZ+pN;
+     tcM=tnM+1.;
+    }
+  } // End of the interaction WHILE
+  G4double totM=tot4M.m();            // total CMS mass of the reaction
   G4int totN=tN+pN;
   G4int totZ=tZ+pZ;
+#ifdef edebug
+  G4cout<<">>>G4QLEn::PSDI: dZ="<<totChg-totZ<<", dB="<<totBaN-totN-totZ<<", d4M="
+        <<tch4M-tot4M<<",N="<<totN<<",Z="<<totZ<<G4endl;
+#endif
   // @@ Here mass[i] can be calculated if mass=0
   G4double mass[nCh]={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
                       0.,0.,0.,0.,0.,0.};
-  mass[0] = targQPDG.GetNuclMass(totZ,totN,0); // gamma+gamma
-#ifdef debug
-  G4cout<<"G4QLowEn::PSDI: Nuclear Mass="<<mass[0]<<G4endl;
+  mass[0] = tM = targQPDG.GetNuclMass(totZ,totN,0); // gamma+gamma
+#ifdef pdebug
+  G4cout<<"G4QLEn::PSDI:TotM="<<totM<<",NucM="<<tM<<",totZ="<<totZ<<",totN="<<totN<<G4endl;
 #endif
   if (totN>0 && totZ>0)
   {
     mass[1] = targQPDG.GetNuclMass(totZ,totN-1,0); // gamma+neutron
     mass[2] = targQPDG.GetNuclMass(totZ-1,totN,0); // gamma+proton
   }
-  if ( (totZ > 0 && totN > 1) || (totN > 0 && totZ > 1) ) 
-     mass[3] = targQPDG.GetNuclMass(totZ-1,totN-1,0); //g+d
-  if ( (totZ > 0 && totN > 2) || (totN > 1 && totZ > 1) ) 
-     mass[4] = targQPDG.GetNuclMass(totZ-1,totN-2,0); //g+t
-  if ( (totZ > 2 && totN > 0) || (totN > 1 && totZ > 1) ) 
-     mass[5] = targQPDG.GetNuclMass(totZ-2,totN-1,0); //g+3
-  if ( (totZ > 2 && totN > 1) || (totN > 2 && totZ > 1) ) 
-     mass[6] = targQPDG.GetNuclMass(totZ-2,totN-2,0); //g+a
-  if ( (totZ > 0 && totN > 1) || totN > 2 ) 
-     mass[7] = targQPDG.GetNuclMass(totZ,totN-2,0); // n+n
-  mass[ 8] = mass[3]; // neutron+proton (the same as a deuteron)
-  if ( (totZ > 1 && totN > 0) || totZ > 2 ) 
-     mass[9] = targQPDG.GetNuclMass(totZ-2,totN,0); // p+p
-  mass[10] = mass[5]; // proton+deuteron (the same as He3)
-  mass[11] = mass[4]; // neutron+deuteron (the same as t)
-  mass[12] = mass[6]; // deuteron+deuteron (the same as alpha)
-  mass[13] = mass[6]; // proton+tritium (the same as alpha)
-  if ( totN > 3 || (totN > 2 && totZ > 0) ) 
-     mass[14] = targQPDG.GetNuclMass(totZ-1,totN-3,0); // n+t
-  if ( totZ > 3 || (totZ > 2 && totN > 0) ) 
-     mass[15] = targQPDG.GetNuclMass(totZ-3,totN-1,0); // He3+p
-  mass[16] = mass[6]; // neutron+He3 (the same as alpha)
-  if ( (totZ > 3 && totN > 1) || (totZ > 2 && totN > 2) ) 
-    mass[17] = targQPDG.GetNuclMass(totZ-3,totN-2,0); // pa
-  if ( (totZ > 1 && totN > 3) || (totZ > 2 && totN > 2) ) 
-    mass[18] = targQPDG.GetNuclMass(totZ-2,totN-3,0); // na
-  if(pL>0)
+  if ( totZ > 1 && totN > 1 ) mass[3] = targQPDG.GetNuclMass(totZ-1,totN-1,0); //g+d
+  if ( totZ > 1 && totN > 2 ) mass[4] = targQPDG.GetNuclMass(totZ-1,totN-2,0); //g+t
+  if ( totZ > 2 && totN > 1 ) mass[5] = targQPDG.GetNuclMass(totZ-2,totN-1,0); //g+3
+  if ( totZ > 2 && totN > 2 ) mass[6] = targQPDG.GetNuclMass(totZ-2,totN-2,0); //g+a
+  if ( totZ > 0 && totN > 2 ) mass[7] = targQPDG.GetNuclMass(totZ  ,totN-2,0); //n+n
+    mass[ 8] = mass[3]; // neutron+proton (the same as a deuteron)
+  if ( totZ > 2 )             mass[9] = targQPDG.GetNuclMass(totZ-2,totN  ,0); //p+p
+    mass[10] = mass[5]; // proton+deuteron (the same as He3)
+    mass[11] = mass[4]; // neutron+deuteron (the same as t)
+    mass[12] = mass[6]; // deuteron+deuteron (the same as alpha)
+    mass[13] = mass[6]; // proton+tritium (the same as alpha)
+  if ( totZ > 1 && totN > 3 ) mass[14] = targQPDG.GetNuclMass(totZ-1,totN-3,0);//n+t
+  if ( totZ > 3 && totN > 1 ) mass[15] = targQPDG.GetNuclMass(totZ-3,totN-1,0);//He3+p
+    mass[16] = mass[6]; // neutron+He3 (the same as alpha)
+  if ( totZ > 3 && totN > 2 ) mass[17] = targQPDG.GetNuclMass(totZ-3,totN-2,0);//pa
+  if ( totZ > 2 && totN > 3 ) mass[18] = targQPDG.GetNuclMass(totZ-2,totN-3,0);//na
+  if(pL>0) // @@ Not debugged @@
   {
     G4int pL1=pL-1;
     if(totN>0||totZ>0) mass[19] = targQPDG.GetNuclMass(totZ  ,totN  ,pL1);// Lambda+gamma
@@ -517,8 +1223,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI: Residual masses are calculated"<<G4endl;
 #endif
-  G4double tA=tZ+tN; 
-  G4double pA=pZ+pN; 
+  tA=tZ+tN; 
+  pA=pZ+pN; 
   G4double prZ=pZ/pA+tZ/tA;
   G4double prN=pN/pA+tN/tA;
   G4double prD=prN*prZ;
@@ -530,13 +1236,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   if(pL>0) prL=pL/pA;
   G4double qval[nCh]={0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
                       0.,0.,0.,0.,0.,0.};
-  qval[ 0] =  totM - mass[ 0];
-  qval[ 1] = (totM - mass[ 1] - mNeut)*prN;
-  qval[ 2] = (totM - mass[ 2] - mProt)*prZ;
-  qval[ 3] = (totM - mass[ 3] - mDeut)*prD/3.;
-  qval[ 4] = (totM - mass[ 4] - mTrit)*prT/6.;
-  qval[ 5] = (totM - mass[ 5] - mHel3)*prH/fhe3;
-  qval[ 6] = (totM - mass[ 6] - mAlph)*prA/9.;
+  qval[ 0] = (totM - mass[ 0])/137./137.;
+  qval[ 1] = (totM - mass[ 1] - mNeut)*prN/137.;
+  qval[ 2] = (totM - mass[ 2] - mProt)*prZ/137.;
+  qval[ 3] = (totM - mass[ 3] - mDeut)*prD/3./137.;
+  qval[ 4] = (totM - mass[ 4] - mTrit)*prT/6./137.;
+  qval[ 5] = (totM - mass[ 5] - mHel3)*prH/fhe3/137.;
+  qval[ 6] = (totM - mass[ 6] - mAlph)*prA/9./137.;
   qval[ 7] = (totM - mass[ 7] - mNeut - mNeut)*prN*prN;
   qval[ 8] = (totM - mass[ 8] - mNeut - mProt)*prD;
   qval[ 9] = (totM - mass[ 9] - mProt - mProt)*prZ*prZ;
@@ -560,19 +1266,15 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     qval[25] = (totM - mass[25] - mAlph - mLamb)*prL*prA/4;
   }
 #ifdef debug
-  G4cout<<"G4QLowEn::PSDI: Q-values are calculated, tgA="<<tA<<"prA="<<pA<<G4endl;
+  G4cout<<"G4QLowEn::PSDI: Q-values are calculated, tgA="<<tA<<", prA="<<pA<<G4endl;
 #endif
-
-  if( !pZ && pN==1)
-  {
-    if(G4UniformRand()>(tA-1.)*(tA-1.)/52900.) qval[0] = 0.0;
-    if(G4UniformRand()>kinEnergy/7.925*tA) qval[2]=qval[3]=qval[4]=qval[5]=qval[9]=0.;
-  }
-  else qval[0] = 0.0;
   
   G4double qv = 0.0;                        // Total sum of probabilities (q-values)
   for(G4int i=0; i<nCh; ++i )
   {
+#ifdef sdebug
+    G4cout<<"G4QLowEn::PSDI: i="<<i<<", q="<<qval[i]<<",m="<<mass[i]<<G4endl;
+#endif
     if( mass[i] < 500.*MeV ) qval[i] = 0.0; // Close A/Z impossible channels
     if( qval[i] < 0.0 )      qval[i] = 0.0; // Close the splitting impossible channels
     qv += qval[i];
@@ -618,9 +1320,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
    case 0:
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(1), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        FstSec->SetDefinition( aGamma );
        SecSec->SetDefinition( aGamma );
@@ -634,12 +1337,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      }
      break;
    case 1:
-     rA-=1;
+     rA-=1;                                              // gamma+n
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(2), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -654,12 +1358,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 2:
      rA-=1;
-     rZ-=1;
+     rZ-=1;                                             // gamma+p
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(3), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -674,12 +1379,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 3:
      rA-=2;
-     rZ-=1;
+     rZ-=1;                                             // gamma+d
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(4), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -693,13 +1399,14 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mF=mDeut; // First hadron 4-momentum
      break;
    case 4:
-     rA-=3;
+     rA-=3;                                             // gamma+t
      rZ-=1;
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(5), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -712,14 +1419,15 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      FstSec->SetDefinition( aTriton );
      mF=mTrit; // First hadron 4-momentum
      break;
-   case 5:
+  case 5:                                            // gamma+He3
      rA-=3;
      rZ-=2;
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(6), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -734,12 +1442,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 6:
      rA-=4;
-     rZ-=2;
+     rZ-=2;                                         // gamma+He4
      if(!evaporate || rA<2)
      {
-       theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+       if(!rZ) theDefinition=aNeutron;
+       else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
-         G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         G4cerr<<"-Warning-G4LE::PSDI: notDef(7), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
      }
@@ -753,10 +1462,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mF=mAlph; // First hadron 4-momentum
      break;
    case 7:
-     rA-=2;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=2;                                          // n+n
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(8), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aNeutron );
@@ -765,10 +1475,21 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 8:
      rZ-=1;
-     rA-=2;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=2;                                           // n+p
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else if(rA==2 && !rZ)
+     {
+       index=7;
+       ResSec->SetDefinition( aDeuteron);
+       FstSec->SetDefinition( aNeutron );
+       SecSec->SetDefinition( aNeutron );
+       mF=mNeut; // First hadron 4-momentum
+       mS=mNeut; // Second hadron 4-momentum
+       break;
+     }
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(9), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aProton );
@@ -777,10 +1498,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 9:
      rZ-=2;
-     rA-=2;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=2;                                           // p+p
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(10), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aProton );
@@ -789,10 +1511,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 10:
      rZ-=2;
-     rA-=3;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=3;                                            // p+d
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(11), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aDeuteron );
@@ -801,10 +1524,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 11:
      rZ-=1;
-     rA-=3;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=3;                                            // n+d
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(12), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aDeuteron );
@@ -813,10 +1537,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 12:
      rZ-=2;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;                                            // d+d
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(13), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
      SecSec->SetDefinition( aDeuteron );
@@ -825,10 +1550,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 13:
      rZ-=2;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;                                            // p+t
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(14), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aTriton );
@@ -837,10 +1563,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 14:
      rZ-=1;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;                                             // n+t
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(15), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aTriton );
@@ -849,10 +1576,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 15:
      rZ-=3;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;                                             // p+He3
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(16), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton);
      SecSec->SetDefinition( aHe3 );
@@ -861,10 +1589,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 16:
      rZ-=2;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;                                             // n+He3
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(17), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aHe3 );
@@ -873,10 +1602,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 17:
      rZ-=3;
-     rA-=5;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=5;                                            // p+alph
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(18), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( anAlpha );
@@ -885,10 +1615,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      break;
    case 18:
      rZ-=2;
-     rA-=5;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=5;                                              // n+alph
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(19), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( anAlpha );
@@ -896,20 +1627,25 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mAlph; // Second hadron 4-momentum
      break;
    case 19:
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rL-=1;                                              // L+gamma (@@ rA inludes rL?)
+     rA-=1;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(20), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aLambda );
      SecSec->SetDefinition( aGamma );
      mF=mLamb; // First hadron 4-momentum
      break;
    case 20:
+     rL-=1;                                              // L+p (@@ rA inludes rL?)
      rZ-=1;
-     rA-=1;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=2;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(21), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
      SecSec->SetDefinition( aLambda );
@@ -917,10 +1653,12 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mLamb; // Second hadron 4-momentum
      break;
    case 21:
-     rA-=1;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rL-=1;                                              // L+n (@@ rA inludes rL?)
+     rA-=2;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(22), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
      SecSec->SetDefinition( aLambda );
@@ -928,11 +1666,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mLamb; // Second hadron 4-momentum
      break;
    case 22:
+     rL-=1;                                              // L+d (@@ rA inludes rL?)
      rZ-=1;
-     rA-=2;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=3;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(23), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
      SecSec->SetDefinition( aLambda );
@@ -940,11 +1680,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mLamb; // Second hadron 4-momentum
      break;
    case 23:
+     rL-=1;                                              // L+t (@@ rA inludes rL?)
      rZ-=1;
-     rA-=3;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(24), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aTriton );
      SecSec->SetDefinition( aLambda );
@@ -952,11 +1694,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mLamb; // Second hadron 4-momentum
      break;
    case 24:
+     rL-=1;                                              // L+He3 (@@ rA inludes rL?)
      rZ-=2;
-     rA-=3;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=4;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(25), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aHe3 );
      SecSec->SetDefinition( aLambda );
@@ -964,11 +1708,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      mS=mLamb; // Second hadron 4-momentum
      break;
    case 25:
+     rL-=1;                                              // L+alph (@@ rA inludes rL?)
      rZ-=2;
-     rA-=4;
-     theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
+     rA-=5;
+     if(rA==1 && !rZ) theDefinition=aNeutron;
+     else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
-       G4cerr<<"-Warning-G4LE::PSDI: notDefined, Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       G4cerr<<"-Warning-G4LE::PSDI: notDef(26), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( anAlpha );
      SecSec->SetDefinition( aLambda );
@@ -1000,10 +1746,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     aNewTrack = new G4Track(FstSec, localtime, position );
     aNewTrack->SetWeight(weight);                                   //    weighted
     aNewTrack->SetTouchableHandle(trTouchable);
-    aParticleChange.AddSecondary( aNewTrack );
+    result.push_back( aNewTrack );
     EnMomConservation-=fst4Mom;
 #ifdef debug
-    G4cout<<"G4QLowEn::PSDI: ***Filled*** 1stH4M="<<fst4Mom<<G4endl;
+    G4cout<<"G4QLowEn::PSDI: ***Filled*** 1stH4M="<<fst4Mom
+          <<", PDG="<<FstSec->GetDefinition()->GetPDGEncoding()<<G4endl;
 #endif
     if(complete>2)                     // Final solution
     {
@@ -1011,7 +1758,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       aNewTrack = new G4Track(ResSec, localtime, position );
       aNewTrack->SetWeight(weight);                                   //    weighted
       aNewTrack->SetTouchableHandle(trTouchable);
-      aParticleChange.AddSecondary( aNewTrack );
+      result.push_back( aNewTrack );
       EnMomConservation-=res4Mom;
 #ifdef debug
       G4cout<<"G4QLowEn::PSDI: ***Filled*** rA4M="<<res4Mom<<",rZ="<<rZ<<",rA="<<rA<<",rL="
@@ -1021,10 +1768,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       aNewTrack = new G4Track(SecSec, localtime, position );
       aNewTrack->SetWeight(weight);                                   //    weighted
       aNewTrack->SetTouchableHandle(trTouchable);
-      aParticleChange.AddSecondary( aNewTrack );
+      result.push_back( aNewTrack );
       EnMomConservation-=snd4Mom;
 #ifdef debug
-      G4cout<<"G4QLowEn::PSDI: ***Filled*** 2ndH4M="<<snd4Mom<<G4endl;
+      G4cout<<"G4QLowEn::PSDI: ***Filled*** 2ndH4M="<<snd4Mom
+          <<", PDG="<<SecSec->GetDefinition()->GetPDGEncoding()<<G4endl;
 #endif
     }
     else res4Mom+=snd4Mom;
@@ -1062,12 +1810,15 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
         G4Track* evaQH = new G4Track(theEQH, localtime, position );
         evaQH->SetWeight(weight);                                   //    weighted
         evaQH->SetTouchableHandle(trTouchable);
-        aParticleChange.AddSecondary( evaQH );
+        result.push_back( evaQH );         
       }
       else G4cerr<<"-Warning-G4QLowEnergy::PostStepDoIt: Bad secondary PDG="<<hPDG<<G4endl;
     }
   }
   // algorithm implementation --- STOPS HERE
+  G4int nres=result.size();
+  aParticleChange.SetNumberOfSecondaries(nres);
+  for(G4int i=0; i<nres; ++i) aParticleChange.AddSecondary(result[i]);
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt:*** PostStepDoIt is done ***"<<G4endl;
 #endif
