@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2009-06-26 17:32:11 vnivanch Exp $
+$Id: History,v 1.122 2009-09-18 14:03:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+18-09-09 mma (testem5-V09-02-06)
+- PhysicsList.cc :
+    renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+- updated README and macro files  
+  
 26-06-09 V.Ivant (testem5-V09-02-05)
 - fixed compillation problem of the previous tag
 

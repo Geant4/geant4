@@ -1,4 +1,4 @@
-# $Id: blaha.mac,v 1.6 2009-03-06 18:04:23 maire Exp $
+# $Id: blaha.mac,v 1.7 2009-09-18 14:03:24 maire Exp $
 #
 # macro file for TestEm5.cc    
 #     		    
@@ -9,7 +9,7 @@
 /testem/det/setAbsThick 3 mm
 /testem/det/setAbsYZ    3 cm
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics local
 #
 /cuts/setLowEdge 1 eV      
 /testem/phys/setCuts 100 um
