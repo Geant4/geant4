@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.26 2009-09-18 15:35:36 vnivanch Exp $
+// $Id: G4Element.hh,v 1.27 2009-09-19 14:13:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -130,13 +130,13 @@ public:  // with description
   //
   G4int GetNbOfAtomicShells() const {return fNbOfAtomicShells;}
   
-  //the binding energy of the shell
+  //the binding energy of the shell, ground shell index=0
   //
-  G4double GetAtomicShell(G4int idx) const;
+  G4double GetAtomicShell(G4int index) const;
 
-  //the number of electrons at the shell
+  //the number of electrons at the shell, ground shell index=0
   //
-  G4int GetNbOfShellElectrons(G4int) const;
+  G4int GetNbOfShellElectrons(G4int index) const;
     
   //number of isotopes constituing this element:
   //
