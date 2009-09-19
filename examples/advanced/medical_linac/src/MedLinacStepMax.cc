@@ -23,78 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// MedLinacStepMax.cc
 //
-// MedLinacPhysicsList.hh
+
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - MedLinac example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
-//
+#include "MedLinacStepMax.hh"
+#include "MedLinacStepMaxMessenger.hh"
 
-#ifndef MedLinacPhysicsList_h
-#define MedLinacPhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
-#include "globals.hh"
-
-class G4VPhysicsConstructor;
-class MedLinacStepMax;
-class MedLinacPhysicsListMessenger;
-
-class MedLinacPhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+MedLinacStepMax::MedLinacStepMax(const G4String& processName)
+ : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
 {
-public:
+  pMess = new MedLinacStepMaxMessenger(this);
+}
+ 
+/////////////////////////////////////////////////////////////////////////////
+MedLinacStepMax::~MedLinacStepMax() { delete pMess; }
 
-  MedLinacPhysicsList();
-  virtual ~MedLinacPhysicsList();
+/////////////////////////////////////////////////////////////////////////////
+G4bool MedLinacStepMax::IsApplicable(const G4ParticleDefinition& particle) 
+{ 
+  return (particle.GetPDGCharge() != 0.);
+}
 
-  void ConstructParticle();
+/////////////////////////////////////////////////////////////////////////////    
+void MedLinacStepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+/////////////////////////////////////////////////////////////////////////////
+G4double MedLinacStepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
+                                                  G4double,
+                                                  G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  G4double ProposedStep = DBL_MAX;
 
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+  if((MaxChargedStep > 0.) &&
+     (aTrack.GetVolume() != 0) &&
+     (aTrack.GetVolume()->GetName() == "DetectorPhys"))
+     ProposedStep = MaxChargedStep;
 
-  void AddStepMax();
-  MedLinacStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
+  return ProposedStep;
+}
 
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  MedLinacStepMax* stepMaxProcess;
-
-  MedLinacPhysicsListMessenger* pMessenger;
-};
-
-#endif
+/////////////////////////////////////////////////////////////////////////////
+G4VParticleChange* MedLinacStepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
 

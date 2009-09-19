@@ -12,7 +12,7 @@
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
+// * use.  Please see the licensepy in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
@@ -23,77 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// MedLinacStepMax.hh
 //
-// MedLinacPhysicsList.hh
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - MedLinac example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
-//
+#ifndef MedLinacStepMax_h
+#define MedLinacStepMax_h 1
 
-#ifndef MedLinacPhysicsList_h
-#define MedLinacPhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
 #include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
 
-class G4VPhysicsConstructor;
-class MedLinacStepMax;
-class MedLinacPhysicsListMessenger;
+class MedLinacStepMaxMessenger;
 
-class MedLinacPhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+class MedLinacStepMax : public G4VDiscreteProcess
 {
-public:
+  public:     
 
-  MedLinacPhysicsList();
-  virtual ~MedLinacPhysicsList();
+     MedLinacStepMax(const G4String& processName ="UserStepMax");
+    ~MedLinacStepMax();
 
-  void ConstructParticle();
+     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     void     SetMaxStep(G4double);
+     G4double GetMaxStep() {return MaxChargedStep;};
+     
+     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                     G4double   previousStepSize,
+			                     G4ForceCondition* condition);
 
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+       {return 0.;};     // it is not needed here !
 
-  void AddStepMax();
-  MedLinacStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
+  private:
 
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  MedLinacStepMax* stepMaxProcess;
-
-  MedLinacPhysicsListMessenger* pMessenger;
+     G4double    MaxChargedStep;
+     MedLinacStepMaxMessenger* pMess;
 };
 
 #endif

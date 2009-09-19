@@ -24,9 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.12 2007-07-06 21:39:05 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc
+// Last revision G.A.P.Cirrone, September 2009
 //
-// Code developed by: M. Piergentili
+// Code originally developed by: M. Piergentili
+// Code mantained by G.A.P.Cirrone
 //
 //
 //------------------------------ beam line along z axis---------------------
@@ -90,13 +92,6 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
     Phantom_phys(0)
 {
   phantomDim = 15.*cm;
-   //PhantomDimensionX = PhantomDim_x;
-   //PhantomDimensionY = PhantomDim_y;
-   //PhantomDimensionZ = PhantomDim_z;
-
-  //numberOfVoxelsAlongX=150;
-  //numberOfVoxelsAlongY=150;
-  //numberOfVoxelsAlongZ=150;
 
   numberOfVoxelsAlongX=0;
   numberOfVoxelsAlongY=0;
@@ -118,9 +113,7 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
   decorator = new MedLinacTargetAndFilterDecorator(pHead);
   decorator1 = new MedLinacMLCDecorator(pHead);
   ComputeDimVoxel();
-
-
-  }
+}
 
 MedLinacDetectorConstruction* MedLinacDetectorConstruction::instance = 0;
 
@@ -258,12 +251,13 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
   G4double expHall_x = 3.0*m;
   G4double expHall_y = 3.0*m;
   G4double expHall_z = 3.0*m;
-  G4Box* experimentalHall_box
-    = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
-  experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
-                                             Air,"expHall_log",0,0,0);
+
+  G4Box* experimentalHall_box = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
+
+  G4LogicalVolume* experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
+							      Air,"expHall_log",0,0,0);
   experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),
-                                      "expHall",experimentalHall_log,0,false,0);
+					    "expHall",experimentalHall_log,0,false,0);
 
 
  
@@ -406,32 +400,12 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    simpleWorldVisAtt->SetVisibility(false);
    experimentalHall_log ->SetVisAttributes(simpleWorldVisAtt);
 
-   //if you want not to see phantom, jaws e vacuum ...:
 
-   //Phantom_log->SetVisAttributes(simpleWorldVisAtt);
-   //JawY1_log->SetVisAttributes(simpleWorldVisAtt);
-   //JawY2_log->SetVisAttributes(simpleWorldVisAtt);
-   //JawX1_log->SetVisAttributes(simpleWorldVisAtt);
-   //JawX2_log->SetVisAttributes(simpleWorldVisAtt);
-   //vacuumBlock_log->SetVisAttributes(simpleWorldVisAtt);
-
-  //   Sets a max Step length in the detector
-   //G4double maxStep = 0.2*mm;
    Phantom_log->SetUserLimits(new G4UserLimits(maxStep));
 
    ConstructVolume();
 
    ConstructSensitiveDetector();
-
-   //G4cout <<"????????????????????numberOfVoxels "<< numberOfVoxels <<G4endl ;
-   //G4cout <<"????????????????????numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
-   //G4cout <<"????????????????????numberOfVoxelsAlongY "<< numberOfVoxelsAlongY <<G4endl ;
-   //G4cout <<"????????????????????numberOfVoxelsAlongZ "<< numberOfVoxelsAlongZ <<G4endl ;
-
-
-   //G4cout <<"????????????????????maxStep "<< maxStep/mm << " mm " <<G4endl ;
-
-
 
 
    return experimentalHall_phys;
@@ -439,16 +413,10 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 
 void MedLinacDetectorConstruction::PrintParameters()
 { 
-  //G4cout <<"jaws1 x position "<< fieldX1/cm << " cm "<<G4endl ;
-  //G4cout <<"jaws2 x position "<< fieldX2/cm << " cm "<<G4endl ; 
-  //G4cout <<"jaws1 y position "<< fieldY1/cm << " cm "<<G4endl ;
-  //G4cout <<"jaws2 y position "<< fieldY2/cm << " cm "<<G4endl ; 
+
   G4cout <<"************************phantom dimension "<< phantomDim_x/cm << " cm "<<G4endl ;
   G4cout <<"************************phantom dimension "<< phantomDim/cm << " cm "<<G4endl;
-  //G4cout <<"************************numberOfVoxelsAlongX "<< numberOfVoxelsAlongX <<G4endl ;
-  //G4cout <<"************************numberOfVoxelsAlongY "<< numberOfVoxelsAlongY <<G4endl ;
-  //G4cout <<"************************numberOfVoxelsAlongZ "<< numberOfVoxelsAlongZ <<G4endl ;
-  //G4cout <<"************************maxStep "<< maxStep/mm << " mm " <<G4endl;
+
 }
 
 

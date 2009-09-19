@@ -12,7 +12,7 @@
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
+// * use.  Please see the lense in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: MedLinacPhysicsListMessenger.hh,v 1.2 2006-06-29 16:03:59 gunter Exp $
-//
-//
-// Code developed by: M. Piergentili
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef MedLinacPhysicsListMessenger_h
 #define MedLinacPhysicsListMessenger_h 1
@@ -37,30 +34,34 @@
 
 class MedLinacPhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class G4UIcmdWithAString;
 
-//****************************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class MedLinacPhysicsListMessenger: public G4UImessenger
 {
   public:
+  
     MedLinacPhysicsListMessenger(MedLinacPhysicsList* );
    ~MedLinacPhysicsListMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    MedLinacPhysicsList* pMedLinacPhysicsList;
-
-    G4UIdirectory*             PhysicsDir;
-    G4UIcmdWithADoubleAndUnit* CutCmd;
-   
-  //G4UIcmdWithoutParameter*   UpdateCmd;
+  
+  MedLinacPhysicsList* pPhysicsList;
+    
+  G4UIdirectory*             physDir;        
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithAString* packageListCmd;    
 };
 
-//****************************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
 

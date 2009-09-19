@@ -23,67 +23,94 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: MedLinacPhysicsListMessenger.cc,v 1.2 2006-06-29 16:04:41 gunter Exp $
-//
-//  Code developed by: M. Piergentili
-
 #include "MedLinacPhysicsListMessenger.hh"
 
 #include "MedLinacPhysicsList.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAString.hh"
 
-//*********************************************************************
+/////////////////////////////////////////////////////////////////////////////
+MedLinacPhysicsListMessenger::MedLinacPhysicsListMessenger(MedLinacPhysicsList* pPhys)
+:pPhysicsList(pPhys)
+{
+  physDir = new G4UIdirectory("/physic/");
+  physDir->SetGuidance("Commands to activate physics models and set cuts");
+   
+  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setGCut",this);  
+  gammaCutCmd->SetGuidance("Set gamma cut.");
+  gammaCutCmd->SetParameterName("Gcut",false);
+  gammaCutCmd->SetUnitCategory("Length");
+  gammaCutCmd->SetRange("Gcut>0.0");
+  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-MedLinacPhysicsListMessenger::MedLinacPhysicsListMessenger(
-                                           MedLinacPhysicsList* MedLinacCut)
-:pMedLinacPhysicsList(MedLinacCut)
-{ 
+  electCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setECut",this);  
+  electCutCmd->SetGuidance("Set electron cut.");
+  electCutCmd->SetParameterName("Ecut",false);
+  electCutCmd->SetUnitCategory("Length");
+  electCutCmd->SetRange("Ecut>0.0");
+  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setPCut",this);  
+  protoCutCmd->SetGuidance("Set positron cut.");
+  protoCutCmd->SetParameterName("Pcut",false);
+  protoCutCmd->SetUnitCategory("Length");
+  protoCutCmd->SetRange("Pcut>0.0");
+  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  G4cout <<"==================PhysicsListMessenger  "<<G4endl;
-  PhysicsDir = new G4UIdirectory("/PhysicsList/");
-  PhysicsDir->SetGuidance("physics parameters");
+  allCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setCuts",this);  
+  allCutCmd->SetGuidance("Set cut for all.");
+  allCutCmd->SetParameterName("cut",false);
+  allCutCmd->SetUnitCategory("Length");
+  allCutCmd->SetRange("cut>0.0");
+  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  CutCmd = new G4UIcmdWithADoubleAndUnit("/PhysicsList/cut",this);
-  CutCmd->SetGuidance("Set cut length (mm)");
-  CutCmd->SetParameterName("defaultCut",false);
-  CutCmd->SetDefaultUnit( "mm" );
-  CutCmd->SetUnitCategory("Length");
-  CutCmd->AvailableForStates(G4State_PreInit);
+  pListCmd = new G4UIcmdWithAString("/physic/addPhysics",this);  
+  pListCmd->SetGuidance("Add physics list.");
+  pListCmd->SetParameterName("PList",false);
+  pListCmd->AvailableForStates(G4State_PreInit);  
 
-  //UpdateCmd = new G4UIcmdWithoutParameter("/Jaws/update",this);
-  //UpdateCmd->SetGuidance("Update geometry.");
-  //UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  //UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  //UpdateCmd->AvailableForStates(G4State_Idle);
-
-
+  packageListCmd = new G4UIcmdWithAString("/physic/addPackage",this);
+  packageListCmd->SetGuidance("Add physics package.");
+  packageListCmd->SetParameterName("package",false);
+  packageListCmd->AvailableForStates(G4State_PreInit);
 }
 
-//****************************************************************************
+/////////////////////////////////////////////////////////////////////////////
 MedLinacPhysicsListMessenger::~MedLinacPhysicsListMessenger()
 {
-
-  delete CutCmd;
-  //delete UpdateCmd;
-
-  delete PhysicsDir;
+  delete gammaCutCmd;
+  delete electCutCmd;
+  delete protoCutCmd;
+  delete allCutCmd;
+  delete pListCmd;
+  delete physDir;    
 }
 
-//****************************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void MedLinacPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == CutCmd )
-   { pMedLinacPhysicsList->SetCut(CutCmd->GetNewDoubleValue(newValue));}
+void MedLinacPhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{       
+  if( command == gammaCutCmd )
+   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
+     
+  if( command == electCutCmd )
+   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
+     
+  if( command == protoCutCmd )
+   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
 
-  //if( command == UpdateCmd )
-  // { MedLinacDetector->UpdateGeometry(); }
+  if( command == allCutCmd )
+    {
+      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
+      pPhysicsList->SetCutForGamma(cut);
+      pPhysicsList->SetCutForElectron(cut);
+      pPhysicsList->SetCutForPositron(cut);
+    } 
 
+  if( command == pListCmd )
+   { pPhysicsList->AddPhysicsList(newValue);}
 }
 
-//****************************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,78 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// MedLinacStepMaxMessenger.hh
 //
-// MedLinacPhysicsList.hh
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
+//
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - MedLinac example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
 // G.A.P. Cirrone(a)*
-//
-// (a) Laboratori Nazionali del Sud
+// 
+// (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-//
+// 
 // * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ----------------------------------------------------------------------------
-//
 
-#ifndef MedLinacPhysicsList_h
-#define MedLinacPhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
+#ifndef MedLinacStepMaxMessenger_h
+#define MedLinacStepMaxMessenger_h 1
+
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
 class MedLinacStepMax;
-class MedLinacPhysicsListMessenger;
+class G4UIcmdWithADoubleAndUnit;
 
-class MedLinacPhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+class MedLinacStepMaxMessenger: public G4UImessenger
 {
-public:
-
-  MedLinacPhysicsList();
-  virtual ~MedLinacPhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  MedLinacStepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  MedLinacStepMax* stepMaxProcess;
-
-  MedLinacPhysicsListMessenger* pMessenger;
+  public:
+    MedLinacStepMaxMessenger(MedLinacStepMax*);
+   ~MedLinacStepMaxMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    MedLinacStepMax* stepMax;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
 #endif
-

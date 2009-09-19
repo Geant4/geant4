@@ -23,224 +23,277 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MedLinacPhysicsList.cc,v 1.6 2007-07-01 15:19:18 mpiergen Exp $
+// MedicalLinacPhysicsList.cc
+// ----------------------------------------------------------------------------
+// Code developed by:
 //
+// G.A.P. Cirrone(a)
 //
-// Code developed by: M. Piergentili
+// (a) Laboratori Nazionali del Sud
+//     of the INFN, Catania, Italy
 //
-#include "globals.hh"
+// * cirrone@lns.infn.it
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
+// ----------------------------------------------------------------------------
+
+// This class provides all the physic models that can be activated;
+// Each model can be setted via macro commands;
+// The models can be activate with three different complementar methods:
+//
+// 1. Use of the *Packages*.
+//    Packages (that are contained inside the
+//    Geant4 distribution at $G4INSTALL/source/physics_lists/lists) provide a full set
+//    of models (both electromagnetic and hadronic).
+//    The User can use this method simply add the line /physic/addPackage <nameOfPackage>
+//    in his/her macro file. No other action is required.
+//
+// 2. Use of the *Physic Lists*.
+//    Physic lists are also already ready to use inside the Geant4 distribution
+//    ($G4INSTALL/source/physics_lists/builders). To use them the simple
+//    /physic/addPhysics <nameOfPhysicList> command must be used in the macro.
+//
+// 3. Use of a *local* physics. In this case the models are implemented in local files
+//    contained in the Hadrontherapy folder. The use of local physic is recommended
+//    to more expert Users.
+//    
+//    The *local* physics can be activated with the same /physic/addPhysic <nameOfPhysic> command;
+//
+//    While Packages approch must be used exclusively, Physics List and Local physics can
+//    be activated, if necessary, contemporaneously in the same simulation run.
+//
 #include "MedLinacPhysicsList.hh"
 #include "MedLinacPhysicsListMessenger.hh"
+#include "MedLinacStepMax.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VPhysicsConstructor.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
-#include <iomanip>   
+// Local physic directly implemented in the Hadronthrapy directory
+
+// Physic lists (contained inside the Geant4 distribution)
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4Decay.hh"
+
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-#include "G4ProductionCuts.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4StepLimiter.hh"
-MedLinacPhysicsList::MedLinacPhysicsList():  G4VUserPhysicsList()
-{   
-  physicsListMessenger = new MedLinacPhysicsListMessenger(this);
-  //defaultCutValue = defaultCut;
-  //cutForGamma     = defaultCutValue;
-  //cutForElectron  = defaultCutValue;
-  //cutForPositron  = defaultCutValue;
-   SetVerboseLevel(6);
+#include "G4ProcessManager.hh"
+
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4EmProcessOptions.hh"
+
+/////////////////////////////////////////////////////////////////////////////
+MedLinacPhysicsList::MedLinacPhysicsList() : G4VModularPhysicsList()
+{
+  G4LossTableManager::Instance();
+  defaultCutValue = 1.*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
+
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
+  locIonIonInelasticIsRegistered = false;
+
+  stepMaxProcess  = 0;
+
+  pMessenger = new MedLinacPhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
+  // EM physics
+  emPhysicsList = new G4EmStandardPhysics_option3(1);
+  emName = G4String("emstandard_opt3");
+
+  // Deacy physics and all particles
+  decPhysicsList = new G4DecayPhysics();
 }
 
+/////////////////////////////////////////////////////////////////////////////
 MedLinacPhysicsList::~MedLinacPhysicsList()
-{;}
+{
+  delete pMessenger;
+  delete emPhysicsList;
+  delete decPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
+}
 
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::AddPackage(const G4String& name)
+{
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
+  G4int i=0;
+  const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
+  G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
+  while (elem !=0)
+	{
+	  RegisterPhysics(tmp);
+	  elem= phys->GetPhysics(++i) ;
+	  tmp = const_cast<G4VPhysicsConstructor*> (elem);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void MedLinacPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
-
-  ConstructBosons();
-  ConstructLeptons();
-}
-void MedLinacPhysicsList::ConstructBosons()
-{
-  // gamma
-  G4Gamma::GammaDefinition();
+  decPhysicsList->ConstructParticle();
 }
 
-void MedLinacPhysicsList::ConstructLeptons()
-{
-  // leptons
-  //  e+/-
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-}
-
+/////////////////////////////////////////////////////////////////////////////
 void MedLinacPhysicsList::ConstructProcess()
 {
-  // Define transportation process
-
+  // transportation
+  //
   AddTransportation();
-  ConstructEM();
+
+  // electromagnetic physics list
+  //
+  emPhysicsList->ConstructProcess();
+  em_config.AddModels();
+
+  // decay physics list
+  //
+  decPhysicsList->ConstructProcess();
+
+  // hadronic physics lists
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
+
+  // step limitation (as a full process)
+  //
+  AddStepMax();
 }
 
-//---------------------------------------------------------------------
-
-//#include "G4ComptonScattering.hh"
-//#include "G4GammaConversion.hh"
-//#include "G4PhotoElectricEffect.hh"
-
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyRayleigh.hh" 
-
-//#include "G4PenelopePhotoElectric.hh"
-//#include "G4PenelopeCompton.hh"  
-//#include "G4PenelopeGammaConversion.hh"
-//#include "G4PenelopeRayleigh.hh" 
-
-#include "G4MultipleScattering.hh"
-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
-
-//#include "G4PenelopeIonisation.hh" 
-//#include "G4PenelopeBremsstrahlung.hh" 
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-
-//---------------------------------------------------------------------
-
-void MedLinacPhysicsList::ConstructEM()
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::AddPhysicsList(const G4String& name)
 {
+  if (verboseLevel>1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
+  if (name == emName) return;
+
+  /////////////////////////////////////////////////////////////////////////////
+  //   ELECTROMAGNETIC MODELS
+  /////////////////////////////////////////////////////////////////////////////
+
+  if (name == "standard_opt3") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
+
+  } else if (name == "LowE_Livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+
+ } else if (name == "LowE_Penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+
+    /////////////////////////////////////////////////////////////////////////////
+    //   HADRONIC MODELS
+    /////////////////////////////////////////////////////////////////////////////
+  } else if (name == "elastic" && !helIsRegisted) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "HElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "QElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    bicIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
+
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  stepMaxProcess = new MedLinacStepMax();
+
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while ((*theParticleIterator)()){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
-      // gamma  
- 
-      lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(lowePhot);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-      pmanager -> AddProcess(new G4StepLimiter(), -1, -1, 3);
 
-      //pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      //pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      //pmanager->AddDiscreteProcess(new G4GammaConversion);
-
-      //pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
-      //pmanager->AddDiscreteProcess(new G4PenelopeCompton);
-      //pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);      
-      //pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
-
-      
-    } else if (particleName == "e-") {
-      //electron
-     
-      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-    
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);     
-      pmanager -> AddProcess(new G4StepLimiter(), -1, -1, 3);
-      
-      //pmanager->AddProcess(new G4PenelopeIonisation,       -1, 2,2);
-      //pmanager->AddProcess(new G4PenelopeBremsstrahlung,   -1,-1,3);
-      
-      //pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      //pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);    
-  
-    } else if (particleName == "e+") {
-      //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      pmanager -> AddProcess(new G4StepLimiter(), -1, -1, 3);
-    }
+    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+      {
+	pmanager ->AddDiscreteProcess(stepMaxProcess);
+      }
   }
 }
 
-
-//---------------------------------------------------------------------
-
+/////////////////////////////////////////////////////////////////////////////
 void MedLinacPhysicsList::SetCuts()
 {
-  // uppress error messages even in case e/gamma/proton do not exist            
-  G4int temp = GetVerboseLevel();                                                
-  SetVerboseLevel(6);               
-                                            
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
- defaultCutValue = defaultCut;
- //G4cout <<"--------------------default cut  "<< defaultCutValue/mm << " mm " <<G4endl;
-  SetCutsWithDefault();   
-
-  //SetCutValue(cutForGamma, "gamma");
-  //SetCutValue(cutForElectron, "e-");
-  //SetCutValue(cutForPositron, "e+");
-
-  // Retrieve verbose level
-  SetVerboseLevel(temp);  
-
-  // Production thresholds for detector regions
-
-  //G4String regName[] = {"PrimaryCollimatorUp","PrimaryCollimatorLow"};
-  //G4double cutValue[] = {1.*mm, 1.*mm};
-  //for(G4int i=0;i<2;i++)
-  // { 
-  //G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName[i]);
-  //G4ProductionCuts* cuts = new G4ProductionCuts;
-  //cuts->SetProductionCut(cutValue[i]);
-  //reg->SetProductionCuts(cuts);
-  //}
-
-
-  G4String regName = "PrimaryCollimatorLow";
-  G4double cutValue = 8.*cm;  
-  G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName);
-  G4ProductionCuts* cuts = new G4ProductionCuts;
-  cuts->SetProductionCut(cutValue);
-  reg->SetProductionCuts(cuts);
-
-  G4String regName1 = "PrimaryCollimatorUp";
-  G4double cutValue1 = 8.*cm;  
-  G4Region* reg1 = G4RegionStore::GetInstance()->GetRegion(regName1);
-  G4ProductionCuts* cuts1 = new G4ProductionCuts;
-  cuts1->SetProductionCut(cutValue1);
-  reg1->SetProductionCuts(cuts1);
-
-  
 
   if (verboseLevel >0){
-    G4cout << "MedLinac::SetCuts: default cut length : "
-         << G4BestUnit(defaultCutValue,"Length") << G4endl;
+    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
-  
 
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
+
+  if (verboseLevel>0) DumpCutValuesTable();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::SetCutForGamma(G4double cut)
+{
+  cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::SetCutForElectron(G4double cut)
+{
+  cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void MedLinacPhysicsList::SetCutForPositron(G4double cut)
+{
+  cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 
-
-void MedLinacPhysicsList::SetCut (G4double val)
-{ 
-  defaultCut = val;
-}

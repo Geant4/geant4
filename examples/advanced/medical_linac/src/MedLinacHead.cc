@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: MedLinacHead.cc
+// Last revision G.A.P.Cirrone, September 2009
 //
-// $Id: MedLinacHead.cc,v 1.3 2006-06-29 16:04:25 gunter Exp $
-//
-// Code developed by: M. Piergentili
+// Code originally developed by: M. Piergentili
+// Code mantained by G.A.P.Cirrone
 //
 //
 //------------------------------ beam line along z axis---------------------
@@ -91,24 +92,14 @@ MedLinacHead::MedLinacHead()
     reticle_phys(0), aLowerCollRegion(0),aUpperCollRegion(0)
    
 { 
-  aLowerCollRegion = new G4Region("PrimaryCollimatorLow");
-  aUpperCollRegion = new G4Region("PrimaryCollimatorUp");
 }
 
 MedLinacHead::~MedLinacHead()
 {;}
 
-
+/////////////////////////////////////////////////////////////////////////////
 void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume* vacuumBlock)
 {
-
-
-  //G4GeometryManager::GetInstance()->OpenGeometry();
-  //G4PhysicalVolumeStore::GetInstance()->Clean();
-  //G4LogicalVolumeStore::GetInstance()->Clean();
-  //G4SolidStore::GetInstance()->Clean();
-  //G4RegionStore::GetInstance()->Clean(); // -> Segmentation fault (core dumped)
-
 
   //    materials
 
@@ -116,7 +107,6 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   G4double z;  // atomic number
   G4double density;
   G4int ncomponents;
-  //G4int natoms;
   G4String name;
   G4String symbol;
   G4double fractionmass;
@@ -124,10 +114,6 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   G4double temperature;                                             
   G4double pressure;                                              
 
-
-  //a = 207.19*g/mole;
-  //density = 11.35*g/cm3;
-  //G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
 
   a = 14.00674*g/mole;
   G4Element* elN = new G4Element(name="Nitrogen" ,symbol="N", z=7., a);
@@ -146,19 +132,6 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   Air->AddElement(elN, fractionmass=70*perCent);
   Air->AddElement(elO, fractionmass=30*perCent);
 
-  //density = 2.702*g/cm3;
-  //a = 26.981539*g/mole;
-  //G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-
-  //density = 8.960*g/cm3;
-  //a = 63.55*g/mole;
-  //G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-
-  //a = 47.88*g/mole;
-  //density = 4.50*g/cm3;
-  //Titanium = new G4Material("titanium" ,z = 22.,a,density);
-
-  //density = 19.3*g/cm3;
   density = 18.*g/cm3;
   a = 183.85*g/mole;
   G4Material* W = new G4Material(name="Tungsten"  , z=74., a, density);
@@ -215,7 +188,9 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   G4Colour  yellow  (1.0, 1.0, 0.0);
   //G4Colour  lblue   (0.20, .50, .85);
 
-  //------------------------------------------------------ volumes
+  
+  
+//------------------------------------------------------ volumes
 
   //------------------------------ experimental hall (world volume)
   //------------------------------ beam line along z axis---------------------  
@@ -233,10 +208,10 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
             G4ThreeVector(windowUpPos_x,windowUpPos_y,windowUpPos_z),
             "windowUp",windowUp_log,world,false,0);
 
-
+  
   //-------------------- the first collimator upper----------------
 
-
+  
   G4double innerRadiusOfTheTubeEx = 1.0*cm;
   G4double outerRadiusOfTheTubeEx = 8.*cm;
   G4double hightOfTheTubeEx = 4.0*cm;
@@ -255,6 +230,8 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
 					   G4ThreeVector(UpperCollimatorPosX,UpperCollimatorPosY,
 							 UpperCollimatorPosZ),"UpperCollimator",
 					   UpperCollimator_log,vacuumBlock,false,0);
+
+ 
   //-------------------- the first collimator lower----------------
 
   G4double  pRmin1 = 0.*cm;
@@ -293,12 +270,8 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
 					G4ThreeVector(CminusCPos_x,CminusCPos_y,CminusCPos_z),
 					"CylMinusCone",CylMinusCone_log,vacuumBlock,false,0);
   
-  
-  //delete collim_log;
-  //delete tracker_log;
+
   //------------------window lower-------------------
-
-
   G4double windowLowDim_x = 4.*cm;
   G4double windowLowDim_y = 4.*cm;
   G4double windowLowDim_z = 0.0127*cm;
@@ -313,7 +286,9 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   windowLow_phys = new G4PVPlacement(0,
             G4ThreeVector(windowLowPos_x,windowLowPos_y,windowLowPos_z),
             "windowLow",windowLow_log,world,false,0);
+	    
 
+  
      
     //---------------Ion chamber------------------------
 
@@ -340,20 +315,21 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
 
   SignalPlate_log = new G4LogicalVolume(SignalPlate ,Kapton,"SignalPlate_log",0,0,0);
 
+  
   //-----Ion chamber----window 1---------------------
 
   G4double Window1Pos_z = 100.165*cm;
   Window1_phys = new G4PVPlacement(0,
            G4ThreeVector(IonChamberPos_x,IonChamberPos_y,Window1Pos_z),
            "Window",Window_log,world,false,0);
-
+  
  //------Ion chamber---Signal Plate 1---------------------
 
   G4double SignalPlate1Pos_z = 99.927*cm;
   SignalPlate1_phys = new G4PVPlacement(0,
            G4ThreeVector(IonChamberPos_x,IonChamberPos_y,SignalPlate1Pos_z),
            "SignalPlate",SignalPlate_log,world,false,0);
-
+  
  //------Ion chamber---Signal Plate 2---------------------
 
   G4double SignalPlate2Pos_z = 99.688*cm;
@@ -361,27 +337,28 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
            G4ThreeVector(IonChamberPos_x,IonChamberPos_y,SignalPlate2Pos_z),
            "SignalPlate",SignalPlate_log,world,false,0);
 
+  
  //------Ion chamber---window 2---------------------
 
   G4double Window2Pos_z = 99.45*cm;
   Window2_phys = new G4PVPlacement(0,
            G4ThreeVector(IonChamberPos_x,IonChamberPos_y,Window2Pos_z),
            "Window",Window_log,world,false,0);
-
+  
  //------Ion chamber---Signal Plate 3---------------------
 
   G4double SignalPlate3Pos_z = 99.212*cm;
   SignalPlate3_phys = new G4PVPlacement(0,
 					G4ThreeVector(IonChamberPos_x,IonChamberPos_y,SignalPlate3Pos_z),
 					"SignalPlate",SignalPlate_log,world,false,0);
-
+  
  //------Ion chamber---Signal Plate 4---------------------
 
   G4double SignalPlate4Pos_z = 98.973*cm;
   SignalPlate4_phys = new G4PVPlacement(0,
 					G4ThreeVector(IonChamberPos_x,IonChamberPos_y,SignalPlate4Pos_z),
 					"SignalPlate",SignalPlate_log,world,false,0);
-
+  
  //------Ion chamber---window 3---------------------
 
   G4double Window3Pos_z = 98.735*cm;
@@ -389,7 +366,7 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
            G4ThreeVector(IonChamberPos_x,IonChamberPos_y,Window3Pos_z),
            "Window",Window_log,world,false,0);
 
-
+  
   //----------------Mirror---------------------------
 
   G4double innerRadiusOfTheMirror = 0.*cm;
@@ -408,7 +385,7 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
   Mirror_phys = new G4PVPlacement(rotateMirror,
            G4ThreeVector(MirrorPos_x,MirrorPos_y,MirrorPos_z),
            "Mirror",Mirror_log,world,false,0);
-
+  
   //----------------Light Field Reticle
 
   G4double reticleDim_x = 15.0*cm;
@@ -426,92 +403,37 @@ void MedLinacHead::ConstructComponent(G4VPhysicalVolume* world,G4VPhysicalVolume
              G4ThreeVector(reticlePos_x,reticlePos_y,reticlePos_z),
              "reticle",reticle_log,world,false,0);
   
-  // Cuts by Regions 
-
-
-  //G4String regName[] = {"PrimaryCollimatorUp","PrimaryCollimatorLow"};
-  //G4Region* aUpperCollRegion = new G4Region(regName[0]);
-  //G4Region* aLowerCollRegion = new G4Region(regName[1]);
-  //UpperCollimator_log->SetRegion(aUpperCollRegion);
-  //CylMinusCone_log->SetRegion(aLowerCollRegion);
-  //aUpperCollRegion->AddRootLogicalVolume(UpperCollimator_log);
-  //aLowerCollRegion->AddRootLogicalVolume(CylMinusCone_log);
-
-  //G4String regName = "PrimaryCollimatorLow";
-  //G4Region* aLowerCollRegion = new G4Region(regName);
-  CylMinusCone_log->SetRegion(aLowerCollRegion);
-  aLowerCollRegion->AddRootLogicalVolume(CylMinusCone_log);
-
-  //G4String regName1 = "PrimaryCollimatorUp";
-  //G4Region* aUpperCollRegion = new G4Region(regName1);
-  UpperCollimator_log->SetRegion(aUpperCollRegion);
-  aUpperCollRegion->AddRootLogicalVolume(UpperCollimator_log);
 
 //--------- Visualization attributes -------------------------------
-
    G4VisAttributes* simpleTungstenWVisAtt= new G4VisAttributes(magenta);
    simpleTungstenWVisAtt->SetVisibility(true);
    simpleTungstenWVisAtt->SetForceWireframe(true);
    collim_log->SetVisAttributes(simpleTungstenWVisAtt);
+   
+ 
    CylMinusCone_log->SetVisAttributes(simpleTungstenWVisAtt);
    UpperCollimator_log->SetVisAttributes(simpleTungstenWVisAtt);
-
-   G4VisAttributes* simpleCopperSVisAtt= new G4VisAttributes(cyan);
-   simpleCopperSVisAtt->SetVisibility(true);
-   simpleCopperSVisAtt->SetForceSolid(true);
-   
+    
    G4VisAttributes* simpleBerylliumSVisAtt= new G4VisAttributes(red);
    simpleBerylliumSVisAtt->SetVisibility(true);
    simpleBerylliumSVisAtt->SetForceSolid(true);
    windowUp_log->SetVisAttributes(simpleBerylliumSVisAtt);
+   
    windowLow_log->SetVisAttributes(simpleBerylliumSVisAtt);
-
+   
    G4VisAttributes* simpleMylarVisAtt= new G4VisAttributes(grey);
    simpleMylarVisAtt->SetVisibility(true);
    simpleMylarVisAtt->SetForceSolid(true);
    Mirror_log->SetVisAttributes(simpleBerylliumSVisAtt);
    reticle_log->SetVisAttributes(simpleMylarVisAtt);
-
+   
 
    G4VisAttributes* simpleKaptonVisAtt= new G4VisAttributes(yellow);
    simpleKaptonVisAtt->SetVisibility(true);
    simpleKaptonVisAtt->SetForceSolid(true);
-   Window_log->SetVisAttributes(simpleKaptonVisAtt);
+   
+   Window_log->SetVisAttributes(simpleKaptonVisAtt);  
    SignalPlate_log->SetVisAttributes(simpleKaptonVisAtt);
-
-   //if you want not to see  mirror ...:
-
-   //G4VisAttributes* simpleWorldVisAtt= new G4VisAttributes(white);
-   //simpleWorldVisAtt->SetVisibility(false);
-   //Mirror_log->SetVisAttributes(simpleWorldVisAtt);
-   //CylMinusCone_log->SetVisAttributes(simpleWorldVisAtt);
-   //UpperCollimator_log->SetVisAttributes(simpleWorldVisAtt);
-   //windowUp_log->SetVisAttributes(simpleWorldVisAtt);
-   //windowLow_log->SetVisAttributes(simpleWorldVisAtt);
-   //Window_log->SetVisAttributes(simpleWorldVisAtt);
-   //SignalPlate_log->SetVisAttributes(simpleWorldVisAtt);
-   //reticle_log->SetVisAttributes(simpleWorldVisAtt);
-
-   //layer1_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer2_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer3_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer4_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer5_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer6_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer7_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer8_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer9_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer10_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer11_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer12_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer13_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer14_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer15_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer16_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer17_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer18_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer19_log->SetVisAttributes(simpleWorldVisAtt);
-   //layer21_log->SetVisAttributes(simpleWorldVisAtt);
 
 }
 

@@ -1,8 +1,9 @@
 
-/PhysicsList/cut 0.2 mm
+
 /control/verbose 1
 /control/saveHistory
 /run/verbose 2
+/physic/addPhysics emstandard_opt3     
 
 /run/initialize
 /tracking/storeTrajectory 1
@@ -193,4 +194,4 @@
 
 /energy 6.0 MeV
 /sourceType 0.127 MeV
-#/run/beamOn 10
+/run/beamOn 1000
