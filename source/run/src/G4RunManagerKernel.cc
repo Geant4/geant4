@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.45 2009-08-10 07:10:14 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.46 2009-09-20 20:22:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,6 +82,21 @@ G4RunManagerKernel::G4RunManagerKernel()
   }
   fRunManagerKernel = this;
 
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  if(particleTable->entries()>0)
+  {
+    // No particle should be registered beforehand
+    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    G4cerr<<" G4RunManagerKernel fatal exception"<<G4endl;
+    G4cerr<<"  -- Following particles have already been registered"<<G4endl;
+    G4cerr<<"     before G4RunManagerKernel is instantiated."<<G4endl;
+    for(int i=0;i<particleTable->entries();i++)
+    { G4cerr<<"     "<<particleTable->GetParticle(i)->GetParticleName()<<G4endl; }
+    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","StaticParticleDefinition",
+       FatalException,"Particles have already been instantiated before G4RunManagerKernel.");
+  }
+  
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
   defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
