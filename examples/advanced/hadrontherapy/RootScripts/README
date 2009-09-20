@@ -4,3 +4,28 @@ Each subdirectory (proton, etc) contains a specific ROOT script.
 
 --> proton/BraggPeak
 comparison.C performs a comparison beetwen non modulated Bragg peaks
+
+All the scripts in the iaeaBenchmark/ -directory apply to results produced using the IAEA geometry
+-->iaeaBenchmark/braggPeak.C
+carbon-12 bragg peak plot
+
+--> iaeaBenchmark/checkBeam.C
+
+--> iaeaBenchmark/fragmentAngularDistribution.C
+
+--> iaeaBenchmark/fragmentAngularDistributionGM.C
+
+--> iaeaBenchmark/fragmentAngularDistributionHistogram.C
+
+--> iaeaBenchmark/fragmentEnergy.C
+
+--> iaeaBenchmark/fragmentEnergyDistributionDifferentAngles.C
+
+--> iaeaBenchmark/fragmentYields.C
+
+--> iaeaBenchmark/fragmentYieldsPlot.C
+
+--> iaeaBenchmark/readExfor.C
+
+--> iaeaBenchmark/rootlogon.C
+

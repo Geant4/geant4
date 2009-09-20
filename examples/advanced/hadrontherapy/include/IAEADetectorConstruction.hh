@@ -118,6 +118,7 @@ private:
   G4double aluWindowThickness;
   G4double endDetectorThickness;
   G4double endDetectorPosition;
+  G4double moveEndDetectorForward;
 
   IAEADetectorMessenger* detectorMessenger; 
 

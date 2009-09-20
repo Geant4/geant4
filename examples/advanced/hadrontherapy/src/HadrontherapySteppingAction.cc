@@ -72,25 +72,13 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-#ifdef MEASUREBEAM
-	//Very cludgy, is supposed to record just positions of the beams hitting the water phantom
-	if(aStep->GetTrack()->GetVolume()->GetName() == "phantomPhys"){
-		//std::cout << aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() << "\n"; //humm why does this also give phantomPhys?
-		HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance(); 
-		analysis->ThintargetBeamDisp(aStep->GetTrack()->GetPosition().x(),aStep->GetTrack()->GetPosition().y());
-		aStep->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-		}
-#endif
-
     if( aStep->GetTrack()->GetVolume()->GetName() == "NewDetectorPhys"){
-      //G4cout <<"Now in NewDetectorPhys" << G4endl;
 #ifdef ANALYSIS_USE
       G4ParticleDefinition *def = aStep->GetTrack()->GetDefinition();
       G4double secondaryParticleKineticEnergy =  aStep->GetTrack()->GetKineticEnergy();     
-      G4String particle = def->GetParticleType();
-      if(particle =="nucleus" || particle=="deuteron" || particle=="triton" || 
-	 particle=="He3" || particle=="alpha") {
-		 //< the G4 kernel presents deut's alphas and triton's as non nucleus for some reason
+      G4String particleType = def->GetParticleType(); // particle type = nucleus for d, t, He3, alpha, and heavier nuclei
+      G4String particleName = def->GetParticleName(); // e.g. for alpha: the name = "alpha" and type = "nucleus"
+      if(particleType == "nucleus") {
 	G4int A = def->GetBaryonNumber();
 	G4double Z = def->GetPDGCharge();
 	G4double posX = aStep->GetTrack()->GetPosition().x() / cm;
@@ -99,11 +87,13 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	G4double energy = secondaryParticleKineticEnergy / A / MeV;
 
 	HadrontherapyAnalysisManager* analysisMgr =  HadrontherapyAnalysisManager::getInstance();   
-//	G4cout <<" A = " << A << "  Z = " << Z << " energy = " << energy << G4endl;
 	analysisMgr->fillFragmentTuple(A, Z, energy, posX, posY, posZ);
-	//if(Z == 6){
-	//	G4cout << "got carbon\n";
-	//	}
+      } else if(particleName == "proton") {   // proton (hydrogen-1) is a special case
+	G4double posX = aStep->GetTrack()->GetPosition().x() / cm ;
+	G4double posY = aStep->GetTrack()->GetPosition().y() / cm ;
+	G4double posZ = aStep->GetTrack()->GetPosition().z() / cm ;
+	G4double energy = secondaryParticleKineticEnergy * MeV;    // Hydrogen-1: A = 1, Z = 1
+	HadrontherapyAnalysisManager::getInstance()->fillFragmentTuple(1, 1.0, energy, posX, posY, posZ);
       }
 
       G4String secondaryParticleName =  def -> GetParticleName();  
@@ -132,7 +122,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
     }
 
   // Electromagnetic and hadronic processes of primary particles in the phantom
-  //setting phantomPhys correctly will break something here fix
+  //setting phantomPhys correctly will break something here fixme
   if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
     (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys") &&
     (aStep -> GetPostStepPoint() -> GetProcessDefinedStep() != NULL))

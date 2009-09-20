@@ -77,18 +77,20 @@ IAEADetectorConstruction::IAEADetectorConstruction()
   detectorSizeY = 20.*cm;
   detectorSizeZ = 20.*cm;
 
-  // Number of the detector voxels  
-  numberOfVoxelsAlongX = 200;
+  // Number of the detector voxels
+  // This does notthing, since a primitive score is used  
+  numberOfVoxelsAlongX = 400;
   numberOfVoxelsAlongY = 1;
   numberOfVoxelsAlongZ = 1;
   
-  startDetectorThickness = 5.*cm; // approximation, exakt value not given by Haettner 2006
+  startDetectorThickness = 5.*cm; // approximation, exact value not given by Haettner
   phantomCenter = startDetectorThickness + 64.*cm;
   phantomDepth = 27.9 *cm;
   plexiThickness = 0.2 *cm;
   aluWindowThickness = 0.01 *cm;
   endDetectorThickness = 3.7 *cm;
-  endDetectorPosition =  startDetectorThickness + 358 *cm + endDetectorThickness / 2;
+  moveEndDetectorForward = 0 *cm; //if detector needs to be moved
+  endDetectorPosition =  startDetectorThickness + 358 *cm + (endDetectorThickness / 2) - moveEndDetectorForward;
   
   noPhantom = false;
   
@@ -117,7 +119,7 @@ G4VPhysicalVolume* IAEADetectorConstruction::Construct()
   ConstructDetector();
 #ifdef ANALYSIS_USE
   //write the metadata for analysis
-  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData(endDetectorPosition/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
+  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((endDetectorPosition - endDetectorThickness/2)/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
 #endif
   // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
@@ -163,8 +165,8 @@ void IAEADetectorConstruction::ConstructPassiveProtonBeamLine()
   G4Material* plexiGlas = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
   //G4Box* phantom = new G4Box("Phantom",10 *cm, 20 *cm, 20 *cm);
   //the below for integrated angular distribution plot
-  G4Box* phantom = new G4Box("Phantom",phantomDepth/2, 20 *cm, 20 *cm);
-  G4Box* plexiSheet = new G4Box("phantomEdge",plexiThickness/2, 20 *cm, 20 *cm);
+  G4Box* phantom = new G4Box("Phantom",phantomDepth/2, 32 *cm, 32 *cm); //< E.haettner has 32x8, but simulation takes scattering symmetrically
+  G4Box* plexiSheet = new G4Box("phantomEdge",plexiThickness/2, 32 *cm, 32 *cm);
   G4LogicalVolume* phantomLogicalVolume = new G4LogicalVolume(phantom,	
 							      waterNist, 
 							      "phantomLog", 0, 0, 0);
@@ -222,12 +224,17 @@ void IAEADetectorConstruction::ConstructPassiveProtonBeamLine()
 }
 
 void IAEADetectorConstruction::setWaterThickness(G4double newWaterThickness){
-	//This has to be run before the elements are made.
+	//This has to be run before the elements are constructed
+	//does not support multiple thicknesses per run.
 	if(newWaterThickness > 0){
 	this->phantomDepth = newWaterThickness;
 	}else{
 	this->noPhantom = true;
-	}	
+	}
+#ifdef ANALYSIS_USE
+	  //update the geometry metadata
+	  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((this->endDetectorPosition - this->endDetectorThickness/2)/10, this->phantomDepth/10, this->phantomCenter/10); //FIXME! unit correction hardcoded
+#endif
 	}
 
 
@@ -269,7 +276,7 @@ void IAEADetectorConstruction::ConstructDetector()
   //-----------
   // NewDetector (mwpc etc. type behind the phantom)
   //-----------
-  G4Material* NewDetectorMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", false);
+  G4Material* NewDetectorMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", false);
   G4Box* NewDetector = new G4Box("NewDetector",endDetectorThickness/2,190.*cm,190.*cm); //huge detector, will be scaled in root
   //For integrated angular distribution below
   NewDetectorLogicalVolume = new G4LogicalVolume(NewDetector,

@@ -302,8 +302,8 @@ void HadrontherapyAnalysisManager::book()
   // Use ROOT
   theTFile = new TFile(analysisFileName, "RECREATE");
 
-  // Create the histograms with the enrgy deposit along the X axis
-  histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 400.);
+  // Create the histograms with the energy deposit along the X axis
+  histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 27.9); //<different waterthicknesses are accoutned for in ROOT-analysis stage
   histo2 = createHistogram1D("h20","Secondary protons - slice, energy", 400, 0., 400.);
   histo3 = createHistogram1D("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
   histo4 = createHistogram1D("h40","Secondary alpha - slice, energy", 400, 0., 400.);
@@ -363,7 +363,7 @@ void HadrontherapyAnalysisManager::BraggPeak(G4int slice, G4double energy)
   h1 -> fill(slice,energy);
 #endif
 #ifdef G4ANALYSIS_USE_ROOT
-  histo1->Fill(slice, energy);
+  histo1->SetBinContent(slice, energy); //This uses setbincontent instead of fill to get labels correct
 #endif
 }
 

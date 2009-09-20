@@ -1,11 +1,6 @@
-# G. Andersen, A. Heikkinen, P. Kaitaniemi
+# G. Danielsen, A. Heikkinen, P. Kaitaniemi
 #
-# Default macro file. It is called if no argument is provided at run
-# 
-# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
-#
-# This macro can be used for a proton beam in water. Both electrmagnetic and
-# hadronic models are swiched on
+# Macro file for IAEA geometry for a carbon beams in water.
 
 /control/getEnv G4SYSTEM
  
@@ -25,23 +20,53 @@
 /physic/addPhysics emstandard_opt3                     # Electromagnetic model
 /physic/addPhysics elastic                             # Hadronic elastic model
 /physic/addPhysics binary                              # Hadronic inelastic model
-/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/physic/addPhysics local_incl_ion_ion_inelastic             # Hadronic inelastic model for ions (local physics list)
 
 
 ##########################
-# Geometry
-#
+#       Geometry         #
+##########################
 /geometrySetup/selectGeometry IAEA  # Select the IAEA geometry
 /iaea/waterPhantomThickness 27.9 cm #default is 27.9, zero will remove phantom
 
-##########################
-# Initialisation procedure
+#############################
+#    Beam energy detection  #
+#############################
+# define scoring mesh for energy deposits
+# If attenuation measures are not needed this is redundant
+# and time-consuming. Even pretty small runs give good attenuation graphs.
+
+#/score/create/boxMesh boxMesh_1
+
+#Box size is the radius of the box ie 20x20x20 gives 40x40x40 outer dimensions
+#/score/mesh/boxSize 13.95 16. 16. cm        # The box size and translation may require adjustement
+
+#this translates the middle of the mesh-box.
+#/score/mesh/translate/xyz 69 0.0 0.0 cm
+#/score/mesh/nBin 400 1 1      # 400 bins in x-direction, 1 in y and z directions, changes require change in code
+
 #
+# define scorers and filters
+# is not able to filter ions.
+
+#/score/quantity/energyDeposit eDep
+#/score/quantity/population eDep
+#/score/quantity/nOfStep nOfStepGamma
+#/score/filter/particle gammaFilter gamma
+#/score/quantity/nOfStep nOfStepEMinus
+#/score/filter/particle eMinusFilter e-
+#/score/quantity/nOfStep nOfStepEPlus
+#/score/filter/particle ePlusFilter e+
+#/score/close
+
+############################
+# Initialisation procedure #
+############################
 /run/initialize
 
 ##########################
-# Visualisation 
-#
+#     Visualisation      #
+##########################
 
 ####### DAWNFILE ###### 
 #/vis/scene/create
@@ -62,18 +87,18 @@
 #/vis/scene/endOfEventAction accumulate
 
 ####### OGLIX #######
-/vis/scene/create
-#/vis/open OGLSX
-/vis/open OGLIX
-#/vis/open OGLIX 600x600-100+0
-#/vis/drawVolume
-#/vis/viewer/set/viewpointThetaPhi 0 0 deg
-/vis/viewer/set/viewpointThetaPhi 45 45 deg
-#/vis/viewer/zoom 1.0
-/vis/scene/add/trajectories
-/vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/scene/create
+##/vis/open OGLSX
+#/vis/open OGLIX
+##/vis/open OGLIX 600x600-100+0
+##/vis/drawVolume
+##/vis/viewer/set/viewpointThetaPhi 0 0 deg
+#/vis/viewer/set/viewpointThetaPhi 45 45 deg
+##/vis/viewer/zoom 1.0
+#/vis/scene/add/trajectories
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 
 
 # Draw only certain particles
@@ -92,6 +117,7 @@
 # Fixme, recommenadtions needed
 #
 /physic/setCuts 0.8 cm
+#/physic/setCuts 0.4 cm
 /Step/waterPhantomStepMax 0.5 cm
 #/Step/waterPhantomStepMax 0.01 mm 
 
@@ -104,6 +130,10 @@
 
 /beam/energy/meanEnergy 4800 MeV # 400MeV/u * C12 = 4800
 /beam/energy/sigmaEnergy 24 MeV # dE/E = 5e-3
+/beam/position/Yposition/sigmaY 1.7 mm # 4mm * 2.35 ~ 1.7
+/beam/position/Zposition/sigmaZ 1.7 mm
+/beam/momentum/sigmaY 0.001
+/beam/momentum/sigmaZ 0.001
 
 #########################
 # Start of the run
@@ -113,11 +143,13 @@
 /beam/position/Yposition 0 cm
 /beam/position/Zposition 0 cm
 
-/run/beamOn 100    # For test/visualization
-#/run/beamOn 1000   # Default value in release
+#/run/beamOn 100    # For test/visualization
+/run/beamOn 200000   # Default value in release
 #/run/beamOn 10000  # Good for basic physics run (takes few min)
-#/run/beamOn 100000 # Accurate results with good statistics 
+#/run/beamOn 400000 # Accurate results with good statistics 
 
+
+#/score/dumpQuantityToFile boxMesh_1 eDep eDep.txt
 
 # Example of running in loop 
 /control/alias initialValue 0

@@ -61,6 +61,8 @@
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
+#include "G4ScoringManager.hh"
+#include "IAEAScoreWriter.hh"
 
 #if defined(G4UI_USE_TCSH)
 #include "G4UIterminal.hh"
@@ -87,12 +89,12 @@ int main(int argc ,char ** argv)
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
   G4RunManager* runManager = new G4RunManager;
+
   //Initialize possible analysis needs, needs to come early in order to pick up metadata
 #ifdef ANALYSIS_USE
   HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
   analysis -> book();
 #endif
-  
   // Geometry controller is responsible for instantiating the
   // geometries. All geometry specific setup tasks are now in class
   // HadrontherapyGeometryController.
@@ -100,9 +102,16 @@ int main(int argc ,char ** argv)
 
   // Connect the geometry controller to the G4 user interface
   HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
-  
+
+  G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
+  scoringManager->SetVerboseLevel(1);
+  scoringManager->SetScoreWriter(new IAEAScoreWriter());
+
   // Initialize the default Hadrontherapy geometry
   geometryController->SetGeometry("default");
+
+  // Initialize command based scoring
+  G4ScoringManager::GetScoringManager();
 
   // Initialize the physics 
   runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
