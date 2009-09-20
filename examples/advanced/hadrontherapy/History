@@ -9,6 +9,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+20.09.2009 P. Kaitaniemi; Tag: hadrontherapy-V09-02-29
+            - Moved HadrontherapyInteractionParameters initialization to the HadrontherapyGeometryController class
+
 11.09.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-28
             - Added messengers to control the event number and to draw only particular tracks.
             The new command are accesible via the command /event/drawTracks and /event/PrintEventNumber  
