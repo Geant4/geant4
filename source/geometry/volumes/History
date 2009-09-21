@@ -1,4 +1,4 @@
-$Id: History,v 1.158 2009-08-04 08:27:36 gcosmo Exp $
+$Id: History,v 1.159 2009-09-21 10:27:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 21st, 2009      G.Cosmo - geomvol-V09-02-01
+- Fix in G4PVParameterised::CheckOverlaps() to not modify daughter volume
+  transformation matrix for application to points in the daughter's frame.
+  Adopt Inverse() instead of Invert() in call to G4AffineTransform.
+  Addresses problem report #1078.
 
 Aug 3rd, 2009       G.Cosmo - geomvol-V09-02-00
 - Get rid of unnecessary call to Reset() in G4NavigationHistory destructor.
