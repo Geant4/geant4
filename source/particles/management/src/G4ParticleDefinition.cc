@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.33 2009-09-15 12:18:04 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.34 2009-09-21 04:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,7 +140,7 @@ G4ParticleDefinition::G4ParticleDefinition(
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
-		  "Illegal operation", RunMustBeAborted, 
+		  "Illegal operation", JustWarning, 
 		  "G4ParticleDefinition should be created in PreInit state");
    }
 
