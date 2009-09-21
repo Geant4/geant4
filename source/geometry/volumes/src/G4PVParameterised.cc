@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.10 2007-04-11 07:56:38 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.11 2009-09-21 10:27:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,7 +225,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol, G4bool verbose)
       {
         // Transform each point according to daughter's frame
         //
-        G4ThreeVector md = Td.Invert().TransformPoint(*pos);
+        G4ThreeVector md = Td.Inverse().TransformPoint(*pos);
 
         if (solidB->Inside(md)==kInside)
         {
