@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.35 2008-12-05 22:15:04 asaim Exp $
+// $Id: G4SteppingManager2.cc,v 1.36 2009-09-21 04:03:25 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -297,16 +297,30 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        fCurrentProcess->AtRestGPIL( 
                                                      *fTrack,
                                                 &fCondition );
-     if(fCondition==Forced){
-       (*fSelectedAtRestDoItVector)[ri] = Forced;
-     }
-     else{
-       (*fSelectedAtRestDoItVector)[ri] = InActivated;
-      if(lifeTime < shortestLifeTime ){
-         shortestLifeTime = lifeTime;
-	 fAtRestDoItProcTriggered =  G4int(int(ri)); 
+//     if(fCondition==Forced){
+//       (*fSelectedAtRestDoItVector)[ri] = Forced;
+//     }
+//     else{
+//       (*fSelectedAtRestDoItVector)[ri] = InActivated;
+//      if(lifeTime < shortestLifeTime ){
+//         shortestLifeTime = lifeTime;
+//	 fAtRestDoItProcTriggered =  G4int(int(ri)); 
+//       }
+
+       if(fCondition==Forced && fCurrentProcess){
+	 (*fSelectedAtRestDoItVector)[ri] = Forced;
        }
-     }
+       else{
+	 (*fSelectedAtRestDoItVector)[ri] = InActivated;
+	 if(lifeTime < shortestLifeTime ){
+	   shortestLifeTime = lifeTime;
+	   fAtRestDoItProcTriggered =  G4int(int(ri));
+	   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
+	 }
+       }
+       if(NofInactiveProc==MAXofAtRestLoops){
+	   G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
+       }
    }
 
 // at least one process is necessary to destory the particle  
