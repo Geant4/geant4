@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WHadronElasticProcess.hh,v 1.1 2009-07-02 09:41:31 vnivanch Exp $
+// $Id: G4WHadronElasticProcess.hh,v 1.2 2009-09-22 17:35:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -55,7 +55,7 @@ class G4WHadronElasticProcess : public G4HadronicProcess
 {
 public:
 
-  G4WHadronElasticProcess(const G4String& procName = "hElastic");
+  G4WHadronElasticProcess(const G4String& procName = "hadElastic");
 
   virtual ~G4WHadronElasticProcess();
  

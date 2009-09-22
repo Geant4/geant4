@@ -19,7 +19,7 @@ code and to keep track of all tags.
   Migrated to true model deign of elastic scattering
   G4WHadronElasticProcess - new elastic process
   G4VHadronElastic - base class for elastic models with default
-                     GEISHA model
+                     GHEISHA model
   G4ElasticHadrNucleusHE - capable to work with old and new interfaces
   G4CHIPSElastic - model interface to CHIPS parameterization
 
