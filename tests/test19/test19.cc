@@ -198,6 +198,7 @@
 //int main(int argc, char** argv)
 int main()
 {
+  static const G4double mNuc=939*MeV;  // Nucleon mass for the visible energy estimate
 #ifdef csdebug
   static const G4double T0=273*kelvin; // Room temperature for the XS tests
 #endif
@@ -464,8 +465,8 @@ int main()
     G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
     exit(1);
   }
-  // Comment for G4QLowEnergies
-  proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+  // Comment for G4QLowEnergies or G4QDiffraction (not G4QCollision)
+  //proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
 #else
   G4HadronInelasticProcess* proc = 0;
   if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
@@ -534,6 +535,9 @@ int main()
      G4int ZN=pPDG%1000000;
      G4int Z=ZN/1000;
      G4int A=Z+ZN%1000;
+#ifdef debug
+     G4cout<<"Test19: Nucleus with Z="<<Z<<", A="<<A<<G4endl; // only one run
+#endif
      part = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);// Define the Generic Ion
    }
    else if(pPDG==3122) part=G4Lambda::Lambda();      // Definition of Lambda projectile
@@ -572,6 +576,7 @@ int main()
    G4Track* gTrack = new G4Track(dParticle,aTime,aPosition); // Track definition (NoTarg)
 
    G4int    bnp=pQC.GetBaryonNumber();
+   G4int    bns=pQC.GetStrangeness();
    // ---------- Define material for the simulation ------------------
    //G4double tgA     = 26.98; // @@ Important? Can it be just tgZ+tgN?
    G4int tgA        = tgZ+tgN; // @@ Temporary, not good
@@ -613,6 +618,11 @@ int main()
    G4double theStep   = 0.01*micrometer;
    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1;
 #ifdef pdebug
+   G4double sumKE=0.;
+   G4double su2KE=0.;
+   G4double sEnAB=0.;
+   G4double sEnH=0.;
+   G4int    sumAB=0;
    G4int targPDG=90000000+1000*tgZ+tgN;                 // PDG Code of the target
    G4cout<<"Test19: The particle: "<<part->GetParticleName()<<G4endl;
    G4cout<<"Test19: The material: "<<material->GetName()<<G4endl;
@@ -629,7 +639,13 @@ int main()
    for(G4int nen=0; nen<cnE; nen++)                          // LOOP over projectile energy
    {
     G4double  energy = (ep-mp)*MeV;                          // projectile kinetic energy
-    if(cnE>1) energy = eli[nen]*MeV;
+    if(cnE>1) energy = eli[nen]*MeV;                         // Kin energy from the vector
+    G4double  pvE = energy+mp;                               // projectile "visible" energy
+    if(bnp>0)
+    {
+      if(bns>0) pvE-= bnp*mNuc;
+      else      pvE-= mp;
+    }
 #ifdef debug
     G4cout<<"Test19: M="<<mp<<", T="<<energy<<", MeV"<<G4endl;
 #endif
@@ -757,7 +773,7 @@ int main()
      G4double pMin=.1;                               // in GeV --> for pions
      //G4double pMin=.000004;                        // in GeV --> for neutrons
      //G4double pMax=700.;                           // in GeV
-     G4int nic=50;                                 // Number of points
+     G4int nic=50;                                   // Number of points
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
      G4double dlp=(lpMax-lpMin)/nic;
@@ -827,9 +843,10 @@ int main()
        // ..... GHAD on the Cross-Section level .... pions
        //G4double CS = theElasticXS.GetCrossSection(dParticle,element,T0) +
        //              theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
-       G4double ICS= barashPiXS.GetCrossSection(dParticle,element,T0);// BarashenkovPiAin
-       G4double ECS= barashPiXS.GetElasticXsc();// BarashenkovPiAin (call after GetCrSec)
-       G4double CS = barashPiXS.GetTotalXsc();// BarashenkovPiAtot (call after GetCrosSe)
+       G4double CS = theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
+       //G4double ICS= barashPiXS.GetCrossSection(dParticle,element,T0);// BarashenkovPiAin
+       //G4double ECS= barashPiXS.GetElasticXsc();// BarashenkovPiAin (call after GetCrSec)
+       //G4double CS = barashPiXS.GetTotalXsc();// BarashenkovPiAtot (call after GetCrosSe)
        //  // ==================== End of GHAD ==============================
        //  // CHIPS calculation by G4QElasticCrossSection
        //  // ..... CHIPS CS on the CS level
@@ -861,6 +878,13 @@ int main()
 #endif
      G4double dTot=0.;
      G4double dEl=0.;
+#ifdef pdebug
+     sumKE=0.;
+     su2KE=0.;
+     sEnAB=0.;
+     sEnH=0.;
+     sumAB=0;
+#endif
      G4int    nDoNothing=0;
      for (G4int iter=0; iter<nEvt; iter++)
      {
@@ -933,7 +957,13 @@ int main()
           G4cout<<"Test19: E="<<sen+sma<<",p="<<(*smo)*std::sqrt(ten*ten-sma*sma)<<G4endl;
           G4cout<<"Test19: L4m="<<s4m<<",T4m="<<totSum<<", N="<<curN<<",M="<<curM<<G4endl;
 #endif
-          totKE+=s4m.e()-sma;
+          totKE+=s4m.e();
+          if(bnp>0)
+          {
+            if(bns>0) totKE-= bnp*mNuc;
+            else      totKE-= mp;
+          }
+          else if (bnp<0) totKE-=bnp*mNuc; 
           totSum-=s4m;
           totSumM=totSum;
         }
@@ -1055,15 +1085,20 @@ int main()
           //  tSig[tb]++;
           //}
           lorV = G4LorentzVector(mom, e+m);    // "e" is a Kinetic energy!
+          G4double visE=0.;
           if(i>=0)                             // Do not count LV & charges of leptons
           {
             totStran-=cST;
             totCharge-=cCG;
             totBaryN-=cBN;
             totSum -= lorV;
-            G4double visE=lorV.e();
-            if(cBN>0) visE-=m;
-            if(cBN<0) visE+=m;
+            visE=lorV.e();
+            if(cBN>0)
+            {
+              if(cST>0) visE-=cBN*mNuc;
+              else      visE-=m;
+            }
+            else if(cBN<0) visE-=cBN*mNuc;
             totKE +=  visE;
 #ifdef debug
             G4cout<<"Test19:i="<<i<<",tS="<<totStran<<",tC="<<totC<<",t4="<<totSum<<",tB="
@@ -1125,13 +1160,25 @@ int main()
           if(lead==fAlive && (i==-1 || c==2112 || c==2212 || c==90000001 || c==90001000))
           //if(lead==fAlive)
             G4cout<<"Test19:#"<<i<<",PDG="<<c<<",S="<<cST<<",C="<<cCG<<",B="<<cBN<<",4M="
-                  <<lorV<<m<<",T="<<lorV.e()-m<<G4endl;
+                  <<lorV<<m<<",T="<<lorV.e()-m<<",vE="<<visE<<G4endl;
 #endif
           //delete aChange->GetSecondary(i);
 #ifdef pdebug
+          if(cBN>0 && cST>0)
+          {
+            G4cout<<"---Test19:--- Hyperon with PDG="<<c<<",S="<<cST<<G4endl;
+            sEnH+=visE;
+          }
+          if(cBN<0)
+          {
+            //if(cST<0) G4cout<<"***Test19:*** Anti-Hyperon with PDG="<<c<<G4endl;
+            G4cout<<"***Test19:*** Anti-Baryon with PDG="<<c<<",S="<<cST<<G4endl;
+            sEnAB+=visE;
+            ++sumAB;
+          }
           //if(lead==fAlive && (i==-1 || c==2112 || c==2212 || c==90000001 || c==90001000))
           G4cout<<"Test19:#"<<i<<",PDG="<<c<<",C="<<cCG<<",B="<<cBN<<",4M="<<lorV<<m<<",T="
-                <<lorV.e()-m<<G4endl;
+                <<lorV.e()-m<<",vE="<<visE<<G4endl;
 #endif
         } // End of the LOOP over secondaries
         // delete secondaries in the end of the event         
@@ -1239,7 +1286,10 @@ int main()
         //                            <<",P="<<pmax<<",dR="<<dR<<G4endl;
 #endif
 #ifdef pdebug
-        G4cout<<">TEST19: r4M="<<totSum<<",rCh="<<totCharge<<",rBN="<<totBaryN<<G4endl;
+        sumKE+=totKE;
+        su2KE+=totKE*totKE;
+        G4cout<<">TEST19: r4M="<<totSum<<", rCh="<<totCharge<<", rBN="<<totBaryN<<", vE="
+              <<totKE<<", vR="<<totKE/pvE<<G4endl;
 #endif
 #ifdef lhepdbg 
         if(prtf)
@@ -1301,6 +1351,13 @@ int main()
        } // End of nSec>0 IF
       } // End of Check for DoNothing
      } // End of the LOOP over events
+#ifdef pdebug
+     G4double meanVE=sumKE/nEvt;
+     G4double rmsVE=su2KE/nEvt;
+     rmsVE=std::sqrt(rmsVE-meanVE*meanVE);
+     G4cout<<">Mean>Test19:RVE="<<meanVE/pvE<<",RMSVE="<<rmsVE/pvE<<",NAB="
+           <<sumAB<<",RAB="<<sEnAB/nEvt/pvE<<",HAB="<<sEnH/nEvt/pvE<<G4endl;
+#endif
      // Stop the timer to estimate the speed of the generation
 #ifdef pidebug
      G4cerr<<"Test19: nPi0="<<nP0<<", nPiP="<<nPP<<", nPiM="<<nPN<<G4endl;
