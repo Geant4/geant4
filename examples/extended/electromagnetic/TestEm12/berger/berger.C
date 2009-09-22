@@ -42,7 +42,7 @@
 
    // Print the histograms legend
    TLegend *legend = new TLegend(0.7,0.65,0.9,0.78);
-   legend->AddEntry(hroot,"G4-9.1-ref-08++ ","l");
+   legend->AddEntry(hroot,"G4-9.2-ref-04 ","l");
    legend->AddEntry(h1d,"Etran simul","l");
    legend->Draw();
 
