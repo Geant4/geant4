@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.16 2009-07-02 09:44:44 vnivanch Exp $
+// $Id: G4DiffuseElastic.hh,v 1.17 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,8 +43,7 @@
 #define G4DiffuseElastic_h 1
  
 #include "globals.hh"
-//#include "G4HadronicInteraction.hh"
-#include "G4VHadronElastic.hh"
+#include "G4HadronicInteraction.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
 
@@ -54,14 +53,17 @@ class G4ParticleDefinition;
 class G4PhysicsTable;
 class G4PhysicsLogVector;
 
-//class G4DiffuseElastic : public G4HadronicInteraction
-class G4DiffuseElastic : public G4VHadronElastic
+class G4DiffuseElastic : public G4HadronicInteraction
 {
 public:
 
   G4DiffuseElastic();
 
   G4DiffuseElastic(const G4ParticleDefinition* aParticle);
+
+
+
+
 
   virtual ~G4DiffuseElastic();
 
@@ -71,9 +73,10 @@ public:
 
   void BuildAngleTable();
 
-  /*
+ 
   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-  				  G4Nucleus & targetNucleus);
+				  G4Nucleus & targetNucleus);
+
 
   void SetPlabLowLimit(G4double value);
 
@@ -90,10 +93,6 @@ public:
 
   G4double SampleTableT(const G4ParticleDefinition* aParticle, 
                          G4double p, G4double Z, G4double A);
-  */
-
-  G4double SampleT(const G4ParticleDefinition* aParticle, 
-                         G4double plab, G4int Z, G4int A);
 
   G4double SampleThetaCMS(const G4ParticleDefinition* aParticle, G4double p, G4double A);
 
@@ -102,8 +101,8 @@ public:
 
   G4double GetScatteringAngle(G4int iMomentum, G4int iAngle, G4double position);
 
-  //G4double SampleThetaLab(const G4HadProjectile* aParticle, 
-  //                              G4double tmass, G4double A);
+  G4double SampleThetaLab(const G4HadProjectile* aParticle, 
+                                G4double tmass, G4double A);
 
   G4double GetDiffuseElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
@@ -221,7 +220,7 @@ private:
 
 };
 
-/*
+
 inline void G4DiffuseElastic::SetRecoilKinEnergyLimit(G4double value)
 {
   lowEnergyRecoilLimit = value;
@@ -246,7 +245,7 @@ inline void G4DiffuseElastic::SetLowestEnergyLimit(G4double value)
 {
   lowestEnergyLimit = value;
 }
-*/
+
 
 /////////////////////////////////////////////////////////////
 //

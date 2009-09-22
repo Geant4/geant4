@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.46 2009-07-02 09:44:44 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.47 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ElasticHadrNucleusHe.hh
@@ -50,8 +50,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChange.hh"
 #include "G4Nucleus.hh"
-
-//#include "G4HadronicInteraction.hh"
 #include "G4VHadronElastic.hh"
 
 class G4NistManager;
@@ -72,7 +70,7 @@ class G4ElasticData
 public:
 
   G4ElasticData(const G4ParticleDefinition* h, 
-	      G4int Z, G4double A, G4double* eGeV);
+		G4int Z, G4double A, G4double* eGeV);
 
   ~G4ElasticData(){}
 
@@ -106,7 +104,6 @@ public:
 //
 //
 
-//class G4ElasticHadrNucleusHE : public G4HadronicInteraction
 class G4ElasticHadrNucleusHE : public G4VHadronElastic
 {
 public:
@@ -115,11 +112,14 @@ public:
 
   virtual ~G4ElasticHadrNucleusHE();
 
-  //G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack,
-  //				  G4Nucleus& G4Nucleus);
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab, 
+				    G4int Z, G4int A);
 
-  G4double SampleT(const G4ParticleDefinition* p, G4double plab, 
+  G4double SampleT(const G4ParticleDefinition* p, 
+		   G4double plab, 
 		   G4int Z, G4int A);
+
   G4double HadronNucleusQ2_2(G4ElasticData * pElD, G4int Z, 
 			     G4double plabGeV, G4double tmax);
 

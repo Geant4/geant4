@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.80 2009-07-02 09:52:24 vnivanch Exp $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.81 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -462,9 +462,10 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 //
 //
 
-G4double G4ElasticHadrNucleusHE::
-                     SampleT(  const G4ParticleDefinition* p,
-                                     G4double inLabMom, G4int Z, G4int N)
+G4double 
+G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
+					 G4double inLabMom, 
+					 G4int Z, G4int N)
 {
   G4double plab  = inLabMom/GeV;   // (GeV/c)
   G4double Q2 = 0;
@@ -542,6 +543,18 @@ G4double G4ElasticHadrNucleusHE::
 	G4cout<<" SampleT: Q2(GeV^2)= "<<Q2<< "  t/tmax= " << Q2/Q2max <<G4endl;
     }
   return  Q2*GeV2;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double 
+G4ElasticHadrNucleusHE::SampleT(const G4ParticleDefinition* p,
+				G4double inLabMom, 
+				G4int Z, G4int N)
+{
+  return SampleInvariantT(p, inLabMom, Z, N);
 }
 
 //////////////////////////////////////////////////////////////////////////

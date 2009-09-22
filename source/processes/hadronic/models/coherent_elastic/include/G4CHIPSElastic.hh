@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CHIPSElastic.hh,v 1.1 2009-07-02 09:41:31 vnivanch Exp $
+// $Id: G4CHIPSElastic.hh,v 1.2 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4CHIPSElastic
@@ -53,8 +53,9 @@ public:
 
   virtual ~G4CHIPSElastic();
  
-  virtual G4double SampleT(const G4ParticleDefinition* p, G4double plab,
-			   G4int Z, G4int A);
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab,
+				    G4int Z, G4int A);
 
 private:
 

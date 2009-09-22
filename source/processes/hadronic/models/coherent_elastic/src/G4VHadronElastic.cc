@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronElastic.cc,v 1.2 2009-07-02 11:09:47 vnivanch Exp $
+// $Id: G4VHadronElastic.cc,v 1.3 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -129,7 +129,7 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   G4double tmax = 4.0*momentumCMS*momentumCMS;
 
   // Sampling in CM system
-  G4double t    = SampleT(theParticle, plab, Z, A);
+  G4double t    = SampleInvariantT(theParticle, plab, Z, A);
   G4double phi  = G4UniformRand()*CLHEP::twopi;
   G4double cost = 1. - 2.0*t/tmax;
   G4double sint;
@@ -138,11 +138,11 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   if(cost >= 1.0) {
     cost = 1.0;
     sint = 0.0;
-    npos++;
+    ++npos;
   } else if(cost < -1 ) {
     cost = 1.0;
     sint = 0.0;
-    nneg++;
+    ++nneg;
 
     // normal situation
   } else  {
@@ -191,18 +191,20 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
 	   << " 4-mom: " << nlv0 
 	   << G4endl;
   }
-  if(erec > lowEnergyRecoilLimit) {
+ 
+  if(erec > GetRecoilEnergyThreshold()) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
-  } else {
-    if(erec > 0.0) theParticleChange.SetLocalEnergyDeposit(erec);
+  } else if(erec > 0.0) {
+    theParticleChange.SetLocalEnergyDeposit(erec);
   }
 
   return &theParticleChange;
 }
 
 // sample momentum transfer in the CMS system 
-G4double G4VHadronElastic::SampleT(const G4ParticleDefinition* /*p*/, 
+G4double 
+G4VHadronElastic::SampleInvariantT(const G4ParticleDefinition* /*p*/, 
 				   G4double /*ptot*/,
 				   G4int /*Z*/, G4int A)
 {
@@ -214,11 +216,11 @@ G4double G4VHadronElastic::SampleT(const G4ParticleDefinition* /*p*/,
   if (A <= 62) {
     bb = 14.5*p->Z23(A);
     aa = p->powZ(A, 1.63)/bb;
-    cc =  1.4*p->Z13(A)/dd;
+    cc = 1.4*p->Z13(A)/dd;
   } else {
     bb = 60.*p->Z13(A);
     aa = p->powZ(A, 1.33)/bb;
-    cc =  0.4*p->powZ(A, 0.4)/dd;
+    cc = 0.4*p->powZ(A, 0.4)/dd;
   }
   G4double q1 = 1.0 - std::exp(-bb*tmax);
   G4double q2 = 1.0 - std::exp(-dd*tmax);

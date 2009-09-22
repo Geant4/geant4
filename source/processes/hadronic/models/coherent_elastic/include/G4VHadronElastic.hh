@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHadronElastic.hh,v 1.1 2009-07-02 09:41:31 vnivanch Exp $
+// $Id: G4VHadronElastic.hh,v 1.2 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -60,9 +60,10 @@ public:
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 					  G4Nucleus & targetNucleus);
 
-  // sample momentum transfer in the CMS system 
-  virtual G4double SampleT(const G4ParticleDefinition* p, G4double plab,
-			   G4int Z, G4int A);
+  // sample momentum transfer using Lab. momentum
+  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
+				    G4double plab,
+				    G4int Z, G4int A);
 
   inline void SetLowestEnergyLimit(G4double value);
 

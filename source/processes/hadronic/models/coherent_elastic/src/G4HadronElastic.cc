@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.62 2009-07-02 09:52:24 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.63 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -225,7 +225,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   if(gtype == fLElastic) {
     G4double g2 = GeV*GeV; 
-    t = g2*SamplingT(tmax/g2,m1,m2,aTarget);
+    t = g2*SampleT(tmax/g2,m1,m2,aTarget);
   }
 
   // use mean atomic number
@@ -339,7 +339,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 }
 
 G4double 
-G4HadronElastic::SamplingT(G4double tmax, G4double, G4double, G4double atno2)
+G4HadronElastic::SampleT(G4double tmax, G4double, G4double, G4double atno2)
 {
   // G4cout << "Entering elastic scattering 2"<<G4endl;
   // Compute the direction of elastic scattering.

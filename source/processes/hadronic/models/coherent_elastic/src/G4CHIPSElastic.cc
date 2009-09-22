@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CHIPSElastic.cc,v 1.1 2009-07-02 09:49:30 vnivanch Exp $
+// $Id: G4CHIPSElastic.cc,v 1.2 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -52,8 +52,8 @@ G4CHIPSElastic::~G4CHIPSElastic()
 {}
 
 G4double 
-G4CHIPSElastic::SampleT(const G4ParticleDefinition* p, 
-			G4double plab, G4int Z, G4int A)
+G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p, 
+				 G4double plab, G4int Z, G4int A)
 {
   G4int N = A - Z;
   if(Z == 1 && N == 2) N = 1;
@@ -62,7 +62,7 @@ G4CHIPSElastic::SampleT(const G4ParticleDefinition* p,
   G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
   G4double t = 0.0;
   if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-  else         t = G4VHadronElastic::SampleT(p, plab, Z, A);
+  else         t = G4VHadronElastic::SampleInvariantT(p, plab, Z, A);
   return t;
 }
 

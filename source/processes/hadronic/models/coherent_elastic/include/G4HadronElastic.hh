@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.28 2009-07-02 09:44:44 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.29 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,7 +94,7 @@ public:
 
   void SetRecoilKinEnergyLimit(G4double value);
 
-  G4double SamplingT(G4double p, G4double m1, G4double m2, G4double A);
+  G4double SampleT(G4double p, G4double m1, G4double m2, G4double A);
 
 private:
 

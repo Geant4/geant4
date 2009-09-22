@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.15 2009-07-02 11:09:28 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.16 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -250,7 +250,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4double tmax = 4.0*ptot*ptot;
   G4double g2 = GeV*GeV; 
 
-  G4double t = g2*SampleTEx(tmax/g2,aTarget);
+  G4double t = g2*SampleT(tmax/g2,aTarget);
 
   if(verboseLevel>1)
     G4cout <<"## G4ChargeExchange t= " << t << " tmax= " << tmax
@@ -297,7 +297,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   return &theParticleChange;
 }
 
-G4double G4ChargeExchange::SampleTEx(G4double tmax, G4double A)
+G4double G4ChargeExchange::SampleT(G4double tmax, G4double A)
 {
   G4double aa, bb, cc, dd;
   if (A <= 62.) {

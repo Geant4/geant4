@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WHadronElasticProcess.cc,v 1.1 2009-07-02 09:49:30 vnivanch Exp $
+// $Id: G4WHadronElasticProcess.cc,v 1.2 2009-09-22 16:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process 
@@ -51,6 +51,7 @@
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
 #include "G4Neutron.hh"
+#include "G4ProductionCutsTable.hh"
  
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName) 
@@ -95,15 +96,20 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 
+  size_t idx = track.GetMaterialCutsCouple()->GetIndex();
+  G4double tcut = 
+    (*(G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3)))[idx];
+  hadi->SetRecoilEnergyThreshold(tcut);
+
   // Initialize the hadronic projectile from the track
   //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
   G4HadProjectile thePro(track);
-  if(verboseLevel>1) 
+  if(verboseLevel>1) {
     G4cout << "G4WHadronElasticProcess::PostStepDoIt for " 
 	   << part->GetParticleName() 
 	   << " Target Z= " << targetNucleus.GetZ() 
 	   << " A= " << targetNucleus.GetZ() << G4endl; 
-
+  }
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
   G4ThreeVector indir = track.GetMomentumDirection();
   G4ThreeVector outdir = (result->GetMomentumChange()).rotateUz(indir);
