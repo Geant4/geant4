@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.9 2008-11-16 21:13:50 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.10 2009-09-22 14:20:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,6 +164,7 @@ void PhysListEmStandard::ConstructProcess()
   //ionization
   //
   emOptions.SetSubCutoff(false);	//default
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
