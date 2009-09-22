@@ -6,8 +6,8 @@
   </argument>
   <argument name="test_ids">
     <set>
-      <text>exam-ext-medical-NRCC_E_Benchmark_V1-build</text>
-      <text>exam-ext-medical-NRCC_E_Benchmark_V1-run</text>
+      <text>exam-ext-medical-electronScattering-build</text>
+      <text>exam-ext-medical-electronScattering-run</text>
     </set>
   </argument>
 </extension>

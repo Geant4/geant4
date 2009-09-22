@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2009-09-15 16:02:21 gunter Exp $
+$Id: History,v 1.38 2009-09-22 16:16:29 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.37 2009-09-15 16:02:21 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-Sept 2009 G.Folger                (testtools-QMtest-V09-02-29)
+- rename NRCC_E_Benchmark_V1 to become electronScattering, and update
+  corresponding files.
 
 15-Sept 2009 G.Folger                (testtools-QMtest-V09-02-28)
 - add add radioactive decay extended example to test{build,run}all.qms

@@ -23,7 +23,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/medical/NRCC_E_Benchmark_V1;make</text>
+    <text>cd $G4INSTALL/examples/extended/medical/electronScattering;make</text>
   </argument>
   <argument name="stderr">
     <text/>

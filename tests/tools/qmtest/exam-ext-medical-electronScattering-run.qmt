@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-ext-medical-NRCC_E_Benchmark_V1-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-ext-medical-electronScattering-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/medical/NRCC_E_Benchmark_V1;$G4BIN/$G4SYSTEM/eBenchmarkV1 eBenchmarkV1.in</text>
+    <text>cd $G4INSTALL/examples/extended/medical/electronScattering;$G4BIN/$G4SYSTEM/eBenchmarkV1 electronScattering.in</text>
   </argument>
   <argument name="stderr">
     <text/>
