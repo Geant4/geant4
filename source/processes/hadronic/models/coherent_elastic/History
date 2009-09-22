@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 September 2009 - V.Ivanchenko (hadr-cohe-V09-01-09)
+------------------------------------------------------
+  Migrated to true model deign of elastic scattering
+  G4WHadronElasticProcess - new elastic process
+  G4VHadronElastic - base class for elastic models with default
+                     GEISHA model
+  G4ElasticHadrNucleusHE - capable to work with old and new interfaces
+  G4CHIPSElastic - model interface to CHIPS parameterization
 
 02 March 2009 - D. Wright for V.Grichine (hadr-cohe-V09-02-00)
 --------------------------------------------------------------
