@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.1 2009-09-19 16:09:44 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2009-09-23 14:59:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,6 +142,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   AddDecay();  
   AddStepMax();
 }
