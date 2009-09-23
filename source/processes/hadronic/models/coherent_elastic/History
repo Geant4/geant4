@@ -22,6 +22,7 @@ code and to keep track of all tags.
                      GHEISHA model
   G4ElasticHadrNucleusHE - capable to work with old and new interfaces
   G4CHIPSElastic - model interface to CHIPS parameterization
+  G4HadronElastic - remove hand made NaN finder and G4cout at destructor 
 
 02 March 2009 - D. Wright for V.Grichine (hadr-cohe-V09-02-00)
 --------------------------------------------------------------
