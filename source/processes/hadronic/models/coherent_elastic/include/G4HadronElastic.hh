@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.29 2009-09-22 16:21:46 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.30 2009-09-23 14:37:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,11 +122,6 @@ private:
   G4double lowEnergyLimitQ;  
   G4double lowestEnergyLimit;  
   G4double plabLowLimit;
-
-  G4int nnans;
-  G4int npos;
-  G4int nneg;
-  G4int neneg;
 
 };
 

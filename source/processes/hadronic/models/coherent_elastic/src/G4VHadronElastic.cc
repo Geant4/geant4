@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronElastic.cc,v 1.3 2009-09-22 16:21:46 vnivanch Exp $
+// $Id: G4VHadronElastic.cc,v 1.4 2009-09-23 14:37:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -50,29 +50,16 @@ G4VHadronElastic::G4VHadronElastic(const G4String& name)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
-  lowEnergyRecoilLimit = 100.*keV;  
   lowestEnergyLimit= 1.e-6*eV;  
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
-
-  npos  = 0;
-  nneg  = 0;
-  neneg = 0;
 }
 
 G4VHadronElastic::~G4VHadronElastic()
-{
-  if( (npos + nneg + neneg) > 0 && verboseLevel > 0) {
-    G4cout << "### G4VHadronElastic destructor Warnings: ";
-    if(npos > 0)  G4cout << "###          N(cost > 1)= " << npos;
-    if(nneg > 0)  G4cout << "###          N(cost <-1)= " << nneg;
-    if(neneg > 0) G4cout << "###          N(E < 0)=    " << neneg;
-    G4cout << "###" << G4endl;
-  }
-}
+{}
 
 G4HadFinalState* G4VHadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
@@ -135,14 +122,17 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   G4double sint;
 
   // problem in sampling
-  if(cost >= 1.0) {
+  if(cost > 1.0 || cost < -1.0) {
+    if(verboseLevel > 0) {
+      G4cout << "G4VHadronElastic WARNING cost= " << cost
+	     << " after scattering of " 
+	     << aParticle->GetDefinition()->GetParticleName()
+	     << " p(GeV/c)= " << plab
+	     << " on " << theDef->GetParticleName()
+	     << G4endl;
+    }
     cost = 1.0;
     sint = 0.0;
-    ++npos;
-  } else if(cost < -1 ) {
-    cost = 1.0;
-    sint = 0.0;
-    ++nneg;
 
     // normal situation
   } else  {
@@ -168,8 +158,7 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
   }
   if(eFinal <= lowestEnergyLimit) {
     if(eFinal < 0.0 && verboseLevel > 0) {
-      neneg++;
-      G4cout << "G4VHadronElastic WARNING ekin= " << eFinal
+      G4cout << "G4VHadronElastic WARNING Efinal= " << eFinal
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
 	     << " p(GeV/c)= " << plab

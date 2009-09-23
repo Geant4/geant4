@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHadronElastic.hh,v 1.3 2009-09-22 17:35:07 vnivanch Exp $
+// $Id: G4VHadronElastic.hh,v 1.4 2009-09-23 14:37:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -67,8 +67,6 @@ public:
 
   inline void SetLowestEnergyLimit(G4double value);
 
-  inline void SetRecoilKinEnergyLimit(G4double value);
-
   inline void ComputeMomentumCMS(const G4ParticleDefinition* p, 
 				 G4double plab, G4int Z, G4int A);
 
@@ -83,18 +81,9 @@ private:
   G4ParticleDefinition* theDeuteron;
   G4ParticleDefinition* theAlpha;
 
-  G4double lowEnergyRecoilLimit;  
   G4double lowestEnergyLimit;  
 
-  G4int npos;
-  G4int nneg;
-  G4int neneg;
 };
-
-inline void G4VHadronElastic::SetRecoilKinEnergyLimit(G4double value)
-{
-  lowEnergyRecoilLimit = value;
-}
 
 inline void G4VHadronElastic::SetLowestEnergyLimit(G4double value)
 {
