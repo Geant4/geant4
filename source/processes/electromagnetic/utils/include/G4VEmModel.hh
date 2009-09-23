@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.71 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.72 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -266,6 +266,12 @@ public:
 
   inline void SetLowEnergyLimit(G4double);
 
+  inline void SetActivationHighEnergyLimit(G4double);
+
+  inline void SetActivationLowEnergyLimit(G4double);
+
+  inline G4bool IsActive(G4double kinEnergy);
+
   inline void SetPolarAngleLimit(G4double);
 
   inline void SetSecondaryThreshold(G4double);
@@ -307,6 +313,8 @@ private:
 
   G4double        lowLimit;
   G4double        highLimit;
+  G4double        eMinActive;
+  G4double        eMaxActive;
   G4double        polarAngleLimit;
   G4double        secondaryThreshold;
   G4bool          theLPMflag;
@@ -433,12 +441,13 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
 
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
+  currentElement = elm;
   G4int N = G4int(elm->GetN() + 0.5);
   G4int ni = elm->GetNumberOfIsotopes();
   if(ni > 0) {
     G4int idx = 0;
     if(ni > 1) {
-      G4double* ab = currentElement->GetRelativeAbundanceVector();
+      G4double* ab = elm->GetRelativeAbundanceVector();
       G4double x = G4UniformRand();
       for(; idx<ni; idx++) {
 	x -= ab[idx];
@@ -512,6 +521,27 @@ inline void G4VEmModel::SetHighEnergyLimit(G4double val)
 inline void G4VEmModel::SetLowEnergyLimit(G4double val)
 {
   lowLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetActivationHighEnergyLimit(G4double val)
+{
+  eMaxActive = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetActivationLowEnergyLimit(G4double val)
+{
+  eMinActive = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4VEmModel::IsActive(G4double kinEnergy)
+{
+  return (kinEnergy >= eMinActive && kinEnergy <= eMaxActive);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

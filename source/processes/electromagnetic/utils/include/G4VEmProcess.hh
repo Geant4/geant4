@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.54 2009-07-22 10:05:04 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.55 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -585,6 +585,7 @@ inline void G4VEmProcess::InitialiseStep(const G4Track& track)
 {
   preStepKinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
+  SelectModel(preStepKinEnergy, currentCoupleIndex);
   if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
 }
 
@@ -645,12 +646,8 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
   SelectModel(e, currentCoupleIndex);
-  G4double x = 0.0;
-  if(currentModel) {
-    x = currentModel->CrossSectionPerVolume(currentMaterial,particle,
-					    e,(*theCuts)[currentCoupleIndex]);
-  }
-  return x;
+  return currentModel->CrossSectionPerVolume(currentMaterial,particle,
+					     e,(*theCuts)[currentCoupleIndex]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

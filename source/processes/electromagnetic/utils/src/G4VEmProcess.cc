@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.75 2009-08-11 15:23:39 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.76 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -393,6 +393,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
   if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
   InitialiseStep(track);
+  if(!currentModel->IsActive(preStepKinEnergy)) return x;
 
   if(preStepKinEnergy < mfpKinEnergy) {
     if (integral) ComputeIntegralLambda(preStepKinEnergy);
@@ -474,6 +475,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
 
   SelectModel(finalT, currentCoupleIndex);
+  if(!currentModel->IsActive(finalT)) return &fParticleChange;
   if(useDeexcitation) {
     currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
   }

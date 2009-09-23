@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.60 2009-07-25 15:21:22 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.61 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -541,10 +541,11 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VParticleChange* 
-G4VMultipleScattering::AlongStepDoIt(const G4Track&, const G4Step& step)
+G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
-  fParticleChange.ProposeTrueStepLength(
-    currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  }
   return &fParticleChange;
 }
 
@@ -554,8 +555,10 @@ inline G4VParticleChange*
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
   fParticleChange.Initialize(track);
-  currentModel->SampleScattering(track.GetDynamicParticle(),
-				 step.GetPostStepPoint()->GetSafety());
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    currentModel->SampleScattering(track.GetDynamicParticle(),
+				   step.GetPostStepPoint()->GetSafety());
+  }
   return &fParticleChange;
 }
 

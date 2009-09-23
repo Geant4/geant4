@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.156 2009-08-11 15:23:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.157 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -911,6 +911,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(preStepScaledEnergy);
+  if(!currentModel->IsActive(preStepScaledEnergy)) return x;
 
   if(isIon) {
     chargeSqRatio = 
@@ -979,7 +980,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 {
   fParticleChange.InitializeForAlongStep(track);
   // The process has range table - calculate energy loss
-  if(!isIonisation) return &fParticleChange;
+  if(!isIonisation || !currentModel->IsActive(preStepScaledEnergy)) {
+    return &fParticleChange;
+  }
 
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
@@ -1291,6 +1294,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   if(finalT <= lowestKinEnergy) return &fParticleChange;
 
   G4double postStepScaledEnergy = finalT*massRatio;
+
+  if(!currentModel->IsActive(postStepScaledEnergy)) return &fParticleChange;
   /*
   if(-1 < verboseLevel) {
     G4cout << GetProcessName()

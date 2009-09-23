@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.74 2009-08-11 15:23:39 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.75 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -330,7 +330,7 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   G4double ekin = track.GetKineticEnergy();
   if(isIon) { ekin *= proton_mass_c2/track.GetDefinition()->GetPDGMass(); }
   currentModel = static_cast<G4VMscModel*>(SelectModel(ekin));
-  if(x > 0.0 && ekin > 0.0) {
+  if(x > 0.0 && ekin > 0.0 && currentModel->IsActive(ekin)) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
     if (tPathLength < x) *selection = CandidateForSelection;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.29 2009-08-11 15:23:39 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.30 2009-09-23 14:42:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 
 G4VEmModel::G4VEmModel(const G4String& nam):
   fluc(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
+  eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
   pParticleChange(0),nuclearStopping(false),
   currentCouple(0),currentElement(0),
@@ -133,10 +134,9 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; i++) {
-    const G4MaterialCutsCouple* couple =
-      theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = couple->GetMaterial();
-    G4int idx = couple->GetIndex();
+    currentCouple = theCoupleTable->GetMaterialCutsCouple(i);
+    const G4Material* material = currentCouple->GetMaterial();
+    G4int idx = currentCouple->GetIndex();
 
     // selector already exist check if should be deleted
     G4bool create = true;
