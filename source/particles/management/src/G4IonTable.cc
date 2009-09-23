@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.59 2009-08-06 15:59:32 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.60 2009-09-23 12:13:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   G4bool stable = true;
   G4double mu = 0.0;
 
-  G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
+  const G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
   if (fProperty !=0 ){
     E    = fProperty->GetEnergy();
     J    = fProperty->GetiSpin();
@@ -175,8 +175,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   
   // Add process manager to the ion
   AddProcessManager(name);
-      
-  if (fProperty !=0) delete fProperty;
+ 
   return ion;
 }
 
@@ -375,6 +374,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   G4IonList::iterator i = fIonList->find(encoding);
   for( ;i != fIonList->end() ; i++) {
     ion = i->second;
+    if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
 
      // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
@@ -421,6 +421,8 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   G4IonList::iterator i = fIonList->find(encoding);
   for( ;i != fIonList->end() ; i++) {
     ion = i->second;
+    if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
+    if(  ion->GetQuarkContent(3) != L) break;
 
      // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();

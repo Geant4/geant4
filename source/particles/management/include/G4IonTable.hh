@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.27 2009-07-31 06:39:22 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.28 2009-09-23 12:13:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,8 +70,8 @@ class G4IonTable
 
  public:
    // Use STL map as list of ions
-   typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*>::Map G4IonList;
-   typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4IonListIterator;
+   typedef  std::multimap<G4int, G4ParticleDefinition*> G4IonList;
+   typedef  std::multimap<G4int, G4ParticleDefinition*>::iterator G4IonListIterator;
 
  public:
   // constructor

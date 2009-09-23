@@ -1,4 +1,4 @@
-$Id: History,v 1.176 2009-09-21 04:08:24 kurasige Exp $
+$Id: History,v 1.177 2009-09-23 12:13:48 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Sep 23 2009     Hisaya Kurashige (particles-V09-02-12)
+- Fix a bug in G4IonTable::FIndIon 
+   (use multimap instead of map)
+- Fix a bug in G4IonTable::CreateIon 
+   (remove deleteion of G4IsotopeProperty* pointer)
+
 
 - Sep 16 2009     Hisaya Kurashige (particles-V09-02-11)
 - Add check on application state in the constructor of G4ParticleDefinition
