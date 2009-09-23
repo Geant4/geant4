@@ -14,7 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-14 May 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+22 September 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+- Add safty for Floating Point Exception caused by 0 kinetic energy neutron
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+14 May 2009  Tatsumi Koi  (hadr-hpn-V09-01-29)
 - Fix bug in IC electron emissions: Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 	G4NeutronHPPhotonDist.cc
 	G4NeutronHPInelasticCompFS.cc
