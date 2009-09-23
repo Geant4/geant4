@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.cc,v 1.7 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4LivermoreRayleighModel.cc,v 1.8 2009-09-23 16:54:06 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Sebastien Inserti
@@ -193,6 +193,11 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	  cosTheta = 2. * G4UniformRand() - 1.;
 	  fcostheta = ( 1. + cosTheta*cosTheta)/2.;
 	} while (fcostheta < G4UniformRand());
+
+      if (photonEnergy0 > 5)
+	{
+	  cosTheta = 1.;
+	}
 
       G4double sinThetaHalf = std::sqrt((1. - cosTheta) / 2.);
       x = sinThetaHalf / (wlPhoton/cm);
