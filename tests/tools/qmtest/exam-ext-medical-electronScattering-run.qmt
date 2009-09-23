@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/medical/electronScattering;$G4BIN/$G4SYSTEM/eBenchmarkV1 electronScattering.in</text>
+    <text>cd $G4INSTALL/examples/extended/medical/electronScattering;$G4BIN/$G4SYSTEM/electronScattering electronScattering.in</text>
   </argument>
   <argument name="stderr">
     <text/>
