@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.27 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.28 2009-09-24 15:04:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 
 #include "G4GDMLReadParamvol.hh"
 
+class G4AssemblyVolume;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
@@ -57,6 +58,7 @@ struct G4GDMLAuxPairType
 
 typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
 typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
+typedef std::map<G4String, G4AssemblyVolume*> G4GDMLAssemblyMapType;
 
 class G4GDMLReadStructure : public G4GDMLReadParamvol
 {
@@ -68,6 +70,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
 
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;
+   G4AssemblyVolume* GetAssembly(const G4String&) const;
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
    const G4GDMLAuxMapType* GetAuxMap() const;
@@ -79,9 +82,11 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
  protected:
 
    G4GDMLAuxPairType AuxiliaryRead(const xercesc::DOMElement* const);
+   void AssemblyRead(const xercesc::DOMElement* const);
    void DivisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* FileRead(const xercesc::DOMElement* const);
-   void PhysvolRead(const xercesc::DOMElement* const);
+   void PhysvolRead(const xercesc::DOMElement* const,
+                    G4AssemblyVolume* assembly=0);
    void ReplicavolRead(const xercesc::DOMElement* const, G4int number);
    void ReplicaRead(const xercesc::DOMElement* const replicaElement,
                     G4LogicalVolume* logvol,G4int number);
@@ -93,6 +98,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
  protected:
 
    G4GDMLAuxMapType auxMap;
+   G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
 
 };
