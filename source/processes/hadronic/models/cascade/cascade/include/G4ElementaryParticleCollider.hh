@@ -31,6 +31,7 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4CascadSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4NucleonSampler.hh"
 #include "G4PionSampler.hh"
 
  
@@ -49,9 +50,10 @@ public:
 
 private:
 
-  G4PionSampler piSampler;
-
   G4int verboseLevel;
+
+  void initializeArrays();
+
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
   void collide(G4InuclElementaryParticle* bullet,
@@ -65,58 +67,57 @@ private:
 			G4InuclElementaryParticle* particle2, 
 			G4LorentzConvertor* toSCM) const; 
 
-  std::vector<G4double> generateMomModules(const std::vector<G4int>& kinds, 
-				      G4int mult,
-				      G4int is, 
-				      G4double ekin, 
-				      G4double etot_cm) const; 
-      
-  G4CascadeMomentum particleSCMmomentumFor2to2(G4int is, 
-			             G4int kw, 
-				     G4double ekin,
-				     G4double pscm) const; 
-    
-  G4int getElasticCase(G4int is, 
-		       G4int kw, 
-		       G4double ekin) const;
 
-  std::vector<G4int> generateOutgoingKindsFor2toMany(G4int is, 
-						G4int mult, 
-						G4double ekin) const;
+  std::vector<G4double>
+  generateMomModules(const std::vector<G4int>& kinds, G4int mult,
+		     G4int is, G4double ekin, G4double etot_cm) const; 
 
 
-  std::vector<G4int> generateStrangeChannelPartTypes(G4int is, 
-						G4int mult, 
-						G4double ekin) const;
+  G4CascadeMomentum
+  particleSCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
+			     G4double pscm) const; 
 
-  G4double getMomModuleFor2toMany(G4int is, 
-				  G4int mult, 
-				  G4int knd, 
-				  G4double ekin) const; 
+
+  G4int getElasticCase(G4int is, G4int kw, G4double ekin) const;
+
+
+  std::vector<G4int>
+  generateStrangeChannelPartTypes(G4int is, G4int mult, 
+				  G4double ekin) const;
+
+
+  G4double
+  getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
+			 G4double ekin) const; 
+
 
   G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
 	
-  G4CascadeMomentum particleSCMmomentumFor2to3(G4int is, 
-					      G4int knd, 
-					      G4double ekin, 
-					      G4double pmod) const; 
-	
-  G4int getIL(G4int is, G4int mult) const; 
+  G4CascadeMomentum
+  particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
+			     G4double pmod) const; 
 
-  std::pair<G4double, G4double> adjustIntervalForElastic(G4double ekin, 
-						    G4double ak, 
-						    G4double ae,
-						    G4int k, 
-						    G4int l, 
-						    const std::vector<G4double>& ssv, 
-						    G4double st) const;
+
+  std::pair<G4double, G4double> 
+  adjustIntervalForElastic(G4double ekin, G4double ak, G4double ae,
+                           G4int k, G4int l, const std::vector<G4double>& ssv, 
+			   G4double st) const;
  
   std::vector<G4InuclElementaryParticle> 
   generateSCMpionAbsorption(G4double etot_scm,
 			    G4InuclElementaryParticle* particle1,
 			    G4InuclElementaryParticle* particle2) const; 
-    
-};        
+
+  G4NucleonSampler nucSampler;
+  G4PionSampler piSampler;
+
+  // Parameter arrays
+
+  G4double rmn[14][10][2];    
+  G4double ang[4][4][13];
+  G4double abn[4][4][4];
+
+};
 
 #endif // G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
