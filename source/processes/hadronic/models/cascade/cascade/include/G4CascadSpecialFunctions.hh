@@ -36,17 +36,9 @@ namespace G4CascadSpecialFunctions {
 
   std::pair<G4int, G4double> getPositionInEnergyScale3(G4double e); 
 
-  std::pair<G4int, G4double> getPositionInEnergyScale2(G4double e); 
+  G4double absorptionCrosSection(G4double e, G4int type);
 
-  std::pair<G4int, G4double> getPositionInEnergyScale1(G4double e);
- 
-  G4double absorptionCrosSection(G4double e, 
-				 G4int type);
-
-  G4double crossSection(G4double e, 
-			G4int is);
-
-  std::pair<G4int, G4double> getPositionInEnergyScaleEMS(G4double e); 
+  G4double crossSection(G4double e, G4int is);
 
 }
 #endif
