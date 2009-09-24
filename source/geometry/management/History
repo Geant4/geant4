@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2009-05-25 15:08:05 gcosmo Exp $
+$Id: History,v 1.134 2009-09-24 13:23:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 24, 2009  G.Cosmo                geommng-V09-02-02
+- Fixed implementation of G4LogicalVolume::TotalVolumeEntities() to become
+  invariant to call sequence.
 
 May 25, 2009  G.Cosmo                      geommng-V09-02-01
 - Fixed initialisation of min/max extent in method BuildReplicaVoxels() in
