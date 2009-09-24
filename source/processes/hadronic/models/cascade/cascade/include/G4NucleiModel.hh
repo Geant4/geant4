@@ -26,14 +26,12 @@
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
-//#include "G4InuclNuclei.hh"
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #include "G4InuclElementaryParticle.hh"
 #endif
 #include "G4CascadParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4CascadSpecialFunctions.hh"
 #include "G4ElementaryParticleCollider.hh"
 
 
@@ -42,7 +40,6 @@
 class G4InuclNuclei;
 
 using namespace G4InuclSpecialFunctions;
-using namespace G4CascadSpecialFunctions;
 
 typedef std::pair<G4InuclElementaryParticle, G4double> partner;
 typedef std::vector<partner> partners;
@@ -54,36 +51,32 @@ public:
   G4NucleiModel();
 
   G4NucleiModel(G4InuclNuclei* nuclei) {
-
     generateModel(nuclei->getA(), nuclei->getZ());
-  };
+  }
 
-  void generateModel(G4double a, 
-		     G4double z);
+  void generateModel(G4double a, G4double z);
+
 
   void reset() {
-
     neutronNumberCurrent = neutronNumber;
     protonNumberCurrent = protonNumber;
-  };
+  }
+
 
   void printModel() const; 
 
-  G4double getDensity(G4int ip, 
-		      G4int izone) const {
 
+  G4double getDensity(G4int ip, G4int izone) const {
     return nucleon_densities[ip - 1][izone];
-  };
+  }
 
-  G4double getFermiMomentum(G4int ip, 
-			    G4int izone) const {
 
+  G4double getFermiMomentum(G4int ip, G4int izone) const {
     return fermi_momenta[ip - 1][izone];
-  };
+  }
 
-  G4double getFermiKinetic(G4int ip, 
-			   G4int izone) const {
 
+  G4double getFermiKinetic(G4int ip, G4int izone) const {
     G4double ekin = 0.0;
 
     if(ip < 3 && izone < number_of_zones) {
@@ -91,59 +84,67 @@ public:
       G4double mass = ip == 1 ? 0.93827 : 0.93957;
 
       ekin = std::sqrt(pf * pf + mass * mass) - mass;
-    };  
-
+    }  
     return ekin;
-  };
+  }
 
-  G4double getPotential(G4int ip, 
-			G4int izone) const {
 
+  G4double getPotential(G4int ip, G4int izone) const {
     G4int ip0 = ip < 3 ? ip - 1 : 2;
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;
-
     return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
-  };
+  }
+
 
   std::vector<G4CascadParticle> 
   generateParticleFate(G4CascadParticle& cparticle,
 		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
 
-  G4double getNumberOfNeutrons() const { 
 
+  G4double getNumberOfNeutrons() const { 
     return neutronNumberCurrent; 
-  };
+  }
+
 
   G4double getNumberOfProtons() const { 
-
     return protonNumberCurrent; 
-  };
+  }
+
 
   G4bool empty() const { 
-
     return neutronNumberCurrent < 1.0 && protonNumberCurrent < 1.0; 
-  };
+  }
+
 
   G4bool stillInside(const G4CascadParticle& cparticle) {
-
     return cparticle.getCurrentZone() < number_of_zones;
-  };
+  }
+
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
-  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+
+  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
+  initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+
 
   std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
     return std::pair<G4int, G4int>(current_nucl1, current_nucl2);
-  };
+  }
+
+
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
-  G4InuclElementaryParticle generateNucleon(G4int type, 
-					    G4int zone) const;
+  G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
 
-private: 
-G4int verboseLevel;
+private:
+ 
+  G4int verboseLevel;
+
+  void initTotalCrossSections();
+  G4double totalCrossSection(G4double e, G4int rtype) const;
+
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
@@ -155,14 +156,10 @@ G4int verboseLevel;
 
   partners generateInteractionPartners(G4CascadParticle& cparticle) const;
 
-  G4double volNumInt(G4double r1, 
-		     G4double r2, 
-		     G4double cu, 
+  G4double volNumInt(G4double r1, G4double r2, G4double cu, 
 		     G4double d1) const; 
 
-  G4double volNumInt1(G4double r1, 
-		      G4double r2, 
-		      G4double cu2) const; 
+  G4double volNumInt1(G4double r1, G4double r2, G4double cu2) const; 
 
   G4double getRatio(G4int ip) const;
 
@@ -181,20 +178,33 @@ G4int verboseLevel;
   G4int number_of_zones;
 
   G4double A;
-
   G4double Z;
 
   G4double neutronNumber;
-
   G4double protonNumber;
 
   G4double neutronNumberCurrent;
-
   G4double protonNumberCurrent;
 
   G4int current_nucl1;
-
   G4int current_nucl2;
+
+  // Total cross sections
+
+  G4double PPtot[30];
+  G4double NPtot[30];
+  G4double pipPtot[30];
+  G4double pimPtot[30];
+  G4double pizPtot[30];
+  G4double kpPtot[30];
+  G4double kpNtot[30];
+  G4double kmPtot[30];
+  G4double kmNtot[30];
+  G4double lPtot[30];
+  G4double spPtot[30];
+  G4double smPtot[30];
+  G4double xi0Ptot[30];
+  G4double ximPtot[30];
 
 };        
 
