@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
+
+<define>
+  <constant name="HALFPI" value="pi/2."/>
+  <constant name="PI" value="1.*pi"/>
+  <constant name="TWOPI" value="2.*pi"/>
+  <position name="center" x="0" y="0" z="0"/>
+  <rotation name="identity" x="0" y="0" z="0"/>
+  <rotation name="alignSurfX" y="HALFPI" />
+  <rotation name="alignSurfY" x="HALFPI" />
+</define>
+
+<materials>
+
+  <element name="Oxygen"   formula="O"  Z="8.">
+    <atom value="16.0"/>
+  </element>
+  <element name="Nitrogen" formula="N"  Z="7.">
+    <atom value="14.01"/>
+  </element>
+
+  <material name="Al" Z="13.0">
+   <D value="2.70"/>
+   <atom value="26.98"/>
+  </material>
+
+  <material name="Air">
+   <D value="1.290" unit="mg/cm3"/>
+   <fraction n="0.7" ref="Nitrogen"/>
+   <fraction n="0.3" ref="Oxygen"/>
+  </material>
+
+</materials>
+
+<solids>
+  <box  name="WorldBox" x="1.0" y="1.0" z="1.0" lunit="m"/>
+  <tube name="TubeSol" rmin="0.1075" rmax="0.1875" z="0.1875" deltaphi="TWOPI" startphi="0" aunit="rad" lunit="m"/>
+</solids>
+
+<structure>
+
+  <volume name="TubeVol">
+    <materialref ref="Al"/>
+    <solidref ref="TubeSol"/>
+  </volume>
+
+  <assembly name="AssemblyVol">
+    <physvol>
+      <volumeref ref="TubeVol"/>
+      <position name="pos1" unit="m" x="0" y="0" z="0.5"/>
+      <rotationref ref="alignSurfX"/>
+    </physvol>
+    <physvol>
+      <volumeref ref="TubeVol"/>
+      <position name="pos2" unit="m" x="0" y="0" z="-0.5"/>
+      <rotationref ref="alignSurfY"/>
+    </physvol>
+  </assembly>
+
+  <volume name="World">
+    <materialref ref="Air"/>
+    <solidref ref="WorldBox"/>
+    <physvol>
+       <volumeref ref="AssemblyVol"/>
+       <positionref ref="center"/>
+       <rotationref ref="identity"/>
+    </physvol>
+  </volume>
+
+</structure>
+
+<setup name="Default" version="1.0">
+  <world ref="World"/>
+</setup>
+
+</gdml>
