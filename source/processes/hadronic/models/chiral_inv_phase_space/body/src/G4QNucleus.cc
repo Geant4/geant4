@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.111 2009-09-04 13:53:03 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.112 2009-09-25 15:24:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -40,6 +40,7 @@
 //#define pdebug 
 //#define cldebug
 //#define qdebug
+//#define cldebug
 //#define pardeb
 //#define ppdebug
 
@@ -3975,9 +3976,13 @@ void G4QNucleus::EvaporateNucleus(G4QHadron* qH, G4QHadronVector* evaHV)
   /// @@@@@@@ *** TEMPORARY TO AVOID HYPERMUCLEI FOR GEANT4 *** @@@@@@@
   if(thePDG>91000000) //@@MadeForGeant4@@: If there is a Lambda, substitute it by A neutron
   {
-    G4int SSS=(thePDG-90000000)/1000000;
+    G4int SSS=(thePDG-90000000)/1000000;      // A # of Lambdas
     thePDG-=SSS*999999;                       // S Neutrons instead of S Lambdas
     qH->SetQPDG(G4QPDGCode(thePDG));
+    theQC  = qH->GetQC();          // Quark Content of the hadron
+#ifdef debug
+    G4cout<<"=>Hyper Change=>G4QNucleus::EvaporateNuceus: NewNucPDG="<<thePDG<<G4endl;
+#endif
   }
   /// @@@ *** ^^^ END OF TEMPORARY ^^^ *** @@@
   if(thePDG<80000000)

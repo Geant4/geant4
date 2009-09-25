@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.153 2009-09-04 13:53:03 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.154 2009-09-25 15:24:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4115,8 +4115,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
 #ifdef qdebug
   if (qH)
   {
-    G4cout<<"G4QEnvironment::EvaporateResidual: deleted at end, PDG="
-           <<qH->GetPDGCode()<<G4endl;
+    G4cout<<"G4QEnvironment::EvaporateResidual:EndDeleted, PDG="<<qH->GetPDGCode()<<G4endl;
     delete qH;
   }
 #endif
@@ -5962,7 +5961,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     {
       G4int fBN=theQHadrons[f]->GetBaryonNumber(); // Baryon number of the fragment
 #ifdef debug
-      G4cout<<"G4QE::FSI:"<<f<<",PDG="<<theQHadrons[f]->GetPDGCode()<<",fBN="<<fBN<<G4endl;
+      G4int fPDG=theQHadrons[f]->GetPDGCode();     // PDG code of the fragment
+      G4LorentzVector fLV=theQHadrons[f]->Get4Momentum(); // 4Mom of the fragment
+      G4cout<<"G4QE::FSI:"<<f<<",PDG="<<fPDG<<",fBN="<<fBN<<",f4M="<<fLV<<G4endl;
 #endif
       if(fBN>1) frag=true;                    // The fragment with A>1 is found
     }
@@ -5984,8 +5985,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         G4QHadron* theLast = theQHadrons[theQHadrons.size()-1];//Get Ptr to the Last Hadron
         if(hPDG==22)
         {
-          sum+=curHadr->Get4Momentum();       // Add 4Mom of gamma to the "sum"
+          G4LorentzVector g4M=curHadr->Get4Momentum();
+          sum+=g4M;                           // Add 4Mom of gamma to the "sum"
           gamCount++;
+#ifdef debug
+          G4cout<<"G4QE::FSI: gam4M="<<g4M<<" is added to s4M="<<sum<<G4endl;
+#endif
         }
         if(h<static_cast<G4int>(theQHadrons.size())-1) // Need swap with the Last
         {
@@ -6072,7 +6077,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     if(gamCount)
     {
       G4QHadron* theLast = theQHadrons[nHadr-1];// Get a pointer to the Last Hadron
-      if(theLast->GetBaryonNumber()>1)        // "Absorb photons & evaporate/decay" case
+      if(theLast->GetBaryonNumber()>0)        // "Absorb photons & evaporate/decay" case
       {
         G4QHadron* theNew  = new G4QHadron(theLast); // Make New Hadron of the Last Hadron
 #ifdef ffdebug
@@ -6324,21 +6329,36 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef debug
       G4cout<<"G4QE::FSI:gp#"<<gp<<", PDG="<<hPDG<<", is found"<<G4endl;
 #endif
-      if(hPDG==22)                                // Photon is foun on the "gp" position
+      if(hPDG==22)                                // Photon is foun ond the "gp" position
       {
         gamSum=gamSum+theCurr->Get4Momentum();    // Accumulate the 4Momenta of the photon
+#ifdef debug
+        G4cout<<"G4QE::FSI:Photon gp#"<<gp<<",nH="<<nHadr<<", update gS="<<gamSum<<G4endl;
+#endif
         unsigned nLast=nHadr-1;                   // position of theLastHadron (gp<nHadr-1)
         G4QHadron* theLast = theQHadrons[nLast];  // Pointer to the Last Hadron
-        while(nLast>gp && theLast->GetPDGCode()==22) // "TheLast is a photon too" LOOP
+#ifdef debug
+        G4int wcn=0;
+#endif
+        while(nLast>=gp && theLast->GetPDGCode()==22) // "TheLast is a photon too" LOOP
         {
-          gamSum=gamSum+theLast->Get4Momentum();  // Accumulate 4-momentum of theLastPhoton
+#ifdef debug
+          ++wcn;
+#endif
+          if(nLast>gp)
+          {
+            gamSum=gamSum+theLast->Get4Momentum();// Accumulate 4-momentum of theLastPhoton
+#ifdef debug
+            G4cout<<"G4QE::FSI:TheLastPhotonIsFound #"<<wcn<<",update gS="<<gamSum<<G4endl;
+#endif
+          }
           theQHadrons.pop_back();                 // Pnt to theLastHadr.is excluded from HV
           delete theLast;//*!!When kill,DON'T forget to delete theLastQHadron as an inst!!*
           nHadr=theQHadrons.size();
           nLast=nHadr-1;
           theLast = theQHadrons[nLast];
         }
-        if(nLast>gp)
+        if(nLast>gp)                              // -> swapping with the last
         {
           G4QPDGCode lQP=theLast->GetQPDG();      // The QPDG of the last
           if(lQP.GetPDGCode()!=10) theCurr->SetQPDG(lQP); //CurHadr instead of PrevHadr
@@ -6348,7 +6368,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           delete theLast;//*!|When kill,DON'T forget to delete theLastQHadron as an inst!!*
           nHadr=theQHadrons.size();
 #ifdef debug
-          G4cout<<"G4QE::FSI:RepBy lPDG="<<lQP<<",nH="<<nHadr<<",gS="<<gamSum<<G4endl;
+          G4cout<<"G4QE::FSI:RepBy lPDG="<<lQP<<", nH="<<nHadr<<", gS="<<gamSum<<G4endl;
 #endif
         }
       }
@@ -6362,7 +6382,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       delete theLast; //**!!When kill,DON'T forget to delete theLastQHadron as an inst.!!**
       nHadr=theQHadrons.size();
 #ifdef debug
-      G4cout<<"G4QE::FSI: The last photon is killed, nH="<<nHadr<<",gS="<<gamSum<<G4endl;
+      G4cout<<"-Warning-G4QE::FSI: LastPhotonIsKilled, nH="<<nHadr<<",gS="<<gamSum<<G4endl;
 #endif
       theLast = theQHadrons[nHadr-1];
     }
@@ -8302,7 +8322,7 @@ void G4QEnvironment::DecayAntistrange(G4QHadron* qH)
   G4int K0PDG= qPDG+astr*999999;               // Residual nonStrange nucleus for S*antiK0
   G4QPDGCode K0QPDG(K0PDG);                    // QPDG of the nuclear residual for S*antiK0
   G4double rK0M=K0QPDG.GetMass();              // Mass of the nuclear residual for S*antiK0
-  G4int KpPDG= qPDG+999000;                    // Residual nonStrange nucleus for S*K+
+  G4int KpPDG= qPDG+astr*999000;               // Residual nonStrange nucleus for S*K+
   G4QPDGCode KpQPDG(KpPDG);                    // QPDG of the nuclear residual for S*K+
   G4double rKpM=KpQPDG.GetMass();              // Mass of the nuclear residual for S*K+
   G4LorentzVector q4M = qH->Get4Momentum();    // Get 4-momentum of the Nucleus

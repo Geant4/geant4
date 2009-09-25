@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.30 2009-09-08 16:10:21 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.31 2009-09-25 15:24:38 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -690,6 +690,25 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   // --- Strings are created, but we should try to get rid of negative mass strings -----
   //
   SwapPartons();
+#ifdef edebug
+  sm=theNucleus.Get4Momentum();    // Nucleus 4Mom in LS
+  rCg=totChg-theNucleus.GetZ();
+  rBC=totBaN-theNucleus.GetA();
+  nStrs=strings.size();
+  G4cout<<"-EMCLS-G4QFrag::Constr:AfterSwap #ofS="<<nStrings<<",tNuc4M(E=M)="<<sum<<G4endl;
+  for(G4int i=0; i<nStrs; i++)
+  {
+    G4LorentzVector strI4M=strings[i]->Get4Momentum();
+    sm+=strI4M;
+    G4int sChg=strings[i]->GetCharge();
+    rCg-=sChg;
+    G4int sBaN=strings[i]->GetBaryonNumber();
+    rBC-=sBaN;
+    G4cout<<"-EMCLS-G4QFragm::Construct:String#"<<i<<",4M="<<strI4M<<strI4M.m()<<",Charge="
+          <<sChg<<",BaryN="<<sBaN<<G4endl;
+  }
+  G4cout<<"-EMCLS-...G4QFragm::Constr:r4M="<<sm-totLS4M<<",rC="<<rCg<<",rB="<<rBC<<G4endl;
+#endif
   //
   // --- Strings are created, but we should get rid of too light strings (Mmin+MPi0) -----
   //
@@ -729,8 +748,8 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     G4double cSM=cSM2;
     if(cSM2>0.) cSM=std::sqrt(cSM2);
 #ifdef debug
-    G4cout<<"G4QFragmentation::Construct: Needs Fusion? cLPDG="<<cLPDG<<",cRPDG="<<cRPDG
-          <<",cM(cM2 if neg)="<<cSM<<G4endl;
+    G4cout<<"G4QFrag::Constr:NeedsFusion? cLPDG="<<cLPDG<<",cRPDG="<<cRPDG<<",cM(cM2If<0)="
+          <<cSM<<",c4M"<<cS4M<<G4endl;
 #endif
     if(cSM>0.)                                       // Mass can be calculated
     {
@@ -770,13 +789,14 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       if(cSM2>0.) minC=false;                        // If M2>0 already don'tSearchFor M2>0
       for(pst = strings.begin(); pst < strings.end(); pst++) if(pst != ist)
       {
-        G4LorentzVector pS4M=(*pst)->Get4Momentum()+cS4M; // Summed 4-momentum
+        G4LorentzVector sS4M=(*pst)->Get4Momentum(); // Partner's 4-momentum
+        G4LorentzVector pS4M=sS4M+cS4M;              // Summed 4-momentum
         G4int nLPDG=0;                               // new Left (like in theStringPartner)
         G4int nRPDG=0;                               // new Right(like in theStringPartner)
         G4double pExcess=-DBL_MAX;                   // Prototype of the excess
         G4double pSM2=pS4M.m2();                     // Squared mass of the Fused Strings
 #ifdef debug
-        G4cout<<"->G4QFragm::Construct: sum4M="<<pS4M<<", M2="<<pSM2<<G4endl;
+        G4cout<<"->G4QFragm::Construct: sum4M="<<pS4M<<",M2="<<pSM2<<",p4M="<<sS4M<<G4endl;
 #endif
         //if(pSM2>0.)                                  // The partner can be a candidate
         //{
@@ -4293,22 +4313,37 @@ void G4QFragmentation::SwapPartons() // Swap string partons, if a string has neg
   G4QStringVector::iterator ist;
   for(ist = strings.begin(); ist < strings.end(); ist++)
   {
-    G4LorentzVector cS4M=(*ist)->Get4Momentum();
+    G4QParton* cLeft=(*ist)->GetLeftParton();        // Current String Left Parton 
+    G4QParton* cRight=(*ist)->GetRightParton();      // Current String Right Parton 
+    G4LorentzVector cL4M=cLeft->Get4Momentum();
+    G4LorentzVector cR4M=cRight->Get4Momentum();
+    G4LorentzVector cS4M=cL4M+cR4M;
     G4double cSM2=cS4M.m2();                         // Squared mass of the String
-    if(cSM2<0.1)                                     // Parton Swapping is needed
+    if(std::fabs(cSM2)<.01)                          // Small correction
     {
-      G4QParton* cLeft=(*ist)->GetLeftParton();      // Current String Left Parton 
-      G4QParton* cRight=(*ist)->GetRightParton();    // Current String Right Parton 
+      G4double dM2=.001-cSM2;
+      G4double E=cS4M.e();
+      G4double dE=std::sqrt(E*E+dM2)-E;
+      G4double LE=cL4M.e();
+      G4double RE=cR4M.e();
+      if(LE<RE) cLeft->Set4Momentum(LE+dE);
+      else      cRight->Set4Momentum(RE+dE);
+      cSM2=.001;                                     // Correction
+    }
+    if(cSM2<0.011)                                   // Parton Swapping is needed
+    {
       G4int cLPDG=cLeft->GetPDGCode();
       G4int cRPDG=cRight->GetPDGCode();
-      G4LorentzVector cL4M=cLeft->Get4Momentum();
-      G4LorentzVector cR4M=cRight->Get4Momentum();
       G4int cLT=cLeft->GetType();
       G4int cRT=cRight->GetType();
       G4QStringVector::iterator sst;                 // Selected partner string
       G4QStringVector::iterator pst;                 // LOOP iterator
       G4double maxM=-DBL_MAX;                        // Swapping providing the max mass
       G4int    sDir=0;                               // Selected direction of swapping
+#ifdef debug
+      G4cout<<"G4QFragmentation::SwapPartons: M2=="<<cSM2<<", 4M="<<cS4M<<",LPDG="<<cLPDG
+            <<",RPDG="<<cRPDG<<G4endl;
+#endif
       for(pst = strings.begin(); pst < strings.end(); pst++) if(pst != ist)
       {
         G4QParton* pLeft=(*pst)->GetLeftParton();    // Partner String Left Parton 
@@ -4319,6 +4354,10 @@ void G4QFragmentation::SwapPartons() // Swap string partons, if a string has neg
         G4LorentzVector pR4M=pRight->Get4Momentum();
         G4int pLT=pLeft->GetType();
         G4int pRT=pRight->GetType();
+#ifdef debug
+        G4cout<<"G4QFragmentation::SwapPartons: p4M="<<cS4M<<",pM2="<<cS4M.m2()<<",LPDG="
+              <<pLPDG<<",RPDG="<<pRPDG<<G4endl;
+#endif
         G4double LM=0.;
         G4double RM=0.;
         if(((cLPDG<-7 || (cLPDG>0 && cLPDG< 7) ) && (pLPDG<-7 || (pLPDG>0 && pLPDG< 7) ))||
