@@ -1,4 +1,4 @@
-$Id: History,v 1.388 2009-09-25 07:41:34 sincerti Exp $
+$Id: History,v 1.389 2009-09-25 07:48:26 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25.09.2009  N. Karakatsanis, , tag emlowen-V09-02-53
+25.09.2009, N. Karakatsanis, , tag emlowen-V09-02-53
             New implementation for data loading and interpolation methods
             LoadData method now loads the data from G4EMLOW dataset and, then, calculates 
             the respective logarithmic values during initialization
