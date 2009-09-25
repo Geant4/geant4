@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.36 2009-09-21 04:03:25 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.37 2009-09-25 00:23:41 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -275,7 +275,6 @@ void G4SteppingManager::GetProcessNumber()
 void G4SteppingManager::InvokeAtRestDoItProcs()
 //////////////////////////////////////////////////////
 {
-
 // Select the rest process which has the shortest time before
 // it is invoked. In rest processes, GPIL()
 // returns the time before a process occurs.
@@ -293,34 +292,22 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        continue;
      }   // NULL means the process is inactivated by a user on fly.
 
-     lifeTime = 
+     lifeTime =
        fCurrentProcess->AtRestGPIL( 
                                                      *fTrack,
                                                 &fCondition );
-//     if(fCondition==Forced){
-//       (*fSelectedAtRestDoItVector)[ri] = Forced;
-//     }
-//     else{
-//       (*fSelectedAtRestDoItVector)[ri] = InActivated;
-//      if(lifeTime < shortestLifeTime ){
-//         shortestLifeTime = lifeTime;
-//	 fAtRestDoItProcTriggered =  G4int(int(ri)); 
-//       }
 
-       if(fCondition==Forced && fCurrentProcess){
-	 (*fSelectedAtRestDoItVector)[ri] = Forced;
+     if(fCondition==Forced && fCurrentProcess){
+       (*fSelectedAtRestDoItVector)[ri] = Forced;
+     }
+     else{
+       (*fSelectedAtRestDoItVector)[ri] = InActivated;
+       if(lifeTime < shortestLifeTime ){
+          shortestLifeTime = lifeTime;
+          fAtRestDoItProcTriggered =  G4int(int(ri));
+          (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
        }
-       else{
-	 (*fSelectedAtRestDoItVector)[ri] = InActivated;
-	 if(lifeTime < shortestLifeTime ){
-	   shortestLifeTime = lifeTime;
-	   fAtRestDoItProcTriggered =  G4int(int(ri));
-	   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
-	 }
-       }
-       if(NofInactiveProc==MAXofAtRestLoops){
-	   G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
-       }
+     }
    }
 
 // at least one process is necessary to destory the particle  
@@ -328,8 +315,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    if(NofInactiveProc==MAXofAtRestLoops){ 
      //     G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
      G4cerr << "G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " << G4endl;
-   } else {
-        (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
    }
 
    fStep->SetStepLength( 0. );  //the particle has stopped
@@ -342,7 +327,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    //       and SelectedAtRestDoItVector.
    //
      if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated){
-
 
        fCurrentProcess = (*fAtRestDoItVector)[np];
        fParticleChange 
@@ -396,7 +380,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 
      } //if(fSelectedAtRestDoItVector[np] != InActivated){
    } //for(size_t np=0; np < MAXofAtRestLoops; np++){
-
    fStep->UpdateTrack();
 
    fTrack->SetTrackStatus( fStopAndKill );
@@ -627,5 +610,4 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
     }
   }
 }
-
 
