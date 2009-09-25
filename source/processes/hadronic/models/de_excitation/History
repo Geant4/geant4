@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-14)
+----------------------------------------------------------
+-  J.M.Quesada fixed G4GEMProbability and G4GEMChannel to provide 
+   the same probablity as proposed in original papers;
+   J.M.Quesada fixed G4ExitationHandler to for the case when FermiBreakUp 
+   and multi-fragmentation model are activated;
+-  V.Ivanchenko added a protection on unphysical initial state in G4GEMChannel
+
 16 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-13)
 ----------------------------------------------------------
 -  J.M.Quesada updated nearly all classes of GEM sub-package by
