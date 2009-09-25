@@ -1,4 +1,4 @@
-$Id: History,v 1.393 2009-08-11 11:21:35 vnivanch Exp $
+$Id: History,v 1.394 2009-09-25 09:16:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 September 09: V.Ivant (emutils-V09-02-18)
+- G4VEmModel - insure definition of pointer to the G4MaterialCutsCouple
+               object both at initialisation and in run time
+- G4EmSaturation - use PDG encoding instead of pointer to G4ParticleDefinition
 
 11 August 09: V.Ivant (emutils-V09-02-17)
 - G4EmModelManager - reduced length of internal arrays, simplified
