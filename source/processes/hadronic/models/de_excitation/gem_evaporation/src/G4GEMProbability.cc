@@ -28,8 +28,12 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept 2001)
 //
+// J. M. Quesada : several fixes in total GEM width 
 // J. M. Quesada 14/07/2009 bug fixed in total emission width (hbarc)
-// J. M. Quesada : several fixes in total GEM width (17-21 july)
+// J. M. Quesada (September 2009) several fixes:
+//       -level density parameter of residual calculated at its right excitation energy.
+//       -InitialLeveldensity calculated according to the right conditions of the 
+//        initial excited nucleus.
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
@@ -106,66 +110,55 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double NuclearMass = G4ParticleTable::GetParticleTable()->
     GetIonTable()->GetNucleusMass(theZ,theA);
   
-  //JMQ 210709: bug fix this level density parameter is for the residual
-  //    G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
-  //						      static_cast<G4int>(fragment.GetZ()),U);
-  G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),
-						    static_cast<G4int>(ResidualZ),U);
-  //JMQ 21/07/09 bug fix in pairing energies: 
-  //1)Tatsumi's pairing energy (delta0) must be used  just in  the level density of the residual	
-  //2 The pairing energy of the parent nucleus (deltaCN) must be used in the InitialLevelDensity 
   
-  G4double deltaCN=G4PairingCorrection::GetInstance()->
-    GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));				      
-  //090115 Tatsumi Koi paring correction to residual and not to fragment
-  //G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
-  //								       static_cast<G4int>(fragment.GetZ()));
-  G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection( static_cast<G4int>( ResidualA ) , static_cast<G4int>( ResidualZ ) );
-  //090115    
   G4double Alpha = CalcAlphaParam(fragment);
   G4double Beta = CalcBetaParam(fragment);
   
-  // JMQ 210709 the a, Ux,Ex, T and E0 quantities used in InitialLevelDensity must be calculated for parent nucleus (CN)   
-  G4double aCN = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
-						      static_cast<G4int>(fragment.GetZ()),U);
-  G4double UxCN = (2.5 + 150.0/fragment.GetA())*MeV;
-  G4double ExCN = UxCN + deltaCN;
-  G4double TCN = 1.0/(std::sqrt(a/UxCN) - 1.5/UxCN);
-  G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
-  // 
-  // JMQ: the following quantities (original) refer to the residual:
+  
+  //                       ***RESIDUAL***
+  //JMQ (September 2009) the following quantities refer to the RESIDUAL:
+  
+  G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection( static_cast<G4int>( ResidualA ) , static_cast<G4int>( ResidualZ ) );  
+  
+  G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),
+  						    static_cast<G4int>(ResidualZ),MaximalKineticEnergy+V-delta0);
   G4double Ux = (2.5 + 150.0/ResidualA)*MeV;
   G4double Ex = Ux + delta0;
   G4double T = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
-  //JMQ 170709 bug in units
-  //    G4double E0 = Ex - T*(std::log(T*MeV) - std::log(a/MeV)/4.0 - 1.25*std::log(Ux*MeV) + 2.0*std::sqrt(a*Ux));
+  //JMQ fixed bug in units
   G4double E0 = Ex - T*(std::log(T/MeV) - std::log(a*MeV)/4.0 - 1.25*std::log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+  //                      ***end RESIDUAL ***
   
+  //                       ***PARENT***
+  //JMQ (September 2009) the following quantities refer to the PARENT:
+     
+  G4double deltaCN=G4PairingCorrection::GetInstance()->
+    GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));				       
+  G4double aCN = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
+						      static_cast<G4int>(fragment.GetZ()),U-deltaCN);
+  G4double UxCN = (2.5 + 150.0/fragment.GetA())*MeV;
+  G4double ExCN = UxCN + deltaCN;
+  G4double TCN = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
+  //JMQ fixed bug in units
+  G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
+//                       ***end PARENT***
+
   G4double Width;
   G4double InitialLevelDensity;
+  G4double t = MaximalKineticEnergy/T;
   if ( MaximalKineticEnergy < Ex ) {
-    G4double t = MaximalKineticEnergy/T;
     //JMQ 190709 bug in I1 fixed (T was  missing)
-    //        Width = (I1(t,t) + (Beta+V)*I0(t))/std::exp(E0/T);
     Width = (I1(t,t)*T + (Beta+V)*I0(t))/std::exp(E0/T);
-    //JMQ 21070921
-    //        InitialLevelDensity = (pi/12.0)*std::exp((U-E0)/T)/T;
-    InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
+//JMQ 160909 fix:  InitialLevelDensity has been taken away (different conditions for initial CN..) 
   } else {
-    G4double t = MaximalKineticEnergy/T;
     G4double tx = Ex/T;
     G4double s = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
     G4double sx = 2.0*std::sqrt(a*(Ex-delta0));
-    //JMQ 190709 bug in I1 fixed (T was  missing)
-    //        Width = I1(t,tx)/std::exp(E0/T) + I3(s,sx)*std::exp(s)/(std::sqrt(2.0)*a);
     Width = I1(t,tx)*T/std::exp(E0/T) + I3(s,sx)*std::exp(s)/(std::sqrt(2.0)*a);
     // For charged particles (Beta+V) = 0 beacuse Beta = -V
     if (theZ == 0) {
       Width += (Beta+V)*(I0(tx)/std::exp(E0/T) + 2.0*std::sqrt(2.0)*I2(s,sx)*std::exp(s));
     }
-    // JMQ 210709 bug fix : quantities must be calculated for parent nucleus (CN)
-    //        InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(a*(U-delta0)))/std::pow(a*std::pow(U-delta0,5.0),1.0/4.0);
-    InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(a*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
   }
   
   //JMQ 14/07/2009 BIG BUG : NuclearMass is in MeV => hbarc instead of hbar_planck must be used
@@ -201,13 +194,28 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double GeometricalXS = pi*Rb*Rb; 
   //end of JMQ fix on Rb by 190709
   
-  //JMQ 190709 BUG : pi instead sqrt(pi) must appear:
+
+
+//JMQ 160909 fix: initial level density must be calculated according to the 
+// conditions at the initial compound nucleus 
+// (it has been removed from previous "if" for the residual) 
+
+   if ( U < ExCN ) 
+      {
+        InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
+      } 
+    else 
+      {
+        InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
+      }
+ //
+
+
+  //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according to Furihata's report:
   //    Width *= std::sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
   Width *= pi*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
-  
-  //JMQ 200709 for testing
-  //G4cout<<"theA="<<theA<<" theZ="<<theZ<<" ResidualA="<<ResidualA<<" ResidualZ="<<ResidualZ<<" ==> Width ="<<Width<<G4endl;
-  //JMQ 200709 end testing
+   
+
   return Width;
 }
 
