@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.12 2009-09-18 12:41:25 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.13 2009-09-25 16:12:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -623,7 +623,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               ++nSec;
             }
             G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
-            if(pPDG=2212) theDefinition = G4Proton::Proton();
+            if(pPDG==2212) theDefinition = G4Proton::Proton();
             G4DynamicParticle* scatN = new G4DynamicParticle(theDefinition, scat4M);
             aNucTrack = new G4Track(scatN, localtime, position );
             aNucTrack->SetWeight(weight);                    //    weighted
@@ -772,7 +772,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               ++nSec;
             }
             G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
-            if(pPDG=2212) theDefinition = G4Proton::Proton();
+            if(pPDG==2212) theDefinition = G4Proton::Proton();
             G4DynamicParticle* scatN = new G4DynamicParticle(theDefinition, scat4M);
             aNucTrack = new G4Track(scatN, localtime, position );
             aNucTrack->SetWeight(weight);                    //    weighted
