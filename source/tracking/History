@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2009-02-27 08:12:42 tsasaki Exp $
+$Id: History,v 1.129 2009-09-25 00:21:59 gum Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 Sep 2009 P.Gumplinger (tracking-V09-02-01)
+- Correction to G4SteppingManager::InvokeAtRestDoItProcs so G4Scintillation
+  process (with an AtRestDoIt and 'Forced') will not be set to 'NotForced' when
+  NofInactiveProc<MAXofAtRestLoops and when the user inactivated it on the fly.
+
 27 Feb 2009 T.Sasaki(tracking-V09-02-00)
 - Fixing the problem in the the special cases of skipping voxel boundaries in
 G4RegularNavigation
