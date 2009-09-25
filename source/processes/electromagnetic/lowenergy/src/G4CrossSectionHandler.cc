@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.19 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.20 2009-09-25 07:41:34 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -34,6 +34,16 @@
 // 1  Aug 2001   MGP        Created
 // 19 Jul 2002   VI         Create composite data set for material
 // 24 Apr 2003   VI         Cut per region mfpt
+//
+// 15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - BuildCrossSectionForMaterials method was revised in order to calculate the 
+//                             logarithmic values of the loaded data. 
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
 //
 // -------------------------------------------------------------------
 
@@ -65,6 +75,9 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
   G4DataVector* energies;
   G4DataVector* data;
 
+  G4DataVector* log_energies;
+  G4DataVector* log_data;
+
   std::vector<G4VEMDataSet*>* matCrossSections = new std::vector<G4VEMDataSet*>;
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -94,17 +107,26 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
         energies = new G4DataVector;
         data = new G4DataVector;
 
+        log_energies = new G4DataVector;
+        log_data = new G4DataVector;
+
 
         for (size_t bin=0; bin<nOfBins; bin++)
 	  {
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);
+            log_energies->push_back(std::log10(e));
 	    G4double cross = density*FindValue(Z,e);
 	    data->push_back(cross);
+            log_data->push_back(std::log10(cross));
 	  }
 
         G4VDataSetAlgorithm* algo1 = interpolationAlgo->Clone();
-        G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,algo1,1.,1.);
+
+//      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,algo1,1.,1.);
+
+        G4VEMDataSet* elSet = new G4EMDataSet(i,energies,data,log_energies,log_data,algo1,1.,1.);
+
         setForMat->AddComponent(elSet);
       }
 

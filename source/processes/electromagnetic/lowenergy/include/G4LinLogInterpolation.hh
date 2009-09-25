@@ -29,7 +29,10 @@
 //
 // History:
 // -----------
-// 27 May 2002   VI        Created
+// 27 May 2002   VI                  Created
+//
+// 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
+//                                   to enhance computing performance of interpolation
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -55,6 +58,12 @@ public:
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
 		     const G4DataVector& data) const;
+
+  G4double Calculate(G4double point, G4int bin,
+                     const G4DataVector& energies,
+                     const G4DataVector& data, 
+		     const G4DataVector& log_energies, 
+		     const G4DataVector& log_data) const;
 
   virtual G4VDataSetAlgorithm* Clone() const { return new G4LinLogInterpolation; }
 

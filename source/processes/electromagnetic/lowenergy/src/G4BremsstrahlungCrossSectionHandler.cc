@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.10 2009-03-03 11:19:18 pandola Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.11 2009-09-25 07:41:34 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,11 +37,25 @@
 // 
 // Creation date: 25 September 2001
 //
-// Modifications: 
+// Modifications:
+// 
 // 10.10.2001 MGP Revision to improve code quality and consistency with design
 // 21.01.2003 VI  cut per region
 // 03.03.2009 LP  Added public method to make a easier migration of
 //                G4LowEnergyBremsstrahlung to G4LivermoreBremsstrahlungModel
+//
+// 15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - BuildCrossSectionForMaterials method was revised in order to calculate the 
+//                             logarithmic values of the loaded data. 
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+//
+//
+//
 //
 // -------------------------------------------------------------------
 
@@ -82,6 +96,10 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
 
   G4DataVector* energies;
   G4DataVector* cs;
+
+  G4DataVector* log_energies;
+  G4DataVector* log_cs;
+
   G4int nOfBins = energyVector.size();
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -104,14 +122,20 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
     for (G4int i=0; i<nElements; i++) {
 
       G4int Z = (G4int) ((*elementVector)[i]->GetZ());
+
       energies = new G4DataVector;
       cs       = new G4DataVector;
+
+      log_energies = new G4DataVector;
+      log_cs       = new G4DataVector;
+
       G4double density = nAtomsPerVolume[i];
 
       for (G4int bin=0; bin<nOfBins; bin++) {
 
         G4double e = energyVector[bin];
         energies->push_back(e);
+        log_energies->push_back(std::log10(e));
         G4double value = 0.0;
 
         if(e > tcut) {
@@ -122,9 +146,14 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
           value *= elemCs*density;
 	}
         cs->push_back(value);
+        log_cs->push_back(std::log10(value));
       }
       G4VDataSetAlgorithm* algol = interp->Clone();
-      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algol,1.,1.);
+
+      //G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algol,1.,1.);
+
+      G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,log_energies,log_cs,algol,1.,1.);
+
       setForMat->AddComponent(elSet);
     }
     set->push_back(setForMat);
