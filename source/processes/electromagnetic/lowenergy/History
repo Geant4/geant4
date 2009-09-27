@@ -1,4 +1,4 @@
-$Id: History,v 1.390 2009-09-25 08:49:06 sincerti Exp $
+$Id: History,v 1.391 2009-09-27 10:47:42 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.09.2009, N. Karakatsanis, tag emlowen-V09-02-54
+            Added fixes to
+            G4ecpssrKCrossSection.cc
+            G4BremsstrahlungCrossSectionHandler.cc
+            G4CrossSectionHandler.cc
+            G4DNACrossSectionDataSet.cc
+            G4eIonisationCrossSectionHandler.cc
 
 25.09.2009, N. Karakatsanis, tag emlowen-V09-02-53
             New implementation for data loading and interpolation methods

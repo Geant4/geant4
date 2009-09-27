@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrKCrossSection.cc,v 1.5 2009-07-23 07:53:04 vnivanch Exp $
+//$Id: G4ecpssrKCrossSection.cc,v 1.6 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -52,7 +52,7 @@
 #include <math.h>
 #include <iostream>
 
-#include "G4LinLogInterpolation.hh"
+#include "G4SemiLogInterpolation.hh"
 
 
 G4ecpssrKCrossSection::G4ecpssrKCrossSection()
@@ -96,15 +96,15 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
   // Storing C coefficients for high velocity formula
 
   G4String fileC1("pixe/c1");
-  tableC1 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC1 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC1->LoadData(fileC1);
 
   G4String fileC2("pixe/c2");
-  tableC2 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC2 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC2->LoadData(fileC2);
 
   G4String fileC3("pixe/c3");
-  tableC3 = new G4DNACrossSectionDataSet(new G4LinLogInterpolation, 1.,1.);
+  tableC3 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC3->LoadData(fileC3);
 
   //

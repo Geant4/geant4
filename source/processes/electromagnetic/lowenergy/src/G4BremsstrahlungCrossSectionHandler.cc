@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.11 2009-09-25 07:41:34 sincerti Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.12 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,6 +135,7 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
 
         G4double e = energyVector[bin];
         energies->push_back(e);
+        if (e==0.) e=1e-300;
         log_energies->push_back(std::log10(e));
         G4double value = 0.0;
 
@@ -146,6 +147,8 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
           value *= elemCs*density;
 	}
         cs->push_back(value);
+
+        if (value==0.) value=1e-300;
         log_cs->push_back(std::log10(value));
       }
       G4VDataSetAlgorithm* algol = interp->Clone();

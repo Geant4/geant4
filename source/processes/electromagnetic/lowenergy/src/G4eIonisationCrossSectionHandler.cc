@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.14 2009-09-25 07:41:34 sincerti Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.15 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -167,6 +167,7 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
 	      }
 
 	  }
+          if (value == 0.) value = 1e-300;
           log_value = std::log10(value);
 	}
         cs->push_back(value);

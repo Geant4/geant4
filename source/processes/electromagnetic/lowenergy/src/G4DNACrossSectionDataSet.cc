@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.9 2009-09-25 07:41:34 sincerti Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.10 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
@@ -125,8 +125,6 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 		  while (!stream->eof())
 		    {
 		      (*stream) >> value;
-
-                      if (value==0.) value=1e-300;
        
 		      while (i>=columns.size())
                         {
@@ -135,6 +133,20 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
                         }
       
 		      columns[i]->push_back(value);
+
+// N. A. Karakatsanis
+// A condition is applied to check if negative or zero values are present in the dataset.
+// If yes, then a near-zero value is applied to allow the computation of the logarithmic value
+// If a value is zero, this simplification is acceptable
+// If a value is negative, then it is not acceptable and the data of the particular column of
+// logarithmic values should not be used by interpolation methods.
+//
+// Therefore, G4LogLogInterpolation and G4LinLogLogInterpolation should not be used if negative values are present.
+// Instead, G4LinInterpolation is safe in every case
+// SemiLogInterpolation is safe only if the energy columns are non-negative
+// G4LinLogInterpolation is safe only if the cross section data columns are non-negative
+
+                      if (value <=0.) value = 1e-300;
                       log_columns[i]->push_back(std::log10(value));
        
 		      i++;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.20 2009-09-25 07:41:34 sincerti Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.21 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -115,9 +115,11 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
 	  {
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);
+            if (e==0.) e=1e-300;
             log_energies->push_back(std::log10(e));
 	    G4double cross = density*FindValue(Z,e);
 	    data->push_back(cross);
+            if (cross==0.) cross=1e-300;
             log_data->push_back(std::log10(cross));
 	  }
 
