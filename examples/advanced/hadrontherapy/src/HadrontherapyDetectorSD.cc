@@ -69,7 +69,6 @@ void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
 							  collectionName[0]);
 }
 
-
 G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
   //The code doesen't seem to get here if we use the IAEA geometry. FIXME

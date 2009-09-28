@@ -2,7 +2,9 @@
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "IAEADetectorConstruction.hh"
+#include "PassiveProtonBeamLine.hh"
 #include "G4RunManager.hh"
+
 
 HadrontherapyGeometryController::HadrontherapyGeometryController()
 {
@@ -21,9 +23,7 @@ void HadrontherapyGeometryController::SetGeometry(G4String name)
     registerGeometry(new IAEADetectorConstruction());
     G4cout <<"IAEA geometry activated" << G4endl;
   } else if(name == "default") {
-    HadrontherapyDetectorConstruction *pDetector = new HadrontherapyDetectorConstruction();
-    registerGeometry(pDetector);
-    new HadrontherapyInteractionParameters(pDetector); // Interaction data
+    registerGeometry(new PassiveProtonBeamLine());
   } else {
     G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;
   }

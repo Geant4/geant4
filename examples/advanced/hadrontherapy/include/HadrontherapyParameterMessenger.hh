@@ -55,7 +55,6 @@ class HadrontherapyParameterMessenger : public G4UImessenger
 
         G4UIdirectory* paramDir;
         G4UIcmdWithAString* dedxCmd; // command to calculate stopping power
-        G4UIcmdWithAString* rangeCmd; // command to calculate stopping power
         G4UIcmdWithoutParameter* materCmd; // command to list Nist materials 
 
 };

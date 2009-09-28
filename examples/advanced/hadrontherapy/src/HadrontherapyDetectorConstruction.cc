@@ -54,115 +54,55 @@
 #include "G4VisAttributes.hh"
 #include "G4NistManager.hh"
 #include "HadrontherapyDetectorROGeometry.hh"
-#include "HadrontherapyDetectorMessenger.hh"
+//#include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
-#include "PassiveProtonBeamLine.hh"
-#include "HadrontherapyModulator.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction()
-  : detectorSD(0), detectorROGeometry(0), 
-    passiveProtonBeamLine(0), modulator(0),
-    physicalTreatmentRoom(0),
-    phantomPhysicalVolume(0), 
+HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
+  : mother(physicalTreatmentRoom),
+	detectorSD(0), detectorROGeometry(0), 
+    phantomSizeX(20.*cm), phantomSizeY(20.*cm), phantomSizeZ(20.*cm),
+    detectorSizeX(20.*mm), detectorSizeY(20.*mm), detectorSizeZ(20.*mm),
+	phantomPhysicalVolume(0), 
     detectorLogicalVolume(0), 
     detectorPhysicalVolume(0)
 {
-  // Messenger to change parameters of the geometry
-  detectorMessenger = new HadrontherapyDetectorMessenger(this);
 
-  // Detector sizes
-  detectorSizeX = 20.*mm;
-  detectorSizeY = 20.*mm;
-  detectorSizeZ = 20.*mm;
+// Messenger to change parameters of the geometry
+//  detectorMessenger = new HadrontherapyDetectorMessenger(this);
 
   // Number of the detector voxels  
   numberOfVoxelsAlongX = 200;
   numberOfVoxelsAlongY = 1;
   numberOfVoxelsAlongZ = 1;
-  
+
+  // Build phantom and associated detector 
+  ConstructPhantom();
+  ConstructDetector();
+
+  // Set the sensitive detector where the energy deposit is collected
+  ConstructSensitiveDetector();
+
  }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 { 
   if (detectorROGeometry) delete detectorROGeometry;  
-  delete detectorMessenger;
+  //delete detectorMessenger;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//void HadrontherapyDetectorConstruction::ChangeTheBeamLine(const G4String& name)
-//if (name == emName) return;
-//if (name == "ProtonPassiveBeamLine")
-//{
-//ConstructPassiveProtonBeamLine();
-//}
-
-/////////////////////////////////////////////////////////////////////////////
-G4VPhysicalVolume* HadrontherapyDetectorConstruction::Construct()
-{ 
-
-  ConstructPassiveProtonBeamLine();
-  ConstructDetector();
-
-  // Set the sensitive detector where the energy deposit is collected
-  ConstructSensitiveDetector();
-  return physicalTreatmentRoom;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
-{ 
-  // -----------------------------
-  // Treatment room - World volume
-  //------------------------------
-  // Treatment room sizes
-  const G4double worldX = 400.0 *cm;
-  const G4double worldY = 400.0 *cm;
-  const G4double worldZ = 400.0 *cm;
-  G4bool isotopes = false;
- 
-  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
-  G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
-  G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
-                                                            airNist, 
-                                                            "logicTreatmentRoom", 
-							    0,0,0);
-  physicalTreatmentRoom = new G4PVPlacement(0,
-					    G4ThreeVector(),
-					    "physicalTreatmentRoom", 
-					    logicTreatmentRoom, 
-					    0,false,0);
- 
-
-  // The treatment room is invisible in the Visualisation
-  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
- 
-  // Components of the Passive Proton Beam Line
-  passiveProtonBeamLine = new PassiveProtonBeamLine(physicalTreatmentRoom);
-  passiveProtonBeamLine -> HadrontherapyBeamLineSupport();
-  passiveProtonBeamLine -> HadrontherapyBeamScatteringFoils();
-  passiveProtonBeamLine -> HadrontherapyRangeShifter();
-  passiveProtonBeamLine -> HadrontherapyBeamCollimators();
-  passiveProtonBeamLine -> HadrontherapyBeamMonitoring();
-  passiveProtonBeamLine -> HadrontherapyMOPIDetector();
-  passiveProtonBeamLine -> HadrontherapyBeamNozzle();
-  passiveProtonBeamLine -> HadrontherapyBeamFinalCollimator();
-
-  // The following lines construc a typical modulator wheel inside the Passive Beam line.
-  // Please remember to set the nodulator material (default is air, i.e. no modulator!) 
-  // in the HadrontherapyModulator.cc file
-  modulator = new HadrontherapyModulator();
-  modulator -> BuildModulator(physicalTreatmentRoom);
-
+void HadrontherapyDetectorConstruction::ConstructPhantom()
+{
   //----------------------------------------
   // Phantom:
   // A box used to approximate tissues
   //----------------------------------------
 
+  G4bool isotopes =  false; 
   G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
-  G4Box* phantom = new G4Box("Phantom",20 *cm, 20 *cm, 20 *cm);
+  G4Box* phantom = new G4Box("Phantom",phantomSizeX, phantomSizeY, phantomSizeZ);
   G4LogicalVolume* phantomLogicalVolume = new G4LogicalVolume(phantom,	
 							      waterNist, 
 							      "phantomLog", 0, 0, 0);
@@ -170,7 +110,7 @@ void HadrontherapyDetectorConstruction::ConstructPassiveProtonBeamLine()
   phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(200.*mm, 0.*mm, 0.*mm),
 					    "phantomPhys",
 					    phantomLogicalVolume,
-					    physicalTreatmentRoom,
+					    mother,
 					    false,0);
 
   // Visualisation attributes of the patient
@@ -195,7 +135,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
 					      "DetectorLog",
 					      0,0,0);
   
-   G4double detectorXtranslation = -180.*mm;
+  G4double detectorXtranslation = detectorSizeX - phantomSizeX;
   detectorPhysicalVolume = new G4PVPlacement(0,
 					     G4ThreeVector(detectorXtranslation, 0.0 *mm, 0.0 *mm),
 					     "DetectorPhys",
@@ -216,9 +156,9 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
   
   // A smaller cut is fixed in the phantom to calculate the energy deposit with the
   // required accuracy 
-  G4Region* aRegion = new G4Region("DetectorLog");
-  detectorLogicalVolume -> SetRegion(aRegion);
-  aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
+  //G4Region* aRegion = new G4Region("DetectorLog");
+  //detectorLogicalVolume -> SetRegion(aRegion);
+  //aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
 }
 /////////////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
@@ -247,50 +187,4 @@ void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector()
       detectorLogicalVolume -> SetSensitiveDetector(detectorSD);
     }
 }
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetModulatorAngle(G4double value)
-{  
-  modulator -> SetModulatorAngle(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetRangeShifterXPosition(G4double value)
-{
-  passiveProtonBeamLine -> SetRangeShifterXPosition(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetRSMaterial(G4String materialChoice)
-{
-  passiveProtonBeamLine -> SetRSMaterial(materialChoice);
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetRangeShifterXSize(G4double value)
-{
-  passiveProtonBeamLine -> SetRangeShifterXSize(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetFirstScatteringFoilSize(G4double value)
-{
-  passiveProtonBeamLine -> SetFirstScatteringFoilXSize(value);  
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetSecondScatteringFoilSize(G4double value)
-{
-  passiveProtonBeamLine -> SetSecondScatteringFoilXSize(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetOuterRadiusStopper(G4double value)
-{
-  passiveProtonBeamLine -> SetOuterRadiusStopper(value); 
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
-}
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyDetectorConstruction::SetInnerRadiusFinalCollimator(G4double value)
-{
- passiveProtonBeamLine -> SetInnerRadiusFinalCollimator(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-}
+

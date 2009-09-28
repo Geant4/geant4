@@ -47,11 +47,6 @@ HadrontherapyParameterMessenger::HadrontherapyParameterMessenger(HadrontherapyIn
     dedxCmd->SetParameterName("inputData",false);
     dedxCmd->AvailableForStates(G4State_Idle);  
 
-	rangeCmd = new G4UIcmdWithAString("/parameter/getrange",this);  
-    rangeCmd->SetGuidance("Get CSDA Range\n parameters: minimum and maximum kinetic energy, n points, particle, material, filename ");
-    rangeCmd->SetParameterName("inputData",false);
-    rangeCmd->AvailableForStates(G4State_Idle);  
-
 	materCmd = new G4UIcmdWithoutParameter("/parameter/materials",this);  
     materCmd->SetGuidance("Print Nist materials list");
     //materCmd->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle,G4State_GeomClosed, G4State_EventProc);  
@@ -61,7 +56,6 @@ HadrontherapyParameterMessenger::~HadrontherapyParameterMessenger()
 {
 	delete paramDir;
 	delete dedxCmd;
-	delete rangeCmd;
 	delete materCmd;
 
 }
@@ -71,10 +65,6 @@ void HadrontherapyParameterMessenger::SetNewValue(G4UIcommand* command, G4String
 	if (command == dedxCmd)
 	{
 		pParam -> GetStoppingTable(vararg);
-	}
-	else if (command == rangeCmd)
-	{
-		pParam -> GetCSDARangeTable(vararg);
 	}
 	else if (command == materCmd)
 	{

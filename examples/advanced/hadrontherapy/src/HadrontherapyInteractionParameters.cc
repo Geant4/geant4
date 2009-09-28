@@ -55,8 +55,8 @@
 #include <vector>
 
 
-HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(HadrontherapyDetectorConstruction* pDet): 
-	pDetector(pDet), data(std::cout.rdbuf()), emCal(new G4EmCalculator),
+HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(): 
+	data(std::cout.rdbuf()), emCal(new G4EmCalculator),
 	pMessenger(new HadrontherapyParameterMessenger(this)) 
 {
 }
@@ -108,61 +108,6 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(G4String vararg)
 
 }
 
-bool HadrontherapyInteractionParameters::GetCSDARangeTable(G4String vararg)
-{
-   
-    if (!ParseArg(vararg)) { return false; }	
-
-	std::vector<G4double> energy;
-	std::vector<G4double> Range;
-	G4double range;
-
-    // Switch off cut dependence!
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
-    UI -> ApplyCommand("/process/eLoss/CSDARange true");
-
-	// log scale (add also linear scale algo)
-     
-    G4double logmin = std::log10(kinEmin);
-	G4double logmax = std::log10(kinEmax); 
-	G4double en;
-/*
-    // Get current state
-    G4StateManager* mState = G4StateManager::GetStateManager();
-    G4ApplicationState  aState = mState -> GetCurrentState(); 
-    G4cout << "\n***** Run State ***** \n" << mState -> GetStateString( aState ) << G4endl; 
-*/
-	// get phantom logical volume and associate material name  
-	//
-    G4String detectorName = pDetector -> GetDetectorLogicalVolume() -> GetName();
-    material = pDetector -> GetDetectorLogicalVolume() -> GetMaterial() -> GetName();
-
-	density = pDetector -> GetDetectorLogicalVolume() -> GetMaterial() -> GetDensity();
-	
-	// compute data
-	if (kinEmin != kinEmax){
-    for (G4double c = 0; c <npoints; c++ ){
-		en = std::pow(10, logmin + ( c*(logmax-logmin)  / (npoints - 1)) );  
-	    energy.push_back(en);
-		// Range in detector.   
-		range =  emCal ->GetRangeFromRestricteDEDX(en, particle, material, detectorName); 
-		//range =  emCal ->GetCSDARange(en, particle, material, detectorName);
-		//range =  emCal ->GetRange(en, particle, material, detectorName);
-		Range.push_back ( range * density  );
-	   }
-	}
-	
-	//data <<  particle << " (into " << material << ")" << std::setw(12) << G4BestUnit(density,"Volumic Mass") << G4endl;
-    data << std::left << std::setw(10) << std::setfill(' ');
-    for (size_t i=0; i<Range.size(); i++){
-		data << std::setw(12) << energy[i]/MeV << std::setw(12) << Range[i]/(g/cm2) << G4endl;
-		//data << std::setw(10)  << G4BestUnit(energy[i], "Energy") << std::setw(10) << 
-		//G4BestUnit(Range[i], "Energy*Surface/Mass") << G4endl;
-	}
-	outfile.close();
-	return true;
-
-}
 
 // search for user material choice inside G4NistManager database
 G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)

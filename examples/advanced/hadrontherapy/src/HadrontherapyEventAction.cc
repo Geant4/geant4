@@ -90,18 +90,16 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
   if(hitsCollectionID < 0)
     return;
-
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
-  HadrontherapyDetectorHitsCollection* CHC = NULL; 
  
   if(HCE)
-    CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
-  
-  if(CHC)
-    {
-      if(matrix)
-	{
-	  // Fill the matrix with the information: voxel and associated energy deposit 
+  {
+    HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
+    if(CHC)
+     {
+       if(matrix)
+	  { 
+	      // Fill the matrix with the information: voxel and associated energy deposit 
           // in the detector at the end of the event
 
 	  G4int HitCount = CHC -> entries();
@@ -113,9 +111,9 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
               G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
               matrix -> Fill(i, j, k, energyDeposit/MeV);              
 	    }
-	}
+	  }
     }
-
+  }
   // Extract the trajectories and draw them in the visualisation
 
   if (G4VVisManager::GetConcreteInstance())

@@ -175,7 +175,6 @@ void IAEADetectorConstruction::ConstructPassiveProtonBeamLine()
 							      plexiGlas, 
 							      "phantomEdgeLog", 0, 0, 0);
 					//5.5cm for veto and start detector, see fig 5.1 and 4.1 ref Haettner 2006 
-
   if(!noPhantom){  
 		  phantomPhysicalVolume = new G4PVPlacement(0,G4ThreeVector(phantomCenter, 0.*cm, 0.*cm),
 								"phantomPhys",

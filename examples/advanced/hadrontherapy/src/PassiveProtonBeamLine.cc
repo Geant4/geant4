@@ -45,16 +45,20 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "globals.hh"
+#include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
-#include "PassiveProtonBeamLine.hh"
 #include "G4NistManager.hh"
 #include "G4NistElementBuilder.hh"
+#include "HadrontherapyDetectorConstruction.hh"
+#include "HadrontherapyModulator.hh"
+#include "PassiveProtonBeamLine.hh"
+#include "PassiveProtonBeamLineMessenger.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
-
+PassiveProtonBeamLine::PassiveProtonBeamLine():
+  modulator(0), physicalTreatmentRoom(0),
   physiBeamLineSupport(0), physiBeamLineCover(0), physiBeamLineCover2(0), 
   firstScatteringFoil(0), physiFirstScatteringFoil(0), physiKaptonWindow(0), 
   solidStopper(0), physiStopper(0), 
@@ -74,6 +78,29 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
   physiSecondHoleNozzleSupport(0),
   solidFinalCollimator(0),
   physiFinalCollimator(0)
+{
+  // Messenger to change parameters of the passiveProtonBeamLine geometry
+  passiveMessenger = new PassiveProtonBeamLineMessenger(this);
+
+}
+/////////////////////////////////////////////////////////////////////////////
+PassiveProtonBeamLine::~PassiveProtonBeamLine()
+{
+  delete passiveMessenger;
+}
+
+G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
+{ 
+  SetDimensions();
+  ConstructPassiveProtonBeamLine();
+  // Now H...DetectorConstruction build ONLY phantom and detector  
+  // with its associated ROGeometry
+  hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
+
+  return physicalTreatmentRoom;
+}
+
+void PassiveProtonBeamLine::SetDimensions()
 {
   // DEFAULTS used in the geometry reconstruction of the beam line
   // HERE THE USER CAN CHANGE THE GEOMETRY CHARACTERISTICS OF BEAM
@@ -121,8 +148,6 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
 	skyBlue -> SetVisibility(true);
 	skyBlue -> SetForceSolid(true);
   
-	// MOTHER VOLUME
-  mother = motherVolume;
 
   // VACUUM PIPE: first track of the beam line is inside vacuum;
   // The PIPE contains the FIRST SCATTERING FOIL and the KAPTON WINDOW
@@ -490,10 +515,49 @@ PassiveProtonBeamLine::PassiveProtonBeamLine(G4VPhysicalVolume* motherVolume):
  // Material of the final collimator
  finalCollimatorMaterial = brass;
 }
-/////////////////////////////////////////////////////////////////////////////
-PassiveProtonBeamLine::~PassiveProtonBeamLine()
-{
-  //delete material;
+
+void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
+{ 
+  // -----------------------------
+  // Treatment room - World volume
+  //------------------------------
+  // Treatment room sizes
+  const G4double worldX = 400.0 *cm;
+  const G4double worldY = 400.0 *cm;
+  const G4double worldZ = 400.0 *cm;
+  G4bool isotopes = false;
+ 
+  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
+  G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
+                                                            airNist, 
+                                                            "logicTreatmentRoom", 
+							    0,0,0);
+  physicalTreatmentRoom = new G4PVPlacement(0,
+					    G4ThreeVector(),
+					    "physicalTreatmentRoom", 
+					    logicTreatmentRoom, 
+					    0,false,0);
+ 
+
+  // The treatment room is invisible in the Visualisation
+  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+ 
+  // Components of the Passive Proton Beam Line
+  HadrontherapyBeamLineSupport();
+  HadrontherapyBeamScatteringFoils();
+  HadrontherapyRangeShifter();
+  HadrontherapyBeamCollimators();
+  HadrontherapyBeamMonitoring();
+  HadrontherapyMOPIDetector();
+  HadrontherapyBeamNozzle();
+  HadrontherapyBeamFinalCollimator();
+
+  // The following lines construc a typical modulator wheel inside the Passive Beam line.
+  // Please remember to set the nodulator material (default is air, i.e. no modulator!) 
+  // in the HadrontherapyModulator.cc file
+  modulator = new HadrontherapyModulator();
+  modulator -> BuildModulator(physicalTreatmentRoom);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -523,7 +587,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 							    beamLineSupportZPosition),
 					   "BeamLineSupport", 
 					   logicBeamLineSupport, 
-					   mother, false, 0);
+					   physicalTreatmentRoom, false, 0);
  
   // Visualisation attributes of the beam line support
 
@@ -554,7 +618,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 							  beamLineCoverZPosition),
 					 "BeamLineCover", 
 					 logicBeamLineCover, 
-					 mother,
+					 physicalTreatmentRoom,
 					 false, 
 					 0);
 
@@ -567,7 +631,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 							   - beamLineCoverZPosition),
 					  "BeamLineCover2", 
 					  logicBeamLineCover, 
-					  mother, 
+					  physicalTreatmentRoom, 
 					  false, 
 					  0);
 
@@ -587,7 +651,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   G4Box* vacuumZone = new G4Box("VacuumZone", vacuumZoneXSize, vacuumZoneYSize, vacuumZoneZSize);
   G4LogicalVolume* logicVacuumZone = new G4LogicalVolume(vacuumZone, vacuumZoneMaterial, "VacuumZone");
   G4VPhysicalVolume* physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(vacuumZoneXPosition, 0., 0.),
-				      "VacuumZone", logicVacuumZone, mother, false, 0);
+				      "VacuumZone", logicVacuumZone, physicalTreatmentRoom, false, 0);
   // --------------------------//
   // THE FIRST SCATTERING FOIL //
   // --------------------------//
@@ -645,7 +709,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   physiStopper = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(stopperXPosition, 
 								   stopperYPosition, 
 								   stopperZPosition)),
-				   "Stopper", logicStopper, mother, false, 0);
+				   "Stopper", logicStopper, physicalTreatmentRoom, false, 0);
  
   logicStopper -> SetVisAttributes(red);
 
@@ -669,7 +733,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 								 secondScatteringFoilYPosition,
 								 secondScatteringFoilZPosition),
 						"SeconScatteringFoil", logicSecondScatteringFoil, 
-						mother, false, 0);
+						physicalTreatmentRoom, false, 0);
   
   logicSecondScatteringFoil -> SetVisAttributes(skyBlue);
 }
@@ -693,7 +757,7 @@ void PassiveProtonBeamLine::HadrontherapyRangeShifter()
 					   G4ThreeVector(rangeShifterXPosition, 0., 0.),
 					   "RangeShifterBox",
 					   logicRangeShifterBox,
-					   mother, 
+					   physicalTreatmentRoom, 
 					   false,
 					   0);                        
 
@@ -729,7 +793,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 							    firstCollimatorZPosition),
 					   "FirstCollimator", 
 					   logicFirstCollimator, 
-					   mother, 
+					   physicalTreatmentRoom, 
 					   false, 
 					   0);
   // ----------------------------//
@@ -776,7 +840,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 							     secondCollimatorZPosition),
 					    "SecondCollimator", 
 					    logicFirstCollimator, 
-					    mother, 
+					    physicalTreatmentRoom, 
 					    false, 
 					    0);
 
@@ -821,7 +885,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 									firstCollimatorModulatorZPosition),
 						       "FirstCollimatorModulatorBox",
 						       logicFirstCollimatorModulatorBox,
-						       mother, false, 0);
+						       physicalTreatmentRoom, false, 0);
 
   // ----------------------------------------------------//
   //   Hole of the first collimator of the modulator box //
@@ -875,7 +939,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 									 secondCollimatorModulatorZPosition),
 							"SecondCollimatorModulatorBox",
 							logicSecondCollimatorModulatorBox,
-							mother, false, 0);
+							physicalTreatmentRoom, false, 0);
 
   // ----------------------------------------------// 
   //   Hole of the second collimator modulator box //
@@ -943,7 +1007,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					      G4ThreeVector(monitor1XPosition,0.*cm,0.*cm),
 					      "FirstMonitorLayer1", 
 					      logicFirstMonitorLayer1, 
-					      mother, 
+					      physicalTreatmentRoom, 
 					      false, 
 					      0);
 
@@ -997,7 +1061,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
   // THE SECOND MONITOR CHAMBER  //
   // ----------------------------//
   physiSecondMonitorLayer1 = new G4PVPlacement(0, G4ThreeVector(-1131.42493 *mm,0.*cm,0.*cm),
-					       "SecondMonitorLayer1", logicFirstMonitorLayer1,mother, false, 0);
+					       "SecondMonitorLayer1", logicFirstMonitorLayer1,physicalTreatmentRoom, false, 0);
 
   physiSecondMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector( monitor2XPosition,0.*cm,0.*cm), "SecondMonitorLayer2",
 					       logicFirstMonitorLayer2, physiSecondMonitorLayer1, false, 0);
@@ -1048,7 +1112,7 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 							  MOPIMotherVolumeZPosition),
 					    "MOPIMotherVolume",
 					    logicMOPIMotherVolume,
-					    mother,
+					    physicalTreatmentRoom,
 					    false,
 					    0);
 
@@ -1223,7 +1287,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
   physiNozzleSupport = new G4PVPlacement(0, G4ThreeVector(nozzleSupportXPosition,0., 0.),
 					 "NozzleSupport", 
 					 logicNozzleSupport, 
-					 mother, 
+					 physicalTreatmentRoom, 
 					 false, 
 					 0);
 
@@ -1254,7 +1318,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 
   physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(holeNozzleSupportXPosition,
 									      0., 0.)),
-					     "HoleNozzleSupport", logicHoleNozzleSupport, mother, false, 0); 
+					     "HoleNozzleSupport", logicHoleNozzleSupport, physicalTreatmentRoom, false, 0); 
 
   logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
   
@@ -1324,7 +1388,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
 							      0);
 
   physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(finalCollimatorXPosition,0.,0.)),
-					   "FinalCollimator", logicFinalCollimator, mother, false, 0); 
+					   "FinalCollimator", logicFinalCollimator, physicalTreatmentRoom, false, 0); 
 
   logicFinalCollimator -> SetVisAttributes(yellow); 
 }
@@ -1333,6 +1397,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
 void PassiveProtonBeamLine::SetRangeShifterXPosition(G4double value)
 {
   physiRangeShifterBox -> SetTranslation(G4ThreeVector(value, 0., 0.)); 
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   G4cout << "The Range Shifter is translated to"<< value/mm <<"mm along the X axis" <<G4endl;
 }
 
@@ -1342,12 +1407,14 @@ void PassiveProtonBeamLine::SetRangeShifterXSize(G4double value)
   solidRangeShifterBox -> SetXHalfLength(value) ;
   G4cout << "RangeShifter size X (mm): "<< ((solidRangeShifterBox -> GetXHalfLength())*2.)/mm
          << G4endl;
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::SetFirstScatteringFoilXSize(G4double value)
 { 
   firstScatteringFoil -> SetXHalfLength(value);
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   G4cout <<"The X size of the first scattering foil is (mm):"<<  
     ((firstScatteringFoil -> GetXHalfLength())*2.)/mm 
 	 << G4endl;
@@ -1357,6 +1424,7 @@ void PassiveProtonBeamLine::SetFirstScatteringFoilXSize(G4double value)
 void PassiveProtonBeamLine::SetSecondScatteringFoilXSize(G4double value)
 {
   secondScatteringFoil -> SetXHalfLength(value);
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   G4cout <<"The X size of the second scattering foil is (mm):"<<  
   ((secondScatteringFoil -> GetXHalfLength())*2.)/mm 
 	 << G4endl;
@@ -1366,6 +1434,7 @@ void PassiveProtonBeamLine::SetSecondScatteringFoilXSize(G4double value)
 void PassiveProtonBeamLine::SetOuterRadiusStopper(G4double value)
 { 
   solidStopper -> SetOuterRadius(value);
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
   G4cout << "OuterRadius od the Stopper is (mm):"
 	 << solidStopper -> GetOuterRadius()/mm
 	 << G4endl;
@@ -1375,6 +1444,7 @@ void PassiveProtonBeamLine::SetOuterRadiusStopper(G4double value)
 void PassiveProtonBeamLine::SetInnerRadiusFinalCollimator(G4double value)
 {
   solidFinalCollimator -> SetInnerRadius(value);
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   G4cout<<"Inner Radius of the final collimator is (mm):"
 	<< solidFinalCollimator -> GetInnerRadius()/mm
 	<< G4endl; 
@@ -1391,3 +1461,11 @@ void PassiveProtonBeamLine::SetRSMaterial(G4String materialChoice)
       logicRangeShifterBox -> SetMaterial(pttoMaterial);  
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
+void PassiveProtonBeamLine::SetModulatorAngle(G4double value)
+{  
+  modulator -> SetModulatorAngle(value);
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
+}
+/////////////////////////////////////////////////////////////////////////////

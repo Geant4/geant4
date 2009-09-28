@@ -9,6 +9,12 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+28.09.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-31
+            - Now the HadrontherapyDetectorConstruction class implements only phantom and detector [RO]geometry.
+			  World volume and the rest of the geometry is inside another class whose messenger allows 
+			  modification by users with the same old syntax
+			- Removed HadrontherapyInteractionParameters from the HadrontherapyGeometryController class 
+			  
 20.09.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-30
             - Added ability to use command based scoring
             - IAEA geometry: produce Bragg peak using command based scoring
@@ -20,11 +26,11 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
 11.09.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-28
             - Added messengers to control the event number and to draw only particular tracks.
-            The new command are accesible via the command /event/drawTracks and /event/PrintEventNumber  
+              The new command are accessible via the command /event/drawTracks and /event/PrintEventNumber  
 
 08.09.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-27
             - Added a method to retrieve stopping power values for protons, alphas and electrons.
-	      This method is implemented in the new class HadrontherapyInteractionParameters.
+	          This method is implemented in the new class HadrontherapyInteractionParameters
 
 13.08.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-26
             - Fixed compilation errors when AIDA analysis is used

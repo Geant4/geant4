@@ -42,98 +42,70 @@
 #define HadrontherapyDetectorConstruction_H 1
 
 #include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
 #include "G4VisAttributes.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class HadrontherapyDetectorROGeometry;
-class PassiveProtonBeamLine;
 class HadrontherapyDetectorMessenger;
-class HadrontherapyModulator;
 class HadrontherapyDetectorSD;
 
-class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
+class HadrontherapyDetectorConstruction 
 {
 public:
 
-  HadrontherapyDetectorConstruction();
+  HadrontherapyDetectorConstruction(G4VPhysicalVolume*);
 
   ~HadrontherapyDetectorConstruction();
 
-  G4VPhysicalVolume* Construct();  
 
 private: 
-  void ConstructPassiveProtonBeamLine();
-  void ConstructDetector();
- 
-  void ConstructSensitiveDetector();
 
+  void ConstructPhantom();
+  void ConstructDetector();
+  void ConstructSensitiveDetector();
  
   //  G4VisAttributes* redWire;
   
 public: 
-  G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
 
-  void SetModulatorAngle(G4double angle);
-  // This method allows moving the modulator through UI commands
+    G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
 
-  void SetRangeShifterXPosition(G4double translation);
-  // This method allows to move the Range Shifter along
-  // the X axis through UI commands
+  // This method allows to set phantom geometry
+  // void SetPhantomDimensionAndPosition(G4double );
+  // This method allows to set detector geometry
+  // void SetDetectorDimensionAndPosition(G4double );
 
-  void SetRangeShifterXSize(G4double halfSize);
-  // This method allows to change the size of the range shifter along
-  // the X axis through UI command.
-
-  void SetFirstScatteringFoilSize(G4double halfSize);
-  // This method allows to change the size of the first scattering foil
-  // along the X axis through UI command.
-
-  void SetSecondScatteringFoilSize (G4double halfSize); 
-  // This method allows to change the size of the second scattering foil
-  // along the X axis through UI command.
-
-  void SetOuterRadiusStopper (G4double value); 
-  // This method allows to change the size of the outer radius of the stopper
-  // through UI command.
-
-  void SetInnerRadiusFinalCollimator (G4double value);
-  // This method allows to change the size of the inner radius of the 
-  // final collimator through UI command.
-
-  void SetRSMaterial(G4String material);
-  // This method allows to change the material 
-  // of the range shifter through UI command.
-
-  G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
+    G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
   // Returns the size of the voxel along the X axis
  
 private:
+
+  HadrontherapyDetectorMessenger* detectorMessenger; 
+
   G4VisAttributes* skyBlue;
   G4VisAttributes* red;
 
-  G4String emName;
-  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
+  G4VPhysicalVolume* mother;
 
+  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
 
-  PassiveProtonBeamLine* passiveProtonBeamLine; // Pointer to the beam line 
-                                   // geometry component
 
-  HadrontherapyModulator* modulator; // Pointer to the modulator 
-                                     // geometry component
-
-  G4VPhysicalVolume* physicalTreatmentRoom;
-  G4VPhysicalVolume* phantomPhysicalVolume;
-  G4LogicalVolume* detectorLogicalVolume;
-  G4VPhysicalVolume* detectorPhysicalVolume;
-  
-  HadrontherapyDetectorMessenger* detectorMessenger; 
+  G4double phantomSizeX; 
+  G4double phantomSizeY; 
+  G4double phantomSizeZ;
 
   G4double detectorSizeX; 
   G4double detectorSizeY; 
   G4double detectorSizeZ;
-   
+
+
+  G4VPhysicalVolume* phantomPhysicalVolume;
+
+  G4LogicalVolume*   detectorLogicalVolume;
+  G4VPhysicalVolume* detectorPhysicalVolume;
+
+
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;
   G4int numberOfVoxelsAlongZ;  

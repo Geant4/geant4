@@ -61,6 +61,7 @@
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
+#include "HadrontherapyInteractionParameters.hh"
 #include "G4ScoringManager.hh"
 #include "IAEAScoreWriter.hh"
 
@@ -134,13 +135,16 @@ int main(int argc ,char ** argv)
   HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
+  // Interaction data
+  HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters();
+
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
 
-G4UImanager* UI = G4UImanager::GetUIpointer();      
+ G4UImanager* UI = G4UImanager::GetUIpointer();      
   
  if (argc!=1)   // batch mode
    {
@@ -169,6 +173,7 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
      // As final option, the simpler user interface terminal is opened
 #else
      session = new G4UIterminal();
+     UI->ApplyCommand("/control/execute defaultMacro.mac");  
 #endif
       
       //#ifdef G4VIS_USE
@@ -191,6 +196,9 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
   
   delete geometryMessenger;
   delete geometryController;
+  delete pInteraction; 
+  delete matrix; 
+
   delete runManager;
   return 0;
 }

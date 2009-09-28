@@ -40,7 +40,7 @@ class HadrontherapyInteractionParameters : public G4EmCalculator
 {
 public:
 
-    HadrontherapyInteractionParameters( HadrontherapyDetectorConstruction* );
+    HadrontherapyInteractionParameters();
 	~HadrontherapyInteractionParameters();
 
 	//G4double GetProtonStopping(G4String mat, G4double kinEnergy);
@@ -51,7 +51,6 @@ public:
 // [particle], [output filename].
 
 	bool GetStoppingTable (G4String vararg);
-	bool GetCSDARangeTable (G4String vararg);
     void ListOfNistMaterials ();
     void BeamOn();
     bool ParseArg (const G4String& vararg);	
@@ -66,7 +65,6 @@ private:
 		G4String material; 
 		G4String filename; 
 //	};
-	HadrontherapyDetectorConstruction* pDetector;
 	std::ofstream outfile;
 	std::ostream data;
     G4Material* Pmaterial;

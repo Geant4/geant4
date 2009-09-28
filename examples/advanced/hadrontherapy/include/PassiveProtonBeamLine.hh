@@ -42,14 +42,27 @@
 #ifndef PassiveProtonBeamLine_H
 #define PassiveProtonBeamLine_H 1
 
-class G4VPhysicalVolume;
-//class HadrontherapyMaterial;
+#include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4VisAttributes.hh"
+#include "G4LogicalVolume.hh"
 
-class PassiveProtonBeamLine 
+class G4VPhysicalVolume;
+class HadrontherapyDetectorConstruction;
+class HadrontherapyModulator;
+class PassiveProtonBeamLineMessenger;
+
+class PassiveProtonBeamLine : public G4VUserDetectorConstruction
 {
 public:
-  PassiveProtonBeamLine(G4VPhysicalVolume*);
+
+  //PassiveProtonBeamLine(G4VPhysicalVolume*);
+  PassiveProtonBeamLine();
   ~PassiveProtonBeamLine();
+
+  G4VPhysicalVolume* Construct();  
 
   void HadrontherapyBeamLineSupport();
   // Definition of the beam line support
@@ -109,10 +122,23 @@ public:
   void SetRSMaterial(G4String);
   // This method allows to change the material 
   // of the range shifter
+  
+  void SetModulatorAngle(G4double angle);
+  // This method allows moving the modulator through UI commands
+
 
 private:
 
-	G4Material* kapton;
+  void SetDimensions(); //passive proton line dimensions
+  void ConstructPassiveProtonBeamLine();
+
+  HadrontherapyModulator* modulator; // Pointer to the modulator 
+                                     // geometry component
+  PassiveProtonBeamLineMessenger* passiveMessenger;  
+  G4VPhysicalVolume* physicalTreatmentRoom;
+  HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction; 
+
+  G4Material* kapton;
 	
   G4double vacuumZoneXSize;
   G4double vacuumZoneYSize;
