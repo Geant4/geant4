@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2009-08-19 13:28:10 lgarnier Exp $
+$Id: History,v 1.147 2009-09-29 21:28:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 September 2009  John Allison  (opengl-V09-02-07)
+- Tagged.
 
 18 August 2009 Laurent Garnier
  - G4OpenGLXmViewer : Fix a wrong initialization introduce by the 
