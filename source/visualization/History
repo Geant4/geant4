@@ -1,4 +1,4 @@
-$Id: History,v 1.445 2009-08-20 15:16:58 lgarnier Exp $
+$Id: History,v 1.446 2009-09-29 22:06:32 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,29 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+29 September 2009  John Allison
+- modeling-V09-02-02: Added warning if logical volume not defined.
+- visman-V09-02-03:
+  o Allow refresh in GeomClosed as well as Idle state.
+  o Fixed uninitialised pointers.
+  o G4VisManager.cc: Considerable tidy up.
+- opengl-V09-02-07:  Tagged work by Laurent Garnier:
+  o G4OpenGLXmViewer : Fix a wrong initialization introduce by the 
+    new way of handling window size hints (January 2009)
+  o G4OpenGLQtViewer : Ensure the GL frame size will be correct
+    by setting a 0 size margin around 
+  o G4OpenGLStoredQtViewer : Remove picking to true at initialisation
+- openinventor-V09-02-02:  Tagged work by Laurent Garnier:
+  o G4OpenInventorXt/WinViewer: Fix a wrong initialization introduce by the 
+    new way of handling window size hints (January 2009)
+  o Remove Geant4_gl2ps.h gl2ps.cc gl2ps.h which were copied in external/gl2ps
+    in february but forgot to remove them from OpenInventor
+- vistest-V09-02-00: Changed main program, test19.cc, to use G4UIExecutive.
+- VRML-V09-02-00: Tagged change of disclaimer on file headings (made long ago).
+
+16 September 2009  John Allison
+- raytracer-V09-02-00: Cosmetic adjustments and tagging.
 
 19 August 2009 Laurent Garnier
  - RayTracer : Fix an bad use of fVP parameters [bugzilla Problem 1072]
