@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2009-09-18 12:48:43 lgarnier Exp $
+$Id: History,v 1.102 2009-09-29 21:23:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+29 September 2009  John Allison  (openinventor-V09-02-02)
+- Tagged.
 
 18 August 2009 Laurent Garnier
  - G4OpenInventorXt/WinViewer : Fix a wrong initialization introduce by the 
