@@ -1,9 +1,12 @@
-$Id: History,v 1.118 2009-09-29 21:35:56 allison Exp $
+$Id: History,v 1.119 2009-09-29 21:36:38 allison Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
 
 $Log: not supported by cvs2svn $
+Revision 1.118  2009/09/29 21:35:56  allison
+Changed main program, test19.cc, to use G4UIExecutive.
+
 Revision 1.117  2009/07/28 12:50:51  lgarnier
 Adding Qt support for test19
 
