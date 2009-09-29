@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.63 2007-11-10 14:56:36 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.64 2009-09-29 21:53:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -759,6 +759,16 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 	<< ':' << fFullPVPath[i].GetCopyNo();
     if (i != fFullPVPath.size() - 1) oss << '/';
   }
+
+  if (!fpCurrentLV) {
+     G4Exception
+        ("G4PhysicalVolumeModel::CreateCurrentAttValues",
+         "",
+         JustWarning,
+         "Current logical volume not defined.");
+     return values;
+  }
+
   values->push_back(G4AttValue("PVPath", oss.str(),""));
   values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
   G4VSolid* pSol = fpCurrentLV->GetSolid();
