@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.83 2008-01-04 22:03:46 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.84 2009-09-29 21:58:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -540,10 +540,11 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = true;
 
-  // Refresh event from end-of-event model list.  Allow only in Idle state...
+  // Refresh event from end-of-event model list.
+  // Allow only in Idle or GeomClosed state...
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState state = stateManager->GetCurrentState();
-  if (state == G4State_Idle) {
+  if (state == G4State_Idle || state == G4State_GeomClosed) {
 
     visManager->SetEventRefreshing(true);
 
