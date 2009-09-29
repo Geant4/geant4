@@ -35,8 +35,8 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
-  SetDefaultKinematic();
+  particleGun = new G4ParticleGun(n_particle);
+  isInitialised = false;
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -46,8 +46,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::SetDefaultKinematic()
 {
-  G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();;
-  particleGun->SetParticleDefinition(particle);
+  isInitialised = true;
+  particleGun->SetParticleDefinition(G4MuonPlus::MuonPlus());
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   ptot  = 172.*MeV;
@@ -56,6 +56,7 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  if(!isInitialised) SetDefaultKinematic();
   G4double p = ptot + (2.0*G4UniformRand() - 1.0)*sigma;
   G4double m = particleGun->GetParticleDefinition()->GetPDGMass();
   particleGun->SetParticleEnergy(std::sqrt(p*p + m*m) - m);

@@ -50,7 +50,7 @@ private:
   G4ParticleGun* particleGun;
   G4double       ptot;
   G4double       sigma;  
-
+  G4bool         isInitialised;
 };
 #endif
 

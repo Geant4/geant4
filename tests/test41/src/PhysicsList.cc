@@ -193,6 +193,7 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
+  SetCutValue(cutForElectron, "proton");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
