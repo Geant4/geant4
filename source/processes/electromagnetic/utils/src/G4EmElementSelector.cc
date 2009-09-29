@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.cc,v 1.10 2009-05-26 16:59:35 vnivanch Exp $
+// $Id: G4EmElementSelector.cc,v 1.11 2009-09-29 11:31:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,7 +67,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   element = (*theElementVector)[0];
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
-    for(G4int i=0; i<n; i++) {
+    for(G4int i=0; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
       //v->SetSpline(spline);
       xSections.push_back(v);
@@ -81,7 +81,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 G4EmElementSelector::~G4EmElementSelector()
 {
   if(nElmMinusOne > 0) {
-    for(G4int i=0; i<=nElmMinusOne; i++) {
+    for(G4int i=0; i<=nElmMinusOne; ++i) {
       delete xSections[i];
     }
   }
@@ -104,12 +104,12 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   G4int i;
 
   // loop over bins
-  for(G4int j=0; j<nbins; j++) {
-    G4double e = (xSections[0])->GetLowEdgeEnergy(j);
+  for(G4int j=0; j<=nbins; ++j) {
+    G4double e = (xSections[0])->Energy(j);
     model->SetupForMaterial(part, material, e);
     cross = 0.0;
     //G4cout << "j= " << j << " e(MeV)= " << e/MeV << G4endl;
-    for (i=0; i<=nElmMinusOne; i++) {
+    for (i=0; i<=nElmMinusOne; ++i) {
       cross += theAtomNumDensityVector[i]*      
 	model->ComputeCrossSectionPerAtom(part, (*theElementVector)[i], e, 
 					  cutEnergy, e);
@@ -119,23 +119,24 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 
   // xSections start from null, so use probabilities from the next bin
   if(DBL_MIN >= (*xSections[nElmMinusOne])[0]) {
-    for (i=0; i<=nElmMinusOne; i++) {
+    for (i=0; i<=nElmMinusOne; ++i) {
       xSections[i]->PutValue(0, (*xSections[i])[1]);
     }
   }
   // xSections ends with null, so use probabilities from the previous bin
-  if(DBL_MIN >= (*xSections[nElmMinusOne])[nbins-1]) {
-    for (i=0; i<=nElmMinusOne; i++) {
-      xSections[i]->PutValue(nbins-1, (*xSections[i])[nbins-2]);
+  if(DBL_MIN >= (*xSections[nElmMinusOne])[nbins]) {
+    for (i=0; i<=nElmMinusOne; ++i) {
+      xSections[i]->PutValue(nbins, (*xSections[i])[nbins-1]);
     }
   }
   // perform normalization
-  for(G4int j=0; j<nbins; j++) {
+  for(G4int j=0; j<=nbins; ++j) {
     cross = (*xSections[nElmMinusOne])[j];
     // only for positive X-section 
     if(cross > DBL_MIN) {
-      for (i=0; i<nElmMinusOne; i++) {
-	xSections[i]->PutValue(j, (*xSections[i])[j]/cross);
+      for (i=0; i<nElmMinusOne; ++i) {
+        G4double x = (*xSections[i])[j]/cross;
+	xSections[i]->PutValue(j, x);
       }
     }
   }
@@ -157,6 +158,7 @@ void G4EmElementSelector::Dump(const G4ParticleDefinition* part)
   G4cout << "Last Element in element vector " 
 	 << (*theElementVector)[nElmMinusOne]->GetName() 
 	 << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
