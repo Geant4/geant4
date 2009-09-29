@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.74 2009-07-24 09:20:52 lgarnier Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.75 2009-09-29 22:00:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -228,18 +228,20 @@ void G4VisCommandSceneAddEventID::EventID::operator()
 {
   const G4Run* currentRun = 0;
   G4RunManager* runManager = G4RunManager::GetRunManager();
-  if (runManager)  currentRun = runManager->GetCurrentRun();
+  if (runManager) currentRun = runManager->GetCurrentRun();
 
   G4VModel* model = fpVisManager->GetCurrentSceneHandler()->GetModel();
-  const G4ModelingParameters* mp;
-  const G4Event* currentEvent;
+  const G4ModelingParameters* mp = 0;
+  const G4Event* currentEvent = 0;
   if (model) {
    mp = model->GetModelingParameters();
    currentEvent = mp->GetEvent();
   } else {
     G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No model defined for this SceneHandler : "<< fpVisManager->GetCurrentSceneHandler()->GetName() << G4endl;
+      G4cout <<	"ERROR: No model defined for this SceneHandler : "
+	     << fpVisManager->GetCurrentSceneHandler()->GetName()
+	     << G4endl;
     }
   }
   if (currentRun && currentEvent) {
