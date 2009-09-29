@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.73 2009-08-04 17:10:58 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.74 2009-09-29 11:33:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,7 @@
 #include "G4Proton.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4NucleiProperties.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -95,7 +96,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = DBL_MIN;
   elecXSection = nucXSection = 0.0;
-  recoilThreshold = 100.*keV;
+  recoilThreshold = 0.*keV;
   ecut = DBL_MAX;
   particle = 0;
   currentCouple = 0;
@@ -200,8 +201,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 	 << " cosTetMaxNuc= " << cosTetMaxNuc
 	 << " cosTetMaxElec= " << cosTetMaxElec
 	 << " screenZ= " << screenZ
-	 << " formfactA= " << formfactA
-	 << " cosTetMaxHad= " << cosTetMaxHad << G4endl;
+	 << " formfactA= " << formfactA << G4endl;
   */
   return xsec;  
 }
@@ -211,10 +211,10 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
   // This method needs initialisation before be called
-  //  G4double fac = coeff*targetZ*chargeSquare*kinFactor;
+  G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
-  G4double meff = targetMass/(mass+targetMass);
-  G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+  // G4double meff = targetMass/(mass+targetMass);
+  // G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
 
   elecXSection = 0.0;
   nucXSection  = 0.0;
@@ -278,6 +278,9 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   currentElement = SelectRandomAtom(couple,particle,ekin,cutEnergy,ekin);
 
   SetupTarget(currentElement->GetZ(),ekin);
+
+  G4int ia = SelectIsotopeNumber(currentElement);
+  targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
   
   G4double cost = SampleCosineTheta();
   G4double z1   = 1.0 - cost;
@@ -285,7 +288,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
   G4double sint = sqrt(z1*(1.0 + cost));
   
-  //G4cout<<"## Sampled sint= " << sint << "  Z= " << targetZ 
+  //G4cout<<"## Sampled sint= " << sint << "  Z= " << targetZ << " A= " << ia
   //	<< "  screenZ= " << screenZ << " cn= " << formfactA << G4endl;
   
   G4double phi  = twopi * G4UniformRand();
@@ -298,22 +301,23 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
   // recoil sampling assuming a small recoil
   // and first order correction to primary 4-momentum
-  if(lowEnergyLimit < kinEnergy) {
-    G4int ia = SelectIsotopeNumber(currentElement);
-    G4double Trec = z1*mom2/(amu_c2*G4double(ia));
-    G4double Tcut = recoilThreshold;
-    if(pCuts) Tcut= (*pCuts)[currentMaterialIndex]; 
+  G4double q2   = 2*z1*mom2;
+  G4double trec = q2/(sqrt(targetMass*targetMass + q2) + targetMass);
+  if(trec > kinEnergy) trec = kinEnergy; 
+  G4double finalT = kinEnergy - trec;
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  G4double tcut = recoilThreshold;
+  if(pCuts) tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
 
-    if(Trec > Tcut) {
-      G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
-      Trec = z1*mom2/ion->GetPDGMass();
-      if(Trec < kinEnergy) {
-	G4ThreeVector dir = (direction - newDirection).unit();
-	G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, Trec);
-	fvect->push_back(newdp);
-	fParticleChange->SetProposedKineticEnergy(kinEnergy - Trec);
-      }
-    }
+  if(trec > tcut) {
+    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    G4ThreeVector dir = (direction*sqrt(mom2) - 
+			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
+    G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
+    fvect->push_back(newdp);
+  } else {
+    fParticleChange->ProposeLocalEnergyDeposit(trec);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
   }
  
   return;
@@ -354,6 +358,9 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
     grej = 1.0/(1.0 + formf*z1);
   } while ( G4UniformRand() > grej*grej );  
 
+  if(G4UniformRand() > (1. - z1*0.5)/(1.0 + z1*sqrt(mom2)/targetMass)) {
+    return 2.0;
+  }
   //G4cout << "z= " << z1 << " cross= " << nucXSection/barn 
   // << " crossE= " << elecXSection/barn << G4endl;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.7 2009-02-19 19:17:50 vnivanch Exp $
+// $Id: G4BohrFluctuations.cc,v 1.8 2009-09-29 11:33:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ using namespace std;
 G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   particle(0),
-  minNumberInteractionsBohr(10.0),
+  minNumberInteractionsBohr(2.0),
   minFraction(0.2),
   xmin(0.2),
   minLoss(0.001*eV)
@@ -109,8 +109,8 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
       siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
     }
     siga = sqrt(siga);
-    //G4cout << "siga= " << siga << G4endl;
     G4double twomeanLoss = meanLoss + meanLoss;
+    //G4cout << "siga= " << siga << " 2edp= " << twomeanLoss <<G4endl;
 
     if(twomeanLoss < siga) {
       G4double x;
@@ -129,7 +129,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
-  //  G4cout << "loss= " << loss << G4endl;
+  //G4cout << "loss= " << loss << G4endl;
 
   return loss;
 }

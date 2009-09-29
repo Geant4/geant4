@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.21 2009-08-04 17:10:58 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.22 2009-09-29 11:33:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 #include "G4CoulombScattering.hh"
 #include "G4CoulombScatteringModel.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4gCoulombScatteringModel.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 
@@ -115,6 +116,14 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
+    //    G4gCoulombScatteringModel* model = new G4gCoulombScatteringModel();
+    G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+    model->SetPolarAngleLimit(PolarAngleLimit());
+    model->SetLowEnergyLimit(emin);
+    model->SetHighEnergyLimit(emax);
+    AddEmModel(1, model);
+    /*
+
     G4double eth  = thEnergy;
     if(mass < MeV) eth  = thEnergyElec; 
     if(eth > emin) {
@@ -131,6 +140,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
       model->SetHighEnergyLimit(emax);
       AddEmModel(2, model);
     }
+    */
   }
 }
 
