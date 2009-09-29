@@ -1,4 +1,4 @@
-$Id: History,v 1.463 2009-08-28 16:42:24 vnivanch Exp $
+$Id: History,v 1.464 2009-09-29 11:37:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 September 09:  V.Ivant (emstand-V09-02-22)
+- G4CoulombScattering - added cut per recoil
+- G4BohrFluctuations - change internal parameter minNumberInteractionsBohr
+                       from 10 to 2 to provide more smooth transition
+                       to Landau regime in the case of small cuts 
 
 28 August 09:  V.Ivant (emstand-V09-02-21)
 - G4PAIModel - fixed problem conneted with modifications for 
