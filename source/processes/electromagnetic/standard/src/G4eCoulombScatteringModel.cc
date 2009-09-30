@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.74 2009-09-29 11:33:22 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.75 2009-09-30 09:51:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -211,10 +211,10 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
   // This method needs initialisation before be called
-  G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2;
+  //G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
-  // G4double meff = targetMass/(mass+targetMass);
-  // G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+  G4double meff = targetMass/(mass+targetMass);
+  G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
 
   elecXSection = 0.0;
   nucXSection  = 0.0;

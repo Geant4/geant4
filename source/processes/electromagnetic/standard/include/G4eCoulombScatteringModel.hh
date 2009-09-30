@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.47 2009-09-29 11:33:22 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.48 2009-09-30 09:51:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,7 +72,6 @@
 
 class G4ParticleChangeForGamma;
 class G4ParticleDefinition;
-class G4DataVector;
 
 class G4eCoulombScatteringModel : public G4VEmModel
 {
@@ -240,6 +239,7 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     targetZ = Z;
     iz= G4int(Z);
     if(iz > 99) iz = 99;
+    targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
     screenZ = ScreenRSquare[iz]/mom2;
     // if(iz > 1) 
     screenZ *= (1.13 + 3.76*Z*Z*invbeta2*alpha2);
