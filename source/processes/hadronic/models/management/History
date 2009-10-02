@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 October 2009 - V.Ivanchenko (hadr-modman-V09-02-06)
+------------------------------------------------------
+-  G4HadronicInteraction - added SetModelName method
+
 30 August 2009 - V.Ivanchenko (hadr-modman-V09-02-05)
 ------------------------------------------------------
 -  G4HadronicInteraction - renamed SampleT by SampleInvariantT,

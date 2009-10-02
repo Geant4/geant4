@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.11 2009-08-30 16:12:34 vnivanch Exp $
+// $Id: G4HadronicInteraction.hh,v 1.12 2009-10-02 08:13:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  abstract base class
@@ -116,6 +116,9 @@ public: // With description
 
   inline void SetVerboseLevel( G4int value )
   { verboseLevel = value; }
+
+  inline void SetModelName(const G4String& nam) 
+  { theModelName = nam; }
 
   inline const G4String& GetModelName() const
   { return theModelName; }
