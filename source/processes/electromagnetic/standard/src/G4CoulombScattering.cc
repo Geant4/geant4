@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.22 2009-09-29 11:33:22 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.23 2009-10-02 07:20:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,7 +51,7 @@
 #include "G4CoulombScattering.hh"
 #include "G4CoulombScatteringModel.hh"
 #include "G4eCoulombScatteringModel.hh"
-#include "G4gCoulombScatteringModel.hh"
+//#include "G4hCoulombScatteringModel.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 
@@ -68,10 +68,10 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetIntegral(true);
   thEnergy = PeV;
   thEnergyElec = PeV;
-  if(name == "CoulombScat") {
-    thEnergy = 10.*MeV;
-    thEnergyElec = 10.*GeV;
-  }
+  //if(name == "CoulombScat") {
+  //  thEnergy = 10.*MeV;
+  //  thEnergyElec = 10.*GeV;
+  //}
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fCoulombScattering);
 }
@@ -149,8 +149,9 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 void G4CoulombScattering::PrintInfo()
 {
   G4cout << "      " << PolarAngleLimit()/degree
-	 << " < Theta(degree) < 180" 
+	 << " < Theta(degree) < 180"
 	 << ", Eth(MeV)= ";
+
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 
