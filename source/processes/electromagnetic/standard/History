@@ -1,4 +1,4 @@
-$Id: History,v 1.465 2009-09-30 09:52:36 vnivanch Exp $
+$Id: History,v 1.466 2009-10-02 08:41:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 October 09:  V.Ivant (emstand-V09-02-23)
+- G4CoulombScattering - fixed compillation problem 
 
 30 September 09:  V.Ivant (emstand-V09-02-22)
 - G4CoulombScattering - added cut per recoil
