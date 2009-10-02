@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc,v 1.8 2009-07-20 18:41:34 vnivanch Exp $
+// $Id: G4eMultipleScattering.cc,v 1.9 2009-10-02 13:36:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -44,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4UrbanMscModel2.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4Electron.hh"
@@ -80,7 +81,7 @@ void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 
   // initialisation of parameters - defaults for particles other
   // than ions can be overwritten by users
-  mscUrban = new G4UrbanMscModel2();
+  mscUrban = new G4UrbanMscModel();
   AddEmModel(1,mscUrban);
   isInitialized = true;
   /*
