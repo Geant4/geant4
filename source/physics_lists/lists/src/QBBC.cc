@@ -23,44 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.3 2009-10-04 16:05:10 vnivanch Exp $
+// $Id: QBBC.cc,v 1.1 2009-10-04 16:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  QBBC
+// ClassName:QBBC
 //
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-// 15.04.2007 set glauber=true (V.Ivanchenko)
+// 24.11.06 Add G4HadronHElasticPhysics and G4NeutronTrackingCut
+// 16.05.2007 V.Ivanchenko: rename EM builders
+//
 //----------------------------------------------------------------------------
 //
-#ifndef QBBC_h
-#define QBBC_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "QBBC.hh"
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
 
-class QBBC : public G4VModularPhysicsList
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4ChargeExchangePhysics.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+
+QBBC::QBBC( G4int ver, const G4String& type )
 {
-public:
+  G4DataQuestionaire it(photon, neutron);
+  G4cout << "<<< Geant4 Physics List simulation engine: QBBC with type <"
+	 << type <<">" <<G4endl;	
+  G4cout <<G4endl;
+  defaultCutValue = 0.7*mm;  
+  SetVerboseLevel(ver);
 
-  QBBC(G4int ver = 1, const G4String& type = "QBBC");
+  // EM Physics
+  RegisterPhysics( new G4EmStandardPhysics(ver));
 
-  virtual ~QBBC();
+  // Synchroton Radiation & GN Physics
+  RegisterPhysics( new G4EmExtraPhysics("extra EM"));
 
-  virtual void SetCuts();
+  // Decays
+  RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
-private:
+   // Hadron Physics
+  RegisterPhysics( new G4HadronHElasticPhysics(ver,false));
+  RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
+  RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+  RegisterPhysics( new G4HadronInelasticQBBC(ver, type));
 
-  // copy constructor and hide assignment operator
-  QBBC(QBBC &);
-  QBBC & operator=(const QBBC &right);
+  // Neutron tracking cut
+  RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+}		 
 
-};
+QBBC::~QBBC() 
+{}
 
-#endif
-
-
+void QBBC::SetCuts()
+{
+  SetCutsWithDefault();   
+}
 
