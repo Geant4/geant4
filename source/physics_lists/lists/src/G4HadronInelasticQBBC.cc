@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.18 2009-10-04 16:06:19 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.19 2009-10-04 16:32:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -147,14 +147,14 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
 
 	hp->RegisterMe(theQGSP);
-	//        hp->RegisterMe(theFTFP);
+	hp->RegisterMe(theFTFP);
 	hp->RegisterMe(theBERT);
 
       } else if(pname == "neutron") {
 	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
 
 	hp->RegisterMe(theQGSP);
-	//        hp->RegisterMe(theFTFP);
+	hp->RegisterMe(theFTFP);
        
 	G4HadronicProcess* capture = FindCaptureProcess();
 	pmanager->AddDiscreteProcess(capture);
@@ -182,7 +182,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       } else if(pname == "pi-" || pname == "pi+") {
 	hp->AddDataSet(new G4BGGPionInelasticXS(particle));
 	hp->RegisterMe(theQGSP);
-	// hp->RegisterMe(theFTFP);
+	hp->RegisterMe(theFTFP);
         hp->RegisterMe(theBERT);
 
       } else if(pname == "kaon-"     || 
