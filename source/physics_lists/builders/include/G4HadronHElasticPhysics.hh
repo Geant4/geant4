@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.hh,v 1.2 2007-11-15 18:08:11 vnivanch Exp $
+// $Id: G4HadronHElasticPhysics.hh,v 1.3 2009-10-04 16:03:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,12 +64,6 @@ public:
   virtual void ConstructProcess();
 
 private:
-
-  G4HadronicInteraction* model;
-  G4HadronicInteraction* neutronModel;
-  G4HadronicInteraction* neutronHPModel;
-
-  G4String mname;
 
   G4int    verbose;
   G4bool   hpFlag;
