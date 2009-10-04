@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2009-10-02 13:54:49 vnivanch Exp $
+$Id: History,v 1.99 2009-10-04 16:29:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-09-2009, V.Ivanchenko                   (phys-lists-V09-02-25)
+04-10-2009, V.Ivanchenko                   (phys-lists-V09-02-26)
+- modified QBBC - remove template and move QBBC.icc to QBBC.cc;
+                  use a new G4VHadronPhysics interface
+- G4HadroHElasticPhysics uses G4WHadronElasticProcess (the result of 
+   redesign of elastic) instead of G4UHadronElasticProcess    
+- QGSP_BERT_EMV uses G4HadroHElasticPhysics instead of G4HadroElasticPhysics  
+
+02-10-2009, V.Ivanchenko                   (phys-lists-V09-02-25)
 - modified EM standard Physics Lists
 G4EmStandardPhysics         - return 9.2 configuration
 G4EmStandardPhysics_option1 - use ApplyCuts=true
