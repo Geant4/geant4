@@ -23,17 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.9 2009-04-17 11:24:07 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.hh,v 1.10 2009-10-04 16:06:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4HadronInelasticQBBC
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 31 August 2009 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
 //
 //----------------------------------------------------------------------------
 //
@@ -42,33 +41,15 @@
 #define G4HadronInelasticQBBC_h 1
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4QGSModel.hh"
-#include "G4QGSParticipants.hh"
-#include "G4FTFModel.hh"
-#include "G4CascadeInterface.hh"
+#include "G4VHadronPhysics.hh"
 
-#include "G4NeutronHPInelasticData.hh"
-#include "G4NeutronHPCaptureData.hh"
-#include "G4NeutronHPFissionData.hh"
-
-class G4HadronicProcess;
-class G4TheoFSGenerator;
-class G4QStringChipsParticleLevelInterface;
-class G4ExcitedStringDecay;
-class G4HadronProcessStore;
-class G4GeneratorPrecompoundInterface;
-class G4BinaryCascade;
-class G4PreCompoundModel;
-class G4QuasiElasticChannel;
-class G4PiNuclearCrossSection;
-class G4ProtonInelasticCrossSection;
-class G4NeutronInelasticCrossSection;
-
-class G4HadronInelasticQBBC : public G4VPhysicsConstructor
+class G4HadronInelasticQBBC : public G4VHadronPhysics
 {
 public: 
 
+  G4HadronInelasticQBBC(G4int ver = 1, const G4String& type = "QBBC");
+
+  // old obsolete interface
   G4HadronInelasticQBBC(const G4String& name = "inelastic",
 			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
 			G4bool chips = false, G4bool hp = false, 
@@ -76,12 +57,6 @@ public:
 
   virtual ~G4HadronInelasticQBBC();
 
-public: 
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
@@ -89,34 +64,12 @@ public:
 
 private:
 
-  G4PiNuclearCrossSection* thePiCross;
-  G4ProtonInelasticCrossSection*  theXSecP;
-  G4NeutronInelasticCrossSection* theXSecN;
+  // copy constructor and hide assignment operator
+  G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
+  G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
-  G4NeutronHPInelasticData*  theHPXSecI;
-  G4NeutronHPCaptureData*    theHPXSecC;
-  G4NeutronHPFissionData*    theHPXSecF;
-
-  G4HadronProcessStore* store;
-
-  G4PreCompoundModel* thePreEquilib;
-  G4QuasiElasticChannel*    theQuasiElastic;
-  G4GeneratorPrecompoundInterface* preCompound;
-  G4BinaryCascade* theCascade;
-  G4QStringChipsParticleLevelInterface * theCHIPSCascade;
-  G4QGSModel< G4QGSParticipants > * theQGStringModel;
-  G4ExcitedStringDecay* theQGStringDecay;
-  G4ExcitedStringDecay* theFTFBStringDecay;
-  G4ExcitedStringDecay* theFTFCStringDecay;
-  G4FTFModel*           theFTFBStringModel;
-  G4FTFModel*           theFTFCStringModel;
-
+  G4String htype;
   G4int    verbose;
-  G4bool   ftfFlag;
-  G4bool   bertFlag;
-  G4bool   chipsFlag;
-  G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.cc,v 1.1 2009-09-03 15:19:40 vnivanch Exp $
+// $Id: G4VHadronPhysics.cc,v 1.2 2009-10-04 16:06:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,12 +87,6 @@ void G4VHadronPhysics::ConstructParticle()
   pShortLivedConstructor.ConstructParticle();
 }
 
-/*
-void G4VHadronPhysics::ConstructProcess()
-{
-}
-*/
-
 G4HadronicInteraction* 
 G4VHadronPhysics::BuildModel(G4VHadronModelBuilder* mBuilder,
 			     G4double emin, 
@@ -117,7 +111,7 @@ G4VHadronPhysics::BuildModel(G4VHadronModelBuilder* mBuilder,
     model =  mBuilder->GetModel();
   }
   model->SetMinEnergy(emin);
-  model->SetMaxEnergy(emin);
+  model->SetMaxEnergy(emax);
   if (verboseLevel>1) {
     G4cout << "### G4VHadronPhysics <" 
 	   << model->GetModelName() << " Emin(GeV)= " 
@@ -135,7 +129,7 @@ G4VHadronPhysics::NewModel(G4HadronicInteraction* model,
 {
   if(!model) return model;
   model->SetMinEnergy(emin);
-  model->SetMaxEnergy(emin);
+  model->SetMaxEnergy(emax);
   if (verboseLevel>1) {
     G4cout << "### G4VHadronPhysics <" 
 	   << model->GetModelName() << " Emin(GeV)= " 
