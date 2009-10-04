@@ -16,9 +16,9 @@ setenv PHYSLIST QBBCG
 setenv PHYSLIST QBBCF
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT_EML
-#source $G4INSTALL/tests/test46/run.csh
-setenv PHYSLIST QGSP_BERT_EMV
 source $G4INSTALL/tests/test46/run.csh
+setenv PHYSLIST QGSP_BERT_EMV
+#source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST FTFP_BERT
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT

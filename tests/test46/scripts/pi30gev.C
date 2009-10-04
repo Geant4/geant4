@@ -50,6 +50,7 @@ for(i=0; i<3; i++) {
 
 legc->Draw();
 
-c1.Print("hcal_vis_pi-30gev.gif");
+//c1.Print("hcal_vis_pi-30gev.gif");
+c1.Print("hcal_vis_pi-30gev.eps");
 
 }
