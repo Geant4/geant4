@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.9 2009-09-17 18:24:30 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.10 2009-10-05 12:39:16 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -60,7 +60,7 @@ G4bool G4ElasticHNScattering::
 //G4cout<<"G4ElasticHNScattering::ElasticScattering"<<G4endl;
 // -------------------- Projectile parameters -----------------------------------
 	   G4LorentzVector Pprojectile=projectile->Get4Momentum();
-
+//G4cout<<"Elastic P "<<Pprojectile<<G4endl;
            if(Pprojectile.z() < 0.)
            {
             target->SetStatus(2);
@@ -88,6 +88,7 @@ G4bool G4ElasticHNScattering::
            G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
 
   	   G4LorentzVector Ptarget=target->Get4Momentum();
+//G4cout<<"Elastic T "<<Ptarget<<G4endl;
            G4double TargetRapidity = Ptarget.rapidity();
 	   G4double M0target = Ptarget.mag();
 

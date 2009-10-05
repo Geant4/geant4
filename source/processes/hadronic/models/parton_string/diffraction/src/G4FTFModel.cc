@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.25 2009-09-19 19:02:48 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.26 2009-10-05 12:39:16 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,7 +72,6 @@ const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
 	throw G4HadronicException(__FILE__, __LINE__, "G4FTFModel::operator= is not meant to be accessed ");
 	return *this;
 }
-#include "G4ParticleTable.hh"
 
 int G4FTFModel::operator==(const G4FTFModel &right) const
 {
@@ -115,7 +114,9 @@ G4cout << "cms std::sqrt(s) (GeV) = " << std::sqrt(s) / GeV << G4endl;
 
 // ------------------------------------------------------------
 G4ExcitedStringVector * G4FTFModel::GetStrings()
-{ 
+{
+//G4int Uzhi; G4cin>>Uzhi;
+ 
 //G4cout<<"GetList"<<G4endl;
 	theParticipants.GetList(theProjectile,theParameters);
 //G4cout<<"Regge"<<G4endl;
@@ -179,6 +180,7 @@ void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 20
               targetSplitable = new G4DiffractiveSplitableHadron(*Neighbour); 
 
               Neighbour->Hit(targetSplitable);
+              Neighbour->SetBindingEnergy(10.*Neighbour->GetBindingEnergy()); // Uzhi 5.10.09
               targetSplitable->SetStatus(2);     
              }
             }  // end of if(!Neighbour->AreYouHit())
@@ -247,12 +249,12 @@ G4bool G4FTFModel::PutOnMassShell()
         G4double        SumMasses = Mprojectile;
 
 //--------------- Target nucleus ------------------------------
-G4int Ninvolv(0);
+//G4int Ninvolv(0);
 	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         {
           G4Nucleon * aNucleon = TheInvolvedNucleon[i];
 //G4cout<<"          "<<Ninvolv<<" "<<aNucleon->Get4Momentum()<<G4endl;
-Ninvolv++;
+//Ninvolv++;
           Psum += aNucleon->Get4Momentum();
           SumMasses += aNucleon->GetDefinition()->GetPDGMass();                
 	}   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
@@ -269,10 +271,10 @@ Ninvolv++;
 // Sampling of nucleons what are transfered to delta-isobars --
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
         G4int NumberOfDeltas(0);
-SumMasses=Mprojectile;
+//SumMasses=Mprojectile;
         if(GetWoundedNucleus()->GetMassNumber() != 1)
         {
-          G4double ProbDeltaIsobar(1.);
+          G4double ProbDeltaIsobar(0.);  // 1. *******************************
 	  for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
           {
             if((G4UniformRand() < ProbDeltaIsobar)&&(NumberOfDeltas < MaxNumberOfDeltas))
@@ -455,13 +457,13 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
 // ------------------------------------------------------------
 G4bool G4FTFModel::ExciteParticipants()
 {
-/*    // Uzhi 29.03.08                     For elastic Scatt.
-G4cout<<"  In ExciteParticipants() "<<theParticipants.theInteractions.size()<<G4endl;
-G4cout<<" test Params Tot "<<theParameters->GetTotalCrossSection()<<G4endl;
-G4cout<<" test Params Ela "<<theParameters->GetElasticCrossSection()<<G4endl;
+//    // Uzhi 29.03.08                     For elastic Scatt.
+//G4cout<<"  In ExciteParticipants() "<<theParticipants.theInteractions.size()<<G4endl;
+//G4cout<<" test Params Tot "<<theParameters->GetTotalCrossSection()<<G4endl;
+//G4cout<<" test Params Ela "<<theParameters->GetElasticCrossSection()<<G4endl;
 	
-G4int counter=0;
-*/   // Uzhi 29.03.08
+//G4int counter=0;
+//   // Uzhi 29.03.08
 
 
 //G4int InterNumber=0; // Vova
@@ -473,19 +475,19 @@ G4int counter=0;
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
-/*
-counter++;
-G4cout<<" Int num "<<counter<<G4endl;
-*/
+//
+//counter++;
+//G4cout<<" Int num "<<counter<<G4endl;
+//
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
 //         G4Nucleon * TargetNucleon=collision.GetTargetNucleon(); // Uzhi 16.07.09
 // Uzhi 16.07.09 ----------------------------
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            { //   Elastic scattering -------------------------
+//G4cout<<"Elastic"<<G4endl;
             if(theElastic->ElasticScattering(projectile, target, theParameters))
             {
-//G4cout<<"Elastic"<<G4endl;
              Successfull = Successfull || true;
             } else
             {
@@ -503,11 +505,11 @@ G4cout<<" Int num "<<counter<<G4endl;
            }
            else
            { //   Inelastic scattering ---------------------- 
+//G4cout<<"InElastic"<<G4endl;
             if(theExcitation->ExciteParticipants(projectile, target, 
                                                  theParameters, theElastic))
             {
              Successfull = Successfull || true; 
-//G4cout<<"InElastic"<<G4endl;
             } else
             {
 //G4cout<<"InElastic Non succes"<<G4endl;
@@ -621,6 +623,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 //G4cout<<"Proj strings -----------------------"<<G4endl;
 	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
 	{
+//G4cout<<" string# "<<ahadron<<" "<<primaries[ahadron]->Get4Momentum()<<G4endl;
             G4bool isProjectile(0);
             if(primaries[ahadron]->GetStatus() == 1) {isProjectile=true; }
             if(primaries[ahadron]->GetStatus() == 3) {isProjectile=false;}

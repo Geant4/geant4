@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.9 2009-09-19 19:02:48 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.10 2009-10-05 12:39:16 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -294,15 +294,15 @@ SetProbabilityOfTarDiff(0.05);
       SetCofNuclearDestruction(1.); //1.0);                 // for meson projectile
     } else if( theA > 20. )
     {
-      SetCofNuclearDestruction(0.); //2);                 // for baryon projectile and heavy target
+      SetCofNuclearDestruction(0.2); //2);                 // for baryon projectile and heavy target
     } else
     {
-      SetCofNuclearDestruction(0.); //1.0);                 // for baryon projectile and light target
+      SetCofNuclearDestruction(0.2); //1.0);                 // for baryon projectile and light target
     }
 
     SetR2ofNuclearDestruction(1.5*fermi*fermi);
 
-    SetDofNuclearDestruction(0.3);
+    SetDofNuclearDestruction(0.4);
     SetPt2ofNuclearDestruction(0.17*GeV*GeV);
     SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 } 

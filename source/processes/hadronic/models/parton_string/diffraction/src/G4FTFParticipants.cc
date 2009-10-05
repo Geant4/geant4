@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.13 2009-07-31 11:03:00 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.14 2009-10-05 12:39:16 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -132,6 +132,7 @@ G4int NucleonNumber(0);        // Uzhi
 //G4cout<<"Part "<<nucleon->Get4Momentum()<<G4endl;
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
+	   	    nucleon->SetBindingEnergy(10.*nucleon->GetBindingEnergy()); // Uzhi 5.10.09
                     targetSplitable->SetStatus(1);     // It takes part in the interaction
 	   	}
 	   	G4InteractionContent * aInteraction = 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.14 2009-09-17 18:24:30 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.15 2009-10-05 12:39:16 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -57,6 +57,9 @@
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
 #include "G4ParticleTable.hh"
+#include "G4Neutron.hh"
+#include "G4ParticleDefinition.hh"
+
 //#include "G4ios.hh"
 //#include "UZHI_diffraction.hh"
 
@@ -73,7 +76,7 @@ G4bool G4DiffractiveExcitation::
 {
 // -------------------- Projectile parameters -----------------------
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
-//G4cout<<Pprojectile<<G4endl;
+//G4cout<<"Excite P "<<Pprojectile<<G4endl;
 
      if(Pprojectile.z() < 0.)
      {
@@ -105,11 +108,16 @@ G4bool G4DiffractiveExcitation::
 
 // -------------------- Target parameters -------------------------
      G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
-
-//G4cout<<"PDGs "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
+     G4int    absTargetPDGcode=std::abs(TargetPDGcode);
 
      G4LorentzVector Ptarget=target->Get4Momentum();
+
      G4double M0target = Ptarget.mag();
+
+//G4cout<<"Excite T "<<Ptarget<<G4endl;
+//G4cout<<"PDGs "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
+//G4cout<<"Masses "<<M0projectile<<" "<<M0target<<G4endl;
+
      G4double TargetRapidity = Ptarget.rapidity();
 
      if(M0target < target->GetDefinition()->GetPDGMass())
@@ -128,6 +136,8 @@ G4bool G4DiffractiveExcitation::
 
      G4double ProbOfDiffraction=ProbProjectileDiffraction +
                                 ProbTargetDiffraction;
+
+     G4double SumMasses=M0projectile+M0target+200.*MeV;
 
 // Kinematical properties of the interactions --------------
      G4LorentzVector Psum;      // 4-momentum in CMS
@@ -157,19 +167,20 @@ G4bool G4DiffractiveExcitation::
 
      G4double SqrtS=std::sqrt(S);
 //G4cout<<" SqrtS "<<SqrtS<<" 2200 "<<G4endl;
-     if(absProjectilePDGcode > 1000 && SqrtS < 2300*MeV)
+     if(absProjectilePDGcode > 1000 && SqrtS < 2300*MeV && SqrtS < SumMasses)
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // p+p-interactions
                                              // at Plab < 1.62 GeV/c.
 
-     if(( absProjectilePDGcode == 211 || ProjectilePDGcode ==  111) && SqrtS < 1600*MeV)
+     if(( absProjectilePDGcode == 211 || ProjectilePDGcode ==  111) && 
+        (SqrtS < 1600*MeV) && (SqrtS < SumMasses))
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // Pi+p-interactions
                                              // at Plab < 1. GeV/c.
 
      if(( (absProjectilePDGcode == 321) || (ProjectilePDGcode == -311)   ||
           (absProjectilePDGcode == 311) || (absProjectilePDGcode == 130) ||
-          (absProjectilePDGcode == 310)) && SqrtS < 1600*MeV)
+          (absProjectilePDGcode == 310)) && (SqrtS < 1600*MeV) && (SqrtS < SumMasses)) 
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // K+p-interactions
                                              // at Plab < ??? GeV/c.  ???
@@ -213,29 +224,40 @@ G4bool G4DiffractiveExcitation::
 
 //G4cout<<1./std::exp(-2.0*(ProjectileRapidity - TargetRapidity))<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
-
+// Getting the values needed for exchange ----------------------
      G4double MagQuarkExchange        =theParameters->GetMagQuarkExchange();
      G4double SlopeQuarkExchange      =theParameters->GetSlopeQuarkExchange();
      G4double DeltaProbAtQuarkExchange=theParameters->GetDeltaProbAtQuarkExchange();
 
-     if(G4UniformRand() < MagQuarkExchange*std::exp(-SlopeQuarkExchange*
-              (ProjectileRapidity - TargetRapidity)))
+     G4double NucleonMass=
+              (G4ParticleTable::GetParticleTable()->FindParticle(2112))->GetPDGMass();     
+     G4double DeltaMass=
+              (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
+
+// Check for possible quark excjane -----------------------------------
+     if(G4UniformRand() < MagQuarkExchange*
+        std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity)))
      {    
+
 //G4cout<<"Exchange "<<G4endl;
+
+      G4int NewProjCode(0), NewTargCode(0);
+
 G4bool StandardExcitation(false); // ================================= 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
 
+//  Projectile unpacking --------------------------
       if(absProjectilePDGcode < 1000 )
       {    // projectile is meson ----------------- 
-       UnpackMeson(ProjectilePDGcode, ProjQ1, ProjQ2);  // Uzhi 7.09.09
+       UnpackMeson(ProjectilePDGcode, ProjQ1, ProjQ2);  
       } else 
       {    // projectile is baryon ----------------
-       UnpackBaryon(ProjectilePDGcode, ProjQ1, ProjQ2, ProjQ3);  // Uzhi 7.09.09
+       UnpackBaryon(ProjectilePDGcode, ProjQ1, ProjQ2, ProjQ3);
       } // End of the hadron's unpacking ----------
 
 //  Target unpacking ------------------------------
       G4int TargQ1(0), TargQ2(0), TargQ3(0);
-      UnpackBaryon(TargetPDGcode, TargQ1, TargQ2, TargQ3);  // Uzhi 7.09.09
+      UnpackBaryon(TargetPDGcode, TargQ1, TargQ2, TargQ3); 
 
 // Sampling of exchanged quarks -------------------
       G4int ProjExchangeQ(0);
@@ -277,41 +299,46 @@ G4bool StandardExcitation(false); // =================================
         }
 
        } // End of if(ProjQ1 > 0 ) // ProjQ1 is quark
-        G4int NewProjCode(0);
-        G4int aProjQ1=std::abs(ProjQ1);
-        G4int aProjQ2=std::abs(ProjQ2);
-        if(aProjQ1 == aProjQ2)          {NewProjCode = 111;} // Pi0-meson
-        else  // |ProjQ1| # |ProjQ2|
-        {
-         if(aProjQ1 > aProjQ2)          {NewProjCode = aProjQ1*100+aProjQ2*10+1;}
-         else                           {NewProjCode = aProjQ2*100+aProjQ1*10+1;}
-        }
-//       } // End of if(ProjQ1 > 0 ) // ProjQ1 is quark
-        projectile->SetDefinition(
-        G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode)); 
 
-        G4int NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3);
+       G4int aProjQ1=std::abs(ProjQ1);
+       G4int aProjQ2=std::abs(ProjQ2);
+       if(aProjQ1 == aProjQ2)          {NewProjCode = 111;} // Pi0-meson
+       else  // |ProjQ1| # |ProjQ2|
+       {
+        if(aProjQ1 > aProjQ2)          {NewProjCode = aProjQ1*100+aProjQ2*10+1;}
+        else                           {NewProjCode = aProjQ2*100+aProjQ1*10+1;}
+       }
+
+//       projectile->SetDefinition(
+//       G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode)); 
+
+       NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3);
  
-        if( (TargQ1 == TargQ2) && (TargQ1 == TargQ3) )  {NewTargCode +=2;} // For Delta isobar
-        else if((G4UniformRand() < DeltaProbAtQuarkExchange) &&
-                (SqrtS > 1100.))                        {NewTargCode +=2;} // For Delta isobar
+       if( (TargQ1 == TargQ2) && (TargQ1 == TargQ3) &&
+           (SqrtS > M0projectile+DeltaMass))           {NewTargCode +=2;} //Create Delta isobar
 
-        target->SetDefinition(
-        G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
+       else if( target->GetDefinition()->GetPDGiIsospin() == 3 )         //Delta was the target
+       { if(G4UniformRand() > DeltaProbAtQuarkExchange){NewTargCode +=2;} //Save   Delta isobar
+         else                                          {}     // De-excite initial Delta isobar
+       }
+
+       else if((G4UniformRand() < DeltaProbAtQuarkExchange) &&         //Nucleon was the target
+               (SqrtS > M0projectile+DeltaMass))      {NewTargCode +=2;}  //Create Delta isobar
+       else                                           {}                 //Save initial nucleon
+
+       target->SetDefinition(
+       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
 //G4cout<<"New PDGs "<<NewProjCode<<" "<<NewTargCode<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
        //}
       } else 
       {    // projectile is baryon ----------------
-
-       G4int NewProjCode(0);
-       G4int NewTargCode(0);
-
 G4double Same=0.; //0.3; //0.5;
-G4bool ProjDeltaHasCreated(false);
-G4bool TargDeltaHasCreated(false);
+       G4bool ProjDeltaHasCreated(false);
+       G4bool TargDeltaHasCreated(false);
+ 
        G4double Ksi=G4UniformRand();
-       if(G4UniformRand() < 0.5) 
+       if(G4UniformRand() < 0.5)     // Sampling exchange quark from proj. or targ.
        {   // Sampling exchanged quark from the projectile ---
 //G4cout<<"Proj Exc"<<G4endl;
         if( Ksi < 0.333333 ) 
@@ -341,28 +368,58 @@ G4bool TargDeltaHasCreated(false);
         else
         {ProjQ3=ProjExchangeQ;}
 
-        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3);
-        if( (ProjQ1 == ProjQ2) && (ProjQ1 == ProjQ3) )  
-        {NewProjCode +=2; ProjDeltaHasCreated = true;}
+/*
+        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
 
-        NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3);
-        if( (TargQ1 == TargQ2) && (TargQ1 == TargQ3) )  
-        {NewTargCode +=2; TargDeltaHasCreated = true;}
+        if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
+        else if(projectile->GetDefinition()->GetPDGiIsospin() == 3)// Projectile was Delta
+        { if(G4UniformRand() > DeltaProbAtQuarkExchange)
+                                                 {NewProjCode +=2; ProjDeltaHasCreated=true;} 
+          else                                   {NewProjCode +=0; ProjDeltaHasCreated=false;}
+        }
+        else                                                       // Projectile was Nucleon
+        {
+         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > DeltaMass+M0target)) 
+                                                 {NewProjCode +=2; ProjDeltaHasCreated=true;}
+         else                                    {NewProjCode +=0; ProjDeltaHasCreated=false;}
+        } 
 
-        if(!ProjDeltaHasCreated && !TargDeltaHasCreated)
-        {NewProjCode +=2; ProjDeltaHasCreated = true;}
+        NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3); // *****************************
+
+        if((TargQ1==TargQ2) && (TargQ1==TargQ3)) {NewTargCode +=2; TargDeltaHasCreated=true;}  
+        else if(target->GetDefinition()->GetPDGiIsospin() == 3)    // Target was Delta
+        { if(G4UniformRand() > DeltaProbAtQuarkExchange)
+                                                 {NewTargCode +=2; TargDeltaHasCreated=true;} 
+          else                                   {NewTargCode +=0; TargDeltaHasCreated=false;}
+        }
+        else                                                       // Target was Nucleon
+        {
+         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > M0projectile+DeltaMass)) 
+                                                 {NewTargCode +=2; TargDeltaHasCreated=true;}
+         else                                    {NewTargCode +=0; TargDeltaHasCreated=false;}
+        }         
+
+        if((absProjectilePDGcode == NewProjCode) && (absTargetPDGcode == NewTargCode))
+        { // Nothing was changed! It is not right!?
+        }
+*/
+/*-----------------------------------------------------------------------------------------
+        if(!ProjDeltaHasCreated && !TargDeltaHasCreated) // No Deltas were created then
+        { if( G4UniformRand() < 0.5) {NewProjCode +=2; ProjDeltaHasCreated = true;}
+          else                       {NewTargCode +=2; TargDeltaHasCreated = true;} 
+        }
 
         if(!(ProjDeltaHasCreated && TargDeltaHasCreated))
         {
          if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS >2600.)) 
          { 
-//G4cout<<"2 Deltas "<<G4endl;
+G4cout<<"2 Deltas "<<G4endl;
           if(!ProjDeltaHasCreated)
                {NewProjCode +=2; ProjDeltaHasCreated = true;}
           else {NewTargCode +=2; TargDeltaHasCreated = true;} // For Delta isobar
          }
         }
-
+*/
        } else
        {   // Sampling exchanged quark from the target -------
 //G4cout<<"Targ Exc"<<G4endl;
@@ -391,7 +448,7 @@ G4bool TargDeltaHasCreated(false);
         {TargQ2=TargExchangeQ;}
         else
         {TargQ3=TargExchangeQ;}
-
+/*
         NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3);
         if( (ProjQ1 == ProjQ2) && (ProjQ1 == ProjQ3) )  
         {NewProjCode +=2; ProjDeltaHasCreated = true;}
@@ -407,43 +464,89 @@ G4bool TargDeltaHasCreated(false);
         {
          if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS >2600.)) 
          { 
-//G4cout<<"2 Deltas "<<G4endl;
+G4cout<<"2 Deltas "<<G4endl;
           if(!ProjDeltaHasCreated)
                {NewProjCode +=2; ProjDeltaHasCreated = true;}
           else {NewTargCode +=2; TargDeltaHasCreated = true;}
          }
         }
+*/
+       } // End of sampling baryon
+
+       NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
+
+       if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
+       else if(projectile->GetDefinition()->GetPDGiIsospin() == 3)// Projectile was Delta
+       { if(G4UniformRand() > DeltaProbAtQuarkExchange)
+                                                {NewProjCode +=2; ProjDeltaHasCreated=true;} 
+         else                                   {NewProjCode +=0; ProjDeltaHasCreated=false;}
+       }
+       else                                                       // Projectile was Nucleon
+       {
+        if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > DeltaMass+M0target)) 
+                                                {NewProjCode +=2; ProjDeltaHasCreated=true;}
+        else                                    {NewProjCode +=0; ProjDeltaHasCreated=false;}
        } 
+
+       NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3); // *****************************
+
+       if((TargQ1==TargQ2) && (TargQ1==TargQ3)) {NewTargCode +=2; TargDeltaHasCreated=true;}  
+       else if(target->GetDefinition()->GetPDGiIsospin() == 3)    // Target was Delta
+       { if(G4UniformRand() > DeltaProbAtQuarkExchange)
+                                                {NewTargCode +=2; TargDeltaHasCreated=true;} 
+         else                                   {NewTargCode +=0; TargDeltaHasCreated=false;}
+       }
+       else                                                       // Target was Nucleon
+       {
+        if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > M0projectile+DeltaMass)) 
+                                                {NewTargCode +=2; TargDeltaHasCreated=true;}
+        else                                    {NewTargCode +=0; TargDeltaHasCreated=false;}
+       }         
+
+       if((absProjectilePDGcode == NewProjCode) && (absTargetPDGcode == NewTargCode))
+       { // Nothing was changed! It is not right!?
+       }
 // Forming baryons --------------------------------------------------
 
-       projectile->SetDefinition(
-       G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode)); 
+//       if( ProjDeltaHasCreated && TargDeltaHasCreated ) {StandardExcitation = true;}
 
-       target->SetDefinition(
-       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
-
-       if( ProjDeltaHasCreated && TargDeltaHasCreated ) {StandardExcitation = true;}
-
-//G4cout<<"Ne PDG "<<NewProjCode<<" "<<NewTargCode<<G4endl;
+//G4cout<<"New PDG "<<NewProjCode<<" "<<NewTargCode<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
       } // End of if projectile is baryon ---------------------------
 
 
 // If we assume that final state hadrons after the charge exchange will be
 // in the ground states, we have to put ----------------------------------
-      M0projectile=projectile->GetDefinition()->GetPDGMass();
-      M0projectile2 = M0projectile * M0projectile;
+      if(M0projectile < 
+         (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass())
+      {
+       M0projectile=
+         (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass();
+       M0projectile2 = M0projectile * M0projectile;
+      }
 
-      M0target=target->GetDefinition()->GetPDGMass();
-      M0target2 = M0target * M0target;
+      if(M0target < 
+         (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass())
+      {
+       M0target=
+         (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass();
+       M0target2 = M0target * M0target;
+      }
 
       PZcms2=(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
              2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
              /4./S;
-//G4cout<<M0projectile<<" "<<M0target<<G4endl;
-//      if(PZcms2 < 0)
-//      {target->SetStatus(2);  return false;}   // It can be in an interaction with 
-                                              // off-shell nuclear nucleon
+//G4cout<<"New Masses "<<M0projectile<<" "<<M0target<<G4endl;
+//G4cout<<"PZcms2 "<<PZcms2<<G4endl;
+
+      if(PZcms2 < 0) {return false;}  // It can be if energy is not sufficient for Delta
+//----------------------------------------------------------
+      projectile->SetDefinition(
+                  G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode)); 
+
+      target->SetDefinition(
+                  G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
+//----------------------------------------------------------
       PZcms = std::sqrt(PZcms2);
 
       Pprojectile.setPz( PZcms);
