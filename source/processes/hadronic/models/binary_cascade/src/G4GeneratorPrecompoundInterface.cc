@@ -30,6 +30,10 @@
 //
 // HPW, 10DEC 98, the decay part originally written by Gunter Folger in his FTF-test-program.
 //
+   
+    G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface()
+    : CaptureThreshold(80*MeV)
+    {}
       
    G4HadFinalState* G4GeneratorPrecompoundInterface::
    ApplyYourself(const G4HadProjectile &, G4Nucleus & )
@@ -100,7 +104,7 @@
 	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
          theTotalResult->push_back(theNew);            
        }
-       else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>80*MeV)
+       else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>CaptureThreshold)
        {
 	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
 	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
@@ -165,18 +169,15 @@
 //      anInitialState.SetExcitationEnergy(exEnergy); // now a redundant call.
 
      // call pre-compound
-//G4cout<<"To G4Fragment "<<G4endl;
        const G4Fragment aFragment(anInitialState);
-//G4cout<<"To theDeExcitation->DeExcite(aFragment)"<<G4endl;
        G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
-//       G4ReactionProductVector * aPreResult = new G4ReactionProductVector;
+
        // fill pre-compound part into the result, and return
        for(unsigned int ll=0; ll<aPreResult->size(); ll++)
        {
          theTotalResult->push_back(aPreResult->operator[](ll));
        }
        delete aPreResult;
-//G4cout<<"End Precompound"<<G4endl;
      }
      else
      {
@@ -189,3 +190,10 @@
      return theTotalResult;
    }
   
+G4double G4GeneratorPrecompoundInterface::SetCaptureThreshold(G4double value)
+{
+    G4double old=CaptureThreshold;
+    CaptureThreshold=value;
+    return old;
+
+}
