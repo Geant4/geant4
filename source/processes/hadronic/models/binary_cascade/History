@@ -12,6 +12,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+5-Oct-2009, Gunter Folger                had-binary-V09-02-03
+- Make capture threshold a setable parameter in G4GeneratorPrecompoundInterface
+- Note that changes below to Binary (30 Aug) are NOT included in tag.
+
 30 August, V. Uzhinsky   -- Proposed changes in bin.cascade to protect
                             energy-non-conservation in FTF+BIC
                             combination.
