@@ -14,9 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 October 2009 - V.Ivanchenko (hadr-cohe-V09-02-01)
+------------------------------------------------------
+- Make a correct tag format
+
 22 September 2009 - V.Ivanchenko (hadr-cohe-V09-01-09)
 ------------------------------------------------------
-  Migrated to true model deign of elastic scattering
+  Migrated to the hadronic model design of elastic scattering
   G4WHadronElasticProcess - new elastic process
   G4VHadronElastic - base class for elastic models with default
                      GHEISHA model
