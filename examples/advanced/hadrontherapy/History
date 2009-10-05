@@ -9,6 +9,9 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+05.10.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-32
+            - Fixed a compilation error with GCC 4.4
+
 28.09.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-31
             - Now the HadrontherapyDetectorConstruction class implements only phantom and detector [RO]geometry.
 			  World volume and the rest of the geometry is inside another class whose messenger allows 

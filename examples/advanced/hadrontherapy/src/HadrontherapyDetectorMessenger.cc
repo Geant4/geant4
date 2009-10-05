@@ -52,3 +52,6 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 }
 
 
+HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger() {}
+    
+void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand*, G4String) {}
