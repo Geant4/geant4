@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.17 2009-07-17 12:25:33 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.18 2009-10-05 12:52:48 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
                                     theString.GetPosition().z()+100.*fermi);
             LeftVector->operator[](0)->SetPosition(aPosition);
 */            
-//G4cout<<"Single hadron "<<LeftVector->operator[](0)->GetPosition()<<" "<<LeftVector->operator[](0)->GetFormationTime()<<G4endl;
+//G4cout<<"Single hadron "<<LeftVector->operator[](0)->Get4Momentum()<<" "<<LeftVector->operator[](0)->Get4Momentum().mag()<<G4endl;
           } else {    // 2 hadrons created from qq-qqbar are stored
             LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
             LeftVector->operator[](0)->SetPosition(theString.GetPosition());
@@ -315,7 +315,7 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
         }
 */
 
-//G4cout<<"Lund Frag #"<<LeftVector->size()<<G4endl;       // Uzhi 11.07.09
+//G4cout<<"Lund Frag # hadrons"<<LeftVector->size()<<G4endl;       // Uzhi 11.07.09
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);

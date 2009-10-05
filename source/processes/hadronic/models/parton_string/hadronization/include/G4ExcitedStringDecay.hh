@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.9 2009-08-03 13:21:25 vuzhinsk Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.10 2009-10-05 12:52:48 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -83,8 +83,9 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 //G4cout<<"Number of strings "<<theStrings->size()<<G4endl;   // Vova  
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
-//G4cout<<"String# "<<astring;  // Vova
+//G4cout<<"String# "<<astring<<" 4mom "<<theStrings->operator[](astring)->Get4Momentum()<<G4endl;  // Vova
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
+//G4cout<<"KTsum "<<KTsum<<G4endl;
 	if( !(KTsum.e()<1) && !(KTsum.e()>-1) )
 	{
           throw G4HadronicException(__FILE__, __LINE__, 
