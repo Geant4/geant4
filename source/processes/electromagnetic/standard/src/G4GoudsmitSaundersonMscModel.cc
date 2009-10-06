@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.17 2009-10-06 13:38:57 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.18 2009-10-06 13:42:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -305,10 +305,10 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
   G4double xi=0.;
   Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
 
-if (Qn1<0.001)xi = -0.5*Qn1*log(G4UniformRand());
-else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
-else
-{
+  if (Qn1<0.001)xi = -0.5*Qn1*log(G4UniformRand());
+  else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
+  else
+    {
       // procedure described by Benedito in Ref.1
       do{
 	r1=G4UniformRand();
@@ -316,7 +316,7 @@ else
 	xi = 2.*u;
 	tet=acos(1.-xi);
       }while(tet*r1*r1>sin(tet));
-}
+    }
 
   if(xi<0.)xi=0.;
   if(xi>2.)xi=2.;
