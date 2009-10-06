@@ -1,4 +1,4 @@
-$Id: History,v 1.391 2009-09-27 10:47:42 sincerti Exp $
+$Id: History,v 1.392 2009-10-06 14:49:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -72,7 +72,7 @@ committal in the CVS repository !
             are adapted to modifications in G4PhysicsVector
 
 23.07.2009, V. Ivanchenko, tag emlowen-V09-02-43
-            Fixed file names in G4ecpssrKCrossSection,
+            Fixed path to G4LEDATA in G4ecpssrKCrossSection,
             G4ecpssrLCrossSection, G4DNACrossSectionDataSet;
             removed debug cout
 
