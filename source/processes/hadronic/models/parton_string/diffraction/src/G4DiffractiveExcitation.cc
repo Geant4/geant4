@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.15 2009-10-05 12:39:16 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.16 2009-10-06 10:10:36 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -229,7 +229,7 @@ G4bool G4DiffractiveExcitation::
      G4double SlopeQuarkExchange      =theParameters->GetSlopeQuarkExchange();
      G4double DeltaProbAtQuarkExchange=theParameters->GetDeltaProbAtQuarkExchange();
 
-     G4double NucleonMass=
+//     G4double NucleonMass=
               (G4ParticleTable::GetParticleTable()->FindParticle(2112))->GetPDGMass();     
      G4double DeltaMass=
               (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
@@ -243,7 +243,7 @@ G4bool G4DiffractiveExcitation::
 
       G4int NewProjCode(0), NewTargCode(0);
 
-G4bool StandardExcitation(false); // ================================= 
+//G4bool StandardExcitation(false); // ================================= 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
 
 //  Projectile unpacking --------------------------

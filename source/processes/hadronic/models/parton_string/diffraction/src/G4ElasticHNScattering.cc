@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.10 2009-10-05 12:39:16 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.11 2009-10-06 10:10:36 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -67,9 +67,9 @@ G4bool G4ElasticHNScattering::
             return false;
            } 
 
-           G4double ProjectileRapidity = Pprojectile.rapidity();
-           G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding();
-           G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition();
+//           G4double ProjectileRapidity = Pprojectile.rapidity();
+//           G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding();
+//           G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition();
 
            G4bool PutOnMassShell(false);
 
@@ -85,11 +85,11 @@ G4bool G4ElasticHNScattering::
            G4double AveragePt2=theParameters->GetAvaragePt2ofElasticScattering();
 
 // -------------------- Target parameters ----------------------------------------------
-           G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
+//           G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
 
   	   G4LorentzVector Ptarget=target->Get4Momentum();
 //G4cout<<"Elastic T "<<Ptarget<<G4endl;
-           G4double TargetRapidity = Ptarget.rapidity();
+//           G4double TargetRapidity = Ptarget.rapidity();
 	   G4double M0target = Ptarget.mag();
 
            if(M0target < target->GetDefinition()->GetPDGMass()) 

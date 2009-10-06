@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.6 2009-09-17 18:24:30 vuzhinsk Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.7 2009-10-06 10:10:36 vuzhinsk Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
@@ -54,12 +54,14 @@ public:
    
 //   G4KineticTrackVector * Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack);
 
-      virtual void CreateStrings        (G4VSplitableHadron * aHadron, 
+      virtual void CreateStrings() const;
+/*
+                                        (G4VSplitableHadron * aHadron, 
                                          G4bool isProjectile,
                                          G4ExcitedString * FirstString, 
                                          G4ExcitedString * SecondString,
                                          G4FTFParameters *theParameters) const;
-
+*/
 private:
 
 const G4DiffractiveExcitation * theExcitation;

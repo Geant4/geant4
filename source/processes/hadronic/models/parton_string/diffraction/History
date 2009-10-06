@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2009-10-05 12:42:29 vuzhinsk Exp $
+$Id: History,v 1.20 2009-10-06 10:12:33 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+6 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-15)
+   Compilation warning are erased.
+----------------------------------------------------------
 5 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-14)
    FTFP with tuned parameters of nuclear de-excitation.
 

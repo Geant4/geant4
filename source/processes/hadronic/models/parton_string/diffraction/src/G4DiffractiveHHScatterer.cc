@@ -37,11 +37,16 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer()
   theStringFragmentation(new G4LundStringFragmentation())
 {}
 
-void G4DiffractiveHHScatterer::CreateStrings(G4VSplitableHadron * aHadron, 
+void G4DiffractiveHHScatterer::CreateStrings()
+/*
+                                             G4VSplitableHadron * aHadron, 
                                              G4bool isProjectile,
                                              G4ExcitedString * FirstString, 
                                              G4ExcitedString * SecondString,
-                                             G4FTFParameters *theParameters) const
+                                             G4FTFParameters *theParameters) 
+*/
+const
+
 {}
 
 /* -------------------------------------------------------------------
