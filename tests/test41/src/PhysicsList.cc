@@ -41,6 +41,7 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4EmConfigurator.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ProcessManager.hh"
@@ -48,6 +49,8 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+
+#include "G4UrbanMscModel2.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -89,6 +92,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   decayPhysics->ConstructProcess();
   AddMaxStep();
 }
@@ -126,6 +130,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "emstandard_msc2") {
+
+    AddPhysicsList("emstandard_opt3");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4UrbanMscModel2* msce = new G4UrbanMscModel2();
+    conf->SetExtraEmModel("e-","msc",msce);
+    G4UrbanMscModel2* mscp = new G4UrbanMscModel2();
+    conf->SetExtraEmModel("e+","msc",mscp);
 
   } else if (name == "standardSS") {
 

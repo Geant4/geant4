@@ -43,6 +43,7 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4UrbanMscModel2.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmConfigurator.hh"
 #include "G4UnitsTable.hh"
@@ -151,6 +152,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
     conf->SetExtraEmModel("e-","msc",msce);
     G4GoudsmitSaundersonMscModel* mscp = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("e+","msc",mscp);
+
+  } else if (name == "emstandard_msc2") {
+
+    AddPhysicsList("emstandard_opt3");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4UrbanMscModel2* msce = new G4UrbanMscModel2();
+    conf->SetExtraEmModel("e-","msc",msce);
+    G4UrbanMscModel2* mscp = new G4UrbanMscModel2();
     conf->SetExtraEmModel("e+","msc",mscp);
 
   } else if (name == "empenelope"){
