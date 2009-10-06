@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.16 2009-10-06 13:35:20 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.17 2009-10-06 13:38:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -198,13 +198,13 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   G4double lambdan=0.;
   G4bool mscatt=false;
   if(llambda0>0.)lambdan=atomPerVolume*tPathLength/llambda0;
-  if((lambdan<=1.0e-12)||(lambdan>1.0e+5))return;
+  if(lambdan<=1.0e-12 || lambdan>1.0e+5)return;
 
   G4double epsilon1=G4UniformRand();
   G4double expn = exp(-lambdan);
-  if((epsilon1<expn)||insideskin)// no scattering 
+  if(epsilon1<expn || insideskin)// no scattering 
     {mscatt=false;}
-  else if((epsilon1<((1.+lambdan)*expn)||(lambdan<1.))
+  else if((epsilon1<(1.+lambdan)*expn) || lambdan<1. )
     {
       mscatt=false;
       ws=G4UniformRand();
@@ -301,7 +301,7 @@ void
 G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						G4double &cost, G4double &sint)
 {
-  G4double u,Qn1,r1,tet,q1;
+  G4double u,Qn1,r1,tet;
   G4double xi=0.;
   Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
 
