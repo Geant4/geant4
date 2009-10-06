@@ -108,6 +108,7 @@ int main(int argc, char** argv) {
   G4ThreeVector aDirection = G4ThreeVector(0.0,0.0,1.0);
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
   G4int jobid = -1;
+  G4int clusterid = -1;
 
   // Control on input
 
@@ -159,6 +160,8 @@ int main(int argc, char** argv) {
   G4cout << "#GNASHTransition" << G4endl;
   G4cout << "#GEMEvaporation" << G4endl;
   G4cout << "#randomSeed" << G4endl;
+  G4cout << "#jobID" << G4endl;
+  G4cout << "#clusterID" << G4endl;
 
   G4String line, line1;
   G4bool end = true;
@@ -227,6 +230,10 @@ int main(int argc, char** argv) {
          (*fin) >> jobid ;
 	histoITEP.setJobID(jobid);
 	histoBNL.setJobID(jobid);
+      } else if ( line == "#clusterID") {
+         (*fin) >> clusterid ;
+	histoITEP.setClusterID(clusterid);
+	histoBNL.setClusterID(clusterid);
       }
     } while(end);
 

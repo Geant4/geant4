@@ -6,6 +6,8 @@
 #include "TFile.h"
 #include "TH1F.h"
 
+#include <string>
+
 class HistoBNLTest47 : public HistoTest47 {
 
 public:
@@ -22,7 +24,8 @@ private:
   void initialize();
   void book();
 
-  char                  fileName[160];
+  // char                  fileName[160];
+  std::string           fileName;
   char                  tag1Name[60], tag2Name[24], tag3Name[40];
   std::vector<TH1F*>    hiMT11, hiMT12, hiMT21, hiMT22;
   std::vector<TH1F*>    hiMT31, hiMT32, hiMT41, hiMT42;

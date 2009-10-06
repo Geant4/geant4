@@ -15,7 +15,7 @@
 
 HistoTest47::HistoTest47(std::string namePart, std::string nameMat, 
 			 G4double momentum, std::string nameGen) 
-   : jobID(-1)
+   : jobID(-1), clusterID(-1)
 {
 
   setParticle(namePart);

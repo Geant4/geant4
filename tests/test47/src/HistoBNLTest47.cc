@@ -212,7 +212,8 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     hiMT60[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
   }
 
-  TFile f(fileName, "recreate");
+  // TFile f(fileName, "recreate");
+  TFile f(fileName.c_str(), "recreate");
   for (unsigned int ii=0; ii<ymin.size(); ii++) {
     hiMT11[ii]->Write(); hiMT10[ii]->Write(); hiMT12[ii]->Write();
     hiMT21[ii]->Write(); hiMT20[ii]->Write(); hiMT22[ii]->Write();
@@ -228,6 +229,7 @@ void HistoBNLTest47::initialize() {
 
   unInitialized = false;
   G4cout << "HistoBNLTest47::initialize invoked" << G4endl;
+/*
   if ( jobID > -1 )
   {
      sprintf ( fileName, "%s%s%s%4.2fGeV-%d.root", particle.c_str(), target.c_str(),
@@ -238,11 +240,29 @@ void HistoBNLTest47::initialize() {
      sprintf ( fileName, "%s%s%s%4.2fGeV.root", particle.c_str(), target.c_str(),
 	       generator.c_str(), energy );
   }
+*/
+
+  fileName = particle + target + generator;
+  std::ostringstream tmp;
+  tmp << energy << "GeV";
+  if ( jobID > -1 )
+  {
+     tmp << "-" << jobID;
+  }
+  if ( clusterID > -1 )
+  {
+     tmp << "-" << clusterID;
+  }
+  tmp << ".root";
+  fileName += tmp.str();
+
   sprintf (tag1Name, "%s%s%s%4.1fGeV", particle.c_str(), target.c_str(),
 	   generator.c_str(), energy); 
   sprintf (tag2Name, "%s+%s", particle.c_str(), target.c_str());
   sprintf (tag3Name, "at %4.1f GeV (%s)", energy, generator.c_str());
-  G4cout << "HistoBNLTest47::fileName:" << fileName << " Tag1:" << tag1Name << " Tag2: " << tag2Name << " Tag3: " << tag3Name << G4endl;
+  // G4cout << "HistoBNLTest47::fileName:" << fileName 
+  G4cout << "HistoBNLTest47::fileName:" << fileName.c_str() 
+         << " Tag1:" << tag1Name << " Tag2: " << tag2Name << " Tag3: " << tag3Name << G4endl;
 
   book();
 }

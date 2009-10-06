@@ -23,6 +23,7 @@ public:
   void setMomentum(double momentum)      {energy = momentum; unInitialized =true;}
   void setGenerator(std::string nameGen) {generator = nameGen; unInitialized =true;}
   void setJobID( int id ) { jobID = id ; return ; }
+  void setClusterID( int id ) { clusterID = id ; return ; }
   virtual void fill(G4VParticleChange*, G4LorentzVector)=0;
   virtual void write(G4double cross_sec, G4int nevt)=0;
 
@@ -33,6 +34,7 @@ protected:
   std::string                            particle, target, generator;
   double                                 energy;
   int                                    jobID;
+  int                                    clusterID;
 
 private:
 

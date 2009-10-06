@@ -6,6 +6,8 @@
 #include "TFile.h"
 #include "TH1F.h"
 
+#include <string>
+
 class G4VParticleChange;
 
 class HistoITEPTest47 : public HistoTest47 {
@@ -24,7 +26,8 @@ private:
   void initialize();
   void book();
 
-  char                  fileName[160];
+  // char                  fileName[160];
+  std::string fileName;
   char                  tag1Name[60], tag2Name[24], tag3Name[40];
   double                dtheta, de;
   std::vector<TH1F*>    hiKE11, hiKE12, hiCT11, hiCT12;
