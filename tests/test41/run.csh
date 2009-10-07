@@ -18,7 +18,7 @@ source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
 
 setenv PHYSLIST    emstandard_msc2
 set    phys = "msc2"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& res1.out
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& res2.out
 
 setenv PHYSLIST    standardIG
 set    phys = "optG"

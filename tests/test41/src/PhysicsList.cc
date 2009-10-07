@@ -139,6 +139,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     conf->SetExtraEmModel("e-","msc",msce);
     G4UrbanMscModel2* mscp = new G4UrbanMscModel2();
     conf->SetExtraEmModel("e+","msc",mscp);
+    G4UrbanMscModel2* mscm = new G4UrbanMscModel2();
+    conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else if (name == "standardSS") {
 
