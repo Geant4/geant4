@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.13 2009-03-31 09:03:58 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.14 2009-10-07 09:12:35 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -79,7 +79,7 @@ G4Qt::G4Qt (
   argn = 0;
   args = NULL;
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_COMMON
   printf("G4Qt::G4Qt try to inited Qt\n");
 #endif
   // Check if Qt already init in another external app
@@ -92,7 +92,7 @@ G4Qt::G4Qt (
     //#endif
     SetArguments      (a_argn,a_args);
     
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_COMMON
     printf("G4Qt::G4Qt alredy inited in external \n");
 #endif
   } else {
@@ -134,13 +134,13 @@ G4Qt::G4Qt (
           SetMainInteractor (qApp);
         }
         SetArguments      (a_argn,a_args);
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_COMMON
         printf("G4Qt::G4Qt inited Qt END\n");
 #endif
       }
     }
   }
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_COMMON
   if (qApp) {
     printf("G4Qt::qApp exist\n");
   }  else {

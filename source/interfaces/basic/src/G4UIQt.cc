@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.26 2009-05-15 09:36:17 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.27 2009-10-07 09:12:35 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -141,7 +141,7 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::Initialise after main window creation\n");
 #endif
 #if QT_VERSION < 0x040000
@@ -154,7 +154,8 @@ G4UIQt::G4UIQt (
   fMainWindow->move(QPoint(50,100));
 #endif
 
-  QSplitter *splitter = new QSplitter(Qt::Vertical,fMainWindow);
+  QWidget *mainWidget = new QWidget(fMainWindow);
+  QSplitter *splitter = new QSplitter(Qt::Vertical,mainWidget);
 
   // Set layouts
 
@@ -207,7 +208,7 @@ G4UIQt::G4UIQt (
   layoutTop->addWidget(clearButton);
 
 #if QT_VERSION >= 0x040000
-  topWidget->setLayout(layoutTop);
+  //  topWidget->setLayout(layoutTop);
 #endif
 
   layoutBottom->addWidget(fCommandHistoryArea);
@@ -215,13 +216,18 @@ G4UIQt::G4UIQt (
   layoutBottom->addWidget(fCommandArea);
 #if QT_VERSION >= 0x040000
 
-  bottomWidget->setLayout(layoutBottom);
+  //  bottomWidget->setLayout(layoutBottom);
+  QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+
   splitter->addWidget(topWidget);
   splitter->addWidget(bottomWidget);
+
+  mainLayout->addWidget(splitter);
+
 #endif
 
-
-  fMainWindow->setCentralWidget(splitter);
+    fMainWindow->setCentralWidget(mainWidget);
+    //fMainWindow->setCentralWidget(splitter);
 
 #if QT_VERSION < 0x040000
 
@@ -256,11 +262,11 @@ G4UIQt::G4UIQt (
 #else
   QList<int> vals = splitter->sizes();
 #endif
-  if(vals.size()==2) {
-    vals[0] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*3/4;
-    vals[1] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*1/4;
-    splitter->setSizes(vals);
-  }
+//    if(vals.size()==2) {
+//      vals[0] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*3/4;
+//      vals[1] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*1/4;
+//      splitter->setSizes(vals);
+//    }
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 }
@@ -996,7 +1002,7 @@ G4bool G4UIQt::GetHelpChoice(
  G4int&
 )
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
 #endif
   return true;
@@ -1008,7 +1014,7 @@ G4bool G4UIQt::GetHelpChoice(
 void G4UIQt::ExitHelp(
 )
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::ExitHelp SHOULD NEVER GO HERE");
 #endif
 }
