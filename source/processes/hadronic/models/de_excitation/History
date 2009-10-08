@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 October 2009 Vladimir Ivanchenko (hadr-deex-V09-02-15)
+----------------------------------------------------------
+-  J.M.Quesada fixed old problem in G4GEMChannel - computation of
+        Coulomb barrier was not consistent with G4GEMProbability 
+
 25 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-14)
 ----------------------------------------------------------
 -  J.M.Quesada fixed G4GEMProbability and G4GEMChannel to provide 
