@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.19 2009-10-04 16:32:45 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.20 2009-10-08 17:29:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -63,12 +63,6 @@
 #include "G4NeutronHPInelasticData.hh"
 #include "G4NeutronHPFissionData.hh"
 #include "G4NeutronHPCaptureData.hh"
-
-
-G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver, const G4String& type)
-  : G4VHadronPhysics("hInelastic"),
-    htype(type),verbose(ver),wasActivated(false)
-{}
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver, 
 					     G4bool, G4bool,
