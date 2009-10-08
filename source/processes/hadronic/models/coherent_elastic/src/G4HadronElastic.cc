@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.64 2009-09-23 14:37:44 vnivanch Exp $
+// $Id: G4HadronElastic.cc,v 1.65 2009-10-08 18:56:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,6 +78,8 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 
+G4VQCrossSection* G4HadronElastic::qCManager = 0;
+
 G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
   : G4HadronicInteraction("G4HadronElastic"), hElastic(HModel)
 {
@@ -90,7 +92,7 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   lowestEnergyLimit= 1.e-6*eV;  
   plabLowLimit     = 20.0*MeV;
 
-  qCManager   = G4QElasticCrossSection::GetPointer();
+  if(!qCManager) {qCManager = G4QElasticCrossSection::GetPointer();}
   if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();

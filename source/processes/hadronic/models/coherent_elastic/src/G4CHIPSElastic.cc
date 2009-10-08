@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CHIPSElastic.cc,v 1.2 2009-09-22 16:21:46 vnivanch Exp $
+// $Id: G4CHIPSElastic.cc,v 1.3 2009-10-08 18:56:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -43,9 +43,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4QElasticCrossSection.hh"
 
+G4VQCrossSection* G4CHIPSElastic::xsManager = 0;
+
 G4CHIPSElastic::G4CHIPSElastic() : G4VHadronElastic("hElasticCHIPS")
 {
-  qCManager = G4QElasticCrossSection::GetPointer();
+  if(!xsManager) {xsManager = G4QElasticCrossSection::GetPointer();}
 }
 
 G4CHIPSElastic::~G4CHIPSElastic()
@@ -59,9 +61,9 @@ G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p,
   if(Z == 1 && N == 2) N = 1;
   else if(Z == 2 && N == 1) N = 2;
   G4int projPDG = p->GetPDGEncoding();
-  G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
+  G4double cs = xsManager->GetCrossSection(false,plab,Z,N,projPDG);
   G4double t = 0.0;
-  if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
+  if(cs > 0.0) t = xsManager->GetExchangeT(Z,N,projPDG);
   else         t = G4VHadronElastic::SampleInvariantT(p, plab, Z, A);
   return t;
 }
