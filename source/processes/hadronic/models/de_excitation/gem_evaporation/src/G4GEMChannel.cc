@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.9 2009-09-25 10:59:51 vnivanch Exp $
+// $Id: G4GEMChannel.cc,v 1.10 2009-10-08 07:55:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -35,6 +35,7 @@
 //  		-hbarc instead of hbar_Planck (BIG BUG)
 //              -quantities for initial nucleus and residual are calculated separately
 // V.Ivanchenko (September 2009) Added proper protection for unphysical final state 
+// J. M. Quesada (October 2009) fixed bug in CoulombBarrier calculation 
 
 #include "G4GEMChannel.hh"
 #include "G4PairingCorrection.hh"
@@ -118,8 +119,15 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
     {
 
       // Effective excitation energy
+      // JMQ 071009: pairing in ExEnergy should be the one of parent compound nucleus 
+      // FIXED the bug causing reported crash by VI (negative Probabilities 
+      // due to inconsistency in Coulomb barrier calculation (CoulombBarrier and -Beta 
+      // param for protons must be the same)   
+      //    G4double ExEnergy = fragment.GetExcitationEnergy() -
+      //    G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
       G4double ExEnergy = fragment.GetExcitationEnergy() -
-	G4PairingCorrection::GetInstance()->GetPairingCorrection(AResidual,ZResidual);
+	G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
+
       //G4cout << "Eexc(MeV)= " << ExEnergy/MeV << G4endl;
 
       if( ExEnergy <= 0.0) {
