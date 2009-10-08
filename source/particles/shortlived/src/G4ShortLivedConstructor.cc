@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.16 2008-09-18 08:37:27 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.17 2009-10-08 14:55:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -259,7 +259,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
    
    // anti ud0-Diquark
   particle = new G4DiQuarks(            
-   "anti_ud0_diquark",         7.2*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_ud0_diquark",         7.3*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -2101,
@@ -283,7 +283,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti sd0-Diquark
   particle = new G4DiQuarks(            
-   "anti_sd0_diquark",       108.8*MeV,       0.0*MeV,    2./3.*eplus, 
+   "anti_sd0_diquark",       108.0*MeV,       0.0*MeV,    2./3.*eplus, 
                     0,              +1,             0,          
                     1,              +1,             0,             
            "diquarks",               0,             0,        -3101,
