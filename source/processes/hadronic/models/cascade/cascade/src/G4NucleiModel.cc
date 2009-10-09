@@ -95,7 +95,6 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
       for (G4int i = 0; i < number_of_zones; i++) {
 	// G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
-
 	zone_radii.push_back(CU + AU * y);
 	ur.push_back(y);
       };
@@ -238,6 +237,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
   }; 
   nuclei_radius = zone_radii[zone_radii.size() - 1];
+
 }
 
 
@@ -476,7 +476,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
   if (path < -small) { // something wrong
     return thePartners;
 
-  } else if (std::fabs(path) < small) { // just on the bounday
+  } else if (std::fabs(path) < small) { // just on the boundary
     path = 0.0; 
 
     G4InuclElementaryParticle particle;
@@ -680,9 +680,7 @@ std::vector<G4CascadParticle>
 G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
                                     G4ElementaryParticleCollider* theElementaryParticleCollider) {
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
-  }
+  if (verboseLevel > 3) G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
   std::vector<G4CascadParticle> outgouing_cparticles;
 
@@ -696,6 +694,8 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     G4int npart = thePartners.size();
 
     if (npart == 1) { // cparticle is on the next zone entry
+      // need to go here if particle outside nucleus ?
+      //
       cparticle.propagateAlongThePath(thePartners[0].second);
       cparticle.incrementCurrentPath(thePartners[0].second);
       boundaryTransition(cparticle);
@@ -723,31 +723,66 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 
 	if (verboseLevel > 2){
 	  if (target.quasi_deutron()) 
-
 	    G4cout << " try absorption: target " << target.type() << " bullet " <<
-
-	      bullet.type() << G4endl;
+	              bullet.type() << G4endl;
 	}
 
 	G4CollisionOutput output = theElementaryParticleCollider->collide(&bullet, &target);
 
-	if (verboseLevel > 2){
-	  output.printCollisionOutput();
-	}
+	if (verboseLevel > 2) output.printCollisionOutput();
 
 	std::vector<G4InuclElementaryParticle> outgoing_particles = 
 
 	  output.getOutgoingParticles();
 
-	if (passFermi(outgoing_particles, zone)) { // interaction
+        if (passFermi(outgoing_particles, zone)) { // interaction
 	  cparticle.propagateAlongThePath(thePartners[i].second);
+          std::vector<G4double> new_position = cparticle.getPosition();
 
-	  std::vector<G4double> new_position = cparticle.getPosition();
+	  /*
+	  // find jet axis for new particles
+          G4double incidentE = cparticle.getParticle().getEnergy();
+          G4CascadeMomentum jetAxis;
+          for (G4int i = 0; i < G4int(outgoing_particles.size()); i++) {
+            for (G4int j = 1; j < 4; j++) jetAxis[j] += (outgoing_particles[i].getMomentum())[j];
+          }
 
-	  for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
-	    outgouing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
-							    new_position, zone, 0.0));
-	  no_interaction = false;
+          // Find pT wrt jet axis for each secondary
+	  */
+
+          for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
+            G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0);
+	    /*
+            G4double pathLength = temp.getPathToTheNextZone(0, nuclei_radius);
+
+	    // Get jet axis
+            G4CascadeMomentum pmom = temp.getMomentum();
+            G4double secMass = temp.getParticle().getMass();
+            G4double dot = 0.0;
+            G4double pmod = 0.0;
+            G4double jmod = 0.0;
+            for (G4int i = 1; i < 4; i++) {
+              dot += pmom[i]*jetAxis[i];
+              pmod += pmom[i]*pmom[i];
+              jmod += jetAxis[i]*jetAxis[i];
+	    }
+
+	    //            G4double sinTheta = std::sqrt(1.0 - dot*dot/pmod/jmod);
+            G4double pT2 = pmod - dot*dot/jmod;
+	    // G4cout << " mass = " << secMass << " Energy = " << incidentE << " pT = " << pT << G4endl;
+            G4double formationLength = 1.0*0.1973*incidentE/(pT2 + secMass*secMass);
+            if(formationLength > pathLength) {
+	      //              G4cout << " formation length = " << formationLength 
+	      //                     << " path length = " << pathLength << G4endl;
+              temp.propagateAlongThePath(pathLength);
+              temp.incrementCurrentPath(pathLength);
+              temp.updateZone(number_of_zones-1);
+	    }
+	    */
+            outgouing_cparticles.push_back(temp);
+          }
+
+          no_interaction = false;
 	  current_nucl1 = 0;
 	  current_nucl2 = 0;
 #ifdef CHC_CHECK
@@ -770,13 +805,11 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	    current_nucl1 = target.type();
 
 	  } else {
-	    if (verboseLevel > 2){
-	      G4cout << " good absorption " << G4endl;
-	    }
+	    if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
 
 	    current_nucl1 = (target.type() - 100) / 10;
 	    current_nucl2 = target.type() - 100 - 10 * current_nucl1;
-	  };   
+          }   
 	  
 	  if (current_nucl1 == 1) {
 	    protonNumberCurrent -= 1.0;
@@ -793,9 +826,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	  };
  
 	  break;
-	}; 
-      };
-      if (no_interaction) { // still now interactions
+        }; 
+      }  // loop over partners
+
+      if (no_interaction) { // still no interactions
 	cparticle.updatePosition(old_position); 
 	cparticle.propagateAlongThePath(thePartners[npart - 1].second);
 	cparticle.incrementCurrentPath(thePartners[npart - 1].second);
@@ -1566,14 +1600,20 @@ void G4NucleiModel::initTotalCrossSections()
    30.46, 29.0,  27.26, 25.84, 25.5, 24.5,  24.0,  23.5, 23.0,  23.0};
 
   const G4double pimPtotData[30] = {
-    0.0,   3.5,  4.0,   4.7,   6.0,   7.5,   8.3,  12.0,  14.4,  24.0,
-   44.0,  67.0, 45.06, 28.82, 28.98, 41.66, 37.32, 51.37, 35.67, 33.25,
-   31.84, 31.0, 29.32, 27.5,  26.5,  25.9,  25.5,  25.2,  25.0,  24.8};
+    6.13,  6.4,   6.67,  6.94,  7.22,  7.5,  8.3,  12.0,  14.4,  24.0,
+   46.0,  72.04, 43.02, 27.19, 27.32, 43.8, 37.08, 51.37, 34.21, 34.79,
+   32.08, 31.19, 30.32, 28.5,  27.0,  25.9, 25.5,  25.2,  25.0,  24.8};
 
+  //  const G4double pizPtotData[30] = {
+  //    0.0,   3.55,  4.65,  5.9,   7.75, 10.1,  11.8,  18.0,  27.7, 52.5,
+  //  102.0, 150.0, 102.64, 51.03, 34.94, 34.52, 32.45, 44.05, 40.2, 34.93,
+  //   32.0,  30.0,  28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0, 23.9};
+
+  // New test
   const G4double pizPtotData[30] = {
-    0.0,   3.55,  4.65,  5.9,   7.75, 10.1,  11.8,  18.0,  27.7, 52.5,
-  102.0, 150.0, 102.64, 51.03, 34.94, 34.52, 32.45, 44.05, 40.2, 34.93,
-   32.0,  30.0,  28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0, 23.9};
+    6.43,  7.18,  7.54,  8.01,  8.52,  9.13, 10.22, 14.37, 20.96, 34.73,
+   61.07, 98.23, 61.97, 32.62, 28.07, 31.37, 35.15, 40.17, 37.27, 33.49,
+   31.06, 29.52, 28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0,  23.9};
 
   const G4double kpPtotData[30] = {
    10.0,  10.34, 10.44, 10.61, 10.82, 11.09, 11.43, 11.71, 11.75, 11.8,
