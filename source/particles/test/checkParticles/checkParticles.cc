@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: checkParticles.cc,v 1.11 2009-09-15 13:26:51 kurasige Exp $
+// $Id: checkParticles.cc,v 1.12 2009-10-09 14:31:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@
 
 void CheckMass(const char*);
 void CheckWidth(const char*);
+
+const double ALLOWANCE = 1.0e-5;
 
 int main(int argc,char** argv) {
   // PDG computer-readble file for particle properties
@@ -117,7 +119,7 @@ void CheckMass(const char* inputString)
     return;
   } 
  
-  if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-4 ) {
+  if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > ALLOWANCE ) {
 	G4cout << "Mass is inconsistent for " << particle->GetParticleName();
     G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
     G4cout <<  encoding << " " << mass <<  " ";
@@ -134,7 +136,7 @@ void CheckMass(const char* inputString)
       G4cout << " for " << name << G4endl;
       return;
     } 
-    if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-3 ) {
+    if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > ALLOWANCE ) {
 	  G4cout << "Mass is inconsistent for " << particle->GetParticleName();
       G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
       G4cout <<  encoding << " " << mass <<  " ";
@@ -168,7 +170,7 @@ void CheckWidth(const char* inputString)
     return;
   } 
  
-  if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-3 ) {
+  if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > ALLOWANCE ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
     G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
     G4cout <<  encoding << " " << width <<  " ";
@@ -185,10 +187,10 @@ void CheckWidth(const char* inputString)
       G4cout << " for " << name << G4endl;
       return;
     } 
-   if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-4 ) {
+   if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > ALLOWANCE ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
-    G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
-    G4cout <<  encoding << " " << width <<  " ";
+	G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
+	G4cout <<  encoding << " " << width <<  " ";
 	G4cout << widthRange <<  " " << name << G4endl;
   }
  }
