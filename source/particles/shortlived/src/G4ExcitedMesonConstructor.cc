@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.20 2008-09-18 08:37:27 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.21 2009-10-09 14:34:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1399,9 +1399,9 @@ const char* G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMultiple
 
 const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] = 
 {
-  {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.273*GeV },
+  {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.272*GeV },
   {   1.474*GeV, 1.350*GeV,       0.0, 1.420*GeV,  1.420*GeV },
-  {   1.230*GeV,1.2818*GeV,1.4263*GeV, 1.403*GeV,  1.403*GeV },
+  {   1.230*GeV,1.2818*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
   {  1.3183*GeV,1.2751*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
   {  1.6724*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
   {   1.720*GeV, 1.670*GeV,       0.0, 1.717*GeV,  1.717*GeV },

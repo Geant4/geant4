@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.17 2009-10-08 14:55:19 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.18 2009-10-09 14:34:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -674,7 +674,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // rho0
   particle = new G4ExcitedMesons(            
-               "rho0",       775.5*MeV,     149.4*MeV,         0.0, 
+               "rho0",       775.49*MeV,    149.4*MeV,         0.0, 
                     2,              -1,            -1,          
                     2,               0,            +1,             
               "meson",               0,             0,         113,
@@ -868,7 +868,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // k_star+
   particle = new G4ExcitedMesons(            
-	    "k_star+",       891.6*MeV,      50.8*MeV,    +1.0*eplus, 
+	    "k_star+",       891.66*MeV,     50.8*MeV,    +1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,           323,
@@ -893,7 +893,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // k_star0
   particle = new G4ExcitedMesons(            
-	    "k_star0",       896.0*MeV,      50.3*MeV,     0.0*eplus, 
+	    "k_star0",       896.00*MeV,     50.3*MeV,     0.0*eplus, 
                     2,              -1,             0,          
                     1,              -1,             0,             
               "meson",               0,             0,           313,
@@ -918,7 +918,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // k_star-
   particle = new G4ExcitedMesons(            
-            "k_star-",       891.6*MeV,      50.8*MeV,    -1.0*eplus, 
+            "k_star-",       891.66*MeV,     50.8*MeV,    -1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,          -323,

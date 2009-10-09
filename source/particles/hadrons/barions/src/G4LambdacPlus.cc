@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LambdacPlus.cc,v 1.15 2008-09-18 08:37:27 kurasige Exp $
+// $Id: G4LambdacPlus.cc,v 1.16 2009-10-09 14:34:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
