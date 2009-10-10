@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.35 2009-08-04 17:10:58 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.36 2009-10-10 15:16:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -112,10 +112,10 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
 
-    ScreenRSquare[0] = 2*alpha2*a0*a0;
+    ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 2.0*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 

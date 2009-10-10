@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.76 2009-10-04 18:05:38 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.77 2009-10-10 15:16:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,10 +108,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
 
-    ScreenRSquare[0] = 2.*alpha2*a0*a0;
+    ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; j++) {
       G4double x = a0*fNistManager->GetZ13(j);
-      ScreenRSquare[j] = 2.*alpha2*x*x;
+      ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
       FormFactor[j] = constn*x*x;
     } 
@@ -358,8 +358,10 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
     grej = 1.0/(1.0 + formf*z1);
   } while ( G4UniformRand() > grej*grej );  
 
-  if(G4UniformRand() > (1. - z1*0.5)/(1.0 + z1*sqrt(mom2)/targetMass)) {
-    return 2.0;
+  if(mass > MeV) {
+    if(G4UniformRand() > (1. - z1*0.5)/(1.0 + z1*sqrt(mom2)/targetMass)) {
+      return 2.0;
+    }
   }
   //G4cout << "z= " << z1 << " cross= " << nucXSection/barn 
   // << " crossE= " << elecXSection/barn << G4endl;
