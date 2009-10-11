@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eWeMoHardScatModel.hh,v 1.1 2009-07-31 15:31:32 grichine Exp $
+// $Id: G4eWeMoHardScatModel.hh,v 1.2 2009-10-11 12:00:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,9 +48,9 @@
 // NIM B73(1993)447 originated from G.Wentzel Z.Phys. 40(1927)590 with 
 // screening parameter from H.A.Bethe Phys. Rev. 89 (1953) 1256.
 // 
-
-// -------------------------------------------------------------------
 //
+// 
+//////////////////////////////////////////////////////////////////////
 
 #ifndef G4eWeMoHardScatModel_h
 #define G4eWeMoHardScatModel_h 1
@@ -198,12 +198,12 @@ void G4eWeMoHardScatModel::SetupParticle(const G4ParticleDefinition* p)
 
   if(p != fParticle) 
   {
-    fParticle = p;
-    fMass = fParticle->GetPDGMass();
-    fSpin = fParticle->GetPDGSpin();
-    G4double q = fParticle->GetPDGCharge()/eplus;
+    fParticle     = p;
+    fMass         = fParticle->GetPDGMass();
+    fSpin         = fParticle->GetPDGSpin();
+    G4double q    = fParticle->GetPDGCharge()/eplus;
     fChargeSquare = q*q;
-    fTkin = 0.0;
+    fTkin         = 0.0;
   }
 }
 
@@ -214,9 +214,9 @@ inline void G4eWeMoHardScatModel::SetupKinematic( G4double ekin,
 {
   if(ekin != fTkin || feCut != cut) 
   {
-    fTkin = ekin;
-    fMom2 = fTkin*(fTkin + 2.0*fMass);
-    fInvBeta2 = 1.0 +  fMass*fMass/fMom2;
+    fTkin         = ekin;
+    fMom2         = fTkin*(fTkin + 2.0*fMass);
+    fInvBeta2     = 1.0 +  fMass*fMass/fMom2;
     fCosTetMinNuc = fCosThetaMin;
     fCosTetMaxNuc = fCosThetaMax;
 
@@ -251,14 +251,14 @@ inline void G4eWeMoHardScatModel::SetupTarget(G4double Z, G4double e)
     //    kinFactor /= (x*x);
     // }
 
-    if(fiz > 1) fScreenZ *= (1.13 + 3.76*Z*Z*fInvBeta2*fAlpha2);
+    if( fiz > 1 ) fScreenZ *= (1.13 + 3.76*Z*Z*fInvBeta2*fAlpha2);
 
       //    screenZ *=(1.13 + std::min(0.5,3.76*Z*Z*invbeta2*alpha2));
 
     fFormFactA = fFormFactor[fiz]*fMom2;
     fCosTetMaxNuc2 = fCosTetMaxNuc;
 
-    if(1 == fiz && fParticle == theProton && fCosTetMaxNuc2 < 0.0) 
+    if( 1 == fiz && fParticle == theProton && fCosTetMaxNuc2 < 0.0 ) 
     {
       fCosTetMaxNuc2 = 0.0;
     }
