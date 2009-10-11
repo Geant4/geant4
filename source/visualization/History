@@ -1,4 +1,4 @@
-$Id: History,v 1.448 2009-10-10 14:32:12 allison Exp $
+$Id: History,v 1.449 2009-10-11 05:19:11 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th October 2009 Joseph Perl (vis-V09-02-06)
+- new global tag for vis, in preparation for  addition of gMocren file driver
 
 10th October 2009  John Allison
 - modeling-V09-02-03: Added G4PhysicalVolumeModelTouchable.  Used in
