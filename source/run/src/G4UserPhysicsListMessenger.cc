@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.28 2007-05-30 10:34:54 gcosmo Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.29 2009-10-11 14:00:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,17 +67,6 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=3");
-
-  // /run/particle/setCut command
-  setPCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
-  setPCutCmd->SetGuidance("Set default cut value ");
-  setPCutCmd->SetGuidance("This command is equivallent to /run/setCut command.");
-  setPCutCmd->SetGuidance("This command is kept for backward compatibility.");
-  setPCutCmd->SetParameterName("cut",false);
-  setPCutCmd->SetDefaultValue(1.0);
-  setPCutCmd->SetRange("cut >0.0");
-  setPCutCmd->SetDefaultUnit("mm");
-  setPCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   // /run/setCut command
   setCutCmd = new G4UIcmdWithADoubleAndUnit("/run/setCut",this);
@@ -87,6 +76,22 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   setCutCmd->SetRange("cut >0.0");
   setCutCmd->SetDefaultUnit("mm");
   setCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  // /run/setCutForAGivenParticle command
+  setCutForAGivenParticleCmd = new G4UIcommand("/run/setCutForAGivenParticle",this) ;
+  setCutForAGivenParticleCmd->SetGuidance("Set a cut value to a specific particle") ;
+  setCutForAGivenParticleCmd->SetGuidance("Usage: /run/setCutForAGivenParticle  gamma  1. mm") ;
+  param = new G4UIparameter("particleName",'s',false) ;
+  param->SetParameterCandidates("e- e+ gamma proton");
+  setCutForAGivenParticleCmd->SetParameter(param) ;
+  param = new G4UIparameter("cut",'d',false) ;
+  param->SetDefaultValue("1.") ;
+  param->SetParameterRange("cut>0.0") ;
+  setCutForAGivenParticleCmd->SetParameter(param) ;
+  param = new G4UIparameter("unit",'s',false) ;
+  param->SetDefaultValue("mm") ;
+  setCutForAGivenParticleCmd->SetParameter(param) ;
+  setCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // /run/setCutForRegion command
   setCutRCmd = new G4UIcommand("/run/setCutForRegion",this);
@@ -184,9 +189,9 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
-  delete setPCutCmd; 
   delete setCutCmd; 
-  delete setCutRCmd; 
+  delete setCutRCmd;
+  delete setCutForAGivenParticleCmd;
   delete verboseCmd;
   delete dumpListCmd;
   delete addProcManCmd;
@@ -201,17 +206,18 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==setCutCmd || command==setPCutCmd ){
+  if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
     thePhysicsList->SetCutsWithDefault();
 
+  } else if( command==setCutForAGivenParticleCmd ){
+    G4String particleName, unit ; G4double cut ;
+    std::istringstream str (newValue) ;
+    str >> particleName >> cut >> unit ;
+    thePhysicsList->SetCutValue(cut*G4UIcommand::ValueOf(unit), particleName) ; 
+
   } else if( command==setCutRCmd ){
-    //G4Tokenizer next( newValue );
-    //G4String rName = G4String(next());
-    //G4String cValue = G4String(next())+" "+G4String(next());
-    //G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
-    //thePhysicsList->SetCutsForRegion(newCut,rName);
     std::istringstream is(newValue);
     char regName[50];
     G4double cVal;
@@ -280,7 +286,7 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
   G4String candidates("none");
   G4ParticleTable::G4PTblDicIterator *piter = (G4ParticleTable::GetParticleTable())->GetIterator();
   
-  if( command==setCutCmd || command==setPCutCmd ){
+  if( command==setCutCmd ) {
     cv = setCutCmd->ConvertToString( thePhysicsList->GetDefaultCutValue(), "mm" );
     
   } else if( command==verboseCmd ){
