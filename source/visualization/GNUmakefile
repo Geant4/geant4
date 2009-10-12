@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.23 2009-03-05 11:32:07 lgarnier Exp $
+# $Id: GNUmakefile,v 1.24 2009-10-12 10:28:38 akimura Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -45,6 +45,8 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4Tree
   SUBDIRS += XXX
   SUBLIBS += G4visXXX
+  SUBDIRS += gMocren
+  SUBLIBS += G4GMocren
 
 ifdef G4VIS_BUILD_OPENGL_DRIVER
   SUBDIRS += externals/gl2ps
