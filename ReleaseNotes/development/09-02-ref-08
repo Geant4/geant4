@@ -61,7 +61,7 @@ particles                                        particles-V09-02-09
   encoding for proton in G4IonTable.
 - Removed obsolete class G4NucleiPropertiesTable.
 
-processes/electromagnetic/lowenergy              emlowen-V09-02-45
+processes/electromagnetic/lowenergy              emlowen-V09-02-51
 -----------------------------------
 - Extended high energy coverage of proton ionisation (G4DNABornIonisationModel)
   and excitation (G4DNABornExcitationModel). Decreased temporarily high energy
@@ -143,7 +143,7 @@ data sets
   o Extended high energy coverage of proton excitation and ionization
   o Improved precision of e- ionisation Born model.
 
-examples                                         examples-V09-02-07
+examples                                         examples-V09-02-08
 --------
 - Updated reference outputs.
 - advanced/amsEcal (amsEcal-V09-02-10)
@@ -156,7 +156,7 @@ examples                                         examples-V09-02-07
 - extended/hadronic/Hadr01 (exhadr01-V09-02-02)
   o Added histograms on energy depositions: total/electromagnetic, pion/proton.
 
-tests                                            tests-V09-02-07
+tests                                            tests-V09-02-08
 -----
 - Updated reference outputs and tools.
 - test12 (test12-V09-02-05)
