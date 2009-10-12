@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.112 2009-09-25 15:24:38 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.113 2009-10-12 08:03:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -61,7 +61,7 @@ G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8
 G4double G4QNucleus::WoodSaxonSurf=.545*fermi; // WoodSaxon Surface Param (0.545 fm) (Body)
 
 G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), maxClust(0),
-                          probVect(),theNucleons(),currentNucleon(-1),
+                          theNucleons(),currentNucleon(-1),
                           rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
@@ -74,7 +74,7 @@ G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), ma
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4QHadron(90000000+s*1000000+z*1000+n), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
-  probVect(), theNucleons(), currentNucleon(-1), rho0(1.), radius(),
+  theNucleons(), currentNucleon(-1), rho0(1.), radius(),
   Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
@@ -105,7 +105,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
 }
 
 G4QNucleus::G4QNucleus(G4int nucPDG):
-  G4QHadron(nucPDG), maxClust(0), probVect(), theNucleons(),
+  G4QHadron(nucPDG), maxClust(0), theNucleons(),
   currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   InitByPDG(nucPDG);
@@ -118,7 +118,7 @@ G4QNucleus::G4QNucleus(G4int nucPDG):
 }
 
 G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
-  G4QHadron(nucPDG, p), maxClust(0), probVect(), theNucleons(),
+  G4QHadron(nucPDG, p), maxClust(0), theNucleons(),
   currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   InitByPDG(nucPDG);
@@ -131,7 +131,7 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QHadron(90000000+s*1000000+z*1000+n,p), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
-  probVect(), theNucleons(), currentNucleon(-1), rho0(1.),radius(1.),
+  theNucleons(), currentNucleon(-1), rho0(1.),radius(1.),
   Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
@@ -150,9 +150,8 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC):
-  G4QHadron(nucQC), dZ(0), dN(0), dS(0), maxClust(0), probVect(),
-  theNucleons(), currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false),
-  RhoActive(false)
+  G4QHadron(nucQC), dZ(0), dN(0), dS(0), maxClust(0), theNucleons(), currentNucleon(-1),
+  rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
 #ifdef debug
@@ -199,9 +198,8 @@ G4QNucleus::G4QNucleus(G4QContent nucQC):
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):
-  G4QHadron(nucQC,p), dZ(0), dN(0), dS(0), maxClust(0), probVect(),
-  theNucleons(), currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false),
-  RhoActive(false)
+  G4QHadron(nucQC,p), dZ(0), dN(0), dS(0), maxClust(0), theNucleons(), currentNucleon(-1),
+  rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
