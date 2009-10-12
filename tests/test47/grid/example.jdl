@@ -1,0 +1,31 @@
+
+universe = grid
+
+type = gt2
+globusscheduler = fngp-osg.fnal.gov/jobmanager-condor
+
+executable = ./test47_itep_grid.csh
+
+transfer_output = true
+transfer_error = true
+transfer_executable = true
+
+environment = "ClusterProcess=$(Cluster)-$(Process)"
+
+log = test47_itep_grid.log.$(Cluster).$(Process)
+
+notification = NEVER
+
+output = test47_itep_grid.out.$(Cluster).$(Process)
+error = test47_itep_grid.err.$(Cluster).$(Process)
+stream_output = false
+stream_error = false
+
+ShouldTransferFiles = YES
+WhenToTransferOutput = ON_EXIT
+
+globusrsl = (jobtype=single)(maxwalltime=999)
+
+Arguments = proton 5000 C 100000 $(Process) $(Cluster)
+queue 10
+
