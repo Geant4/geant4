@@ -263,7 +263,7 @@ examples                                         examples-V09-02-09
 tests                                            tests-V09-02-09
 -----
 - Updated reference outputs and tools.
-- test19 (test19-V09-02-03)
+- test19 (test19-V09-02-07)
   o Added inelastic cross-sections and low-energy test.
   o More detailed check of quantum numbers.
   o Now handling also ion-ion inelastic tests.
