@@ -1,16 +1,27 @@
 #!/bin/tcsh -f
 
+source g4setup_grid.csh
+
 set lists = ( "lepar" "bertini" "binary" "ftfp" "qgsc" )
 
-# I think we need to provide defaults...
+# defaults...
+set Beam = ( "proton" )
+set Energy = ( 1400 )
+set Target = ( "C" )
+set NEvents = ( 10000 )
+set JobID = ( -1 )
+set ClusterID = ( -1 )
 
+
+# settings
+if ( $#argv > 0 ) then 
 set Beam = $1
 set Energy = $2
 set Target = $3
 set NEvents = $4
 set JobID = $5
 set ClusterID = $6
-
+endif
 cat > ITEP.$Beam.$Energy.$Target.$JobID.$ClusterID <<EOF
 #verbose
 0
