@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.35 2008-03-23 14:32:13 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.36 2009-10-12 02:58:04 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,6 +62,12 @@ void G4VScoringMesh::ResetScore() {
 void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
   sizeIsSet = true;
+}
+G4ThreeVector G4VScoringMesh::GetSize() {
+  if(sizeIsSet)
+    return G4ThreeVector(fSize[0], fSize[1], fSize[2]);
+  else
+    return G4ThreeVector(0., 0., 0.);
 }
 void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
