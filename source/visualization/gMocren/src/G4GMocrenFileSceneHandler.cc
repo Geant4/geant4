@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.3 2009-10-12 10:24:23 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4HitsModel.hh"
 #include "G4GMocrenMessenger.hh"
-#include "G4ScoringHitsModel.hh"
+#include "G4GMocrenPSHitsModel.hh"
 #include "G4GMocrenIO.hh"
 #include "G4VNestedParameterisation.hh"
 #include "G4GMocrenTouchable.hh"
@@ -475,7 +475,7 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 
 
       G4Scene * scene = GetScene();
-      scene->AddEndOfEventModel(new G4ScoringHitsModel());
+      scene->AddEndOfEventModel(new G4GMocrenPSHitsModel());
       scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
 	std::vector<G4VModel*> vmodel = scene->GetEndOfEventModelList();

@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringHitsModel.hh,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenPSHitsModel.hh,v 1.1 2009-10-12 10:24:23 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 // Model which knows how to draw GEANT4 scorers.
 //
@@ -40,23 +40,23 @@
 
 class G4VHit;
 
-class G4ScoringHitsModel: public G4VModel {
+class G4GMocrenPSHitsModel: public G4VModel {
 
 public: // With description
 
-  G4ScoringHitsModel ();
+  G4GMocrenPSHitsModel ();
    
-  virtual ~G4ScoringHitsModel ();
+  virtual ~G4GMocrenPSHitsModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
   const G4VHit* GetCurrentHit() const
-  {return fpCurrentHit;}
+  {return kpCurrentHit;}
 
 private:
 
-  const G4VHit* fpCurrentHit;
+  const G4VHit* kpCurrentHit;
 };
 
 #endif

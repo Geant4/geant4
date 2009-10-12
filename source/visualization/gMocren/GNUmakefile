@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2009-04-01 13:16:11 akimura Exp $
+# $Id: GNUmakefile,v 1.2 2009-10-12 10:24:23 akimura Exp $
 
 name := G4GMocren
 
@@ -26,13 +26,18 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
+
+CPPFLAGS += -I$(G4BASE)/geometry/navigation/include/
+
 CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
-CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/utils/include
+
+#CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
 
 
 #CPPFLAGS += -DG4GMocrenFileDEBUG
