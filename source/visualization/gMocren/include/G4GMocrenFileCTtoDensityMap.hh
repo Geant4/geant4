@@ -24,48 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// $Id: G4GMocrenFileCTtoDensityMap.hh,v 1.1 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver
+// Created:  Oct. 12, 2009  Akinori Kimura  
 //
-// GMocrenFile viewer - opens window, hard copy, etc.
+// mapping data of  CT values [H.U.] to densities [g/cm3]
 //
-#ifndef G4GMocrenFile_VIEWER_HH
-#define G4GMocrenFile_VIEWER_HH
+#ifndef G4GMocrenFile_CTtoDensity_MAP_HH
+#define G4GMocrenFile_CTtoDensity_MAP_HH
 
-#include "G4VViewer.hh"
 #include "globals.hh"
 
-class G4GMocrenFileSceneHandler;
-class G4GMocrenMessenger;
-
-class G4GMocrenFileViewer: public G4VViewer {
+class G4GMocrenFileCTtoDensityMap {
 public:
-  //----- constructor and destructor
-  G4GMocrenFileViewer  (G4GMocrenFileSceneHandler& scene, 
-			G4GMocrenMessenger & messenger,
-			const G4String& name = "");
-  virtual ~G4GMocrenFileViewer ();
+  G4GMocrenFileCTtoDensityMap();
+  ~G4GMocrenFileCTtoDensityMap();
 
-  //----- overriding base class methods
-  void SetView(); // Do nothing. SendViewParameters will do its job. 
-  void ClearView();
-  void DrawView();
-  void ShowView();
+  // get min. CT value
+  G4int GetMinCT() const {return kCTMinMax[0];}
+  // get max. CT value
+  G4int GetMaxCT() const {return kCTMinMax[1];}
+  // get density corresponding to CT value
+  G4double GetDensity(G4int & _ct) const;
 
-  //---- methods inherent to this class
-  const char* GetG4GddViewer() { return kG4GddViewer;}
-  const char* GetG4GddViewerInvocation() { return kG4GddViewerInvocation;}
-
-private:
-  G4GMocrenFileSceneHandler& kSceneHandler; // Reference to Graphics Scene for this view.
-  G4GMocrenMessenger & kMessenger;
-
-  char  kG4GddViewer[32] ;
-  char  kG4GddViewerInvocation[64] ;
-
+protected:
+  G4int kCTMinMax[2];
+  G4double * kDensity;
+  G4int kSize;
 };
-
 #endif

@@ -24,18 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.cc,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenFileViewer.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 
 
 #define __G_ANSI_C__
 #define G4GMocrenFile_STRUCTURE_PRIORITY  1.
-
-// #define DEBUG_FR_VIEW
 
 #include "G4ios.hh"
 #include <cstdio>
@@ -48,7 +46,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 
-#include "G4FRConst.hh"
 #include "G4GMocrenFile.hh"
 #include "G4GMocrenFileSceneHandler.hh"
 #include "G4GMocrenFileViewer.hh"
@@ -56,32 +53,33 @@
 
 
 //----- constants
-const char  FR_ENV_MULTI_WINDOW [] = "G4DAWN_MULTI_WINDOW" ;
-const char  FR_ENV_MULTI_WINDOW2[] = "G4GMocrenFile_MULTI_WINDOW" ;
+
+//-- for a debugging
+const bool GFDEBUG = false;
 
 //----- G4GMocrenFileViewer, constructor
 G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandler,
 					  G4GMocrenMessenger & messenger,
 					  const G4String& name)
   : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
-    fSceneHandler (sceneHandler),
-    fMessenger(messenger)
+    kSceneHandler (sceneHandler),
+    kMessenger(messenger)
 {
   // Set a g4.gdd-file viewer 
-  std::strcpy( fG4GddViewer, "gMocren" ); 
+  std::strcpy( kG4GddViewer, "gMocren" ); 
   if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
-    std::strcpy( fG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;			
+    std::strcpy( kG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;			
   } 
 
   // string for viewer invocation
-  if ( !std::strcmp( fG4GddViewer, "NONE" ) ) {
+  if ( !std::strcmp( kG4GddViewer, "NONE" ) ) {
 		
-    std::strcpy( fG4GddViewerInvocation, "" );
+    std::strcpy( kG4GddViewerInvocation, "" );
   } else {
 
-    std::strcpy( fG4GddViewerInvocation, fG4GddViewer );
-    std::strcat( fG4GddViewerInvocation, " ");
-    std::strcat( fG4GddViewerInvocation, fSceneHandler.GetGddFileName() );
+    std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
+    std::strcat( kG4GddViewerInvocation, " ");
+    std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
   }
 
 }
@@ -93,9 +91,9 @@ G4GMocrenFileViewer::~G4GMocrenFileViewer ()
 //----- G4GMocrenFileViewer::SetView () 
 void G4GMocrenFileViewer::SetView () 
 {
-#if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
-#endif 
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
+
   // Do nothing, since DAWN is running as a different process.
   // SendViewParameters () will do this job instead.
 }
@@ -105,16 +103,15 @@ void G4GMocrenFileViewer::SetView ()
 void
 G4GMocrenFileViewer::ClearView( void )
 {
-#if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
-#endif
-  if (fSceneHandler.fGddDest.IsOpen()) {
-    fSceneHandler.fGddDest.Close();
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
+
+  if(kSceneHandler.kGddDest) {
+    kSceneHandler.kGddDest.close();
     // Re-open with same filename...
-    fSceneHandler.fGddDest.Open(fSceneHandler.fGddFileName);
-    //fSceneHandler.SendStr( FR_G4_GDD_HEADER );
-    fSceneHandler.FRflag_in_modeling = false;
-    fSceneHandler.FRBeginModeling();
+    kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
+    kSceneHandler.kFlagInModeling = false;
+    kSceneHandler.GFBeginModeling();
   }
 }
 
@@ -122,11 +119,11 @@ G4GMocrenFileViewer::ClearView( void )
 //----- G4GMocrenFileViewer::DrawView () 
 void G4GMocrenFileViewer::DrawView () 
 {
-#if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
-#endif
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
+
   //----- 
-  fSceneHandler.FRBeginModeling() ;
+  kSceneHandler.GFBeginModeling() ;
 
   //----- Always visit G4 kernel 
   NeedKernelVisit ();
@@ -141,54 +138,30 @@ void G4GMocrenFileViewer::DrawView ()
 //----- G4GMocrenFileViewer::ShowView()
 void G4GMocrenFileViewer::ShowView( void )
 {
-#if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
-#endif
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
 
-  if( fSceneHandler.FRIsInModeling() ) 
+  if( kSceneHandler.GFIsInModeling() ) 
     {
       //----- End of modeling
       // !EndModeling, !DrawAll, !CloseDevice,
       // close g4.gdd
-      fSceneHandler.FREndModeling();
+      kSceneHandler.GFEndModeling();
 
       //----- Output DAWN GUI file 
       //SendViewParameters(); 
 
       //----- string for viewer invocation
-      if ( !strcmp( fG4GddViewer, "NONE" ) ) {
+      if ( !strcmp( kG4GddViewer, "NONE" ) ) {
 		
-	std::strcpy( fG4GddViewerInvocation, "" );
+	std::strcpy( kG4GddViewerInvocation, "" );
       } else {
 
-	std::strcpy( fG4GddViewerInvocation, fG4GddViewer );
-	std::strcat( fG4GddViewerInvocation, " ");
-	std::strcat( fG4GddViewerInvocation, fSceneHandler.GetGddFileName() );
+	std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
+	std::strcat( kG4GddViewerInvocation, " ");
+	std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
       }
 
-
-      //----- Invoke DAWN
-      /*
-	G4cout << G4endl ;
-	if( false == G4FRofstream::DoesFileExist( fSceneHandler.GetG4PrimFileName() ) )   
-	{
-	G4cout << "ERROR: Failed to generate file  ";
-	G4cout << fSceneHandler.GetG4PrimFileName() << G4endl;
-
-	} else 	if( strcmp( GetG4PrimViewerInvocation(), "" ) )  
-	{
-	G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
-	G4cout << "  is generated." << G4endl;
-	G4cout << GetG4PrimViewerInvocation() << G4endl;
-	system( GetG4PrimViewerInvocation() );
-
-	} else { // no view, i.e., only file generation
-	G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 
-	G4cout << "  is generated." << G4endl;
-	G4cout << "No viewer is invoked." << G4endl;
-	}
-
-      */
     }
 
 } // G4GMocrenFileViewer::ShowView()

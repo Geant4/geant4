@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 // Scene handler to export geometry and trajectories to a gMocren file.
 //
@@ -39,8 +39,7 @@
 
 #include "G4VSceneHandler.hh"
 
-#include "G4FRofstream.hh"
-#include "G4FRConst.hh"
+#include <fstream>
 
 #include "G4THitsMap.hh"
 
@@ -52,7 +51,7 @@ class G4VSolid;
 class G4Polyhedron;
 class G4Colour;
 
-	//-----
+//-----
 class G4GMocrenFileSceneHandler: public G4VSceneHandler {
 
   friend class G4GMocrenFileViewer;
@@ -109,45 +108,45 @@ public:
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
   //----- public methods inherent to this class
-  void         FRBeginModeling () ;
-  void         FREndModeling   () ;
-  G4bool       FRIsInModeling  () { return FRflag_in_modeling ; }
+  void         GFBeginModeling () ;
+  void         GFEndModeling   () ;
+  G4bool       GFIsInModeling  () { return kFlagInModeling ; }
 
-  G4bool IsSavingGdd   ( void ) { return flag_saving_g4_gdd ;	}
+  G4bool IsSavingGdd   ( void ) { return kFlagSaving_g4_gdd ;	}
   void	BeginSavingGdd( void ); 
   void	EndSavingGdd  ( void ) ;
   void	SetGddFileName() ;
 
-  G4GMocrenFile&  GetSystem   () { return fSystem   ; }
-  const char*  GetGddFileName () { return fGddFileName ; }
+  G4GMocrenFile&  GetSystem   () { return kSystem   ; }
+  const char*  GetGddFileName () { return kGddFileName ; }
 
 
 private:
 
-  //----- Utilities etc (common to DAWN and GMocrenFile drivers )
-  G4bool    IsVisible     ( void ) ;
+  //----- Utilities etc.
+  G4bool IsVisible();
 
   //
   void AddDetector(const G4VSolid & solid);
   void ExtractDetector();
 
+  void GetNestedVolumeIndex(G4int, G4int[3]);
+
 private:
-  G4GMocrenFile&	fSystem;     // Graphics system for this scene.
-  G4GMocrenMessenger & fMessenger;
-  G4GMocrenIO * fgMocrenIO;
+  G4GMocrenFile&	kSystem;     // Graphics system for this scene.
+  G4GMocrenMessenger & kMessenger;
+  G4GMocrenIO * kgMocrenIO;
 
-  std::map<G4int, float> fModality;
-  short fCTMapMinMax[2];
-  std::vector<float> fCTMap;
-  G4int fModalitySize[3];
-  //std::map<G4ThreeVector, float> fModalityDensities; // key: position, val: density
-  G4bool fbSetModalityVoxelSize;
-  G4bool fbModelingTrajectory;
+  std::map<G4int, float> kModality;
+  G4int kModalitySize[3];
+  //std::map<G4ThreeVector, float> kModalityDensities; // key: position, val: density
+  G4bool kbSetModalityVoxelSize;
+  G4bool kbModelingTrajectory;
 
-  static G4int	fSceneIdCount;
+  static G4int	kSceneIdCount;
   //std::vector<float *> fTrajectories;
   //std::vector<unsigned char *> fTrajectoryColors;
-  G4Transform3D fVolumeTrans3D;
+  G4Transform3D kVolumeTrans3D;
 
   class Detector {
   public:
@@ -159,11 +158,12 @@ private:
     ~Detector();
     void clear();
   };
-  std::vector<Detector> fDetectors;
-  G4ThreeVector fVolMinPosition, fVolMaxPosition;
-  G4ThreeVector fVolumeSize;
-  G4ThreeVector fVoxelDimension;
-  std::vector<G4String> fNestedVolumeNames;
+  std::vector<Detector> kDetectors;
+  G4ThreeVector kVolumeSize;
+  G4ThreeVector kVoxelDimension;
+  std::vector<G4String> kNestedVolumeNames;
+  G4int kNestedVolumeDimension[3];
+  G4int kNestedVolumeDirAxis[3];
 
   class Index3D{
   public:
@@ -174,31 +174,33 @@ private:
     G4bool operator < (const Index3D & _right) const;
     G4bool operator == (const Index3D & _right) const;
   };
-  std::map<Index3D, float> fNestedModality;
-  std::map<Index3D, G4double> * fTempNestedHits;
-  std::map<G4String, std::map<Index3D, G4double> > fNestedHitsList;
-  //std::map<G4String, G4String> fNestedHitsUnit;
 
-  G4FRofstream	fGddDest    ;  // defined here
-  G4bool	FRflag_in_modeling ;	
-		// true:  FR_BEGIN_MODELING has sent to DAWN, and
-		//        FR_END_MODELING   has not sent yet.
+  std::map<Index3D, float> kNestedModality;
+  std::map<Index3D, G4double> * fTempNestedHits;
+  std::map<G4String, std::map<Index3D, G4double> > kNestedHitsList;
+  //std::map<G4String, G4String> kNestedHitsUnit;
+
+  std::ofstream	kGddDest;  // defined here
+  G4bool kFlagInModeling;	
+		// true:  GF_BEGIN_MODELING has sent to gMocrenFile, and
+		//        GF_END_MODELING   has not sent yet.
 		// false:  otherwise
 		// 
-		// FRflag_in_modeling is set to "true"
-		// in FRBeginModeling(), and to "false" 
-		// in FREndModeling().
+		// kFlagInModeling is set to "true"
+		// in GFBeginModeling(), and to "false" 
+		// in GFEndModeling().
 
-  G4bool	flag_saving_g4_gdd ;	
+  G4bool kFlagSaving_g4_gdd ;	
 
-  const int	COMMAND_BUF_SIZE    ;
+  G4int kFlagParameterization; // 0: G4VNestedParameterisation based geometry
+                               // 1: G4PhantomParameterisation
+                               // 2: interactive scorer
+  G4bool kFLagProcessedInteractiveScorer;
 
-  char		fGddDestDir [256] ; 
-  char          fGddFileName[256] ;
-  G4int		fMaxFileNum           ;
+  char kGddDestDir[256]; 
+  char kGddFileName[256];
+  G4int	kMaxFileNum;
 
-  G4int         fPrec, fPrec2 ;
-	
 };
 
 #endif

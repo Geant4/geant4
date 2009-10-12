@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFile.hh,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenFile.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 // GMocren-file driver factory.
 //
@@ -54,9 +54,9 @@ public:
 			     const G4String& name = "");
 
 private:
-  G4VViewer * fViewer;
-  G4VSceneHandler * fSceneHandler;
-  G4GMocrenMessenger * fMessenger;
+  G4VViewer * kViewer;
+  G4VSceneHandler * kSceneHandler;
+  G4GMocrenMessenger * kMessenger;
 
 };
 

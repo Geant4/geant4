@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenTouchable.hh,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenTouchable.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 // G4GMocrenTouchable class
 // is used to get densities of each box cell of patient geometry

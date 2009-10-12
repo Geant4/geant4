@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GMocrenMessenger.hh,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenMessenger.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 // UI command definition for gMocren-file driver.
 //
@@ -64,10 +64,10 @@ public:
   virtual std::vector<G4String> getHitScorerNames();
   virtual void list();
   virtual void getNoVoxels(G4int & nx, G4int & ny, G4int & nz) const;
-  virtual G4bool getDrawVolumeGrid() {return fDrawVolumeGrid;}
+  virtual G4bool getDrawVolumeGrid() {return kDrawVolumeGrid;}
 
 private:            
-  G4UIdirectory* gMocrenDirectory;
+  G4UIdirectory* kgMocrenDirectory;
         
   G4String suffix;
   G4UIcmdWithAString* setEventNumberSuffixCommand;
@@ -84,27 +84,27 @@ private:
   G4bool invisibles;
   G4UIcmdWithABool* writeInvisiblesCommand;
 
-  G4String fgMocrenVolumeName;
-  G4UIcmdWithAString* fsetgMocrenVolumeNameCommand;
+  G4String kgMocrenVolumeName;
+  G4UIcmdWithAString* kSetgMocrenVolumeNameCommand;
 
-  std::vector<G4String> fgMocrenHitNames;
-  G4UIcmdWithAString* faddgMocrenHitNameCommand;
-  G4UIcmdWithoutParameter * fresetgMocrenHitNameCommand;
+  std::vector<G4String> kgMocrenHitNames;
+  G4UIcmdWithAString* kAddgMocrenHitNameCommand;
+  G4UIcmdWithoutParameter * kResetgMocrenHitNameCommand;
 
-  G4String fgMocrenScoringMeshName;
-  G4UIcmdWithAString * fsetgMocrenScoringMeshNameCommand;
+  G4String kgMocrenScoringMeshName;
+  G4UIcmdWithAString * kSetgMocrenScoringMeshNameCommand;
 
-  std::vector<G4String> fgMocrenHitScorerNames;
-  G4UIcmdWithAString * faddgMocrenHitScorerNameCommand;
-  G4UIcmdWithoutParameter * fresetgMocrenHitScorerNameCommand;
+  std::vector<G4String> kgMocrenHitScorerNames;
+  G4UIcmdWithAString * kAddgMocrenHitScorerNameCommand;
+  G4UIcmdWithoutParameter * kResetgMocrenHitScorerNameCommand;
 
-  G4int fgMocrenNoVoxels[3];
-  G4UIcommand * fsetgMocrenNoVoxelsCommand;
+  G4int kgMocrenNoVoxels[3];
+  G4UIcommand * kSetgMocrenNoVoxelsCommand;
 
-  G4UIcmdWithoutParameter * flistgMocrenCommand;
+  G4UIcmdWithoutParameter * kListgMocrenCommand;
 
-  G4bool fDrawVolumeGrid;
-  G4UIcmdWithABool* fDrawVolumeGridCommand;
+  G4bool kDrawVolumeGrid;
+  G4UIcmdWithABool* kDrawVolumeGridCommand;
 };
 
 #endif

@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenMessenger.cc,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenMessenger.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
 //
 #include "G4GMocrenMessenger.hh"
 
@@ -41,12 +41,12 @@
 
 G4GMocrenMessenger::G4GMocrenMessenger()
   : suffix (""), geometry(true), solids(true), invisibles(true),
-    fgMocrenVolumeName("gMocrenVolume"),
-    fgMocrenScoringMeshName("gMocrenScoringMesh"),
-    fDrawVolumeGrid(false) {
+    kgMocrenVolumeName("gMocrenVolume"),
+    kgMocrenScoringMeshName("gMocrenScoringMesh"),
+    kDrawVolumeGrid(false) {
 
-  gMocrenDirectory = new G4UIdirectory("/vis/gMocren/");
-  gMocrenDirectory->SetGuidance("gMocren commands.");
+  kgMocrenDirectory = new G4UIdirectory("/vis/gMocren/");
+  kgMocrenDirectory->SetGuidance("gMocren commands.");
 
   setEventNumberSuffixCommand = new G4UIcmdWithAString("/vis/gMocren/setEventNumberSuffix", this);
   setEventNumberSuffixCommand->SetGuidance("Write separate event files, appended with given suffix.");
@@ -81,61 +81,61 @@ G4GMocrenMessenger::G4GMocrenMessenger()
      writeInvisiblesCommand->AvailableForStates(G4State_Idle);
   */
 
-  fsetgMocrenVolumeNameCommand = new G4UIcmdWithAString("/vis/gMocren/setVolumeName", this);
-  fsetgMocrenVolumeNameCommand->SetGuidance("detector name for a volume data in gMocren data.");
-  fsetgMocrenVolumeNameCommand->SetParameterName("fgMocrenVolumeName",false);
-  fsetgMocrenVolumeNameCommand->SetDefaultValue("gMocrenVolume");
-  fsetgMocrenVolumeNameCommand->AvailableForStates(G4State_Idle);
+  kSetgMocrenVolumeNameCommand = new G4UIcmdWithAString("/vis/gMocren/setVolumeName", this);
+  kSetgMocrenVolumeNameCommand->SetGuidance("detector name for a volume data in gMocren data.");
+  kSetgMocrenVolumeNameCommand->SetParameterName("kgMocrenVolumeName",false);
+  kSetgMocrenVolumeNameCommand->SetDefaultValue("gMocrenVolume");
+  kSetgMocrenVolumeNameCommand->AvailableForStates(G4State_Idle);
 
-  faddgMocrenHitNameCommand = new G4UIcmdWithAString("/vis/gMocren/addHitName", this);
-  faddgMocrenHitNameCommand->SetGuidance("hit name for a dose distribution in gMocren data.");
-  faddgMocrenHitNameCommand->SetParameterName("fgMocrenHitName",false);
-  faddgMocrenHitNameCommand->AvailableForStates(G4State_Idle);
+  kAddgMocrenHitNameCommand = new G4UIcmdWithAString("/vis/gMocren/addHitName", this);
+  kAddgMocrenHitNameCommand->SetGuidance("hit name for a dose distribution in gMocren data.");
+  kAddgMocrenHitNameCommand->SetParameterName("kgMocrenHitName",false);
+  kAddgMocrenHitNameCommand->AvailableForStates(G4State_Idle);
 
-  fresetgMocrenHitNameCommand = new G4UIcmdWithoutParameter("/vis/gMocren/resetHitNames", this);
-  fresetgMocrenHitNameCommand->SetGuidance("reset all hit names.");
-  fresetgMocrenHitNameCommand->AvailableForStates(G4State_Idle);
+  kResetgMocrenHitNameCommand = new G4UIcmdWithoutParameter("/vis/gMocren/resetHitNames", this);
+  kResetgMocrenHitNameCommand->SetGuidance("reset all hit names.");
+  kResetgMocrenHitNameCommand->AvailableForStates(G4State_Idle);
 
-  fsetgMocrenScoringMeshNameCommand = new G4UIcmdWithAString("/vis/gMocren/setScoringMeshName", this);
-  fsetgMocrenScoringMeshNameCommand->SetGuidance("scoring mesh name for a dose distribution in gMocren data.");
-  fsetgMocrenScoringMeshNameCommand->SetParameterName("fgMocrenScoringMeshName",false);
-  fsetgMocrenScoringMeshNameCommand->SetDefaultValue("gMocrenScoringMesh");
-  fsetgMocrenScoringMeshNameCommand->AvailableForStates(G4State_Idle);
+  kSetgMocrenScoringMeshNameCommand = new G4UIcmdWithAString("/vis/gMocren/setScoringMeshName", this);
+  kSetgMocrenScoringMeshNameCommand->SetGuidance("scoring mesh name for a dose distribution in gMocren data.");
+  kSetgMocrenScoringMeshNameCommand->SetParameterName("kgMocrenScoringMeshName",false);
+  kSetgMocrenScoringMeshNameCommand->SetDefaultValue("gMocrenScoringMesh");
+  kSetgMocrenScoringMeshNameCommand->AvailableForStates(G4State_Idle);
 
-  faddgMocrenHitScorerNameCommand = new G4UIcmdWithAString("/vis/gMocren/addHitScorerName", this);
-  faddgMocrenHitScorerNameCommand->SetGuidance("hit scorer name for a dose distribution in gMocren data.");
-  faddgMocrenHitScorerNameCommand->SetParameterName("fgMocrenHitScorerNames",false);
-  faddgMocrenHitScorerNameCommand->AvailableForStates(G4State_Idle);
+  kAddgMocrenHitScorerNameCommand = new G4UIcmdWithAString("/vis/gMocren/addHitScorerName", this);
+  kAddgMocrenHitScorerNameCommand->SetGuidance("hit scorer name for a dose distribution in gMocren data.");
+  kAddgMocrenHitScorerNameCommand->SetParameterName("kgMocrenHitScorerNames",false);
+  kAddgMocrenHitScorerNameCommand->AvailableForStates(G4State_Idle);
 
-  fresetgMocrenHitScorerNameCommand = new G4UIcmdWithoutParameter("/vis/gMocren/resetHitScorerName", this);
-  fresetgMocrenHitScorerNameCommand->SetGuidance("reset all hit scorer names.");
-  fresetgMocrenHitScorerNameCommand->AvailableForStates(G4State_Idle);
+  kResetgMocrenHitScorerNameCommand = new G4UIcmdWithoutParameter("/vis/gMocren/resetHitScorerName", this);
+  kResetgMocrenHitScorerNameCommand->SetGuidance("reset all hit scorer names.");
+  kResetgMocrenHitScorerNameCommand->AvailableForStates(G4State_Idle);
 
-  fsetgMocrenNoVoxelsCommand = new G4UIcommand("/vis/gMocren/setNumberOfVoxels", this);
-  fsetgMocrenNoVoxelsCommand->SetGuidance("set number of voxels.");
-  fsetgMocrenNoVoxelsCommand->AvailableForStates(G4State_Idle);
+  kSetgMocrenNoVoxelsCommand = new G4UIcommand("/vis/gMocren/setNumberOfVoxels", this);
+  kSetgMocrenNoVoxelsCommand->SetGuidance("set number of voxels.");
+  kSetgMocrenNoVoxelsCommand->AvailableForStates(G4State_Idle);
   G4UIparameter * param = new G4UIparameter("nX", 'i', false);
   param->SetDefaultValue("1");
   param->SetParameterRange("nX>0");
-  fsetgMocrenNoVoxelsCommand->SetParameter(param);
+  kSetgMocrenNoVoxelsCommand->SetParameter(param);
   param = new G4UIparameter("nY", 'i', false);
   param->SetDefaultValue("1");
   param->SetParameterRange("nY>0");
-  fsetgMocrenNoVoxelsCommand->SetParameter(param);
+  kSetgMocrenNoVoxelsCommand->SetParameter(param);
   param = new G4UIparameter("nZ", 'i', false);
   param->SetDefaultValue("1");
   param->SetParameterRange("nZ>0");
-  fsetgMocrenNoVoxelsCommand->SetParameter(param);
+  kSetgMocrenNoVoxelsCommand->SetParameter(param);
 
-  flistgMocrenCommand = new G4UIcmdWithoutParameter("/vis/gMocren/list", this);
-  flistgMocrenCommand->SetGuidance("list gMocren command parameters.");
-  flistgMocrenCommand->AvailableForStates(G4State_Idle);
+  kListgMocrenCommand = new G4UIcmdWithoutParameter("/vis/gMocren/list", this);
+  kListgMocrenCommand->SetGuidance("list gMocren command parameters.");
+  kListgMocrenCommand->AvailableForStates(G4State_Idle);
 
-  fDrawVolumeGridCommand = new G4UIcmdWithABool("/vis/gMocren/drawVolumeGrid", this);
-  fDrawVolumeGridCommand->SetGuidance("Add grid of the volume.");
-  fDrawVolumeGridCommand->SetParameterName("fDrawVolumeGrid",false);
-  fDrawVolumeGridCommand->SetDefaultValue(false);
-  fDrawVolumeGridCommand->AvailableForStates(G4State_Idle);
+  kDrawVolumeGridCommand = new G4UIcmdWithABool("/vis/gMocren/drawVolumeGrid", this);
+  kDrawVolumeGridCommand->SetGuidance("Add grid of the volume.");
+  kDrawVolumeGridCommand->SetParameterName("kDrawVolumeGrid",false);
+  kDrawVolumeGridCommand->SetDefaultValue(false);
+  kDrawVolumeGridCommand->AvailableForStates(G4State_Idle);
 
 }
 
@@ -145,19 +145,19 @@ G4GMocrenMessenger::~G4GMocrenMessenger() {
   delete addPointAttributesCommand;
   delete useSolidsCommand;
   //    delete writeInvisiblesCommand;
-  delete fsetgMocrenVolumeNameCommand;
-  delete faddgMocrenHitNameCommand;
-  delete fresetgMocrenHitNameCommand;
+  delete kSetgMocrenVolumeNameCommand;
+  delete kAddgMocrenHitNameCommand;
+  delete kResetgMocrenHitNameCommand;
   //
-  delete fsetgMocrenScoringMeshNameCommand;
-  delete faddgMocrenHitScorerNameCommand;
-  delete fresetgMocrenHitScorerNameCommand;
+  delete kSetgMocrenScoringMeshNameCommand;
+  delete kAddgMocrenHitScorerNameCommand;
+  delete kResetgMocrenHitScorerNameCommand;
   //
-  delete fsetgMocrenNoVoxelsCommand;
+  delete kSetgMocrenNoVoxelsCommand;
   //
-  delete gMocrenDirectory;
+  delete kgMocrenDirectory;
   //
-  delete fDrawVolumeGridCommand;
+  delete kDrawVolumeGridCommand;
 }
 
 G4String G4GMocrenMessenger::GetCurrentValue(G4UIcommand * command) {
@@ -171,28 +171,28 @@ G4String G4GMocrenMessenger::GetCurrentValue(G4UIcommand * command) {
     return useSolidsCommand->ConvertToString(solids);
     //    } else if (command==writeInvisiblesCommand) {
     //        return writeInvisiblesCommand->ConvertToString(invisibles);
-  } else if (command == fsetgMocrenVolumeNameCommand) {
-    return fgMocrenVolumeName;
-  } else if (command == faddgMocrenHitNameCommand) {
+  } else if (command == kSetgMocrenVolumeNameCommand) {
+    return kgMocrenVolumeName;
+  } else if (command == kAddgMocrenHitNameCommand) {
     G4String strval;
-    std::vector<G4String>::iterator itr = fgMocrenHitNames.begin();
-    for(; itr != fgMocrenHitNames.end(); itr++) {
+    std::vector<G4String>::iterator itr = kgMocrenHitNames.begin();
+    for(; itr != kgMocrenHitNames.end(); itr++) {
       strval += *itr;
       strval += " ";
     }
     return strval;
-  } else if (command == fsetgMocrenScoringMeshNameCommand) {
-    return fgMocrenScoringMeshName;
-  } else if (command == faddgMocrenHitScorerNameCommand) {
+  } else if (command == kSetgMocrenScoringMeshNameCommand) {
+    return kgMocrenScoringMeshName;
+  } else if (command == kAddgMocrenHitScorerNameCommand) {
     G4String strval;
-    std::vector<G4String>::iterator itr = fgMocrenHitScorerNames.begin();
-    for(; itr != fgMocrenHitNames.end(); itr++) {
+    std::vector<G4String>::iterator itr = kgMocrenHitScorerNames.begin();
+    for(; itr != kgMocrenHitNames.end(); itr++) {
       strval += *itr;
       strval += " ";
     }
     return strval;
-  } else if (command==fDrawVolumeGridCommand) {
-    return fDrawVolumeGridCommand->ConvertToString(fDrawVolumeGrid);
+  } else if (command==kDrawVolumeGridCommand) {
+    return kDrawVolumeGridCommand->ConvertToString(kDrawVolumeGrid);
   } else {
     return "";
   }
@@ -209,27 +209,27 @@ void G4GMocrenMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
     solids = useSolidsCommand->GetNewBoolValue(newValue);
     //    } else if (command==writeInvisiblesCommand) {
     //        invisibles = writeInvisiblesCommand->GetNewBoolValue(newValue);
-  } else if (command == fsetgMocrenVolumeNameCommand) {
-    fgMocrenVolumeName = newValue;
-  } else if (command == faddgMocrenHitNameCommand) {
-    fgMocrenHitNames.push_back(newValue);
-  } else if (command == fresetgMocrenHitNameCommand) {
-    fgMocrenHitNames.clear();
-  } else if (command == fsetgMocrenScoringMeshNameCommand) {
-    fgMocrenScoringMeshName = newValue;
-  } else if (command == faddgMocrenHitScorerNameCommand) {
-    fgMocrenHitScorerNames.push_back(newValue);
-  } else if (command == fresetgMocrenHitScorerNameCommand) {
-    fgMocrenHitScorerNames.clear();
-  } else if (command == flistgMocrenCommand) {
+  } else if (command == kSetgMocrenVolumeNameCommand) {
+    kgMocrenVolumeName = newValue;
+  } else if (command == kAddgMocrenHitNameCommand) {
+    kgMocrenHitNames.push_back(newValue);
+  } else if (command == kResetgMocrenHitNameCommand) {
+    kgMocrenHitNames.clear();
+  } else if (command == kSetgMocrenScoringMeshNameCommand) {
+    kgMocrenScoringMeshName = newValue;
+  } else if (command == kAddgMocrenHitScorerNameCommand) {
+    kgMocrenHitScorerNames.push_back(newValue);
+  } else if (command == kResetgMocrenHitScorerNameCommand) {
+    kgMocrenHitScorerNames.clear();
+  } else if (command == kListgMocrenCommand) {
     list();
-  } else if (command == fsetgMocrenNoVoxelsCommand) {
+  } else if (command == kSetgMocrenNoVoxelsCommand) {
     G4Tokenizer next(newValue);
     for(int i = 0; i < 3; i++) {
-      fgMocrenNoVoxels[i] = StoI(next());
+      kgMocrenNoVoxels[i] = StoI(next());
     }
-  } else if (command==fDrawVolumeGridCommand) {
-    fDrawVolumeGrid = fDrawVolumeGridCommand->GetNewBoolValue(newValue);
+  } else if (command==kDrawVolumeGridCommand) {
+    kDrawVolumeGrid = kDrawVolumeGridCommand->GetNewBoolValue(newValue);
   } 
 }
 
@@ -254,41 +254,41 @@ G4bool G4GMocrenMessenger::writeInvisibles() {
 }
 
 G4String G4GMocrenMessenger::getVolumeName() {
-  return fgMocrenVolumeName;
+  return kgMocrenVolumeName;
 }
 
 std::vector<G4String> G4GMocrenMessenger::getHitNames() {
-  return fgMocrenHitNames;
+  return kgMocrenHitNames;
 }
 
 G4String G4GMocrenMessenger::getScoringMeshName() {
-  return fgMocrenScoringMeshName;
+  return kgMocrenScoringMeshName;
 }
 
 std::vector<G4String> G4GMocrenMessenger::getHitScorerNames() {
-  return fgMocrenHitScorerNames;
+  return kgMocrenHitScorerNames;
 }
 
 void G4GMocrenMessenger::list() {
   G4cout << "  Current valuess of gMocren command parameters:" << G4endl;
   //
-  G4cout << "    volume name:        " << fgMocrenVolumeName << G4endl;
+  G4cout << "    volume name:        " << kgMocrenVolumeName << G4endl;
   //
   G4cout << "    hit names:          ";
-  if(fgMocrenHitNames.size() > 0) {
-    std::vector<G4String>::iterator itr = fgMocrenHitNames.begin();
-    for(; itr != fgMocrenHitNames.end(); itr++)
+  if(kgMocrenHitNames.size() > 0) {
+    std::vector<G4String>::iterator itr = kgMocrenHitNames.begin();
+    for(; itr != kgMocrenHitNames.end(); itr++)
       G4cout << *itr << "  " << G4endl;
   } else {
     G4cout << G4endl;
   }
   //
-  G4cout << "    scoring mesh name:  " << fgMocrenScoringMeshName << G4endl;
+  G4cout << "    scoring mesh name:  " << kgMocrenScoringMeshName << G4endl;
   //
   G4cout << "    scorer names:       ";
-  if(fgMocrenHitScorerNames.size() > 0) {
-    std::vector<G4String>::iterator itr = fgMocrenHitScorerNames.begin();
-    for(; itr != fgMocrenHitScorerNames.end(); itr++)
+  if(kgMocrenHitScorerNames.size() > 0) {
+    std::vector<G4String>::iterator itr = kgMocrenHitScorerNames.begin();
+    for(; itr != kgMocrenHitScorerNames.end(); itr++)
       G4cout << *itr << "  " << G4endl;
   } else {
     G4cout << G4endl;
@@ -297,7 +297,7 @@ void G4GMocrenMessenger::list() {
 }
 
 void G4GMocrenMessenger::getNoVoxels(G4int & nx, G4int & ny, G4int & nz) const {
-  nx = fgMocrenNoVoxels[0];
-  ny = fgMocrenNoVoxels[1];
-  nz = fgMocrenNoVoxels[2];
+  nx = kgMocrenNoVoxels[0];
+  ny = kgMocrenNoVoxels[1];
+  nz = kgMocrenNoVoxels[2];
 }

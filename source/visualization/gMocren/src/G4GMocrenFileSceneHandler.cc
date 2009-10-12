@@ -24,21 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Akinori Kimura    March 31, 2009
+// Created:  Mar. 31, 2009  Akinori Kimura  
+//           Sep. 22, 2009  Akinori Kimura : modify and fix code to support 
+//                                          PrimitiveScorers and clean up
 //
-// GMocrenFile scene.
+// GMocrenFile scene handler
 
 
 //----- header files
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
+
 #include "globals.hh"
-#include "G4FRConst.hh"
 #include "G4GMocrenFile.hh"
 #include "G4GMocrenFileSceneHandler.hh"
 #include "G4GMocrenFileViewer.hh"
@@ -76,18 +78,31 @@
 #include "G4GMocrenIO.hh"
 #include "G4VNestedParameterisation.hh"
 #include "G4GMocrenTouchable.hh"
+#include "G4GMocrenFileCTtoDensityMap.hh"
+#include "G4PhantomParameterisation.hh"
+
+#include "G4ScoringManager.hh"
+#include "G4ScoringBox.hh"
 
 //----- constants
-const char  FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
 const char  GDD_FILE_HEADER      [] = "g4_";
 const char  DEFAULT_GDD_FILE_NAME[] = "g4_00.gdd";
 
-const int   FR_MAX_FILE_NUM = 100 ;
+const G4int FR_MAX_FILE_NUM = 100 ;
+const G4int MAX_NUM_TRAJECTORIES = 100000;
 
+//-- for a debugging
+const bool GFDEBUG = false;
 const bool GFDEBUG_TRK = false;//true;
 const bool GFDEBUG_HIT = false;//true;
-//const bool GFDEBUG = false;
 const G4int GFDEBUG_DET = 0; // 0: false 
+
+//////////////////////
+// static variables //
+//////////////////////
+
+//----- static variables
+G4int G4GMocrenFileSceneHandler::kSceneIdCount = 0; 
 
 ///////////////////////////
 // Driver-dependent part //
@@ -98,50 +113,42 @@ const G4int GFDEBUG_DET = 0; // 0: false
 G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 						     G4GMocrenMessenger & messenger,
 						     const G4String& name)
-  : G4VSceneHandler(system, fSceneIdCount++, name) ,
-    fSystem(system),
-    fMessenger(messenger),
-    fgMocrenIO(new G4GMocrenIO()),
-    fbSetModalityVoxelSize(false),
-    fbModelingTrajectory(false),
-    fGddDest(),
-    FRflag_in_modeling(false),
-    flag_saving_g4_gdd(false),
-    COMMAND_BUF_SIZE(G4FRofstream::SEND_BUFMAX),
-    fPrec(9), fPrec2(16) {
+  : G4VSceneHandler(system, kSceneIdCount++, name),
+    kSystem(system),
+    kMessenger(messenger),
+    kgMocrenIO(new G4GMocrenIO()),
+    kbSetModalityVoxelSize(false),
+    kbModelingTrajectory(false),
+    kFlagInModeling(false),
+    kFlagSaving_g4_gdd(false),
+    kFlagParameterization(0),
+    kFLagProcessedInteractiveScorer(false) {
 
   // g4.gdd filename and its directory
-  if ( getenv( "G4GMocrenFile_DEST_DIR" ) == NULL ) {
-    std::strcpy( fGddDestDir , "" )                      ;  // output dir
-    std::strcpy( fGddFileName, DEFAULT_GDD_FILE_NAME );  // filename
+  if(getenv("G4GMocrenFile_DEST_DIR") == NULL) {
+    std::strcpy(kGddDestDir , "");                    // output dir
+    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
   } else {
-    std::strcpy( fGddDestDir , getenv( "G4GMocrenFile_DEST_DIR" ) ); // output dir
-    std::strcpy( fGddFileName, DEFAULT_GDD_FILE_NAME        ); // filename 
+    std::strcpy(kGddDestDir , getenv("G4GMocrenFile_DEST_DIR")); // output dir
+    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename 
   }
 		
   // maximum number of g4.gdd files in the dest directory
-  fMaxFileNum = FR_MAX_FILE_NUM ; // initialization
-  if ( getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
+  kMaxFileNum = FR_MAX_FILE_NUM ; // initialization
+  if ( std::getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
 		
-    std::sscanf( getenv("G4GMocrenFile_MAX_FILE_NUM"), "%d", &fMaxFileNum ) ;
+    std::sscanf( getenv("G4GMocrenFile_MAX_FILE_NUM"), "%d", &kMaxFileNum ) ;
 
   } else {
-    fMaxFileNum = FR_MAX_FILE_NUM ;
+    kMaxFileNum = FR_MAX_FILE_NUM ;
   }
-  if( fMaxFileNum < 1 ) { fMaxFileNum = 1 ; }
+  if( kMaxFileNum < 1 ) { kMaxFileNum = 1 ; }
 
-  /*
 
-  //----- precision control
-  if( getenv( "G4GMocrenFile_PRECISION" ) != NULL ) {
-    sscanf( getenv("G4GMocrenFile_PRECISION"), "%d", &fPrec ) ;
-  } else {
-    fPrec = 9 ;
-  }
-  fPrec2 = fPrec + 7 ;
-  */
   for(int i = 0; i < 3; i++) {
-    fModalitySize[i] = 0;
+    kModalitySize[i] = 0;
+    kNestedVolumeDimension[i] = 0;
+    kNestedVolumeDirAxis[i] = -1;
   }
 } 
 
@@ -149,16 +156,13 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 //----- G4GMocrenFileSceneHandler, destructor
 G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler () 
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** ~G4GMocrenFileSceneHandler" << G4endl;
-#endif 
-  if (fGddDest.IsOpen()) 
-    {
-      //----- End of modeling
-      // !EndModeling, !DrawAll, !CloseDevice,
-      // close g4.gdd
-      FREndModeling();
-    }
+  if(GFDEBUG) G4cerr << "***** ~G4GMocrenFileSceneHandler" << G4endl;
+
+  if(kGddDest) {
+    //----- End of modeling
+    // close g4.gdd
+    GFEndModeling();
+  }
   ClearStore (); // clear current scene
 }
 
@@ -166,16 +170,16 @@ G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler ()
 void	G4GMocrenFileSceneHandler::SetGddFileName() 
 {
   // g4_00.gdd, g4_01.gdd, ..., g4_MAX_FILE_INDEX.gdd
-  const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
+  const int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strcpy ( fGddFileName, fGddDestDir) ; 
+  std::strcpy ( kGddFileName, kGddDestDir) ; 
 
   // create full path name (default)
-  std::strcat ( fGddFileName, DEFAULT_GDD_FILE_NAME );
+  std::strcat ( kGddFileName, DEFAULT_GDD_FILE_NAME );
 
   // Automatic updation of file names
-  for( int i = 0 ; i < fMaxFileNum ; i++) { 
+  for( int i = 0 ; i < kMaxFileNum ; i++) { 
 
     // Message in the final execution
     if( i == MAX_FILE_INDEX ) 
@@ -191,14 +195,15 @@ void	G4GMocrenFileSceneHandler::SetGddFileName()
 
     // re-determine file name as G4GMocrenFile_DEST_DIR/g4_XX.gdd 
     if( i >=  0 && i <= 9 ) { 
-      std::sprintf( fGddFileName, "%s%s%s%d.gdd" , fGddDestDir,  GDD_FILE_HEADER, "0", i );
+      std::sprintf( kGddFileName, "%s%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, "0", i );
     } else {
-      std::sprintf( fGddFileName, "%s%s%d.gdd" , fGddDestDir,  GDD_FILE_HEADER, i );
+      std::sprintf( kGddFileName, "%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, i );
     }
 
     // check validity of the file name
-    std::ifstream  fin ; 
-    fin.open(fGddFileName) ;
+    std::ifstream fin(kGddFileName); 
+    if(GFDEBUG)
+      G4cout << "FILEOPEN: " << i << " : " << kGddFileName << fin.fail() << G4endl;
     if(!fin) { 
       // new file	
       fin.close();  
@@ -210,18 +215,20 @@ void	G4GMocrenFileSceneHandler::SetGddFileName()
 
   } // for 
 
-  G4cerr << "===========================================    " << G4endl; 
-  G4cerr << "Output file: " <<    fGddFileName             << G4endl; 
-  G4cerr << "Destination directory (current dir if NULL): "       << fGddDestDir    << G4endl; 
-  G4cerr << "Maximal number of files in the destination directory: " << fMaxFileNum << G4endl; 
-  G4cerr << "Note:                                                " << G4endl; 
-  G4cerr << "  * The maximal number is customizable as:           " << G4endl;
-  G4cerr << "       % setenv  G4GMocrenFile_MAX_FILE_NUM  number " << G4endl;        
+  G4cerr << "======================================================================" << G4endl; 
+  G4cerr << "Output file: " << kGddFileName                          << G4endl; 
+  G4cerr << "Destination directory (current dir if NULL): " << kGddDestDir << G4endl; 
+  G4cerr << "Maximum number of files in the destination directory: " << kMaxFileNum << G4endl; 
+  G4cerr << "Note:" << G4endl; 
+  G4cerr << "  * The maximum number is customizable as:           " << G4endl;
+  G4cerr << "      % setenv  G4GMocrenFile_MAX_FILE_NUM  number " << G4endl;        
   G4cerr << "  * The destination directory is customizable as:" << G4endl;
-  G4cerr << "       % setenv  G4GMocrenFile_DEST_DIR  dir_name/  " << G4endl;        
-  G4cerr << "     ** Do not forget \"/\" at the end of the    " << G4endl;              
-  G4cerr << "        dir_name, e.g. \"./tmp/\".  " << G4endl;              
-  G4cerr << "===========================================      " << G4endl; 
+  G4cerr << "      % setenv  G4GMocrenFile_DEST_DIR  dir_name/  " << G4endl;        
+  G4cerr << "     ** Do not forget \"/\" at the end of the dir_name, e.g. \"./tmp/\"." << G4endl;              
+  //G4cerr << "        dir_name, e.g. \"./tmp/\"."                 << G4endl;              
+  G4cerr << G4endl;
+  G4cerr << "Maximum number of trajectories is set to " << MAX_NUM_TRAJECTORIES << "."<< G4endl;
+  G4cerr << "======================================================================" << G4endl; 
 
 } // G4GMocrenFileSceneHandler::SetGddFileName()
 
@@ -229,105 +236,116 @@ void	G4GMocrenFileSceneHandler::SetGddFileName()
 //-----
 void	G4GMocrenFileSceneHandler::BeginSavingGdd( void ) 
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** BeginSavingGdd (called)\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** BeginSavingGdd (called)\n";
 
   if( !IsSavingGdd() ) {
 
-#if defined DEBUG_FR_SCENE
-    G4cerr << "*****                   (started) " ;
-    G4cerr << "(open g4.gdd, ##)"  << G4endl;
-#endif
-    SetGddFileName() ; // result set to fGddFileName
-    fGddDest.Open(fGddFileName)   ;
+    if(GFDEBUG) {
+      G4cerr << "*****                   (started) " ;
+      G4cerr << "(open g4.gdd, ##)"  << G4endl;
+    }
 
-    //SendStr( FR_G4_GDD_HEADER   )    ; 
-    flag_saving_g4_gdd = true        ; 
+    SetGddFileName() ; // result set to kGddFileName
+    if(!kGddDest) kGddDest.open(kGddFileName);
 
+    kFlagSaving_g4_gdd = true        ; 
+
+
+    G4GMocrenFileCTtoDensityMap ctdens;
+    short minmax[2];
+    minmax[0] = ctdens.GetMinCT();
+    minmax[1] = ctdens.GetMaxCT();
+    kgMocrenIO->setModalityImageMinMax(minmax);
+    std::vector<float> map;
+    float dens;
+    for(int i = minmax[0]; i <= minmax[1]; i++) {
+      dens = ctdens.GetDensity(i);
+      map.push_back(dens);
+    }
+    kgMocrenIO->setModalityImageDensityMap(map);
+
+    /*
     G4String fname = "modality-map.dat";
     std::ifstream ifile(fname);
     if(ifile) {
       short minmax[2];
       ifile >> minmax[0] >> minmax[1];
-      fgMocrenIO->setModalityImageMinMax(minmax);
+      kgMocrenIO->setModalityImageMinMax(minmax);
       std::vector<float> map;
       float dens;
       for(int i = minmax[0]; i <= minmax[1]; i++) {
 	ifile >> dens;
 	map.push_back(dens);
       }
-      fgMocrenIO->setModalityImageDensityMap(map);
+      kgMocrenIO->setModalityImageDensityMap(map);
       
     } else {
       G4cerr << "cann't open the file : " << fname << G4endl;
     }
+    */
 
     // mesh size
-    //fMessenger.getNoVoxels(fModalitySize[0], fModalitySize[1], fModalitySize[2]);
-    //fgMocrenIO->setModalityImageSize(fModalitySize);
+    //kMessenger.getNoVoxels(kModalitySize[0], kModalitySize[1], kModalitySize[2]);
+    //kgMocrenIO->setModalityImageSize(kModalitySize);
     
     // initializations
-    fgMocrenIO->clearTracks();
-    fgMocrenIO->clearDetector();
-    std::vector<Detector>::iterator itr = fDetectors.begin();
-    for(; itr != fDetectors.end(); itr++) {
+    kgMocrenIO->clearTracks();
+    kgMocrenIO->clearDetector();
+    std::vector<Detector>::iterator itr = kDetectors.begin();
+    for(; itr != kDetectors.end(); itr++) {
       itr->clear();
     }
-    fDetectors.clear();
+    kDetectors.clear();
     
-    fNestedHitsList.clear();
-    fNestedVolumeNames.clear();
+    kNestedHitsList.clear();
+    kNestedVolumeNames.clear();
       
   }
 }
 
 void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void ) 
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** EndSavingGdd (called)\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** EndSavingGdd (called)\n";
 
   if(  IsSavingGdd() )
     {
-#if defined DEBUG_FR_SCENE
-      G4cerr << "*****                 (started) (close g4.gdd)" << G4endl;
-#endif
-      fGddDest.Close()               ;
-      flag_saving_g4_gdd = false ; 
+      if(GFDEBUG) G4cerr << "*****                 (started) (close g4.gdd)" << G4endl;
 
-      std::map<Index3D, float>::iterator itr = fNestedModality.begin();
+      if(kGddDest) kGddDest.close();
+      kFlagSaving_g4_gdd = false ; 
+
+      std::map<Index3D, float>::iterator itr = kNestedModality.begin();
       G4int xmax=0, ymax=0, zmax=0;
-      for(; itr != fNestedModality.end(); itr++) {
+      for(; itr != kNestedModality.end(); itr++) {
 	if(itr->first.x > xmax) xmax = itr->first.x;
 	if(itr->first.y > ymax) ymax = itr->first.y;
 	if(itr->first.z > zmax) zmax = itr->first.z;
       }
       // mesh size
-      fModalitySize[0] = xmax+1;
-      fModalitySize[1] = ymax+1;
-      fModalitySize[2] = zmax+1;
-      fgMocrenIO->setModalityImageSize(fModalitySize);
-      G4cout << " modality size : "
-	     << fModalitySize[0] << " x "
-	     << fModalitySize[1] << " x "
-	     << fModalitySize[2] << G4endl;
+      kModalitySize[0] = xmax+1;
+      kModalitySize[1] = ymax+1;
+      kModalitySize[2] = zmax+1;
+      kgMocrenIO->setModalityImageSize(kModalitySize);
+      if(GFDEBUG) G4cout << "gMocren-file driver : modality size : "
+			 << kModalitySize[0] << " x "
+			 << kModalitySize[1] << " x "
+			 << kModalitySize[2] << G4endl;
 
-      G4int nxy = fModalitySize[0]*fModalitySize[1];
+      G4int nxy = kModalitySize[0]*kModalitySize[1];
       //std::map<G4int, float>::iterator itr;
-      for(int z = 0; z < fModalitySize[2]; z++) {
+      for(int z = 0; z < kModalitySize[2]; z++) {
 	short * modality = new short[nxy];
-	for(int y = 0; y < fModalitySize[1]; y++) {
-	  for(int x = 0; x < fModalitySize[0]; x++) {
-	  //for(int x = fModalitySize[0]-1; x >= 0 ; x--) {
-	    //G4int ixy = x + (fModalitySize[1]-y-1)*fModalitySize[0];
+	for(int y = 0; y < kModalitySize[1]; y++) {
+	  for(int x = 0; x < kModalitySize[0]; x++) {
+	  //for(int x = kModalitySize[0]-1; x >= 0 ; x--) {
+	    //G4int ixy = x + (kModalitySize[1]-y-1)*kModalitySize[0];
 
-	    G4int ixy = x + y*fModalitySize[0];
+	    G4int ixy = x + y*kModalitySize[0];
 	    Index3D idx(x,y,z);
-	    itr = fNestedModality.find(idx);
-	    if(itr != fNestedModality.end()) {
+	    itr = kNestedModality.find(idx);
+	    if(itr != kNestedModality.end()) {
 
-	      modality[ixy] = fgMocrenIO->convertDensityToHU(itr->second);
+	      modality[ixy] = kgMocrenIO->convertDensityToHU(itr->second);
 	    } else {
 	      G4cout << "ABC : " << x << ", " <<  y << ", " << z << G4endl;
 	      modality[ixy] = -1024;
@@ -335,29 +353,29 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 
 	  }
 	}
-	fgMocrenIO->setModalityImage(modality);
+	kgMocrenIO->setModalityImage(modality);
       }
 
       //-- dose
-      size_t nhits = fNestedHitsList.size();
-      G4cout << " # hits : " << nhits << G4endl;
+      size_t nhits = kNestedHitsList.size();
+      if(GFDEBUG) G4cout << "gMocren-file driver : # hits = " << nhits << G4endl;
 
       std::map<Index3D, G4double>::iterator hitsItr;
-      std::map<G4String, std::map<Index3D, G4double> >::iterator hitsListItr = fNestedHitsList.begin();
+      std::map<G4String, std::map<Index3D, G4double> >::iterator hitsListItr = kNestedHitsList.begin();
 
-      for(int n = 0; hitsListItr != fNestedHitsList.end(); hitsListItr++, n++) {
+      for(int n = 0; hitsListItr != kNestedHitsList.end(); hitsListItr++, n++) {
 
-	fgMocrenIO->newDoseDist();
-	fgMocrenIO->setDoseDistName(hitsListItr->first, n);
-	fgMocrenIO->setDoseDistSize(fModalitySize, n);
+	kgMocrenIO->newDoseDist();
+	kgMocrenIO->setDoseDistName(hitsListItr->first, n);
+	kgMocrenIO->setDoseDistSize(kModalitySize, n);
 
 	G4double minmax[2] = {DBL_MAX, -DBL_MAX};
-	for(int z = 0 ; z < fModalitySize[2]; z++) {
+	for(int z = 0 ; z < kModalitySize[2]; z++) {
 	  G4double * values = new G4double[nxy];
-	  for(int y = 0; y < fModalitySize[1]; y++) {
-	    for(int x = 0; x < fModalitySize[0]; x++) {
+	  for(int y = 0; y < kModalitySize[1]; y++) {
+	    for(int x = 0; x < kModalitySize[0]; x++) {
 
-	      G4int ixy = x + y*fModalitySize[0];
+	      G4int ixy = x + y*kModalitySize[0];
 	      Index3D idx(x,y,z);
 	      hitsItr = hitsListItr->second.find(idx);
 	      if(hitsItr != hitsListItr->second.end()) {
@@ -370,31 +388,31 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 	      if(values[ixy] > minmax[1]) minmax[1] = values[ixy];
 	    }
 	  }
-	  fgMocrenIO->setDoseDist(values, n);
+	  kgMocrenIO->setDoseDist(values, n);
 	}
-	fgMocrenIO->setDoseDistMinMax(minmax, n);
+	kgMocrenIO->setDoseDistMinMax(minmax, n);
 	G4double lower = 0.;
 	if(minmax[0] < 0)  lower = minmax[0];
 	G4double scale = (minmax[1]-lower)/25000.;
-	fgMocrenIO->setDoseDistScale(scale, n);
+	kgMocrenIO->setDoseDistScale(scale, n);
 	G4String sunit("unit?"); //temporarily
-	fgMocrenIO->setDoseDistUnit(sunit, n);
+	kgMocrenIO->setDoseDistUnit(sunit, n);
       }
       
 
       //-- draw axes
-      if(false) {//true) {
+      if(false) {//true,false
       G4ThreeVector trans;
       G4RotationMatrix rot;
-      trans = fVolumeTrans3D.getTranslation();
-      rot = fVolumeTrans3D.getRotation().inverse();
+      trans = kVolumeTrans3D.getTranslation();
+      rot = kVolumeTrans3D.getRotation().inverse();
       // x
       std::vector<float *> tracks;
       unsigned char colors[3];
       float * trk = new float[6];
       tracks.push_back(trk);
 
-      G4ThreeVector orig(0.,0.,0), xa(1000.,0.,0.), ya(0.,1000.,0.), za(0.,0.,1000.);
+      G4ThreeVector orig(0.,0.,0), xa(2000.,0.,0.), ya(0.,2000.,0.), za(0.,0.,2000.);
       orig -= trans;
       orig.transform(rot);
       xa -= trans;
@@ -406,15 +424,15 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
       for(int i = 0; i < 3; i++) trk[i] = orig[i];
       for(int i = 0; i < 3; i++) trk[i+3] = xa[i];
       colors[0] = 255; colors[1] = 0; colors[2] = 0;
-      fgMocrenIO->addTrack(tracks, colors);
+      kgMocrenIO->addTrack(tracks, colors);
       // y
       for(int i = 0; i < 3; i++) trk[i+3] = ya[i];
       colors[0] = 0; colors[1] = 255; colors[2] = 0;
-      fgMocrenIO->addTrack(tracks, colors);
+      kgMocrenIO->addTrack(tracks, colors);
       // z
       for(int i = 0; i < 3; i++) trk[i+3] = za[i];
       colors[0] = 0; colors[1] = 0; colors[2] = 255;
-      fgMocrenIO->addTrack(tracks, colors);
+      kgMocrenIO->addTrack(tracks, colors);
       }
 
       //-- detector
@@ -425,42 +443,38 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
       std::vector<float> transformObjects;
       for(int i = 0; i < 3; i++) {
 	// need to check!!
-	transformObjects.push_back((fVolumeSize[i]/2. - fVoxelDimension[i]/2.));
+	transformObjects.push_back((kVolumeSize[i]/2. - kVoxelDimension[i]/2.));
 	if(GFDEBUG_DET) G4cout << transformObjects[i] << ", ";
       }
       if(GFDEBUG_DET) G4cout << ")" << G4endl;
 
 
-      fgMocrenIO->translateTracks(transformObjects);
-      fgMocrenIO->translateDetector(transformObjects);
+      kgMocrenIO->translateTracks(transformObjects);
+      kgMocrenIO->translateDetector(transformObjects);
 
       // store
-      fgMocrenIO->storeData(fGddFileName);
+      kgMocrenIO->storeData(kGddFileName);
     } 
 }
 
 
 //----- 
-void G4GMocrenFileSceneHandler::FRBeginModeling( void )
+void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 {
   G4VSceneHandler::BeginModeling();
 
-  if( !FRIsInModeling() )  	
-    {
-#if defined DEBUG_FR_SCENE
-      G4cerr << "***** G4GMocrenFileSceneHandler::FRBeginModeling (called & started)" << G4endl;
-#endif
+  if( !GFIsInModeling() ) {
 
+
+      if(GFDEBUG) G4cerr << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
 
       //----- Send saving command and heading comment
       BeginSavingGdd();
-
-      FRflag_in_modeling = true ;
+      
+      kFlagInModeling = true ;
 
 
       G4Scene * scene = GetScene();
-      //G4VModel * model = new G4ScoringHitsModel();
-      //scene->AddEndOfEventModel(model);
       scene->AddEndOfEventModel(new G4ScoringHitsModel());
       scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
@@ -472,8 +486,6 @@ void G4GMocrenFileSceneHandler::FRBeginModeling( void )
       }
 
     } // if
-
-
 } 
 
 
@@ -482,16 +494,17 @@ void G4GMocrenFileSceneHandler::FRBeginModeling( void )
 //----- Add polyline 
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline) 
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive\n";
-#endif 
+  if(GFDEBUG) G4cerr << "***** AddPrimitive\n";
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
 
+  //----- Initialize if necessary
+  GFBeginModeling();
+
+  static G4int numTrajectories = 0;
+  if(numTrajectories >= MAX_NUM_TRAJECTORIES) return;
 
   // draw trajectories
-  if(fbModelingTrajectory) {
+  if(kbModelingTrajectory) {
     
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
@@ -501,8 +514,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 
     G4ThreeVector trans;
     G4RotationMatrix rot;
-    trans = fVolumeTrans3D.getTranslation();
-    rot = fVolumeTrans3D.getRotation().inverse();
+    trans = kVolumeTrans3D.getTranslation();
+    rot = kVolumeTrans3D.getRotation().inverse();
 
     if(GFDEBUG_TRK) G4cout << "   trajectory points : " << G4endl;
     std::vector<float *> trajectory;
@@ -549,8 +562,9 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 	     << color.GetBlue() << "]" << G4endl;
     }
 
-    fgMocrenIO->addTrack(trajectory, trkcolor);
+    kgMocrenIO->addTrack(trajectory, trkcolor);
 
+    numTrajectories++;
   }
 
 } // G4GMocrenFileSceneHandler::AddPrimitive (polyline)
@@ -560,16 +574,11 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
 {
   //----- 
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive( G4NURBS )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4NURBS )\n";
 
-  //----- Initialize DAWN IF NECESSARY
-  FRBeginModeling();
-	
-  ///////////////////////////////////////////////
-  // DAWN does not support NUBS visualizaition //
-  ///////////////////////////////////////////////
+  //----- Initialize if necessary
+  GFBeginModeling();
+
 }
 
 
@@ -581,64 +590,11 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
   G4Text dummytext = text;
 
   //----- 
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive( G4Text )\n";
-#endif
-  //----- Initialize DAWN IF NECESSARY
-  FRBeginModeling();
+  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Text )\n";
 
-  //----- send color
-  /*
-  const G4Color&	color     = GetTextColor (text) ;
-  SendStrDouble3(	FR_COLOR_RGB    ,
-			color.GetRed  (), 
-			color.GetGreen(),
-			color.GetBlue () );
+  //----- Initialize IF NECESSARY
+  GFBeginModeling();
 
-  //----- Calc size 
-  //MarkerSizeType size_type;
-  G4double	fontsize  = GetMarkerDiameter( text , size_type );
-
-  //----- Calc position
-  const G4Point3D&	position       = text.GetPosition  () ;
-
-  //----- offset
-  G4double x_offset = text.GetXOffset();
-  G4double y_offset = text.GetYOffset();
-
-  //----- get string to be visualized and Calc its length
-  const char* vis_text    = text.GetText();
-  const int   STR_LENGTH  = strlen ( vis_text );
-
-  //----- create buffer and copy the string there
-  int   MAX_STR_LENGTH   =  COMMAND_BUF_SIZE - 100 ;
-  if  ( MAX_STR_LENGTH <= 0 ) { 
-    G4cerr << "ERROR (FukuiRenderer) : Not enough buffer size for data transferring." << G4endl;
-    G4cerr << "                        G4Text Visualization is aborted" << G4endl;
-    return ;
-  }
-  char*  buf  = new char [ (MAX_STR_LENGTH + 1) ] ; 
-  if  ( MAX_STR_LENGTH >= STR_LENGTH  ) {
-    strcpy  ( buf, vis_text ) ; 
-  } else {
-    strncpy ( buf, vis_text, MAX_STR_LENGTH ) ;
-  }
-
-  //----- select string command 
-  char  text_command[32];
-  switch (size_type) {
-  case world:
-    strcpy ( text_command, FR_MARK_TEXT_2D  );
-    break;
-  case screen:
-  default:
-    strcpy ( text_command, FR_MARK_TEXT_2DS );
-    break;
-  }
-
-  //----- delete buffer
-  delete [] buf ;
-  */
 } // G4GMocrenFileSceneHandler::AddPrimitive ( text )
 
 
@@ -649,11 +605,10 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   G4Circle dummycircle = mark_circle;
 
   //----- 
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive( G4Circle )\n";
-#endif
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Circle )\n";
+
+  //----- Initialize IF NECESSARY
+  GFBeginModeling();
 
 
 } // G4GMocrenFileSceneHandler::AddPrimitive ( mark_circle )
@@ -666,11 +621,10 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   G4Square dummysquare = mark_square;
 
   //----- 
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive( G4Square )\n";
-#endif
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Square )\n";
+
+  //----- Initialize if necessary
+  GFBeginModeling();
 
 } // G4GMocrenFileSceneHandler::AddPrimitive ( mark_square )
 
@@ -679,14 +633,13 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron ) 
 {
   //----- 
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddPrimitive( G4Polyhedron )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddPrimitive( G4Polyhedron )\n";
+
 
   if (polyhedron.GetNoFacets() == 0) return;
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //---------- (3) Facet block
   for (int f = polyhedron.GetNoFacets(); f; f--){
@@ -725,26 +678,25 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
 
 
 //----- 
-void G4GMocrenFileSceneHandler::FREndModeling ()
+void G4GMocrenFileSceneHandler::GFEndModeling ()
 {
   G4VSceneHandler::EndModeling();
 
   //----- 		
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** FREndModeling (called)" << G4endl;
-#endif
-  if( FRIsInModeling() ) {
+  if(GFDEBUG) G4cerr << "***** GFEndModeling (called)" << G4endl;
 
-#if defined DEBUG_FR_SCENE
-    G4cerr << "***** FREndModeling (started) " ; 
-    G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
-#endif
+  if( GFIsInModeling() ) {
+
+    if(GFDEBUG) {
+      G4cerr << "***** GFEndModeling (started) " ; 
+      G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
+    }
 
     //----- End saving data to g4.gdd
     EndSavingGdd() ;
 
     //------ Reset flag 
-    FRflag_in_modeling = false ;
+    kFlagInModeling = false ;
 
   }
 
@@ -754,11 +706,9 @@ void G4GMocrenFileSceneHandler::FREndModeling ()
 //----- 
 void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** BeginPrimitives \n";
-#endif
+  if(GFDEBUG) G4cerr << "***** BeginPrimitives \n";
 
-  FRBeginModeling();
+  GFBeginModeling();
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
@@ -769,9 +719,8 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
 //----- 
 void G4GMocrenFileSceneHandler::EndPrimitives ()
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** EndPrimitives \n";
-#endif
+  if(GFDEBUG) G4cerr << "***** EndPrimitives \n";
+
   G4VSceneHandler::EndPrimitives ();
 }
 
@@ -781,9 +730,7 @@ void G4GMocrenFileSceneHandler::EndPrimitives ()
 //----- Add box
 void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( box )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( box )\n";
 
   if(GFDEBUG_DET > 0)
     G4cout << "G4GMocrenFileSceneHandler::AddSolid(const G4Box&)  : "
@@ -792,8 +739,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
 
   //--
@@ -821,6 +768,21 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
   }
 
 
+  // the volume name set by /vis/gMocren/setVolumeName
+  G4String volName = kMessenger.getVolumeName();
+
+  if(kFlagParameterization != 2) {
+    G4ScoringManager * pScrMan = G4ScoringManager::GetScoringManager();
+    if(pScrMan) {
+      G4ScoringBox * pScBox = dynamic_cast<G4ScoringBox*>(pScrMan->FindMesh(volName));
+      G4bool bMesh = false;
+      if(pScBox != NULL) bMesh = true;
+      if(bMesh) kFlagParameterization = 2;
+      if(GFDEBUG_DET > 0) G4cout << "   G4ScoringManager::FindMesh() : "
+				 << volName << " - " << bMesh << G4endl;
+    }
+  }
+
   const G4VModel* pv_model  = GetModel();
   if (!pv_model) { return ; } 
   G4PhysicalVolumeModel* pPVModel =
@@ -845,24 +807,21 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4cout << "    top phys. vol. name : " << pPVModel->GetTopPhysicalVolume()->GetName() << G4endl;
   }
 
-  //-- check parameterised volume
-  G4String volName = fMessenger.getVolumeName();
+  //-- check the parameterised volume
   if(box.GetName() == volName) {
-  //G4String paraName = "DICOMNest";
-  //if(box.GetName() == paraName) {
     
-    fVolumeTrans3D = *fpObjectTransformation;
+    kVolumeTrans3D = *fpObjectTransformation;
     // coordination system correction for gMocren
     G4ThreeVector raxis(1., 0., 0.), dummy(0.,0.,0.); 
-    G4RotationMatrix rot(raxis, M_PI*rad);
+    G4RotationMatrix rot(raxis, pi*rad);
     G4Transform3D trot(rot, dummy);
     if(GFDEBUG_DET) {
-      G4ThreeVector trans = fVolumeTrans3D.getTranslation();
-      G4RotationMatrix rot = fVolumeTrans3D.getRotation().inverse();
-      G4cout << "fVolumeTrans3D: " << trans << G4endl << rot << G4endl;
+      G4ThreeVector trans = kVolumeTrans3D.getTranslation();
+      G4RotationMatrix rot = kVolumeTrans3D.getRotation().inverse();
+      G4cout << "kVolumeTrans3D: " << trans << G4endl << rot << G4endl;
     }
-    fVolumeTrans3D = fVolumeTrans3D*trot;
-    G4cout << " Parameterised volume : " << box.GetName() << G4endl;
+    kVolumeTrans3D = kVolumeTrans3D*trot;
+    if(GFDEBUG_DET) G4cout << " Parameterised volume : " << box.GetName() << G4endl;
 
 
 
@@ -884,211 +843,414 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     case kZAxis: dirAxis[0] = 2; break;
     default: G4Exception("Error.");
     }
-    fNestedVolumeNames.push_back(pv[0]->GetName());
+    kNestedVolumeNames.push_back(pv[0]->GetName());
     if(GFDEBUG_DET) 
       G4cout << "        daughter name :  " << pv[0]->GetName()
 	     << "   # : " << nDaughters[0] << G4endl;
 
     //
-    pv[1] = pv[0]->GetLogicalVolume()->GetDaughter(0);
-    if(pv[1]) {
-      pv[1]->GetReplicationData(axis, nReplicas, width, offset, consuming);
-      nDaughters[1] = nReplicas;
-      switch(axis) {
-      case kXAxis: dirAxis[1] = 0; break;
-      case kYAxis: dirAxis[1] = 1; break;
-      case kZAxis: dirAxis[1] = 2; break;
-      default: G4Exception("Error.");
-      }
-      fNestedVolumeNames.push_back(pv[1]->GetName());
-      if(GFDEBUG_DET) 
-	G4cout << "        sub-daughter name :  " << pv[1]->GetName()
-	      << "   # : " << nDaughters[1]<< G4endl;
-
-      //
-      pv[2] = pv[1]->GetLogicalVolume()->GetDaughter(0);
-      if(pv[2]) {
-	nDaughters[2] = pv[2]->GetMultiplicity();
-	fNestedVolumeNames.push_back(pv[2]->GetName());
-	if(GFDEBUG_DET) 
-	  G4cout << "        sub-sub-daughter name :  " << pv[2]->GetName()
-		 << "   # : " << nDaughters[2] << G4endl;
-
-	if(nDaughters[2] > 1) {
-	  G4VNestedParameterisation * nestPara
-	    = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-	  if(!nestPara) G4Exception("Error[gMocrenFileSceneHandler]: None nested parameterisation");
-	  nestPara->ComputeTransformation(0, pv[2]);
-	  G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
-	  nestPara->ComputeTransformation(1, pv[2]);
-	  G4ThreeVector trans1 = pv[2]->GetObjectTranslation();
-	  G4ThreeVector diff(trans0 - trans1);
-	  if(GFDEBUG_DET) 
-	    G4cout << trans0 << " - " << trans1 << " - " << diff << G4endl;
-
-	  if(diff.x() != 0.) dirAxis[2] = 0;
-	  else if(diff.y() != 0.) dirAxis[2] = 1;
-	  else if(diff.z() != 0.) dirAxis[2] = 2;
-	  else G4Exception("Error[gMocrenFileSceneHandler]: Unexpected nested parameterisation");
-	}
+    if(GFDEBUG_DET) {
+      if(pv[0]->GetLogicalVolume()->GetNoDaughters()) {
+	G4cout << "# of daughters : " 
+	       << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
+      } else {
+	//G4Exception("Error: G4GMocrenFileSceneHandler: 0000010");
       }
     }
 
-    // get densities
-    G4VNestedParameterisation * nestPara
-      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-    if(nestPara) {
-      G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
-      for(int n0 = 0; n0 < nDaughters[0]; n0++) {
-	for(int n1 = 0; n1 < nDaughters[1]; n1++) {
-	  for(int n2 = 0; n2 < nDaughters[2]; n2++) {
+    // check whether nested or regular parameterization
+    if(GFDEBUG_DET) G4cout << "# of daughters : " 
+			   << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
+    if(pv[0]->GetLogicalVolume()->GetNoDaughters() == 0) {
+      kFlagParameterization = 1;
+      //G4Exception("Error: G4GMocrenFileSceneHandler: 0000020");
+    }
+    
+    if(kFlagParameterization == 0) {
+
+      pv[1] = pv[0]->GetLogicalVolume()->GetDaughter(0);
+      if(pv[1]) {
+	pv[1]->GetReplicationData(axis, nReplicas, width, offset, consuming);
+	nDaughters[1] = nReplicas;
+	switch(axis) {
+	case kXAxis: dirAxis[1] = 0; break;
+	case kYAxis: dirAxis[1] = 1; break;
+	case kZAxis: dirAxis[1] = 2; break;
+	default: G4Exception("Error.");
+	}
+	kNestedVolumeNames.push_back(pv[1]->GetName());
+	if(GFDEBUG_DET) 
+	  G4cout << "        sub-daughter name :  " << pv[1]->GetName()
+		 << "   # : " << nDaughters[1]<< G4endl;
+
+	//
+	pv[2] = pv[1]->GetLogicalVolume()->GetDaughter(0);
+	if(pv[2]) {
+	  nDaughters[2] = pv[2]->GetMultiplicity();
+	  kNestedVolumeNames.push_back(pv[2]->GetName());
+	  if(GFDEBUG_DET) 
+	    G4cout << "        sub-sub-daughter name :  " << pv[2]->GetName()
+		   << "   # : " << nDaughters[2] << G4endl;
+
+	  if(nDaughters[2] > 1) {
+	    G4VNestedParameterisation * nestPara
+	      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
+	    if(!nestPara) G4Exception("Error[gMocrenFileSceneHandler]: None nested parameterisation");
+	    nestPara->ComputeTransformation(0, pv[2]);
+	    G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
+	    nestPara->ComputeTransformation(1, pv[2]);
+	    G4ThreeVector trans1 = pv[2]->GetObjectTranslation();
+	    G4ThreeVector diff(trans0 - trans1);
+	    if(GFDEBUG_DET) 
+	      G4cout << trans0 << " - " << trans1 << " - " << diff << G4endl;
+
+	    if(diff.x() != 0.) dirAxis[2] = 0;
+	    else if(diff.y() != 0.) dirAxis[2] = 1;
+	    else if(diff.z() != 0.) dirAxis[2] = 2;
+	    else G4Exception("Error[gMocrenFileSceneHandler]: Unexpected nested parameterisation");
+	  }
+	}
+      }
+      
+      for(int i = 0; i < 3; i++) {
+	kNestedVolumeDimension[i] = nDaughters[i];
+	//kNestedVolumeDimension[i] = nDaughters[dirAxis[i]];
+	kNestedVolumeDirAxis[i] = dirAxis[i];
+      }
+      //G4cout << "@@@@@@@@@ "
+      //       << dirAxis[0] << ", " << dirAxis[1] << ", " << dirAxis[2] << G4endl;
+
+      // get densities
+      G4VNestedParameterisation * nestPara
+	= dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
+      if(nestPara) {
+	G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
+	for(int n0 = 0; n0 < nDaughters[0]; n0++) {
+	  for(int n1 = 0; n1 < nDaughters[1]; n1++) {
+	    for(int n2 = 0; n2 < nDaughters[2]; n2++) {
 		  
-	    G4GMocrenTouchable * touch = new G4GMocrenTouchable(n1, n0);
-	    if(GFDEBUG_DET) 
-	      G4cout << "   retrieve volume : copy # : " << n0
-		     << ", " << n1 << ", " << n2 << G4endl;
-	    G4Material * mat = nestPara->ComputeMaterial(pv[2], n2, touch);
-	    delete touch;
-	    G4double dens = mat->GetDensity()/(g/cm3);
+	      G4GMocrenTouchable * touch = new G4GMocrenTouchable(n1, n0);
+	      if(GFDEBUG_DET) 
+		G4cout << "   retrieve volume : copy # : " << n0
+		       << ", " << n1 << ", " << n2 << G4endl;
+	      G4Material * mat = nestPara->ComputeMaterial(pv[2], n2, touch);
+	      delete touch;
+	      G4double dens = mat->GetDensity()/(g/cm3);
  
-	    if(GFDEBUG_DET) 
-	      G4cout << "           density :" << dens << " [g/cm3]" << G4endl;
-	    G4Box tbox(box);
-	    nestPara->ComputeDimensions(tbox, n2, pv[2]);
-	    xyz[0] = tbox.GetXHalfLength()/mm;
-	    xyz[1] = tbox.GetYHalfLength()/mm;
-	    xyz[2] = tbox.GetZHalfLength()/mm;
-	    if(n0 != 0 || n1 != 0 || n2 != 0) {
-	      for(int i = 0; i < 3; i++) {
-		if(xyz[i] != prexyz[i]) G4Exception("Error[gMocrenFileSceneHandler]: Unsupported parameterisation.");
+	      if(GFDEBUG_DET) 
+		G4cout << "           density :" << dens << " [g/cm3]" << G4endl;
+
+	      G4Box tbox(box);
+	      nestPara->ComputeDimensions(tbox, n2, pv[2]);
+	      xyz[0] = tbox.GetXHalfLength()/mm;
+	      xyz[1] = tbox.GetYHalfLength()/mm;
+	      xyz[2] = tbox.GetZHalfLength()/mm;
+	      if(n0 != 0 || n1 != 0 || n2 != 0) {
+		for(int i = 0; i < 3; i++) {
+		  if(xyz[i] != prexyz[i]) G4Exception("Error[gMocrenFileSceneHandler]: Unsupported parameterisation.");
+		}
 	      }
+	      if(GFDEBUG_DET) 
+		G4cout << "              size : " << tbox.GetXHalfLength()/mm << " x "
+		       << tbox.GetYHalfLength()/mm << " x "
+		       << tbox.GetZHalfLength()/mm << " [mm3]" << G4endl;
+
+	      G4int idx[3];
+	      idx[dirAxis[0]] = n0;
+	      idx[dirAxis[1]] = n1;
+	      idx[dirAxis[2]] = n2;
+	      Index3D i3d(idx[0],idx[1],idx[2]);
+	      kNestedModality[i3d] = dens;
+	      if(GFDEBUG_DET) 
+		G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
+		       << "  density: " << dens << G4endl;
+
+	      for(int i = 0; i < 3; i++) prexyz[i] = xyz[i];
 	    }
-	    if(GFDEBUG_DET) 
-	      G4cout << "              size : " << tbox.GetXHalfLength()/mm << " x "
-		     << tbox.GetYHalfLength()/mm << " x "
-		     << tbox.GetZHalfLength()/mm << " [mm3]" << G4endl;
+	  }
+	}  
+
+	kVolumeSize.set(box.GetXHalfLength()*2/mm,
+			box.GetYHalfLength()*2/mm,
+			box.GetZHalfLength()*2/mm);
+	// mesh size
+	if(!kbSetModalityVoxelSize) {
+	  float spacing[3] = {2*xyz[0], 2*xyz[1], 2*xyz[2]};
+	  kgMocrenIO->setVoxelSpacing(spacing);
+	  kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
+	  kbSetModalityVoxelSize = true;
+	}
+
+      } else {
+	if(GFDEBUG_DET) 
+	  G4cout << pv[2]->GetName() << G4endl;
+	G4Exception("Error[gMocrenFileSceneHandler]: none nested parameterization");
+      }
+
+
+
+      //-- debug
+      if(GFDEBUG_DET > 1) {
+	if(pPVModel->GetCurrentPV()->IsParameterised()) {
+	  G4VPVParameterisation * para = pPVModel->GetCurrentPV()->GetParameterisation();
+	  G4cout << " Is nested parameterisation? : " << para->IsNested() << G4endl;
+
+
+	  G4int npvp = pPVModel->GetDrawnPVPath().size();
+	  G4cout << "     physical volume node id : "
+		 << "size: " << npvp << ", PV name: ";
+	  for(int i = 0; i < npvp; i++) {
+	    G4cout << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetName()
+		   << " [param:"
+		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsParameterised()
+		   << ",rep:"
+		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsReplicated();
+	    if(pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()) {
+	      G4cout << ",nest:"
+		     << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()->IsNested();
+	    }
+	    G4cout << ",copyno:"
+		   << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetCopyNo();
+	    G4cout << "] - ";
+	  }
+	  G4cout << G4endl;
+
+
+	  EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;  
+	  pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
+	  G4cout << "     # replicas : " << nReplicas << G4endl;
+	  G4double pareDims[3] = {0.,0.,0.};
+	  G4Box * pbox = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
+	  if(pbox) {
+	    pareDims[0] = 2.*pbox->GetXHalfLength()*mm;
+	    pareDims[1] = 2.*pbox->GetYHalfLength()*mm;
+	    pareDims[2] = 2.*pbox->GetZHalfLength()*mm;
+	    G4cout << "     mother size ["
+		   << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
+		   << "] : "
+		   << pareDims[0] << " x "
+		   << pareDims[1] << " x "
+		   << pareDims[2] << " [mm3]"
+		   << G4endl;
+	  }
+	  G4double paraDims[3];
+	  G4Box * boxP = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
+	  if(boxP) {
+	    paraDims[0] = 2.*boxP->GetXHalfLength()*mm;
+	    paraDims[1] = 2.*boxP->GetYHalfLength()*mm;
+	    paraDims[2] = 2.*boxP->GetZHalfLength()*mm;
+	    G4cout << "     parameterised volume? ["
+		   << pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetName()
+		   << "] : "
+		   << paraDims[0] << " x "
+		   << paraDims[1] << " x "
+		   << paraDims[2] << " [mm3]  : "
+		   << G4int(pareDims[0]/paraDims[0]) << " x "
+		   << G4int(pareDims[1]/paraDims[1]) << " x "
+		   << G4int(pareDims[2]/paraDims[2]) << G4endl;
+	  } else {
+	    G4cout << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
+		   << " isn't a G4Box." << G4endl;
+	  }
+	}
+      }
+
+
+    } else if(kFlagParameterization == 1) { // G4PhantomParameterisation based geom. construnction
+
+      // get the dimension of the parameterized patient geometry
+      G4PhantomParameterisation * phantomPara
+	= dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
+      if(!phantomPara) {
+	G4Exception("Error: G4GMocrenFileSceneHandler: no G4PhantomParameterisation");
+      } else {
+	;
+      }
+
+      kNestedVolumeDimension[0] = phantomPara->GetNoVoxelX();
+      kNestedVolumeDimension[1] = phantomPara->GetNoVoxelY();
+      kNestedVolumeDimension[2] = phantomPara->GetNoVoxelZ();
+      kNestedVolumeDirAxis[0] = 0;
+      kNestedVolumeDirAxis[1] = 1;
+      kNestedVolumeDirAxis[2] = 2;
+
+      // get densities of the parameterized patient geometry
+      G4int nX = kNestedVolumeDimension[0];
+      G4int nXY = kNestedVolumeDimension[0]*kNestedVolumeDimension[1];
+
+      for(int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
+	for(int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
+	  for(int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+
+	    G4int repNo = n0 + n1*nX + n2*nXY;
+	    G4Material * mat = phantomPara->ComputeMaterial(repNo, pv[0]);
+	    G4double dens = mat->GetDensity()/(g/cm3);
+
 
 	    G4int idx[3];
-	    idx[dirAxis[0]] = n0;
-	    idx[dirAxis[1]] = n1;
-	    idx[dirAxis[2]] = n2;
+	    idx[kNestedVolumeDirAxis[0]] = n0;
+	    idx[kNestedVolumeDirAxis[1]] = n1;
+	    idx[kNestedVolumeDirAxis[2]] = n2;
 	    Index3D i3d(idx[0],idx[1],idx[2]);
-	    fNestedModality[i3d] = dens;
+	    kNestedModality[i3d] = dens;
+
 	    if(GFDEBUG_DET) 
 	      G4cout << " index: " << idx[0] << ", " << idx[1] << ", " << idx[2]
 		     << "  density: " << dens << G4endl;
 
-	    for(int i = 0; i < 3; i++) prexyz[i] = xyz[i];
 	  }
-        }
-      }  
+	}
+      }
 
-      fVolumeSize.set(box.GetXHalfLength()*2/mm,
+      kVolumeSize.set(box.GetXHalfLength()*2/mm,
 		      box.GetYHalfLength()*2/mm,
 		      box.GetZHalfLength()*2/mm);
+
       // mesh size
-      if(!fbSetModalityVoxelSize) {
-	float spacing[3] = {2*xyz[0], 2*xyz[1], 2*xyz[2]};
-	fgMocrenIO->setVoxelSpacing(spacing);
-	fVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
-	fbSetModalityVoxelSize = true;
+      if(!kbSetModalityVoxelSize) {
+	float spacing[3] = {2*phantomPara->GetVoxelHalfX(),
+			    2*phantomPara->GetVoxelHalfY(),
+			    2*phantomPara->GetVoxelHalfZ()};
+	kgMocrenIO->setVoxelSpacing(spacing);
+	kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
+	kbSetModalityVoxelSize = true;
       }
-    } else {
-      if(GFDEBUG_DET) 
-        G4cout << pv[2]->GetName() << G4endl;
-      G4Exception("Error[gMocrenFileSceneHandler]: none nested parameterization");
     }
-  }
+
+  } // if(box.GetName() == volName) 
+
+
+  // processing geometry construction based on the interactive PS
+  if(!kFLagProcessedInteractiveScorer) {
+
+
+    // get the dimension of the geometry defined in G4VScoringMesh
+    G4ScoringManager * pScrMan = G4ScoringManager::GetScoringManager();
+    if(!pScrMan) return;
+    G4ScoringBox * scoringBox
+      = dynamic_cast<G4ScoringBox*>(pScrMan->FindMesh(volName));
+    if(scoringBox == NULL) return;
+
+
+    G4int nVoxels[3];
+    scoringBox->GetNumberOfSegments(nVoxels);
+    // this order depends on the G4ScoringBox
+    kNestedVolumeDimension[0] = nVoxels[2];
+    kNestedVolumeDimension[1] = nVoxels[1];
+    kNestedVolumeDimension[2] = nVoxels[0];
+    kNestedVolumeDirAxis[0] = 2;
+    kNestedVolumeDirAxis[1] = 1;
+    kNestedVolumeDirAxis[2] = 0;
+
+    // get densities of the parameterized patient geometry
+    for(int n0 = 0; n0 < kNestedVolumeDimension[0]; n0++) {
+      for(int n1 = 0; n1 < kNestedVolumeDimension[1]; n1++) {
+	for(int n2 = 0; n2 < kNestedVolumeDimension[2]; n2++) {
+
+	  G4double dens = 0.*(g/cm3);
+
+	  G4int idx[3];
+	  idx[kNestedVolumeDirAxis[0]] = n0;
+	  idx[kNestedVolumeDirAxis[1]] = n1;
+	  idx[kNestedVolumeDirAxis[2]] = n2;
+	  Index3D i3d(idx[0],idx[1],idx[2]);
+	  kNestedModality[i3d] = dens;
+
+	}
+      }
+    }
+
+    G4ThreeVector boxSize = scoringBox->GetSize();
+    if(GFDEBUG_DET > 1) {
+      G4cout << "Interactive Scorer : size - "
+	     << boxSize.x()/cm << " x " 
+	     << boxSize.y()/cm << " x " 
+	     << boxSize.z()/cm << " [cm3]" << G4endl;
+      G4cout << "Interactive Scorer : # voxels - "
+	     << nVoxels[0] << " x " 
+	     << nVoxels[1] << " x " 
+	     << nVoxels[2] << G4endl;
+    }
+    kVolumeSize.set(boxSize.x()*2,
+		    boxSize.y()*2,
+		    boxSize.z()*2);
+
+    // mesh size
+    if(!kbSetModalityVoxelSize) {
+      float spacing[3] = {boxSize.x()*2/nVoxels[0],
+			  boxSize.y()*2/nVoxels[1],
+			  boxSize.z()*2/nVoxels[2]};
+
+      kgMocrenIO->setVoxelSpacing(spacing);
+      kVoxelDimension.set(spacing[0], spacing[1], spacing[2]);
+      kbSetModalityVoxelSize = true;
+
+    }
+
+
+    kVolumeTrans3D = *fpObjectTransformation;
+
+    // translation for the scoring mesh
+    G4ThreeVector sbth = scoringBox->GetTranslation();
+    G4Translate3D sbtranslate(sbth);
+    kVolumeTrans3D = kVolumeTrans3D*sbtranslate;
+
+    // rotation matrix for the scoring mesh 
+    G4RotationMatrix sbrm;
+    sbrm = scoringBox->GetRotationMatrix();
+    if(!sbrm.isIdentity()) {
+      G4ThreeVector sbdummy(0.,0.,0.); 
+      G4Transform3D sbrotate(sbrm.inverse(), sbdummy);
+      kVolumeTrans3D = kVolumeTrans3D*sbrotate;
+    }
+
+
+    // coordination system correction for gMocren
+    G4ThreeVector raxisY(0., 1., 0.), dummyY(0.,0.,0.); 
+    G4RotationMatrix rotY(raxisY, pi*rad);
+    G4Transform3D trotY(rotY, dummyY);
+    G4ThreeVector raxisZ(0., 0., 1.), dummyZ(0.,0.,0.); 
+    G4RotationMatrix rotZ(raxisZ, pi*rad);
+    G4Transform3D trotZ(rotZ, dummyZ);
+
+    kVolumeTrans3D = kVolumeTrans3D*trotY*trotZ;
+
+
+    //
+    kFLagProcessedInteractiveScorer = true;
+  }  
+
 
 
   //-- add detectors
   G4bool bAddDet = true;
-  if(!fMessenger.getDrawVolumeGrid()) {
+  if(!kMessenger.getDrawVolumeGrid()) {
 
-    if(volName == box.GetName()) {
-      bAddDet = false;
-    }
+    if(kFlagParameterization == 0) { // nested parameterisation
 
-    std::vector<G4String>::iterator itr = fNestedVolumeNames.begin();
-    for(; itr != fNestedVolumeNames.end(); itr++) {
-      if(*itr == box.GetName())  {
+      if(volName == box.GetName()) {
 	bAddDet = false;
-	break;
       }
+
+      std::vector<G4String>::iterator itr = kNestedVolumeNames.begin();
+      for(; itr != kNestedVolumeNames.end(); itr++) {
+	if(*itr == box.GetName())  {
+	  bAddDet = false;
+	  break;
+	}
+      }
+    } else if(kFlagParameterization == 1) { // phantom paramemterisation
+
+      if(volName != box.GetName()) {
+	bAddDet = false;
+      }
+
+    } else if(kFlagParameterization == 2) { // interactive primitive scorer
+      ;
     }
 
   }
   if(bAddDet) AddDetector(box);
-    
-
-
-  //-- debug
-  if(GFDEBUG_DET > 1) {
-    if(pPVModel->GetCurrentPV()->IsParameterised()) {
-      G4VPVParameterisation * para = pPVModel->GetCurrentPV()->GetParameterisation();
-      G4cout << " Is nested parameterisation? : " << para->IsNested() << G4endl;
-
-
-      G4int npvp = pPVModel->GetDrawnPVPath().size();
-      G4cout << "     physical volume node id : "
-	     << "size: " << npvp << ", PV name: ";
-      for(int i = 0; i < npvp; i++) {
-	G4cout << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetName()
-	       << " [param:"
-	       << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsParameterised()
-	       << ",rep:"
-	       << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->IsReplicated();
-	if(pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()) {
-	  G4cout << ",nest:"
-		 << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetParameterisation()->IsNested();
-	}
-	G4cout << ",copyno:"
-	       << pPVModel->GetDrawnPVPath()[i].GetPhysicalVolume()->GetCopyNo();
-	G4cout << "] - ";
-      }
-      G4cout << G4endl;
-
-
-      EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;  
-      pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
-      G4cout << "     # replicas : " << nReplicas << G4endl;
-      G4double pareDims[3];
-      G4Box * pbox = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
-      if(pbox) {
-	pareDims[0] = 2.*pbox->GetXHalfLength()*mm;
-	pareDims[1] = 2.*pbox->GetYHalfLength()*mm;
-	pareDims[2] = 2.*pbox->GetZHalfLength()*mm;
-	G4cout << "     mother size ["
-	       << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
-	       << "] : "
-	       << pareDims[0] << " x "
-	       << pareDims[1] << " x "
-	       << pareDims[2] << " [mm3]"
-	       << G4endl;
-      }
-      G4double paraDims[3];
-      G4Box * boxP = dynamic_cast<G4Box *>(pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetLogicalVolume()->GetSolid());
-      if(boxP) {
-	paraDims[0] = 2.*boxP->GetXHalfLength()*mm;
-	paraDims[1] = 2.*boxP->GetYHalfLength()*mm;
-	paraDims[2] = 2.*boxP->GetZHalfLength()*mm;
-	G4cout << "     parameterised volume? ["
-	       << pPVModel->GetDrawnPVPath()[npvp-1].GetPhysicalVolume()->GetName()
-	       << "] : "
-	       << paraDims[0] << " x "
-	       << paraDims[1] << " x "
-	       << paraDims[2] << " [mm3]  : "
-	       << G4int(pareDims[0]/paraDims[0]) << " x "
-	       << G4int(pareDims[1]/paraDims[1]) << " x "
-	       << G4int(pareDims[2]/paraDims[2]) << G4endl;
-      } else {
-	G4cout << pPVModel->GetDrawnPVPath()[npvp-2].GetPhysicalVolume()->GetName()
-	       << " isn't a G4Box." << G4endl;
-      }
-    }
-  }
-
-
 
 
 } // void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
@@ -1098,20 +1260,19 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( tubes )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( tubes )\n";
+
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(tubes);
 
 
-  //AK test
+  // for a debug
   if(GFDEBUG_DET > 0) {
     G4cout << "-------" << G4endl;
     G4cout << "    " << tubes.GetName() << G4endl;
@@ -1132,8 +1293,7 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
   if (!pPVModel) { return ; }
   G4Material * mat = pPVModel->GetCurrentMaterial();
   G4String name = mat->GetName();
-  //G4double dens = mat->GetDensity() /(g/cm3);
-  //SendStrDouble("/DENSITY", dens);
+
 } // void G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& )
 
 
@@ -1142,14 +1302,13 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( cons )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( cons )\n";
+
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(cons);
@@ -1160,15 +1319,14 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 //----- Add trd
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( trd )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( trd )\n";
+
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(trd);
@@ -1179,14 +1337,13 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 //----- Add sphere
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( sphere )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( sphere )\n";
+
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(sphere);
@@ -1197,15 +1354,13 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 //----- Add para
 void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( para )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( para )\n";
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(para);
@@ -1216,15 +1371,13 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 //----- Add trap
 void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( trap )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( trap )\n";
 
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(trap);
@@ -1236,14 +1389,13 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Torus& torus )
 {
-#if defined DEBUG_FR_SCENE
-  G4cerr << "***** AddSolid ( torus )\n";
-#endif
+  if(GFDEBUG) G4cerr << "***** AddSolid ( torus )\n";
+
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(torus);
@@ -1258,8 +1410,8 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4VSolid& solid  )
   //----- skip drawing invisible primitive
   if( !IsVisible() ) { return ; }
 
-  //----- Initialize Fukui Renderer IF NECESSARY
-  FRBeginModeling();
+  //----- Initialize if necessary
+  GFBeginModeling();
 
   //
   AddDetector(solid);
@@ -1276,7 +1428,7 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4VSolid& solid  )
 //----- Add a trajectory
 void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
 
-  fbModelingTrajectory = true;
+  kbModelingTrajectory = true;
 
   G4VSceneHandler::AddCompound(traj);
 
@@ -1308,7 +1460,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
     }
   }
 
-  fbModelingTrajectory = false;
+  kbModelingTrajectory = false;
 }
 
 #include <vector>
@@ -1330,7 +1482,7 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
     }
   */
 
-  std::vector<G4String> hitNames = fMessenger.getHitNames();
+  std::vector<G4String> hitNames = kMessenger.getHitNames();
   if(GFDEBUG_HIT) {
     std::vector<G4String>::iterator itr = hitNames.begin();
     for(; itr != hitNames.end(); itr++) 
@@ -1343,8 +1495,6 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 
     G4bool bid[3] = {false, false, false};
     Index3D id;
-
-    G4int nhitname = (G4int)hitNames.size();
 
     std::vector<G4AttValue>::iterator itr;
     // First, get IDs
@@ -1369,6 +1519,8 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
       }
     }
 
+    G4int nhitname = (G4int)hitNames.size();
+
     if(bid[0] && bid[1] && bid[2]) {
 
       if(GFDEBUG_HIT)
@@ -1386,16 +1538,16 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 	    G4String unit;
 	    sval >> value >> unit;
 
-	    std::map<G4String, std::map<Index3D, G4double> >::iterator fNestedHitsListItr;
-	    fNestedHitsListItr = fNestedHitsList.find(hitNames[i]);
-	    if(fNestedHitsListItr != fNestedHitsList.end()) {
-	      //fTempNestedHits = &fNestedHitsListItr->second;
+	    std::map<G4String, std::map<Index3D, G4double> >::iterator kNestedHitsListItr;
+	    kNestedHitsListItr = kNestedHitsList.find(hitNames[i]);
+	    if(kNestedHitsListItr != kNestedHitsList.end()) {
+	      //fTempNestedHits = &kNestedHitsListItr->second;
 	      //(*fTempNestedHits)[id] = value;
-	      fNestedHitsListItr->second[id] = value;
+	      kNestedHitsListItr->second[id] = value;
 	    } else {
 	      std::map<Index3D, G4double> hits;
 	      hits[id] = value;
-	      fNestedHitsList[hitNames[i]] = hits;
+	      kNestedHitsList[hitNames[i]] = hits;
 	    }
 
 	    
@@ -1418,25 +1570,71 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   if(GFDEBUG_HIT)
     G4cout << " ::AddCompound(const std::map<G4int, G4double*> &) >>>>>>>>> " << G4endl;
 
+
+  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
+  G4int nhitname = (G4int)hitScorerNames.size();
+  G4String scorername = ((G4VHitsCollection)hits).GetName();
+
   if(GFDEBUG_HIT) {
     G4String meshname = ((G4VHitsCollection)hits).GetSDname();
-    G4String scorername = ((G4VHitsCollection)hits).GetName();
     G4cout << "       >>>>> " << meshname << " : " << scorername  << G4endl;
 
-    std::vector<G4String> hitScorerNames = fMessenger.getHitScorerNames();
-    G4int nhitname = (G4int)hitScorerNames.size();
     for(int i = 0; i < nhitname; i++)
       if(scorername == hitScorerNames[i]) 
-	G4cout << "       !!!! Hit scorer !!!!" << G4endl;
+	G4cout << "       !!!! Hit scorer !!!! " << scorername << G4endl;
 
+    G4cout << " dimension: "
+	   << kNestedVolumeDimension[0] << " x "
+	   << kNestedVolumeDimension[1] << " x "
+	   << kNestedVolumeDimension[2] << G4endl;
+
+    G4int id[3];
     std::map<G4int, G4double*> * map = hits.GetMap();
     std::map<G4int, G4double*>::const_iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
-      G4cout << "[" << itr->first << "] " << *itr->second << ", ";
+      GetNestedVolumeIndex(itr->first, id);
+      G4cout << "[" << itr->first << "] "
+	     << "("<< id[0] << "," << id[1] << "," << id[2] << ")"
+	     << *itr->second << ", ";
     }
     G4cout << G4endl;
   }
 
+  //-- --//
+  /*
+  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
+  if(GFDEBUG_HIT) {
+    std::vector<G4String>::iterator itr = hitScorerNames.begin();
+    for(; itr != hitScorerNames.end(); itr++) 
+      G4cout << "  PS name : " << *itr << G4endl;
+  }
+  */
+  
+
+  for(int i = 0; i < nhitname; i++) {
+    if(scorername == hitScorerNames[i]) {
+
+      G4int idx[3];
+      std::map<G4int, G4double*> * map = hits.GetMap();
+      std::map<G4int, G4double*>::const_iterator itr = map->begin();
+      for(; itr != map->end(); itr++) {
+	GetNestedVolumeIndex(itr->first, idx);
+	Index3D id;
+	id.x = idx[0]; id.y = idx[1]; id.z = idx[2];
+	
+	std::map<G4String, std::map<Index3D, G4double> >::iterator kNestedHitsListItr;
+	kNestedHitsListItr = kNestedHitsList.find(scorername);
+	if(kNestedHitsListItr != kNestedHitsList.end()) {
+	  kNestedHitsListItr->second[id] = *itr->second;
+	} else {
+	  std::map<Index3D, G4double> hit;
+	  hit[id] = *itr->second;
+	  kNestedHitsList[scorername] = hit;
+	}
+      }
+      break;
+    }
+  }
 }
 
 //----- 
@@ -1445,22 +1643,17 @@ G4bool G4GMocrenFileSceneHandler::IsVisible()
   //----- 
   G4bool  visibility  = true ;
 
-  //----- 
   const G4VisAttributes* pVisAttribs =
     fpViewer->GetApplicableVisAttributes( fpVisAttribs );
 
-  //----- 
-  if( ( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ) != NULL      )   && \
-      ( strcmp( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ),"0"  ) ) && \
-      ( pVisAttribs )                                             ) 
-    {
-      visibility = pVisAttribs->IsVisible();
-    } 
+  if(pVisAttribs) {
+    visibility = pVisAttribs->IsVisible();
+  } 
 
-  //----- 
   return visibility ;
 
 } // G4GMocrenFileSceneHandler::IsVisible()
+
 
 //----- 
 void G4GMocrenFileSceneHandler::ClearTransientStore() 
@@ -1510,7 +1703,7 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
   }
   for(int i = 0; i < 3; i++) detector.color[i] = uccolor[i];
   //
-  fDetectors.push_back(detector);
+  kDetectors.push_back(detector);
 
   if(GFDEBUG_DET > 1) {
     G4cout << "0     color:   (" << (int)uccolor[0] << ", "
@@ -1523,20 +1716,20 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
 //----- 
 void G4GMocrenFileSceneHandler::ExtractDetector() {
 
-  std::vector<Detector>::iterator itr = fDetectors.begin();
+  std::vector<Detector>::iterator itr = kDetectors.begin();
 
-  for(; itr != fDetectors.end(); itr++) {
+  for(; itr != kDetectors.end(); itr++) {
 
     // detector name
     G4String detname = itr->name;
-    if(GFDEBUG_DET > 0)
+    if(GFDEBUG_DET > 1)
       G4cout << "Detector name : " << detname << G4endl;
 
     // edge points of the detector
     std::vector<float *> dedges;
     G4Polyhedron * poly = itr->polyhedron;
     poly->Transform(itr->transform3D);
-    G4Transform3D invVolTrans = fVolumeTrans3D.inverse();
+    G4Transform3D invVolTrans = kVolumeTrans3D.inverse();
     poly->Transform(invVolTrans);
 
     G4Point3D v1, v2;
@@ -1562,13 +1755,13 @@ void G4GMocrenFileSceneHandler::ExtractDetector() {
 				itr->color[1],
 				itr->color[2]};
     //
-    fgMocrenIO->addDetector(detname, dedges, uccolor);
+    kgMocrenIO->addDetector(detname, dedges, uccolor);
     for(int i = 0; i < nedges; i++) { // # of edges is 12.
       delete [] dedges[i];
     }
     dedges.clear(); 
 
-    if(GFDEBUG_DET > 0) {
+    if(GFDEBUG_DET > 1) {
       G4cout << "    color:   (" << (int)uccolor[0] << ", "
 	     << (int)uccolor[1] << ", " << (int)uccolor[2] << ")"
 	     << G4endl;
@@ -1612,13 +1805,67 @@ G4bool G4GMocrenFileSceneHandler::Index3D::operator == (const Index3D & _right) 
   if(z == _right.z && y == _right.y && x == _right.x) return true;
   return false;
 }
+void G4GMocrenFileSceneHandler::GetNestedVolumeIndex(G4int _idx, G4int _idx3d[3]) {
+  if(kNestedVolumeDimension[0] == 0 ||
+     kNestedVolumeDimension[1] == 0 ||
+     kNestedVolumeDimension[2] == 0) {
+    for(int i = 0; i < 3; i++) _idx3d[i] = 0;
+    return;
+  }
+
+
+  if(kFlagParameterization == 0) {
+
+    G4int plane = kNestedVolumeDimension[2]*kNestedVolumeDimension[1];
+    G4int line = kNestedVolumeDimension[2];
+ 
+  /*
+  G4int idx3d[3];
+  idx3d[0] = _idx/plane;
+  idx3d[1] = (_idx%plane)/line;
+  idx3d[2] = (_idx%plane)%line;
+  _idx3d[0] = idx3d[kNestedVolumeDirAxis[0]];
+  _idx3d[1] = idx3d[kNestedVolumeDirAxis[1]];
+  _idx3d[2] = idx3d[kNestedVolumeDirAxis[2]];
+  */
+
+    _idx3d[kNestedVolumeDirAxis[0]] = _idx/plane;
+    _idx3d[kNestedVolumeDirAxis[1]] = (_idx%plane)/line;
+    _idx3d[kNestedVolumeDirAxis[2]] = (_idx%plane)%line;
 
 
 
-//////////////////////
-// static variables //
-//////////////////////
+  /*
 
-//----- static variables
-G4int G4GMocrenFileSceneHandler::fSceneIdCount = 0; 
+  G4cout << "G4GMocrenFileSceneHandler::GetNestedVolumeIndex : " << G4endl;
+  G4cout << "(depi, depj, depk) : "
+	 << kNestedVolumeDirAxis[0] << ", "
+	 << kNestedVolumeDirAxis[1] << ", "
+	 << kNestedVolumeDirAxis[2] << G4endl;
+  G4cout << "(ni, nj, nk) :"
+	 << kNestedVolumeDimension[0] << ", " 
+	 << kNestedVolumeDimension[1] << ", "
+	 << kNestedVolumeDimension[2] << " - " << G4endl;
+
+  G4cout << " _idx = " << _idx << "  :  plane = "
+	 << plane << " ,   line = " << line << G4endl;
+  G4cout << "(idx,idy,idz) + " << _idx3d[0] << ", "
+	 << _idx3d[1] << ", " << _idx3d[2] << " + " << G4endl;
+
+  */
+
+
+
+  } else {
+    
+    G4int plane = kNestedVolumeDimension[0]*kNestedVolumeDimension[1];
+    G4int line = kNestedVolumeDimension[0];
+    _idx3d[kNestedVolumeDirAxis[2]] = _idx/plane;
+    _idx3d[kNestedVolumeDirAxis[1]] = (_idx%plane)/line;
+    _idx3d[kNestedVolumeDirAxis[0]] = (_idx%plane)%line;
+
+  }
+
+}
+
 

@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.1 2009-04-01 13:16:11 akimura Exp $
+// $Id: G4GMocrenIO.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // File I/O manager class for writing or reading calcuated dose
 // distribution and some event information
 //
-//  Mar. 31, 2009 :  release for the gMocrenFile driver
+// Created:  Mar. 31, 2009  Akinori Kimura : release for the gMocrenFile driver
 //
 //                               Akinori Kimura
 //                               gMocren home page:
@@ -454,8 +454,8 @@ bool G4GMocrenIO::storeData(char * _filename) {
 
 bool G4GMocrenIO::storeData4() {
 
-  std::cout << ">>>>>>>  store data (ver.4) <<<<<<<" << std::endl;
-  std::cout << "         " << kFileName << std::endl;
+  if(kVerbose > 0) std::cout << ">>>>>>>  store data (ver.4) <<<<<<<" << std::endl;
+  if(kVerbose > 0) std::cout << "         " << kFileName << std::endl;
 
   bool DEBUG = false;//
 
@@ -664,7 +664,8 @@ bool G4GMocrenIO::storeData4() {
 
   // modality desity map for CT value
   size_t msize = minmax[1] - minmax[0]+1;
-  std::cout << minmax[0] << ", " << minmax[1] << std::endl;
+  if(DEBUG || kVerbose > 0) 
+    std::cout << "modality image : " << minmax[0] << ", " << minmax[1] << std::endl;
   float * pdmap = new float[msize];
   for(int i = 0; i < (int)msize; i++) pdmap[i] =kModalityImageDensityMap[i]; 
 
@@ -1019,8 +1020,8 @@ bool G4GMocrenIO::storeData4() {
 }
 bool G4GMocrenIO::storeData3() {
 
-  std::cout << ">>>>>>>  store data (ver.3) <<<<<<<" << std::endl;
-  std::cout << "         " << kFileName << std::endl;
+  if(kVerbose > 0) std::cout << ">>>>>>>  store data (ver.3) <<<<<<<" << std::endl;
+  if(kVerbose > 0) std::cout << "         " << kFileName << std::endl;
 
   bool DEBUG = false;//
 
@@ -1317,8 +1318,8 @@ bool G4GMocrenIO::storeData4(char * _filename) {
 // version 2
 bool G4GMocrenIO::storeData2() {
 
-  std::cout << ">>>>>>>  store data (ver.2) <<<<<<<" << std::endl;
-  std::cout << "         " << kFileName << std::endl;
+  if(kVerbose > 0) std::cout << ">>>>>>>  store data (ver.2) <<<<<<<" << std::endl;
+  if(kVerbose > 0) std::cout << "         " << kFileName << std::endl;
 
   bool DEBUG = false;//
 
@@ -1743,7 +1744,7 @@ bool G4GMocrenIO::retrieveData4() {
     if(DEBUG || kVerbose > 0) {
       std::cout << "No data." << std::endl;
     }
-    return -1;
+    return false;
   }
 
   // event number
@@ -2263,7 +2264,7 @@ bool G4GMocrenIO::retrieveData3() {
     if(DEBUG || kVerbose > 0) {
       std::cout << "No data." << std::endl;
     }
-    return -1;
+    return false;
   }
 
   // event number
@@ -2685,7 +2686,7 @@ bool G4GMocrenIO::retrieveData2() {
     if(DEBUG || kVerbose > 0) {
       std::cout << "No data." << std::endl;
     }
-    return -1;
+    return false;
   }
 
   // event number
