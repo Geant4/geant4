@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.36 2009-10-12 02:58:04 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.37 2009-10-12 04:11:25 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,7 +63,7 @@ void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
   sizeIsSet = true;
 }
-G4ThreeVector G4VScoringMesh::GetSize() {
+G4ThreeVector G4VScoringMesh::GetSize() const {
   if(sizeIsSet)
     return G4ThreeVector(fSize[0], fSize[1], fSize[2]);
   else
