@@ -917,7 +917,7 @@ int main()
       {
         G4double eOut=aChange->GetEnergy();
         if(std::fabs(eOut-energy) < .01) nDoNothing++; // Calculate # of DoNothing events
-        else G4cerr<<"**Tst19: DoNothing E="<<eOut<<" # "<<energy<<G4endl;
+        else G4cout<<"**Tst19: DoNothing E="<<eOut<<" # "<<energy<<G4endl;
       }
       else
       {
@@ -1067,7 +1067,7 @@ int main()
           }
           if (e < 0.0)
           {
-            G4cerr<<"**Test19:Event#"<<iter<<",Hadron#"<<i<<",T="<<e<<"<0 (Set 0)"<<G4endl;
+            G4cout<<"**Test19:Event#"<<iter<<",Hadron#"<<i<<",T="<<e<<"<0 (Set 0)"<<G4endl;
             e = 0.0;
           }
           // for exclusive reaction 2 particles in final state
@@ -1111,7 +1111,7 @@ int main()
           //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
           if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
           {
-            G4cerr<<"***Test19: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
+            G4cout<<"***Test19: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
             alarm=true;
           }
           if(!(lorV.e()>=0||lorV.e()<0)   || !(lorV.px()>=0||lorV.px()<0) ||
@@ -1297,10 +1297,10 @@ int main()
 #ifdef chips
         if (totCharge || totBaryN || ss>.27 || alarm || (nGamma && !EGamma))// OnlyForCHIPS
         {
-          G4cerr<<"**Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
+          G4cout<<"*Warning*Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Ch="<<totCharge
                 <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
           totSum = totSumM;
-          if(nGamma&&!EGamma)G4cerr<<"***Test19: Egamma=0"<<G4endl;
+          if(nGamma && !EGamma) G4cout<<"***Test19: Egamma=0"<<G4endl;
           for (G4int indx=begi; indx<nSec; indx++)
           {
             if(indx<0) // Leading particle
@@ -1323,7 +1323,7 @@ int main()
               cBN = static_cast<G4int>(pd->GetBaryonNumber());
               if(!c) c=90000000+cST*999999+cCG*999+cBN;
               m   = pd->GetPDGMass();
-              //G4cerr<<"***Tmp***Test19:#"<<indx<<",S="<<cST<<",C="<<cCG<<",B="<<cBN
+              //G4cout<<"***Tmp***Test19:#"<<indx<<",S="<<cST<<",C="<<cCG<<",B="<<cBN
               //      <<",M="<<m<<G4endl;
               mom = sec->GetMomentumDirection();
               e   = sec->GetKineticEnergy();
@@ -1332,7 +1332,7 @@ int main()
             mom *= p;
             lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
             totSum -= lorV;
-            G4cerr<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
+            G4cout<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
                   <<", d4M="<<totSum<<", S="<<cST<<", C="<<cCG<<", B="<<cBN<<G4endl;
           }
           if(sr>misr)G4Exception("***Test19:ALARM/baryn/chrg/energy/mom isn't conserved");
@@ -1360,7 +1360,7 @@ int main()
 #endif
      // Stop the timer to estimate the speed of the generation
 #ifdef pidebug
-     G4cerr<<"Test19: nPi0="<<nP0<<", nPiP="<<nPP<<", nPiM="<<nPN<<G4endl;
+     G4cout<<"Test19: nPi0="<<nP0<<", nPiP="<<nPP<<", nPiM="<<nPN<<G4endl;
 #endif
      G4double dn=100.* nDoNothing / nEvt;
      timer->Stop();
@@ -1375,7 +1375,7 @@ int main()
      for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors
 #endif
 #ifdef pverb
-     G4cerr<<"Test19: ########## End of run ##########"<<G4endl;
+     G4cout<<"Test19: ########## End of run ##########"<<G4endl;
 #endif
      delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
     } // End of the target LOOP
