@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.21 2009-03-14 11:43:42 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.22 2009-10-12 11:54:50 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
+#include "G4GMocrenFile.hh"
 
 // Needing external packages or libraries...
 
@@ -109,6 +110,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
+  RegisterGraphicsSystem (new G4GMocrenFile);
   // Graphics systems needing external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
