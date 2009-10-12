@@ -1,27 +1,13 @@
 //-- gMocren-file driver --//
 
-Apr. 1, 2009 : Akinori Kimura
+Oct. 12, 2009 : Akinori Kimura
+               Beta release.
+               It supports a geometry constructed with G4PhantomParameterisation or
+               G4VNestedParameterisation and a hits collection based on G4VHits, 
+               primitive scorer or the interactive scorer.
 
-               first version of the gMocren-file driver.
+Apr.  1, 2009 : Akinori Kimura
+
+               First version of the gMocren-file driver.
                This is a prototype, not a release version.
-
-               How to install
-               - Add the following two lines around 43rd line of 
-                 $G4INSTALL/visualization/GNUmakefile.
-  SUBDIRS += gMocren
-  SUBLIBS += G4GMocren
-
-               - Add the following lines in $G4INSTALL/config/G4VIS_USE.gmk.
-                 around 33rd line:
-  CPPFLAGS += -DG4VIS_USE_GMOCRENFILE
-  VISLIBS  += -lG4GMocren
-
-                 around 40th line:
-  CPPFLAGS += -I$(G4BASE)/visualization/gMocren/include
-
-               - Build the library and rebuild the libmap in $G4INSTALL/source
-                 $ make 
-                 $ make libmap 
-
-
 
