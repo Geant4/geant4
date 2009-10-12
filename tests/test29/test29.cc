@@ -44,14 +44,15 @@
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
-//#define nout
+//#define pdebug
+#define nout
+#define inter
 //#define pverb
 //#define pscan
 //#define smear
 //#define escan
 //#define debug
 //#define rdebug
-//#define pdebug
 //#define mtst
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
@@ -615,7 +616,7 @@ int main()
 #ifdef debug
       G4cout<<"Test29: ### "<<iter<< "-th event starts.###"<<G4endl;
 #endif
-      if(!(iter%100) && iter)
+      if(!(iter%1000) && iter)
          G4cout<<"****************>>TEST29: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
@@ -786,8 +787,10 @@ int main()
       }
       G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+std::fabs(totSum.y())+
                   std::fabs(totSum.z());    
+#ifdef inter
       G4double sr=std::fabs(Residual.t())+std::fabs(Residual.x())+std::fabs(Residual.y())+
                   std::fabs(Residual.z());    
+#endif
 #ifdef pdebug
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
@@ -798,7 +801,7 @@ int main()
       //if (1>2)
       //
       {
-        G4cerr<<"**Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Charge="<<totCharge
+        G4cout<<"*Warning*Test29:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Chrg="<<totCharge
               <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
         totSum = G4LorentzVector(0., 0., pmax, e0+curM);
         if(nGamma&&!EGamma)G4cerr<<"***Test29: Egamma=0"<<G4endl;
@@ -827,10 +830,12 @@ int main()
           mom *= p;
           lorV = G4LorentzVector(mom, e + m);    // "e" is a Kinetic energy!
           totSum -= lorV;
-          G4cerr<<"Test29:#"<<indx<<",PDG="<<c<<",m="<<m<<"("<<sm<<"),4M="<<lorV<<",T="<<e
+          G4cout<<"Test29:#"<<indx<<",PDG="<<c<<",m="<<m<<"("<<sm<<"),4M="<<lorV<<",T="<<e
                 <<",r4M="<<totSum<<G4endl;
         }
+#ifdef inter
         if(sr>.27)
+#endif
           G4Exception("***Test29: ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
