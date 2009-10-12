@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.cc,v 1.1 2009-10-12 11:17:26 akimura Exp $
+// $Id: G4PSHitsModel.cc,v 1.2 2009-10-12 11:25:15 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Event.hh"
 #include "G4THitsMap.hh"
+#include "G4GMocrenFileSceneHandler.hh"
 
 G4PSHitsModel::~G4PSHitsModel () {}
 
@@ -51,14 +52,17 @@ G4PSHitsModel::G4PSHitsModel ():
 void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
   const G4Event* event = fpMP->GetEvent();
-  if (event) {
-    G4HCofThisEvent * HCE = event->GetHCofThisEvent();
-    if (HCE) {
-      G4int nHC = HCE -> GetCapacity ();
-      for (int iHC = 0; iHC < nHC; iHC++) {
+  G4GMocrenFileSceneHandler * gHandler = dynamic_cast<G4GMocrenFileSceneHandler*>(&sceneHandler);
+  if(gHandler) {
+    if (event) {
+      G4HCofThisEvent * HCE = event->GetHCofThisEvent();
+      if (HCE) {
+	G4int nHC = HCE -> GetCapacity ();
+	for (int iHC = 0; iHC < nHC; iHC++) {
 	  G4THitsMap<G4double> * hits = dynamic_cast<G4THitsMap<G4double> *>(HCE -> GetHC (iHC));
-	  if(hits) sceneHandler.AddCompound (*hits);
+	  if(hits) gHandler->AddCompound (*hits);
 	  
+	}
       }
     }
   }
