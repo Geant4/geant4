@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.154 2009-09-25 15:24:38 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.155 2009-10-12 19:27:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1374,6 +1374,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 {
   static const G4int  NUCPDG = 90000000;
   static const G4QNucleus vacuum(NUCPDG);
+  static const G4LorentzVector zeroLV(0.,0.,0.,0.);
+  //static const G4QContent zeroQC(0,0,0,0,0,0);
   static const G4QContent PiQC(0,1,0,1,0,0);
   static const G4QContent K0QC(1,0,0,0,0,1);
   static const G4QContent KpQC(0,1,0,0,0,1);
@@ -1824,8 +1826,14 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
         sumstat           += Qst;
 #ifdef debug
         G4cout<<"G4QEnv::HadrQE:#"<<iq<<", Qst="<<Qst<<", Q="<<Q4M<<Q4M.m()<<QQC<<", Env="
-              <<theEnvironment<<G4endl;
+              <<theEnvironment<<",nQ="<<nQuasmons<<G4endl;
 #endif
+        if(nQuasmons>1 && iq+1==nQuasmons && !Qst && Q4M==zeroLV)
+        {
+          theQuasmons.pop_back();                // Exclude the zero-Quasmon
+          delete pQ;                             // and delet it
+          nQuasmons--;
+        }
         if(Qst==1||Qst==3||Qst==4)
         {
           fCount++;                              // Incr. counterSuccessfulFragmentations
@@ -3542,7 +3550,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
         EvaporateResidual(evH);                  // Try to evaporate residual (del.equiv.)
         return theQHadrons;
       }
-      else                                       // ==> "Only GSEnvironment exists" case
+      else                                       // ==> "Only with GSEnvironment" case
       { 
         if(totPDG==90000000 || fabs(totMass)<0.000001)
         {
@@ -3555,7 +3563,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
               <<",nQ="<<nQuasmons<<G4endl;
 #endif
         G4Quasmon*       pQ = theQuasmons[0];    // Pointer to the first Quasmon          
-        G4QPDGCode    QQPDG = pQ->GetQPDG();     // QPDG of the Quasmon
+        G4QPDGCode    QQPDG = pQ->GetQPDG();     // QPDG of the first Quasmon
         G4int          QPDG = QQPDG.GetPDGCode();
         G4QNucleus    totRN(totQC,tot4M);        // Nucleus for theTotalResidualNuclearComp
         G4int          spbRN=totRN.SplitBaryon();// PossibilityToSplit baryon from Residual
@@ -3700,8 +3708,37 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
             CleanUp();
             G4QHadron* evH = new G4QHadron(totQC,tot4M);// Create a Hadron for ResidualNucl
-            EvaporateResidual(evH);            // Try to evaporate residual (del. equiv.)
+            EvaporateResidual(evH);              // Try to evaporate residual (del. equiv.)
             return theQHadrons;
+          }
+          else                                   // No environment
+          {
+            G4int nHadrs=theQHadrons.size();     // #of available hadrons
+            for(G4int ih=0; ih<nHadrs; ++ih)
+            {
+              G4QHadron* ch=theQHadrons[ih];
+              G4LorentzVector ch4M=ch->Get4Momentum();
+              G4double chM=ch4M.m();
+              G4LorentzVector tch4M=ch4M+tot4M;
+              if(tch4M.m() > chM + totM)         // Can be corrected
+              {
+                G4LorentzVector h14M(0.,0.,0.,chM);
+                G4LorentzVector h24M(0.,0.,0.,totM);
+                if(!G4QHadron(tch4M).DecayIn2(h14M,h24M))
+                {
+                  G4cout<<"-Warning->G4QE::HQE:M="<<tch4M.m()<<"->"<<chM<<"+"<<totM<<"="
+                        <<chM+totM<<G4endl;
+                }
+                else
+                {
+                  tot4M=h24M;                    // Change the residual 4M
+                  ch->Set4Momentum(h14M);        // Change 4M of the current hadron
+                  break;                         // Quit the loop
+                }
+              }
+            }
+            G4QHadron* rH = new G4QHadron(totQC,tot4M);// Create a Hadron for ResidualNucl
+            theQHadrons.push_back(rH);
           }
         }
         else if(spbRN)// => "Join all quasmons to the residual compound and evaporate" case
@@ -5917,13 +5954,14 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             }
             else tot4Mom-=cH4Mom+pH4Mom;
           }
+#ifdef ppdebug
           if(ch<0)
           {
             G4cerr<<"*Warning*G4QEnvir::FSI:***EnergyMomentumCorrection FAILED***"<<G4endl;
-#ifdef debug
+
             throw G4QException("***G4QEnvironment::FSInteraction: EnMomCorrectionFailed");
-#endif
           }
+#endif
         }
 #ifdef debug
         else G4cout<<"G4QE::FSI: Yes, it is. d="<<dem<<" for "<<nHadr<<" hadrons."<<G4endl;

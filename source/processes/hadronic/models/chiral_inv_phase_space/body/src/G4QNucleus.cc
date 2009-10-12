@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.113 2009-10-12 08:03:20 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.114 2009-10-12 19:27:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3465,6 +3465,11 @@ void G4QNucleus::InitDensity()
   if(iA<17)                                           // Gaussian density distribution
   {
     radius = r0sq*At2;                                // R2 Mean Squared Radius (fm^2)
+    if(radius<=0.)
+    {
+      G4cout<<"-Warning-G4QNucl::ChoosePositions:L,iA="<<iA<<",Radius(?)="<<radius<<G4endl;
+      radius=1.;
+    }
     rho0   = pow(2*pi*radius, -1.5);                  // Central Density (M.K. 2 is added)
     // V=4pi*R2*sqrt(pi*R2/2)=(sqrt(2*pi*R2))^3
   }
@@ -3472,7 +3477,17 @@ void G4QNucleus::InitDensity()
   {
     G4double r0=1.16*(1.-1.16/At2)*fermi;             // Base for A-dependent radius
     radius = r0*At;                                   // Half Density Radius (fm)
+    if(radius<=0.)
+    {
+      G4cout<<"-Warning-G4QNucl::ChoosePositions:H,iA="<<iA<<",Radius(?)="<<radius<<G4endl;
+      radius=1.;
+    }
     G4double rd=WoodSaxonSurf/radius;                 // Relative thickness of the surface
+    if(!(rd<=0.1) && !(rd>-0.1))                      // NAN for rd
+    {
+      G4cout<<"-Warning-G4QNucl::ChoosePositions:H,NAN,iA="<<iA<<", rd="<<rd<<G4endl;
+      rd=1.;
+    }
     rho0=0.75/(pi*pow(radius,3)*(1.+rd*rd*pi2));      // Central Density
   }
   RhoActive=true;
