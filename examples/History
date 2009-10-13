@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2009-09-04 14:25:38 gcosmo Exp $
+$Id: History,v 1.151 2009-10-13 14:43:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th October 2009  Gabriele Cosmo (examples-V09-02-09)
+- Updated reference outputs according to reference tag geant4-09-02-ref-09.
+- Includes tags: amsEcal-V09-02-11, hadrontherapy-V09-02-28,
+                 medical_linac-V09-02-02, testem1-V09-02-00, testem2-V09-02-01,
+                 testem3-V09-02-01, testem5-V09-02-06, testem11-V09-02-00,
+                 testem12-V09-02-00, testem13-V09-02-00, testem14-V09-02-00,
+                 electronScattering-V09-02-02, G01-V09-02-04, exrdm-V09-02-00.
 
 4th September 2009  Gabriele Cosmo (examples-V09-02-08)
 - Updated reference outputs according to reference tag geant4-09-02-ref-08.
