@@ -35,6 +35,8 @@
 #include <cmath>
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4RandomTools.hh"
+#include "G4Integrator.hh"
 #include "G4UnitsTable.hh"
 #include <iomanip>
 #include <complex>
@@ -72,9 +74,10 @@ G4double GetDeltaZDistribution(G4double v)
   G4double u, r;
   if ( v > 0.) u = std::exp(-1./v);
   else         u = 0.;
+
   if( v <= 3.)
   {
-    r  = 2.*u*( 1 - std::pow(u, 8.) + 5.*std::pow(u, 24.) );
+    r  = 2.*u*( 1 - 3.*std::pow(u, 8.) + 5.*std::pow(u, 24.) );
     r /= v*std::sqrt(pi*v);
   }
   else
@@ -84,6 +87,32 @@ G4double GetDeltaZDistribution(G4double v)
   return r;
 }
 
+// ln( G-function(x) )
+
+
+G4double GammaLog(G4double xx)
+{
+  static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
+                             24.01409824083091,      -1.231739572450155,
+                              0.1208650973866179e-2, -0.5395239384953e-5  } ;
+  register G4int j;
+  G4double x = xx - 1.0 ;
+  G4double tmp = x + 5.5 ;
+  tmp -= (x + 0.5) * std::log(tmp) ;
+  G4double ser = 1.000000000190015 ;
+
+  for ( j = 0; j <= 5; j++ )
+  {
+    x += 1.0 ;
+    ser += cof[j]/x ;
+  }
+  return -tmp + std::log(2.5066282746310005*ser) ;
+}
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -91,23 +120,108 @@ G4double GetDeltaZDistribution(G4double v)
 int main()
 {
 
-  G4int i, j, k, iMax;
-  G4double x, B;
-  G4double expXrad=0., g4Xrad;
+  G4int i, j, k, iMax, iStat;
+  G4double x, xm, mm, a, B[200], sG[200], Bint[200], sGint[200],g, G[200], Gint[200], delta;
+  G4double expXrad=0., g4Xrad, sumB=0., sumG=0.;
 
+  for( i = 0; i < 200; i++)
+  {
+    B[i]     = 0.;
+    Bint[i]  = 0.;
+    G[i]     = 0.;
+    Gint[i]  = 0.;
+    sG[i]    = 0.;
+    sGint[i] = 0.;
+  }
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
-   iMax = 50;
+  delta = 0.1;
+  xm = 1.8;
+  a  = 16./pi/pi;
+  g  = GammaLog(a);
+  g  = std::exp(g);
+  G4cout<<"xm = "<<xm<<"; a = "<<a<<";   g(a) = "<<g<<G4endl;
+  G4cout<<G4endl;
+
+
+
+   iMax = 100;
   // iMax = 0;
   // writef<<iMax<<G4endl;
 
   for( i = 1; i <= iMax; i++ )
   {
-    x = 0.1*i;
-    B = GetDeltaZDistribution(x);
-    G4cout<<x<<"\t"<<B<<G4endl;
+    sG[i] = 0.;
+    x     = delta*i;
+    B[i]     = GetDeltaZDistribution(x);
+    sumB += B[i]*delta;
+
+    mm = a*x/xm;
+    G[i] = std::pow(mm,a)*std::exp(-mm)/x/g;
+
+    sumG += G[i]*delta;
+    Bint[i] = 1. - sumB;
+    Gint[i] = 1. - sumG;
+
+    // G4cout<<x<<"\t"<<B[i]<<"\t"<<G[i]<<G4endl;
   }
+  G4cout<<"sumB = "<<sumB<<"; sumG = "<<sumG<<G4endl;
+
+  writef<<iMax<<G4endl;
+
+  for( i = 1; i <= iMax; i++ )
+  {
+    x     = delta*i;
+    // B[i] *= sumG/sumB; 
+    // writef<<x<<"\t"<<B[i]<<"\t"<<G[i]<<G4endl;
+  }
+
+  iStat  = 100000;
+
+  for( i = 1; i <= iStat; i++ )
+  {
+    x = CLHEP::RandGamma::shoot(a,a/xm);
+    x += delta;
+
+    for( j = 0; j < iMax; j++ )
+    {
+      if( x <= delta*j ) 
+      {
+        sG[j] += 1.;
+        break;
+      }
+    } 
+  }
+
+  // normalise on 1.
+
+  sumG = 0.;
+
+  for( i = 0; i < iMax; i++ )
+  {   
+    sumG += delta*sG[i];
+  }
+
+  sumB = 0.;
+ 
+  for( i = 1; i <= iMax; i++ )
+  {   
+    x     = delta*i;
+
+    sG[i] /= sumG;
+    // sG[i] /= delta*iStat;
+
+    sumB    += sG[i]*delta;
+    sGint[i] = 1. - sumB;
+
+
+    // writef<<x<<"\t"<<B[i]<<"\t"<<G[i]<<"\t"<<sG[i]<<G4endl;
+    writef<<x<<"\t"<<Bint[i]<<"\t"<<Gint[i]<<"\t"<<sGint[i]<<G4endl;
+  } 
+
+
+  // elements, materials using NIST
 
   G4Element*     theElement;
   G4Material*    theMaterial;
