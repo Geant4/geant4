@@ -77,7 +77,7 @@ persistency/gdml                                 gdml-V09-02-16
 
 physics_lists                                    phys-lists-V09-02-25
 -------------
-- Modified EM standard physics-lists: retunrn to 9.2 configuration for
+- Modified EM standard physics-lists: return to 9.2 configuration for
   G4EmStandardPhysics; use 'ApplyCuts=true' in G4EmStandardPhysics_option1;
   use G4eMultipleScattering for e+- in G4EmStandardPhysics_option2.
 - Added high energy limit to e- models for better clarity in
