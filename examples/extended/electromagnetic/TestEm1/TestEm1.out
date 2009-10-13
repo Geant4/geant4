@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,7 +112,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -346,7 +346,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  6.88731 keV    e-  596.68 keV    e+  568.011 keV proton 0 eV 
+ Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -369,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.53s Real=10.51s Sys=0.08s
+  User=7.67s Real=7.72s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -377,29 +377,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.803 MeV
+ total energy deposit: 99.756 MeV
 
- nb tracks/event   neutral:     27.821   charged:      149.5
- nb  steps/event   neutral:     140.71   charged:     478.95
+ nb tracks/event   neutral:     27.663   charged:     148.71
+ nb  steps/event   neutral:     139.92   charged:     476.75
 
  nb of process calls per event: 
-            msc       eBrem       eIoni       compt        phot        conv     annihilTransportation
-         150.02      25.247      302.25      112.89      25.488       1.427       1.427        0.92
+            msc       eBrem       eIoni       compt        photTransportation        conv     annihil
+         149.29      25.104      300.94      112.26      25.273       0.999       1.403       1.403
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.016 cm    rms = 3.8289 cm 
- proj Range = 9.5777 cm    rms = 3.5384 cm 
- proj/true  = 0.86943
- transverse dispersion at end = 1.6438 cm 
-      mass true Range from simulation = 29.744 g/cm2 
+ true Range = 11.075 cm    rms = 3.7828 cm 
+ proj Range = 9.5809 cm    rms = 3.4913 cm 
+ proj/true  = 0.86507
+ transverse dispersion at end = 1.6797 cm 
+      mass true Range from simulation = 29.903 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1881000463, 790369683
+ Current couple of seeds = 600723939, 264408015
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -419,7 +419,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  33.887552 keV    e+  33.472938 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  34.172517 keV    e+  33.943645 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -429,7 +429,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1881000463, 790369683
+ Current couple of seeds = 600723939, 264408015
 ----------------------------------------
 Start Run processing.
 
@@ -437,7 +437,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=14.47s Real=16.86s Sys=0.09s
+  User=14.72s Real=14.76s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -445,29 +445,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.809 MeV
+ total energy deposit: 99.814 MeV
 
- nb tracks/event   neutral:     34.978   charged:     315.64
- nb  steps/event   neutral:     146.64   charged:     952.68
+ nb tracks/event   neutral:     34.839   charged:     312.09
+ nb  steps/event   neutral:     145.89   charged:     944.06
 
  nb of process calls per event: 
           eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-         607.38      33.007      310.83      32.602      111.66       1.451       1.451       0.941
+          602.5      32.977      307.15      32.496      111.05       1.409       1.409       0.948
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.077 cm    rms = 3.8627 cm 
- proj Range = 9.5941 cm    rms = 3.5857 cm 
- proj/true  = 0.86609
- transverse dispersion at end = 1.7569 cm 
-      mass true Range from simulation = 29.909 g/cm2 
+ true Range = 11.069 cm    rms = 3.875 cm 
+ proj Range = 9.6224 cm    rms = 3.6043 cm 
+ proj/true  = 0.86931
+ transverse dispersion at end = 1.6757 cm 
+      mass true Range from simulation = 29.886 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 862021850, 282978248
+ Current couple of seeds = 1812713879, 303010491
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

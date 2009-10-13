@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -70,7 +70,7 @@
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Germanium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  20.7022 keV    e-  867.397 keV    e+  827.585 keV proton 0 eV 
+ Energy thresholds :  gamma  20.7332 keV    e-  870.964 keV    e+  825.404 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -96,23 +96,23 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
  e- (10 MeV) in Water (density: 1 g/cm3 ;   radiation length: 36.0924 cm )
 
   Range cuts : 	 gamma      100 um 	 e-      100 um 
- Energy cuts : 	 gamma  1.10224 keV	 e-  85.4196 keV
+ Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
  Max_energy _transferable : 10 MeV (4.9049 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  cross section per volume : 	     0.991171 cm^-1	     0.344038 cm^-1	      1.33521 cm^-1
-  cross section per mass   : 	     0.991171 cm2/g	     0.344038 cm2/g	      1.33521 cm2/g
+  cross section per volume : 	     0.994761 cm^-1	     0.343859 cm^-1	      1.33862 cm^-1
+  cross section per mass   : 	     0.994761 cm2/g	     0.343859 cm2/g	      1.33862 cm2/g
  
-  mean free path           : 	      1.00891 cm 	      2.90666 cm 	      7.48946 mm 
-        (g/cm2)            : 	      1.00891 g/cm2 	      2.90666 g/cm2 	      748.946 mg/cm2
+  mean free path           : 	      1.00527 cm 	      2.90817 cm 	      7.47038 mm 
+        (g/cm2)            : 	      1.00527 g/cm2 	      2.90817 g/cm2 	      747.038 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61567 MeV/cm	      12.3265 eV/cm 	      1.61568 MeV/cm
-      (MeV/g/cm2)          : 	      1.61567 MeV*cm2/g	      12.3265  eV*cm2/g	      1.61568 MeV*cm2/g
+  restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm
+      (MeV/g/cm2)          : 	      1.61536 MeV*cm2/g	      12.5324  eV*cm2/g	      1.61538 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05738 cm  ( 6.05738 g/cm2 )
+  range from restrict dE/dx: 	 6.05854 cm  ( 6.05854 g/cm2 )
   range from full dE/dx    : 	  4.9049 cm  (  4.9049 g/cm2 )
  
   transport mean free path : 	 28.2437 cm  ( 28.2437 g/cm2 )

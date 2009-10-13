@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -276,21 +276,21 @@ hIoni:   for  pi-    SubType= 2
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
- Energy thresholds :  gamma  990 eV     e-  1.13129 keV    e+  1.11247 keV proton 200 keV
+ Energy thresholds :  gamma  990 eV     e-  1.17296 keV    e+  1.16215 keV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
- Energy thresholds :  gamma  120.589 keV    e-  2.614 MeV    e+  2.42788 MeV proton 200 keV
+ Energy thresholds :  gamma  120.879 keV    e-  2.64203 MeV    e+  2.43733 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : liquidArgon
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
- Energy thresholds :  gamma  8.59044 keV    e-  561.061 keV    e+  540.718 keV proton 200 keV
+ Energy thresholds :  gamma  8.73423 keV    e-  567.027 keV    e+  540.972 keV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

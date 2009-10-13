@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,7 +93,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -202,7 +202,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -306,7 +306,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -342,28 +342,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=14.37s Real=21.06s Sys=0.28s
+  User=14.85s Real=15.11s Sys=0.26s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.7693 cm    rms= 1.94874 mm 
- Mean number of primary steps = 188.557
- Total energy deposit= 160 MeV
- NIEL energy deposit = 50.0027 keV
+ Projected Range= 17.7682 cm    rms= 2.51272 mm 
+ Mean number of primary steps = 188.563
+ Total energy deposit= 159.985 MeV
+ NIEL energy deposit = 49.9878 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.54373 GeV	0.283983 % 	9.09982e-05 Gy
- tally 1: 	 	4.92108 GeV	0.307568 % 	9.85555e-05 Gy
- tally 2: 	 	3.31999 GeV	0.2075 % 	6.64902e-05 Gy
- tally 3: 	 	1.84811 GeV	0.115507 % 	3.70124e-05 Gy
+ tally 0: 	 	4.69003 GeV	0.293127 % 	9.39281e-05 Gy
+ tally 1: 	 	4.94006 GeV	0.308754 % 	9.89356e-05 Gy
+ tally 2: 	 	3.29309 GeV	0.205818 % 	6.59514e-05 Gy
+ tally 3: 	 	1.91469 GeV	0.119668 % 	3.8346e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2107743023, 998822175
+ Current couple of seeds = 1558093779, 583990613
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -383,7 +383,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -393,7 +393,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2107743023, 998822175
+ Current couple of seeds = 1558093779, 583990613
 ----------------------------------------
 Start Run processing.
 
@@ -401,28 +401,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.4s Real=7.04s Sys=0.03s
+  User=5.3s Real=5.32s Sys=0.01s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.6636 cm    rms= 496.753 um 
- Mean number of primary steps = 124.093
+ Projected Range= 16.6689 cm    rms= 530.865 um 
+ Mean number of primary steps = 121.591
  Total energy deposit= 3.49997 GeV
- NIEL energy deposit = 1.40248 MeV
+ NIEL energy deposit = 1.4026 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.2914 GeV	0.322611 % 	0.000226135 Gy
- tally 1: 	 	13.3674 GeV	0.381927 % 	0.000267713 Gy
- tally 2: 	 	15.612 GeV	0.446057 % 	0.000312665 Gy
- tally 3: 	 	22.0704 GeV	0.630583 % 	0.000442008 Gy
+ tally 0: 	 	12.1335 GeV	0.34667 % 	0.000242999 Gy
+ tally 1: 	 	13.5933 GeV	0.388381 % 	0.000272237 Gy
+ tally 2: 	 	14.776 GeV	0.422173 % 	0.000295923 Gy
+ tally 3: 	 	21.1469 GeV	0.604197 % 	0.000423513 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 782152770, 146048375
+ Current couple of seeds = 1419648187, 1569317502
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
@@ -499,7 +499,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -608,7 +608,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -712,12 +712,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  24.6072 keV    e-  1.39521 MeV    e+  1.31192 MeV proton 0 eV 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -727,7 +727,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 782152770, 146048375
+ Current couple of seeds = 1419648187, 1569317502
 ----------------------------------------
 Start Run processing.
 
@@ -735,20 +735,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.27s Real=8.59s Sys=0.03s
+  User=4.72s Real=4.73s Sys=0.03s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.10514 cm    rms= 1.70355 mm 
- Mean number of primary steps = 8.294
- Total energy deposit= 283 MeV
+ Projected Range= 2.11458 cm    rms= 1.4413 mm 
+ Mean number of primary steps = 8.364
+ Total energy deposit= 285.141 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.37043 GeV	2.37043 % 	5.29833e-06 Gy
- tally 1: 	 	0 eV 	0 % 	0 Gy
- tally 2: 	 	143.236 keV	0.000143236 % 	3.20158e-10 Gy
+ tally 0: 	 	2.58139 GeV	2.58139 % 	5.76987e-06 Gy
+ tally 1: 	 	1.3131 MeV	0.0013131 % 	2.93502e-09 Gy
+ tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
 ---------------------------------------------------------
@@ -756,7 +756,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 588864004, 15598461
+ Current couple of seeds = 111141804, 582613665
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -833,7 +833,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -942,7 +942,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1046,12 +1046,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  24.6072 keV    e-  1.39521 MeV    e+  1.31192 MeV proton 0 eV 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 0 eV 
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : TechVacuum
@@ -1066,7 +1066,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 588864004, 15598461
+ Current couple of seeds = 111141804, 582613665
 ----------------------------------------
 Start Run processing.
 
@@ -1074,18 +1074,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 327.587 um    rms= 92.4517 um 
- Mean number of primary steps = 2.63
- Total energy deposit= 264.032 eV 
- NIEL energy deposit = 243.253 eV 
+ Projected Range= 331.517 um    rms= 94.3965 um 
+ Mean number of primary steps = 2.69
+ Total energy deposit= 265 eV 
+ NIEL energy deposit = 247.393 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.7112 keV	44.1931 % 	2.34542e-05 Gy
+ tally 0: 	 	10.894 keV	41.1095 % 	2.18177e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1095,7 +1095,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1402421533, 1064274804
+ Current couple of seeds = 1497818231, 1290602246
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1172,7 +1172,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1281,7 +1281,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1385,14 +1385,14 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  24.6072 keV    e-  1.39521 MeV    e+  1.31192 MeV proton 0 eV 
+ Energy thresholds :  gamma  24.7508 keV    e-  1.39534 MeV    e+  1.31345 MeV proton 0 eV 
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : TechVacuum
@@ -1405,7 +1405,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1402421533, 1064274804
+ Current couple of seeds = 1497818231, 1290602246
 ----------------------------------------
 Start Run processing.
 
@@ -1413,18 +1413,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0.01s
+  User=0.03s Real=0.04s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.68209 mm    rms= 50.4809 um 
- Mean number of primary steps = 31.44
+ Projected Range= 6.66478 mm    rms= 50.6886 um 
+ Mean number of primary steps = 31.42
  Total energy deposit= 100 MeV
- NIEL energy deposit = 62.3268 keV
+ NIEL energy deposit = 62.3941 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	827.932 MeV	8.27932 % 	1.65812e-05 Gy
+ tally 0: 	 	792.981 MeV	7.92981 % 	1.58812e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1434,7 +1434,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 453713769, 1985747314
+ Current couple of seeds = 2049421433, 1555729993
 ----------------------------------------
 G4 kernel has come to Quit state.
 

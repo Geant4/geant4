@@ -4,14 +4,14 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 4 *****
+***** Table : Nb of materials = 9 *****
 
  Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
@@ -22,6 +22,21 @@
 
  Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 321.900 eV 
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Tungsten     density: 19.350 g/cm3   RadL:   3.495 mm   Nucl.Int.Length:  10.285 cm   Imean: 725.200 eV 
+   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Uranium     density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm   Imean: 892.400 eV 
+   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      BGO     density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.806 cm   Imean: 469.142 eV 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
@@ -34,8 +49,8 @@
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 /testem/run/acceptance 0.949 0.0082 3.0
-/testem/phys/addPhysics emstandard
-PhysicsList::AddPhysicsList: <emstandard>
+/testem/phys/addPhysics emstandard_opt0
+PhysicsList::AddPhysicsList: <emstandard_opt0>
 /testem/phys/setCuts 1.0 mm
 /run/initialize
 Absorber is 17.8491 cm  of G4_PbWO4
@@ -310,7 +325,7 @@ hPairProd:   for  pi-    SubType= 4
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  84.7768 keV    e-  1.13176 MeV    e+  1.06419 MeV proton 0 eV 
+ Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -336,24 +351,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.92s Real=7.78s Sys=0.01s
+  User=7.17s Real=7.17s Sys=0.01s
 
  SUMMARY 
 
- energy deposit :   94.77 % E0 +-    0.81 % E0
- charged traklen:  479.25 radl +-    4.34 radl
- neutral traklen: 4477.38 radl +-  116.76 radl
+ energy deposit :   94.74 % E0 +-    0.94 % E0
+ charged traklen:  479.34 radl +-    4.94 radl
+ neutral traklen: 4466.32 radl +-  117.22 radl
 
- 90.00 % confinement: radius = 3.03 radl  (2.70 cm )
+ 90.00 % confinement: radius = 3.05 radl  (2.72 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1476075892, 670300373
+ Current couple of seeds = 1171293487, 1725180354
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94767095  delEdep= -0.0013290526 nrms= -1.6207959
-Erms: 0.0080594109  delErms= -0.00014058909 nrms= -0.17145011
+Edep: 0.94741855  delEdep= -0.0015814507 nrms= -1.9285984
+Erms: 0.009372642  delErms= 0.001172642 nrms= 1.4300513
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

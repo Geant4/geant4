@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -121,7 +121,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.33111 keV    e-  130.147 keV    e+  127.666 keV proton -1 MeV
+ Energy thresholds :  gamma  2.34623 keV    e-  130.52 keV    e+  129.1 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -167,7 +167,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -177,7 +177,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -201,7 +201,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -242,7 +242,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -252,7 +252,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -276,7 +276,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -317,7 +317,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -327,7 +327,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -351,7 +351,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -392,7 +392,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -402,7 +402,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -428,7 +428,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -469,7 +469,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -479,7 +479,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -503,7 +503,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -544,7 +544,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -554,7 +554,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -578,7 +578,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -619,7 +619,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -629,7 +629,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -653,7 +653,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -694,7 +694,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -704,7 +704,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /calor/setAbsMat Lead
 
@@ -739,12 +739,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -785,12 +785,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -824,12 +824,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -848,7 +848,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -870,12 +870,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -909,12 +909,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -955,12 +955,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -970,7 +970,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -994,12 +994,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1040,12 +1040,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1055,7 +1055,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1081,12 +1081,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1127,12 +1127,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1142,7 +1142,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 2
@@ -1166,12 +1166,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1212,12 +1212,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1227,7 +1227,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1251,12 +1251,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1297,12 +1297,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1336,12 +1336,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1382,12 +1382,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1397,7 +1397,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1433,17 +1433,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1484,17 +1484,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1528,17 +1528,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1579,17 +1579,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1599,7 +1599,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -1623,17 +1623,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1674,17 +1674,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1694,7 +1694,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -1718,17 +1718,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1747,7 +1747,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1769,17 +1769,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1815,17 +1815,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1866,17 +1866,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1910,17 +1910,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1961,17 +1961,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1981,7 +1981,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 2
@@ -2005,17 +2005,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2056,17 +2056,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2076,7 +2076,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 2
@@ -2100,17 +2100,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2151,17 +2151,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.331105122779143 keV    e-  130.147332742996 keV    e+  127.666462607321 keV proton -1 MeV
+ Energy thresholds :  gamma  2.346227833532118 keV    e-  130.519816811778 keV    e+  129.0996806828959 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54600981988182 keV    e-  240.9381519612027 keV    e+  231.8401670073336 keV proton -1 MeV
+ Energy thresholds :  gamma  29.47822682691526 keV    e-  240.8510562607276 keV    e+  233.9259787688956 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.104318907643669 keV    e-  85.22155196191412 keV    e+  83.59705763904017 keV proton -1 MeV
+ Energy thresholds :  gamma  1.106917128853608 keV    e-  84.87748075049909 keV    e+  84.26067925168807 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2171,7 +2171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2220,19 +2220,19 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
 
 ====================================================================
 
@@ -2240,7 +2240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2262,19 +2262,19 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
 
 ====================================================================
 
@@ -2282,7 +2282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2312,19 +2312,19 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
 
 ====================================================================
 
@@ -2332,7 +2332,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2354,19 +2354,19 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
 
 ====================================================================
 
@@ -2374,7 +2374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2404,17 +2404,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2424,7 +2424,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -2446,17 +2446,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  2.3311051 keV    e-  130.14733 keV    e+  127.66646 keV proton -1 MeV
+ Energy thresholds :  gamma  2.3462278 keV    e-  130.51982 keV    e+  129.09968 keV proton -1 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  29.54601 keV    e-  240.93815 keV    e+  231.84017 keV proton -1 MeV
+ Energy thresholds :  gamma  29.478227 keV    e-  240.85106 keV    e+  233.92598 keV proton -1 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.1043189 keV    e-  85.221552 keV    e+  83.597058 keV proton -1 MeV
+ Energy thresholds :  gamma  1.1069171 keV    e-  84.877481 keV    e+  84.260679 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

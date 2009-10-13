@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -98,9 +98,8 @@ Registered filter factories:
 /testem/det/setSizeX 1 mm
 /testem/det/setSizeYZ 1 mm
 #
-/testem/phys/addPhysics standard
-PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  penelope   # em physics
+/testem/phys/addPhysics local
+PhysicsList::AddPhysicsList: <local>
 #
 /run/initialize
 userDetector->Construct() start.
@@ -154,7 +153,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -377,7 +376,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  6.88731 keV    e-  540.718 keV    e+  521.113 keV proton 0 eV 
+ Energy thresholds :  gamma  6.95018 keV    e-  548.291 keV    e+  526.624 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -404,7 +403,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=12.33s Real=15.74s Sys=0.48s
+  User=13.13s Real=13.58s Sys=0.46s
 
  ======================== run summary ======================
 
@@ -412,20 +411,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 443.439 keV +- 110.269 keV
+ Total Energy deposited        = 444.946 keV +- 108.652 keV
 
- Track length of primary track = 865.220 um  +- 198.358 um 
+ Track length of primary track = 867.925 um  +- 194.717 um 
  Range from EmCalculator       = 938.291 um  (from full dE/dx)
 
- Projected range               = 319.341 um  +- 208.039 um 
+ Projected range               = 312.231 um  +- 204.275 um 
 
- Nb of steps of primary track  = 87.05 +- 19.82	 Step size= 9.929 um  +- 105.121 nm 
+ Nb of steps of primary track  = 87.32 +- 19.46	 Step size= 9.931 um  +- 90.887 nm 
 
- absorbed = 76.58 %   transmit = 5.39 %   reflected = 18.03 %
+ absorbed = 77.20 %   transmit = 4.93 %   reflected = 17.87 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 404256153, 148723447
+ Current couple of seeds = 464955099, 937138604
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

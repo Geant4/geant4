@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -266,7 +266,7 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.88022e+295 J      e-  2.88022e+295 J      e+  2.88022e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -281,7 +281,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1s Real=1.1s Sys=0s
+  User=1s Real=1s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -476,12 +476,12 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.9e+295 J      e-  2.9e+295 J      e+  2.9e+295 J   proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  9.9e+02 eV     e-  7.1e+02 keV    e+  6.8e+02 keV proton 1e+02 MeV
+ Energy thresholds :  gamma  9.9e+02 eV     e-  7.1e+02 keV    e+  6.9e+02 keV proton 1e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -491,7 +491,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon
 #
@@ -686,17 +686,17 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -706,7 +706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.34s Real=0.35s Sys=0s
+  User=0.37s Real=0.37s Sys=0.01s
 #
 #
 # deuteron at 200 MeV in U
@@ -728,19 +728,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -748,7 +748,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.03s Sys=0s
+  User=0.06s Real=0.05s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -769,19 +769,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -810,17 +810,17 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -830,7 +830,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -853,19 +853,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -873,7 +873,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.25s Real=0.39s Sys=0s
+  User=0.33s Real=0.33s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -894,19 +894,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -935,17 +935,17 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -955,7 +955,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.05s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -976,19 +976,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -996,7 +996,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1017,19 +1017,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1058,17 +1058,17 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1102,19 +1102,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1122,7 +1122,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1144,19 +1144,19 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1186,17 +1186,17 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1206,7 +1206,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1402,22 +1402,22 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  834.15882 keV    e-  317.96904 MeV    e+  302.69093 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1427,7 +1427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1450,24 +1450,24 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  834.15882 keV    e-  317.96904 MeV    e+  302.69093 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1497,24 +1497,24 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  834.15882 keV    e-  317.96904 MeV    e+  302.69093 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1522,7 +1522,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1544,24 +1544,24 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  834.15882 keV    e-  317.96904 MeV    e+  302.69093 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
 
 ====================================================================
 
@@ -1569,7 +1569,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1768,27 +1768,27 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  708.90956 keV    e+  683.20614 keV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  1.0114457 GeV    e+  962.84668 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  834.15882 keV    e-  317.96904 MeV    e+  302.69093 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  2.8802217e+295 J      e-  2.8802217e+295 J      e+  2.8802217e+295 J   proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 

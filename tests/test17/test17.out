@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -264,14 +264,14 @@ msc:   for pi-    SubType= 10
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.40169 eV     e+  6.40169 eV  proton 0 eV 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.07536 keV    e-  84.6034 keV    e+  83.5687 keV proton 0 eV 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -282,18 +282,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.22s Sys=0s
+  User=0.21s Real=0.22s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1963 +- 0.00573887  microns 
-    CSDA  Range  in absorber = 9.04855 +- 0.00659517  microns 
+    Track Length in absorber = 9.1963 +- 0.00573885  microns 
+    CSDA  Range  in absorber = 9.04855 +- 0.00659516  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.137302 +- 0.00573887 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.17955 +- 0.00659517 microns 
+    Track Length (G4 - ICRU49) = 0.137304 +- 0.00573885 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.179551 +- 0.00659516 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -307,14 +307,14 @@ Average Number photons per event   = 0
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.40169 eV     e+  6.40169 eV  proton 0 eV 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.07536 keV    e-  84.6034 keV    e+  83.5687 keV proton 0 eV 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -325,7 +325,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.2s Real=0.21s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -348,14 +348,14 @@ G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0] mass(MeV)= 11174.9 charge
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.40169 eV     e+  6.40169 eV  proton 0 eV 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.07536 keV    e-  84.6034 keV    e+  83.5687 keV proton 0 eV 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -370,8 +370,8 @@ Run Summary
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.57071 +- 0.00120133  microns 
-    CSDA  Range  in absorber = 6.96568 +- 0.0110585  microns 
+    Track Length in absorber = 8.56857 +- 0.00129545  microns 
+    CSDA  Range  in absorber = 6.94097 +- 0.0117308  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -390,14 +390,14 @@ Average Number photons per event   = 0
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.40169 eV     e+  6.40169 eV  proton 0 eV 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.07536 keV    e-  84.6034 keV    e+  83.5687 keV proton 0 eV 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -408,21 +408,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.93s Real=7.68s Sys=0.01s
+  User=6.77s Real=6.77s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17606 +- 0.0152419  microns 
-    CSDA  Range  in absorber = 9.03255 +- 0.0174611  microns 
+    Track Length in absorber = 9.18415 +- 0.0183021  microns 
+    CSDA  Range  in absorber = 9.02005 +- 0.0299831  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.117059 +- 0.0152419 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.163547 +- 0.0174611 microns 
+    Track Length (G4 - ICRU49) = 0.125153 +- 0.0183021 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.151052 +- 0.0299831 microns 
 
-Average Number electrons per event = 22.31
-Average Number photons per event   = 22.31
+Average Number electrons per event = 22.42
+Average Number photons per event   = 22.42
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -434,14 +434,14 @@ Average Number photons per event   = 22.31
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.40169 eV     e+  6.40169 eV  proton 0 eV 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.07536 keV    e-  84.6034 keV    e+  83.5687 keV proton 0 eV 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -452,21 +452,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.9s Real=8.66s Sys=0s
+  User=7.79s Real=7.79s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19582 +- 0.0162451  microns 
-    CSDA  Range  in absorber = 9.04435 +- 0.0179698  microns 
+    Track Length in absorber = 9.18277 +- 0.0149771  microns 
+    CSDA  Range  in absorber = 9.03714 +- 0.0168893  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.136822 +- 0.0162451 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.175348 +- 0.0179698 microns 
+    Track Length (G4 - ICRU49) = 0.123774 +- 0.0149771 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.168142 +- 0.0168893 microns 
 
-Average Number electrons per event = 521.11
-Average Number photons per event   = 2.95
+Average Number electrons per event = 520.55
+Average Number photons per event   = 2.78
 
 G4 kernel has come to Quit state.
 

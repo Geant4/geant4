@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -80,23 +80,23 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :     Emin=          0 eV         Emax=   100 GeV
-        MollerBhabha :     Emin=        100 GeV        Emax=   10 TeV
+       LowEnergyIoni :     Emin=          0 eV         Emax=   1 GeV
+        MollerBhabha :     Emin=          1 GeV        Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           LowEnBrem :     Emin=          0 eV         Emax=   100 GeV
-            eBremRel :     Emin=        100 GeV        Emax=   10 TeV
+           LowEnBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -213,7 +213,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -323,7 +323,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  20.7856 keV    e+  20.268 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -364,45 +364,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.21s Real=16.78s Sys=2.37s
+  User=8.2s Real=10.34s Sys=2.14s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.381 keV +- 15.36 eV 
+ Total energy deposit in absorber per event = 6.407 keV +- 15.81 eV 
 
- -----> Mean dE/dx = 3.19 MeV/cm	(1.369 MeV*cm2/g)
+ -----> Mean dE/dx = 3.203 MeV/cm	(1.375 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 2.973 MeV/cm	(1.276 MeV*cm2/g)
+   restricted dEdx = 2.98 MeV/cm	(1.279 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.814 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.805 keV   secondaries = 18.97 keV +- 2.804 keV
+ Leakage :  primary = 99.97 MeV +- 3.296 keV   secondaries = 26.83 keV +- 3.296 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.26 um  +- 7.697 nm 
- Total track length (neutral) in absorber per event = 25.55 nm  +- 1.806 nm 
+ Total track length (charged) in absorber per event = 20.27 um  +- 7.986 nm 
+ Total track length (neutral) in absorber per event = 33.71 nm  +- 2.089 nm 
 
- Number of steps (charged) in absorber per event = 7.168 +- 8.773e-06
- Number of steps (neutral) in absorber per event = 0.00298 +- 8.773e-06
+ Number of steps (charged) in absorber per event = 8.172 +- 8.936e-06
+ Number of steps (neutral) in absorber per event = 0.00363 +- 8.936e-06
 
- Number of secondaries per event : Gammas = 0.00298;   electrons = 0.01753;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00363;   electrons = 0.01804;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.139 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.143 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.218 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.268 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 2.359 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 2.335 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1180105586, 436074614
+ Current couple of seeds = 342228756, 1879604666
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -453,23 +453,23 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :     Emin=          0 eV         Emax=   100 GeV
-        MollerBhabha :     Emin=        100 GeV        Emax=   10 TeV
+       LowEnergyIoni :     Emin=          0 eV         Emax=   1 GeV
+        MollerBhabha :     Emin=          1 GeV        Emax=   10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           LowEnBrem :     Emin=          0 eV         Emax=   100 GeV
-            eBremRel :     Emin=        100 GeV        Emax=   10 TeV
+           LowEnBrem :     Emin=          0 eV         Emax=   1 GeV
+            eBremRel :     Emin=          1 GeV        Emax=   10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -586,7 +586,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -696,12 +696,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  20.785626 keV    e+  20.267959 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  21.488579 keV    e+  20.895427 keV proton 0 eV 
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Gold
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  6.5175568 keV    e-  65.072458 keV    e+  63.489878 keV proton 0 eV 
+ Energy thresholds :  gamma  6.5422867 keV    e-  65.140571 keV    e+  63.840474 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -716,7 +716,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1180105586, 436074614
+ Current couple of seeds = 342228756, 1879604666
 ----------------------------------------
 Start Run processing.
 
@@ -742,45 +742,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=8.42s Real=12.58s Sys=2.36s
+  User=8.66s Real=10.99s Sys=2.32s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.5 keV +- 46.09 eV 
+ Total energy deposit in absorber per event = 18.44 keV +- 45.22 eV 
 
- -----> Mean dE/dx = 19.15 MeV/cm	(0.9914 MeV*cm2/g)
+ -----> Mean dE/dx = 19.09 MeV/cm	(0.9881 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 17.73 MeV/cm	(0.9176 MeV*cm2/g)
+   restricted dEdx = 17.73 MeV/cm	(0.9177 MeV*cm2/g)
    full dEdx       = 60.89 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.552 keV   secondaries = 41.25 keV +- 1.547 keV
+ Leakage :  primary = 15.64 MeV +- 1.507 keV   secondaries = 40.14 keV +- 1.502 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.946 um  +- 8.915 nm 
- Total track length (neutral) in absorber per event = 133 nm  +- 7.147 nm 
+ Total track length (charged) in absorber per event = 9.948 um  +- 8.588 nm 
+ Total track length (neutral) in absorber per event = 122.2 nm  +- 4.276 nm 
 
- Number of steps (charged) in absorber per event = 8.967 +- 9.442e-06
- Number of steps (neutral) in absorber per event = 0.02805 +- 9.442e-06
+ Number of steps (charged) in absorber per event = 8.973 +- 9.267e-06
+ Number of steps (neutral) in absorber per event = 0.02687 +- 9.267e-06
 
- Number of secondaries per event : Gammas = 0.02788;   electrons = 0.02278;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02674;   electrons = 0.02201;   positrons = 1e-05
 
  Number of events with the primary particle transmitted = 99.98 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
 
- Number of events with the primary particle reflected = 0.023 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.285 %
+ Number of events with the primary particle reflected = 0.024 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.321 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 32.85 mrad (central part only)
+  rms proj angle of transmit primary particle = 32.96 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 2.694 %
+  central part defined as +- 105.3 mrad;   Tail ratio = 2.745 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1553588857, 1098394944
+ Current couple of seeds = 1932179123, 1979250049
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

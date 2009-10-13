@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -102,7 +102,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -237,7 +237,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -347,14 +347,14 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  100.511 keV    e-  1.37814 MeV    e+  1.28002 MeV proton 0 eV 
+ Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : liquidArgon
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  6.17835 keV    e-  342.891 keV    e+  334.551 keV proton 0 eV 
+ Energy thresholds :  gamma  6.19986 keV    e-  344.855 keV    e+  333.46 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -391,13 +391,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.63s Real=13.06s Sys=0.02s
+  User=10.41s Real=10.44s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 765.53 MeV :  25.91 MeV     3.385 +- 0.3385 %      54.6 cm  +- 2.09 cm 
-   liquidArgon: 208.44 MeV :  19.18 MeV     9.201 +- 0.9201 %      1.03 m   +- 9.83 cm 
+          Lead: 768.41 MeV :  23.09 MeV     3.005 +- 0.3005 %      54.9 cm  +-  1.7 cm 
+   liquidArgon: 205.26 MeV :  15.67 MeV     7.637 +- 0.7637 %      1.02 m   +- 7.99 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -405,15 +405,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 765.527 MeV
-liquidArgon:	 208.436 MeV
+      Lead:	 768.412 MeV
+liquidArgon:	 205.257 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 545351837, 65703135
+ Current couple of seeds = 2006324174, 756464912
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

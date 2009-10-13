@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -144,7 +144,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   10 TeV
+         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -327,7 +327,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.90186 keV    e-  347.138 keV    e+  338.695 keV proton 0 eV 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -356,21 +356,21 @@ Run Summary
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.753 cm  +- 20.697 nm 
- geomPathLength :	2.0713 cm  +- 8.183 nm 
- lateralDisplac :	1.1493 cm  +- 6.9592 nm 
- Psi            :	506.56 mrad +- 0.00035995 mrad  (29.024 deg +- 2.0624e-05 deg)
+ truePathLength :	2.7512 cm  +- 11.142 nm 
+ geomPathLength :	2.0703 cm  +- 16.621 nm 
+ lateralDisplac :	1.1488 cm  +- 3.0764 nm 
+ Psi            :	506.58 mrad +- 0.00019228 mrad  (29.025 deg +- 1.1017e-05 deg)
 
  Theta_plane    :	1810.8 mrad  (103.75 deg)
- phi correlation:	0.26298 +- 0.057989  (std::cos(phi_pos - phi_dir))
+ phi correlation:	0.26308 +- 0.058008  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.3657 cm 
- range from restrict dE/dx:	2.753 cm 
+ range from restrict dE/dx:	2.7512 cm 
  ---> effective facRange  :	1
 
- compute theta0 from Highland :	620.24 mrad  (35.537 deg)
+ compute theta0 from Highland :	620.02 mrad  (35.525 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -427,8 +427,8 @@ Run Summary
  lateralDisplac :	923.68 nm  +- 393.04 fm 
  Psi            :	148.35 mrad +- 5.0567e-05 mrad  (8.4998 deg +- 2.8973e-06 deg)
 
- Theta_plane    :	243.36 mrad  (13.944 deg)
- phi correlation:	0.077644 +- 0.13144  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	261.72 mrad  (14.996 deg)
+ phi correlation:	0.11197 +- 0.12946  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -440,7 +440,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 885985248, 261613716
+ Current couple of seeds = 1971947806, 321117681
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
