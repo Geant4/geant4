@@ -96,7 +96,8 @@ class G4GDMLReadDefine : public G4GDMLRead
    void RotationRead(const xercesc::DOMElement* const);
    void ScaleRead(const xercesc::DOMElement* const);
    void VariableRead(const xercesc::DOMElement* const); 
-   void QuantityRead(const xercesc::DOMElement* const); 
+   void QuantityRead(const xercesc::DOMElement* const);
+   void ExpressionRead(const xercesc::DOMElement* const);
 
  protected:
 
