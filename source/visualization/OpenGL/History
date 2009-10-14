@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2009-10-14 13:27:30 lgarnier Exp $
+$Id: History,v 1.149 2009-10-14 14:06:00 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 13 October 2009 Laurent Garnier
  - G4OpenGLImmediateQtViewer/StoredQtViewer : some cleaning
- 
+ - G4OpenGLQtViewer.hh : Fix a compile error on mac OS X 10.5.8
+
 29 September 2009  John Allison  (opengl-V09-02-07)
 - Tagged.
 
