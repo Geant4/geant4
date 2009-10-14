@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh,v 1.5 2009-02-04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.hh,v 1.6 2009-10-14 13:27:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,10 +33,9 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#ifndef G4OpenGLIMMEDIATEQTVIEWER_HH
-#define G4OpenGLIMMEDIATEQTVIEWER_HH
+#ifndef G4OPENGLIMMEDIATEQTVIEWER_HH
+#define G4OPENGLIMMEDIATEQTVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLImmediateViewer.hh"
 #include "G4OpenGLQtViewer.hh"
 

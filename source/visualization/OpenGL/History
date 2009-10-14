@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2009-09-29 21:28:51 allison Exp $
+$Id: History,v 1.148 2009-10-14 13:27:30 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+13 October 2009 Laurent Garnier
+ - G4OpenGLImmediateQtViewer/StoredQtViewer : some cleaning
+ 
 29 September 2009  John Allison  (opengl-V09-02-07)
 - Tagged.
 
