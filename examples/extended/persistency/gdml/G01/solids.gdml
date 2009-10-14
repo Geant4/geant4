@@ -5,6 +5,7 @@
   <constant name="HALFPI" value="pi/2."/>
   <constant name="PI" value="1.*pi"/>
   <constant name="TWOPI" value="2.*pi"/>
+  <expression name="customangle">2*(HALFPI+0.2*PI)</expression>
   <position name="center" x="0" y="0" z="0"/>
   <rotation name="identity" x="0" y="0" z="0" />
   <position name="shiftbyx" x="-500"/>
@@ -33,16 +34,17 @@
   <position name="pos1001"  x="950" y="0"/>
   <rotation name="rotatebyx" x="HALFPI"/>
   <rotation name="rotatebyall" x="HALFPI" y="PI" z="TWOPI"/>
- <position name="v0" unit="mm" x="10" y="10" z="0" />
+  <position name="v0" unit="mm" x="10" y="10" z="0" />
   <position name="v1" unit="mm" x="-10" y="10" z="0" />
   <position name="v2" unit="mm" x="0" y="0" z="20" />
   <position name="v3" unit="mm" x="-10" y="-10" z="0" />
   <position name="v4" unit="mm" x="10" y="-10" z="0" />
-  <quantity type="density" name="ro" unit="g/cm3" value="1234.00"/>
-  <quantity type="length" name="sizeoft500" unit="mm" value="500.0"/>
-   <position name="shiftbysizeoft500" x="500.0"/>
-    <position name="unionidentitypos" x="25."/>
-</define>
+  <quantity name="ro" type="density" unit="g/cm3" value="1234.00"/>
+  <quantity name="sizeoft500" type="length" unit="mm" value="500.0"/>
+  <quantity name="wextent" type="length" value="10000.0" unit="mm"/>
+  <position name="shiftbysizeoft500" x="500.0"/>
+  <position name="unionidentitypos" x="25."/>
+ </define>
  <materials>
  
   <element name="Hydrogen" formula="H"  Z="1.">  <atom value="1.01"/>   </element>
@@ -63,7 +65,7 @@
  </materials>
  <solids>
  
-  <box name="WorldBox" x="10000.0" y="10000.0" z="10000.0"/>
+  <box name="WorldBox" x="wextent" y="wextent" z="wextent"/>
 
   <box name="b100" x="10.0" y="10.0" z="10.0"/>
   <box name="b500" x="50.0" y="50.0" z="50.0"/>
@@ -80,7 +82,7 @@
                              x4="10.0"    alpha2="30.0"/>
   <trd name="trd1" x1="10.0" x2="10.0" y1="10.0" y2="20.0" z="30.0"/>
   <tube name="t1000" z="1000.0" rmax="100.0" deltaphi="TWOPI" aunit="rad"/>
-  <tube name="t400" z="200.0" rmax="50.0" deltaphi="PI" aunit="rad"/>
+  <tube name="t400" z="200.0" rmax="50.0" deltaphi="customangle" aunit="rad"/>
   <tube name="t100" z="100.0" rmax="10.0" deltaphi="TWOPI" aunit="rad"/>
  
    <union name="u1">

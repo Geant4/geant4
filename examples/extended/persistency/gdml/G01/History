@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2009-09-24 15:01:45 gcosmo Exp $
+$Id: History,v 1.12 2009-10-14 13:08:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 14th, 2009  Gabriele Cosmo - G01-V09-02-05
+- Added usage of 'expression' and 'quantity' in solids.gdml.
 
 Sep 24th, 2009  Gabriele Cosmo - G01-V09-02-04
 - Added assembly.gdml to demonstrate support for 'assembly' tags.
