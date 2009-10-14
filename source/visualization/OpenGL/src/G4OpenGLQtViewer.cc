@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.43 2009-07-29 10:04:45 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.44 2009-10-14 14:35:07 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,9 +105,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
-#endif
 
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
@@ -188,9 +185,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
   fGLWindow->show();
   
   if(!fWindow) return;
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
-#endif
 
   if (!fContextMenu) 
     createPopupMenu();
@@ -1432,8 +1426,10 @@ void Graph::exportToSVG(const QString& fname)
 
 void G4OpenGLQtViewer::FinishView()
 {
-   glFlush ();
-   fWindow->swapBuffers ();
+  glFlush ();
+
+  // L. Garnier 10/2009 : Not necessary and cause problems on mac OS X 10.6
+  //  fWindow->swapBuffers ();
 }
 
 /**
