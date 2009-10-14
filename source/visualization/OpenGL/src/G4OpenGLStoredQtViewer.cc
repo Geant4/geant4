@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.26 2009-07-27 14:01:13 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.27 2009-10-14 14:51:20 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,16 +37,14 @@
 
 #include "G4ios.hh"
 
-//#include <qmouseevent.h>
-#include <qevent.h> // include <qcontextmenuevent.h>
-
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 (G4OpenGLStoredSceneHandler& sceneHandler,
  const G4String&  name):
   G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
   G4OpenGLViewer (sceneHandler),
   G4OpenGLQtViewer (sceneHandler),
-  G4OpenGLStoredViewer (sceneHandler)             // FIXME : gerer le pb du parent !
+  G4OpenGLStoredViewer (sceneHandler),             // FIXME : gerer le pb du parent !
+  QGLWidget()
 {
 
 #if QT_VERSION < 0x040000
@@ -224,7 +222,18 @@ void G4OpenGLStoredQtViewer::paintGL()
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
   if ( !fHasToRepaint) {
-    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) {
+    // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
+    // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
+    int sw = 0;
+    int sh = 0;
+    if (!isMaximized() && !isFullScreen()) {
+      sw = normalGeometry().width();
+      sh = normalGeometry().height();
+    } else {
+      sw = frameGeometry().width();
+      sh = frameGeometry().height();
+    }
+    if ((getWinWidth() == (unsigned int)sw) &&(getWinHeight() == (unsigned int)sh)) {
       return;
     }
   }
