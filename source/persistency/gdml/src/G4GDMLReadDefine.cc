@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.23 2009-04-17 15:24:58 gcosmo Exp $
+// $Id: G4GDMLReadDefine.cc,v 1.24 2009-10-14 13:10:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadDefine Implementation
@@ -167,6 +167,36 @@ G4GDMLReadDefine::ConstantRead(const xercesc::DOMElement* const constantElement)
       if (attName=="value") { value = eval.Evaluate(attValue); }
    }
 
+   eval.DefineConstant(name,value);
+}
+
+void
+G4GDMLReadDefine::ExpressionRead(const xercesc::DOMElement* const expElement)
+{
+   G4String name  = "";
+   G4double value = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = expElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name")  { name = attValue; }
+   }
+
+   const G4String expValue = Transcode(expElement->getTextContent());
+   value = eval.Evaluate(expValue);
    eval.DefineConstant(name,value);
 }
 
@@ -373,6 +403,7 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
    }
 
    quantityMap[name] = value*unit;
+   eval.DefineConstant(name,value*unit);
 }
 
 void
@@ -395,7 +426,8 @@ G4GDMLReadDefine::DefineRead(const xercesc::DOMElement* const defineElement)
       if (tag=="rotation") { RotationRead(child); } else
       if (tag=="scale")    { ScaleRead(child); }    else
       if (tag=="variable") { VariableRead(child); } else
-      if (tag=="quantity") { QuantityRead(child); }
+      if (tag=="quantity") { QuantityRead(child); } else
+      if (tag=="expression") { ExpressionRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in define: "+tag;
