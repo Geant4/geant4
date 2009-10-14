@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2009-10-14 14:51:20 lgarnier Exp $
+$Id: History,v 1.153 2009-10-14 15:04:09 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,6 @@ committal in the CVS repository !
      ----------------------------------------------------------
 13 October 2009 Laurent Garnier
  - G4OpenGLImmediateQtViewer/StoredQtViewer : some cleaning
- - G4OpenGLQtViewer.hh : Fix a compile error on mac OS X 10.5.8
  - G4OpenGLImmediateQtViewer : Remove picking to true at initialisation 
  - G4OpenGLQtViewer.cc : Fix a redraw problem on mac OS X 10.6
  - G4OpenGLStoreQtViewer.cc,G4OpenGLImmediateQtViewer.cc : Fix width()

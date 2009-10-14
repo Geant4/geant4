@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.18 2009-10-14 14:06:00 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.19 2009-10-14 15:04:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,16 +38,9 @@
 
 #include "globals.hh"
 
-// FIXME : L.Garnier 22 Sept 09
-// This include should be the first, because we should include 
-// qobject.h first. I don't know why, but on macOSX 10.5.8, if
-// we do not, it says :
-// /Library/Frameworks/QtCore.framework/Headers/qglobal.h:1895: error: redefinition of ‘class QTypeInfo<char>’
-// /Library/Frameworks/QtCore.framework/Headers/qglobal.h:1894: error: previous definition of ‘class QTypeInfo<char>’
-
-#include <qobject.h>
 #include "G4OpenGLViewer.hh"
 
+#include <qobject.h>
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
