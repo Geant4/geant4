@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.14 2009-05-13 10:28:00 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.15 2009-10-14 14:32:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,9 +47,6 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   G4OpenGLImmediateViewer (sceneHandler)
 {
 
-  //set true to picking
-  fVP.SetPicking(true);
-  fDefaultVP.SetPicking(true);
 #if QT_VERSION < 0x040000
   setFocusPolicy(QWidget::StrongFocus); // enable keybord events
 #else
