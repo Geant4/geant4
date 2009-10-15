@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.57 2009-08-19 13:28:10 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.58 2009-10-15 15:33:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -495,11 +495,24 @@ void G4OpenGLViewer::printEPS() {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::printEPS file:%s Vec:%d Name:%s\n",getRealPrintFilename().c_str(),fVectoredPs,GetName().c_str());
 #endif
+
+  // Change the LC_NUMERIC value in order to have "." separtor and not ","
+  // This case is only useful for French, Canadien...
+  char *oldLocale = strdup(setlocale(LC_NUMERIC,NULL));
+  setlocale(LC_NUMERIC,"C");
+
   if (fVectoredPs) {
     res = printVectoredEPS();
   } else {
     res = printNonVectoredEPS();
   }
+
+  // restore the local
+  if (oldLocale) {
+    setlocale(LC_NUMERIC,oldLocale);
+    free(oldLocale);
+  }
+
   if (res == false) {
     G4cerr << "Error while saving file... "<<getRealPrintFilename().c_str()<< G4endl;
   } else {
