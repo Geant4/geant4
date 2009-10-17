@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
   G4double excitationE = atof(argv[3]);
   double angularMom = atof(argv[4]);
   G4int numberOfEvents = atoi(argv[5]);
-  G4double mass = G4NucleiProperties::GetAtomicMass(nucleusA,nucleusZ)/MeV;
+  G4double mass = G4NucleiProperties::GetNuclearMass(nucleusA,nucleusZ)/MeV;
 
   G4double recoilE = 0;
   G4double nucMomX = 0;

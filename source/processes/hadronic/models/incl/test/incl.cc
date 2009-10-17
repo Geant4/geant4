@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #include "G4Incl.hh"
 
@@ -27,10 +28,12 @@ enum type {fullrun = 0, inclrun = 1};
 
 int main(int argc, char *argv[])
 {
-  //  const char outputfile[100] = argv[5];
-
   char *filename = new char [2000];
   char *summaryFilename = new char [2000];
+
+  // For CPU time measurement:
+  long starttime = 0;
+  long stoptime = 0;
 
   // Summary and diagnostics data:
   double fCrossSection;
@@ -86,19 +89,9 @@ int main(int argc, char *argv[])
   G4Incl *incl = new G4Incl(hazard, calincl, ws, mat, varntp);
 
 #ifdef USEROOT 
-//   char *rootfilename = new char[2000];
-
-//   if (rootfilename == NULL)
-//   {
-//     cout << "Memory allocation error." << endl;
-//     return -1;
-//   }
-
   TFile *dataFile = NULL;
 
-  //  strcpy(rootfilename, argv[6]);
   TString rootfilename(argv[7]);
-//  cout <<"filename: " << rootfilename << endl;
   if(rootfilename.Contains(".root") == 1) {
     dataFile = new TFile(rootfilename, "RECREATE");
     usingRoot = true;
@@ -174,7 +167,7 @@ int main(int argc, char *argv[])
   }
 
   if(argc < 8) {
-    cout <<"Usage: inclStandAlone targetA targetZ bulletType bulletEnergy events outputfile" << endl;
+    cout <<"Usage: incl <cascade|full> targetA targetZ bulletType bulletEnergy events outputfile" << endl;
     return -1;
   }
 
@@ -217,25 +210,6 @@ int main(int argc, char *argv[])
   // FINPUT(6)
   calincl->f[5] = 1.0;
 
-  // Evaporation model 1 = KHS, 2 = GEM:
-  //  localvars_.choice_evap = 1;
-
-  // Other random seeds:
-  //   int seeds[19] = {21033,17563,27563,33657,43657,56375,66375,77365,87365, 
-  // 		   12345,22345,32345,42345,52345,62345,72345,82345,34567,
-  // 		   47059};
-  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-  //     hazard->igraine[seedIndex] = seeds[seedIndex];
-  //   }
-
-  //   cout <<"Seeds at the beginning of the simulation:" << endl;
-  //   cout <<"ial: " << hazard_.ial << endl;
-  //   for(int seedIndex = 0; seedIndex < 19; seedIndex++) {
-  //     cout <<"IY(" << seedIndex <<") = " << hazard_.IY[seedIndex] << endl;
-  //   }
-  //   cout << endl;
-
-
   // Nuclear potential:
   // FINPUT(5)
   calincl->f[4] = 45.0;
@@ -249,27 +223,19 @@ int main(int argc, char *argv[])
   // NPAULSTR
   ws->npaulstr = 0;
 
-  // Message output file:
-  //  sprintf(localvars_.stringout, "inclabla.out");
-
-  // Data path:
-  //  sprintf(localvars_.RACINE, "./dapnia/dapx4");
-
   // Events (only for compatibility)
   // Deprecated
   calincl->icoup = 1;
 
   // Events:
-  //  int totalevents = 100000;
   int totalevents = atoi(argv[6]);
-  //  debugval_.allevents = totalevents;
 
   int particleI = 0;
   
   // End of input parameters
 
-  cout << "Outpufile: " << argv[7] << endl;
-  cout << "Bullet: " << endl;
+  cout << "Outputfile: " << argv[7] << endl;
+  cout << "Projectile: " << endl;
   cout << "Type: " << calincl->f[6] << endl;
   cout << "energy: " << calincl->f[2] << " mev " << endl;
   cout << "target: " << endl;
@@ -288,6 +254,7 @@ int main(int argc, char *argv[])
   incl->initIncl(false);
   cout <<"Initialization complete." << endl;
 
+  starttime = clock();
   for(int n = 1; n <= totalevents; n++) {
     if(n == 1) {
       doinit = 1;
@@ -418,6 +385,7 @@ int main(int argc, char *argv[])
       }
     }
   }
+  stoptime = clock();
   
   if(!usingRoot) {
     out.close();
@@ -428,7 +396,7 @@ int main(int argc, char *argv[])
   ofstream summaryFile;
   summaryFile.open(summaryFilename);
   
-  summaryFile << "INCL4+ABLA C++-Fortran hybrid thin-target calculation:" << endl;
+  summaryFile << "INCL4/ABLA C++ thin-target calculation:" << endl;
   summaryFile << endl;
   summaryFile << "Run setup:" << endl;
   summaryFile << "Bullet: " << endl;
@@ -438,6 +406,7 @@ int main(int argc, char *argv[])
   summaryFile << "\t A: " << calincl->f[0] << endl;
   summaryFile << "\t Z: " << calincl->f[1] << endl;
   summaryFile << "Events: " << argv[6] << endl;
+  summaryFile << "CPU time: " << (stoptime - starttime)/1000 << " milliseconds";
   summaryFile << endl;
   if(!usingRoot) {
     summaryFile << "Calculation output in ASCII file: " << filename << endl;

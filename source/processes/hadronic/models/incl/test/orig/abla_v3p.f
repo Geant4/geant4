@@ -1908,7 +1908,7 @@ C
 C      IF (((A.LE.0.0).OR.(Z.LE.0.0)).OR.(A-Z.LE.0.0)) THEN             
 C                                                                       
       IF ( (A1.LE.0).OR.(Z1.LE.0).OR.((A1-Z1).LE.0) )  THEN 
-C Modif pour récupérer une masse p et n correcte:
+C Modif pour recuperer une masse p et n correcte:
          EL=0.                  
 C        EL = 1.0E38                                                     
         GO TO 50                                                        
@@ -2712,7 +2712,7 @@ C   	do i=1,261
 C===============================================================================
 C=	"PACE2"                                                                =
 C=  	Cette fonction retourne le defaut de masse du noyau A,Z en MeV
-C              Révisée pour a, z flottants 25/4/2002	                       =
+C              Revisee pour a, z flottants 25/4/2002	                       =
 C===============================================================================
 
       	function pace2(a,z)
@@ -2752,7 +2752,7 @@ C===============================================================================
 C=	"GUET"                                                                 =
 C=	TABLE DE MASSES ET FORMULE DE MASSE TIRE DU PAPIER DE BRACK-GUET       =
 C=   	Gives the theoritical value for mass excess...                         =
-C              Révisée pour x, z flottants 25/4/2002	                       =
+C              Revisee pour x, z flottants 25/4/2002	                       =
 C===============================================================================
  
       	subroutine guet(X,Z,FIND)

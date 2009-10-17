@@ -29,6 +29,43 @@ void fragments()
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   residus();
   // Neutron kinetic energy. Phys.Rev. article p21
+
+  INCL(); // Plot INCL output variables: Remnant mass, charge, excitation and impact parameter
+}
+
+void INCL()
+{
+  TFile *cf = new TFile("tmp/run2.root");
+  TFile *ff = new TFile("tmp/run2ref.root");
+
+  TTree *ct = (TTree *) cf->Get("h101");
+  ct->SetLineColor(kRed);
+  TTree *ft = (TTree *) ff->Get("h101");
+
+  TCanvas *inclResult = new TCanvas();
+  inclResult->Divide(2,2);
+
+  inclResult->cd(1);
+  ft->Draw("Massini");
+  ct->Draw("Massini", "", "same");
+
+  inclResult->cd(2);
+  ft->Draw("Mzini");
+  ct->Draw("Mzini", "", "same");
+
+  inclResult->cd(3);
+  ft->Draw("Exini");
+  ct->Draw("Exini", "", "same");
+
+  inclResult->cd(4);
+  ft->Draw("Jremn");
+  ct->Draw("Jremn", "", "same");
+
+  TCanvas *bimpactPlot = new TCanvas();
+  ft->Draw("Bimpact");
+  ct->Draw("Bimpact", "", "same");
+
+  inclResult->SaveAs("run2INCL.eps");
 }
 
 void residus() {
@@ -167,8 +204,11 @@ void residus() {
   // Sum theory on measured elementary cross sections and normalize:	
   TH2D* calc1= new TH2D("calc1","",dimZ,-0.5,99.5,dimA,-0.5,299.5);
   ref->Draw("Avv:Zvv >> calc1");
-	
   calc1->Multiply(calc1,verite);
+
+  TH2D* calc1_fort= new TH2D("calc1_fort","",dimZ,-0.5,99.5,dimA,-0.5,299.5);
+  reffort->Draw("Avv:Zvv >> calc1_fort");
+  calc1_fort->Multiply(calc1_fort,verite);
 	
   // Z Plot
   c1_1->SetLogy();
@@ -242,7 +282,11 @@ void residus() {
 	
   TH1D* hista_on_measured=new TH1D("hista_on_measured","",nbx,amin,amax);
   hista_on_measured=calc1->ProjectionY();
-  hista_on_measured->SetLineColor(kGreen);
+  hista_on_measured->SetLineColor(kRed);
+
+  TH1D* hista_on_measured_fortran=new TH1D("hista_on_measured_fortran","",nbx,amin,amax);
+  hista_on_measured_fortran=calc1_fort->ProjectionY();
+  hista_on_measured_fortran->SetLineColor(kBlack);
  
   TH1F* hista=new TH1F("hista","",nbx,amin,amax);
   hista->SetFillStyle(0);
@@ -281,17 +325,30 @@ void residus() {
 
   grexpa->Draw("PZ");
 	 
-  c1->Print(psFileName_debut,"Portrait"); // saving the ps file
+  //c1->Print(psFileName_debut,"Portrait"); // saving the ps file
 
   c1->Clear();
   c1->SetLogy(1);
   hista->SetTitle(titre);
-  hista->Draw();
+  hista_on_measured->Draw();
+  hista->Draw("same");
   histfortran->Draw("same");
+  grexpa->Draw("PZ");
+  //  c1->SaveAs("fragments.png");
+  //  c1->SaveAs("fragments.eps");
+  // c1->Print(psFileName,"Portrait"); // saving the ps file
+
+  c1->Clear();
+  c1->SetLogy(1);
+  hista_on_measured->GetXaxis()->SetTitle("A");
+  hista_on_measured->GetYaxis()->SetTitle("Cross section (mb)");
+  hista_on_measured->SetTitle(titre);
+  hista_on_measured->Draw();
+  hista_on_measured_fortran->Draw("same");
   grexpa->Draw("PZ");
   c1->SaveAs("fragments.png");
   c1->SaveAs("fragments.eps");
-  c1->Print(psFileName,"Portrait"); // saving the ps file
+  c1->Print(psFileName_debut,"Portrait"); // saving the ps file
 
   // Second page, isotopic cross sections
   Int_t zDebut=84;

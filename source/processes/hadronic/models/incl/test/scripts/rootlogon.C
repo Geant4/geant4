@@ -9,6 +9,7 @@
 
   // use plain black on white colors
   hipStyle->SetFrameBorderMode(0);
+  hipStyle->SetFrameFillColor(kWhite);
   hipStyle->SetCanvasBorderMode(0);
   hipStyle->SetPadBorderMode(0);
   hipStyle->SetPadColor(0);

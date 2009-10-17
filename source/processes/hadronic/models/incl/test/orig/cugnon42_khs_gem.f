@@ -8,7 +8,7 @@ C**********************************************************************
 C	      The aim of this code is to provide a self consistent MAIN
 C	to be used for a spallation calculation in the case of a thin 
 C	target (one interaction, no transport) starting from the intra
-C	nuclear cascade of Liège (INCL), and coupled with various
+C	nuclear cascade of Liege (INCL), and coupled with various
 C	evaporation and fission codes.
 C	      The idea is to provide a tool for physicists to
 C 	check various models and options compared with observables
@@ -17,7 +17,7 @@ C	choice before using the proposed physics models in complex
 C	geometries treated by transport codes (LAHET, MCNPX, HERMES,
 C	GEANT).
 C	TT_MSC 	is developped at Saclay by A. BOUDARD and C. VOLANT.
-C	INCL	is developped at Liège by J. CUGNON
+C	INCL	is developped at Liege by J. CUGNON
 C	KHS	is developped at GSI by K.H. SCHMIDT,
 C			and at Santiago de Compostella by J. BENLLIURE.
 C	GEM     is developped in Tokyo by S. FURIHATA 
@@ -142,11 +142,11 @@ C		GEM		(2)		(08/2002)
 C
 C 9/2002, the nuclear mass is taken from KHS model. Solves some incoherences
 C    in the kinematics computed in the MAIN. Still problems with GEM.
-C    MGLMS(A,Z,0,EL) est la fonction de masse cohérente avec KHS evapo-fis.
+C    MGLMS(A,Z,0,EL) est la fonction de masse coherente avec KHS evapo-fis.
 C    Attention aux parametres, ici 0=OPTSHP, NO microscopic corrections!
 C
-C 11/2003 Corrections proposées par John Hendricks (MCNPX): précisions
-C	numériques pour le calcul des angles (translab)
+C 11/2003 Corrections proposees par John Hendricks (MCNPX): precisions
+C	numeriques pour le calcul des angles (translab)
 C *********************************************************************** 
 C *********************************************************************** 
 C
@@ -545,7 +545,7 @@ C      DO ipr=1,NOPART
 C      WRITE(6,*) ipr,KIND(ipr),EP(ipr),ALPHA(ipr),BETA2(ipr),GAM(ipr)
 C      ENDDO
 
-C Absorption forcée pour p (10-100 MeV) et n (20-100MeV)
+C Absorption forcee pour p (10-100 MeV) et n (20-100MeV)
       CALL FORCE_ABSOR(nopart,F,IAREM,IZREM,ESREM,ERECREM,
      s  ALREM,BEREM,GAREM,JREM)
 
@@ -861,7 +861,7 @@ C Essais avec la masse de KHS (9/2002):
       CSREM(2)=BEREM
       CSREM(3)=GAREM
       
-C Pour Vérif Remnant = evapo(Pre fission) + Noyau_fissionant (système  Remnant)
+C Pour Verif Remnant = evapo(Pre fission) + Noyau_fissionant (systeme  Remnant)
 	Bil_E=0.
 	Bil_Px=0.
 	Bil_Py=0.
@@ -921,7 +921,7 @@ C      	   MASSE1 = MASSE1 + AFF1*UMA - ZFF1*MELEC + EFF1
 C           MASSE2 = pace2(DBLE(AFF2),DBLE(ZFF2))
 C      	   MASSE2 = MASSE2 + AFF2*UMA - ZFF2*MELEC + EFF2
 C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2
-C MGLMS est la fonction de masse cohérente avec KHS evapo-fis.
+C MGLMS est la fonction de masse coherente avec KHS evapo-fis.
 C   Attention aux parametres, ici 0=OPTSHP, NO microscopic correct. 
 	   CALL MGLMS(AF,ZF,0,EL)
 	   MASSEF = ZF*FMP + (AF-ZF)*FMN + EL + EE + EF
@@ -1006,7 +1006,7 @@ C On ajoute le fragment:
          zcv(iv)=0.
         END IF
 	        
-C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
+C Pour Verif evapo de PF1 dans le systeme du Noyau Fissionant
 	Bil1_E=0.
 	Bil1_Px=0.
 	Bil1_Py=0.
@@ -1065,7 +1065,7 @@ C On ajoute le fragment:
          ycv(iv)=0.
          zcv(iv)=0.
         END IF        
-C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
+C Pour Verif evapo de PF1 dans le systeme du Noyau Fissionant
 	Bil2_E=0.
 	Bil2_Px=0.
 	Bil2_Py=0.
@@ -1099,7 +1099,7 @@ c
         END IF
 C --------------------- End of PF2 calculation
 
-C Pour vérifications: calculs du noyau fissionant et des PF dans 
+C Pour verifications: calculs du noyau fissionant et des PF dans 
 C    le systeme du remnant.
       DO iloc=1,3
         PFIS_REM(iloc)=0.
@@ -1363,8 +1363,8 @@ C Pour KHS, impression si trop mauvaise conservation de P (PL>5, PT>3):
 		WRITE(6,*) MASSE2,T2,P2,CTET2,PHI2,GAMFIS,ETFIS,R,
      s   PLAB2,GAM2,ETA2,CSDIR2
         IF (FF.EQ.1) THEN
-      WRITE(6,*) 'Bilans de fission (système remnant) i:',I
-      WRITE(6,*) '	 Remnant,      Bilan (Evapo pré fis)'
+      WRITE(6,*) 'Bilans de fission (systeme remnant) i:',I
+      WRITE(6,*) '	 Remnant,      Bilan (Evapo pre fis)'
       WRITE(6,*) 'E  ',REMMASS,Bil_E 
       WRITE(6,*) 'Px ','          0',Bil_Px 
       WRITE(6,*) 'Py ','          0',Bil_Py 
@@ -1395,8 +1395,8 @@ C Pour KHS, impression si trop mauvaise conservation de P (PL>5, PT>3):
       WRITE(6,*) 'Px ',PF2_REM(1),Bil_PX_PF2
       WRITE(6,*) 'Py ',PF2_REM(2),Bil_PY_PF2
       WRITE(6,*) 'Pz ',PF2_REM(3),Bil_PZ_PF2
-      WRITE(6,*) 'Energie des Résidus de fis. ',
-     s  '(apres évapo) :',EPF1_OUT,EPF2_out
+      WRITE(6,*) 'Energie des Residus de fis. ',
+     s  '(apres evapo) :',EPF1_OUT,EPF2_out
         ENDIF
 
 		
@@ -1457,7 +1457,7 @@ c	write(6,*)'Numero',inum
                 ENDDO
 	ENDIF
 
-C Imressions pour vérif sur un test a choisir:
+C Imressions pour verif sur un test a choisir:
 C        IF (EXINI.GE.58.) THEN
 C	WRITE(6,*) 'inum,IZREM,IAREM,MCOREM',inum,IZREM,IAREM,MCOREM
 C        WRITE(6,*) 'E*,T_REM,A,B,G',ESREM,ERECREM,ALREM,BEREM,GAREM
@@ -1862,9 +1862,9 @@ C-------------------------------------------------------------------------
       end
 C------------------------------------------------------------------------
       SUBROUTINE LOR_AB(GAM,ETA,Ein,Pin,Eout,Pout)
-C  Transformation de lorentz brute pour vérifs.
-C	P(3) = P_longitudinal (transformé)
-C	P(1) et P(2) = P_transvers (non transformés)
+C  Transformation de lorentz brute pour verifs.
+C	P(3) = P_longitudinal (transforme)
+C	P(1) et P(2) = P_transvers (non transformes)
       DIMENSION Pin(3),Pout(3)
       REAL*8 GAM,ETA,Ein
 

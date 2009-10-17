@@ -40,6 +40,43 @@ void run10()
   gROOT->ProcessLine(".x scripts/rootlogon.C");
   gROOT->SetStyle("clearRetro");
   nCrossSection();
+  INCL();
+}
+
+void INCL()
+{
+  TFile *cf = new TFile("tmp/run10.root");
+  TFile *ff = new TFile("tmp/run10ref.root");
+
+  TTree *ct = (TTree *) cf->Get("h101");
+  ct->SetLineColor(kRed);
+  TTree *ft = (TTree *) ff->Get("h101");
+
+  TCanvas *inclResult = new TCanvas();
+  inclResult->Divide(2,2);
+
+  inclResult->cd(1);
+  ft->Draw("Massini");
+  ct->Draw("Massini", "", "same");
+
+  inclResult->cd(2);
+  ft->Draw("Mzini");
+  ct->Draw("Mzini", "", "same");
+
+  inclResult->cd(3);
+  ft->Draw("Exini");
+  ct->Draw("Exini", "", "same");
+
+  inclResult->cd(4);
+  ft->Draw("Jremn");
+  ct->Draw("Jremn", "", "same");
+
+  TCanvas *bimpactPlot = new TCanvas();
+  ft->Draw("Bimpact");
+  ct->Draw("Bimpact", "", "same");
+
+  inclResult->SaveAs("run10Remnants.eps");
+  bimpactPlot->SaveAs("run10ImpactParameter.eps");
 }
 
 void plotExpTheta(Char_t* file_name, Char_t* racine, Float_t fnor)

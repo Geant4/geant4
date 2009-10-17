@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.10 2007-12-10 16:31:55 gunter Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.11 2009-10-17 19:14:34 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -37,7 +37,8 @@
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 
-G4InclAblaCascadeInterface::G4InclAblaCascadeInterface()
+G4InclAblaCascadeInterface::G4InclAblaCascadeInterface(const G4String& nam)
+  :G4VIntraNuclearTransportModel(nam)
 {
   hazard = new G4Hazard();
   const G4long* table_entry = CLHEP::HepRandom::getTheSeeds(); // Get random seed from CLHEP.

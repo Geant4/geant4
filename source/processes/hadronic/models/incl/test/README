@@ -25,6 +25,7 @@ II REQUIREMENTS AND DEPENDENCIES
 
 2. ROOT (any version will do)
 
+3. CERNLIB (for the reference FORTRAN code)
 
 III BUILDING AND USING THE TESTS
 
@@ -34,6 +35,26 @@ INCL/ABLA separately. Untar the tarball using command tar -zxf
 
 1. Build INCL4/ABLA by issuing command "make" in the incl/
 -directory.
+
+2. Setup CERNLIB settings, if necessary.
+
+The default configuration is built for Debian GNU/Linux (and
+Ubuntu). On different systems, however, the CERNLIB location and
+library settings may differ. Especially the Debian and original CERN
+versions of the library are slightly different. Both must be
+supported.
+
+The added configuration environment variables are:
+CERNLIBDIR   -   The toplevel directory containing CERNLIB
+The libraries needed are KERNLIB and PACKLIB. It is especially important to
+note the difference between the libraries with and without libshift support.
+KERNLIB      -   The name of the KERNLIB library
+PACKLIB      -   The name of the PACKLIB library
+
+Example (using Bash shell):
+export CERNLIBDIR=/cern/pro
+export KERNLIB=$CERNLIBDIR/lib/libkernlib_noshift.a
+export PACKLIB=$CERNLIBDIR/lib/libpacklib_noshift.a
 
 2. Enter the test/ directory and run command "make build".
 

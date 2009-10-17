@@ -62,10 +62,48 @@ void run5()
 
   c1->SetLogy(0);
   cpp->Draw("Enerj", "Avv == 4 && Zvv == 2");
-  fort->Draw("Exini", "Avv == 4 && Zvv == 2", "same");
+  fort->Draw("Enerj", "Avv == 4 && Zvv == 2", "same");
   c1->SaveAs("test5.ps");
 
   cpp->Draw("Exini:Massini");
   fort->Draw("Exini:Massini", "", "same");
   c1->SaveAs("test5.ps)");
+
+  INCL();
+}
+
+void INCL()
+{
+  TFile *cf = new TFile("tmp/run5.root");
+  TFile *ff = new TFile("tmp/run5ref.root");
+
+  TTree *ct = (TTree *) cf->Get("h101");
+  ct->SetLineColor(kRed);
+  TTree *ft = (TTree *) ff->Get("h101");
+
+  TCanvas *inclResult = new TCanvas();
+  inclResult->Divide(2,2);
+
+  inclResult->cd(1);
+  ft->Draw("Massini");
+  ct->Draw("Massini", "", "same");
+
+  inclResult->cd(2);
+  ft->Draw("Mzini");
+  ct->Draw("Mzini", "", "same");
+
+  inclResult->cd(3);
+  ft->Draw("Exini");
+  ct->Draw("Exini", "", "same");
+
+  inclResult->cd(4);
+  ft->Draw("Jremn");
+  ct->Draw("Jremn", "", "same");
+
+  TCanvas *bimpactPlot = new TCanvas();
+  ft->Draw("Bimpact");
+  ct->Draw("Bimpact", "", "same");
+
+  inclResult->SaveAs("run5Remnants.eps");
+  bimpactPlot->SaveAs("run5ImpactParameter.eps");
 }
