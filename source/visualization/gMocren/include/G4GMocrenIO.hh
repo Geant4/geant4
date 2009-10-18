@@ -353,6 +353,8 @@ public:
   // merge two dose distributions
   bool mergeDoseDist(std::vector<class GMocrenDataPrimitive<double> > & _dose);
 
+  // clear all dose distributions
+  void clearDoseDistAll();
 protected:
   // check whether dose variable is empty or not
   bool isDoseEmpty();
@@ -381,6 +383,7 @@ public:
   // get & set the ROI image min. and max.
   void getROIMinMax(short _minmax[2], int _num = 0);
   void setROIMinMax(short _minmax[2], int _num = 0);
+  void clearROIAll();
 protected:
   // check whether RoI variable is empty or not
   bool isROIEmpty();

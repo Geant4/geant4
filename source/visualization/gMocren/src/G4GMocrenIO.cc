@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// $Id: G4GMocrenIO.cc,v 1.3 2009-10-18 04:02:09 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -454,15 +454,19 @@ bool G4GMocrenIO::storeData(char * _filename) {
 
 bool G4GMocrenIO::storeData4() {
 
-  if(kVerbose > 0) std::cout << ">>>>>>>  store data (ver.4) <<<<<<<" << std::endl;
-  if(kVerbose > 0) std::cout << "         " << kFileName << std::endl;
-
   bool DEBUG = false;//
+
+  if(DEBUG || kVerbose > 0)
+    std::cout << ">>>>>>>  store data (ver.4) <<<<<<<" << std::endl;
+  if(DEBUG || kVerbose > 0)
+    std::cout << "         " << kFileName << std::endl;
 
   // output file open
   std::ofstream ofile(kFileName.c_str(),
 		      std::ios_base::out|std::ios_base::binary);
-
+  if(DEBUG || kVerbose > 0)
+    std::cout << "         file open status: " << ofile << std::endl;
+  
   // file identifier
   ofile.write("gMocren ", 8);
 
@@ -1015,6 +1019,8 @@ bool G4GMocrenIO::storeData4() {
   ofile.write("END", 3);
 
   ofile.close();
+  if(DEBUG || kVerbose > 0)
+    std::cout << ">>>> closed gdd file: " << kFileName << std::endl;
 
   return true;
 }
@@ -3666,6 +3672,16 @@ bool G4GMocrenIO::mergeDoseDist(std::vector<class GMocrenDataPrimitive<double> >
   return true;
 }
 //
+void G4GMocrenIO::clearDoseDistAll() {
+
+  if(!isDoseEmpty()) {
+    for(int i = 0; i < getNumDoseDist(); i++) {
+      kDose[i].clear();
+    }
+    kDose.clear();
+  }
+}
+//
 bool G4GMocrenIO::isDoseEmpty() {
   if(kDose.empty()) {
     std::cerr << "!!! dose distribution data is empty." << std::endl;
@@ -3759,6 +3775,16 @@ void G4GMocrenIO::getROICenterPosition(float _center[3], int _num) {
     for(int i = 0; i < 3; i++) _center[i] = 0;
   else 
     kRoi[_num].getCenterPosition(_center);
+}
+//
+void G4GMocrenIO::clearROIAll() {
+
+  if(!isROIEmpty()) {
+    for(int i = 0; i < getNumROI(); i++) {
+      kRoi[i].clear();
+    }
+    kRoi.clear();
+  }
 }
 //
 bool G4GMocrenIO::isROIEmpty() {

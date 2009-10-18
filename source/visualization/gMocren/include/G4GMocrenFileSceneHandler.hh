@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.hh,v 1.3 2009-10-18 04:02:09 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,6 +122,9 @@ public:
 
 
 private:
+
+  //----- initialize all parameters
+  void InitializeParameters();
 
   //----- Utilities etc.
   G4bool IsVisible();
