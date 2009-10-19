@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.6 2006-06-29 21:14:59 gunter Exp $
+// $Id: G4VUserTrackInformation.hh,v 1.7 2009-10-19 09:37:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,15 +56,32 @@
 #ifndef G4VUserTrackInformation_H
 #define G4VUserTrackInformation_H 1
 
+#include "globals.hh"
+
 class G4VUserTrackInformation
-{
-  public:
+{ 
+  public: // With Description
     G4VUserTrackInformation();
+    G4VUserTrackInformation(const G4String& infoType);
+    // String is provided to indicate Type of UserTrackInfo class  
+    // User is recommended to set the type of his/her class  
+
     virtual ~G4VUserTrackInformation();
 
-  public:
     virtual void Print() const = 0;
+    
+    const G4String& GetType() const;
+    // get Type of this UserTrackInfo     
+ 
+  private:
+    G4String fType;    
 };
 
+inline 
+ const G4String& G4VUserTrackInformation::GetType() const
+{
+  return fType;
+}
+    
 #endif
 

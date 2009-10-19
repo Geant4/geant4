@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.cc,v 1.2 2006-06-29 21:15:21 gunter Exp $
+// $Id: G4VUserTrackInformation.cc,v 1.3 2009-10-19 09:37:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,12 @@
 #include "G4VUserTrackInformation.hh"
 
 G4VUserTrackInformation::G4VUserTrackInformation()
+  : fType("NONE")
 {;}
+
+G4VUserTrackInformation::G4VUserTrackInformation(const G4String& infoType)
+  : fType(infoType)
+{;}
+
 G4VUserTrackInformation::~G4VUserTrackInformation()
 {;}

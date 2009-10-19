@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2009-06-18 06:34:14 kurasige Exp $
+$Id: History,v 1.107 2009-10-19 09:37:00 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 19, 2009 Hisaya Kurashige (track-V09-02-04)
+added a string prooperty to indicate type of UserTrackInformation
+
+
 June 18, 2009 Hisaya Kurashige (track-V09-02-03)
 added SetLowEnergyLimit method (Vladimir)
 
