@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.7 2009-10-19 09:37:00 kurasige Exp $
+// $Id: G4VUserTrackInformation.hh,v 1.8 2009-10-19 17:11:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ class G4VUserTrackInformation
     const G4String& GetType() const;
     // get Type of this UserTrackInfo     
  
-  private:
+  protected:
     G4String fType;    
 };
 
