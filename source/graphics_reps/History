@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.135 2009-02-25 14:13:43 allison Exp $
+cvs log $Id: History,v 1.136 2009-10-20 15:28:51 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th October 2009  Guy Barrand
+- HepPolyhedronProcessor : class to handle "overall shifting" in case
+  of doing multiple boolean operations. This permited to solve most
+  tricky cases in LHCb visualization.
+- HepPolyhedron : handle the ierr variable on the BooleanProcessor.execute.
+- BooleanProcessor.src : modifs coming from LHCb to "loop on shifts"
+  to attempt solving the "coplanar faces cases".
+- BooleanProcessor.src : modifs coming from LHCb to optmize the code.
 
 25th February 2009  John Allison  (greps-V09-02-01)
 - G4VVisManager: Added NotifyHandlers.
