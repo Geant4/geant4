@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2009-05-26 14:30:27 gunter Exp $
+$Id: History,v 1.20 2009-10-20 07:36:13 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20 Oct. 2009 Hisaya Kurashige
+- Use /run/setCut command instead of /run/particle/setCut
 
 26 May 2009, Gunter Folger     ( test11-V09-02-00 )
 - rename hadronic exerciser files; use "_" instead of "." in filename; 
