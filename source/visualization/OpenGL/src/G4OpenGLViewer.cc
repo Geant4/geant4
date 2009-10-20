@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.58 2009-10-15 15:33:30 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.59 2009-10-20 12:47:45 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -771,6 +771,9 @@ GLdouble G4OpenGLViewer::getSceneDepth()
 
 void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
 {
+  if (!fSceneHandler.GetScene()) {
+    return;
+  }
 
   G4Vector3D vp;
   G4Vector3D up;

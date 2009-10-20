@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.17 2009-05-14 16:38:23 lgarnier Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.18 2009-10-20 12:47:45 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -160,7 +160,9 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
   
   case 1:
     {
-
+      if (!pView->GetSceneHandler()->GetScene()) {
+        break;
+      }
       if (!pView->fppanning_top) {
 	std::ostringstream pan_Name;
 	pan_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
