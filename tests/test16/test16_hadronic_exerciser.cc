@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test16_hadronic_exerciser.cc,v 1.1 2009-05-26 14:36:27 gunter Exp $
+// $Id: test16_hadronic_exerciser.cc,v 1.2 2009-10-20 07:47:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,7 +83,7 @@ int main (int argc, char** argv) {
     "\n#"
     "\n/control/verbose 2"
     "\n# /run/verbose 2"
-    "\n/run/particle/setCut 1 m"
+    "\n/run/setCut 1 m"
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
 
