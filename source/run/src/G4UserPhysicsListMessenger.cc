@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.29 2009-10-11 14:00:29 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.30 2009-10-20 07:07:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,17 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   setCutCmd->SetRange("cut >0.0");
   setCutCmd->SetDefaultUnit("mm");
   setCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  // /run/particle/setCut command
+  setPCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
+  setPCutCmd->SetGuidance("Set default cut value ");
+  setPCutCmd->SetGuidance("This command is equivallent to /run/setCut command.");
+  setPCutCmd->SetGuidance("This command is kept for backward compatibility.");
+  setPCutCmd->SetParameterName("cut",false);
+  setPCutCmd->SetDefaultValue(1.0);
+  setPCutCmd->SetRange("cut >0.0");
+  setPCutCmd->SetDefaultUnit("mm");
+  setPCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // /run/setCutForAGivenParticle command
   setCutForAGivenParticleCmd = new G4UIcommand("/run/setCutForAGivenParticle",this) ;
@@ -189,6 +200,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
+  delete setPCutCmd; 
   delete setCutCmd; 
   delete setCutRCmd;
   delete setCutForAGivenParticleCmd;
@@ -207,6 +219,12 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   if( command==setCutCmd ){
+    G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
+    thePhysicsList->SetDefaultCutValue(newCut);
+    thePhysicsList->SetCutsWithDefault();
+
+  } else if( command==setPCutCmd ){
+    G4cout << "Please use /run/setCut command instead. This command will be removed" << G4endl; 
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
     thePhysicsList->SetCutsWithDefault();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.19 2009-10-11 14:00:29 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.20 2009-10-20 07:07:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,6 +93,7 @@ public: // with description
     
   private: //commands
     G4UIdirectory *             theDirectory;
+    G4UIcmdWithADoubleAndUnit * setPCutCmd; 
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
     G4UIcommand *               setCutRCmd;
     G4UIcommand *               setCutForAGivenParticleCmd; 
