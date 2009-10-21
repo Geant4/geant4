@@ -48,7 +48,8 @@ is not set to vacuum, the plots 10->43 below may be not pertinent.
  - "emstandard_opt1" best CPU performance standard physics for LHC
  - "emstandard_opt2"     
  - "emstandard_opt3" 
-    
+ - "emstandard_ly" Lewis-Yang msc theory
+   
  Physics lists and options can be (re)set with UI commands
     
  Please, notice that options set through G4EmProcessOPtions are global, eg
