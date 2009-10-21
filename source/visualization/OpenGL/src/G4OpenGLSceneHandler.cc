@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.55 2009-03-03 14:51:29 lgarnier Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.56 2009-10-21 15:18:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -842,6 +842,10 @@ void G4OpenGLSceneHandler::AddCompound(const G4VTrajectory& traj) {
 
 void G4OpenGLSceneHandler::AddCompound(const G4VHit& hit) {
   G4VSceneHandler::AddCompound(hit);  // For now.
+}
+
+void G4OpenGLSceneHandler::AddCompound(const G4THitsMap<G4double>& hits) {
+  G4VSceneHandler::AddCompound(hits);  // For now.
 }
 
 #endif

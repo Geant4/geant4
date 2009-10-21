@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.26 2009-04-23 10:13:56 lgarnier Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.27 2009-10-21 15:18:14 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,7 @@ public:
   void AddSolid (const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void AddCompound (const G4VHit&);
+  void AddCompound (const G4THitsMap<G4double>&);
 
 protected:
 
