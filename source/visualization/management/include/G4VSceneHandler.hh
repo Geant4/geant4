@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.40 2008-01-04 22:03:45 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.41 2009-10-21 14:26:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,11 +41,10 @@
 
 #include "globals.hh"
 
-#include <stack>
-
 #include "G4VGraphicsScene.hh"
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
+#include "G4THitsMap.hh"
 
 class G4Scene;
 class G4VViewer;
@@ -129,6 +128,7 @@ public: // With description
 
   virtual void AddCompound (const G4VTrajectory&);
   virtual void AddCompound (const G4VHit&);
+  virtual void AddCompound (const G4THitsMap<G4double>&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.

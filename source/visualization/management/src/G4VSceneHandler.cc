@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.84 2009-09-29 21:58:47 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.85 2009-10-21 14:26:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -262,6 +262,23 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
+}
+
+void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
+  static G4bool called = false;
+  if (!called) {
+    G4VisManager::Verbosity verbosity =
+      G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout <<
+	  "WARNING: G4VSceneHandler::AddCompound(const G4THitsMap<G4double>&)"
+	  "\n  No default implementation of this method."
+	  "\n  Only implemented in G4GMocrenFileSceneHandler."
+	  "\n  All subsequent calls ignored."
+	       << G4endl;
+      }
+      called = true;
+  }
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
