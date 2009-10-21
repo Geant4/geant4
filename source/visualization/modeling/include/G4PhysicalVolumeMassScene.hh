@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.9 2008-01-04 21:59:15 allison Exp $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.10 2009-10-21 14:17:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,7 @@ public:
   void AddSolid (const G4VSolid& s) {AccrueMass (s);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
+  void AddCompound (const G4THitsMap<G4double>&) {}
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
