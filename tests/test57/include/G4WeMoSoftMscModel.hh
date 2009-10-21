@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.3 2009-07-31 15:31:32 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.4 2009-10-21 13:56:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,7 @@
 //
 // Author:        V.Grichine 
 //
-// Creation date: 31.07.2009 from G4WentzelVIModel
+// Creation date: 31.07.2009 from design of G4WentzelVIModel
 //
 // Modifications:
 //
@@ -44,10 +44,10 @@
 // Class Description:
 //
 // Implementation of the model of multiple scattering based on
-// G.Wentzel, Z. Phys. 40 (1927) 590.
+// Lewis theory in gaussian approximation (Yang model in terms of true step length)
+// C.N. Yang, Phys.Rev 84 (1951) 599.
 // H.W.Lewis, Phys Rev 78 (1950) 526.
-// J.M. Fernandez-Varea et al., NIM B73 (1993) 447.
-// L.Urban, CERN-OPEN-2006-077.
+// J.M. Fernandez-Varea et al., NIM B73 (1993) 447..
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -266,9 +266,12 @@ inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
 {
   if( ekin != fTkin || feCut != cut) 
   {
+    G4double beta2;
     fTkin     = ekin;
     fMom2     = fTkin*(fTkin + 2.0*fMass);
-    fInvBeta2 = 1.0 +  fMass*fMass/fMom2;
+    beta2     = fMom2/( fMom2 + fMass*fMass );
+    beta2    += fAlpha2;                         // atomic shell correction
+    fInvBeta2 = 1/beta2;                       // 1.0 +  fMass*fMass/fMom2;
 
     fCosTetMaxNuc = fCosThetaMax;
 

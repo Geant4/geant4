@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.2 2009-10-11 12:00:13 grichine Exp $
+# $Id: GNUmakefile,v 1.3 2009-10-21 13:56:07 grichine Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := testG4GaussMscModel
+name := test57
 G4TARGET := $(name)
 G4EXLIB := true
 

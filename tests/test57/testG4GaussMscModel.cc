@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// Unit test for coherent elastic models
+// Unit test for coherent elastic models with msc part
 //
-//  18.05.07 V. Grichine
+//  18.09.09 V. Grichine
 //
 //
 
