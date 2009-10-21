@@ -1,4 +1,4 @@
-$Id: History,v 1.155 2009-10-21 08:14:44 lgarnier Exp $
+$Id: History,v 1.156 2009-10-21 15:21:09 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 21 October 2009 Laurent Garnier
  -  G4OpenGLQtViewer : Prepare to attach viewer In UI
+
+21st October 2009  John Allison  (opengl-V09-02-08 coworks greps-V09-02-02)
+- Added default AddCompound (const G4THitsMap<G4double>&) methods.
+  o Prevents warnings about hiding - calls G4VSceneHandler base class.
 
 15 October 2009 Laurent Garnier
  - G4OpenGLViewer.cc : Fix a problem with printing. On mac OSX version
