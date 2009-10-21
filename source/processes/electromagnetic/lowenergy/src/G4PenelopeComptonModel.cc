@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.5 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.6 2009-10-21 10:47:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -43,6 +43,8 @@
 //                  - apply internal high-energy limit only in constructor 
 //                  - do not apply low-energy limit (default is 0)
 //                  - do not apply production threshold on level of the model
+// 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
+//                            G4VEmModel::DeexcitationFlag()
 //
 
 #include "G4PenelopeComptonModel.hh"
@@ -78,7 +80,9 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   energyForIntegration = 0.0;
   ZForIntegration = 1;
 
-  fUseAtomicDeexcitation = true;
+  //by default, the model will use atomic deexcitation
+  SetDeexcitationFlag(true);
+
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 

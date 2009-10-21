@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.8 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.9 2009-10-21 10:47:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -43,6 +43,8 @@
 //                  - do not apply production threshold on secondaries
 // 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
 //                            Initialise(), since they might be checked later on
+// 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
+//                            G4VEmModel::DeexcitationFlag()
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -72,7 +74,9 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  fUseAtomicDeexcitation = true;
+  //by default the model will inkove the atomic deexcitation
+  SetDeexcitationFlag(true);  
+
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -365,7 +369,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 
 void G4PenelopePhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
-  if (!fUseAtomicDeexcitation)
+  if (!DeexcitationFlag())
     {
       G4cout << "WARNING - G4PenelopePhotoElectricModel" << G4endl;
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;

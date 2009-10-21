@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.1 2008-12-04 14:12:09 pandola Exp $
+// $Id: G4PenelopeIonisationModel.hh,v 1.2 2009-10-21 10:47:02 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -32,6 +32,8 @@
 // -----------
 // 26 Nov 2008   L. Pandola   1st implementation. Migration from EM process 
 //                            to EM model. Physics is unchanged.
+// 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle 
+//                            AtomicDeexcitationFlag - now demanded to G4VEmModel
 //
 // -------------------------------------------------------------------
 //
@@ -85,11 +87,7 @@ public:
                                const G4ParticleDefinition*,
                                G4double kineticEnergy,
                                G4double cutEnergy);
-				 
-
-  void SetUseAtomicDeexcitation(G4bool value){fUseAtomicDeexcitation = value;};		 
-  G4bool GetUseAtomicDeexcitation(){return fUseAtomicDeexcitation;};
-
+				
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
@@ -107,8 +105,6 @@ private:
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
 
-  G4bool fUseAtomicDeexcitation;
-
   G4int verboseLevel;
 
   G4bool isInitialised;
@@ -120,7 +116,7 @@ private:
   void CalculateDiscreteForElectrons(G4double kinEnergy,G4double cutoffEnergy,
 				     G4int Z,G4double electronVolumeDensity);
   void CalculateDiscreteForPositrons(G4double kinEnergy,G4double cutoffEnergy,
-				     G4int Z,G4double electronVolumeDensity);
+			     G4int Z,G4double electronVolumeDensity);
 
   G4AtomicDeexcitation deexcitationManager;
   G4double kineticEnergy1;

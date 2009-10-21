@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.7 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.8 2009-10-21 10:47:21 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -38,6 +38,8 @@
 //                  - do not change track status
 // 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
 //                            Initialise(), since they might be checked later on
+// 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
+//                            G4VEmModel::DeexcitationFlag()
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -76,8 +78,8 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
- 
-  fUseAtomicDeexcitation = true;
+  // Atomic deexcitation model activated by default
+  SetDeexcitationFlag(true);
   verboseLevel= 0;
   
   // Verbosity scale:
