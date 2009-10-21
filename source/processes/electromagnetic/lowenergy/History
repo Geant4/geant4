@@ -1,4 +1,4 @@
-$Id: History,v 1.392 2009-10-06 14:49:48 vnivanch Exp $
+$Id: History,v 1.393 2009-10-21 10:50:36 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.10.2009, L. Pandola, tag emlowen-V09-02-55
+            Cleaning up of Penelope Photoelectric, Compton and Ionisation 
+            (atomic deexcitation flag now referred to G4VEmModel)
 
 27.09.2009, N. Karakatsanis, tag emlowen-V09-02-54
             Added fixes to
