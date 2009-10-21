@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.19 2009-10-14 15:04:09 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.20 2009-10-21 08:14:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,9 +38,9 @@
 
 #include "globals.hh"
 
+#include <qobject.h>
 #include "G4OpenGLViewer.hh"
 
-#include <qobject.h>
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
@@ -149,7 +149,7 @@ private:
   void setRecordingStatus(RECORDING_STEP);
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
-
+  QWidget* getParentWidget();
 
 #if QT_VERSION < 0x040000
   QPopupMenu *fContextMenu;

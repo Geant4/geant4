@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.44 2009-10-14 14:35:07 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.45 2009-10-21 08:14:44 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,57 +106,16 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
   if(fWindow) return; //Done.
 
-  // launch Qt if not
-  G4Qt* interactorManager = G4Qt::getInstance ();
-  //  G4UImanager* UI = G4UImanager::GetUIpointer();
-
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  // create window
-  if (((QApplication*)interactorManager->GetMainInteractor())) {
-    // look for the main window
-    bool found = false;
+  QWidget *myParent = getParentWidget();
+  if (myParent != NULL) {
 #if QT_VERSION < 0x040000
-    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
-    // but if I comment them, it doesn't work...
-    QWidgetList  *list = QApplication::allWidgets();
-    QWidgetListIt it( *list );         // iterate over the widgets
-    QWidget * widget;
-    while ( (widget=it.current()) != 0 ) {  // for each widget...
-      ++it;
-      if ((found== false) && (widget->inherits("QMainWindow"))) {
-        fGLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
-        found = true;
-      }
-    }
-    delete list;                      // delete the list, not the widgets
+    glWidget->reparent(myParent,0,QPoint(0,0));  
 #else
-    foreach (QWidget *widget, QApplication::allWidgets()) {
-      if ((found== false) && (widget->inherits("QMainWindow"))) {
-        fGLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-        found = true;
-      }
-    }
+    glWidget->setParent(myParent);  
 #endif
-
-#if QT_VERSION < 0x040000
-    glWidget->reparent(fGLWindow,0,QPoint(0,0));  
-#else
-    glWidget->setParent(fGLWindow);  
-#endif
-
-    if (found==false) {
-#ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
-#endif
-      fGLWindow = new QDialog();
-    }
-  } else {
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
-    fGLWindow = new QDialog();
   }
 
   QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
@@ -2638,6 +2597,62 @@ QString G4OpenGLQtViewer::getProcessErrorMsg()
   }
 #endif
    return txt;
+}
+
+
+
+
+QWidget *G4OpenGLQtViewer::getParentWidget() 
+{
+  // launch Qt if not
+  G4Qt* interactorManager = G4Qt::getInstance ();
+  //  G4UImanager* UI = G4UImanager::GetUIpointer();
+  
+  bool found = false;
+  
+  // create window
+  if (((QApplication*)interactorManager->GetMainInteractor())) {
+    // look for the main window
+#if QT_VERSION < 0x040000
+    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+    // but if I comment them, it doesn't work...
+    QWidgetList  *list = QApplication::allWidgets();
+    QWidgetListIt it( *list );         // iterate over the widgets
+    QWidget * widget;
+    while ( (widget=it.current()) != 0 ) {  // for each widget...
+      ++it;
+      if ((found== false) && (widget->inherits("QMainWindow"))) {
+        fGLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+        found = true;
+      }
+    }
+    delete list;                      // delete the list, not the widgets
+#else
+    foreach (QWidget *widget, QApplication::allWidgets()) {
+      if ((found== false) && (widget->inherits("QMainWindow"))) {
+        fGLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        found = true;
+      }
+    }
+#endif
+    
+    if (found==false) {
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
+#endif
+      fGLWindow = new QDialog();
+    }
+  } else {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
+#endif
+    fGLWindow = new QDialog();
+  }
+  if (found) {
+    return fGLWindow;
+  } else {
+    return NULL;
+  }
 }
 
 /*
