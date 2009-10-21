@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFileSceneHandler.hh,v 1.3 2006-06-29 21:26:42 gunter Exp $
+// $Id: G4XXXFileSceneHandler.hh,v 1.4 2009-10-21 15:28:53 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,6 +75,7 @@ public:
   // More optional functions...
   // void AddCompound(const G4VTrajectory&);
   // void AddCompound(const G4VHit&);
+  // void AddCompound(const G4THitsMap<G4double>&);
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //	   const G4VisAttributes&);
   // void PostAddSolid();
