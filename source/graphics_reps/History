@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.136 2009-10-20 15:28:51 gbarrand Exp $
+cvs log $Id: History,v 1.137 2009-10-21 15:37:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,9 @@ committal in the CVS repository !
 - BooleanProcessor.src : modifs coming from LHCb to "loop on shifts"
   to attempt solving the "coplanar faces cases".
 - BooleanProcessor.src : modifs coming from LHCb to optmize the code.
+
+20th October 2009  John Allison  (greps-V09-02-02 coworks vis-V09-02-07)
+- G4VGraphicsScene: Added AddCompound (const G4THitsMap<G4double>&.
 
 25th February 2009  John Allison  (greps-V09-02-01)
 - G4VVisManager: Added NotifyHandlers.
