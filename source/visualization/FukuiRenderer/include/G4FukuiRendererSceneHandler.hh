@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.15 2006-06-29 21:16:46 gunter Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.16 2009-10-21 14:59:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,9 @@ public:
   }
   void AddCompound ( const G4VHit& hit) {
     G4VSceneHandler::AddCompound(hit);
+  }
+  void AddCompound ( const G4THitsMap<G4double> & hits) {
+    G4VSceneHandler::AddCompound(hits);
   }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
