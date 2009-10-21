@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.42 2006-11-06 09:22:26 allison Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.43 2009-10-21 15:08:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,6 +84,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         
         void AddCompound (const G4VTrajectory&);
         void AddCompound (const G4VHit& hit);
+        void AddCompound (const G4THitsMap<G4double>& hits) {
+	  G4VSceneHandler::AddCompound(hits);
+	}
 
         void PreAddSolid (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddSolid ();
