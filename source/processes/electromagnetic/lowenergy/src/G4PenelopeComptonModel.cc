@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.6 2009-10-21 10:47:21 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.7 2009-10-21 14:56:40 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -45,6 +45,7 @@
 //                  - do not apply production threshold on level of the model
 // 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
 //                            G4VEmModel::DeexcitationFlag()
+//                            Add ActivateAuger() method
 //
 
 #include "G4PenelopeComptonModel.hh"
@@ -59,7 +60,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PenelopeIntegrator.hh"
 #include "G4AtomicTransitionManager.hh"
-#include "G4AtomicDeexcitation.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -82,6 +82,7 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 
   //by default, the model will use atomic deexcitation
   SetDeexcitationFlag(true);
+  deexcitationManager.ActivateAugerElectronProduction(false);
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -526,10 +527,8 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     if (localEnergyDeposit > cutg || localEnergyDeposit > cute)
       { 
 	G4DynamicParticle* aPhoton;
-	G4AtomicDeexcitation deexcitationManager;
 	deexcitationManager.SetCutForSecondaryPhotons(cutg);
 	deexcitationManager.SetCutForAugerElectrons(cute);
-	deexcitationManager.ActivateAugerElectronProduction(false);
       
 	photonVector = deexcitationManager.GenerateParticles(Z,shellId);
 	if(photonVector) 
@@ -752,3 +751,19 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta)
   return diffCS;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeComptonModel::ActivateAuger(G4bool augerbool)
+{
+  if (!DeexcitationFlag())
+    {
+      G4cout << "WARNING - G4PenelopeComptonModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
+  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << augerbool << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

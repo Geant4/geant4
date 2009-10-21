@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.2 2009-10-21 10:47:02 pandola Exp $
+// $Id: G4PenelopeIonisationModel.hh,v 1.3 2009-10-21 14:56:47 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -34,6 +34,7 @@
 //                            to EM model. Physics is unchanged.
 // 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle 
 //                            AtomicDeexcitationFlag - now demanded to G4VEmModel
+//			      Add ActivateAuger() method
 //
 // -------------------------------------------------------------------
 //
@@ -91,6 +92,7 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
+  void ActivateAuger(G4bool);
 
 protected:
   G4ParticleChangeForLoss* fParticleChange;

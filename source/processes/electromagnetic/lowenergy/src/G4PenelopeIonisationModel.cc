@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.8 2009-10-21 10:47:21 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.9 2009-10-21 14:56:40 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -40,6 +40,7 @@
 //                            Initialise(), since they might be checked later on
 // 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
 //                            G4VEmModel::DeexcitationFlag()
+//			      Add ActivateAuger() method 
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -1722,3 +1723,19 @@ G4int G4PenelopeIonisationModel::SampleRandomAtom(const G4MaterialCutsCouple* co
 }
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeIonisationModel::ActivateAuger(G4bool augerbool)
+{
+  if (!DeexcitationFlag())
+    {
+      G4cout << "WARNING - G4PenelopeIonisationModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
+  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << augerbool << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
