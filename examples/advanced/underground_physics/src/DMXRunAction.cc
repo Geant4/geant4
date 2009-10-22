@@ -38,6 +38,7 @@
 //
 // History:
 // 17 Jan 2002 Alex Howard Added Analysis
+// 23 Oct 2009 Luciano Pandola Removed un-necessary calls from EndOfRun()
 //
 // RunAction program
 // --------------------------------------------------------------
@@ -103,14 +104,6 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void DMXRunAction::EndOfRunAction(const G4Run*)
 {
-
-#ifdef G4ANALYSIS_USE
-  DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-  //analysis->PlotHistos(interactplot);
-  //analysis->PulseTimeFit();
-  analysis->Finish();
-#endif
-
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }

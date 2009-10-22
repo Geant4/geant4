@@ -36,7 +36,7 @@
 // 17 November 2002 Alex Howard Migrated to AIDA 3.0 and added fitting
 // 22 October 2009 Luciano Pandola Changed variables names for ntuple2
 //                                 (avoid problem with columns) and some 
-//                                 clean-up
+//                                 clean-up (e.g. remove ntuple4)
 //
 // -------------------------------------------------------------------
 #ifdef  G4ANALYSIS_USE
@@ -48,26 +48,18 @@ DMXAnalysisManager* DMXAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::DMXAnalysisManager() :
-  af(0), tree(0), hf(0), tpf(0),
-   ntuple1(0), ntuple2(0), ntuple3(0), ntuple4(0),
+  af(0), tf(0),tree(0), hf(0), tpf(0),
+   ntuple1(0), ntuple2(0), ntuple3(0), 
   hEsourcep(0), hEdepp(0), hEdepRecoil(0), hNumPhLow(0), hNumPhHigh(0),
   hAvPhArrival(0), hPhArrival(0), hPMTHits(0), h1stPMTHit(0),hGammaEdep(0), 
   hNeutronEdep(0), hElectronEdep(0), hPositronEdep(0), hOtherEdep(0) 
   //,funFact(0),fitFact(0),exponFun(0),gaussFun(0),e_fitter(0),fitResult(0)
-{
-  // tree is created and booked inside book()
-  ;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::~DMXAnalysisManager() 
-{ 
-  delete tpf;
-  delete hf;
-  delete tree;
-  delete af;
- }
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -94,7 +86,7 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
   G4bool fileExists = true;
   G4bool readOnly   = false;
 
-  AIDA::ITreeFactory     * tf = af->createTreeFactory();
+  tf = af->createTreeFactory();
 
   tree = tf->create(histogramfile, "hbook", readOnly, fileExists);
 
@@ -120,10 +112,6 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
 
   ntuple3 = tpf->create( "3", "PMT Hits Info", 
 				"float event, hits, xpos, ypos, zpos" );
-
-  // ---- extra ntuple ------   
-  ntuple4 = tpf->create( "4", "Particles energy type", 
-			     "float energy, NameIdx" );
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -158,8 +146,6 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
   hPositronEdep = hf->createHistogram1D("94","Positron Ener Deposit/keV",1000,0.,1000.);
 
   hOtherEdep    = hf->createHistogram1D("95","Other Ener Deposit/keV", 1000,0.,1000.);
-  
-  delete tf;
 
  //  // Creating the plotter factory
 //   pf = af->createPlotterFactory();
@@ -197,14 +183,14 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
 //   //  assert(e_fitter); 
 
 //   G4cout << " Created e_fitter " << G4endl;
+  return;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXAnalysisManager::Init()
-{
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -220,6 +206,13 @@ void DMXAnalysisManager::Finish()
 
   // close (will again commit)
   tree->close();
+
+  
+  delete tpf;
+  delete hf;
+  delete tree;
+  delete tf;
+  delete af;
 
   // extra delete as objects are created in book() method rather than during
   // initialisation of class
