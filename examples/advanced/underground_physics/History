@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.18 2009-10-22 08:53:39 pandola Exp $
+$Id: History,v 1.19 2009-10-22 13:29:24 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.18 2009-10-22 08:53:39 pandola Exp $
 
                       Category History file
                       ---------------------
+
+22.10.2009 - L. Pandola (DMX-V09-02-01)
+	     Correct Analysis manager to solve a problem with the HBOOK output files
+	     (ntuples not filled, histograms not saved). Still at the stage of 
+	     pre-migration.
 
 22.10.2009 - L. Pandola (DMX-V09-02-00)
              Get rid of a warning message and allocation problems with ntuple2
