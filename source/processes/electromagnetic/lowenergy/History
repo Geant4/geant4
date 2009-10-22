@@ -1,4 +1,4 @@
-$Id: History,v 1.393 2009-10-21 10:50:36 pandola Exp $
+$Id: History,v 1.394 2009-10-22 11:57:19 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.10.2009, L. Pandola, tag emlowen-V09-02-56
+	    Added ActivateAuger() method to Penelope Compton and Ionisation, so that 
+	    all Penelope models have the same interface. 
+
 21.10.2009, L. Pandola, tag emlowen-V09-02-55
             Cleaning up of Penelope Photoelectric, Compton and Ionisation 
-            (atomic deexcitation flag now referred to G4VEmModel)
+            (atomic deexcitation flag now referred to G4VEmModel). Deexcitation now 
+	    is by default active in Penelope models.
 
 27.09.2009, N. Karakatsanis, tag emlowen-V09-02-54
             Added fixes to
