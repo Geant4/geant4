@@ -5,7 +5,7 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            test57 (based on TestEm5 and TestEm15)   
+                            test57 (based on TestEm5 and partly TestEm15)   
                             -------
 How to study the transmission, absorption and reflexion of particles through
 a single, thin or thick, layer of material. The test is focused to combination 
@@ -35,20 +35,29 @@ is not set to vacuum, the plots 10->43 below may be not pertinent.
  Physics lists can be local (eg. in this example) or from G4 kernel
  physics_lists subdirectory.
      
- Local physics lists:	 
+ Local physics lists:
+	 
  - "standard"	standard EM physics with current 'best' options setting.
                 these options are explicited in PhysListEmStandard
+
  - "standardSS" standard EM physics with single Coulomb scattering 
-                instead of multiple scattering			
+                instead of multiple scattering
+			
  - "livermore"  low-energy EM physics using Livermore data
+
  - "penelope"   low-energy EM physics implementing Penelope models
     
- From geant4/source/physics_lists/builders:	 
+ From geant4/source/physics_lists/builders:
+	 
  - "emstandard"      recommended standard EM physics for LHC
+
  - "emstandard_opt1" best CPU performance standard physics for LHC
- - "emstandard_opt2"     
+
+ - "emstandard_opt2" G4WentzelVIModel 
+    
  - "emstandard_opt3" 
- - "emstandard_ly" Lewis-Yang msc theory
+
+ - "emstandard_ly" Lewis-Yang msc theory for fast e-+ and others
    
  Physics lists and options can be (re)set with UI commands
     
@@ -171,14 +180,14 @@ is not set to vacuum, the plots 10->43 below may be not pertinent.
  9- HOW TO START ?
  
  - compile and link to generate an executable
- 	% cd TestEm5
+ 	% cd Test57
  	% gmake
  		
- - execute TestEm5 in 'batch' mode from macro files e.g.
+ - execute Test57 in 'batch' mode from macro files e.g.
  	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
 		
- - execute TestEm5 in 'interactive' mode with visualization e.g.
- 	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
+ - execute Test57 in 'interactive' mode with visualization e.g.
+ 	% $(G4INSTALL)/bin/$(G4SYSTEM)/Test57
 	Then type your commands, for instance :
 	Idle> control/execute vis.mac
 	Idle> run/beamOn 5

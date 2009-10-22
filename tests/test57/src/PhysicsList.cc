@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2009-10-21 14:10:55 grichine Exp $
+// $Id: PhysicsList.cc,v 1.3 2009-10-22 08:20:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,7 +228,9 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
     
-  } else if (name == "emstandard_ly") {
+  } 
+  else if (name == "emstandard_ly") // Lewis-Yang theory for soft msc
+  {
 
     emName = name;
     delete emPhysicsList;
