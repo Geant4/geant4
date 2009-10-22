@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009-10-21 06:59:18 allison Exp $
+$Id: History,v 1.2 2009-10-22 08:02:18 akimura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,15 +20,19 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
-date: 2009-10-18 06:02:09 +0200;  author: akimura
+22 October 2009  Akinori Kimura (gMocren-V09-02-00)
+G4PSHitsModel.{hh,cc} were moved to the modeling directory.
+Made a tag of the gMocren file driver.
+
+18 October 2009  Akinori Kimura
 Fixed bugs which are to create an extra file and to be not able to
 deal with multiple runs.
 
-date: 2009-10-12 12:04:35 +0200;  author: akimura
+12 October 2009  Akinori Kimura
 Large modification to support G4PhantomParameterisation,
 G4VNestedParameterisation, primitive scorer and interactive primitive
 scorer
 
-date: 2009-04-01 15:16:11 +0200;  author: akimura
+1 April 2009  Akinori Kimura
 The prototype gMocren-file driver is added.
 Tagged vis-V09-02-06.
