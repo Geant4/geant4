@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2008-06-15 22:39:27 cirrone Exp $
+$Id: History,v 1.18 2009-10-22 08:53:39 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.17 2008-06-15 22:39:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+22.10.2009 - L. Pandola (DMX-V09-02-00)
+             Get rid of a warning message and allocation problems with ntuple2
+             Meant to be the reference to verify the migration to new 
+	     Livermore models. 
+
 16.06.2008 - G.A.P.Cirrone (DMX-V09-01-01)
              Removed AIDA command from GNUmakefile
 
