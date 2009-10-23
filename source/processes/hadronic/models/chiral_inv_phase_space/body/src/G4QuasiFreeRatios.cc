@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.1 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.2 2009-10-23 14:26:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -611,6 +611,33 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
   return std::make_pair(El,To);
 } // End of CalcElTot
 
+// For hadron PDG with momentum Mom (GeV/c) on N (p/n) calculate <sig_el,sig_tot> pair (mb)
+std::pair<G4double,G4double> G4QuasiFreeRatios::GetElTotXS(G4double p, G4int PDG, G4bool F)
+{
+  G4int ind=0;                                 // Prototype of the reaction index
+  G4bool kfl=true;                             // Flag of K0/aK0 oscillation
+  G4bool kf=false;
+  if(PDG==130||PDG==310)
+  {
+    kf=true;
+    if(G4UniformRand()>.5) kfl=false;
+  }
+  if      ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) ind=0; // pp/nn
+  else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) ind=1; // np/pn
+  else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) ind=2; // pimp/pipn
+  else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) ind=3; // pipp/pimn
+  else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) ind=4; // KmN/K0N
+  else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) ind=5; // KpN/aK0N
+  else if ( PDG >  3000 && PDG <  3335) ind=6; // @@ for all hyperons - take Lambda
+  else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
+  else {
+    G4cout<<"*Error*G4QuasiFreeRatios::CalcElTotXS: PDG="<<PDG
+          <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
+    G4Exception("G4QuasiFreeRatio::CalcElTotXS:","22",FatalException,"CHIPScrash");
+  }
+  return CalcElTot(p,ind);
+}
+
 // Calculatio pair(hN_el,hN_tot)(mb): p in GeV/c, F=true -> N=proton, F=false -> N=neutron
 std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG, G4bool F)
 {
@@ -655,23 +682,15 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
     kf=true;
     if(G4UniformRand()>.5) kfl=false;
   }
-  if ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) {
-    ind=0; // pp/nn
-  } else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) {
-    ind=1; // np/pn
-  } else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) {
-    ind=2; // pimp/pipn
-  } else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) {
-    ind=3; // pipp/pimn
-  } else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) {
-    ind=4; // KmN/K0N
-  } else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) {
-    ind=5; // KpN/aK0N
-  } else if ( PDG > 3000 && PDG < 3335) {
-    ind=6;        // @@ for all hyperons - take Lambda
-  } else if ( PDG < -2000 && PDG > -3335 ) {
-    ind=7;        // @@ for all anti-baryons - anti-p/anti-n
-  } else {
+  if      ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) ind=0; // pp/nn
+  else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) ind=1; // np/pn
+  else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) ind=2; // pimp/pipn
+  else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) ind=3; // pipp/pimn
+  else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) ind=4; // KmN/K0N
+  else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) ind=5; // KpN/aK0N
+  else if ( PDG >  3000 && PDG <  3335) ind=6; // @@ for all hyperons - take Lambda
+  else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
+  else {
     G4cout<<"*Error*G4QuasiFreeRatios::FetchElTot: PDG="<<PDG
           <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
     G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");

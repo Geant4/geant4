@@ -81,12 +81,16 @@ class G4QuasiFreeRatios
   // Calculate ChEx/El ratio coefficient (p is in independent units, (Z,N) is a target)
   G4double ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG);
 
+  // For hadron PDG with momentum Mom (GeV/c) on F(p/n) calculate <sig_el,sig_tot> pair(mb)
+  // F=true corresponds to the Nroton target, F=false corresponds to the Proton target
+  std::pair<G4double,G4double> GetElTotXS(G4double Mom, G4int PDG, G4bool F);//<sigEl,sigT>
+  std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//<E,T>fromAMDB
+
  private:
   // These working member functions are in CHIPS units and must not be used externally
   G4double GetQF2IN_Ratio(G4double TotCS_mb, G4int A); // QuasiFree/Inelastic (fast)
   G4double CalcQF2IN_Ratio(G4double TCSmb, G4int A); // R=QuasuFree/Inelastic (sig_t in mb)
-  std::pair<G4double,G4double> FetchElTot(G4double pGeV,G4int PDG,G4bool F);//(E,T)fromAMDB
-  std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigE,sigT)(Index)
+  std::pair<G4double,G4double> CalcElTot(G4double pGeV,G4int Index);//(sigEl,sigTot)(Index)
 
  // Body
  private:
