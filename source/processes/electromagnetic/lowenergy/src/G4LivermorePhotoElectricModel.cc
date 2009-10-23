@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.8 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.9 2009-10-23 09:31:03 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,10 @@
 //                  - simplify sampling of deexcitation by using cut in energy
 //                  - added protection against numerical problem in energy sampling 
 //                  - use G4ElementSelector
+// 23 Oct 2009   L Pandola
+//                  - atomic deexcitation managed via G4VEmModel::DeexcitationFlag() is 
+//                    set as "true" (default would be false)
+//
 
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -58,6 +62,8 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
+  //Set atomic deexcitation by default
+  SetDeexcitationFlag(true);
   ActivateAuger(false);
    
   verboseLevel= 0;
