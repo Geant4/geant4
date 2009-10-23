@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.65 2009-10-10 14:29:59 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.66 2009-10-23 08:08:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
@@ -517,69 +518,82 @@ void G4PhysicalVolumeModel::DescribeSolid
       G4Polyhedron::SetNumberOfRotationSteps(fpMP->GetNoOfSides());
     G4Polyhedron* pOriginal = pSol->GetPolyhedron();
     G4Polyhedron::ResetNumberOfRotationSteps();
+
     if (!pOriginal) {
-	if (fpMP->IsWarning())
-	  G4cout <<
- "WARNING: G4PhysicalVolumeModel::DescribeSolid: solid\n  \""
-		 << pSol->GetName() <<
- "\" has no polyhedron.  Cannot by clipped."
-		 << G4endl;
-	pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
+
+      if (fpMP->IsWarning())
+	G4cout <<
+	  "WARNING: G4PhysicalVolumeModel::DescribeSolid: solid\n  \""
+	       << pSol->GetName() <<
+	  "\" has no polyhedron.  Cannot by clipped."
+	       << G4endl;
+      pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
+
     } else {
 
       G4Polyhedron resultant = *pOriginal;
+      G4VisAttributes resultantVisAttribs(*pVisAttribs);
 
       if (fpClippingPolyhedron) {
 	G4Polyhedron clipper = *fpClippingPolyhedron;  // Local copy.
 	clipper.Transform(theAT.inverse());
+	HepPolyhedronProcessor processor;
 	switch (fClippingMode) {
 	default:
-	case subtraction: resultant = resultant.subtract(clipper); break;
-	case intersection: resultant = resultant.intersect(clipper); break;
+	case subtraction: processor.push_back(HepPolyhedronProcessor::SUBTRACTION, clipper); break;
+	case intersection: processor.push_back(HepPolyhedronProcessor::INTERSECTION, clipper); break;
 	}
-	if(resultant.IsErrorBooleanProcess()) {
+	if (!processor.execute(resultant)) {
 	  if (fpMP->IsWarning())
 	    G4cout <<
  "WARNING: G4PhysicalVolumeModel::DescribeSolid: clipped polyhedron for"
  "\n  solid \"" << pSol->GetName() <<
  "\" not defined due to error during Boolean processing."
+ "\n  It will be drawn in red."
 		   << G4endl;
-	  // Nevertheless, keep resultant.
+	  // Nevertheless, keep resultant, but draw it in red
+	  resultantVisAttribs.SetColour(G4Colour::Red());
 	}
       }
 
       if (pSectionPolyhedron) {
 	G4Polyhedron sectioner = *pSectionPolyhedron;  // Local copy.
 	sectioner.Transform(theAT.inverse());
-	resultant = resultant.intersect(sectioner);
-	if(resultant.IsErrorBooleanProcess()) {
+	HepPolyhedronProcessor processor;
+	processor.push_back(HepPolyhedronProcessor::INTERSECTION, sectioner);
+	if (!processor.execute(resultant)) {
 	  if (fpMP->IsWarning())
 	    G4cout <<
  "WARNING: G4PhysicalVolumeModel::DescribeSolid: sectioned polyhedron for"
  "\n  solid \"" << pSol->GetName() <<
  "\" not defined due to error during Boolean processing."
+ "\n  It will be drawn in red."
 		   << G4endl;
-	  // Nevertheless, keep resultant.
+	  // Nevertheless, keep resultant, but draw it in red
+	  resultantVisAttribs.SetColour(G4Colour::Red());
 	}
       }
 
       if (pCutawayPolyhedron) {
 	G4Polyhedron cutter = *pCutawayPolyhedron;  // Local copy.
 	cutter.Transform(theAT.inverse());
-	resultant = resultant.subtract(cutter);
-	if(resultant.IsErrorBooleanProcess()) {
+	HepPolyhedronProcessor processor;
+	processor.push_back(HepPolyhedronProcessor::SUBTRACTION, cutter);
+	if (!processor.execute(resultant)) {
 	  if (fpMP->IsWarning())
 	    G4cout <<
  "WARNING: G4PhysicalVolumeModel::DescribeSolid: cutaway polyhedron for"
  "\n  solid \"" << pSol->GetName() <<
  "\" not defined due to error during Boolean processing."
+ "\n  It will be drawn in red."
 		   << G4endl;
-	  // Nevertheless, keep resultant.
+	  // Nevertheless, keep resultant, but draw it in red
+	  resultantVisAttribs.SetColour(G4Colour::Red());
 	}
       }
 
       // Finally, force polyhedron drawing...
-      resultant.SetVisAttributes(pVisAttribs);
+      resultant.SetVisAttributes(resultantVisAttribs);
       sceneHandler.BeginPrimitives(theAT);
       sceneHandler.AddPrimitive(resultant);
       sceneHandler.EndPrimitives();
@@ -784,7 +798,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G4PhysicalVolumeModelTouc
 const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetTranslation(G4int depth) const
 {
   size_t i = fFullPVPath.size() - depth - 1;
-  if (i < 0 || i >= fFullPVPath.size()) {
+  if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetTranslation",
 		"Index out of range",
 		FatalErrorInArgument,
@@ -798,7 +812,7 @@ const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetT
 const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetRotation(G4int depth) const
 {
   size_t i = fFullPVPath.size() - depth - 1;
-  if (i < 0 || i >= fFullPVPath.size()) {
+  if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetRotation",
 		"Index out of range",
 		FatalErrorInArgument,
@@ -812,7 +826,7 @@ const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G
 G4VPhysicalVolume* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetVolume(G4int depth) const
 {
   size_t i = fFullPVPath.size() - depth - 1;
-  if (i < 0 || i >= fFullPVPath.size()) {
+  if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetVolume",
 		"Index out of range",
 		FatalErrorInArgument,
@@ -824,7 +838,7 @@ G4VPhysicalVolume* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetVol
 G4VSolid* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetSolid(G4int depth) const
 {
   size_t i = fFullPVPath.size() - depth - 1;
-  if (i < 0 || i >= fFullPVPath.size()) {
+  if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetSolid",
 		"Index out of range",
 		FatalErrorInArgument,
@@ -836,7 +850,7 @@ G4VSolid* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetSolid(G4int 
 G4int G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetReplicaNumber(G4int depth) const
 {
   size_t i = fFullPVPath.size() - depth - 1;
-  if (i < 0 || i >= fFullPVPath.size()) {
+  if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetReplicaNumber",
 		"Index out of range",
 		FatalErrorInArgument,
