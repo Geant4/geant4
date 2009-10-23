@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.6 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.7 2009-10-23 09:30:08 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -40,6 +40,9 @@
 //                  - remove initialisation of element selectors
 // 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
 //                            Initialise(), since they might be checked later on
+// 23 Oct 2009   L Pandola
+//                  - atomic deexcitation managed via G4VEmModel::DeexcitationFlag() is
+//                    set as "true" (default would be false)
 //
 
 #include "G4LivermoreIonisationModel.hh"
@@ -54,7 +57,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4CrossSectionHandler.hh"
-#include "G4AtomicDeexcitation.hh"
 #include "G4ProcessManager.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
@@ -83,8 +85,10 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   //
   verboseLevel = 0;
   //
-  fUseAtomicDeexcitation = true;
+  //By default: use deexcitation, not auger
+  SetDeexcitationFlag(true);
   ActivateAuger(false);
+
   //
   // Notice: the fluorescence along step is generated only if it is 
   // set by the PROCESS (e.g. G4eIonisation) via the command
@@ -660,6 +664,14 @@ void G4LivermoreIonisationModel::InitialiseFluorescence()
 
 void G4LivermoreIonisationModel::ActivateAuger(G4bool val)
 {
+  if (!DeexcitationFlag() && val)
+    {
+      G4cout << "WARNING - G4LivermoreIonisationModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
   deexcitationManager.ActivateAugerElectronProduction(val);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << val << G4endl;
 }
 
