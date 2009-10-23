@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.hh,v 1.2 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreIonisationModel.hh,v 1.3 2009-10-23 09:28:37 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -32,7 +32,9 @@
 // -----------
 // 12 Jan 2009   L. Pandola   1st implementation. Migration from EM process 
 //                            to EM model. Physics is unchanged.
-//
+// 23 Oct 2009   L. Pandola   remove un-necessary methods to manage atomic 
+//                            deexcitation (done by G4VEmModel)
+// 
 // -------------------------------------------------------------------
 //
 // Class description:
@@ -99,8 +101,7 @@ public:
                                 const G4MaterialCutsCouple*);
 		 
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
-  void SetUseAtomicDeexcitation(G4bool val){fUseAtomicDeexcitation = val;};
-  G4bool GetSetUseAtomicDeexcitation(){return fUseAtomicDeexcitation;};
+  G4int GetVerboseLevel(){return verboseLevel;};
 
   void ActivateAuger(G4bool);
 
@@ -120,7 +121,6 @@ private:
   G4int fNBinEnergyLoss;
 
   G4bool isInitialised;
-  G4bool fUseAtomicDeexcitation;
  
   G4int verboseLevel;
  
