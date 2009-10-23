@@ -23,42 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCoherentChargeExchange.hh,v 1.2 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QElastic.hh,v 1.7 2009-10-23 16:35:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QCoherentChargeExchange header ----------------
+//      ---------------- G4QElastic header ----------------
 //                 by Mikhail Kossov, December 2003.
-//  Header of G4QCoherentChargeExchange class (hadron+A) of the CHIPS Simulation Branch in GEANT4
+//  Header of G4QElastic class (hadron+A) of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Elastic Scattering Prosesses
 // -------------------------------------------------------------------------------
-// At present (Jan-06) only proton-to-neutron & neutron-to-proton scattering on nuclei
-// are implemented. The scattering of mesons and nuclei on nuclei are possible...
+// At present (Jan-06) only proton-proton scattering is implemented The interaction with
+// nuclei are planned only. The scattering of nuclei on nuclei are possible...
 // The simulation is based on the CHIPS approximation of total elastic and differential
 // elastic cross sections from E=0 to the highest energyes.
 // -------------------------------------------------------------------------------
-// Short description: This class resolves an ambiguity in the definition of the
-// "inelastic" cross section. As it was shown in Ph.D.Thesis (M.Kosov,ITEP,1979)
-// it is more reasonable to subdivide the total cross-section in the coherent &
-// incoherent parts, but the measuring method for the "inelastic" cross-sections
-// consideres the lack of the projectile within the narrow forward solid angle
-// with the consequent extrapolation of these partial cross-sections, corresponding
-// to the particular solid angle, to the zero solid angle. The low angle region
-// is shadowed by the elastic (coherent) scattering. BUT the coherent charge
-// exchange (e.g. conversion p->n) is included by this procedure as a constant term
-// in the extrapolation, so the "inelastic" cross-section differes from the
-// incoherent cross-section by the value of the coherent charge exchange cross
-// section. Fortunately, this cross-sectoion drops ruther fast with energy increasing.
-// All Geant4 inelastic hadronic models (including CHIPS) simulate the incoherent
-// reactions. So the incoherent (including quasielastic) cross-section must be used
-// instead of the inelastic cross-section. For that the "inelastic" cross-section
-// must be reduced by the value of the coherent charge-exchange cross-section, which
-// is estimated (it must be tuned!) in this CHIPS class. The angular distribution
-// is made (at present) identical to the corresponding coherent-elastic scattering 
-// -----------------------------------------------------------------------------------
+// Short description: At present this is a process for nucleon-nucleus
+// elastic scattering. Mesons and hyperons exist only for the Hydrogen
+// target (see G4QuasiFreeRatios).
+// ---------------------------------------------------------------
 
-#ifndef G4QCoherentChargeExchange_hh
-#define G4QCoherentChargeExchange_hh
+#ifndef G4QElastic_hh
+#define G4QElastic_hh
 
 // GEANT4 Headers
 #include "globals.hh"
@@ -76,7 +61,6 @@
 #include "G4HadronicProcessType.hh"
 
 // CHIPS Headers
-#include "G4QuasiFreeRatios.hh"
 #include "G4QElasticCrossSection.hh"
 #include "G4QIsotope.hh"
 #include "G4QPDGToG4Particle.hh"
@@ -84,15 +68,15 @@
 #include "G4QHadron.hh"
 #include <vector>
 
-class G4QCoherentChargeExchange : public G4VDiscreteProcess
+class G4QElastic : public G4VDiscreteProcess
 {
 public:
 
   // Constructor
-  G4QCoherentChargeExchange(const G4String& processName ="CHIPS_CoherChargeExScattering");
+  G4QElastic(const G4String& processName ="CHIPSElasticScattering");
 
   // Destructor
-  ~G4QCoherentChargeExchange();
+  ~G4QElastic();
 
   G4bool IsApplicable(const G4ParticleDefinition& particle);
 
@@ -119,10 +103,10 @@ public:
 private:
 
   // Hide assignment operator as private 
-  G4QCoherentChargeExchange& operator=(const G4QCoherentChargeExchange &right);
+  G4QElastic& operator=(const G4QElastic &right);
 
   // Copy constructor
-  G4QCoherentChargeExchange(const G4QCoherentChargeExchange&);
+  G4QElastic(const G4QElastic&);
 
   // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
   G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);

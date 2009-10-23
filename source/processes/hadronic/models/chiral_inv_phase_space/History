@@ -17,6 +17,10 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
 
 <<<<<<< History
+23-Oct-2009 M.Kosov                             (hadr-chips-V09-02-12)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fix + G4QuasiFreeRatio change (needs make clean)
+
 12-Oct-2009 M.Kosov                             (hadr-chips-V09-02-11)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the bug fixes (mostly body)

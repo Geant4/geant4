@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.1 2009-07-31 12:43:28 mkossov Exp $
+// $Id: G4QElasticCrossSection.cc,v 1.2 2009-10-23 16:35:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -794,7 +794,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
       if(ini<nPoints)
       {
         G4int fin = static_cast<int>((LP-lPMin)/dlnP)+1; // final bin of initialization
-        if(fin>nPoints) fin=nLast;                // Limit of the tabular initialization
+        if(fin>=nPoints) fin=nLast;               // Limit of the tabular initialization
         if(fin>=ini)
         {
           G4double lp=0.;
