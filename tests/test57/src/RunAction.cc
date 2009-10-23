@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2009-07-30 15:06:02 grichine Exp $
+// $Id: RunAction.cc,v 1.2 2009-10-23 13:40:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -267,22 +267,32 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // normalize histograms
   //
   G4int ih = 1;
+
   G4double binWidth = histoManager->GetBinWidth(ih);
   G4double unit     = histoManager->GetHistoUnit(ih);  
   G4double fac = unit/(TotNbofEvents*binWidth);
   histoManager->Scale(ih,fac);
     
   ih = 10;
+
   binWidth = histoManager->GetBinWidth(ih);
   unit     = histoManager->GetHistoUnit(ih);  
   fac = unit/(TotNbofEvents*binWidth);
   histoManager->Scale(ih,fac);
     
   // save histograms
+
   histoManager->save();
 
   // show Rndm status
+
   CLHEP::HepRandom::showEngineStatus();
+
+  // write files for independent histos
+
+  histoManager->SetThetaZero( ComputeMscHighland() );
+  histoManager->WriteFiles(); 
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

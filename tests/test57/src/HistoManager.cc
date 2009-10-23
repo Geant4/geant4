@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2009-07-30 15:06:02 grichine Exp $
+// $Id: HistoManager.cc,v 1.2 2009-10-23 13:40:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+///////////////////////////////////////////////////////////////////////////////////////..
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
@@ -37,15 +36,25 @@
 #include "AIDA/AIDA.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//////////////////////////////////////////////////////////////////////////////////.....
 
 HistoManager::HistoManager()
-:af(0),tree(0),factoryOn(false)
+:
+af(0),
+tree(0),
+factoryOn(false),
+fNdNdOmega(0),
+fNTheta(0),
+fNTransverseCoordinates(0),
+fNTransverseRadius(0),
+fThetaZero(0.)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
-  if(!af) {
+
+  if(!af) 
+  {
     G4cout << " HistoManager::HistoManager() :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
@@ -55,8 +64,11 @@ HistoManager::HistoManager()
   fileName[0] = "testem5";
   fileType    = "root";
   fileOption  = "--noErrors export=root uncompress";  
+
   // histograms
-  for (G4int k=0; k<MaxHisto; k++) {
+
+  for (G4int k=0; k<MaxHisto; k++) 
+  {
     histo[k] = 0;
     exist[k] = false;
     Unit[k]  = 1.0;
@@ -67,7 +79,7 @@ HistoManager::HistoManager()
   histoMessenger = new HistoMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////////....
 
 HistoManager::~HistoManager()
 {
@@ -78,7 +90,7 @@ HistoManager::~HistoManager()
 #endif    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+////////////////////////////////////////////////////////////////////////////////////////..
 
 void HistoManager::book()
 {
@@ -89,10 +101,14 @@ void HistoManager::book()
   fileName[1] = fileName[0] + "." + fileType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
+
   AIDA::ITreeFactory* tf  = af->createTreeFactory();
   tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
+
   delete tf;
-  if(!tree) {
+
+  if(!tree) 
+  {
     G4cout << "HistoManager::book() :" 
            << " problem creating the AIDA tree with "
            << " storeName = " << fileName[1]
@@ -105,11 +121,15 @@ void HistoManager::book()
   }
 
   // Creating a histogram factory, whose histograms will be handled by the tree
+
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
   // create selected histograms
-  for (G4int k=0; k<MaxHisto; k++) {
-    if (exist[k]) {
+
+  for ( G4int k = 0; k < MaxHisto; k++ ) 
+  {
+    if ( exist[k] ) 
+    {
       histo[k] = hf->createHistogram1D( Label[k], Title[k],
                                                   Nbins[k], Vmin[k], Vmax[k]);
       factoryOn = true;
@@ -117,17 +137,19 @@ void HistoManager::book()
   }
   delete hf;  
   if(factoryOn) 
+  {
       G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
-
+  }
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////////////////...
 
 void HistoManager::save()
 {
 #ifdef G4ANALYSIS_USE
-  if (factoryOn) {
+  if (factoryOn) 
+  {
     saveAscii();          // Write ascii file, if any     
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
@@ -140,21 +162,52 @@ void HistoManager::save()
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// Called from TrackingManager..
 
 void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 {
-  if (ih > MaxHisto) {
+  if ( ih > MaxHisto ) 
+  {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
            << "does not exist; e= " << e << " w= " << weight << G4endl;
     return;
   }
+  else if( ih == 12 )
+  {
+    fNdNdOmega += 1;
+    fVectordNdOmegaX.push_back(e/Unit[ih]);  // vmg, check units
+    fVectordNdOmegaY.push_back(weight);
+  }
+  else if( ih == 13 )
+  {
+    fNTheta += 1;
+    fVectorTheta.push_back(e/Unit[ih]);  // vmg, check units 
+  }
+  else if( ih == 13 )
+  {
+    fNTransverseCoordinates += 1;
+    fVectorTransverseCoordinates.push_back(e/Unit[ih]);  // vmg, check units 
+  }
+  else if( ih == 14 )
+  {
+    fNTransverseRadius += 1;
+    fVectorTransverseRadius.push_back(e/Unit[ih]);  // vmg, check units 
+  }
+
+
+
+
+
+
+
 #ifdef G4ANALYSIS_USE
-  if(exist[ih]) histo[ih]->fill(e/Unit[ih], weight);
+  if( exist[ih] ) histo[ih]->fill(e/Unit[ih], weight);
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/////////////////////////////////////////////////////////////////////////////////////////////...
 
 void HistoManager::SetHisto(G4int ih,
             G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
@@ -206,15 +259,19 @@ void HistoManager::SetHisto(G4int ih,
 
   G4String titl = title[ih];
   G4double vmin = valmin, vmax = valmax;
-  Unit[ih] = 1.;
+  Unit[ih]      = 1.;
 
-  if (ih == 3) { vmin = std::log10(valmin/MeV); vmax = std::log10(valmax/MeV);}
-  else if (unit != "none") {
-    titl = title[ih] + " (" + unit + ")";
-    Unit[ih] = G4UnitDefinition::GetValueOf(unit);
-    vmin = valmin/Unit[ih]; vmax = valmax/Unit[ih];
+  if (ih == 3) 
+  { 
+    vmin = std::log10(valmin/MeV); 
+    vmax = std::log10(valmax/MeV);
   }
-
+  else if (unit != "none") 
+  {
+    titl     = title[ih] + " (" + unit + ")";
+    Unit[ih] = G4UnitDefinition::GetValueOf(unit);
+    vmin     = valmin/Unit[ih]; vmax = valmax/Unit[ih];
+  }
   exist[ih] = true;
   Label[ih] = id[ih];
   Title[ih] = titl;
@@ -229,11 +286,12 @@ void HistoManager::SetHisto(G4int ih,
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+///////////////////////////////////////////////////////////////////////////////////////////...
 
 void HistoManager::RemoveHisto(G4int ih)
 {
- if (ih > MaxHisto) {
+ if (ih > MaxHisto) 
+ {
     G4cout << "---> warning from HistoManager::RemoveHisto() : histo " << ih
            << "does not exist" << G4endl;
     return;
@@ -242,11 +300,12 @@ void HistoManager::RemoveHisto(G4int ih)
   histo[ih] = 0;  exist[ih] = false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//////////////////////////////////////////////////////////////////////////////////////////////..
 
 void HistoManager::Scale(G4int ih, G4double fac)
 {
- if (ih > MaxHisto) {
+ if (ih > MaxHisto) 
+ {
     G4cout << "---> warning from HistoManager::Scale() : histo " << ih
            << "does not exist.  (fac = " << fac << ")" << G4endl;
     return;
@@ -256,17 +315,23 @@ void HistoManager::Scale(G4int ih, G4double fac)
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//////////////////////////////////////////////////////////////////////////////////////////////..
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
- else
+  if (ih < MaxHisto) 
+  { 
+    ascii[ih] = true; 
+    ascii[0]  = true; 
+  }
+  else
+  {
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+////////////////////////////////////////////////////////////////////////////////////////////////..
 
 #include <fstream>
 
@@ -277,16 +342,21 @@ void HistoManager::saveAscii()
  if (!ascii[0]) return;
  
  G4String name = fileName[0] + ".ascii";
+
  std::ofstream File(name, std::ios::out);
  File.setf( std::ios::scientific, std::ios::floatfield );
  
  //write selected histograms
- for (G4int ih=0; ih<MaxHisto; ih++) {
-    if (exist[ih] && ascii[ih]) {
+
+ for ( G4int ih = 0; ih < MaxHisto; ih++ ) 
+ {
+    if (exist[ih] && ascii[ih]) 
+    {
       File << "\n  1D histogram " << ih << ": " << Title[ih] 
            << "\n \n \t     X \t\t     Y" << G4endl;
      
-      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) {
+      for (G4int iBin=0; iBin<Nbins[ih]; iBin++) 
+      {
          File << "  " << iBin << "\t" 
               << 0.5*(histo[ih]->axis().binLowerEdge(iBin) +
 	              histo[ih]->axis().binUpperEdge(iBin)) << "\t"	      
@@ -298,6 +368,23 @@ void HistoManager::saveAscii()
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+void HistoManager::WriteFiles()
+{
+
+
+
+  return;
+}
+
+
+
+
+//
+//
+///////////////////////////////////////////////////////////////////////////////////////////////..
 
 

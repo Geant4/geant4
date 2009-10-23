@@ -23,30 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2009-07-30 15:05:25 grichine Exp $
+// $Id: HistoManager.hh,v 1.2 2009-10-23 13:40:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+//
+//
+//////////////////////////////////////////////////////////////////////////////////////////..
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
 #include "globals.hh"
+#include <vector>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace AIDA {
+
+namespace AIDA 
+{
  class IAnalysisFactory;
  class ITree;
  class IHistogram1D;
 }
 
+
 class HistoMessenger;
 
 const G4int MaxHisto = 50;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////////////...
 
 class HistoManager
 {
@@ -57,27 +64,40 @@ class HistoManager
 
     void SetFileName   (const G4String& name) { fileName[0] = name;};
     void SetFileType   (const G4String& name) { fileType    = name;};
-    void SetFileOption (const G4String& name) { fileOption  = name;};    
+    void SetFileOption (const G4String& name) { fileOption  = name;}; 
+   
     void book();
     void save();
+
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void RemoveHisto (G4int);
     void Scale (G4int, G4double);    
     void PrintHisto  (G4int);
     
-    G4bool    HistoExist  (G4int id) {return exist[id];}
-    G4double  GetHistoUnit(G4int id) {return Unit[id];}
-    G4double  GetBinWidth (G4int id) {return Width[id];}
+    G4bool    HistoExist  (G4int id) { return exist[id]; }
+    G4double  GetHistoUnit(G4int id) { return Unit[id]; }
+    G4double  GetBinWidth (G4int id) { return Width[id]; }
+
+    void SetThetaZero(G4double theta0){fThetaZero = theta0;}
+
+    void WriteFiles();
+    
+  private:
+
+    void saveAscii();       
 
   private:
 
     G4String                 fileName[2];
     G4String                 fileType;
     G4String                 fileOption;    
+
+  
     AIDA::IAnalysisFactory*  af;    
     AIDA::ITree*             tree;
     AIDA::IHistogram1D*      histo[MaxHisto];
+  
     G4bool                   exist[MaxHisto];
     G4String                 Label[MaxHisto];
     G4String                 Title[MaxHisto];
@@ -90,12 +110,30 @@ class HistoManager
         
     G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
-    
-  private:
-    void saveAscii();       
+
+  // vectors for filling of data
+
+  G4int                      fNdNdOmega;
+  std::vector<G4double>      fVectordNdOmegaX;
+  std::vector<G4double>      fVectordNdOmegaY;
+
+  G4int                      fNTheta;
+  std::vector<G4double>      fVectorTheta;
+  
+  G4int                      fNTransverseCoordinates;
+  std::vector<G4double>      fVectorTransverseCoordinates;
+
+  G4int                      fNTransverseRadius;
+  std::vector<G4double>      fVectorTransverseRadius;
+  
+  G4double fThetaZero;  
+
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+//
+//////////////////////////////////////////////////////////////////////////////////////////////..
 
 #endif
 
