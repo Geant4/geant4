@@ -25,6 +25,7 @@
 //
 //
 // 24.11.08 V. Grichine - first implementation
+// 23.10.09 M.Kosov - Get CHIPS hN XS directly from G4QuasiFreeRatios
 //
 
 #include "G4GGNuclNuclCrossSection.hh"
@@ -44,6 +45,7 @@ G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection()
   fLowerLimit( 0.1 * MeV ),
   fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
 {
+  CHIPS_hN_XS = G4QuasiFreeRatios::GetPointer();
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
 }
@@ -662,12 +664,7 @@ G4double
 G4GGNuclNuclCrossSection::GetHadronNucleonXscMK(G4ParticleDefinition* pParticle, G4double pTkin,
                                                 G4ParticleDefinition* nucleon  )
 {
-  G4int I = -1;
   G4int PDG = pParticle->GetPDGEncoding();
-  G4double totalXsc = 0;
-  G4double elasticXsc = 0;
-  G4double inelasticXsc;
-  // G4int absPDG = std::abs(PDG);
 
   G4double pM = pParticle->GetPDGMass();
   G4double p  = std::sqrt(pTkin*(pTkin+2*pM))/GeV;
@@ -681,103 +678,16 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscMK(G4ParticleDefinition* pParticle,
     F = true;
   }
 
-  G4bool kfl = true;                             // Flag of K0/aK0 oscillation
-  G4bool kf  = false;
+  // Getting the <El,Tot> CHIPS hN Cross-sections as a pair
+  std::pair<G4double,G4double> CHIPSXS=CHIPS_hN_XS->GetElTotXS(p, PDG, F);
+  G4double totalXsc = CHIPSXS.second;
+  G4double elasticXsc = CHIPSXS.first;
 
-  if( PDG == 130 || PDG == 310 )
-  {
-    kf = true;
-    if( G4UniformRand() > .5 ) kfl = false;
-  }
-  if     ( (PDG == 2212 && F) || (PDG == 2112 && !F) ) I = 0; // pp/nn
-  else if( (PDG == 2112 && F) || (PDG == 2212 && !F) ) I = 1; // np/pn
-  else
-  {
-    G4cout<<"MK PDG = "<<PDG
-          <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-    G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");
-  }
-
-  // Each parameter set can have not more than nPoints = 128 parameters
-
-  static const G4double lmi = 3.5;       // min of (lnP-lmi)^2 parabola
-  static const G4double pbe = .0557;     // elastic (lnP-lmi)^2 parabola coefficient
-  static const G4double pbt = .3;        // total (lnP-lmi)^2 parabola coefficient
-  static const G4double pmi = .1;        // Below that fast LE calculation is made
-  static const G4double pma = 1000.;     // Above that fast HE calculation is made
-                  
-  if( p <= 0.)
-  {
-    G4cout<<" p = "<<p<<" is zero or negative"<<G4endl;
-
-    elasticXsc   = 0.;
-    inelasticXsc = 0.;
-    totalXsc     = 0.;
-
-    return totalXsc;
-  }
-  if (!I)                          // pp/nn
-  {
-    if( p < pmi )
-    {
-      G4double p2 = p*p;
-      elasticXsc          = 1./(.00012 + p2*.2);
-      totalXsc          = elasticXsc;
-    }
-    else if(p>pma)
-    {
-      G4double lp  = std::log(p)-lmi;
-      G4double lp2 = lp*lp;
-      elasticXsc  = pbe*lp2 + 6.72;
-      totalXsc    = pbt*lp2 + 38.2;
-    }
-    else
-    {
-      G4double p2  = p*p;
-      G4double LE  = 1./( .00012 + p2*.2);
-      G4double lp  = std::log(p) - lmi;
-      G4double lp2 = lp*lp;
-      G4double rp2 = 1./p2;
-      elasticXsc  = LE + ( pbe*lp2 + 6.72+32.6/p)/( 1. + rp2/p);
-      totalXsc    = LE + ( pbt*lp2 + 38.2+52.7*rp2)/( 1. + 2.72*rp2*rp2);
-    }
-  }
-  else if( I==1 )                        // np/pn
-  {
-    if( p < pmi )
-    {
-      G4double p2 = p*p;
-      elasticXsc = 1./( .00012 + p2*( .051 + .1*p2));
-      totalXsc   = elasticXsc;
-    }
-    else if( p > pma )
-    {
-      G4double lp  = std::log(p) - lmi;
-      G4double lp2 = lp*lp;
-      elasticXsc  = pbe*lp2 + 6.72;
-      totalXsc    = pbt*lp2 + 38.2;
-    }
-    else
-    {
-      G4double p2  = p*p;
-      G4double LE  = 1./( .00012 + p2*( .051 + .1*p2 ) );
-      G4double lp  = std::log(p) - lmi;
-      G4double lp2 = lp*lp;
-      G4double rp2 = 1./p2;
-      elasticXsc  = LE + (pbe*lp2 + 6.72 + 30./p)/( 1. + .49*rp2/p);
-      totalXsc    = LE + (pbt*lp2 + 38.2)/( 1. + .54*rp2*rp2);
-    }
-  }
-  else
-  {
-    G4cout<<"PDG incoding = "<<I<<" is not defined (0-1)"<<G4endl;
-  
-  }
   if( elasticXsc > totalXsc ) elasticXsc = totalXsc;
 
   totalXsc   *= millibarn;
   elasticXsc *= millibarn;
-  inelasticXsc   = totalXsc - elasticXsc;
+  G4double inelasticXsc   = totalXsc - elasticXsc;
   if (inelasticXsc < 0.) inelasticXsc = 0.;
 
   return inelasticXsc;

@@ -34,6 +34,7 @@
 //
 //
 // 24.11.08 V. Grichine - first implementation based on G4GlauberGribovCrossSection
+// 23.10.09 M.Kosov - Get CHIPS hN XS directly from G4QuasiFreeRatios
 //
 //
 
@@ -45,6 +46,7 @@
 #include "G4Nucleus.hh"
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4QuasiFreeRatios.hh"
 
 class G4ParticleDefinition;
 
@@ -148,6 +150,8 @@ private:
  
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
   G4double fHadronNucleonXsc;
+
+  G4QuasiFreeRatios* CHIPS_hN_XS;
  
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;

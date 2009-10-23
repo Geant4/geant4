@@ -33,6 +33,7 @@
 //
 //
 // 14.03.07 V. Grichine - first implementation
+// 23.10.09 M.Kosov - Get CHIPS hN XS directly from G4QuasiFreeRatios
 //
 //
 
@@ -43,6 +44,7 @@
 #include "G4Proton.hh"
 #include "G4Nucleus.hh"
 
+#include "G4QuasiFreeRatios.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
@@ -96,6 +98,8 @@ private:
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc;
   G4double fHadronNucleonXsc;
+
+  G4QuasiFreeRatios* CHIPS_hN_XS;
  
   G4ParticleDefinition* theGamma;
   G4ParticleDefinition* theProton;

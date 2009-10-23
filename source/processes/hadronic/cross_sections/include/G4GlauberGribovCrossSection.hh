@@ -37,7 +37,7 @@
 // 05.03.07 V.Ivanchenko - add IfZAApplicable
 // 06.03.07 V.Ivanchenko - add GetElasticGlauberGribov and GetElasticGlauberGribov
 //                         for combined dataset
-//
+// 23.10.09 M.Kosov - Get CHIPS hN XS directly from G4QuasiFreeRatios
 //
 
 #ifndef G4GlauberGribovCrossSection_h
@@ -48,6 +48,7 @@
 #include "G4Nucleus.hh"
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4QuasiFreeRatios.hh"
 
 class G4ParticleDefinition;
 
@@ -142,6 +143,8 @@ private:
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
   G4double fHadronNucleonXsc;
+
+  G4QuasiFreeRatios* CHIPS_hN_XS;
  
   G4ParticleDefinition* theGamma;
   G4ParticleDefinition* theProton;
