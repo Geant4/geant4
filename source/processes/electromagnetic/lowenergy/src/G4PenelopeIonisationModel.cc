@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.9 2009-10-21 14:56:40 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.10 2009-10-23 09:29:24 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -1727,7 +1727,7 @@ G4int G4PenelopeIonisationModel::SampleRandomAtom(const G4MaterialCutsCouple* co
 
 void G4PenelopeIonisationModel::ActivateAuger(G4bool augerbool)
 {
-  if (!DeexcitationFlag())
+  if (!DeexcitationFlag() && augerbool)
     {
       G4cout << "WARNING - G4PenelopeIonisationModel" << G4endl;
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.7 2009-10-21 14:56:40 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.8 2009-10-23 09:29:24 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -82,7 +82,7 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
 
   //by default, the model will use atomic deexcitation
   SetDeexcitationFlag(true);
-  deexcitationManager.ActivateAugerElectronProduction(false);
+  ActivateAuger(false);
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -755,7 +755,7 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta)
 
 void G4PenelopeComptonModel::ActivateAuger(G4bool augerbool)
 {
-  if (!DeexcitationFlag())
+  if (!DeexcitationFlag() && augerbool)
     {
       G4cout << "WARNING - G4PenelopeComptonModel" << G4endl;
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
