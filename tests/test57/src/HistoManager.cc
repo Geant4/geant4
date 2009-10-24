@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2009-10-23 13:40:40 grichine Exp $
+// $Id: HistoManager.cc,v 1.3 2009-10-24 14:10:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///////////////////////////////////////////////////////////////////////////////////////..
@@ -374,6 +374,54 @@ void HistoManager::saveAscii()
 
 void HistoManager::WriteFiles()
 {
+  G4int i, iMax, j, jMax;
+  G4double angleMax = 3*fThetaZero, tmp = 0.;
+
+  G4double angle[100], weight[100];
+  jMax = 100;
+
+  std::ofstream wFile("theta.sim", std::ios::out);
+  wFile.setf( std::ios::scientific, std::ios::floatfield );
+
+  G4cout<<G4endl;
+  G4cout<<"angleMax = 3*theta0 = "<<angleMax/degree<<" degree "<<G4endl;  
+  G4cout<<G4endl;
+
+  for(j = 0; j < jMax; j++) 
+  { 
+    weight[j] = 0.;
+    angle[j] = angleMax*j/jMax;
+  }
+
+
+
+
+  iMax = fVectorTheta.size();
+
+
+
+  for(i = 0; i < iMax; i++) 
+  {
+    for( j = 0; j < jMax; j++) 
+    {
+      if( fVectorTheta[i] <= angle[j] )
+      {
+        weight[j] += 1.;
+        break;
+      }
+    } 
+  }
+  wFile<<jMax<<G4endl;
+  for(j = 0; j < jMax; j++) 
+  { 
+    tmp += weight[j];  
+    G4cout<<angle[j]/degree<<"\t"<<weight[j]<<G4endl;
+    wFile<<angle[j]/degree<<"\t"<<weight[j]<<G4endl;
+  }
+  G4cout<<G4endl;
+  G4cout<<"weight sum/vector size =  "<<tmp/iMax<<G4endl;  
+  G4cout<<G4endl;
+
 
 
 

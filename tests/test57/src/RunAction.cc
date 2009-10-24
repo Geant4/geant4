@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.2 2009-10-23 13:40:40 grichine Exp $
+// $Id: RunAction.cc,v 1.3 2009-10-24 14:10:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -284,14 +284,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   histoManager->save();
 
-  // show Rndm status
-
-  CLHEP::HepRandom::showEngineStatus();
-
   // write files for independent histos
 
   histoManager->SetThetaZero( ComputeMscHighland() );
   histoManager->WriteFiles(); 
+
+  // show Rndm status
+
+  CLHEP::HepRandom::showEngineStatus();
 
 }
 
