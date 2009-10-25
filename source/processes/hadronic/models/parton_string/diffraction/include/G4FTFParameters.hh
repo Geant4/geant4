@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.6 2009-09-17 18:24:30 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.7 2009-10-25 10:50:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -83,6 +83,8 @@ class G4FTFParameters
         void SetCofNuclearDestruction(const G4double aValue);
         void SetR2ofNuclearDestruction(const G4double aValue);
 
+        void SetExcitationEnergyPerWoundedNucleon(const G4double aValue);
+
         void SetDofNuclearDestruction(const G4double aValue);
         void SetPt2ofNuclearDestruction(const G4double aValue);
         void SetMaxPt2ofNuclearDestruction(const G4double aValue);
@@ -124,6 +126,8 @@ class G4FTFParameters
 // --------- Get parameters of nuclear destruction---------------------
         G4double GetCofNuclearDestruction();
         G4double GetR2ofNuclearDestruction();
+
+        G4double GetExcitationEnergyPerWoundedNucleon();
 
         G4double GetDofNuclearDestruction();
         G4double GetPt2ofNuclearDestruction();
@@ -168,6 +172,8 @@ class G4FTFParameters
 // --------- Parameters of nuclear destruction------------------------
         G4double CofNuclearDestruction;         // Cnd of nuclear destruction
         G4double R2ofNuclearDestruction;        // R2nd
+
+        G4double ExcitationEnergyPerWoundedNucleon;
 
         G4double DofNuclearDestruction;         // D for momentum sampling
         G4double Pt2ofNuclearDestruction;       // Pt2
@@ -258,6 +264,9 @@ inline  void G4FTFParameters::SetCofNuclearDestruction(const G4double aValue)
 inline  void G4FTFParameters::SetR2ofNuclearDestruction(const G4double aValue)
              {R2ofNuclearDestruction = aValue;}
 
+inline  void G4FTFParameters::SetExcitationEnergyPerWoundedNucleon(const G4double aValue)
+             {ExcitationEnergyPerWoundedNucleon = aValue;}
+
 inline  void G4FTFParameters::SetDofNuclearDestruction(const G4double aValue)
              {DofNuclearDestruction = aValue;}
 inline  void G4FTFParameters::SetPt2ofNuclearDestruction(const G4double aValue)
@@ -317,6 +326,10 @@ inline  std::vector<G4double>
 // --------- Get parameters of nuclear destruction---------------------
 inline  G4double G4FTFParameters::GetCofNuclearDestruction(){return CofNuclearDestruction;}
 inline  G4double G4FTFParameters::GetR2ofNuclearDestruction(){return R2ofNuclearDestruction;}
+
+inline  G4double G4FTFParameters::GetExcitationEnergyPerWoundedNucleon()
+            {return ExcitationEnergyPerWoundedNucleon;}
+
 
 inline  G4double G4FTFParameters::GetDofNuclearDestruction()
                  {return DofNuclearDestruction;}

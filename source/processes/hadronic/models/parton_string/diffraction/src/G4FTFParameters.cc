@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.10 2009-10-05 12:39:16 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.11 2009-10-25 10:50:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -301,6 +301,8 @@ SetProbabilityOfTarDiff(0.05);
     }
 
     SetR2ofNuclearDestruction(1.5*fermi*fermi);
+
+    SetExcitationEnergyPerWoundedNucleon(100*MeV);
 
     SetDofNuclearDestruction(0.4);
     SetPt2ofNuclearDestruction(0.17*GeV*GeV);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.9 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4FTFModel.hh,v 1.10 2009-10-25 10:50:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -85,6 +85,7 @@ class G4FTFModel : public G4VPartonStringModel
        G4bool PutOnMassShell();
        G4bool ExciteParticipants();
        G4ExcitedStringVector * BuildStrings();
+       void GetResidualNucleus();                  // 23 Oct. 2009
        G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
   
   private:     
@@ -99,6 +100,8 @@ class G4FTFModel : public G4VPartonStringModel
        G4DiffractiveExcitation * theExcitation;
        G4ElasticHNScattering   * theElastic;
 
+       G4LorentzVector Residual4Momentum;
+       G4double ResidualExcitationEnergy;
 
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.26 2009-10-05 12:39:16 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.27 2009-10-25 10:50:54 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 #include <utility> 
+#include "G4IonTable.hh"
 
 // Class G4FTFModel 
 
@@ -96,6 +97,7 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
                      sqr( G4Proton::Proton()->GetPDGMass() ) +
                      2*theProjectile.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
 /*
+G4cout<<"----------------------------------------"<<G4endl;
 G4cout << " primary Total E (GeV): " << theProjectile.GetTotalEnergy()/GeV << G4endl;
 G4cout << " primary Mass    (GeV): " << theProjectile.GetMass() /GeV << G4endl;
 G4cout << " primary 3Mom           " << theProjectile.GetMomentum() << G4endl;
@@ -128,6 +130,9 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 //G4cout<<"Strings"<<G4endl;
 	G4ExcitedStringVector * theStrings = BuildStrings();
 //G4cout<<"Out FTF N strings "<<theStrings->size()<<G4endl;
+//G4cout<<"GetResidualNucleus"<<G4endl;
+        GetResidualNucleus();
+//G4cout<<"Out of FTF"<<G4endl;
         if( theParameters != 0 )
         {
           delete theParameters;
@@ -180,7 +185,7 @@ void G4FTFModel::ReggeonCascade()                             // Uzhi 26 July 20
               targetSplitable = new G4DiffractiveSplitableHadron(*Neighbour); 
 
               Neighbour->Hit(targetSplitable);
-              Neighbour->SetBindingEnergy(10.*Neighbour->GetBindingEnergy()); // Uzhi 5.10.09
+//              Neighbour->SetBindingEnergy(3.*Neighbour->GetBindingEnergy()); // Uzhi 5.10.09
               targetSplitable->SetStatus(2);     
              }
             }  // end of if(!Neighbour->AreYouHit())
@@ -249,30 +254,78 @@ G4bool G4FTFModel::PutOnMassShell()
         G4double        SumMasses = Mprojectile;
 
 //--------------- Target nucleus ------------------------------
-//G4int Ninvolv(0);
-	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
+        G4V3DNucleus *theNucleus = GetWoundedNucleus();
+        G4Nucleon * aNucleon;
+        G4int ResidualMassNumber=theNucleus->GetMassNumber();
+        G4int ResidualCharge    =theNucleus->GetCharge();
+//G4cout<<"Nucleus "<<ResidualMassNumber<<" "<<ResidualCharge<<G4endl;
+        ResidualExcitationEnergy=0.;
+	G4LorentzVector PnuclearResidual(0.,0.,0.,0.);
+
+        G4double ExcitationEnergyPerWoundedNucleon=
+                  theParameters->GetExcitationEnergyPerWoundedNucleon();
+
+        theNucleus->StartLoop();
+//G4int NucleonNum(0);
+	while (aNucleon = theNucleus->GetNextNucleon())
         {
-          G4Nucleon * aNucleon = TheInvolvedNucleon[i];
-//G4cout<<"          "<<Ninvolv<<" "<<aNucleon->Get4Momentum()<<G4endl;
-//Ninvolv++;
+         if(aNucleon->AreYouHit())
+         {   // Involved nucleons
+//G4cout<<"          "<<NucleonNum<<" "<<aNucleon->Get4Momentum()<<G4endl;
           Psum += aNucleon->Get4Momentum();
-          SumMasses += aNucleon->GetDefinition()->GetPDGMass();                
-	}   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
-//G4cout<<"Ninvolv "<<Ninvolv<<G4endl;
+          SumMasses += aNucleon->GetDefinition()->GetPDGMass();
+          ResidualMassNumber--;
+          ResidualCharge-=(G4int) aNucleon->GetDefinition()->GetPDGCharge();
+          ResidualExcitationEnergy+=ExcitationEnergyPerWoundedNucleon;
+         }
+         else
+         {   // Spectator nucleons
+          PnuclearResidual += aNucleon->Get4Momentum();
+         }  // end of if(!aNucleon->AreYouHit())
+//NucleonNum++;
+	}   // end of while (theNucleus->GetNextNucleon())
+
+//G4cout<<"Nucleus "<<ResidualMassNumber<<" "<<ResidualCharge<<G4endl;
+//G4cout<<"PResid "<<PnuclearResidual<<G4endl;
+
+        Psum += PnuclearResidual;
+        G4double ResidualMass(0.);
+        if(ResidualMassNumber == 0)
+        {
+         ResidualMass=0.;
+         ResidualExcitationEnergy=0.;
+        }
+        else
+        {
+         ResidualMass=G4ParticleTable::GetParticleTable()->GetIonTable()->
+                              GetIonMass(ResidualCharge ,ResidualMassNumber);
+         if(ResidualMassNumber == 1) {ResidualExcitationEnergy=0.;}
+        }
+ 
+//        ResidualMass +=ResidualExcitationEnergy; // Will be given after checks
+        SumMasses += ResidualMass;
+
 //-------------------------------------------------------------
 
         G4double SqrtS=Psum.mag();
         G4double     S=Psum.mag2();
 //G4cout<<" SqrtS SumMasses "<<SqrtS <<" "<< SumMasses<<G4endl;
+//G4cout<<"Res M E* "<<ResidualMass<<" "<<ResidualExcitationEnergy<<G4endl;
         if(SqrtS < SumMasses)      {return false;} // It is impossible to simulate
                                                    // after putting nuclear nucleons
                                                    // on mass-shell
+        if(SqrtS < SumMasses+ResidualExcitationEnergy) {ResidualExcitationEnergy=0.;}
+
+        ResidualMass +=ResidualExcitationEnergy;
+        SumMasses    +=ResidualExcitationEnergy;
+//G4cout<<"Res M E* "<<ResidualMass<<" "<<ResidualExcitationEnergy<<G4endl;
+
 //-------------------------------------------------------------
 // Sampling of nucleons what are transfered to delta-isobars --
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
         G4int NumberOfDeltas(0);
 //SumMasses=Mprojectile;
-        if(GetWoundedNucleus()->GetMassNumber() != 1)
+        if(theNucleus->GetMassNumber() != 1)
         {
           G4double ProbDeltaIsobar(0.);  // 1. *******************************
 	  for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
@@ -281,20 +334,24 @@ G4bool G4FTFModel::PutOnMassShell()
             {
               NumberOfDeltas++;
               G4VSplitableHadron * targetSplitable=TheInvolvedNucleon[i]->GetSplitableHadron();
+              SumMasses-=targetSplitable->GetDefinition()->GetPDGMass();
+
               G4int PDGcode = targetSplitable->GetDefinition()->GetPDGEncoding();
               G4int newPDGcode = PDGcode/10; newPDGcode=newPDGcode*10+4; // Delta
               G4ParticleDefinition* ptr = 
                  G4ParticleTable::GetParticleTable()->FindParticle(newPDGcode);
               targetSplitable->SetDefinition(ptr);
-SumMasses+=targetSplitable->GetDefinition()->GetPDGMass();
+              SumMasses+=targetSplitable->GetDefinition()->GetPDGMass();
 //G4cout<<" i "<<i<<" Delta "<<targetSplitable->GetDefinition()->GetPDGMass()<<G4endl;
-            } else {
-SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGMass();
+            } 
+            else 
+            {
+//              SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->
+//                         GetDefinition()->GetPDGMass();
 //G4cout<<" i "<<i<<" Nuclo "<<TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGMass()<<G4endl;
-}
-
+            }
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
-        }   // end of if(GetWoundedNucleus().GetN() != 1)
+        }   // end of if(theNucleus.GetMassNumber() != 1)
 //G4cout<<"MaxNumberOfDeltas NumberOfDeltas "<<MaxNumberOfDeltas<<" "<<NumberOfDeltas<<G4endl;
 //G4cout<<" SqrtS SumMasses "<<SqrtS <<" "<< SumMasses<<G4endl;
 //-------------------------------------------------------------
@@ -320,13 +377,15 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
 //-------------------------------------------------------------
 //------- Ascribing of the involved nucleons Pt and Xminus ----
         G4double Dcor        = theParameters->GetDofNuclearDestruction()/
-                                                  NumberOfInvolvedNucleon;
+                                               theNucleus->GetMassNumber();
+//                                                  NumberOfInvolvedNucleon;
         G4double AveragePt2  = theParameters->GetPt2ofNuclearDestruction();
         G4double maxPtSquare = theParameters->GetMaxPt2ofNuclearDestruction();
 //G4cout<<" D Pt2 "<<Dcor<<" "<<AveragePt2<<G4endl;
-        G4double M2target;
-        G4int NumberOfTries=0;
-        G4double ScaleFactor=1.;
+
+        G4double M2target(0.);
+        G4int    NumberOfTries(0);
+        G4double ScaleFactor(1.);
         do    // while (SqrtS < Mprojectile + std::sqrt(M2target))
         {     // while (DecayMomentum < 0.)
 
@@ -341,27 +400,27 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
 //G4int Uzhi; G4cin>>Uzhi;
           }
 //G4cout<<"Start Decay "<<G4endl; G4int Uzhi; G4cin>>Uzhi;
-          G4ThreeVector PtSum;
+          G4ThreeVector PtSum(0.,0.,0.);
           G4double XminusSum(0.);
           G4double Xminus(0.);
+          G4bool Success=true;
 
-          do      // while((Xminus <= 0.) || (Xminus >= 1.));
+          do      // while(Success == false);
           {
-//G4cout<<"Sample Pt and X"<<G4endl; // G4int Uzhi1; G4cin>>Uzhi1;
+//G4cout<<"Sample Pt and X"<<" Ninv "<<NumberOfInvolvedNucleon<<G4endl; // G4int Uzhi1; G4cin>>Uzhi1;
+             Success=true;
+
              PtSum    =G4ThreeVector(0.,0.,0.);
              XminusSum=0.;
-             M2target =0.;
 
 	     for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
              {
                G4Nucleon * aNucleon = TheInvolvedNucleon[i];
 
-               G4ThreeVector tmpPt;
-               tmpPt = GaussianPt(AveragePt2, maxPtSquare);
+               G4ThreeVector tmpPt = GaussianPt(AveragePt2, maxPtSquare);
                PtSum += tmpPt;
 
-               G4ThreeVector tmpX;
-               tmpX =GaussianPt(Dcor*Dcor, 1.);
+               G4ThreeVector tmpX=GaussianPt(Dcor*Dcor, 1.);
                Xminus=tmpX.x();
                XminusSum+=Xminus;
 
@@ -371,19 +430,35 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
 //---------------------------------------------------------------------------
-             G4double DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
-             G4double DeltaY      = PtSum.y()/NumberOfInvolvedNucleon;
-             G4double DeltaXminus = (XminusSum-1.)/NumberOfInvolvedNucleon;
+             G4double DeltaX(0.);
+             G4double DeltaY(0.);
+             G4double DeltaXminus(0.);
+
+             if(ResidualMassNumber == 0)
+             {
+              DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
+              DeltaY      = PtSum.y()/NumberOfInvolvedNucleon;
+              DeltaXminus = (XminusSum-1.)/NumberOfInvolvedNucleon;
+             }
+             else
+             {
+              DeltaXminus = -1./theNucleus->GetMassNumber();
+             }
 //G4cout<<"Deltas "<<DeltaX<<" "<<DeltaY<<" "<<DeltaXminus<<G4endl;
+
+             XminusSum=1.;
              M2target =0.;
+
 
 	     for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
              {
                G4Nucleon * aNucleon = TheInvolvedNucleon[i];
 
                Xminus = aNucleon->Get4Momentum().pz() - DeltaXminus;
-               if((Xminus <= 0.) || (Xminus > 1.)) {//G4cout<<"-X break "<<Xminus<<G4endl; 
-                                                    break;}
+//G4cout<<i<<" "<<Xminus<<" "<<XminusSum<<G4endl;
+               XminusSum-=Xminus;               
+               if((Xminus <= 0.)   || (Xminus > 1.) || 
+                  (XminusSum <=0.) || (XminusSum > 1.)) {Success=false; break;}
  
                G4double Px=aNucleon->Get4Momentum().px() - DeltaX;
                G4double Py=aNucleon->Get4Momentum().py() - DeltaY;
@@ -396,7 +471,13 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
                aNucleon->SetMomentum(tmp);
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
-          } while((Xminus <= 0.) || (Xminus >= 1.));
+             if(Success && (ResidualMassNumber != 0))
+             {
+              M2target +=(ResidualMass*ResidualMass + PtSum.mag2())/XminusSum;
+             }
+//G4cout<<"Success "<<Success<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+          } while(Success == 0);
 
 //-------------------------------------------------------------
 //G4cout<<"SqrtS > Mprojectile + std::sqrt(M2target) "<<SqrtS<<" "<<Mprojectile<<" "<< std::sqrt(M2target)<<" "<<Mprojectile + std::sqrt(M2target)<<G4endl;
@@ -421,10 +502,14 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
 //G4cout<<"Proj After "<<Pprojectile<<G4endl;
 //-------------------------------------------------------------
 //Ninvolv=0;
+
+        G4ThreeVector Residual3Momentum(0.,0.,1.);
+
 	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         {
            G4Nucleon * aNucleon = TheInvolvedNucleon[i];
            G4LorentzVector tmp=aNucleon->Get4Momentum();
+           Residual3Momentum-=tmp.vect();
 
            G4double Mt2 = sqr(tmp.x())+sqr(tmp.y())+
                           aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()*
@@ -443,7 +528,23 @@ SumMasses+=TheInvolvedNucleon[i]->GetSplitableHadron()->GetDefinition()->GetPDGM
            G4VSplitableHadron * targetSplitable=aNucleon->GetSplitableHadron();
            targetSplitable->Set4Momentum(tmp);
 //G4cout<<"nucleon M "<<aNucleon->Get4Momentum()<<G4endl;
+           
         }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
+
+        G4double Mt2Residual=sqr(ResidualMass) +
+                                 sqr(Residual3Momentum.x())+sqr(Residual3Momentum.x());
+
+        G4double PzResidual=-WminusTarget*Residual3Momentum.z()/2. + 
+                             Mt2Residual/(2.*WminusTarget*Residual3Momentum.z());
+        G4double EResidual = WminusTarget*Residual3Momentum.z()/2. + 
+                             Mt2Residual/(2.*WminusTarget*Residual3Momentum.z());
+
+//        G4LorentzVector Residual4Momentum(0.,0.,0.,0.);
+        Residual4Momentum.setPx(Residual3Momentum.x());
+        Residual4Momentum.setPy(Residual3Momentum.y());
+        Residual4Momentum.setPz(PzResidual); 
+        Residual4Momentum.setE(EResidual);
+        Residual4Momentum.transform(toLab);
 
 //G4cout<<"Return Nucleus"<<G4endl;
 //-------------------------------------------------------------
@@ -713,6 +814,24 @@ G4cout<<"Else ????????????"<<G4endl;
 
 	return strings;
 }
+// ------------------------------------------------------------
+void G4FTFModel::GetResidualNucleus()
+{ // This method is needed for the correct application of G4PrecompoundModelInterface
+        G4double DeltaExcitationE=ResidualExcitationEnergy/
+                                  (G4double) NumberOfInvolvedNucleon;
+        G4LorentzVector DeltaPResidualNucleus = Residual4Momentum/
+                                  (G4double) NumberOfInvolvedNucleon;
+
+	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
+        {
+         G4Nucleon * aNucleon = TheInvolvedNucleon[i];
+         G4LorentzVector tmp=aNucleon->Get4Momentum()-DeltaPResidualNucleus;
+         aNucleon->SetMomentum(tmp);
+         aNucleon->SetBindingEnergy(DeltaExcitationE);
+        }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
+
+}
+
 // ------------------------------------------------------------
 G4ThreeVector G4FTFModel::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
