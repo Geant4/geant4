@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2009-01-30 09:34:26 maire Exp $
+$Id: History,v 1.30 2009-10-25 19:06:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+25-10-09 mma (fano-V09-02-01)
+- splite PhysicsList in 2, as others TestEm examples.
+- local copy of PhysListEmStandard_option0, PhysListEmStandard_option3,
+  PhysListEmStandard_SS
+- PhysicsList: add cut for proton recoil in case of Single Scattering
      
 30-01-09 mma (fano-V09-02-00)
 - EndOfRun : error = ratio*std::sqrt(dEoverE*dEoverE + dToverT*dToverT)

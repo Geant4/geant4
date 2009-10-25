@@ -23,48 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2009-10-25 19:06:26 maire Exp $
+// $Id: MyKleinNishinaMessenger.hh,v 1.1 2009-10-25 19:06:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PhysicsListMessenger.hh"
+#ifndef MyKleinNishinaMessenger_h
+#define MyKleinNishinaMessenger_h 1
 
-#include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:pPhysicsList(pPhys)
-{ 
-  physDir = new G4UIdirectory("/testem/phys/");
-  physDir->SetGuidance("physics list commands");
-
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);
-}
+class MyKleinNishinaCompton;
+class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger()
+class MyKleinNishinaMessenger: public G4UImessenger
 {
-  delete pListCmd;
-  delete physDir;
-}
+  public:  
+    MyKleinNishinaMessenger(MyKleinNishinaCompton* );
+   ~MyKleinNishinaMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:  
+    MyKleinNishinaCompton* pKleinNishina;  
+    G4UIcmdWithADouble* csFactor;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{           
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

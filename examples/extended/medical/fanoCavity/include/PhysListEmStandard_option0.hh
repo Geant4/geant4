@@ -23,48 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2009-10-25 19:06:26 maire Exp $
+// $Id: PhysListEmStandard_option0.hh,v 1.1 2009-10-25 19:06:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PhysicsListMessenger.hh"
+#ifndef PhysListEmStandard_option0_h
+#define PhysListEmStandard_option0_h 1
 
-#include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:pPhysicsList(pPhys)
-{ 
-  physDir = new G4UIdirectory("/testem/phys/");
-  physDir->SetGuidance("physics list commands");
-
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);
-}
+class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger()
+class PhysListEmStandard_option0 : public G4VPhysicsConstructor
 {
-  delete pListCmd;
-  delete physDir;
-}
+public: 
+  PhysListEmStandard_option0(const G4String& name, 
+                             DetectorConstruction* det);
+  virtual ~PhysListEmStandard_option0();
+
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
+  
+private:
+  DetectorConstruction* detector;  
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{           
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+
+
+
+
+

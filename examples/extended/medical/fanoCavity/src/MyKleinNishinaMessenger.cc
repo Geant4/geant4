@@ -23,48 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2009-10-25 19:06:26 maire Exp $
+// $Id: MyKleinNishinaMessenger.cc,v 1.1 2009-10-25 19:06:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PhysicsListMessenger.hh"
+#include "MyKleinNishinaMessenger.hh"
 
-#include "PhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#include "MyKleinNishinaCompton.hh"
+#include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:pPhysicsList(pPhys)
-{ 
-  physDir = new G4UIdirectory("/testem/phys/");
-  physDir->SetGuidance("physics list commands");
-
-  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
-  pListCmd->SetGuidance("Add modula physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);
+MyKleinNishinaMessenger::MyKleinNishinaMessenger(MyKleinNishinaCompton* pPhys)
+:pKleinNishina(pPhys)
+{  
+  csFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
+  csFactor->SetGuidance("multiply Compton cross section");
+  csFactor->SetParameterName("factor",false);
+  csFactor->SetRange("factor>=0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger()
+MyKleinNishinaMessenger::~MyKleinNishinaMessenger()
 {
-  delete pListCmd;
-  delete physDir;
+  delete csFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+void MyKleinNishinaMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
-{           
-  if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
+{
+  if (command == csFactor)
+   {pKleinNishina->SetCSFactor(csFactor->GetNewDoubleValue(newValue));}        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
