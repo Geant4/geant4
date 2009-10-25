@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.4 2009-10-21 13:56:07 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.5 2009-10-25 16:46:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -267,8 +267,10 @@ inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
   if( ekin != fTkin || feCut != cut) 
   {
     G4double beta2;
+
     fTkin     = ekin;
     fMom2     = fTkin*(fTkin + 2.0*fMass);
+
     beta2     = fMom2/( fMom2 + fMass*fMass );
     beta2    += fAlpha2;                         // atomic shell correction
     fInvBeta2 = 1/beta2;                       // 1.0 +  fMass*fMass/fMom2;
@@ -293,12 +295,12 @@ inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
     fTargetZ = Z;
     fiz      = G4int(Z);
 
-    if(fiz > 99) fiz = 99;
+    if( fiz > 99 ) fiz = 99;
 
     fTargetMass      = fNistManager->GetAtomicMassAmu(fiz)*amu_c2;
     fScreenZ         = fScreenRSquare[fiz]/fMom2;
-    G4double gamma2 = 1./(1.-1./fInvBeta2);
-    G4double mu_c2  = (fMass*fTargetMass)/(fMass+fTargetMass);
+    G4double gamma2  = 1./(1.-1./fInvBeta2);
+    G4double mu_c2   = (fMass*fTargetMass)/(fMass+fTargetMass);
     fKinFactor       = fCoeff*fTargetZ*fChargeSquare*fInvBeta2*fInvBeta2/(gamma2*mu_c2*mu_c2);
     /*
     G4double m12  = fMass*fMass;
@@ -311,7 +313,7 @@ inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
       fKinFactor /= (x*x);
     }
     */
-    if(fiz > 1) fScreenZ *=(1.13 + 3.76*Z*Z*fAlpha2);
+    if( fiz > 1 ) fScreenZ *=(1.13 + 3.76*Z*Z*fAlpha2);
 
     //if(iz > 1) fScreenZ *=(1.13 + std::min(0.5,3.76*Z*Z*fInvBeta2*fAlpha2));
 

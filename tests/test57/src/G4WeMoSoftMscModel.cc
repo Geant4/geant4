@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.cc,v 1.2 2009-07-31 14:11:09 grichine Exp $
+// $Id: G4WeMoSoftMscModel.cc,v 1.3 2009-10-25 16:46:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,20 +82,20 @@ G4WeMoSoftMscModel::G4WeMoSoftMscModel(const G4String& nam) :
 {
   fInvSqrt12      = 1./sqrt(12.);
   ftLimitMinFix   = 1.e-6*mm;
-  theManager     = G4LossTableManager::Instance(); 
-  fNistManager   = G4NistManager::Instance();
-  theElectron    = G4Electron::Electron();
-  thePositron    = G4Positron::Positron();
-  theProton      = G4Proton::Proton();
+  theManager      = G4LossTableManager::Instance(); 
+  fNistManager    = G4NistManager::Instance();
+  theElectron     = G4Electron::Electron();
+  thePositron     = G4Positron::Positron();
+  theProton       = G4Proton::Proton();
   fLowEnergyLimit = 0.1*keV;
-  G4double p0    = electron_mass_c2*classic_electr_radius;
+  G4double p0     = electron_mass_c2*classic_electr_radius;
   fCoeff          = twopi*p0*p0;
 
   fTkin = fTargetZ = fMom2 = DBL_MIN;
 
   feCut = feTag = DBL_MAX;
 
-  fParticle = 0;
+  fParticle  = 0;
   fnElements = 5;
 
   fXsc.resize(fnElements);
@@ -113,9 +113,9 @@ G4WeMoSoftMscModel::G4WeMoSoftMscModel(const G4String& nam) :
 
     for( G4int j = 1; j < 100; j++ ) 
     {
-      G4double x       = a0*fNistManager->GetZ13(j);
+      G4double x        = a0*fNistManager->GetZ13(j);
       fScreenRSquare[j] = fAlpha2*x*x;
-      x                = fNistManager->GetA27(j); 
+      x                 = fNistManager->GetA27(j); 
       fFormFactor[j]    = constn*x*x;
     } 
   }
@@ -189,7 +189,7 @@ G4double G4WeMoSoftMscModel::ComputeTransportXSectionPerAtom()
   // scattering off electrons
   if( fCosTetMaxElec2 < 1.0 ) 
   {
-    x = (1.0 - fCosTetMaxElec2)/fScreenZ;
+    x = ( 1.0 - fCosTetMaxElec2 )/fScreenZ;
 
     if( x < fNumLimit ) y = 0.5*x*x*(1.0 - 1.3333333*x + 1.5*x*x); 
     else               y = log(1.0 + x) - x/(1.0 + x);
@@ -379,7 +379,7 @@ G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
     //	 << " fLambda1= " << fLambda1 << " tau= " << tau << G4endl; 
     // small step
 
-    if(tau < fNumLimit) 
+    if( tau < fNumLimit ) 
     {
       fGeomPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2009-10-24 14:10:08 grichine Exp $
+// $Id: HistoManager.cc,v 1.4 2009-10-25 16:46:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///////////////////////////////////////////////////////////////////////////////////////..
@@ -374,17 +374,23 @@ void HistoManager::saveAscii()
 
 void HistoManager::WriteFiles()
 {
-  G4int i, iMax, j, jMax;
+  G4int i, iMax, j, jMax, ;
   G4double angleMax = 3*fThetaZero, tmp = 0.;
 
-  G4double angle[100], weight[100];
+  angleMax = 30*degree;
+
+  G4double solidAngle = 1., angle[100], weight[100];
   jMax = 100;
 
-  std::ofstream wFile("theta.sim", std::ios::out);
-  wFile.setf( std::ios::scientific, std::ios::floatfield );
+  std::ofstream thetaFile("theta.sim", std::ios::out);
+  thetaFile.setf( std::ios::scientific, std::ios::floatfield );
+
+  std::ofstream dNdOFile("dNdO.sim", std::ios::out);
+  dNdOFile.setf( std::ios::scientific, std::ios::floatfield );
 
   G4cout<<G4endl;
-  G4cout<<"angleMax = 3*theta0 = "<<angleMax/degree<<" degree "<<G4endl;  
+  // G4cout<<"angleMax = 3*theta0 = "<<angleMax/degree<<" degree "<<G4endl;  
+  G4cout<<"angleMax = "<<angleMax/degree<<" degree "<<G4endl;  
   G4cout<<G4endl;
 
   for(j = 0; j < jMax; j++) 
@@ -392,13 +398,7 @@ void HistoManager::WriteFiles()
     weight[j] = 0.;
     angle[j] = angleMax*j/jMax;
   }
-
-
-
-
   iMax = fVectorTheta.size();
-
-
 
   for(i = 0; i < iMax; i++) 
   {
@@ -407,19 +407,62 @@ void HistoManager::WriteFiles()
       if( fVectorTheta[i] <= angle[j] )
       {
         weight[j] += 1.;
+        tmp += 1.;  
         break;
       }
     } 
   }
-  wFile<<jMax<<G4endl;
+  // tmp *= degree*degree;
+
+  thetaFile<<jMax<<G4endl;
   for(j = 0; j < jMax; j++) 
   { 
-    tmp += weight[j];  
-    G4cout<<angle[j]/degree<<"\t"<<weight[j]<<G4endl;
-    wFile<<angle[j]/degree<<"\t"<<weight[j]<<G4endl;
+    // solidAngle = std::sin((j+0.5)*angleMax/jMax)*twopi;    
+    G4cout<<angle[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
+    thetaFile<<angle[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
   }
   G4cout<<G4endl;
-  G4cout<<"weight sum/vector size =  "<<tmp/iMax<<G4endl;  
+  // G4cout<<"weight sum/vector size =  "<<tmp/iMax<<G4endl;  
+  G4cout<<"tmp = "<<tmp<<"; iMax  = "<<iMax<<"; tmp/iMax =  "<<tmp/iMax<<G4endl;  
+  G4cout<<G4endl;
+
+  // dNdO destrinution
+
+  for(j = 0; j < jMax; j++) 
+  { 
+    weight[j] = 0.;
+    angle[j] = angleMax*j/jMax;
+  }
+  iMax = fVectordNdOmegaX.size();
+
+  tmp = 0.;
+
+  for(i = 0; i < iMax; i++) 
+  {
+    for( j = 0; j < jMax; j++) 
+    {
+      if( fVectordNdOmegaX[i] <= angle[j] )
+      {
+        // weight[j] += fVectordNdOmegaY[i];
+        weight[j] += 1.;
+        tmp += 1.;
+        // tmp += weight[j];  
+        break;
+      }
+    } 
+  }
+  dNdOFile<<jMax<<G4endl;
+
+  tmp = iMax;
+
+  for(j = 0; j < jMax; j++) 
+  { 
+    // tmp += weight[j];  
+    // G4cout<<angle[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
+    dNdOFile<<angle[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
+  }
+  G4cout<<G4endl;
+  G4cout<<"tmp = "<<tmp<<"; iMax  = "<<iMax<<"; tmp/iMax =  "<<tmp/iMax<<G4endl;  
   G4cout<<G4endl;
 
 
