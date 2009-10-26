@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.10.2009 - L. Pandola, tag cosmicray_charging-V09-02-00
+	     Revised AIDA output. Meant to be correct version 
+	     before migration from LowEnergy processes to new 
+	     Livermore models.
+
 15.06.2008 -- G.A.P.Cirrone; Tag: cosmicray_charging-V09-01-00
               Removed no more necessary AIDA commands from GNUmakefile
 
