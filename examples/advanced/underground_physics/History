@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.19 2009-10-22 13:29:24 pandola Exp $
+$Id: History,v 1.20 2009-10-26 10:31:03 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.19 2009-10-22 13:29:24 pandola Exp $
 
                       Category History file
                       ---------------------
+
+26.10.2009 - L. Pandola (DMX-V09-02-02)
+	     Physics list migrated from LowEnergy processes to the new Livermore 
+	     models. Physics results unchanged for gamma/e-. Possible differences 
+             with ions/protons, since we don't use anymore G4hLowEnergyIonisation
 
 22.10.2009 - L. Pandola (DMX-V09-02-01)
 	     Correct Analysis manager to solve a problem with the HBOOK output files
