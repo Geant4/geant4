@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.10.2009 - L. Pandola, tag cosmicray_charging-V09-02-01
+	     Physics list migrated from LowEnergy processes to 
+             newly migrated Livermore models
+
 26.10.2009 - L. Pandola, tag cosmicray_charging-V09-02-00
 	     Revised AIDA output. Meant to be correct version 
 	     before migration from LowEnergy processes to new 
