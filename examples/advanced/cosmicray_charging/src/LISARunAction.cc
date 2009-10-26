@@ -121,14 +121,12 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
 
     // form filename (eg run00_7324329387_3284798343.out)
     os << "run" << std::setw(2) << std::setfill('0') << run_id
-       << "_" << seeds[0] << "_" << seeds[1] << std::ends;
+       << "_" << seeds[0] << "_" << seeds[1]; 
   }
   else {
     // default filename, seeds set by /random/reset
-    os << "charge" << std::ends;
+    os << "charge"; 
   }
-  //  G4cout << "Filename: " << G4String(os.str()) << G4endl;
-
 
   // send filename to eventAction
   LISAEventAction* eventAction = (LISAEventAction*)
@@ -137,9 +135,10 @@ void LISARunAction::BeginOfRunAction(const G4Run* aRun) {
 
 
 #ifdef G4ANALYSIS_USE
+  G4String fName = ((G4String) os.str()) + ".hbook";
   // Book histograms and ntuples
   LISAAnalysisManager* analysis = LISAAnalysisManager::getInstance();
-  analysis->bookRun( G4String(os.str())+G4String(".hbook") );
+  analysis->bookRun(fName);
 #endif
 
 

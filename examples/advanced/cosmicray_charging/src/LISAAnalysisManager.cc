@@ -119,11 +119,11 @@ void LISAAnalysisManager::bookRun(G4String hbookfile) {
 
 
   // create RunTree
-  G4bool fileExists = false;
+  G4bool fileExists = true;
   G4bool readOnly   = false;
   run_tree = tf->create(hbookfile, "hbook", readOnly, fileExists);
-  G4cout << " LISAAnalysis -- tree store: " << run_tree->storeName()<<G4endl;
-
+  G4cout << " LISAAnalysis -- tree store: " << run_tree->storeName() << G4endl;
+ 
   // create TupleFactory
   run_tpf = af->createTupleFactory(*run_tree );
   G4cout << " LISAAnalysis -- created NTuple factory" << G4endl;
@@ -131,7 +131,7 @@ void LISAAnalysisManager::bookRun(G4String hbookfile) {
   // Run Information
   run_tuple = run_tpf->create( "1", "Run Tuple", 
               "float evt,tm,energy,charge,in,out,seed1,seed2");
-  assert(run_tuple);
+  //assert(run_tuple);
   G4cout << " LISAAnalysis -- created Run NTuple" << G4endl;
   
 
