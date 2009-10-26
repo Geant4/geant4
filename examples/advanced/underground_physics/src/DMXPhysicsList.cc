@@ -290,7 +290,7 @@ void DMXPhysicsList::ConstructEM() {
       {
 	//gamma
 	G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-	theRayleigh->SetModel(new G4LivermoreRayleighModel());
+	theRayleigh->SetModel(new G4LivermoreRayleighModel());  //not strictly necessary
 	pmanager->AddDiscreteProcess(theRayleigh);
 
 	G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
@@ -313,13 +313,13 @@ void DMXPhysicsList::ConstructEM() {
 	// Multiple scattering
 	G4eMultipleScattering* msc = new G4eMultipleScattering();
 	msc->SetStepLimitType(fUseDistanceToBoundary);
-	pmanager->AddProcess(msc,                   -1, 1, 1);
+	pmanager->AddProcess(msc,-1, 1, 1);
 
 	// Ionisation
 	G4eIonisation* eIonisation = new G4eIonisation();
 	eIonisation->SetEmModel(new G4LivermoreIonisationModel());
-	eIonisation->SetStepFunction(0.2, 100*um); //     
-	pmanager->AddProcess(eIonisation,                 -1, 2, 2);
+	eIonisation->SetStepFunction(0.2, 100*um); //improved precision in tracking  
+	pmanager->AddProcess(eIonisation,-1, 2, 2);
 	
 	// Bremsstrahlung
 	G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
@@ -331,16 +331,17 @@ void DMXPhysicsList::ConstructEM() {
 	//positron	
 	G4eMultipleScattering* msc = new G4eMultipleScattering();
 	msc->SetStepLimitType(fUseDistanceToBoundary);
-	pmanager->AddProcess(msc,                   -1, 1, 1);
+	pmanager->AddProcess(msc,-1, 1, 1);
 	
 	// Ionisation
 	G4eIonisation* eIonisation = new G4eIonisation();
 	eIonisation->SetStepFunction(0.2, 100*um); //     
 	pmanager->AddProcess(eIonisation,                 -1, 2, 2);
 
-	pmanager->AddProcess(msc,     -1, 1, 1);
-	pmanager->AddProcess(eIonisation,     -1, 2, 2);
+	//Bremsstrahlung (use default, no low-energy available)
 	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
+
+	//Annihilation
 	pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 4);      
       } 
     else if( particleName == "mu+" || 
@@ -358,12 +359,15 @@ void DMXPhysicsList::ConstructEM() {
 	     particleName == "pi+" || 
 	     particleName == "pi-")
       {
+	//multiple scattering
 	pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       
+	//ionisation
 	G4hIonisation* hIonisation = new G4hIonisation();
 	hIonisation->SetStepFunction(0.2, 50*um);
-
 	pmanager->AddProcess(hIonisation,                     -1, 2, 2);      
+	
+	//bremmstrahlung
 	pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       }
     else if(particleName == "alpha"      ||
@@ -371,7 +375,10 @@ void DMXPhysicsList::ConstructEM() {
 	     particleName == "triton"     ||
 	     particleName == "He3")
       {
+	//multiple scattering
 	pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
+	
+	//ionisation
 	G4ionIonisation* ionIoni = new G4ionIonisation();
 	ionIoni->SetStepFunction(0.1, 20*um);
 	pmanager->AddProcess(ionIoni,                   -1, 2, 2);
@@ -381,8 +388,11 @@ void DMXPhysicsList::ConstructEM() {
 	// OBJECT may be dynamically created as either a GenericIon or nucleus
 	// G4Nucleus exists and therefore has particle type nucleus
 	// genericIon:
+	
+	//multiple scattering
 	pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
 
+	//ionisation
 	G4ionIonisation* ionIoni = new G4ionIonisation();
 	ionIoni->SetEmModel(new G4IonParametrisedLossModel());
 	ionIoni->SetStepFunction(0.1, 20*um);
@@ -396,7 +406,11 @@ void DMXPhysicsList::ConstructEM() {
 	//all others charged particles except geantino
         G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
         G4hIonisation* ahadronIon = new G4hIonisation();
+	
+	//multiple scattering
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
+
+	//ionisation
 	pmanager->AddProcess(ahadronIon,       -1,2,2);      
       }
     
