@@ -101,6 +101,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 
     char * data = new char[DATABUFFSIZE];
 
+ 
     // Read information up to the pixel data
     while(true) {
 
@@ -117,16 +118,17 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	// Creating a tag to be identified afterward
 	G4int tagDictionary = readGroupId*0x10000 + readElementId;
 
-
-	// VR or element length
+      // VR or element length
 	std::fread(buffer,2,1,dicom);
 	GetValue(buffer, elementLength2);
-
-	// If value representation (VR) is OB, OW, SQ, UN, 
+	  
+ 	// If value representation (VR) is OB, OW, SQ, UN, added OF and UT 
 	//the next length is 32 bits
 	if((elementLength2 == 0x424f ||  // "OB"
 	    elementLength2 == 0x574f ||  // "OW"
-	    elementLength2 == 0x5153 ||  // "SQ"
+	    elementLength2 == 0x464f ||  // "OF"
+	    elementLength2 == 0x5455 ||  // "UT"
+	    elementLength2 == 0x5153 || //  "SQ"
 	    elementLength2 == 0x4e55) && // "UN"
 	   !implicitEndian ) {           // explicit VR
 
@@ -138,33 +140,67 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 
 	    // beginning of the pixels
 	    if(tagDictionary == 0x7FE00010) break;
-
+	    
+	    if(elementLength4 == 0xFFFFFFFF) G4cerr << "Too difficult for me!" << G4endl; // VR = SQ with undefined length
+	    
 	    // Reading the information with data
 	    std::fread(data, elementLength4,1,dicom);
 
+		
+	}  else { 
 
-	} else { // length is 16 bits :
+		if(!implicitEndian || readGroupId == 2) {  //  explicit with VR different than previous ones
+	    	
+		  //G4cout << "Reading  DICOM files with Explicit VR"<< G4endl;
+		  // element length (2 bytes)
+		  std::fread(buffer, 2, 1, dicom);
+		  GetValue(buffer, elementLength2);
+		  elementLength4 = elementLength2;
+		  
+		  if(tagDictionary == 0x7FE00010) break; // beginning of the pixels
+	          
+		  std::fread(data, elementLength4, 1, dicom);
+	        
+		} else { 				 // Implicit VR
 
-	    if(!implicitEndian || readGroupId == 2) {
-		// element length (2 bytes)
-		std::fread(buffer, 2, 1, dicom);
-		GetValue(buffer, elementLength2);
-		elementLength4 = elementLength2;
+                  //G4cout << "Reading  DICOM files with Implicit VR"<< G4endl;
+   
+		  // element length (4 bytes)
+		  if(std::fseek(dicom, -2, SEEK_CUR) != 0) {
+		      G4cerr << "[DicomHandler] fseek failed" << G4endl;
+		      exit(-10);}
 
-	    } else { 
-		// element length (4 bytes)
-		if(std::fseek(dicom, -2, SEEK_CUR) != 0) {
-		    G4cerr << "[DicomHandler] fseek failed" << G4endl;
-		    exit(-10);
-		}
-		std::fread(buffer, 4, 1, dicom);
-		GetValue(buffer, elementLength4);
-	    }
+		  std::fread(buffer, 4, 1, dicom);
+		  GetValue(buffer, elementLength4);
 
-	    // beginning of the pixels
-	    if(tagDictionary == 0x7FE00010) break;
-
-	    std::fread(data, elementLength4, 1, dicom);
+	          //G4cout <<  std::hex<< elementLength4 << G4endl;
+	      
+	          if(elementLength4 == 0xFFFFFFFF) {
+	          short momreadGroupId;
+		  short momreadElementId;
+		  G4int momelementLength4 ; // deal with element length in 4 bytes
+      		  G4cout << "Trying to read nested items!" << G4endl; // VR = SQ with undefined length
+		  while(true){
+			std::fread(buffer, 2, 1, dicom);
+			GetValue(buffer, momreadGroupId);
+			std::fread(buffer, 2, 1, dicom);
+			GetValue(buffer, momreadElementId);
+			G4int momtagDictionary = momreadGroupId*0x10000 + momreadElementId;
+			//G4cout << "TAG"<< std::hex << momtagDictionary << G4endl;
+			std::fread(buffer, 4, 1, dicom);
+			GetValue(buffer, momelementLength4);
+			//G4cout << "Length"<< std::hex << momelementLength4 << G4endl;
+			if(momelementLength4 == 0x00000000 || momelementLength4 == 0xFFFFFFFF ) break;
+                	std::fread(buffer, momelementLength4, 1, dicom);
+			}
+		  } else {
+	          if(tagDictionary == 0x7FE00010) break; // beginning of the pixels
+	          
+		  std::fread(data, elementLength4, 1, dicom);
+	        
+		 } 
+		      
+	       } 
 	}
 
 	// NULL termination
