@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2009-10-25 16:46:22 grichine Exp $
+// $Id: HistoManager.cc,v 1.5 2009-10-27 16:24:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///////////////////////////////////////////////////////////////////////////////////////..
@@ -67,7 +67,7 @@ fThetaZero(0.)
 
   // histograms
 
-  for (G4int k=0; k<MaxHisto; k++) 
+  for ( G4int k = 0; k < MaxHisto; k++ ) 
   {
     histo[k] = 0;
     exist[k] = false;
@@ -177,7 +177,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
   else if( ih == 12 )
   {
     fNdNdOmega += 1;
-    fVectordNdOmegaX.push_back(e/Unit[ih]);  // vmg, check units
+    fVectordNdOmegaX.push_back(e);  // vmg, check units
     fVectordNdOmegaY.push_back(weight);
   }
   else if( ih == 13 )
@@ -185,12 +185,12 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
     fNTheta += 1;
     fVectorTheta.push_back(e/Unit[ih]);  // vmg, check units 
   }
-  else if( ih == 13 )
+  else if( ih == 14 )
   {
     fNTransverseCoordinates += 1;
     fVectorTransverseCoordinates.push_back(e/Unit[ih]);  // vmg, check units 
   }
-  else if( ih == 14 )
+  else if( ih == 15 )
   {
     fNTransverseRadius += 1;
     fVectorTransverseRadius.push_back(e/Unit[ih]);  // vmg, check units 
@@ -375,12 +375,12 @@ void HistoManager::saveAscii()
 void HistoManager::WriteFiles()
 {
   G4int i, iMax, j, jMax, ;
-  G4double angleMax = 3*fThetaZero, tmp = 0.;
+  G4double angleMax = 3*fThetaZero, tmp = 0., angleUnit, dTheta;
 
   angleMax = 30*degree;
 
-  G4double solidAngle = 1., angle[100], weight[100];
-  jMax = 100;
+  G4double solidAngle = 1., angle[200], angleBin[200], weight[200];
+  jMax = 50;
 
   std::ofstream thetaFile("theta.sim", std::ios::out);
   thetaFile.setf( std::ios::scientific, std::ios::floatfield );
@@ -396,7 +396,8 @@ void HistoManager::WriteFiles()
   for(j = 0; j < jMax; j++) 
   { 
     weight[j] = 0.;
-    angle[j] = angleMax*j/jMax;
+    angle[j]  = angleMax*(j+0.5)/jMax;
+    angleBin[j]  = angleMax*(j+1.)/jMax;
   }
   iMax = fVectorTheta.size();
 
@@ -404,7 +405,7 @@ void HistoManager::WriteFiles()
   {
     for( j = 0; j < jMax; j++) 
     {
-      if( fVectorTheta[i] <= angle[j] )
+      if( fVectorTheta[i] <= angleBin[j] )
       {
         weight[j] += 1.;
         tmp += 1.;  
@@ -418,50 +419,63 @@ void HistoManager::WriteFiles()
   for(j = 0; j < jMax; j++) 
   { 
     // solidAngle = std::sin((j+0.5)*angleMax/jMax)*twopi;    
-    G4cout<<angle[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
-    thetaFile<<angle[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
+    // G4cout<<angleBin[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
+    thetaFile<<angleBin[j]/degree<<"\t"<<weight[j]/tmp/solidAngle<<G4endl;
   }
   G4cout<<G4endl;
   // G4cout<<"weight sum/vector size =  "<<tmp/iMax<<G4endl;  
   G4cout<<"tmp = "<<tmp<<"; iMax  = "<<iMax<<"; tmp/iMax =  "<<tmp/iMax<<G4endl;  
   G4cout<<G4endl;
 
-  // dNdO destrinution
 
-  for(j = 0; j < jMax; j++) 
+  // dNdO destrinution, hanson.mac, histo id = 12
+
+
+  for( j = 0; j < jMax; j++ ) 
   { 
-    weight[j] = 0.;
-    angle[j] = angleMax*j/jMax;
+    weight[j]    = 0.;
+    angle[j]     = angleMax*(j + 0.5)/jMax;
+    angleBin[j]  = angleMax*(j+1.)/jMax;
   }
-  iMax = fVectordNdOmegaX.size();
+  iMax      = fVectordNdOmegaX.size();
+  angleUnit = GetHistoUnit(12);
+  dTheta    = angleMax/jMax;
+  tmp       = 0.;
 
-  tmp = 0.;
-
-  for(i = 0; i < iMax; i++) 
+  for( i = 0; i < iMax; i++ ) 
   {
-    for( j = 0; j < jMax; j++) 
+    for( j = 0; j < jMax; j++ ) 
     {
-      if( fVectordNdOmegaX[i] <= angle[j] )
+      if( fVectordNdOmegaX[i] <= angleBin[j] )
       {
         // weight[j] += fVectordNdOmegaY[i];
-        weight[j] += 1.;
+
+        weight[j] += angleUnit*angleUnit/(twopi*std::sin(angle[j])*dTheta);
+        // weight[j] += 1.;
+
         tmp += 1.;
-        // tmp += weight[j];  
+
+        // tmp += weight[j]; 
+ 
         break;
       }
     } 
   }
   dNdOFile<<jMax<<G4endl;
 
-  tmp = iMax;
+  // tmp = iMax;
 
-  for(j = 0; j < jMax; j++) 
+  for( j = 0; j < jMax; j++ ) 
   { 
     // tmp += weight[j];  
-    // G4cout<<angle[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
-    dNdOFile<<angle[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
+    //G4cout<<angle[j]/degree<<"\t"<<weight[j]/tmp/(twopi*std::sin(angle[j])*dTheta)<<G4endl;
+    //dNdOFile<<angle[j]/degree<<"\t"<<weight[j]/tmp/(twopi*std::sin(angle[j])*dTheta)<<G4endl;
+
+    G4cout<<angleBin[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
+    dNdOFile<<angleBin[j]/degree<<"\t"<<weight[j]/tmp<<G4endl;
   }
   G4cout<<G4endl;
+  G4cout<<"angleUnit = "<<angleUnit/degree<<" degree"<<G4endl;  
   G4cout<<"tmp = "<<tmp<<"; iMax  = "<<iMax<<"; tmp/iMax =  "<<tmp/iMax<<G4endl;  
   G4cout<<G4endl;
 

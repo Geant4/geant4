@@ -23,25 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysicsLYmsc.cc,v 1.2 2009-10-21 14:02:55 grichine Exp $
+// $Id: G4EmStandardPhysicsLYmsc.cc,v 1.3 2009-10-27 16:24:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4EmStandardPhysicsLYmsc
 //
-// Author:      V.Ivanchenko 09.11.2005
+// Author:    V.Grichine based on Em_opt2 builder of  V.Ivanchenko 
 //
 // Modified:
-// 19.12.2005 V.Ivanchenko rename 71 -> 72
-// 15.06.2006 V.Ivanchenko use this class as a constructor of fast EM physics
-// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
-// 14.11.2006 V.Ivanchenko use sub-cutoff option for all particles
-// 13.02.2007 V.Ivanchenko use default msc 
-// 15.05.2007 V.Ivanchenko rename to LYmsc 
-// 13.03.2008 V.Ivanchenko use G4eMultipleScattering
-// 21.04.2008 V.Ivanchenko add long-lived D and B mesons; use spline
-// 28.05.2008 V.Ivanchenko linLossLimit=0.01; added hBrem and hPairProd processes
+// 19.12.2009 V.Grichine LY msc model was substituted
 //
 //----------------------------------------------------------------------------
 //
@@ -100,6 +92,7 @@ G4EmStandardPhysicsLYmsc::G4EmStandardPhysicsLYmsc(
   : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
+  G4cout<<"G4EmStandardPhysicsLYmsc::G4EmStandardPhysicsLYmsc"<<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,65 +136,70 @@ void G4EmStandardPhysicsLYmsc::ConstructParticle()
 void G4EmStandardPhysicsLYmsc::ConstructProcess()
 {
   // Add standard EM Processes
+  G4cout<<"G4EmStandardPhysicsLYmsc::ConstructProcess()"<<G4endl;
 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+
     if(verbose > 1)
+    {
       G4cout << "### " << GetPhysicsName() << " instantiates for " 
 	     << particleName << G4endl;
-
-    if (particleName == "gamma") {
-
+    }
+    if (particleName == "gamma") 
+    {
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-
-    } else if (particleName == "e-") {
-
+    } 
+    else if (particleName == "e-") 
+    {
       pmanager->AddProcess(new G4LYMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
-
-    } else if (particleName == "e+") {
-
+    } 
+    else if (particleName == "e+") 
+    {
       pmanager->AddProcess(new G4LYMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
-
-    } else if (particleName == "mu+" ||
-               particleName == "mu-"    ) {
-
+    } 
+    else if (particleName == "mu+" ||
+             particleName == "mu-"    ) 
+    {
       pmanager->AddProcess(new G4LYMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
-
-    } else if (particleName == "alpha" ||
-               particleName == "He3" ||
-               particleName == "GenericIon") {
-
+    } 
+    else if (particleName == "alpha" ||
+             particleName == "He3" ||
+             particleName == "GenericIon"   ) 
+    {
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
-
-    } else if (particleName == "pi+" ||
-               particleName == "pi-" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
-               particleName == "proton" ) {
-
+    } 
+    else if (particleName == "pi+" ||
+             particleName == "pi-" ||
+	     particleName == "kaon+" ||
+             particleName == "kaon-" ||
+             particleName == "proton"    ) 
+    {
       pmanager->AddProcess(new G4LYMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
-
-    } else if (particleName == "B+" ||
+    } 
+    else if (  particleName == "B+" ||
 	       particleName == "B-" ||
 	       particleName == "D+" ||
 	       particleName == "D-" ||
@@ -227,8 +225,8 @@ void G4EmStandardPhysicsLYmsc::ConstructProcess()
                particleName == "tau-" ||
                particleName == "triton" ||
                particleName == "xi_c+" ||
-               particleName == "xi-" ) {
-
+               particleName == "xi-"       ) 
+    {
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }

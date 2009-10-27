@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.5 2009-10-25 16:46:22 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.6 2009-10-27 16:24:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,9 @@
 #ifndef G4WeMoSoftMscModel_h
 #define G4WeMoSoftMscModel_h 1
 
-//////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//
+//
 
 #include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
@@ -66,7 +68,9 @@ class G4LossTableManager;
 class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
 
-///////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+//
+//
 
 class G4WeMoSoftMscModel : public G4VMscModel
 {
@@ -207,7 +211,9 @@ private:
   G4bool   fInside;
 };
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 
 inline
@@ -221,7 +227,9 @@ void G4WeMoSoftMscModel::DefineMaterial(const G4MaterialCutsCouple* cup)
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//
+//
 
 inline
 G4double G4WeMoSoftMscModel::GetLambda(G4double e)
@@ -243,7 +251,9 @@ G4double G4WeMoSoftMscModel::GetLambda(G4double e)
   return x;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//
+//
 
 inline void G4WeMoSoftMscModel::SetupParticle(const G4ParticleDefinition* p)
 {
@@ -254,13 +264,15 @@ inline void G4WeMoSoftMscModel::SetupParticle(const G4ParticleDefinition* p)
     fParticle     = p;
     fMass         = fParticle->GetPDGMass();
     fSpin         = fParticle->GetPDGSpin();
-    G4double q   = fParticle->GetPDGCharge()/eplus;
+    G4double q    = fParticle->GetPDGCharge()/eplus;
     fChargeSquare = q*q;
     fTkin         = 0.0;
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//
+//
 
 inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
 {
@@ -285,7 +297,9 @@ inline void G4WeMoSoftMscModel::SetupKinematic(G4double ekin, G4double cut)
   } 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//
+//
   
 inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
 {
@@ -313,7 +327,7 @@ inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
       fKinFactor /= (x*x);
     }
     */
-    if( fiz > 1 ) fScreenZ *=(1.13 + 3.76*Z*Z*fAlpha2);
+    if( fiz > 1 ) fScreenZ *= (1.13 + 3.76*fChargeSquare*Z*Z*fAlpha2*fInvBeta2);
 
     //if(iz > 1) fScreenZ *=(1.13 + std::min(0.5,3.76*Z*Z*fInvBeta2*fAlpha2));
 

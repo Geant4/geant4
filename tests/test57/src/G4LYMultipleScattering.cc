@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LYMultipleScattering.cc,v 1.1 2009-10-21 13:55:01 grichine Exp $
+// $Id: G4LYMultipleScattering.cc,v 1.2 2009-10-27 16:24:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -78,8 +78,12 @@ G4bool G4LYMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4LYMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
-  if(isInitialized) return;
-  AddEmModel(1, new G4WeMoSoftMscModel());
+  if( isInitialized ) return;
+
+  G4cout<<"G4LYMultipleScattering::InitialiseProcess"<<G4endl;
+
+  AddEmModel(1, new G4WeMoSoftMscModel() );
+
   isInitialized = true;
 }
 

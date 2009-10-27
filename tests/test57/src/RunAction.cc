@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2009-10-24 14:10:08 grichine Exp $
+// $Id: RunAction.cc,v 1.4 2009-10-27 16:24:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -270,14 +270,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4double binWidth = histoManager->GetBinWidth(ih);
   G4double unit     = histoManager->GetHistoUnit(ih);  
-  G4double fac = unit/(TotNbofEvents*binWidth);
+  G4double fac      = unit/(TotNbofEvents*binWidth);
   histoManager->Scale(ih,fac);
     
   ih = 10;
 
   binWidth = histoManager->GetBinWidth(ih);
   unit     = histoManager->GetHistoUnit(ih);  
-  fac = unit/(TotNbofEvents*binWidth);
+  fac      = unit/(TotNbofEvents*binWidth);
   histoManager->Scale(ih,fac);
     
   // save histograms
