@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.33 2009-10-20 15:31:00 gbarrand Exp $
+// $Id: HepPolyhedron.cc,v 1.34 2009-10-28 13:36:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2254,7 +2254,6 @@ int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
  ***********************************************************************/
 
 #include "BooleanProcessor.src"
-static BooleanProcessor processor;
 
 HepPolyhedron HepPolyhedron::add(const HepPolyhedron & p) const 
 /***********************************************************************
@@ -2267,6 +2266,7 @@ HepPolyhedron HepPolyhedron::add(const HepPolyhedron & p) const
  ***********************************************************************/
 {
   int ierr;
+  BooleanProcessor processor;
   return processor.execute(OP_UNION, *this, p,ierr);
 }
 
@@ -2281,6 +2281,7 @@ HepPolyhedron HepPolyhedron::intersect(const HepPolyhedron & p) const
  ***********************************************************************/
 {
   int ierr;
+  BooleanProcessor processor;
   return processor.execute(OP_INTERSECTION, *this, p,ierr);
 }
 
@@ -2295,11 +2296,8 @@ HepPolyhedron HepPolyhedron::subtract(const HepPolyhedron & p) const
  ***********************************************************************/
 {
   int ierr;
+  BooleanProcessor processor;
   return processor.execute(OP_SUBTRACTION, *this, p,ierr);
-}
-
-bool HepPolyhedron::IsErrorBooleanProcess() const {
-  return processor.get_processor_error();
 }
 
 //NOTE : include the code of HepPolyhedronProcessor here
