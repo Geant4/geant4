@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.cc,v 1.4 2009-10-27 16:24:32 grichine Exp $
+// $Id: G4WeMoSoftMscModel.cc,v 1.5 2009-10-28 16:18:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,7 +155,7 @@ void G4WeMoSoftMscModel::Initialise(const G4ParticleDefinition* p,
 
   if(!fInitialized) 
   {
-    fInitialized   = true;
+    fInitialized    = true;
     fParticleChange = GetParticleChangeForMSC();
     InitialiseSafetyHelper();
   }
@@ -202,7 +202,7 @@ G4double G4WeMoSoftMscModel::ComputeTransportXSectionPerAtom()
   {
     // x = ( 1.0 - fCosTetMaxElec2 )/fScreenZ;
 
-    x = 2.*( 1.0 - fCosTetMaxElec2 )/fScreenZ;
+    x = 2.*( 1.0 - fCosTetMaxElec2 )/fScreenZ;   // mu_s/A_m
 
     if( x < fNumLimit ) y = 0.5*x*x*(1.0 - 1.3333333*x + 1.5*x*x); 
     else                y = log(1.0 + x) - x/(1.0 + x);
@@ -382,13 +382,19 @@ G4double G4WeMoSoftMscModel::ComputeTruePathLengthLimit(
 
 G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
 {
+  G4double tau, x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
+
   fTruePathLength  = truelength;
   fGeomPathLength  = fTruePathLength;
   fLambdaEff    = fLambda1;
 
-  if(fLambda1 > 0.0) 
+  x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
+  if( x > 10.) x = 10.*G4UniformRand();
+
+
+  if( fLambda1 > 0.0 ) 
   {
-    G4double tau = fTruePathLength/fLambda1;
+    tau = fTruePathLength/fLambda1;
 
     //G4cout << "ComputeGeomPathLength: tLength= " << fTruePathLength
     //	 << " fLambda1= " << fLambda1 << " tau= " << tau << G4endl; 
@@ -396,7 +402,9 @@ G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
 
     if( tau < fNumLimit ) 
     {
-      fGeomPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
+      // fGeomPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
+
+      fGeomPathLength = fTruePathLength*( 1. - 0.25*tau*x );
 
       // medium step
     } 
@@ -413,20 +421,19 @@ G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
 				    fCurrentCouple              );
       }
       fLambdaEff      = GetLambda( 0.5*(e1 + fPreKinEnergy) );
-      // fGeomPathLength = fLambdaEff*( 1.0 - exp(-fTruePathLength/fLambdaEff) );
+      tau = fTruePathLength/fLambdaEff;
+      // fGeomPathLength = fLambdaEff*( 1.0 - exp(-tau) );
 
-
-
-
-
-
-
-
-
+      fGeomPathLength = fTruePathLength*( 1. - 0.25*x*tau );
     }
   }
   //G4cout<<"Comp.geom: zLength= "<<fGeomPathLength<<" tLength= "<<fTruePathLength<<G4endl;
 
+  if( fGeomPathLength < 0. ) 
+  {
+    // G4cout<<"z = "<<fGeomPathLength<<" t = "<<fTruePathLength<<" tau = "<<tau<<G4endl;
+    fGeomPathLength = 0.;
+  }
   return fGeomPathLength;
 }
 
@@ -440,12 +447,20 @@ G4double G4WeMoSoftMscModel::ComputeTrueStepLength(G4double geomStepLength)
 
   if(geomStepLength == fGeomPathLength) return fTruePathLength;
 
+
+  G4double x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
+
+  x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
+  if( x > 10.) x = 10.*G4UniformRand();
+
+
   // step defined by transportation 
 
   fTruePathLength  = geomStepLength;
   fGeomPathLength  = geomStepLength;
   G4double tau     = fGeomPathLength/fLambdaEff;
-  fTruePathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
+  // fTruePathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
+  fTruePathLength = fGeomPathLength*( 1. + 0.25*tau*x );
 
   if( tau > fNumLimit ) 
   {
