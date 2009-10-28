@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.36 2009-10-10 15:16:57 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.37 2009-10-28 10:14:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -157,9 +157,9 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 			     G4double cutEnergy, G4double)
 {
   SetupParticle(p);
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
-  SetupKinematic(ekin, cutEnergy);
-  SetupTarget(Z, ekin);
+  if(kinEnergy < lowEnergyLimit) return 0.0;
+  SetupKinematic(kinEnergy, cutEnergy);
+  SetupTarget(Z, kinEnergy);
   G4double xsec = ComputeTransportXSectionPerAtom();
   /*   
   G4cout << "CS: e= " << tkin << " cosEl= " << cosTetMaxElec2 
@@ -391,7 +391,9 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   //G4cout << "!##! G4WentzelVIModel::SampleScattering for " 
   //	 << particle->GetParticleName() << G4endl;
   G4double kinEnergy = dynParticle->GetKineticEnergy();
-  if(kinEnergy <= DBL_MIN || tPathLength <= DBL_MIN) return;
+
+  // ignore scattering for zero step length and enegy below the limit
+  if(kinEnergy < lowEnergyLimit || tPathLength <= DBL_MIN) return;
 
   G4double ekin = preKinEnergy;
   if(ekin - kinEnergy > ekin*dtrl) {
@@ -422,7 +424,6 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     cosThetaMin = 1.0 - 3.0*x1;
 
     // for low-energy e-,e+ no limit
-    ekin = std::max(ekin, lowEnergyLimit);
     SetupKinematic(ekin, cut);
   
     // recompute transport cross section

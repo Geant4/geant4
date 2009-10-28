@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.77 2009-10-10 15:16:57 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.78 2009-10-28 10:14:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,10 +190,10 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   //  << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
   G4double xsec = 0.0;
   SetupParticle(p);
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
-  SetupKinematic(ekin, cutEnergy);
+  if(kinEnergy < lowEnergyLimit) return xsec;
+  SetupKinematic(kinEnergy, cutEnergy);
   if(cosTetMaxNuc < cosTetMinNuc) {
-    SetupTarget(Z, ekin);
+    SetupTarget(Z, kinEnergy);
     xsec = CrossSectionPerAtom();  
   }
   /*
@@ -265,19 +265,20 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy <= DBL_MIN) return;
+  if(kinEnergy < lowEnergyLimit) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
-  SetupKinematic(ekin, cutEnergy);
+
+  SetupKinematic(kinEnergy, cutEnergy);
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   //	 << kinEnergy << "  " << particle->GetParticleName() 
   //	 << " cut= " << cutEnergy<< G4endl;
  
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,ekin,cutEnergy,ekin);
+  currentElement = SelectRandomAtom(couple,particle,
+				    kinEnergy,cutEnergy,kinEnergy);
 
-  SetupTarget(currentElement->GetZ(),ekin);
+  SetupTarget(currentElement->GetZ(),kinEnergy);
 
   G4int ia = SelectIsotopeNumber(currentElement);
   targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
@@ -303,8 +304,13 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   // and first order correction to primary 4-momentum
   G4double q2   = 2*z1*mom2;
   G4double trec = q2/(sqrt(targetMass*targetMass + q2) + targetMass);
-  if(trec > kinEnergy) trec = kinEnergy; 
-  G4double finalT = kinEnergy - trec;
+  G4double finalT = kinEnergy - trec; 
+  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
+  if(finalT <= lowEnergyLimit) { 
+    trec = kinEnergy;  
+    finalT = 0.0;
+  } 
+
   fParticleChange->SetProposedKineticEnergy(finalT);
   G4double tcut = recoilThreshold;
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
@@ -339,14 +345,14 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
     formf = 0.0;
   }
 
-  /*
+  /*  
   G4cout << "SampleCost: e(MeV)= " << tkin 
-  	 << " ctmin= " << cosThetaMin
-  	 << " ctmaxN= " << cosTetMaxNuc
-  	 << " ctmax= " << costm
-  	 << " Z= " << targetZ << " A= " << targetA
+  	 << " 1-ctmaxN= " << 1. - cosTetMinNuc
+  	 << " 1-ctmax= " << 1. - costm
+  	 << " Z= " << targetZ 
   	 << G4endl;
   */
+
   if(costm >= cosTetMinNuc) return 2.0; 
 
   G4double x1 = 1. - cosTetMinNuc + screenZ;
@@ -363,8 +369,8 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
       return 2.0;
     }
   }
-  //G4cout << "z= " << z1 << " cross= " << nucXSection/barn 
-  // << " crossE= " << elecXSection/barn << G4endl;
+  //G4cout << "z1= " << z1 << " cross= " << nucXSection/barn 
+  //	 << " crossE= " << elecXSection/barn << G4endl;
 
   return 1.0 - z1;
 }

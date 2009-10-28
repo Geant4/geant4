@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.24 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.25 2009-10-28 10:14:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,6 +135,7 @@ G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					       const G4Material* mat,
 					       G4double kineticEnergy)
 {
+  //G4cout << "G4BraggIonModel::GetChargeSquareRatio e= " <<  kineticEnergy << G4endl;
   // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
   corrFactor  = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy); 
@@ -147,6 +148,7 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
+  //G4cout << "G4BraggIonModel::GetParticleCharge e= " <<  kineticEnergy << G4endl;
   // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
@@ -260,6 +262,8 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   G4double e = preKinEnergy - eloss*0.5;
   if(e < 0.0) e = preKinEnergy*0.5;
 
+  //G4cout << "G4BraggIonModel::CorrectionsAlongStep e= " <<  e << G4endl;
+
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
   GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
   eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
@@ -282,6 +286,7 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     */
     fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
   }
+  //G4cout << "G4BraggIonModel::CorrectionsAlongStep end" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.42 2009-10-04 18:05:38 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.43 2009-10-28 10:14:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,8 +86,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double)
 {
   SetupParticle(p);
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
-  SetupKinematic(ekin, cutEnergy);
+  if(kinEnergy < lowEnergyLimit) return 0.0;
+  SetupKinematic(kinEnergy, cutEnergy);
 
   // save lab system kinematics
   G4double xtkin = tkin;
@@ -133,14 +133,14 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy <= DBL_MIN) return;
+  if(kinEnergy < lowEnergyLimit) return;
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  G4double ekin = std::max(lowEnergyLimit, kinEnergy);
-  SetupKinematic(ekin, cutEnergy);
+  SetupKinematic(kinEnergy, cutEnergy);
 
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,ekin,ecut,tkin);
+  currentElement = SelectRandomAtom(couple,particle,
+				    kinEnergy,ecut,kinEnergy);
 
   G4double Z  = currentElement->GetZ();
   iz          = G4int(Z);
@@ -186,19 +186,19 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double elab = etot - m2*(ptot/Ecm)*(ptot/Ecm)*(1.-cost) ;
 
  
-  ekin = elab - mass;
-  if(ekin < 0.0) ekin = 0.0;
-  fParticleChange->SetProposedKineticEnergy(ekin);
+  G4double finalT = elab - mass;
+  if(finalT < 0.0) finalT = 0.0;
+  fParticleChange->SetProposedKineticEnergy(finalT);
 
   // recoil
-  G4double erec = kinEnergy - ekin;
+  G4double erec = kinEnergy - finalT;
 
   G4double tcut = recoilThreshold;
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); } 
 
   if(erec > tcut) {
     G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
-    G4double plab = sqrt(ekin*(ekin + 2.0*mass));
+    G4double plab = sqrt(finalT*(finalT + 2.0*mass));
     G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, erec);
     fvect->push_back(newdp);
