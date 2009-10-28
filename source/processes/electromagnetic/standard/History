@@ -1,4 +1,4 @@
-$Id: History,v 1.469 2009-10-10 15:16:57 vnivanch Exp $
+$Id: History,v 1.470 2009-10-28 10:15:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 October 09:  V.Ivant (emstand-V09-02-26)
+- G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel - added
+                       protection for very low energies
 
 10 October 09:  V.Ivant (emstand-V09-02-25)
 - G4WentzelVIModel and G4eCoulombScatteringModel - changed screening parameters
