@@ -29,6 +29,8 @@
   
 #include "HepPolyhedronProcessor.h"
 
+#include "globals.hh"
+
 HepPolyhedronProcessor::HepPolyhedronProcessor(){}
 HepPolyhedronProcessor::~HepPolyhedronProcessor(){}
 //private for the moment.
@@ -64,9 +66,9 @@ static bool is_in(unsigned int a_index,
 static void dump(const std::vector<unsigned int>& a_is) {
   unsigned int number = a_is.size();
   for(unsigned int index=0;index<number;index++) {
-    printf("%d ",a_is[index]);
+    G4cout << ' ' << a_is[index];
   }
-  printf("\n");
+  G4cout << G4endl;
 }
 
 namespace HEPVis {
