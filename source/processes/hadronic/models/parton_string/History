@@ -13,6 +13,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+29 October 2009, V. Uzhinsky (hadr-prtn-V09-02-08)
+   Warning meassage is erased in FTFmodel
+-----------------------------------------------------
 25 October 2009, V Uzhinsky (hadr-prtn-V09-02-07)
    Excitation energy calculation was added in FTF.
 -----------------------------------------------------
