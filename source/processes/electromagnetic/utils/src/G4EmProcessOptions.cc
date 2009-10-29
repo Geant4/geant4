@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.26 2009-02-18 14:43:27 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.27 2009-10-29 19:25:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -511,6 +511,13 @@ void G4EmProcessOptions::SetPolarAngleLimit(G4double val)
     G4VEmProcess* q = *itp;
     if(q) q->SetPolarAngleLimit(val);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetFactorForAngleLimit(G4double val)
+{
+  theManager->SetFactorForAngleLimit(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

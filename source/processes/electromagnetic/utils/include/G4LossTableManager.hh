@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.54 2009-04-09 16:10:57 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.55 2009-10-29 19:25:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -209,6 +209,8 @@ public:
 
   void SetBremsstrahlungTh(G4double val);
 
+  void SetFactorForAngleLimit(G4double val);
+
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
@@ -220,6 +222,8 @@ public:
   G4bool SplineFlag() const;
 
   G4double BremsstrahlungTh() const;
+
+  G4double FactorForAngleLimit() const;
 
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
@@ -301,6 +305,7 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
   G4double bremsTh;
+  G4double factorForAngleLimit;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;

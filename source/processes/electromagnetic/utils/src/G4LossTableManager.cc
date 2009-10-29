@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.96 2009-04-09 16:10:57 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.97 2009-10-29 19:25:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -175,6 +175,7 @@ G4LossTableManager::G4LossTableManager()
   flagLPM = true;
   splineFlag = true;
   bremsTh = DBL_MAX;
+  factorForAngleLimit = 1.0;
   verbose = 1;
   tableBuilder->SetSplineFlag(splineFlag);
 }
@@ -917,6 +918,20 @@ void G4LossTableManager::SetBremsstrahlungTh(G4double val)
 G4double G4LossTableManager::BremsstrahlungTh() const
 {
   return bremsTh;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LossTableManager::SetFactorForAngleLimit(G4double val) 
+{
+  if(val > 0.0) factorForAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LossTableManager::FactorForAngleLimit() const
+{
+  return factorForAngleLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
