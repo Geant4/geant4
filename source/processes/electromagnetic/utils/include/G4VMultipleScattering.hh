@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.61 2009-09-23 14:42:47 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.62 2009-10-29 17:56:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -210,6 +210,12 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
 
+  // Assign a model to a process
+  void SetModel(G4VMscModel*, G4int index = 1);
+  
+  // return the assigned model
+  G4VMscModel* Model(G4int index = 1);
+
   // Access to models by index
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
@@ -273,6 +279,8 @@ private:
   G4bool                      buildLambdaTable;
 
   // ======== Parameters of the class fixed at initialisation =======
+
+  std::vector<G4VMscModel*>   mscModels;
 
   G4PhysicsTable*             theLambdaTable;
   const G4ParticleDefinition* firstParticle;

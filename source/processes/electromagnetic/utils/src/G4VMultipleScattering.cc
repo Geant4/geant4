@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.75 2009-09-23 14:42:47 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.76 2009-10-29 17:56:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,6 +145,23 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
   modelManager->AddEmModel(order, p, fm, region);
   if(p) p->SetParticleChange(pParticleChange);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
+{
+  G4int n = mscModels.size();
+  if(index >= n) for(G4int i=n; i<index+1; ++i) {mscModels.push_back(0);}
+  mscModels[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VMscModel* G4VMultipleScattering::Model(G4int index)
+{
+  G4VMscModel* p = 0;
+  if(index >= 0 && index <  G4int(mscModels.size())) p = mscModels[index];
+  return p;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -177,7 +194,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4PhysicsLogVector* aVector = 0;
     G4PhysicsLogVector* bVector = 0;
 
-    for (size_t i=0; i<numOfCouples; i++) {
+    for (size_t i=0; i<numOfCouples; ++i) {
 
       if (theLambdaTable->GetFlag(i)) {
         // create physics vector and fill it
@@ -258,7 +275,7 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
-    for(G4int i=0; i<nmod; i++) {
+    for(G4int i=0; i<nmod; ++i) {
       G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
       if(isIon) {
 	msc->SetStepLimitType(fMinimal);
@@ -433,7 +450,7 @@ G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* part,
     }
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = theLambdaTable->length();
-      for(size_t i=0; i<n; i++) {
+      for(size_t i=0; i<n; ++i) {
         if((* theLambdaTable)[i]) {
 	  (* theLambdaTable)[i]->SetSpline(true);
 	}
