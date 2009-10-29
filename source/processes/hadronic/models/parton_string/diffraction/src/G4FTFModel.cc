@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.27 2009-10-25 10:50:54 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.28 2009-10-29 14:55:33 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -267,7 +267,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
         theNucleus->StartLoop();
 //G4int NucleonNum(0);
-	while (aNucleon = theNucleus->GetNextNucleon())
+	while ((aNucleon = theNucleus->GetNextNucleon()))
         {
          if(aNucleon->AreYouHit())
          {   // Involved nucleons
