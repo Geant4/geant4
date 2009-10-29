@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.53 2009-07-03 14:39:17 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.54 2009-10-29 17:56:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -686,24 +686,18 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     }
     massFactor = proton_mass_c2/p->GetPDGMass();
     idx = -1;
-    G4int dz = 1000;
 
     for(G4int i=0; i<nIons; i++) {
-      if(materialList[i] == mat) {
-        G4int delz = currentZ - Zion[i];
-        if(delz < 0) delz = -delz;
-        if(delz < dz) {
-	  idx = i;
-          dz = delz;
-          if(0 == delz) break;
-        }
+      if(materialList[i] == mat && currentZ == Zion[i]) {
+        idx = i;
+        break;
       }
     }
-    //    G4cout << " idx= " << idx << " dz= " << dz << G4endl;
-    if(idx > 0) {
+    //    G4cout << " idx= " << idx << " dz= " << G4endl;
+    if(idx >= 0) {
       if(!ionList[idx]) BuildCorrectionVector(); 
       if(ionList[idx])  curVector = stopData[idx];
-    }
+    } else { return factor; }
   }
   if(curVector) {
     factor = curVector->Value(ekin*massFactor);
