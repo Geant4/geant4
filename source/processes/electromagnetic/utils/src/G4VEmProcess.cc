@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.76 2009-09-23 14:42:47 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.77 2009-10-29 17:56:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,7 +172,7 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
 void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
 {
   G4int n = emModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  if(index >= n) for(G4int i=n; i<index+1; ++i) {emModels.push_back(0);}
   emModels[index] = p;
 }
 
@@ -221,7 +221,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
-    for(G4int i=0; i<nmod; i++) {
+    for(G4int i=0; i<nmod; ++i) {
       G4VEmModel* mod = modelManager->GetModel(i);
       mod->SetPolarAngleLimit(polarAngleLimit);
       if(mod->HighEnergyLimit() > maxKinEnergy) {
@@ -250,13 +250,13 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     idxDERegions = new G4bool[numOfCouples];
 
-    for (size_t j=0; j<numOfCouples; j++) {
+    for (size_t j=0; j<numOfCouples; ++j) {
 
       const G4MaterialCutsCouple* couple =
         theCoupleTable->GetMaterialCutsCouple(j);
       const G4ProductionCuts* pcuts = couple->GetProductionCuts();
       G4bool reg = false;
-      for(G4int i=0; i<nDERegions; i++) {
+      for(G4int i=0; i<nDERegions; ++i) {
 	if(deRegions[i]) {
 	  if(pcuts == deRegions[i]->GetProductionCuts()) reg = true;
 	}
@@ -266,7 +266,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   if (1 < verboseLevel && nDERegions>0) {
     G4cout << " Deexcitation is activated for regions: " << G4endl;
-    for (G4int i=0; i<nDERegions; i++) {
+    for (G4int i=0; i<nDERegions; ++i) {
       const G4Region* r = deRegions[i];
       G4cout << "           " << r->GetName() << G4endl;
     }
@@ -320,7 +320,7 @@ void G4VEmProcess::BuildLambdaTable()
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
 
-  for(size_t i=0; i<numOfCouples; i++) {
+  for(size_t i=0; i<numOfCouples; ++i) {
 
     if (theLambdaTable->GetFlag(i)) {
 
@@ -504,7 +504,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     fParticleChange.SetNumberOfSecondaries(num);
     G4double edep = fParticleChange.GetLocalEnergyDeposit();
      
-    for (G4int i=0; i<num; i++) {
+    for (G4int i=0; i<num; ++i) {
       G4DynamicParticle* dp = secParticles[i];
       const G4ParticleDefinition* p = dp->GetDefinition();
       G4double e = dp->GetKineticEnergy();
@@ -596,7 +596,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
     }
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = theLambdaTable->length();
-      for(size_t i=0; i<n; i++) {
+      for(size_t i=0; i<n; ++i) {
         if((* theLambdaTable)[i]) {
 	  (* theLambdaTable)[i]->SetSpline(true);
 	}
@@ -623,7 +623,7 @@ void G4VEmProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
 
   // the region is in the list
   if (nDERegions) {
-    for (G4int i=0; i<nDERegions; i++) {
+    for (G4int i=0; i<nDERegions; ++i) {
       if (reg == deRegions[i]) {
 	if(!val) deRegions[i] = 0;
         return;
@@ -685,7 +685,7 @@ void G4VEmProcess::FindLambdaMax()
   theEnergyOfCrossSectionMax = new G4double [n];
   theCrossSectionMax = new G4double [n];
 
-  for (size_t i=0; i<n; i++) {
+  for (size_t i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
     emax = DBL_MAX;
     smax = 0.0;
@@ -694,7 +694,7 @@ void G4VEmProcess::FindLambdaMax()
       emax = DBL_MAX;
       smax = 0.0;
       if(nb > 0) {
-	for (size_t j=0; j<nb; j++) {
+	for (size_t j=0; j<nb; ++j) {
 	  e = pv->Energy(j);
 	  s = (*pv)(j);
 	  if(s > smax) {
