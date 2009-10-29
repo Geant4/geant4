@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.57 2009-08-11 10:29:30 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.58 2009-10-29 18:07:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4RegionModels::G4RegionModels(G4int nMod, std::vector<G4int>& indx,
   nModelsForRegion      = nMod;
   theListOfModelIndexes = new G4int [nModelsForRegion];
   lowKineticEnergy      = new G4double [nModelsForRegion+1];
-  for (G4int i=0; i<nModelsForRegion; i++) {
+  for (G4int i=0; i<nModelsForRegion; ++i) {
     theListOfModelIndexes[i] = indx[i];
     lowKineticEnergy[i] = lowE[i];
   }
@@ -253,7 +253,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     } else {
       G4bool newRegion = true;
       if (nRegions>1) {
-        for (G4int j=1; j<nRegions; j++) {
+        for (G4int j=1; j<nRegions; ++j) {
 	  if ( r == setr[j] ) newRegion = false;
         }
       }
@@ -366,7 +366,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 		  idx = 0;
 		} else {
 		  // find energy interval to replace
-		  for(G4int k=0; k<n; k++) { 
+		  for(G4int k=0; k<n; ++k) { 
 		    if(tmin <= eLow[k] && tmax >= eHigh[k]) {
 		      push = false;
 		      modelAtRegion[k] = ii;
@@ -406,7 +406,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       G4cout << "New G4RegionModels set with " << n << " models for region <";
       if (region) G4cout << region->GetName();
       G4cout << ">  Elow(MeV)= ";
-      for(G4int ii=0; ii<=n; ii++) {G4cout << eLow[ii]/MeV << " ";}
+      for(G4int ii=0; ii<=n; ++ii) {G4cout << eLow[ii]/MeV << " ";}
       G4cout << G4endl;
     }
     G4RegionModels* rm = new G4RegionModels(n, modelAtRegion, eLow, region);
@@ -663,7 +663,7 @@ void G4EmModelManager::DumpModelList(G4int verb)
     if(n > 0) {
       G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
 	     << " ======" << G4endl;;
-      for(G4int j=0; j<n; j++) {
+      for(G4int j=0; j<n; ++j) {
 	const G4VEmModel* m = models[r->ModelIndex(j)];
 	G4cout << std::setw(20);
 	G4cout << m->GetName() << " :     Emin= " 

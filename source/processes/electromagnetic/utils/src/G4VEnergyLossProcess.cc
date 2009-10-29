@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.157 2009-09-23 14:42:47 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.158 2009-10-29 18:07:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -230,7 +230,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   vstrag = new G4PhysicsLogVector(keV, GeV, nrbins-1);
   vstrag->SetSpline(true);
   G4double s[nrbins] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
-  for(G4int i=0; i<nrbins; i++) {vstrag->PutValue(i, s[i]);}
+  for(G4int i=0; i<nrbins; ++i) {vstrag->PutValue(i, s[i]);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -351,7 +351,7 @@ void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam,
 void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
 {
   G4int n = emModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; i++) {emModels.push_back(0);}
+  if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
   emModels[index] = p;
 }
 
@@ -360,7 +360,7 @@ void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
 G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
 {
   G4VEmModel* p = 0;
-  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
   return p;
 }
 
@@ -466,12 +466,12 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     massRatio = (baseParticle->GetPDGMass())/initialMass;
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
-    if(chargeSqRatio > 0.0) reduceFactor = 1.0/(chargeSqRatio*massRatio);
+    if(chargeSqRatio > 0.0) { reduceFactor = 1.0/(chargeSqRatio*massRatio); }
   }
 
   // initialisation of models
   G4int nmod = modelManager->NumberOfModels();
-  for(G4int i=0; i<nmod; i++) {
+  for(G4int i=0; i<nmod; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
@@ -492,7 +492,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     if(nSCoffRegions>0) idxSCoffRegions = new G4bool[numOfCouples];
     if(nDERegions>0) idxDERegions = new G4bool[numOfCouples];
   
-    for (size_t j=0; j<numOfCouples; j++) {
+    for (size_t j=0; j<numOfCouples; ++j) {
 
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(j);
@@ -500,14 +500,14 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       
       if(nSCoffRegions>0) {
 	G4bool reg = false;
-	for(G4int i=0; i<nSCoffRegions; i++) {
+	for(G4int i=0; i<nSCoffRegions; ++i) {
 	  if( pcuts == scoffRegions[i]->GetProductionCuts()) reg = true;
 	}
 	idxSCoffRegions[j] = reg;
       }
       if(nDERegions>0) {
 	G4bool reg = false;
-	for(G4int i=0; i<nDERegions; i++) {
+	for(G4int i=0; i<nDERegions; ++i) {
 	  if( pcuts == deRegions[i]->GetProductionCuts()) reg = true;
 	}
 	idxDERegions[j] = reg;
@@ -526,14 +526,14 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
            << " reduceFactor= " << reduceFactor << G4endl;
     if (nSCoffRegions) {
       G4cout << " SubCutoff Regime is ON for regions: " << G4endl;
-      for (G4int i=0; i<nSCoffRegions; i++) {
+      for (G4int i=0; i<nSCoffRegions; ++i) {
         const G4Region* r = scoffRegions[i];
 	G4cout << "           " << r->GetName() << G4endl;
       }
     }
     if (nDERegions) {
       G4cout << " Deexcitation is ON for regions: " << G4endl;
-      for (G4int i=0; i<nDERegions; i++) {
+      for (G4int i=0; i<nDERegions; ++i) {
         const G4Region* r = deRegions[i];
 	G4cout << "           " << r->GetName() << G4endl;
       }
@@ -629,7 +629,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
 
-  for(size_t i=0; i<numOfCouples; i++) {
+  for(size_t i=0; i<numOfCouples; ++i) {
 
     if(1 < verboseLevel) {
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " 
@@ -701,7 +701,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
-  for(size_t i=0; i<numOfCouples; i++) {
+  for(size_t i=0; i<numOfCouples; ++i) {
 
     if (table->GetFlag(i)) {
 
@@ -815,7 +815,7 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
 
   // the region is in the list
   if (nSCoffRegions) {
-    for (G4int i=0; i<nSCoffRegions; i++) {
+    for (G4int i=0; i<nSCoffRegions; ++i) {
       if (reg == scoffRegions[i]) {
 	if(!val) deRegions[i] = 0;
         return;
@@ -827,7 +827,7 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
   if(val) {
     useSubCutoff = true;
     scoffRegions.push_back(reg);
-    nSCoffRegions++;
+    ++nSCoffRegions;
   } else {
     useSubCutoff = false;
   }
@@ -843,7 +843,7 @@ void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
 
   // the region is in the list
   if (nDERegions) {
-    for (G4int i=0; i<nDERegions; i++) {
+    for (G4int i=0; i<nDERegions; ++i) {
       if (reg == deRegions[i]) {
 	if(!val) deRegions[i] = 0;
         return;
@@ -855,7 +855,7 @@ void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
   if(val) {
     useDeexcitation = true;
     deRegions.push_back(reg);
-    nDERegions++;
+    ++nDERegions;
   } else {
     useDeexcitation = false;
   }
@@ -1107,7 +1107,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	// add bremsstrahlung sampling
 	/*
 	if(nProcesses > 0) {
-	  for(G4int i=0; i<nProcesses; i++) {
+	  for(G4int i=0; i<nProcesses; ++i) {
 	    (scProcesses[i])->SampleSubCutSecondaries(
 		scTracks, step, (scProcesses[i])->
 		SelectModelForMaterial(preStepKinEnergy, currentMaterialIndex),
@@ -1119,7 +1119,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	if(n>0) {
 	  G4ThreeVector mom = dynParticle->GetMomentum();
 	  fParticleChange.SetNumberOfSecondaries(n);
-	  for(G4int i=0; i<n; i++) {
+	  for(G4int i=0; i<n; ++i) {
 	    G4Track* t = scTracks[i];
 	    G4double e = t->GetKineticEnergy();
 	    if (t->GetDefinition() == thePositron) e += 2.0*electron_mass_c2;
@@ -1250,7 +1250,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
     // position of subcutoff particles
     G4ThreeVector r = prepoint + fragment*dr;
     std::vector<G4DynamicParticle*>::iterator it;
-    for(it=secParticles.begin(); it!=secParticles.end(); it++) {
+    for(it=secParticles.begin(); it!=secParticles.end(); ++it) {
 
       G4bool addSec = true;
       /*
@@ -1314,7 +1314,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
              << " preLambda= " << preStepLambda 
 	     << " < " << lx << " (postLambda) "
 	     << G4endl;
-      nWarnings++;
+      ++nWarnings;
     }
     */
     if(preStepLambda*G4UniformRand() > lx) {
@@ -1339,7 +1339,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   G4int num = secParticles.size();
   if(num > 0) {
     fParticleChange.SetNumberOfSecondaries(num);
-    for (G4int i=0; i<num; i++) {
+    for (G4int i=0; i<num; ++i) {
       fParticleChange.AddSecondary(secParticles[i]);
     }
   }
@@ -1514,7 +1514,7 @@ G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
 
     if((G4LossTableManager::Instance())->SplineFlag()) {
       size_t n = aTable->length();
-      for(size_t i=0; i<n; i++) {
+      for(size_t i=0; i<n; ++i) {
         if((*aTable)[i]) {
 	  (*aTable)[i]->SetSpline(true);
 	}
@@ -1641,7 +1641,7 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
   G4bool add = true;
   if(p->GetProcessName() != "eBrem") add = false;
   if(add && nProcesses > 0) {
-    for(G4int i=0; i<nProcesses; i++) {
+    for(G4int i=0; i<nProcesses; ++i) {
       if(p == scProcesses[i]) {
         add = false;
         break;
@@ -1650,7 +1650,7 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
   }
   if(add) {
     scProcesses.push_back(p);
-    nProcesses++;
+    ++nProcesses;
     if (1 < verboseLevel) { 
       G4cout << "### The process " << p->GetProcessName() 
 	     << " is added to the list of collaborative processes of "
@@ -1672,7 +1672,7 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
       G4double emax = maxKinEnergyCSDA;
       theDEDXAtMaxEnergy = new G4double [n];
 
-      for (size_t i=0; i<n; i++) {
+      for (size_t i=0; i<n; ++i) {
 	pv = (*p)[i];
 	G4double dedx = pv->Value(emax);
 	theDEDXAtMaxEnergy[i] = dedx;
@@ -1706,7 +1706,7 @@ void G4VEnergyLossProcess::SetCSDARangeTable(G4PhysicsTable* p)
     G4double emax = maxKinEnergyCSDA;
     theRangeAtMaxEnergy = new G4double [n];
 
-    for (size_t i=0; i<n; i++) {
+    for (size_t i=0; i<n; ++i) {
       pv = (*p)[i];
       G4double r2 = pv->Value(emax);
       theRangeAtMaxEnergy[i] = r2;
@@ -1777,14 +1777,14 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
     theEnergyOfCrossSectionMax = new G4double [n];
     theCrossSectionMax = new G4double [n];
 
-    for (size_t i=0; i<n; i++) {
+    for (size_t i=0; i<n; ++i) {
       pv = (*p)[i];
       emax = DBL_MAX;
       smax = 0.0;
       if(pv) {
         size_t nb = pv->GetVectorLength();
         if(nb > 0) {
-	  for (size_t j=0; j<nb; j++) {
+	  for (size_t j=0; j<nb; ++j) {
 	    e = pv->Energy(j);
 	    s = (*pv)(j);
 	    if(s > smax) {

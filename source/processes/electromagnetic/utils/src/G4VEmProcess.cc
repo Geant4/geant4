@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.77 2009-10-29 17:56:47 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.78 2009-10-29 18:07:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,7 +172,7 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
 void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
 {
   G4int n = emModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; ++i) {emModels.push_back(0);}
+  if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
   emModels[index] = p;
 }
 
@@ -181,7 +181,7 @@ void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
 G4VEmModel* G4VEmProcess::Model(G4int index)
 {
   G4VEmModel* p = 0;
-  if(index >= 0 && index <  G4int(emModels.size())) p = emModels[index];
+  if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
   return p;
 }
 

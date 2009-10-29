@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.76 2009-10-29 17:56:04 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.77 2009-10-29 18:07:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,7 +150,7 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
 {
   G4int n = mscModels.size();
-  if(index >= n) for(G4int i=n; i<index+1; ++i) {mscModels.push_back(0);}
+  if(index >= n) { for(G4int i=n; i<=index; ++i) {mscModels.push_back(0);} }
   mscModels[index] = p;
 }
 
@@ -159,7 +159,7 @@ void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
 G4VMscModel* G4VMultipleScattering::Model(G4int index)
 {
   G4VMscModel* p = 0;
-  if(index >= 0 && index <  G4int(mscModels.size())) p = mscModels[index];
+  if(index >= 0 && index <  G4int(mscModels.size())) { p = mscModels[index]; }
   return p;
 }
 
