@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.2 2009-10-30 14:45:23 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.3 2009-10-30 17:32:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -1205,6 +1205,10 @@ void G4DensityEffectData::AddMaterial(G4float* val, const G4String& matName)
 
 void G4DensityEffectData::PrintData(const G4String& matName)
 {
+  if("" == matName || "all" == matName) {
+    DumpData();
+    return;
+  }
   G4int idx = GetIndex(matName);
   if(idx >= 0) {
     G4cout << "G4DensityEffectData for <" << matName 
