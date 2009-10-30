@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.25 2008-07-08 10:34:56 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.26 2009-10-30 14:46:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,24 +39,36 @@
 // 10-05-05, add a missing coma in FindMeanExcitationEnergy() - Bug#746 (mma)
 // 27-09-07, add computation of parameters for ions (V.Ivanchenko)
 // 04-03-08, remove reference to G4NistManager. Add fBirks constant (mma)
+// 30-10-09, add G4DensityEffectData class and density effect computation (VI)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
+#include "G4DensityEffectData.hh"
+
+G4double G4IonisParamMat::twoln10 = 2.*std::log(10.);
+G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::G4IonisParamMat(G4Material* material)
   : fMaterial(material)
 {
+  fBirks = 0.;
+  fMeanEnergyPerIon = 0.0;
+
+  // minimal set of default parameters for density effect
+  fCdensity = 0.0;
+  fD0density = 0.0;
+  fAdjustmentFactor = 1.0;
+  if(!fDensityData) fDensityData = new G4DensityEffectData();
+
+  // compute parameters
   ComputeMeanParameters();
   ComputeDensityEffect();
   ComputeFluctModel();
   ComputeIonParameters();
-  
-  fBirks = 0.;
-  fMeanEnergyPerIon = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -121,12 +133,26 @@ void G4IonisParamMat::ComputeMeanParameters()
                     
 void G4IonisParamMat::ComputeDensityEffect()
 {
+  const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
+  //  const G4double twoln10 = 2.*std::log(10.);
+
+  // Check if density effect data exist in the table
+  // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
+  G4int idx = fDensityData->GetIndex(fMaterial->GetName());
+  if(idx >= 0) {
+    fCdensity = fDensityData->GetCdensity(idx); 
+    fMdensity = fDensityData->GetMdensity(idx);
+    fAdensity = fDensityData->GetAdensity(idx);
+    fX0density = fDensityData->GetX0density(idx);
+    fX1density = fDensityData->GetX1density(idx);
+    fD0density = fDensityData->GetDelta0density(idx);
+    fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
+    fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
+    return;
+  }
+
   // Compute parameters for the density effect correction in DE/Dx formula.
   // The parametrization is from R.M. Sternheimer, Phys. Rev.B,3:3681 (1971)
-
-  const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
-  const G4double twoln10 = 2.*std::log(10.);
-
   G4int icase;
   
   fCdensity = 1. + std::log(fMeanExcitationEnergy*fMeanExcitationEnergy
@@ -190,7 +216,7 @@ void G4IonisParamMat::ComputeDensityEffect()
       G4double Pressure = fMaterial->GetPressure();
       G4double Temp     = fMaterial->GetTemperature();
       
-     G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+      G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
 
       G4double ParCorr = std::log(Density/DensitySTP);
   
@@ -387,6 +413,9 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fAdensity                 = right.fAdensity;
       fX0density                = right.fX0density;
       fX1density                = right.fX1density;
+      fD0density                = right.fD0density;
+      fPlasmaEnergy             = right.fPlasmaEnergy;
+      fAdjustmentFactor         = right.fAdjustmentFactor;
       fF1fluct                  = right.fF1fluct;
       fF2fluct                  = right.fF2fluct;
       fEnergy1fluct             = right.fEnergy1fluct;
@@ -395,7 +424,14 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fLogEnergy2fluct          = right.fLogEnergy2fluct;      
       fEnergy0fluct             = right.fEnergy0fluct;
       fRateionexcfluct          = right.fRateionexcfluct;
-     } 
+      fZeff                     = right.fZeff;
+      fFermiEnergy              = right.fFermiEnergy;
+      fLfactor                  = right.fLfactor;
+      fBirks                    = right.fBirks;
+      fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
+      twoln10                   = right.twoln10;
+      fDensityData              = right.fDensityData;
+    } 
   return *this;
 }
 
