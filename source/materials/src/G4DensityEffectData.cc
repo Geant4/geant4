@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.3 2009-10-30 17:32:33 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.4 2009-10-30 19:53:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -1237,7 +1237,7 @@ void G4DensityEffectData::DumpData()
   G4cout << "======================================================================"
 	 << G4endl; 
   for(G4int i=0; i<NDENSDATA; ++i) {
-    G4cout << std::setw(3) << i << ". " << std::setw(20) << names[i]
+    G4cout << std::setw(3) << i << ". " << std::setw(25) << names[i]
 	   << std::setw(8) << data[i][0]/eV;
     for(G4int j=1; j<NDENSARRAY; ++j) { G4cout << std::setw(8) << data[i][j]; }
     G4cout << G4endl;
