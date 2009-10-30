@@ -15,6 +15,12 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+30-Oct-2009 M.Kosov                             (hadr-chips-V09-02-13)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for new CHIPS hA cross-sections
+- 8 new CHIPS cross-sectopn classes are added + bug is fixed in the CHIPS
+  pA cross_sections + pimA XS class is not fake now, but real
+
 23-Oct-2009 M.Kosov                             (hadr-chips-V09-02-12)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the bug fix + G4QuasiFreeRatio change (needs make clean)

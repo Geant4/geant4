@@ -62,7 +62,7 @@ public:
 
   // At present momentum (pMom) in MeV/c, CS in mb (@@ Units)
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
-                                   G4int pPDG=2212);
+                                   G4int pPDG=-211);
 
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z,
                                  G4int N, G4double Momentum);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.22 2009-06-29 16:03:33 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.23 2009-10-30 10:49:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -230,16 +230,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   for(i=0; i<nE; ++i)
   {
     G4double frac=material->GetFractionVector()[i];
-    if(projPDG==13||projPDG==15)
-    {
-      G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
-      frac*=cZ;
-      if(cZ==9||cZ==35||cZ==53||cZ==85) frac*=.66;
-      else if                  (cZ== 3) frac*=.50;
-      else if          (cZ==24||cZ==28) frac*=.90;
-      else if          (cZ== 5||cZ==17) frac*=.70;
-      else if                  (cZ== 8) frac*=.56;
-    }
+    if(projPDG==13||projPDG==15) frac*=(*theElementVector)[i]->GetZ();
     sum+=frac;
     sumfra.push_back(sum);             // remember the summation steps
   }
@@ -340,8 +331,6 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: touch="<<trTouchable<<G4endl;
 #endif
   localtime += Time;
-  std::vector<G4double>* cascE = new std::vector<G4double>;
-  std::vector<G4Track*>* cascT = new std::vector<G4Track*>;
   G4bool neutronElastic = false;             // Flag of elastic neutro-nucleeus Scattering
   G4bool chargExElastic = false;             // Flag of charge exchange Quasi-Elastic Scat.
   G4LorentzVector proj4M;
@@ -512,21 +501,6 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4LorentzVector totLV(0.,0.,0.,mbm);     // 4-momentum of bounded muon/tau
     if(projPDG==13) // now for tau it is only energy deposition, for mu this EMCascade
     {
-      MuCaptureEMCascade(Z, N, cascE);
-      G4int nsec=cascE->size();
-      G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
-      for(G4int is=0; is<nsec; is++)
-      {
-        G4double ener=cascE->operator[](is);
-        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),
-                                                  G4RandomDirection(),ener);
-        else    theSec = new G4DynamicParticle(G4Gamma::Gamma(),G4RandomDirection(),-ener);
-        totLV-=theSec->Get4Momentum();
-        G4Track* aNewTrack = new G4Track(theSec, localtime, position );
-        aNewTrack->SetWeight(weight);                                   //    weighted
-        aNewTrack->SetTouchableHandle(trTouchable);
-        cascT->push_back(aNewTrack);
-      }
 #ifdef debug
       G4cout<<"G4QCaptureAtRest::AtRestDoIt: e+nu+nu decay 4M="<<totLV<<totLV.m()<<G4endl;
 #endif
@@ -712,36 +686,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS M="<<mp<<",dE="<<EnergyDeposition<<G4endl;
 #endif
     G4LorentzVector projLV(0.,0.,0.,mp);
-    if(projPDG==13) // now for tau it is only energy deposition, for mu this EMCascade+qqnu
+    if(projPDG==13) // now for tau it is only energy deposition @@ add similar qqnu decay
     {
-      MuCaptureEMCascade(Z, N, cascE);
-      G4int nsec=cascE->size();
-      G4DynamicParticle* theSec = 0; // Prototype to fill particle in the G4ParticleChange
-      for(G4int is=0; is<nsec; is++)
-      {
-        G4double ener=cascE->operator[](is);
-        if(ener>0) theSec = new G4DynamicParticle(G4Electron::Electron(),
-                                                  G4RandomDirection(),ener);
-        else    theSec = new G4DynamicParticle(G4Gamma::Gamma(),G4RandomDirection(),-ener);
-        projLV-=theSec->Get4Momentum();
-        G4Track* aNewTrack = new G4Track(theSec, localtime, position );
-        aNewTrack->SetWeight(weight);                                   //    weighted
-        aNewTrack->SetTouchableHandle(trTouchable);
-        cascT->push_back(aNewTrack);
-      }
-      // ----- Ericson mu to pi conversion ----- ????? -----
       if(G4UniformRand()<.04) // .04 is a parameter !
       {
         projPDG=-211;
-        // Phase space decay of mu->nu+q+aq M=1
-        //G4LorentzVector f4Mom(0.,0.,0.,0.);      // Muon neutrino 
-        //G4LorentzVector s4Mom(0.,0.,0.,0.);      // Quark
-        //G4LorentzVector r4Mom(0.,0.,0.,0.);      // Anti-Quark
-        //if(!G4QHadron(projLV).DecayIn3(f4Mom,s4Mom,r4Mom))
-        //{
-        //  G4cerr<<"--Worning--G4QCaptureAtRest::AtRestDoIt: (mu-)=>q+aq+nu, M=1"<<G4endl;
-        //  return 0;
-        //}
         // Phase space decay of mu->nu+q+aq with matrix element
         G4double mmu2=projLV.m2();
         G4double mmu=std::sqrt(mmu2);
@@ -794,19 +743,11 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #ifdef debug
     G4cout<<"G4QCaptureAtRest::AtRestDoIt: CHIPS fragmentation is done, CV="<<CV<<G4endl;
 #endif
-    // ----- Ericson mu to pi conversion ----- ????? -----
-    if(neutr) output->push_back(neutr);      // Fill nutrino_mu in the output
-    // end of --- ??? ---
+    if(neutr) output->push_back(neutr);    // Fill nutrino_mu in the output
   }
   aParticleChange.Initialize(track);
-  G4int tNH = output->size(); // A#of hadrons in the output without EM Cascade
-  G4int nsec=cascE->size();
-  aParticleChange.SetNumberOfSecondaries(tNH+nsec); 
-  for(G4int is=0; is<nsec; is++) aParticleChange.AddSecondary((*cascT)[is]);
-  cascE->clear();
-  delete cascE;
-  cascT->clear();
-  delete cascT;
+  G4int tNH = output->size();              // A#of hadrons in the output without EM Cascade
+  aParticleChange.SetNumberOfSecondaries(tNH); 
   // Now add nuclear fragments
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::AtRestDoIt: "<<tNH<<" particles are generated"<<G4endl;
@@ -987,91 +928,11 @@ G4bool G4QCaptureAtRest::RandomizeMuDecayOrCapture(G4int Z, G4int N)
 }
 
 // Calculate the TotalEnergyDeposition for the AtomicCascadeDecay of MuMesoAtom to K-shell
-void G4QCaptureAtRest::CalculateEnergyDepositionOfMuCapture(G4int Z) // (2p->1s) in MeV
+void G4QCaptureAtRest::CalculateEnergyDepositionOfMuCapture(G4int Z)
 {
-  EnergyDeposition = .0029035*Z*Z*(1.-.0056817*Z)-.0006343; // MeV
+  EnergyDeposition = Z*Z/(3556.+403.4/Z/(2.15+.0039*Z)); // MeV
 #ifdef debug
   G4cout<<"G4QCaptureAtR::CalculateEnergyDepositionOfMuCapture="<<EnergyDeposition<<G4endl;
-#endif
-}
-
-// Calculate gamma cascade from high (14th level) to the K(1s)-shell (follows V.Ivanchenko)
-void G4QCaptureAtRest::MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double>* dV)
-{ 
-  static const G4double mEl  = G4Electron::Electron()->GetPDGMass(); // GEANT4 style
-  static const G4double mMu  = G4MuonMinus::MuonMinus()->GetPDGMass();
-  //static const G4double mEl  = G4QPDGCode(11).GetMass(); // CHIPS style
-  //static const G4double mMu  = G4QPDGCode(13).GetMass();
-  static const G4double vEl  = .0000136/mEl;
-  //static const G4double dElM = mEl+mEl;
-  // Inicialization - cascade start from 14th level (N.C.Mukhopadhyay Phy.Rep. 30 (1977) 1)
-  G4double EnergyLevel[14];
-  G4double dZ=Z;
-  G4double nucM=G4NucleiProperties::GetNuclearMass(dZ+N,dZ);
-  if(nucM<900.) nucM=G4QPDGCode(2112).GetNuclMass(Z,N,0); // CHIPS style
-
-  G4double mass = mMu*nucM/(mMu+nucM);        //equivalemtMassOfMuon in C.M. muA-system
-
-  G4double Z2=Z*Z;
-  G4double KEnergy = vEl*Z2*mass;             // Finaite nuclear size (?)
-
-  EnergyLevel[0] = EnergyDeposition;
-#ifdef debug
-  G4cout<<"G4QCapAtR::MuCapEMCascade:E="<<EnergyDeposition<<",e="<<mEl<<",m="<<mMu<<G4endl;
-#endif
-  for(G4int i=2; i<15; i++) EnergyLevel[i-1]=KEnergy/i/i; // To simple to be right (? M.K.)
-
-  G4int nAuger = 1;
-  G4int nGamma = 0;
-  G4int nLevel = 13;
-  G4double DeltaE=0.;
-  G4double pGamma = Z2*Z2;
-
-  // Capture on 14-th level
-  G4double energy=EnergyLevel[13];
-  //G4double ptot = sqrt(energy*(energy + dElM));
-  //G4ThreeVector moment = ptot * G4RandomDirection();
-#ifdef debug
-  G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: first electron E="<<energy<<G4endl;
-#endif
-  dV->push_back(energy);
-#ifdef debug
-  G4cout<<"G4QCaptureAtR::MuCaptureEMCascade:before while nl="<<nLevel<<G4endl;
-#endif
-  // Algorithm of Vladimir Ivanchenko
-  while(nLevel>0)                     // Radiative transitions and  Auger electron emission
-  {
-#ifdef debug
-    G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: in while nLevel="<<nLevel<<G4endl;
-#endif
-    // case of Auger electrons
-    if((nAuger < Z) && ((pGamma + 10000.0) * G4UniformRand() < 10000.0) ) // 10000 (? M.K.)
-    {
-      nAuger++;                       // Radiate one more Auger electron
-      DeltaE = EnergyLevel[nLevel-1] - EnergyLevel[nLevel];
-      nLevel--;
-#ifdef debug
-   G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: Auger_e E="<<DeltaE<<G4endl;
-#endif
-      dV->push_back(DeltaE);
-    }
-    else // Rad transitions from C.S.Wu and L.Wilets, Ann. Rev. Nuclear Sci. 19 (1969) 527.
-    {
-      G4int iLevel = nLevel - 1 ;
-      G4double var = 10.0 + iLevel * G4UniformRand(); // 10.0 (? M.K.)
-      if(var > 10.0) iLevel -= G4int(var-10.0) + 1;
-      if( iLevel < 0 ) iLevel = 0;
-      DeltaE = EnergyLevel[iLevel] - EnergyLevel[nLevel];
-      nLevel = iLevel;
-#ifdef debug
-      G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: photon E="<<DeltaE<<G4endl;
-#endif
-      dV->push_back(-DeltaE);
-      nGamma++;
-    }
-  }
-#ifdef debug
-  G4cout<<"G4QCaptureAtR::MuCaptureEMCascade: nElect="<<nAuger<<", nGamm="<<nGamma<<G4endl;
 #endif
 }
 
@@ -1111,9 +972,9 @@ G4bool G4QCaptureAtRest::RandomizeTauDecayOrCapture(G4int Z, G4int N)
 }
 
 // Calculate the TotalEnergyDeposition for the AtomicCascadeDecay of TauMesoAtom to K-shell
-void G4QCaptureAtRest::CalculateEnergyDepositionOfTauCapture(G4int Z) // (2p->1s) in MeV
+void G4QCaptureAtRest::CalculateEnergyDepositionOfTauCapture(G4int Z)
 {
-  EnergyDeposition = .05*Z*Z*(1.-.0056817*Z)-.01; // MeV (@@ Must be improved)
+  EnergyDeposition = Z*Z/(21.144+40.38/Z/(2.15+.0039*Z)); // MeV
 #ifdef debug
   G4cout<<"G4QCapAtRest::CalculateEnergyDepositionOfTauCapture="<<EnergyDeposition<<G4endl;
 #endif

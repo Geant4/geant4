@@ -79,7 +79,7 @@ G4QProtonNuclearCrossSection::~G4QProtonNuclearCrossSection()
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
-                                                       G4int tgZ, G4int tgN, G4int)
+                                                       G4int tgZ, G4int tgN, G4int PDG)
 {
   static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
@@ -93,6 +93,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   G4cout<<"G4QPrCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
+  if(PDG!=2212) G4cout<<"-Warning-G4QProtonCS::GetCS:***Not a proton***,PDG="<<PDG<<G4endl;
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
   {
@@ -337,14 +338,16 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
 G4double G4QProtonNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
 {
   static const G4double third=1./3.;
-  static const G4double pM = G4QPDGCode(2212).GetMass(); // Proton mass in MeV
-  static const G4double tpM= pM+pM;       // Doubled proton mass (MeV)
+  static const G4double pM = G4QPDGCode(2212).GetMass(); // Projectile mass in MeV
+  static const G4double tpM= pM+pM;       // Doubled projectile mass (MeV)
   G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
   else if(tZ==1 && tN==0) return 800.;    // A threshold on the free proton
   //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
   G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
-  return std::sqrt(dE*(tpM+dE));
+  G4double tM=931.5*tA;
+  G4double T=dE+dE*(dE/2+pM)/tM;
+  return std::sqrt(T*(tpM+T));
 }
 
 // Calculation formula for proton-nuclear inelastic cross-section (mb) (P in GeV/c)
@@ -372,6 +375,12 @@ G4double G4QProtonNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4dou
         pex=320.;
         pos=.14;
         wid=7.e-6;
+      }
+      else if(tZ==5 && tN==6)
+      {
+        pex=270.;
+        pos=.17;
+        wid=.002;
       }
       else if(tZ==4 && tN==5)
       {
@@ -425,13 +434,15 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
                                                            G4double P, G4double lP)
 {
   G4double sigma=0.;
-  if(tZ==1 && !tN)                        // pp interaction
+  if(tZ==1 && !tN)                        // pp interaction (from G4QuasiElasticRatios)
   {
-    G4double sp=std::sqrt(P);
-    G4double ds=lP-4.2;
-    G4double dp=P-.35;
-    G4double d3=dp*dp*dp;
-    sigma=(33.+.2*ds*ds)/(1.+.4/sp)/(1.+.5/d3/d3);
+    G4double p2=P*P;
+    G4double lp=lP-3.5;
+    G4double lp2=lp*lp;
+    G4double rp2=1./p2;
+    G4double El=(.0557*lp2+6.72+30./P)/(1.+.49*rp2/P);
+    G4double To=(.3*lp2+38.2)/(1.+.54*rp2*rp2);
+    sigma=To-El;
   }
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -441,23 +452,26 @@ G4double G4QProtonNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double p4=p2*p2;
     G4double a=tN+tZ;                       // A of the target
     G4double al=std::log(a);
+    G4double sa=std::sqrt(a);
     G4double a2=a*a;
+    G4double a2s=a2*sa;
     G4double a4=a2*a2;
     G4double a8=a4*a4;
     G4double a12=a8*a4;
     G4double a16=a8*a8;
-    G4double c=170./(1.+5./std::exp(al*1.6));
-    G4double dl=al-2.8;
-    G4double r=.3+.2*dl*dl;
+    G4double c=(170.+3600./a2s)/(1.+65./a2s);
+    G4double dl=al-3.;
+    G4double dl2=dl*dl;
+    G4double r=.21+.62*dl2/(1.+.5*dl2);
     G4double g=40.*std::exp(al*0.712)/(1.+12.2/a)/(1.+34./a2);
     G4double e=318.+a4/(1.+.0015*a4/std::exp(al*0.09))/(1.+4.e-28*a12)+
                8.e-18/(1./a16+1.3e-20)/(1.+1.e-21*a12);
     G4double s=3.57+.009*a2/(1.+.0001*a2*a);
-    G4double h=(.01/a4+2.5e-6/a)*(1.+7.e-8*a4)/(1.+6.e7/a12/a2);
+    G4double h=(.01/a4+2.5e-6/a)*(1.+6.e-6*a2*a)/(1.+6.e7/a12/a2);
     sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
 #ifdef pdebug
-  G4cout<<"G4QProtNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g<<",d="
-        <<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
+    G4cout<<"G4QProtNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+          <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }
   else

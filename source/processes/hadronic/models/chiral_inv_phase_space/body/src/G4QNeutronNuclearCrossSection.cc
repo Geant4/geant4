@@ -80,7 +80,7 @@ G4QNeutronNuclearCrossSection::~G4QNeutronNuclearCrossSection()
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
-                                                        G4int tgZ, G4int tgN, G4int)
+                                                        G4int tgZ, G4int tgN, G4int PDG)
 {
   static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
@@ -94,6 +94,7 @@ G4double G4QNeutronNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMo
   G4cout<<"G4QNeutCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="
         <<tgN<<"("<<lastN<<"),PDG=2112, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
+  if(PDG!=2112) G4cout<<"-Warning-G4QNeutronCS::GetCS:**Not a neutron**,PDG="<<PDG<<G4endl;
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
   {
@@ -1340,21 +1341,15 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
                                                            G4double P, G4double lP)
 {
   G4double sigma=0.;
-  if(tZ==1 && !tN)                        // np interaction
+  if(tZ==1 && !tN)                        // np interaction from G4QuasiElasticRatios
   {
-    G4double sp=std::sqrt(P);
-    G4double ds=lP-4.2;
-    G4double dp=P-.35;
-    G4double d3=dp*dp*dp;
-    sigma=(33.+.2*ds*ds)/(1.+.4/sp)/(1.+.5/d3/d3);
-  }
-  if(!tZ && tN==1)                        // nn interaction
-  {
-    G4double sp=std::sqrt(P);
-    G4double ds=lP-4.2;
-    G4double dp=P-.35;
-    G4double d3=dp*dp*dp;
-    sigma=(33.+.2*ds*ds)/(1.+.4/sp)/(1.+.5/d3/d3);
+    G4double p2=P*P;
+    G4double lp=lP-3.5;
+    G4double lp2=lp*lp;
+    G4double rp2=1./p2;
+    G4double El=(.0557*lp2+6.72+32.6/P)/(1.+rp2/P);
+    G4double To=(.3*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
+    sigma=To-El;
   }
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -1386,7 +1381,7 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
 
     //G4double h=(.01/a4+2.5e-6/a)*(1.+7.e-8*a4)/(1.+6.e7/a12/a2);
     //sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
-				sigma=(c+d*d)/(1+r/p4)+(g+e*std::exp(-s*P))/(1+h/p4/p4);
+    sigma=(c+d*d)/(1+r/p4)+(g+e*std::exp(-s*P))/(1+h/p4/p4);
 #ifdef pdebug
     G4cout<<"G4QNeutNuclearCrossS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="
           <<g<<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
