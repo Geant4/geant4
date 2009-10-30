@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2009-10-23 07:58:36 allison Exp $
+$Id: History,v 1.126 2009-10-30 16:04:12 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,12 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+30th October 2009  John Allison
+- Added /vis/scene/add/psHits.
+- G4VisManager.cc: As above and also:
+  o Tidied view creation.
+  o Improved message ("scene" should be "scene handler").
 
 23rd October 2009  John Allison  (visman-V09-02-05 coworks greps-V09-02-02)
 - Implemented default behaviour in
