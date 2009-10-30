@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.5 2009-07-17 18:45:57 vnivanch Exp $
+// $Id: G4NistMessenger.cc,v 1.6 2009-10-30 18:01:22 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -142,6 +142,11 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    
   if (command == g4MatCmd)
    { manager->PrintG4Material(newValue);}
-}
+
+  if (command == g4DensCmd)
+    { if (G4Material::GetNumberOfMaterials > 0) {
+      G4IonParamMat::fDensityData->PrintData(newValue);
+    }
+    }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
