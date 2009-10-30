@@ -17,7 +17,9 @@ web : thomson.phy.ulaval.ca/phys_med
 + Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
-Very small changes by StÃ©phane Chauvie in January 2009
+Very small changes by StÃ©phane Chauvie in January 200.
+StÃ©phane Chauvie, Oct 09: changed Physics list. changes in DICOM read. 
+
 
 --->1) Introduction
 
@@ -29,11 +31,11 @@ In the application the phantom is placed on a table.
 ---> 2) Installation:
 
  - A standard Geant4 example GNUmakefile is provided            
- - Compile it with 'make' 
+ - Compile it with 'make'/'gmake' 
 
 ---> 3) Run the example:
 
- - To run the environment variable G4LEDATA needs to be set, pointing to the low energy data base, G4EMLOW4.3      
+ - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base
 
  - batch mode:
    - $G4INSTALL/bin/Linux-g++/dicom run.mac 
