@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.7 2009-10-30 18:23:18 bagoulia Exp $
+// $Id: G4NistMessenger.cc,v 1.8 2009-10-30 19:39:35 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,6 +105,11 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   g4MatCmd->SetParameterName("mat", true);
   g4MatCmd->SetDefaultValue("all");
 
+  g4DensCmd = new G4UIcmdWithAString("/material/g4/printDensityEffParam",this);
+  g4DensCmd->SetGuidance("print Material from G4DensityEffectData.");
+  g4DensCmd->SetGuidance("all - all materials");
+  g4DensCmd->SetParameterName("mat", true);
+  g4DensCmd->SetDefaultValue("all");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
