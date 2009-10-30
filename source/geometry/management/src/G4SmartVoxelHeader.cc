@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.33 2009-05-26 08:39:50 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.34 2009-10-30 14:05:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1037,6 +1037,9 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   //
   for (nNode=0; nNode<noNodes; nNode++)
   {
+    // Get rid of possible excess capacity in the internal node vector
+    //
+    ((*nodeList)[nNode])->Shrink();
     G4SmartVoxelProxy* pProxyNode = new G4SmartVoxelProxy((*nodeList)[nNode]);
     if (!pProxyNode)
     {
