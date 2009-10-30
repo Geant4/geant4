@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc,v 1.13 2009-07-24 18:03:22 vnivanch Exp $
+// $Id: G4MuMultipleScattering.cc,v 1.14 2009-10-30 18:37:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -47,18 +47,20 @@
 
 #include "G4MuMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4MuMultipleScattering::G4MuMultipleScattering(G4double tet, const G4String& pnam)
+G4MuMultipleScattering::G4MuMultipleScattering(const G4String& pnam)
   : G4VMultipleScattering(pnam)
 {
   isInitialized = false;  
-  SetPolarAngleLimit(tet);
-  SetRangeFactor(0.2);
+  SetStepLimitType(fMinimal);
+  //SetPolarAngleLimit(CLHEP::twopi);
+  //SetRangeFactor(0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +81,8 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
   if(isInitialized) return;
-  AddEmModel(1, new G4WentzelVIModel());
+  AddEmModel(1, new G4UrbanMscModel90());
+  //  AddEmModel(1, new G4WentzelVIModel());
   isInitialized = true;
 }
 
