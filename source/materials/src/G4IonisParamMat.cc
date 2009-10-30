@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.26 2009-10-30 14:46:00 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.27 2009-10-30 18:19:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,6 +127,13 @@ void G4IonisParamMat::ComputeMeanParameters()
     }
     fShellCorrectionVector[j] *= 2.0/fMaterial->GetTotNbOfElectPerVolume();
   } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
+{
+  return fDensityData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

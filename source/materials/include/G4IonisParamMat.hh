@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.14 2009-10-30 15:13:12 vnivanch Exp $
+// $Id: G4IonisParamMat.hh,v 1.15 2009-10-30 18:19:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -87,6 +87,7 @@ public:
   // compute density correction as a function of the kinematic variable
   // x = log10(beta*gamma)  
   inline G4double DensityCorrection(G4double x);
+  static G4DensityEffectData* GetDensityEffectData();
 
   // parameters of the energy loss fluctuation model:
   G4double  GetF1fluct()                const {return fF1fluct;};
