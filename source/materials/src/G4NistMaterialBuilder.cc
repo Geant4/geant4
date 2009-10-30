@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.20 2009-05-07 18:50:46 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.21 2009-10-30 14:45:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,8 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 27.06.06 V.Ivanchneko fix graphite description
 // 27.07.07 V.Ivanchneko remove dependence on NistManager
+// 30.10.09 V.Ivanchneko update density of G4_GRAFITE from PDG'2008
+//                       added G4_GRAPHITE_POROUS
 //
 // -------------------------------------------------------------------
 //
@@ -1702,7 +1704,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.094935);
   AddElementByWeightFraction( 6, 0.905065);
 
-  AddMaterial("G4_GRAPHITE", 1.7, 6, 78.);
+  AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
   nNIST = nMaterials;
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 }
@@ -1726,6 +1728,10 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   G4double density = universe_mean_density*cm3/g;
   AddMaterial("G4_Galactic", density, 1, 21.8, 1, kStateGas);
   AddGas("G4_Galactic",2.73*kelvin, 3.e-18*pascal);
+
+  AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 78.);
+  AddChemicalFormula("G4_GRAPHITE","Graphite");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
