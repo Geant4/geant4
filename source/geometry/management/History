@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2009-09-24 13:23:32 gcosmo Exp $
+$Id: History,v 1.135 2009-10-30 14:06:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 30, 2009  G.Cosmo                  geommng-V09-02-03
+- Clear possible excess capacity in node vectors in G4SmartVoxelHeader
+  BuildNodes() method. May reduce excess memory allocated in optimisation
+  in large detector setups, with slight time increase in initialisation for
+  geometry voxelisation.
 
 September 24, 2009  G.Cosmo                geommng-V09-02-02
 - Fixed implementation of G4LogicalVolume::TotalVolumeEntities() to become
