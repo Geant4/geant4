@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.18 2009-09-13 16:22:34 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.19 2009-10-30 18:36:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,12 +57,13 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
-#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4UrbanMscModel93.hh"
+#include "G4WentzelVIModel.hh"
+//#include "G4GoudsmitSaundersonMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -76,7 +77,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-#include "G4IonParametrisedLossModel.hh"
+//#include "G4IonParametrisedLossModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -164,6 +165,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
@@ -172,6 +174,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
@@ -181,10 +184,12 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                     -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1,-4, 4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "GenericIon") {
@@ -192,8 +197,8 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      //      ionIoni->SetStepFunction(0.1, 20*um);
+      //ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
     } else if (particleName == "alpha" ||
@@ -254,10 +259,10 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   
   // Physics tables
   //
-  opt.SetMinEnergy(1*keV);
-  opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(70);
-  opt.SetLambdaBinning(70);
+  //opt.SetMinEnergy(0.1*keV);
+  // opt.SetMaxEnergy(10*TeV);
+  //opt.SetDEDXBinning(77);
+  //opt.SetLambdaBinning(77);
   //opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(0.2);
     

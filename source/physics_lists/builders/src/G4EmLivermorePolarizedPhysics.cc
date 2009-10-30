@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.3 2009-09-09 16:02:02 sincerti Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.4 2009-10-30 18:36:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -64,6 +64,7 @@
 
 // mu
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
@@ -79,6 +80,11 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+
+// msc models
+#include "G4UrbanMscModel93.hh"
+#include "G4WentzelVIModel.hh"
+#include "G4CoulombScattering.hh"
 
 //
 
@@ -200,6 +206,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       
@@ -225,6 +232,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
 
@@ -241,15 +249,17 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
       // Identical to G4EmStandardPhysics_option3
       
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);
 
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 50*um);          
       pmanager->AddProcess(muIoni,                    -1, 2, 2);
       
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);      
       pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "GenericIon") {
 
@@ -345,6 +355,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   opt.SetLambdaBinning(220);
 
   //opt.SetSplineFlag(true);
+  opt.SetPolarAngleLimit(0.2);
     
   // Ionization
   //
