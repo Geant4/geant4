@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.120 2009-09-29 22:02:46 allison Exp $
+// $Id: G4VisManager.cc,v 1.121 2009-10-30 16:03:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -651,7 +651,7 @@ void G4VisManager::CreateSceneHandler (G4String name) {
       if(fVerbosity >= errors) {
 	G4cout << "ERROR in G4VisManager::CreateSceneHandler during "
 	       << fpGraphicsSystem -> GetName ()
-	       << " scene creation.\n  No action taken."
+	       << " scene handler creation.\n  No action taken."
 	       << G4endl;
       }
     }
@@ -680,14 +680,6 @@ void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
     return;
   }
 
-  // Viewer is created, now we can set geometry parameters
-  // Before 12/2008, it was done in G4VViewer.cc but it did not have to be there!
-    
-  G4ViewParameters initialvp = p -> GetViewParameters();
-  initialvp.SetXGeometryString(XGeometry); //parse string and store parameters
-  p -> SetViewParameters(initialvp);
-  p -> Initialise ();  // (Viewer itself may change view parameters further.)
-
   if (p -> GetViewId() < 0) {
     if (fVerbosity >= errors) {
       G4cout << "ERROR in G4VisManager::CreateViewer during "
@@ -698,10 +690,17 @@ void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
     return;
   }
 
+  // Viewer is created, now we can set geometry parameters
+  // Before 12/2008, it was done in G4VViewer.cc but it did not have to be there!
+    
+  G4ViewParameters initialvp = p -> GetViewParameters();
+  initialvp.SetXGeometryString(XGeometry); //parse string and store parameters
+  p -> SetViewParameters(initialvp);
+  p -> Initialise ();  // (Viewer itself may change view parameters further.)
+
   fpViewer = p;                             // Make current.
   fpSceneHandler -> AddViewerToList (fpViewer);
   fpSceneHandler -> SetCurrentViewer (fpViewer);
-
   if (fVerbosity >= confirmations) {
     G4cout << "G4VisManager::CreateViewer: new viewer created."
 	   << G4endl;
@@ -1070,6 +1069,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddPSHits);
   RegisterMessenger(new G4VisCommandSceneAddScale);
   RegisterMessenger(new G4VisCommandSceneAddText);
   RegisterMessenger(new G4VisCommandSceneAddTrajectories);
