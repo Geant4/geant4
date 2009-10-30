@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.75 2009-09-29 22:00:44 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.76 2009-10-30 15:58:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -36,6 +36,7 @@
 #include "G4LogicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
+#include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
 #include "G4TextModel.hh"
@@ -891,6 +892,52 @@ void G4VisCommandSceneAddLogo::G4Logo::operator()
   sceneHandler.AddPrimitive(*fpG);
   sceneHandler.AddPrimitive(*fp4);
   sceneHandler.EndPrimitives();
+}
+
+////////////// /vis/scene/add/psHits ///////////////////////////////////////
+
+G4VisCommandSceneAddPSHits::G4VisCommandSceneAddPSHits () {
+  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/psHits", this);
+  fpCommand -> SetGuidance
+    ("Adds Primitive Scorer Hits (PSHits) to current scene.");
+  fpCommand -> SetGuidance
+    ("PSHits are drawn at end of run when the scene in which"
+     "\nthey are added is current.");
+}
+
+G4VisCommandSceneAddPSHits::~G4VisCommandSceneAddPSHits () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddPSHits::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddPSHits::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4PSHitsModel* model = new G4PSHitsModel;
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Primitive Scorer hits will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////

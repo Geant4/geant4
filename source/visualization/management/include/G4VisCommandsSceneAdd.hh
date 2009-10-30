@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.17 2006-11-01 10:50:28 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.18 2009-10-30 15:58:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -130,6 +130,18 @@ private:
     G4Polyhedron *fpG, *fp4;
   };
   G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddPSHits: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddPSHits ();
+  virtual ~G4VisCommandSceneAddPSHits ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddPSHits (const G4VisCommandSceneAddPSHits&);
+  G4VisCommandSceneAddPSHits& operator = (const G4VisCommandSceneAddPSHits&);
+  G4UIcmdWithoutParameter* fpCommand;
 };
 
 class G4VisCommandSceneAddScale: public G4VVisCommandScene {
