@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.13 2009-10-30 14:46:00 vnivanch Exp $
+// $Id: G4IonisParamMat.hh,v 1.14 2009-10-30 15:13:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -192,8 +192,8 @@ inline G4double G4IonisParamMat::DensityCorrection(G4double x)
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*std::pow(10.,2*(x - fX0density)); }
-  } else if(x >= fX1density) { y = 2*twoln10 - fCdensity; }
-  else {y = 2*twoln10 - fCdensity + fAdensity*std::pow(fX1density - x, fMdensity);}
+  } else if(x >= fX1density) { y = 2*twoln10*x - fCdensity; }
+  else {y = 2*twoln10*x - fCdensity + fAdensity*std::pow(fX1density - x, fMdensity);}
   return y;
 }
 
