@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.1 2009-10-29 17:13:45 bagoulia Exp $
+// $Id: G4DensityEffectData.cc,v 1.2 2009-10-30 14:45:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // Description: Data on density effect
 //
-// Author:    A.Ivanchenko 28.10.2009
+// Authors:    A.Bagulya, A.Ivanchenko 28.10.2009
 //
 // Modifications:
 // 
@@ -45,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4DensityEffectData.hh"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -1183,11 +1184,11 @@ void G4DensityEffectData::Initialize()
 
 }
 
-  G4int G4DensityEffectData::GetIndex(const G4String& matName)
+G4int G4DensityEffectData::GetIndex(const G4String& matName)
 {
   G4int idx = -1;
 
-  for (G4int i = 0; i < NDENSDATA; i++) {
+  for (G4int i=0; i<NDENSDATA; ++i) {
     if ( names[i] == matName ) idx = i;
     break;
   }
@@ -1195,9 +1196,48 @@ void G4DensityEffectData::Initialize()
   return idx;
 }
 
-  void G4DensityEffectData::AddMaterial(G4float* val, const G4String& matName)
+void G4DensityEffectData::AddMaterial(G4float* val, const G4String& matName)
 {
   for(G4int i=0; i<NDENSARRAY; ++i) { data[index][i] = val[i]; } 
   names.push_back( matName );
   index++;
+}
+
+void G4DensityEffectData::PrintData(const G4String& matName)
+{
+  G4int idx = GetIndex(matName);
+  if(idx >= 0) {
+    G4cout << "G4DensityEffectData for <" << matName 
+	   << "> index= " << idx << G4endl;
+    G4cout << "Eplasma(eV)= " << data[idx][0]/eV
+	   << " rho= " << data[idx][1]
+	   << " -C= " << data[idx][2] 
+	   << " x0= " << data[idx][3]
+	   << " x1= " << data[idx][4]
+	   << " a= " << data[idx][5]
+	   << " m= " << data[idx][6] 
+	   << " d0= " << data[idx][7] 
+	   << " err= " << data[idx][8] 
+	   << G4endl;
+  } else {
+    G4cout << "G4DensityEffectData does not have <" << matName << ">" << G4endl; 
+  }
+}
+
+void G4DensityEffectData::DumpData()
+{
+  G4cout << "======================================================================"
+	 << G4endl; 
+  G4cout << "     Material        Eplasma(eV)  rho  -C   x0   x1   a   m  d0  err"
+	 << G4endl;        
+  G4cout << "======================================================================"
+	 << G4endl; 
+  for(G4int i=0; i<NDENSDATA; ++i) {
+    G4cout << std::setw(3) << i << ". " << std::setw(20) << names[i]
+	   << std::setw(8) << data[i][0]/eV;
+    for(G4int j=1; j<NDENSARRAY; ++j) { G4cout << std::setw(8) << data[i][j]; }
+    G4cout << G4endl;
+  }
+  G4cout << "======================================================================"
+	 << G4endl; 
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.1 2009-10-29 17:13:45 bagoulia Exp $
+// $Id: G4DensityEffectData.hh,v 1.2 2009-10-30 14:45:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //
 // Description: Data on density effect
 //
-// Author:    A.Ivanchenko 28.10.2009
+// Authors:   A.Bagulya, A.Ivanchenko 28.10.2009
 //
 // Modifications:
 // 
@@ -65,10 +65,16 @@ public:
 
   ~G4DensityEffectData();
 
-  G4int GetIndex(G4int ionZ);
-
+  // return index by material name, -1 if material is not in the table 
   G4int GetIndex(const G4String& matName);
 
+  // printout data for material
+  void PrintData(const G4String& matName);
+
+  // printout all data
+  void DumpData();
+
+  // Access to the data via index
   inline G4float GetPlasmaEnergy(G4int idx); 
   inline G4float GetAdjustmentFactor(G4int idx); 
   inline G4float GetCdensity(G4int idx); 
@@ -83,14 +89,12 @@ private:
 
   void Initialize();
 
-  // Function for creating a physics vector
   void AddMaterial(G4float* val, const G4String& matName);
 
   // Assignment operator and copy constructor
   G4DensityEffectData & operator=(const G4DensityEffectData &right);
   G4DensityEffectData(const G4DensityEffectData&);
 
-  // Vectors containing the atomic numbers and names of the materials
   G4float data[NDENSDATA][NDENSARRAY];
   std::vector<G4String> names;
 
