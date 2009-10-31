@@ -23,49 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.2 2009-10-31 18:05:56 maire Exp $
+// $Id: PhysListEmStandard_GS.hh,v 1.1 2009-10-31 18:05:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef PhysListEmStandard_GS_h
+#define PhysListEmStandard_GS_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
-
 class DetectorConstruction;
-class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysListEmStandard_GS : public G4VPhysicsConstructor
 {
-public:
-  PhysicsList(DetectorConstruction*);
-  virtual ~PhysicsList();
+public: 
+  PhysListEmStandard_GS(const G4String& name, DetectorConstruction* det);
+  virtual ~PhysListEmStandard_GS();
 
-  void ConstructParticle();
-        
-  void AddPhysicsList(const G4String& name);    
-  void ConstructProcess();    
-  void AddStepMax(); 
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
   
-  void SetCuts();      
-    
 private:
-
-  DetectorConstruction* detector;
-  PhysicsListMessenger* pMessenger; 
-
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  DetectorConstruction* detector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 
