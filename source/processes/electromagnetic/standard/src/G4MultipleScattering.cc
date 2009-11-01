@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.76 2009-07-20 18:41:34 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.77 2009-11-01 13:05:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -128,7 +128,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScattering.hh"
-#include "G4UrbanMscModel.hh"
+#include "G4UrbanMscModel92.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4UrbanMscModel.hh"
 
@@ -140,6 +140,12 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
+  G4cout << G4endl;
+  G4cout << "!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!" << G4endl;
+  G4cout << "!!! Please use G4eMultipleScattering for e+ and e- !!!" << G4endl;
+  G4cout << "!!! Please use G4MuMultipleScattering for mu+ and mu- !!!" << G4endl;
+  G4cout << "!!! Please use G4hMultipleScattering for hadrons and ions !!!" << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,7 +168,7 @@ void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 
   // initialisation of parameters - defaults for particles other
   // than ions can be overwritten by users
-  mscUrban = new G4UrbanMscModel();
+  mscUrban = new G4UrbanMscModel92();
   AddEmModel(1,mscUrban);
   isInitialized = true;
   /*

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.15 2009-07-20 18:41:34 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.16 2009-11-01 13:05:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) return;
-  mscUrban = new G4UrbanMscModel90();
+  G4VMscModel* mscUrban = new G4UrbanMscModel90();
   AddEmModel(1,mscUrban);
   isInitialized = true;
 }

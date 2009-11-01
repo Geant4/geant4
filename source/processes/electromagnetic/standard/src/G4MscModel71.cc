@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.7 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4MscModel71.cc,v 1.8 2009-11-01 13:05:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,7 +103,7 @@ using namespace std;
 
 G4MscModel71::G4MscModel71(G4double& m_dtrl, G4double& m_NuclCorrPar,
 			   G4double& m_FactPar, G4double& m_factail,
-		       G4bool& m_samplez, const G4String& nam)
+			   G4bool& m_samplez, const G4String& nam)
   : G4VEmModel(nam),
   taubig(8.0),
   tausmall(1.e-20),
@@ -116,7 +116,11 @@ G4MscModel71::G4MscModel71(G4double& m_dtrl, G4double& m_NuclCorrPar,
   isInitialized(false)
 {
   stepmin       = 1.e-6*mm;
-  currentRange  = 0. ;
+  currentRange  = 0.;
+  G4cout << G4endl;
+  G4cout << "!!! G4MscModel71 class is obsolete and will be removed for the next major Geant4 release !!!" << G4endl;
+  G4cout << "!!! Please use other models (G4UrbanMscModel90, 92, 93) !!!" << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
