@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.5 2009-10-18 04:02:09 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.6 2009-11-01 12:59:55 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1636,10 +1636,10 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
 	Index3D id;
 	id.x = idx[0]; id.y = idx[1]; id.z = idx[2];
 	
-	std::map<G4String, std::map<Index3D, G4double> >::iterator kNestedHitsListItr;
-	kNestedHitsListItr = kNestedHitsList.find(scorername);
-	if(kNestedHitsListItr != kNestedHitsList.end()) {
-	  kNestedHitsListItr->second[id] = *itr->second;
+	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
+	nestedHitsListItr = kNestedHitsList.find(scorername);
+	if(nestedHitsListItr != kNestedHitsList.end()) {
+	  nestedHitsListItr->second[id] = *itr->second;
 	} else {
 	  std::map<Index3D, G4double> hit;
 	  hit[id] = *itr->second;
@@ -1797,21 +1797,29 @@ void G4GMocrenFileSceneHandler::Detector::clear() {
   transform3D = G4Transform3D::Identity;
 }
 
+G4GMocrenFileSceneHandler::Index3D::Index3D()
+  : x(0), y(0), z(0) {
+  ;
+}
+
+G4GMocrenFileSceneHandler::Index3D::Index3D(const Index3D & _index3D) 
+  : x(static_cast<Index3D>(_index3D).x),
+    y(static_cast<Index3D>(_index3D).y),
+    z(static_cast<Index3D>(_index3D).z) {
+  ;
+}
+
 G4GMocrenFileSceneHandler::Index3D::Index3D(G4int _x, G4int _y, G4int _z) 
   : x(_x), y(_y), z(_z) {
   ;
 }
-
-G4GMocrenFileSceneHandler::Index3D::Index3D()
-  : x(0), y(0), z(0) {
-}
 G4bool G4GMocrenFileSceneHandler::Index3D::operator < (const Index3D & _right) const {
-  if(z < _right.z) {
+  if(z < static_cast<Index3D>(_right).z) {
      return true;
   } else if(z == _right.z) {
-    if(y < _right.y) return true;
+    if(y < static_cast<Index3D>(_right).y) return true;
     else if(y == _right.y) 
-      if(x < _right.x) return true;
+      if(x < static_cast<Index3D>(_right).x) return true;
   } 
   return false;
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009-10-22 08:02:18 akimura Exp $
+$Id: History,v 1.3 2009-11-01 12:59:55 akimura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+1 Novemeber 2009  Akinori Kimura
+A few warning as following were fixed.
+src/G4GMocrenFileSceneHandler.cc:1812: warning: dereferencing pointer '<anonymous>' does break strict-aliasing rules
+
 
 22 October 2009  Akinori Kimura (gMocren-V09-02-00)
 G4PSHitsModel.{hh,cc} were moved to the modeling directory.

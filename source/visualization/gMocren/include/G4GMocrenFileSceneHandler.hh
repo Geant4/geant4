@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh,v 1.3 2009-10-18 04:02:09 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.hh,v 1.4 2009-11-01 12:59:55 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -168,14 +168,18 @@ private:
   G4int kNestedVolumeDimension[3];
   G4int kNestedVolumeDirAxis[3];
 
-  class Index3D{
+  class Index3D {
   public:
     G4int x, y, z;
     Index3D();
+    Index3D(const Index3D & _index3D);
     Index3D(G4int _x, G4int _y, G4int _z);
     ~Index3D(){;}
     G4bool operator < (const Index3D & _right) const;
     G4bool operator == (const Index3D & _right) const;
+    G4int X() const {return x;}
+    G4int Y() const {return y;}
+    G4int Z() const {return z;}
   };
 
   std::map<Index3D, float> kNestedModality;
