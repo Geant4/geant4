@@ -171,6 +171,18 @@ int main() {
   CompareDEDXValues(icru73comp, 1.909  * unitDEDX, 0.025, 3, "G4_CARBON_DIOXIDE");
   CompareDEDXValues(icru73comp, 4.225  * unitDEDX, 10.0 , 10, "G4_MYLAR");
 
+  // Reference values taken directly from revised ICRU 73 tables
+  CompareDEDXValues(icru73comp, 0.19364 * unitDEDX, 25.0, 3, "G4_WATER");
+  CompareDEDXValues(icru73comp, 3.6037 * unitDEDX, 0.025, 6, "G4_WATER");
+  CompareDEDXValues(icru73comp, 1.6302 * unitDEDX, 10.0, 6, "G4_WATER");
+  CompareDEDXValues(icru73comp, 0.079682 * unitDEDX, 1000.0, 6, "G4_WATER");
+  CompareDEDXValues(icru73comp, 1.2296 * unitDEDX, 80.0, 12, "G4_WATER");
+  CompareDEDXValues(icru73comp, 7.1917 * unitDEDX, 15.0, 15, "G4_WATER");
+  CompareDEDXValues(icru73comp, 4.7505 * unitDEDX, 30.0, 16, "G4_WATER");
+  CompareDEDXValues(icru73comp, 0.76464 * unitDEDX, 800.0, 18, "G4_WATER");
+  CompareDEDXValues(icru73comp, 12.836 * unitDEDX, 0.09, 18, "G4_WATER");
+  CompareDEDXValues(icru73comp, 0.39022 * unitDEDX, 250.0, 10, "G4_WATER");
+
   G4cout << G4endl << "### C. G4IronStoppingICRU73:" << G4endl;
 
   // Reference values taken directly from ICRU 73 tables

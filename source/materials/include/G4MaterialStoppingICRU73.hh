@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStoppingICRU73.hh,v 1.5 2009-03-18 10:14:49 alechner Exp $
+// $Id: G4MaterialStoppingICRU73.hh,v 1.6 2009-11-01 10:11:50 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4MaterialStoppingICRU73_h
@@ -88,6 +88,11 @@ private:
   G4PhysicsVector* CreatePhysicsVector(G4double* energy, 
                                        G4double* stoppower, 
                                        G4double factor);
+
+  // Function for creating a physics vector (full range up to 1 GeV/u)
+  G4PhysicsVector* CreatePhysicsVectorFullRange(G4double* energy, 
+                                                G4double* stoppower, 
+                                                G4double factor);
 
   // Assignment operator and copy constructor
   G4MaterialStoppingICRU73 & 
