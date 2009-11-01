@@ -1,4 +1,4 @@
-$Id: History,v 1.470 2009-10-28 10:15:44 vnivanch Exp $
+$Id: History,v 1.471 2009-11-01 13:14:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 October 09:  V.Ivant (emstand-V09-02-27)
+- Added G4UrbanMscModel92, G4UrbanMscModel93 - 9.2 and 9.3 versions
+                       version of the Urban model
+- Set default model G4UrbanMscModel92 for G4eMultipleScattering
+- Added warting to obsolete msc classes G4MultipleScattering, G4UrbanMscModel,
+                       G4UrbanMscMode2, G4MscModel71  
 
 28 October 09:  V.Ivant (emstand-V09-02-26)
 - G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel - added
