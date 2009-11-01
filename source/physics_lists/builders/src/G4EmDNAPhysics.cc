@@ -23,16 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.1 2009-03-25 11:28:07 sincerti Exp $
+// $Id: G4EmDNAPhysics.cc,v 1.2 2009-11-01 13:21:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
 
-#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4DNAGenericIonsManager.hh"
 
-// *** Processes and models
+// *** Processes and models for Geant4-DNA
 
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
@@ -58,6 +57,25 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 
+// Warning : the following is needed in order to use EM Physics builders
+// e+
+#include "G4Positron.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+// gamma
+#include "G4Gamma.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+// end of warning
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics::G4EmDNAPhysics(
@@ -70,16 +88,23 @@ G4EmDNAPhysics::G4EmDNAPhysics(
 G4EmDNAPhysics::~G4EmDNAPhysics()
 {}
 
+#include "G4GenericIon.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmDNAPhysics::ConstructParticle()
 {
+// bosons
+  G4Gamma::Gamma();
 
 // leptons
   G4Electron::Electron();
-
+  G4Positron::Positron();
+  
 // baryons
   G4Proton::Proton();
+
+  G4GenericIon::GenericIonDefinition();
 
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
@@ -119,6 +144,7 @@ void G4EmDNAPhysics::ConstructProcess()
       // *** Ionisation ***
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
 
+    
     } else if ( particleName == "proton" ) {
       pmanager->AddDiscreteProcess(new G4DNAExcitation());
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
@@ -145,6 +171,62 @@ void G4EmDNAPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
 
     }
+    
+    // Warning : the following particles and processes are needed by EM Physics builders
+    // They are taken from the default Livermore Physics list
+    // These particles are currently not handled by Geant4-DNA
+    
+      // e+
+      
+      else if (particleName == "e+") {
+
+      // Identical to G4EmStandardPhysics_option3
+      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);      
+      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
+
+    }  else if (particleName == "gamma") {
+    
+      G4double LivermoreHighEnergyLimit = GeV;
+
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
+	new G4LivermorePhotoElectricModel();
+      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4LivermoreComptonModel* theLivermoreComptonModel = 
+	new G4LivermoreComptonModel();
+      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      pmanager->AddDiscreteProcess(theComptonScattering);
+
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
+	new G4LivermoreGammaConversionModel();
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      pmanager->AddDiscreteProcess(theGammaConversion);
+
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theRayleigh->AddEmModel(0, theRayleighModel);
+      pmanager->AddDiscreteProcess(theRayleigh);
+    }
+    
+   // Warning : end of particles and processes are needed by EM Physics builders 
+    
   }
 }
 
