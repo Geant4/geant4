@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.hh,v 1.7 2009-07-04 15:48:02 vnivanch Exp $
+// $Id: G4hMultipleScattering.hh,v 1.8 2009-11-01 13:04:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,8 +60,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4VMscModel;
-
 class G4hMultipleScattering : public G4VMultipleScattering
 
 {
@@ -83,8 +81,6 @@ protected:
   void InitialiseProcess(const G4ParticleDefinition*);
 
 private:        // data members
-
-  G4VMscModel* mscUrban;
 
   G4bool   isInitialized;
 

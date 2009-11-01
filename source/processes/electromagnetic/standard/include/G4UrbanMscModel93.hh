@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.hh,v 1.6 2009-11-01 13:04:12 vnivanch Exp $
+// $Id: G4UrbanMscModel93.hh,v 1.1 2009-11-01 13:04:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -32,13 +32,17 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4UrbanMscModel90
+// File name:     G4UrbanMscModel93
 //
-// Author:        V.Ivanchenko clone Laszlo Urban model
+// Author:        Laszlo Urban
 //
-// Creation date: 07.12.2007
+// Creation date: 06.03.2008
 //
 // Modifications:
+// 23-04-2009 L.Urban updated parameterization in UpdateCache method
+// 28-10-2009 V.Ivanchenko moved G4UrbanMscModel2 to G4UrbanMscModel93, 
+//            now it is a frozen version of the Urban model corresponding 
+//            to g4 9.3
 //
 //
 // Class Description:
@@ -49,8 +53,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4UrbanMscModel90_h
-#define G4UrbanMscModel90_h 1
+#ifndef G4UrbanMscModel93_h
+#define G4UrbanMscModel93_h 1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,14 +68,14 @@ class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4UrbanMscModel90 : public G4VMscModel
+class G4UrbanMscModel93 : public G4VMscModel
 {
 
 public:
 
-  G4UrbanMscModel90(const G4String& nam = "UrbanMsc90");
+  G4UrbanMscModel93(const G4String& nam = "UrbanMsc93");
 
-  virtual ~G4UrbanMscModel90();
+  virtual ~G4UrbanMscModel93();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -81,12 +85,6 @@ public:
 				      G4double AtomicWeight=0., 
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
-
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double,
-			 G4double);
 
   void SampleScattering(const G4DynamicParticle*,
 			G4double safety);
@@ -104,6 +102,8 @@ public:
 
 private:
 
+  G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
+
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
 
   G4double SampleDisplacement();
@@ -114,33 +114,32 @@ private:
 
   inline void SetParticle(const G4ParticleDefinition*);
 
+  inline void UpdateCache();
+
   //  hide assignment operator
-  G4UrbanMscModel90 & operator=(const  G4UrbanMscModel90 &right);
-  G4UrbanMscModel90(const  G4UrbanMscModel90&);
+  G4UrbanMscModel93 & operator=(const  G4UrbanMscModel93 &right);
+  G4UrbanMscModel93(const  G4UrbanMscModel93&);
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
 
   G4double mass;
-  G4double charge;
-
-  G4double masslimite,masslimitmu;
+  G4double charge,ChargeSquare;
+  G4double masslimite,lambdalimit,fr;
 
   G4double taubig;
   G4double tausmall;
   G4double taulim;
   G4double currentTau;
-  G4double frscaling1,frscaling2;
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
+  G4double tgeom;
 
-  G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
@@ -159,22 +158,31 @@ private:
 
   G4double currentKinEnergy;
   G4double currentRange; 
+  G4double rangeinit;
   G4double currentRadLength;
 
-  G4double Zeff;
+  G4double theta0max,rellossmax;
+  G4double third;
 
   G4int    currentMaterialIndex;
+
+  G4double y;
+  G4double Zold;
+  G4double Zeff,Z2,Z23,lnZ;
+  G4double coeffth1,coeffth2;
+  G4double coeffc1,coeffc2;
+  G4double scr1ini,scr2ini,scr1,scr2;
 
   G4bool   isInitialized;
   G4bool   inside;
   G4bool   insideskin;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4UrbanMscModel90::GetLambda(G4double e)
+G4double G4UrbanMscModel93::GetLambda(G4double e)
 {
   G4double x;
   if(theLambdaTable) {
@@ -191,16 +199,37 @@ G4double G4UrbanMscModel90::GetLambda(G4double e)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void G4UrbanMscModel90::SetParticle(const G4ParticleDefinition* p)
+void G4UrbanMscModel93::SetParticle(const G4ParticleDefinition* p)
 {
   if (p != particle) {
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
+    ChargeSquare = charge*charge;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel93::UpdateCache()                                   
+{
+    lnZ = std::log(Zeff);
+    //new correction in theta0 formula
+    coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
+    coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
+    // tail parameters
+    G4double lnZ1 = std::log(Zeff+1.);
+    coeffc1  = 2.943-0.197*lnZ1;                  
+    coeffc2  = 0.0987-0.0143*lnZ1;                              
+    // for single scattering
+    Z2 = Zeff*Zeff;
+    Z23 = std::exp(2.*lnZ/3.);
+    scr1     = scr1ini*Z23;
+    scr2     = scr2ini*Z2*ChargeSquare;
+                                              
+    Zold = Zeff;
+}
 
 #endif
 
