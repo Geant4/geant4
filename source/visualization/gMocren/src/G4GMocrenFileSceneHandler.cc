@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.6 2009-11-01 12:59:55 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.7 2009-11-01 14:37:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1560,7 +1560,7 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 	      kNestedHitsListItr->second[id] = value;
 	    } else {
 	      std::map<Index3D, G4double> hits;
-	      hits[id] = value;
+	      hits.insert(std::map<Index3D, G4double>::value_type(id, value));
 	      kNestedHitsList[hitNames[i]] = hits;
 	    }
 
@@ -1587,10 +1587,10 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
 
   std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
   G4int nhitname = (G4int)hitScorerNames.size();
-  G4String scorername = ((G4VHitsCollection)hits).GetName();
+  G4String scorername = static_cast<G4VHitsCollection>(hits).GetName();
 
   if(GFDEBUG_HIT) {
-    G4String meshname = ((G4VHitsCollection)hits).GetSDname();
+    G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();
     G4cout << "       >>>>> " << meshname << " : " << scorername  << G4endl;
 
     for(int i = 0; i < nhitname; i++)
@@ -1633,8 +1633,9 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
       std::map<G4int, G4double*>::const_iterator itr = map->begin();
       for(; itr != map->end(); itr++) {
 	GetNestedVolumeIndex(itr->first, idx);
-	Index3D id;
-	id.x = idx[0]; id.y = idx[1]; id.z = idx[2];
+	Index3D id(idx[0], idx[1], idx[2]);
+	//Index3D id;
+	//id.x = idx[0]; id.y = idx[1]; id.z = idx[2];
 	
 	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
 	nestedHitsListItr = kNestedHitsList.find(scorername);
@@ -1642,7 +1643,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
 	  nestedHitsListItr->second[id] = *itr->second;
 	} else {
 	  std::map<Index3D, G4double> hit;
-	  hit[id] = *itr->second;
+	  hit.insert(std::map<Index3D, G4double>::value_type(id, *itr->second));
 	  kNestedHitsList[scorername] = hit;
 	}
       }
@@ -1783,50 +1784,6 @@ void G4GMocrenFileSceneHandler::ExtractDetector() {
   }
 }
 
-G4GMocrenFileSceneHandler::Detector::Detector()
-  : polyhedron(0) {
-  color[0] = color[1] = color[2] = 255;
-}
-G4GMocrenFileSceneHandler::Detector::~Detector() {
-  if(!polyhedron) delete polyhedron;
-}
-void G4GMocrenFileSceneHandler::Detector::clear() {
-  name.clear();
-  if(!polyhedron) delete polyhedron;
-  color[0] = color[1] = color[2] = 255;
-  transform3D = G4Transform3D::Identity;
-}
-
-G4GMocrenFileSceneHandler::Index3D::Index3D()
-  : x(0), y(0), z(0) {
-  ;
-}
-
-G4GMocrenFileSceneHandler::Index3D::Index3D(const Index3D & _index3D) 
-  : x(static_cast<Index3D>(_index3D).x),
-    y(static_cast<Index3D>(_index3D).y),
-    z(static_cast<Index3D>(_index3D).z) {
-  ;
-}
-
-G4GMocrenFileSceneHandler::Index3D::Index3D(G4int _x, G4int _y, G4int _z) 
-  : x(_x), y(_y), z(_z) {
-  ;
-}
-G4bool G4GMocrenFileSceneHandler::Index3D::operator < (const Index3D & _right) const {
-  if(z < static_cast<Index3D>(_right).z) {
-     return true;
-  } else if(z == _right.z) {
-    if(y < static_cast<Index3D>(_right).y) return true;
-    else if(y == _right.y) 
-      if(x < static_cast<Index3D>(_right).x) return true;
-  } 
-  return false;
-}
-G4bool G4GMocrenFileSceneHandler::Index3D::operator == (const Index3D & _right) const {
-  if(z == _right.z && y == _right.y && x == _right.x) return true;
-  return false;
-}
 void G4GMocrenFileSceneHandler::GetNestedVolumeIndex(G4int _idx, G4int _idx3d[3]) {
   if(kNestedVolumeDimension[0] == 0 ||
      kNestedVolumeDimension[1] == 0 ||
@@ -1891,3 +1848,53 @@ void G4GMocrenFileSceneHandler::GetNestedVolumeIndex(G4int _idx, G4int _idx3d[3]
 }
 
 
+//-- --//
+G4GMocrenFileSceneHandler::Detector::Detector()
+  : polyhedron(0) {
+  color[0] = color[1] = color[2] = 255;
+}
+G4GMocrenFileSceneHandler::Detector::~Detector() {
+  if(!polyhedron) delete polyhedron;
+}
+void G4GMocrenFileSceneHandler::Detector::clear() {
+  name.clear();
+  if(!polyhedron) delete polyhedron;
+  color[0] = color[1] = color[2] = 255;
+  transform3D = G4Transform3D::Identity;
+}
+
+//-- --//
+G4GMocrenFileSceneHandler::Index3D::Index3D()
+  : x(0), y(0), z(0) {
+  ;
+}
+
+G4GMocrenFileSceneHandler::Index3D::Index3D(const Index3D & _index3D) 
+  : x(_index3D.x), y(_index3D.y), z(_index3D.z) {
+  //: x(_index3D.X()),
+  //y(_index3D.Y()),
+  //z(_index3D.Z()) {
+  //  : x(static_cast<Index3D>(_index3D).x),
+  //    y(static_cast<Index3D>(_index3D).y),
+  //    z(static_cast<Index3D>(_index3D).z) {
+  ;
+}
+
+G4GMocrenFileSceneHandler::Index3D::Index3D(G4int _x, G4int _y, G4int _z) 
+  : x(_x), y(_y), z(_z) {
+  ;
+}
+G4bool G4GMocrenFileSceneHandler::Index3D::operator < (const Index3D & _right) const {
+  if(z < static_cast<Index3D>(_right).z) {
+     return true;
+  } else if(z == _right.z) {
+    if(y < static_cast<Index3D>(_right).y) return true;
+    else if(y == _right.y) 
+      if(x < static_cast<Index3D>(_right).x) return true;
+  } 
+  return false;
+}
+G4bool G4GMocrenFileSceneHandler::Index3D::operator == (const Index3D & _right) const {
+  if(z == _right.z && y == _right.y && x == _right.x) return true;
+  return false;
+}
