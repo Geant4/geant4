@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2009-10-30 18:36:15 vnivanch Exp $
+q$Id: History,v 1.103 2009-11-01 13:23:09 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-10-2009, V.Ivanchenko                   (phys-lists-V09-02-30)
+- G4EmDNAPhysics (S.Inserti) updated combined Physics List standard/DNA
 
 30-10-2009, V.Ivanchenko                   (phys-lists-V09-02-29)
 - Review of all EM builders: 
