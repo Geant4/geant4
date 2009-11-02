@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc,v 1.3 2009-03-04 13:28:49 sincerti Exp $
+// $Id: G4DNAIonisation.cc,v 1.4 2009-11-02 17:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAIonisation.hh"
@@ -76,8 +76,8 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
     if(name == "e-")
     {
       if(!Model()) SetModel(new G4DNABornIonisationModel);
-      Model()->SetLowEnergyLimit(12.61*eV);
-      Model()->SetHighEnergyLimit(30*keV);
+      Model()->SetLowEnergyLimit(11.*eV);
+      Model()->SetHighEnergyLimit(1.*MeV);
 
       AddEmModel(1, Model());   
     }

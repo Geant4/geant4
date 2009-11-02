@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.12 2009-08-31 14:03:29 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.13 2009-11-02 17:00:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -104,8 +104,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
     tableFile[electron] = fileElectron;
 
-    lowEnergyLimit[electron] = 12.61 * eV; 
-    highEnergyLimit[electron] = 20. * keV;
+    lowEnergyLimit[electron] = 11. * eV; 
+    highEnergyLimit[electron] = 1. * MeV;
 
     // Cross section
     
