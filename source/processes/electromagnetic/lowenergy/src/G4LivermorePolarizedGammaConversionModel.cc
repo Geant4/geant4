@@ -67,7 +67,7 @@ G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionMod
 
 G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionModel()
 {  
-  if (meanFreePathTable)   delete meanFreePathTable;
+  //  if (meanFreePathTable)   delete meanFreePathTable;
   if (crossSectionHandler) delete crossSectionHandler;
 }
 
@@ -111,8 +111,8 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
   G4String crossSectionFile = "pair/pp-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
-  meanFreePathTable = 0;
-  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
+  //  meanFreePathTable = 0;
+  //meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 
 
   //
@@ -217,7 +217,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
 
  // Select randomly one element in the current material
 
-      G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+      //     G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
       const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
 
       if (element == 0)
@@ -349,7 +349,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   // the electron and positron are assumed to have a symetric angular
   // distribution with respect to the Z axis along the parent photon
 
-  G4double localEnergyDeposit = 0. ;
+  //G4double localEnergyDeposit = 0. ;
 
   G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
 
@@ -747,8 +747,8 @@ G4double G4LivermorePolarizedGammaConversionModel::Encu
 G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double x)
 {
   G4double value =0.;
-  G4double y0 = p_p1[0];
-  G4double A = p_p1[1];
+  // G4double y0 = p_p1[0];
+  // G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
@@ -771,7 +771,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double
 G4double G4LivermorePolarizedGammaConversionModel::Fdlor(G4double* p_p1, G4double x)
 {
   G4double value =0.;
-  G4double y0 = p_p1[0];
+  //G4double y0 = p_p1[0];
   G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
@@ -799,8 +799,8 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvlor(G4double* p_p1, G4dou
 {
   G4double value = 0.;
   G4double nor = 0.;
-  G4double y0 = p_p1[0];
-  G4double A = p_p1[1];
+  //G4double y0 = p_p1[0];
+  //  G4double A = p_p1[1];
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
@@ -941,28 +941,5 @@ void G4LivermorePolarizedGammaConversionModel::SystemOfRefChange
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LivermorePolarizedGammaConversionModel::GetMeanFreePath(const G4Track& track,
-						      G4double,
-						      G4ForceCondition*)
-{
-
-  const G4DynamicParticle* photon = track.GetDynamicParticle();
-  G4double energy = photon->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  //  size_t materialIndex = material->GetIndex();
-
-  G4double meanFreePath = DBL_MAX;
-
-  //  if (energy > highEnergyLimit)
-  //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
-
-  return meanFreePath;
-
-
-}
 
 
