@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.7 2009-11-01 14:37:10 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.8 2009-11-02 04:59:07 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -487,11 +487,11 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
       
       kFlagInModeling = true ;
 
-
-      G4Scene * scene = GetScene();
-      scene->AddEndOfEventModel(new G4PSHitsModel());
-      scene->AddEndOfEventModel(new G4HitsModel());
+      // These models are entrusted to user commands /vis/scene/add/psHits or hits
+      //scene->AddEndOfEventModel(new G4PSHitsModel()); 
+      //scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
+        G4Scene * scene = GetScene();
 	std::vector<G4VModel*> vmodel = scene->GetEndOfEventModelList();
 	std::vector<G4VModel*>::iterator itr = vmodel.begin();
 	for(; itr != vmodel.end(); itr++) {
