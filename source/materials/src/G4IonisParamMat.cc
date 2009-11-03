@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.27 2009-10-30 18:19:56 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.28 2009-11-03 16:24:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,12 +140,15 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
                     
 void G4IonisParamMat::ComputeDensityEffect()
 {
-  const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
   //  const G4double twoln10 = 2.*std::log(10.);
 
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
+  if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
+    idx = fDensityData->GetIndex(G4int(fMaterial->GetZ()));
+  }
+
   if(idx >= 0) {
     fCdensity = fDensityData->GetCdensity(idx); 
     fMdensity = fDensityData->GetMdensity(idx);
@@ -157,6 +160,9 @@ void G4IonisParamMat::ComputeDensityEffect()
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
     return;
   }
+
+  const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
+  fPlasmaEnergy = std::sqrt(Cd2*fMaterial->GetTotNbOfElectPerVolume());
 
   // Compute parameters for the density effect correction in DE/Dx formula.
   // The parametrization is from R.M. Sternheimer, Phys. Rev.B,3:3681 (1971)
