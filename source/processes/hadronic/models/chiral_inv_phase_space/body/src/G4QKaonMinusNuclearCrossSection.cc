@@ -48,11 +48,11 @@
 #include "G4QKaonMinusNuclearCrossSection.hh"
 
 // Initialization of the
-G4double* G4QKaonMinusNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
-G4double* G4QKaonMinusNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighEn CS
+G4double* G4QKaonMinusNuclearCrossSection::lastLEN=0; // Pointer to lastArray of LowEn CS
+G4double* G4QKaonMinusNuclearCrossSection::lastHEN=0; // Pointer to lastArray of HighEn CS
 G4int     G4QKaonMinusNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
 G4int     G4QKaonMinusNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QKaonMinusNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double  G4QKaonMinusNuclearCrossSection::lastP=0.;  // Last used in CrossSection Momentum
 G4double  G4QKaonMinusNuclearCrossSection::lastTH=0.; // Last threshold momentum
 G4double  G4QKaonMinusNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
 G4int     G4QKaonMinusNuclearCrossSection::lastI=0;   // The last position in the DAMDB
@@ -62,7 +62,7 @@ std::vector<G4double*>* G4QKaonMinusNuclearCrossSection::HEN = new std::vector<G
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QKaonMinusNuclearCrossSection::GetPointer()
 {
-  static G4QKaonMinusNuclearCrossSection theCrossSection; //**Static body of Cross Section**
+  static G4QKaonMinusNuclearCrossSection theCrossSection;//**Static body of Cross Section**
   return &theCrossSection;
 }
 
@@ -91,9 +91,9 @@ G4double G4QKaonMinusNuclearCrossSection::GetCrossSection(G4bool fCS, G4double p
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 #ifdef debug
   G4cout<<"G4QPrCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
+        <<"("<<lastN<<"),PDG="<<PDG<<", thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
-  if(PDG!=-321) G4cout<<"-Warning-G4QPiMinusCS::GetCS:**Not a PiMinus**,PDG="<<PDG<<G4endl;
+  if(PDG!=-321) G4cout<<"-Warning-G4QPiMinusCS::GetCS:**Not a KMinus**,PDG="<<PDG<<G4endl;
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
   {

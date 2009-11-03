@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.62 2009-08-07 14:20:57 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.63 2009-11-03 16:13:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -55,6 +55,8 @@ G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
 #ifdef sdebug
   G4cout<<"G4QPDGCode:Constructer is called with PDGCode="<<PDGCode<<G4endl;  
 #endif
+  if(PDGCode==130) PDGCode= 311; // Safety. Should not happen.
+  if(PDGCode==310) PDGCode=-311; // Safety. Should not happen.
   if(PDGCode) theQCode=MakeQCode(PDGCode);
   else        
   {

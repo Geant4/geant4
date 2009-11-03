@@ -91,7 +91,7 @@ G4double G4QKaonPlusNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 #ifdef debug
   G4cout<<"G4QPrCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
+        <<"("<<lastN<<"),PDG="<<PDG<<", thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
   if(PDG!=321) G4cout<<"-Warning-G4QKaonPlusCS::GetCS:***Not a KPlus***,PDG="<<PDG<<G4endl;
   G4bool in=false;                     // By default the isotope must be found in the AMDB
