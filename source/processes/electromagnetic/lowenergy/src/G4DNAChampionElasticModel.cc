@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.9 2009-08-13 11:32:47 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.10 2009-11-03 15:04:25 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 
   killBelowEnergy = 8.23*eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
-  lowEnergyLimitOfModel = 7 * eV; // The model lower energy is 7 eV
+  lowEnergyLimitOfModel = 7.4 * eV; // The model lower energy is 7.4 eV
   highEnergyLimit = 10 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
