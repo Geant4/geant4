@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.11 2009-10-20 12:47:45 lgarnier Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.12 2009-11-03 10:21:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,10 +133,6 @@ void G4OpenGLXmViewer::left_right_pan_callback (XtPointer clientData,
 					      XtIntervalId* timer_id) 
 
 {
-  if (!pView->GetSceneHandler()->GetScene()) {
-    return;
-  }
-
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   G4double delta;
   
@@ -190,10 +186,6 @@ void G4OpenGLXmViewer::pan_up_down_callback (Widget w,
 void G4OpenGLXmViewer::up_down_pan_callback (XtPointer clientData,
 					   XtIntervalId* timer_id) 
 {
-  if (!pView->GetSceneHandler()->GetScene()) {
-    break;
-  }
-
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
   G4double delta;
   

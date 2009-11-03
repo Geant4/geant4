@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2009-10-21 15:21:09 allison Exp $
+$Id: History,v 1.157 2009-11-03 10:21:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd November October 2009  John Allison
+- G4OpenGLXmPanningCallbacks: Fixed pView compilation problem.
 
 21 October 2009 Laurent Garnier
  -  G4OpenGLQtViewer : Prepare to attach viewer In UI
