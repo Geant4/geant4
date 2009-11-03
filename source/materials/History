@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2009-11-03 17:02:03 alechner Exp $
+$Id: History,v 1.154 2009-11-03 17:20:20 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-
-
-
+- G4VIonDEDXTable - (A.Lechner) added new method (BuildPhysicsVector) which
+                    invoke the build process of physics vectors on demand in
+                    the initialisation phase
+- G4SimpleMaterialStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class
+- G4MaterialStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class, changed material name 
+                    from G4_NYLON-6/6 to G4_NYLON-6-6
+- G4IronStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class
+- G4ExtDEDXTable - (A.Lechner) added method BuildPhysicsVector according to 
+                   change in base class
+- G4IonStoppingData - (A.Lechner) new class, which can read ion stopping power 
+                      vectors contained in G4LEDATA: Allows to include larger
+                      physics vectors than those in the ICRU 73 classes, where
+                      vectors are restricted to the maximum energy 10 MeV/nuc.
 - G4NistMaterialBuilder - (A.Lechner) changed following material names:
                            * from G4_NYLON-6/6 to G4_NYLON-6-6
                            * from G4_NYLON-6/10 to G4_NYLON-6-10
