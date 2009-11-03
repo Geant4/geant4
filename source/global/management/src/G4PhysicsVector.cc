@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.36 2009-07-03 11:34:30 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.37 2009-11-03 17:05:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,9 +64,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 // --------------------------------------------------------------
 
 G4PhysicsVector::~G4PhysicsVector() 
-{
-  DeleteData();
-}
+{}
 
 // --------------------------------------------------------------
 
@@ -106,6 +104,9 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 void G4PhysicsVector::DeleteData()
 {
+  lastEnergy=0.;
+  lastValue =0.;
+  lastBin   =0;
   secDerivative.clear();
 }
 
@@ -172,9 +173,6 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
-  lastEnergy=0.;
-  lastValue =0.;
-  lastBin   =0;
   dataVector.clear();
   binVector.clear();
   DeleteData();
@@ -234,6 +232,19 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   }
   delete [] value;
   return true;
+}
+
+// --------------------------------------------------------------
+
+void 
+G4PhysicsVector::ScaleVector(G4double factor)
+{
+  size_t n = dataVector.size();
+  size_t i;
+  if(n > 0) { for(i=0; i<n; ++i) {dataVector[i] *= factor;} }
+  n = secDerivative.size();
+  if(n > 0) { for(i=0; i<n; ++i) {secDerivative[i] *= factor;} }
+  lastValue *= factor;
 }
 
 // --------------------------------------------------------------
@@ -405,9 +416,9 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(secDerivative.size() > 0)  { DeleteData(); }
+  DeleteData(); 
   secDerivative.reserve(numberOfNodes);
-  for(size_t j=0; j<numberOfNodes; j++)
+  for(size_t j=0; j<numberOfNodes; ++j)
   {
     secDerivative.push_back(0.0);
     if(j > 0)

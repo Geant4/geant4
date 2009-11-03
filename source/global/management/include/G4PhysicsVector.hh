@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.22 2009-07-03 11:34:30 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.23 2009-11-03 17:05:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,12 +114,18 @@ class G4PhysicsVector
          // energy of the index. You can get this energy by the next method
          // or by the old method GetLowEdgeEnergy().
 
+    void ScaleVector(G4double factor);
+         // Scale all values of the vector and second derivatives
+         // by factor. This method may be applied after Retrieve
+         // the vector from external file to convert values into Geant4 units
+
     inline G4double Energy(size_t index) const;
          // Returns simply the value in the energy specified by 'index'
          // of the energy vector. The boundary check will not be done. 
          // Use this function when you fill physis vector by PutValue().
 
     virtual G4double GetLowEdgeEnergy(size_t binNumber) const;
+         // Obsolete method
          // Get the energy value at the low edge of the specified bin.
          // Take note that the 'binNumber' starts from '0'.
          // This value should be defined before the call.
@@ -182,8 +188,8 @@ class G4PhysicsVector
 
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
 
-    G4double edgeMin;           // Lower edge value of the lowest bin
-    G4double edgeMax;           // Lower edge value of the highest bin
+    G4double edgeMin;           // Energy of first point
+    G4double edgeMax;           // Energy of the last point
 
     size_t numberOfNodes;
 
