@@ -58,7 +58,7 @@ protected:
 
 public:
 
-  ~G4QKaonZeroNuclearCrossSection() {}
+  ~G4QKaonZeroNuclearCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 

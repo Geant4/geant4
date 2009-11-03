@@ -36,8 +36,7 @@
 // ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
 // *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
-// Short description: CHIPS cross-sections for pi(minus)-nuclear interactions
-// It is purely fake now (just a copy of the proton-nuclear XS) !!! only for testing !!!
+// Short description: CHIPS cross-sections for K0-nuclear interactions [K0=(K+ + K-)/2]
 // -------------------------------------------------------------------------------------
 //
 //#define debug

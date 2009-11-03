@@ -243,8 +243,6 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
   static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
   static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
-  //
-  // Associative memory for acceleration
 #ifdef debug
   G4cout<<"G4QProtNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif

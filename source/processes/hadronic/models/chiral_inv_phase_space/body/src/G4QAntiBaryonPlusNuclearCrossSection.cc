@@ -36,8 +36,7 @@
 // ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
 // *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
 // ****************************************************************************************
-// Short description: CHIPS cross-sections for pi(minus)-nuclear interactions
-// It is purely fake now (just a copy of the proton-nuclear XS) !!! only for testing !!!
+// Short description: CHIPS cross-sections for AntiBaryon(plus)-nuclear interactions
 // -------------------------------------------------------------------------------------
 //
 //#define debug
@@ -49,20 +48,34 @@
 #include "G4QAntiBaryonPlusNuclearCrossSection.hh"
 
 // Initialization of the
-G4double* G4QAntiBaryonPlusNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS
-G4double* G4QAntiBaryonPlusNuclearCrossSection::lastHEN=0; // Pointer to the lastArray of HighEn CS
-G4int     G4QAntiBaryonPlusNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4int     G4QAntiBaryonPlusNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4QAntiBaryonPlusNuclearCrossSection::lastP=0.;  // Last used in cross section Momentum
+G4double* G4QAntiBaryonPlusNuclearCrossSection::lastLEN=0; // PointerToLastArray ofLowEn CS
+G4double* G4QAntiBaryonPlusNuclearCrossSection::lastHEN=0; // PointerToLastArray ofHighEnCS
+G4int     G4QAntiBaryonPlusNuclearCrossSection::lastN=0;   // TheLastN of calculatedNucleus
+G4int     G4QAntiBaryonPlusNuclearCrossSection::lastZ=0;   // TheLastZ of calculatedNucleus
+G4double  G4QAntiBaryonPlusNuclearCrossSection::lastP=0.;  // LastUsedCrossSectionMomentum
 G4double  G4QAntiBaryonPlusNuclearCrossSection::lastTH=0.; // Last threshold momentum
-G4double  G4QAntiBaryonPlusNuclearCrossSection::lastCS=0.; // Last value of the Cross Section
-G4int     G4QAntiBaryonPlusNuclearCrossSection::lastI=0;   // The last position in the DAMDB
+G4double  G4QAntiBaryonPlusNuclearCrossSection::lastCS=0.; // LastValue of the CrossSection
+G4int     G4QAntiBaryonPlusNuclearCrossSection::lastI=0;   // TheLastPosition in the DAMDB
+std::vector<G4double*>* G4QAntiBaryonPlusNuclearCrossSection::LEN =
+                                                                new std::vector<G4double*>;
+std::vector<G4double*>* G4QAntiBaryonPlusNuclearCrossSection::HEN =
+                                                                new std::vector<G4double*>;
 
 // Returns Pointer to the G4VQCrossSection class
 G4VQCrossSection* G4QAntiBaryonPlusNuclearCrossSection::GetPointer()
 {
-  static G4QAntiBaryonPlusNuclearCrossSection theCrossSection; //**Static body of Cross Section**
+  static G4QAntiBaryonPlusNuclearCrossSection theCrossSection;//Static body of CrossSection
   return &theCrossSection;
+}
+
+G4QAntiBaryonPlusNuclearCrossSection::~G4QAntiBaryonPlusNuclearCrossSection()
+{
+  G4int lens=LEN->size();
+  for(G4int i=0; i<lens; ++i) delete[] (*LEN)[i];
+  delete LEN;
+  G4int hens=HEN->size();
+  for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
+  delete HEN;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
@@ -158,8 +171,8 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::GetCrossSection(G4bool fCS, G4dou
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(fCS,0,j,2212,lastZ,lastN,pMom); //calculate & create
-      if(lastCS>0.)                   // It means that the AMBD was initialized
-      {
+      //if(lastCS>0.)                   // It means that the AMBD was initialized
+      //{
 
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef debug
@@ -173,7 +186,7 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::GetCrossSection(G4bool fCS, G4dou
 #ifdef debug
         G4cout<<"G4QPrCS::GetCrosSec:recCS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
 #endif
-      }
+      //} // M.K. Presence of H1 with high threshold breaks the syncronization
 #ifdef pdebug
       G4cout<<"G4QPrCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
 #endif
@@ -233,11 +246,6 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
   static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
   static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
   static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
-  //
-  // Associative memory for acceleration
-  //static std::vector <G4double>  spA;  // shadowing coefficients (A-dependent)
-  static std::vector <G4double*> LEN;  // Vector of pointers to LowEnPiMinusCrossSection
-  static std::vector <G4double*> HEN;  // Vector of pointers to HighEnPiMinusCrossSection
 #ifdef debug
   G4cout<<"G4QProtNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
@@ -252,10 +260,10 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
   {
     if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
     {
-      G4int sync=LEN.size();
+      G4int sync=LEN->size();
       if(sync<=I) G4cerr<<"*!*G4QPiMinusNuclCS::CalcCrosSect:Sync="<<sync<<"<="<<I<<G4endl;
-      lastLEN=LEN[I];                  // Pointer to prepared LowEnergy cross sections
-      lastHEN=HEN[I];                  // Pointer to prepared High Energy cross sections
+      lastLEN=(*LEN)[I];               // Pointer to prepared LowEnergy cross sections
+      lastHEN=(*HEN)[I];               // Pointer to prepared High Energy cross sections
     }
     else                               // This isotope wasn't calculated before => CREATE
     {
@@ -279,15 +287,15 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
 #endif
       // --- End of possible separate function
       // *** The synchronization check ***
-      G4int sync=LEN.size();
+      G4int sync=LEN->size();
       if(sync!=I)
       {
         G4cerr<<"***G4QPiMinusNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ
               <<", N="<<targN<<", F="<<F<<G4endl;
         //G4Exception("G4PiMinusNuclearCS::CalculateCS:","39",FatalException,"DBoverflow");
       }
-      LEN.push_back(lastLEN);          // remember the Low Energy Table
-      HEN.push_back(lastHEN);          // remember the High Energy Table
+      LEN->push_back(lastLEN);         // remember the Low Energy Table
+      HEN->push_back(lastHEN);         // remember the High Energy Table
     } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
