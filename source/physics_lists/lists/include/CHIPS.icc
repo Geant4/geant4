@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CHIPS.icc,v 1.1 2009-10-30 15:29:25 mkossov Exp $
+// $Id: CHIPS.icc,v 1.2 2009-11-03 16:19:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -83,7 +83,6 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
 
    // Hadron Physics
-   G4bool quasiElastic;
   this->RegisterPhysics(  new HadronPhysicsCHIPS("inelastic"));
 
   // Stopping Physics

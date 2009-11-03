@@ -1,4 +1,4 @@
-q$Id: History,v 1.103 2009-11-01 13:23:09 vnivanch Exp $
+q$Id: History,v 1.104 2009-11-03 16:19:17 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3-11-2009, M.Kosov                        (phys-lists-V09-02-31)
+- close the warning about not used quasiElastic
 
 31-10-2009, V.Ivanchenko                   (phys-lists-V09-02-30)
 - G4EmDNAPhysics (S.Inserti) updated combined Physics List standard/DNA
