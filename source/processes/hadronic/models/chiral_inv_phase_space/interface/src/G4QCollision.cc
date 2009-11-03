@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.53 2009-11-03 11:43:03 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.54 2009-11-03 16:14:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -452,7 +452,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #ifdef debug
       G4cout<<"G4QCollis::GetMeanFrP: Before CS, P="<<Momentum<<",Z="<<Z<<",N="<<N<<G4endl;
 #endif
-      if(!pPDG) G4cout<<"-Warning-G4QCollis::GetMeanFrP: projectile PDG=0"<<G4endl;
+      if(!pPDG) G4cout<<"-Warning-G4QCollis::GetMeanFrP: (1) projectile PDG=0"<<G4endl;
       G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       if(CSmanager2)CSI+=CSmanager2->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i)nu,nu
 #ifdef debug
@@ -648,7 +648,6 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   G4cout<<"G4QCollision::PostStepDoIt: "<<nE<<" elements in the material."<<G4endl;
 #endif
   G4int projPDG=0;                           // PDG Code prototype for the captured hadron
-  // Not all these particles are implemented yet (see Is Applicable)
   G4int pZ=particle->GetAtomicNumber();
   G4int pA=particle->GetAtomicMass();
   if      (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
@@ -657,8 +656,14 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
   else if (particle ==        G4KaonPlus::KaonPlus()       ) projPDG=  321;
   else if (particle ==       G4KaonMinus::KaonMinus()      ) projPDG= -321;
-  else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) projPDG=  130;
-  else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) projPDG=  310;
+  else if (particle ==    G4KaonZeroLong::KaonZeroLong()  ||
+           particle ==   G4KaonZeroShort::KaonZeroShort() ||
+           particle ==        G4KaonZero::KaonZero()      ||
+           particle ==    G4AntiKaonZero::AntiKaonZero()   )
+  {
+    if(G4UniformRand() > 0.5)                                projPDG=  311;
+    else                                                     projPDG= -311;
+  }
   else if (                      pZ > 0 && pA > 1          ) projPDG = 90000000+999*pZ+pA;
   else if (particle ==          G4Lambda::Lambda()         ) projPDG= 3122;
   else if (particle ==       G4SigmaPlus::SigmaPlus()      ) projPDG= 3222;
@@ -826,6 +831,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       ml2=mt2;
     }
     // @@ Probably this is not necessary any more (?)
+    if(!aProjPDG) G4cout<<"-Warning-G4QCollis::PostStepDoIt: (2) projectile PDG=0"<<G4endl;
     G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);// Recalculate XS
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section is 0 -> Do Nothing
@@ -1074,6 +1080,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       scatPDG=-11;                       // secondary scattered e+
     }
     // @@ Probably this is not necessary any more
+    if(!projPDG) G4cout<<"-Warning-G4QCollis::PostStepDoIt: (3) projectile PDG=0"<<G4endl;
     G4double xSec1=CSmanager->GetCrossSection(false,Momentum,Z,N,projPDG); //Recalculate XS
     G4double xSec2=CSmanager2->GetCrossSection(false,Momentum,Z,N,projPDG);//Recalculate XS
     G4double xSec=xSec1+xSec2;
@@ -1374,13 +1381,12 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
   // quasi-elastic (& pickup process) for p+A(Z,N)
   //
   }
-  //else if (aProjPDG == 211 && Z > 0 && N > 0)// Made for both pi+ and pi- (experimental)
   else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0)
   //else if(2>3) 
   {
     G4bool ncap = true; // As a prototype: the capture process have not happened
     // @@ in the same way the fission reaction can be added for heavy nuclei
-    if(momentum<500. && projPDG == 2112) // @@ It is reasonable to add the proton capture
+    if(momentum<500. && projPDG == 2112) // @@ It's reasonable to add proton capture too !
     {
       G4QNeutronCaptureRatio* capMan=G4QNeutronCaptureRatio::GetPointer();
       if(G4UniformRand() <= capMan->GetRatio(momentum, Z, N)) ncap = false; // Make capture
