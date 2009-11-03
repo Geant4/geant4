@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.12 2006-06-29 18:58:20 gunter Exp $
+// $Id: G4TouchableHistory.cc,v 1.13 2009-11-03 09:15:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4TouchableHistory.hh"
+
+G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
 
 G4TouchableHistory::~G4TouchableHistory()
 {
