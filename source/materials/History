@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2009-11-01 13:46:00 vnivanch Exp $
+$Id: History,v 1.151 2009-11-03 15:40:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4DensityEffectData - (A.Bagulya) added method GetIndex
+- G4IonisParamMat - (A.Bagulya) fixed density effect computation
 
 01-11-09 A.Lechner (materials-V09-02-11)
 - G4MaterialStoppingICRU73 - (A.Lechner) Extended the energy range of revised
