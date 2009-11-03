@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2009-11-03 16:26:14 vnivanch Exp $
+$Id: History,v 1.153 2009-11-03 17:02:03 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+
+
+- G4NistMaterialBuilder - (A.Lechner) changed following material names:
+                           * from G4_NYLON-6/6 to G4_NYLON-6-6
+                           * from G4_NYLON-6/10 to G4_NYLON-6-10
+                          to allow matching with ion stopping power data files,
+                          which have material name in the file name  
 - G4DensityEffectData - (A.Bagulya) added method GetIndex
 - G4IonisParamMat - (A.Bagulya) fixed density effect computation;
                     added plasma energy computation and access to

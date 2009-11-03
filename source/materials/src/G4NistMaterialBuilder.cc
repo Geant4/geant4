@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.21 2009-10-30 14:45:04 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.22 2009-11-03 17:02:03 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,9 @@
 // 27.07.07 V.Ivanchneko remove dependence on NistManager
 // 30.10.09 V.Ivanchneko update density of G4_GRAFITE from PDG'2008
 //                       added G4_GRAPHITE_POROUS
+// 03.11.09 A.Lechner changed following material names:
+//                    From G4_NYLON-6/6 to G4_NYLON-6-6
+//                    From G4_NYLON-6/10 to G4_NYLON-6-10
 //
 // -------------------------------------------------------------------
 //
@@ -1338,13 +1341,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 7, 0.099536);
   AddElementByWeightFraction( 8, 0.148539);
 
-  AddMaterial("G4_NYLON-6/6", 1.14, 0, 63.9, 4);
+  AddMaterial("G4_NYLON-6-6", 1.14, 0, 63.9, 4);
   AddElementByWeightFraction( 1, 0.097976);
   AddElementByWeightFraction( 6, 0.636856);
   AddElementByWeightFraction( 7, 0.123779);
   AddElementByWeightFraction( 8, 0.141389);
 
-  AddMaterial("G4_NYLON-6/10", 1.14, 0, 63.2, 4);
+  AddMaterial("G4_NYLON-6-10", 1.14, 0, 63.2, 4);
   AddElementByWeightFraction( 1, 0.107062);
   AddElementByWeightFraction( 6, 0.680449);
   AddElementByWeightFraction( 7, 0.099189);
