@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.52 2009-10-30 10:49:34 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.53 2009-11-03 11:43:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -374,7 +374,9 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     leptoNuc=true;
     pPDG=-12;
   }
-  else G4cout<<"G4QCollision::GetMeanFreePath:Particle isn't implemented in CHIPS"<<G4endl;
+  else G4cout<<"-Warning-G4QCollision::GetMeanFreePath:Particle "
+             <<incidentParticleDefinition->GetPDGEncoding()
+             <<" isn't supported by CHIPS"<<G4endl;
   
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -450,6 +452,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #ifdef debug
       G4cout<<"G4QCollis::GetMeanFrP: Before CS, P="<<Momentum<<",Z="<<Z<<",N="<<N<<G4endl;
 #endif
+      if(!pPDG) G4cout<<"-Warning-G4QCollis::GetMeanFrP: projectile PDG=0"<<G4endl;
       G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       if(CSmanager2)CSI+=CSmanager2->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i)nu,nu
 #ifdef debug
