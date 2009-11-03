@@ -28,31 +28,27 @@
 // ===========================================================================
 // GEANT4 class header file
 //
-// Class:                G4ExtDEDXTable
+// Class:                G4IonStoppingData
 //
 // Base class:           G4VIonDEDXTable 
 // 
 // Author:               Anton Lechner (Anton.Lechner@cern.ch)
 //
-// First implementation: 29. 02. 2009
+// First implementation: 03. 11. 2009
 //
 // Modifications:
-// 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
-//            to interface changes in base class G4VIonDEDXTable.
 //
 //
-// Class description:
-//    Utility class for users to add their own electronic stopping powers
-//    for ions. This class is dedicated for use with G4IonParametrisedLossModel
-//    of the low-energy electromagnetic package.
+// Class description: Class which can read ion stopping power data from
+//                    $G4LEDATA/ion_stopping_data
 //
 // Comments:
 //
 // =========================================================================== 
 //
 
-#ifndef G4EXTDEDXTABLE_HH
-#define G4EXTDEDXTABLE_HH
+#ifndef G4IONSTOPPINGDATA_HH
+#define G4IONSTOPPINGDATA_HH
 
 #include "globals.hh"
 #include "G4VIonDEDXTable.hh"
@@ -61,17 +57,11 @@
 #include <map>
 
 
-class G4ExtDEDXTable : public G4VIonDEDXTable {
+class G4IonStoppingData : public G4VIonDEDXTable {
 
  public:
-   G4ExtDEDXTable();
-   virtual ~G4ExtDEDXTable();
-
-   G4bool BuildPhysicsVector(G4int ionZ, 
-                             const G4String& matName);
-
-   G4bool BuildPhysicsVector(G4int ionZ, 
-                             G4int matZ);
+   G4IonStoppingData(const G4String& leDirectory);
+   virtual ~G4IonStoppingData();
 
    // Function for checking the availability of stopping power tables
    // for a given ion-material couple, where the material consists of
@@ -87,6 +77,16 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
         G4int atomicNumberIon,          // Atomic number of ion
         const G4String& matIdentifier   // Name or chemical formula of material
                        );
+
+   // Function which invokes the read/build process of physics vectors from
+   // files in G4LEDATA
+   G4bool BuildPhysicsVector(G4int ionZ, 
+                             const G4String& matName);
+
+   // Function which invokes the read/build process of physics vectors from
+   // files in G4LEDATA
+   G4bool BuildPhysicsVector(G4int ionZ, 
+                             G4int matZ);
 
    // Function returning the stopping power vector for given ion-material
    // couples, where the material consists of a single element only.
@@ -116,7 +116,7 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
    G4double GetDEDX(
         G4double kinEnergyPerNucleon,   // Kinetic energy per nucleon
 	G4int atomicNumberIon,          // Atomic number of ion
-        const G4String& matIdenfier     // Name or chemical formula of material
+        const G4String& matIdentifier   // Name or chemical formula of material
 				     );
 
    // Function for adding dE/dx vector for an elemental materials. The last
@@ -124,8 +124,15 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
    G4bool AddPhysicsVector(
         G4PhysicsVector* physicsVector, // Physics vector
 	G4int atomicNumberIon,          // Atomic number of ion
-        const G4String& matIdenfier,    // Name or chemical formula of material
-        G4int atomicNumberElem = 0      // Atomic number of elemental material
+        const G4String& matIdentifier   // Name or chemical formula of material
+  			   );
+
+   // Function for adding dE/dx vector for an elemental materials. The last
+   // argument only applies to elemental materials.
+   G4bool AddPhysicsVector(
+        G4PhysicsVector* physicsVector, // Physics vector
+	G4int atomicNumberIon,          // Atomic number of ion
+        G4int atomicNumberElem          // Atomic number of elemental material
 			 );
 
    // Function for removing dE/dx vector for a compound materials
@@ -133,17 +140,11 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
 	G4int atomicNumberIon,          // Atomic number of ion
         const G4String& matIdentifier   // Name or chemical formula of material
 			    );
-
-   // Function writing all stopping power vectors to file
-   G4bool StorePhysicsTable(
-        const G4String& fileName        // File name
-			     );
-
-   // Function retrieving all stopping power vectors from file
-   G4bool RetrievePhysicsTable(
-        const G4String& fileName       // File name
-			       );
-
+   // Function for removing dE/dx vector for a compound materials
+   G4bool RemovePhysicsVector(
+	G4int atomicNumberIon,          // Atomic number of ion
+        G4int atomicNumberElem          // Atomic number of elemental material
+			    );
    // Function deleting all physics vectors and clearing the maps
    void ClearTable();
 
@@ -151,9 +152,8 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
    void DumpMap();
 
  private:
-   G4PhysicsVector* CreatePhysicsVector(G4int vectorType); 
-
-   G4int FindAtomicNumberElement(G4PhysicsVector* physicsVector);
+   // Subdirectory of G4LEDATA
+   G4String subDir;
 
    typedef std::pair<G4int, G4int> G4IonDEDXKeyElem;
    typedef std::pair<G4int, G4String> G4IonDEDXKeyMat;
@@ -165,4 +165,4 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
    G4IonDEDXMapMat dedxMapMaterials;
 };
 
-#endif // G4EXTDEDXTABLE_HH
+#endif // G4IONSTOPPINGDATA_HH

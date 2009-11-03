@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.6 2009-03-18 10:14:49 alechner Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.7 2009-11-03 17:19:35 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
@@ -38,6 +38,8 @@
 // Author:      Ivantchenko 10.07.2008
 //
 // Modifications:
+// 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
+//            to interface changes in base class G4VIonDEDXTable.
 //
 //----------------------------------------------------------------------------
 //
@@ -64,6 +66,12 @@ public:
   G4SimpleMaterialStoppingICRU73(G4bool splineFlag = true);
 
   ~G4SimpleMaterialStoppingICRU73();
+
+  G4bool BuildPhysicsVector(G4int ionZ, 
+                            const G4String& matName);
+
+  G4bool BuildPhysicsVector(G4int ionZ, 
+                            G4int matZ);
 
   G4bool IsApplicable(G4int ionZ,  
                       G4int matZ);

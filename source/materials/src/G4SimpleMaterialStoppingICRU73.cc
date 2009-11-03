@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.7 2009-04-29 13:51:53 vnivanch Exp $
+// $Id: G4SimpleMaterialStoppingICRU73.cc,v 1.8 2009-11-03 17:19:35 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -38,6 +38,8 @@
 // Modifications:
 // 29.04.2009 A.Ivantchenko added revised data for G4_Cu
 //            provided by  Prof.P.Sigmund Univ. Southern Denmark
+// 03.11.2009 A. Lechner: Added new methods BuildPhysicsVector according
+//            to interface changes in base class G4VIonDEDXTable.
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +68,21 @@ G4SimpleMaterialStoppingICRU73::G4SimpleMaterialStoppingICRU73(G4bool flag)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool G4SimpleMaterialStoppingICRU73::BuildPhysicsVector(G4int ionZ, 
+                                                          G4int matZ) 
+{
+  return IsApplicable( ionZ, matZ );
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4SimpleMaterialStoppingICRU73::BuildPhysicsVector(G4int ionZ, 
+                                                       const G4String& matName) 
+{
+  return IsApplicable( ionZ, matName );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4SimpleMaterialStoppingICRU73::IsApplicable(G4int ionZ, 
                                              G4int matZ)
 {

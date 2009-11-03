@@ -34,8 +34,9 @@
 //
 // First implementation: 15. 02. 2009
 //
-// Modifications:
-//
+// Modifications:        
+// 02. 11. 2009 A. Lechner: Added BuildPhysicsVector function which should
+//              invoke the build process of physics vectors.
 //
 // Class description:
 //    Base class for electronic stopping power tables for ions.
@@ -58,6 +59,19 @@ class G4VIonDEDXTable {
  public:
    G4VIonDEDXTable(); 
    virtual ~G4VIonDEDXTable();  
+
+   // Function for building a stopping power table for a material consisting of
+   // a single element only.
+   virtual G4bool BuildPhysicsVector(
+        G4int,  // Atomic number of ion
+        G4int   // Atomic number of elemental material
+                               ) = 0;
+
+   // Function building stopping power table for a given ion-material pair.
+   virtual G4bool BuildPhysicsVector(
+        G4int,           // Atomic number of ion
+        const G4String&  // Name or chemical formula of material
+                               ) = 0;
 
    // Function for checking the availability of stopping power tables
    // for a given ion-material pair, where the material consists of

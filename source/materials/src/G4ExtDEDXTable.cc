@@ -36,6 +36,8 @@
 // First implementation: 29. 02. 2009
 //
 // Modifications:
+// 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
+//            to interface changes in base class G4VIonDEDXTable.
 //
 //
 // Class description:
@@ -73,6 +75,22 @@ G4ExtDEDXTable::G4ExtDEDXTable() {
 G4ExtDEDXTable::~G4ExtDEDXTable() {
 
   ClearTable();
+}
+
+// #########################################################################
+
+G4bool G4ExtDEDXTable::BuildPhysicsVector(G4int ionZ, G4int matZ) {
+
+  return IsApplicable( ionZ, matZ );
+}
+
+
+// #########################################################################
+
+G4bool G4ExtDEDXTable::BuildPhysicsVector(G4int ionZ, 
+                                          const G4String& matName) {
+
+  return IsApplicable( ionZ, matName );
 }
 
 // #########################################################################

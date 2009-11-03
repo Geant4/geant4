@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialStoppingICRU73.cc,v 1.8 2009-11-01 10:11:50 alechner Exp $
+// $Id: G4MaterialStoppingICRU73.cc,v 1.9 2009-11-03 17:19:35 alechner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -38,7 +38,12 @@
 // Modifications:
 // 29.04.2009 A.Ivantchenko added revised data for G4WATER, G4WATER_VAPOR,
 //            G4_NYLON-6/6 provided by  Prof.P.Sigmund Univ. Southern Denmark
-//
+// 01.11.2009 A. Lechner: Extended energy range of G4_WATER tables up to 
+//            1 GeV/u
+// 03.11.2009 A. Lechner: Changed material name from G4_NYLON-6/6 to
+//            G4_NYLON-6-6. Added new methods BuildPhysicsVector according
+//            to interface changes in base class G4VIonDEDXTable.
+//  
 //----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +60,7 @@ G4MaterialStoppingICRU73::G4MaterialStoppingICRU73(G4bool splineFlag)
   minIonAtomicNmb = 3;
   maxIonAtomicNmb = 18;
 
-  G4String matName[31] = {"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","G4_ALUMINUM_OXIDE","G4_BONE_COMPACT_ICRU","G4_BONE_CORTICAL_ICRP","G4_C-552","G4_CALCIUM_FLUORIDE","G4_CARBON_DIOXIDE","G4_Pyrex_Glass","G4_KAPTON","G4_LITHIUM_FLUORIDE","G4_LITHIUM_TETRABORATE","G4_METHANE","G4_MUSCLE_STRIATED_ICRU","G4_NYLON-6/6","G4_PHOTO_EMULSION","G4_PLASTIC_SC_VINYLTOLUENE","G4_POLYCARBONATE","G4_POLYETHYLENE","G4_MYLAR","G4_LUCITE","G4_POLYSTYRENE","G4_TEFLON","G4_PROPANE","G4_SILICON_DIOXIDE","G4_SODIUM_IODIDE","G4_TISSUE-METHANE","G4_TISSUE-PROPANE","G4_WATER","G4_WATER_VAPOR"};
+  G4String matName[31] = {"G4_A-150_TISSUE","G4_ADIPOSE_TISSUE_ICRP","G4_AIR","G4_ALUMINUM_OXIDE","G4_BONE_COMPACT_ICRU","G4_BONE_CORTICAL_ICRP","G4_C-552","G4_CALCIUM_FLUORIDE","G4_CARBON_DIOXIDE","G4_Pyrex_Glass","G4_KAPTON","G4_LITHIUM_FLUORIDE","G4_LITHIUM_TETRABORATE","G4_METHANE","G4_MUSCLE_STRIATED_ICRU","G4_NYLON-6-6","G4_PHOTO_EMULSION","G4_PLASTIC_SC_VINYLTOLUENE","G4_POLYCARBONATE","G4_POLYETHYLENE","G4_MYLAR","G4_LUCITE","G4_POLYSTYRENE","G4_TEFLON","G4_PROPANE","G4_SILICON_DIOXIDE","G4_SODIUM_IODIDE","G4_TISSUE-METHANE","G4_TISSUE-PROPANE","G4_WATER","G4_WATER_VAPOR"};
 
   for( size_t i = 0; i < 31; i++ ) {
       namesMat.push_back( matName[i] );
@@ -73,6 +78,21 @@ G4MaterialStoppingICRU73::~G4MaterialStoppingICRU73()
   namesMat.clear();
   dedxKeys.clear();
   dedx.clear();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool G4MaterialStoppingICRU73::BuildPhysicsVector(G4int ionZ, 
+                                                    G4int matZ) 
+{
+  return IsApplicable( ionZ, matZ );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MaterialStoppingICRU73::BuildPhysicsVector(G4int ionZ, 
+                                                    const G4String& matName) 
+{
+  return IsApplicable( ionZ, matName );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
