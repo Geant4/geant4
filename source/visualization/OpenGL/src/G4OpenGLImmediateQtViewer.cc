@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.16 2009-10-14 14:51:20 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.17 2009-11-03 11:02:32 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -187,6 +187,9 @@ void G4OpenGLImmediateQtViewer::paintGL()
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !fHasToRepaint) {
+#if QT_VERSION < 0x040000
+    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
+#else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
     int sw = 0;
@@ -199,6 +202,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
       sh = frameGeometry().height();
     }
     if ((getWinWidth() == (unsigned int)sw) &&(getWinHeight() == (unsigned int)sh)) {
+#endif
       return;
     }
   }

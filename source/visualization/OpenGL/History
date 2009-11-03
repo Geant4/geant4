@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2009-11-03 10:21:49 allison Exp $
+$Id: History,v 1.158 2009-11-03 11:02:32 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd November October 2009  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer : Protec Qt4 method 
+  introduce 13rd october 09 by ifdef
 
 3rd November October 2009  John Allison
 - G4OpenGLXmPanningCallbacks: Fixed pView compilation problem.
