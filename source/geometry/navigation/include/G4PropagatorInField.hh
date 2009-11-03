@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.17 2008-11-13 14:28:56 tnikitin Exp $
+// $Id: G4PropagatorInField.hh,v 1.18 2009-11-03 18:19:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -182,6 +182,9 @@ class G4PropagatorInField
                                        G4int noAbandon );
    inline G4int GetThresholdNoZeroSteps( G4int i ); 
 
+   inline G4double  GetZeroStepThreshold(); 
+   inline void      SetZeroStepThreshold( G4double newLength ); 
+
  protected:  // with description
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
@@ -242,6 +245,8 @@ class G4PropagatorInField
 
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
+   G4double  fZeroStepThreshold; 
+     // Threshold for counting of tiny or 'zero' steps
 
    G4VIntersectionLocator *fIntersectionLocator;
    G4bool fAllocatedLocator;

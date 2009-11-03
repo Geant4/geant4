@@ -35,6 +35,8 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
+// $Id: G4PropagatorInField.cc,v 1.46 2009-11-03 18:19:48 japost Exp $
+// GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
 #include "G4PropagatorInField.hh"
@@ -68,6 +70,7 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
     fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
     fSetFieldMgr(false),
+    fZeroStepThreshold( 0.0 ), 
     fpTrajectoryFilter( 0 )
 {
   if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
@@ -82,6 +85,11 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
   fPreviousSafety= 0.0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  fZeroStepThreshold= std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer ) ; 
+  G4cout << " PiF: Zero Step Threshold set to " << fZeroStepThreshold / millimeter
+	 << " mm." << G4endl;
+  G4cout << " PiF:   Value of kCarTolerance = " << kCarTolerance / millimeter 
+	 << " mm. " << G4endl;
 
   // Definding Intersection Locator and his parameters
   if(vLocator==0){
@@ -402,7 +410,7 @@ G4PropagatorInField::ComputeStep(
   // In order to correct this efficiently, we identify these cases
   // and only take corrective action when they occur.
   // 
-  if( TruePathLength < 0.5*kCarTolerance ) 
+  if( TruePathLength < fZeroStepThreshold ) // Old Threshold = 0.5*kCarTolerance 
     fNoZeroStep++;
   else
     fNoZeroStep = 0;

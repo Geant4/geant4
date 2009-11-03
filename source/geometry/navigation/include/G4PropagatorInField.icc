@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.14 2009-06-02 14:14:34 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.15 2009-11-03 18:19:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -233,6 +233,12 @@ G4int G4PropagatorInField::GetThresholdNoZeroSteps( G4int i )
    else if (i==3) { t = fAbandonThreshold_NoZeroSteps; }
 
    return t;
+}
+
+inline G4double  G4PropagatorInField::GetZeroStepThreshold(){ return fZeroStepThreshold; }
+inline void      G4PropagatorInField::SetZeroStepThreshold( G4double newLength )
+{ 
+  fZeroStepThreshold= newLength;
 }
 
 inline
