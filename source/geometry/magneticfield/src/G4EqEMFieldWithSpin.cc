@@ -24,15 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.6 2009-03-25 15:29:02 gcosmo Exp $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.7 2009-11-04 23:42:41 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  This is the standard right-hand side for equation of motion.
-//
-//  The only case another is required is when using a moving reference
-//  frame ... or extending the class to include additional Forces,
-//  eg an electric field
 //
 //  30.08.2007 Chris Gong, Peter Gumplinger
 //  14.02.2009 Kevin Lynch
@@ -93,7 +89,7 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    // S = \vec{s}, where S^2 = 1
    // B = \vec{B}
    // \beta = \vec{\beta} = \beta \vec{u} with u^2 = 1
-   // E = \vec{E} 
+   // E = \vec{E}
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
