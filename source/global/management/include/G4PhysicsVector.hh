@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.23 2009-11-03 17:05:34 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.24 2009-11-04 09:34:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,8 @@ class G4PhysicsVector
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
 
-    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+  //    inline 
+G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // Obolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 

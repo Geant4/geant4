@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.37 2009-11-03 17:05:34 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.38 2009-11-04 09:34:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   lastEnergy(0.), lastValue(0.), lastBin(0), useSpline(spline)
+   lastEnergy(-1.0), lastValue(0.), lastBin(0), useSpline(spline)
 {}
 
 // --------------------------------------------------------------
@@ -80,7 +80,7 @@ G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
   if (&right==this)  { return *this; }
   if (type != right.type)  { return *this; }
 
-  DeleteData();
+  //DeleteData();
   CopyData(right);
 
   return *this;
@@ -104,9 +104,6 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 void G4PhysicsVector::DeleteData()
 {
-  lastEnergy=0.;
-  lastValue =0.;
-  lastBin   =0;
   secDerivative.clear();
 }
 
@@ -173,9 +170,12 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
+  lastEnergy=-1.0;
+  lastValue =0.;
+  lastBin   =0;
   dataVector.clear();
   binVector.clear();
-  DeleteData();
+  secDerivative.clear();
   comment = "";
 
   // retrieve in ascii mode
@@ -416,7 +416,8 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  DeleteData(); 
+  if(!useSpline) return useSpline;
+  secDerivative.clear();
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
   {
