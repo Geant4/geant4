@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.121 2009-10-30 16:03:41 allison Exp $
+// $Id: G4VisManager.cc,v 1.122 2009-11-04 12:58:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1323,6 +1323,7 @@ void G4VisManager::EndOfRun ()
   if (valid) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
+	fpSceneHandler->DrawEndOfRunModels();
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
