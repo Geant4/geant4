@@ -18,6 +18,11 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-16)
+-----------------------------------------------------------------------
+Mutual tag: Thanks to Andrea bug fix (skip for Z=0,A=0 residual nucleus)
+            in G4QCollision class
+
 4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-15)
 -----------------------------------------------------------------------
 Mutual tag: Reduction of the CHIPS-body dependency + G4QNucleus bug fix
