@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: History,v 1.8 2009-10-20 07:56:36 kurasige Exp $
+// $Id: History,v 1.9 2009-11-04 05:41:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-20 October 2009, Hisaya Kurashige 
+20 October 2009, Hisaya Kurashige (test12-V09-02-01)
 - Use /run/setCut command instead of /run/particle/setCut command
 
 26 May 2009, Gunter Folger             (test23-V09-02-00)
