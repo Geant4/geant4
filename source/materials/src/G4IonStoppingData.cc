@@ -399,18 +399,9 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
      return false;
   }
 
-  size_t vecSize = physicsVector -> GetVectorLength();
-  for(size_t i = 0; i < vecSize; i++) {
-
-     G4double energy = physicsVector -> GetLowEdgeEnergy( i );
-     G4bool b;
-     G4double value = physicsVector -> GetValue( energy, b );
-
-     physicsVector -> 
-                 PutValues( i, energy * MeV, value * MeV * cm2 /( 0.001 * g) );
-  }
-
-  physicsVector -> SetSpline(true);
+  physicsVector -> ScaleVector( MeV, MeV * cm2 /( 0.001 * g) ); 
+  physicsVector -> SetSpline( true );
+  physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store
   if( !AddPhysicsVector(physicsVector, atomicNumberIon, matIdentifier) ) {
@@ -455,18 +446,9 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
      return false;
   }
 
-  size_t vecSize = physicsVector -> GetVectorLength();
-  for(size_t i = 0; i < vecSize; i++) {
-
-     G4double energy = physicsVector -> GetLowEdgeEnergy( i );
-     G4bool b;
-     G4double value = physicsVector -> GetValue( energy, b );
-
-     physicsVector -> 
-                PutValues( i, energy * MeV, value * MeV * cm2 /( 0.001 * g) );
-  }
-
-  physicsVector -> SetSpline(true);
+  physicsVector -> ScaleVector( MeV, MeV * cm2 /( 0.001 * g) ); 
+  physicsVector -> SetSpline( true );
+  physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store
   if( !AddPhysicsVector(physicsVector, atomicNumberIon, atomicNumberElem) ) {
