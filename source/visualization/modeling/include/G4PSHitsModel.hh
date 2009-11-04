@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.hh,v 1.3 2009-10-22 07:35:06 akimura Exp $
+// $Id: G4PSHitsModel.hh,v 1.4 2009-11-04 12:44:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,25 +38,26 @@
 
 #include "G4VModel.hh"
 
-class G4VHit;
+template <typename T> class G4THitsMap;
 
 class G4PSHitsModel: public G4VModel {
 
 public: // With description
 
-  G4PSHitsModel ();
+  G4PSHitsModel (const G4String& requestedMapName = "all");
    
   virtual ~G4PSHitsModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  const G4VHit* GetCurrentHit() const
-  {return kpCurrentHit;}
+  const G4THitsMap<G4double>* GetCurrentHits() const
+  {return fpCurrentHits;}
 
 private:
 
-  const G4VHit* kpCurrentHit;
+  G4String fRequestedMapName;
+  const G4THitsMap<G4double>* fpCurrentHits;
 };
 
 #endif

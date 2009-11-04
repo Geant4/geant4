@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.cc,v 1.3 2009-10-22 07:35:06 akimura Exp $
+// $Id: G4PSHitsModel.cc,v 1.4 2009-11-04 12:44:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,12 +37,12 @@
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4Event.hh"
-#include "G4THitsMap.hh"
+#include "G4ScoringManager.hh"
 
 G4PSHitsModel::~G4PSHitsModel () {}
 
-G4PSHitsModel::G4PSHitsModel ():
-  kpCurrentHit(0)
+G4PSHitsModel::G4PSHitsModel (const G4String& requestedMapName):
+  fRequestedMapName(requestedMapName), fpCurrentHits(0)
 {
   fGlobalTag = "G4PSHitsModel for G4THitsMap<G4double> hits.";
   fGlobalDescription = fGlobalTag;
@@ -50,15 +50,23 @@ G4PSHitsModel::G4PSHitsModel ():
 
 void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  const G4Event* event = fpMP->GetEvent();
-  if (event) {
-    G4HCofThisEvent * HCE = event->GetHCofThisEvent();
-    if (HCE) {
-      G4int nHC = HCE -> GetCapacity ();
-      for (int iHC = 0; iHC < nHC; iHC++) {
-	G4THitsMap<G4double> * hits = dynamic_cast<G4THitsMap<G4double> *>(HCE -> GetHC (iHC));
-	if(hits) sceneHandler.AddCompound (*hits);
-	
+  G4ScoringManager* scoringManager =
+    G4ScoringManager::GetScoringManagerIfExist();
+  if (scoringManager) {
+    size_t nMeshes = scoringManager->GetNumberOfMesh();
+    for (size_t i = 0; i < nMeshes; ++i) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+      if (mesh && mesh->IsActive()) {
+	MeshScoreMap scoreMap = mesh->GetScoreMap();
+	for(MeshScoreMap::const_iterator i = scoreMap.begin();
+	    i != scoreMap.end(); ++i) {
+	  const G4String& name = i->first;
+	  if (fRequestedMapName == "all" || name == fRequestedMapName) {
+	    fpCurrentHits = i->second;
+	    //G4cout << name << ": " << fpCurrentHits << G4endl;
+	    if (fpCurrentHits) sceneHandler.AddCompound(*fpCurrentHits);
+	  }
+	}
       }
     }
   }
