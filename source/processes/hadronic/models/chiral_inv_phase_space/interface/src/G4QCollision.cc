@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.54 2009-11-03 16:14:08 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.55 2009-11-04 14:43:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1515,7 +1515,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
          G4int ic=1;                        // Start from the smallest cluster boundary
          if(max>1) while(ic<max) if(ran>clProb[ic++]) cln=ic;
        }
-       G4ParticleDefinition* theDefinition; // Prototype for qfNucleon
+       G4ParticleDefinition* theDefinition=0; // Prototype for qfNucleon
        G4bool cp1 = cln+2==A;               // A=ClusterBN+1 condition
        if(!cln || cp1)                      // Split in nucleon + (A-1) with Fermi momentum
        {
@@ -1725,7 +1725,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         // Fill scattered quasi-free nucleon/fragment
         if     (nPDG==90000001) theDefinition = G4Neutron::Neutron();
         else if(nPDG==90001000) theDefinition = G4Proton::Proton();
-        else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(nZ,nA,0,nZ);//ion
+        else if(nZ>0 && nA>1)
+                  theDefinition = G4ParticleTable::GetParticleTable()->FindIon(nZ,nA,0,0.);
+        else G4cout<<"-Warning_G4QCol::PSD:scatqfPDG="<<nPDG<<",Z="<<nZ<<",A="<<nA<<G4endl;
         G4DynamicParticle* theQFN = new G4DynamicParticle(theDefinition,sctout.first);
         G4Track* scatQFN = new G4Track(theQFN, localtime, position ); //   scattered
         scatQFN->SetWeight(weight);                                   //    weighted
@@ -1735,7 +1737,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         // Fill residual nucleus
         if     (restPDG==90000001) theDefinition = G4Neutron::Neutron();
         else if(restPDG==90001000) theDefinition = G4Proton::Proton();
-        else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);//ion
+        else if(rZ>0 && rA>1)
+                  theDefinition = G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,0.);
+        else G4cout<<"-Warning_G4QCol::PSD:resPDG="<<restPDG<<",Z="<<rZ<<",A="<<rA<<G4endl;
         G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
         G4Track* scatReN = new G4Track(theReN, localtime, position ); //    scattered
         scatReN->SetWeight(weight);                                   //    weighted
