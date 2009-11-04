@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.362 2009-11-04 15:26:22 gcosmo Exp $
+cvs log $Id: History,v 1.363 2009-11-04 17:10:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th November 2009  John Allison
+- Added new gMocren flags for backward compatibility.
 
 4th November 2009  Gabriele Cosmo (config-V09-02-11)
 - Added new gMocren include path to G4VIS_USE.gmk script.
