@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInelastic.cc,v 1.8 2009-09-02 15:45:19 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.9 2009-11-04 11:01:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,8 +60,8 @@ G4double G4QInelastic::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExc
 
 G4QInelastic::G4QInelastic(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
 {
-  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
-  static const G4double  mPi0  = G4PionZero::PionZero()->GetPDGMass(); // Mass of Pi0
+  static const G4double mProt= G4QPDGCode(2212).GetMass(); // Mass of proton
+  static const G4double mPi0= G4QPDGCode(111).GetMass();   // Mass of Pi0
   theWorld= G4QCHIPSWorld::Get();         // Get a pointer to the CHIPS World
   theResult = new G4QHadronVector;        // Define theResultingHadronVector
   G4bool stringsInitted=false;            // Strings are initiated

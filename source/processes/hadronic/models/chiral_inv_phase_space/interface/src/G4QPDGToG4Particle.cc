@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPDGToG4Particle.cc,v 1.6 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QPDGToG4Particle.cc,v 1.1 2009-11-04 11:01:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------

@@ -39,15 +39,8 @@
 #ifndef G4QElectronNuclearCrossSection_h
 #define G4QElectronNuclearCrossSection_h 1
 
-#include "G4VCrossSectionDataSet.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Element.hh"
-#include "G4ParticleTable.hh"
-#include "G4NucleiProperties.hh"
 #include <vector>
 #include "Randomize.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4VQCrossSection.hh"
 
 class G4QElectronNuclearCrossSection : public G4VQCrossSection

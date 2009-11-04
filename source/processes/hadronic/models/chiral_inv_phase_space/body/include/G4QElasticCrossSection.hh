@@ -38,17 +38,10 @@
 #ifndef G4QElasticCrossSection_h
 #define G4QElasticCrossSection_h 1
 
-#include "G4VCrossSectionDataSet.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Element.hh"
-#include "G4ParticleTable.hh"
-#include "G4NucleiProperties.hh"
 #include "G4QPDGCode.hh"
 #include "G4QException.hh"
 #include <vector>
 #include "Randomize.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4VQCrossSection.hh"
 
 class G4QElasticCrossSection : public G4VQCrossSection

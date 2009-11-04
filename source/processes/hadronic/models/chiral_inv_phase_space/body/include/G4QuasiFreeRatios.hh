@@ -44,7 +44,6 @@
 #include <vector>
 #include "G4QPDGCode.hh"
 #include "G4QHadron.hh"
-#include "G4VCrossSectionDataSet.hh"
 #include "G4QElasticCrossSection.hh"
 
 

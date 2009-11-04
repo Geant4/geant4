@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.32 2009-11-04 10:52:34 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.33 2009-11-04 11:01:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,9 +60,9 @@ G4double G4QFragmentation::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStrin
 
 G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &aPrimary)
 {
-  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
-  static const G4double  mProt2= mProt*mProt;                      // SquaredMass of proton
-  static const G4double  mPi0  = G4PionZero::PionZero()->GetPDGMass(); // Mass of Pi0
+  static const G4double mProt= G4QPDGCode(2212).GetMass(); // Mass of proton
+  static const G4double mProt2= mProt*mProt;               // SquaredMass of proton
+  static const G4double mPi0= G4QPDGCode(111).GetMass();   // Mass of Pi0
   theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
   theQuasiElastic=G4QuasiFreeRatios::GetPointer();
   theResult = new G4QHadronVector;        // Define theResultingHadronVector
@@ -1664,10 +1664,10 @@ G4QFragmentation::~G4QFragmentation()
 
 G4QHadronVector* G4QFragmentation::Fragment()
 { // This is the member function fragmenting Strings & Quasmons (in nuclear matter)
-  static const G4double  mProt = G4Proton::Proton()->GetPDGMass(); // Mass of proton
-  static const G4double  mNeut = G4Neutron::Neutron()->GetPDGMass(); // Mass of neutron
-  static const G4double  mPiCh = G4PionMinus::PionMinus()->GetPDGMass();// Mass of chgdPion
-  static const G4double  mPiZr = G4PionZero::PionZero()->GetPDGMass(); // Mass of neutrPion
+  static const G4double  mProt = G4QPDGCode(2212).GetMass(); // Mass of proton
+  static const G4double  mNeut = G4QPDGCode(2112).GetMass(); // Mass of neutron
+  static const G4double  mPiCh = G4QPDGCode(211).GetMass();  // Mass of chgdPion
+  static const G4double  mPiZr = G4QPDGCode(111).GetMass();  // Mass of neutrPion
 #ifdef debug
   G4cout<<"*******>G4QFragmentation::Fragment: ***Called***, Res="<<theResult<<G4endl;
 #endif

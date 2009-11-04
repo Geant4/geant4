@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.29 2009-08-05 09:29:12 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.30 2009-11-04 11:01:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -44,9 +44,98 @@
 
 #include <iostream>
 #include "globals.hh"
-#include "G4ParticleTable.hh"
+// Geant4 particles for consistency of masses only
+// Leptons
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4TauMinus.hh"
+#include "G4TauPlus.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4NeutrinoTau.hh"
+#include "G4AntiNeutrinoTau.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4NeutrinoE.hh"
+#include "G4AntiNeutrinoE.hh"
+// Mesons
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4PionZero.hh"
+#include "G4Eta.hh"
+#include "G4EtaPrime.hh"
+
+#include "G4KaonPlus.hh"
+#include "G4KaonMinus.hh"
+#include "G4KaonZero.hh"
+#include "G4AntiKaonZero.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
+
+#include "G4DMesonPlus.hh"
+#include "G4DMesonMinus.hh"
+#include "G4DMesonZero.hh"
+#include "G4AntiDMesonZero.hh"
+#include "G4DsMesonPlus.hh"
+#include "G4DsMesonMinus.hh"
+#include "G4JPsi.hh"
+
+#include "G4BMesonPlus.hh"
+#include "G4BMesonMinus.hh"
+#include "G4BMesonZero.hh"
+#include "G4AntiBMesonZero.hh"
+#include "G4BsMesonZero.hh"
+#include "G4AntiBsMesonZero.hh"
+
+
+// Barions
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
+#include "G4Neutron.hh"
+#include "G4AntiNeutron.hh"
+
+#include "G4Lambda.hh"
+#include "G4SigmaPlus.hh"
+#include "G4SigmaZero.hh"
+#include "G4SigmaMinus.hh"
+#include "G4XiMinus.hh"
+#include "G4XiZero.hh"
+#include "G4OmegaMinus.hh"
+
+#include "G4AntiLambda.hh"
+#include "G4AntiSigmaPlus.hh"
+#include "G4AntiSigmaZero.hh"
+#include "G4AntiSigmaMinus.hh"
+#include "G4AntiXiMinus.hh"
+#include "G4AntiXiZero.hh"
+#include "G4AntiOmegaMinus.hh"
+
+#include "G4LambdacPlus.hh"
+#include "G4SigmacPlusPlus.hh"
+#include "G4SigmacPlus.hh"
+#include "G4SigmacZero.hh"
+#include "G4XicPlus.hh"
+#include "G4XicZero.hh"
+#include "G4OmegacZero.hh"
+
+#include "G4AntiLambdacPlus.hh"
+#include "G4AntiSigmacPlusPlus.hh"
+#include "G4AntiSigmacPlus.hh"
+#include "G4AntiSigmacZero.hh"
+#include "G4AntiXicPlus.hh"
+#include "G4AntiXicZero.hh"
+#include "G4AntiOmegacZero.hh"
+
+// Nuclei
+#include "G4Alpha.hh"
+#include "G4Deuteron.hh"
+#include "G4He3.hh"
+#include "G4Triton.hh"
+
+//ions
+#include "G4GenericIon.hh"
 #include "G4NucleiProperties.hh"
-#include "G4ParticleTypes.hh"
+// --- End of consistency headers ---
 
 #include "G4QContent.hh"
 
