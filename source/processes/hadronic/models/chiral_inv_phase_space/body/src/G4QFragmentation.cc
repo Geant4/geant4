@@ -15,7 +15,7 @@
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
+// * This  code  implementation is the result of  the  scientific 2and *
 // * technical work of the GEANT4 collaboration.                      *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.31 2009-09-25 15:24:38 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.32 2009-11-04 10:52:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------

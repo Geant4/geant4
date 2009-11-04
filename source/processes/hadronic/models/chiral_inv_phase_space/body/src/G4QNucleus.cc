@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.114 2009-10-12 19:27:13 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.115 2009-11-04 10:52:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -74,7 +74,7 @@ G4QNucleus::G4QNucleus(): G4QHadron(), Z(0), N(0), S(0), dZ(0), dN(0), dS(0), ma
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   G4QHadron(90000000+s*1000000+z*1000+n), Z(z),N(n),S(s), dZ(0),dN(0),dS(0), maxClust(0),
-  theNucleons(), currentNucleon(-1), rho0(1.), radius(),
+  theNucleons(), currentNucleon(-1), rho0(1.), radius(1.),
   Tb(), TbActive(false), RhoActive(false)
 {
   probVect[0]=mediRatio;
@@ -246,10 +246,10 @@ G4QNucleus::G4QNucleus(G4QNucleus* right, G4bool cop3D) : currentNucleon(-1)
   SetQPDG        (right->GetQPDG());
   SetQC          (right->GetQC());
   SetNFragments  (right->GetNFragments());
+  rho0        = right->rho0;
+  radius      = right->radius;
   if(cop3D)
   {
-    rho0          = right->rho0;
-    radius        = right->radius;
     G4int nn=right->theNucleons.size();
     for(G4int i=0; i<nn; ++i)
     {
@@ -283,10 +283,10 @@ G4QNucleus::G4QNucleus(const G4QNucleus &right, G4bool cop3D):
   SetQPDG        (right.GetQPDG());
   SetQC          (right.GetQC());
   SetNFragments  (right.GetNFragments());
+  rho0        = right.rho0;
+  radius      = right.radius;
   if(cop3D)
   {
-    rho0        = right.rho0;
-    radius      = right.radius;
     G4int nn=right.theNucleons.size();
     for(G4int i=0; i<nn; ++i)
     {

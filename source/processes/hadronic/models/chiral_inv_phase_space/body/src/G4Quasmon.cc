@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.116 2009-09-07 09:33:06 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.117 2009-11-04 10:52:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -293,7 +293,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   G4double addPhoton=phot4M.e();
 #ifdef debug
   G4cout<<"G4Quasmon::HadrQ:*=>>>START QUASMON HADRONIZATION<<<=*, aP="<<addPhoton<<",Env="
-        <<qEnv<<qEnv.GetProbability()<<G4endl;
+        <<qEnv<<qEnv.GetProbability()<<", #ofQuasms="<<nQuasms<<G4endl;
 #endif
   G4bool first=false;
   if(nQuasms<0)
