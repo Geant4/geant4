@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.4 2009-11-04 15:22:42 vnivanch Exp $
+// $Id: G4DensityEffectData.hh,v 1.5 2009-11-04 18:18:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -41,8 +41,8 @@
 //----------------------------------------------------------------------------
 //
 //  Data are taken from:  
-//  R.M. Sternheimer et al. Density Effect For The Ionization Loss Of Charged 
-//  Particles In Various Substances. Atom. Data Nucl. Data Tabl. 30 (1984) 261-271. 
+//  R.M. Sternheimer et al. Density Effect for the Ionization Loss of Charged 
+//  Particles in Various Substances. Atom. Data Nucl. Data Tabl. 30 (1984) 261-271. 
 
 #ifndef DensityEffectData_h
 #define DensityEffectData_h 1

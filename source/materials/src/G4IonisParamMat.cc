@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.29 2009-11-04 15:22:42 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.30 2009-11-04 18:18:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,6 +151,12 @@ void G4IonisParamMat::ComputeDensityEffect()
   }
 
   if(idx >= 0) {
+
+    // Take parameters for the density effect correction from
+    // R.M. Sternheimer et al. Density Effect For The Ionization Loss 
+    // of Charged Particles in Various Substances. 
+    // Atom. Data Nucl. Data Tabl. 30 (1984) 261-271. 
+
     fCdensity = fDensityData->GetCdensity(idx); 
     fMdensity = fDensityData->GetMdensity(idx);
     fAdensity = fDensityData->GetAdensity(idx);
@@ -160,17 +166,6 @@ void G4IonisParamMat::ComputeDensityEffect()
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
 
-    //    G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
-    //	   << "> " << G4endl;
-    // G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV
-    //	   << " rho= " << fAdjustmentFactor
-    //	   << " -C= " << fCdensity 
-    //	   << " x0= " << fX0density
-    //	   << " x1= " << fX1density
-    //	   << " a= " << fAdensity
-    //   << " m= " << fMdensity
-    //   << G4endl;
-    //    return;
   } else {
 
     const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
@@ -255,9 +250,12 @@ void G4IonisParamMat::ComputeDensityEffect()
     fX1density -= ParCorr/twoln10;
   }
 
-  G4double Xa = fCdensity/twoln10;
-  fAdensity = twoln10*(Xa-fX0density)
-              /std::pow((fX1density-fX0density),fMdensity);
+  // fAdensity parameter can be fixed for not conductive materials 
+  if(0.0 == fD0density) {
+    G4double Xa = fCdensity/twoln10;
+    fAdensity = twoln10*(Xa-fX0density)
+      /std::pow((fX1density-fX0density),fMdensity);
+  }
   /*
   G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
 	 << "> " << G4endl;
