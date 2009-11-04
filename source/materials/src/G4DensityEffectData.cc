@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.6 2009-11-04 10:32:57 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.7 2009-11-04 15:22:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ void G4DensityEffectData::Initialize()
   // delta_0 - Density-effect value delta(X_0)
   // DELTA_{max} - Upper bound for the error inherent in the fitting procedure
  
-  for (G4int i=0; i< NDENSELEM; i++)
+  for (G4int i=0; i< NDENSELEM; ++i)
     {
       indexZ[i] = -1;
     }
@@ -142,7 +142,7 @@ void G4DensityEffectData::Initialize()
 //G4_Al  index=13
   G4float M13[NDENSARRAY]={32.86,2.18,4.2395,0.1708,3.0127,0.08024,3.6345,0.12,0.061};
   AddMaterial(M13,"G4_Al");
-  indexZ[NDENSARRAY]=13;
+  indexZ[13]=13;
 
 //G4_Si  index=14
   G4float M14[NDENSARRAY]={31.055,2.103,4.4351,0.2014,2.8715,0.14921,3.2546,0.14,0.059};
@@ -501,57 +501,57 @@ void G4DensityEffectData::Initialize()
 //G4_Rn  index=85
   G4float M85[NDENSARRAY]={1.708,1.458,13.2839,1.5368,4.9889,0.20798,2.7409,0,0.057};
   AddMaterial(M85,"G4_Rn");
-  indexZ[85]=85;
+  indexZ[86]=85;
 
 //G4_Ra  index=86
   G4float M86[NDENSARRAY]={40.205,1.403,7.0452,0.5991,3.9428,0.08804,3.2454,0.14,0.022};
   AddMaterial(M86,"G4_Ra");
-  indexZ[86]=86;
+  indexZ[88]=86;
 
 //G4_Ac  index=87
   G4float M87[NDENSARRAY]={57.254,1.380,6.3742,0.4559,3.7966,0.08567,3.2683,0.14,0.023};
   AddMaterial(M87,"G4_Ac");
-  indexZ[87]=87;
+  indexZ[89]=87;
 
 //G4_Th  index=88
   G4float M88[NDENSARRAY]={61.438,1.363,6.2473,0.4202,3.7681,0.08655,3.2610,0.14,0.025};
   AddMaterial(M88,"G4_Th");
-  indexZ[88]=88;
+  indexZ[90]=88;
 
 //G4_Pa  index=89
   G4float M89[NDENSARRAY]={70.901,1.42,6.0327,0.3144,3.5079,.14770,2.9845,0.14,0.036};
   AddMaterial(M89,"G4_Pa");
-  indexZ[89]=89;
+  indexZ[91]=89;
 
 //G4_U  index=90
   G4float M90[NDENSARRAY]={77.986,1.447,5.8694,0.2260,3.3721,.19677,2.8171,0.14,0.043};
   AddMaterial(M90,"G4_U");
-  indexZ[90]=90;
+  indexZ[92]=90;
 
 //G4_Np  index=91
   G4float M91[NDENSARRAY]={81.221,1.468,5.8149,0.1869,3.369,0.19741,2.8082,0.14,0.043};
   AddMaterial(M91,"G4_Np");
-  indexZ[91]=91;
+  indexZ[93]=91;
 
 //G4_Pu  index=92
   G4float M92[NDENSARRAY]={80.486,1.519,5.8748,0.1557,3.3981,0.20419,2.7679,0.14,0.057};
   AddMaterial(M92,"G4_Pu");
-  indexZ[92]=92;
+  indexZ[94]=92;
 
 //G4_Am  index=93
   G4float M93[NDENSARRAY]={66.607,1.552,6.2813,0.2274,3.5021,0.20308,2.7615,0.14,0.056};
   AddMaterial(M93,"G4_Am");
-  indexZ[93]=93;
+  indexZ[95]=93;
 
 //G4_Cm  index=94
   G4float M94[NDENSARRAY]={66.022,1.559,6.3097,0.2484,3.516,.20257,2.7579,0.14,0.056};
   AddMaterial(M94,"G4_Cm");
-  indexZ[94]=94;
+  indexZ[96]=94;
 
 //G4_Bk  index=95
   G4float M95[NDENSARRAY]={67.557,1.574,6.2912,0.2378,3.5186,.20192,2.7560,0.14,0.062};
   AddMaterial(M95,"G4_Bk");
-  indexZ[95]=95;
+  indexZ[97]=95;
 
 //G4_A-150_TISSUE  index=96
   G4float M96[NDENSARRAY]={22.667,1.950,3.1100,0.1329,2.6234,0.10783,3.4442,0,0.048};

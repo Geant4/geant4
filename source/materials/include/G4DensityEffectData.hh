@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.3 2009-11-03 09:24:05 bagoulia Exp $
+// $Id: G4DensityEffectData.hh,v 1.4 2009-11-04 15:22:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -110,63 +110,63 @@ private:
 inline G4float G4DensityEffectData::GetPlasmaEnergy(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[0][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][0]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetAdjustmentFactor(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[1][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][1]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetCdensity(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[2][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][2]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetX0density(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[3][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][3]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetX1density(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[4][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][4]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetAdensity(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[5][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][5]; }
   return x;
 }
  
 inline G4float G4DensityEffectData::GetMdensity(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[6][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][6]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetDelta0density(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[7][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][7]; }
   return x;
 } 
 
 inline G4float G4DensityEffectData::GetErrorDensity(G4int idx)
 {
   G4float x = DBL_MAX;
-  if(idx >= 0 && idx < NDENSDATA) { x = data[8][idx]; }
+  if(idx >= 0 && idx < NDENSDATA) { x = data[idx][8]; }
   return x;
 } 
 

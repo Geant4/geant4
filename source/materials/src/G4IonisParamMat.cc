@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.28 2009-11-03 16:24:11 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.29 2009-11-04 15:22:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,6 +141,7 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
 void G4IonisParamMat::ComputeDensityEffect()
 {
   //  const G4double twoln10 = 2.*std::log(10.);
+  G4State State = fMaterial->GetState();
 
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
@@ -158,25 +159,37 @@ void G4IonisParamMat::ComputeDensityEffect()
     fD0density = fDensityData->GetDelta0density(idx);
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
-    return;
-  }
 
-  const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
-  fPlasmaEnergy = std::sqrt(Cd2*fMaterial->GetTotNbOfElectPerVolume());
+    //    G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
+    //	   << "> " << G4endl;
+    // G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV
+    //	   << " rho= " << fAdjustmentFactor
+    //	   << " -C= " << fCdensity 
+    //	   << " x0= " << fX0density
+    //	   << " x1= " << fX1density
+    //	   << " a= " << fAdensity
+    //   << " m= " << fMdensity
+    //   << G4endl;
+    //    return;
+  } else {
 
-  // Compute parameters for the density effect correction in DE/Dx formula.
-  // The parametrization is from R.M. Sternheimer, Phys. Rev.B,3:3681 (1971)
-  G4int icase;
+    const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
+    fPlasmaEnergy = std::sqrt(Cd2*fMaterial->GetTotNbOfElectPerVolume());
+
+    // Compute parameters for the density effect correction in DE/Dx formula.
+    // The parametrization is from R.M. Sternheimer, Phys. Rev.B,3:3681 (1971)
+    G4int icase;
+    
+    fCdensity = 1. + 2*std::log(fMeanExcitationEnergy/fPlasmaEnergy);
+
+    //fCdensity = 1. + std::log(fMeanExcitationEnergy*fMeanExcitationEnergy
+    //			      /(Cd2*fMaterial->GetTotNbOfElectPerVolume()));
+
+    //
+    // condensed materials
+    //
   
-  fCdensity = 1. + std::log(fMeanExcitationEnergy*fMeanExcitationEnergy
-              /(Cd2*fMaterial->GetTotNbOfElectPerVolume()));
-
-  //
-  // condensed materials
-  //
-  G4State State = fMaterial->GetState();
-  
-  if ((State == kStateSolid)||(State == kStateLiquid)) {
+    if ((State == kStateSolid)||(State == kStateLiquid)) {
 
       const G4double E100eV  = 100.*eV; 
       const G4double ClimiS[] = {3.681 , 5.215 };
@@ -195,12 +208,12 @@ void G4IonisParamMat::ComputeDensityEffect()
       if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==1.)) {
          fX0density = 0.425; fX1density = 2.0; fMdensity = 5.949;
       }
-  }
+    }
 
-  //
-  // gases
-  //
-  if (State == kStateGas) { 
+    //
+    // gases
+    //
+    if (State == kStateGas) { 
 
       const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25 , 13.804};
       const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0   ,  2.0 };
@@ -220,27 +233,43 @@ void G4IonisParamMat::ComputeDensityEffect()
       if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==2.)) {
          fX0density = 2.191; fX1density = 3.0; fMdensity = 3.297;
       }
+    }
+  }
 
-      // change parameters if the gas is not in STP.
-      // For the correction the density(STP) is needed. 
-      // Density(STP) is calculated here : 
-      
-      G4double Density  = fMaterial->GetDensity();
-      G4double Pressure = fMaterial->GetPressure();
-      G4double Temp     = fMaterial->GetTemperature();
-      
-      G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
-
-      G4double ParCorr = std::log(Density/DensitySTP);
+  // change parameters if the gas is not in STP.
+  // For the correction the density(STP) is needed. 
+  // Density(STP) is calculated here : 
   
-      fCdensity  -= ParCorr;
-      fX0density -= ParCorr/twoln10;
-      fX1density -= ParCorr/twoln10;
+    
+  if (State == kStateGas) { 
+    G4double Density  = fMaterial->GetDensity();
+    G4double Pressure = fMaterial->GetPressure();
+    G4double Temp     = fMaterial->GetTemperature();
+      
+    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+
+    G4double ParCorr = std::log(Density/DensitySTP);
+  
+    fCdensity  -= ParCorr;
+    fX0density -= ParCorr/twoln10;
+    fX1density -= ParCorr/twoln10;
   }
 
   G4double Xa = fCdensity/twoln10;
   fAdensity = twoln10*(Xa-fX0density)
               /std::pow((fX1density-fX0density),fMdensity);
+  /*
+  G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
+	 << "> " << G4endl;
+  G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV
+	 << " rho= " << fAdjustmentFactor
+	 << " -C= " << fCdensity 
+	 << " x0= " << fX0density
+	 << " x1= " << fX1density
+	 << " a= " << fAdensity
+	 << " m= " << fMdensity
+	 << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
