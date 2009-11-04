@@ -73,7 +73,7 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   particleGun->SetParticleMomentumDirection(dir);       
   particleGun->SetParticleEnergy(5.*MeV);
   //put it at SAD = 1 m on xy plane of central slice
-  particleGun->SetParticlePosition(G4ThreeVector(0.,-99.9*cm,-27.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,-99.9*cm,87.5*mm));
   //particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.));
   particleGun->GeneratePrimaryVertex(anEvent);
 }
