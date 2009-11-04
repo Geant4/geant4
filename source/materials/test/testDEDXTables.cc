@@ -56,6 +56,8 @@ G4bool Compare(G4PhysicsVector* physicsVector,
      }
   }
 
+  //  G4cout << *physicsVector << G4endl;
+
   G4cout << " E/A1(MeV) = "   << kinEnergyPerNucleon / MeV
          << ", Z(Ion) = "     << atomicNumberIon
          << ", Mat = "        << matIdentifier
