@@ -1,4 +1,4 @@
-$Id: History,v 1.127 2009-10-30 16:05:30 allison Exp $
+$Id: History,v 1.128 2009-11-04 13:15:48 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,17 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+4th November 2009  John Allison
+- G4Scene: Added EndOfRunModelList.
+- G4VSceneHandler:
+  o Added DrawEndOfRunModels.
+  o AddCompound(const G4THitsMap<G4double>&): Prototype implementation
+    using G4ScoringManager.  Still does nothing for scoring maps but
+    otherwise calls DrawAllHits.
+- G4VisManager.cc: Call fpSceneHandler->DrawEndOfRunModels at end of run.
+- G4VisCommandsSceneAdd: Added optional parameter:
+  o /vis/scene/add/psHits [scoring map name]
 
 30th October 2009  John Allison  (visman-V09-02-06 coworks greps-V09-02-03)
 - Added /vis/scene/add/psHits.
