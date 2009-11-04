@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.86 2009-10-23 07:58:36 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.87 2009-11-04 12:55:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,7 @@
 #include "G4VTrajectoryPoint.hh"
 #include "G4HitsModel.hh"
 #include "G4VHit.hh"
+#include "G4ScoringManager.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
@@ -265,8 +266,47 @@ void G4VSceneHandler::AddCompound (const G4VHit& hit) {
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
-  // Cast because DrawAllHits is non-const!!!!
-  static_cast<G4THitsMap<G4double> >(hits).DrawAllHits();
+  //G4cout << "AddCompound: hits: " << &hits << G4endl;
+  G4bool scoreMapHits = false;
+  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
+  if (scoringManager) {
+    size_t nMeshes = scoringManager->GetNumberOfMesh();
+    for (size_t i = 0; i < nMeshes; ++i) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+      if (mesh && mesh->IsActive()) {
+	G4int nSegment[3];
+	mesh->GetNumberOfSegments(nSegment);
+	//G4cout << mesh->GetWorldName()
+	//       << ' ' << mesh->GetSize()
+	//       << ' ' << nSegment[0] << ',' << nSegment[1] << ',' << nSegment[2]
+	//       << G4endl;
+	MeshScoreMap scoreMap = mesh->GetScoreMap();
+	for(MeshScoreMap::const_iterator i = scoreMap.begin();
+	    i != scoreMap.end(); ++i) {
+	  const G4String& name = i->first;
+	  const G4THitsMap<G4double>* foundHits = i->second;
+	  if (foundHits == &hits) {
+	    scoreMapHits = true;
+	    //G4cout <<
+	    //  name << ": " << &hits << " found in scoring map."
+	    //   << G4endl;
+	    std::map<G4int,G4double*>* hitsMap = hits.GetMap();
+	    for (std::map<G4int,G4double*>::const_iterator i = hitsMap->begin();
+		 i != hitsMap->end(); ++i) {
+	      G4int index = i->first;
+	      G4double value = *(i->second);
+	      //G4cout << index << ' ' << value << G4endl;
+	      // Now what?!!!
+	    }
+	  }
+	}
+      }
+    }
+  }
+  if (!scoreMapHits) {  // Not score map hits.  Just call DrawAllHits.
+    // Cast because DrawAllHits is non-const!!!!
+    static_cast<G4THitsMap<G4double> >(hits).DrawAllHits();
+  }
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
@@ -614,6 +654,26 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
     pMP->SetEvent(event);
     for (size_t i = 0; i < nModels; i++) {
       G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters(pMP);
+      SetModel (pModel);
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters(0);
+    }
+    delete pMP;
+    SetModel (0);
+  }
+}
+
+void G4VSceneHandler::DrawEndOfRunModels()
+{
+  const std::vector<G4VModel*>& EORModelList =
+    fpScene -> GetEndOfRunModelList ();
+  size_t nModels = EORModelList.size();
+  if (nModels) {
+    G4ModelingParameters* pMP = CreateModelingParameters();
+    pMP->SetEvent(0);
+    for (size_t i = 0; i < nModels; i++) {
+      G4VModel* pModel = EORModelList [i];
       pModel -> SetModelingParameters(pMP);
       SetModel (pModel);
       pModel -> DescribeYourselfTo (*this);

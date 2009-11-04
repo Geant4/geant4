@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.41 2009-10-21 14:26:59 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.42 2009-11-04 12:55:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -268,6 +268,9 @@ public: // With description
   void DrawEvent(const G4Event*);
   // Checks scene's end-of-event model list and draws trajectories,
   // hits, etc.
+
+  void DrawEndOfRunModels();
+  // Draws end-of-run models.
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
