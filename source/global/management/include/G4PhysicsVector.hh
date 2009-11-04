@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.24 2009-11-04 09:34:10 vnivanch Exp $
+// $Id: G4PhysicsVector.hh,v 1.25 2009-11-04 11:32:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,8 +90,7 @@ class G4PhysicsVector
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
 
-  //    inline 
-G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // Obolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 
@@ -115,10 +114,11 @@ G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // energy of the index. You can get this energy by the next method
          // or by the old method GetLowEdgeEnergy().
 
-    void ScaleVector(G4double factor);
+    void ScaleVector(G4double factorE, G4double factorV);
          // Scale all values of the vector and second derivatives
-         // by factor. This method may be applied after Retrieve
-         // the vector from external file to convert values into Geant4 units
+         // by factorV, energies by vectorE. This method may be applied 
+         // for example after Retrieve a vector from an external file to 
+         // convert values into Geant4 units
 
     inline G4double Energy(size_t index) const;
          // Returns simply the value in the energy specified by 'index'

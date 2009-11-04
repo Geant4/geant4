@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.38 2009-11-04 09:34:10 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.39 2009-11-04 11:32:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,7 +225,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
   binVector.reserve(size);
   dataVector.reserve(size);
-  for(size_t i = 0; i < size; i++)
+  for(size_t i = 0; i < size; ++i)
   {
     binVector.push_back(value[2*i]);
     dataVector.push_back(value[2*i+1]);
@@ -237,14 +237,23 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 // --------------------------------------------------------------
 
 void 
-G4PhysicsVector::ScaleVector(G4double factor)
+G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 {
   size_t n = dataVector.size();
   size_t i;
-  if(n > 0) { for(i=0; i<n; ++i) {dataVector[i] *= factor;} }
+  if(n > 0) { 
+    for(i=0; i<n; ++i) {
+      binVector[i]  *= factorE;
+      dataVector[i] *= factorV;
+    } 
+  }
   n = secDerivative.size();
-  if(n > 0) { for(i=0; i<n; ++i) {secDerivative[i] *= factor;} }
-  lastValue *= factor;
+  if(n > 0) { for(i=0; i<n; ++i) {secDerivative[i] *= factorV;} }
+
+  edgeMin *= factorE;
+  edgeMax *= factorE;
+  lastEnergy *= factorE;
+  lastValue  *= factorV;
 }
 
 // --------------------------------------------------------------
@@ -280,7 +289,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   // Decomposition loop for tridiagonal algorithm. secDerivative[i]
   // and u[i] are used for temporary storage of the decomposed factors.
 
-  for(G4int i=1; i<n; i++)
+  for(G4int i=1; i<n; ++i)
   {
     sig = (binVector[i]-binVector[i-1]) / (binVector[i+1]-binVector[i-1]);
     p = sig*secDerivative[i-1] + 2.0;
@@ -300,7 +309,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
    
-  for(G4int k=n-1; k>0; k--)
+  for(G4int k=n-1; k>0; --k)
   {
     secDerivative[k] *= 
       (secDerivative[k+1] - 
@@ -346,7 +355,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   secDerivative[1] = (2.0*binVector[1]-binVector[0]-binVector[2])
     / (2.0*binVector[2]-binVector[0]-binVector[1]);
 
-  for(G4int i=2; i<n-1; i++)
+  for(G4int i=2; i<n-1; ++i)
   {
     sig = (binVector[i]-binVector[i-1]) / (binVector[i+1]-binVector[i-1]);
     p = sig*secDerivative[i-1] + 2.0;
@@ -369,7 +378,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
    
-  for(G4int k=n-2; k>1; k--)
+  for(G4int k=n-2; k>1; --k)
   {
     secDerivative[k] *= 
       (secDerivative[k+1] - 
@@ -399,7 +408,7 @@ G4PhysicsVector::ComputeSecDerivatives()
 
   size_t n = numberOfNodes-1;
 
-  for(size_t i=1; i<n; i++)
+  for(size_t i=1; i<n; ++i)
   {
     secDerivative[i] =
       3.0*((dataVector[i+1]-dataVector[i])/(binVector[i+1]-binVector[i]) -
