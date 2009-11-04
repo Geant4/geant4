@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.39 2009-11-04 11:32:43 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.40 2009-11-04 11:45:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,7 +154,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
   fOut.write((char*)(&size), sizeof size);
 
   G4double* value = new G4double[2*size];
-  for(size_t i = 0; i < size; i++)
+  for(size_t i = 0; i < size; ++i)
   {
     value[2*i]  =  binVector[i];
     value[2*i+1]=  dataVector[i];
@@ -248,7 +248,7 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
     } 
   }
   n = secDerivative.size();
-  if(n > 0) { for(i=0; i<n; ++i) {secDerivative[i] *= factorV;} }
+  if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
 
   edgeMin *= factorE;
   edgeMax *= factorE;
