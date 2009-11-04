@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.76 2009-10-30 15:58:50 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.77 2009-11-04 13:15:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -897,12 +897,18 @@ void G4VisCommandSceneAddLogo::G4Logo::operator()
 ////////////// /vis/scene/add/psHits ///////////////////////////////////////
 
 G4VisCommandSceneAddPSHits::G4VisCommandSceneAddPSHits () {
-  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/psHits", this);
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/add/psHits", this);
   fpCommand -> SetGuidance
     ("Adds Primitive Scorer Hits (PSHits) to current scene.");
   fpCommand -> SetGuidance
     ("PSHits are drawn at end of run when the scene in which"
      "\nthey are added is current.");
+  fpCommand -> SetGuidance
+    ("Optional parameter specifies name of scoring map.  By default all"
+     "\nscoring maps registered with the G4ScoringManager are drawn.");
+  fpCommand -> SetParameterName ("mapname", omitable = true);
+  fpCommand -> SetDefaultValue ("all");
 }
 
 G4VisCommandSceneAddPSHits::~G4VisCommandSceneAddPSHits () {
@@ -913,8 +919,9 @@ G4String G4VisCommandSceneAddPSHits::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddPSHits::SetNewValue (G4UIcommand*, G4String) {
-
+void G4VisCommandSceneAddPSHits::SetNewValue
+(G4UIcommand*, G4String newValue)
+{
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
 
@@ -926,12 +933,17 @@ void G4VisCommandSceneAddPSHits::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4PSHitsModel* model = new G4PSHitsModel;
+  G4PSHitsModel* model = new G4PSHitsModel(newValue);
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
+  G4bool successful = pScene -> AddEndOfRunModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Primitive Scorer hits will be drawn in scene \""
+      if (newValue == "all") {
+	G4cout << "All Primitive Scorer hits";
+      } else {
+	G4cout << "Hits of Primitive Scorer \"" << newValue << '"';
+      }
+      G4cout << " will be drawn at end of run in scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }

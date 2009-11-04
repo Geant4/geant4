@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.18 2009-10-30 15:58:50 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.19 2009-11-04 13:15:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -141,7 +141,7 @@ public:
 private:
   G4VisCommandSceneAddPSHits (const G4VisCommandSceneAddPSHits&);
   G4VisCommandSceneAddPSHits& operator = (const G4VisCommandSceneAddPSHits&);
-  G4UIcmdWithoutParameter* fpCommand;
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneAddScale: public G4VVisCommandScene {
