@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.56 2009-11-04 14:57:05 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.57 2009-11-04 15:05:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -1727,24 +1727,34 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
         else if(nPDG==90001000) theDefinition = G4Proton::Proton();
         else if(nZ>0 && nA>1)
                   theDefinition = G4ParticleTable::GetParticleTable()->FindIon(nZ,nA,0,nZ);
+#ifdef debug
         else G4cout<<"-Warning_G4QCol::PSD:scatqfPDG="<<nPDG<<",Z="<<nZ<<",A="<<nA<<G4endl;
-        G4DynamicParticle* theQFN = new G4DynamicParticle(theDefinition,sctout.first);
-        G4Track* scatQFN = new G4Track(theQFN, localtime, position ); //   scattered
-        scatQFN->SetWeight(weight);                                   //    weighted
-        scatQFN->SetTouchableHandle(trTouchable);                     //   quasi-free
-        aParticleChange.AddSecondary(scatQFN);                        //  nucleon/cluster
+#endif
+        if(nZ>0 && nA>0)
+        {
+          G4DynamicParticle* theQFN = new G4DynamicParticle(theDefinition,sctout.first);
+          G4Track* scatQFN = new G4Track(theQFN, localtime, position ); //   scattered
+          scatQFN->SetWeight(weight);                                   //    weighted
+          scatQFN->SetTouchableHandle(trTouchable);                     //   quasi-free
+          aParticleChange.AddSecondary(scatQFN);                        //  nucleon/cluster
+        }
         // ----------------------------------------------------
         // Fill residual nucleus
         if     (restPDG==90000001) theDefinition = G4Neutron::Neutron();
         else if(restPDG==90001000) theDefinition = G4Proton::Proton();
         else if(rZ>0 && rA>1)
                   theDefinition = G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,0,rZ);
+#ifdef debug
         else G4cout<<"-Warning_G4QCol::PSD:resPDG="<<restPDG<<",Z="<<rZ<<",A="<<rA<<G4endl;
-        G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
-        G4Track* scatReN = new G4Track(theReN, localtime, position ); //    scattered
-        scatReN->SetWeight(weight);                                   //    weighted
-        scatReN->SetTouchableHandle(trTouchable);                     //    residual
-        aParticleChange.AddSecondary(scatReN);                        //    nucleus
+#endif
+        if(rZ>0 && rA>0)
+        {
+          G4DynamicParticle* theReN = new G4DynamicParticle(theDefinition,r4M);
+          G4Track* scatReN = new G4Track(theReN, localtime, position ); //    scattered
+          scatReN->SetWeight(weight);                                   //    weighted
+          scatReN->SetTouchableHandle(trTouchable);                     //    residual
+          aParticleChange.AddSecondary(scatReN);                        //    nucleus
+        }
         delete output;
         return G4VDiscreteProcess::PostStepDoIt(track, step);
        }
