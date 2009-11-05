@@ -1,0 +1,261 @@
+
+                       geant4-09-02-ref-10
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Attempted reduce of memory fragmentation and calls to malloc for
+   G4TouchableHistory objects. Measured average improvement of 3-5% in
+   CPU speed.
+ o Revised HepPolyhedron and BooleanProcessor to improve visualization of
+   Boolean shapes in built-in drivers.
+ o New data set for EM low-energy processes, G4EMLOW-6.8 and extensions to
+   processes.
+ o General review of EM builders in physics-lists. First release of CHIPS
+   physics lists, allowing to use CHIPS as unique model.
+ o New gMocren driver for visualization of medical patient data and DICOM
+   data allowing for dose distributions calculation and analysis for
+   radiotherapy. See also: http://geant4.kek.jp/gMocren/.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-12
+------
+- Added new gMocren include path to G4VIS_USE.gmk script and flags for
+  backward compatibility in G4VIS_BUILD.gmk.
+  Removed references to obsolete GAGTREE driver.
+
+digits_hits                                      digits_hits-V09-02-03
+-----------
+- Added few accessors for visualization to G4VScoringMesh.
+
+geometry/management                              geommng-V09-02-03
+-------------------
+- Clear possible excess capacity in node vectors in G4SmartVoxelHeader
+  BuildNodes() method. May reduce excess memory allocated in optimisation
+  in medium/large detector setups, at the price of a slight time increase
+  in initialisation for geometry voxelisation.
+
+geometry/volumes                                 geomvol-V09-02-03
+----------------
+- Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
+  Should reduce the number of direct calls to malloc and memory fragmentation.
+  Measured an average improvement of 3-5% in CPU speed with same memory
+  footprint.
+
+global                                           global-V09-02-08
+------
+- Cleared warning for unused argument in G4Allocator internal method.
+
+graphics_reps                                    greps-V09-02-03
+-------------
+- HepPolyhedronProcessor: new class to handle "overall shifting" in case
+  of doing multiple boolean operations. This permitted to solve most
+  tricky cases in LHCb visualization.
+- HepPolyhedron: removed static instance of BooleanProcessor; removed
+  IsErrorBooleanProcess, use HepPolyhedronProcessor instead.
+- BooleanProcessor.src: changes contributed from LHCb to "loop on shifts"
+  in the attempt to solve visualization of "coplanar faces cases".
+  Optimized the code.
+- G4VGraphicsScene: added method AddCompound (const G4THitsMap<G4double>&).
+
+materials                                        materials-V09-02-11
+---------
+- G4MaterialStoppingICRU73: extended energy range of revised ICRU 73 tables
+  for water from 0.025-10 MeV/u to 0.025-1 GeV/u.
+  Added new function AddPhysicsVectorFullRange() for creating corresponding
+  physics vectors.
+- G4NistMessenger: added UI command to print parameters of density effect data.
+- G4NistMaterialBuilder: changed density of G4_GRAPHITE according to PDG-2008,
+  added new material G4_GRAPHITE_POROUS.
+- G4DensityEffectData: added data from Atom. Data Nucl. Data Tabl.30 (1984) 261
+  accessible via material name.
+- G4IonisParamMat: added new members: Eplasma, AdjustmentFactor, Delta0
+  parameter of density effect parameterization, and pointer to
+  G4DensityEffectData. Fixed copy constructor.
+  Added new access method and method DensityCorrection().
+
+particles                                        particles-V09-02-15
+---------
+- Fixed mass of anti baryons (Sigmac, Lambdac) and anti-diquarks A.
+- Fix small difference of mass of taus, mesons, and baryons between PDG-2009.
+- Changed G4ElectronOccupancies::MaxSizeOfOrbit to 10.
+
+persistency/gdml                                 gdml-V09-02-17
+----------------
+- Added support for GDML 'expression' tag, implementing generic expressions
+  stored as literal constants.
+- Corrected handling of 'quantity' tag; added missing caching of evaluation.
+
+physics_lists                                    phys-lists-V09-02-31
+-------------
+- Reviewed all EM builders: 
+  o separated definition of processes for He3 and He4 ions;
+    G4eMultipleScattering for e+, e-, G4MuMultipleScattering for muons.
+  o G4UrbanMscModel93 for e+- for all builders except Opt0 and Opt1
+  o G4WentzelVIModel for muons for all builders except Opt0 and Opt1
+  o G4ParameterizedIonModel for Opt3 and all combined builders
+  o StepFunction (0.1, 0.02*mm) for ions inside Opt2  
+- First implementation of single 'CHIPS' model physics list.
+  Fixed warning about not used quasi-Elastic.
+- G4EmDNAPhysics: updated combined Physics List standard/DNA.
+- Modified QBBC list: removed templated interface and moved inline code
+  to source; use new interface through G4VHadronPhysics class.
+- Change to G4HadroHElasticPhysics to make use of G4WHadronElasticProcess
+  as part of the design review for elastic.   
+- Change to QGSP_BERT_EMV to make use of G4HadroHElasticPhysics.
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-60
+-----------------------------------
+- New data set for G4LEDATA, G4EMLOW-6.8.
+- Modified low energy limit of e- elastic Champion Geant4-DNA model
+  to be used with new data set.
+- Extended coverage of e- ionisation Geant4-DNA model 
+  to be used with new data set.
+- Switched atomic deexcitation to on by default in Livermore PhotoElectric
+  and Ionisation, as for the former LowEnergy processes.
+- Added ActivateAuger() method to Penelope Compton and Ionisation, so that 
+  all Penelope models have now the same interface. 
+- Cleaning up of Penelope Photoelectric, Compton and Ionisation (atomic
+  deexcitation flag now referred to G4VEmModel).
+
+processes/electromagnetic/standard               emstand-V09-02-27
+----------------------------------
+- Added G4UrbanMscModel92, G4UrbanMscModel93 classes: 9.2 and 9.3 versions
+  of the Urban multiple-scattering model.
+  Set default model G4UrbanMscModel92 for G4eMultipleScattering
+  Added warning in obsolete multiple-scattering classes G4MultipleScattering,
+  G4UrbanMscModel, G4UrbanMscModel2, G4MscModel71.
+- G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel:
+  added protection for very low energies; changed screening parameters
+
+processes/electromagnetic/utils                  emutils-V09-02-20
+-------------------------------
+- G4VMultipleScattering: added SetModel() method.
+- G4EmCorrections: fixed bug reported in phys-list forum #532.
+- G4ionEffectiveCharge: return back lost protection for zero energy.
+- G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger: added
+  parameter 'FactorForAngleLimit', accessors, modifiers and UI command to be
+  used in the computation of limit on -t (invariant momentum transfer)
+  inside single scattering and G4WentzelVI models.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V09-02-09)
+  o G4PionSampler: use charge exchange cross-section for pi0-p, go back to
+    original Bertini pi0-p elastic partial cross-section. Updated pi0 total
+    cross-section accordingly. Improved fits to pi-p partial cross-section
+    and updated pi- total cross-sections.
+  o G4NucleiModel: updated pi- and pi0 total cross-sections.
+- models/chiral_inv_phase_space (hadr-chips-V09-02-11)
+  o First prototype of CHIPS ion-ion elastic.
+  o Improvements in hadron+proton, heavy fragments in low-energy, various
+    bug fixes in G4QNucleus, G4QEnvironment.
+- models/coherent_elastic (hadr-cohe-V09-02-02)
+  o G4CHIPSElastic, G4HadronElastic: use static pointer to G4VQCrossSection
+    in order to guarantee unique version of CHIPS cross-section class.
+
+run                                              run-V09-02-06
+---
+- Added command /run/setCutForAGivenParticle in G4UserPhysicsListMessenger.
+
+track                                            track-V09-02-04
+-----
+- Added SetLowEnergyLimit() method to G4VUserTrackInformation;
+  added a string property to indicate type of UserTrackInformation.
+
+visualization                                    vis-V09-02-10
+-------------
+- Accomodated interfaces according to new pure virtual function
+  AddCompound (const G4THitsMap<G4double>&) introduced in graphics_reps
+  module.
+- Fixed bug in ratio and geometry on X/Xm/Qt/Win32 viewers.
+- Command 'printEPS' is now fully functionnal for X, Xm, Qt Win viewers.   
+- gMocren (gMocren-V09-02-03):
+  o New driver for visualization of medical patient data and DICOM data
+    allowing for dose distributions calculations and analysis for
+    radiotherapy. See also: http://geant4.kek.jp/gMocren/.
+- management:
+  o G4VisManager: Implemented NotifyHandlers.  A user may notify scene
+    handlers (G4VGraphicsScene objects) that the scene has changed so
+    that they may rebuild their graphics database, if any, and redraw
+    all views.
+  o Introduced /vis/initialize command, and instantiate /vis/verbose and
+    /vis/initialize in constructor of G4VisManager so that a user may set
+    verbosity before initialisation.
+  o Added /vis/viewer/set/targetPoint command and improved end of run
+    event keeping information.
+  o Added /vis/scene/add/psHits command.
+  o Allow refresh in 'GeomClosed' as well as 'Idle' state.
+  o Implemented default behaviour in G4VSceneHandler::AddCompound().
+  o G4VisExecutive: made methods inline.
+- modeling:
+  o Added warning if logical volume is not defined.
+  o Added G4PhysicalVolumeModelTouchable. Used in ComputeMaterial() and
+    effective for visualization of nested parameterisations.
+  o Added setAux/StepPtsSizeType commands with unit.
+  o Added G4PSHitsModel for gMocren driver.
+  o G4ModelApplyCommandsT: Added visManager->NotifyHandlers() to force
+    update of all viewers after a change of model, e.g., trajectory colour,
+    point size, etc.
+- OpenGL:
+  o Improvements in order to use gl2ps for printing.
+  o Added commands /vis/ogl/set/printSize and /vis/ogl/set/printFilename.
+  o G4OpenGLXmViewer: fixed wrong initialization introduced by the 
+    new way of handling window size hints.
+  o G4OpenGLQtViewer: ensure the GL frame size will be correct by setting a
+    zero size margin around.
+  o G4OpenGLStoredQtViewer: removed picking to true at initialisation.
+- OpenInventor:
+  o Created new "externals" module for gl2ps library, moving out code from
+    OpenInventor module. Added ability to draw markers.
+  o Improvements in order to use gl2ps for printing.
+  o G4OpenInventorXt/WinViewer: fixed a wrong initialization introduced by
+    the  new way of handling window size hints.
+- RayTracer:
+  o Fixed bad use of fVP parameters. Addressing problem report #1072.
+
+data sets
+---------
+- G4EMLOW-6.8:
+  o Included ICRU 73 stopping powers and revised tables provided by
+    P. Sigmund/Univ. of Southern Denmark.
+  o Updated Geant4-DNA e- elastic Champion files.
+  o Updated Geant4-DNA e- ionisation Born files.
+
+examples                                         examples-V09-02-10
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm18 (testem18-V09-02-03)
+  o Substituted obsolete low-energy physics builders by builders from
+    the physics_list library.
+- extended/medical/fanoCavity (fano-V09-02-02)
+- extended/medical/fanoCavity2 (fano2-V09-02-00)
+  o New PhysListEmStandard_GS for GoudsmitSaundersonMsc model.
+  o Split PhysicsList in two, as in other TestEm* examples.
+  o Local copy of PhysListEmStandard_option0, PhysListEmStandard_option3,
+    PhysListEmStandard_SS.
+  o PhysicsList: added cut for proton recoil in case of Single Scattering.
+- examples/extended/persistency/gdml/G01 (G01-V09-02-05)
+  o Added usage of 'expression' and 'quantity' in solids.gdml.
+
+tests                                            tests-V09-02-10
+-----
+- Updated reference outputs and tools.
+- test02 (test02-V09-02-01)
+- test11 (test11-V09-02-01)
+- test12 (test12-V09-02-06)
+- test13 (test13-V09-02-01)
+- test16 (test16-V09-02-01)
+  o Use /run/setCut command instead of obsolete /run/particle/setCut.
+- test19 (test19-V09-02-08)
+  o Inelastic cross-sections improvement.
+- test21 (test21-V09-02-01)
+- test23 (test23-V09-02-01)
+  o Use /run/setCut command instead of obsolete /run/particle/setCut.
+- test29 (test29-V09-02-04)
+  o Reduced warnings.
