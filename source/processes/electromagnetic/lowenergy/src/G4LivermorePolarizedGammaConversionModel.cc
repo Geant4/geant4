@@ -330,8 +330,8 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   //  }
   //else
   // {
-  //psi = G4UniformRand()*2.*M_PI;
-  //phi = M_PI; // coplanar
+  //psi = G4UniformRand()*2.*pi;
+  //phi = pi; // coplanar
   // }
 
   Psi = psi;
@@ -492,7 +492,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
       xi = 3.0;
       xe = Encu(pl,pt,xi);
       //G4cout << "ENCU "<< xe << G4endl;
-      n1 = Fintlor(pl,M_PI) - Fintlor(pl,xe);
+      n1 = Fintlor(pl,pi) - Fintlor(pl,xe);
       n2 = Finttan(pt,xe) - Finttan(pt,0.);
     }
   else
@@ -509,7 +509,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
 
       //G4cout << "PL < 50."<< pl[0] << " " << pl[1] << " " << pl[2] << " " <<pl[3] << " " << G4endl;
       //G4cout << "ENCU "<< xe << G4endl;
-      n1 = Fintlor(pl,M_PI) - Fintlor(pl,xe);
+      n1 = Fintlor(pl,pi) - Fintlor(pl,xe);
 
     }
 
@@ -679,7 +679,7 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPsi(G4double Energy, G4dou
     {
       r1 = G4UniformRand();
       r2 = G4UniformRand();
-      value = r2*M_PI;
+      value = r2*pi;
       r3 = nr*(a*cos(value)*cos(value) + b*sin(value)*sin(value));
     }while(r1>r3);
 
@@ -733,7 +733,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Encu
       //G4cout << abs(fx) << " " << i << " " << x << "dentro ENCU " << G4endl;
     } while( (i<100) && (abs(fx) > 1e-6)) ;
 
-  if (i>100||x>M_PI) x = 3.0;
+  if (i>100||x>pi) x = 3.0;
   value = x;
 
   if (value<0.) value=0.;
@@ -752,7 +752,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Flor(G4double* p_p1, G4double
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
-  value = 1./(M_PI*(w*w + 4.*(x-xc)*(x-xc)));
+  value = 1./(pi*(w*w + 4.*(x-xc)*(x-xc)));
   return value;
 }
 
@@ -764,7 +764,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Glor(G4double* p_p1, G4double
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
-  value = (y0 *M_PI*(w*w +  4.*(x-xc)*(x-xc)) + 2.*A*w);
+  value = (y0 *pi*(w*w +  4.*(x-xc)*(x-xc)) + 2.*A*w);
   return value;
 }
 
@@ -777,7 +777,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Fdlor(G4double* p_p1, G4doubl
   G4double xc = p_p1[3];
 
   value = (-16.*A*w*(x-xc))/
-    (M_PI*(w*w+4.*(x-xc)*(x-xc))*(w*w+4.*(x-xc)*(x-xc)));
+    (pi*(w*w+4.*(x-xc)*(x-xc))*(w*w+4.*(x-xc)*(x-xc)));
   return value;
 }
 
@@ -790,7 +790,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Fintlor(G4double* p_p1, G4dou
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
-  value = y0*x + A*atan( 2*(x-xc)/w) / M_PI;
+  value = y0*x + A*atan( 2*(x-xc)/w) / pi;
   return value;
 }
 
@@ -804,8 +804,8 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvlor(G4double* p_p1, G4dou
   G4double w = p_p1[2];
   G4double xc = p_p1[3];
 
-  nor = atan(2.*(M_PI-xc)/w)/(2.*M_PI*w) - atan(2.*(x-xc)/w)/(2.*M_PI*w);
-  value = xc - (w/2.)*tan(-2.*r*nor*M_PI*w+atan(2*(xc-x)/w));
+  nor = atan(2.*(pi-xc)/w)/(2.*pi*w) - atan(2.*(x-xc)/w)/(2.*pi*w);
+  value = xc - (w/2.)*tan(-2.*r*nor*pi*w+atan(2*(xc-x)/w));
 
   return value;
 }
