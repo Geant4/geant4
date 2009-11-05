@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2009-11-05 22:20:40 japost Exp $
+$Id: History,v 1.144 2009-11-05 22:34:23 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 5th,  2009 J.Apostolakis - field-V09-02-06
+----------------------------
+- G4MagIntegratorDriver.cc : Enabled call to ComputeRightHandSide
+- G4NystromRK4.cc          : Disabled auxiliary code in Stepper (needed if
+                              ComputeRightHandSide is not called.)
+
 
 Nov 5th,  2009 J.Apostolakis - field-V09-02-05
 ----------------------------
