@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.8 2009-11-02 04:59:07 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.9 2009-11-05 03:14:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1589,6 +1589,42 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   G4int nhitname = (G4int)hitScorerNames.size();
   G4String scorername = static_cast<G4VHitsCollection>(hits).GetName();
 
+  //-- --//
+  /*
+  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
+  if(GFDEBUG_HIT) {
+    std::vector<G4String>::iterator itr = hitScorerNames.begin();
+    for(; itr != hitScorerNames.end(); itr++) 
+      G4cout << "  PS name : " << *itr << G4endl;
+  }
+  */
+  
+
+  //for(int i = 0; i < nhitname; i++) {       // this selection trusts
+    //if(scorername == hitScorerNames[i]) {   // thea command /vis/scene/add/psHits hit_name.
+
+      G4int idx[3];
+      std::map<G4int, G4double*> * map = hits.GetMap();
+      std::map<G4int, G4double*>::const_iterator itr = map->begin();
+      for(; itr != map->end(); itr++) {
+	GetNestedVolumeIndex(itr->first, idx);
+	Index3D id(idx[0], idx[1], idx[2]);
+	
+	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
+	nestedHitsListItr = kNestedHitsList.find(scorername);
+	if(nestedHitsListItr != kNestedHitsList.end()) {
+	  nestedHitsListItr->second[id] = *itr->second;
+	} else {
+	  std::map<Index3D, G4double> hit;
+	  hit.insert(std::map<Index3D, G4double>::value_type(id, *itr->second));
+	  kNestedHitsList[scorername] = hit;
+	}
+      }
+ 
+      //break;
+    //}
+  //}
+
   if(GFDEBUG_HIT) {
     G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();
     G4cout << "       >>>>> " << meshname << " : " << scorername  << G4endl;
@@ -1614,42 +1650,6 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
     G4cout << G4endl;
   }
 
-  //-- --//
-  /*
-  std::vector<G4String> hitScorerNames = kMessenger.getHitScorerNames();
-  if(GFDEBUG_HIT) {
-    std::vector<G4String>::iterator itr = hitScorerNames.begin();
-    for(; itr != hitScorerNames.end(); itr++) 
-      G4cout << "  PS name : " << *itr << G4endl;
-  }
-  */
-  
-
-  for(int i = 0; i < nhitname; i++) {
-    if(scorername == hitScorerNames[i]) {
-
-      G4int idx[3];
-      std::map<G4int, G4double*> * map = hits.GetMap();
-      std::map<G4int, G4double*>::const_iterator itr = map->begin();
-      for(; itr != map->end(); itr++) {
-	GetNestedVolumeIndex(itr->first, idx);
-	Index3D id(idx[0], idx[1], idx[2]);
-	//Index3D id;
-	//id.x = idx[0]; id.y = idx[1]; id.z = idx[2];
-	
-	std::map<G4String, std::map<Index3D, G4double> >::iterator nestedHitsListItr;
-	nestedHitsListItr = kNestedHitsList.find(scorername);
-	if(nestedHitsListItr != kNestedHitsList.end()) {
-	  nestedHitsListItr->second[id] = *itr->second;
-	} else {
-	  std::map<Index3D, G4double> hit;
-	  hit.insert(std::map<Index3D, G4double>::value_type(id, *itr->second));
-	  kNestedHitsList[scorername] = hit;
-	}
-      }
-      break;
-    }
-  }
 }
 
 //----- 

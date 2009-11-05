@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.3 2009-10-18 04:02:09 akimura Exp $
+// $Id: G4GMocrenIO.cc,v 1.4 2009-11-05 03:14:12 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -3684,7 +3684,7 @@ void G4GMocrenIO::clearDoseDistAll() {
 //
 bool G4GMocrenIO::isDoseEmpty() {
   if(kDose.empty()) {
-    std::cerr << "!!! dose distribution data is empty." << std::endl;
+    //std::cerr << "!!! dose distribution data is empty." << std::endl;
     return true;
   } else {
     return false;
