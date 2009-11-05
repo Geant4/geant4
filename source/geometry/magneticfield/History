@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2009-11-05 13:15:18 japost Exp $
+$Id: History,v 1.142 2009-11-05 13:19:13 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,8 @@ Nov 4th,  2009 J.Apostolakis - field-V09-02-04
 - G4NystromRK4 :         New Stepper with Nystrom for magnetic field
      with analytic estimation of integration error.  
      Greatly reduces number of field value per step.
+- Revised testPropagateMagField to use Cached Quadrupole field,
+     and to cover G4NystromRK4 and G4ConstRK4.
 
 
 Nov 4th,  2009 P.Gumplinger - field-V09-02-03
