@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.7 2009-11-04 15:22:42 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.8 2009-11-05 11:17:27 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -1295,8 +1295,10 @@ G4int G4DensityEffectData::GetIndex(const G4String& matName)
   G4int idx = -1;
 
   for (G4int i=0; i<NDENSDATA; ++i) {
-    if ( names[i] == matName ) idx = i;
-    break;
+    if ( names[i] == matName ) {
+      idx = i;
+      break;
+    }
   }
 
   return idx;
