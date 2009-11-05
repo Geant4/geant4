@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2009-11-05 03:14:12 akimura Exp $
+$Id: History,v 1.7 2009-11-05 11:37:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,17 +20,21 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
-5 Novemeber 2009  Akinori Kimura
+5 November 2009  Gabriele Cosmo (gMocren-V09-02-03)
+Fix in G4GMocrenFileSceneHandler.cc for resolving compilation error on
+Windows
+
+5 November 2009  Akinori Kimura
 GMocrenFileSceneHandler::AddCompound(G4THisMap<>) was modified
 to deal with /vis/scene/add/psHits <scorer_name>.
 GMocrenIO.cc was modified to remove an unnecessary output by std::cout.
 
-2 Novemeber 2009  Akinori Kimura (gMocren-V09-02-02)
+2 November 2009  Akinori Kimura (gMocren-V09-02-02)
 I mistook to make a tag, gMocren-V09-02-01.
 So I made a tag again.
 
 
-2 Novemeber 2009  Akinori Kimura (gMocren-V09-02-01)
+2 November 2009  Akinori Kimura (gMocren-V09-02-01)
 Deleted the following two AddEndOfEventModel(*) in
 G4GMocrenFileSceneHandler::GFBeginModeling().
 These models are entrusted to user commands /vis/scene/add/psHits or hits
@@ -39,7 +43,7 @@ These models are entrusted to user commands /vis/scene/add/psHits or hits
    scene->AddEndOfEventModel(new G4HitsModel());
 
 
-1 Novemeber 2009  Akinori Kimura
+1 November 2009  Akinori Kimura
 A few warning as following were fixed.
 src/G4GMocrenFileSceneHandler.cc:1812: warning: dereferencing pointer '<anonymous>' does break strict-aliasing rules
 
