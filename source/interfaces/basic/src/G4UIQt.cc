@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.27 2009-10-07 09:12:35 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.28 2009-11-05 14:34:18 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -155,7 +155,11 @@ G4UIQt::G4UIQt (
 #endif
 
   QWidget *mainWidget = new QWidget(fMainWindow);
+#if QT_VERSION < 0x040000
+  QSplitter *splitter = new QSplitter(Qt::Vertical,fMainWindow);
+#else
   QSplitter *splitter = new QSplitter(Qt::Vertical,mainWidget);
+#endif
 
   // Set layouts
 
@@ -226,8 +230,11 @@ G4UIQt::G4UIQt (
 
 #endif
 
-    fMainWindow->setCentralWidget(mainWidget);
-    //fMainWindow->setCentralWidget(splitter);
+#if QT_VERSION >= 0x040000
+  fMainWindow->setCentralWidget(mainWidget);
+#else
+  fMainWindow->setCentralWidget(splitter);
+#endif
 
 #if QT_VERSION < 0x040000
 
