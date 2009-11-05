@@ -1,4 +1,4 @@
-q$Id: History,v 1.104 2009-11-03 16:19:17 mkossov Exp $
+q$Id: History,v 1.105 2009-11-05 02:26:32 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4-11-2009, P.Gumplinger                   (phys-lists-V09-02-32)
+- add G4OpticalPhysics and G4OpticalPhysicsMessenger class
 
 3-11-2009, M.Kosov                        (phys-lists-V09-02-31)
 - close the warning about not used quasiElastic
