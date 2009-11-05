@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2009-11-04 13:15:48 allison Exp $
+$Id: History,v 1.129 2009-11-05 14:24:59 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+5th November 2009  John Allison
+- G4VSceneHandler.cc:
+  o ProcessScene: Added DrawEndOfRunModels().
+  o AddCompound (const G4THitsMap<G4double>&): Call DrawMesh.
 
 4th November 2009  John Allison
 - G4Scene: Added EndOfRunModelList.

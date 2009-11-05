@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.87 2009-11-04 12:55:33 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.88 2009-11-05 14:24:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -265,6 +265,7 @@ void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   static_cast<G4VHit>(hit).Draw(); // Cast because Draw is non-const!!!!
 }
 
+#include "G4DefaultLinearColorMap.hh"
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
   //G4cout << "AddCompound: hits: " << &hits << G4endl;
   G4bool scoreMapHits = false;
@@ -274,30 +275,44 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
     for (size_t i = 0; i < nMeshes; ++i) {
       G4VScoringMesh* mesh = scoringManager->GetMesh(i);
       if (mesh && mesh->IsActive()) {
-	G4int nSegment[3];
-	mesh->GetNumberOfSegments(nSegment);
-	//G4cout << mesh->GetWorldName()
-	//       << ' ' << mesh->GetSize()
+	//G4String worldName = mesh->GetWorldName();
+	//MeshShape meshShape = mesh->GetShape();
+	//G4ThreeVector meshTranslation = mesh->GetTranslation();
+	//G4ThreeVector meshSize = mesh->GetSize();
+	//G4int nSegment[3];
+	//mesh->GetNumberOfSegments(nSegment);
+	//G4cout << worldName
+	//       << ' ' << meshShape 
+	//       << ' ' << meshTranslation
+	//       << ' ' << meshSize
 	//       << ' ' << nSegment[0] << ',' << nSegment[1] << ',' << nSegment[2]
 	//       << G4endl;
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();
 	    i != scoreMap.end(); ++i) {
-	  const G4String& name = i->first;
+	  const G4String& scoreMapName = i->first;
 	  const G4THitsMap<G4double>* foundHits = i->second;
 	  if (foundHits == &hits) {
 	    scoreMapHits = true;
 	    //G4cout <<
-	    //  name << ": " << &hits << " found in scoring map."
+	    //  scoreMapName << ": " << &hits << " found in scoring map."
 	    //   << G4endl;
-	    std::map<G4int,G4double*>* hitsMap = hits.GetMap();
-	    for (std::map<G4int,G4double*>::const_iterator i = hitsMap->begin();
-		 i != hitsMap->end(); ++i) {
-	      G4int index = i->first;
-	      G4double value = *(i->second);
-	      //G4cout << index << ' ' << value << G4endl;
-	      // Now what?!!!
-	    }
+	    mesh->DrawMesh(scoreMapName, new G4DefaultLinearColorMap("G4VSceneHandlerColorMap"));
+	    //std::map<G4int,G4double*>* hitsMap = hits.GetMap();
+	    //for (std::map<G4int,G4double*>::const_iterator i = hitsMap->begin();
+	    // i != hitsMap->end(); ++i) {
+	    //  G4int index = i->first;
+	    //  G4double value = *(i->second);
+	    //  G4cout << index << ' ' << value << G4endl;
+	    // Now what?!!!
+	    //  if (meshShape == boxMesh) {
+	    //  } else {
+	    //G4cout <<
+	    //  "G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&):"
+	    //  "\n  Shape " << meshShape << " not implemented."
+	    //       << G4endl;
+	    //  }
+	    //}
 	  }
 	}
       }
@@ -639,6 +654,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       }
     }
     visManager->SetEventRefreshing(false);
+  }
+
+  // Refresh end-of-run model list.
+  // Allow only in Idle or GeomClosed state...
+  if (state == G4State_Idle || state == G4State_GeomClosed) {
+    DrawEndOfRunModels();
   }
 
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
