@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.12 2009-04-21 15:35:45 gcosmo Exp $
+// $Id: G4OpticalSurface.hh,v 1.13 2009-11-05 00:37:39 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,89 +82,99 @@ class G4MaterialPropertiesTable;
 
 class G4OpticalSurface : public G4SurfaceProperty
 {
-  public: // With description
 
-    ////////////////////////////////
-    // Constructor
-    ////////////////////////////////
-
-    G4OpticalSurface(const G4String& name,
-                     G4OpticalSurfaceModel model = glisur,
-                     G4OpticalSurfaceFinish finish = polished,
-                     G4SurfaceType type = dielectric_dielectric,
-                     G4double value = 1.0);
-    // Constructor of an optical surface object.
-
-  public: // Without description
-
-    //////////////
-    // Constructors and destructor
-    //////////////
-
-    G4OpticalSurface();
-    virtual ~G4OpticalSurface();
-    G4OpticalSurface(const G4OpticalSurface &right);
+public: // Without description
   
-    //////////////
-    // Operators
-    //////////////
+        //////////////
+        // Operators
+        //////////////
   
-    const G4OpticalSurface & operator=(const G4OpticalSurface &right);
+	G4OpticalSurface(const G4OpticalSurface &right);
+	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
   
-    G4int operator==(const G4OpticalSurface &right) const;
-    G4int operator!=(const G4OpticalSurface &right) const;
+	G4int operator==(const G4OpticalSurface &right) const;
+	G4int operator!=(const G4OpticalSurface &right) const;
 
-    ////////////
-    // Methods
-    ////////////
+public: // With description
 
-  public: // With description
+        ////////////////////////////////
+        // Constructors and Destructor
+        ////////////////////////////////
 
-    const G4OpticalSurfaceFinish& GetFinish() const { return theFinish; }
-    // Returns the optical surface finish.
-    void SetFinish(const G4OpticalSurfaceFinish& finish) { theFinish = finish; }
-    // Sets the optical surface finish.
+	G4OpticalSurface(const G4String& name,
+			 G4OpticalSurfaceModel model = glisur,
+			 G4OpticalSurfaceFinish finish = polished,
+			 G4SurfaceType type = dielectric_dielectric,
+			 G4double value = 1.0);
+        // Constructor of an optical surface object.
 
-    const G4OpticalSurfaceModel& GetModel() const { return theModel; }
-    // Returns the optical surface model used.
-    void SetModel(const G4OpticalSurfaceModel& model) { theModel = model; }
-    // Sets the optical surface model to be followed.
+public: // Without description
 
-    G4double GetSigmaAlpha() const { return sigma_alpha; }
-    // Returns an unified model surface parameter.
-    void     SetSigmaAlpha(const G4double s_a) { sigma_alpha = s_a; }
-    // Sets an unified model surface parameter.
+	virtual ~G4OpticalSurface();
 
-    G4double GetPolish() const { return polish; }
-    // Returns the optical surface polish type.
-    void     SetPolish(const G4double plsh) { polish=plsh; }
-    // Sets the optical surface polish type.
+	////////////
+	// Methods
+        ////////////
 
-    G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-                                   { return theMaterialPropertiesTable; }
-    // Retrieves the pointer of the G4MaterialPropertiesTable 
-    // attached to optical surface.
+	// public methods
 
-    void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
-                                   { theMaterialPropertiesTable = anMPT; }
-    // Attaches a G4MaterialPropertiesTable to the optical surface.
+public: // With description
 
-    void DumpInfo() const;
-    // Prints information about the optical surface.
+        virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
 
-  private:
+        G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
+        // Returns the optical surface finish.
+        void         SetFinish(const G4OpticalSurfaceFinish finish)
+						 {theFinish = finish;};
+        // Sets the optical surface finish.
 
-    // ------------------
-    // Basic data members ( To define an optical surface)
-    // ------------------
+        G4OpticalSurfaceModel GetModel() const {return theModel;};
+        // Returns the optical surface model used.
+        void           SetModel(const G4OpticalSurfaceModel model)
+						   {theModel = model;};
+        // Sets the optical surface model to be followed.
 
-    G4OpticalSurfaceModel theModel;          // Surface model
-    G4OpticalSurfaceFinish theFinish;        // Surface finish
+	G4double GetSigmaAlpha() const {return sigma_alpha;};
+        // Returns an unified model surface parameter.
+	void     SetSigmaAlpha(const G4double s_a)
+				        {sigma_alpha = s_a;};
+        // Sets an unified model surface parameter.
 
-    G4double sigma_alpha;           // The sigma of micro-facet polar angle
-    G4double polish;                // Polish parameter in glisur model
+	G4double GetPolish() const {return polish;};
+        // Returns the optical surface polish type.
+	void     SetPolish(const G4double plsh) {polish=plsh;};
+        // Sets the optical surface polish type.
 
-    G4MaterialPropertiesTable* theMaterialPropertiesTable;
+	G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
+				       { return theMaterialPropertiesTable;};
+        // Retrieves the pointer of the G4MaterialPropertiesTable 
+        // attached to optical surface.
+
+	void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
+				    { theMaterialPropertiesTable = anMPT;};
+        // Attaches a G4MaterialPropertiesTable to the optical surface.
+
+	void DumpInfo() const;
+        // Prints information about the optical surface.
+
+private:
+
+// ------------------
+// Basic data members ( To define an optical surface)
+// ------------------
+
+        G4OpticalSurfaceModel theModel;		// Surface model
+        G4OpticalSurfaceFinish theFinish;	// Surface finish
+
+	G4double sigma_alpha;		// The sigma of micro-facet polar angle
+	G4double polish;		// Polish parameter in glisur model
+
+	G4MaterialPropertiesTable* theMaterialPropertiesTable;
+
 };
+
+////////////////////
+// Inline methods
+////////////////////
 
 #endif /* G4OpticalSurface_h */
