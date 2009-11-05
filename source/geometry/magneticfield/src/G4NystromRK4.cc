@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.3 2009-11-05 22:23:15 japost Exp $
+// $Id: G4NystromRK4.cc,v 1.4 2009-11-05 22:31:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -83,21 +83,11 @@ G4NystromRK4::Stepper
   G4double S4 = .25*Step   ;
   G4double S6 =     Step * one_sixth;   // Step / 6.;
 
-#if 0
-  // #ifndef G4NYSTROM_RHS
-  // if( ! m_cachedMom ) { 
-    // John A  added, in order to emulate effect of call to changed/derived RHS
-    m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
-    m_imom  = 1./m_mom;
-    m_cof   = m_fEq->FCof()*m_imom;
-// }
-#endif
-  //  Do not reset m_cachedMom
-  //    as this would invalidate the caching further (2nd+) calls to Stepper
-  //    for the same starting point (in case of large error or intersection).
 
-  // G4double  dPdS2[6];
-  // OwnRightHandSide( P, dPdS2 );
+  // John A  added, in order to emulate effect of call to changed/derived RHS
+  // m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
+  // m_imom  = 1./m_mom;
+  // m_cof   = m_fEq->FCof()*m_imom;
 
   // Point 1
   //
