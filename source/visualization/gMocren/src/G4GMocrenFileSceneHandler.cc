@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.9 2009-11-05 03:14:12 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.10 2009-11-05 11:34:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,7 +119,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
     kgMocrenIO(new G4GMocrenIO()),
     kbSetModalityVoxelSize(false),
     kbModelingTrajectory(false),
-    kGddDest(0),
+//    kGddDest(0),
     kFlagInModeling(false),
     kFlagSaving_g4_gdd(false),
     kFlagParameterization(0),
