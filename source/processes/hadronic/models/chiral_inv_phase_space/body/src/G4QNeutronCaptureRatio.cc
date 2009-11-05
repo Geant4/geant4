@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.2 2009-05-25 17:32:08 mkossov Exp $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.1 2009-11-05 15:25:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,29 +129,20 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
       pv+=dp;
       lastT[j]=CalcCap2In_Ratio(pv,tgZ,tgN); // ??
     }
-    if(pIU>pma)                          // Initialize the logarithmic Table
+    lastL=new G4double[mls];           // Create the logarithmic Table
+    G4double ls=std::log(s);
+    lastK = static_cast<int>((ls-lpi)/dl)+1; // MaxBin to be initialized in LogTaB
+    if(lastK>nls)
     {
-      lastL=new G4double[mls];           // Create the logarithmic Table
-      G4double ls=std::log(s);
-      lastK = static_cast<int>((ls-lpi)/dl)+1; // MaxBin to be initialized in LogTaB
-      if(lastK>nls)
-      {
-        lastK=nls;
-        lastM=lpa-lpi;
-      }
-      else lastM = lastK*dl;             // Calculate max initialized ln(s)-lpi for LogTab
-      pv=mi;
-      for(G4int j=0; j<=lastK; j++)      // Calculate LogTab values
-      {
-        lastL[j]=CalcCap2In_Ratio(pv,tgZ,tgN);
-        if(j!=lastK) pv*=edl;
-      }
+      lastK=nls;
+      lastM=lpa-lpi;
     }
-    else                                 // LogTab is not initialized
+    else lastM = lastK*dl;             // Calculate max initialized ln(s)-lpi for LogTab
+    pv=mi;
+    for(G4int j=0; j<=lastK; j++)      // Calculate LogTab values
     {
-      lastL = 0;
-      lastK = 0;
-      lastM = 0.;
+      lastL[j]=CalcCap2In_Ratio(pv,tgZ,tgN);
+      if(j!=lastK) pv*=edl;
     }
     i++;                                 // Make a new record to AMDB and position on it
     vZ.push_back(lastZ);

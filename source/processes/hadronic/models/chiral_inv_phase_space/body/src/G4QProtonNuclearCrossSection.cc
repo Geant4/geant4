@@ -97,7 +97,7 @@ G4double G4QProtonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ)         // The nucleus was not the last used isotope
   {
-    in = false;                        // By default the isotope haven't be found in AMDB  
+    in      = false;                   // By default the isotope haven't been found in AMDB
     lastP   = 0.;                      // New momentum history (nothing to compare with)
     lastN   = tgN;                     // The last N of the calculated nucleus
     lastZ   = tgZ;                     // The last Z of the calculated nucleus
@@ -246,7 +246,6 @@ G4double G4QProtonNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G4
 #ifdef debug
   G4cout<<"G4QProtNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
-  if (Momentum<THmin) return 0.;       // @@ This can be dangerouse for the heaviest nuc.?!
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;              // A of the target

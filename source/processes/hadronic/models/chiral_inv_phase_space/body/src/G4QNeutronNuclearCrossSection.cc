@@ -250,7 +250,6 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
 #ifdef debug
   G4cout<<"G4QNeutNCS::CalCS:N="<<targN<<",Z="<<targZ<<",P="<<Momentum<<">"<<THmin<<G4endl;
 #endif
-  if (Momentum<THmin) return 0.;       // @@ This can be dangerouse for the heaviest nuc.?!
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;              // A of the target
