@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.51 2009-03-25 15:29:02 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.52 2009-11-05 22:23:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,8 +212,15 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     yFldTrkStart.SetCurveLength(x);
 #endif
 
-    pIntStepper->RightHandSide( y, dydx );
 
+    // #ifndef G4NYSTROM_RHS
+    // Standard method - inline call to Equation of Motion
+    // pIntStepper->RightHandSide( y, dydx );
+    // #else
+    // Trial alternative - NystromRK4 (and others) can override this
+    //  method in order to cache field, or state (eg momentum magnitude)
+    pIntStepper->ComputeRightHandSide( y, dydx );
+    // #endif
     fNoTotalSteps++;
 
     // Perform the Integration
