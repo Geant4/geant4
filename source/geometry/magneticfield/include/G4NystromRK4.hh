@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NystromRK4.hh,v 1.1 2009-11-05 11:29:25 japost Exp $ 
+// $Id: G4NystromRK4.hh,v 1.2 2009-11-05 18:31:15 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NystromRK4
@@ -40,8 +40,8 @@
 // - Adaptations:  J. Apostolakis  May-Nov 2009
 // -------------------------------------------------------------------
 
-#ifndef G4ATLASRK4_HH
-#define G4ATLASRK4_HH
+#ifndef G4NYSTROMRK4_HH
+#define G4NYSTROMRK4_HH
 
 #include "globals.hh"
 #include "G4MagIntegratorStepper.hh"
@@ -50,8 +50,8 @@
 class G4NystromRK4 : public G4MagIntegratorStepper
 {
   public: 
-    G4NystromRK4(G4EquationOfMotion *EquationMotion, G4int numberOfVariables = 6);
-    // G4NystromRK4(G4Mag_EqRhs *EquationMotion);  // Enforces MagEq, numVar=6
+    G4NystromRK4(G4Mag_EqRhs *EquationMotion, G4double distanceConstField=0.0); 
+      // Can be used only for Magnetic Fields - and for 6 variables (x,p)
 
     ~G4NystromRK4() ;
 
@@ -60,27 +60,35 @@ class G4NystromRK4 : public G4MagIntegratorStepper
 	               G4double step  ,
 	               G4double Po  [],
 	               G4double Err []);
+      // Single call for integration result and error
+      // - Provides Error via analytical method
 
+    virtual void ComputeRightHandSide(const double P[],double dPdS[]);   
+      // Must compute RHS - and does caches result
+
+    void      SetDistanceForConstantField( G4double length ); 
+    G4double  GetDistanceForConstantField() const; 
+   
     G4int     IntegratorOrder() const {return 4;}
     G4double  DistChord() const; 
-    inline void OwnRightHandSide(const double P[],double dPdS[]);   
   
   private:
 
-    void getField   (const G4double P[]);
+    inline void getField   (const G4double P[]);
 
     ////////////////////////////////////////////////////////////////
     // Private data
     ////////////////////////////////////////////////////////////////
 
     G4Mag_EqRhs*           m_fEq;          
-    G4double      m_field    [3];
-    G4double      m_fpos     [4];
+    G4double      m_lastField[3];
+    G4double      m_fldPosition[4];
     G4double      m_magdistance ;
     G4double      m_magdistance2;
     G4double      m_cof         ;
     G4double      m_mom         ;
     G4double      m_imom        ;
+    G4bool        m_cachedMom   ;
     G4double      m_iPoint   [3];
     G4double      m_mPoint   [3];
     G4double      m_fPoint   [3];
@@ -90,47 +98,35 @@ class G4NystromRK4 : public G4MagIntegratorStepper
 /////////////////////////////////////////////////////////////////////////////////
 // Inline methods
 /////////////////////////////////////////////////////////////////////////////////
+inline void  G4NystromRK4::SetDistanceForConstantField( G4double length )
+{
+  m_magdistance=   length;
+  m_magdistance2 = length*length;
+}
 
+inline G4double  G4NystromRK4::GetDistanceForConstantField() const
+{
+  return m_magdistance; 
+}
 
 /////////////////////////////////////////////////////////////////////////////////
-// Get new magnetic field with testing distance from previouse call
+// Get value of magnetic field while checking distance from last stored call
 /////////////////////////////////////////////////////////////////////////////////
 
 inline void G4NystromRK4::getField (const G4double P[])
 {
   
-  G4double dx = P[0]-m_fpos[0];
-  G4double dy = P[1]-m_fpos[1];
-  G4double dz = P[2]-m_fpos[2];
+  G4double dx = P[0]-m_fldPosition[0];
+  G4double dy = P[1]-m_fldPosition[1];
+  G4double dz = P[2]-m_fldPosition[2];
 
   if((dx*dx+dy*dy+dz*dz) > m_magdistance2) {
 
-    m_fpos[0] = P[0];
-    m_fpos[1] = P[1];
-    m_fpos[2] = P[2];
-    m_fpos[3] = P[7];
-    m_fEq->GetFieldValue(m_fpos,m_field);
+    m_fldPosition[0] = P[0];
+    m_fldPosition[1] = P[1];
+    m_fldPosition[2] = P[2];
+    m_fldPosition[3] = P[7];
+    m_fEq->GetFieldValue(m_fldPosition, m_lastField);
   }
 }
-
-/////////////////////////////////////////////////////////////////////////////////
-// Derivatives calculation 
-/////////////////////////////////////////////////////////////////////////////////
-
-inline void 
-G4NystromRK4::OwnRightHandSide(const G4double P[],G4double dPdS[])
-{
-  getField(P);
-  m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
-  m_imom  = 1./m_mom                                ;
-  m_cof   = m_fEq->FCof()*m_imom                    ;
-  dPdS[0] = P[3]*m_imom                             ; // dx /ds
-  dPdS[1] = P[4]*m_imom                             ; // dy /ds
-  dPdS[2] = P[5]*m_imom                             ; // dz /ds
-  dPdS[3] = m_cof*(P[4]*m_field[2]-P[5]*m_field[1]) ; // dPx/ds
-  dPdS[4] = m_cof*(P[5]*m_field[0]-P[3]*m_field[2]) ; // dPy/ds
-  dPdS[5] = m_cof*(P[3]*m_field[1]-P[4]*m_field[0]) ; // dPz/ds
-}
-
-
-#endif  // G4ATLASRK4_HH
+#endif  // G4NYSTROMRK4

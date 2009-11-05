@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.11 2006-06-29 18:24:34 gunter Exp $
+// $Id: G4MagIntegratorStepper.cc,v 1.12 2009-11-05 18:31:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -46,4 +46,9 @@ G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
 
 G4MagIntegratorStepper::~G4MagIntegratorStepper()
 {
+}
+
+void G4MagIntegratorStepper::ComputeRightHandSide( const G4double y[], G4double dydx[] ) 
+{
+  this->RightHandSide( y, dydx );
 }

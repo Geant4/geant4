@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.1 2009-11-05 11:29:25 japost Exp $
+// $Id: G4NystromRK4.cc,v 1.2 2009-11-05 18:31:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -36,24 +36,24 @@
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////
-// Constructor sets the number of variables (default = 6)
+// Constructor - with optional distance ( has default value)
 //////////////////////////////////////////////////////////////////
 
-G4NystromRK4::G4NystromRK4(G4EquationOfMotion* EqRhs, G4int numberOfVariables)
-  : G4MagIntegratorStepper(EqRhs, numberOfVariables)
+G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* magEqRhs, G4double distanceConstField)
+  : G4MagIntegratorStepper(magEqRhs, 6),            // number of variables
+    m_fEq( magEqRhs ),
+    m_magdistance( distanceConstField ),
+    m_cof( 0.0 ),
+    m_mom( 0.0 ),
+    m_imom( 0.0 ),
+    m_cachedMom( false )
 {
-  m_fEq          =  dynamic_cast<G4Mag_EqRhs*>(GetEquationOfMotion());
-  m_magdistance  = 0.;           //  Previous default = 5.; // ie * millimeter ;
-  m_fpos[0]      = 99999999. ;
-  m_fpos[1]      = 99999999. ;
-  m_fpos[2]      = 99999999. ;
-  m_magdistance2 = m_magdistance*m_magdistance;
+  m_fldPosition[0]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
+  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
+  m_fldPosition[2]  = m_iPoint[1] = m_fPoint[2] = 9.9999999e+99 ;
+  m_fldPosition[3]  = -9.9999999e+99;
 
-  if( numberOfVariables != 6 ) { 
-    G4Exception("G4CashKarpRKF45 Constructor", "Incorrect Number of Variables",
-		 FatalException, 
-		"Method can integrate only over 6 variables: position, momentum.");
-  } 
+  m_magdistance2 = distanceConstField*distanceConstField;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -77,15 +77,23 @@ G4NystromRK4::Stepper
 
   m_iPoint[0]=R[0]; m_iPoint[1]=R[1]; m_iPoint[2]=R[2];
 
+  const G4double one_sixth= 1./6.;
   G4double S  =     Step   ;
   G4double S5 =  .5*Step   ;
   G4double S4 = .25*Step   ;
-  G4double S6 =     Step/6.;
+  G4double S6 =     Step * one_sixth;   // Step / 6.;
 
-  // John A  added, in order to emulate effect of call to changed/derived RHS
-  m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
-  m_imom  = 1./m_mom;
-  m_cof   = m_fEq->FCof()*m_imom;
+#if 1
+//  if( ! m_cachedMom ) { 
+    // John A  added, in order to emulate effect of call to changed/derived RHS
+    m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
+    m_imom  = 1./m_mom;
+    m_cof   = m_fEq->FCof()*m_imom;
+//  }
+#endif
+  //  Do not reset m_cachedMom
+  //    as this would invalidate the caching further (2nd+) calls to Stepper
+  //    for the same starting point (in case of large error or intersection).
 
   // G4double  dPdS2[6];
   // OwnRightHandSide( P, dPdS2 );
@@ -103,18 +111,18 @@ G4NystromRK4::Stepper
   getField(p);
 
   G4double A2[3] = {A[0]+S5*K1[0],A[1]+S5*K1[1],A[2]+S5*K1[2]};
-  G4double K2[3] = {(A2[1]*m_field[2]-A2[2]*m_field[1])*m_cof,
-		    (A2[2]*m_field[0]-A2[0]*m_field[2])*m_cof,
-		    (A2[0]*m_field[1]-A2[1]*m_field[0])*m_cof};
+  G4double K2[3] = {(A2[1]*m_lastField[2]-A2[2]*m_lastField[1])*m_cof,
+		    (A2[2]*m_lastField[0]-A2[0]*m_lastField[2])*m_cof,
+		    (A2[0]*m_lastField[1]-A2[1]*m_lastField[0])*m_cof};
  
   m_mPoint[0]=p[0]; m_mPoint[1]=p[1]; m_mPoint[2]=p[2];
 
   // Point 3 with the same magnetic field
   //
   G4double A3[3] = {A[0]+S5*K2[0],A[1]+S5*K2[1],A[2]+S5*K2[2]};
-  G4double K3[3] = {(A3[1]*m_field[2]-A3[2]*m_field[1])*m_cof,
-		    (A3[2]*m_field[0]-A3[0]*m_field[2])*m_cof,
-		    (A3[0]*m_field[1]-A3[1]*m_field[0])*m_cof};
+  G4double K3[3] = {(A3[1]*m_lastField[2]-A3[2]*m_lastField[1])*m_cof,
+		    (A3[2]*m_lastField[0]-A3[0]*m_lastField[2])*m_cof,
+		    (A3[0]*m_lastField[1]-A3[1]*m_lastField[0])*m_cof};
   
   // Point 4
   //
@@ -125,9 +133,9 @@ G4NystromRK4::Stepper
   getField(p);
   
   G4double A4[3] = {A[0]+S*K3[0],A[1]+S*K3[1],A[2]+S*K3[2]};
-  G4double K4[3] = {(A4[1]*m_field[2]-A4[2]*m_field[1])*m_cof,
-		    (A4[2]*m_field[0]-A4[0]*m_field[2])*m_cof,
-		    (A4[0]*m_field[1]-A4[1]*m_field[0])*m_cof};
+  G4double K4[3] = {(A4[1]*m_lastField[2]-A4[2]*m_lastField[1])*m_cof,
+		    (A4[2]*m_lastField[0]-A4[0]*m_lastField[2])*m_cof,
+		    (A4[0]*m_lastField[1]-A4[1]*m_lastField[0])*m_cof};
   
   // New position
   //
@@ -184,4 +192,24 @@ G4NystromRK4::DistChord() const
     dz         -= (s*az)                ;
   }
   return sqrt(dx*dx+dy*dy+dz*dz);
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Derivatives calculation - caching the momentum value
+/////////////////////////////////////////////////////////////////////////////////
+
+void 
+G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
+{
+  getField(P);
+  m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
+  m_imom  = 1./m_mom                                ;
+  m_cof   = m_fEq->FCof()*m_imom                    ;
+  m_cachedMom = true                                ; // Caching the value
+  dPdS[0] = P[3]*m_imom                             ; // dx /ds
+  dPdS[1] = P[4]*m_imom                             ; // dy /ds
+  dPdS[2] = P[5]*m_imom                             ; // dz /ds
+  dPdS[3] = m_cof*(P[4]*m_lastField[2]-P[5]*m_lastField[1]) ; // dPx/ds
+  dPdS[4] = m_cof*(P[5]*m_lastField[0]-P[3]*m_lastField[2]) ; // dPy/ds
+  dPdS[5] = m_cof*(P[3]*m_lastField[1]-P[4]*m_lastField[0]) ; // dPz/ds
 }
