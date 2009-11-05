@@ -1,4 +1,4 @@
-$Id: History,v 1.230 2009-11-04 18:33:42 vnivanch Exp $
+$Id: History,v 1.231 2009-11-05 09:10:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 November 4, 2009  V.Ivanchenko (global-V09-02-09)
-- G4PhysicsVector: cleanup initialisation of cauch values;
-                   simplification Value method (do not look into previous bin);
-                   added method ScaleVector needed for ICRU'73 data. 
+- G4PhysicsVector: cleaned up initialisation of cached values;
+  simplified Value() method, now not looking into previous bin;
+  added method ScaleVector() needed for ICRU'73 data. 
 
 October 29, 2009  G.Cosmo (global-V09-02-08)
 - Cleared warning for unused argument in G4Allocator internal method.
