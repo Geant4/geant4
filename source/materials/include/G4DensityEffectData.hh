@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.5 2009-11-04 18:18:27 vnivanch Exp $
+// $Id: G4DensityEffectData.hh,v 1.6 2009-11-05 10:42:14 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -56,7 +56,7 @@
 
 const G4int NDENSDATA  = 278;
 const G4int NDENSARRAY = 9;
-const G4int NDENSELEM  = 96;
+const G4int NDENSELEM  = 98;
 
 class G4DensityEffectData 
 {
