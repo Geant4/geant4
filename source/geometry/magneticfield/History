@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2009-11-05 13:19:13 japost Exp $
+$Id: History,v 1.143 2009-11-05 22:20:40 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 4th,  2009 J.Apostolakis - field-V09-02-04
+Nov 5th,  2009 J.Apostolakis - field-V09-02-05
+----------------------------
+- Added new virtual method CalculateRightHandSide to G4MagIntegratorStepper for use
+      in caching momentum (and field value) by G4NystromRK4
+      Default implementation in G4MagIntegratorStepper calls RightHandSide inline method.
+- G4Nystrom:  New Set/Get method for cache distance.
+              Changed private data members in G4NystromRK4.
+- G4MagIntegratorDriver:  alternative call to ComputeRightHandSide is not used (in comment)
+              As a result G4NystromRK4 operates without reusing 
+
+Nov 5th,  2009 J.Apostolakis - field-V09-02-04
 ----------------------------
 - G4CachedMagneticField: New Simple class to cache value of Magnetic Field. 
      Speeds up code when calculation of field value is complex.
