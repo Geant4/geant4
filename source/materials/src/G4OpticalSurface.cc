@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.12 2008-12-11 10:23:54 gcosmo Exp $
+// $Id: G4OpticalSurface.cc,v 1.13 2009-11-05 00:38:20 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,11 +95,6 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 		G4Exception("G4OpticalSurface::G4OpticalSurface ==> " 
 			    "Constructor called with INVALID model.");
 	}
-}
-
-G4OpticalSurface::G4OpticalSurface()
-  : G4SurfaceProperty()
-{
 }
 
 G4OpticalSurface::~G4OpticalSurface()
