@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2009-11-04 18:19:11 vnivanch Exp $
+$Id: History,v 1.157 2009-11-05 00:36:58 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-11-09 P. Gumplinger (materials-V09-02-13)
+- cleanup of include file: G4OpticalSurface.hh (and consequent small
+  change in the imlementation .cc)
+ 
 04-11-09 V.Ivanchenko (materials-V09-02-12)
 - G4VIonDEDXTable - (A.Lechner) added new method (BuildPhysicsVector) which
                     invoke the build process of physics vectors on demand in
