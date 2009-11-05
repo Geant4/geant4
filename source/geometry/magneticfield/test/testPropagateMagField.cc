@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.32 2007-07-06 14:16:47 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.33 2009-11-05 13:18:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -52,8 +52,6 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-
-#include "G4UniformMagField.hh"
 
 #include "G4ios.hh"
 #include <iomanip>
@@ -222,6 +220,10 @@ G4VPhysicalVolume* BuildGeometry()
     return worldPhys;
 }
 
+#include "G4UniformMagField.hh"
+#include "G4QuadrupoleMagField.hh"
+#include "G4CachedMagneticField.hh"
+
 #include "G4ChordFinder.hh"
 #include "G4PropagatorInField.hh"
 #include "G4MagneticField.hh"
@@ -239,10 +241,13 @@ G4VPhysicalVolume* BuildGeometry()
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+#include "G4ConstRK4.hh"
+#include "G4NystromRK4.hh"
 #include "G4HelixMixedStepper.hh"
 
-G4UniformMagField myMagField(10.*tesla, 0., 0.); 
-
+G4UniformMagField      uniformMagField(10.*tesla, 0., 0.); 
+G4QuadrupoleMagField   quadrupoleMagField( 10.*tesla/(50.*cm) ); 
+G4CachedMagneticField  myMagField( &quadrupoleMagField, 1.0 * cm); 
 
 G4FieldManager* SetupField(G4int type)
 {
@@ -265,6 +270,8 @@ G4FieldManager* SetupField(G4int type)
       case 9: pStepper = new G4ExactHelixStepper( fEquation );   break;
       case 10: pStepper = new G4RKG3_Stepper( fEquation );       break;
       case 11: pStepper = new G4HelixMixedStepper( fEquation );  break;
+      case 12: pStepper = new G4ConstRK4( fEquation ); break;
+      case 13: pStepper = new G4NystromRK4( fEquation ); break; 
       default: 
         pStepper = 0;
         G4cerr << " Stepper type provided is " << type << G4endl;
@@ -447,6 +454,9 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 	  UnitMomentum= EndUnitMomentum;
 	  physStep *= 2.; 
        } // ...........................  end for ( istep )
+
+       myMagField.ReportStatistics(); 
+
     }    // ..............................  end for ( iparticle )
 
     return(1);
