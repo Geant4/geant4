@@ -339,13 +339,14 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
 G4double G4QAntiBaryonPlusNuclearCrossSection::ThresholdMomentum(G4int tZ, G4int tN)
 {
   static const G4double third=1./3.;
+  static const G4double prM = G4QPDGCode(2212).GetMass(); // Proton mass in MeV
   static const G4double pM = G4QPDGCode(3112).GetMass(); // Projectile mass in MeV
   static const G4double tpM= pM+pM;       // Doubled projectile mass (MeV)
   G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
-  //G4double dE=1.263*tZ/(1.+std::pow(tA,third));
   G4double dE=tZ/(1.+std::pow(tA,third)); // Safety for diffused edge of the nucleus (QE)
   G4double tM=931.5*tA;
+  if(tZ==1 && tN==0) tM=prM;    // A threshold on the free proton
   G4double T=dE+dE*(dE/2+pM)/tM;
   return std::sqrt(T*(tpM+T));
 }

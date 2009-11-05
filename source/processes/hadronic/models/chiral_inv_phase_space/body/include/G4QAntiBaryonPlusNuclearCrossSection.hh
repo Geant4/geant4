@@ -68,7 +68,6 @@ public:
                                  G4int N, G4double Momentum);
 
 private:
-  G4int    GetFunctions(G4int tZ, G4int tN, G4double* y, G4double* z); // y&z=ArrayPointers
   G4double CrossSectionLin(G4int targZ, G4int targN, G4double P);
   G4double CrossSectionLog(G4int targZ, G4int targN, G4double lP);
   G4double CrossSectionFormula(G4int targZ, G4int targN, G4double P, G4double lP);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.2 2009-10-23 14:26:58 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.3 2009-11-05 09:41:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1049,7 +1049,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
     G4Exception("G4QuasiFreeRatios::ChExer:","21",FatalException,"CHIPS complain");
     //return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M);// Use this if not exception
   }
-  if(sPDG) mS=G4QPDGCode(2112).GetMass();
+  if(sPDG) mS=mNeut;
   else
   {
     G4cout<<"Error:G4QuasiFreeRatios::ChExer: BAD pPDG="<<pPDG<<", NPDG="<<NPDG<<G4endl;

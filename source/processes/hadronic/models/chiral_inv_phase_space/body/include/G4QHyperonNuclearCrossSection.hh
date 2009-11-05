@@ -46,7 +46,6 @@
 #include "G4NucleiProperties.hh"
 #include <vector>
 #include "G4VQCrossSection.hh"
-#include "G4QPDGCode.hh"
 
 class G4QHyperonNuclearCrossSection : public G4VQCrossSection
 {
@@ -68,11 +67,9 @@ public:
                                  G4int N, G4double Momentum);
 
 private:
-  G4int    GetFunctions(G4int tZ, G4int tN, G4double* y, G4double* z); // y&z=ArrayPointers
   G4double CrossSectionLin(G4int targZ, G4int targN, G4double P);
   G4double CrossSectionLog(G4int targZ, G4int targN, G4double lP);
   G4double CrossSectionFormula(G4int targZ, G4int targN, G4double P, G4double lP);
-  G4double ThresholdMomentum(G4int targZ, G4int targN); // Threshold of pA reaction (MeV/c)
 // Body
 private:
   static G4double  lastSig; // Last value of the Cross Section

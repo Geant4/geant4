@@ -332,12 +332,6 @@ G4double G4QKaonMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
   return sigma;
 }
 
-// Electromagnetic momentum-threshold (in MeV/c) 
-G4double G4QKaonMinusNuclearCrossSection::ThresholdMomentum(G4int , G4int )
-{
-  return 0.; // No threshold for the negative meson (byt for positive meson it should be)
-}
-
 // Calculation formula for piMinus-nuclear inelastic cross-section (mb) (P in GeV/c)
 G4double G4QKaonMinusNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4double P)
 {

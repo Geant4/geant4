@@ -93,27 +93,4 @@ G4double G4QKaonZeroNuclearCrossSection::CalculateCrossSection(G4bool, G4int, G4
 {
   G4cout<<"-Warning-G4QKaonZeroCS::CalcCS:*A fake function is called, returns 0**"<<G4endl;
   return 0.;
-}
-
-// Electromagnetic momentum-threshold (in MeV/c) 
-G4double G4QKaonZeroNuclearCrossSection::ThresholdMomentum(G4int , G4int )
-{
-  return 0.; // No threshold for the negative meson (byt for positive meson it should be)
-}
-
-// A fake calculation formula for K0-nuclear inelastic cross-section (mb) (P in GeV/c)
-G4double G4QKaonZeroNuclearCrossSection::CrossSectionLin(G4int , G4int , G4double )
-{
-  return 0.;
-}
-
-// A fake calculation formula for K0-nuclear inelastic cross-section (mb) log(P in GeV/c)
-G4double G4QKaonZeroNuclearCrossSection::CrossSectionLog(G4int , G4int , G4double )
-{
-  return 0.;
-}
-// A fake calculation formula for K0-nuclear inelastic cross-section (mb) log(P in GeV/c)
-G4double G4QKaonZeroNuclearCrossSection::CrossSectionFormula(G4int,G4int,G4double,G4double)
-{
-  return 0.;  
-}
+} // It is kept because this is a pure virtual function of the G4VQCrossSection interface
