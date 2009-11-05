@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.364 2009-11-05 10:06:54 allison Exp $
+cvs log $Id: History,v 1.365 2009-11-05 10:59:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th November 2009  John Allison
+5th November 2009  John Allison (config-V09-02-12)
 - Removed references to obsolete GAGTREE driver.
 
 4th November 2009  John Allison
