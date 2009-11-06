@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2009-11-05 22:34:23 japost Exp $
+$Id: History,v 1.145 2009-11-06 22:41:27 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 6th,  2009 P.Gumplinger - field-V09-02-07
+---------------------------
+- bug fix in G4EqEMFieldWithSpin and G4EqEMFieldWithEDM
+  thanks to Hiromi Iinuma (KEK) see:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
+
 Nov 5th,  2009 J.Apostolakis - field-V09-02-06
 ----------------------------
 - G4MagIntegratorDriver.cc : Enabled call to ComputeRightHandSide
 - G4NystromRK4.cc          : Disabled auxiliary code in Stepper (needed if
                               ComputeRightHandSide is not called.)
-
 
 Nov 5th,  2009 J.Apostolakis - field-V09-02-05
 ----------------------------
@@ -43,7 +48,6 @@ Nov 5th,  2009 J.Apostolakis - field-V09-02-04
      Greatly reduces number of field value per step.
 - Revised testPropagateMagField to use Cached Quadrupole field,
      and to cover G4NystromRK4 and G4ConstRK4.
-
 
 Nov 4th,  2009 P.Gumplinger - field-V09-02-03
 ---------------------------
