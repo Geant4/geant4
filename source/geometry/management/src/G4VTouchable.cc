@@ -24,16 +24,69 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.icc,v 1.10 2009-11-06 10:36:00 gcosmo Exp $
+// $Id: G4VTouchable.cc,v 1.1 2009-11-06 10:36:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4VTouchable Inline implementation
+// class G4VTouchable implementation
 //
 // --------------------------------------------------------------------
 
-inline
-G4int G4VTouchable::GetCopyNumber(G4int depth) const
+#include "G4VTouchable.hh"
+
+G4VTouchable::G4VTouchable()
 {
-  return GetReplicaNumber(depth);
+}
+
+G4VTouchable::~G4VTouchable()
+{
+}
+
+G4VPhysicalVolume* G4VTouchable::GetVolume(G4int) const
+{
+  G4Exception("G4VTouchable::GetVolume()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return 0;
+}
+
+G4VSolid* G4VTouchable::GetSolid(G4int) const
+{
+  G4Exception("G4VTouchable::GetSolid()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return 0;
+}
+
+G4int G4VTouchable::GetReplicaNumber(G4int) const
+{
+  G4Exception("G4VTouchable::GetReplicaNumber()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return 0;
+}
+
+G4int G4VTouchable::MoveUpHistory(G4int)
+{
+  G4Exception("G4VTouchable::MoveUpHistory()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return 0;
+}
+
+void G4VTouchable::UpdateYourself(G4VPhysicalVolume*,
+			          const G4NavigationHistory* ) 
+{
+  G4Exception("G4VTouchable::UpdateYourself()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+}
+
+G4int G4VTouchable::GetHistoryDepth() const
+{
+  G4Exception("G4VTouchable::GetHistoryDepth()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return  0;
+}
+
+const G4NavigationHistory* G4VTouchable::GetHistory() const
+{
+  G4Exception("G4VTouchable::GetHistory()", "NotApplicable",
+              FatalException, "Undefined call to base class.");
+  return 0;
 }
