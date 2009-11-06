@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2009-05-14 02:59:33 kmura Exp $
+$Id: History,v 1.76 2009-11-06 06:25:03 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6 November, 2009 K. Murakami (intercoms-V09-02-01)
+ - fix incorrect directory deletion of G4UIcommandTree::RemoveCommand()
 
 14 May 2009 K.Murakami (intercoms-V09-02-00)
  - tagged for release 9.3 beta
