@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.24 2009-10-12 10:28:38 akimura Exp $
+# $Id: GNUmakefile,v 1.25 2009-11-06 16:00:20 allison Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -29,8 +29,8 @@ endif
 # CPPFLAGS += -DG4DEBUG_VIS_OI
 # CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
 
-# Libraries which can be used without external packages or libraries...
 ifdef G4VIS_BUILD
+# Drivers that can be used without external libraries...
   SUBDIRS += management
   SUBLIBS += G4vis_management
   SUBDIRS += FukuiRenderer
@@ -47,7 +47,7 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4visXXX
   SUBDIRS += gMocren
   SUBLIBS += G4GMocren
-
+# Drivers needing external libraries...
 ifdef G4VIS_BUILD_OPENGL_DRIVER
   SUBDIRS += externals/gl2ps
   SUBDIRS += OpenGL
