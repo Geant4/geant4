@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th  Nov 2009 Peter Gumplinger (op-V09-02-03)
+              G4OpBoundary::PostStepDoIt - all dielectric_dielectric
+              surfaces may now have a reflectivity <1; not only
+              'frontpainted' as was the case in the past.
+
 6th  May 2009 Peter Gumplinger (op-V09-02-02)
               G4OpBoundary::PostStepDoIt now throws an G4Exception
               EventMustBeAborted when an invalid surface normal is returnd;
