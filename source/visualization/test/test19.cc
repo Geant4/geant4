@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.31 2009-09-29 21:35:56 allison Exp $
+// $Id: test19.cc,v 1.32 2009-11-06 16:01:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 // Usage: test19 [<session>] [<verbosity>]
 // Without verbosity, verbosity=warnings.
-// Without session, session=new G4UIterminal(), or if G4UI_USE_TCSH is set
-//                  session=new G4UIterminal(new G4UItcsh),
 
 #include <stdio.h>
 #include <ctype.h>
@@ -81,8 +79,7 @@ int main (int argc, char** argv) {
 
 #ifdef G4UI_USE
   // Choose (G)UI.
-  G4UIExecutive* UIexecutive = new G4UIExecutive(argc, argv);
-  G4UImanager::GetUIpointer()->SetSession(UIexecutive->GetSession());  //So that Pause works..
+  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #endif
 
   // Run manager
@@ -118,13 +115,13 @@ int main (int argc, char** argv) {
   visManager -> Initialize ();
 #endif
 
-  G4UImanager* UI = G4UImanager::GetUIpointer ();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer ();
 #ifdef G4UI_USE_WIN32
   G4cout << "Reading win32.g4m file...." << G4endl;
-  UI -> ApplyCommand ("/control/execute win32.g4m");
+  UImanager -> ApplyCommand ("/control/execute win32.g4m");
 #else
   G4cout << "Reading test19.g4m file...." << G4endl;
-  UI -> ApplyCommand ("/control/execute test19.g4m");
+  UImanager -> ApplyCommand ("/control/execute test19.g4m");
 #endif
 
   G4cout << 
@@ -134,7 +131,7 @@ int main (int argc, char** argv) {
 
 #ifdef G4UI_USE
   // Start an interactive session.
-  UIexecutive -> SessionStart();
+  ui -> SessionStart();
 #endif
 
 #ifdef G4VIS_USE
@@ -147,7 +144,7 @@ int main (int argc, char** argv) {
   G4cout << "vis_test19: Run manager deleted." << G4endl;
   G4cout << "vis_test19: Deleting session..." << G4endl;
 #ifdef G4UI_USE
-  delete UIexecutive;
+  delete ui;
   G4cout << "vis_test19: Session deleted." << G4endl;
 #endif
 
