@@ -407,7 +407,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		  }
 	  }
 	  else {
-		  DielectricDielectric();
+
+                  if( !G4BooleanRand(theReflectivity) ) {
+                    DoAbsorption();
+                  }
+                  else {
+                    DielectricDielectric();
+                  }
 	  }
 	}
 	else {
