@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2009-11-06 11:29:26 gcosmo Exp $
+$Id: History,v 1.163 2009-11-06 11:35:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Nov 6th, 2009       G.Cosmo - geomvol-V09-02-04
-- Moved inline constructors to source, to avoid problem of memory alignment
-  in allocation.
+- Moved inline constructors to source for G4TouchableHistory, to avoid problems
+  of memory alignment in allocation.
 
 Nov 3rd, 2009       G.Cosmo - geomvol-V09-02-03
 - Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
