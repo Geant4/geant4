@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.7 2009-11-04 23:42:41 gum Exp $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.8 2009-11-06 22:31:35 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,8 @@
 //
 //  30.08.2007 Chris Gong, Peter Gumplinger
 //  14.02.2009 Kevin Lynch
+//  06.11.2009 Hiromi Iinuma see:
+//  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
 //
 // -------------------------------------------------------------------
 
@@ -83,7 +85,7 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    // Electrodynamics, Second Edition,
    // dS/dt = (e/mc) S \cross
    //              [ (g/2-1 +1/\gamma) B
-   //               -(g/-1)\gamma/(\gamma+1) (\beta \cdot B)\beta
+   //               -(g/2-1)\gamma/(\gamma+1) (\beta \cdot B)\beta
    //               -(g/2-\gamma/(\gamma+1) \beta \cross E ]
    // where
    // S = \vec{s}, where S^2 = 1
@@ -98,13 +100,9 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
-   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
-
-   //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
-
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -123,6 +121,8 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
    G4ThreeVector EField(Field[3],Field[4],Field[5]);
+
+   EField /= c_light;
 
    G4ThreeVector u(y[3], y[4], y[5]);
    u *= pModuleInverse;

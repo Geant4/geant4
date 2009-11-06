@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.cc,v 1.1 2009-11-04 23:51:59 gum Exp $
+// $Id: G4EqEMFieldWithEDM.cc,v 1.2 2009-11-06 22:31:54 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  This is the standard right-hand side for equation of motion.
 //
 //  19.02.2009 Kevin Lynch, based on G4EqEMFieldWithSpin
+//  06.11.2009 Hiromi Iinuma see:
+//  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
 //
 // -------------------------------------------------------------------
 
@@ -88,7 +90,7 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
 
    // dS/dt = (e/m) S \cross 
    // MDM:         [ (g/2-1 +1/\gamma) B
-   //               -(g/-1)\gamma/(\gamma+1) (\beta \cdot B)\beta 
+   //               -(g/2-1)\gamma/(\gamma+1) (\beta \cdot B)\beta 
    //               -(g/2-\gamma/(\gamma+1) \beta \cross E 
    //
    // EDM:        eta/2( E - gamma/(gamma+1) \beta (\beta \cdot E)
@@ -107,13 +109,9 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
-   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
-
-   //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
-
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -133,6 +131,8 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
    G4ThreeVector EField(Field[3],Field[4],Field[5]);
 
+   EField /= c_light;
+
    G4ThreeVector u(y[3], y[4], y[5]);
    u *= pModuleInverse;
 
@@ -142,8 +142,6 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    G4double ude = beta*gamma/(1.+gamma)*(EField*u);
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
-
-   // if (Spin.mag() > 0.) Spin = Spin.unit();
 
    G4ThreeVector dSpin
      = ParticleCharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
