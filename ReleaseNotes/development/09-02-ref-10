@@ -5,7 +5,7 @@
 Some of the development/fixes included since the last development tag are:
 
  o Attempted reduce of memory fragmentation and calls to malloc for
-   G4TouchableHistory objects. Measured average improvement of 3-5% in
+   G4TouchableHistory objects. Measured average improvement of ~5% in
    CPU speed.
  o Revised HepPolyhedron and BooleanProcessor to improve visualization of
    Boolean shapes in built-in drivers.
@@ -33,19 +33,22 @@ digits_hits                                      digits_hits-V09-02-03
 -----------
 - Added few accessors for visualization to G4VScoringMesh.
 
-geometry/management                              geommng-V09-02-03
+geometry/management                              geommng-V09-02-04
 -------------------
 - Clear possible excess capacity in node vectors in G4SmartVoxelHeader
   BuildNodes() method. May reduce excess memory allocated in optimisation
   in medium/large detector setups, at the price of a slight time increase
   in initialisation for geometry voxelisation.
+- G4VTouchable: moved inline vitual methods, constructor and destructor to
+  source, to avoid problem of memory alignment in allocation of derived objects.
 
-geometry/volumes                                 geomvol-V09-02-03
+geometry/volumes                                 geomvol-V09-02-04
 ----------------
 - Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
   Should reduce the number of direct calls to malloc and memory fragmentation.
-  Measured an average improvement of 3-5% in CPU speed with same memory
-  footprint.
+  Measured an average improvement of ~5% in CPU speed with same memory
+  footprint. Moved inline constructors to source to avoid problems of memory
+  alignment in allocation.
 
 global                                           global-V09-02-08
 ------
@@ -151,10 +154,13 @@ processes/hadronic
     cross-section accordingly. Improved fits to pi-p partial cross-section
     and updated pi- total cross-sections.
   o G4NucleiModel: updated pi- and pi0 total cross-sections.
-- models/chiral_inv_phase_space (hadr-chips-V09-02-11)
+- models/chiral_inv_phase_space (hadr-chips-V09-02-17)
   o First prototype of CHIPS ion-ion elastic.
+  o Added 8 new cross-section classes and bug fixes in pA cross-sections.
   o Improvements in hadron+proton, heavy fragments in low-energy, various
-    bug fixes in G4QNucleus, G4QEnvironment.
+    bug fixes in G4QNucleus, G4QEnvironment, G4QCollision.
+  o MuCaptureEMCascade excluded from capture at rest for mu-; all the atomic
+    deexcitation energy of capture is concentrated in the energy deposition.
 - models/coherent_elastic (hadr-cohe-V09-02-02)
   o G4CHIPSElastic, G4HadronElastic: use static pointer to G4VQCrossSection
     in order to guarantee unique version of CHIPS cross-section class.
