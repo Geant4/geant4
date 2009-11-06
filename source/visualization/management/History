@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2009-11-05 14:24:59 allison Exp $
+$Id: History,v 1.130 2009-11-06 15:59:08 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+6th November 2009  John Allison
+- G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&):
+  o For scoring maps, call DrawMesh with G4DefaultLinearColorMap as default.
+  o Write message about other options:
+    - /vis/open/gMocrenFile
+    - /score/draw.. commands.
+  o For hits that are not scoring maps, call DrawAllHits.
 
 5th November 2009  John Allison
 - G4VSceneHandler.cc:

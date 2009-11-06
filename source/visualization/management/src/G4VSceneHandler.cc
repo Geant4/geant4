@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.88 2009-11-05 14:24:59 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.89 2009-11-06 15:59:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,7 @@
 #include "G4HitsModel.hh"
 #include "G4VHit.hh"
 #include "G4ScoringManager.hh"
+#include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
@@ -265,7 +266,6 @@ void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   static_cast<G4VHit>(hit).Draw(); // Cast because Draw is non-const!!!!
 }
 
-#include "G4DefaultLinearColorMap.hh"
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
   //G4cout << "AddCompound: hits: " << &hits << G4endl;
   G4bool scoreMapHits = false;
@@ -275,50 +275,34 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
     for (size_t i = 0; i < nMeshes; ++i) {
       G4VScoringMesh* mesh = scoringManager->GetMesh(i);
       if (mesh && mesh->IsActive()) {
-	//G4String worldName = mesh->GetWorldName();
-	//MeshShape meshShape = mesh->GetShape();
-	//G4ThreeVector meshTranslation = mesh->GetTranslation();
-	//G4ThreeVector meshSize = mesh->GetSize();
-	//G4int nSegment[3];
-	//mesh->GetNumberOfSegments(nSegment);
-	//G4cout << worldName
-	//       << ' ' << meshShape 
-	//       << ' ' << meshTranslation
-	//       << ' ' << meshSize
-	//       << ' ' << nSegment[0] << ',' << nSegment[1] << ',' << nSegment[2]
-	//       << G4endl;
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();
 	    i != scoreMap.end(); ++i) {
 	  const G4String& scoreMapName = i->first;
 	  const G4THitsMap<G4double>* foundHits = i->second;
 	  if (foundHits == &hits) {
+	    G4DefaultLinearColorMap colorMap("G4VSceneHandlerColorMap");
 	    scoreMapHits = true;
-	    //G4cout <<
-	    //  scoreMapName << ": " << &hits << " found in scoring map."
-	    //   << G4endl;
-	    mesh->DrawMesh(scoreMapName, new G4DefaultLinearColorMap("G4VSceneHandlerColorMap"));
-	    //std::map<G4int,G4double*>* hitsMap = hits.GetMap();
-	    //for (std::map<G4int,G4double*>::const_iterator i = hitsMap->begin();
-	    // i != hitsMap->end(); ++i) {
-	    //  G4int index = i->first;
-	    //  G4double value = *(i->second);
-	    //  G4cout << index << ' ' << value << G4endl;
-	    // Now what?!!!
-	    //  if (meshShape == boxMesh) {
-	    //  } else {
-	    //G4cout <<
-	    //  "G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&):"
-	    //  "\n  Shape " << meshShape << " not implemented."
-	    //       << G4endl;
-	    //  }
-	    //}
+	    mesh->DrawMesh(scoreMapName, &colorMap);
 	  }
 	}
       }
     }
   }
-  if (!scoreMapHits) {  // Not score map hits.  Just call DrawAllHits.
+  if (scoreMapHits) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4cout <<
+	"Scoring map drawn with default parameters."
+	"\n  To get gMocren file for gMocren browser:"
+	"\n    /vis/open gMocrenFile"
+	"\n    /vis/viewer/flush"
+	"\n  Many other options available with /score/draw... commands."
+	"\n  You might want to \"/vis/viewer/set/autoRefresh false\"."
+	     << G4endl;
+    }
+  } else {  // Not score map hits.  Just call DrawAllHits.
     // Cast because DrawAllHits is non-const!!!!
     static_cast<G4THitsMap<G4double> >(hits).DrawAllHits();
   }
