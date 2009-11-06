@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.13 2009-11-03 09:15:51 gcosmo Exp $
+// $Id: G4TouchableHistory.cc,v 1.14 2009-11-06 08:22:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@ G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
 
 G4TouchableHistory::~G4TouchableHistory()
 {
+  delete fphistory;
 }
 
 const G4ThreeVector&
@@ -54,7 +55,7 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   else
   {
     currTranslation =
-      fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+      fphistory->GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
     return currTranslation;
   }
 }
@@ -73,7 +74,7 @@ G4TouchableHistory::GetRotation(G4int depth) const
   }
   else
   {
-    rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+    rotM = fphistory->GetTransform(CalculateHistoryIndex(depth)).NetRotation();
     return &rotM;
   }
 }

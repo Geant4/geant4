@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.hh,v 1.9 2009-11-03 09:15:51 gcosmo Exp $
+// $Id: G4TouchableHistory.hh,v 1.10 2009-11-06 08:22:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ class G4TouchableHistory : public G4VTouchable
 
   G4RotationMatrix frot;
   G4ThreeVector ftlate;
-  G4NavigationHistory fhistory;
+  G4NavigationHistory* fphistory;
 };
 
 #include "G4TouchableHistory.icc"
