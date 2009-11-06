@@ -239,6 +239,8 @@ examples                                         examples-V09-02-10
 - extended/electromagnetic/TestEm18 (testem18-V09-02-03)
   o Substituted obsolete low-energy physics builders by builders from
     the physics_list library.
+- extended/field/field04 (fieldex04-V09-02-02)
+  o Introduced use of G4UIExecutive.
 - extended/medical/fanoCavity (fano-V09-02-02)
 - extended/medical/fanoCavity2 (fano2-V09-02-00)
   o New PhysListEmStandard_GS for GoudsmitSaundersonMsc model.
@@ -246,8 +248,17 @@ examples                                         examples-V09-02-10
   o Local copy of PhysListEmStandard_option0, PhysListEmStandard_option3,
     PhysListEmStandard_SS.
   o PhysicsList: added cut for proton recoil in case of Single Scattering.
+- extended/optical/LXe (LXe-V09-02-00)
+  o Introduced use of G4UIExecutive.
 - examples/extended/persistency/gdml/G01 (G01-V09-02-05)
   o Added usage of 'expression' and 'quantity' in solids.gdml.
+- examples/novice/N02 (exampleN02-V09-02-00)
+- examples/novice/N03 (exampleN03-V09-02-01)
+- examples/novice/N04 (exampleN04-V09-02-00)
+- examples/novice/N05 (exampleN05-V09-02-00)
+- examples/novice/N06 (exampleN06-V09-02-00)
+- examples/novice/N07 (exampleN07-V09-02-00)
+  o Introduced use of G4UIExecutive.
 
 tests                                            tests-V09-02-10
 -----
