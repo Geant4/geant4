@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.15 2009-05-07 09:33:51 lgarnier Exp $
+// $Id: G4UIcommandTree.cc,v 1.16 2009-11-06 06:16:07 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -142,7 +142,8 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
         { 
     	  tree[i_thTree]->RemoveCommand( aCommand );
     	  G4int n_commandRemain = tree[i_thTree]->GetCommandEntry();
-    	  if(n_commandRemain==0)
+        G4int n_treeRemain = tree[i_thTree]-> GetTreeEntry();
+    	  if(n_commandRemain == 0 && n_treeRemain == 0)
     	  {
     	    G4UIcommandTree * emptyTree = tree[i_thTree];
     	    tree.erase(tree.begin()+i_thTree);
