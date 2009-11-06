@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.14 2009-11-06 08:22:31 gcosmo Exp $
+// $Id: G4TouchableHistory.cc,v 1.15 2009-11-06 11:10:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,9 +36,25 @@
 
 G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
 
+G4TouchableHistory::G4TouchableHistory()
+  : frot(G4RotationMatrix()),
+    ftlate(G4ThreeVector(0.,0.,0.)),
+    fhistory()
+{
+   G4VPhysicalVolume* pPhysVol=0;
+   fhistory.SetFirstEntry(pPhysVol);
+}
+
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
+  : fhistory(history)
+{
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
+}
+
 G4TouchableHistory::~G4TouchableHistory()
 {
-  delete fphistory;
 }
 
 const G4ThreeVector&
@@ -55,7 +71,7 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   else
   {
     currTranslation =
-      fphistory->GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+      fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
     return currTranslation;
   }
 }
@@ -74,7 +90,7 @@ G4TouchableHistory::GetRotation(G4int depth) const
   }
   else
   {
-    rotM = fphistory->GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+    rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
     return &rotM;
   }
 }
