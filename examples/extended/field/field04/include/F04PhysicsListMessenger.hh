@@ -72,15 +72,10 @@ private:
     G4UIcmdWithADoubleAndUnit* fPosCutCMD;
     G4UIcmdWithADoubleAndUnit* fAllCutCMD;
     G4UIcmdWithADoubleAndUnit* fStepMaxCMD;
-
-    G4UIcmdWithAString*        fAddPhysicsCMD;
-    G4UIcmdWithAString*        fRemoveEMPhysicsCMD;
-    G4UIcmdWithAString*        fRemoveHadronPhysicsCMD;
-    G4UIcmdWithoutParameter*   fClearEMPhysicsCMD;
-    G4UIcmdWithoutParameter*   fClearHadronPhysicsCMD;
-
-    G4UIcmdWithoutParameter*   fListCMD;
-
+/*
+    G4UIcmdWithAString*        fRemovePhysicsCMD;
+    G4UIcmdWithoutParameter*   fClearPhysicsCMD;
+*/
     G4UIcmdWithoutParameter* fPienuCMD;
     G4UIcmdWithoutParameter* fPimunuCMD;
 

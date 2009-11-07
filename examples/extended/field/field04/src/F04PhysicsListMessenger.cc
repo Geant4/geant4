@@ -86,34 +86,16 @@ F04PhysicsListMessenger::F04PhysicsListMessenger(F04PhysicsList* pPhys)
     fStepMaxCMD->SetRange("mxStep>0.0");
     fStepMaxCMD->SetDefaultUnit("mm");
     fStepMaxCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
+/*
+    fClearPhysicsCMD = new G4UIcmdWithoutParameter("/exp/phys/clearPhysics",this);
+    fClearPhysicsCMD->SetGuidance("Clear the physics list");
+    fClearPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fAddPhysicsCMD = new G4UIcmdWithAString("/exp/phys/addPhysics",this);
-    fAddPhysicsCMD->SetGuidance("Add to modular physics list");
-    fAddPhysicsCMD->SetParameterName("PList",false);
-    fAddPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fClearEMPhysicsCMD = new G4UIcmdWithoutParameter("/exp/phys/clearEMPhysics",this);
-    fClearEMPhysicsCMD->SetGuidance("Clear the EM physics list");
-    fClearEMPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fClearHadronPhysicsCMD = new G4UIcmdWithoutParameter("/exp/phys/clearHadronPhysics",this);
-    fClearHadronPhysicsCMD->SetGuidance("Clear the Hadron physics list");
-    fClearHadronPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fRemoveEMPhysicsCMD = new G4UIcmdWithAString("/exp/phys/removeEMPhysics",this);
-    fRemoveEMPhysicsCMD->SetGuidance("Remove a physics process from EM Physics List");
-    fRemoveEMPhysicsCMD->SetParameterName("PList",false);
-    fRemoveEMPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fRemoveHadronPhysicsCMD = new G4UIcmdWithAString("/exp/phys/removeHadronPhysics",this);
-    fRemoveHadronPhysicsCMD->SetGuidance("Remove a physics process from Hadron Physics List");
-    fRemoveHadronPhysicsCMD->SetParameterName("PList",false);
-    fRemoveHadronPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-    fListCMD = new G4UIcmdWithoutParameter("/exp/phys/list",this);
-    fListCMD->SetGuidance("Available Physics Lists");
-    fListCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+    fRemovePhysicsCMD = new G4UIcmdWithAString("/exp/phys/removePhysics",this);
+    fRemovePhysicsCMD->SetGuidance("Remove a physics process from Physics List");
+    fRemovePhysicsCMD->SetParameterName("PList",false);
+    fRemovePhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
+*/
     fDecayDirectory = new G4UIdirectory("/decay/");
     fDecayDirectory->SetGuidance("Decay chain control commands.");
 
@@ -131,15 +113,10 @@ F04PhysicsListMessenger::~F04PhysicsListMessenger()
     delete fElectCutCMD;
     delete fPosCutCMD;
     delete fAllCutCMD;
-
-    delete fAddPhysicsCMD;
-    delete fClearEMPhysicsCMD;
-    delete fClearHadronPhysicsCMD;
-    delete fRemoveEMPhysicsCMD;
-    delete fRemoveHadronPhysicsCMD;
-
-    delete fListCMD;
-
+/*
+    delete fClearPhysicsCMD;
+    delete fRemovePhysicsCMD;
+*/
     delete fPienuCMD;
     delete fPimunuCMD;
 }
@@ -190,35 +167,12 @@ void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command,
         fPhysicsList->SetStepMax(fStepMaxCMD
                                      ->GetNewDoubleValue(newValue));
     }
-    else if (command == fAddPhysicsCMD) {
+/*  else if (command == fClearPhysicsCMD) {
+        fPhysicsList->ClearPhysics();
+    }
+    else if (command == fRemovePhysicsCMD) {
         G4String name = newValue;
-        if (name == "PHYSLIST") {
-            char* path = getenv(name);
-            if (path) name = G4String(path);
-            else {
-                G4cout << "### F04PhysicsListMessenger WARNING: "
-                       << " environment variable PHYSLIST is not defined"
-                       << G4endl;
-                return; 
-            }
-        }
-        fPhysicsList->AddPhysicsList(name);
+        fPhysicsList->RemoveFromPhysicsList(name);
     }
-    else if (command == fClearEMPhysicsCMD) {
-        fPhysicsList->ClearEMPhysics();
-    }
-    else if (command == fClearHadronPhysicsCMD) {
-        fPhysicsList->ClearHadronPhysics();
-    }
-    else if (command == fRemoveEMPhysicsCMD) {
-        G4String name = newValue;
-        fPhysicsList->RemoveFromEMPhysicsList(name);
-    }
-    else if (command == fRemoveHadronPhysicsCMD) {
-        G4String name = newValue;
-        fPhysicsList->RemoveFromHadronPhysicsList(name);
-    }
-    else if (command == fListCMD) {
-        fPhysicsList->List();
-    }
+*/
 }

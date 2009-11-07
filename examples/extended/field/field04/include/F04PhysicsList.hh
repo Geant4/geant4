@@ -48,8 +48,6 @@ public:
     F04PhysicsList(G4String);
     virtual ~F04PhysicsList();
 
-    void ConstructParticle();
-    
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
@@ -58,51 +56,27 @@ public:
     void SetStepMax(G4double);
     F04StepMax* GetStepMaxProcess();
     void AddStepMax();
-    
-    /// Add physics to the Physics List    
-    void AddPhysicsList(const G4String& name);
+/*    
+    /// Remove specific physics from physics list.
+    void RemoveFromPhysicsList(const G4String&);
 
-    /// Remove specific EM physics from EM physics list.
-    void RemoveFromEMPhysicsList(const G4String&);
-
-    /// Remove specific Hadron physics from Hadron physics list.
-    void RemoveFromHadronPhysicsList(const G4String&);
-
-    /// Make sure that the EM physics list is empty.
-    void ClearEMPhysics();
-
-    /// Make sure that the hadron physics list is empty.
-    void ClearHadronPhysics();
-
+    /// Make sure that the physics list is empty.
+    void ClearPhysics();
+*/
+    void ConstructParticle();
     void ConstructProcess();
-    void List();
-  
+
 private:
-
-    typedef std::vector<G4VPhysicsConstructor*>  PhysicsListVector;
-
-    void SetBuilderList0(G4bool flagHP = false);
-    void SetBuilderList1(G4bool flagHP = false);
-    void SetBuilderList2(G4bool flagHP = false);
-    void SetBuilderList3(G4bool flagHP = false);
-    void SetBuilderList4(G4bool flagHP = false);
-    void SetBuilderList5(G4bool flagHP = false);
-    void SetBuilderList6(G4bool flagHP = false);
 
     G4double fCutForGamma;
     G4double fCutForElectron;
     G4double fCutForPositron;
-
-    G4VPhysicsConstructor*  decayPhysicsList;
-
-    PhysicsListVector* fEMPhysics;
-    PhysicsListVector* fHadronPhysics;
 
     G4double MaxChargedStep;
     F04StepMax* stepMaxProcess;
     
     F04PhysicsListMessenger* fMessenger;
 
-    G4bool fDump;
 };
+
 #endif
