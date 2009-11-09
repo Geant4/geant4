@@ -96,17 +96,17 @@ G4VIntraNuclearTransportModel("Binary Cascade")
   theDecay=new G4BCDecay;
   theLateParticle= new G4BCLateParticle;
   theImR.push_back(theDecay);
+  G4MesonAbsorption * aAb=new G4MesonAbsorption;
+  theImR.push_back(aAb);
   G4Scatterer * aSc=new G4Scatterer;
   theH1Scatterer = new G4Scatterer;
   theImR.push_back(aSc);
-  G4MesonAbsorption * aAb=new G4MesonAbsorption;
-  theImR.push_back(aAb);
 
   thePropagator = new G4RKPropagation;
   theCurrentTime = 0.;
   theBCminP = 45*MeV;
   theCutOnP = 90*MeV;
-  theCutOnPAbsorb= 0*MeV;
+  theCutOnPAbsorb= 0*MeV;   // No Absorption of slow Mesons, other than above G4MesonAbsorption
 
   theExcitationHandler = new G4ExcitationHandler;
   SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
@@ -390,7 +390,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
        debug.push_back("======>    test 1"); debug.dump();
        if (!DoTimeStep(nextCollision->GetCollisionTime()-theCurrentTime) )
        {
-	   // Check if nextCollision is still valid, ie. partcile did not leave nucleus
+	   // Check if nextCollision is still valid, ie. particle did not leave nucleus
 	   if (theCollisionMgr->GetNextCollision() != nextCollision )
 	   {
 	       nextCollision = 0;
@@ -547,8 +547,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   fragment = FindFragments();
   if(fragment)                                                            // Uzhi
   {                                                                       // Uzhi
-//  theDeExcitation =0;
-//       if(fragment && fragment->GetA() >1.5) // hpw @@@@ still to add the nucleon, if one exists.                                                                   // closed by Uzhi
        if(fragment->GetA() >1.5)                                          // Uzhi
        {
 	 if (theDeExcitation)                // pre-compound
@@ -575,7 +573,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
              i=theTargetList.begin();
 	     G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
 	     aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());       
-	     aNew->SetMomentum(G4ThreeVector(0));// see boost fro preCompoundProducts below..
+	     aNew->SetMomentum(G4ThreeVector(0));// see boost for preCompoundProducts below..
 	     precompoundProducts->push_back(aNew);
 	 } 
 
@@ -712,7 +710,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 		G4cout << "final shortlived : ";
 	     } else
 	     {
-		G4cout << "final un stable : ";
+		G4cout << "final non stable : ";
 	     }
 	     G4cout <<kt->GetDefinition()->GetParticleName()<< G4endl;
 	 }
@@ -992,6 +990,7 @@ void  G4BinaryCascade::FindDecayCollision(G4KineticTrack * secondary)
 void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
 //----------------------------------------------------------------------------
 {
+    G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
     if ( secondary->GetTrackingMomentum().mag2() < -1.*eV )
     {
       G4cout << "G4BinaryCascade::FindDecayCollision(): negative m2:" << secondary->GetTrackingMomentum().mag2() << G4endl;
@@ -1013,6 +1012,15 @@ void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
     } else {
        secondary->SetState(G4KineticTrack::miss_nucleus);
            //G4cout << "G4BC set miss ,no intersect tin, tout " << tin << " , " << tout <<G4endl;
+    }
+
+    //  for barions, correct for fermi energy
+    G4int PDGcode=std::abs(secondary->GetDefinition()->GetPDGEncoding());
+    if ( PDGcode > 1000 ) 
+    {
+       G4double initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
+                                          secondary->GetPosition()); 
+       secondary->Update4Momentum(secondary->Get4Momentum().e() - initial_Efermi);
     }
 
 #ifdef debug_BIC_FindCollision
@@ -1083,23 +1091,12 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   mom4Primary=primary->Get4Momentum();
   initial_Efermi=RKprop->GetField(primary->GetDefinition()->GetPDGEncoding(),primary->GetPosition());
 
-if(!haveTarget)                                                          // Uzhi 
-{                                                                        // Uzhi
-  if ( PDGcode > 1000 )                                                  // Uzhi
-  {                                                                      // Uzhi
-     initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(), // Uzhi
-                                                primary->GetPosition()); // Uzhi
-     primary->Update4Momentum(mom4Primary.e() - initial_Efermi);         // Uzhi
-  }                                                                      // Uzhi
-} else                                                                   // Uzhi
-{                                                                        // Uzhi
   if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
   {
      initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
                                                 primary->GetPosition());
      primary->Update4Momentum(mom4Primary.e() - initial_Efermi);
   }
-}                                                                        // Uzhi
 
   std::vector<G4KineticTrack *>::iterator titer;
   for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
@@ -1116,9 +1113,15 @@ if(!haveTarget)                                                          // Uzhi
   products = collision->GetFinalState();
 
   #ifdef debug_BIC_ApplyCollision
-      if ( !products )
+        G4bool havePion=false;
+        for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
+   	{
+       		G4int PDGcode=std::abs((*i)->GetDefinition()->GetPDGEncoding());
+		if (std::abs(PDGcode)==211 || PDGcode==111 ) havePion=true;
+	}	
+     if ( !products  || havePion)
       {
-            G4cout << " Collision type: "<< typeid(*collision->GetGenerator()).name()
+            G4cout << " Collision " << collision << ", type: "<< typeid(*collision->GetGenerator()).name()
 		<< ", with NO products! " <<G4endl;
 	   G4cout << G4endl<<"Initial condition are these:"<<G4endl;
 	   G4cout << "proj: "<<collision->GetPrimary()->GetDefinition()->GetParticleName()<<G4endl;
@@ -1200,8 +1203,8 @@ if(!haveTarget)                                                          // Uzhi
       }
    }
 
-#ifdef debug_BIC_ApplyCollisionXX
-  DebugApplyCollsion(collision, products);
+#ifdef debug_BIC_ApplyCollision
+  DebugApplyCollision(collision, products);
 #endif
 
   G4int finalBaryon(0);
