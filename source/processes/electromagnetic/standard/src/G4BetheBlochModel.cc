@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.31 2009-04-24 14:24:00 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.32 2009-11-09 19:16:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -233,11 +233,11 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  G4double cden  = material->GetIonisation()->GetCdensity();
-  G4double mden  = material->GetIonisation()->GetMdensity();
-  G4double aden  = material->GetIonisation()->GetAdensity();
-  G4double x0den = material->GetIonisation()->GetX0density();
-  G4double x1den = material->GetIonisation()->GetX1density();
+  //G4double cden  = material->GetIonisation()->GetCdensity();
+  //G4double mden  = material->GetIonisation()->GetMdensity();
+  //G4double aden  = material->GetIonisation()->GetAdensity();
+  //G4double x0den = material->GetIonisation()->GetX0density();
+  //G4double x1den = material->GetIonisation()->GetX1density();
 
   G4double eDensity = material->GetElectronDensity();
 
@@ -251,10 +251,11 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // density correction
   G4double x = log(bg2)/twoln10;
-  if ( x >= x0den ) {
-    dedx -= twoln10*x - cden ;
-    if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-  }
+  //if ( x >= x0den ) {
+  //  dedx -= twoln10*x - cden ;
+  //  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
+  //}
+  dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
   dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);

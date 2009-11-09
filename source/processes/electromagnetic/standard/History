@@ -1,4 +1,4 @@
-$Id: History,v 1.472 2009-11-09 18:40:25 vnivanch Exp $
+$Id: History,v 1.473 2009-11-09 19:16:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 09:  V.Ivant (emstand-V09-02-29)
+- G4BetheBlochModel, G4MollerBhabhaModel - compute density effect correction
+                                           using method of G4IonisParamMat class 
+                                           applying revised parameterisation
 
 09 November 09:  V.Ivant (emstand-V09-02-28)
 - G4GoudsmitSaundersonMscModel (O.Kadri) - tuning small angle theta distributions

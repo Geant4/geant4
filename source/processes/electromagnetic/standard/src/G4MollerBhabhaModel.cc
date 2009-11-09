@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.34 2009-04-24 17:15:46 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.35 2009-11-09 19:16:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -257,17 +257,18 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   } 
 
   //density correction 
-  G4double cden  = material->GetIonisation()->GetCdensity();
-  G4double mden  = material->GetIonisation()->GetMdensity();
-  G4double aden  = material->GetIonisation()->GetAdensity();
-  G4double x0den = material->GetIonisation()->GetX0density();
-  G4double x1den = material->GetIonisation()->GetX1density();
+  //G4double cden  = material->GetIonisation()->GetCdensity();
+  //G4double mden  = material->GetIonisation()->GetMdensity();
+  //G4double aden  = material->GetIonisation()->GetAdensity();
+  //G4double x0den = material->GetIonisation()->GetX0density();
+  //G4double x1den = material->GetIonisation()->GetX1density();
   G4double x     = log(bg2)/twoln10;
 
-  if (x >= x0den) {
-    dedx -= twoln10*x - cden;
-    if (x < x1den) dedx -= aden*pow(x1den-x, mden);
-  } 
+  //if (x >= x0den) {
+  //  dedx -= twoln10*x - cden;
+  //  if (x < x1den) dedx -= aden*pow(x1den-x, mden);
+  //}
+  dedx -= material->GetIonisation()->DensityCorrection(x); 
 
   // now you can compute the total ionization loss
   dedx *= twopi_mc2_rcl2*electronDensity/beta2;
