@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.18 2009-10-06 13:42:25 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.19 2009-11-09 18:40:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,7 +156,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   ///////////////////////////////////////////
   // Effective energy and path-length from Eq. 4.7.15+16 of Ref.4
   G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
-  if(eloss>0.5*kineticEnergy)return;
+  if(eloss>0.5*kineticEnergy)eloss=kineticEnergy-eloss;//exchange possibility between target atomic e- and incident particle
   G4double ee       = kineticEnergy - 0.5*eloss;
   G4double ttau     = ee/electron_mass_c2;
   G4double ttau2    = ttau*ttau;
@@ -196,19 +196,27 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 
   G4double us=0.0,vs=0.0,ws=1.0,x_coord=0.0,y_coord=0.0,z_coord=1.0;
   G4double lambdan=0.;
-  G4bool mscatt=false;
+  G4bool mscatt=false,noscatt=false;
+
   if(llambda0>0.)lambdan=atomPerVolume*tPathLength/llambda0;
-  if(lambdan<=1.0e-12 || lambdan>1.0e+5)return;
+  if((lambdan<=1.0e-12))return;
 
   G4double epsilon1=G4UniformRand();
   G4double expn = exp(-lambdan);
-  if(epsilon1<expn || insideskin)// no scattering 
-    {mscatt=false;}
-  else if((epsilon1<(1.+lambdan)*expn) || lambdan<1. )
+  if((epsilon1<expn)||insideskin)// no scattering 
+    {noscatt=true;}
+  else if((epsilon1<((1.+lambdan)*expn)||(lambdan<1.)))
     {
       mscatt=false;
       ws=G4UniformRand();
       ws= 1.-2.*scrA*ws/(1.-ws + scrA);
+      if(acos(ws)<sqrt(scrA))//small angle approximation for theta less than screening angle
+      {G4int i=0;
+      do{i++;
+      ws=1.+0.5*atomPerVolume*tPathLength*log(G4UniformRand())/llambda1;
+      }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
+      if(i==19)ws=cos(sqrt(scrA));
+      }
       G4double phi0=twopi*G4UniformRand(); 
       us=sqrt(1.-ws*ws)*cos(phi0);
       vs=sqrt(1.-ws*ws)*sin(phi0);
@@ -238,14 +246,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       vs = sinTheta2*(cosTheta1*sinPhi1*cosPhi2 + cosPhi1*sinPhi2) + cosTheta2*sinTheta1*sinPhi1;
       ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2; 
     }
-  // Theta min limit due to screening effect of the atomic nucleus (below screening angle DCS's are constant)
-  if((!insideskin)&&(acos(ws)<sqrt(2.*scrA)))
-    {
-      G4double phi0=twopi*G4UniformRand(); 
-      ws=cos(sqrt(2.*scrA)*G4UniformRand());
-      us=sqrt(1.-ws*ws)*cos(phi0);
-      vs=sqrt(1.-ws*ws)*sin(phi0);
-    }
+    
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
@@ -275,7 +276,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	}
 
       // displacement is computed relatively to the end point
-      z_coord -= 1.0;
+      if(!noscatt)z_coord -= 1.0;//for noscatt zcoord z_coord !=0.
       G4double rr = sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
       G4double r  = rr*zPathLength;
       /*
@@ -305,10 +306,10 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
   G4double xi=0.;
   Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
 
-  if (Qn1<0.001)xi = -0.5*Qn1*log(G4UniformRand());
-  else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
-  else
-    {
+if (Qn1<0.001)xi=-0.5*Qn1*log(G4UniformRand());
+else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
+else
+{
       // procedure described by Benedito in Ref.1
       do{
 	r1=G4UniformRand();
@@ -316,11 +317,10 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 	xi = 2.*u;
 	tet=acos(1.-xi);
       }while(tet*r1*r1>sin(tet));
-    }
+}
 
   if(xi<0.)xi=0.;
   if(xi>2.)xi=2.;
-
   cost=(1. - xi);
   sint=sqrt(xi*(2.-xi));
 
