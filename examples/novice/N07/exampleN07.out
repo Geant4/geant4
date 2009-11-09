@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,6 +23,7 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
 
@@ -131,6 +132,66 @@ New sensitive detector <Calor-CP_para> is registored at /
 #############################################################################
  G4VUserPhysicsList::AddTransportation() --- G4CoupledTransportation is used 
 #############################################################################
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 ExN07PhysicsList::SetCuts: default cut length : 1 mm 
 ##############################################################
 ## /tracking/verbose must be set to 1 for ExN07SteppingVerbose
@@ -183,7 +244,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -233,7 +294,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -275,7 +336,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -332,7 +393,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -391,7 +452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.97s Real=2.11s Sys=0.13s
+  User=1.91s Real=2.04s Sys=0.13s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -518,22 +579,22 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18          0          0          0          0          0          0
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0x2a9904c588
+CPU Time spent by each region0x2a992bb588
 Region <DefaultRegionForTheWorld>
- All particles : User=0  Real=0.02  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.87  Real=0.88  Sys=0.03
- e+ / e-       : User=0.57  Real=0.63  Sys=0.02
+ All particles : User=0.81  Real=0.82  Sys=0.04
+ e+ / e-       : User=0.59  Real=0.56  Sys=0.02
 
 Region <Calor-B>
- All particles : User=0.39  Real=0.44  Sys=0.01
- e+ / e-       : User=0.3  Real=0.38  Sys=0.01
+ All particles : User=0.42  Real=0.47  Sys=0.02
+ e+ / e-       : User=0.24  Real=0.31  Sys=0.01
 
 Region <Calor-C>
- All particles : User=0.17  Real=0.22  Sys=0.02
- e+ / e-       : User=0.12  Real=0.17  Sys=0
+ All particles : User=0.16  Real=0.17  Sys=0
+ e+ / e-       : User=0.11  Real=0.1  Sys=0
 
 /run/dumpCouples
 
@@ -641,7 +702,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -691,7 +752,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -733,7 +794,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -790,7 +851,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -849,7 +910,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.23s Real=3.46s Sys=0.22s
+  User=3.13s Real=3.35s Sys=0.21s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -976,22 +1037,22 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18 0.05124596          0        0.2          0 0.018025699        0.3
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0x2a9904c588
+CPU Time spent by each region0x2a992bb588
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.98  Real=1.05  Sys=0.07
- e+ / e-       : User=0.66  Real=0.7  Sys=0.08
+ All particles : User=0.93  Real=1.04  Sys=0.04
+ e+ / e-       : User=0.62  Real=0.76  Sys=0.06
 
 Region <Calor-B>
- All particles : User=0.89  Real=0.98  Sys=0.05
- e+ / e-       : User=0.66  Real=0.64  Sys=0.02
+ All particles : User=0.81  Real=0.95  Sys=0.04
+ e+ / e-       : User=0.59  Real=0.69  Sys=0.04
 
 Region <Calor-C>
- All particles : User=0.59  Real=0.56  Sys=0
- e+ / e-       : User=0.41  Real=0.39  Sys=0
+ All particles : User=0.58  Real=0.58  Sys=0.02
+ e+ / e-       : User=0.32  Real=0.41  Sys=0.01
 
 /run/dumpCouples
 
@@ -1098,7 +1159,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1148,7 +1209,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1190,7 +1251,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1247,7 +1308,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -1336,7 +1397,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.7s Real=0.75s Sys=0.05s
+  User=0.7s Real=0.73s Sys=0.04s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1463,22 +1524,22 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18 0.014757654          0        0.2          0 0.0085332973        0.4
       19 0.006064754          0        0.1          0 0.0026535933        0.2
 ############################################################
-CPU Time spent by each region0x2a9904c588
+CPU Time spent by each region0x2a992bb588
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.25  Real=0.29  Sys=0.01
- e+ / e-       : User=0.14  Real=0.15  Sys=0.03
+ All particles : User=0.25  Real=0.28  Sys=0.01
+ e+ / e-       : User=0.13  Real=0.13  Sys=0.01
 
 Region <Calor-B>
- All particles : User=0.19  Real=0.18  Sys=0
- e+ / e-       : User=0.1  Real=0.1  Sys=0
+ All particles : User=0.17  Real=0.21  Sys=0.01
+ e+ / e-       : User=0.1  Real=0.09  Sys=0
 
 Region <Calor-C>
- All particles : User=0.06  Real=0.09  Sys=0
- e+ / e-       : User=0.04  Real=0.03  Sys=0
+ All particles : User=0.08  Real=0.11  Sys=0
+ e+ / e-       : User=0.03  Real=0.08  Sys=0
 
 /run/dumpCouples
 
@@ -1616,7 +1677,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1666,7 +1727,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1708,7 +1769,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1765,7 +1826,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -1854,7 +1915,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.54s Real=1.63s Sys=0.09s
+  User=1.49s Real=1.6s Sys=0.12s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1981,22 +2042,22 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18 0.17499504        0.1        0.9          0 0.68804712        1.9
       19 0.097933858          0        1.2          0 0.089050017        2.9
 ############################################################
-CPU Time spent by each region0x2a9904c588
+CPU Time spent by each region0x2a992bb588
 Region <DefaultRegionForTheWorld>
- All particles : User=0  Real=0.01  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.45  Real=0.48  Sys=0.03
- e+ / e-       : User=0.25  Real=0.29  Sys=0.02
+ All particles : User=0.4  Real=0.43  Sys=0.06
+ e+ / e-       : User=0.19  Real=0.25  Sys=0.03
 
 Region <Calor-B>
- All particles : User=0.53  Real=0.55  Sys=0.01
- e+ / e-       : User=0.26  Real=0.31  Sys=0.01
+ All particles : User=0.5  Real=0.56  Sys=0.01
+ e+ / e-       : User=0.31  Real=0.36  Sys=0.03
 
 Region <Calor-C>
- All particles : User=0.13  Real=0.17  Sys=0
- e+ / e-       : User=0.07  Real=0.1  Sys=0
+ All particles : User=0.16  Real=0.16  Sys=0
+ e+ / e-       : User=0.05  Real=0.12  Sys=0
 
 /run/dumpCouples
 

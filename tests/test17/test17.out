@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,14 +83,92 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
  X position of the middle of the absorber 0 fm 
 G4VUserPhysicsList::Construct()
 Construct processes 
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Ionic processes for GenericIon
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Ionic processes for alpha
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for anti_proton
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Ionic processes for deuteron
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for kaon+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for kaon-
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for pi+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for pi-
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 Hadronic processes for proton
 Test17PhysicsList::SetCuts:CutLength : 100 um 
 Set cuts for all particles! 
@@ -118,7 +196,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -159,7 +237,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -176,7 +254,7 @@ hLowEIoni:    Knock-on electron cross sections .
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
@@ -209,7 +287,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -257,7 +335,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -282,7 +360,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.22s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -366,7 +444,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.42s Real=0.42s Sys=0s
+  User=0.41s Real=0.41s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -408,7 +486,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.77s Real=6.77s Sys=0s
+  User=6.93s Real=6.93s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -452,7 +530,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.79s Real=7.79s Sys=0s
+  User=7.92s Real=7.92s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

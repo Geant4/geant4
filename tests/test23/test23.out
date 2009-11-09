@@ -4,15 +4,166 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 SimpleBox is now made of Pb
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 # /run/verbose 2
 /run/particle/setCut 1 m
+Please use /run/setCut command instead. This command will be removed
 /run/initialize
 /gun/direction 1 0 0
 #
@@ -57,7 +208,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -97,12 +248,12 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -156,7 +307,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -201,7 +352,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -267,6 +418,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2637(0.31759895), e-=13813(2.0081328), e+=16(4.1984924), p=367(5.6434907), n=1901(3.9285785), d=49(1.8517898), t=11(1.6396459), He3=0(0), alph=172(2.5687585), nu=1345(52.480494), anu=744(32.719229), others=20107*0.094390523
+Test23_Result: gam=123(3.7645745), e-=1674(15.46102), e+=22(3.9572371), p=360(5.0975786), n=2224(3.7701009), d=48(2.3936125), t=13(1.6355956), He3=0(0), alph=193(2.978495), nu=1326(54.527709), anu=697(32.861338), others=22978*0.086433782
 Test23 is done
 

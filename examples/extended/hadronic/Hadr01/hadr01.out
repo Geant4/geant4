@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,18 +68,18 @@ PhysicsList::SetCuts:CutLength : 1 mm
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   4.5  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <kaon->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   4.5  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
           CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <lambda>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      FTFP: Emin(GeV)=   4.5  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
@@ -88,27 +88,27 @@ PhysicsList::SetCuts:CutLength : 1 mm
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.5  Emax(GeV)= 100000
                                                    FTFP: Emin(GeV)=   4.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 
                      Hadronic Processes for <pi+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.5  Emax(GeV)= 100000
                                                    FTFP: Emin(GeV)=   4.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <pi->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.5  Emax(GeV)= 100000
                                                    FTFP: Emin(GeV)=   4.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
           CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <proton>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
           hInelastic  Models:                      QGSP: Emin(GeV)=   9.5  Emax(GeV)= 100000
                                                    FTFP: Emin(GeV)=   4.5  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 7.5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 ============================================================================================
 
 ========= Table of registered couples ==============================
@@ -144,33 +144,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.26s Real=0.26s Sys=0s
+  User=0.29s Real=0.28s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         65.76   RMS(MeV) 70.46
-Average number of steps              228.9
-Average number of gamma              1.93
-Average number of e-                 3.72
+Average energy deposit (MeV)         94.87   RMS(MeV) 80.27
+Average number of steps              247.8
+Average number of gamma              3.21
+Average number of e-                 3.92
 Average number of e+                 0.05
-Average number of neutrons           1.18
-Average number of protons            1.16
+Average number of neutrons           2.91
+Average number of protons            3.04
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.25
-Average number of pi0                0.13
+Average number of pi+ & pi-          0.48
+Average number of pi0                0.27
 Average number of kaons              0
 Average number of muons              0.01
-Average number of deuterons+tritons  0.1
-Average number of He3+alpha          0.18
-Average number of ions               0.42
-Average number of forward neutrons   0.1
-Average number of reflected neutrons 0.01
-Average number of leaked neutrons    0.99
-Average number of proton leak        0.46
-Average number of pion leak          0.2
+Average number of deuterons+tritons  0.24
+Average number of He3+alpha          0.51
+Average number of ions               1.01
+Average number of forward neutrons   0.39
+Average number of reflected neutrons 0.12
+Average number of leaked neutrons    2.18
+Average number of proton leak        1.31
+Average number of pion leak          0.42
 ========================================================
 
 #

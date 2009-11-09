@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-08    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,11 +13,246 @@
 SimpleBox is now made of Pb
 /run/verbose 2
 /run/particle/setCut 1 m
+Please use /run/setCut command instead. This command will be removed
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
+
+!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
+!!! Please use G4eMultipleScattering for e+ and e- !!!
+!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
+!!! Please use G4hMultipleScattering for hadrons and ions !!!
+
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 Tst62PhysicsList::SetCuts:CutLength : 1000 (mm)
@@ -49,7 +284,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -90,7 +325,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -104,7 +339,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -137,7 +372,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -194,7 +429,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -281,7 +516,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.34s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -343,7 +578,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.5s Real=1.5s Sys=0s
+  User=1.5s Real=1.6s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -402,7 +637,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -443,7 +678,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -457,7 +692,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -490,7 +725,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -547,7 +782,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -584,7 +819,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.41s Real=0.4s Sys=0s
+  User=0.41s Real=0.41s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -692,7 +927,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.7s Real=1.7s Sys=0.01s
+  User=1.7s Real=1.7s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -720,7 +955,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -761,7 +996,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -775,7 +1010,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -808,7 +1043,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -865,7 +1100,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -907,7 +1142,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -989,7 +1224,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.79s Real=0.78s Sys=0s
+  User=0.79s Real=0.79s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1030,7 +1265,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.8s Real=0.8s Sys=0s
+  User=0.81s Real=0.81s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1058,7 +1293,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1099,7 +1334,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1113,7 +1348,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1146,7 +1381,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1203,7 +1438,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1342,7 +1577,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.28s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1416,7 +1651,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1457,7 +1692,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1471,7 +1706,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1504,7 +1739,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1561,7 +1796,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 1e+02 eV  to 10 TeV in 77 bins
@@ -1613,7 +1848,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -1715,7 +1950,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.15s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -1766,7 +2001,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.27s Sys=0s
+  User=0.26s Real=0.26s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -1794,7 +2029,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1835,7 +2070,7 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1849,7 +2084,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1882,7 +2117,7 @@ msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1939,7 +2174,7 @@ msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         UrbanMscUni :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1996,7 +2231,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -2108,7 +2343,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 # pi- at 1 GeV in C
 #
