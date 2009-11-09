@@ -1,4 +1,4 @@
-# $Id: shen1.mac,v 1.1 2009-07-30 15:03:30 grichine Exp $
+# $Id: shen1.mac,v 1.2 2009-11-09 15:28:51 grichine Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -29,4 +29,6 @@
 #
 /testem/stack/killSecondaries
 #
-/run/beamOn 100000
+/testem/event/printModulo 1000
+#/run/beamOn 100000
+/run/beamOn 10000

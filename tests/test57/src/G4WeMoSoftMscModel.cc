@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.cc,v 1.5 2009-10-28 16:18:29 grichine Exp $
+// $Id: G4WeMoSoftMscModel.cc,v 1.6 2009-11-09 15:28:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,7 +147,9 @@ void G4WeMoSoftMscModel::Initialise(const G4ParticleDefinition* p,
 
   fCurrentRange = 0.0;
 
-  fCosThetaMax  = cos(PolarAngleLimit()); // critical angle from msx process
+  fCosThetaMax  = cos( PolarAngleLimit() ); // critical angle from msc process
+
+  // fCosThetaMax  = std::cos(0.3); // critical angle from msc process
 
   fCurrentCuts  = &cuts;
 
@@ -200,9 +202,9 @@ G4double G4WeMoSoftMscModel::ComputeTransportXSectionPerAtom()
 
   if( fCosTetMaxElec2 < 1.0 ) 
   {
-    // x = ( 1.0 - fCosTetMaxElec2 )/fScreenZ;
+    x = ( 1.0 - fCosTetMaxElec2 )/fScreenZ; // fScreenZ=2Am
 
-    x = 2.*( 1.0 - fCosTetMaxElec2 )/fScreenZ;   // mu_s/A_m
+    // x = 2.*( 1.0 - fCosTetMaxElec2 )/fScreenZ;   // mu_s/A_m
 
     if( x < fNumLimit ) y = 0.5*x*x*(1.0 - 1.3333333*x + 1.5*x*x); 
     else                y = log(1.0 + x) - x/(1.0 + x);
@@ -239,8 +241,8 @@ G4double G4WeMoSoftMscModel::ComputeTransportXSectionPerAtom()
     x  = 1.0 - fCosTetMaxNuc2;
     x1 = fScreenZ*fFormFactA;
     x2 = 1.0 - x1; 
-    // x3 = x/fScreenZ;
-    x3 = 2.*x/fScreenZ;
+    x3 = x/fScreenZ;  // fScreenZ=2Am
+    // x3 = 2.*x/fScreenZ;  // mu_s/A_m
     x4 = fFormFactA*x;
 
     // low-energy limit
@@ -382,14 +384,14 @@ G4double G4WeMoSoftMscModel::ComputeTruePathLengthLimit(
 
 G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
 {
-  G4double tau, x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
+  G4double tau; // , x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
 
   fTruePathLength  = truelength;
   fGeomPathLength  = fTruePathLength;
   fLambdaEff    = fLambda1;
 
-  x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
-  if( x > 10.) x = 10.*G4UniformRand();
+  // x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
+  // if( x > 10.) x = 10.*G4UniformRand();
 
 
   if( fLambda1 > 0.0 ) 
@@ -403,8 +405,9 @@ G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
     if( tau < fNumLimit ) 
     {
       // fGeomPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
+      // fGeomPathLength = fTruePathLength*( 1. - 0.25*tau*x );
 
-      fGeomPathLength = fTruePathLength*( 1. - 0.25*tau*x );
+      fGeomPathLength = fTruePathLength*( 1. - 0.45*tau );
 
       // medium step
     } 
@@ -423,8 +426,9 @@ G4double G4WeMoSoftMscModel::ComputeGeomPathLength(G4double truelength)
       fLambdaEff      = GetLambda( 0.5*(e1 + fPreKinEnergy) );
       tau = fTruePathLength/fLambdaEff;
       // fGeomPathLength = fLambdaEff*( 1.0 - exp(-tau) );
+      // fGeomPathLength = fTruePathLength*( 1. - 0.25*x*tau );
 
-      fGeomPathLength = fTruePathLength*( 1. - 0.25*x*tau );
+      fGeomPathLength = fTruePathLength*( 1. - 0.45*tau );
     }
   }
   //G4cout<<"Comp.geom: zLength= "<<fGeomPathLength<<" tLength= "<<fTruePathLength<<G4endl;
@@ -448,10 +452,10 @@ G4double G4WeMoSoftMscModel::ComputeTrueStepLength(G4double geomStepLength)
   if(geomStepLength == fGeomPathLength) return fTruePathLength;
 
 
-  G4double x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
+  // G4double x, xm = 1.8, a = 16./pi/pi, delta = 0.2;
 
-  x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
-  if( x > 10.) x = 10.*G4UniformRand();
+  // x = delta + CLHEP::RandGamma::shoot(a,a/xm) + CLHEP::RandGamma::shoot(a, a/xm); 
+  // if( x > 10.) x = 10.*G4UniformRand();
 
 
   // step defined by transportation 
@@ -460,7 +464,8 @@ G4double G4WeMoSoftMscModel::ComputeTrueStepLength(G4double geomStepLength)
   fGeomPathLength  = geomStepLength;
   G4double tau     = fGeomPathLength/fLambdaEff;
   // fTruePathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
-  fTruePathLength = fGeomPathLength*( 1. + 0.25*tau*x );
+  // fTruePathLength = fGeomPathLength*( 1. + 0.25*tau*x );
+  fTruePathLength = fGeomPathLength*( 1. + 0.55*tau );
 
   if( tau > fNumLimit ) 
   {
@@ -524,10 +529,10 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   if( x1 > 0.5 ) 
   {
-    x1      *= 0.5;
+    x1      *= 0.5;   // now = 0.25*t/lambda_1
     largeAng = true;    
   } 
-  else // normal case
+  else // normal case i.e. t <= lambda_1
   {
     // define threshold angle between single and multiple scattering 
 
@@ -545,7 +550,7 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
       xsec = ComputeXSectionPerVolume();
 
       if(fTransportXsc > DBL_MIN) x1 = 0.5*fTruePathLength*fTransportXsc;
-      else                x1 = 0.0;
+      else                        x1 = 0.0;
 
       /*      
 	G4cout << "fCosTetMaxNuc= " << fCosTetMaxNuc 
@@ -573,7 +578,7 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   if( cost < -1.0 )     cost = -1.0;
   else if( cost > 1.0 ) cost = 1.0;
 
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+  G4double sint = sqrt( (1.0 - cost)*(1.0 + cost) );
 
   G4double phi  = twopi*G4UniformRand();
 
@@ -585,42 +590,42 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(dirx,diry,cost);
-  G4ThreeVector temp(0.0,0.0,1.0);
-  G4ThreeVector pos(0.0,0.0,-fGeomPathLength);
-  G4ThreeVector dir(0.0,0.0,1.0);
+  G4ThreeVector temp(0.0, 0.0, 1.0);
+  G4ThreeVector pos(0.0, 0.0, -fGeomPathLength);
+  G4ThreeVector dir(0.0, 0.0, 1.0);
   G4bool isscat = false;
 
   // sample MSC scattering for large angle
-  // extra central scattering for holf step
+  // extra central scattering for half step
 
-  if(largeAng) 
+  if( largeAng )  // i.e. t > lambda_1
   {
     isscat = true;
-    pos.setZ(-0.5*fGeomPathLength);
+    pos.setZ( -0.5*fGeomPathLength );
 
     do 
     {
-      z = -x1*log(G4UniformRand());
+      z = -x1*log( G4UniformRand() );
     } 
-    while (z > 1.0); 
+    while ( z > 1.0 ); 
 
     cost = 1.0 - 2.0*z;
 
-    if(std::abs(cost) > 1.0) cost = 1.0;
+    if( std::abs(cost) > 1.0 ) cost = 1.0;
 
-    sint = sqrt((1.0 - cost)*(1.0 + cost));
+    sint = sqrt( (1.0 - cost)*(1.0 + cost) );
     phi  = twopi*G4UniformRand();
 
     // position and direction for secondary scattering
 
     dir.set(sint*cos(phi),sint*sin(phi),cost);
     pos += 0.5*dir*fGeomPathLength;
-    x1 *= 2.0;
+    x1  *= 2.0;                      // again = 0.5*t/lambda_1
   }
 
   // sample Rutherford scattering for large angle
 
-  if(xsec > DBL_MIN) 
+  if( xsec > DBL_MIN ) 
   {
     G4double t = fTruePathLength;
     G4int nelm = fCurrentMaterial->GetNumberOfElements();
@@ -642,21 +647,21 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
         G4int i = 0;
 
-	if(nelm > 1) 
+	if( nelm > 1 ) 
         {
 	  for (; i < nelm; i++ ) 
           {
             if( fXsc[i] >= qsec ) break;
           }
-	  if(i >= nelm) i = nelm - 1;
+	  if( i >= nelm ) i = nelm - 1;
 	}
-	SetupTarget((*theElementVector)[i]->GetZ(), fTkin);
+	SetupTarget( (*theElementVector)[i]->GetZ(), fTkin);
         G4double formf = fFormFactA;
         G4double costm = fCosTetMaxNuc2;
 
-        if(fProb[i] > 0.0) 
+        if( fProb[i] > 0.0 ) 
         {
-	  if(G4UniformRand() <= fProb[i]) 
+	  if( G4UniformRand() <= fProb[i] ) 
           {
 	    formf = 0.0;
 	    costm = fCosTetMaxElec2;
@@ -672,38 +677,41 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
 	  do 
           {
-	    zz = w1*w2/(w1 + G4UniformRand()*w3) - fScreenZ;
+	    zz   = w1*w2/(w1 + G4UniformRand()*w3) - fScreenZ;
 	    grej = 1.0/(1.0 + formf*zz);
 	  } 
           while ( G4UniformRand() > grej*grej ); 
  
-	  if(zz < 0.0) zz = 0.0;
-	  else if(zz > 2.0) zz = 2.0;
+	  if( zz < 0.0 )      zz = 0.0;
+	  else if( zz > 2.0 ) zz = 2.0;
 
 	  zz1 = 1.0 - zz;
 	}
-        if(zz1 < 1.0) 
+        if( zz1 < 1.0 ) 
         {
 	  isscat = true;
 
 	  //G4cout << "Rutherford zz1= " << zz1 << " t= " << t << G4endl;
 
-	  sint = sqrt((1.0 - zz1)*(1.0 + zz1));
+	  sint = sqrt( (1.0 - zz1)*(1.0 + zz1) );
 
 	  //G4cout << "sint= " << sint << G4endl;
 
 	  phi          = twopi*G4UniformRand();
 	  G4double vx1 = sint*cos(phi);
 	  G4double vy1 = sint*sin(phi);
+
 	  temp.set(vx1,vy1,zz1);
 	  temp.rotateUz(dir);
+
 	  dir = temp;
 	}
       }
     } 
-    while (t > 0.0); 
+    while ( t > 0.0 ); 
   }
-  if(isscat) newDirection.rotateUz(dir);
+  
+  if( isscat ) newDirection.rotateUz(dir);
 
   newDirection.rotateUz(oldDirection);
 
@@ -715,12 +723,12 @@ void G4WeMoSoftMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
   if (latDisplasment && safety > ftLimitMinFix) 
   {
     G4double rms = fInvSqrt12*sqrt(2.0*x1);
-    G4double dx = fGeomPathLength*(0.5*dirx + rms*G4RandGauss::shoot(0.0,1.0));
-    G4double dy = fGeomPathLength*(0.5*diry + rms*G4RandGauss::shoot(0.0,1.0));
+    G4double dx  = fGeomPathLength*(0.5*dirx + rms*G4RandGauss::shoot(0.0,1.0));
+    G4double dy  = fGeomPathLength*(0.5*diry + rms*G4RandGauss::shoot(0.0,1.0));
     G4double dz;
-    G4double d = (dx*dx + dy*dy)/(fGeomPathLength*fGeomPathLength);
+    G4double d   = (dx*dx + dy*dy)/(fGeomPathLength*fGeomPathLength);
 
-    if(      d < fNumLimit)  dz = -0.5*fGeomPathLength*d*(1.0 + 0.25*d);
+    if(      d < fNumLimit) dz = -0.5*fGeomPathLength*d*(1.0 + 0.25*d);
     else if( d < 1.0     )  dz = -fGeomPathLength*(1.0 - sqrt(1.0 - d));
     else 
     {

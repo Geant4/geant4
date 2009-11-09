@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2009-10-27 16:24:32 grichine Exp $
+// $Id: RunAction.cc,v 1.5 2009-11-09 15:28:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
+  fTimer.Start();
   //initialisation
   EnergyDeposit  = EnergyDeposit2  = 0.;
   TrakLenCharged = TrakLenCharged2 = 0.;
@@ -90,6 +90,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   // compute mean and rms
   //
+
   G4int TotNbofEvents = aRun->GetNumberOfEvent();
   if (TotNbofEvents == 0) return;
   
@@ -289,6 +290,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   histoManager->SetThetaZero( ComputeMscHighland() );
   histoManager->WriteFiles(); 
 
+  fTimer.Stop();
+  G4cout<<"Total time of run = "<<fTimer.GetUserElapsed()<<" s"<<G4endl;
   // show Rndm status
 
   CLHEP::HepRandom::showEngineStatus();

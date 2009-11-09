@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2009-07-30 15:06:02 grichine Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2009-11-09 15:28:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                            DetectorConstruction* DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 :Detector(DC)
 {
   G4int n_particle = 1;
@@ -69,12 +68,17 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
   // default particle kinematic
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle("e-");
+
+  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+
   particleGun->SetParticleDefinition(particle);
+
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+
   particleGun->SetParticleEnergy(30.*MeV);
+
   G4double x0 = -0.5*(Detector->GetWorldSizeX());
+
   particleGun->SetParticlePosition(G4ThreeVector(x0, 0*cm, 0*cm));  
 }
 
@@ -85,8 +89,22 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.
-  if (rndmBeam > 0.) 
-    {
+
+  G4double theta = CLHEP::RandGauss::shoot(0, 2.4*mrad);
+  // G4double theta = CLHEP::RandExponential::shoot(1.*mrad);
+  if(std::abs(theta) > 50*mrad) theta = G4UniformRand()*100*mrad - 50*mrad;
+  G4double phi = twopi*G4UniformRand();
+
+
+  particleGun->SetParticleMomentumDirection( G4ThreeVector( std::cos(theta),
+                                             std::sin(theta)*std::cos(phi),
+                                             std::sin(theta)*std::sin(phi) ) 
+                                           );
+
+
+
+  if ( rndmBeam > 0.) 
+  {
       G4ThreeVector oldPosition = particleGun->GetParticlePosition();    
       G4double rbeam = 0.5*(Detector->GetAbsorberSizeYZ())*rndmBeam;
       G4double x0 = oldPosition.x();
@@ -95,7 +113,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
       particleGun->GeneratePrimaryVertex(anEvent);
       particleGun->SetParticlePosition(oldPosition);      
-    }
+  }
   else  particleGun->GeneratePrimaryVertex(anEvent); 
 }
 

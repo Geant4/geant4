@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WeMoSoftMscModel.hh,v 1.6 2009-10-27 16:24:32 grichine Exp $
+// $Id: G4WeMoSoftMscModel.hh,v 1.7 2009-11-09 15:28:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -327,7 +327,9 @@ inline void G4WeMoSoftMscModel::SetupTarget(G4double Z, G4double e)
       fKinFactor /= (x*x);
     }
     */
-    if( fiz > 1 ) fScreenZ *= (1.13 + 3.76*fChargeSquare*Z*Z*fAlpha2*fInvBeta2);
+    G4double cofAm = 1.;
+   
+    if( fiz > 1 ) fScreenZ *= cofAm*(1.13 + 3.76*fChargeSquare*Z*Z*fAlpha2*fInvBeta2);
 
     //if(iz > 1) fScreenZ *=(1.13 + std::min(0.5,3.76*Z*Z*fInvBeta2*fAlpha2));
 

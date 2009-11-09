@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.1 2009-07-30 15:05:25 grichine Exp $
+// $Id: RunAction.hh,v 1.2 2009-11-09 15:28:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Timer.hh"
 
 #include "globals.hh"
 
@@ -116,6 +117,7 @@ public:
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;
     HistoManager*           histoManager;
+    G4Timer                 fTimer;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
