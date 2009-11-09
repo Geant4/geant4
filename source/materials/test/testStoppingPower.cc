@@ -31,11 +31,13 @@
 //          G4Stopping classes are in $G4INSTALL/source/materials/
 // 
 //
-// 11.08.08, Ivantchenko
+// 11.08.08 A.Ivantchenko
 //
+// in the framework of the ESA Technology Research Programme
+// (ESA contract 21435/08/NL/AT)
 //
 // $TESTTARGET should be gived, please look GNUmakefile
-
+//
 
 #include "G4MaterialStoppingICRU73.hh"
 #include "G4SimpleMaterialStoppingICRU73.hh"

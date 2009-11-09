@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IronStoppingICRU73.cc,v 1.8 2009-11-03 17:19:35 alechner Exp $
+// $Id: G4IronStoppingICRU73.cc,v 1.9 2009-11-09 16:51:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -34,6 +34,9 @@
 // Description: Data on stopping power
 //
 // Author:    A.Ivanchenko 10.08.2008
+//
+// in the framework of the ESA Technology Research Programme
+// (ESA contract 21435/08/NL/AT)
 //
 // Modifications:
 // 29.04.2009 A.Ivantchenko added data for G4WATER

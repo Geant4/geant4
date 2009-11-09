@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialStoppingICRU73.hh,v 1.7 2009-11-03 17:19:35 alechner Exp $
+// $Id: G4MaterialStoppingICRU73.hh,v 1.8 2009-11-09 16:51:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4MaterialStoppingICRU73_h
@@ -36,6 +36,9 @@
 // Description: Data on stopping powers for light ions in compounds
 //
 // Author:      Ivantchenko 10.07.2008
+//
+// in the framework of the ESA Technology Research Programme
+// (ESA contract 21435/08/NL/AT)
 //
 // Modifications:
 // 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
