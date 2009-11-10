@@ -139,12 +139,22 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
         G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
 
+        if ( verboseLevel > 0 ) {
+           G4cout << " Photon at Boundary! " << G4endl;
+           G4VPhysicalVolume* thePrePV = pPreStepPoint->GetPhysicalVolume();
+           G4VPhysicalVolume* thePostPV = pPostStepPoint->GetPhysicalVolume();
+           if (thePrePV)  G4cout << " thePrePV:  " << thePrePV->GetName()  << G4endl;
+           if (thePostPV) G4cout << " thePostPV: " << thePostPV->GetName() << G4endl;
+        }
+
         if (pPostStepPoint->GetStepStatus() != fGeomBoundary){
 	        theStatus = NotAtBoundary;
+                if ( verboseLevel > 0) BoundaryProcessVerbose();
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 	if (aTrack.GetStepLength()<=kCarTolerance/2){
 	        theStatus = StepTooSmall;
+                if ( verboseLevel > 0) BoundaryProcessVerbose();
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
@@ -156,6 +166,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	thePhotonMomentum = aParticle->GetTotalMomentum();
         OldMomentum       = aParticle->GetMomentumDirection();
 	OldPolarization   = aParticle->GetPolarization();
+
+        if ( verboseLevel > 0 ) {
+           G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
+           G4cout << " Old Polarization:       " << OldPolarization << G4endl;
+        }
 
         G4ThreeVector theGlobalPoint = pPostStepPoint->GetPosition();
 
@@ -206,6 +221,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
+                if ( verboseLevel > 0) BoundaryProcessVerbose();
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -215,9 +231,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 	        theStatus = NoRINDEX;
+                if ( verboseLevel > 0) BoundaryProcessVerbose();
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
+
+        theReflectivity = 1.;
+        theEfficiency   = 0.;
 
         theModel = glisur;
         theFinish = polished;
@@ -280,6 +300,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   }
                   else {
 		     theStatus = NoRINDEX;
+                     if ( verboseLevel > 0) BoundaryProcessVerbose();
                      aParticleChange.ProposeTrackStatus(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
@@ -304,8 +325,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                  CalculateReflectivity();
 
-              } else {
-                 theReflectivity = 1.0;
               }
 
               PropertyPointer =
@@ -313,8 +332,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               if (PropertyPointer) {
                       theEfficiency =
                       PropertyPointer->GetProperty(thePhotonMomentum);
-              } else {
-                      theEfficiency = 0.0;
               }
 
 	      if ( theModel == unified ) {
@@ -358,6 +375,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	      if (Material1 == Material2){
 		 theStatus = SameMaterial;
+                 if ( verboseLevel > 0) BoundaryProcessVerbose();
 		 return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
               aMaterialPropertiesTable =
@@ -369,16 +387,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               }
               else {
 		 theStatus = NoRINDEX;
+                 if ( verboseLevel > 0) BoundaryProcessVerbose();
                  aParticleChange.ProposeTrackStatus(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
            }
-        }
-
-        if ( verboseLevel > 0 ) {
-                G4cout << " Photon at Boundary! " << G4endl;
-                G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
-                G4cout << " Old Polarization:       " << OldPolarization << G4endl;
         }
 
 	if (type == dielectric_metal) {
@@ -396,7 +409,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	  if ( theFinish == polishedfrontpainted ||
 	       theFinish == groundfrontpainted ) {
-
 	          if( !G4BooleanRand(theReflectivity) ) {
 		    DoAbsorption();
 		  }
@@ -407,7 +419,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		  }
 	  }
 	  else {
-
                   if( !G4BooleanRand(theReflectivity) ) {
                     DoAbsorption();
                   }
@@ -427,42 +438,47 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         NewPolarization = NewPolarization.unit();
 
         if ( verboseLevel > 0) {
-		G4cout << " New Momentum Direction: " << NewMomentum     << G4endl;
-		G4cout << " New Polarization:       " << NewPolarization << G4endl;
-		if ( theStatus == Undefined )
-			G4cout << " *** Undefined *** " << G4endl;
-		if ( theStatus == FresnelRefraction )
-			G4cout << " *** FresnelRefraction *** " << G4endl;
-		if ( theStatus == FresnelReflection )
-			G4cout << " *** FresnelReflection *** " << G4endl;
-		if ( theStatus == TotalInternalReflection )
-			G4cout << " *** TotalInternalReflection *** " << G4endl;
-		if ( theStatus == LambertianReflection )
-			G4cout << " *** LambertianReflection *** " << G4endl;
-		if ( theStatus == LobeReflection )
-			G4cout << " *** LobeReflection *** " << G4endl;
-		if ( theStatus == SpikeReflection )
-			G4cout << " *** SpikeReflection *** " << G4endl;
-		if ( theStatus == BackScattering )
-			G4cout << " *** BackScattering *** " << G4endl;
-		if ( theStatus == Absorption )
-			G4cout << " *** Absorption *** " << G4endl;
-		if ( theStatus == Detection )
-			G4cout << " *** Detection *** " << G4endl;
-                if ( theStatus == NotAtBoundary )
-                        G4cout << " *** NotAtBoundary *** " << G4endl;
-                if ( theStatus == SameMaterial )
-                        G4cout << " *** SameMaterial *** " << G4endl;
-                if ( theStatus == StepTooSmall )
-                        G4cout << " *** StepTooSmall *** " << G4endl;
-                if ( theStatus == NoRINDEX )
-                        G4cout << " *** NoRINDEX *** " << G4endl;
+	   G4cout << " New Momentum Direction: " << NewMomentum     << G4endl;
+	   G4cout << " New Polarization:       " << NewPolarization << G4endl;
+           BoundaryProcessVerbose();
         }
 
 	aParticleChange.ProposeMomentumDirection(NewMomentum);
 	aParticleChange.ProposePolarization(NewPolarization);
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+}
+
+void G4OpBoundaryProcess::BoundaryProcessVerbose() const
+{
+        if ( theStatus == Undefined )
+                G4cout << " *** Undefined *** " << G4endl;
+        if ( theStatus == FresnelRefraction )
+                G4cout << " *** FresnelRefraction *** " << G4endl;
+        if ( theStatus == FresnelReflection )
+                G4cout << " *** FresnelReflection *** " << G4endl;
+        if ( theStatus == TotalInternalReflection )
+                G4cout << " *** TotalInternalReflection *** " << G4endl;
+        if ( theStatus == LambertianReflection )
+                G4cout << " *** LambertianReflection *** " << G4endl;
+        if ( theStatus == LobeReflection )
+                G4cout << " *** LobeReflection *** " << G4endl;
+        if ( theStatus == SpikeReflection )
+                G4cout << " *** SpikeReflection *** " << G4endl;
+        if ( theStatus == BackScattering )
+                G4cout << " *** BackScattering *** " << G4endl;
+        if ( theStatus == Absorption )
+                G4cout << " *** Absorption *** " << G4endl;
+        if ( theStatus == Detection )
+                G4cout << " *** Detection *** " << G4endl;
+        if ( theStatus == NotAtBoundary )
+                G4cout << " *** NotAtBoundary *** " << G4endl;
+        if ( theStatus == SameMaterial )
+                G4cout << " *** SameMaterial *** " << G4endl;
+        if ( theStatus == StepTooSmall )
+                G4cout << " *** StepTooSmall *** " << G4endl;
+        if ( theStatus == NoRINDEX )
+                G4cout << " *** NoRINDEX *** " << G4endl;
 }
 
 G4ThreeVector
