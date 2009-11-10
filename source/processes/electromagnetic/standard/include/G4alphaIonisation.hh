@@ -23,71 +23,105 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.15 2009-11-10 11:50:30 vnivanch Exp $
+// $Id: G4alphaIonisation.hh,v 1.1 2009-11-10 11:50:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-// GEANT4 Class file
+// GEANT4 Class header file
 //
 //
-// File name:     G4ionGasIonisation
+// File name:     G4alphaIonisation
 //
 // Author:        Vladimir Ivanchenko
 //
-// Creation date: 23.07.2007
+// Creation date: 28.10.2009
 //
 // Modifications:
 //
 //
+// Class Description:
+//
+// This class manages the ionisation process for He ions. Effective charge,
+// nuclear stopping power, energy loss corrections are taken into account.
+// It inherites from G4VEnergyLossLoss.
+//
+
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4ionGasIonisation.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
+#ifndef G4alphaIonisation_h
+#define G4alphaIonisation_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4VEnergyLossProcess.hh"
 
-using namespace std;
+class G4Material;
 
-G4ionGasIonisation::G4ionGasIonisation(const G4String& name)
-  : G4ionIonisation(name)
+class G4alphaIonisation : public G4VEnergyLossProcess
 {
-  G4cout << G4endl;
-  G4cout << "!!! G4ionGasIonisation class is obsolete and may be removed for the next major Geant4 release !!!" << G4endl;
-  G4cout << "!!! Please use G4ionIonisation for ions !!!" << G4endl;
-  G4cout << G4endl;
+public:
+
+  G4alphaIonisation(const G4String& name = "alphaIoni");
+
+  virtual ~G4alphaIonisation();
+
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+
+  // Print out of the class parameters
+  virtual void PrintInfo();
+
+  void ActivateNuclearStopping(G4bool);
+
+protected:
+
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				   const G4Material*, G4double cut);
+
+  inline G4double BetheBlochEnergyThreshold();
+
+  inline G4bool NuclearStoppingFlag();
+
+private:
+
+  // hide assignment operator
+  G4alphaIonisation & operator=(const G4alphaIonisation &right);
+  G4alphaIonisation(const G4alphaIonisation&);
+
+  const G4ParticleDefinition* theParticle;
+
+  G4double   mass;
+  G4double   ratio;
+  G4double   eth;
+
+  G4bool     isInitialised;
+  G4bool     nuclearStopping;
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4alphaIonisation::ActivateNuclearStopping(G4bool val)
+{
+  nuclearStopping = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionGasIonisation::~G4ionGasIonisation()
-{}
-
-/*
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4ionGasIonisation::SampleChargeAfterStep(G4double qeff, G4double xeff)
+inline G4double G4alphaIonisation::BetheBlochEnergyThreshold()
 {
-  // qeff - equilibrium charge
-  // xeff - effective number of collisions
-  // q    - current charge
-  G4double q = G4double(currentIonZ);
-  if(qeff > q) {
-    if(G4UniformRand() < qeff - q) currentIonZ++;
-  } else {
-    if(G4UniformRand() < q - qeff) currentIonZ--;
-  }
-
-  q = eplus*currentIonZ;
-  if(verboseLevel > 1) G4cout << "G4ionGasIonisation: Q1= " << currentIonZ
-			      << " Qeff= " << qeff/eplus << "  Neff= " << xeff
-			      << G4endl;
-  return q;
+  return eth;
 }
-*/
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4alphaIonisation::NuclearStoppingFlag()
+{
+  return nuclearStopping;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#endif
