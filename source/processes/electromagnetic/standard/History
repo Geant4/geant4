@@ -1,4 +1,4 @@
-$Id: History,v 1.474 2009-11-10 11:50:30 vnivanch Exp $
+$Id: History,v 1.475 2009-11-10 19:28:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 09:  V.Ivant (emstand-V09-02-31)
+- G4BetheBlochModel, G4BraggModel, G4BraggIonModel - remove computations
+                       of nuclear stopping power, some CPU speadup
+- G4NuclearStopping - updated process for computation of nuclear stopping
+- G4ICRU49NuclearStoppingModel - model providing computation of nuclear 
+                      stopping
 
 10 November 09:  V.Ivant (emstand-V09-02-30)
 - Added G4alphaIonisation process
