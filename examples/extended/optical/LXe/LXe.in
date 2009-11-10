@@ -7,4 +7,7 @@
 #/LXe/detector/MainScintYield 100
 /LXe/eventVerbose 1
 #/tracking/verbose 1
+/run/initialize
+#/optics_engine/selectOpProcess OpBoundary
+#/optics_engine/setOpProcessVerbose 1
 /run/beamOn 3

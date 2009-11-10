@@ -72,7 +72,7 @@ int main(int argc, char** argv)
   runManager->SetUserAction(new LXeTrackingAction(recorder));
   runManager->SetUserAction(new LXeSteppingAction(recorder));
 
-  runManager->Initialize();
+  // runManager->Initialize();
  
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
