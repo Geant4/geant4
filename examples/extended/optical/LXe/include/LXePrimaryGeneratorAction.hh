@@ -27,7 +27,6 @@
 #ifndef LXePrimaryGeneratorAction_h
 #define LXePrimaryGeneratorAction_h 1
 
-#include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4ParticleGun;
