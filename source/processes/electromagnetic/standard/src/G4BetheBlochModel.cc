@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.32 2009-11-09 19:16:13 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.33 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -295,7 +295,7 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
     eloss += length*corr->IonHighOrderCorrections(p,couple,e);
   }
-
+  /*
   if(nuclearStopping && preKinEnergy*proton_mass_c2/mass < chargeSquare*100.*MeV) {
 
     G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
@@ -307,14 +307,14 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     } else {
       eloss += nloss;
     }
-    /*
+    
     G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     	   << " de= " << eloss << " NIEL= " << nloss 
 	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
+    
     fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
   }
-
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

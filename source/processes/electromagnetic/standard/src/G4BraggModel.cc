@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.22 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.23 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -239,7 +239,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					const G4DynamicParticle* dp,
 					G4double& eloss,
@@ -262,14 +262,15 @@ void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     } else {
       eloss += nloss;
     }
-    /*
+    
     G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     	   << " de= " << eloss << " NIEL= " << nloss 
 	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
+    
     fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
   }
 }
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

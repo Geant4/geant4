@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.hh,v 1.1 2009-07-22 09:57:54 vnivanch Exp $
+// $Id: G4ICRU49NuclearStoppingModel.hh,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,7 @@
 
 #include "G4VEmModel.hh"
 
-class G4ParticleChangeForGamma;
+class G4ParticleChangeForLoss;
 class G4Pow;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,8 @@ public:
 
   virtual ~G4ICRU49NuclearStoppingModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&);
 
   // main method to compute dEdx
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
@@ -77,17 +78,16 @@ public:
                                         G4double kineticEnergy,
                                         G4double cutEnergy = DBL_MAX);
 
-  // PostStep method for sampling of the nuclear energy loss 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin, G4double);
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*, 
+				 G4double, G4double);
 
   inline void SetFluctuationFlag(G4bool);
 
 private:
 
-  void Initialise();
+  void InitialiseNuclearStopping();
 
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
@@ -97,7 +97,6 @@ private:
   G4ICRU49NuclearStoppingModel & operator=(const  G4ICRU49NuclearStoppingModel &right);
   G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&);
 
-  G4ParticleChangeForGamma*   fParticleChange;
   G4Pow* g4pow;
 
   static G4double ed[104];
@@ -106,7 +105,6 @@ private:
   G4double theZieglerFactor;
 
   // flags
-  G4bool   isInitialized;
   G4bool   lossFlucFlag;
 };
 

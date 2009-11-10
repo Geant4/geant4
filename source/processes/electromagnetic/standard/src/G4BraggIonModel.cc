@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.25 2009-10-28 10:14:13 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.26 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -253,7 +253,7 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					   const G4DynamicParticle* dp,
 					   G4double& eloss,
 					   G4double&,
-					   G4double length)
+					   G4double /*length*/)
 {
   // this method is called only for ions
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -267,7 +267,7 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
   GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
   eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
-
+  /*
   if(nuclearStopping) {
 
     G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
@@ -279,13 +279,14 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     } else {
       eloss += nloss;
     }
-    /*
+    
     G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     	   << " de= " << eloss << " NIEL= " << nloss 
 	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
+    
     fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
   }
+  */
   //G4cout << "G4BraggIonModel::CorrectionsAlongStep end" << G4endl;
 }
 

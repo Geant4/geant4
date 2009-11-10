@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh,v 1.1 2009-07-22 09:57:54 vnivanch Exp $
+// $Id: G4NuclearStopping.hh,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -57,8 +57,11 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GPILSelection.hh"
+#include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4ICRU49NuclearStoppingModel;
 
 class G4NuclearStopping : public G4VEmProcess
 {
@@ -92,6 +95,10 @@ protected:
   void InitialiseProcess(const G4ParticleDefinition*);
 
 private:       
+
+  G4ParticleChangeForLoss nParticleChange;
+
+  G4ICRU49NuclearStoppingModel* modelICRU49;
 
   G4bool   isInitialized;
 

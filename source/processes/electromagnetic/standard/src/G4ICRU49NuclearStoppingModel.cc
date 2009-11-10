@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc,v 1.1 2009-07-22 09:57:54 vnivanch Exp $
+// $Id: G4ICRU49NuclearStoppingModel.cc,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,7 +53,7 @@
 #include "G4ICRU49NuclearStoppingModel.hh"
 #include "Randomize.hh"
 #include "G4LossTableManager.hh"
-#include "G4ParticleChangeForGamma.hh"
+#include "G4ParticleChangeForLoss.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Step.hh"
@@ -67,11 +67,11 @@ G4double G4ICRU49NuclearStoppingModel::ed[] = {0.0};
 using namespace std;
 
 G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam) 
-  : G4VEmModel(nam),isInitialized(false),lossFlucFlag(false)
+  : G4VEmModel(nam),lossFlucFlag(false)
 {
   theZieglerFactor = eV*cm2*1.0e-15;
   g4pow = G4Pow::GetInstance();
-  if(ad[0] == 0.0) Initialise();
+  if(ad[0] == 0.0) InitialiseNuclearStopping();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,44 +81,18 @@ G4ICRU49NuclearStoppingModel::~G4ICRU49NuclearStoppingModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void 
-G4ICRU49NuclearStoppingModel::Initialise(const G4ParticleDefinition*,
-					 const G4DataVector&)
-{
-  if(!isInitialized) {
-    isInitialized = true;
-    fParticleChange = GetParticleChangeForGamma();
-  }
-}
+void G4ICRU49NuclearStoppingModel::Initialise(const G4ParticleDefinition*, 
+					      const G4DataVector&)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
 G4ICRU49NuclearStoppingModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-						const G4MaterialCutsCouple* couple,
-						const G4DynamicParticle* dp,
+						const G4MaterialCutsCouple*,
+						const G4DynamicParticle*,
 						G4double, G4double)
-{
-  const G4Step* step = fParticleChange->GetCurrentTrack()->GetStep();
-  G4double length = step->GetStepLength();
- 
-  G4double T1 = step->GetPreStepPoint()->GetKineticEnergy();
-  G4double T2 = step->GetPostStepPoint()->GetKineticEnergy();
-  if(T2 > 0.0) {
-
-    // primary
-    G4double T = 0.5*(T1 + T2);
-    const G4ParticleDefinition* part = dp->GetDefinition();
-
-    // sample stopping
-    lossFlucFlag = true;
-    G4double nloss = length*ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
-    if(nloss > T2) nloss = T2;
-    fParticleChange->SetProposedKineticEnergy(T2 - nloss);
-    fParticleChange->ProposeLocalEnergyDeposit(nloss);
-    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -207,7 +181,7 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ICRU49NuclearStoppingModel::Initialise()
+void G4ICRU49NuclearStoppingModel::InitialiseNuclearStopping()
 {
   const G4double nuca[104][2] = {
   { 1.0E+8, 5.831E-8},

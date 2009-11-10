@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.13 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.14 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -120,13 +120,14 @@ public:
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
 				     G4double kineticEnergy);
-
+  /*
   // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,
 				    G4double& eloss,
 				    G4double& niel,
 				    G4double length);
+  */
 
 protected:
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc,v 1.1 2009-07-22 09:57:54 vnivanch Exp $
+// $Id: G4NuclearStopping.cc,v 1.2 2009-11-10 19:25:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -55,12 +55,16 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
 {
   isInitialized = false;  
   SetProcessSubType(fCoulombScattering);
+  enableAlongStepDoIt = true; 
+  modelICRU49 = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NuclearStopping::~G4NuclearStopping()
-{}
+{
+  delete modelICRU49;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,8 +81,12 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
     isInitialized = true;
     SetBuildTableFlag(false);
     //    SetSecondaryParticle(G4Electron::Electron());
-    if(!Model()) SetModel(new G4ICRU49NuclearStoppingModel());
+    if(!Model()) {
+      modelICRU49 = new G4ICRU49NuclearStoppingModel();
+      SetModel(modelICRU49);
+    }
     AddEmModel(1, Model());
+    Model()->SetParticleChange(&nParticleChange);
   }
 }
 
@@ -97,16 +105,32 @@ G4NuclearStopping::AlongStepGetPhysicalInteractionLength(
 G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
 						    const G4Step&  step)
 {
-  fParticleChange.InitializeForPostStep(track);
-  if(step.GetStepLength() > 0.0) {
-    MeanFreePath(track);
-    G4double e = track.GetKineticEnergy();
-    const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple(); 
-    G4VEmModel* mod = SelectModel(e, couple->GetIndex());
-    std::vector<G4DynamicParticle*>* v =0;
-    mod->SampleSecondaries(v, couple, track.GetDynamicParticle());
+  nParticleChange.InitializeForAlongStep(track);
+  G4double length = step.GetStepLength();
+  if(length > 0.0) {
+
+    G4double T1 = step.GetPreStepPoint()->GetKineticEnergy();
+    G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
+    if(T2 > 0.0) {
+
+      // primary
+      G4double T = 0.5*(T1 + T2);
+      const G4ParticleDefinition* part = track.GetDefinition();
+      const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple(); 
+      G4VEmModel* mod = SelectModel(T, couple->GetIndex());
+
+      // sample stopping
+      if(modelICRU49) modelICRU49->SetFluctuationFlag(true);
+      G4double nloss = 
+	length*mod->ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
+      if(nloss > T1) nloss = T1;
+      nParticleChange.SetProposedKineticEnergy(T1 - nloss);
+      nParticleChange.ProposeLocalEnergyDeposit(nloss);
+      nParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
+      if(modelICRU49) modelICRU49->SetFluctuationFlag(false);
+    }
   }
-  return &fParticleChange;
+  return &nParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
