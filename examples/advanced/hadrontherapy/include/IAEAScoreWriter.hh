@@ -45,7 +45,7 @@ public:
 
 public:
   // store a quantity into a file
-  void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  void DumpQuantityToFile(G4String & psName, /*G4String & fileName,*/ G4String & option);
 
 };
 

@@ -32,7 +32,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIQt
 #/vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
@@ -67,5 +67,5 @@
 # Start of the run
 #
 
-/control/execute gui.mac
+/control/execute macro/GUIPersonalisation.mac
 #/run/beamOn 100

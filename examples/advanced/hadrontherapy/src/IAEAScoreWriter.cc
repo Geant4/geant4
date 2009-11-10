@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 
 #include "IAEAScoreWriter.hh"
 
@@ -46,7 +45,7 @@ IAEAScoreWriter::~IAEAScoreWriter() {
   ;
 }
 
-void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
+void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, /*G4String & fileName,*/ G4String & option) {
   //
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."
@@ -62,17 +61,7 @@ void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName,
   // confirm the option
   if(opt.size() == 0) opt = "csv";
 
-  // open the file
- // std::ofstream ofile(fileName);
-  /* if(!ofile) {
-    G4cerr << "ERROR : DumpToFile : File open error -> "
-	   << fileName << G4endl;
-    return;
-  } */
-//  ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
-
-  
-  // retrieve the map
+    // retrieve the map
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   
 
@@ -83,12 +72,7 @@ void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName,
     return;
   }
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
-  //ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
-
-  // write header info 
-  //ofile << "# xy projection" << G4endl;
- // ofile << fNMeshSegments[0] << " " << fNMeshSegments[1] << " " << G4endl;
-
+  
   // declare xy array
   std::vector<double> projy;
   for(int y = 0; y < fNMeshSegments[1]; y++) projy.push_back(0.);
@@ -110,7 +94,7 @@ void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName,
   } // x
 
   // write quantity
-  //ofile << std::setprecision(16); // for double value with 8 bytes
+  
 #ifdef ANALYSIS_USE // If we are using ROOT or AIDA analysis
   HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
 #endif

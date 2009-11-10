@@ -33,11 +33,10 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone
 // 
 // (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
@@ -61,7 +60,6 @@
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
-#include "HadrontherapyInteractionParameters.hh"
 #include "G4ScoringManager.hh"
 #include "IAEAScoreWriter.hh"
 
@@ -135,16 +133,13 @@ int main(int argc ,char ** argv)
   HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
-  // Interaction data
-  HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters();
-
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
 
- G4UImanager* UI = G4UImanager::GetUIpointer();      
+G4UImanager* UI = G4UImanager::GetUIpointer();      
   
  if (argc!=1)   // batch mode
    {
@@ -165,40 +160,33 @@ int main(int argc ,char ** argv)
 
      // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
      // G$UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
-     // In this case a gui.mac file is executed
+     // In the following case the GUI.mac file is also executed
+     // 
 #elif defined(G4UI_USE_QT)
      session = new G4UIQt(argc,argv);
-     UI->ApplyCommand("/control/execute gui.mac");      
+     UI->ApplyCommand("/control/execute macro/GUI.mac");      
      
      // As final option, the simpler user interface terminal is opened
 #else
      session = new G4UIterminal();
-     UI->ApplyCommand("/control/execute defaultMacro.mac");  
+ UI->ApplyCommand("/control/execute defaultMacro.mac");
 #endif
-      
-      //#ifdef G4VIS_USE
-      //UI->ApplyCommand("/control/execute vis.mac");     
-      //#endif
-      
-	session->SessionStart();
-	delete session;
+ session->SessionStart();
+ delete session;
    }
  matrix -> TotalEnergyDeposit();
  
 #ifdef ANALYSIS_USE
-  analysis -> finish();
+ analysis -> finish();
 #endif
-
-  // Job termination
+ 
+ // Job termination
 #ifdef G4VIS_USE
-  delete visManager;
+ delete visManager;
 #endif
-  
-  delete geometryMessenger;
-  delete geometryController;
-  delete pInteraction; 
-  delete matrix; 
-
-  delete runManager;
-  return 0;
+ 
+ delete geometryMessenger;
+ delete geometryController;
+ delete runManager;
+ return 0;
 }

@@ -31,15 +31,15 @@
 ##########################
 # Visualisation 
 #
-#/vis/scene/create
-#/vis/open OGLIX
-#/vis/viewer/flush
-#/vis/viewer/set/viewpointThetaPhi 30 140 deg
-#/vis/viewer/zoom 1
-#/vis/viewer/pan -10  0 cm
-#/tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
-#/vis/viewer/update
+/vis/scene/create
+/vis/open OGLIQt
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  0 cm
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
 
 ##########################
 # Set here the cut and the step max for the tracking. 

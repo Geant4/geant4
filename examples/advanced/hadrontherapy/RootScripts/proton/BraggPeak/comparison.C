@@ -36,13 +36,10 @@ gROOT->Reset();
      
    }
  
-
-
-
  // LOAD THE SIMULATION RESULT FILE
  // CONTAINED IN THE DIRECTORY
  // hadrontherapy/simulationResults/proton/BraggPeak 
- TFile *simulationFile = new TFile("../../../simulationResults/proton/BraggPeak/protonBraggPeak.root","READ");
+ TFile *simulationFile = new TFile("../../../SimulationOutputs/proton/BraggPeak/protonBraggPeak.root","READ");
 
  // EXTRACTION, FROM THE SIMULATION FILE OF THE INTERESTING HISTOGRAMS
  TH1D *simulatedPeak = (TH1D*) simulationFile -> Get("10");
