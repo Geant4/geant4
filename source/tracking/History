@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2009-09-25 00:28:56 gum Exp $
+$Id: History,v 1.131 2009-11-10 16:39:32 ldesorgh Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 Nov 2009 L. Desorgher(tracking-V09-02-03)
+- First commit of Adjoint classes in the tracking category
+  New classes are: - G4AdjointCrossSurfChecker and G4AdjointSteppingAction
+
 
 24 Sep 2009 P.Gumplinger (tracking-V09-02-02)
 - Correction to G4SteppingManager::InvokeAtRestDoItProcs so G4Scintillation
