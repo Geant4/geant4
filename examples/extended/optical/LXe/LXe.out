@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-02-ref-07    (5-June-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,6 +22,8 @@ Current available graphics systems are:
   gMocrenFile (gMocrenFile)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -42,30 +40,6 @@ Registered filter factories:
   particleFilter
   originVolumeFilter
   attributeFilter
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 G4Cerenkov::G4Cerenkov constructor
 NOTE: this is now a G4VProcess!
@@ -129,11 +103,11 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -183,42 +157,41 @@ muPairProd:   for  mu-    SubType= 4
           muMinusCaptureAtRest
 ============================================================================================
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (0.0102623,-0.173123,-103.444)
+	Energy weighted position of hits in LXe : (0.107057,-0.057996,-103.428)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (-1.9426,-0.369633,-17.7135)
+	Reconstructed position of hits in LXe : (0.725575,-0.938698,-16.4198)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1811
+	Number of photons that hit PMTs in this event : 1475
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5568
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3757
+	Number of photons produced by scintillation in this event : 5672
+	Number of photons produced by cerenkov in this event : 2
+	Number of photons absorbed (OpAbsorption) in this event : 4199
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-4.21614,2.9846,-96.2826)
+	Energy weighted position of hits in LXe : (-4.95711,17.1789,-76.5994)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (-0.162152,0.0982676,-20.2084)
-	Number of photons that hit PMTs in this event : 1876
+	Reconstructed position of hits in LXe : (1.53736,5.96173,-22.4351)
+	Number of photons that hit PMTs in this event : 1488
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5531
+	Number of photons produced by scintillation in this event : 5424
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3655
+	Number of photons absorbed (OpAbsorption) in this event : 3936
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (1.23568,1.39511,-97.7636)
+	Energy weighted position of hits in LXe : (-13.8501,-1.1474,-100.302)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (2.68645,-2.18125,-17.8823)
-	Number of photons that hit PMTs in this event : 1824
+	Reconstructed position of hits in LXe : (0.895197,-0.619525,-18.2295)
+	Number of photons that hit PMTs in this event : 1296
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5453
+	Number of photons produced by scintillation in this event : 5444
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3629
+	Number of photons absorbed (OpAbsorption) in this event : 4148
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Graphics systems deleted.
 Visualization Manager deleting...
-
