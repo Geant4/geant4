@@ -62,12 +62,12 @@ void LXeMuonPhysics::ConstructParticle()
 void LXeMuonPhysics::ConstructProcess()
 {
   fMuPlusIonisation = new G4MuIonisation();
-  fMuPlusMultipleScattering = new G4MultipleScattering();
+  fMuPlusMultipleScattering = new G4MuMultipleScattering();
   fMuPlusBremsstrahlung=new G4MuBremsstrahlung();
   fMuPlusPairProduction= new G4MuPairProduction();
 
   fMuMinusIonisation = new G4MuIonisation();
-  fMuMinusMultipleScattering = new G4MultipleScattering;
+  fMuMinusMultipleScattering = new G4MuMultipleScattering;
   fMuMinusBremsstrahlung = new G4MuBremsstrahlung();
   fMuMinusPairProduction = new G4MuPairProduction();
 
