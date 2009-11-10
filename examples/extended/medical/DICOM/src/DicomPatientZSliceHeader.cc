@@ -147,7 +147,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
     G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different number of materials: " << fMaterialNames.size() << " =? " << fMaterialNames2.size() << G4endl;
     G4Exception("");
   }
-  for( size_t ii = 0; ii < fMaterialNames.size(); ii++ ) {
+  for( unsigned int ii = 0; ii < fMaterialNames.size(); ii++ ) {
     if( fMaterialNames[ii] != fMaterialNames2[ii] ) {
       G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different material number " << ii << " : " << fMaterialNames[ii] << " =? " << fMaterialNames2[ii] << G4endl;
       G4Exception("");

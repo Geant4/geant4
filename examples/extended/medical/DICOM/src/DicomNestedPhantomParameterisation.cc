@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedPhantomParameterisation.cc,v 1.5 2009-01-27 10:44:58 gcosmo Exp $
+// $Id: DicomNestedPhantomParameterisation.cc,v 1.6 2009-11-10 18:48:46 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -52,7 +52,7 @@ DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
 }
 
 void DicomNestedPhantomParameterisation::
-SetNoVoxel( size_t nx, size_t ny, size_t nz )
+SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz )
 {
   fnX = nx;
   fnY = ny;
@@ -79,14 +79,14 @@ ComputeMaterial(G4VPhysicalVolume*, const G4int copyNoZ,
 
   G4int copyNo = ix + fnX*iy + fnX*fnY*iz;
 
-  size_t matIndex = GetMaterialIndex(copyNo);
+  unsigned int matIndex = GetMaterialIndex(copyNo);
 
   return fMaterials[ matIndex ];
 }
 
 //------------------------------------------------------------------
-size_t DicomNestedPhantomParameterisation::
-GetMaterialIndex( size_t copyNo ) const
+unsigned int DicomNestedPhantomParameterisation::
+GetMaterialIndex( unsigned int copyNo ) const
 {
   return *(fMaterialIndices+copyNo);
 }
