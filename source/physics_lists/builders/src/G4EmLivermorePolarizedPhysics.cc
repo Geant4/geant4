@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.4 2009-10-30 18:36:15 vnivanch Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.5 2009-11-10 20:08:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -80,6 +80,7 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4NuclearStopping.hh"
 
 // msc models
 #include "G4UrbanMscModel93.hh"
@@ -269,6 +270,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
       ionIoni->SetStepFunction(0.1, 20*um); 
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ) {
@@ -280,6 +282,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ||
