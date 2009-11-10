@@ -73,12 +73,12 @@ void LXeEMPhysics::ConstructProcess()
   thePairProduction = new G4GammaConversion();
   
     // Electron physics
-  theElectronMultipleScattering = new G4MultipleScattering();
+  theElectronMultipleScattering = new G4eMultipleScattering();
   theElectronIonisation = new G4eIonisation();
   theElectronBremsStrahlung = new G4eBremsstrahlung();
   
     //Positron physics
-  thePositronMultipleScattering = new G4MultipleScattering();
+  thePositronMultipleScattering = new G4eMultipleScattering();
   thePositronIonisation = new G4eIonisation(); 
   thePositronBremsStrahlung = new G4eBremsstrahlung();  
   theAnnihilation = new G4eplusAnnihilation();

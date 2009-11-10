@@ -34,7 +34,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -62,12 +62,12 @@ class LXeEMPhysics : public G4VPhysicsConstructor
     G4GammaConversion* thePairProduction;
   
     // Electron physics
-    G4MultipleScattering* theElectronMultipleScattering;
+    G4eMultipleScattering* theElectronMultipleScattering;
     G4eIonisation* theElectronIonisation;
     G4eBremsstrahlung* theElectronBremsStrahlung;
   
     //Positron physics
-    G4MultipleScattering* thePositronMultipleScattering;
+    G4eMultipleScattering* thePositronMultipleScattering;
     G4eIonisation* thePositronIonisation; 
     G4eBremsstrahlung* thePositronBremsStrahlung;  
     G4eplusAnnihilation* theAnnihilation;
