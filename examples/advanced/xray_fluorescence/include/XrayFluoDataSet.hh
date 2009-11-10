@@ -32,7 +32,7 @@
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
-//
+//  2001 - 2009  Alfonso Mantero      Mantained
 // -------------------------------------------------------------------
 
 //for the documentation of this class see also G4EMDataSet class
@@ -84,6 +84,22 @@ public:
 
   const G4DataVector& GetEnergies(G4int) const { return *energies; }
   const G4DataVector& GetData(G4int) const { return *data; }
+  
+  virtual const G4DataVector& GetLogEnergies(G4int ) const { return *energies; }
+  virtual const G4DataVector& GetLogData(G4int ) const { return *data; }
+  //  void SetEnergiesData(G4DataVector* x, G4DataVector* data, G4int component=0) {;}
+  
+  virtual void SetLogEnergiesData(G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4int ) {;}
+
+  virtual G4bool LoadNonLogData(const G4String& ) {return false;}
+
+//  G4bool SaveData(const G4String& fileName) const {return 0;}
+
+
 
 private:
 
@@ -103,5 +119,7 @@ private:
   size_t numberOfBins;
 
 };
+
+
  
 #endif

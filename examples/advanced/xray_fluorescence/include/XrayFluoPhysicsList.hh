@@ -44,11 +44,14 @@
 //#include "XrayFluoDetectorConstruction.hh"
 //#include "XrayFluoMercuryConstruction.hh"
 
-class XrayFluoPhysicsListMessenger;
+/*
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
 class G4eIonisation;
+*/
+
+class XrayFluoPhysicsListMessenger;
 class XrayFluoDetectorConstruction;
 class XrayFluoPlaneDetectorConstruction;
 class XrayFluoMercuryDetectorConstruction;
@@ -103,9 +106,9 @@ public:
 
 private:
 
-  G4LowEnergyIonisation*  LeIoprocess;
-  G4LowEnergyPhotoElectric* LePeprocess;
-  G4LowEnergyBremsstrahlung* LeBrprocess;
+//  G4LowEnergyIonisation*  LeIoprocess;
+//  G4LowEnergyPhotoElectric* LePeprocess;
+//  G4LowEnergyBremsstrahlung* LeBrprocess;
   // G4eIonisation* eIoProcess; // modified
   XrayFluoPhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
