@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.78 2009-10-29 18:07:08 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.79 2009-11-10 20:30:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -277,10 +277,11 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
+  G4String partname = part.GetParticleName();
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
-           << " and particle " << part.GetParticleName()
+           << " and particle " << partname
 	   << " buildLambdaTable= " << buildLambdaTable
            << G4endl;
   }
@@ -289,12 +290,18 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     BuildLambdaTable();
     FindLambdaMax();
   }
-  if(0 < verboseLevel) PrintInfoDefinition();
+
+  // reduce printout for nuclear stopping
+  G4bool gproc = true;
+  if(GetProcessName() == "nuclearStopping" && 
+     partname != "GenericIon" && partname != "alpha") { gproc = false; } 
+
+  if(gproc && 0 < verboseLevel) { PrintInfoDefinition(); }
 
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
-           << " and particle " << part.GetParticleName()
+           << " and particle " << partname
            << G4endl;
   }
 }
