@@ -18,6 +18,15 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+10-Nov-2009 M.Kosov                            (hadr-chips-V09-02-18)
+-----------------------------------------------------------------------
+Mutual tag: Diffraction is added to CHIPS inelastic
+
+5-Nov-2009 M.Kosov                             (hadr-chips-V09-02-17)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in XS's & migration of G4QNeutronCaptureRatio from
+            body to interface
+
 4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-16)
 -----------------------------------------------------------------------
 Mutual tag: Thanks to Andrea bug fix (skip for Z=0,A=0 residual nucleus)

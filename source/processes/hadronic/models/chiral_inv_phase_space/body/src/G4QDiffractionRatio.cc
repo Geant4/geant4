@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.1 2009-11-10 17:13:46 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.2 2009-11-10 18:38:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions
-// Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-06
+// Created: M.V. Kossov, CERN/ITEP(Moscow), 25-OCT-01
+// The last update: M.V. Kossov, CERN/ITEP(Moscow) 10-Nov-09
 // 
 //=======================================================================
 // Short description: Difraction excitation is a part of the incoherent
@@ -54,11 +54,11 @@ G4QDiffractionRatio* G4QDiffractionRatio::GetPointer()
 // Calculation of pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
 G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4int tgN)
 {
-  static const G4double mNeut= G4QPDGCode(2112).GetMass();
-  static const G4double mProt= G4QPDGCode(2212).GetMass();
-  static const G4double mN=.5*(mNeut+mProt);
-  static const G4double dmN=mN+mN;
-  static const G4double mN2=mN*mN;
+  static const G4double mNeut= .001*G4QPDGCode(2112).GetMass(); // in GeV
+  static const G4double mProt= .001*G4QPDGCode(2212).GetMass(); // in GeV
+  static const G4double mN=.5*(mNeut+mProt);  // mean nucleon mass in GeV
+  static const G4double dmN=mN+mN;            // doubled nuc. mass in GeV
+  static const G4double mN2=mN*mN;            // squared nuc. mass in GeV^2
   // Table parameters
   static const G4int    nps=100;        // Number of steps in the R(s) LinTable
   static const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
@@ -105,10 +105,10 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   G4double pM=G4QPDGCode(pPDG).GetMass()*.001; // Projectile mass in GeV
   G4double pM2=pM*pM;
   G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
-  G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom));
+  G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom)); // in GeV
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
   //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
-  if(nDB && lastA==A && s==lastS) return lastR;   // VI do not use toler
+  if(nDB && lastA==A && s==lastS) return lastR;   // VI do not use tolerance
   if(s>ms)
   {
     lastR=CalcDiff2Prod_Ratio(s,A);     // @@ Probably user ought to be notified about bigS
@@ -139,29 +139,20 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
       sv+=ds;
       lastT[j]=CalcDiff2Prod_Ratio(sv,A);
     }
-    if(s>sma)                           // Initialize the logarithmic Table
+    lastL=new G4double[mls];          // Create the logarithmic Table
+    G4double ls=std::log(s);
+    lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
+    if(lastK>nls)
     {
-      lastL=new G4double[mls];          // Create the logarithmic Table
-      G4double ls=std::log(s);
-      lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
-      if(lastK>nls)
-      {
-        lastK=nls;
-        lastM=lsa-lsi;
-      }
-      else lastM = lastK*dl;            // Calculate max initialized ln(s)-lsi for LogTab
-      sv=mi;
-      for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
-      {
-        lastL[j]=CalcDiff2Prod_Ratio(sv,A);
-        if(j!=lastK) sv*=edl;
-      }
+      lastK=nls;
+      lastM=lsa-lsi;
     }
-    else                                // LogTab is not initialized
+    else lastM = lastK*dl;            // Calculate max initialized ln(s)-lsi for LogTab
+    sv=mi;
+    for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
     {
-      lastL = 0;
-      lastK = 0;
-      lastM = 0.;
+      lastL[j]=CalcDiff2Prod_Ratio(sv,A);
+      if(j!=lastK) sv*=edl;
     }
     i++;                                // Make a new record to AMDB and position on it
     vA.push_back(lastA);

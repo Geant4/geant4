@@ -29,7 +29,7 @@
 //
 // GEANT4 physics class: G4QDiffractionRatio -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 10-Nov-2009
 //
 //=======================================================================
 // Short description: Difraction excitation is a part of the incoherent

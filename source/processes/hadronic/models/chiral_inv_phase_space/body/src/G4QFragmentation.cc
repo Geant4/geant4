@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.33 2009-11-04 11:01:59 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.34 2009-11-10 18:38:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -63,8 +63,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   static const G4double mProt= G4QPDGCode(2212).GetMass(); // Mass of proton
   static const G4double mProt2= mProt*mProt;               // SquaredMass of proton
   static const G4double mPi0= G4QPDGCode(111).GetMass();   // Mass of Pi0
-  theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
-  theQuasiElastic=G4QuasiFreeRatios::GetPointer();
+  theWorld= G4QCHIPSWorld::Get();                          // Pointer to CHIPS World
+  theQuasiElastic=G4QuasiFreeRatios::GetPointer();         // Pointer to CHIPS quasiElastic
+  theDiffraction=G4QDiffractionRatio::GetPointer();        // Pointer to CHIPS Diffraction
   theResult = new G4QHadronVector;        // Define theResultingHadronVector
   G4bool stringsInitted=false;            // Strings are initiated
   G4QHadron aProjectile = aPrimary;       // As a primary is const
@@ -110,9 +111,17 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   // Now we can make the Quasi-Elastic (@@ Better to select a nucleon from the perifery)
   std::pair<G4double,G4double> ratios=std::make_pair(0.,0.);
   G4int apPDG=std::abs(pPDG);
-  if(apPDG>99) ratios=theQuasiElastic->GetRatios(proj4M.vect().mag(), pPDG, tZ, tN);
-  if(apPDG>99 && G4UniformRand() < ratios.first*ratios.second)// Make Quasi-Elastic
+  G4double pMom=proj4M.vect().mag();      // proj. momentum in MeV (independent units)
+  if(apPDG>99)
   {
+   ratios = theQuasiElastic->GetRatios(pMom, pPDG, tZ, tN);
+   G4double qeRat = ratios.first*ratios.second;        // quasi-elastic part [qe/in]
+   G4double difRat= theDiffraction->GetRatio(pMom, pPDG, tZ, tN); // diffrPart [d/(in-qe)]
+   if(qeRat < 1.) difRat /= (1.-qeRat);
+   difRat += qeRat;                                    // for the diffraction selection
+   G4double rnd=G4UniformRand();
+   if(rnd < qeRat)                                     // --> Make Quasi-Elastic reaction
+   {
     theNucleus.StartLoop();                            // Prepare Loop ovder nucleons
     G4QHadron* pNucleon = theNucleus.GetNextNucleon(); // Get the next nucleon to try
     G4LorentzVector pN4M=pNucleon->Get4Momentum();     // Selected Nucleon 4-momentum
@@ -140,6 +149,24 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #endif
       return;                                          // The Quasielastic is the only act
     }
+   } // End of quasi-elastic reaction
+   else if(rnd < difRat)                               // --> Make diffractive reaction
+   {
+     G4QHadronVector* out=theDiffraction->TargFragment(pPDG, proj4M, tZ, tN);
+     G4int nSec=out->size();                           // #of secondaries in diffReaction
+     if(nSec>1) for(G4int i=0; i<nSec; i++) theResult->push_back((*out)[i]);
+     else if(nSec>0)
+     {
+#ifdef debug
+       G4cout<<"-Warning-G4QFragmentation::Construct: 1 secondary in Diffractionp 4M="
+             <<proj4M<<", s4M="<<(*out)[0]->Get4Momentum()<<G4endl;
+#endif
+       delete (*out)[0];
+     }
+     out->clear();                                     // Clean up the output QHadronVector
+     delete out;                                       // Delete the output QHadronVector
+     if(nSec>1) return;
+   } // End of diffraction
   }
 #ifdef edebug
   G4LorentzVector sum1=theNucleus.GetNucleons4Momentum(); // Sum ofNucleons4M inRotatedLS
