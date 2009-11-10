@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QBesIKJY.cc,v 1.3 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QBesIKJY.cc,v 1.4 2009-11-10 17:13:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QBesIKJY ----------------
@@ -33,6 +33,7 @@
 // -------------------------------------------------------------------
 // Short description: Bessel functions class (can be substituted)
 // -------------------------------------------------------------------
+
 //#define debug
 //#define pdebug
 
