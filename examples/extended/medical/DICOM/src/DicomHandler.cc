@@ -97,7 +97,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
     short readGroupId;    // identify the kind of input data 
     short readElementId;  // identify a particular type information
     short elementLength2; // deal with element length in 2 bytes
-    G4int elementLength4; // deal with element length in 4 bytes
+    unsigned int elementLength4; // deal with element length in 4 bytes
 
     char * data = new char[DATABUFFSIZE];
 
@@ -178,14 +178,14 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	          if(elementLength4 == 0xFFFFFFFF) {
 	          short momreadGroupId;
 		  short momreadElementId;
-		  G4int momelementLength4 ; // deal with element length in 4 bytes
+		  unsigned int momelementLength4 ; // deal with element length in 4 bytes
       		  G4cout << "Trying to read nested items!" << G4endl; // VR = SQ with undefined length
 		  while(true){
 			std::fread(buffer, 2, 1, dicom);
 			GetValue(buffer, momreadGroupId);
 			std::fread(buffer, 2, 1, dicom);
 			GetValue(buffer, momreadElementId);
-			G4int momtagDictionary = momreadGroupId*0x10000 + momreadElementId;
+			//G4int momtagDictionary = momreadGroupId*0x10000 + momreadElementId;
 			//G4cout << "TAG"<< std::hex << momtagDictionary << G4endl;
 			std::fread(buffer, 4, 1, dicom);
 			GetValue(buffer, momelementLength4);
@@ -214,12 +214,12 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
     std::ofstream foutG4DCM;
     G4String fnameG4DCM = G4String(filename2) + ".g4dcm";
     foutG4DCM.open(fnameG4DCM);
-    G4cout << " opened fnameG4DCM file " << fnameG4DCM << G4endl;
+    G4cout << "### Writing of " << fnameG4DCM << " ### " << G4endl;
 
     foutG4DCM << fMaterialIndices.size() << G4endl;
     //--- Write materials
-    size_t ii = 0;
-    std::map<G4double,G4String>::const_iterator ite;
+    unsigned int ii = 0;
+    std::map<G4float,G4String>::const_iterator ite;
     for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ite++, ii++ ){
       foutG4DCM << ii << " " << (*ite).second << G4endl;
     }
@@ -229,6 +229,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
     foutG4DCM << -pixelSpacingX*rows/2 << " " << pixelSpacingX*rows/2 << G4endl;
     foutG4DCM << -pixelSpacingY*columns/2 << " " << pixelSpacingY*columns/2 << G4endl;
     foutG4DCM << sliceLocation-sliceThickness/2. << " " << sliceLocation+sliceThickness/2. << G4endl;
+    //    foutG4DCM << compression << G4endl;
     
     ReadData( dicom, filename2 );
     
@@ -466,14 +467,14 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 
 void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
 {
-  size_t nMate;
+  unsigned int nMate;
   G4String mateName;
-  G4double densityMax;
+  G4float densityMax;
   finData >> nMate;
   if( finData.eof() ) return;
 
   G4cout << " ReadMaterialIndices " << nMate << G4endl;
-  for( size_t ii = 0; ii < nMate; ii++ ){
+  for( unsigned int ii = 0; ii < nMate; ii++ ){
     finData >> mateName >> densityMax;
     fMaterialIndices[densityMax] = mateName;
     G4cout << ii << " ReadMaterialIndices " << mateName << " " << densityMax << G4endl;
@@ -481,10 +482,9 @@ void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
 
 }
 
-size_t DicomHandler::GetMaterialIndex( G4double density )
+unsigned int DicomHandler::GetMaterialIndex( G4float density )
 {
-  size_t mateID;
-  std::map<G4double,G4String>::reverse_iterator ite;
+  std::map<G4float,G4String>::reverse_iterator ite;
   G4int ii = fMaterialIndices.size();
   for( ite = fMaterialIndices.rbegin(); ite != fMaterialIndices.rend(); ite++, ii-- ) {
     if( density >= (*ite).first ) {
@@ -543,21 +543,48 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     }
 
     // Creation of .g4 files wich contains averaged density data
-
     char * nameProcessed = new char[FILENAMESIZE];
-    FILE* processed;
+    FILE* fileOut;
 
-    std::sprintf(nameProcessed,"%s.g4",filename2);
-    processed = std::fopen(nameProcessed,"w+b");
+    std::sprintf(nameProcessed,"%s.g4dcmb",filename2);
+    fileOut = std::fopen(nameProcessed,"w+b");
     std::printf("### Writing of %s ###\n",nameProcessed);
 
-    std::fwrite(&rows, 2, 1, processed);
-    std::fwrite(&columns, 2, 1, processed);
-    std::fwrite(&pixelSpacingX, 8, 1, processed);
-    std::fwrite(&pixelSpacingY, 8, 1, processed);
-    std::fwrite(&sliceThickness, 8, 1, processed);
-    std::fwrite(&sliceLocation, 8, 1, processed);
-    std::fwrite(&compression, 2, 1, processed);
+    unsigned int nMate = fMaterialIndices.size();
+    std::fwrite(&nMate, sizeof(unsigned int), 1, fileOut);
+    //--- Write materials
+    std::map<G4float,G4String>::const_iterator ite;
+    for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ite++ ){
+      G4String mateName = (*ite).second;
+      for( G4int ii = (*ite).second.length(); ii < 40; ii++ ) {
+	mateName += " ";
+      }	 //mateName = const_cast<char*>(((*ite).second).c_str());
+
+      const char* mateNameC = mateName.c_str();
+      std::fwrite(mateNameC, sizeof(char),40, fileOut);
+    }
+
+    unsigned int rowsC = rows/compression;
+    unsigned int columnsC = columns/compression;
+    unsigned int planesC = 1;
+    G4float pixelLocationXM = -pixelSpacingX*rows/2.;
+    G4float pixelLocationXP = pixelSpacingX*rows/2.;
+    G4float pixelLocationYM = -pixelSpacingY*rows/2.;
+    G4float pixelLocationYP = pixelSpacingY*rows/2.;
+    G4float sliceLocationZM = sliceLocation-sliceThickness/2.;
+    G4float sliceLocationZP = sliceLocation+sliceThickness/2.;
+    //--- Write number of voxels (assume only one voxel in Z)
+    std::fwrite(&rowsC, sizeof(unsigned int), 1, fileOut);
+    std::fwrite(&columnsC, sizeof(unsigned int), 1, fileOut);
+    std::fwrite(&planesC, sizeof(unsigned int), 1, fileOut);
+    //--- Write minimum and maximum extensions
+    std::fwrite(&pixelLocationXM, sizeof(G4float), 1, fileOut);
+    std::fwrite(&pixelLocationXP, sizeof(G4float), 1, fileOut);
+    std::fwrite(&pixelLocationYM, sizeof(G4float), 1, fileOut);
+    std::fwrite(&pixelLocationYP, sizeof(G4float), 1, fileOut);
+    std::fwrite(&sliceLocationZM, sizeof(G4float), 1, fileOut);
+    std::fwrite(&sliceLocationZP, sizeof(G4float), 1, fileOut);
+    //    std::fwrite(&compression, sizeof(unsigned int), 1, fileOut);
 
     std::printf("%8i   %8i\n",rows,columns);
     std::printf("%8f   %8f\n",pixelSpacingX,pixelSpacingY);
@@ -567,46 +594,86 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 
     G4int compSize = compression;
     G4int mean;
-    G4double density;
+    G4float density;
     G4bool overflow = false;
     G4int cpt=1;
 
+    //----- Write index of material for each pixel
     if(compSize == 1) { // no compression: each pixel has a density value)
-	for( G4int ww = 0; ww < rows; ww++) {
-	    for( G4int xx = 0; xx < columns; xx++) {
-		mean = tab[ww][xx];
-		density = Pixel2density(mean);
-		std::fwrite(&density, sizeof(G4double), 1, processed);
-            }
-        }
+      for( G4int ww = 0; ww < rows; ww++) {
+	for( G4int xx = 0; xx < columns; xx++) {
+	  mean = tab[ww][xx];
+	  density = Pixel2density(mean);
+	  unsigned int mateID = GetMaterialIndex( density );
+	  std::fwrite(&mateID, sizeof(unsigned int), 1, fileOut);
+	}
+      }
 
     } else {
-	// density value is the average of a square region of
-	// compression*compression pixels
-	for(G4int ww = 0; ww < rows ;ww += compSize ) {
-	    for(G4int xx = 0; xx < columns ;xx +=compSize ) {
-		overflow = false;
-		mean = 0;
-		for(int sumx = 0; sumx < compSize; sumx++) {
-		    for(int sumy = 0; sumy < compSize; sumy++) {
-			if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
-			mean += tab[ww+sumy][xx+sumx];
-		    }
-		    if(overflow) break;
-		}
-		mean /= compSize*compSize;
-		cpt = 1;
-
-		if(!overflow) {
-		    G4double density = Pixel2density(mean);
-		    std::fwrite(&density, sizeof(G4double), 1, processed);
-		}
+      // density value is the average of a square region of
+      // compression*compression pixels
+      for(G4int ww = 0; ww < rows ;ww += compSize ) {
+	for(G4int xx = 0; xx < columns ;xx +=compSize ) {
+	  overflow = false;
+	  mean = 0;
+	  for(int sumx = 0; sumx < compSize; sumx++) {
+	    for(int sumy = 0; sumy < compSize; sumy++) {
+	      if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
+	      mean += tab[ww+sumy][xx+sumx];
 	    }
-
+	    if(overflow) break;
+	  }
+	  mean /= compSize*compSize;
+	  cpt = 1;
+	  
+	  if(!overflow) {
+	    density = Pixel2density(mean);
+	    unsigned int mateID = GetMaterialIndex( density );
+	    std::fwrite(&mateID, sizeof(unsigned int), 1, fileOut);
+	  }
 	}
+	
+      }
     }
-    std::fclose(processed);
 
+    //----- Write density for each pixel
+    if(compSize == 1) { // no compression: each pixel has a density value)
+      for( G4int ww = 0; ww < rows; ww++) {
+	for( G4int xx = 0; xx < columns; xx++) {
+	  mean = tab[ww][xx];
+	  density = Pixel2density(mean);
+	  std::fwrite(&density, sizeof(G4float), 1, fileOut);
+	}
+      }
+      
+    } else {
+      // density value is the average of a square region of
+      // compression*compression pixels
+      for(G4int ww = 0; ww < rows ;ww += compSize ) {
+	for(G4int xx = 0; xx < columns ;xx +=compSize ) {
+	  overflow = false;
+	  mean = 0;
+	  for(int sumx = 0; sumx < compSize; sumx++) {
+	    for(int sumy = 0; sumy < compSize; sumy++) {
+	      if(ww+sumy >= rows || xx+sumx >= columns) overflow = true;
+	      mean += tab[ww+sumy][xx+sumx];
+	    }
+	    if(overflow) break;
+	  }
+	  mean /= compSize*compSize;
+	  cpt = 1;
+	  
+	  if(!overflow) {
+	    density = Pixel2density(mean);
+	    std::fwrite(&density, sizeof(G4float), 1, fileOut);
+	  }
+	}
+	
+      }
+    }
+    
+    std::fclose(fileOut);
+    
     delete [] nameProcessed;
 
     /*    for ( G4int i = 0; i < rows; i ++ ) {
@@ -630,9 +697,9 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   }
 */
 
-G4double DicomHandler::Pixel2density(G4int pixel)
+G4float DicomHandler::Pixel2density(G4int pixel)
 {
-    G4double density = -1.;
+    G4float density = -1.;
     G4int nbrequali = 0;
     G4double deltaCT = 0;
     G4double deltaDensity = 0;
