@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.19 2009-03-23 21:18:20 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.20 2009-11-10 04:38:06 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,18 +148,6 @@ public: // With description
         G4OpBoundaryProcessStatus GetStatus() const;
         // Returns the current status.
 
-	G4double GetIncidentAngle();
-        // Returns the incident angle of optical photon
-
-	G4double GetReflectivity(G4double E1_perp,
-                                 G4double E1_parl,
-                                 G4double incidentangle,
-	                         G4double RealRindex,
-                                 G4double ImaginaryRindex);
-        // Returns the Reflectivity on a metalic surface
-
-        void CalculateReflectivity(void);
-
         void SetModel(G4OpticalSurfaceModel model);
 	// Set the optical surface model to be followed
         // (glisur || unified).
@@ -177,6 +165,20 @@ private:
 	void ChooseReflection();
 	void DoAbsorption();
 	void DoReflection();
+
+        G4double GetIncidentAngle();
+        // Returns the incident angle of optical photon
+
+        G4double GetReflectivity(G4double E1_perp,
+                                 G4double E1_parl,
+                                 G4double incidentangle,
+                                 G4double RealRindex,
+                                 G4double ImaginaryRindex);
+        // Returns the Reflectivity on a metalic surface
+
+        void CalculateReflectivity(void);
+
+        void BoundaryProcessVerbose(void) const;
 
 private:
 
