@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.21 2009-07-29 16:34:40 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.22 2009-11-11 12:23:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -461,8 +461,7 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
 {
   if (p == G4ThreeVector(0.,0.,0.))  { return p; }
 
-  G4ThreeVector dFrom;
-  G4double dOut2;
+  G4double dFrom, dOut2;
   
   dFrom = DistanceAway( p, false, dOut2 );
   
