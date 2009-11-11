@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.57 2009-11-04 15:05:21 mkossov Exp $
+// $Id: G4QCollision.cc,v 1.58 2009-11-11 17:45:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCollision class -----------------
@@ -220,19 +220,10 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
           incidentParticleDefinition == G4KaonZeroShort::KaonZeroShort() ||
           incidentParticleDefinition == G4KaonZero::KaonZero()           ||
           incidentParticleDefinition == G4AntiKaonZero::AntiKaonZero()   )
-          
-
   {
     CSmanager=G4QKaonZeroNuclearCrossSection::GetPointer();
     if(G4UniformRand() > 0.5) pPDG= 311;
     else                      pPDG=-311;
-  }
-  else if(incidentParticleDefinition == G4Electron::Electron() ||
-          incidentParticleDefinition == G4Positron::Positron())
-  {
-    CSmanager=G4QElectronNuclearCrossSection::GetPointer();
-    leptoNuc=true;
-    pPDG=11;
   }
   else if(incidentParticleDefinition == G4Lambda::Lambda())
   {

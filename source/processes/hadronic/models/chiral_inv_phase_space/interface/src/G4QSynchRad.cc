@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.cc,v 1.1 2009-11-10 17:05:22 mkossov Exp $
+// $Id: G4QSynchRad.cc,v 1.2 2009-11-11 17:45:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Created by Mikhail Kosov 6-Nov-2009
@@ -55,10 +55,16 @@ G4double G4QSynchRad::GetMeanFreePath(const G4Track& track,G4double,G4ForceCondi
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   *cond = NotForced ;
   G4double gamma = particle->GetTotalEnergy() / particle->GetMass();
+#ifdef debug
+  G4cout<<"G4QSynchRad::MeanFreePath: gamma = "<<gamma<<G4endl;
+#endif
   G4double MFP = DBL_MAX;
   if( gamma > 227. )                                // For smalle gamma neglect the process
   {
     G4double R = GetRadius(track);
+#ifdef debug
+    G4cout<<"G4QSynchRad::MeanFreePath: Radius = "<<R/meter<<" [m]"<<G4endl;
+#endif
     if(R > 0.) MFP= coef*R/gamma;
   }
 #ifdef debug
@@ -139,6 +145,7 @@ G4double G4QSynchRad::GetRadius(const G4Track& track)
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   G4double z = particle->GetDefinition()->GetPDGCharge();
   if(z == 0.) return 0.;                              // --> neutral particle
+  if(z < 0.) z=-z;
   G4TransportationManager* transMan = G4TransportationManager::GetTransportationManager();
   G4PropagatorInField* Field = transMan->GetPropagatorInField();
   G4FieldManager* fMan = Field->FindAndSetFieldManager(track.GetVolume());
@@ -149,11 +156,18 @@ G4double G4QSynchRad::GetRadius(const G4Track& track)
   G4double  BArray[3];
   pField->GetFieldValue(PosArray, BArray);
   G4ThreeVector B3D(BArray[0], BArray[1], BArray[2]);
+#ifdef debug
+  G4cout<<"G4QSynchRad::GetRadius: Pos="<<position/meter<<", B(tesla)="<<B3D/tesla<<G4endl;
+#endif
   G4ThreeVector MomDir = particle->GetMomentumDirection();
   G4ThreeVector Ort = B3D.cross(MomDir);
   G4double OrtB = Ort.mag();                          // not negative (independent units)
   if(OrtB == 0.) return 0.;                           // --> along the field line
   Polarization = Ort/OrtB;                            // Polarization unit vector
+  G4double mom = particle->GetTotalMomentum();        // Momentum of the particle
+#ifdef debug
+  G4cout<<"G4QSynchRad::GetRadius: P(GeV)="<<mom/GeV<<", B(tesla)="<<OrtB/tesla<<G4endl;
+#endif
   // R [m]= mom [GeV]/(0.3 * z * OrtB [tesla])
-  return particle->GetTotalMomentum() * unk / z / OrtB; 
+  return mom * unk / z / OrtB; 
 }
