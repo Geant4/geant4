@@ -1,44 +1,22 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4ContinuousGainOfEnergy.hh
+//      Class:		G4ContinuousGainOfEnergy
 //	Author:       	L. Desorgher
-//	Date:		10 May 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
 //      ChangeHistory: 
-//	 	10 May 2007 creation by L. Desorgher  		
+//	 	-10 May 2007 creation by L. Desorgher  
+//		-February-March 2009 Update for protons by L.Desorgher
+//		-July August 2009  Update for ion by L.Desorgher
 //
 //-------------------------------------------------------------
 //	Documentation:
-//		Continuous process acting on adjoint particles to compute the continuous gain of energy of charged particels whern they are tracked back! 
+//		Continuous process acting on adjoint particles to compute the continuous gain of energy of charged particles when they are tracked back! 
+//		
 //
 #ifndef G4ContinuousGainOfEnergy_h
 #define G4ContinuousGainOfEnergy_h 1
@@ -51,6 +29,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4VEnergyLossProcess.hh"
+#include "G4ProductionCutsTable.hh"
 
 
 class G4Step;
@@ -105,7 +84,7 @@ public:
   
   inline void SetDirectEnergyLossProcess(G4VEnergyLossProcess* aProcess){theDirectEnergyLossProcess=aProcess;};  
  
-  inline void SetDirectParticle(G4ParticleDefinition* p){theDirectPartDef=p;};
+  void SetDirectParticle(G4ParticleDefinition* p);
 
 protected:
 
@@ -115,6 +94,8 @@ protected:
 private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
+  void SetDynamicMassCharge(const G4Track& track, G4double energy);
+ 
  
   // hide  assignment operator
 
@@ -127,8 +108,11 @@ private:
   const G4Material*  currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t   currentMaterialIndex; 
+  size_t   currentCoupleIndex; 
   G4double currentTcut;
+  G4double currentCutInRange;
   G4double preStepKinEnergy;
+  
   
  
   G4double linLossLimit; 
@@ -141,6 +125,18 @@ private:
   
   G4bool is_integral;
   
+  //adding for Ions
+  //----------------
+  G4bool IsIon; 
+  G4double massRatio;
+  G4double chargeSqRatio;
+  G4VEmModel* currentModel; 
+  G4double preStepChargeSqRatio;
+  G4double preStepScaledKinEnergy;
+
+  
+  
+  
   
 };
 
@@ -152,30 +148,16 @@ inline void G4ContinuousGainOfEnergy::DefineMaterial(
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
-    currentMaterialIndex = couple->GetIndex();
-    currentTcut = couple->GetProductionCuts()->GetProductionCut(theDirectPartDef->GetParticleName());
+    currentCoupleIndex = couple->GetIndex();
+    currentMaterialIndex = currentMaterial->GetIndex();
+    
+    size_t idx=1;
+    const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
+    currentTcut=(*aVec)[currentCoupleIndex];
+    currentCutInRange = couple->GetProductionCuts()->GetProductionCut(theDirectPartDef->GetParticleName());
     //G4cout<<"Define Material"<<std::endl;
     //if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
-///////////////////////////////////////////////////////
-//
-inline G4double G4ContinuousGainOfEnergy::GetContinuousStepLimit(const G4Track& track,
-                G4double , G4double , G4double& )
-{ 
-  G4double x = DBL_MAX;
-  x=.1*mm;
- 
-  //G4cout<<x<<std::endl;
-  DefineMaterial(track.GetMaterialCutsCouple());
-  preStepKinEnergy = track.GetKineticEnergy();
-  G4double maxE=1.2*preStepKinEnergy;
-  G4double r = theDirectEnergyLossProcess->GetRange(preStepKinEnergy, currentCouple);
-  G4double r1 = theDirectEnergyLossProcess->GetRange(maxE, currentCouple);
-  x=std::max(r1-r,.1);
- 
-  return x;
-  
- 
-}
+
 #endif

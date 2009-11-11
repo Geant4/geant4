@@ -1,28 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
 
@@ -33,6 +8,7 @@
 #include "G4AdjointElectron.hh"
 #include "G4AdjointGamma.hh"
 #include "G4Gamma.hh"
+#include "G4KleinNishinaCompton.hh"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,12 +19,12 @@ G4AdjointComptonModel::G4AdjointComptonModel():
 { SetApplyCutInRange(false);
   SetUseMatrix(true);
   SetUseMatrixPerElement(true);
-  SetIsIonisation(false);
   SetUseOnlyOneMatrixForAllElements(true);
   theAdjEquivOfDirectPrimPartDef =G4AdjointGamma::AdjointGamma();
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
+  theDirectEMModel=new G4KleinNishinaCompton(G4Gamma::Gamma(),"ComptonDirectModel");
  
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,27 +46,16 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
    
    
   const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
-  //DefineCurrentMaterial(aTrack->GetMaterialCutsCouple());
-  size_t ind= 0;
-  
-  
- 
- 
- //Elastic inverse scattering //not correct in all the cases 
- //---------------------------------------------------------
- G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
- 
- //G4cout<<adjointPrimKinEnergy<<std::endl;
- if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
+  G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
+  if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
  	return;
- }
+  }
+ 
  
  //Sample secondary energy
  //-----------------------
  G4double gammaE1;
-
- gammaE1 = SampleAdjSecEnergyFromCSMatrix(ind,
- 						  adjointPrimKinEnergy,
+ gammaE1 = SampleAdjSecEnergyFromCSMatrix(adjointPrimKinEnergy,
 						  IsScatProjToProjCase);
  
  
@@ -140,9 +105,13 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
  
  //It is important to correct the weight of particles before adding the secondary
  //------------------------------------------------------------------------------
- CorrectPostStepWeight(fParticleChange, aTrack.GetWeight(), adjointPrimKinEnergy,gammaE1);
+ CorrectPostStepWeight(fParticleChange, 
+ 			aTrack.GetWeight(), 
+			adjointPrimKinEnergy,
+			gammaE1,
+			IsScatProjToProjCase);
  
- if (!IsScatProjToProjCase && CorrectWeightMode){ //kill the primary and add a secondary
+ if (!IsScatProjToProjCase){ //kill the primary and add a secondary
  	fParticleChange->ProposeTrackStatus(fStopAndKill);
  	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,gammaMomentum1));
 	//G4cout<<"gamma0Momentum "<<gamma0Momentum<<std::endl;
@@ -178,9 +147,11 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
 				      G4double Z, 
                                       G4double )
 { //Based on Klein Nishina formula
- //* In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised while the secondaries are sampled from the 
+ // In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised while
+ // the secondaries are sampled from the 
  // Klein Nishida differential cross section
- // The used diffrential cross section here is therefore the cross section multiplied by the normalidsed differential Klein Nishida cross section
+ // The used diffrential cross section here is therefore the cross section multiplied by the normalised 
+ //differential Klein Nishida cross section
  
  
  //Klein Nishida Cross Section

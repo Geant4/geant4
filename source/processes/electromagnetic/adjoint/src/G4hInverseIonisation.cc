@@ -1,26 +1,23 @@
 ///////////////////////////////////////////////////////
-// File name:     G4eInverseCompton
+// File name:     G4hInverseIonisation
 //
 // Author:        Laurent Desorgher
 //
-// Creation date: 20.11.2006
+// Creation date: 15.02.2009
 //
 ///////////////////////////////////////////////////////
-#include "G4eInverseCompton.hh"
+#include "G4hInverseIonisation.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4AdjointComptonModel.hh"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-G4eInverseCompton::G4eInverseCompton(G4bool whichScatCase,G4String process_name,G4AdjointComptonModel* aComptonAdjointModel):
+G4hInverseIonisation::G4hInverseIonisation(G4bool whichScatCase,G4String process_name,G4AdjointhIonisationModel* aEmAdjointModel):
 				G4VAdjointReverseReaction(process_name,whichScatCase)
-{theAdjointEMModel = aComptonAdjointModel;
+{theAdjointEMModel = aEmAdjointModel;
  theAdjointEMModel->SetSecondPartOfSameType(false);
- SetIntegralMode(false);
- /*if (IsScatProjToProjCase) SetIntegralMode(false);
- else   SetIntegralMode(true); */
+ SetIntegralMode(true); 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-G4eInverseCompton::~G4eInverseCompton(){
+G4hInverseIonisation::~G4hInverseIonisation(){
 }

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4eInverseCompton.hh
+//      Module:		G4hInverseIonisation.hh
 //	Author:       	L. Desorgher
 // 	Organisation: 	SpaceIT GmbH
 //	Contract:	ESA contract 21435/08/NL/AT
@@ -9,28 +9,27 @@
 // CHANGE HISTORY
 // --------------
 //      ChangeHistory: 
-//	 	25 October 2007 creation by L. Desorgher  		
+//	 	15 February 2009 creation by L. Desorgher  		
 //
 //-------------------------------------------------------------
 //	Documentation:
-//		Adjoint/reverse Compton
+//		Adjoint/reverse discrete ionisation for proton
 //
 
-
-#ifndef G4eInverseCompton_h
-#define G4eInverseCompton_h 1
+#ifndef G4hInverseIonisation_h
+#define G4hInverseIonisation_h 1
 
 #include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
 #include "G4eIonisation.hh"
-class G4AdjointComptonModel;
-class G4eInverseCompton: public G4VAdjointReverseReaction
+#include "G4AdjointhIonisationModel.hh"
+class G4hInverseIonisation: public G4VAdjointReverseReaction
 
 {
 public:
 
-  G4eInverseCompton(G4bool whichScatCase, G4String process_name, G4AdjointComptonModel* aEmAdjointModel);
-  ~G4eInverseCompton();
+  G4hInverseIonisation(G4bool whichScatCase, G4String process_name, G4AdjointhIonisationModel* aEmAdjointModel);
+  ~G4hInverseIonisation();
   
 private:
     

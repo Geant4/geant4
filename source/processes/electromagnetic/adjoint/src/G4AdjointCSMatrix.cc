@@ -1,34 +1,8 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
+
 #include "G4AdjointCSMatrix.hh"
 #include <iomanip>
 #include <fstream>
-
 #include "G4AdjointInterpolator.hh"
-
 ///////////////////////////////////////////////////////
 //
 G4AdjointCSMatrix::G4AdjointCSMatrix(G4bool aBool){
@@ -67,23 +41,22 @@ void G4AdjointCSMatrix::Clear()
 	 							       std::vector< G4double>* aLogProbVector,size_t n_pro_decade){
 	
 	G4AdjointInterpolator* theInterpolator=G4AdjointInterpolator::GetInstance();
-	//Add this time we consider that the energy are given monotically
 	
+	//At this time we consider that the energy is increasing monotically
 	theLogPrimEnergyVector.push_back(aLogPrimEnergy);
 	theLogCrossSectionVector.push_back(aLogCS);
 	theLogSecondEnergyMatrix.push_back(aLogSecondEnergyVector);
-	//G4cout<<"Test Add Data "<<this<<'\t'<<aSecondEnergyVector->size()<<std::endl;
-	//G4cout<<theSecondEnergyMatrix.size()<<std::endl;
 	theLogProbMatrix.push_back(aLogProbVector);
-	//G4cout<<"Test Add Data 1 "<<this<<'\t'<<aSecondEnergyVector->size()<<std::endl;
-	//G4cout<<theSecondEnergyMatrix.size()<<std::endl;
+	
 	std::vector< size_t>* aLogProbVectorIndex = 0;
 	dlog =0;
+	
 	if (n_pro_decade > 0 && aLogProbVector->size()>0) {
 		aLogProbVectorIndex = new std::vector< size_t>();
 		dlog=std::log(10.)/n_pro_decade;
 		G4double log_val = int(std::min((*aLogProbVector)[0],aLogProbVector->back())/dlog)*dlog;
 		log0Vector.push_back(log_val);
+		
 		while(log_val<0.) {
 			aLogProbVectorIndex->push_back(theInterpolator->FindPosition(log_val,(*aLogProbVector)));
 			log_val+=dlog;
@@ -108,15 +81,9 @@ bool G4AdjointCSMatrix::GetData(unsigned int i, G4double& aLogPrimEnergy,G4doubl
 	aLogPrimEnergy = theLogPrimEnergyVector[i];
 	aLogCS = theLogCrossSectionVector[i];
 	aLogSecondEnergyVector = theLogSecondEnergyMatrix[i];
-	//G4cout<<"Test Get Data "<<this<<'\t'<<theSecondEnergyMatrix[i]->size()<<std::endl;
-	//G4cout<<"Test Get Data "<<this<<'\t'<<aSecondEnergyVector->size()<<std::endl;
-	//G4cout<<"Test Get Data "<<this<<'\t'<<aSecondEnergyVector<<std::endl;
 	aLogProbVector = theLogProbMatrix[i];
 	aLogProbVectorIndex = theLogProbMatrixIndex[i];
 	log0=log0Vector[i];
-	//G4cout<<"Test Get Data 1 "<<this<<'\t'<<theProbMatrix[i]->size()<<std::endl;
-	//G4cout<<"Test Get Data 1 "<<this<<'\t'<<aProbVector->size()<<std::endl;
-	//G4cout<<"Test Get Data 1 "<<this<<'\t'<<aLogProbVectorIndex<<std::endl;
 	return true;
 	
 }
