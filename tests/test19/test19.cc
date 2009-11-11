@@ -110,8 +110,20 @@
 #include "G4PionMinusInelasticProcess.hh"
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
-//Does not work with shared libraries//#include "G4MuNuclearInteraction.hh"
+// CHIPS Cross-Sections
 #include "G4QMuonNuclearCrossSection.hh"
+#include "G4QProtonNuclearCrossSection.hh"
+#include "G4QNeutronNuclearCrossSection.hh"
+#include "G4QPionMinusNuclearCrossSection.hh"
+#include "G4QPionPlusNuclearCrossSection.hh"
+#include "G4QKaonPlusNuclearCrossSection.hh"
+#include "G4QKaonMinusNuclearCrossSection.hh"
+#include "G4QKaonZeroNuclearCrossSection.hh"
+#include "G4QHyperonNuclearCrossSection.hh"
+#include "G4QHyperonPlusNuclearCrossSection.hh"
+#include "G4QAntiBaryonPlusNuclearCrossSection.hh"
+#include "G4QAntiBaryonNuclearCrossSection.hh"
+// GHAD Cross-Sections
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
@@ -200,7 +212,7 @@ int main()
 {
   static const G4double mNuc=939*MeV;  // Nucleon mass for the visible energy estimate
 #ifdef csdebug
-  static const G4double T0=273*kelvin; // Room temperature for the XS tests
+  //GHAD//static const G4double T0=273*kelvin; // Room temperature for the XS tests
 #endif
 #ifdef ranseed
   //G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -761,36 +773,52 @@ int main()
      // ..... CHIPS on the Process level
      ///G4QCollision* HadrPR = new G4QCollision(); // CHIPS MuNuc
      // ..... CHIPS on the Cross-Section level
-     //G4VQCrossSection* HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // CHIPS MuNuc
+     G4VQCrossSection* HadrCS = 0;             // ProtoPointer to CHIPS CrossSections
+     if(pPDG==13 || pPDG==-13) HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // MuNuc
+     else if(pPDG==2212)    HadrCS = G4QProtonNuclearCrossSection::GetPointer(); // pA
+     else if(pPDG==2112)    HadrCS = G4QNeutronNuclearCrossSection::GetPointer(); // nA
+     else if(pPDG==-211)    HadrCS = G4QPionMinusNuclearCrossSection::GetPointer(); // pi-A
+     else if(pPDG== 211)    HadrCS = G4QPionPlusNuclearCrossSection::GetPointer(); // pi+A
+     else if(pPDG==-321)    HadrCS = G4QKaonMinusNuclearCrossSection::GetPointer(); // K-A
+     else if(pPDG== 321)    HadrCS = G4QKaonPlusNuclearCrossSection::GetPointer(); // K+A
+     else if(pPDG== 311 || pPDG==-311 || pPDG== 310 || pPDG== 130)
+                            HadrCS = G4QKaonZeroNuclearCrossSection::GetPointer(); // K0A
+     else if(pPDG==3222)    HadrCS = G4QHyperonPlusNuclearCrossSection::GetPointer();
+     else if(pPDG>3000 && pPDG<4000 && pPDG!=-3222)                                 // @@
+                            HadrCS = G4QHyperonNuclearCrossSection::GetPointer();
+     else if(pPDG==-3112 || pPDG==-3312 || pPDG==-3334)
+                            HadrCS = G4QAntiBaryonPlusNuclearCrossSection::GetPointer();
+     else if(pPDG>-4000 && pPDG<-2000 && pPDG!=-3112 && pPDG!=-3312 && pPDG!=-3334) // @@
+                            HadrCS = G4QAntiBaryonNuclearCrossSection::GetPointer();
      // ______ End of CHIPS/GHAD ___________
      //G4cout<<"Test19: before new Mu-Nuclear process"<<G4endl;
      // --- A temporary LOOP for calculation of total cross section ------------
-     //G4double pMin=.02;                            // in GeV --> for protons
-     G4double pMax=300.;                             // in GeV ==> for pions
-     //G4double pMax=10000000.;                      // in GeV --> np
-     //G4double pMax=1000.;                           // in GeV --> np->inelastic
-     //G4double pMin=.03;                            // in GeV --> np->dg
-     G4double pMin=.1;                               // in GeV --> for pions
-     //G4double pMin=.000004;                        // in GeV --> for neutrons
-     //G4double pMax=700.;                           // in GeV
-     G4int nic=50;                                   // Number of points
+     //G4double pMin=.02;                       // in GeV --> for protons
+     G4double pMax=300.;                       // in GeV ==> for pions
+     //G4double pMax=10000000.;                 // in GeV --> np
+     //G4double pMax=1000.;                     // in GeV --> np->inelastic
+     //G4double pMin=.03;                       // in GeV --> np->dg
+     G4double pMin=.07;                        // in GeV --> for pions
+     //G4double pMin=.000004;                   // in GeV --> for neutrons
+     //G4double pMax=700.;                      // in GeV
+     G4int nic=50;                             // Number of points
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
      G4double dlp=(lpMax-lpMin)/nic;
      G4double lmic=lpMin-dlp/2;
-     //G4double hMa=.938272;                         // Mass of a proton in GeV
-     G4double hMa=.13957;                            // Mass of a charged pion in GeV
-     G4double hMa2=hMa*hMa;
+     //G4double hMa=.938272;                    // Mass of a proton in GeV
+     //GHAD//G4double hMa=.13957;                      // Mass of a charged pion in GeV
+     //GHAD//G4double hMa2=hMa*hMa;
      G4cout<<"Test19: mi="<<lmic+dlp<<",ma="<<lmic+dlp*nic<<",d="<<dlp<<",n="<<nic<<", Z="
            <<tgZ<<", N="<<tgN<<", Element="<<*element<<G4endl;
      for(G4int ic=0; ic<nic; ic++)
      {
        lmic+=dlp;
-       G4double mic=std::exp(lmic);                // current Momentum in GeV
-       G4double p2=mic*mic;
-       G4double ken=std::sqrt(p2+hMa2)-hMa;
+       G4double mic=std::exp(lmic);            // current Momentum in GeV
+       //GHAD//G4double p2=mic*mic;
+       //GHAD//G4double ken=std::sqrt(p2+hMa2)-hMa;
        // CHIPS calculation by G4QElasticCrossSection___ Only for CHIPS CS level
-       //G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG); 
+       G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG);
        //
        // === From here CHECK of energy-momentum conservation starts ===
        //G4double den=0.;
@@ -832,7 +860,7 @@ int main()
        //  //G4cout<<"Test19: before aCange->Clear, nS="<<nS<<G4endl;
        //  aChange->Clear();
        //  //
-       dParticle->SetKineticEnergy(ken*GeV);   // Fill Kinetic Energy of thep rojectile
+       ///dParticle->SetKineticEnergy(ken*GeV);   // Fill Kinetic Energy of thep rojectile
        //  // GHAD Cross-section on process level
        //  //G4double MFP = HadrPR->GetMeanFreePath(*gTrack,.1,cond);
        // ..... GHAD on the Cross-Section level .... mu-nuclear
@@ -843,7 +871,7 @@ int main()
        // ..... GHAD on the Cross-Section level .... pions
        //G4double CS = theElasticXS.GetCrossSection(dParticle,element,T0) +
        //              theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
-       G4double CS = theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
+       //G4double CS = theInelasticXS.GetCrossSection(dParticle,element,T0);// GEISHA total
        //G4double ICS= barashPiXS.GetCrossSection(dParticle,element,T0);// BarashenkovPiAin
        //G4double ECS= barashPiXS.GetElasticXsc();// BarashenkovPiAin (call after GetCrSec)
        //G4double CS = barashPiXS.GetTotalXsc();// BarashenkovPiAtot (call after GetCrosSe)
