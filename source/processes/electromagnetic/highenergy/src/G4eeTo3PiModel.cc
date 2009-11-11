@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeTo3PiModel.cc,v 1.2 2009-02-20 16:38:33 vnivanch Exp $
+// $Id: G4eeTo3PiModel.cc,v 1.3 2009-11-11 17:13:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -130,7 +130,7 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
   G4double x1 = massPi/e;
 
   G4LorentzVector w0, w1, w2;
-  G4ThreeVector dir0, dir1, mom, mom1, mom2;
+  G4ThreeVector dir0, dir1;
   G4double e0, p0, e2, p, g, m01, m02, m12;
 
   // max pi0 energy
@@ -153,19 +153,27 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
     dir1 = G4RandomDirection();
     w2 = G4LorentzVector(p*dir1.x(),p*dir1.y(),p*dir1.z(),sqrt(e2));
     w2.boost(bst);
-    mom2 = w2.vect();
+    G4double px2 = w2.x();
+    G4double py2 = w2.y();
+    G4double pz2 = w2.z();
 
     // pi- 
     w1 -= w2;
-    mom1 = w2.vect();
+    G4double px1 = w1.x();
+    G4double py1 = w1.y();
+    G4double pz1 = w1.z();
 
     m01 = w0*w1;
     m02 = w0*w2;
     m12 = w1*w2;
 
-    mom = mom1*mom2;
-    g = mom.mag2()*norm( 1.0/cross->DpRho(m01) +  1.0/cross->DpRho(m02)
-			 + 1.0/cross->DpRho(m12) );
+    G4double px = py1*pz2 - py2*pz1;
+    G4double py = pz1*px2 - pz2*px1;
+    G4double pz = px1*py2 - px2*py1;
+
+    g = (px*px + py*py + pz*pz)*
+      norm( 1.0/cross->DpRho(m01) +  1.0/cross->DpRho(m02)
+	    + 1.0/cross->DpRho(m12) );
     if(g > gmax) {
       G4cout << "G4eeTo3PiModel::SampleSecondaries WARNING matrix element g= "
 	     << g << " > " << gmax << " (majoranta)" << G4endl;
