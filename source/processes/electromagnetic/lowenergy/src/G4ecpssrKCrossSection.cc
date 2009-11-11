@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrKCrossSection.cc,v 1.6 2009-09-27 10:47:42 sincerti Exp $
+//$Id: G4ecpssrKCrossSection.cc,v 1.7 2009-11-11 09:14:53 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -35,6 +35,7 @@
 //  21 Apr 2008   MGP        Major revision according to a design iteration
 //  21 Apr 2009	  ALF Some correction for compatibility to G4VShellCrossSection
 //		  and changed name to G4ecpssrKCrossSection 
+//  11 Nov 2009   ALF update and code cleaning for the Dec Release 
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -66,7 +67,7 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
     G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: G4LEDATA environment variable not set");
 
     std::ostringstream fileName;
-    fileName << path << "/pixe/FK.dat";
+    fileName << path << "/pixe/uf/FK.dat";
     std::ifstream FK(fileName.str().c_str());
 
     if (!FK) G4Exception("G4ecpssrKCrossSection::CalculateCrossSection: error opening FK data file");
@@ -95,15 +96,15 @@ G4ecpssrKCrossSection::G4ecpssrKCrossSection()
 
   // Storing C coefficients for high velocity formula
 
-  G4String fileC1("pixe/c1");
+  G4String fileC1("pixe/uf/c1");
   tableC1 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC1->LoadData(fileC1);
 
-  G4String fileC2("pixe/c2");
+  G4String fileC2("pixe/uf/c2");
   tableC2 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC2->LoadData(fileC2);
 
-  G4String fileC3("pixe/c3");
+  G4String fileC3("pixe/uf/c3");
   tableC3 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC3->LoadData(fileC3);
 

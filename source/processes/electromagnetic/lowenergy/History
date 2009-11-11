@@ -1,4 +1,4 @@
-$Id: History,v 1.398 2009-11-05 11:20:53 gcosmo Exp $
+$Id: History,v 1.399 2009-11-11 09:14:53 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.11.2009, A. Mantero tag emlowen-V09-02-61
+            PIXE code cleaning for the Dec review and update of G4hLowEnIonisation
+            in order to use new PIXE developments.
 
 05.11.2009, G. Cosmo, tag emlowen-V09-02-60
             replaced usage of M_PI with pi from CLHEP, to fix compilation

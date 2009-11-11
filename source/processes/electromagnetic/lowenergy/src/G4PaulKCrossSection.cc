@@ -28,6 +28,7 @@
 // -----------
 //  21 Apr 2008   H. Abdelohauwed - 1st implementation
 //  29 Apr 2009   ALF  Major Design Revision
+//  11 Nov 2009   ALF update and code cleaning for the Dec Release 
 //
 // -------------------------------------------------------------------
 
@@ -69,11 +70,11 @@ G4PaulKCrossSection::G4PaulKCrossSection()
 
     for (G4int i=4; i<93; i++) {
       protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonDataSetMap[i]->LoadData("kcsPaul/kcs-");
+      protonDataSetMap[i]->LoadData("pixe/kpcsPaul/kcs-");
     }
     for (G4int i=6; i<93; i++) {
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaDataSetMap[i]->LoadData("kacsPaul/kacs-");
+      alphaDataSetMap[i]->LoadData("pixe/kacsPaul/kacs-");
     }
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4ecpssrLiCrossSection.cc,v 1.6 2009-07-23 09:14:34 vnivanch Exp $
+//$Id: G4ecpssrLiCrossSection.cc,v 1.7 2009-11-11 09:14:53 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -35,6 +35,7 @@
 //  28 Apr 2008   MGP        Major revision according to a design iteration
 //  29 Apr 2009   ALF Updated Desing for Integration
 //  02 May 2009   ALF + Haifa L1,L2,L3 Extensions
+//  11 Nov 2009   ALF code cleaning for the Dec release
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -64,8 +65,8 @@ G4ecpssrLiCrossSection::G4ecpssrLiCrossSection()
 
      std::ostringstream fileName1;
      std::ostringstream fileName2;
-    fileName1 << path << "/pixe/FL1.dat";
-    fileName2 << path << "/pixe/FL2.dat";
+    fileName1 << path << "/pixe/uf/FL1.dat";
+    fileName2 << path << "/pixe/uf/FL2.dat";
    
     std::ifstream FL1(fileName1.str().c_str());
     std::ifstream FL2(fileName1.str().c_str());
