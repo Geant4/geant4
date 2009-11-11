@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2009-05-14 13:58:50 arce Exp $
+$Id: History,v 1.15 2009-11-11 17:12:10 arce Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11 November 2009 - P.Arce (error_propagation-V09-02-02)
+- Avoid G4ThreeVector(double) constructor in G4ErrorMagFieldLimitProcess.cc
+
 14 May 2008 - P.Arce (error_propagation-V09-02-01) 
 - Inclusion of pion+/- and proton in physics list
 - Possibility to account for error deflation (needed to make 'smoothing')
