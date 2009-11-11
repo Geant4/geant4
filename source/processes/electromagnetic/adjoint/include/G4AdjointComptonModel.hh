@@ -9,7 +9,8 @@
 // CHANGE HISTORY
 // --------------
 //      ChangeHistory: 
-//	 	1 September 2007 creation by L. Desorgher  		
+//	 	1 September 2007 creation by L. Desorgher 
+//		11 November 2009 Implement the use of approximated diffCS as an alternative of CSMatrix. 		
 //
 //-------------------------------------------------------------
 //	Documentation:
@@ -22,6 +23,7 @@
 
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
+#include "G4VEmProcess.hh"
 class G4AdjointComptonModel: public G4VEmAdjointModel
 
 {
@@ -32,6 +34,9 @@ public:
   
   
   virtual void SampleSecondaries(const G4Track& aTrack,
+                                G4bool IsScatProjToProjCase,
+				G4ParticleChange* fParticleChange);
+  void RapidSampleSecondaries(const G4Track& aTrack,
                                 G4bool IsScatProjToProjCase,
 				G4ParticleChange* fParticleChange);
   
@@ -45,15 +50,22 @@ public:
                                       G4double kinEnergyProd, // kinetic energy of the secondary particle 
 				      G4double Z, 
                                       G4double A = 0.);
+ 
   virtual G4double GetSecondAdjEnergyMaxForScatProjToProjCase(G4double PrimAdjEnergy);
   virtual G4double GetSecondAdjEnergyMinForProdToProjCase(G4double PrimAdjEnergy);
-
+  
+  
+  virtual G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase);
 
   
   
-  			      
+  inline void SetDirectProcess(G4VEmProcess* aProcess){theDirectEMProcess = aProcess;};			      
   
 private:
+  G4VEmProcess* theDirectEMProcess;
+  G4double G4direct_CS;
   
     
 };

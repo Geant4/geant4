@@ -634,12 +634,14 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(const G4MaterialCutsCouple* a
 	else {
 		G4ParticleDefinition* theDirSecondPartDef = 
 			GetForwardParticleEquivalent(listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectSecondaryParticleDefinition());
-		size_t idx=-1;
+		size_t idx=56;
  		if (theDirSecondPartDef->GetParticleName() == "gamma") idx = 0;
 		else if (theDirSecondPartDef->GetParticleName() == "e-") idx = 1;
  		else if (theDirSecondPartDef->GetParticleName() == "e+") idx = 2;
-		const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
- 		Tlow =(*aVec)[aCouple->GetIndex()];
+		if (idx <56) {
+			const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
+ 			Tlow =(*aVec)[aCouple->GetIndex()];
+		}	
 		
 	
 	}
