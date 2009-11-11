@@ -1,4 +1,4 @@
-$Id: History,v 1.475 2009-11-10 19:28:41 vnivanch Exp $
+$Id: History,v 1.476 2009-11-11 23:22:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 09:  V.Ivant (emstand-V09-02-32)
+- G4BetheBlochModel - minor speedup inside CorrectionsAlongStep method
 
 10 November 09:  V.Ivant (emstand-V09-02-31)
 - G4BetheBlochModel, G4BraggModel, G4BraggIonModel - remove computations

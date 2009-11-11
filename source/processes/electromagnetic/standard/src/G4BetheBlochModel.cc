@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.33 2009-11-10 19:25:47 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.34 2009-11-11 23:22:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -283,13 +283,13 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					     G4double&,
 					     G4double length)
 {
-  const G4ParticleDefinition* p = dp->GetDefinition();
-  const G4Material* mat = couple->GetMaterial();
-  G4double preKinEnergy = dp->GetKineticEnergy();
-  G4double e = preKinEnergy - eloss*0.5;
-  if(e < 0.0) e = preKinEnergy*0.5;
-
   if(isIon) {
+    const G4ParticleDefinition* p = dp->GetDefinition();
+    const G4Material* mat = couple->GetMaterial();
+    G4double preKinEnergy = dp->GetKineticEnergy();
+    G4double e = preKinEnergy - eloss*0.5;
+    if(e < 0.0) e = preKinEnergy*0.5;
+
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
     eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
