@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.34 2009-11-10 18:38:37 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.35 2009-11-11 08:48:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -111,9 +111,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   // Now we can make the Quasi-Elastic (@@ Better to select a nucleon from the perifery)
   std::pair<G4double,G4double> ratios=std::make_pair(0.,0.);
   G4int apPDG=std::abs(pPDG);
-  G4double pMom=proj4M.vect().mag();      // proj. momentum in MeV (independent units)
   if(apPDG>99)
   {
+   G4double pMom=proj4M.vect().mag();                  // proj.Momentum in MeV (indepUnits)
    ratios = theQuasiElastic->GetRatios(pMom, pPDG, tZ, tN);
    G4double qeRat = ratios.first*ratios.second;        // quasi-elastic part [qe/in]
    G4double difRat= theDiffraction->GetRatio(pMom, pPDG, tZ, tN); // diffrPart [d/(in-qe)]
@@ -152,6 +152,10 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
    } // End of quasi-elastic reaction
    else if(rnd < difRat)                               // --> Make diffractive reaction
    {
+#ifdef debug
+     G4cout<<"-->Dif-->G4QFragmentation::Construct: qe="<<qeRat<<", dif="<<difRat-qeRat
+           <<",P="<<proj4M.vect().mag()<<", tZ="<<tZ<<", tN="<<tN<<G4endl;
+#endif
      G4QHadronVector* out=theDiffraction->TargFragment(pPDG, proj4M, tZ, tN);
      G4int nSec=out->size();                           // #of secondaries in diffReaction
      if(nSec>1) for(G4int i=0; i<nSec; i++) theResult->push_back((*out)[i]);
