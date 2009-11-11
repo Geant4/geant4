@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.24 2009-09-14 22:41:24 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.25 2009-11-11 03:20:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1150,3 +1150,15 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
 }
 
+/////////////////////////////////////////////////////////////
+G4double G4ProductionCutsTable::GetMaxEnergyCut()
+{
+  return G4VRangeToEnergyConverter::GetMaxEnergyCut();
+}
+
+
+/////////////////////////////////////////////////////////////  
+void G4ProductionCutsTable::SetMaxEnergyCut(G4double value)
+{
+  G4VRangeToEnergyConverter::SetMaxEnergyCut(value);
+}

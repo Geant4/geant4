@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.11 2009-09-14 07:48:20 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.12 2009-11-11 03:20:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,10 @@ class G4ProductionCutsTable
     G4double GetLowEdgeEnergy() const;
     G4double GetHighEdgeEnergy() const;
     // These methods get the limits of energy cuts for all particles.
+
+    //  get/set max cut energy of RangeToEnergy Converter for all particle type
+    G4double GetMaxEnergyCut();
+    void SetMaxEnergyCut(G4double value);
 
 
     void DumpCouples() const;
