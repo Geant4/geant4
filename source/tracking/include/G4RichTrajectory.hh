@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh,v 1.4 2006-06-29 21:15:23 gunter Exp $
+// $Id: G4RichTrajectory.hh,v 1.5 2009-11-12 09:09:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -94,6 +94,7 @@ private:
   G4VPhysicalVolume* fpInitialVolume;
   G4VPhysicalVolume* fpInitialNextVolume;
   const G4VProcess*  fpCreatorProcess;
+  G4double           fFinalKineticEnergy;
 
 };
 

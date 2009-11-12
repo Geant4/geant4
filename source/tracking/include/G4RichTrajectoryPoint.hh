@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.5 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4RichTrajectoryPoint.hh,v 1.6 2009-11-12 09:09:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -96,6 +96,7 @@ private:
   // Extended member data
   std::vector<G4ThreeVector>* fpAuxiliaryPointVector;
   G4double fTotEDep;
+  G4double fRemainingEnergy;
   const G4VProcess* fpProcess;
   G4double fPreStepPointGlobalTime;
   G4double fPostStepPointGlobalTime;

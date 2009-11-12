@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.6 2006-10-16 13:43:43 allison Exp $
+// $Id: G4RichTrajectory.cc,v 1.7 2009-11-12 09:09:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+#include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
 
 //#define G4ATTDEBUG
@@ -61,7 +62,8 @@ G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),
   fpInitialVolume(0),
   fpInitialNextVolume(0),
-  fpCreatorProcess(0)
+  fpCreatorProcess(0),
+  fFinalKineticEnergy(0.)
 {}
 
 G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
@@ -80,6 +82,9 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   fpRichPointsContainer = new RichTrajectoryPointsContainer;
   // Insert the first rich trajectory point (see note above)...
   fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aTrack));
+  // On construction, set final KE to initial KE.
+  // Final KE is updated at the addition of every step - see AppendStep.
+  fFinalKineticEnergy = aTrack->GetKineticEnergy();
 }
 
 G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
@@ -89,6 +94,7 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
   fpInitialNextVolume = right.fpInitialNextVolume;
   fpCreatorProcess = right.fpCreatorProcess;
   fpRichPointsContainer = new RichTrajectoryPointsContainer;
+  fFinalKineticEnergy = right.fFinalKineticEnergy;
   for(size_t i=0;i<right.fpRichPointsContainer->size();i++)
   {
     G4RichTrajectoryPoint* rightPoint =
@@ -113,6 +119,13 @@ G4RichTrajectory::~G4RichTrajectory()
 void G4RichTrajectory::AppendStep(const G4Step* aStep)
 {
   fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aStep));
+  // Except for first step, which is a sort of virtual step to start
+  // the track, compute the final energy.
+  if (aStep->GetTrack()->GetCurrentStepNumber() > 0) {
+    fFinalKineticEnergy =
+      aStep->GetPreStepPoint()->GetKineticEnergy() -
+      aStep->GetTotalEnergyDeposit();
+  }
 }
   
 void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
@@ -160,6 +173,10 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
     (*store)[ID] = G4AttDef(ID,"Creator Process Type Name",
 			    "Physics","","G4String");
 
+    ID = "FKE";
+    (*store)[ID] = G4AttDef(ID,"Final kinetic energy",
+			    "Physics","G4BestUnit","G4double");
+
   }
 
   return store;
@@ -182,6 +199,9 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     values->push_back(G4AttValue("CPN","User Defined",""));
     values->push_back(G4AttValue("CPTN","User",""));
   }
+
+  values->push_back
+    (G4AttValue("FKE",G4BestUnit(fFinalKineticEnergy,"Energy"),""));
 
 #ifdef G4ATTDEBUG
   G4cout << G4AttCheck(values,GetAttDefs());

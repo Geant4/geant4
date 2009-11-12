@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh,v 1.11 2006-06-29 21:15:27 gunter Exp $
+// $Id: G4SmoothTrajectory.hh,v 1.12 2009-11-12 09:09:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -94,6 +94,8 @@ public: // with description
    { return PDGCharge; }
    inline G4int GetPDGEncoding() const
    { return PDGEncoding; }
+   inline G4double GetInitialKineticEnergy() const
+   { return initialKineticEnergy; }
    inline G4ThreeVector GetInitialMomentum() const
    { return initialMomentum; }
 
@@ -108,7 +110,7 @@ public: // with description
 
    G4ParticleDefinition* GetParticleDefinition();
 
- // Get method for HEPRep style attributes
+// Get method for HEPRep style attributes
    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
@@ -122,6 +124,7 @@ public: // with description
   G4int                     PDGEncoding;
   G4double                  PDGCharge;
   G4String                  ParticleName;
+  G4double                  initialKineticEnergy;
   G4ThreeVector             initialMomentum;
 
 };

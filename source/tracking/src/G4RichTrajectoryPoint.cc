@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.cc,v 1.3 2006-09-27 20:42:52 asaim Exp $
+// $Id: G4RichTrajectoryPoint.cc,v 1.4 2009-11-12 09:09:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,6 +65,7 @@ G4Allocator<G4RichTrajectoryPoint> aRichTrajectoryPointAllocator;
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),
   fTotEDep(0.),
+  fRemainingEnergy(0.),
   fpProcess(0),
   fPreStepPointGlobalTime(0),
   fPostStepPointGlobalTime(0)
@@ -74,6 +75,7 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack):
   G4TrajectoryPoint(aTrack->GetPosition()),
   fpAuxiliaryPointVector(0),
   fTotEDep(0.),
+  fRemainingEnergy(aTrack->GetKineticEnergy()),
   fpProcess(0),
   fPreStepPointGlobalTime(aTrack->GetGlobalTime()),
   fPostStepPointGlobalTime(aTrack->GetGlobalTime())
@@ -86,6 +88,11 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
 {
   G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
   G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
+  if (aStep->GetTrack()->GetCurrentStepNumber() <= 0) {  // First step
+    fRemainingEnergy = aStep->GetTrack()->GetKineticEnergy();
+  } else {
+    fRemainingEnergy = preStepPoint->GetKineticEnergy() - fTotEDep;
+  }
   fpProcess = postStepPoint->GetProcessDefinedStep();
   fPreStepPointGlobalTime = preStepPoint->GetGlobalTime();
   fPostStepPointGlobalTime = postStepPoint->GetGlobalTime();
@@ -123,6 +130,7 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint
   G4TrajectoryPoint(right),
   fpAuxiliaryPointVector(right.fpAuxiliaryPointVector),
   fTotEDep(right.fTotEDep),
+  fRemainingEnergy(right.fRemainingEnergy),
   fpProcess(right.fpProcess),
   fPreStepPointGlobalTime(right.fPreStepPointGlobalTime),
   fPostStepPointGlobalTime(right.fPostStepPointGlobalTime)
@@ -159,6 +167,9 @@ G4RichTrajectoryPoint::GetAttDefs() const
     ID = "TED";
     (*store)[ID] = G4AttDef(ID,"Total Energy Deposit",
 			    "Physics","G4BestUnit","G4double");
+    ID = "RE";
+    (*store)[ID] = G4AttDef(ID,"Remaining Energy",
+			    "Physics","G4BestUnit","G4double");
     ID = "PDS";
     (*store)[ID] = G4AttDef(ID,"Process Defined Step",
 			    "Physics","","G4String");
@@ -189,6 +200,8 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
   }
 
   values->push_back(G4AttValue("TED",G4BestUnit(fTotEDep,"Energy"),""));
+
+  values->push_back(G4AttValue("RE",G4BestUnit(fRemainingEnergy,"Energy"),""));
 
   if (fpProcess) {
     values->push_back
