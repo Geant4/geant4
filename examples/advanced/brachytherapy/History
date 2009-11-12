@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.28 2009-11-12 02:50:51 cirrone Exp $
+$Id: History,v 1.29 2009-11-12 10:34:31 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,10 @@ $Id: History,v 1.28 2009-11-12 02:50:51 cirrone Exp $
                       Category History file
                       ---------------------
 
-12 Nov. 2009 - S. Guatelli;
+12 Nov 2009 - L. Pandola; tag brachy-V09-02-02
+ Fixed AIDA 
+
+12 Nov. 2009 - S. Guatelli; brachy-V09-02-01
 - Update of Physics List
 
 22.Feb 2009 - G.Folger;  tag brachy-V09-02-00
