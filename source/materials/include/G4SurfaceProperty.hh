@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.9 2009-04-21 15:35:45 gcosmo Exp $
+// $Id: G4SurfaceProperty.hh,v 1.10 2009-11-12 00:53:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,7 @@ enum G4SurfaceType
 {
    dielectric_metal,            // dielectric-metal interface
    dielectric_dielectric,       // dielectric-dielectric interface
+   dielectric_LUT,              // dielectric-Look-Up-Table interface
    firsov,                      // for Firsov Process
    x_ray                        // for x-ray mirror process
 };
