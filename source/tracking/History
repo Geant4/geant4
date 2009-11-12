@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2009-11-10 16:39:32 ldesorgh Exp $
+$Id: History,v 1.132 2009-11-12 09:09:56 allison Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -18,10 +18,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 Nov 2009 J.Allison
+- G4Trajectory, G4SmoothTrajectory, G4RichTrajectory:
+  o Added initial kinetic energy.
+- G4RichTrajectory:
+  o Added final kinetic energy.
+- G4RichTrajectoryPoint:
+  o Added "remaining energy" at each step.
+
 10 Nov 2009 L. Desorgher(tracking-V09-02-03)
 - First commit of Adjoint classes in the tracking category
   New classes are: - G4AdjointCrossSurfChecker and G4AdjointSteppingAction
-
 
 24 Sep 2009 P.Gumplinger (tracking-V09-02-02)
 - Correction to G4SteppingManager::InvokeAtRestDoItProcs so G4Scintillation
