@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.4 2009-11-05 22:31:43 japost Exp $
+// $Id: G4NystromRK4.cc,v 1.5 2009-11-12 15:02:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -156,8 +156,11 @@ G4NystromRK4::Stepper
 
   // Normalize momentum
   //
-  G4double N = m_mom/sqrt(Po[3]*Po[3]+Po[4]*Po[4]+Po[5]*Po[5]);
-  Po [3]*=N; Po[4]*=N; Po[5]*=N; Po[6]=P[6]; Po[7]=P[7];
+  G4double normF = m_mom/sqrt(Po[3]*Po[3]+Po[4]*Po[4]+Po[5]*Po[5]);
+  Po [3]*=normF; Po[4]*=normF; Po[5]*=normF; 
+
+  // Pass Energy, time unchanged -- time is not integrated !!
+  Po[6]=P[6]; Po[7]=P[7];
 }
 
 
