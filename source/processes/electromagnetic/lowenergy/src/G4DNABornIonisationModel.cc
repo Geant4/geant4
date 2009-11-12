@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.13 2009-11-02 17:00:11 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.14 2009-11-12 03:08:58 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -467,12 +467,36 @@ G4double k, G4int shell)
     if ((k+waterStructure.IonisationEnergy(shell))/2. > k) maximumEnergyTransfer=k;
     else maximumEnergyTransfer = (k+waterStructure.IonisationEnergy(shell))/2.;
     
+// SI : original method
+/*
     G4double crossSectionMaximum = 0.;
     for(G4double value=waterStructure.IonisationEnergy(shell); value<=maximumEnergyTransfer; value+=0.1*eV)
     {
       G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
       if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
     }
+*/
+
+ 
+// SI : alternative method
+
+    G4double crossSectionMaximum = 0.;
+
+    G4double minEnergy = waterStructure.IonisationEnergy(shell);
+    G4double maxEnergy = maximumEnergyTransfer;
+    G4int nEnergySteps = 50;
+
+    G4double value(minEnergy);
+    G4double stpEnergy(std::pow(maxEnergy/value, 1./static_cast<G4double>(nEnergySteps-1)));
+    G4int step(nEnergySteps);
+    while (step>0)
+    {
+      step--;
+      G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
+      if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
+      value*=stpEnergy;
+    }
+//
  
     G4double secondaryElectronKineticEnergy=0.;
     do 
@@ -575,7 +599,7 @@ double G4DNABornIonisationModel::DifferentialCrossSection(G4ParticleDefinition *
       std::vector<double>::iterator t1 = t2-1;
 
       // SI : the following condition avoids situations where energyTransfer >last vector element
-      if (energyTransfer <= eVecm[(*t1)].back())
+      if (energyTransfer <= eVecm[(*t1)].back() && energyTransfer <= eVecm[(*t2)].back() )
       {
         std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
         std::vector<double>::iterator e11 = e12-1;

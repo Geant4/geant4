@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.1 2009-05-04 10:05:35 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.2 2009-11-12 03:13:46 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,22 +109,6 @@ void PhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4MultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyRayleigh.hh"
-
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-
-#include "G4hLowEnergyIonisation.hh"
-#include "G4StepLimiter.hh"
 
 /*
 // NON MIGRATED Geant4-DNA
