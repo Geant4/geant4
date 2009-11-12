@@ -1,4 +1,4 @@
-$Id: History,v 1.401 2009-11-12 10:05:30 sincerti Exp $
+$Id: History,v 1.402 2009-11-12 15:48:41 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.11.2009, A. Lechner tag emlowen-V09-02-64
+            -G4IonParametrisedLossModel: 
+             *) Moved from original ICRU 73 classes to new class (G4Ion-
+                StoppingData), which is capable of reading stopping power data 
+                files stored in G4LEDATA (requires G4EMLOW6.8): With the new 
+                tables the upper energy limit of ICRU 73 stopping powers is 
+                increased to 1 GeV/nucleon. 
+             *) Decision logic concerning stopping power scaling for heavy ions
+                was entirely moved to class G4IonDEDXScalingICRU73.
+             *) Introduced function for switching off scaling for heavy ions.
+             *) Removed nuclear stopping from model since dedicated process is 
+                available in standard EM package. 
+             *) Minor fixes were applied in energy loss computation.
+            - G4VIonDEDXScalingAlgorithm: Introduced additional argument for
+              energy scaling function.
+            - G4IonDEDXScalingICRU73: See model above. Adapted function
+              according to interface changes in G4VIonDEDXScalingAlgorithm
+            - G4IonDEDXHandler: Adapted function according to interface
+              changes in G4VIonDEDXScalingAlgorithm. Using new build methods
+              defined in G4VIonDEDXTable (contained in material package).
 
 12.11.2009, S. Incerti tag emlowen-V09-02-63
             -removed memory leak in G4DNACrossSectionDataSet.cc
