@@ -34,8 +34,13 @@
 //
 // First implementation: 11. 03. 2009
 //
-// Modifications: 
-//
+// Modifications: 12. 11 .2009 - Function BuildDEDXTable: Using adapted build 
+//                               methods of stopping power classes according
+//                               to interface change in G4VIonDEDXTable.
+//                               Function UpdateCacheValue: Using adapted
+//                               ScalingFactorEnergy function according to
+//                               interface change in G4VIonDEDXScaling-
+//                               Algorithm (AL)
 //
 // Class description:
 //    Ion dE/dx table handler. 
@@ -226,7 +231,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
   const G4String& chemFormula = material -> GetChemicalFormula();
   const G4String& materialName = material -> GetName();
 
-  isApplicable = table -> IsApplicable(atomicNumberBase, chemFormula);
+  isApplicable = table -> BuildPhysicsVector(atomicNumberBase, chemFormula);
 
   if(isApplicable) { 
      stoppingPowerTable[key] = 
@@ -234,7 +239,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
      return isApplicable;
   }
 
-  isApplicable = table -> IsApplicable(atomicNumberBase, materialName);
+  isApplicable = table -> BuildPhysicsVector(atomicNumberBase, materialName);
   if(isApplicable) { 
      stoppingPowerTable[key] = 
               table -> GetPhysicsVector(atomicNumberBase, materialName);
@@ -252,7 +257,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
       G4int atomicNumberMat = G4int((*elementVector)[i] -> GetZ());
 
-      isApplicable = table -> IsApplicable(atomicNumberBase, atomicNumberMat);
+      isApplicable = table -> BuildPhysicsVector(atomicNumberBase, atomicNumberMat);
 
       if(isApplicable) { 
 
@@ -338,7 +343,7 @@ G4CacheValue G4IonDEDXHandler::UpdateCacheValue(
  
      G4double nmbNucleons = G4double(particle -> GetAtomicMass());
      value.energyScaling = 
-            algorithm -> ScalingFactorEnergy(particle) / nmbNucleons;
+           algorithm -> ScalingFactorEnergy(particle, material) / nmbNucleons;
 
      size_t nmbdEdxBins = value.dedxVector -> GetVectorLength();
      value.lowerEnergyEdge = value.dedxVector -> GetLowEdgeEnergy(0);
