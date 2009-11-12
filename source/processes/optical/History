@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th Nov 2009 Peter Gumplinger (op-V09-02-05)
+              add capability of simulating surface reflections
+              with Look-Up-Tables (LUT) containing measured
+              optical reflectance for a variety of surface
+              treatments - Thanks to Martin Janecek and
+              William Moses (Lawrence Berkeley National Lab.)
+
 9th  Nov 2009 Peter Gumplinger (op-V09-02-04)
               G4OpBoundary: initialze theReflectivity and theEfficiency
               at the beginning of the PostStepDoIt; add method
