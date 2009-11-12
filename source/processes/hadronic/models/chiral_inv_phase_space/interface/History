@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12-Nov-2009 M.Kosov                            (hadr-chips-V09-02-20)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in G4QDiffractionRatio (tested by Valgrind)
+
 11-Nov-2009 M.Kosov                            (hadr-chips-V09-02-19)
 -----------------------------------------------------------------------
 Mutual tag: Bug fix in G4QSynchRad

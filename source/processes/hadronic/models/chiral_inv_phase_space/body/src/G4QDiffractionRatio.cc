@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.2 2009-11-10 18:38:37 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.3 2009-11-12 17:02:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,8 @@ G4QDiffractionRatio* G4QDiffractionRatio::GetPointer()
 // Calculation of pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
 G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4int tgN)
 {
-  static const G4double mNeut= .001*G4QPDGCode(2112).GetMass(); // in GeV
-  static const G4double mProt= .001*G4QPDGCode(2212).GetMass(); // in GeV
+  static const G4double mNeut= G4QPDGCode(2112).GetMass()/GeV; // in GeV
+  static const G4double mProt= G4QPDGCode(2212).GetMass()/GeV; // in GeV
   static const G4double mN=.5*(mNeut+mProt);  // mean nucleon mass in GeV
   static const G4double dmN=mN+mN;            // doubled nuc. mass in GeV
   static const G4double mN2=mN*mN;            // squared nuc. mass in GeV^2
@@ -77,19 +77,19 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   static G4double lastR=0.;             // Last ratio R which was calculated
   // Local Associative Data Base:
   static std::vector<G4int>     vA;     // Vector of calculated A
-  static std::vector<G4double>  vH;     // Vector of max sqs initialized in the LinTable
-  static std::vector<G4int>     vN;     // Vector of topBin number initialized in LinTable
-  static std::vector<G4double>  vM;     // Vector of relMax ln(sqs) initialized in LogTable
-  static std::vector<G4int>     vK;     // Vector of topBin number initialized in LogTable
+  //static std::vector<G4double>  vH;     // Vector of max sqs initialized in the LinTable
+  //static std::vector<G4int>     vN;     // Vector of topBin number initialized in LinTab
+  //static std::vector<G4double>  vM;     // Vector of relMax ln(sqs) initialized in LogTab
+  //static std::vector<G4int>     vK;     // Vector of topBin number initialized in LogTab
   static std::vector<G4double*> vT;     // Vector of pointers to LinTable in C++ heap
   static std::vector<G4double*> vL;     // Vector of pointers to LogTable in C++ heap
   // Last values of the Associative Data Base:
-  static G4int     lastPDG=0;           // Last PDG for which R was calculated (now indep)
+  //static G4int     lastPDG=0;           // Last PDG for which R was calculated (now fake)
   static G4int     lastA=0;             // theLast of calculated A
-  static G4double  lastH=0.;            // theLast of max sqs initialized in the LinTable
-  static G4int     lastN=0;             // theLast of topBin number initialized in LinTable
-  static G4double  lastM=0.;            // theLast of relMax ln(sqs) initialized in LogTab.
-  static G4int     lastK=0;             // theLast of topBin number initialized in LogTable
+  //static G4double  lastH=0.;            // theLast max sqs initialized in the LinTable
+  //static G4int     lastN=0;             // theLast of topBin number initialized in LinTab
+  //static G4double  lastM=0.;            // theLast relMax ln(sqs) initialized in LogTab
+  //static G4int     lastK=0;             // theLast of topBin number initialized in LogTab
   static G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
   static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
   // LogTable is created only if necessary. R(sqs>2981GeV) calcul by formula for any nuclei
@@ -100,15 +100,14 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     G4cout<<"-*-Warning-*-G4QuasiFreeRatio::GetRatio: A="<<A<<">238, return zero"<<G4endl;
     return 0.;
   }
-  lastPDG=pPDG;                         // @@ at present ratio is PDG independent @@
+  //lastPDG=pPDG;                         // @@ at present ratio is PDG independent @@
   // Calculate sqs
-  G4double pM=G4QPDGCode(pPDG).GetMass()*.001; // Projectile mass in GeV
+  G4double pM=G4QPDGCode(pPDG).GetMass()/GeV; // Projectile mass in GeV
   G4double pM2=pM*pM;
-  G4double mom=pIU/gigaelectronvolt;    // Projectile momentum in GeV
+  G4double mom=pIU/GeV;                 // Projectile momentum in GeV
   G4double s=std::sqrt(mN2+pM2+dmN*std::sqrt(pM2+mom*mom)); // in GeV
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
-  if(nDB && lastA==A && s==lastS) return lastR;   // VI do not use tolerance
+  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
   if(s>ms)
   {
     lastR=CalcDiff2Prod_Ratio(s,A);     // @@ Probably user ought to be notified about bigS
@@ -125,101 +124,105 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   {
     lastA = A;
     lastT = new G4double[mps];          // Create the linear Table
-    lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
-    if(lastN>nps)
-    {
-      lastN=nps;
-      lastH=sma;
-    }
-    else lastH = lastN*ds;              // Calculate max initialized s for LinTab
+    //lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
+    //if(lastN>nps)                     // ===> Now initialize all lin table
+    //{
+    //  lastN=nps;
+    //  lastH=sma;
+    //}
+    //else lastH = lastN*ds;              // Calculate max initialized s for LinTab
     G4double sv=0;
     lastT[0]=1.;
-    for(G4int j=1; j<=lastN; j++)       // Calculate LinTab values
+    //for(G4int j=1; j<=lastN; j++)       // Calculate LinTab values
+    for(G4int j=1; j<=nps; j++)       // Calculate LinTab values
     {
       sv+=ds;
       lastT[j]=CalcDiff2Prod_Ratio(sv,A);
     }
-    lastL=new G4double[mls];          // Create the logarithmic Table
-    G4double ls=std::log(s);
-    lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
-    if(lastK>nls)
-    {
-      lastK=nls;
-      lastM=lsa-lsi;
-    }
-    else lastM = lastK*dl;            // Calculate max initialized ln(s)-lsi for LogTab
+    lastL = new G4double[mls];          // Create the logarithmic Table
+    //G4double ls=std::log(s);
+    //lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
+    //if(lastK>nls)                     // ===> Now initialize all lin table
+    //{
+    //  lastK=nls;
+    //  lastM=lsa-lsi;
+    //}
+    //else lastM = lastK*dl;              // Calculate max initialized ln(s)-lsi for LogTab
     sv=mi;
-    for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
+    //for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
+    for(G4int j=0; j<=nls; j++)     // Calculate LogTab values
     {
       lastL[j]=CalcDiff2Prod_Ratio(sv,A);
-      if(j!=lastK) sv*=edl;
+      //if(j!=lastK) sv*=edl;
+      sv*=edl;
     }
     i++;                                // Make a new record to AMDB and position on it
     vA.push_back(lastA);
-    vH.push_back(lastH);
-    vN.push_back(lastN);
-    vM.push_back(lastM);
-    vK.push_back(lastK);
+    //vH.push_back(lastH);
+    //vN.push_back(lastN);
+    //vM.push_back(lastM);
+    //vK.push_back(lastK);
     vT.push_back(lastT);
     vL.push_back(lastL);
   }
   else                                  // The A value was found in AMDB
   {
     lastA=vA[i];
-    lastH=vH[i];
-    lastN=vN[i];
-    lastM=vM[i];
-    lastK=vK[i];
+    //lastH=vH[i];
+    //lastN=vN[i];
+    //lastM=vM[i];
+    //lastK=vK[i];
     lastT=vT[i];
     lastL=vL[i];
-    if(s>lastM)                          // At least LinTab must be updated
-    {
-      G4int nextN=lastN+1;               // The next bin to be initialized
-      if(lastN<nps)
-      {
-        lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
-        if(lastN>nps)
-        {
-          lastN=nps;
-          lastH=sma;
-        }
-        else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-        G4double sv=lastM;
-        for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
-        {
-          sv+=ds;
-          lastT[j]=CalcDiff2Prod_Ratio(sv,A);
-        }
-      } // End of LinTab update
-      if(lastN>=nextN)
-      {
-        vH[i]=lastH;
-        vN[i]=lastN;
-      }
-      G4int nextK=lastK+1;
-      if(s>sma && lastK<nls)             // LogTab must be updated
-      {
-        G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
-        G4double ls=std::log(s);
-        lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
-        if(lastK>nls)
-        {
-          lastK=nls;
-          lastM=lsa-lsi;
-        }
-        else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
-        for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
-        {
-          sv*=edl;
-          lastL[j]=CalcDiff2Prod_Ratio(sv,A);
-        }
-      } // End of LogTab update
-      if(lastK>=nextK)
-      {
-        vM[i]=lastM;
-        vK[i]=lastK;
-      }
-    }
+    // ==> Now all bins of the tables are initialized immediately for the A
+    //if(s>lastM)                          // At least LinTab must be updated
+    //{
+    //  G4int nextN=lastN+1;               // The next bin to be initialized
+    //  if(lastN<nps)
+    //  {
+    //    lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
+    //    if(lastN>nps)
+    //    {
+    //      lastN=nps;
+    //      lastH=sma;
+    //    }
+    //    else lastH = lastN*ds;           // Calculate max initialized s for LinTab
+    //    G4double sv=lastM;
+    //    for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
+    //    {
+    //      sv+=ds;
+    //      lastT[j]=CalcDiff2Prod_Ratio(sv,A);
+    //    }
+    //  } // End of LinTab update
+    //  if(lastN>=nextN)
+    //  {
+    //    vH[i]=lastH;
+    //    vN[i]=lastN;
+    //  }
+    //  G4int nextK=lastK+1;
+    //  if(s>sma && lastK<nls)             // LogTab must be updated
+    //  {
+    //    G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
+    //    G4double ls=std::log(s);
+    //    lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
+    //    if(lastK>nls)
+    //    {
+    //      lastK=nls;
+    //      lastM=lsa-lsi;
+    //    }
+    //    else lastM = lastK*dl;           // Calcul. max initialized ln(s)-lsi for LogTab
+    //    for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
+    //    {
+    //      sv*=edl;
+    //      lastL[j]=CalcDiff2Prod_Ratio(sv,A);
+    //    }
+    //  } // End of LogTab update
+    //  if(lastK>=nextK)
+    //  {
+    //    vM[i]=lastM;
+    //    vK[i]=lastK;
+    //  }
+    //}
   }
   // Now one can use tabeles to calculate the value
   if(s<sma)                             // Use linear table
@@ -240,7 +243,7 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
   if(lastR<0.) lastR=0.;
   if(lastR>1.) lastR=1.;
   return lastR;
-} // End of CalcDiff2Prod_Ratio
+} // End of GetRatio
 
 // Calculate Diffraction/Production Ratio as a function of total sq(s)(hN) (in GeV), A=Z+N
 G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
@@ -270,8 +273,7 @@ G4double G4QDiffractionRatio::CalcDiff2Prod_Ratio(G4double s, G4int A)
     G4double a8=a7*a;
     G4double a11=a8*a3;
     G4double a12=a8*a4;
-    G4double p=std::pow(a,0.37);
-    p1=(.023*p+3.5/a3+2.1e6/a12+4.e-14*a5)/(1.+7.6e-4*a*sa+2.15e7/a11);
+    p1=(.023*std::pow(a,0.37)+3.5/a3+2.1e6/a12+4.e-14*a5)/(1.+7.6e-4*a*sa+2.15e7/a11);
     p2=(1.42*std::pow(a,0.61)+1.6e5/a8+4.5e-8*a4)/(1.+4.e-8*a4+1.2e4/a6);
     G4double q=std::pow(a,0.7);
     p4=(.036/q+.0009*q)/(1.+6./a3+1.e-7*a3);
@@ -359,14 +361,14 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mP2=pr4M.m2();                  // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                       // Can be a problem for photon (m_min = 2*m_pi0)
   G4double s=tot4M.m2();                   // @@ Check <0 ...
-  G4double E=(s-mT2-mP2)/dmT;              // Effective interactinEnergy (virt.nucl.target)
+  G4double E=(s-mT2-mP2)/dmT;              // Effective interactionEnergy (virtNucl target)
   G4double E2=E*E;
-  if(E<0. || E2<mP2)
+  if(E<0. || E2<mP2)                       // Impossible to fragment: return projectile
   {
 #ifdef pdebug
-    G4cerr<<"_Warning-G4DifR::TFra:<NegativeEnergy>E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
+    G4cerr<<"-Warning-G4DifR::TFra:<NegativeEnergy>E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
 #endif
-    return ResHV;                          // Do Nothing Action
+    return ResHV;                          // *** Do Nothing Action ***
   }
   G4double mP=std::sqrt(mP2);              // Calculate mass of the projectile (to be exc.)
   if(mP<.1)mP=mPi0;                        // For photons minDiffraction is gam+P->P+Pi0
@@ -382,7 +384,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   if(mMin>=mMax)
   {
 #ifdef pdebug
-    G4cerr<<"Warning-G4DifR::TFra:ZeroDiffractionMRange, mi="<<mMin<<", ma="<<mMax<<G4endl;
+    G4cerr<<"-Warning-G4DifR::TFra:ZeroDiffractionMRange, mi="<<mMin<<",ma="<<mMax<<G4endl;
 #endif
     return ResHV;                          // Do Nothing Action
   }
@@ -455,14 +457,14 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4cout<<"G4QDifRat::TargFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
 #endif
   // Now everything is ready for fragmentation and DoNothing projHadron must be wiped out
-  ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
   delete hadron;     // Delete the fake (doNothing) projectile hadron
+  ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
   hadron = new G4QHadron(pPDG,r4M);     // Hadron for the recoil nucleon
   ResHV->push_back(hadron);             // Fill the recoil nucleon
 #ifdef debug
   G4cout<<"G4QDiffractionRatio::TargFragm: *Filled* LeadingNuc="<<r4M<<pPDG<<G4endl;
 #endif
-  G4QHadronVector* leadhs=new G4QHadronVector;// Quasmon Output G4QHadronVectorum --->---*
+  G4QHadronVector* leadhs = 0;   // Prototype of Quasmon Output G4QHadronVector  ---->---*
   G4QContent dQC=G4QPDGCode(rPDG).GetQuarkContent(); // QuarkContent of quasiFreeNucleon | 
   G4Quasmon* quasm = new G4Quasmon(dQC,d4M); // Quasmon=DiffractionExcitationQuasmon-*   |
 #ifdef debug
@@ -475,15 +477,14 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
 #endif
   try                                                           //                |  |   |
   {                                                             //                |  |   |
-    delete leadhs;                                              //                |  |   |
-    leadhs = pan->Fragment();// DESTROYED in the end of the LOOP work space       |  |   |
+    leadhs = pan->Fragment();// DESTROYED in the end of the LOOP work space       |  | <-|
   }                                                             //                |  |   |
   catch (G4QException& error)//                                                   |  |   |
   {                                                             //                |  |   |
     //#ifdef pdebug
-    G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |  |   |
+    G4cerr<<"***G4QDiffractionRatio::TargFrag: G4QException is catched"<<G4endl;//|  |   |
     //#endif
-    G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPSCrash");//|  |   |
+    G4Exception("G4QDiffractionRatio::TargFragm:","27",FatalException,"*Nucl");// |  |   |
   }                                                             //                |  |   |
   delete pan;                              // Delete the Nuclear Environment <-<--*--*   |
   G4int qNH=leadhs->size();                // A#of collected hadrons from diff.frag.     |
@@ -492,6 +493,7 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     G4QHadron* loh=(*leadhs)[iq];          // Pointer to the output hadron               |
     ResHV->push_back(loh);                 // Fill in the result                         |
   }                                        //                                            |
+  leadhs->clear();//                                                                     |
   delete leadhs; // <----<----<----<----<----<----<----<----<----<----<----<----<----<---*
   return ResHV; // Result
 } // End of TargFragment
@@ -561,7 +563,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   if(E<0. || E2<mP2)
   {
 #ifdef pdebug
-    G4cerr<<"_Warning-G4DifR::PFra:<NegativeEnergy>E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
+    G4cerr<<"-Warning-G4DifR::PFra:<NegativeEnergy>E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
 #endif
     return ResHV; // Do Nothing Action
   }
@@ -574,7 +576,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   if(mMin>=mMax)
   {
 #ifdef pdebug
-    G4cerr<<"Warning-G4DifR::PFra:ZeroDiffractionMRange, mi="<<mMin<<", ma="<<mMax<<G4endl;
+    G4cerr<<"-Warning-G4DifR::PFra:ZeroDiffractionMRange, mi="<<mMin<<",ma="<<mMax<<G4endl;
 #endif
     return ResHV; // Do Nothing Action
   }
@@ -645,8 +647,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4cout<<"G4QDiffR::ProjFragm:d4M="<<d4M<<"+r4M="<<r4M<<"="<<d4M+r4M<<"="<<tot4M<<G4endl;
 #endif
   // Now everything is ready for fragmentation and DoNothing projHadron must be wiped out
-  ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
   delete hadron;     // Delete the fake (doNothing) projectile hadron
+  ResHV->pop_back(); // Clean up pointer to the fake (doNothing) projectile
   hadron = new G4QHadron(tPDG,t4M);  // Hadron for the recoil neucleus
   ResHV->push_back(hadron);          // Fill the recoil nucleus
 #ifdef debug
@@ -659,7 +661,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
 #endif
   G4LorentzVector sum4M(0.,0.,0.,0.);
   // Now the (pPdg,d4M) Quasmon must be fragmented
-  G4QHadronVector* leadhs = new G4QHadronVector;// Prototype of QuasmOutput G4QHadronVector
+  G4QHadronVector* leadhs = 0;       // Prototype of QuasmOutput G4QHadronVector
   G4QContent dQC=G4QPDGCode(pPDG).GetQuarkContent(); // Quark Content of the projectile
   G4Quasmon* pan= new G4Quasmon(dQC,d4M); // --->---->---->----->-----> DELETED -->---*
   try                                                           //                    |
@@ -1292,6 +1294,7 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
     G4cout<<"G4QDR::PrFra:#"<<iq<<","<<loh->Get4Momentum()<<loh->GetPDGCode()<<G4endl;//|
 #endif
   }                                        //                                           |
+  leadhs->clear();//                                                                    |
   delete leadhs; // <----<----<----<----<----<----<----<----<----<----<----<----<----<--*
 #ifdef debug
   G4cout<<"G4QDiffractionRatio::ProjFragment: *End* Sum="<<sum4M<<" =?= d4M="<<d4M<<G4endl;

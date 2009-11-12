@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.cc,v 1.2 2009-11-11 17:45:29 mkossov Exp $
+// $Id: G4QSynchRad.cc,v 1.3 2009-11-12 17:02:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Created by Mikhail Kosov 6-Nov-2009
@@ -98,13 +98,15 @@ G4VParticleChange* G4QSynchRad::PostStepDoIt(const G4Track& track, const G4Step&
     return G4VDiscreteProcess::PostStepDoIt(track, step);
   }
   G4double EPhoton = hc * gamma * gamma * gamma / R;           // E_c
-  G4double rnd=G4UniformRand();
-  if(rnd < 0.3) EPhoton *= rnd * rnd * rnd;
+  G4double dd=5.e-8;
+  G4double rnd=G4UniformRand()*(1.+dd);
+  if     (rnd < 0.5 ) EPhoton *= .65 * rnd * rnd * rnd;
+  else if(rnd > .997) EPhoton *= 15.-1.03*std::log((1.-rnd)/dd+1.);
   else
   {
     G4double r2=rnd*rnd;
     G4double dr=1.-rnd;
-    EPhoton*=(6326.+127./rnd)/(1.+780./r2/r2+16000.*(std::sqrt(dr)+25.*dr*dr*dr));
+    EPhoton*=(2806.+28./rnd)/(1.+500./r2/r2+6500.*(std::sqrt(dr)+28.*dr*dr*dr));
   }
 #ifdef debug
   G4cout<<"G4SynchRad::PostStepDoIt: PhotonEnergy = "<<EPhoton/keV<<" [keV]"<<G4endl;

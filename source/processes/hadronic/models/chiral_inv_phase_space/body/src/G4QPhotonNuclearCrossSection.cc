@@ -125,7 +125,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       if(colN[i]==tgN && colZ[i]==tgZ)
       {
         lastI=i;
-        lastTH =colTH[i];                // Last THreshold (A-dependent)
+        lastTH =colTH[i];              // Last THreshold (A-dependent)
 #ifdef pdebug
         G4cout<<"G4QPhCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
@@ -136,11 +136,10 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
           G4cout<<"G4QPhCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-          return 0.;                     // Energy is below the Threshold value
+          return 0.;                   // Energy is below the Threshold value
         }
-        lastP  =colP [i];                // Last Momentum  (A-dependent)
-        lastCS =colCS[i];                // Last CrossSect (A-dependent)
- //        if(std::fabs(lastP/pMom-1.)<tolerance) // VI do not use tolerance
+        lastP  =colP [i];              // Last Momentum  (A-dependent)
+        lastCS =colCS[i];              // Last CrossSect (A-dependent)
         if(lastP == pMom)
         {
 #ifdef pdebug
@@ -149,7 +148,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
           CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // Update param's only
           return lastCS*millibarn;     // Use theLastCS
         }
-        in = true;                       // This is the case when the isotop is found in DB
+        in = true;                     // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
 #ifdef pdebug
         G4cout<<"G4QPhCS::G:UpdatDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
@@ -159,14 +158,14 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         G4cout<<"G4QPhCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-        if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
+        if(lastCS<=0. && pEn>lastTH)   // Correct the threshold
         {
 #ifdef pdebug
           G4cout<<"G4QPhCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
-        break;                           // Go out of the LOOP
+        break;                         // Go out of the LOOP
       }
 #ifdef pdebug
       G4cout<<"---G4QPhCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
@@ -230,7 +229,6 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  //  else if(std::fabs(lastP/pMom-1.)<tolerance) // VI (do not use tolerance)
   else if(lastP == pMom)
   {
 #ifdef pdebug

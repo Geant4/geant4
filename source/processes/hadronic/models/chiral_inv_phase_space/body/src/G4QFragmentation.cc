@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.35 2009-11-11 08:48:09 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.36 2009-11-12 17:02:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -117,7 +117,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
    ratios = theQuasiElastic->GetRatios(pMom, pPDG, tZ, tN);
    G4double qeRat = ratios.first*ratios.second;        // quasi-elastic part [qe/in]
    G4double difRat= theDiffraction->GetRatio(pMom, pPDG, tZ, tN); // diffrPart [d/(in-qe)]
-   if(qeRat < 1.) difRat /= (1.-qeRat);
+   if(qeRat < 1.) difRat /= (1.-qeRat)*.5;             // Double for Top/Bottom
    difRat += qeRat;                                    // for the diffraction selection
    G4double rnd=G4UniformRand();
    if(rnd < qeRat)                                     // --> Make Quasi-Elastic reaction
@@ -156,7 +156,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
      G4cout<<"-->Dif-->G4QFragmentation::Construct: qe="<<qeRat<<", dif="<<difRat-qeRat
            <<",P="<<proj4M.vect().mag()<<", tZ="<<tZ<<", tN="<<tN<<G4endl;
 #endif
-     G4QHadronVector* out=theDiffraction->TargFragment(pPDG, proj4M, tZ, tN);
+     G4QHadronVector* out=0;
+     if(G4UniformRand()>0.5) out=theDiffraction->TargFragment(pPDG, proj4M, tZ, tN);
+     else                    out=theDiffraction->ProjFragment(pPDG, proj4M, tZ, tN);
      G4int nSec=out->size();                           // #of secondaries in diffReaction
      if(nSec>1) for(G4int i=0; i<nSec; i++) theResult->push_back((*out)[i]);
      else if(nSec>0)
