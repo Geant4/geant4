@@ -36,8 +36,11 @@
 //
 // First implementation: 10. 05. 2009
 //
-// Modifications: 06. 08. 2009 -- Minor bug fix (initialization of cache) AL
-//
+// Modifications: 06. 08. 2009 - Minor bug fix (initialization of cache) AL
+//                12. 11. 2009 - Moved all decision logic concerning ICRU 73
+//                               scaling for heavy ions into this class.
+//                               Adapting ScalingFactorEnergy class according
+//                               to changes in base class (AL).
 //
 // Class description:
 //    dE/dx scaling algorithm applied on top of ICRU 73 data (for ions not
@@ -57,21 +60,29 @@
 
 G4IonDEDXScalingICRU73::G4IonDEDXScalingICRU73(
                           G4int minAtomicNumberIon,
-                          G4int maxAtomicNumberIon,
-                          G4int atomicNumberReference, 
-                          G4int massNumberReference) :
+                          G4int maxAtomicNumberIon) :
      minAtomicNumber( minAtomicNumberIon ),
      maxAtomicNumber( maxAtomicNumberIon ),
-     excludedIon( false ),
-     reference( 0 ),
-     atomicNumberRef( atomicNumberReference ),
-     massNumberRef( massNumberReference ),
+     referenceFe( 0 ),
+     atomicNumberRefFe( 26 ),
+     massNumberRefFe( 56 ),
+     atomicNumberRefPow23Fe( 0 ),
+     chargeRefFe( 0 ),
+     massRefFe( 0 ),
+     referenceAr( 0 ),
+     atomicNumberRefAr( 18 ),
+     massNumberRefAr( 40 ),
+     atomicNumberRefPow23Ar( 0 ),
+     chargeRefAr( 0 ),
+     massRefAr( 0 ),
+     useFe( true ),
      cacheParticle( 0 ),
      cacheMassNumber( 0 ),
      cacheAtomicNumber( 0 ),
      cacheAtomicNumberPow23( 0 ),
      cacheCharge( 0 ),
-     cacheMass( 0 ) { 
+     cacheMass( 0 ),
+     cacheMaterial( 0 ) { 
 
 }
 
@@ -83,20 +94,25 @@ G4IonDEDXScalingICRU73::~G4IonDEDXScalingICRU73() {
 
 // ###########################################################################
 
-void G4IonDEDXScalingICRU73::CreateReferenceParticle() {
-
+void G4IonDEDXScalingICRU73::CreateReferenceParticles() {
    
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
 
   G4double excitationEnergy = 0.0;
 
-  reference = 
-    particleTable -> GetIon(atomicNumberRef, massNumberRef, excitationEnergy); 
+  referenceFe = particleTable -> GetIon(atomicNumberRefFe, massNumberRefFe,  
+                                        excitationEnergy); 
+  referenceAr = particleTable -> GetIon(atomicNumberRefAr, massNumberRefAr, 
+                                        excitationEnergy); 
   
-  massRef = reference -> GetPDGMass();
-  chargeRef = reference -> GetPDGCharge();
+  massRefFe = referenceFe -> GetPDGMass();
+  massRefAr = referenceAr -> GetPDGMass();
 
-  atomicNumberRefPow23 = std::pow(G4double(atomicNumberRef), 2./3.);
+  chargeRefFe = referenceFe -> GetPDGCharge();
+  chargeRefAr = referenceAr -> GetPDGCharge();
+
+  atomicNumberRefPow23Fe = std::pow(G4double(atomicNumberRefFe), 2./3.);
+  atomicNumberRefPow23Ar = std::pow(G4double(atomicNumberRefAr), 2./3.);
 }
 
 
@@ -104,19 +120,25 @@ void G4IonDEDXScalingICRU73::CreateReferenceParticle() {
 
 
 G4double G4IonDEDXScalingICRU73::ScalingFactorEnergy (
-            const G4ParticleDefinition* particle) {    // Projectile (ion) 
+            const G4ParticleDefinition* particle,     // Projectile (ion) 
+            const G4Material* material) {             // Target material
                                                          
   G4double factor = 1.0;
  
-  UpdateCache(particle);
+  UpdateCacheParticle(particle);
+  UpdateCacheMaterial(material);
 
-  if(! excludedIon &&
-     cacheAtomicNumber >= minAtomicNumber &&
-     cacheAtomicNumber <= maxAtomicNumber) {
+  if(cacheAtomicNumber >= minAtomicNumber &&
+     cacheAtomicNumber <= maxAtomicNumber &&
+     cacheAtomicNumber != atomicNumberRefFe &&
+     cacheAtomicNumber != atomicNumberRefAr) {
 
-     if(reference == 0) CreateReferenceParticle();
+     if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
 
-     factor = cacheMassNumber * (massRef / cacheMass) / massNumberRef;
+     if( useFe )
+         factor = cacheMassNumber * (massRefFe / cacheMass) / massNumberRefFe;
+     else
+         factor = cacheMassNumber * (massRefAr / cacheMass) / massNumberRefAr;
   }
 
   return factor;
@@ -126,34 +148,58 @@ G4double G4IonDEDXScalingICRU73::ScalingFactorEnergy (
 
 G4double G4IonDEDXScalingICRU73::ScalingFactorDEDX(
              const G4ParticleDefinition* particle,     // Projectile (ion) 
-             const G4Material*,                        // Target material
+             const G4Material* material,               // Target material
              G4double kineticEnergy) {                 // Kinetic energy
 
   G4double factor = 1.0;
 
-  UpdateCache(particle);
+  UpdateCacheParticle(particle);
+  UpdateCacheMaterial(material);
 
-  if(! excludedIon &&
-     cacheAtomicNumber >= minAtomicNumber &&
-     cacheAtomicNumber <= maxAtomicNumber) {
+  if(cacheAtomicNumber >= minAtomicNumber &&
+     cacheAtomicNumber <= maxAtomicNumber &&
+     cacheAtomicNumber != atomicNumberRefFe &&
+     cacheAtomicNumber != atomicNumberRefAr) {
       
-      if(reference == 0) CreateReferenceParticle();
+      if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
 
-      G4double equilibriumCharge = EquilibriumCharge(cacheMass,
+      if( useFe ) {
+
+         G4double equilibriumCharge = EquilibriumCharge(cacheMass,
                                                      cacheCharge,
                                                      cacheAtomicNumberPow23,
                                                      kineticEnergy);
 
-      G4double scaledKineticEnergy = kineticEnergy * (massRef / cacheMass);
+         G4double scaledKineticEnergy = kineticEnergy * (massRefFe / cacheMass);
       
-      G4double equilibriumChargeRef = EquilibriumCharge(massRef,
-                                                        chargeRef,
-                                                        atomicNumberRefPow23,
+         G4double equilibriumChargeRefFe = EquilibriumCharge(massRefFe,
+                                                        chargeRefFe,
+                                                        atomicNumberRefPow23Fe,
                                                         scaledKineticEnergy);
 
-      factor = equilibriumCharge * equilibriumCharge/ 
-                ( equilibriumChargeRef * equilibriumChargeRef );
- }  
+         factor = equilibriumCharge * equilibriumCharge/ 
+                   ( equilibriumChargeRefFe * equilibriumChargeRefFe );
+
+      }
+      else {
+
+         G4double equilibriumCharge = EquilibriumCharge(cacheMass,
+                                                     cacheCharge,
+                                                     cacheAtomicNumberPow23,
+                                                     kineticEnergy);
+
+         G4double scaledKineticEnergy = kineticEnergy * (massRefAr / cacheMass);
+      
+         G4double equilibriumChargeRefAr = EquilibriumCharge(massRefAr,
+                                                        chargeRefAr,
+                                                        atomicNumberRefPow23Ar,
+                                                        scaledKineticEnergy);
+
+         factor = equilibriumCharge * equilibriumCharge/ 
+                   ( equilibriumChargeRefAr * equilibriumChargeRefAr );
+
+      }
+  }  
 
   return factor;
 }
@@ -162,27 +208,21 @@ G4double G4IonDEDXScalingICRU73::ScalingFactorDEDX(
 
 G4int G4IonDEDXScalingICRU73::AtomicNumberBaseIon(
              G4int atomicNumberIon,           // Atomic number of ion 
-             const G4Material*) {             // Target material
+             const G4Material* material) {    // Target material
+
+  UpdateCacheMaterial(material);
 
   G4int atomicNumber = atomicNumberIon;
 
   if(atomicNumberIon >= minAtomicNumber &&
-     atomicNumberIon <= maxAtomicNumber) {
- 
-     G4bool ionIsExcluded = false;
-     size_t nmb = excludedAtomicNumbers.size();
- 
-     for(size_t i = 0; i < nmb; i++) {
-        
-        if(atomicNumberIon == excludedAtomicNumbers[i]) 
-           ionIsExcluded = true;
-     }
+     atomicNumberIon <= maxAtomicNumber &&
+     atomicNumberIon != atomicNumberRefFe &&
+     atomicNumberIon != atomicNumberRefAr) {
 
-     if(! ionIsExcluded) {
-        if(reference == 0) CreateReferenceParticle();
+     if(referenceFe == 0 || referenceAr == 0) CreateReferenceParticles();
 
-        atomicNumber = atomicNumberRef;
-     }
+     if( useFe ) atomicNumber = atomicNumberRefFe;
+     else atomicNumber = atomicNumberRefAr;     
   }
 
   return atomicNumber;

@@ -36,8 +36,10 @@
 //
 // First implementation: 10. 05. 2009
 //
-// Modifications: 
-//
+// Modifications: 12. 11. 2009 - Moved all decision logic concerning ICRU 73
+//                               scaling for heavy ions into this class.
+//                               Adapting ScalingFactorEnergy class according
+//                               to changes in base class (AL).
 //
 // Class description:
 //    dE/dx scaling algorithm applied on top of ICRU 73 data (for ions not
@@ -52,22 +54,23 @@
 
 #include "globals.hh"
 #include "G4VIonDEDXScalingAlgorithm.hh"
+#include "G4Material.hh"
+#include "G4ParticleDefinition.hh"
 #include <vector>
 
 
 class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
 
  public:
-   G4IonDEDXScalingICRU73(G4int minAtomicNumberIon,
-                          G4int maxAtomicNumberIon,
-                          G4int atomicNumberReference, 
-                          G4int massNumberReference);
+   G4IonDEDXScalingICRU73(G4int minAtomicNumberIon = 19,
+                          G4int maxAtomicNumberIon = 102);
    ~G4IonDEDXScalingICRU73();
 
    // Function for scaling the kinetic energy (no scaling by default).
    // Returns scaling factor for a given ion.
    G4double ScalingFactorEnergy(
-           const G4ParticleDefinition* particle);      // Projectile (ion) 
+             const G4ParticleDefinition* particle,     // Projectile (ion) 
+             const G4Material* material);              // Target material
                                                          
 
    // Function for scaling the dE/dx value (no scaling by default).
@@ -86,13 +89,14 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
              G4int atomicNumberIon,           // Atomic number of ion 
              const G4Material*);              // Target material
 
-   void AddException(G4int atomicNumberIon);
-
  private:
-   void UpdateCache(
+   void UpdateCacheParticle(
              const G4ParticleDefinition* particle);    // Projectile (ion) 
 
-   void CreateReferenceParticle();
+   void UpdateCacheMaterial(
+             const G4Material* material);              // Target material 
+
+   void CreateReferenceParticles();
  
    G4double EquilibriumCharge(
              G4double mass,                            // Ion mass
@@ -105,17 +109,24 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    G4int minAtomicNumber;
    G4int maxAtomicNumber;
 
-   // Vector with atomic numbers excepted from scaling procedure
-   std::vector<G4int> excludedAtomicNumbers;
-   G4bool excludedIon;
+   // Some properties of reference particle (Fe) are stored for faster access
+   G4ParticleDefinition* referenceFe; 
+   G4int atomicNumberRefFe;
+   G4int massNumberRefFe;
+   G4double atomicNumberRefPow23Fe;
+   G4double chargeRefFe;
+   G4double massRefFe;
 
-   // Some properties of reference particles are stored for faster access
-   G4ParticleDefinition* reference; 
-   G4int atomicNumberRef;
-   G4int massNumberRef;
-   G4double atomicNumberRefPow23;
-   G4double chargeRef;
-   G4double massRef;
+   // Some properties of reference particle (Ar) are stored for faster access
+   G4ParticleDefinition* referenceAr; 
+   G4int atomicNumberRefAr;
+   G4int massNumberRefAr;
+   G4double atomicNumberRefPow23Ar;
+   G4double chargeRefAr;
+   G4double massRefAr;
+
+   // Flag indicating the use of Fe ions as reference particles
+   G4bool useFe;
 
    // Some properties of projectiles are stored for faster access
    const G4ParticleDefinition* cacheParticle;
@@ -124,12 +135,15 @@ class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
    G4double cacheAtomicNumberPow23;
    G4double cacheCharge;
    G4double cacheMass;
+
+   // Material pointer
+   const G4Material* cacheMaterial;
 };
 
 // ###########################################################################
 
-inline void G4IonDEDXScalingICRU73::UpdateCache (
-            const G4ParticleDefinition* particle) {    // Projectile (ion) 
+inline void G4IonDEDXScalingICRU73::UpdateCacheParticle (
+            const G4ParticleDefinition* particle) {   // Projectile (ion) 
 
   if(particle != cacheParticle) {
 
@@ -138,16 +152,25 @@ inline void G4IonDEDXScalingICRU73::UpdateCache (
      cacheMassNumber = particle -> GetAtomicMass();
      cacheCharge = particle -> GetPDGCharge();
      cacheMass = particle -> GetPDGMass();
-
      cacheAtomicNumberPow23 = std::pow(G4double(cacheAtomicNumber), 2./3.);
+  }
+}
 
-     excludedIon = false;
-     size_t nmb = excludedAtomicNumbers.size();
-     for(size_t i = 0; i < nmb; i++) {
-        
-        if(cacheAtomicNumber == excludedAtomicNumbers[i]) 
-           excludedIon = true;
-     }
+// ###########################################################################
+
+inline void G4IonDEDXScalingICRU73::UpdateCacheMaterial (
+            const G4Material* material) {            // Target material
+
+  if(cacheMaterial != material) {
+
+     cacheMaterial = material;
+
+     useFe = true;
+
+     size_t nmbElements = material -> GetNumberOfElements();
+     if( nmbElements > 1 ) useFe = false;
+
+     if( material -> GetName() == "G4_WATER" ) useFe = true;   
   }
 }
 
@@ -170,17 +193,6 @@ inline G4double G4IonDEDXScalingICRU73::EquilibriumCharge(
   G4double q1 = 1.0 - std::exp(-velOverBohrVel / atomicNumberPow);
  
   return q1 * charge;
-}
-
-// ###########################################################################
-
-inline void G4IonDEDXScalingICRU73::AddException(G4int atomicNumber) {
-
-  if(atomicNumber >= minAtomicNumber &&
-     atomicNumber <= maxAtomicNumber) {
-
-     excludedAtomicNumbers.push_back( atomicNumber );
-  }
 }
 
 // ###########################################################################
