@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2009-04-08 13:59:38 cirrone Exp $
+$Id: History,v 1.16 2009-11-12 13:09:56 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.15 2009-04-08 13:59:38 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2009 - A.Ribon (Rich-V09-02-01)
+             Added the possibility to use QGSP_BIC_EMY as 
+             Physics List. However, by default, the example's 
+             Physics List is used.
 
 08.04.2009 - G.A.P.Cirrone; Tag: Rich-V09-02-00
              Tag for the next release

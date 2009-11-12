@@ -43,10 +43,14 @@
 #include "RichTbIOData.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "QGSP_BIC_EMY.hh"
+
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
+
 #include "Randomize.hh"
+
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
@@ -76,15 +80,15 @@ int main(int argc,char** argv) {
    
    runManager->SetUserInitialization(RichTbDet);
    
-   RichTbPhysicsList* RichTbPhy
-     =new RichTbPhysicsList(rConfig);
-
-   runManager-> SetUserInitialization(RichTbPhy);
-
+   //***LOOKHERE*** : Choose the Physics List
+   RichTbPhysicsList* RichTbPhy =new RichTbPhysicsList(rConfig);
+   runManager->SetUserInitialization(RichTbPhy);        // Use example's Physics List
+   //runManager->SetUserInitialization(new QGSP_BIC_EMY); // Use QGSP_BIC_EMY
    
 
 // UserAction classes - optional
 
+ #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive();
   visManager->SetVerboseLevel(0);
   visManager->Initialize();
@@ -92,6 +96,7 @@ int main(int argc,char** argv) {
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
    G4cout<<" PVVisManager "<<pVVisManager<<G4endl;
    G4cout<<"VisManager "<<visManager<<G4endl;
+#endif
 
    runManager->SetUserAction(new RichTbRunAction);
 
@@ -100,9 +105,13 @@ int main(int argc,char** argv) {
 
    runManager->SetUserAction( PrimaryGenAction );
 
-   RichTbEventAction* eventAction=
-     new RichTbEventAction(rConfig,visManager,
-			   rIOData);
+ #ifdef G4VIS_USE
+   RichTbEventAction* eventAction=new RichTbEventAction(rConfig,visManager,rIOData);
+#endif
+
+ #ifndef G4VIS_USE
+   RichTbEventAction* eventAction=new RichTbEventAction(rConfig,0,rIOData);
+#endif
 
    runManager->SetUserAction(eventAction);
 
@@ -145,9 +154,8 @@ int main(int argc,char** argv) {
   }
 #ifdef G4VIS_USE
   delete visManager;
-#endif
-
   G4cout << "\nVisManager deleted..\n" <<G4endl;
+#endif
 
    delete runManager;
 
