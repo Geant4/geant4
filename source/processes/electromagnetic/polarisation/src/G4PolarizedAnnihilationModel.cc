@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.8 2009-04-12 17:47:58 vnivanch Exp $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.9 2009-11-12 12:57:15 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -348,7 +348,7 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
     G4cout<<"ERROR: PolarizedAnnihilation Polarization Vector at epsil = "
 	  <<epsil<<" is too large!!! \n"
 	  <<"annihi pol1= "<<finalGamma1Polarization<<", ("<<n1<<")\n";
-    finalGamma1Polarization+=1./std::sqrt(n1);
+    finalGamma1Polarization*=1./std::sqrt(n1);
   }
 
   // define polarization of first final state photon
@@ -379,7 +379,7 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
     G4cout<<"ERROR: PolarizedAnnihilation Polarization Vector at epsil = "<<epsil<<" is too large!!! \n";
     G4cout<<"annihi pol2= "<<finalGamma2Polarization<<", ("<<n2<<")\n";
     
-    finalGamma2Polarization+=1./std::sqrt(n2);
+    finalGamma2Polarization*=1./std::sqrt(n2);
   }
   finalGamma2Polarization.SetPhoton();
   finalGamma2Polarization.RotateAz(nInteractionFrame,Phot2Direction);
