@@ -58,6 +58,11 @@
 //                           off a metal surface by way of a complex index 
 //                           of refraction - Thanks to Sehwook Lee and John 
 //                           Hauptman (Dept. of Physics - Iowa State Univ.)
+//              2009-11-10 - add capability of simulating surface reflections
+//                           with Look-Up-Tables (LUT) containing measured
+//                           optical reflectance for a variety of surface
+//                           treatments - Thanks to Martin Janecek and
+//                           William Moses (Lawrence Berkeley National Lab.)
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -110,6 +115,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
+        surface_read = false;
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
@@ -405,6 +411,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
           // }
 
 	}
+        else if (type == dielectric_LUT) {
+
+          DielectricLUT();
+
+        }
 	else if (type == dielectric_dielectric) {
 
 	  if ( theFinish == polishedfrontpainted ||
@@ -467,6 +478,54 @@ void G4OpBoundaryProcess::BoundaryProcessVerbose() const
                 G4cout << " *** SpikeReflection *** " << G4endl;
         if ( theStatus == BackScattering )
                 G4cout << " *** BackScattering *** " << G4endl;
+        if ( theStatus == PolishedLumirrorAirReflection )
+                G4cout << " *** PolishedLumirrorAirReflection *** " << G4endl;
+        if ( theStatus == PolishedLumirrorGlueReflection )
+                G4cout << " *** PolishedLumirrorGlueReflection *** " << G4endl;
+        if ( theStatus == PolishedAirReflection )
+                G4cout << " *** PolishedAirReflection *** " << G4endl;
+        if ( theStatus == PolishedTeflonAirReflection )
+                G4cout << " *** PolishedTeflonAirReflection *** " << G4endl;
+        if ( theStatus == PolishedTiOAirReflection )
+                G4cout << " *** PolishedTiOAirReflection *** " << G4endl;
+        if ( theStatus == PolishedTyvekAirReflection )
+                G4cout << " *** PolishedTyvekAirReflection *** " << G4endl;
+        if ( theStatus == PolishedVM2000AirReflection )
+                G4cout << " *** PolishedVM2000AirReflection *** " << G4endl;
+        if ( theStatus == PolishedVM2000GlueReflection )
+                G4cout << " *** PolishedVM2000GlueReflection *** " << G4endl;
+        if ( theStatus == EtchedLumirrorAirReflection )
+                G4cout << " *** EtchedLumirrorAirReflection *** " << G4endl;
+        if ( theStatus == EtchedLumirrorGlueReflection )
+                G4cout << " *** EtchedLumirrorGlueReflection *** " << G4endl;
+        if ( theStatus == EtchedAirReflection )
+                G4cout << " *** EtchedAirReflection *** " << G4endl;
+        if ( theStatus == EtchedTeflonAirReflection )
+                G4cout << " *** EtchedTeflonAirReflection *** " << G4endl;
+        if ( theStatus == EtchedTiOAirReflection )
+                G4cout << " *** EtchedTiOAirReflection *** " << G4endl;
+        if ( theStatus == EtchedTyvekAirReflection )
+                G4cout << " *** EtchedTyvekAirReflection *** " << G4endl;
+        if ( theStatus == EtchedVM2000AirReflection )
+                G4cout << " *** EtchedVM2000AirReflection *** " << G4endl;
+        if ( theStatus == EtchedVM2000GlueReflection )
+                G4cout << " *** EtchedVM2000GlueReflection *** " << G4endl;
+        if ( theStatus == GroundLumirrorAirReflection )
+                G4cout << " *** GroundLumirrorAirReflection *** " << G4endl;
+        if ( theStatus == GroundLumirrorGlueReflection )
+                G4cout << " *** GroundLumirrorGlueReflection *** " << G4endl;
+        if ( theStatus == GroundAirReflection )
+                G4cout << " *** GroundAirReflection *** " << G4endl;
+        if ( theStatus == GroundTeflonAirReflection )
+                G4cout << " *** GroundTeflonAirReflection *** " << G4endl;
+        if ( theStatus == GroundTiOAirReflection )
+                G4cout << " *** GroundTiOAirReflection *** " << G4endl;
+        if ( theStatus == GroundTyvekAirReflection )
+                G4cout << " *** GroundTyvekAirReflection *** " << G4endl;
+        if ( theStatus == GroundVM2000AirReflection )
+                G4cout << " *** GroundVM2000AirReflection *** " << G4endl;
+        if ( theStatus == GroundVM2000GlueReflection )
+                G4cout << " *** GroundVM2000GlueReflection *** " << G4endl;
         if ( theStatus == Absorption )
                 G4cout << " *** Absorption *** " << G4endl;
         if ( theStatus == Detection )
@@ -487,7 +546,7 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 {
         G4ThreeVector FacetNormal;
 
-	if (theModel == unified) {
+	if (theModel == unified || theModel == LUT) {
 
 	/* This function code alpha to a random value taken from the
            distribution p(alpha) = g(alpha; 0, sigma_alpha)*std::sin(alpha),
@@ -641,6 +700,62 @@ void G4OpBoundaryProcess::DielectricMetal()
 	   }
 
 	} while (NewMomentum * theGlobalNormal < 0.0);
+}
+
+void G4OpBoundaryProcess::DielectricLUT()
+{
+        G4int thetaIndex, phiIndex;
+        G4double AngularDistributionValue, thetaRad, phiRad, EdotN;
+        G4ThreeVector PerpendicularVectorTheta, PerpendicularVectorPhi;
+
+        do {
+           if ( !G4BooleanRand(theReflectivity) ) // Not reflected, so Absorbed
+              DoAbsorption();
+           else {
+              // Calculate Angle between Normal and Photon Momentum
+              G4double anglePhotonToNormal = 
+                                          OldMomentum.angle(-theGlobalNormal);
+              // Round it to closest integer
+              G4int angleIncident = G4int(floor(180/pi*anglePhotonToNormal+0.5));
+
+              if (!surface_read) ReadFile();
+
+              // Take random angles THETA and PHI, 
+              // and see if below Probability - if not - Redo
+              do {
+                 thetaIndex = CLHEP::RandFlat::shootInt(thetaIndexMax-1);
+                 phiIndex = CLHEP::RandFlat::shootInt(phiIndexMax-1);
+                 // Find probability with the new indeces from LUT
+                 AngularDistributionValue =
+                   AngularDistribution[angleIncident+
+                                       thetaIndex*incidentIndexMax+
+                                       phiIndex*thetaIndexMax*incidentIndexMax];
+              } while ( !G4BooleanRand(AngularDistributionValue) );
+
+              thetaRad = (-90 + 4*thetaIndex)*pi/180;
+              phiRad = (-90 + 5*phiIndex)*pi/180;
+              // Rotate Photon Momentum in Theta, then in Phi
+              NewMomentum = -OldMomentum;
+              PerpendicularVectorTheta = NewMomentum.cross(theGlobalNormal);
+              if (PerpendicularVectorTheta.mag() > kCarTolerance ) {
+                 PerpendicularVectorPhi = 
+                                  PerpendicularVectorTheta.cross(NewMomentum);
+              }
+              else {
+                 PerpendicularVectorTheta = NewMomentum.orthogonal();
+                 PerpendicularVectorPhi =
+                                  PerpendicularVectorTheta.cross(NewMomentum);
+              }
+              NewMomentum =
+                 NewMomentum.rotate(anglePhotonToNormal-thetaRad,
+                                    PerpendicularVectorTheta);
+              NewMomentum = NewMomentum.rotate(-phiRad,PerpendicularVectorPhi);
+              // Rotate Polarization too:
+              theFacetNormal = (NewMomentum - OldMomentum).unit();
+              EdotN = OldPolarization * theFacetNormal;
+              NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
+           }
+        } while (NewMomentum * theGlobalNormal <= 0.0);
 }
 
 void G4OpBoundaryProcess::DielectricDielectric()
@@ -1011,4 +1126,101 @@ void G4OpBoundaryProcess::CalculateReflectivity()
   theReflectivity =
              GetReflectivity(E1_perp, E1_parl, incidentangle,
                                                  RealRindex, ImaginaryRindex);
+}
+
+void G4OpBoundaryProcess::ReadFile()
+{
+  G4String readFileName;
+
+  char* path = getenv("G4REALSURFACE");
+  if (!path) {
+     G4String excep = 
+        "G4OpBoundaryProcess - G4REALSURFACE environment variable not set";
+     G4Exception(excep);
+  }
+  G4String pathString(path);
+
+  if (theFinish == polishedlumirrorglue) {
+     readFileName = "PolishedLumirrorGlue.dat";
+  }
+  else if (theFinish == polishedlumirrorair) {
+     readFileName = "PolishedLumirror.dat";
+  }
+  else if (theFinish == polishedteflonair) {
+     readFileName = "PolishedTeflon.dat";
+  }
+  else if (theFinish == polishedtioair) {
+     readFileName = "PolishedTiO.dat";
+  }
+  else if (theFinish == polishedtyvekair) {
+     readFileName = "PolishedTyvek.dat";
+  }
+  else if (theFinish == polishedvm2000glue) {
+     readFileName = "PolishedVM2000Glue.dat";
+  }
+  else if (theFinish == polishedvm2000air) {
+     readFileName = "PolishedVM2000.dat";
+  }
+  else if (theFinish == etchedlumirrorglue) {
+     readFileName = "EtchedLumirrorGlue.dat";
+  }
+  else if (theFinish == etchedlumirrorair) {
+     readFileName = "EtchedLumirror.dat";
+  }
+  else if (theFinish == etchedteflonair) {
+     readFileName = "EtchedTeflon.dat";
+  }
+  else if (theFinish == etchedtioair) {
+     readFileName = "EtchedTiO.dat";
+  }
+  else if (theFinish == etchedtyvekair) {
+     readFileName = "EtchedTyvek.dat";
+  }
+  else if (theFinish == etchedvm2000glue) {
+     readFileName = "EtchedVM2000Glue.dat";
+  }
+  else if (theFinish == etchedvm2000air) {
+     readFileName = "EtchedVM2000.dat";
+  }
+  else if (theFinish == groundlumirrorglue) {
+     readFileName = "GroundLumirrorGlue.dat";
+  }
+  else if (theFinish == groundlumirrorair) {
+     readFileName = "GroundLumirror.dat";
+  }
+  else if (theFinish == groundteflonair) {
+     readFileName = "GroundTeflon.dat";
+  }
+  else if (theFinish == groundtioair) {
+     readFileName = "GroundTiO.dat";
+  }
+  else if (theFinish == groundtyvekair) {
+     readFileName = "GroundTyvek.dat";
+  }
+  else if (theFinish == groundvm2000glue) {
+     readFileName = "GroundVM2000Glue.dat";
+  }
+  else if (theFinish == groundvm2000air) {
+     readFileName = "GroundVM2000.dat";
+  }
+
+  readFileName = pathString + "/" + readFileName;
+
+  // Open LUT with Material and Integer Angle
+  FILE* readFileHandle;
+
+  readFileHandle = fopen(readFileName,"r");
+
+  if (readFileHandle!=NULL) {
+     for (int i=0;i<incidentIndexMax*thetaIndexMax*phiIndexMax;i++) {
+         fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+     }
+     G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+  }
+  else {
+     G4String excep = "LUT - data file: " + readFileName + " not found";
+     G4Exception(excep);
+  }
+  fclose(readFileHandle);
+  surface_read = true;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.20 2009-11-10 04:38:06 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.21 2009-11-12 00:48:05 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,11 @@
 //                           off a metal surface by way of a complex index
 //                           of refraction - Thanks to Sehwook Lee and John
 //                           Hauptman (Dept. of Physics - Iowa State Univ.)
+//              2009-11-10 - add capability of simulating surface reflections
+//                           with Look-Up-Tables (LUT) containing measured
+//                           optical reflectance for a variety of surface
+//                           treatments - Thanks to Martin Janecek and
+//                           William Moses (Lawrence Berkeley National Lab.)
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
@@ -94,6 +99,30 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   TotalInternalReflection,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
+                                  PolishedLumirrorAirReflection,
+                                  PolishedLumirrorGlueReflection,
+                                  PolishedAirReflection,
+                                  PolishedTeflonAirReflection,
+                                  PolishedTiOAirReflection,
+                                  PolishedTyvekAirReflection,
+                                  PolishedVM2000AirReflection,
+                                  PolishedVM2000GlueReflection,
+                                  EtchedLumirrorAirReflection,
+                                  EtchedLumirrorGlueReflection,
+                                  EtchedAirReflection,
+                                  EtchedTeflonAirReflection,
+                                  EtchedTiOAirReflection,
+                                  EtchedTyvekAirReflection,
+                                  EtchedVM2000AirReflection,
+                                  EtchedVM2000GlueReflection,
+                                  GroundLumirrorAirReflection,
+                                  GroundLumirrorGlueReflection,
+                                  GroundAirReflection,
+                                  GroundTeflonAirReflection,
+                                  GroundTiOAirReflection,
+                                  GroundTyvekAirReflection,
+                                  GroundVM2000AirReflection,
+                                  GroundVM2000GlueReflection,
                                   Absorption, Detection, NotAtBoundary,
                                   SameMaterial, StepTooSmall, NoRINDEX };
 
@@ -150,7 +179,7 @@ public: // With description
 
         void SetModel(G4OpticalSurfaceModel model);
 	// Set the optical surface model to be followed
-        // (glisur || unified).
+        // (glisur || unified || LUT).
 
 private:
 
@@ -161,6 +190,7 @@ private:
 
 	void DielectricMetal();
 	void DielectricDielectric();
+        void DielectricLUT();
 
 	void ChooseReflection();
 	void DoAbsorption();
@@ -179,6 +209,8 @@ private:
         void CalculateReflectivity(void);
 
         void BoundaryProcessVerbose(void) const;
+
+        void ReadFile(void);
 
 private:
 
@@ -220,6 +252,13 @@ private:
         G4int iTE, iTM;
 
         G4double kCarTolerance;
+
+        G4bool surface_read;
+        static const G4int incidentIndexMax = 91;
+        static const G4int thetaIndexMax = 45;
+        static const G4int phiIndexMax = 37;
+        G4float AngularDistribution[incidentIndexMax*thetaIndexMax*phiIndexMax];
+
 };
 
 ////////////////////
