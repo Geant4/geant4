@@ -53,6 +53,7 @@ public:
     particleType = 0;     // DHW: added to keep 4.3 compiler happy
     particleMass = 0.;    //            "              "
     valid_particle = false;
+    generation = 0;
   };
 
   G4InuclElementaryParticle(G4int type) 
@@ -457,6 +458,14 @@ public:
       " ekin " << getKineticEnergy() << G4endl; 
   };
 
+  void setGeneration(G4int gen) {
+    generation = gen;
+  }
+
+  G4int getGeneration() {
+    return generation;
+  }
+
 private: 
 
   G4int particleType;
@@ -464,6 +473,9 @@ private:
   G4double particleMass;
 
   G4bool valid_particle;
+
+  G4int generation;
+
 };        
 
 #endif // G4INUCL_ELEMENTARY_PARTICLE_HH 
