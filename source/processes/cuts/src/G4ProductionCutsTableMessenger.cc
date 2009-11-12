@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTableMessenger.cc,v 1.2 2009-11-11 03:20:22 kurasige Exp $
+// $Id: G4ProductionCutsTableMessenger.cc,v 1.3 2009-11-12 00:20:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,7 @@ G4ProductionCutsTableMessenger::G4ProductionCutsTableMessenger(   G4ProductionCu
   setHighEdgeCmd->AvailableForStates(G4State_PreInit);
  
   // /cuts/setMaxCutEnergy command
-  setMaxEnergyCutCmd = new G4UIcmdWithADoubleAndUnit("/cuts/setMaxCutEnregy",this);
+  setMaxEnergyCutCmd = new G4UIcmdWithADoubleAndUnit("/cuts/setMaxCutEnergy",this);
   setMaxEnergyCutCmd->SetGuidance("Set maximum of cut energy value ");
   setMaxEnergyCutCmd->SetParameterName("cut",false);
   setMaxEnergyCutCmd->SetDefaultValue(10.0);
