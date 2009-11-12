@@ -714,7 +714,7 @@ std::vector<G4CascadParticle> G4BertiniNucleiModel::generateParticleFate(G4Casca
 
 	  for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
 	    outgouing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
-							    new_position, zone, 0.0));
+							    new_position, zone, 0.0, 0));
 	  
 	  no_interaction = false;
 	  current_nucl1 = 0;
@@ -927,7 +927,7 @@ G4CascadParticle G4BertiniNucleiModel::initializeCascad(G4InuclElementaryParticl
   pos[1] = rz * std::sin(phi);
   pos[2] = -nuclei_radius * std::sqrt(1.0 - s1 * s1);
  
-  G4CascadParticle cpart(*particle, pos, number_of_zones, large);
+  G4CascadParticle cpart(*particle, pos, number_of_zones, large, 0);
 
   if (verboseLevel > 2){
     cpart.print();
@@ -1373,7 +1373,7 @@ G4BertiniNucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    coordinates[ip][1] += mom[2] * tr / pmod;
 	    coordinates[ip][2] += mom[3] * tr / pmod;
 	    casparticles.push_back(G4CascadParticle(raw_particles[ip], coordinates[ip], 
-						    number_of_zones, large));
+						    number_of_zones, large, 0));
 	  } else {
 	    particles.push_back(raw_particles[ip]); 
 	  }; 
