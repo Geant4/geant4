@@ -32,7 +32,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.21 2009-02-23 17:34:26 gunter Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.22 2009-11-12 10:32:59 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4ANALYSIS_USE
@@ -119,7 +119,7 @@ void BrachyAnalysisManager::book()
 				     300,-150.,150.); //bins' number, xmin, xmax
 
   //defining the ntuple columns' name 
-  std::string columnNames = "double energy; double x; double y; double z";
+  std::string columnNames = "double energy, x , y , z ";
   std::string options = "";
   
   //creating a ntuple
