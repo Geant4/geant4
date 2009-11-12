@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.22 2009-04-08 13:25:37 cirrone Exp $
+$Id: History,v 1.23 2009-11-12 05:12:18 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.22 2009-04-08 13:25:37 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2009 S. Guatelli, tag radioprotection-V09-02-01
+	   Physics List updated
+
 08.04.2009 G.A.P.Cirrone, tag radioprotection-V09-02-00
            GNUmakefile updated
 
