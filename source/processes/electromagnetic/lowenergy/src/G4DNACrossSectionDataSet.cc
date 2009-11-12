@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.10 2009-09-27 10:47:42 sincerti Exp $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.11 2009-11-12 10:05:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
@@ -247,6 +247,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
     {
       i--;
       delete columns[i];
+      delete log_columns[i];
     }
 
   return true;

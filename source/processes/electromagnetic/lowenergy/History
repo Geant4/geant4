@@ -1,4 +1,4 @@
-$Id: History,v 1.400 2009-11-12 03:08:58 sincerti Exp $
+$Id: History,v 1.401 2009-11-12 10:05:30 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.11.2009, S. Incerti tag emlowen-V09-02-63
+            -removed memory leak in G4DNACrossSectionDataSet.cc
 
 12.11.2009, S. Incerti tag emlowen-V09-02-62
             -added protection for secondary electron energy computation in
