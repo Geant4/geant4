@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.20 2009-11-12 14:33:44 gunter Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.21 2009-11-12 14:34:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -287,22 +287,6 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   {
      
   }
-
-/*  debug code 
-  G4double thetaold=10000.;
-  if (std::abs(an) < 50 )
-  {
-     
-    G4double expan=std::exp(an);
-    thetaold = std::acos(std::log(expan-random*(expan-1.0/expan))/an);
-
-     if ( std::abs(theta-thetaold) > 1e-6 ) 
-     {
-         G4cout << "theta check" << an << " " <<theta 
-	         << " " << thetaold << " " << theta-thetaold << G4endl; 
-     }
-  }
- end debug code */  
 
   G4double phi = twopi*G4UniformRand();
   
