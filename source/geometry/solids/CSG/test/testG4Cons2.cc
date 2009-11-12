@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.20 2007-05-18 10:24:32 gcosmo Exp $
+// $Id: testG4Cons2.cc,v 1.21 2009-11-12 10:40:45 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -1016,6 +1016,18 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
   dist = ctest10.DistanceToIn(alex2P,alex2V);
   // if (OutRange(dist,kInfinity))
   G4cout << "ctest10.DistanceToIn(alex2P,alex2V) = " << dist << G4endl;
+
+  //Add Error of CMS, point on the Inner Surface going // to imaginary cone
+
+   G4Cons  testc( "cCone", 261.9*mm,270.4*mm,1066.5*mm,1068.7*mm,274.75*mm , 0., twopi);   
+    G4ThreeVector dir;
+ dir=G4ThreeVector(0.653315775,0.5050862758,0.5639737158);
+     G4double x,y,z;
+     x=-296.7662086;y=-809.1328836;z=13210.2270-(12.8005*m+274.75*mm);
+ G4ThreeVector point=G4ThreeVector(x,y,z);
+     G4ThreeVector newp=point+testc.DistanceToOut(point,dir)*dir;
+     G4cout<<"CMS problem: DistIn has to be small="<<testc.DistanceToOut(point,dir)<<G4endl;
+     G4cout<<"CMS problem: DistInNew has to be kInfinity="<<testc.DistanceToIn(newp,dir)<<G4endl;
 
 	    // G4cout << "NOT Checking G4Cons::ScopeCar...\n";
 	    // G4cout << "NOT Checking G4Cons::ScopePhi...\n";
