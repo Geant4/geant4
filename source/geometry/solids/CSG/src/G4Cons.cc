@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.65 2009-11-12 10:14:17 tnikitin Exp $
+// $Id: G4Cons.cc,v 1.66 2009-11-12 10:28:19 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1728,7 +1728,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
             yi     = p.y() + slentol*v.y() ;
             if(sidetol==kRMax){
               risec  = std::sqrt(xi*xi + yi*yi)*secRMax ;
-	      Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMin/secRMin) ;}
+	      Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax) ;}
             else{
              risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
              Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;}
