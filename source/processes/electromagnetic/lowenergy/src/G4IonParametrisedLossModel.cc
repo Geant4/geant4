@@ -37,12 +37,25 @@
 // First implementation: 10. 11. 2008
 //
 // Modifications: 03. 02. 2009 - Bug fix iterators (AL)
-//                11. 03. 2009 - Introduced new table handler (G4IonDEDXHandler)
+//                11. 03. 2009 - Introduced new table handler(G4IonDEDXHandler)
 //                               and modified method to add/remove tables
-//                               (tables are now built in initialisation phase),
+//                               (tables are now built in init. phase),
 //                               Minor bug fix in ComputeDEDXPerVolume (AL)
 //                11. 05. 2009 - Introduced scaling algorithm for heavier ions:
 //                               G4IonDEDXScalingICRU73 (AL)
+//                12. 11. 2009 - Moved from original ICRU 73 classes to new
+//                               class (G4IonStoppingData), which is capable
+//                               of reading stopping power data files stored
+//                               in G4LEDATA (requires G4EMLOW6.8 or higher).
+//                               Simultanesouly, the upper energy limit of 
+//                               ICRU 73 is increased to 1 GeV/nucleon.
+//                             - Removed nuclear stopping from Corrections-
+//                               AlongStep since dedicated process was created.
+//                             - Added function for switching off scaling 
+//                               of heavy ions from ICRU 73 data 
+//                             - Minor fix in ComputeLossForStep function  
+//                             - Minor fix in ComputeDEDXPerVolume (AL)
+//
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -57,9 +70,8 @@
 
 
 #include "G4IonParametrisedLossModel.hh"
-#include "G4MaterialStoppingICRU73.hh"
-#include "G4SimpleMaterialStoppingICRU73.hh"
-#include "G4IronStoppingICRU73.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4IonStoppingData.hh"
 #include "G4VIonDEDXTable.hh"
 #include "G4VIonDEDXScalingAlgorithm.hh"
 #include "G4IonDEDXScalingICRU73.hh"
@@ -103,45 +115,9 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   betheBlochModel = new G4BetheBlochModel();
 
   // By default ICRU 73 stopping power tables are loaded:
-
-  // Ions with Z above between 19 and 21: Ar-40 data is used as basis 
-  // for stopping power scaling
-  G4int ionZMin = 19;
-  G4int ionZMax = 21;
-  G4int refIonZ = 18;
-  G4int refIonA = 40;
-
-  AddDEDXTable("ICRU73-elemmat",
-           new G4SimpleMaterialStoppingICRU73,
-	   new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA));
-
-  // Ions with Z above 21: Fe-56 data is used as basis for stopping power 
-  // scaling
-  ionZMin = 22;
-  ionZMax = 102;
-  refIonZ = 26;
-  refIonA = 56;
-
-  AddDEDXTable("ICRU73-ironions",
-               new G4IronStoppingICRU73,
-	       new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA));
-
-  // Compound materials: Ar-40 data is used as basis for stopping power 
-  // scaling (except for iron ions)
-  ionZMin = 19;
-  ionZMax = 102;
-  refIonZ = 18;
-  refIonA = 40;
-
-  G4IonDEDXScalingICRU73* scaling =
-            new G4IonDEDXScalingICRU73(ionZMin, ionZMax, refIonZ, refIonA);
-
-  G4int ironIonAtomicNumber = 26;
-  scaling -> AddException(ironIonAtomicNumber);
-
-  AddDEDXTable("ICRU73-compmat",
-               new G4MaterialStoppingICRU73,
-	       scaling);
+  AddDEDXTable("ICRU73",
+	       new G4IonStoppingData("ion_stopping_data/icru73"),
+  	       new G4IonDEDXScalingICRU73());
 
   // The boundaries for the range tables are set
   lowerEnergyEdgeIntegr = 0.025 * MeV;
@@ -537,7 +513,6 @@ G4double G4IonParametrisedLossModel::ComputeDEDXPerVolume(
         dEdx = betheBlochModel -> ComputeDEDXPerVolume(
                                       material, genericIon,
      				      scaledKineticEnergy, cutEnergy);
-        dEdx *= factor;
 
         dEdx *= chargeSquare;
 
@@ -545,6 +520,8 @@ G4double G4IonParametrisedLossModel::ComputeDEDXPerVolume(
            dEdx += corrections -> ComputeIonCorrections(particle, 
                                       material, kineticEnergy);
         }
+
+        dEdx *= factor;
      }
 
   }
@@ -861,8 +838,6 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
   // generic ion tables (in combination with the effective charge) are used
   // in the along step DoIt function.
   //
-  // Contributon due to nuclear stopping are applied in any case (given the
-  // nuclear stopping flag is set).
   //
   // (Implementation partly adapted from G4BraggIonModel/G4BetheBlochModel)
 
@@ -990,27 +965,6 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
        eloss += length * 
             corrections -> IonHighOrderCorrections(particle, couple, energy);
   }
-
-  // Nuclear stopping 
-  G4double scaledKineticEnergy = kineticEnergy * dedxCacheGenIonMassRatio;
-  G4double charge   = particle->GetPDGCharge()/eplus;
-  G4double chargeSquare = charge * charge;
-
-  if(nuclearStopping && scaledKineticEnergy < chargeSquare * 100.0 * MeV) {
-
-     G4double nloss = 
-        length * corrections -> NuclearDEDX(particle, material, energy, false);
-
-     if(eloss + nloss > kineticEnergy) {
-
-       nloss *= (kineticEnergy / (eloss + nloss));
-       eloss = kineticEnergy;
-     } else {
-       eloss += nloss;
-     }
-
-     particleChangeLoss -> ProposeNonIonizingEnergyDeposit(nloss);
-  } 
 }
 
 // #########################################################################
@@ -1195,8 +1149,18 @@ G4double G4IonParametrisedLossModel::ComputeLossForStep(
   if(energyRange != 0 && rangeEnergy != 0) {
      G4bool b;
 
+     G4double lowerEnEdge = energyRange -> GetLowEdgeEnergy( 0 );
+     G4double lowerRangeEdge = rangeEnergy -> GetLowEdgeEnergy( 0 );
+
      // Computing range for pre-step kinetic energy:
      G4double range = energyRange -> GetValue(kineticEnergy, b);
+
+     // Energy below vector boundary:
+     if(kineticEnergy < lowerEnEdge) {
+
+        range =  energyRange -> GetValue(lowerEnEdge, b);
+        range *= std::sqrt(kineticEnergy / lowerEnEdge);
+     }
 
 #ifdef PRINT_DEBUG
      G4cout << "G4IonParametrisedLossModel::ComputeLossForStep() range = " 
@@ -1204,18 +1168,25 @@ G4double G4IonParametrisedLossModel::ComputeLossForStep(
             << G4endl;
 #endif
 
+     // Remaining range:
+     G4double remRange = range - stepLength;
+
      // If range is smaller than step length, the loss is set to kinetic  
      // energy
-     if(range <= stepLength) loss = kineticEnergy;
+     if(remRange < 0.0) loss = kineticEnergy;
+     else if(remRange < lowerRangeEdge) {
+ 
+        G4double ratio = remRange / lowerRangeEdge;
+        loss = kineticEnergy - ratio * ratio * lowerEnEdge;
+     }
      else {
 
         G4double energy = rangeEnergy -> GetValue(range - stepLength, b);
-
-        loss = kineticEnergy - energy;
-
-        if(loss < 0.0) loss = 0.0;
+        loss = kineticEnergy - energy;      
      }
   }
+
+  if(loss < 0.0) loss = 0.0;
 
   return loss;
 }
@@ -1277,7 +1248,24 @@ G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
      if(tableName == name) { 
         delete (*iter);
 
+        // Remove from table list
         lossTableList.erase(iter);
+
+        // Range vs energy and energy vs range vectors are cleared
+        RangeEnergyTable::iterator iterRange = r.begin();
+        RangeEnergyTable::iterator iterRange_end = r.end();
+
+        for(;iterRange != iterRange_end; iterRange++) 
+                                            delete iterRange -> second;
+        r.clear();
+
+        EnergyRangeTable::iterator iterEnergy = E.begin();
+        EnergyRangeTable::iterator iterEnergy_end = E.end();
+
+        for(;iterEnergy != iterEnergy_end; iterEnergy++) 
+                                            delete iterEnergy -> second;
+        E.clear();
+
         return true;
      }
   }
@@ -1287,3 +1275,10 @@ G4bool G4IonParametrisedLossModel::RemoveDEDXTable(
 
 // #########################################################################
 
+void G4IonParametrisedLossModel::DeactivateICRU73Scaling() {
+
+  RemoveDEDXTable("ICRU73");
+  AddDEDXTable("ICRU73", new G4IonStoppingData("ion_stopping_data/icru73"));
+}
+
+// #########################################################################

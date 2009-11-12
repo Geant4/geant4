@@ -37,11 +37,14 @@
 // First implementation: 10. 11. 2008
 //
 // Modifications: 03. 02. 2009 - Bug fix iterators (AL)
-//                11. 03. 2009 - Introduced new table handler (G4IonDEDXHandler)
+//                11. 03. 2009 - Introduced new table handler(G4IonDEDXHandler)
 //                               and modified method to add/remove tables 
-//                               (tables are now built in initialisation phase),
+//                               (tables are now built in init. phase),
 //                               Minor bug fix in ComputeDEDXPerVolume (AL) 
-// 
+//                12. 11. 2009 - Added function for switching off scaling 
+//                               of heavy ions from ICRU 73 data
+//
+//
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
 //    parameterisation of dE/dx tables (default ICRU 73 tables). For 
@@ -168,6 +171,10 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                      G4VIonDEDXScalingAlgorithm* algorithm = 0); 
 
    G4bool RemoveDEDXTable(const G4String& name); 
+
+   // Function which allows to switch off scaling of stopping powers of heavy
+   // ions from existing ICRU 73 data
+   void DeactivateICRU73Scaling();
 
    // Function checking the applicability of physics tables to ion-material
    // combinations (Note: the energy range of tables is not checked)
