@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.13 2009-11-05 00:38:20 gum Exp $
+// $Id: G4OpticalSurface.cc,v 1.14 2009-11-12 00:57:59 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,6 +91,10 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 		sigma_alpha = value;
 		polish = 0.0;
 	}
+        else if ( model == LUT ) {
+                sigma_alpha = value;
+                polish = 0.0;
+        }
 	else {
 		G4Exception("G4OpticalSurface::G4OpticalSurface ==> " 
 			    "Constructor called with INVALID model.");
@@ -137,6 +141,9 @@ void G4OpticalSurface::DumpInfo() const
 	if (theModel == glisur ){
 		G4cout << polish      << G4endl;
 	}
+        else if (theModel == LUT ){
+                G4cout << sigma_alpha << G4endl;
+        }
 	else {
 		G4cout << sigma_alpha << G4endl;
 	}

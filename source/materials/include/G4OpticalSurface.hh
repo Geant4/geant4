@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.13 2009-11-05 00:37:39 gum Exp $
+// $Id: G4OpticalSurface.hh,v 1.14 2009-11-12 00:54:30 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,34 @@ enum G4OpticalSurfaceFinish
    polished,                    // smooth perfectly polished surface
    polishedfrontpainted,        // smooth top-layer (front) paint
    polishedbackpainted,         // same is 'polished' but with a back-paint
+
+   polishedlumirrorair,         // mechanically polished surface, with lumirror
+   polishedlumirrorglue,        // mechanically polished surface, with lumirror & meltmount
+   polishedair,                 // mechanically polished surface
+   polishedteflonair,           // mechanically polished surface, with teflon
+   polishedtioair,              // mechanically polished surface, with tio paint
+   polishedtyvekair,            // mechanically polished surface, with tyvek
+   polishedvm2000air,           // mechanically polished surface, with esr film
+   polishedvm2000glue,          // mechanically polished surface, with esr film & meltmount
+
+   etchedlumirrorair,           // chemically etched surface, with lumirror
+   etchedlumirrorglue,          // chemically etched surface, with lumirror & meltmount
+   etchedair,                   // chemically etched surface
+   etchedteflonair,             // chemically etched surface, with teflon
+   etchedtioair,                // chemically etched surface, with tio paint
+   etchedtyvekair,              // chemically etched surface, with tyvek
+   etchedvm2000air,             // chemically etched surface, with esr film
+   etchedvm2000glue,            // chemically etched surface, with esr film & meltmount
+
+   groundlumirrorair,           // rough-cut surface, with lumirror
+   groundlumirrorglue,          // rough-cut surface, with lumirror & meltmount
+   groundair,                   // rough-cut surface
+   groundteflonair,             // rough-cut surface, with teflon
+   groundtioair,                // rough-cut surface, with tio paint
+   groundtyvekair,              // rough-cut surface, with tyvek
+   groundvm2000air,             // rough-cut surface, with esr film
+   groundvm2000glue,            // rough-cut surface, with esr film & meltmount
+
    ground,                      // rough surface
    groundfrontpainted,          // rough top-layer (front) paint
    groundbackpainted            // same as 'ground' but with a back-paint
@@ -71,7 +99,8 @@ enum G4OpticalSurfaceFinish
 enum G4OpticalSurfaceModel
 {
    glisur,                      // original GEANT3 model
-   unified                      // UNIFIED model
+   unified,                     // UNIFIED model
+   LUT                          // Look-Up-Table model
 };
 
 class G4MaterialPropertiesTable;
