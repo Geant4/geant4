@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.27 2009-02-23 17:36:59 gunter Exp $
+$Id: History,v 1.28 2009-11-12 02:50:51 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.27 2009-02-23 17:36:59 gunter Exp $
 
                       Category History file
                       ---------------------
+
+12 Nov. 2009 - S. Guatelli;
+- Update of Physics List
 
 22.Feb 2009 - G.Folger;  tag brachy-V09-02-00
 -  Correct compilation  errors and warnings when G4ANALYSIS is NOT set
