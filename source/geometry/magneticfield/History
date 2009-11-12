@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2009-11-12 15:05:49 japost Exp $
+$Id: History,v 1.147 2009-11-12 18:45:02 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 12th,  2009 J.Apostolakis - field-V09-02-08
+Nov 12th,  2009 J.Apostolakis - field-V09-02-09
 -----------------------------
+- G4MagIntegratorDriver:  Activate Peter Gumplinger's check on integration
+                          error for spin.
+
+Nov 12th,  2009 J.Apostolakis - field-V09-02-08
+-----------------------------  (fix only)
 - G4Nystrom:  Corrected interface method getField: array now has explicit dimension[4]
                 (Problem found by gcc 4.3 - it checked indices used in inline method! )
 
