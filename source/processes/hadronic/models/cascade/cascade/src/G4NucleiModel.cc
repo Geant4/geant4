@@ -751,7 +751,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	  */
 
           for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-            G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0);
+            G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
 	    /*
             G4double pathLength = temp.getPathToTheNextZone(0, nuclei_radius);
 
@@ -1024,7 +1024,7 @@ G4CascadParticle G4NucleiModel::initializeCascad(G4InuclElementaryParticle* part
   pos[1] = rz * std::sin(phi);
   pos[2] = -nuclei_radius * std::sqrt(1.0 - s1 * s1);
  
-  G4CascadParticle cpart(*particle, pos, number_of_zones, large);
+  G4CascadParticle cpart(*particle, pos, number_of_zones, large, 0);
 
   if (verboseLevel > 2){
     cpart.print();
@@ -1467,7 +1467,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    coordinates[ip][2] += mom[3] * tr / pmod;
 	    casparticles.push_back(
 				   G4CascadParticle(raw_particles[ip], coordinates[ip], 
-						    number_of_zones, large));
+						    number_of_zones, large, 0));
 
 	  } else {
 	    particles.push_back(raw_particles[ip]); 
