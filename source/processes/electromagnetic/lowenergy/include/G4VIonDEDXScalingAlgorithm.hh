@@ -34,8 +34,8 @@
 //
 // First implementation: 11. 03. 2009
 //
-// Modifications: 
-//
+// Modifications: 12. 11. 2009 - Added second argument (material) to energy
+//                               scaling function (AL)
 //
 // Class description:
 //    Base class for dE/dx scaling algorithms, used by G4IonDEDXHandler
@@ -63,7 +63,8 @@ class G4VIonDEDXScalingAlgorithm {
    // Function for scaling the kinetic energy (no scaling by default).
    // Returns scaling factor for a given ion.
    virtual G4double ScalingFactorEnergy(
-             const G4ParticleDefinition*)     // Projectile (ion) 
+             const G4ParticleDefinition*,     // Projectile (ion) 
+             const G4Material*)               // Target material
                  { return 1.0; }
 
    // Function for scaling the dE/dx value (no scaling by default).
