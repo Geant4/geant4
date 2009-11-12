@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NystromRK4.hh,v 1.2 2009-11-05 18:31:15 japost Exp $ 
+// $Id: G4NystromRK4.hh,v 1.3 2009-11-12 15:01:36 japost Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NystromRK4
@@ -34,6 +34,8 @@
 // using 4th Runge-Kutta-Nystrom method with errors estimation 
 // (ATL-SOFT-PUB-2009-01)
 // Current form can be used only for 'pure' magnetic field.
+// Notes: 1) field must be time-independent.
+//        2) time is not integrated
 // 
 // History:
 // - Created: I.Gavrilenko   15.05.2009   (as G4AtlasRK4)
@@ -74,7 +76,7 @@ class G4NystromRK4 : public G4MagIntegratorStepper
   
   private:
 
-    inline void getField   (const G4double P[]);
+    inline void getField   (const G4double P[4]);
 
     ////////////////////////////////////////////////////////////////
     // Private data
@@ -113,7 +115,7 @@ inline G4double  G4NystromRK4::GetDistanceForConstantField() const
 // Get value of magnetic field while checking distance from last stored call
 /////////////////////////////////////////////////////////////////////////////////
 
-inline void G4NystromRK4::getField (const G4double P[])
+inline void G4NystromRK4::getField (const G4double P[4])
 {
   
   G4double dx = P[0]-m_fldPosition[0];
@@ -125,7 +127,7 @@ inline void G4NystromRK4::getField (const G4double P[])
     m_fldPosition[0] = P[0];
     m_fldPosition[1] = P[1];
     m_fldPosition[2] = P[2];
-    m_fldPosition[3] = P[7];
+    m_fldPosition[3] = P[3];   //  Generally it is P[7] - changed convention !!
     m_fEq->GetFieldValue(m_fldPosition, m_lastField);
   }
 }
