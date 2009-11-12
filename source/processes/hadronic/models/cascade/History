@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Nov 2009 Dennis Wright (hadr-casc-V09-02-10)
+-----------------------------------------------
+- G4CascadParticle, G4InuclElementaryParticle: add integer argument to ctor
+  to indicate which generation cascade particle belongs to.
+  Also change G4NucleiModel and G4BertiniNucleiModel to use this.
+
  8 Oct 2009 Dennis Wright (hadr-casc-V09-02-09)
 -----------------------------------------------
 - G4PionSampler:  use charge exchange cross section for pi0-p, go back
