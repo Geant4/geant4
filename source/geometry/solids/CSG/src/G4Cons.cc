@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.64 2009-06-30 10:10:11 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.65 2009-11-12 10:14:17 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,6 +34,8 @@
 //
 // History:
 //
+// 12.10.09 T.Nikitina: Add to DistanceToIn(p,v) check on the direction in case 
+//                      of the point on the Surface(fix for bug from CMS)
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 13.09.96 V.Grichine: Review and final modifications
 // ~1994    P.Kent: Created, as main part of the geometry prototype
@@ -681,11 +683,13 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMax2,tolIRMax,tolIRMax2 ;
   G4double tolODz,tolIDz ;
 
-  G4double Dist,s,xi,yi,zi,ri=0.,rhoi2,cosPsi ; // Intersection point variables
+  G4double Dist,s,xi,yi,zi,ri=0.,risec,rhoi2,cosPsi ; // Intersection point variables
 
   G4double t1,t2,t3,b,c,d ;    // Quadratic solver variables 
   G4double nt1,nt2,nt3 ;
   G4double Comp ;
+
+  G4ThreeVector Normal;
 
   // Cone Precalcs
 
@@ -887,13 +891,21 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
       {
         // Inside cones, delta r -ve, inside z extent
 
+	//Point is on the Surface => check Direction using  Normal.dot(v)
+         xi     = p.x() ;
+         yi     = p.y()  ;
+         risec  = std::sqrt(xi*xi + yi*yi)*secRMax ;
+         Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMax/secRMax) ;
         if ( !fPhiFullCone )
         {
           cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/std::sqrt(t3) ;
 
-          if (cosPsi >= cosHDPhiIT)  { return 0.0; }
+          if (cosPsi >= cosHDPhiIT)  {if( Normal.dot(v) <= 0 ) return 0.0; }
         }
-        else  { return 0.0; }
+	
+        else{             
+          if( Normal.dot(v) <= 0 )return 0.0;
+        }
       }
     }
   }
@@ -941,7 +953,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   //        => lots of duplicated code
 
   if (rMinAv)
-  {
+  { 
     nt1 = t1 - (tanRMin*v.z())*(tanRMin*v.z()) ;
     nt2 = t2 - tanRMin*v.z()*rin ;
     nt3 = t3 - rin*rin ;
@@ -978,9 +990,26 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 ri     = rMinAv + zi*tanRMin ;
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                if (cosPsi >= cosHDPhiIT)  { snxt = s; }
+                if (cosPsi >= cosHDPhiIT)  { 
+                   if( s > halfRadTolerance ) {snxt=s;}
+	           else{// Calculate a normal vector in order to check Direction
+                    risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                    Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                    if( Normal.dot(v) <= 0 ) {snxt = s;}
+		   } 
+		}
               }
-              else  { return s; }
+	      else  {
+                if ( s > halfRadTolerance ) {return s;}
+	        else{
+                // Calculate a normal vector in order to check Direction
+                xi     = p.x() + s*v.x() ;
+                yi     = p.y() + s*v.y() ;
+                risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                if( Normal.dot(v) <= 0 )return s;
+                } 
+              }
             }
           }
         }
@@ -1017,9 +1046,26 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 yi     = p.y() + s*v.y() ;
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                if (cosPsi >= cosHDPhiOT)  { snxt = s; }
+                if (cosPsi >= cosHDPhiOT)  {
+                  if( s > halfRadTolerance ) {snxt=s;}
+	          else{// Calculate a normal vector in order to check Direction
+                   risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                   Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                   if( Normal.dot(v) <= 0 )  {snxt = s;} 
+		   }
+		}
               }
-              else  { return s; }
+              else  {
+                if( s > halfRadTolerance ) {return s;}
+	        else{
+                // Calculate a normal vector in order to check Direction
+                xi     = p.x() + s*v.x() ;
+                yi     = p.y() + s*v.y() ;
+                risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                if( Normal.dot(v) <= 0 )return s;
+                } 
+              }
             }
           }
           else
@@ -1035,15 +1081,32 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                 G4double fTerm = s-std::fmod(s,dRmax);
                 s = fTerm + DistanceToIn(p+fTerm*v,v);
               } 
-              if ( !fPhiFullCone )
+             if ( !fPhiFullCone )
               {
                 xi     = p.x() + s*v.x() ;
                 yi     = p.y() + s*v.y() ;
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/ri ;
 
-                if (cosPsi >= cosHDPhiIT)  { snxt = s; }
+                if (cosPsi >= cosHDPhiIT)  {
+                  if( s > halfRadTolerance ) {snxt=s;}
+	          else{// Calculate a normal vector in order to check Direction
+                   risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                   Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                   if( Normal.dot(v) <= 0 ) {snxt = s;} 
+		   }
+		}
               }
-              else  { return s; }
+              else  {
+                if( s > halfRadTolerance ) {return s;}
+	        else{
+                // Calculate a normal vector in order to check Direction
+                xi     = p.x() + s*v.x() ;
+                yi     = p.y() + s*v.y() ;
+                risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+                Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;
+                if( Normal.dot(v) <= 0 )return s;
+                } 
+              }
             }
           }
         }
@@ -1329,7 +1392,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
   // Vars for intersection within tolerance
 
-  ESide    sidetol ;
+  ESide    sidetol = kNull ;
   G4double slentol = kInfinity ;
 
   // Vars for phi intersection:
@@ -1663,8 +1726,12 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
             xi     = p.x() + slentol*v.x() ;
             yi     = p.y() + slentol*v.y() ;
-            risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
-            Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMin/secRMin) ;
+            if(sidetol==kRMax){
+              risec  = std::sqrt(xi*xi + yi*yi)*secRMax ;
+	      Normal = G4ThreeVector(xi/risec,yi/risec,-tanRMin/secRMin) ;}
+            else{
+             risec  = std::sqrt(xi*xi + yi*yi)*secRMin ;
+             Normal = G4ThreeVector(-xi/risec,-yi/risec,tanRMin/secRMin) ;}
             
             if( Normal.dot(v) > 0 )
             {
