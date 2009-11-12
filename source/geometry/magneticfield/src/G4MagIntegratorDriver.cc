@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.53 2009-11-05 22:31:43 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.54 2009-11-12 17:10:40 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,6 +207,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     G4ThreeVector StartPos( y[0], y[1], y[2] );
 
 #ifdef G4DEBUG_FIELD
+    G4double xSubStepStart= x; 
     for (i=0;i<nvar;i++)  { ySubStepStart[i] = y[i]; }
     yFldTrkStart.LoadFromArray(y, fNoIntegrationVariables);
     yFldTrkStart.SetCurveLength(x);
@@ -226,9 +227,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       //--------------------------------------
       lastStepSucceeded= (hdid == h);   
 #ifdef G4DEBUG_FIELD
-      if (dbg>2)
-      {
-        PrintStatus( ySubStepStart, xSubStart, y, x, h,  nstp); // Only
+      if (dbg>2) {
+        PrintStatus( ySubStepStart, xSubStepStart, y, x, h,  nstp); // Only
       }
 #endif
     }
@@ -290,8 +290,11 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     if( (dbg>0) && (dbg<=2) && (nstp>nStpPr))
     {
       if( nstp==nStpPr )  { G4cout << "***** Many steps ****" << G4endl; }
+      G4cout << "MagIntDrv: " ; 
       G4cout << "hdid="  << std::setw(12) << hdid  << " "
-             << "hnext=" << std::setw(12) << hnext << " " << G4endl;
+             << "hnext=" << std::setw(12) << hnext << " " 
+	     << "hstep=" << std::setw(12) << hstep << " (requested) " 
+	     << G4endl;
       PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
     }
 #endif
@@ -368,13 +371,16 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         // Cannot progress - accept this as last step - by default
         lastStep = true;
 #ifdef G4DEBUG_FIELD
-        if (dbg)
+        if (dbg>2)
         {
+          int prec= G4cout.precision(12); 
           G4cout << "Warning: G4MagIntegratorDriver::AccurateAdvance"
                  << G4endl
                  << "  Integration step 'h' became "
-                 << h << " due to roundoff " << G4endl
+                 << h << " due to roundoff. " << G4endl
+		 << " Calculated as difference of x2= "<< x2 << " and x=" << x
                  << "  Forcing termination of advance." << G4endl;
+          G4cout.precision(prec);
         }          
 #endif
       }
