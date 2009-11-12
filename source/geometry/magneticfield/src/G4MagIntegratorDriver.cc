@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.55 2009-11-12 18:34:08 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.56 2009-11-12 18:41:03 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -586,14 +586,6 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
       errspin_sq =  ( sqr(yerr[9]) + sqr(yerr[10]) + sqr(yerr[11]) )
                  /  ( sqr(y[9]) + sqr(y[10]) + sqr(y[11]) );
       errspin_sq *= inv_eps_vel_sq;
-#ifdef G4DEBUG
-      if( errspin_sq > errmax_sq ) 
-      { 
-         G4cout << " MiD: has-spin.  Relative ErrSpin^2= " << errspin_sq 
-		<< " Relative OtherErr^2 = " << errmax_sq ; // << G4endl;
-	 G4cout << "Spin Error is larger." << G4endl;
-      }
-#endif
       errmax_sq = std::max( errmax_sq, errspin_sq ); 
    }
 
