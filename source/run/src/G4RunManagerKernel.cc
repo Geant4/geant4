@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.46 2009-09-20 20:22:19 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.47 2009-11-13 23:13:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -460,7 +460,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
     size_t nRootLV = region->GetNumberOfRootVolumes();
     std::vector<G4LogicalVolume*>::iterator lvItr = region->GetRootLogicalVolumeIterator();
     for(size_t j=0;j<nRootLV;j++)
-    { G4cout << (*lvItr)->GetName() << " "; }
+    { G4cout << (*lvItr)->GetName() << " "; lvItr++; }
     G4cout << G4endl;
 
     G4cout << " Pointers : G4VUserRegionInformation[" << region->GetUserInformation() 
