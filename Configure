@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.118 2009-08-17 14:39:58 bmorgan Exp $
+# $Id: Configure,v 1.119 2009-11-13 15:42:05 bmorgan Exp $
 #
-# Generated on Mon Aug 17 15:01:56 BST 2009 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 13 15:36:27 GMT 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2508,7 +2508,18 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         # Now check for appropriate library...
         #
         if test -d "\$g4_qt_dir/lib64" ; then
-            g4_qt_lib_dir=\$g4_qt_dir/lib64
+	    # Damn, this doesn't guarantee we're on a 64bit system, some distros/packages
+	    # will have a lib64 dir even on an i*86 machine...
+	    # We don't ever cross-compile Geant4, so must have the native libraries.
+	    # Double check for this craziness...
+            case `uname -m` in
+		i*86)
+		    g4_qt_lib_dir=\$g4_qt_dir/lib
+		    ;;
+		*)
+		    g4_qt_lib_dir=\$g4_qt_dir/lib64
+		    ;;
+	    esac
         else
             g4_qt_lib_dir=\$g4_qt_dir/lib
         fi
@@ -3218,9 +3229,10 @@ done
 
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.6'
+g4data_g4emlow_version='G4EMLOW6.9'
 g4data_g4ndl_version='G4NDL3.13'
 g4data_g4abla_version='G4ABLA3.0'
+g4data_realsurface_version='RealSurface1.0'
 #END GEANT4 DATA OPTIONS
 echo " "
 
@@ -3264,11 +3276,17 @@ case "$g4abladata" in
 	;;
 esac
 
+case "$g4realsurfacedata" in
+'')
+	g4realsurfacedata=$g4data/$g4data_realsurface_version
+	;;
+esac
+
 
 #
 # Now we have defaults, prompt user to see if this is where they want to use
 # 
-g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version"
 
 g4message=`cat <<EOM
 Specify the path where the Geant4 data libraries 
@@ -3343,6 +3361,18 @@ while test "x$promptend" = "xno" ; do
         	g4data_foundall="no"
 	fi
 
+	### G4REALSURFACE
+	$echo $n "checking for $g4data_realsurface_version... $c"
+	if test -d "$g4data/$g4data_realsurface_version" ; then
+        	$echo "yes"
+        	g4realsurfacedata=$g4data/$g4data_realsurface_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+
+
 	#
 	# If we haven't found all the data, query the user as to whether they
 	# want to
@@ -3379,6 +3409,7 @@ EOM`
 			g4ledata="$g4data/$g4data_g4emlow_version"
 			g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
 			g4abladata="$g4data/$g4data_g4abla_version"
+			g4realsurfacedata="$g4data/$g4data_realsurface_version"
 			
 
 		elif test "x$gans" = "xc" ; then
@@ -3392,7 +3423,7 @@ EOM`
                         g4ledata="$g4data/$g4data_g4emlow_version"
                         g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
                         g4abladata="$g4data/$g4data_g4abla_version"
-
+                        g4realsurfacedata="$g4data/$g4data_realsurface_version"
 
 		else
 			#try again
@@ -3423,6 +3454,8 @@ You have chosen to customize the Geant4 data library paths.
 	$g4neutronhpcrosssections
 5) $g4data_g4abla_version: 
 	$g4abladata
+6) $g4data_realsurface_version:
+	$g4realsurfacedata
 
 Choose a number from the list above to customize that path (e.g. 2)
 EOM`
@@ -3472,6 +3505,14 @@ EOM`
 		rp="Custom path to $g4data_g4abla_version?"
 		. ./getfile
 		g4abladata=$ans
+		;;
+
+	"6")
+		dflt=$g4realsurfacedata
+		fn='d~'
+		rp="Custom path to $g4data_realsurface_version?"
+		. ./getfile
+		g4realsurfacedata=$ans
 		;;
 
 	*)
