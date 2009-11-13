@@ -81,7 +81,7 @@ void G4QInelasticCHIPSBuilder::Build()
        pname == "anti_proton"  || pname == "anti_neutron" || pname == "anti_lambda"  ||
        pname == "anti_sigma+"  || pname == "anti_sigma0"  || pname == "anti_sigma-"  ||
        pname == "anti_xi0"     || pname == "anti_xi-"     || pname == "anti_omega-"  )
-     {
+    {
       if(verbose>1)G4cout<< "__G4QInelCHIPSBuilder: "<< pname <<" is defined here"<<G4endl;
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4QCollision* hp = new G4QCollision();
