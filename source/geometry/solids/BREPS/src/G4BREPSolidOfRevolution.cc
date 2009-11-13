@@ -23,39 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SurfaceOfRevolution.hh,v 1.6 2009-11-13 14:29:52 gcamelli Exp $
+// $Id: G4BREPSolidOfRevolution.cc,v 1.1 2009-11-13 14:29:52 gcamelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4SurfaceOfRevolution
+// GEANT 4 class source file
 //
-// Class description:
-// 
-// Definition of a surface of revolution.
-// (not implemented yet).
+// G4BREPSolidOfRevolution.cc
 //
-// Author: G.Camellini.
 // ----------------------------------------------------------------------
-#ifndef included_G4SurfaceOfRevolution
-#define included_G4SurfaceOfRevolution
 
-#include "G4Surface.hh"
+#include "G4BREPSolidOfRevolution.hh"
+#include "G4SurfaceOfRevolution.hh"
 
-class G4SurfaceOfRevolution : public G4Surface
+G4BREPSolidOfRevolution::G4BREPSolidOfRevolution(const G4String& pName,
+                                                 G4Curve* pCurve)
+  : G4BREPSolid(pName)
 {
+  G4Curve* curve = pCurve;
+  curve->GetEntityType();
+//  Initialize();
+}
 
-public:  // with description
+G4BREPSolidOfRevolution::G4BREPSolidOfRevolution( __void__& a )
+  : G4BREPSolid(a)
+{
+}
 
-  G4SurfaceOfRevolution();
-  virtual ~G4SurfaceOfRevolution();
-    // Constructor & destructor.
+G4BREPSolidOfRevolution::~G4BREPSolidOfRevolution()
+{
+}
 
-private:
+// Streams solid contents to output stream.
+std::ostream& G4BREPSolidOfRevolution::StreamInfo(std::ostream& os) const
+{
+  G4BREPSolid::StreamInfo( os )
+//  << "\n curve:        " << constructorParams.curve
+  << "\n-----------------------------------------------------------\n";
 
-  G4SurfaceOfRevolution(const G4SurfaceOfRevolution &);
-  G4SurfaceOfRevolution& operator=(const G4SurfaceOfRevolution &);
-    // Private copy constructor and assignment operator.
-};
-
-#endif
+  return os;
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.hh,v 1.11 2007-05-11 13:49:31 gcosmo Exp $
+// $Id: G4Curve.hh,v 1.12 2009-11-13 14:29:52 gcamelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@
 //   - if the curve is bounded, call one of the SetBounds() methods.
 
 // Author: J.Sulkimo, P.Urban.
-// Revisions by: L.Broglia, G.Cosmo.
+// Revisions by: L.Broglia, G.Cosmo, G.Camellini.
 // ----------------------------------------------------------------------
 #ifndef __CURVE_H
 #define __CURVE_H 

@@ -24,38 +24,61 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceOfRevolution.hh,v 1.6 2009-11-13 14:29:52 gcamelli Exp $
+// $Id: G4BREPSolidOfRevolution.hh,v 1.1 2009-11-13 14:29:52 gcamelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4SurfaceOfRevolution
+// Class G4BREPSolidOfRevolution
 //
 // Class description:
-// 
-// Definition of a surface of revolution.
-// (not implemented yet).
+//
+//  Definition of a generic BREP solid of revolution:
+//  the 2d curve defined on x,y plane is rotated around z-axis in 3D
+//  space to generate a surface of revolution closed with two planes
+//
+//  G4BREPSolidOfRevolution(const G4String& pName,
+//                          const G4Curve& pCurve)
 //
 // Author: G.Camellini.
+// Revisions by:
 // ----------------------------------------------------------------------
-#ifndef included_G4SurfaceOfRevolution
-#define included_G4SurfaceOfRevolution
+#ifndef __G4BREPSolidOfRevolution
+#define __G4BREPSolidOfRevolution
 
-#include "G4Surface.hh"
+#include "G4BREPSolid.hh"
 
-class G4SurfaceOfRevolution : public G4Surface
+class G4BREPSolidOfRevolution : public G4BREPSolid
 {
 
-public:  // with description
+ public: // with description
 
-  G4SurfaceOfRevolution();
-  virtual ~G4SurfaceOfRevolution();
-    // Constructor & destructor.
+  G4BREPSolidOfRevolution(const G4String& pName,
+                          G4Curve* pCurve);
+    // Constructor defining the solid through surface of revolution and
+    // two planes.
 
-private:
+  ~G4BREPSolidOfRevolution();
+    // Empty destructor.
 
-  G4SurfaceOfRevolution(const G4SurfaceOfRevolution &);
-  G4SurfaceOfRevolution& operator=(const G4SurfaceOfRevolution &);
-    // Private copy constructor and assignment operator.
+  virtual std::ostream& StreamInfo(std::ostream& os) const;
+    // Streams solid contents to output stream.
+
+ public:  // without description
+
+  G4BREPSolidOfRevolution(__void__&);
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
+
+ private:
+
+    G4BREPSolidOfRevolution(const G4BREPSolidOfRevolution&);
+    G4BREPSolidOfRevolution& operator=(const G4BREPSolidOfRevolution&);
+      // Private copy constructor and assignment operator.
+
+//  struct G4BREPSolidOfRevolutionParams
+//  {
+//  } fConstructorParams;
 };
 
 #endif
