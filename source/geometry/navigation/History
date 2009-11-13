@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2009-11-12 19:06:32 japost Exp $
+$Id: History,v 1.136 2009-11-13 17:38:37 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 12th, 2009 - J.Apostolakis (geomnav-V09-02-09)
+------------------------------
+- G4PropagatorInField: cleanup of minor methods:
+   Added new method RefreshIntersectionLocator to update the state of
+       Use this method to synchronise with IntersectionLocator.
+   Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep
+	   SetDeltaIntersection,  SetDeltaOneStep
+   Revised implementation to avoid using the older methods
+           GetDeltaIntersection   GetDeltaOneStep
 
 Nov 12th, 2009 - J.Apostolakis (geomnav-V09-02-08)
 ------------------------------
