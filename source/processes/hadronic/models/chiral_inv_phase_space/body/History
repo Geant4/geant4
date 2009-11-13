@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-21)
+-----------------------------------------------------------------------
+Mutual tag: G4QDiffractionRatio lost dependence on G4QElasticCrossSection
+
 12-Nov-2009 M.Kosov                            (hadr-chips-V09-02-20)
 -----------------------------------------------------------------------
 Mutual tag: bug fix in G4QDiffractionRatio (tested by Valgrind)
