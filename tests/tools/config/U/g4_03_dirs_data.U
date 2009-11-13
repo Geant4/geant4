@@ -79,6 +79,8 @@ esac
 case "$g4realsurfacedata" in
 '')
 	g4realsurfacedata=$g4data/$g4data_realsurface_version
+	;;
+esac
 
 
 #
