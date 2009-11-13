@@ -359,7 +359,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
   G4bool haveProducts = false;
   G4int collisionCount=0;
-  theMomentumTransfer=0;
+  theMomentumTransfer=G4ThreeVector(0,0,0);
   while(theCollisionMgr->Entries() > 0)
   {
     // G4cout << "Propagate Captured size: " << theCapturedList.size() << G4endl;
@@ -589,80 +589,83 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   } else                            // End of if(fragment)
   {                                 // No fragment, can be neutrons only  // Uzhi
      precompoundProducts = new G4ReactionProductVector();                      
-                                                                               
-     std::vector<G4KineticTrack *>::iterator aNuc;                             
-     G4LorentzVector aVec;                                                     
-     std::vector<G4double> masses;                                             
-     G4double sumMass(0);
+     
+     if ( (theTargetList.size()+theCapturedList.size()) > 0 )
+     {                                                                      
+	std::vector<G4KineticTrack *>::iterator aNuc;                             
+	G4LorentzVector aVec;                                                     
+	std::vector<G4double> masses;                                             
+	G4double sumMass(0);
 
-     if ( theTargetList.size() != 0)                                      // Uzhi
-     {
-        for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
-        {
-           G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
-           masses.push_back(mass);
-           sumMass += mass;
-        }
-     }                                                                    // Uzhi
+	if ( theTargetList.size() != 0)                                      // Uzhi
+	{
+           for ( aNuc=theTargetList.begin(); aNuc != theTargetList.end(); aNuc++)
+           {
+              G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();
+              masses.push_back(mass);
+              sumMass += mass;
+           }
+	}                                                                    // Uzhi
 
-     if ( theCapturedList.size() != 0)                                    // Uzhi
-     {                                                                    // Uzhi
-        for(aNuc = theCapturedList.begin();                               // Uzhi
-            aNuc != theCapturedList.end(); aNuc++)                        // Uzhi
-        {                                                                 // Uzhi
-           G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();          // Uzhi
-           masses.push_back(mass);                                        // Uzhi
-           sumMass += mass;                                               // Uzhi
-        }                 
-     }
+	if ( theCapturedList.size() != 0)                                    // Uzhi
+	{                                                                    // Uzhi
+           for(aNuc = theCapturedList.begin();                               // Uzhi
+               aNuc != theCapturedList.end(); aNuc++)                        // Uzhi
+           {                                                                 // Uzhi
+              G4double mass=(*aNuc)->GetDefinition()->GetPDGMass();          // Uzhi
+              masses.push_back(mass);                                        // Uzhi
+              sumMass += mass;                                               // Uzhi
+           }                 
+	}
 
-     G4LorentzVector finalP=GetFinal4Momentum();
-     G4FermiPhaseSpaceDecay decay;
-// G4cout << " some neutrons? " << masses.size() <<" " ;
-// G4cout<< theTargetList.size()<<" "<<finalP <<" " << finalP.mag()<<G4endl;
+	G4LorentzVector finalP=GetFinal4Momentum();
+	G4FermiPhaseSpaceDecay decay;
+	// G4cout << " some neutrons? " << masses.size() <<" " ;
+	// G4cout<< theTargetList.size()<<" "<<finalP <<" " << finalP.mag()<<G4endl;
 
-     G4double eCMS=finalP.mag();
-     if ( eCMS < sumMass )                    // @@GF --- Cheat!!
-     {
-        eCMS=sumMass + (2*MeV*masses.size());     
-	finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
-     }
+	G4double eCMS=finalP.mag();
+	if ( eCMS < sumMass )                    // @@GF --- Cheat!!
+	{
+           eCMS=sumMass + (2*MeV*masses.size());     
+	   finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
+	}
 
-     precompoundLorentzboost.set(finalP.boostVector());
-     std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
-     std::vector<G4LorentzVector*>::iterator aMom=momenta->begin();
+	precompoundLorentzboost.set(finalP.boostVector());
+	std::vector<G4LorentzVector*> * momenta=decay.Decay(eCMS,masses);
+	std::vector<G4LorentzVector*>::iterator aMom=momenta->begin();
 
-     if ( theTargetList.size() != 0)
-     {
-       for ( aNuc=theTargetList.begin(); 
-            (aNuc != theTargetList.end()) && (aMom!=momenta->end()); 
-             aNuc++, aMom++ )
-       {
-          G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
-          aNew->SetTotalEnergy((*aMom)->e());
-          aNew->SetMomentum((*aMom)->vect());
-          precompoundProducts->push_back(aNew);
+	if ( theTargetList.size() != 0)
+	{
+	  for ( aNuc=theTargetList.begin(); 
+               (aNuc != theTargetList.end()) && (aMom!=momenta->end()); 
+        	aNuc++, aMom++ )
+	  {
+             G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
+             aNew->SetTotalEnergy((*aMom)->e());
+             aNew->SetMomentum((*aMom)->vect());
+             precompoundProducts->push_back(aNew);
 
-          delete *aMom;
-       }
-     }
+             delete *aMom;
+	  }
+	}
 
-     if ( theCapturedList.size() != 0)                                    // Uzhi
-     {                                                                    // Uzhi
-       for ( aNuc=theCapturedList.begin();                                // Uzhi
-            (aNuc != theCapturedList.end()) && (aMom!=momenta->end());    // Uzhi
-	     aNuc++, aMom++ )                                             // Uzhi
-       {                                                                  // Uzhi
-          G4ReactionProduct * aNew = new G4ReactionProduct(               // Uzhi
-                                    (*aNuc)->GetDefinition());            // Uzhi
-          aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
-          aNew->SetMomentum((*aMom)->vect());                             // Uzhi
-          precompoundProducts->push_back(aNew);                           // Uzhi
-          delete *aMom;                                                   // Uzhi
-       }                                                                  // Uzhi
-     }                                                                    // Uzhi
+	if ( theCapturedList.size() != 0)                                    // Uzhi
+	{                                                                    // Uzhi
+	  for ( aNuc=theCapturedList.begin();                                // Uzhi
+               (aNuc != theCapturedList.end()) && (aMom!=momenta->end());    // Uzhi
+		aNuc++, aMom++ )                                             // Uzhi
+	  {                                                                  // Uzhi
+             G4ReactionProduct * aNew = new G4ReactionProduct(               // Uzhi
+                                       (*aNuc)->GetDefinition());            // Uzhi
+             aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
+             aNew->SetMomentum((*aMom)->vect());                             // Uzhi
+             precompoundProducts->push_back(aNew);                           // Uzhi
+             delete *aMom;                                                   // Uzhi
+	  }                                                                  // Uzhi
+	}                                                                    // Uzhi
 
-     if(momenta) delete momenta;                                          // Uzhi
+	if(momenta) delete momenta;
+     }  
   }                   // End if(!fragment)
 
 
