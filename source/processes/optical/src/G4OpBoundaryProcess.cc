@@ -1132,10 +1132,10 @@ void G4OpBoundaryProcess::ReadFile()
 {
   G4String readFileName;
 
-  char* path = getenv("G4REALSURFACE");
+  char* path = getenv("G4REALSURFACEDATA");
   if (!path) {
      G4String excep = 
-        "G4OpBoundaryProcess - G4REALSURFACE environment variable not set";
+        "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
      G4Exception(excep);
   }
   G4String pathString(path);
