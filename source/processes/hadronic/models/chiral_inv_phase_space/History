@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-22)
+-----------------------------------------------------------------------
+Mutual tag: MinGamma parameter is added to G4QSynchRad
+
 13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-21)
 -----------------------------------------------------------------------
 Mutual tag: G4QDiffractionRatio lost dependence on G4QElasticCrossSection

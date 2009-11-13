@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.cc,v 1.3 2009-11-12 17:02:45 mkossov Exp $
+// $Id: G4QSynchRad.cc,v 1.4 2009-11-13 18:46:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Created by Mikhail Kosov 6-Nov-2009
@@ -46,7 +46,7 @@
  
 // Constructor
 G4QSynchRad::G4QSynchRad(const G4String& Name, G4ProcessType Type):
-  G4VDiscreteProcess (Name, Type), Polarization(0.,0.,1.) {}
+  G4VDiscreteProcess (Name, Type), minGamma(227.), Polarization(0.,0.,1.) {}
 
 // Calculates MeanFreePath in GEANT4 internal units
 G4double G4QSynchRad::GetMeanFreePath(const G4Track& track,G4double,G4ForceCondition* cond)
@@ -59,7 +59,7 @@ G4double G4QSynchRad::GetMeanFreePath(const G4Track& track,G4double,G4ForceCondi
   G4cout<<"G4QSynchRad::MeanFreePath: gamma = "<<gamma<<G4endl;
 #endif
   G4double MFP = DBL_MAX;
-  if( gamma > 227. )                                // For smalle gamma neglect the process
+  if( gamma > minGamma )                            // For smalle gamma neglect the process
   {
     G4double R = GetRadius(track);
 #ifdef debug
@@ -80,7 +80,7 @@ G4VParticleChange* G4QSynchRad::PostStepDoIt(const G4Track& track, const G4Step&
   aParticleChange.Initialize(track);
   const G4DynamicParticle* particle=track.GetDynamicParticle();
   G4double gamma = particle->GetTotalEnergy() / particle->GetMass();
-  if(gamma <= 227. )
+  if(gamma <= minGamma )
   {
 #ifdef debug
     G4cout<<"-Warning-G4QSynchRad::PostStepDoIt is called for small gamma="<<gamma<<G4endl;

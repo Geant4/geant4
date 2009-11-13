@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.hh,v 1.1 2009-11-10 17:05:22 mkossov Exp $
+// $Id: G4QSynchRad.hh,v 1.2 2009-11-13 18:46:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Created by Mikhail Kosov 6-Nov-2009
@@ -72,11 +72,14 @@ public:
   G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step);
   G4bool IsApplicable(const G4ParticleDefinition& pd) { return (pd.GetPDGCharge() != 0.); }
 
+  void SetMinGamma(G4double ming) {minGamma = ming;}
+  G4double GetMinGamma()          {return minGamma;}
   G4double GetRadius(const G4Track& track); // Revolution Radius (independent units)
 
-  // Body
-  private:
+// Body
+private:
 
+  G4double minGamma;
   G4ThreeVector Polarization;  
 };
 
