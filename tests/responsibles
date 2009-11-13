@@ -114,20 +114,20 @@ examples/novice/N07          asai@slac.stanford.edu          Makoto Asai
 examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   air_shower                 bernardo@lip.pt                 Bernardo Tome
   amsEcal                    Michel.Maire@lapp.in2p3.fr      Michel Maire
-  brachytherapy              MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+  brachytherapy              susanna@uow.edu.au              Susanna Guatelli
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
   cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
-  human_phantom              sug@ansto.gov.au                Susanna Guatelli
+  human_phantom              susanna@uow.edu.au              Susanna Guatelli
   lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
-  medical_linac              Michela.Piergentili@ge.infn.it  Michela Piergentili
+  medical_linac              cirrone@lns.infn.it             Pablo Cirrone
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
   microdosimetry             incerti@cenbg.in2p3.fr          Sebastien Incerti
   nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
-  radiation_monitor          MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-  radioprotection            MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
+  radiation_monitor          cirrone@lns.infn.it             Pablo Cirrone
+  radioprotection            cirrone@lns.infn.it             Pablo Cirrone
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
   Tiara                      Alexander.Howard@cern.ch        Alexander Howard
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
@@ -170,7 +170,7 @@ examples/extended
   optical/LXe                gum@triumf.ca                   Peter Gumplinger
   parallel:
     ParN02, ParN04           gene@ccs.neu.edu                Gene Cooperman
-    ExDiane                  MariaGrazia.Pia@ge.infn.it	     Maria Grazia Pia
+    ExDiane                  susanna@uow.edu.au              Susanna Guatelli
     MPI                      Koichi.Murakami@kek.jp          Koichi Murakami
   parameterisations/gflash   Marc.Verderi@in2p3.fr           Marc Verderi
   persistency
