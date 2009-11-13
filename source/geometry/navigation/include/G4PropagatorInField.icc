@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.15 2009-11-03 18:19:48 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.16 2009-11-13 17:34:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,6 +109,7 @@ void     G4PropagatorInField::SetMaxLoopCount( G4int new_max )
   fMax_loop_count = new_max;
 }
 
+// #if 0
 inline
 G4double G4PropagatorInField::GetDeltaIntersection() const
 {
@@ -120,25 +121,7 @@ G4double G4PropagatorInField::GetDeltaOneStep() const
 {
   return fCurrentFieldMgr->GetDeltaOneStep();
 }
-
-inline
-void
-G4PropagatorInField::SetAccuraciesWithDeltaOneStep( G4double valDeltaOneStep )
-{ 
-  fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
-}
-
-inline
-void G4PropagatorInField::SetDeltaOneStep( G4double valDeltaOneStep )
-{ 
-  fDetectorFieldMgr->SetDeltaOneStep(valDeltaOneStep); 
-}
-
-inline
-void G4PropagatorInField::SetDeltaIntersection( G4double valDeltaIntersection )
-{
-  fDetectorFieldMgr->SetDeltaIntersection(valDeltaIntersection);
-}
+// #endif 
 
 inline
 G4int G4PropagatorInField::GetVerboseLevel() const
@@ -305,3 +288,4 @@ G4bool G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
                           fPreviousSafety,fPreviousSftOrigin,
                           LinearStepLength,IntersectionPoint);
 }
+

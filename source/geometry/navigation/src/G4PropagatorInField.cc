@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.47 2009-11-12 17:24:58 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.48 2009-11-13 17:34:26 japost Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -101,10 +101,7 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fIntersectionLocator=vLocator;
     fAllocatedLocator=false;
   }
-  fIntersectionLocator->SetEpsilonStepFor(fEpsilonStep);
-  fIntersectionLocator->SetDeltaIntersectionFor(GetDeltaIntersection());
-  fIntersectionLocator->SetChordFinderFor(GetChordFinder());
-  fIntersectionLocator->SetSafetyParametersFor( fUseSafetyForOptimisation);
+  RefreshIntersectionLocator();  //  Copy all relevant parameters 
 }
 
 G4PropagatorInField::~G4PropagatorInField()
@@ -112,6 +109,15 @@ G4PropagatorInField::~G4PropagatorInField()
   if(fAllocatedLocator)delete  fIntersectionLocator; 
 }
 
+// Update the IntersectionLocator with current parameters
+void
+G4PropagatorInField::RefreshIntersectionLocator()
+{
+  fIntersectionLocator->SetEpsilonStepFor(fEpsilonStep);
+  fIntersectionLocator->SetDeltaIntersectionFor(fCurrentFieldMgr->GetDeltaIntersection());
+  fIntersectionLocator->SetChordFinderFor(GetChordFinder());
+  fIntersectionLocator->SetSafetyParametersFor( fUseSafetyForOptimisation);
+}
 ///////////////////////////////////////////////////////////////////////////
 //
 // Compute the next geometric Step
@@ -162,12 +168,9 @@ G4PropagatorInField::ComputeStep(
 
   GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass); 
 
- // Values for Intersection Locator has to be updated on each call
- // because the CurrentFieldManager changes
-    fIntersectionLocator->SetChordFinderFor(GetChordFinder());
-    fIntersectionLocator->SetSafetyParametersFor( fUseSafetyForOptimisation);
-    fIntersectionLocator->SetEpsilonStepFor(fEpsilonStep);
-    fIntersectionLocator->SetDeltaIntersectionFor(GetDeltaIntersection()); 
+ // Values for Intersection Locator has to be updated on each call for the
+ // case that CurrentFieldManager has changed from the one of previous step
+  RefreshIntersectionLocator();
 
   G4FieldTrack  CurrentState(pFieldTrack);
   G4FieldTrack  OriginalState = CurrentState;
@@ -187,7 +190,7 @@ G4PropagatorInField::ComputeStep(
     CurrentProposedStepLength= std::min( trialProposedStep,
                                            fLargestAcceptableStep ); 
   }
-  epsilon = GetDeltaOneStep() / CurrentProposedStepLength;
+  epsilon = fCurrentFieldMgr->GetDeltaOneStep() / CurrentProposedStepLength;
   // G4double raw_epsilon= epsilon;
   G4double epsilonMin= fCurrentFieldMgr->GetMinimumEpsilonStep();
   G4double epsilonMax= fCurrentFieldMgr->GetMaximumEpsilonStep();; 

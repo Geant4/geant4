@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.18 2009-11-03 18:19:48 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.19 2009-11-13 17:34:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -162,16 +162,13 @@ class G4PropagatorInField
 
    inline G4VIntersectionLocator* GetIntersectionLocator();
    inline void SetIntersectionLocator(G4VIntersectionLocator *pLocator );
+     // Change or get the object which calculates the exact 
+     //  intersection point with the next boundary
  
  public:  // without description
 
    inline G4double  GetDeltaIntersection() const;
    inline G4double  GetDeltaOneStep() const;
-   inline void    SetAccuraciesWithDeltaOneStep( G4double deltaOneStep );  
-   inline void    SetDeltaIntersection( G4double deltaIntersection );
-   inline void    SetDeltaOneStep( G4double deltaOneStep );  
-     // The above 5 methods are obsolete and will not work, as they have been
-     // replaced by the same methods in G4FieldManager since Geant4 4.0 ...
 
    inline G4FieldManager*  GetCurrentFieldManager();
    inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
@@ -184,6 +181,10 @@ class G4PropagatorInField
 
    inline G4double  GetZeroStepThreshold(); 
    inline void      SetZeroStepThreshold( G4double newLength ); 
+
+   void RefreshIntersectionLocator(); 
+     // Update the Locator with parameters from this class
+     //    and from current field manager
 
  protected:  // with description
 
