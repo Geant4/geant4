@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+13-November 2009 Gunter Folger     hadr-mod-util-V09-02-03
+--------------------------------------------------------
+- Correct use of G4ThreeVector, ie. avoid vector=0;
+
 19 December 2008 V, Uzhinsky (hadr-mod-util-V09-02-02)
 --------------------------------------------------------
 New method (SortNucleonsDecZ()) for sorting nucleons on decreasing Z-coordanates 
