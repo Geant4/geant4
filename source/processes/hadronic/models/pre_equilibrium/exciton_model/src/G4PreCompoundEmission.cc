@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.21 2009-11-12 14:34:25 gunter Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.22 2009-11-13 17:40:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -454,7 +454,7 @@ G4double G4PreCompoundEmission::logfactorial(G4double a) const
   {
       result = logfact[ia];
   } else {
-      result = (ia+0.5)*std::log(ia) - ia + halfLn2pi;
+      result = (ia+0.5)*std::log(G4double(ia)) - ia + halfLn2pi;
   }
    
   return result;
