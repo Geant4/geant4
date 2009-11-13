@@ -38,8 +38,6 @@
 
 #include <algorithm>
 
-#include "UZHI_diffraction.hh"
-
 class G4DecayStrongResonances
 {
 public:
@@ -86,9 +84,6 @@ public:
      }
           
      size_t aResult=0;
-
-//G4cout<<"Number of primery "<<result1->size()<<G4endl;  // Uzhi
-Uzhi_targetdiffraction=result1->size();                 // Uzhi
      for (aResult=0; aResult < result1->size(); aResult++)
      {
        G4ParticleDefinition * pdef;
@@ -97,8 +92,6 @@ Uzhi_targetdiffraction=result1->size();                 // Uzhi
          throw G4HadronicException(__FILE__, __LINE__, "DecayStrongRes: null pointer in input vector!!! ");
        }
        pdef=result1->operator[](aResult)->GetDefinition();
-
-//G4cout<<aResult<<" "<<pdef->GetParticleName()<<" "; // Uzhi
        if(!pdef)
        {
         throw G4HadronicException(__FILE__, __LINE__, "DecayStrongRes: 0x0 particle definition ");
@@ -109,14 +102,12 @@ Uzhi_targetdiffraction=result1->size();                 // Uzhi
 	  try
 	  {
  	    secondaries = result1->operator[](aResult)->Decay();
-//G4cout<<"Decay ";  // Uzhi
 	  }
           catch(...)
           {
             throw G4HadronicException(__FILE__, __LINE__, "DecayStrongRes: failing in Decay ");
           }
        }
-//G4cout<<G4endl;   // Uzhi
        if ( secondaries == NULL )
        {
 	  try
