@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.51 2007-11-13 19:25:13 asaim Exp $
+// $Id: G4RunManager.hh,v 1.52 2009-11-13 23:14:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -440,7 +440,7 @@ class G4RunManager
 
   public:
     void ConstructScoringWorlds();
-  private:
+  protected:
     void UpdateScoring();
 };
 
