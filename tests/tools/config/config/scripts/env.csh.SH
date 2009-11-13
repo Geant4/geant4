@@ -40,6 +40,7 @@ unsetenv  G4LEVELGAMMADATA
 unsetenv  G4NEUTRONHPDATA
 unsetenv  G4RADIOACTIVEDATA
 unsetenv  G4ABLADATA
+unsetenv  G4REALSURFACEDATA
 
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
@@ -157,12 +158,12 @@ setenv G4ABLADATA "$g4abladata"
 echo "On this machine the G4ABLADATA=\$G4ABLADATA"
 endif
 
-
 #+
-#if ( X$g4elasticdata != X ) then
-#setenv G4ELASTICDATA "$g4elasticdata"
-#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-#endif
+if ( X$g4realsurfacedata != X ) then
+setenv G4REALSURFACEDATA "$g4realsurfacedata"
+echo "On this machine the G4REALSURFACEDATA=\$G4REALSURFACEDATA"
+endif
+
 
 #
 # g4clhep.U
