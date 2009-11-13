@@ -67,8 +67,6 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
   currentNucleon=-1;
   if(theNucleons) delete [] theNucleons;
 
-// this was delected already:
-//  std::for_each(theRWNucleons.begin(), theRWNucleons.end(), DeleteNucleon());
   theRWNucleons.clear();
 
   myZ = G4int(theZ);
@@ -322,12 +320,10 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4int jx,jy;
 	G4double arand[600];
 	G4double *prand=arand;
-//	G4int Attempt=0;
 	while ( i < myA )
 	{
 	   do
 	   {   	
-//	        ++Attempt;
 		if ( jr < 3 ) 
 		{
 		    jr=std::min(600,9*(myA - i));
@@ -372,7 +368,6 @@ void G4Fancy3DNucleus::ChoosePositions()
 	      }
 	   }
 	}
-//	G4cout << "Att " << myA << " " << Attempt << G4endl;
 
 }
 
@@ -406,7 +401,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	      }  else
 	      {
 	          G4cerr << "G4Fancy3DNucleus: difficulty finding proton momentum" << G4endl;
-		  mom=0;
+		  mom=G4ThreeVector(0,0,0);
 	      }
 
 	   }
@@ -423,25 +418,12 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     ;
 //     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
 
-//G4cout<<"Fermi momenta"<<G4endl;                       // Uzhi
-//G4cout<<BindingEnergy()/myA<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-
     G4double energy;
     for ( i=0; i< myA ; i++ )
     {
        energy = theNucleons[i].GetParticleType()->GetPDGMass()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
-//   // Uzhi
-/*   // Uzhi
-       energy = theNucleons[i].GetParticleType()->GetPDGMass()
-	        - BindingEnergy()/myA;
-       G4LorentzVector tempV(0.,0.,0.,energy);
-*/   // Uzhi
-
-//G4cout<<"nucleon 4-mom   "<<tempV<<tempV.mag()<<G4endl;             // Uzhi
-
        theNucleons[i].SetMomentum(tempV);
     }
 
@@ -565,11 +547,6 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 
 	// Now we have a nucleon with a bigger Fermi Momentum.
 	// Exchange with last nucleon.. and iterate.
-// 	G4cout << " Nucleon to swap with : " << swapit << G4endl;
-// 	G4cout << " Fermi momentum test, and better.. " << PFermi << " / "
-// 	       << theFermi.GetFermiMomentum(density) << G4endl;
-//	cout << theNucleons[swapit]<< G4endl << theNucleons[myA-1] << G4endl;
-//	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
 	G4Nucleon swap= theNucleons[swapit];
 	G4ThreeVector mom_swap=momentum[swapit];
 	G4double pf=pFermiM[swapit];
@@ -579,8 +556,6 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	theNucleons[myA-1]=swap;
 	momentum[myA-1]=mom_swap;
 	pFermiM[myA-1]=pf;
-//	cout << "after swap" <<G4endl<< theNucleons[swapit] << G4endl << theNucleons[myA-1] << G4endl;
-//	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
 	return ReduceSum(momentum,pFermiM);
 }
 
