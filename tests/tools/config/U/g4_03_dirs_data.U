@@ -23,12 +23,16 @@
 ?S:.
 ?S:g4abladata:
 ?S:	This variable defines the path to the G4ABLA data libraries
-?S.
+?S:.
+?S:g4realsurfacedata:
+?S:	This variable defines the path to the G4REALSURFACE data libraries
+?S:.
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.6'
+g4data_g4emlow_version='G4EMLOW6.9'
 g4data_g4ndl_version='G4NDL3.13'
 g4data_g4abla_version='G4ABLA3.0'
+g4data_realsurface_version='RealSurface1.0'
 #END GEANT4 DATA OPTIONS
 echo " "
 
@@ -72,11 +76,15 @@ case "$g4abladata" in
 	;;
 esac
 
+case "$g4realsurfacedata" in
+'')
+	g4realsurfacedata=$g4data/$g4data_realsurface_version
+
 
 #
 # Now we have defaults, prompt user to see if this is where they want to use
 # 
-g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version"
 
 g4message=`cat <<EOM
 Specify the path where the Geant4 data libraries 
@@ -151,6 +159,18 @@ while test "x$promptend" = "xno" ; do
         	g4data_foundall="no"
 	fi
 
+	### G4REALSURFACE
+	$echo $n "checking for $g4data_realsurface_version... $c"
+	if test -d "$g4data/$g4data_realsurface_version" ; then
+        	$echo "yes"
+        	g4realsurfacedata=$g4data/$g4data_realsurface_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
+
+
 	#
 	# If we haven't found all the data, query the user as to whether they
 	# want to
@@ -187,6 +207,7 @@ EOM`
 			g4ledata="$g4data/$g4data_g4emlow_version"
 			g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
 			g4abladata="$g4data/$g4data_g4abla_version"
+			g4realsurfacedata="$g4data/$g4data_realsurface_version"
 			
 
 		elif test "x$gans" = "xc" ; then
@@ -200,7 +221,7 @@ EOM`
                         g4ledata="$g4data/$g4data_g4emlow_version"
                         g4neutronhpcrosssections="$g4data/$g4data_g4ndl_version"
                         g4abladata="$g4data/$g4data_g4abla_version"
-
+                        g4realsurfacedata="$g4data/$g4data_realsurface_version"
 
 		else
 			#try again
@@ -231,6 +252,8 @@ You have chosen to customize the Geant4 data library paths.
 	$g4neutronhpcrosssections
 5) $g4data_g4abla_version: 
 	$g4abladata
+6) $g4data_realsurface_version:
+	$g4realsurfacedata
 
 Choose a number from the list above to customize that path (e.g. 2)
 EOM`
@@ -280,6 +303,14 @@ EOM`
 		rp="Custom path to $g4data_g4abla_version?"
 		. ./getfile
 		g4abladata=$ans
+		;;
+
+	"6")
+		dflt=$g4realsurfacedata
+		fn='d~'
+		rp="Custom path to $g4data_realsurface_version?"
+		. ./getfile
+		g4realsurfacedata=$ans
 		;;
 
 	*)
