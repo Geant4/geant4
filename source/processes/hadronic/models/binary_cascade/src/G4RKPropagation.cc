@@ -251,7 +251,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 				G4double timeStep)
 {
 //  reset momentum transfer to field
-    theMomentumTranfer=0;
+    theMomentumTranfer=G4ThreeVector(0,0,0);
 
 // Loop over tracks
 
@@ -501,7 +501,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeStep)
 //----------------------------------------------------------------------------
 {
-    theMomentumTranfer=0;
+    theMomentumTranfer=G4ThreeVector(0,0,0);
 //    G4cout <<"Stepper input"<<kt->GetTrackingMomentum()<<G4endl;
 // create the integrator stepper
     //    G4Mag_EqRhs * equation = mapIter->second;
