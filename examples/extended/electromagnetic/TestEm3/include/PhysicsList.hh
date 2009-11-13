@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.7 2009-03-05 10:01:53 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.8 2009-11-13 17:01:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,6 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4EmConfigurator.hh"
 
 class StepMax;
 class PhysicsListMessenger;
@@ -67,8 +66,6 @@ public:
     
     G4VPhysicsConstructor*  emPhysicsList;
     G4String emName;
-
-    G4EmConfigurator em_config;
     
     StepMax* stepMaxProcess;
     

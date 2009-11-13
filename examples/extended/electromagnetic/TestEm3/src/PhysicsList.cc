@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.29 2009-09-17 20:06:26 maire Exp $
+// $Id: PhysicsList.cc,v 1.30 2009-11-13 17:01:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,6 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
-#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4UrbanMscModel.hh"
 
@@ -49,7 +48,6 @@
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;
@@ -178,7 +176,6 @@ void PhysicsList::ConstructProcess()
   // electromagnetic Physics List
   //
   emPhysicsList->ConstructProcess();
-  em_config.AddModels();
 
   // Add Decay Process
   //
@@ -244,16 +241,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
-    
-  } else if (name == "emstandard_msc91") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
-    G4UrbanMscModel* msc1 = new G4UrbanMscModel();
-    em_config.SetExtraEmModel("e-","msc",msc1);
-    G4UrbanMscModel* msc2 = new G4UrbanMscModel();
-    em_config.SetExtraEmModel("e-","msc",msc2);
     
   } else if (name == "emlivermore") {
 
