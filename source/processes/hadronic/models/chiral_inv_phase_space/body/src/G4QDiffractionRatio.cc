@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.3 2009-11-12 17:02:45 mkossov Exp $
+// $Id: G4QDiffractionRatio.cc,v 1.4 2009-11-13 09:20:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -371,8 +371,8 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
     return ResHV;                          // *** Do Nothing Action ***
   }
   G4double mP=std::sqrt(mP2);              // Calculate mass of the projectile (to be exc.)
-  if(mP<.1)mP=mPi0;                        // For photons minDiffraction is gam+P->P+Pi0
-  G4double dmP=mP+mP;                      // Doubled mass of the projectile
+  if(mP<.1) mP=mPi0;                       // For photons minDiffraction is gam+P->P+Pi0
+  //G4double dmP=mP+mP;                      // Doubled mass of the projectile
   G4double mMin=mP+mPi0;                   // Minimum diffractive mass
   G4double tA=tgA;                         // Real A of the target
   G4double sA=5./std::pow(tA,third);       // Mass-screaning
@@ -392,38 +392,18 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mDif=std::exp(R*std::log(mMax)+(1.-R)*std::log(mMin)); // Low Mass Approximation
   G4double mDif2=mDif*mDif;
   G4double ds=s-mP2-mDif2;               
-  G4double e=ds/dmP;
-  G4double P=std::sqrt(e*e-mDif2);      // Momentum in pseudo laboratory system
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+  //G4double e=ds/dmP;
+  //G4double P=std::sqrt(e*e-mDif2);      // Momentum in pseudo laboratory system
 #ifdef debug
   G4cout<<"G4QDiffR::TargFrag:Before XS, P="<<P<<",Z="<<Z<<",N="<<N<<",PDG="<<pPDG<<G4endl;
 #endif
   // @@ Temporary NN t-dependence for all hadrons
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QDifR::Fragment: pPDG="<<pPDG<<G4endl;
-  G4int PDG=2212;                                                  // *TMP* instead of pPDG
-  G4double xSec=CSmanager->GetCrossSection(false, P, tgZ, tgN, PDG);// Rec.CrossSect *TMP*
-  //G4double xSec=CSmanager->GetCrossSection(false, P, tgZ, tgN, pPDG); // Rec.CrossSect
-#ifdef debug
-  G4cout<<"G4QDiffRat::TargFragment:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
-#endif
-#ifdef nandebug
-  if(xSec>0. || xSec<0. || xSec==0);
-  else  G4cout<<"***NAN***G4QDiffractionRatio::TargFragment:xSec="<<xSec/millibarn<<G4endl;
-#endif
-  // @@ check a possibility to separate p, n, or alpha (!)
-  if(xSec <= 0.)                       // The cross-section iz 0 -> Do Nothing
-  {
-#ifdef pdebug
-    G4cerr<<"-Warning-G4QDiffrRatio::TargFragment:**Zero XS**PDG="<<pPDG<<",P="<<P<<G4endl;
-#endif
-    return ResHV;                       //Do Nothing Action
-  }
-  //G4double t=CSmanager->GetExchangeT(tgZ,tgN,pPDG); // functional randomized -t (MeV^2)
   G4double maxt=(ds*ds-4*mP2*mDif2)/s;  // maximum possible -t
   G4double tsl=140000.;                 // slope in MeV^2 
   G4double t=-std::log(G4UniformRand())*tsl;
 #ifdef pdebug
-  G4cout<<"G4QDifR::TFra:ph="<<pPDG<<",P="<<P<<",X="<<xSec<<",t="<<t<<"<"<<maxt<<G4endl;
+  G4cout<<"G4QDifR::TFra:ph="<<pPDG<<",P="<<P<<",t="<<t<<"<"<<maxt<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);                   // To make the Warning for NAN
@@ -584,43 +564,25 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double mDif=std::exp(R*std::log(mMax)+(1.-R)*std::log(mMin)); // LowMassApproximation
   G4double mDif2=mDif*mDif;
   G4double ds=s-mT2-mDif2;
-  G4double e=ds/dmT;
-  G4double P=std::sqrt(e*e-mDif2);          // Momentum in pseudo laboratory system
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+  //G4double e=ds/dmT;
+  //G4double P=std::sqrt(e*e-mDif2);          // Momentum in pseudo laboratory system
 #ifdef debug
   G4cout<<"G4QDiffR::PFra: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
   // @@ Temporary NN t-dependence for all hadrons
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QDifR::Fragment: pPDG="<<pPDG<<G4endl;
-  G4int PDG=2212;                                                  // *TMP* instead of pPDG
-  G4double xSec=CSmanager->GetCrossSection(false, P, tgZ, tgN, PDG);// Rec.CrossSect *TMP*
-  //G4double xSec=CSmanager->GetCrossSection(false, P, tgZ, tgN, pPDG); // Rec.CrossSect
-#ifdef debug
-  G4cout<<"G4QDiffR::ProjFragment:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
-#endif
-#ifdef nandebug
-  if(xSec>0. || xSec<0. || xSec==0);
-  else  G4cout<<"***NAN***G4QDiffRatio::ProjFragment: xSec="<<xSec/millibarn<<G4endl;
-#endif
-  // @@ check a possibility to separate p, n, or alpha (!)
-  if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
-  {
+  G4double tsl=140000.;                        // slope in MeV^2 
+  G4double t=-std::log(G4UniformRand())*tsl;
+  G4double maxt=(ds*ds-4*mT2*mDif2)/s;         // maximum possible -t
 #ifdef pdebug
-    G4cerr<<"-Warning-G4QDiffRatio::ProjFragment:**Zero XS**PDG="<<pPDG<<",P="<<P<<G4endl;
-#endif
-    return ResHV; //Do Nothing Action
-  }
-  G4double t=CSmanager->GetExchangeT(tgZ,tgN,pPDG); // functional randomized -t (MeV^2)
-  G4double maxt=(ds*ds-4*mT2*mDif2)/s;                 // maximum possible -t
-#ifdef pdebug
-  G4cout<<"G4QDifR::PFra:ph="<<pPDG<<",P="<<P<<",X="<<xSec<<",t="<<mint<<"<"<<maxt<<G4endl;
+  G4cout<<"G4QDifR::PFra:ph="<<pPDG<<",P="<<P<<",t="<<mint<<"<"<<maxt<<G4endl;
 #endif
 #ifdef nandebug
   if(mint>-.0000001);                          // To make the Warning for NAN
   else  G4cout<<"******G4QDiffractionRatio::ProjFragment: -t="<<mint<<G4endl;
 #endif
   G4double rt=t/maxt;
-  G4double cost=1.-rt-rt;                          // cos(theta) in CMS
+  G4double cost=1.-rt-rt;                      // cos(theta) in CMS
 #ifdef ppdebug
   G4cout<<"G4QDiffRatio::ProjFragment: -t="<<t<<", maxt="<<maxt<<", cost="<<cost<<G4endl;
 #endif
