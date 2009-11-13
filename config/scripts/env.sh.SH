@@ -40,6 +40,7 @@ unset  G4LEVELGAMMADATA
 unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
 unset  G4ABLADATA
+unset  G4REALSURFACEDATA
 
 unset  G4LIB
 unset  G4LIB_BUILD_G3TOG4
@@ -187,17 +188,14 @@ echo "On this machine the G4ABLADATA=\$G4ABLADATA"
 fi
 fi
 
-
-
-
 #+
-#if [ X$g4elasticdata != X ] ; then 
-#G4ELASTICDATA="$g4elasticdata"
-#export G4ELASTICDATA
-#if [ X\$g4non_display = X ] ; then
-#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-#fi
-#fi
+if [ X$g4realsurfacedata != X ] ; then 
+G4REALSURFACEDATA="$g4realsurfacedata"
+export G4REALSURFACEDATA
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4REALSURFACEDATA=\$G4REALSURFACEDATA"
+fi
+fi
 
 #
 # g4clhep.U
