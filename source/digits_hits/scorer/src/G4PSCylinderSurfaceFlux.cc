@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.3 2008-12-28 21:10:51 asaim Exp $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.4 2009-11-14 00:01:13 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // // G4PSCylinderSurfaceFlux
@@ -143,8 +143,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
     if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
+    //   <kCarTolerance ){
+    G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_In;
     }
   }
@@ -155,8 +160,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
     if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())) 
+    // <kCarTolerance ){
+    G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_Out;
     }
   }
