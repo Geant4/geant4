@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.18 2007-03-11 07:17:35 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.19 2009-11-14 02:23:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ class G4DynamicParticle
      G4DynamicParticle(const G4DynamicParticle &right);
 
   //- destructor
-     ~G4DynamicParticle();
+     virtual ~G4DynamicParticle();
 
   //- operators
      G4DynamicParticle & operator=(const G4DynamicParticle &right);
@@ -200,11 +200,11 @@ class G4DynamicParticle
      //    mode 0 : default )(minimum)
      //    mode 1 : 0 + electron occupancy
 
-   private:
+   protected:
      void      AllocateElectronOccupancy(); 
      G4double  GetElectronMass() const;
 
-   private:
+   protected:
      G4ThreeVector theMomentumDirection;
       //  The normalized momentum vector
 
@@ -231,7 +231,7 @@ class G4DynamicParticle
 
      G4double thePreAssignedDecayTime;
 
- private:
+ protected:
    G4int verboseLevel;
  
  public:  // With Description
@@ -242,7 +242,7 @@ class G4DynamicParticle
    //  1: Warning message
    //  2: More
 
- private:
+ protected:
    G4PrimaryParticle* primaryParticle;
    // This void pointer is used by G4EventManager to maintain the
    // link between pre-assigned decay products and corresponding
@@ -265,7 +265,7 @@ class G4DynamicParticle
    // corresponding primary particle or pre-assigned decay product will be
    // returned if available. Otherwise (e.g. for geantino) returns 0.
 
- private:
+ protected:
    G4int thePDGcode;
 };
 

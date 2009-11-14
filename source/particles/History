@@ -1,4 +1,4 @@
-$Id: History,v 1.181 2009-11-06 01:09:59 kurasige Exp $
+$Id: History,v 1.182 2009-11-14 02:23:13 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov 11 2009     Hisaya Kurashige 
+- Change destructor of G4DynamicParticle to virtual method
+  in order that a derived class from G4DynamicParticle can be created
 
 - Nov 06 2009     Hisaya Kurashige (particles-V09-02-16)
 - Add G4AdjointProton and Adjoint-light ions (Laurent)
