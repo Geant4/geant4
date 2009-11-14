@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2009-11-14 17:10:43 allison Exp $
+$Id: History,v 1.132 2009-11-14 17:20:28 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ History file for visualization management sub-category
 
 14th November 2009  John Allison
 - G4VSceneHandler.cc: Bug fix: Should be const_cast, not static_cast, for hits.
-  (Introduced in geant4-09-03-beta-01 and geant4-09-02-ref tags.)
+  (Introduced in visman-V09-02-05 and geant4-09-02-ref-10.)
 
 6th November 2009  John Allison
 - G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&):
