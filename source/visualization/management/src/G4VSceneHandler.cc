@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.89 2009-11-06 15:59:08 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.90 2009-11-14 17:10:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,7 +263,8 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
 }
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
-  static_cast<G4VHit>(hit).Draw(); // Cast because Draw is non-const!!!!
+  // Cast away const because Draw is non-const!!!!
+  const_cast<G4VHit&>(hit).Draw();
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
@@ -303,8 +304,8 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
 	     << G4endl;
     }
   } else {  // Not score map hits.  Just call DrawAllHits.
-    // Cast because DrawAllHits is non-const!!!!
-    static_cast<G4THitsMap<G4double> >(hits).DrawAllHits();
+    // Cast away const because DrawAllHits is non-const!!!!
+    const_cast<G4THitsMap<G4double>&>(hits).DrawAllHits();
   }
 }
 
