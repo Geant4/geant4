@@ -1,5 +1,5 @@
-$Id: History,v 1.122 2009-09-18 14:03:24 maire Exp $
--------------------------------------------------------------------
+$Id: History,v 1.123 2009-11-15 22:10:03 maire Exp $
+----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-11-09 mma (testem5-V09-02-07)
+- PhysListEmStandard.cc (local): eMultipleScattering -> UrbanMscModel93
+- new local physics list : PhysListEmStandardGS
+- PhysicsList : remove G4EmConfigurator
      
 18-09-09 mma (testem5-V09-02-06)
 - PhysicsList.cc :
