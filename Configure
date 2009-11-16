@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.119 2009-11-13 15:42:05 bmorgan Exp $
+# $Id: Configure,v 1.120 2009-11-16 12:25:55 bmorgan Exp $
 #
-# Generated on Fri Nov 13 15:36:27 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Mon Nov 16 12:23:45 GMT 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -306,6 +306,9 @@ g4vis_use_openglqt='n'
 #INITIALIZE G4MAKE
 g4make=""
 #END G4MAKE INITIALIZATION
+#INITIALIZE G3TOG4 OPTIONS
+g4wlib_build_g3tog4='n'
+g4wlib_use_g3tog4='n'
 
 : Find the basic shell for Bourne shell scripts
 case "$sh" in
@@ -6637,32 +6640,15 @@ EOM`
 fi
 
 
-
 echo " "
-case "$g4wlib_build_g3tog4" in
-'')
-	g4wlib_build_g3tog4=n
-	;;
-esac
-
-case "$g4w_use_g3tog4" in
-'')
-	g4w_use_g3tog4=n
-	;;
-esac
-
-echo ""
 
 g4message=`cat << EOM
 
   G4LIB_BUILD_G3TOG4  
 
-The utility module 'g3tog4' will be built by setting this
-variable. NOTE: it requires a valid FORTRAN compiler to be
-installed on your system and the 'cernlib' command in the
-path, in order to build the ancillary tools!
-Do you want to build 'g3tog4' ?
- 
+The utility module 'g3tog4' will be built by setting this variable. 
+NOTE: it requires a valid FORTRAN compiler to be installed on your system.
+Enable build of G3toG4 module?
 EOM`
 
 dflt=$g4wlib_build_g3tog4
@@ -6670,8 +6656,7 @@ rp=$g4message
 . ./myread
 gans=$ans
 
-	case $gans in
-	
+case $gans in
 	n*|N*) 
 		g4wlib_build_g3tog4=n
 		g4w_use_g3tog4=n
@@ -6680,7 +6665,7 @@ gans=$ans
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
 		;;
-	esac
+esac
 
 
 echo " "
