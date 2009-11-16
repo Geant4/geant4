@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009-11-12 03:13:46 sincerti Exp $
+$Id: History,v 1.5 2009-11-16 09:28:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 Nov 2009 - G. Cosmo    tag test60-V09-02-05
+              Renamed main file (and exacutable) from Test60 to test60
+              to be conformed with all other tests. 
 
 12 Nov 2009 - S. Incerti  tag test60-V09-02-04
               Removed useless include files in physics list
