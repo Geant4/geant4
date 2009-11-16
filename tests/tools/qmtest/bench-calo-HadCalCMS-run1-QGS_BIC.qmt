@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/benchmarks/calorimeter/HadCalCMS;$G4BIN/$G4SYSTEM/mainHadCalo run1.in QGS_BIC</text>
+    <text>cd $G4INSTALL/benchmarks/calorimeter/HadCalCMS;$G4BIN/$G4SYSTEM/mainHadCalo run1.g4 QGS_BIC</text>
   </argument>
   <argument name="stderr">
     <text/>
